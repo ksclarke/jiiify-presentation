@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="message-class-name">info.freelibrary.iiif.presentation.MessageCodes</entry>
+
+  <!-- Messages to be stored in the MessageCodes class -->
+  <entry key="EXC-001">Property value cannot be null</entry>
+  <entry key="EXC-002">Label value cannot be null</entry>
+  <entry key="EXC-003">ID value cannot be null</entry>
+  <entry key="EXC-004">MediaType cannot be null</entry>
+  <entry key="EXC-005">Profile cannot be null</entry>
+  <entry key="EXC-006">Image resource cannot be null</entry>
+  <entry key="EXC-007">Context URI cannot be null</entry>
+  <entry key="EXC-008">Sequence cannot be null</entry>
+  
+</properties>

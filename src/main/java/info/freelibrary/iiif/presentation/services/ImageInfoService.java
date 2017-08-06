@@ -1,0 +1,123 @@
+
+package info.freelibrary.iiif.presentation.services;
+
+import java.net.URI;
+
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import info.freelibrary.iiif.presentation.helpers.Constants;
+
+/**
+ * An Image Info service that will return image info about a particular item.
+ *
+ * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
+ */
+@JsonPropertyOrder({ Constants.CONTEXT, Constants.ID, Constants.PROFILE })
+public class ImageInfoService extends Service {
+
+    /* The context for this service */
+    private static final String CONTEXT = "http://iiif.io/api/image/2/context.json";
+
+    private static final APIComplianceLevel DEFAULT_LEVEL = APIComplianceLevel.ZERO;
+
+    private APIComplianceLevel myLevel;
+
+    private URI myID;
+
+    /**
+     * Creates a new Image Info IIIF service.
+     *
+     * @param aLevel A compliance level for the service
+     * @param aID An ID for the item to request from the service
+     */
+    public ImageInfoService(final APIComplianceLevel aLevel, final URI aID) {
+        myLevel = aLevel;
+        myID = aID;
+    }
+
+    /**
+     * Creates a new Image Info IIIF service.
+     *
+     * @param aLevel A compliance level for the service
+     * @param aID An ID for the item to request from the service
+     */
+    public ImageInfoService(final APIComplianceLevel aLevel, final String aID) {
+        myLevel = aLevel;
+        myID = URI.create(aID);
+    }
+
+    /**
+     * Creates a new Image Info IIIF service.
+     *
+     * @param aID An ID for the item to request from the service
+     */
+    public ImageInfoService(final URI aID) {
+        myLevel = DEFAULT_LEVEL;
+        myID = aID;
+    }
+
+    /**
+     * Creates a new Image Info IIIF service.
+     *
+     * @param aID An ID for the item to request from the service
+     */
+    public ImageInfoService(final String aID) {
+        myLevel = DEFAULT_LEVEL;
+        myID = URI.create(aID);
+    }
+
+    /**
+     * Gets the service context.
+     *
+     * @return A service context
+     */
+    @Override
+    @JsonGetter(Constants.CONTEXT)
+    public String getContext() {
+        return CONTEXT;
+    }
+
+    /**
+     * Gets the service profile.
+     *
+     * @return The service profile
+     */
+    @JsonGetter(Constants.PROFILE)
+    public String getProfile() {
+        return myLevel.string();
+    }
+
+    /**
+     * Sets the profile to retrieve from the service.
+     *
+     * @param aLevel The profile (service level) supported by the service
+     * @return The Image Info service
+     */
+    public ImageInfoService setProfile(final APIComplianceLevel aLevel) {
+        myLevel = aLevel;
+        return this;
+    }
+
+    /**
+     * Gets the ID of the item to return from the service.
+     *
+     * @return The ID of the item to return from the service
+     */
+    @JsonGetter(Constants.ID)
+    public URI getID() {
+        return myID;
+    }
+
+    /**
+     * Sets the ID to retrieve from the service.
+     *
+     * @param aID The ID to retrieve from the service
+     * @return The Image Info service
+     */
+    public ImageInfoService setID(final URI aID) {
+        myID = aID;
+        return this;
+    }
+
+}

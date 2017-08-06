@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>jiiify-presentation</artifactId>
+  <packaging>jar</packaging>
+  <version>0.0.1-2.1-SNAPSHOT</version>
+  <name>jiiify-presentation</name>
+  <description>A Java Library for the IIIF Presentation API</description>
+  <url>http://projects.freelibrary.info/jiiify-presentation</url>
+
+  <licenses>
+    <license>
+      <name>The 3-Clause BSD License</name>
+      <url>https://opensource.org/licenses/BSD-3-Clause</url>
+    </license>
+  </licenses>
+
+  <scm>
+    <connection>scm:git:git@github.com:ksclarke/jiiify-presentation.git</connection>
+    <developerConnection>scm:git:git@github.com:ksclarke/jiiify-presentation.git</developerConnection>
+    <url>git@github.com:ksclarke/jiiify-presentation.git</url>
+  </scm>
+
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/ksclarke/jiiify-presentation/issues</url>
+  </issueManagement>
+
+  <developers>
+    <developer>
+      <email>ksclarke@ksclarke.io</email>
+      <name>Kevin S. Clarke</name>
+      <url>http://kevinclarke.info</url>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>America/New_York</timezone>
+    </developer>
+  </developers>
+
+  <properties>
+    <jackson.version>2.7.4</jackson.version>
+    <guava.version>23.0</guava.version>
+
+    <!-- Test related versions -->
+    <vertx.version>3.4.2</vertx.version>
+    <opencsv.version>3.10</opencsv.version>
+
+    <!-- Build related versions -->
+    <codacy.plugin.version>1.0.2</codacy.plugin.version>
+  </properties>
+
+  <dependencies>
+    <!-- Project dependencies -->
+    <dependency>
+      <groupId>info.freelibrary</groupId>
+      <artifactId>freelib-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>${guava.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jdk8</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <!-- Below dependencies are only used for testing -->
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-core</artifactId>
+      <version>${vertx.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-unit</artifactId>
+      <version>${vertx.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.opencsv</groupId>
+      <artifactId>opencsv</artifactId>
+      <version>${opencsv.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!-- Generate our MessageCodes class from the messages resource file -->
+      <plugin>
+        <groupId>info.freelibrary</groupId>
+        <artifactId>freelib-utils</artifactId>
+        <executions>
+          <execution>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>generate-codes</goal>
+            </goals>
+            <configuration>
+              <generatedSourcesDirectory>${project.basedir}/src/main/generated</generatedSourcesDirectory>
+              <messageFiles>
+                <messageFile>src/main/resources/iiif_presentation_messages.xml</messageFile>
+              </messageFiles>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <show>public</show>
+          <detectLinks>false</detectLinks>
+          <links>
+            <link>https://google.github.io/guava/releases/23.0/api/docs/</link>
+          </links>
+          <sourcepath>src/main/java:src/main/generated</sourcepath>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-enforcer-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>com.gavinmogan</groupId>
+        <artifactId>codacy-maven-plugin</artifactId>
+        <version>${codacy.plugin.version}</version>
+      </plugin>
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <systemPropertyVariables>
+            <vertx.port>${vertx.port}</vertx.port>
+            <vertx.logger-delegate-factory-class-name>io.vertx.core.logging.SLF4JLogDelegateFactory</vertx.logger-delegate-factory-class-name>
+          </systemPropertyVariables>
+          <argLine>${jacoco.agent.arg}</argLine>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <debuglevel>lines,source,vars</debuglevel>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
+          <generatedSourcesDirectory>${project.basedir}/src/main/generated</generatedSourcesDirectory>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>br.com.ingenieux</groupId>
+        <artifactId>jbake-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <configuration>
+          <portNames>
+            <portName>vertx.port</portName>
+          </portNames>
+        </configuration>
+        <executions>
+          <execution>
+            <id>reserve-port</id>
+            <phase>initialize</phase>
+            <goals>
+              <goal>reserve-network-port</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <!-- Enables pushing project documentation up to an S3 bucket -->
+  <distributionManagement>
+    <site>
+      <id>s3.site</id>
+      <url>s3://projects.freelibrary.info/jiiify-presentation</url>
+    </site>
+  </distributionManagement>
+
+  <!-- Pulls in standard FreeLibrary Project configuration options -->
+  <parent>
+    <artifactId>freelib-parent</artifactId>
+    <groupId>info.freelibrary</groupId>
+    <version>0.1.15</version>
+  </parent>
+
+</project>

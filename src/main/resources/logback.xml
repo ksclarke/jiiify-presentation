@@ -1,0 +1,26 @@
+<configuration>
+  <timestamp key="byDay" datePattern="yyyy-MM-dd" />
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>[%level] %logger{45} | %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+    <file>target/vertx-maven-${byDay}.log</file>
+    <append>false</append>
+    <encoder>
+      <pattern>[%level] %logger{45} | %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <logger name="io.netty" level="ERROR" additivity="false">
+    <appender-ref ref="STDOUT" />
+  </logger>
+
+  <root level="DEBUG">
+    <appender-ref ref="STDOUT" />
+  </root>
+
+</configuration>
