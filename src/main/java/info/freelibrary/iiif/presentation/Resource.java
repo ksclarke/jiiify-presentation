@@ -563,7 +563,7 @@ public abstract class Resource<T extends Resource<T>> {
      * @param aNumber The number of required arguments
      */
     private void checkArgs(final Object[] aArgArray, final String[] aNameArray, final int aNumber) {
-        if ((aArgArray.length < aNumber)) {
+        if (aArgArray.length < aNumber) {
             throw new IndexOutOfBoundsException(String.valueOf(aNumber));
         } else if (aArgArray.length != aNameArray.length) {
             throw new IllegalArgumentException("Number of arguments is not equal to the number of names");

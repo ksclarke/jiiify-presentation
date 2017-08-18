@@ -12,7 +12,7 @@ public enum ViewingDirection {
 
     private final String myValue;
 
-    private ViewingDirection(final String aDirection) {
+    ViewingDirection(final String aDirection) {
         myValue = aDirection;
     }
 

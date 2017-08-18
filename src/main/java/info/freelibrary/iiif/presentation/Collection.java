@@ -23,7 +23,7 @@ public class Collection extends Resource<Collection> {
 
     static final String TYPE = "sc:Collection";
 
-    private final static int REQ_ARG_COUNT = 3;
+    private static final int REQ_ARG_COUNT = 3;
 
     private NavDate myNavDate;
 

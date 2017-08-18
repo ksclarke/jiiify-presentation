@@ -19,7 +19,7 @@ public class Layer extends Resource<Layer> {
 
     static final String TYPE = "sc:Layer";
 
-    private final static int REQ_ARG_COUNT = 3;
+    private static final int REQ_ARG_COUNT = 3;
 
     private ViewingDirection myViewingDirection;
 

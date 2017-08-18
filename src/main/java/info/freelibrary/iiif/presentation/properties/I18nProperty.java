@@ -155,5 +155,4 @@ class I18nProperty<T extends I18nProperty<T>> {
             return null;
         }
     }
-
 }

@@ -26,7 +26,7 @@ public class Canvas extends Resource<Canvas> {
 
     static final String TYPE = "sc:Canvas";
 
-    private final static int REQ_ARG_COUNT = 3;
+    private static final int REQ_ARG_COUNT = 3;
 
     private int myWidth;
 

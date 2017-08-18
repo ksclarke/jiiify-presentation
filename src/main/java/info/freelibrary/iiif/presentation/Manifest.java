@@ -31,9 +31,9 @@ public class Manifest extends Resource<Manifest> {
 
     static final String TYPE = "sc:Manifest";
 
-    private final static URI CONTEXT = URI.create("http://iiif.io/api/presentation/2/context.json");
+    private static final URI CONTEXT = URI.create("http://iiif.io/api/presentation/2/context.json");
 
-    private final static int REQ_ARG_COUNT = 3;
+    private static final int REQ_ARG_COUNT = 3;
 
     private NavDate myNavDate;
 

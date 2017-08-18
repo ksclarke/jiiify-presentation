@@ -23,7 +23,7 @@ public class Sequence extends Resource<Sequence> {
 
     static final String TYPE = "sc:Sequence";
 
-    private final static int REQ_ARG_COUNT = 1;
+    private static final int REQ_ARG_COUNT = 1;
 
     private ViewingDirection myViewingDirection;
 

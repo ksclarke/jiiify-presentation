@@ -12,9 +12,9 @@ import info.freelibrary.iiif.presentation.helpers.Constants;
 @SuppressWarnings("unchecked")
 abstract class Content<T extends Content<T>> extends Resource<T> {
 
-    private final static String MOTIVATION = "sc:painting";
+    private static final String MOTIVATION = "sc:painting";
 
-    private final static int REQ_ARG_COUNT = 2;
+    private static final int REQ_ARG_COUNT = 2;
 
     private URI myOn;
 

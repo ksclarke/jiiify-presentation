@@ -42,7 +42,7 @@ public class ViewingHint {
 
         private final String myValue;
 
-        private Option(final String aHint) {
+        Option(final String aHint) {
             myValue = aHint;
         }
 
