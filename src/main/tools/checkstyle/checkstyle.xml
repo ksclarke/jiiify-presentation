@@ -13,7 +13,9 @@
     <module name="EqualsHashCode" />
     <module name="StringLiteralEquality" />
     <module name="SuperClone" />
+    <module name="IllegalImport" />
     <module name="DefaultComesLast" />
+    <module name="InnerTypeLast" />
     <module name="UpperEll" />
     <module name="MemberName">
       <property name="format" value="^(my|is)[A-Z][a-zA-Z0-9]*$" />
@@ -75,7 +77,6 @@
     <module name="IllegalThrows" />
     <module name="HideUtilityClassConstructor" />
     <module name="MultipleVariableDeclarations" />
-    <module name="FileContentsHolder" />
     <module name="SuppressionCommentFilter">
       <property name="offCommentFormat" value="BEGIN GENERATED CODE" />
       <property name="onCommentFormat" value="END GENERATED CODE" />

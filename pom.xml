@@ -43,6 +43,7 @@
   <properties>
     <jackson.version>2.7.4</jackson.version>
     <guava.version>23.0</guava.version>
+    <freelib-utils.version>0.8.4</freelib-utils.version>
 
     <!-- Test related versions -->
     <vertx.version>3.4.2</vertx.version>
@@ -57,6 +58,7 @@
     <dependency>
       <groupId>info.freelibrary</groupId>
       <artifactId>freelib-utils</artifactId>
+      <version>${freelib-utils.version}</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
@@ -215,7 +217,7 @@
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>0.2.0</version>
+    <version>0.2.2</version>
   </parent>
 
 </project>

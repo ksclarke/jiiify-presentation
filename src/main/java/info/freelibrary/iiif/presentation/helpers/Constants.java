@@ -6,7 +6,7 @@ package info.freelibrary.iiif.presentation.helpers;
  *
  * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
  */
-public abstract class Constants {
+public final class Constants {
 
     /* The name of the project's resource bundle. */
     public static final String BUNDLE_NAME = "iiif_presentation_messages";
@@ -79,5 +79,9 @@ public abstract class Constants {
     public static final String ITEM = "item";
 
     public static final String DEFAULT = "default";
+
+    private Constants() {
+        super();
+    }
 
 }
