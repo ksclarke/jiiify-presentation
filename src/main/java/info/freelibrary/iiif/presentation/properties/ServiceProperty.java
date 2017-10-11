@@ -18,11 +18,12 @@ import info.freelibrary.iiif.presentation.services.ServiceImage;
  * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
  */
 @SuppressWarnings("unchecked")
-abstract class ServiceProperty<T extends ServiceProperty<T>> {
+class ServiceProperty<T extends ServiceProperty<T>> {
 
     private List<ServiceImage> myImages;
 
     protected ServiceProperty() {
+        super();
     }
 
     /**

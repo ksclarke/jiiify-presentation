@@ -33,7 +33,7 @@ public class SeeAlso {
         myValues = new ArrayList<>();
 
         for (final String id : aID) {
-            Objects.requireNonNull(id, LOGGER.getMessage("", id));
+            Objects.requireNonNull(id, LOGGER.getMessage(MessageCodes.EXC_009));
 
             if (!myValues.add(new Value(URI.create(id)))) {
                 throw new UnsupportedOperationException();
@@ -50,7 +50,7 @@ public class SeeAlso {
         myValues = new ArrayList<>();
 
         for (final URI uri : aID) {
-            Objects.requireNonNull(uri, LOGGER.getMessage("", uri));
+            Objects.requireNonNull(uri, LOGGER.getMessage(MessageCodes.EXC_009));
 
             if (!myValues.add(new Value(uri))) {
                 throw new UnsupportedOperationException();
@@ -227,10 +227,10 @@ public class SeeAlso {
             final Value value = myValues.get(0);
             final String id = value.getID().toString();
 
-            if (!value.getFormat().isPresent() && !value.getProfile().isPresent()) {
-                return id;
-            } else {
+            if (value.getFormat().isPresent() || value.getProfile().isPresent()) {
                 return value;
+            } else {
+                return id;
             }
         } else {
             final List<Object> list = new ArrayList<>();

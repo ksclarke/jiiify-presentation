@@ -19,7 +19,7 @@ import info.freelibrary.iiif.presentation.helpers.Constants;
  * <p>
  * An example representation in JSON:
  * </p>
- * <code><pre>
+ * <pre><code>
  * &quot;metadata&quot;: [
  *   { &quot;label&quot;: &quot;Author&quot;, &quot;value&quot;: &quot;Anne Author&quot; },
  *   { &quot;label&quot;: &quot;Published&quot;, &quot;value&quot;: [
@@ -32,7 +32,7 @@ import info.freelibrary.iiif.presentation.helpers.Constants;
  *       &quot;value&quot;: &quot;From: &lt;a href='http://example.org/1.html'&gt;link&lt;/a&gt;&quot;
  *   }
  * ]
- * </pre></code>
+ * </code></pre>
  *
  * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
  */
@@ -44,6 +44,7 @@ public class Metadata {
      * Creates a metadata property.
      */
     public Metadata() {
+        getEntries();
     }
 
     /**
@@ -125,7 +126,7 @@ public class Metadata {
      * @return The metadata entries
      */
     @JsonValue
-    public List<Metadata.Entry> getEntries() {
+    public final List<Metadata.Entry> getEntries() {
         if (myEntries == null) {
             myEntries = new ArrayList<Metadata.Entry>();
         }
@@ -177,7 +178,7 @@ public class Metadata {
          * @return True if the metadata entry has values; else, false
          */
         public boolean hasValues() {
-            return myValues.size() > 0;
+            return !myValues.isEmpty();
         }
 
         /**
@@ -233,10 +234,10 @@ public class Metadata {
                     while (iterator.hasNext()) {
                         final Value entry = iterator.next();
 
-                        if (!entry.getLang().isPresent()) {
-                            list.add(entry.getValue());
-                        } else {
+                        if (entry.getLang().isPresent()) {
                             list.add(entry);
+                        } else {
+                            list.add(entry.getValue());
                         }
                     }
 
@@ -277,7 +278,7 @@ public class Metadata {
          * @param aValue A list of values
          * @return The metadata entry
          */
-        public Entry addValues(final String... aValue) {
+        public final Entry addValues(final String... aValue) {
             Objects.requireNonNull(aValue, MessageCodes.EXC_001);
 
             for (final String value : aValue) {
@@ -297,7 +298,7 @@ public class Metadata {
          * @param aValue A list of values
          * @return The metadata entry
          */
-        public Entry addValues(final Value... aValue) {
+        public final Entry addValues(final Value... aValue) {
             Objects.requireNonNull(aValue, MessageCodes.EXC_001);
 
             for (final Value value : aValue) {

@@ -24,6 +24,7 @@ public class License {
      * Creates a license property from the supplied URL(s).
      *
      * @param aURL A URL (or URLs) for the license(s)
+     * @throws MalformedURLException If the supplied URL string isn't a valid URL
      */
     public License(final String... aURL) throws MalformedURLException {
         final List<URL> urls = new ArrayList<>(aURL.length + LIST_PADDING);

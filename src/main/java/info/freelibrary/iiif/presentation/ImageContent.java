@@ -34,6 +34,9 @@ public class ImageContent extends Content<ImageContent> {
 
     /**
      * Creates a IIIF presentation content resource.
+     *
+     * @param aID An image content ID
+     * @param aCanvas A canvas for the image content
      */
     public ImageContent(final String aID, final Canvas aCanvas) {
         super(TYPE, aID, aCanvas);
@@ -41,6 +44,9 @@ public class ImageContent extends Content<ImageContent> {
 
     /**
      * Creates a IIIF presentation content resource.
+     *
+     * @param aID An image content ID
+     * @param aCanvas A canvas for the image content
      */
     public ImageContent(final URI aID, final Canvas aCanvas) {
         super(TYPE, aID, aCanvas);
@@ -61,7 +67,7 @@ public class ImageContent extends Content<ImageContent> {
     /**
      * Sets the default image resource.
      *
-     * @param aResource
+     * @param aResource An image resource
      * @return The image content
      */
     @JsonIgnore

@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation;
 
-import java.io.IOException;
 import java.net.URI;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
@@ -119,7 +118,7 @@ public class ImageResource extends ServiceImage {
      */
     @JsonGetter(Constants.FORMAT)
     public String getFormat() {
-        return myFormat != null ? myFormat.toString() : null;
+        return myFormat == null ? null : myFormat.toString();
     }
 
     /**
@@ -200,13 +199,7 @@ public class ImageResource extends ServiceImage {
 
     @JsonIgnore
     private void setMediaTypeFromExt(final String aURI) {
-        String mimeType = null;
-
-        try {
-            mimeType = FileUtils.getMimeType(aURI);
-        } catch (final IOException details) {
-            throw new RuntimeException(details);
-        }
+        final String mimeType = FileUtils.getMimeType(aURI);
 
         if (mimeType != null) {
             myFormat = MediaType.parse(mimeType);

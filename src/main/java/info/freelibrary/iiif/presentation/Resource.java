@@ -28,7 +28,7 @@ import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
 /**
- * An abstract resource that can be used as a base for IIIF resources.
+ * A resource that can be used as a base for more specific IIIF presentation resources.
  *
  * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
  */
@@ -36,7 +36,7 @@ import info.freelibrary.util.LoggerFactory;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.LABEL, Constants.ID, Constants.TYPE, Constants.DESCRIPTION,
     Constants.LOGO, Constants.THUMBNAIL, Constants.METADATA, Constants.SEQUENCES })
-public abstract class Resource<T extends Resource<T>> {
+public class Resource<T extends Resource<T>> {
 
     private final Type myType;
 
@@ -61,7 +61,7 @@ public abstract class Resource<T extends Resource<T>> {
     private SeeAlso mySeeAlso;
 
     /**
-     * Creates a new abstract resource from the supplied type.
+     * Creates a new resource from the supplied type.
      *
      * @param aType A resource type
      * @param aNumber the number of required arguments
@@ -72,7 +72,7 @@ public abstract class Resource<T extends Resource<T>> {
     }
 
     /**
-     * Creates a new abstract resource from the supplied ID and type.
+     * Creates a new resource from the supplied ID and type.
      *
      * @param aID An ID
      * @param aType A resource type
@@ -88,7 +88,7 @@ public abstract class Resource<T extends Resource<T>> {
     }
 
     /**
-     * Creates a new abstract resource from the supplied ID and type.
+     * Creates a new resource from the supplied ID and type.
      *
      * @param aID An ID
      * @param aType A resource type
@@ -102,7 +102,7 @@ public abstract class Resource<T extends Resource<T>> {
     }
 
     /**
-     * Creates a new abstract resource from a supplied ID, type, and label.
+     * Creates a new resource from a supplied ID, type, and label.
      *
      * @param aID A URI
      * @param aType A type of resources
@@ -124,7 +124,7 @@ public abstract class Resource<T extends Resource<T>> {
     }
 
     /**
-     * Creates a new abstract resource from a supplied ID and label.
+     * Creates a new resource from a supplied ID and label.
      *
      * @param aID A URI ID (preferably and HTTP based one)
      * @param aType A type of resource
@@ -141,7 +141,7 @@ public abstract class Resource<T extends Resource<T>> {
     }
 
     /**
-     * Creates a new abstract resource from string values.
+     * Creates a new resource from string values.
      *
      * @param aID An ID
      * @param aType A type
@@ -175,7 +175,7 @@ public abstract class Resource<T extends Resource<T>> {
     }
 
     /**
-     * Creates a new abstract resource from properties
+     * Creates a new resource from properties.
      *
      * @param aID An ID
      * @param aType A type
@@ -383,6 +383,7 @@ public abstract class Resource<T extends Resource<T>> {
      *
      * @param aURL A license URL
      * @return The resource
+     * @throws MalformedURLException If the supplied URL string isn't a valid URL
      */
     @JsonIgnore
     public T setLicense(final String aURL) throws MalformedURLException {
@@ -562,15 +563,15 @@ public abstract class Resource<T extends Resource<T>> {
      * @param aNameArray An array of names corresponding to the arguments passed to the constructor
      * @param aNumber The number of required arguments
      */
-    private void checkArgs(final Object[] aArgArray, final String[] aNameArray, final int aNumber) {
-        if (aArgArray.length < aNumber) {
+    private void checkArgs(final Object[] aArgs, final String[] aNames, final int aNumber) {
+        if (aArgs.length < aNumber) {
             throw new IndexOutOfBoundsException(String.valueOf(aNumber));
-        } else if (aArgArray.length != aNameArray.length) {
+        } else if (aArgs.length != aNames.length) {
             throw new IllegalArgumentException("Number of arguments is not equal to the number of names");
         }
 
         for (int index = 0; index < aNumber; index++) {
-            Objects.requireNonNull(aArgArray[index], getLogger().getMessage("{} is required", aNameArray[index]));
+            Objects.requireNonNull(aArgs[index], getLogger().getMessage(MessageCodes.EXC_012, aNames[index]));
         }
     }
 

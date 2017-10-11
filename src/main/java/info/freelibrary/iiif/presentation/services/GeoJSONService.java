@@ -14,7 +14,7 @@ import info.freelibrary.iiif.presentation.helpers.Constants;
  *
  * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
  */
-public class GeoJSONService extends Service {
+public class GeoJSONService implements Service {
 
     /* The context for this service */
     @JsonIgnore

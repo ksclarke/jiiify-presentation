@@ -43,7 +43,7 @@
   <properties>
     <jackson.version>2.7.4</jackson.version>
     <guava.version>23.0</guava.version>
-    <freelib-utils.version>0.8.4</freelib-utils.version>
+    <freelib-utils.version>0.8.5</freelib-utils.version>
 
     <!-- Test related versions -->
     <vertx.version>3.4.2</vertx.version>
@@ -144,6 +144,9 @@
         </configuration>
       </plugin>
       <plugin>
+        <artifactId>maven-pmd-plugin</artifactId>
+      </plugin>
+      <plugin>
         <artifactId>maven-checkstyle-plugin</artifactId>
       </plugin>
       <plugin>
@@ -217,7 +220,7 @@
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>0.2.2</version>
+    <version>0.2.5</version>
   </parent>
 
 </project>

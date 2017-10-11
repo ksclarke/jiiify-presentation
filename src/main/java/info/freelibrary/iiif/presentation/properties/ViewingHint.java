@@ -7,11 +7,13 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import info.freelibrary.iiif.presentation.MessageCodes;
 import info.freelibrary.iiif.presentation.helpers.Constants;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -261,13 +263,20 @@ public class ViewingHint {
          * @param aValue A string representation of the viewing hint value
          */
         public Value(final String aValue) {
-            try {
-                myOption = Option.valueOf(aValue.toUpperCase().replaceAll("\\-", ""));
-            } catch (final IllegalArgumentException vhDetails) {
+            final String value = aValue.toUpperCase(Locale.US).replaceAll("\\-", "");
+
+            for (final Option option : Option.values()) {
+                if (option.name().equals(value)) {
+                    myOption = Option.valueOf(value);
+                    break;
+                }
+            }
+
+            if (myOption == null) {
                 try {
                     myURI = URI.create(aValue);
                 } catch (final IllegalArgumentException uriDetails) {
-                    throw new IllegalArgumentException(LOGGER.getMessage("{} isn't a viewingHint or URI", aValue));
+                    throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.EXC_010, aValue), uriDetails);
                 }
             }
         }
@@ -294,13 +303,17 @@ public class ViewingHint {
          */
         @JsonValue
         public String getString() {
-            if (myURI != null) {
-                return myURI.toString();
-            } else if (myOption != null) {
-                return myOption.toString();
+            final String result;
+
+            if ((myURI == null) && (myOption == null)) {
+                result = null;
+            } else if (myOption == null) {
+                result = myURI.toString();
             } else {
-                return null;
+                return myOption.toString();
             }
+
+            return result;
         }
 
         /**

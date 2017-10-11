@@ -16,6 +16,8 @@ public class Annotation extends Resource<Annotation> {
 
     /**
      * Creates a IIIF presentation annotation resource.
+     *
+     * @param aID An annotation ID
      */
     public Annotation(final URI aID) {
         super(TYPE, aID, REQ_ARG_COUNT);
@@ -23,6 +25,8 @@ public class Annotation extends Resource<Annotation> {
 
     /**
      * Creates a IIIF presentation annotation resource.
+     *
+     * @param aID An annotation ID
      */
     public Annotation(final String aID) {
         super(TYPE, URI.create(aID), REQ_ARG_COUNT);

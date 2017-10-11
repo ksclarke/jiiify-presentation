@@ -25,6 +25,9 @@ public class Layer extends Resource<Layer> {
 
     /**
      * Creates a IIIF presentation layer resource.
+     *
+     * @param aID A layer ID
+     * @param aLabel A descriptive label for the layer
      */
     public Layer(final String aID, final String aLabel) {
         super(TYPE, aID, aLabel, REQ_ARG_COUNT);
@@ -32,6 +35,9 @@ public class Layer extends Resource<Layer> {
 
     /**
      * Creates a IIIF presentation layer resource.
+     *
+     * @param aID A layer ID
+     * @param aLabel A descriptive label for the layer
      */
     public Layer(final URI aID, final Label aLabel) {
         super(TYPE, aID, aLabel, REQ_ARG_COUNT);

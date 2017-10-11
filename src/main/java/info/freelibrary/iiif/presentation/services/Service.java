@@ -10,10 +10,14 @@ import info.freelibrary.iiif.presentation.helpers.Constants;
  *
  * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
  */
-public abstract class Service {
+public interface Service {
 
-    /** Required by ImageInfo, PhysicalDims; suggested by GeoJSON. */
+    /**
+     * Required by ImageInfo, PhysicalDims; suggested by GeoJSON.
+     *
+     * @return A context
+     */
     @JsonGetter(Constants.CONTEXT)
-    public abstract String getContext();
+    String getContext();
 
 }

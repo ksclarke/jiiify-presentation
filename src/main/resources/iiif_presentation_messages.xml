@@ -12,5 +12,9 @@
   <entry key="EXC-006">Image resource cannot be null</entry>
   <entry key="EXC-007">Context URI cannot be null</entry>
   <entry key="EXC-008">Sequence cannot be null</entry>
+  <entry key="EXC-009">SeeAlso ID cannot be null</entry>
+  <entry key="EXC-010">{} isn't a viewingHint or URI</entry>
+  <entry key="EXC-011">Width ({}) and height ({}) must be above zero</entry>
+  <entry key="EXC-012">{} is required</entry>
   
 </properties>

@@ -2,7 +2,6 @@
 package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -32,7 +31,6 @@ public class Collection extends Resource<Collection> {
      *
      * @param aID A collection ID
      * @param aLabel A collection label
-     * @throws IllegalArgumentException If the supplied ID is not a valid URI
      */
     public Collection(final String aID, final String aLabel) {
         super(TYPE, aID, aLabel, REQ_ARG_COUNT);
@@ -56,10 +54,9 @@ public class Collection extends Resource<Collection> {
      * @param aMetadata A collection's metadata
      * @param aDescription A collection description
      * @param aThumbnail A collection thumbnail
-     * @throws IllegalArgumentException If the supplied ID is not a valid URI
      */
     public Collection(final String aID, final String aLabel, final Metadata aMetadata, final String aDescription,
-            final Thumbnail aThumbnail) throws URISyntaxException {
+            final Thumbnail aThumbnail) {
         super(TYPE, aID, aLabel, aMetadata, aDescription, aThumbnail, REQ_ARG_COUNT);
     }
 

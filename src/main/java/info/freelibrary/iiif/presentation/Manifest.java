@@ -116,10 +116,10 @@ public class Manifest extends Resource<Manifest> {
      */
     @JsonIgnore
     public List<URI> getContexts() {
-        if (myContexts.size() > 0) {
-            return myContexts;
-        } else {
+        if (myContexts.isEmpty()) {
             return null;
+        } else {
+            return myContexts;
         }
     }
 

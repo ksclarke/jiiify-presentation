@@ -81,7 +81,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      * @param aValue A String property value
      * @return A String value to the property
      */
-    public T addValue(final String... aValue) {
+    public final T addValue(final String... aValue) {
         Objects.requireNonNull(aValue, MessageCodes.EXC_001);
 
         for (final String value : aValue) {
@@ -101,7 +101,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      * @param aValue A I18N property value
      * @return A String value to the property
      */
-    public T addValue(final Value... aValue) {
+    public final T addValue(final Value... aValue) {
         Objects.requireNonNull(aValue, MessageCodes.EXC_001);
 
         for (final Value value : aValue) {
@@ -121,7 +121,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      * @return True if the property has a value; else, false
      */
     public boolean hasValues() {
-        return myValues.size() > 0;
+        return !myValues.isEmpty();
     }
 
     /**
@@ -142,10 +142,10 @@ class I18nProperty<T extends I18nProperty<T>> {
                 while (iterator.hasNext()) {
                     final Value entry = iterator.next();
 
-                    if (!entry.getLang().isPresent()) {
-                        list.add(entry.getValue());
-                    } else {
+                    if (entry.getLang().isPresent()) {
                         list.add(entry);
+                    } else {
+                        list.add(entry.getValue());
                     }
                 }
 

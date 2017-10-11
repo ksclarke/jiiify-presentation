@@ -14,6 +14,9 @@ public class OtherContent extends Content<OtherContent> {
 
     /**
      * Creates a IIIF presentation content resource.
+     *
+     * @param aID A other content ID
+     * @param aCanvas A canvas for other content
      */
     public OtherContent(final String aID, final Canvas aCanvas) {
         super(TYPE, aID, aCanvas);
@@ -21,6 +24,9 @@ public class OtherContent extends Content<OtherContent> {
 
     /**
      * Creates a IIIF presentation content resource.
+     *
+     * @param aID A other content ID
+     * @param aCanvas A canvas for other content
      */
     public OtherContent(final URI aID, final Canvas aCanvas) {
         super(TYPE, aID, aCanvas);

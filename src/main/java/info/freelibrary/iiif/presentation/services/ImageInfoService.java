@@ -14,7 +14,7 @@ import info.freelibrary.iiif.presentation.helpers.Constants;
  * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
  */
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.ID, Constants.PROFILE })
-public class ImageInfoService extends Service {
+public class ImageInfoService implements Service {
 
     /* The context for this service */
     private static final String CONTEXT = "http://iiif.io/api/image/2/context.json";

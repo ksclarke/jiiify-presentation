@@ -5,6 +5,10 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
+import info.freelibrary.iiif.presentation.helpers.Constants;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+
 /**
  * The Image Info profile level.
  *
@@ -15,6 +19,8 @@ public enum APIComplianceLevel {
     ZERO("http://iiif.io/api/image/2/level0.json"),
     ONE("http://iiif.io/api/image/2/level1.json"),
     TWO("http://iiif.io/api/image/2/level2.json");
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(APIComplianceLevel.class, Constants.BUNDLE_NAME);
 
     private String myURL;
 
@@ -54,8 +60,8 @@ public enum APIComplianceLevel {
         try {
             return new URL(myURL);
         } catch (final MalformedURLException details) {
-            // The provided URLs should not have syntax exceptions
-            throw new RuntimeException(details);
+            LOGGER.error(details, details.getMessage());
+            return null; // should not be possible since we test URLs
         }
     }
 

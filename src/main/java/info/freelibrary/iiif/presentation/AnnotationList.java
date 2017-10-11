@@ -16,6 +16,8 @@ public class AnnotationList extends Resource<AnnotationList> {
 
     /**
      * Creates an annotation list resource.
+     *
+     * @param aID An annotation list ID
      */
     public AnnotationList(final String aID) {
         super(TYPE, aID, REQ_ARG_COUNT);
@@ -23,6 +25,8 @@ public class AnnotationList extends Resource<AnnotationList> {
 
     /**
      * Creates an annotation list resource.
+     *
+     * @param aID An annotation list ID
      */
     public AnnotationList(final URI aID) {
         super(TYPE, aID, REQ_ARG_COUNT);

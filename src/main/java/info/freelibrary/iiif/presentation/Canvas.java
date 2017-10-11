@@ -41,7 +41,8 @@ public class Canvas extends Resource<Canvas> {
      *
      * @param aID A canvas ID
      * @param aLabel A canvas label
-     * @throws IllegalArgumentException If the supplied ID is not a valid URI
+     * @param aWidth A canvas width
+     * @param aHeight A canvas height
      */
     public Canvas(final String aID, final String aLabel, final int aWidth, final int aHeight) {
         super(TYPE, aID, aLabel, REQ_ARG_COUNT);
@@ -53,6 +54,8 @@ public class Canvas extends Resource<Canvas> {
      *
      * @param aID A canvas ID
      * @param aLabel A canvas label
+     * @param aWidth A canvas width
+     * @param aHeight A canvas height
      */
     public Canvas(final URI aID, final Label aLabel, final int aWidth, final int aHeight) {
         super(TYPE, aID, aLabel, REQ_ARG_COUNT);
@@ -67,7 +70,6 @@ public class Canvas extends Resource<Canvas> {
      * @param aWidth A canvas width
      * @param aHeight A canvas height
      * @param aThumbnail A canvas thumbnail
-     * @throws IllegalArgumentException If the supplied ID is not a valid URI
      */
     public Canvas(final String aID, final String aLabel, final int aWidth, final int aHeight,
             final Thumbnail aThumbnail) {
@@ -148,8 +150,7 @@ public class Canvas extends Resource<Canvas> {
             myWidth = aWidth;
             myHeight = aHeight;
         } else {
-            throw new IllegalArgumentException(getLogger().getMessage("Width ({}) and height ({}) must be above zero",
-                    aWidth, aHeight));
+            throw new IllegalArgumentException(getLogger().getMessage(MessageCodes.EXC_011, aWidth, aHeight));
         }
     }
 

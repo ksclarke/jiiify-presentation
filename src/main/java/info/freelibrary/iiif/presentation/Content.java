@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.iiif.presentation.helpers.Constants;
 
 @SuppressWarnings("unchecked")
-abstract class Content<T extends Content<T>> extends Resource<T> {
+class Content<T extends Content<T>> extends Resource<T> {
 
     private static final String MOTIVATION = "sc:painting";
 
