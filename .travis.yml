@@ -14,7 +14,7 @@ branches:
     - develop
 
 script:
-  - mvn install
+  - mvn install pmd:pmd pmd:check
 
 after_success:
   - mvn com.gavinmogan:codacy-maven-plugin:coverage -DcoverageReportFile=target/site/jacoco/jacoco.xml -DprojectToken="${PROJECT_TOKEN}" -DapiToken="${API_TOKEN}"
