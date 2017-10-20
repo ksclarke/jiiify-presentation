@@ -1,9 +1,9 @@
 title=Frequently Asked Questions (FAQs)
-date=2016-08-03
+date=2017-10-20
 type=page
 status=published
 ~~~~~~
 
 There are not yet any FAQs.
 
-Feel free to submit some to the FreeLibrary Projects [mailing list](https://groups.google.com/forum/#!forum/freelibrary-projects).
+Feel free to send questions to <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>. Suggestions for improvements or bug reports can be filed in the project's [Issues](https://github.com/ksclarke/jiiify-presentation/issues) page.
