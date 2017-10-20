@@ -5,8 +5,8 @@ import java.net.URI;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 
-import info.freelibrary.iiif.presentation.helpers.Constants;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
+import info.freelibrary.iiif.presentation.util.Constants;
 
 /**
  * A thumbnail property.

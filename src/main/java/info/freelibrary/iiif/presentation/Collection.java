@@ -6,12 +6,12 @@ import java.net.URI;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.iiif.presentation.helpers.Constants;
 import info.freelibrary.iiif.presentation.properties.Description;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.NavDate;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
+import info.freelibrary.iiif.presentation.util.Constants;
 
 /**
  * A collection resource.

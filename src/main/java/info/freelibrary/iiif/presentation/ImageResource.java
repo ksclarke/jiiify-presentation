@@ -10,9 +10,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.google.common.net.MediaType;
 
-import info.freelibrary.iiif.presentation.helpers.Constants;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.services.ServiceImage;
+import info.freelibrary.iiif.presentation.util.Constants;
 import info.freelibrary.util.FileUtils;
 
 /**

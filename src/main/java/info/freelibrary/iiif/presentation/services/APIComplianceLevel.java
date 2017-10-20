@@ -5,7 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
-import info.freelibrary.iiif.presentation.helpers.Constants;
+import info.freelibrary.iiif.presentation.util.Constants;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 

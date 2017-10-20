@@ -10,8 +10,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.iiif.presentation.MessageCodes;
-import info.freelibrary.iiif.presentation.helpers.Constants;
+import info.freelibrary.iiif.presentation.util.Constants;
+import info.freelibrary.iiif.presentation.util.MessageCodes;
 
 /**
  * An image.

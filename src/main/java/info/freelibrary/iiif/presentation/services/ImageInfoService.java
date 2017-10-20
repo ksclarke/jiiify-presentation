@@ -6,7 +6,7 @@ import java.net.URI;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import info.freelibrary.iiif.presentation.helpers.Constants;
+import info.freelibrary.iiif.presentation.util.Constants;
 
 /**
  * An Image Info service that will return image info about a particular item.

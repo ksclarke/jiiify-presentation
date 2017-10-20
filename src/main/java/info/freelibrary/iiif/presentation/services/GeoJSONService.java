@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.iiif.presentation.helpers.Constants;
+import info.freelibrary.iiif.presentation.util.Constants;
 
 /**
  * A GeoJSON service. Right now, this just supports externally resolved GeoJSON, not embedded.

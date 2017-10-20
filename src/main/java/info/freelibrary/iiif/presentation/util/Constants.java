@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.helpers;
+package info.freelibrary.iiif.presentation.util;
 
 /**
  * Constants for the Jiiify Presentation project.

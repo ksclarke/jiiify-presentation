@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.AbstractTest;
 import info.freelibrary.iiif.presentation.Manifest;
-import info.freelibrary.iiif.presentation.helpers.Constants;
+import info.freelibrary.iiif.presentation.util.Constants;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
