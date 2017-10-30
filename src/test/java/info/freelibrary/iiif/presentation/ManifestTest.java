@@ -144,7 +144,7 @@ public class ManifestTest extends AbstractTest {
         mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
         mapper.findAndRegisterModules(); // Needed for Jdk8Module
 
-        System.out.println(mapper.writeValueAsString(manifest));
+        // System.out.println(mapper.writeValueAsString(manifest));
     }
 
 }

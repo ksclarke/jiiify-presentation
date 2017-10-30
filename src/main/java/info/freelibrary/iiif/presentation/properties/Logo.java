@@ -5,8 +5,8 @@ import java.net.URI;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 
-import info.freelibrary.iiif.presentation.helpers.Constants;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
+import info.freelibrary.iiif.presentation.util.Constants;
 
 /**
  * A logo property.
@@ -31,6 +31,28 @@ public class Logo extends ServiceProperty<Logo> {
      */
     public Logo(final URI... aID) {
         addImage(aID);
+    }
+
+    /**
+     * Creates a logo property.
+     *
+     * @param aURI A URI image ID
+     * @param aWidth An image width
+     * @param aHeight An image height
+     */
+    public Logo(final String aURI, final int aWidth, final int aHeight) {
+        addImage(aURI, aWidth, aHeight);
+    }
+
+    /**
+     * Creates a logo property.
+     *
+     * @param aID A URI image ID
+     * @param aWidth An image width
+     * @param aHeight An image height
+     */
+    public Logo(final URI aID, final int aWidth, final int aHeight) {
+        addImage(aID, aWidth, aHeight);
     }
 
     /**

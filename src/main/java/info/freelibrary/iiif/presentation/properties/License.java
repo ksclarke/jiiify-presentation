@@ -11,14 +11,12 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
  * A license property.
- *
- * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
  */
 public class License {
 
     private static final int LIST_PADDING = 2;
 
-    private List<URL> myURLs;
+    private final List<URL> myURLs;
 
     /**
      * Creates a license property from the supplied URL(s).
@@ -27,13 +25,11 @@ public class License {
      * @throws MalformedURLException If the supplied URL string isn't a valid URL
      */
     public License(final String... aURL) throws MalformedURLException {
-        final List<URL> urls = new ArrayList<>(aURL.length + LIST_PADDING);
+        myURLs = new ArrayList<>(aURL.length + LIST_PADDING);
 
         for (final String url : aURL) {
-            urls.add(new URL(url));
+            myURLs.add(new URL(url));
         }
-
-        myURLs = urls;
     }
 
     /**
@@ -110,11 +106,16 @@ public class License {
      * @return The URLs for the licenses
      */
     public List<URL> getURLs() {
-        if (myURLs == null) {
-            myURLs = new ArrayList<URL>();
-        }
-
         return myURLs;
+    }
+
+    /**
+     * Gets number of license URLs.
+     *
+     * @return The number of license URLs
+     */
+    public int count() {
+        return getURLs().size();
     }
 
     /**
@@ -138,12 +139,10 @@ public class License {
      * @return The first URL
      */
     public URL getURL() {
-        final List<URL> urls = getURLs();
-
-        if (urls.size() > 1) {
-            return urls.get(0);
-        } else {
+        if (myURLs.isEmpty()) {
             return null;
+        } else {
+            return myURLs.get(0);
         }
     }
 

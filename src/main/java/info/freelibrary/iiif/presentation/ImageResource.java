@@ -10,10 +10,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.google.common.net.MediaType;
 
-import info.freelibrary.iiif.presentation.helpers.Constants;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.services.ServiceImage;
-import info.freelibrary.util.FileUtils;
+import info.freelibrary.iiif.presentation.util.Constants;
 
 /**
  * An image content resource.
@@ -24,14 +23,6 @@ import info.freelibrary.util.FileUtils;
     Constants.HEIGHT, Constants.FORMAT, Constants.SERVICE })
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ImageResource extends ServiceImage {
-
-    static final String TYPE = "dctypes:Image";
-
-    private MediaType myFormat;
-
-    private int myWidth;
-
-    private int myHeight;
 
     private String myLabel;
 
@@ -78,25 +69,15 @@ public class ImageResource extends ServiceImage {
     }
 
     /**
-     * Gets the resource type.
-     *
-     * @return The resource type
-     */
-    @JsonGetter(Constants.TYPE)
-    public String getType() {
-        return TYPE;
-    }
-
-    /**
      * Sets the format of the image resource.
      *
      * @param aMediaType A string representation of media type
      * @return The image resource
      */
+    @Override
     @JsonSetter(Constants.FORMAT)
     public ImageResource setFormat(final String aMediaType) {
-        myFormat = MediaType.parse(aMediaType);
-        return this;
+        return (ImageResource) super.setFormat(aMediaType);
     }
 
     /**
@@ -105,30 +86,10 @@ public class ImageResource extends ServiceImage {
      * @param aMediaType A media type
      * @return The image resource
      */
+    @Override
     @JsonIgnore
     public ImageResource setFormatMediaType(final MediaType aMediaType) {
-        myFormat = aMediaType;
-        return this;
-    }
-
-    /**
-     * Gets the format of the image resource.
-     *
-     * @return A string representation of the format
-     */
-    @JsonGetter(Constants.FORMAT)
-    public String getFormat() {
-        return myFormat == null ? null : myFormat.toString();
-    }
-
-    /**
-     * Gets the media type format of the image resource.
-     *
-     * @return The media type format of the image resource
-     */
-    @JsonIgnore
-    public MediaType getFormatMediaType() {
-        return myFormat;
+        return (ImageResource) super.setFormatMediaType(aMediaType);
     }
 
     /**
@@ -137,10 +98,10 @@ public class ImageResource extends ServiceImage {
      * @param aWidth The image resource width
      * @return The image resource
      */
+    @Override
     @JsonSetter(Constants.WIDTH)
     public ImageResource setWidth(final int aWidth) {
-        myWidth = aWidth;
-        return this;
+        return (ImageResource) super.setWidth(aWidth);
     }
 
     /**
@@ -149,10 +110,10 @@ public class ImageResource extends ServiceImage {
      * @param aHeight The image resource height
      * @return The image resource
      */
+    @Override
     @JsonSetter(Constants.HEIGHT)
     public ImageResource setHeight(final int aHeight) {
-        myHeight = aHeight;
-        return this;
+        return (ImageResource) super.setHeight(aHeight);
     }
 
     /**
@@ -168,26 +129,6 @@ public class ImageResource extends ServiceImage {
     }
 
     /**
-     * Gets the image resource width.
-     *
-     * @return The image resource
-     */
-    @JsonGetter(Constants.WIDTH)
-    public int getWidth() {
-        return myWidth;
-    }
-
-    /**
-     * Gets the image resource height.
-     *
-     * @return The image resource
-     */
-    @JsonGetter(Constants.HEIGHT)
-    public int getHeight() {
-        return myHeight;
-    }
-
-    /**
      * Gets the image resource label.
      *
      * @return The image resource label
@@ -197,12 +138,4 @@ public class ImageResource extends ServiceImage {
         return myLabel;
     }
 
-    @JsonIgnore
-    private void setMediaTypeFromExt(final String aURI) {
-        final String mimeType = FileUtils.getMimeType(aURI);
-
-        if (mimeType != null) {
-            myFormat = MediaType.parse(mimeType);
-        }
-    }
 }

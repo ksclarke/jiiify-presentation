@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-  <entry key="message-class-name">info.freelibrary.iiif.presentation.MessageCodes</entry>
+  <entry key="message-class-name">info.freelibrary.iiif.presentation.util.MessageCodes</entry>
 
   <!-- Messages to be stored in the MessageCodes class -->
   <entry key="EXC-001">Property value cannot be null</entry>
@@ -16,5 +16,6 @@
   <entry key="EXC-010">{} isn't a viewingHint or URI</entry>
   <entry key="EXC-011">Width ({}) and height ({}) must be above zero</entry>
   <entry key="EXC-012">{} is required</entry>
+  <entry key="EXC-013">{} is not a recognizable media type</entry>
   
 </properties>

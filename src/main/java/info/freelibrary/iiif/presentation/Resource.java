@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
-import info.freelibrary.iiif.presentation.helpers.Constants;
 import info.freelibrary.iiif.presentation.properties.Attribution;
 import info.freelibrary.iiif.presentation.properties.Description;
 import info.freelibrary.iiif.presentation.properties.Label;
@@ -24,6 +23,8 @@ import info.freelibrary.iiif.presentation.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.properties.Type;
 import info.freelibrary.iiif.presentation.properties.ViewingHint;
 import info.freelibrary.iiif.presentation.properties.ViewingHint.Option;
+import info.freelibrary.iiif.presentation.util.Constants;
+import info.freelibrary.iiif.presentation.util.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 

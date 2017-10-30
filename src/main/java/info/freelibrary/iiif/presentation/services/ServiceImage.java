@@ -1,25 +1,41 @@
 
 package info.freelibrary.iiif.presentation.services;
 
+import static info.freelibrary.iiif.presentation.util.Constants.BUNDLE_NAME;
+
 import java.net.URI;
 import java.util.Objects;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.google.common.net.MediaType;
 
-import info.freelibrary.iiif.presentation.MessageCodes;
-import info.freelibrary.iiif.presentation.helpers.Constants;
+import info.freelibrary.iiif.presentation.util.Constants;
+import info.freelibrary.iiif.presentation.util.MessageCodes;
+import info.freelibrary.util.FileUtils;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
 
 /**
  * An image.
- *
- * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
  */
-@JsonPropertyOrder({ Constants.ID, Constants.SERVICE })
+@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.FORMAT, Constants.WIDTH, Constants.HEIGHT,
+    Constants.SERVICE })
+@JsonInclude(Include.NON_DEFAULT)
 public class ServiceImage {
+
+    static final String TYPE = "dctypes:Image";
+
+    private Optional<MediaType> myFormat;
+
+    private int myWidth;
+
+    private int myHeight;
 
     private URI myID;
 
@@ -28,13 +44,15 @@ public class ServiceImage {
     /**
      * Creates an image
      *
-     * @param aID An image ID
+     * @param aURI An image ID
      */
-    public ServiceImage(final String aID) {
-        Objects.requireNonNull(aID, MessageCodes.EXC_003);
+    public ServiceImage(final String aURI) {
+        Objects.requireNonNull(aURI, MessageCodes.EXC_003);
 
         myService = Optional.empty();
-        myID = URI.create(aID);
+        myID = URI.create(aURI);
+
+        setMediaTypeFromExt(aURI);
     }
 
     /**
@@ -47,19 +65,23 @@ public class ServiceImage {
 
         myService = Optional.empty();
         myID = aID;
+
+        setMediaTypeFromExt(aID.toString());
     }
 
     /**
      * Creates an image.
      *
-     * @param aID An image ID as URI string
+     * @param aURI A URI image ID
      * @param aService A service for the image
      */
-    public ServiceImage(final String aID, final ImageInfoService aService) {
-        Objects.requireNonNull(aID, MessageCodes.EXC_003);
+    public ServiceImage(final String aURI, final ImageInfoService aService) {
+        Objects.requireNonNull(aURI, MessageCodes.EXC_003);
 
-        myID = URI.create(aID);
+        myID = URI.create(aURI);
         myService = Optional.ofNullable(aService);
+
+        setMediaTypeFromExt(aURI);
     }
 
     /**
@@ -73,6 +95,140 @@ public class ServiceImage {
 
         myID = aID;
         myService = Optional.ofNullable(aService);
+
+        setMediaTypeFromExt(aID.toString());
+    }
+
+    /**
+     * Creates an image.
+     *
+     * @param aURI An image ID
+     * @param aWidth An image width
+     * @param aHeight An image height
+     */
+    public ServiceImage(final String aURI, final int aWidth, final int aHeight) {
+        Objects.requireNonNull(aURI, MessageCodes.EXC_003);
+
+        myID = URI.create(aURI);
+        myWidth = aWidth;
+        myHeight = aHeight;
+
+        setMediaTypeFromExt(aURI);
+    }
+
+    /**
+     * Creates an image.
+     *
+     * @param aID An image ID
+     * @param aWidth An image width
+     * @param aHeight An image height
+     */
+    public ServiceImage(final URI aID, final int aWidth, final int aHeight) {
+        Objects.requireNonNull(aID, MessageCodes.EXC_003);
+
+        myID = aID;
+        myWidth = aWidth;
+        myHeight = aHeight;
+
+        setMediaTypeFromExt(aID.toString());
+    }
+
+    /**
+     * Gets the image type.
+     *
+     * @return The image type
+     */
+    @JsonGetter(Constants.TYPE)
+    public String getType() {
+        return TYPE;
+    }
+
+    /**
+     * Sets the format of the image from a file extension or media type.
+     *
+     * @param aMediaType A string representation of media type or file extension
+     * @return The image
+     */
+    @JsonSetter(Constants.FORMAT)
+    public ServiceImage setFormat(final String aMediaType) {
+        setMediaTypeFromExt(aMediaType);
+        return this;
+    }
+
+    /**
+     * Sets the format of the image.
+     *
+     * @param aMediaType A media type
+     * @return The image
+     */
+    @JsonIgnore
+    public ServiceImage setFormatMediaType(final MediaType aMediaType) {
+        myFormat = Optional.ofNullable(aMediaType);
+        return this;
+    }
+
+    /**
+     * Gets the format of the image.
+     *
+     * @return A string representation of the format
+     */
+    @JsonGetter(Constants.FORMAT)
+    public String getFormat() {
+        return myFormat.isPresent() ? myFormat.get().toString() : null;
+    }
+
+    /**
+     * Gets the media type format of the image.
+     *
+     * @return The media type format of the image
+     */
+    @JsonIgnore
+    public Optional<MediaType> getFormatMediaType() {
+        return myFormat;
+    }
+
+    /**
+     * Sets the image width.
+     *
+     * @param aWidth The image width
+     * @return The image
+     */
+    @JsonSetter(Constants.WIDTH)
+    public ServiceImage setWidth(final int aWidth) {
+        myWidth = aWidth;
+        return this;
+    }
+
+    /**
+     * Sets the image height.
+     *
+     * @param aHeight The image height
+     * @return The image
+     */
+    @JsonSetter(Constants.HEIGHT)
+    public ServiceImage setHeight(final int aHeight) {
+        myHeight = aHeight;
+        return this;
+    }
+
+    /**
+     * Gets the image width.
+     *
+     * @return The image width
+     */
+    @JsonGetter(Constants.WIDTH)
+    public int getWidth() {
+        return myWidth;
+    }
+
+    /**
+     * Gets the image height.
+     *
+     * @return The image height
+     */
+    @JsonGetter(Constants.HEIGHT)
+    public int getHeight() {
+        return myHeight;
     }
 
     /**
@@ -118,7 +274,7 @@ public class ServiceImage {
      */
     @JsonGetter(Constants.SERVICE)
     public Optional<ImageInfoService> getService() {
-        return myService;
+        return myService == null ? Optional.empty() : myService;
     }
 
     /**
@@ -133,4 +289,22 @@ public class ServiceImage {
         return this;
     }
 
+    @JsonIgnore
+    protected final void setMediaTypeFromExt(final String aURI) {
+        final String mimeType = FileUtils.getMimeType(aURI);
+
+        try {
+            if (mimeType != null) {
+                myFormat = Optional.ofNullable(MediaType.parse(mimeType));
+            } else {
+                myFormat = Optional.ofNullable(MediaType.parse(aURI));
+            }
+        } catch (final IllegalArgumentException details) {
+            getLogger().warn(MessageCodes.EXC_013, aURI);
+        }
+    }
+
+    protected Logger getLogger() {
+        return LoggerFactory.getLogger(ServiceImage.class, BUNDLE_NAME);
+    }
 }

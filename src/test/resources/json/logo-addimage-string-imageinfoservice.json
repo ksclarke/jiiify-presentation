@@ -1,0 +1,16 @@
+[ {
+  "@id" : "http://example.org/images/logo1.jpg",
+  "@type" : "dctypes:Image",
+  "format" : "image/jpeg",
+  "width" : 1000,
+  "height" : 1000
+}, {
+  "@id" : "http://example.org/images/logo2.jpg",
+  "@type" : "dctypes:Image",
+  "format" : "image/jpeg",
+  "service" : {
+    "@context" : "http://iiif.io/api/image/2/context.json",
+    "@id" : "http://example.org/asdf",
+    "profile" : "http://iiif.io/api/image/2/level0.json"
+  }
+} ]

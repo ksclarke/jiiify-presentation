@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.properties;
 
-import static info.freelibrary.iiif.presentation.helpers.Constants.BUNDLE_NAME;
+import static info.freelibrary.iiif.presentation.util.Constants.BUNDLE_NAME;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -13,8 +13,8 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-import info.freelibrary.iiif.presentation.MessageCodes;
-import info.freelibrary.iiif.presentation.helpers.Constants;
+import info.freelibrary.iiif.presentation.util.Constants;
+import info.freelibrary.iiif.presentation.util.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 

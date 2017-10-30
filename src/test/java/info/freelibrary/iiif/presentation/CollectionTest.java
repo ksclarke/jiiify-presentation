@@ -5,8 +5,6 @@ import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.properties.NavDate;
 
-import io.vertx.core.json.JsonObject;
-
 public class CollectionTest {
 
     @Test
@@ -15,7 +13,7 @@ public class CollectionTest {
 
         collection.setNavDate(NavDate.now());
 
-        System.out.println(JsonObject.mapFrom(collection).encodePrettily());
+        // System.out.println(JsonObject.mapFrom(collection).encodePrettily());
     }
 
     @Test
@@ -24,7 +22,7 @@ public class CollectionTest {
 
         collection.setNavDate(new NavDate(NavDate.now().getZonedDateTime()));
 
-        System.out.println(JsonObject.mapFrom(collection).encodePrettily());
+        // System.out.println(JsonObject.mapFrom(collection).encodePrettily());
     }
 
 }
