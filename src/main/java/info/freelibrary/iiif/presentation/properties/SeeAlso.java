@@ -66,31 +66,7 @@ public class SeeAlso {
      * @param aMediaType A media type
      */
     public SeeAlso(final String aID, final MediaType aMediaType) {
-        myValues = new ArrayList<>();
-
-        Objects.requireNonNull(aID, MessageCodes.EXC_003);
-        Objects.requireNonNull(aMediaType, MessageCodes.EXC_004);
-
-        if (!myValues.add(new Value(URI.create(aID), Optional.of(aMediaType)))) {
-            throw new UnsupportedOperationException();
-        }
-    }
-
-    /**
-     * Creates a new see also.
-     *
-     * @param aID The see also's ID
-     * @param aMediaType A media type
-     */
-    public SeeAlso(final String aID, final String aMediaType) {
-        myValues = new ArrayList<>();
-
-        Objects.requireNonNull(aID, MessageCodes.EXC_003);
-        Objects.requireNonNull(aMediaType, MessageCodes.EXC_004);
-
-        if (!myValues.add(new Value(URI.create(aID), Optional.of(MediaType.parse(aMediaType))))) {
-            throw new UnsupportedOperationException();
-        }
+        this(URI.create(aID), aMediaType);
     }
 
     /**
@@ -117,20 +93,8 @@ public class SeeAlso {
      * @param aMediaType A media type
      * @param aProfile A profile
      */
-    public SeeAlso(final String aID, final String aMediaType, final String aProfile) {
-        final Value value;
-
-        myValues = new ArrayList<>();
-
-        Objects.requireNonNull(aID, MessageCodes.EXC_003);
-        Objects.requireNonNull(aMediaType, MessageCodes.EXC_004);
-        Objects.requireNonNull(aProfile, MessageCodes.EXC_005);
-
-        value = new Value(URI.create(aID), Optional.of(MediaType.parse(aMediaType)), Optional.of(aProfile));
-
-        if (!myValues.add(value)) {
-            throw new UnsupportedOperationException();
-        }
+    public SeeAlso(final URI aID, final String aMediaType, final URI aProfile) {
+        this(aID, MediaType.parse(aMediaType), aProfile);
     }
 
     /**
@@ -141,19 +105,7 @@ public class SeeAlso {
      * @param aProfile A profile
      */
     public SeeAlso(final String aID, final MediaType aMediaType, final String aProfile) {
-        final Value value;
-
-        myValues = new ArrayList<>();
-
-        Objects.requireNonNull(aID, MessageCodes.EXC_003);
-        Objects.requireNonNull(aMediaType, MessageCodes.EXC_004);
-        Objects.requireNonNull(aProfile, MessageCodes.EXC_005);
-
-        value = new Value(URI.create(aID), Optional.of(aMediaType), Optional.of(aProfile));
-
-        if (!myValues.add(value)) {
-            throw new UnsupportedOperationException();
-        }
+        this(URI.create(aID), aMediaType, URI.create(aProfile));
     }
 
     /**
@@ -163,7 +115,7 @@ public class SeeAlso {
      * @param aMediaType A media type
      * @param aProfile A profile
      */
-    public SeeAlso(final URI aID, final MediaType aMediaType, final String aProfile) {
+    public SeeAlso(final URI aID, final MediaType aMediaType, final URI aProfile) {
         myValues = new ArrayList<>();
 
         Objects.requireNonNull(aID, MessageCodes.EXC_003);
@@ -172,6 +124,61 @@ public class SeeAlso {
 
         if (!myValues.add(new Value(aID, Optional.of(aMediaType), Optional.of(aProfile)))) {
             throw new UnsupportedOperationException();
+        }
+    }
+
+    /**
+     * Gets the first see also value's ID.
+     *
+     * @return The first see also value's ID
+     */
+    public URI getID() {
+        if (myValues.isEmpty()) {
+            return null;
+        } else {
+            return myValues.get(0).getID();
+        }
+    }
+
+    /**
+     * Gets the first see also value's profile.
+     *
+     * @return The first see also value's profile
+     */
+    @JsonIgnore
+    public Optional<URI> getProfile() {
+        if (myValues.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return myValues.get(0).getProfile();
+        }
+    }
+
+    /**
+     * Gets the first see also value's format.
+     *
+     * @return The first see also value's format
+     */
+    @JsonIgnore
+    public Optional<String> getFormat() {
+        if (myValues.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return myValues.get(0).getFormat();
+        }
+    }
+
+    /**
+     * Gets the first see also value's format media type.
+     *
+     * @return The first see also value's format media type
+     */
+    @JsonIgnore
+    public Optional<MediaType> getFormatMediaType() {
+        if (myValues.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return myValues.get(0).getFormatMediaType();
         }
     }
 
@@ -209,6 +216,16 @@ public class SeeAlso {
         }
 
         return this;
+    }
+
+    /**
+     * Returns number of see also values.
+     *
+     * @return The number of see also values
+     */
+    @JsonIgnore
+    public int count() {
+        return myValues.size();
     }
 
     /**
@@ -266,7 +283,7 @@ public class SeeAlso {
 
         private final Optional<MediaType> myFormat;
 
-        private final Optional<String> myProfile;
+        private final Optional<URI> myProfile;
 
         /**
          * Creates a new see also value from the supplied string ID.
@@ -297,7 +314,7 @@ public class SeeAlso {
          * @param aFormat A format
          * @param aProfile A profile
          */
-        private Value(final URI aID, final Optional<MediaType> aFormat, final Optional<String> aProfile) {
+        private Value(final URI aID, final Optional<MediaType> aFormat, final Optional<URI> aProfile) {
             myID = aID;
             myFormat = aFormat;
             myProfile = aProfile;
@@ -339,13 +356,13 @@ public class SeeAlso {
          * @return The profile
          */
         @JsonIgnore
-        public Optional<String> getProfile() {
+        public Optional<URI> getProfile() {
             return myProfile;
         }
 
         @JsonGetter(Constants.PROFILE)
         private String getProfileAsString() {
-            return myProfile.isPresent() ? myProfile.get() : null;
+            return myProfile.isPresent() ? myProfile.get().toString() : null;
         }
 
         @JsonGetter(Constants.FORMAT)

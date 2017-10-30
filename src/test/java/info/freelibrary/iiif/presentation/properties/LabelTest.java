@@ -9,14 +9,10 @@ import org.junit.Test;
 import info.freelibrary.iiif.presentation.AbstractTest;
 import info.freelibrary.iiif.presentation.Manifest;
 import info.freelibrary.iiif.presentation.util.Constants;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
 
 import io.vertx.core.json.JsonObject;
 
 public class LabelTest extends AbstractTest {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(MetadataTest.class, Constants.BUNDLE_NAME);
 
     private Manifest myManifest;
 
@@ -29,12 +25,17 @@ public class LabelTest extends AbstractTest {
     }
 
     @Test
+    public void testValueConstructor() {
+        final Label label = new Label(new Value("asdf"));
+        assertEquals("asdf", label.getString());
+    }
+
+    @Test
     public void testSingleLabelObj() {
         myManifest.setLabel(new Label("asdf"));
         myJSON.put(Constants.LABEL, "asdf").put(Constants.ID, "aaaa").put(Constants.TYPE, "sc:Manifest");
 
         assertEquals(JsonObject.mapFrom(myManifest), myJSON);
-        LOGGER.debug("testSinglePairJson" + System.lineSeparator() + myJSON.encodePrettily());
     }
 
     @Test
@@ -43,7 +44,6 @@ public class LabelTest extends AbstractTest {
         myJSON.put(Constants.LABEL, "asdf").put(Constants.ID, "aaaa").put(Constants.TYPE, "sc:Manifest");
 
         assertEquals(JsonObject.mapFrom(myManifest), myJSON);
-        LOGGER.debug("testSinglePairJson" + System.lineSeparator() + myJSON.encodePrettily());
     }
 
 }
