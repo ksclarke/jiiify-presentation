@@ -45,7 +45,7 @@
     <freelib.utils.version>0.8.8</freelib.utils.version>
 
     <!-- Test related versions -->
-    <vertx.version>3.5.1</vertx.version>
+    <vertx.version>3.5.4</vertx.version>
     <opencsv.version>3.10</opencsv.version>
 
     <!-- Build related versions -->
