@@ -42,7 +42,7 @@
   <properties>
     <jackson.version>2.9.7</jackson.version>
     <guava.version>25.0-jre</guava.version>
-    <freelib.utils.version>0.8.8</freelib.utils.version>
+    <freelib.utils.version>0.8.9</freelib.utils.version>
 
     <!-- Test related versions -->
     <vertx.version>3.5.4</vertx.version>
