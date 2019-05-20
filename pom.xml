@@ -40,7 +40,7 @@
   </developers>
 
   <properties>
-    <jackson.version>2.9.8</jackson.version>
+    <jackson.version>2.9.9</jackson.version>
     <guava.version>27.0.1-jre</guava.version>
     <freelib.utils.version>0.8.9</freelib.utils.version>
 
