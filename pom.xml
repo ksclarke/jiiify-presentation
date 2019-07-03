@@ -41,6 +41,7 @@
 
   <properties>
     <jackson.version>2.9.9</jackson.version>
+    <jackson.databind.version>2.9.9.1</jackson.databind.version>
     <guava.version>27.0.1-jre</guava.version>
     <freelib.utils.version>0.8.9</freelib.utils.version>
 
@@ -67,7 +68,7 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>${jackson.version}</version>
+      <version>${jackson.databind.version}</version>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
