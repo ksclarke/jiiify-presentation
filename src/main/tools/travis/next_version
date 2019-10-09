@@ -1,0 +1,9 @@
+#! /bin/bash
+
+#
+# A simple script to return the next version of a Maven snapshot project.
+#
+
+VERSION=$(mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive exec:exec)
+
+echo ${VERSION%"-SNAPSHOT"}

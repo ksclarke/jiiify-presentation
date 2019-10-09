@@ -1,0 +1,13 @@
+#! /bin/bash
+
+#
+# A simple script to perform a release. It can be run locally or from a CI server.
+# From CI, a settings.xml file must be supplied.
+#
+
+# We can supply a settings.xml file for custom settings
+if [ -z "$1" ]; then
+  mvn -U -Dmaven.test.skip=true help:active-profiles clean deploy -P release,!code-coverage
+else
+  mvn -U -Dmaven.test.skip=true help:active-profiles clean deploy -P release,!code-coverage -s "$1"
+fi
