@@ -1,7 +1,0 @@
-#! /bin/bash
-
-#
-# A simple script to push the latest tag to origin.
-#
-
-git push origin $(git describe)
