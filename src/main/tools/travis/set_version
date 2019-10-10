@@ -1,7 +1,0 @@
-#! /bin/bash
-
-#
-# A simple script to set a new version in a project's POM file.
-#
-
-mvn -q versions:set -DnewVersion="$1"

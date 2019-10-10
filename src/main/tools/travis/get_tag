@@ -1,7 +1,0 @@
-#! /bin/bash
-
-#
-# Get the latest tag on any branch.
-#
-
-git describe --tags $(git rev-list --tags --max-count=1)

@@ -1,8 +1,0 @@
-#! /bin/bash
-
-#
-# A simple script to unencrypt the build key. Two variables should be passed in. These variables will look something
-#   like: $encrypted_f9b802c36f4f_key and $encrypted_f9b802c36f4f_iv (same number but ending in _key and _iv).
-#
-
-openssl aes-256-cbc -K $1 -iv $2 -in src/main/resources/build-key.gpg.enc -out src/main/resources/build-key.gpg -d
