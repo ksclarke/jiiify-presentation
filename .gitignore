@@ -3,3 +3,12 @@ src/main/generated
 
 # Build artifacts in case someone doesn't use a global .gitignore
 target
+
+# We encode this for deploys but we NEVER want to check it in
+src/main/resources/build-key.gpg
+
+# Ignore project build tools which are generated on each build;
+# we keep Checkstyle and PMD so they can be picked up by Codacy
+src/main/tools/travis
+src/main/tools/eclipse
+

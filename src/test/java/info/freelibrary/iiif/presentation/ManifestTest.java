@@ -28,6 +28,9 @@ import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.JsonObject;
 
+/**
+ * A manifest test.
+ */
 public class ManifestTest extends AbstractTest {
 
     private static final String SINAI_JSON = "src/test/resources/json/z1960050.json";
@@ -46,10 +49,11 @@ public class ManifestTest extends AbstractTest {
 
     private static final String LOGO_URI = "https://sinai-images.library.ucla.edu/images/logos/iiif_logo.png";
 
-    private static final List<String[]> metadataPairs = Stream.of(new String[] { "Title",
-        "Georgian NF Fragment 68a" }, new String[] { "Extent", "1 f" }, new String[] { "Overtext Language",
-            "Georgian" }, new String[] { "Undertext Language(s)", "Christian Palestinian Aramaic" }).collect(
-                    Collectors.toList());;
+    private static final String TEST_TITLE = "Georgian NF Fragment 68a";
+
+    private static final List<String[]> METADATA_PAIRS = Stream.of(new String[] { "Title", TEST_TITLE },
+            new String[] { "Extent", "1 f" }, new String[] { "Overtext Language", "Georgian" }, new String[] {
+                "Undertext Language(s)", "Christian Palestinian Aramaic" }).collect(Collectors.toList());
 
     private static final int HEIGHT = 8176;
 
@@ -59,6 +63,11 @@ public class ManifestTest extends AbstractTest {
 
     private List<String[]> mySecondCanvas;
 
+    /**
+     * Sets up the manifest testing environment.
+     *
+     * @throws IOException If there is trouble reading test files
+     */
     @Before
     public void setUp() throws IOException {
         final CSVReader reader1 = new CSVReader(new FileReader("src/test/resources/csv/sinai-images-canvas-1.csv"));
@@ -71,16 +80,22 @@ public class ManifestTest extends AbstractTest {
         reader2.close();
     }
 
+    /**
+     * Test reading a Sinai manifest.
+     *
+     * @throws URISyntaxException If there is an invalid URI
+     * @throws UnsupportedEncodingException If there is an unsupported encoding
+     */
     @Test
     public void testSinaiManifest() throws URISyntaxException, UnsupportedEncodingException {
         final Buffer buffer = Vertx.factory.vertx().fileSystem().readFileBlocking(SINAI_JSON);
         final JsonObject expected = new JsonObject(buffer);
 
-        final Manifest manifest = new Manifest(MANIFEST_URI, "Georgian NF Fragment 68a");
+        final Manifest manifest = new Manifest(MANIFEST_URI, TEST_TITLE);
         final Metadata metadata = new Metadata();
         final Sequence sequence = new Sequence();
 
-        for (final String[] kvPair : metadataPairs) {
+        for (final String[] kvPair : METADATA_PAIRS) {
             metadata.add(kvPair[0], kvPair[1]);
         }
 
@@ -136,6 +151,11 @@ public class ManifestTest extends AbstractTest {
         assertEquals(expected, JsonObject.mapFrom(manifest));
     }
 
+    /**
+     * Tests reading an example manifest.
+     *
+     * @throws JsonProcessingException If there is trouble processing JSON
+     */
     @Test
     public void testExampleFromDocs() throws JsonProcessingException {
         final Manifest manifest = new Manifest("https://example.org/iiif/001/manifest", "My document");

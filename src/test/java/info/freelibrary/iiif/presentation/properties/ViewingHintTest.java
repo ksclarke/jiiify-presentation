@@ -10,15 +10,18 @@ import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.properties.ViewingHint.Option;
 
+/**
+ * A viewingHint test.
+ */
 public class ViewingHintTest {
 
-    private final Option[] hints = new Option[] { Option.INDIVIDUALS, Option.PAGED, Option.CONTINUOUS,
+    private static final Option[] HINTS = new Option[] { Option.INDIVIDUALS, Option.PAGED, Option.CONTINUOUS,
         Option.MULTIPART, Option.NONPAGED, Option.TOP, Option.FACINGPAGES };
 
-    private final String[] values = new String[] { "individuals", "paged", "continuous", "multi-part", "non-paged",
-        "top", "facing-pages" };
+    private static final String[] VALUES = new String[] { "individuals", "paged", "continuous", "multi-part",
+        "non-paged", "top", "facing-pages" };
 
-    private final URI[] uris = new URI[] { URI.create("http://library.unc.edu"), URI.create(
+    private static final URI[] URIS = new URI[] { URI.create("http://library.unc.edu"), URI.create(
             "http://library.ucla.edu") };
 
     /**
@@ -26,27 +29,33 @@ public class ViewingHintTest {
      */
     @Test
     public void testGetString() {
-        for (int index = 0; index < hints.length; index++) {
-            assertEquals(values[index], hints[index].toString());
+        for (int index = 0; index < HINTS.length; index++) {
+            assertEquals(VALUES[index], HINTS[index].toString());
         }
     }
 
+    /**
+     * Tests the viewingHint constructor.
+     */
     @Test
     public void testConstructor() {
         int index = 0;
 
-        for (final ViewingHint.Value value : new ViewingHint(values).getValues()) {
-            assertEquals(values[index++], value.getString());
+        for (final ViewingHint.Value value : new ViewingHint(VALUES).getValues()) {
+            assertEquals(VALUES[index++], value.getString());
         }
     }
 
+    /**
+     * Tests getting the viewing hint option.
+     */
     @Test
     public void testGetOption() {
         int index = 0;
 
-        for (final ViewingHint.Value value : new ViewingHint(uris).getValues()) {
+        for (final ViewingHint.Value value : new ViewingHint(URIS).getValues()) {
             assertTrue(value.isURI());
-            assertEquals(uris[index++], value.getURI());
+            assertEquals(URIS[index++], value.getURI());
         }
     }
 

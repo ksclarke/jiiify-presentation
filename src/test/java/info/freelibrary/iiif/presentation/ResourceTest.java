@@ -18,34 +18,62 @@ import info.freelibrary.iiif.presentation.properties.ViewingHint;
 import info.freelibrary.iiif.presentation.properties.ViewingHint.Option;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
 
+/**
+ * A resource test.
+ */
 public class ResourceTest extends AbstractTest {
 
+    private static final String AAAA = "aaaa";
+
+    private static final String BBBB = "bbbb";
+
+    private static final String ASDF_JPG = "asdf.jpg";
+
+    private static final String SILS_URL = "http://ils.unc.edu";
+
+    /**
+     * Constructs the resource test.
+     */
+    public ResourceTest() {
+        super();
+    }
+
+    /**
+     * Tests setting a resource with single values.
+     *
+     * @throws MalformedURLException If a URL is malformed
+     */
     @Test
     public void testSingleValues() throws MalformedURLException {
         final TestResource test = new TestResource();
-        final ImageInfoService service = new ImageInfoService(URI.create("http://ils.unc.edu"));
+        final ImageInfoService service = new ImageInfoService(URI.create(SILS_URL));
 
-        test.setID("aaaa");
-        test.setLabel("bbbb");
+        test.setID(AAAA);
+        test.setLabel(BBBB);
         test.setMetadata(new Metadata("myLabel", "myValue"));
         test.setDescription("a description");
-        test.setThumbnail(new Thumbnail("asdf.jpg", service));
+        test.setThumbnail(new Thumbnail(ASDF_JPG, service));
         test.setAttribution("an attribution");
-        test.setLicense("http://ils.unc.edu");
-        test.setLogo(new Logo("asdf.jpg", service));
+        test.setLicense(SILS_URL);
+        test.setLogo(new Logo(ASDF_JPG, service));
         test.setViewingHint(Option.CONTINUOUS);
         test.setSeeAlso("http://www.unc.edu");
 
         // System.out.println(JsonObject.mapFrom(test).encodePrettily());
     }
 
+    /**
+     * Tests setting a resource with multiple values.
+     *
+     * @throws MalformedURLException If a URL is malformed
+     */
     @Test
     public void testMultiValues() throws MalformedURLException {
         final TestResource test = new TestResource();
-        final ImageInfoService service = new ImageInfoService(URI.create("http://ils.unc.edu"));
+        final ImageInfoService service = new ImageInfoService(URI.create(SILS_URL));
 
-        test.setID("aaaa");
-        test.setLabel(new Label("bbbb").addValue("cccc"));
+        test.setID(AAAA);
+        test.setLabel(new Label(BBBB).addValue("cccc"));
         test.setMetadata(new Metadata("myLabel1", "myValue1").add("myLabel2", "myValue2")); // addValue?
         test.setDescription(new Description("a first description", "a second description"));
         test.setThumbnail(new Thumbnail("dddd.jpg", service).addImage("eeee.jpg", service)); // should be value too?
@@ -58,9 +86,12 @@ public class ResourceTest extends AbstractTest {
         // System.out.println(JsonObject.mapFrom(test).encodePrettily());
     }
 
+    /**
+     * Tests constructing a resource.
+     */
     class TestResource extends Resource<TestResource> {
 
-        public TestResource() {
+        TestResource() {
             super("fake", 1);
         }
     }

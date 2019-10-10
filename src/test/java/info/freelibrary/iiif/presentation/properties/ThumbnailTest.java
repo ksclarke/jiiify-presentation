@@ -15,36 +15,59 @@ import info.freelibrary.iiif.presentation.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.util.TestUtils;
 import info.freelibrary.util.StringUtils;
 
+/**
+ * A thumbnail test.
+ */
 public class ThumbnailTest {
 
-    public final static URI THUMBNAIL_ID_1 = URI.create(
+    public static final URI THUMBNAIL_ID_1 = URI.create(
             "http://example.org/images/book1-page1/full/80,100/0/default.jpg");
 
-    public final static URI PAGE_ID_1 = URI.create("http://example.org/images/book1-page1");
+    public static final URI PAGE_ID_1 = URI.create("http://example.org/images/book1-page1");
 
-    public final static URI THUMBNAIL_ID_2 = URI.create(
+    public static final URI THUMBNAIL_ID_2 = URI.create(
             "http://example.org/images/book1-page2/full/80,100/0/default.jpg");
 
-    public final static URI PAGE_ID_2 = URI.create("http://example.org/images/book1-page2");
+    public static final URI PAGE_ID_2 = URI.create("http://example.org/images/book1-page2");
 
-    private final static File TEST_DIR = new File("src/test/resources/json");
+    private static final String TN_FULL_SINGLE = "thumbnail-full-single.json";
 
+    private static final File TEST_DIR = new File("src/test/resources/json");
+
+    /**
+     * Tests constructing a new thumbnail.
+     *
+     * @throws JsonProcessingException If there is trouble processing the test JSON
+     * @throws IOException If there is trouble reading the test file
+     */
     @Test
     public void testFullSingleURI() throws JsonProcessingException, IOException {
         final Thumbnail thumbnail = new Thumbnail(THUMBNAIL_ID_1, 1000, 1000);
-        final File expected = new File(TEST_DIR, "thumbnail-full-single.json");
+        final File expected = new File(TEST_DIR, TN_FULL_SINGLE);
 
         assertEquals(StringUtils.read(expected), TestUtils.toJson(thumbnail, true));
     }
 
+    /**
+     * Tests constructing a new thumbnail.
+     *
+     * @throws JsonProcessingException If there is trouble processing the test JSON
+     * @throws IOException If there is trouble reading the test file
+     */
     @Test
     public void testFullSingleString() throws JsonProcessingException, IOException {
         final Thumbnail thumbnail = new Thumbnail(THUMBNAIL_ID_1.toString(), 1000, 1000);
-        final File expected = new File(TEST_DIR, "thumbnail-full-single.json");
+        final File expected = new File(TEST_DIR, TN_FULL_SINGLE);
 
         assertEquals(StringUtils.read(expected), TestUtils.toJson(thumbnail, true));
     }
 
+    /**
+     * Tests constructing a new thumbnail.
+     *
+     * @throws JsonProcessingException If there is trouble processing the test JSON
+     * @throws IOException If there is trouble reading the test file
+     */
     @Test
     public void testFullSingleService() throws JsonProcessingException, IOException {
         final Thumbnail thumbnail = new Thumbnail(THUMBNAIL_ID_1, new ImageInfoService(PAGE_ID_1));
@@ -53,6 +76,12 @@ public class ThumbnailTest {
         assertEquals(StringUtils.read(expected), TestUtils.toJson(thumbnail, true));
     }
 
+    /**
+     * Tests constructing a new thumbnail.
+     *
+     * @throws JsonProcessingException If there is trouble processing the test JSON
+     * @throws IOException If there is trouble reading the test file
+     */
     @Test
     public void testSimpleTwo() throws JsonProcessingException, IOException {
         final Thumbnail thumbnail = new Thumbnail(THUMBNAIL_ID_1, THUMBNAIL_ID_2);
@@ -61,6 +90,12 @@ public class ThumbnailTest {
         assertEquals(StringUtils.read(expected), TestUtils.toJson(thumbnail, false));
     }
 
+    /**
+     * Tests constructing a new thumbnail.
+     *
+     * @throws JsonProcessingException If there is trouble processing the test JSON
+     * @throws IOException If there is trouble reading the test file
+     */
     @Test
     public void testSimpleOne() throws JsonProcessingException, IOException {
         final Thumbnail thumbnail = new Thumbnail(THUMBNAIL_ID_1);

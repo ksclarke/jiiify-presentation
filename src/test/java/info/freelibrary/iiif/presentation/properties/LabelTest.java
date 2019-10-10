@@ -12,36 +12,57 @@ import info.freelibrary.iiif.presentation.util.Constants;
 
 import io.vertx.core.json.JsonObject;
 
+/**
+ * Tests a label.
+ */
 public class LabelTest extends AbstractTest {
+
+    private static final String MANIFEST = "sc:Manifest";
+
+    private static final String ASDF = "asdf";
+
+    private static final String AAAA = "aaaa";
 
     private Manifest myManifest;
 
     private JsonObject myJSON;
 
+    /**
+     * Sets up the testing environment.
+     */
     @Before
     public void setUp() {
-        myManifest = new Manifest("aaaa", "bbbb");
+        myManifest = new Manifest(AAAA, "bbbb");
         myJSON = new JsonObject().put(Constants.CONTEXT, "http://iiif.io/api/presentation/2/context.json");
     }
 
+    /**
+     * Tests constructing a label.
+     */
     @Test
     public void testValueConstructor() {
-        final Label label = new Label(new Value("asdf"));
-        assertEquals("asdf", label.getString());
+        final Label label = new Label(new Value(ASDF));
+        assertEquals(ASDF, label.getString());
     }
 
+    /**
+     * Tests constructing a label.
+     */
     @Test
     public void testSingleLabelObj() {
-        myManifest.setLabel(new Label("asdf"));
-        myJSON.put(Constants.LABEL, "asdf").put(Constants.ID, "aaaa").put(Constants.TYPE, "sc:Manifest");
+        myManifest.setLabel(new Label(ASDF));
+        myJSON.put(Constants.LABEL, ASDF).put(Constants.ID, AAAA).put(Constants.TYPE, MANIFEST);
 
         assertEquals(JsonObject.mapFrom(myManifest), myJSON);
     }
 
+    /**
+     * Tests setting a single label.
+     */
     @Test
     public void testSingleLabel() {
-        myManifest.setLabel("asdf");
-        myJSON.put(Constants.LABEL, "asdf").put(Constants.ID, "aaaa").put(Constants.TYPE, "sc:Manifest");
+        myManifest.setLabel(ASDF);
+        myJSON.put(Constants.LABEL, ASDF).put(Constants.ID, AAAA).put(Constants.TYPE, MANIFEST);
 
         assertEquals(JsonObject.mapFrom(myManifest), myJSON);
     }

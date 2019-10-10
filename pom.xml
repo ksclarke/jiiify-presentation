@@ -40,17 +40,15 @@
   </developers>
 
   <properties>
-    <jackson.version>2.9.9</jackson.version>
-    <jackson.databind.version>2.9.9.1</jackson.databind.version>
-    <guava.version>27.0.1-jre</guava.version>
-    <freelib.utils.version>0.8.9</freelib.utils.version>
+    <jackson.version>2.10.0</jackson.version>
+    <jackson.databind.version>2.10.0</jackson.databind.version>
+    <guava.version>28.1-jre</guava.version>
+    <freelib.utils.version>1.0.1</freelib.utils.version>
+    <freelib.maven.version>0.0.3</freelib.maven.version>
 
     <!-- Test related versions -->
-    <vertx.version>3.6.2</vertx.version>
-    <opencsv.version>3.10</opencsv.version>
-
-    <!-- Build related versions -->
-    <codacy.plugin.version>1.0.2</codacy.plugin.version>
+    <vertx.version>3.8.2</vertx.version>
+    <opencsv.version>4.6</opencsv.version>
   </properties>
 
   <dependencies>
@@ -116,8 +114,8 @@
       <!-- Generate our MessageCodes class from the messages resource file -->
       <plugin>
         <groupId>info.freelibrary</groupId>
-        <artifactId>freelib-utils</artifactId>
-        <version>${freelib.utils.version}</version>
+        <artifactId>freelib-maven-plugins</artifactId>
+        <version>${freelib.maven.version}</version>
         <executions>
           <execution>
             <phase>process-resources</phase>
@@ -154,11 +152,6 @@
         <artifactId>maven-enforcer-plugin</artifactId>
       </plugin>
       <plugin>
-        <groupId>com.gavinmogan</groupId>
-        <artifactId>codacy-maven-plugin</artifactId>
-        <version>${codacy.plugin.version}</version>
-      </plugin>
-      <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
       </plugin>
       <plugin>
@@ -172,21 +165,8 @@
         </configuration>
       </plugin>
       <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <debuglevel>lines,source,vars</debuglevel>
-          <source>${maven.compiler.source}</source>
-          <target>${maven.compiler.target}</target>
-          <generatedSourcesDirectory>${project.basedir}/src/main/generated</generatedSourcesDirectory>
-        </configuration>
-      </plugin>
-      <plugin>
         <groupId>br.com.ingenieux</groupId>
         <artifactId>jbake-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -221,7 +201,7 @@
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>0.3.4</version>
+    <version>3.7.4</version>
   </parent>
 
 </project>

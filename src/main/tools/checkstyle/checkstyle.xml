@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.3//EN" "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+
+<!DOCTYPE module PUBLIC "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+  "https://checkstyle.org/dtds/configuration_1_3.dtd">
 
 <!-- Checkstyle-Configuration: FreeLibrary Description: Checkstyle configuration for the FreeLibrary projects -->
 <module name="Checker">
@@ -95,5 +97,7 @@
     <property name="fileExtensions" value="java,css,js,xml" />
   </module>
   <module name="SuppressWarningsFilter" />
-  <module name="NewlineAtEndOfFile" />
+  <module name="NewlineAtEndOfFile">
+    <property name="fileExtensions" value="java,css,js,xml" />
+  </module>
 </module>
