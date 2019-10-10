@@ -49,9 +49,6 @@
     <!-- Test related versions -->
     <vertx.version>3.8.2</vertx.version>
     <opencsv.version>4.6</opencsv.version>
-
-    <!-- Build related versions -->
-    <codacy.plugin.version>1.0.2</codacy.plugin.version>
   </properties>
 
   <dependencies>
@@ -155,11 +152,6 @@
         <artifactId>maven-enforcer-plugin</artifactId>
       </plugin>
       <plugin>
-        <groupId>com.gavinmogan</groupId>
-        <artifactId>codacy-maven-plugin</artifactId>
-        <version>${codacy.plugin.version}</version>
-      </plugin>
-      <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
       </plugin>
       <plugin>
@@ -209,7 +201,7 @@
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>3.7.3</version>
+    <version>3.7.4</version>
   </parent>
 
 </project>

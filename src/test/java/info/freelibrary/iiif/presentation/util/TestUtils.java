@@ -6,24 +6,59 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+/**
+ * Utilities for running tests.
+ */
 public final class TestUtils {
 
     private TestUtils() {
     }
 
-    public static final String toJson(final Object aObject) throws JsonProcessingException {
+    /**
+     * Returns an object as JSON.
+     *
+     * @param aObject An object to convert into JSON
+     * @return The supplied object's JSON representation
+     * @throws JsonProcessingException If there is a JSON processing problem
+     */
+    public static String toJson(final Object aObject) throws JsonProcessingException {
         return toJson(null, aObject, false);
     }
 
-    public static final String toJson(final Object aObject, final boolean aIndent) throws JsonProcessingException {
+    /**
+     * Returns an object as JSON.
+     *
+     * @param aObject An object to convert into JSON
+     * @param aIndent Whether the returned JSON should be pretty-printed
+     * @return The supplied object's JSON representation
+     * @throws JsonProcessingException If there is a JSON processing problem
+     */
+    public static String toJson(final Object aObject, final boolean aIndent) throws JsonProcessingException {
         return toJson(null, aObject, aIndent);
     }
 
-    public static final String toJson(final String aName, final Object aObject) throws JsonProcessingException {
+    /**
+     * Returns a named object as JSON.
+     *
+     * @param aName A name for the supplied object
+     * @param aObject An object to convert into JSON
+     * @return The supplied object's JSON representation
+     * @throws JsonProcessingException If there is a JSON processing problem
+     */
+    public static String toJson(final String aName, final Object aObject) throws JsonProcessingException {
         return toJson(aName, aObject, false);
     }
 
-    public static final String toJson(final String aName, final Object aObject, final boolean aIndent)
+    /**
+     * Returns a named object as JSON.
+     *
+     * @param aName A name for the supplied object
+     * @param aObject An object to convert into JSON
+     * @param aIndent Whether the returned JSON should be pretty-printed
+     * @return The supplied object's JSON representation
+     * @throws JsonProcessingException If there is a JSON processing problem
+     */
+    public static String toJson(final String aName, final Object aObject, final boolean aIndent)
             throws JsonProcessingException {
         final ObjectMapper mapper = new ObjectMapper();
 

@@ -7,6 +7,9 @@ import java.net.URI;
 
 import org.junit.Test;
 
+/**
+ * Tests getting the PhysicalDimsService.
+ */
 public class PhysicalDimsServiceTest {
 
     private static final URI ID = URI.create("asdf");
@@ -15,6 +18,9 @@ public class PhysicalDimsServiceTest {
 
     private static final String UNITS = "in";
 
+    /**
+     * Tests the PhysicalDimsService syntax.
+     */
     @Test
     public void test() {
         PhysicalDimsService service;

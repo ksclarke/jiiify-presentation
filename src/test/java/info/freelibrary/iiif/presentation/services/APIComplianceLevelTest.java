@@ -10,6 +10,9 @@ import java.net.URL;
 
 import org.junit.Test;
 
+/**
+ * An API compliance level test.
+ */
 public class APIComplianceLevelTest {
 
     public static final String IMAGE_INFO_LEVEL_0 = "http://iiif.io/api/image/2/level0.json";
@@ -18,6 +21,12 @@ public class APIComplianceLevelTest {
 
     public static final String IMAGE_INFO_LEVEL_2 = "http://iiif.io/api/image/2/level2.json";
 
+    /**
+     * Tests of the API compliance levels.
+     *
+     * @throws MalformedURLException If the levels have malformed URLs
+     * @throws URISyntaxException If there is a syntactical problem with the level URIs
+     */
     @Test
     public void test() throws MalformedURLException, URISyntaxException {
 
