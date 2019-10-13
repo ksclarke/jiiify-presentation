@@ -16,7 +16,6 @@ import info.freelibrary.iiif.presentation.services.ServiceImage;
 /**
  * A property that relies on a service.
  */
-@SuppressWarnings("unchecked")
 class ServiceProperty<T extends ServiceProperty<T>> {
 
     private List<ServiceImage> myImages;
@@ -120,20 +119,6 @@ class ServiceProperty<T extends ServiceProperty<T>> {
     }
 
     /**
-     * Adds image(s) to the property.
-     *
-     * @param aImage A list of images
-     * @return The property
-     */
-    protected T addImage(final ServiceImage... aImage) {
-        if (!Collections.addAll(getImages(), aImage)) {
-            throw new UnsupportedOperationException();
-        }
-
-        return (T) this;
-    }
-
-    /**
      * Returns a list of images.
      *
      * @return A list of images
@@ -207,6 +192,20 @@ class ServiceProperty<T extends ServiceProperty<T>> {
      */
     public Optional<ImageInfoService> getService() {
         return getImages().get(0).getService();
+    }
+
+    /**
+     * Adds image(s) to the property.
+     *
+     * @param aImage A list of images
+     * @return The property
+     */
+    protected T addImage(final ServiceImage... aImage) {
+        if (!Collections.addAll(getImages(), aImage)) {
+            throw new UnsupportedOperationException();
+        }
+
+        return (T) this;
     }
 
     /**

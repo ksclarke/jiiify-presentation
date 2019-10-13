@@ -1,10 +1,8 @@
 
-package info.freelibrary.iiif.presentation.util;
+package info.freelibrary.iiif.presentation.utils;
 
 /**
  * Constants for the Jiiify Presentation project.
- *
- * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
  */
 public final class Constants {
 
@@ -79,6 +77,8 @@ public final class Constants {
     public static final String ITEM = "item";
 
     public static final String DEFAULT = "default";
+
+    public static final String OA_CHOICE = "oa:Choice";
 
     private Constants() {
         super();

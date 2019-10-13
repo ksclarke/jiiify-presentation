@@ -6,18 +6,16 @@ import java.net.URI;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import info.freelibrary.iiif.presentation.util.Constants;
+import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
  * An Image Info service that will return image info about a particular item.
- *
- * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
  */
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.ID, Constants.PROFILE })
 public class ImageInfoService implements Service {
 
     /* The context for this service */
-    private static final String CONTEXT = "http://iiif.io/api/image/2/context.json";
+    public static final String CONTEXT = "http://iiif.io/api/image/2/context.json";
 
     private static final APIComplianceLevel DEFAULT_LEVEL = APIComplianceLevel.ZERO;
 

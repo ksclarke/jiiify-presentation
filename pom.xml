@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>jiiify-presentation</artifactId>
@@ -45,9 +46,9 @@
     <guava.version>28.1-jre</guava.version>
     <freelib.utils.version>1.0.1</freelib.utils.version>
     <freelib.maven.version>0.0.3</freelib.maven.version>
+    <vertx.version>3.8.2</vertx.version>
 
     <!-- Test related versions -->
-    <vertx.version>3.8.2</vertx.version>
     <opencsv.version>4.6</opencsv.version>
   </properties>
 
@@ -78,13 +79,12 @@
       <artifactId>jackson-datatype-jdk8</artifactId>
       <version>${jackson.version}</version>
     </dependency>
-    <!-- Below dependencies are only used for testing -->
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-core</artifactId>
       <version>${vertx.version}</version>
-      <scope>test</scope>
     </dependency>
+    <!-- Below dependencies are only used for testing -->
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>

@@ -25,26 +25,20 @@ public class Type {
     }
 
     /**
+     * Creates an empty type.
+     */
+    @SuppressWarnings("unused")
+    private Type(final String aType) {
+        this(new String[] { aType });
+    }
+
+    /**
      * Gets the first type value.
      *
      * @return The first type value
      */
     public String getString() {
         return myTypes.get(0);
-    }
-
-    /**
-     * Gets the value of the type; it may be a string or a list of strings.
-     *
-     * @return The value of the type
-     */
-    @JsonValue
-    private Object getValue() {
-        if (myTypes.size() == 1) {
-            return myTypes.get(0);
-        } else {
-            return myTypes;
-        }
     }
 
     /**
@@ -82,4 +76,17 @@ public class Type {
         return this;
     }
 
+    /**
+     * Gets the value of the type; it may be a string or a list of strings.
+     *
+     * @return The value of the type
+     */
+    @JsonValue
+    private Object getValue() {
+        if (myTypes.size() == 1) {
+            return myTypes.get(0);
+        } else {
+            return myTypes;
+        }
+    }
 }

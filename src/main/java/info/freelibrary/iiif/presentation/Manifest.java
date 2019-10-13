@@ -19,30 +19,33 @@ import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.NavDate;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
+import info.freelibrary.iiif.presentation.properties.Type;
 import info.freelibrary.iiif.presentation.properties.ViewingDirection;
-import info.freelibrary.iiif.presentation.util.Constants;
 import info.freelibrary.iiif.presentation.util.MessageCodes;
+import info.freelibrary.iiif.presentation.utils.Constants;
+import info.freelibrary.util.I18nRuntimeException;
+
+import io.vertx.core.json.Json;
+import io.vertx.core.json.JsonObject;
 
 /**
  * A presentation manifest.
- *
- * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
  */
 public class Manifest extends Resource<Manifest> {
 
-    static final String TYPE = "sc:Manifest";
+    private static final String TYPE = "sc:Manifest";
 
     private static final URI CONTEXT = URI.create("http://iiif.io/api/presentation/2/context.json");
 
     private static final int REQ_ARG_COUNT = 3;
 
-    private NavDate myNavDate;
-
-    private ViewingDirection myViewingDirection;
-
     private final List<URI> myContexts = Stream.of(CONTEXT).collect(Collectors.toList());
 
     private final List<Sequence> mySequences = new ArrayList<>();
+
+    private NavDate myNavDate;
+
+    private ViewingDirection myViewingDirection;
 
     /**
      * Creates a IIIF presentation manifest.
@@ -95,19 +98,10 @@ public class Manifest extends Resource<Manifest> {
     }
 
     /**
-     * Gets the manifest context.
-     *
-     * @return The manifest context
+     * A private constructor used for serialization purposes.
      */
-    @JsonGetter(Constants.CONTEXT)
-    private Object getContextJson() {
-        if (myContexts.size() == 1) {
-            return myContexts.get(0);
-        } else if (myContexts.size() > 1) {
-            return myContexts;
-        } else {
-            return null;
-        }
+    private Manifest() {
+        super(new Type(TYPE));
     }
 
     /**
@@ -247,5 +241,60 @@ public class Manifest extends Resource<Manifest> {
     public Manifest setSequences(final Sequence... aSequence) {
         mySequences.clear();
         return addSequence(aSequence);
+    }
+
+    /**
+     * Returns a JsonObject of the Manifest.
+     *
+     * @return A JsonObject of the Manifest
+     */
+    @JsonIgnore
+    public JsonObject toJSON() {
+        return JsonObject.mapFrom(this);
+    }
+
+    @Override
+    @JsonIgnore
+    public String toString() {
+        return toJSON().encodePrettily();
+    }
+
+    /**
+     * Returns a Manifest from its JSON representation.
+     *
+     * @param aJsonObject A Manifest in JSON form
+     * @return The manifest
+     */
+    @JsonIgnore
+    public static Manifest fromJSON(final JsonObject aJsonObject) {
+        return Json.decodeValue(aJsonObject.toString(), Manifest.class);
+    }
+
+    /**
+     * Method used internally to set context from JSON.
+     *
+     * @param aContext A manifest context
+     */
+    @JsonSetter(Constants.CONTEXT)
+    private void setContext(final String aContext) {
+        if (!CONTEXT.equals(URI.create(aContext))) {
+            throw new I18nRuntimeException();
+        }
+    }
+
+    /**
+     * Gets the manifest context.
+     *
+     * @return The manifest context
+     */
+    @JsonGetter(Constants.CONTEXT)
+    private Object getContextJson() {
+        if (myContexts.size() == 1) {
+            return myContexts.get(0);
+        } else if (myContexts.size() > 1) {
+            return myContexts;
+        } else {
+            return null;
+        }
     }
 }

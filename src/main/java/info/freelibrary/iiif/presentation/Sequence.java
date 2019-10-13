@@ -11,17 +11,15 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.properties.ViewingDirection;
-import info.freelibrary.iiif.presentation.util.Constants;
+import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
  * A sequence resource.
- *
- * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
  */
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.LABEL, Constants.ID, Constants.TYPE })
 public class Sequence extends Resource<Sequence> {
 
-    static final String TYPE = "sc:Sequence";
+    private static final String TYPE = "sc:Sequence";
 
     private static final int REQ_ARG_COUNT = 1;
 

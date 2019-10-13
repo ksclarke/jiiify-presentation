@@ -13,19 +13,18 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
-import info.freelibrary.iiif.presentation.util.Constants;
+import info.freelibrary.iiif.presentation.properties.Type;
 import info.freelibrary.iiif.presentation.util.MessageCodes;
+import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
  * A canvas resource.
- *
- * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
  */
 @JsonPropertyOrder({ Constants.TYPE, Constants.LABEL, Constants.ID, Constants.WIDTH, Constants.HEIGHT,
     Constants.THUMBNAIL, Constants.IMAGE_CONTENT, Constants.OTHER_CONTENT })
 public class Canvas extends Resource<Canvas> {
 
-    static final String TYPE = "sc:Canvas";
+    private static final String TYPE = "sc:Canvas";
 
     private static final int REQ_ARG_COUNT = 3;
 
@@ -96,6 +95,13 @@ public class Canvas extends Resource<Canvas> {
     }
 
     /**
+     * Creates a blank new canvas.
+     */
+    private Canvas() {
+        super(new Type(TYPE));
+    }
+
+    /**
      * Gets the width of the canvas.
      *
      * @return The width of the canvas
@@ -137,22 +143,6 @@ public class Canvas extends Resource<Canvas> {
     public Canvas setHeight(final int aHeight) {
         myHeight = aHeight;
         return this;
-    }
-
-    /**
-     * Sets width and height if they are above zero. Width and height are required for Canvas.
-     *
-     * @param aWidth A canvas width
-     * @param aHeight A canvas height
-     */
-    @JsonIgnore
-    private void setWidthHeight(final int aWidth, final int aHeight) {
-        if ((aWidth > 0) && (aHeight > 0)) {
-            myWidth = aWidth;
-            myHeight = aHeight;
-        } else {
-            throw new IllegalArgumentException(getLogger().getMessage(MessageCodes.EXC_011, aWidth, aHeight));
-        }
     }
 
     /**
@@ -235,4 +225,19 @@ public class Canvas extends Resource<Canvas> {
         return myOtherContent;
     }
 
+    /**
+     * Sets width and height if they are above zero. Width and height are required for Canvas.
+     *
+     * @param aWidth A canvas width
+     * @param aHeight A canvas height
+     */
+    @JsonIgnore
+    private void setWidthHeight(final int aWidth, final int aHeight) {
+        if ((aWidth > 0) && (aHeight > 0)) {
+            myWidth = aWidth;
+            myHeight = aHeight;
+        } else {
+            throw new IllegalArgumentException(getLogger().getMessage(MessageCodes.EXC_011, aWidth, aHeight));
+        }
+    }
 }
