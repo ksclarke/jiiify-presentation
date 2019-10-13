@@ -5,12 +5,10 @@ import java.net.URI;
 
 /**
  * An annotation list resource.
- *
- * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
  */
 public class AnnotationList extends Resource<AnnotationList> {
 
-    static final String TYPE = "sc:AnnotationList";
+    private static final String TYPE = "sc:AnnotationList";
 
     private static final int REQ_ARG_COUNT = 2;
 

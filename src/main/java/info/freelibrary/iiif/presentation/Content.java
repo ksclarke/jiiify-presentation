@@ -7,9 +7,10 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.iiif.presentation.util.Constants;
+import info.freelibrary.iiif.presentation.properties.Type;
+import info.freelibrary.iiif.presentation.utils.Constants;
+import info.freelibrary.util.I18nRuntimeException;
 
-@SuppressWarnings("unchecked")
 class Content<T extends Content<T>> extends Resource<T> {
 
     private static final String MOTIVATION = "sc:painting";
@@ -34,6 +35,15 @@ class Content<T extends Content<T>> extends Resource<T> {
         myOn = aCanvas.getID();
     }
 
+    /**
+     * Creates a IIIF presentation content resource.
+     *
+     * @param aType A type of Content
+     */
+    protected Content(final Type aType) {
+        super(aType);
+    }
+
     @JsonGetter(Constants.MOTIVATION)
     public String getMotivation() {
         return MOTIVATION;
@@ -56,4 +66,10 @@ class Content<T extends Content<T>> extends Resource<T> {
         return (T) this;
     }
 
+    @JsonSetter(Constants.MOTIVATION)
+    private void setMotivation(final String aMotivation) {
+        if (!MOTIVATION.equals(aMotivation)) {
+            throw new I18nRuntimeException();
+        }
+    }
 }

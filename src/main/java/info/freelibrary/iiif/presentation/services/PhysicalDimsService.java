@@ -7,22 +7,20 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.iiif.presentation.util.Constants;
+import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
  * A physical dimensions service that provides information useful for rulers, etc.
- *
- * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
  */
 public class PhysicalDimsService implements Service {
 
     /* The context for this service */
     @JsonIgnore
-    static final String CONTEXT = "http://iiif.io/api/annex/services/physdim/1/context.json";
+    public static final String CONTEXT = "http://iiif.io/api/annex/services/physdim/1/context.json";
 
     /* The profile for this service */
     @JsonIgnore
-    static final String PROFILE = "http://iiif.io/api/annex/services/physdim";
+    public static final String PROFILE = "http://iiif.io/api/annex/services/physdim";
 
     private URI myID;
 

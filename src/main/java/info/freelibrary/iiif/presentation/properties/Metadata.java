@@ -5,14 +5,19 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import info.freelibrary.iiif.presentation.util.Constants;
 import info.freelibrary.iiif.presentation.util.MessageCodes;
+import info.freelibrary.iiif.presentation.utils.Constants;
+import info.freelibrary.iiif.presentation.utils.MetadataDeserializer;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
 
 /**
  * A metadata property.
@@ -33,10 +38,11 @@ import info.freelibrary.iiif.presentation.util.MessageCodes;
  *   }
  * ]
  * </code></pre>
- *
- * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
  */
+@JsonDeserialize(using = MetadataDeserializer.class)
 public class Metadata {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Metadata.class, Constants.BUNDLE_NAME);
 
     private List<Metadata.Entry> myEntries;
 
@@ -121,6 +127,79 @@ public class Metadata {
     }
 
     /**
+     * Gets the first metadata value for the supplied label.
+     *
+     * @param aLabel A metadata element name
+     * @return The first metadata value for the supplied name
+     */
+    @JsonIgnore
+    public Optional<String> getValue(final String aLabel) {
+        final Iterator<Metadata.Entry> iterator = myEntries.iterator();
+
+        while (iterator.hasNext()) {
+            final Metadata.Entry entry = iterator.next();
+
+            if (entry.getLabel().equals(aLabel)) {
+                return Optional.of(entry.getString());
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    /**
+     * Gets the first metadata value for the supplied label with the supplied language code.
+     *
+     * @param aLabel A metadata element name
+     * @param aLangCode A language code (e.g. 'eng')
+     * @return The first metadata value for the supplied name
+     */
+    @JsonIgnore
+    public Optional<String> getValue(final String aLabel, final String aLangCode) {
+        final Iterator<Metadata.Entry> entryIterator = myEntries.iterator();
+
+        while (entryIterator.hasNext()) {
+            final Metadata.Entry entry = entryIterator.next();
+
+            if (entry.getLabel().equals(aLabel)) {
+                final Iterator<Value> valuesIterator = entry.myValues.iterator();
+
+                while (valuesIterator.hasNext()) {
+                    final Value value = valuesIterator.next();
+                    final Optional<String> lang = value.getLang();
+
+                    if (lang.isPresent() && lang.get().equals(aLangCode)) {
+                        return Optional.of(value.getValue());
+                    }
+                }
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    /**
+     * Gets the metadata values for the supplied label.
+     *
+     * @param aLabel A metadata element name
+     * @return The values for the supplied name
+     */
+    @JsonIgnore
+    public List<Value> getValues(final String aLabel) {
+        final Iterator<Metadata.Entry> iterator = myEntries.iterator();
+
+        while (iterator.hasNext()) {
+            final Metadata.Entry entry = iterator.next();
+
+            if (entry.getLabel().equals(aLabel)) {
+                return entry.getValues();
+            }
+        }
+
+        return new ArrayList();
+    }
+
+    /**
      * Gets the metadata entries.
      *
      * @return The metadata entries
@@ -128,7 +207,7 @@ public class Metadata {
     @JsonValue
     public final List<Metadata.Entry> getEntries() {
         if (myEntries == null) {
-            myEntries = new ArrayList<Metadata.Entry>();
+            myEntries = new ArrayList<>();
         }
 
         return myEntries;
@@ -136,8 +215,6 @@ public class Metadata {
 
     /**
      * A metadata entry with a label and values.
-     *
-     * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
      */
     @JsonPropertyOrder({ "label", "value" })
     public class Entry {
@@ -163,7 +240,7 @@ public class Metadata {
          * Creates a metadata entry from the supplied label and I18n values.
          *
          * @param aLabel A metadata label
-         * @param aValue A list of vI18n alues
+         * @param aValue A list of I18n values
          */
         public Entry(final String aLabel, final Value... aValue) {
             Objects.requireNonNull(aLabel, MessageCodes.EXC_002);
@@ -218,37 +295,6 @@ public class Metadata {
         }
 
         /**
-         * Returns the metadata entry's values.
-         *
-         * @return The metadata entry's values
-         */
-        @JsonGetter(Constants.VALUE)
-        Object getValue() {
-            if (hasValues()) {
-                if ((myValues.size() == 1) && !myValues.get(0).getLang().isPresent()) {
-                    return myValues.get(0).getValue();
-                } else {
-                    final List<Object> list = new ArrayList<>();
-                    final Iterator<Value> iterator = myValues.iterator();
-
-                    while (iterator.hasNext()) {
-                        final Value entry = iterator.next();
-
-                        if (entry.getLang().isPresent()) {
-                            list.add(entry);
-                        } else {
-                            list.add(entry.getValue());
-                        }
-                    }
-
-                    return list;
-                }
-            } else {
-                return null;
-            }
-        }
-
-        /**
          * Sets the supplied values in the metadata entry, clearing any previously existing ones.
          *
          * @param aValue A list of values
@@ -279,10 +325,10 @@ public class Metadata {
          * @return The metadata entry
          */
         public final Entry addValues(final String... aValue) {
-            Objects.requireNonNull(aValue, MessageCodes.EXC_001);
+            Objects.requireNonNull(aValue, LOGGER.getMessage(MessageCodes.EXC_001));
 
             for (final String value : aValue) {
-                Objects.requireNonNull(value, MessageCodes.EXC_001);
+                Objects.requireNonNull(value, LOGGER.getMessage(MessageCodes.EXC_001));
 
                 if (!myValues.add(new Value(value))) {
                     throw new UnsupportedOperationException();
@@ -299,10 +345,10 @@ public class Metadata {
          * @return The metadata entry
          */
         public final Entry addValues(final Value... aValue) {
-            Objects.requireNonNull(aValue, MessageCodes.EXC_001);
+            Objects.requireNonNull(aValue, LOGGER.getMessage(MessageCodes.EXC_001));
 
             for (final Value value : aValue) {
-                Objects.requireNonNull(value, MessageCodes.EXC_001);
+                Objects.requireNonNull(value, LOGGER.getMessage(MessageCodes.EXC_001));
 
                 if (!myValues.add(value)) {
                     throw new UnsupportedOperationException();
@@ -310,6 +356,37 @@ public class Metadata {
             }
 
             return this;
+        }
+
+        /**
+         * Returns the metadata entry's values.
+         *
+         * @return The metadata entry's values
+         */
+        @JsonGetter(Constants.VALUE)
+        private Object getJsonValue() {
+            if (hasValues()) {
+                if ((myValues.size() == 1) && !myValues.get(0).getLang().isPresent()) {
+                    return myValues.get(0).getValue();
+                } else {
+                    final List<Object> list = new ArrayList<>();
+                    final Iterator<Value> iterator = myValues.iterator();
+
+                    while (iterator.hasNext()) {
+                        final Value entry = iterator.next();
+
+                        if (entry.getLang().isPresent()) {
+                            list.add(entry);
+                        } else {
+                            list.add(entry.getValue());
+                        }
+                    }
+
+                    return list;
+                }
+            } else {
+                return null;
+            }
         }
     }
 }

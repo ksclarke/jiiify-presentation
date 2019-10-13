@@ -8,6 +8,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
@@ -23,28 +24,28 @@ import info.freelibrary.iiif.presentation.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.properties.Type;
 import info.freelibrary.iiif.presentation.properties.ViewingHint;
 import info.freelibrary.iiif.presentation.properties.ViewingHint.Option;
-import info.freelibrary.iiif.presentation.util.Constants;
 import info.freelibrary.iiif.presentation.util.MessageCodes;
+import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
 /**
  * A resource that can be used as a base for more specific IIIF presentation resources.
- *
- * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
  */
-@SuppressWarnings("unchecked")
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.LABEL, Constants.ID, Constants.TYPE, Constants.DESCRIPTION,
     Constants.LOGO, Constants.THUMBNAIL, Constants.METADATA, Constants.SEQUENCES })
 public class Resource<T extends Resource<T>> {
 
-    private final Type myType;
+    @JsonProperty("@type")
+    protected final Type myType;
 
+    @JsonProperty("@id")
     private URI myID;
 
     private Label myLabel;
 
+    @JsonProperty("metadata")
     private Metadata myMetadata;
 
     private Description myDescription;
@@ -201,6 +202,15 @@ public class Resource<T extends Resource<T>> {
     }
 
     /**
+     * Creates a new resource from the supplied type.
+     *
+     * @param aType A type of resource
+     */
+    protected Resource(final Type aType) {
+        myType = aType;
+    }
+
+    /**
      * Gets the label.
      *
      * @return The label
@@ -216,7 +226,7 @@ public class Resource<T extends Resource<T>> {
      * @param aLabel The label to set
      * @return The resource
      */
-    @JsonIgnore
+    @JsonSetter(Constants.LABEL)
     public T setLabel(final String aLabel) {
         myLabel = new Label(aLabel);
         return (T) this;

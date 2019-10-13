@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.properties;
 
-import static info.freelibrary.iiif.presentation.util.Constants.BUNDLE_NAME;
+import static info.freelibrary.iiif.presentation.utils.Constants.BUNDLE_NAME;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -13,15 +13,13 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-import info.freelibrary.iiif.presentation.util.Constants;
 import info.freelibrary.iiif.presentation.util.MessageCodes;
+import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
 /**
  * Creates a viewing hint.
- *
- * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
  */
 public class ViewingHint {
 
@@ -29,18 +27,11 @@ public class ViewingHint {
 
     /**
      * The supported out of the box viewing hints.
-     *
-     * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
      */
     public enum Option {
 
-        INDIVIDUALS("individuals"),
-        PAGED("paged"),
-        CONTINUOUS("continuous"),
-        MULTIPART("multi-part"),
-        NONPAGED("non-paged"),
-        TOP("top"),
-        FACINGPAGES("facing-pages");
+        INDIVIDUALS("individuals"), PAGED("paged"), CONTINUOUS("continuous"), MULTIPART("multi-part"), NONPAGED(
+                "non-paged"), TOP("top"), FACINGPAGES("facing-pages");
 
         private final String myValue;
 
@@ -55,7 +46,7 @@ public class ViewingHint {
 
     }
 
-    private final List<Value> myValues = new ArrayList<Value>();
+    private final List<Value> myValues = new ArrayList<>();
 
     /**
      * Creates a new viewing hint from one of the specified options.
@@ -134,24 +125,6 @@ public class ViewingHint {
     @JsonIgnore
     public List<Value> getValues() {
         return myValues;
-    }
-
-    /**
-     * Gets the raw value of the viewing hint; for a viewing hint with a single value this will be a
-     * <code>String</code> and for a viewing hint with multiple values this will be a
-     * <code>List<ViewingHint.Value></code>.
-     *
-     * @return The value of the viewing hint
-     */
-    @JsonGetter(Constants.VIEWING_HINT)
-    private Object getValueJson() {
-        if (myValues.size() == 1) {
-            return myValues.get(0).getString();
-        } else if (myValues.size() > 1) {
-            return myValues;
-        } else {
-            return null;
-        }
     }
 
     /**
@@ -238,9 +211,25 @@ public class ViewingHint {
     }
 
     /**
-     * A value of the viewing hint.
+     * Gets the raw value of the viewing hint; for a viewing hint with a single value this will be a
+     * <code>String</code> and for a viewing hint with multiple values this will be a
+     * <code>List<ViewingHint.Value></code>.
      *
-     * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
+     * @return The value of the viewing hint
+     */
+    @JsonGetter(Constants.VIEWING_HINT)
+    private Object getValueJson() {
+        if (myValues.size() == 1) {
+            return myValues.get(0).getString();
+        } else if (myValues.size() > 1) {
+            return myValues;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * A value of the viewing hint.
      */
     public class Value {
 

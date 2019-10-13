@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.services;
 
-import static info.freelibrary.iiif.presentation.util.Constants.BUNDLE_NAME;
+import static info.freelibrary.iiif.presentation.utils.Constants.BUNDLE_NAME;
 
 import java.net.URI;
 import java.util.Objects;
@@ -15,8 +15,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.google.common.net.MediaType;
 
-import info.freelibrary.iiif.presentation.util.Constants;
 import info.freelibrary.iiif.presentation.util.MessageCodes;
+import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.util.FileUtils;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -29,7 +29,7 @@ import info.freelibrary.util.LoggerFactory;
 @JsonInclude(Include.NON_DEFAULT)
 public class ServiceImage {
 
-    static final String TYPE = "dctypes:Image";
+    private static final String TYPE = "dctypes:Image";
 
     private Optional<MediaType> myFormat;
 

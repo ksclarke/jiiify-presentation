@@ -5,12 +5,10 @@ import java.net.URI;
 
 /**
  * A content resource.
- *
- * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
  */
 public class OtherContent extends Content<OtherContent> {
 
-    static final String TYPE = "sc:AnnotationList";
+    private static final String TYPE = "sc:AnnotationList";
 
     /**
      * Creates a IIIF presentation content resource.

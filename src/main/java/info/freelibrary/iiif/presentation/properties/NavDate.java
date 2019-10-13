@@ -11,8 +11,6 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
  * A date that the client can use for navigation purposes.
- *
- * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
  */
 public class NavDate {
 

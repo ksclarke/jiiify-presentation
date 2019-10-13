@@ -8,16 +8,14 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.ViewingDirection;
-import info.freelibrary.iiif.presentation.util.Constants;
+import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
  * A range resource.
- *
- * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
  */
 public class Range extends Resource<Range> {
 
-    static final String TYPE = "sc:Range";
+    private static final String TYPE = "sc:Range";
 
     private static final int REQ_ARG_COUNT = 3;
 

@@ -13,8 +13,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.net.MediaType;
 
-import info.freelibrary.iiif.presentation.util.Constants;
 import info.freelibrary.iiif.presentation.util.MessageCodes;
+import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
@@ -274,8 +274,6 @@ public class SeeAlso {
 
     /**
      * A see also value.
-     *
-     * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
      */
     public final class Value {
 

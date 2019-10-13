@@ -5,8 +5,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -16,9 +14,6 @@ import java.util.stream.Stream;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.opencsv.CSVReader;
 
 import info.freelibrary.iiif.presentation.properties.Metadata;
@@ -59,9 +54,7 @@ public class ManifestTest extends AbstractTest {
 
     private static final int WIDTH = 6132;
 
-    private List<String[]> myFirstCanvas;
-
-    private List<String[]> mySecondCanvas;
+    private Manifest myManifest;
 
     /**
      * Sets up the manifest testing environment.
@@ -72,37 +65,23 @@ public class ManifestTest extends AbstractTest {
     public void setUp() throws IOException {
         final CSVReader reader1 = new CSVReader(new FileReader("src/test/resources/csv/sinai-images-canvas-1.csv"));
         final CSVReader reader2 = new CSVReader(new FileReader("src/test/resources/csv/sinai-images-canvas-2.csv"));
-
-        myFirstCanvas = reader1.readAll();
-        mySecondCanvas = reader2.readAll();
+        final List<String[]> firstCanvas = reader1.readAll();
+        final List<String[]> secondCanvas = reader2.readAll();
+        final Metadata metadata = new Metadata();
+        final Sequence sequence = new Sequence();
 
         reader1.close();
         reader2.close();
-    }
-
-    /**
-     * Test reading a Sinai manifest.
-     *
-     * @throws URISyntaxException If there is an invalid URI
-     * @throws UnsupportedEncodingException If there is an unsupported encoding
-     */
-    @Test
-    public void testSinaiManifest() throws URISyntaxException, UnsupportedEncodingException {
-        final Buffer buffer = Vertx.factory.vertx().fileSystem().readFileBlocking(SINAI_JSON);
-        final JsonObject expected = new JsonObject(buffer);
-
-        final Manifest manifest = new Manifest(MANIFEST_URI, TEST_TITLE);
-        final Metadata metadata = new Metadata();
-        final Sequence sequence = new Sequence();
 
         for (final String[] kvPair : METADATA_PAIRS) {
             metadata.add(kvPair[0], kvPair[1]);
         }
 
-        manifest.setMetadata(metadata);
-        manifest.setLogo(LOGO_URI);
-        manifest.setThumbnail(MANIFEST_THUMBNAIL_URI);
-        manifest.setSequences(sequence);
+        myManifest = new Manifest(MANIFEST_URI, TEST_TITLE);
+        myManifest.setMetadata(metadata);
+        myManifest.setLogo(LOGO_URI);
+        myManifest.setThumbnail(MANIFEST_THUMBNAIL_URI);
+        myManifest.setSequences(sequence);
 
         sequence.setID(SEQUENCE_URI).setLabel(URLDecoder.decode(MANIFEST_ID, StandardCharsets.UTF_8.name()));
 
@@ -114,7 +93,7 @@ public class ManifestTest extends AbstractTest {
 
         canvas1.addImageContent(content1);
 
-        for (final String[] values : myFirstCanvas) {
+        for (final String[] values : firstCanvas) {
             final String id = SERVER + values[1] + THUMBNAIL_PATH;
             final ImageInfoService service = new ImageInfoService(SERVER + values[1]);
             final ImageResource resource = new ImageResource(id, service);
@@ -134,7 +113,7 @@ public class ManifestTest extends AbstractTest {
 
         canvas2.addImageContent(content2);
 
-        for (final String[] values : mySecondCanvas) {
+        for (final String[] values : secondCanvas) {
             final String id = SERVER + values[1] + THUMBNAIL_PATH;
             final ImageInfoService service = new ImageInfoService(SERVER + values[1]);
             final ImageResource resource = new ImageResource(id, service);
@@ -147,24 +126,38 @@ public class ManifestTest extends AbstractTest {
         }
 
         sequence.addCanvas(canvas1, canvas2);
-
-        assertEquals(expected, JsonObject.mapFrom(manifest));
     }
 
     /**
-     * Tests reading an example manifest.
-     *
-     * @throws JsonProcessingException If there is trouble processing JSON
+     * Tests manifest's toJSON().
      */
     @Test
-    public void testExampleFromDocs() throws JsonProcessingException {
-        final Manifest manifest = new Manifest("https://example.org/iiif/001/manifest", "My document");
-        final ObjectMapper mapper = new ObjectMapper();
+    public void testToJSON() {
+        final Buffer buffer = Vertx.factory.vertx().fileSystem().readFileBlocking(SINAI_JSON);
+        final JsonObject expected = new JsonObject(buffer);
 
-        mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-        mapper.findAndRegisterModules(); // Needed for Jdk8Module
-
-        // System.out.println(mapper.writeValueAsString(manifest));
+        assertEquals(expected, myManifest.toJSON());
     }
 
+    /**
+     * Tests manifest's toString().
+     */
+    @Test
+    public void testToString() {
+        final Buffer buffer = Vertx.factory.vertx().fileSystem().readFileBlocking(SINAI_JSON);
+        final String expected = new JsonObject(buffer).encodePrettily();
+
+        assertEquals(expected, myManifest.toString());
+    }
+
+    /**
+     * Tests manifest creation fromJSON().
+     */
+    @Test
+    public void testFromJSON() {
+        final JsonObject json = new JsonObject(Vertx.factory.vertx().fileSystem().readFileBlocking(SINAI_JSON));
+        final Manifest manifest = Manifest.fromJSON(json);
+
+        assertEquals(json, manifest.toJSON());
+    }
 }

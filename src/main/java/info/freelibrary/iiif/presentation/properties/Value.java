@@ -8,15 +8,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.iiif.presentation.util.Constants;
+import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
  * A property value that can be used to handle IIIF's
  * <a href= "http://iiif.io/api/presentation/2.1/#language-of-property-values">language of property values</a> JSON-LD
  * consideration. This pattern may be used in label, description, attribution and the label and value fields of the
  * metadata construction. It's more complex than a simple string or array of string values, so warrants its own class.
- *
- * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
  */
 @JsonPropertyOrder({ "@value", "@language" })
 @JsonInclude(JsonInclude.Include.NON_EMPTY)

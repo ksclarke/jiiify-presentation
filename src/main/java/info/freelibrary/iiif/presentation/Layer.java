@@ -8,16 +8,14 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.ViewingDirection;
-import info.freelibrary.iiif.presentation.util.Constants;
+import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
  * A layer resource.
- *
- * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
  */
 public class Layer extends Resource<Layer> {
 
-    static final String TYPE = "sc:Layer";
+    private static final String TYPE = "sc:Layer";
 
     private static final int REQ_ARG_COUNT = 3;
 

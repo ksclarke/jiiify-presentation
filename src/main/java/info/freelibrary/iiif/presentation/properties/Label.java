@@ -3,12 +3,10 @@ package info.freelibrary.iiif.presentation.properties;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 
-import info.freelibrary.iiif.presentation.util.Constants;
+import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
  * A label property.
- *
- * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
  */
 public class Label extends I18nProperty<Label> {
 
@@ -32,7 +30,7 @@ public class Label extends I18nProperty<Label> {
 
     @Override
     @JsonGetter(Constants.LABEL)
-    Object getValue() {
+    protected Object getValue() {
         return super.getValue();
     }
 

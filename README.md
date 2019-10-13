@@ -5,16 +5,6 @@ presentation manifests from files on disk, etc.
 
 This is a work in progress and should not be considered stable.
 
-Deserializing to JSON requires Jackson's `ObjectMapper`. A very simple example:
-
-    final Manifest manifest = new Manifest("https://example.org/iiif/001/manifest", "My document");
-    final ObjectMapper mapper = new ObjectMapper();
-    
-    mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-    mapper.findAndRegisterModules(); // Needed for Jdk8Module
-    
-    System.out.println(mapper.writeValueAsString(manifest));
-
 ### Getting Started
 
 To check out and build the project, type on the command line:
@@ -29,4 +19,4 @@ To build the Javadocs, from the command line, run: `mvn javadoc:javadoc`
 
 ### Contact
 
-If you have questions about jiiify-presentation <a href="mailto:ksclarke@ksclarke.io">feel free to ask</a> or, if you encounter a problem, please feel free to [open an issue](https://github.com/ksclarke/jiiify-presentation/issues "GitHub Issue Queue") in the project's issue queue.
+If you encounter a problem or would like to make a suggestion, please feel free to [open a ticket](https://github.com/ksclarke/jiiify-presentation/issues "GitHub Issue Queue") in the project's issue queue.

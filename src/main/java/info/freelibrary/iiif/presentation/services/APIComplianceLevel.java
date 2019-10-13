@@ -5,20 +5,19 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
-import info.freelibrary.iiif.presentation.util.Constants;
+import info.freelibrary.iiif.presentation.utils.Constants;
+import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
 /**
  * The Image Info profile level.
- *
- * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
  */
 public enum APIComplianceLevel {
 
-    ZERO("http://iiif.io/api/image/2/level0.json"),
-    ONE("http://iiif.io/api/image/2/level1.json"),
-    TWO("http://iiif.io/api/image/2/level2.json");
+    // Compliance levels
+    ZERO("http://iiif.io/api/image/2/level0.json"), ONE("http://iiif.io/api/image/2/level1.json"), TWO(
+            "http://iiif.io/api/image/2/level2.json");
 
     private static final Logger LOGGER = LoggerFactory.getLogger(APIComplianceLevel.class, Constants.BUNDLE_NAME);
 
@@ -61,8 +60,23 @@ public enum APIComplianceLevel {
             return new URL(myURL);
         } catch (final MalformedURLException details) {
             LOGGER.error(details, details.getMessage());
-            return null; // should not be possible since we test URLs
+            throw new I18nRuntimeException(details); // Should not be possible
         }
     }
 
+    /**
+     * Gets a compliance level from a string value.
+     *
+     * @param aProfile A string form of the compliance level
+     * @return A compliance level
+     */
+    public static APIComplianceLevel fromProfile(final String aProfile) {
+        for (final APIComplianceLevel level : APIComplianceLevel.values()) {
+            if (level.string().equals(aProfile)) {
+                return level;
+            }
+        }
+
+        return null;
+    }
 }

@@ -12,10 +12,7 @@ import info.freelibrary.iiif.presentation.util.MessageCodes;
 
 /**
  * A property value that can be used in the label, description, attribution and the label and value fields.
- *
- * @author <a href="mailto:ksclarke@ksclarke.io">Kevin S. Clarke</a>
  */
-@SuppressWarnings("unchecked")
 class I18nProperty<T extends I18nProperty<T>> {
 
     private final List<Value> myValues;
@@ -131,7 +128,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      * @return The value(s) of the property
      */
     @JsonValue
-    Object getValue() {
+    protected Object getValue() {
         if (hasValues()) {
             if ((myValues.size() == 1) && !myValues.get(0).getLang().isPresent()) {
                 return myValues.get(0).getValue();
