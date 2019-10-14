@@ -9,6 +9,10 @@ import org.junit.Test;
 import info.freelibrary.iiif.presentation.Manifest;
 import info.freelibrary.iiif.presentation.Manifestor;
 
+<<<<<<< HEAD
+public class Examples {
+
+=======
 /**
  * Examples from documentation.
  */
@@ -19,6 +23,7 @@ public class Examples {
      *
      * @throws IOException If there is trouble reading or writing a file.
      */
+>>>>>>> c55340359bf98a7932e42836b8d3d2ee08552573
     @Test
     public final void testReadmeExample() throws IOException {
         final Manifestor manifestor = new Manifestor();
