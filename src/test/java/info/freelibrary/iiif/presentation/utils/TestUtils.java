@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.util;
+package info.freelibrary.iiif.presentation.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -62,7 +62,7 @@ public final class TestUtils {
             throws JsonProcessingException {
         final ObjectMapper mapper = new ObjectMapper();
 
-        mapper.findAndRegisterModules(); // Needed for Jdk8Module
+        mapper.findAndRegisterModules();
 
         mapper.configure(SerializationFeature.INDENT_OUTPUT, aIndent);
         mapper.configure(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT, true);
