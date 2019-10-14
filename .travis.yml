@@ -1,7 +1,6 @@
 language: java
 
 jdk:
-  - openjdk8
   - openjdk11
 
 # Overridden because parent project uses maven.test.skip instead of skipTests

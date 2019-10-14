@@ -109,6 +109,7 @@ public class ServiceImage {
     public ServiceImage(final String aURI, final int aWidth, final int aHeight) {
         Objects.requireNonNull(aURI, MessageCodes.EXC_003);
 
+        myService = Optional.empty();
         myID = URI.create(aURI);
         myWidth = aWidth;
         myHeight = aHeight;
@@ -129,6 +130,7 @@ public class ServiceImage {
         myID = aID;
         myWidth = aWidth;
         myHeight = aHeight;
+        myService = Optional.empty();
 
         setMediaTypeFromExt(aID.toString());
     }
@@ -274,7 +276,7 @@ public class ServiceImage {
      */
     @JsonGetter(Constants.SERVICE)
     public Optional<ImageInfoService> getService() {
-        return myService == null ? Optional.empty() : myService;
+        return myService.isEmpty() ? Optional.empty() : myService;
     }
 
     /**

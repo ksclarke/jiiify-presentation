@@ -98,7 +98,7 @@ public class ImageContent extends Content<ImageContent> {
      */
     @JsonIgnore
     public Optional<ImageResource> getDefaultResource() {
-        return myDefaultResource == null ? Optional.empty() : myDefaultResource;
+        return myDefaultResource.isEmpty() ? Optional.empty() : myDefaultResource;
     }
 
     /**
@@ -117,7 +117,7 @@ public class ImageContent extends Content<ImageContent> {
      * @return The resources map
      */
     @JsonGetter(Constants.RESOURCE)
-    Map<String, Object> getResourcesMap() {
+    private Map<String, Object> getResourcesMap() {
         final Map<String, Object> map = new TreeMap<>();
 
         if (!myResources.isEmpty()) {
@@ -139,7 +139,7 @@ public class ImageContent extends Content<ImageContent> {
      * @param aResourceMap A JSON representation of the resources map
      */
     @JsonSetter(Constants.RESOURCE)
-    void setResourcesMap(final Map<String, Object> aResourceMap) {
+    private void setResourcesMap(final Map<String, Object> aResourceMap) {
         if (!aResourceMap.isEmpty()) {
             final Map<String, Object> defaultItem = (Map<String, Object>) aResourceMap.get(Constants.DEFAULT);
             final List<Map<String, Object>> items = (List<Map<String, Object>>) aResourceMap.get(Constants.ITEM);
