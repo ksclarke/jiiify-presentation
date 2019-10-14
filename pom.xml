@@ -138,6 +138,7 @@
           <detectLinks>false</detectLinks>
           <links>
             <link>https://google.github.io/guava/releases/23.0/api/docs/</link>
+            <link>https://vertx.io/docs/apidocs/</link>
           </links>
           <sourcepath>src/main/java:src/main/generated</sourcepath>
         </configuration>

@@ -31,7 +31,7 @@ public class MetadataDeserializer extends StdDeserializer<Metadata> {
     /**
      * Creates a new metadata deserializer.
      *
-     * @param aClass
+     * @param aClass A class
      */
     public MetadataDeserializer(final Class<?> aClass) {
         super(aClass);
