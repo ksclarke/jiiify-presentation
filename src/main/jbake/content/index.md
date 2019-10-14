@@ -4,14 +4,8 @@ type=page
 status=published
 ~~~~~~
 
-This project is a Java library for working with the IIIF Presentation API. It's not a server, but provides components that could be used in a server or in a client-side (or command line) application. It's still in active development and shouldn't yet be considered stable.
+A [IIIF Presentation](http://iiif.io/api/presentation) library for Java. It does not contain a server. It's just for working with IIIF presentation manifests.
 
-<script>
-xmlhttp=new XMLHttpRequest();
-xmlhttp.open("GET", "https://55rkvqxzlf.execute-api.us-east-1.amazonaws.com/maven?q=jiiify-presentation", false);
-xmlhttp.send();
-$version = xmlhttp.responseText;
-</script>
 
 ## Using Jiiify Presentation
 <p/>
@@ -21,14 +15,13 @@ To use the jiiify-presentation library, reference it in your project's `pom.xml`
 <pre><code>&lt;dependency&gt;
   &lt;groupId&gt;info.freelibrary&lt;/groupId&gt;
   &lt;artifactId&gt;jiiify-presentation&lt;/artifactId&gt;
-  &lt;version&gt;<script>document.write($version);</script><noscript>${version}</noscript>&lt;/version&gt;
+  &lt;version&gt;${jiiify.pres.version}&lt;/version&gt;
 &lt;/dependency&gt;
 </code></pre>
 
 <br/>Or, to use it with Gradle/Grails, include the following in your project's `build.gradle` file:
 
-<pre><code>compile &apos;info.freelibrary:jiiify-presentation:<script>
-document.write($version);</script><noscript>${version}</noscript>&apos;</code></pre>
+<pre><code>compile &apos;info.freelibrary:jiiify-presentation:${jiiify.pres.version}&apos;</code></pre>
 <p/>
 
 ## Building Jiiify Presentation

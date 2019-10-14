@@ -27,11 +27,16 @@ import info.freelibrary.util.I18nRuntimeException;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.json.jackson.DatabindCodec;
 
 /**
  * A presentation manifest.
  */
 public class Manifest extends Resource<Manifest> {
+
+    static {
+        DatabindCodec.mapper().findAndRegisterModules();
+    }
 
     private static final String TYPE = "sc:Manifest";
 
