@@ -18,6 +18,8 @@ public final class Constants {
 
     public static final String METADATA = "metadata";
 
+    public static final String WITHIN = "within";
+
     public static final String LABEL = "label";
 
     public static final String DESCRIPTION = "description";

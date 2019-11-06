@@ -34,18 +34,20 @@ import info.freelibrary.util.LoggerFactory;
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.LABEL, Constants.ID, Constants.TYPE, Constants.DESCRIPTION,
-    Constants.LOGO, Constants.THUMBNAIL, Constants.METADATA, Constants.SEQUENCES })
+    Constants.WITHIN, Constants.LOGO, Constants.THUMBNAIL, Constants.METADATA, Constants.SEQUENCES })
 public class Resource<T extends Resource<T>> {
 
-    @JsonProperty("@type")
+    @JsonProperty(Constants.TYPE)
     protected final Type myType;
 
-    @JsonProperty("@id")
+    @JsonProperty(Constants.ID)
     private URI myID;
 
     private Label myLabel;
 
-    @JsonProperty("metadata")
+    private URI myWithin;
+
+    @JsonProperty(Constants.METADATA)
     private Metadata myMetadata;
 
     private Description myDescription;
@@ -466,6 +468,40 @@ public class Resource<T extends Resource<T>> {
     @JsonIgnore
     public T setID(final URI aID) {
         myID = aID;
+        return (T) this;
+    }
+
+    /**
+     * Gets the within link.
+     *
+     * @return The within link
+     */
+    @JsonGetter(Constants.WITHIN)
+    public URI getWithin() {
+        return myWithin;
+    }
+
+    /**
+     * Sets the within link.
+     *
+     * @param aWithin A within link
+     * @return The resource
+     */
+    @JsonIgnore
+    public T setWithin(final String aWithin) {
+        myWithin = URI.create(aWithin);
+        return (T) this;
+    }
+
+    /**
+     * Sets the within link.
+     *
+     * @param aWithin A within link
+     * @return The resource
+     */
+    @JsonSetter(Constants.WITHIN)
+    public T setWithin(final URI aWithin) {
+        myWithin = aWithin;
         return (T) this;
     }
 
