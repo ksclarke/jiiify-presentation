@@ -20,7 +20,7 @@ public class ValueTest {
     @Test
     public void testValueString() {
         final String asdf = "asdf";
-        final Value value = new Value(asdf);
+        final I18nValue value = new I18nValue(asdf);
 
         assertEquals(asdf, value.getValue());
     }
@@ -30,7 +30,7 @@ public class ValueTest {
      */
     @Test
     public void testValueStringString() {
-        final Value value = new Value("asdf_", ENG);
+        final I18nValue value = new I18nValue("asdf_", ENG);
 
         assertEquals("asdf_eng", value.getValue() + value.getLang().get());
     }
@@ -41,7 +41,7 @@ public class ValueTest {
     @Test
     public void testSetValue() {
         final String two = "two";
-        final Value value = new Value(ONE);
+        final I18nValue value = new I18nValue(ONE);
 
         assertEquals(two, value.setValue(two).getValue());
     }
@@ -51,7 +51,7 @@ public class ValueTest {
      */
     @Test
     public void testSetLang() {
-        final Value value = new Value(ONE);
+        final I18nValue value = new I18nValue(ONE);
 
         assertEquals(ENG, value.setLang(ENG).getLang().get());
     }

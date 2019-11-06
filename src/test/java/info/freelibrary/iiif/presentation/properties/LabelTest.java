@@ -41,7 +41,7 @@ public class LabelTest extends AbstractTest {
      */
     @Test
     public void testValueConstructor() {
-        final Label label = new Label(new Value(ASDF));
+        final Label label = new Label(new I18nValue(ASDF));
         assertEquals(ASDF, label.getString());
     }
 

@@ -15,7 +15,7 @@ public class Description extends I18nProperty<Description> {
      *
      * @param aValue A list of I18n values for description
      */
-    public Description(final Value... aValue) {
+    public Description(final I18nValue... aValue) {
         super(aValue);
     }
 

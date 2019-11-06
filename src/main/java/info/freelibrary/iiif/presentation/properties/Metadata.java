@@ -78,7 +78,7 @@ public class Metadata {
      * @param aLabel A metadata label
      * @param aValue A list of I18n values
      */
-    public Metadata(final String aLabel, final Value... aValue) {
+    public Metadata(final String aLabel, final I18nValue... aValue) {
         getEntries().add(new Metadata.Entry(aLabel, aValue));
     }
 
@@ -118,7 +118,7 @@ public class Metadata {
      * @param aValue A metadata values list
      * @return The metadata
      */
-    public Metadata add(final String aLabel, final Value... aValue) {
+    public Metadata add(final String aLabel, final I18nValue... aValue) {
         if (!getEntries().add(new Metadata.Entry(aLabel, aValue))) {
             throw new UnsupportedOperationException();
         }
@@ -162,10 +162,10 @@ public class Metadata {
             final Metadata.Entry entry = entryIterator.next();
 
             if (entry.getLabel().equals(aLabel)) {
-                final Iterator<Value> valuesIterator = entry.myValues.iterator();
+                final Iterator<I18nValue> valuesIterator = entry.myValues.iterator();
 
                 while (valuesIterator.hasNext()) {
-                    final Value value = valuesIterator.next();
+                    final I18nValue value = valuesIterator.next();
                     final Optional<String> lang = value.getLang();
 
                     if (lang.isPresent() && lang.get().equals(aLangCode)) {
@@ -185,7 +185,7 @@ public class Metadata {
      * @return The values for the supplied name
      */
     @JsonIgnore
-    public List<Value> getValues(final String aLabel) {
+    public List<I18nValue> getValues(final String aLabel) {
         final Iterator<Metadata.Entry> iterator = myEntries.iterator();
 
         while (iterator.hasNext()) {
@@ -221,7 +221,7 @@ public class Metadata {
 
         private final String myLabel;
 
-        private final List<Value> myValues;
+        private final List<I18nValue> myValues;
 
         /**
          * Creates a metadata entry from the supplied label and string values.
@@ -242,7 +242,7 @@ public class Metadata {
          * @param aLabel A metadata label
          * @param aValue A list of I18n values
          */
-        public Entry(final String aLabel, final Value... aValue) {
+        public Entry(final String aLabel, final I18nValue... aValue) {
             Objects.requireNonNull(aLabel, MessageCodes.JPA_002);
             myValues = new ArrayList<>();
             myLabel = aLabel;
@@ -290,7 +290,7 @@ public class Metadata {
          * @return The metadata entry's string values
          */
         @JsonIgnore
-        public List<Value> getValues() {
+        public List<I18nValue> getValues() {
             return myValues;
         }
 
@@ -313,7 +313,7 @@ public class Metadata {
          * @return The metadata entry
          */
         @JsonIgnore
-        public Entry setValues(final Value... aValue) {
+        public Entry setValues(final I18nValue... aValue) {
             myValues.clear();
             return addValues(aValue);
         }
@@ -330,7 +330,7 @@ public class Metadata {
             for (final String value : aValue) {
                 Objects.requireNonNull(value, LOGGER.getMessage(MessageCodes.JPA_001));
 
-                if (!myValues.add(new Value(value))) {
+                if (!myValues.add(new I18nValue(value))) {
                     throw new UnsupportedOperationException();
                 }
             }
@@ -344,10 +344,10 @@ public class Metadata {
          * @param aValue A list of values
          * @return The metadata entry
          */
-        public final Entry addValues(final Value... aValue) {
+        public final Entry addValues(final I18nValue... aValue) {
             Objects.requireNonNull(aValue, LOGGER.getMessage(MessageCodes.JPA_001));
 
-            for (final Value value : aValue) {
+            for (final I18nValue value : aValue) {
                 Objects.requireNonNull(value, LOGGER.getMessage(MessageCodes.JPA_001));
 
                 if (!myValues.add(value)) {
@@ -370,10 +370,10 @@ public class Metadata {
                     return myValues.get(0).getValue();
                 } else {
                     final List<Object> list = new ArrayList<>();
-                    final Iterator<Value> iterator = myValues.iterator();
+                    final Iterator<I18nValue> iterator = myValues.iterator();
 
                     while (iterator.hasNext()) {
-                        final Value entry = iterator.next();
+                        final I18nValue entry = iterator.next();
 
                         if (entry.getLang().isPresent()) {
                             list.add(entry);

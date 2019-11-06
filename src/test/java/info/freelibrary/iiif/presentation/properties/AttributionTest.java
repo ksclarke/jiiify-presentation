@@ -17,7 +17,7 @@ public class AttributionTest {
      */
     @Test
     public void testAttributionValueArray() {
-        final Attribution attribution = new Attribution(new Value(VALUE));
+        final Attribution attribution = new Attribution(new I18nValue(VALUE));
 
         assertEquals(VALUE, attribution.getString());
     }

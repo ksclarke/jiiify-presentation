@@ -15,7 +15,7 @@ public class Label extends I18nProperty<Label> {
      *
      * @param aValue A list of I18n values for the label
      */
-    public Label(final Value... aValue) {
+    public Label(final I18nValue... aValue) {
         super(aValue);
     }
 
