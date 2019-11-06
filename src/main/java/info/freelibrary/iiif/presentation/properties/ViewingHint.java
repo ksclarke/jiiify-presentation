@@ -211,9 +211,11 @@ public class ViewingHint {
     }
 
     /**
-     * Gets the raw value of the viewing hint; for a viewing hint with a single value this will be a
-     * <code>String</code> and for a viewing hint with multiple values this will be a
-     * <code>List<ViewingHint.Value></code>.
+     * Gets the raw value of the viewing hint
+     * <p>
+     * For a viewing hint with a single value this will be a <code>String</code> and for a viewing hint with multiple
+     * values this will be a <code>List&lt;ViewingHint.Value&gt;</code>.
+     * </p>
      *
      * @return The value of the viewing hint
      */
