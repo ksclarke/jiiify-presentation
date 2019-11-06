@@ -14,8 +14,8 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 
-import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.I18nValue;
+import info.freelibrary.iiif.presentation.properties.Metadata;
 
 /**
  * A custom deserializer for the Metadata class.
@@ -60,17 +60,28 @@ public class MetadataDeserializer extends StdDeserializer<Metadata> {
 
                 if (valueNode instanceof ArrayNode) {
                     final List<I18nValue> i18nValues = new ArrayList<>();
+                    final List<String> values = new ArrayList<>();
                     final ArrayNode arrayNode = (ArrayNode) valueNode;
 
                     for (int arrayNodeIndex = 0; arrayNodeIndex < arrayNode.size(); arrayNodeIndex++) {
-                        final ObjectNode objNode = (ObjectNode) arrayNode.get(arrayNodeIndex);
-                        final String i18nValue = objNode.get(Constants.I18N_VALUE).textValue();
-                        final String i18nLang = objNode.get(Constants.I18N_LANG).textValue();
+                        final JsonNode arrayValueNode = arrayNode.get(arrayNodeIndex);
 
-                        i18nValues.add(new I18nValue(i18nValue, i18nLang));
+                        if (arrayValueNode instanceof ObjectNode) {
+                            final ObjectNode objNode = (ObjectNode) arrayNode.get(arrayNodeIndex);
+                            final String i18nValue = objNode.get(Constants.I18N_VALUE).textValue();
+                            final String i18nLang = objNode.get(Constants.I18N_LANG).textValue();
+
+                            i18nValues.add(new I18nValue(i18nValue, i18nLang));
+                        } else if (arrayValueNode instanceof TextNode) {
+                            values.add(((TextNode) arrayValueNode).textValue());
+                        }
                     }
 
-                    metadata.add(label, i18nValues.toArray(new I18nValue[] {}));
+                    if (i18nValues.size() > 0) {
+                        metadata.add(label, i18nValues.toArray(new I18nValue[] {}));
+                    } else if (values.size() > 0) {
+                        metadata.add(label, values.toArray(new String[] {}));
+                    }
                 } else if (valueNode instanceof TextNode) {
                     metadata.add(label, valueNode.textValue());
                 }

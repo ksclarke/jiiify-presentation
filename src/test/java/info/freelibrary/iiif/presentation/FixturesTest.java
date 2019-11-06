@@ -46,6 +46,11 @@ public class FixturesTest {
         test(StringUtils.format(FIXTURE_PATH, 3));
     }
 
+    @Test
+    public final void testFixture4() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 4));
+    }
+
     private void test(final String aFixtureFilePath) throws IOException {
         final TestData data = prepareTest(new File(aFixtureFilePath));
 
