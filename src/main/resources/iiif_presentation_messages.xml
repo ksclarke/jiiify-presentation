@@ -4,18 +4,20 @@
   <entry key="message-class-name">info.freelibrary.iiif.presentation.util.MessageCodes</entry>
 
   <!-- Messages to be stored in the MessageCodes class -->
-  <entry key="EXC-001">Property value cannot be null</entry>
-  <entry key="EXC-002">Label value cannot be null</entry>
-  <entry key="EXC-003">ID value cannot be null</entry>
-  <entry key="EXC-004">MediaType cannot be null</entry>
-  <entry key="EXC-005">Profile cannot be null</entry>
-  <entry key="EXC-006">Image resource cannot be null</entry>
-  <entry key="EXC-007">Context URI cannot be null</entry>
-  <entry key="EXC-008">Sequence cannot be null</entry>
-  <entry key="EXC-009">SeeAlso ID cannot be null</entry>
-  <entry key="EXC-010">{} isn't a viewingHint or URI</entry>
-  <entry key="EXC-011">Width ({}) and height ({}) must be above zero</entry>
-  <entry key="EXC-012">{} is required</entry>
-  <entry key="EXC-013">{} is not a recognizable media type</entry>
-  
+  <entry key="JPA-001">Property value cannot be null</entry>
+  <entry key="JPA-002">Label value cannot be null</entry>
+  <entry key="JPA-003">ID value cannot be null</entry>
+  <entry key="JPA-004">MediaType cannot be null</entry>
+  <entry key="JPA-005">Profile cannot be null</entry>
+  <entry key="JPA-006">Image resource cannot be null</entry>
+  <entry key="JPA-007">Context URI cannot be null</entry>
+  <entry key="JPA-008">Sequence cannot be null</entry>
+  <entry key="JPA-009">SeeAlso ID cannot be null</entry>
+  <entry key="JPA-010">{} isn't a viewingHint or URI</entry>
+  <entry key="JPA-011">Width ({}) and height ({}) must be above zero</entry>
+  <entry key="JPA-012">{} is required</entry>
+  <entry key="JPA-013">{} is not a recognizable media type</entry>
+  <entry key="JPA-014">Output file content from failed test: {}</entry>
+  <entry key="JPA-015">Image content resource map: {}</entry>
+
 </properties>

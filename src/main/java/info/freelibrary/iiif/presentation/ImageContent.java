@@ -73,7 +73,7 @@ public class ImageContent extends Content<ImageContent> {
      */
     @JsonIgnore
     public ImageContent addResource(final ImageResource aResource) {
-        Objects.requireNonNull(aResource, MessageCodes.EXC_006);
+        Objects.requireNonNull(aResource, MessageCodes.JPA_006);
         myResources.add(aResource);
         return this;
     }
@@ -86,7 +86,7 @@ public class ImageContent extends Content<ImageContent> {
      */
     @JsonIgnore
     public ImageContent setDefaultResource(final ImageResource aResource) {
-        Objects.requireNonNull(aResource, MessageCodes.EXC_006);
+        Objects.requireNonNull(aResource, MessageCodes.JPA_006);
         myDefaultResource = Optional.of(aResource);
         return this;
     }
@@ -98,7 +98,11 @@ public class ImageContent extends Content<ImageContent> {
      */
     @JsonIgnore
     public Optional<ImageResource> getDefaultResource() {
-        return myDefaultResource.isEmpty() ? Optional.empty() : myDefaultResource;
+        if (myDefaultResource == null) {
+            myDefaultResource = Optional.empty();
+        }
+
+        return myDefaultResource;
     }
 
     /**
@@ -121,13 +125,32 @@ public class ImageContent extends Content<ImageContent> {
         final Map<String, Object> map = new TreeMap<>();
 
         if (!myResources.isEmpty()) {
-            map.put(Constants.TYPE, Constants.OA_CHOICE);
+            if (myResources.size() > 1) {
+                map.put(Constants.TYPE, Constants.OA_CHOICE);
 
-            if (getDefaultResource().isPresent()) {
-                map.put(Constants.DEFAULT, myDefaultResource);
+                if (getDefaultResource().isPresent()) {
+                    map.put(Constants.DEFAULT, myDefaultResource);
+                }
+
+                map.put(Constants.ITEM, myResources);
+            } else if (myResources.size() == 1) {
+                final ImageResource resource = myResources.get(0);
+                final Optional<ImageInfoService> service = resource.getService();
+
+                map.put(Constants.ID, resource.getID());
+                map.put(Constants.TYPE, resource.getType());
+                map.put(Constants.HEIGHT, resource.getHeight());
+                map.put(Constants.WIDTH, resource.getWidth());
+                map.put(Constants.FORMAT, resource.getFormat());
+
+                if (resource.getLabel() != null) {
+                    map.put(Constants.LABEL, resource.getLabel());
+                }
+
+                if (service.isPresent()) {
+                    map.put(Constants.SERVICE, resource.getService());
+                }
             }
-
-            map.put(Constants.ITEM, myResources);
         }
 
         return map;
@@ -140,6 +163,8 @@ public class ImageContent extends Content<ImageContent> {
      */
     @JsonSetter(Constants.RESOURCE)
     private void setResourcesMap(final Map<String, Object> aResourceMap) {
+        LOGGER.trace(aResourceMap.toString());
+
         if (!aResourceMap.isEmpty()) {
             final Map<String, Object> defaultItem = (Map<String, Object>) aResourceMap.get(Constants.DEFAULT);
             final List<Map<String, Object>> items = (List<Map<String, Object>>) aResourceMap.get(Constants.ITEM);
@@ -152,6 +177,10 @@ public class ImageContent extends Content<ImageContent> {
                 for (final Map<String, Object> map : items) {
                     myResources.add(buildImageResource(map));
                 }
+            }
+
+            if (defaultItem == null && items == null && aResourceMap.get(Constants.ID) != null) {
+                myResources.add(buildImageResource(aResourceMap));
             }
         }
     }

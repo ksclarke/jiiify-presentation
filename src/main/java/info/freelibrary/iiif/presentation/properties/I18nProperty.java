@@ -79,10 +79,10 @@ class I18nProperty<T extends I18nProperty<T>> {
      * @return A String value to the property
      */
     public final T addValue(final String... aValue) {
-        Objects.requireNonNull(aValue, MessageCodes.EXC_001);
+        Objects.requireNonNull(aValue, MessageCodes.JPA_001);
 
         for (final String value : aValue) {
-            Objects.requireNonNull(value, MessageCodes.EXC_001);
+            Objects.requireNonNull(value, MessageCodes.JPA_001);
 
             if (!myValues.add(new Value(value))) {
                 throw new UnsupportedOperationException();
@@ -99,10 +99,10 @@ class I18nProperty<T extends I18nProperty<T>> {
      * @return A String value to the property
      */
     public final T addValue(final Value... aValue) {
-        Objects.requireNonNull(aValue, MessageCodes.EXC_001);
+        Objects.requireNonNull(aValue, MessageCodes.JPA_001);
 
         for (final Value value : aValue) {
-            Objects.requireNonNull(value, MessageCodes.EXC_001);
+            Objects.requireNonNull(value, MessageCodes.JPA_001);
 
             if (!myValues.add(value)) {
                 throw new UnsupportedOperationException();

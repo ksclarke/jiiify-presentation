@@ -33,7 +33,7 @@ public class SeeAlso {
         myValues = new ArrayList<>();
 
         for (final String id : aID) {
-            Objects.requireNonNull(id, LOGGER.getMessage(MessageCodes.EXC_009));
+            Objects.requireNonNull(id, LOGGER.getMessage(MessageCodes.JPA_009));
 
             if (!myValues.add(new Value(URI.create(id)))) {
                 throw new UnsupportedOperationException();
@@ -50,7 +50,7 @@ public class SeeAlso {
         myValues = new ArrayList<>();
 
         for (final URI uri : aID) {
-            Objects.requireNonNull(uri, LOGGER.getMessage(MessageCodes.EXC_009));
+            Objects.requireNonNull(uri, LOGGER.getMessage(MessageCodes.JPA_009));
 
             if (!myValues.add(new Value(uri))) {
                 throw new UnsupportedOperationException();
@@ -78,8 +78,8 @@ public class SeeAlso {
     public SeeAlso(final URI aID, final MediaType aMediaType) {
         myValues = new ArrayList<>();
 
-        Objects.requireNonNull(aID, MessageCodes.EXC_003);
-        Objects.requireNonNull(aMediaType, MessageCodes.EXC_004);
+        Objects.requireNonNull(aID, MessageCodes.JPA_003);
+        Objects.requireNonNull(aMediaType, MessageCodes.JPA_004);
 
         if (!myValues.add(new Value(aID, Optional.of(aMediaType)))) {
             throw new UnsupportedOperationException();
@@ -118,9 +118,9 @@ public class SeeAlso {
     public SeeAlso(final URI aID, final MediaType aMediaType, final URI aProfile) {
         myValues = new ArrayList<>();
 
-        Objects.requireNonNull(aID, MessageCodes.EXC_003);
-        Objects.requireNonNull(aMediaType, MessageCodes.EXC_004);
-        Objects.requireNonNull(aProfile, MessageCodes.EXC_005);
+        Objects.requireNonNull(aID, MessageCodes.JPA_003);
+        Objects.requireNonNull(aMediaType, MessageCodes.JPA_004);
+        Objects.requireNonNull(aProfile, MessageCodes.JPA_005);
 
         if (!myValues.add(new Value(aID, Optional.of(aMediaType), Optional.of(aProfile)))) {
             throw new UnsupportedOperationException();
@@ -190,7 +190,7 @@ public class SeeAlso {
      */
     public SeeAlso addValue(final String... aID) {
         for (final String id : aID) {
-            Objects.requireNonNull(id, MessageCodes.EXC_003);
+            Objects.requireNonNull(id, MessageCodes.JPA_003);
 
             if (!myValues.add(new Value(URI.create(id)))) {
                 throw new UnsupportedOperationException();
@@ -208,7 +208,7 @@ public class SeeAlso {
      */
     public SeeAlso addValue(final URI... aID) {
         for (final URI id : aID) {
-            Objects.requireNonNull(id, MessageCodes.EXC_003);
+            Objects.requireNonNull(id, MessageCodes.JPA_003);
 
             if (!myValues.add(new Value(id))) {
                 throw new UnsupportedOperationException();

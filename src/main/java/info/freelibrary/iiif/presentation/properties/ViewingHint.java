@@ -267,7 +267,7 @@ public class ViewingHint {
                 try {
                     myURI = URI.create(aValue);
                 } catch (final IllegalArgumentException uriDetails) {
-                    throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.EXC_010, aValue), uriDetails);
+                    throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_010, aValue), uriDetails);
                 }
             }
         }

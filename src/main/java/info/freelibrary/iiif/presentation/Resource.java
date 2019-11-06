@@ -618,7 +618,7 @@ public class Resource<T extends Resource<T>> {
         }
 
         for (int index = 0; index < aNumber; index++) {
-            Objects.requireNonNull(aArgs[index], getLogger().getMessage(MessageCodes.EXC_012, aNames[index]));
+            Objects.requireNonNull(aArgs[index], getLogger().getMessage(MessageCodes.JPA_012, aNames[index]));
         }
     }
 
