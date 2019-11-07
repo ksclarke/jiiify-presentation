@@ -284,7 +284,6 @@ public class Resource<T extends Resource<T>> {
      * @param aDescription A description
      * @return The resource
      */
-    @JsonIgnore
     public T setDescription(final String aDescription) {
         myDescription = new Description(aDescription);
         return (T) this;
