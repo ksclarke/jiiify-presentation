@@ -2,12 +2,15 @@
 package info.freelibrary.iiif.presentation.properties;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import info.freelibrary.iiif.presentation.utils.AttributionDeserializer;
 import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
  * An attribution property.
  */
+@JsonDeserialize(using = AttributionDeserializer.class)
 public class Attribution extends I18nProperty<Attribution> {
 
     /**

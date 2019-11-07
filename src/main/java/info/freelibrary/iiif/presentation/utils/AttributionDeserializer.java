@@ -12,35 +12,35 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
-import info.freelibrary.iiif.presentation.properties.Description;
+import info.freelibrary.iiif.presentation.properties.Attribution;
 import info.freelibrary.iiif.presentation.properties.Value;
 import info.freelibrary.iiif.presentation.util.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
-public class DescriptionDeserializer extends StdDeserializer<Description> {
+public class AttributionDeserializer extends StdDeserializer<Attribution> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DescriptionDeserializer.class,
+    private static final Logger LOGGER = LoggerFactory.getLogger(AttributionDeserializer.class,
             Constants.BUNDLE_NAME);
 
     /**
-     * The <code>serialVersionUID</code> of CustomMetadataSerializer.
+     * The <code>serialVersionUID</code> for the AttributionDeserializer.
      */
-    private static final long serialVersionUID = -1205197208026340074L;
+    private static final long serialVersionUID = 8003097539400386107L;
 
     /**
-     * Creates a new metadata deserializer.
+     * Creates a new attribution deserializer.
      */
-    public DescriptionDeserializer() {
+    public AttributionDeserializer() {
         this(null);
     }
 
     /**
-     * Creates a new metadata deserializer.
+     * Creates a new attribution deserializer.
      *
      * @param aClass A class
      */
-    public DescriptionDeserializer(final Class<?> aClass) {
+    public AttributionDeserializer(final Class<?> aClass) {
         super(aClass);
     }
 
@@ -48,10 +48,10 @@ public class DescriptionDeserializer extends StdDeserializer<Description> {
      *
      */
     @Override
-    public Description deserialize(final JsonParser aParser, final DeserializationContext aContext)
+    public Attribution deserialize(final JsonParser aParser, final DeserializationContext aContext)
             throws IOException, JsonProcessingException {
         final JsonNode node = aParser.getCodec().readTree(aParser);
-        final Description description;
+        final Attribution attribution;
 
         if (node.isArray()) {
             final List<Value> values = new ArrayList<>();
@@ -69,14 +69,14 @@ public class DescriptionDeserializer extends StdDeserializer<Description> {
                 }
             }
 
-            description = new Description(values.toArray(new Value[] {}));
+            attribution = new Attribution(values.toArray(new Value[] {}));
         } else if (node.isTextual()) {
-            description = new Description(node.textValue());
+            attribution = new Attribution(node.textValue());
         } else {
             throw new JsonParseException(aParser, LOGGER.getMessage(MessageCodes.JPA_016, node.getClass().getName()),
                     aParser.getCurrentLocation());
         }
 
-        return description;
+        return attribution;
     }
 }

@@ -34,7 +34,8 @@ import info.freelibrary.util.LoggerFactory;
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.LABEL, Constants.ID, Constants.TYPE, Constants.DESCRIPTION,
-    Constants.WITHIN, Constants.LOGO, Constants.THUMBNAIL, Constants.METADATA, Constants.SEQUENCES })
+    Constants.ATTRIBUTION, Constants.LICENSE, Constants.WITHIN, Constants.LOGO, Constants.THUMBNAIL,
+    Constants.METADATA, Constants.SEQUENCES })
 public class Resource<T extends Resource<T>> {
 
     @JsonProperty(Constants.TYPE)
@@ -362,7 +363,7 @@ public class Resource<T extends Resource<T>> {
      * @param aAttribution An attribution
      * @return The resource
      */
-    @JsonIgnore
+    @JsonProperty
     public T setAttribution(final Attribution aAttribution) {
         myAttribution = aAttribution;
         return (T) this;
@@ -373,7 +374,7 @@ public class Resource<T extends Resource<T>> {
      *
      * @return The license
      */
-    @JsonGetter(Constants.LICENSE)
+    @JsonProperty
     public License getLicense() {
         return myLicense;
     }
@@ -384,7 +385,7 @@ public class Resource<T extends Resource<T>> {
      * @param aLicense A license
      * @return The resource
      */
-    @JsonIgnore
+    @JsonProperty
     public T setLicense(final License aLicense) {
         myLicense = aLicense;
         return (T) this;
