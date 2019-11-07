@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import info.freelibrary.iiif.presentation.properties.Description;
-import info.freelibrary.iiif.presentation.properties.I18nValue;
+import info.freelibrary.iiif.presentation.properties.Value;
 import info.freelibrary.iiif.presentation.util.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -54,22 +54,22 @@ public class DescriptionDeserializer extends StdDeserializer<Description> {
         final Description description;
 
         if (node.isArray()) {
-            final List<I18nValue> values = new ArrayList<>();
+            final List<Value> values = new ArrayList<>();
 
             for (int index = 0; index < node.size(); index++) {
                 final JsonNode arrayNode = node.get(index);
 
                 if (arrayNode.isTextual()) {
-                    values.add(new I18nValue(arrayNode.textValue()));
+                    values.add(new Value(arrayNode.textValue()));
                 } else {
                     final String value = arrayNode.get(Constants.I18N_VALUE).textValue();
                     final String lang = arrayNode.get(Constants.I18N_LANG).textValue();
 
-                    values.add(new I18nValue(value, lang));
+                    values.add(new Value(value, lang));
                 }
             }
 
-            description = new Description(values.toArray(new I18nValue[] {}));
+            description = new Description(values.toArray(new Value[] {}));
         } else if (node.isTextual()) {
             description = new Description(node.textValue());
         } else {

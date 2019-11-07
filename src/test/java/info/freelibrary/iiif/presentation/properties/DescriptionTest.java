@@ -27,7 +27,7 @@ public class DescriptionTest {
      */
     @Test
     public void testValueConstructor() {
-        final Description description = new Description(new I18nValue(VALUE));
+        final Description description = new Description(new Value(VALUE));
 
         assertEquals(VALUE, description.getString());
     }

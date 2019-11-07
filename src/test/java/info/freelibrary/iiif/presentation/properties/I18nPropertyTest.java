@@ -27,7 +27,7 @@ public class I18nPropertyTest {
      */
     @Test
     public void testI18nPropertyValueArray() {
-        assertEquals(ONE, new I18nProperty(new I18nValue(ONE), new I18nValue(TWO)).getString());
+        assertEquals(ONE, new I18nProperty(new Value(ONE), new Value(TWO)).getString());
     }
 
     /**
@@ -52,7 +52,7 @@ public class I18nPropertyTest {
     @Test
     public void testGetValues() {
         final I18nProperty i18np = new I18nProperty(ONE, TWO);
-        final List<I18nValue> values = i18np.getValues();
+        final List<Value> values = i18np.getValues();
 
         assertEquals(2, values.size());
     }
@@ -90,7 +90,7 @@ public class I18nPropertyTest {
      */
     @Test
     public void testAddValueValueArray() {
-        assertEquals(3, new I18nProperty(ONE).addValue(new I18nValue(TWO), new I18nValue(THREE)).getValues().size());
+        assertEquals(3, new I18nProperty(ONE).addValue(new Value(TWO), new Value(THREE)).getValues().size());
     }
 
     /**
@@ -127,7 +127,7 @@ public class I18nPropertyTest {
     @Test
     public void testGetValueSimpleValueTwo() {
         final List<String> expected = Arrays.asList(new String[] { ONE, TWO });
-        assertEquals(expected, new I18nProperty(new I18nValue(ONE), new I18nValue(TWO)).getValue());
+        assertEquals(expected, new I18nProperty(new Value(ONE), new Value(TWO)).getValue());
     }
 
     /**
@@ -147,8 +147,8 @@ public class I18nPropertyTest {
      */
     @Test
     public void testGetValueSimpleValue() {
-        final I18nValue value = new I18nValue(ONE, "eng");
-        final List<I18nValue> values = Arrays.asList(new I18nValue[] { value });
+        final Value value = new Value(ONE, "eng");
+        final List<Value> values = Arrays.asList(new Value[] { value });
 
         assertEquals(values, new I18nProperty(value).getValue());
     }

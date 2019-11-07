@@ -18,7 +18,7 @@ import info.freelibrary.iiif.presentation.utils.Constants;
  */
 @JsonPropertyOrder({ "@value", "@language" })
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class I18nValue {
+public class Value {
 
     private String myValue;
 
@@ -29,7 +29,7 @@ public class I18nValue {
      *
      * @param aValue A property value
      */
-    public I18nValue(final String aValue) {
+    public Value(final String aValue) {
         this(aValue, (String) null);
     }
 
@@ -39,7 +39,7 @@ public class I18nValue {
      * @param aValue A string value
      * @param aLang A language code
      */
-    public I18nValue(final String aValue, final String aLang) {
+    public Value(final String aValue, final String aLang) {
         myValue = aValue;
         myLang = Optional.ofNullable(aLang);
     }
@@ -71,7 +71,7 @@ public class I18nValue {
      * @return The value
      */
     @JsonSetter(Constants.I18N_VALUE)
-    public I18nValue setValue(final String aValue) {
+    public Value setValue(final String aValue) {
         myValue = aValue;
         return this;
     }
@@ -83,7 +83,7 @@ public class I18nValue {
      * @return The value
      */
     @JsonSetter(Constants.I18N_LANG)
-    public I18nValue setLang(final String aLang) {
+    public Value setLang(final String aLang) {
         myLang = Optional.ofNullable(aLang);
         return this;
     }

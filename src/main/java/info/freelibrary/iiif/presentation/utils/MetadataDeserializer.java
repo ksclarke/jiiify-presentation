@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 
-import info.freelibrary.iiif.presentation.properties.I18nValue;
+import info.freelibrary.iiif.presentation.properties.Value;
 import info.freelibrary.iiif.presentation.properties.Metadata;
 
 /**
@@ -59,7 +59,7 @@ public class MetadataDeserializer extends StdDeserializer<Metadata> {
                 final JsonNode valueNode = entry.get(Constants.VALUE);
 
                 if (valueNode instanceof ArrayNode) {
-                    final List<I18nValue> i18nValues = new ArrayList<>();
+                    final List<Value> i18nValues = new ArrayList<>();
                     final List<String> values = new ArrayList<>();
                     final ArrayNode arrayNode = (ArrayNode) valueNode;
 
@@ -71,14 +71,14 @@ public class MetadataDeserializer extends StdDeserializer<Metadata> {
                             final String i18nValue = objNode.get(Constants.I18N_VALUE).textValue();
                             final String i18nLang = objNode.get(Constants.I18N_LANG).textValue();
 
-                            i18nValues.add(new I18nValue(i18nValue, i18nLang));
+                            i18nValues.add(new Value(i18nValue, i18nLang));
                         } else if (arrayValueNode instanceof TextNode) {
                             values.add(((TextNode) arrayValueNode).textValue());
                         }
                     }
 
                     if (i18nValues.size() > 0) {
-                        metadata.add(label, i18nValues.toArray(new I18nValue[] {}));
+                        metadata.add(label, i18nValues.toArray(new Value[] {}));
                     } else if (values.size() > 0) {
                         metadata.add(label, values.toArray(new String[] {}));
                     }

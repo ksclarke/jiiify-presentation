@@ -15,7 +15,7 @@ import info.freelibrary.iiif.presentation.util.MessageCodes;
  */
 class I18nProperty<T extends I18nProperty<T>> {
 
-    private final List<I18nValue> myValues;
+    private final List<Value> myValues;
 
     /**
      * Creates a property from a list of I18n Value(s).
@@ -23,7 +23,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      * @param aName A name of the property
      * @param aValue A value for the property
      */
-    I18nProperty(final I18nValue... aValue) {
+    I18nProperty(final Value... aValue) {
         myValues = new ArrayList<>();
         addValue(aValue);
     }
@@ -55,7 +55,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      *
      * @return A List of the property's String values
      */
-    public List<I18nValue> getValues() {
+    public List<Value> getValues() {
         return myValues;
     }
 
@@ -84,7 +84,7 @@ class I18nProperty<T extends I18nProperty<T>> {
         for (final String value : aValue) {
             Objects.requireNonNull(value, MessageCodes.JPA_001);
 
-            if (!myValues.add(new I18nValue(value))) {
+            if (!myValues.add(new Value(value))) {
                 throw new UnsupportedOperationException();
             }
         }
@@ -98,10 +98,10 @@ class I18nProperty<T extends I18nProperty<T>> {
      * @param aValue A I18N property value
      * @return A String value to the property
      */
-    public final T addValue(final I18nValue... aValue) {
+    public final T addValue(final Value... aValue) {
         Objects.requireNonNull(aValue, MessageCodes.JPA_001);
 
-        for (final I18nValue value : aValue) {
+        for (final Value value : aValue) {
             Objects.requireNonNull(value, MessageCodes.JPA_001);
 
             if (!myValues.add(value)) {
@@ -134,10 +134,10 @@ class I18nProperty<T extends I18nProperty<T>> {
                 return myValues.get(0).getValue();
             } else {
                 final List<Object> list = new ArrayList<>();
-                final Iterator<I18nValue> iterator = myValues.iterator();
+                final Iterator<Value> iterator = myValues.iterator();
 
                 while (iterator.hasNext()) {
-                    final I18nValue entry = iterator.next();
+                    final Value entry = iterator.next();
 
                     if (entry.getLang().isPresent()) {
                         list.add(entry);

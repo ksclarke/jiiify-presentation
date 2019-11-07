@@ -15,7 +15,7 @@ public class Attribution extends I18nProperty<Attribution> {
      *
      * @param aValue A list of I18n values for attribution
      */
-    public Attribution(final I18nValue... aValue) {
+    public Attribution(final Value... aValue) {
         super(aValue);
     }
 

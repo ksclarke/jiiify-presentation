@@ -105,7 +105,7 @@ public class MetadataTest extends AbstractTest {
      */
     @Test
     public void testSinglePairLangValueJson() {
-        myManifest.setMetadata(new Metadata(AAAA, new I18nValue(BBBB, ENG)));
+        myManifest.setMetadata(new Metadata(AAAA, new Value(BBBB, ENG)));
 
         myJSON.put(Constants.METADATA, new JsonArray().add(new JsonObject().put(Constants.LABEL, AAAA).put(
                 Constants.VALUE, new JsonArray().add(new JsonObject().put(Constants.I18N_VALUE, BBBB).put(
@@ -119,7 +119,7 @@ public class MetadataTest extends AbstractTest {
      */
     @Test
     public void testDoublePairLangValueJson() {
-        myManifest.setMetadata(new Metadata(AAAA, new I18nValue(BBBB, ENG), new I18nValue(CCCC, FRE)));
+        myManifest.setMetadata(new Metadata(AAAA, new Value(BBBB, ENG), new Value(CCCC, FRE)));
 
         myJSON.put(Constants.METADATA, new JsonArray().add(new JsonObject().put(Constants.LABEL, AAAA).put(
                 Constants.VALUE, new JsonArray().add(new JsonObject().put(Constants.I18N_VALUE, BBBB).put(
