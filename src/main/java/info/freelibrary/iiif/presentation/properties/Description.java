@@ -2,12 +2,15 @@
 package info.freelibrary.iiif.presentation.properties;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import info.freelibrary.iiif.presentation.utils.Constants;
+import info.freelibrary.iiif.presentation.utils.DescriptionDeserializer;
 
 /**
  * A description property.
  */
+@JsonDeserialize(using = DescriptionDeserializer.class)
 public class Description extends I18nProperty<Description> {
 
     /**
@@ -33,5 +36,4 @@ public class Description extends I18nProperty<Description> {
     protected Object getValue() {
         return super.getValue();
     }
-
 }

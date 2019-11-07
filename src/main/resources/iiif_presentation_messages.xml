@@ -19,5 +19,6 @@
   <entry key="JPA-013">{} is not a recognizable media type</entry>
   <entry key="JPA-014">Output file content from failed test: {}</entry>
   <entry key="JPA-015">Image content resource map: {}</entry>
+  <entry key="JPA-016">Unexpected JSON node: {}</entry>
 
 </properties>
