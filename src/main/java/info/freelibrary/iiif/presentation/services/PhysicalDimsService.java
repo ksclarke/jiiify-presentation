@@ -16,11 +16,11 @@ public class PhysicalDimsService implements Service {
 
     /* The context for this service */
     @JsonIgnore
-    public static final String CONTEXT = "http://iiif.io/api/annex/services/physdim/1/context.json";
+    public static final URI CONTEXT = URI.create("http://iiif.io/api/annex/services/physdim/1/context.json");
 
     /* The profile for this service */
     @JsonIgnore
-    public static final String PROFILE = "http://iiif.io/api/annex/services/physdim";
+    public static final URI PROFILE = URI.create("http://iiif.io/api/annex/services/physdim");
 
     private URI myID;
 
@@ -52,7 +52,7 @@ public class PhysicalDimsService implements Service {
 
     @Override
     @JsonGetter(Constants.CONTEXT)
-    public String getContext() {
+    public URI getContext() {
         return CONTEXT;
     }
 
@@ -61,7 +61,7 @@ public class PhysicalDimsService implements Service {
      *
      * @return The service profile
      */
-    public String getProfile() {
+    public URI getProfile() {
         return PROFILE;
     }
 
@@ -70,6 +70,7 @@ public class PhysicalDimsService implements Service {
      *
      * @return The ID of the item
      */
+    @Override
     @JsonGetter(Constants.ID)
     public URI getID() {
         return myID;

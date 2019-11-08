@@ -24,6 +24,7 @@ import info.freelibrary.iiif.presentation.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.properties.Type;
 import info.freelibrary.iiif.presentation.properties.ViewingHint;
 import info.freelibrary.iiif.presentation.properties.ViewingHint.Option;
+import info.freelibrary.iiif.presentation.services.Service;
 import info.freelibrary.iiif.presentation.util.MessageCodes;
 import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.util.Logger;
@@ -64,6 +65,8 @@ public class Resource<T extends Resource<T>> {
     private ViewingHint myViewingHint;
 
     private SeeAlso mySeeAlso;
+
+    private Service myService;
 
     /**
      * Creates a new resource from the supplied type.
@@ -244,6 +247,28 @@ public class Resource<T extends Resource<T>> {
     @JsonIgnore
     public T setLabel(final Label aLabel) {
         myLabel = aLabel;
+        return (T) this;
+    }
+
+    /**
+     * Gets a service.
+     *
+     * @return A service
+     */
+    @JsonGetter(Constants.SERVICE)
+    public Service getService() {
+        return myService;
+    }
+
+    /**
+     * Sets a service.
+     *
+     * @param aService A service
+     * @return The resource
+     */
+    @JsonSetter(Constants.SERVICE)
+    public T setService(final Service aService) {
+        myService = aService;
         return (T) this;
     }
 

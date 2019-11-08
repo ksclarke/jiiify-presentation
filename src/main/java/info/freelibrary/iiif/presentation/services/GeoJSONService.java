@@ -16,7 +16,7 @@ public class GeoJSONService implements Service {
 
     /* The context for this service */
     @JsonIgnore
-    public static final String CONTEXT = "http://geojson.org/geojson-ld/geojson-context.jsonld";
+    public static final URI CONTEXT = URI.create("http://geojson.org/geojson-ld/geojson-context.jsonld");
 
     private URI myID;
 
@@ -31,7 +31,7 @@ public class GeoJSONService implements Service {
 
     @Override
     @JsonGetter(Constants.CONTEXT)
-    public String getContext() {
+    public URI getContext() {
         return CONTEXT;
     }
 
@@ -40,6 +40,7 @@ public class GeoJSONService implements Service {
      *
      * @return The ID
      */
+    @Override
     @JsonGetter(Constants.ID)
     public URI getID() {
         return myID;

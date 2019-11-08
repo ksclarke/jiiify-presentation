@@ -1,21 +1,30 @@
 
 package info.freelibrary.iiif.presentation.services;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
+import java.net.URI;
 
-import info.freelibrary.iiif.presentation.utils.Constants;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import info.freelibrary.iiif.presentation.utils.ServiceDeserializer;
 
 /**
  * An abstract service to be subclasses by actual IIIF services.
  */
-public interface Service {
+@JsonDeserialize(using = ServiceDeserializer.class)
+public interface Service<T> {
 
     /**
      * Required by ImageInfo, PhysicalDims; suggested by GeoJSON.
      *
      * @return A context
      */
-    @JsonGetter(Constants.CONTEXT)
-    String getContext();
+    URI getContext();
+
+    /**
+     * Gets the ID of the item.
+     *
+     * @return The ID of the item
+     */
+    URI getID();
 
 }
