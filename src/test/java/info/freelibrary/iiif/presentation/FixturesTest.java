@@ -81,6 +81,41 @@ public class FixturesTest {
         test(StringUtils.format(FIXTURE_PATH, 10));
     }
 
+    @Test
+    public final void testFixture11() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 11));
+    }
+
+    @Test
+    public final void testFixture12() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 12));
+    }
+
+    @Test
+    public final void testFixture13() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 13));
+    }
+
+    @Test
+    public final void testFixture14() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 14));
+    }
+
+    @Test
+    public final void testFixture15() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 15));
+    }
+
+    @Test
+    public final void testFixture16() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 16));
+    }
+
+    @Test
+    public final void testFixture17() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 17));
+    }
+
     private void test(final String aFixtureFilePath) throws IOException {
         final TestData data = prepareTest(new File(aFixtureFilePath));
 
