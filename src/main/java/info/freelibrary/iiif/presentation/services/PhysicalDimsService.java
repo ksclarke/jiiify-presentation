@@ -93,6 +93,7 @@ public class PhysicalDimsService implements Service {
      *
      * @return The physical scale
      */
+    @JsonGetter(Constants.PHYSICAL_SCALE)
     public double getPhysicalScale() {
         return myPhysicalScale;
     }
@@ -103,6 +104,7 @@ public class PhysicalDimsService implements Service {
      * @param aScale The physical scale
      * @return The physical dimensions service
      */
+    @JsonSetter(Constants.PHYSICAL_SCALE)
     public PhysicalDimsService setPhysicalScale(final double aScale) {
         myPhysicalScale = aScale;
         return this;
@@ -113,6 +115,7 @@ public class PhysicalDimsService implements Service {
      *
      * @return The physical units
      */
+    @JsonGetter(Constants.PHYSICAL_UNITS)
     public String getPhysicalUnits() {
         return myPhysicalUnits;
     }
@@ -123,6 +126,7 @@ public class PhysicalDimsService implements Service {
      * @param aPhysicalUnits The physical units
      * @return The physical dimensions service
      */
+    @JsonSetter(Constants.PHYSICAL_SCALE)
     public PhysicalDimsService setPhysicalUnits(final String aPhysicalUnits) {
         myPhysicalUnits = aPhysicalUnits;
         return this;
@@ -135,6 +139,7 @@ public class PhysicalDimsService implements Service {
      * @param aPhysicalUnits The physical units
      * @return The physical dimensions service
      */
+    @JsonIgnore
     public PhysicalDimsService setPhysicalDims(final double aPhysicalScale, final String aPhysicalUnits) {
         myPhysicalScale = aPhysicalScale;
         myPhysicalUnits = aPhysicalUnits;

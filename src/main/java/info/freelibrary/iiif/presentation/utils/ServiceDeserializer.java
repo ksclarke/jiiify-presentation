@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation.utils;
 
 import java.io.IOException;
+import java.net.URI;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
@@ -10,7 +11,11 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
+import info.freelibrary.iiif.presentation.services.APIComplianceLevel;
 import info.freelibrary.iiif.presentation.services.GenericService;
+import info.freelibrary.iiif.presentation.services.GeoJSONService;
+import info.freelibrary.iiif.presentation.services.ImageInfoService;
+import info.freelibrary.iiif.presentation.services.PhysicalDimsService;
 import info.freelibrary.iiif.presentation.services.Service;
 import info.freelibrary.iiif.presentation.util.MessageCodes;
 import info.freelibrary.util.Logger;
@@ -47,6 +52,58 @@ public class ServiceDeserializer extends StdDeserializer<Service> {
 
         if (node.isTextual()) {
             service = new GenericService(node.textValue());
+        } else if (node.isObject()) {
+            final URI id = URI.create(node.get(Constants.ID).textValue());
+            final JsonNode contextNode = node.get(Constants.CONTEXT);
+
+            if (contextNode != null) {
+                final URI context = URI.create(contextNode.textValue());
+
+                if (PhysicalDimsService.CONTEXT.equals(context)) {
+                    final JsonNode scale = node.get(Constants.PHYSICAL_SCALE);
+                    final JsonNode units = node.get(Constants.PHYSICAL_UNITS);
+
+                    if (scale != null && units != null) {
+                        service = new PhysicalDimsService(id).setPhysicalDims(scale.asDouble(), units.textValue());
+                    } else {
+                        service = new PhysicalDimsService(id);
+                    }
+                } else if (ImageInfoService.CONTEXT.equals(context)) {
+                    final String profile = node.get(Constants.PROFILE).textValue();
+                    final APIComplianceLevel level = APIComplianceLevel.fromProfile(profile);
+
+                    service = new ImageInfoService(level, id);
+                } else if (GeoJSONService.CONTEXT.equals(context)) {
+                    service = new GeoJSONService(id);
+                } else {
+                    final JsonNode profile = node.get(Constants.PROFILE);
+                    final JsonNode format = node.get(Constants.FORMAT);
+
+                    if (profile != null && format != null) {
+                        service = new GenericService(id).setContext(context).setProfile(profile.textValue())
+                                .setFormat(format.textValue());
+                    } else if (profile != null) {
+                        service = new GenericService(id).setContext(context).setProfile(profile.textValue());
+                    } else if (format != null) {
+                        service = new GenericService(id).setContext(context).setFormat(format.textValue());
+                    } else {
+                        service = new GenericService(id).setContext(context);
+                    }
+                }
+            } else {
+                final JsonNode profile = node.get(Constants.PROFILE);
+                final JsonNode format = node.get(Constants.FORMAT);
+
+                if (profile != null && format != null) {
+                    service = new GenericService(id).setProfile(profile.textValue()).setFormat(format.textValue());
+                } else if (profile != null) {
+                    service = new GenericService(id).setProfile(profile.textValue());
+                } else if (format != null) {
+                    service = new GenericService(id).setFormat(format.textValue());
+                } else {
+                    service = new GenericService(id);
+                }
+            }
         } else {
             throw new JsonParseException(aParser, LOGGER.getMessage(MessageCodes.JPA_016, node.getClass().getName()),
                     aParser.getCurrentLocation());

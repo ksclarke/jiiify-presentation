@@ -2,12 +2,21 @@
 package info.freelibrary.iiif.presentation.services;
 
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.net.MediaType;
 
+import info.freelibrary.iiif.presentation.util.MessageCodes;
 import info.freelibrary.iiif.presentation.utils.Constants;
+import info.freelibrary.util.FileUtils;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
@@ -24,6 +33,8 @@ public class GenericService implements Service<GenericService> {
     private URI myContext;
 
     private URI myProfile;
+
+    private Optional<MediaType> myFormat;
 
     /**
      * Creates a service for the supplied URI.
@@ -133,18 +144,90 @@ public class GenericService implements Service<GenericService> {
         return this;
     }
 
+    /**
+     * Sets the format from a file extension or media type.
+     *
+     * @param aMediaType A string representation of media type or file extension
+     * @return The Service
+     */
+    @JsonSetter(Constants.FORMAT)
+    public GenericService setFormat(final String aMediaType) {
+        setMediaTypeFromExt(aMediaType);
+        return this;
+    }
+
+    /**
+     * Sets the format of the image.
+     *
+     * @param aMediaType A media type
+     * @return The service
+     */
+    @JsonIgnore
+    public GenericService setFormatMediaType(final MediaType aMediaType) {
+        myFormat = Optional.ofNullable(aMediaType);
+        return this;
+    }
+
+    /**
+     * Gets the format of the image.
+     *
+     * @return A string representation of the format
+     */
+    @JsonGetter(Constants.FORMAT)
+    public String getFormat() {
+        return myFormat.isPresent() ? myFormat.get().toString() : null;
+    }
+
+    /**
+     * Gets the media type format of the image.
+     *
+     * @return The media type format of the image
+     */
+    @JsonIgnore
+    public Optional<MediaType> getFormatMediaType() {
+        return myFormat;
+    }
+
+    @JsonIgnore
+    private void setMediaTypeFromExt(final String aURI) {
+        final String mimeType = FileUtils.getMimeType(aURI);
+
+        try {
+            if (mimeType != null) {
+                myFormat = Optional.ofNullable(MediaType.parse(mimeType));
+            } else {
+                myFormat = Optional.ofNullable(MediaType.parse(aURI));
+            }
+        } catch (final IllegalArgumentException details) {
+            LOGGER.warn(MessageCodes.JPA_013, aURI);
+        }
+    }
+
     @JsonValue
     private Object getJsonValue() {
         if (myID != null) {
-            if (myProfile == null && myContext == null) {
+            if (myProfile == null && myContext == null && myFormat == null) {
                 return myID;
-            } else if (myProfile != null && myContext != null) {
-                return ImmutableMap.of(Constants.CONTEXT, myContext, Constants.ID, myID, Constants.PROFILE,
-                        myProfile);
-            } else if (myProfile != null) {
-                return ImmutableMap.of(Constants.ID, myID, Constants.PROFILE, myProfile);
             } else {
-                return ImmutableMap.of(Constants.CONTEXT, myContext, Constants.ID, myID);
+                final Map<String, Object> map = new HashMap<>();
+
+                if (myProfile != null) {
+                    map.put(Constants.PROFILE, myProfile);
+                }
+
+                if (myFormat.isPresent()) {
+                    map.put(Constants.FORMAT, getFormat());
+                }
+
+                if (myContext != null) {
+                    map.put(Constants.CONTEXT, myContext);
+                }
+
+                if (myID != null) {
+                    map.put(Constants.ID, myID);
+                }
+
+                return ImmutableMap.copyOf(map);
             }
         } else {
             throw new NullPointerException();

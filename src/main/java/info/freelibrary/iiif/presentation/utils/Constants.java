@@ -82,6 +82,10 @@ public final class Constants {
 
     public static final String OA_CHOICE = "oa:Choice";
 
+    public static final String PHYSICAL_SCALE = "physicalScale";
+
+    public static final String PHYSICAL_UNITS = "physicalUnits";
+
     private Constants() {
         super();
     }

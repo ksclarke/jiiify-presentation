@@ -239,7 +239,7 @@ public class SeeAlso {
     }
 
     @JsonValue
-    private Object getValue() {
+    private Object getJsonValue() {
         if (myValues.size() == 1) {
             final Value value = myValues.get(0);
             final String id = value.getID().toString();
