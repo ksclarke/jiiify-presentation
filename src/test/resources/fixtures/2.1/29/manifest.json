@@ -37,8 +37,9 @@
                 "item": [
                   {
                     "@id": "http://iiif.io/api/image/2.1/example/reference/page1-full/full/full/0/gray.jpg", 
-                    "@type": "dctypes:Image", 
-                    "label": "Greyscale", 
+                    "@type": "dctypes:Image",
+                    "label": "Greyscale",
+                    "format": "image/jpeg",
                     "height": 1800, 
                     "width": 1200
                   }

@@ -32,6 +32,8 @@ public class ImageContent extends Content<ImageContent> {
 
     private static final String TYPE = "oa:Annotation";
 
+    private static final String RDF_NIL = "rdf:nil";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageContent.class, Constants.BUNDLE_NAME);
 
     private final List<ImageResource> myResources = new ArrayList<>();
@@ -125,14 +127,26 @@ public class ImageContent extends Content<ImageContent> {
         final Map<String, Object> map = new TreeMap<>();
 
         if (!myResources.isEmpty()) {
-            if (myResources.size() > 1) {
+            final Optional<ImageResource> defaultResource = getDefaultResource();
+
+            if (myResources.size() > 1 || defaultResource.isPresent()) {
+                final List<Object> itemList = new ArrayList<>();
+
                 map.put(Constants.TYPE, Constants.OA_CHOICE);
 
-                if (getDefaultResource().isPresent()) {
+                if (defaultResource.isPresent()) {
                     map.put(Constants.DEFAULT, myDefaultResource);
                 }
 
-                map.put(Constants.ITEM, myResources);
+                for (final ImageResource resource : myResources) {
+                    if (resource == null) {
+                        itemList.add(RDF_NIL);
+                    } else {
+                        itemList.add(resource);
+                    }
+                }
+
+                map.put(Constants.ITEM, itemList);
             } else if (myResources.size() == 1) {
                 final ImageResource resource = myResources.get(0);
                 final Optional<ImageInfoService> service = resource.getService();
@@ -174,8 +188,12 @@ public class ImageContent extends Content<ImageContent> {
             }
 
             if (items != null) {
-                for (final Map<String, Object> map : items) {
-                    myResources.add(buildImageResource(map));
+                for (final Object object : items) {
+                    if (object instanceof String && RDF_NIL.equals(object.toString())) {
+                        myResources.add(null);
+                    } else {
+                        myResources.add(buildImageResource((Map<String, Object>) object));
+                    }
                 }
             }
 

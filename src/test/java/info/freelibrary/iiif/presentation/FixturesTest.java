@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.util.MessageCodes;
@@ -116,8 +117,100 @@ public class FixturesTest {
         test(StringUtils.format(FIXTURE_PATH, 17));
     }
 
+    @Ignore
+    @Test
+    public final void testFixture18() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 18));
+    }
+
+    @Test
+    public final void testFixture19() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 19));
+    }
+
+    @Test
+    public final void testFixture20() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 20));
+    }
+
+    @Test
+    public final void testFixture21() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 21));
+    }
+
+    @Test
+    public final void testFixture22() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 22));
+    }
+
+    @Test
+    public final void testFixture23() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 23));
+    }
+
+    @Test
+    public final void testFixture24() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 24), true);
+    }
+
+    // FIXME
+    @Ignore
+    @Test
+    public final void testFixture25() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 25));
+    }
+
+    @Test
+    public final void testFixture26() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 26));
+    }
+
+    @Test
+    public final void testFixture27() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 27));
+    }
+
+    @Test
+    public final void testFixture28() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 28));
+    }
+
+    @Test
+    public final void testFixture29() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 29), true);
+    }
+
+    @Test
+    public final void testFixture30() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 30));
+    }
+
+    @Test
+    public final void testFixture31() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 31), true);
+    }
+
+    @Test
+    public final void testFixture32() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 32));
+    }
+
+    @Test
+    public final void testFixture33() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 33));
+    }
+
+    @Test
+    public final void testFixture34() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 34));
+    }
+
     private void test(final String aFixtureFilePath) throws IOException {
-        final TestData data = prepareTest(new File(aFixtureFilePath));
+        test(aFixtureFilePath, false);
+    }
+
+    private void test(final String aFixtureFilePath, final boolean aFormatCheck) throws IOException {
+        final TestData data = prepareTest(new File(aFixtureFilePath), aFormatCheck);
 
         try {
             Assert.assertEquals(data.getExpected(), data.getFound());
@@ -129,7 +222,7 @@ public class FixturesTest {
         }
     }
 
-    private TestData prepareTest(final File aFixtureFile) throws IOException {
+    private TestData prepareTest(final File aFixtureFile, final boolean aFormatCheck) throws IOException {
         final File outputFile = File.createTempFile(myTestID, ".json");
         final Manifestor manifestor = new Manifestor();
         final Manifest manifest = manifestor.read(aFixtureFile);
@@ -141,7 +234,9 @@ public class FixturesTest {
         found = new JsonObject(StringUtils.read(outputFile));
 
         // We add format in ImageResource(s) by default, but fixtures don't have this
-        removeImageResourceFormat(found);
+        if (!aFormatCheck) {
+            removeImageResourceFormat(found);
+        }
 
         return new TestData(expected, found, outputFile);
     }
@@ -149,19 +244,41 @@ public class FixturesTest {
     private void removeImageResourceFormat(final JsonObject aJsonObject) {
         final JsonArray sequences = aJsonObject.getJsonArray(Constants.SEQUENCES);
 
-        for (int seqIndex = 0; seqIndex < sequences.size(); seqIndex++) {
-            final JsonObject sequence = sequences.getJsonObject(seqIndex);
-            final JsonArray canvases = sequence.getJsonArray(Constants.CANVASES);
+        if (sequences != null) {
+            for (int seqIndex = 0; seqIndex < sequences.size(); seqIndex++) {
+                final JsonObject sequence = sequences.getJsonObject(seqIndex);
+                final JsonArray canvases = sequence.getJsonArray(Constants.CANVASES);
 
-            for (int canvasIndex = 0; canvasIndex < canvases.size(); canvasIndex++) {
-                final JsonObject canvas = canvases.getJsonObject(canvasIndex);
-                final JsonArray images = canvas.getJsonArray(Constants.IMAGE_CONTENT);
+                if (canvases != null) {
+                    for (int canvasIndex = 0; canvasIndex < canvases.size(); canvasIndex++) {
+                        final JsonObject canvas = canvases.getJsonObject(canvasIndex);
+                        final JsonArray images = canvas.getJsonArray(Constants.IMAGE_CONTENT);
 
-                for (int imageIndex = 0; imageIndex < images.size(); imageIndex++) {
-                    final JsonObject image = images.getJsonObject(imageIndex);
-                    final JsonObject resource = image.getJsonObject(Constants.RESOURCE);
+                        if (images != null) {
+                            for (int imageIndex = 0; imageIndex < images.size(); imageIndex++) {
+                                final JsonObject image = images.getJsonObject(imageIndex);
+                                final JsonObject resource = image.getJsonObject(Constants.RESOURCE);
+                                final JsonObject defaultResource = resource.getJsonObject(Constants.DEFAULT);
+                                final JsonArray items = resource.getJsonArray(Constants.ITEM);
 
-                    resource.remove(Constants.FORMAT);
+                                resource.remove(Constants.FORMAT);
+
+                                if (defaultResource != null) {
+                                    defaultResource.remove(Constants.FORMAT);
+                                }
+
+                                if (items != null) {
+                                    for (int index = 0; index < items.size(); index++) {
+                                        final Object object = items.getValue(index);
+
+                                        if (!(object instanceof String)) {
+                                            items.getJsonObject(index).remove(Constants.FORMAT);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
