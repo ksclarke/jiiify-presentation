@@ -14,8 +14,8 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.properties.Type;
-import info.freelibrary.iiif.presentation.util.MessageCodes;
 import info.freelibrary.iiif.presentation.utils.Constants;
+import info.freelibrary.iiif.presentation.utils.MessageCodes;
 
 /**
  * A canvas resource.

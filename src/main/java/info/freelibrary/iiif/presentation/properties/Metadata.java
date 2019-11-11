@@ -13,8 +13,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import info.freelibrary.iiif.presentation.util.MessageCodes;
 import info.freelibrary.iiif.presentation.utils.Constants;
+import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.utils.MetadataDeserializer;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;

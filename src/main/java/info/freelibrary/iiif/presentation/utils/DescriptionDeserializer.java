@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import info.freelibrary.iiif.presentation.properties.Description;
 import info.freelibrary.iiif.presentation.properties.Value;
-import info.freelibrary.iiif.presentation.util.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 

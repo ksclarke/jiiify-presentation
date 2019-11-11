@@ -17,11 +17,15 @@ import info.freelibrary.iiif.presentation.services.GeoJSONService;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.services.PhysicalDimsService;
 import info.freelibrary.iiif.presentation.services.Service;
-import info.freelibrary.iiif.presentation.util.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
 public class ServiceDeserializer extends StdDeserializer<Service> {
+
+    /**
+     * The <code>serialVersionUID</code> for ServiceDeserializer.
+     */
+    private static final long serialVersionUID = 1840979246965623150L;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ServiceDeserializer.class, Constants.BUNDLE_NAME);
 
