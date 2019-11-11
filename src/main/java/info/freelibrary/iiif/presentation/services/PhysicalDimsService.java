@@ -16,11 +16,11 @@ public class PhysicalDimsService implements Service {
 
     /* The context for this service */
     @JsonIgnore
-    public static final String CONTEXT = "http://iiif.io/api/annex/services/physdim/1/context.json";
+    public static final URI CONTEXT = URI.create("http://iiif.io/api/annex/services/physdim/1/context.json");
 
     /* The profile for this service */
     @JsonIgnore
-    public static final String PROFILE = "http://iiif.io/api/annex/services/physdim";
+    public static final URI PROFILE = URI.create("http://iiif.io/api/annex/services/physdim");
 
     private URI myID;
 
@@ -52,7 +52,7 @@ public class PhysicalDimsService implements Service {
 
     @Override
     @JsonGetter(Constants.CONTEXT)
-    public String getContext() {
+    public URI getContext() {
         return CONTEXT;
     }
 
@@ -61,7 +61,7 @@ public class PhysicalDimsService implements Service {
      *
      * @return The service profile
      */
-    public String getProfile() {
+    public URI getProfile() {
         return PROFILE;
     }
 
@@ -70,6 +70,7 @@ public class PhysicalDimsService implements Service {
      *
      * @return The ID of the item
      */
+    @Override
     @JsonGetter(Constants.ID)
     public URI getID() {
         return myID;
@@ -92,6 +93,7 @@ public class PhysicalDimsService implements Service {
      *
      * @return The physical scale
      */
+    @JsonGetter(Constants.PHYSICAL_SCALE)
     public double getPhysicalScale() {
         return myPhysicalScale;
     }
@@ -102,6 +104,7 @@ public class PhysicalDimsService implements Service {
      * @param aScale The physical scale
      * @return The physical dimensions service
      */
+    @JsonSetter(Constants.PHYSICAL_SCALE)
     public PhysicalDimsService setPhysicalScale(final double aScale) {
         myPhysicalScale = aScale;
         return this;
@@ -112,6 +115,7 @@ public class PhysicalDimsService implements Service {
      *
      * @return The physical units
      */
+    @JsonGetter(Constants.PHYSICAL_UNITS)
     public String getPhysicalUnits() {
         return myPhysicalUnits;
     }
@@ -122,6 +126,7 @@ public class PhysicalDimsService implements Service {
      * @param aPhysicalUnits The physical units
      * @return The physical dimensions service
      */
+    @JsonSetter(Constants.PHYSICAL_SCALE)
     public PhysicalDimsService setPhysicalUnits(final String aPhysicalUnits) {
         myPhysicalUnits = aPhysicalUnits;
         return this;
@@ -134,6 +139,7 @@ public class PhysicalDimsService implements Service {
      * @param aPhysicalUnits The physical units
      * @return The physical dimensions service
      */
+    @JsonIgnore
     public PhysicalDimsService setPhysicalDims(final double aPhysicalScale, final String aPhysicalUnits) {
         myPhysicalScale = aPhysicalScale;
         myPhysicalUnits = aPhysicalUnits;

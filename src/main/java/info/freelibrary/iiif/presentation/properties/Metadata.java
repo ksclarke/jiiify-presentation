@@ -230,7 +230,7 @@ public class Metadata {
          * @param aValue A list of string values
          */
         public Entry(final String aLabel, final String... aValue) {
-            Objects.requireNonNull(aLabel, MessageCodes.EXC_002);
+            Objects.requireNonNull(aLabel, MessageCodes.JPA_002);
             myValues = new ArrayList<>();
             myLabel = aLabel;
             addValues(aValue);
@@ -243,7 +243,7 @@ public class Metadata {
          * @param aValue A list of I18n values
          */
         public Entry(final String aLabel, final Value... aValue) {
-            Objects.requireNonNull(aLabel, MessageCodes.EXC_002);
+            Objects.requireNonNull(aLabel, MessageCodes.JPA_002);
             myValues = new ArrayList<>();
             myLabel = aLabel;
             addValues(aValue);
@@ -325,10 +325,10 @@ public class Metadata {
          * @return The metadata entry
          */
         public final Entry addValues(final String... aValue) {
-            Objects.requireNonNull(aValue, LOGGER.getMessage(MessageCodes.EXC_001));
+            Objects.requireNonNull(aValue, LOGGER.getMessage(MessageCodes.JPA_001));
 
             for (final String value : aValue) {
-                Objects.requireNonNull(value, LOGGER.getMessage(MessageCodes.EXC_001));
+                Objects.requireNonNull(value, LOGGER.getMessage(MessageCodes.JPA_001));
 
                 if (!myValues.add(new Value(value))) {
                     throw new UnsupportedOperationException();
@@ -345,10 +345,10 @@ public class Metadata {
          * @return The metadata entry
          */
         public final Entry addValues(final Value... aValue) {
-            Objects.requireNonNull(aValue, LOGGER.getMessage(MessageCodes.EXC_001));
+            Objects.requireNonNull(aValue, LOGGER.getMessage(MessageCodes.JPA_001));
 
             for (final Value value : aValue) {
-                Objects.requireNonNull(value, LOGGER.getMessage(MessageCodes.EXC_001));
+                Objects.requireNonNull(value, LOGGER.getMessage(MessageCodes.JPA_001));
 
                 if (!myValues.add(value)) {
                     throw new UnsupportedOperationException();

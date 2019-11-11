@@ -166,7 +166,7 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>br.com.ingenieux</groupId>
+        <groupId>org.jbake</groupId>
         <artifactId>jbake-maven-plugin</artifactId>
       </plugin>
       <plugin>
@@ -202,7 +202,8 @@
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>3.7.4</version>
+    <version>3.7.6</version>
   </parent>
 
 </project>
+

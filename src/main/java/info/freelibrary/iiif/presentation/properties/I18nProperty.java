@@ -79,10 +79,10 @@ class I18nProperty<T extends I18nProperty<T>> {
      * @return A String value to the property
      */
     public final T addValue(final String... aValue) {
-        Objects.requireNonNull(aValue, MessageCodes.EXC_001);
+        Objects.requireNonNull(aValue, MessageCodes.JPA_001);
 
         for (final String value : aValue) {
-            Objects.requireNonNull(value, MessageCodes.EXC_001);
+            Objects.requireNonNull(value, MessageCodes.JPA_001);
 
             if (!myValues.add(new Value(value))) {
                 throw new UnsupportedOperationException();
@@ -99,10 +99,10 @@ class I18nProperty<T extends I18nProperty<T>> {
      * @return A String value to the property
      */
     public final T addValue(final Value... aValue) {
-        Objects.requireNonNull(aValue, MessageCodes.EXC_001);
+        Objects.requireNonNull(aValue, MessageCodes.JPA_001);
 
         for (final Value value : aValue) {
-            Objects.requireNonNull(value, MessageCodes.EXC_001);
+            Objects.requireNonNull(value, MessageCodes.JPA_001);
 
             if (!myValues.add(value)) {
                 throw new UnsupportedOperationException();
@@ -128,10 +128,14 @@ class I18nProperty<T extends I18nProperty<T>> {
      * @return The value(s) of the property
      */
     @JsonValue
-    protected Object getValue() {
+    protected Object getJsonValue() {
         if (hasValues()) {
-            if ((myValues.size() == 1) && !myValues.get(0).getLang().isPresent()) {
-                return myValues.get(0).getValue();
+            if (myValues.size() == 1) {
+                if (myValues.get(0).getLang().isPresent()) {
+                    return myValues.get(0);
+                } else {
+                    return myValues.get(0).getValue();
+                }
             } else {
                 final List<Object> list = new ArrayList<>();
                 final Iterator<Value> iterator = myValues.iterator();

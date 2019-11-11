@@ -15,7 +15,7 @@ import info.freelibrary.iiif.presentation.utils.Constants;
 public class ImageInfoService implements Service {
 
     /* The context for this service */
-    public static final String CONTEXT = "http://iiif.io/api/image/2/context.json";
+    public static final URI CONTEXT = URI.create("http://iiif.io/api/image/2/context.json");
 
     private static final APIComplianceLevel DEFAULT_LEVEL = APIComplianceLevel.ZERO;
 
@@ -72,7 +72,7 @@ public class ImageInfoService implements Service {
      */
     @Override
     @JsonGetter(Constants.CONTEXT)
-    public String getContext() {
+    public URI getContext() {
         return CONTEXT;
     }
 
@@ -102,6 +102,7 @@ public class ImageInfoService implements Service {
      *
      * @return The ID of the item to return from the service
      */
+    @Override
     @JsonGetter(Constants.ID)
     public URI getID() {
         return myID;

@@ -151,9 +151,11 @@ public class Canvas extends Resource<Canvas> {
      * @param aImageContent A canvas image content
      * @return The canvas
      */
-    @JsonIgnore
     public Canvas setImageContent(final ImageContent... aImageContent) {
-        myImageContent.clear();
+        if (myImageContent != null) {
+            myImageContent.clear();
+        }
+
         return addImageContent(aImageContent);
     }
 
@@ -165,7 +167,10 @@ public class Canvas extends Resource<Canvas> {
      */
     @JsonIgnore
     public Canvas setOtherContent(final OtherContent... aOtherContent) {
-        myOtherContent.clear();
+        if (myOtherContent != null) {
+            myOtherContent.clear();
+        }
+
         return addOtherContent(aOtherContent);
     }
 
@@ -237,7 +242,7 @@ public class Canvas extends Resource<Canvas> {
             myWidth = aWidth;
             myHeight = aHeight;
         } else {
-            throw new IllegalArgumentException(getLogger().getMessage(MessageCodes.EXC_011, aWidth, aHeight));
+            throw new IllegalArgumentException(getLogger().getMessage(MessageCodes.JPA_011, aWidth, aHeight));
         }
     }
 }

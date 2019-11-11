@@ -47,7 +47,7 @@ public class ServiceImage {
      * @param aURI An image ID
      */
     public ServiceImage(final String aURI) {
-        Objects.requireNonNull(aURI, MessageCodes.EXC_003);
+        Objects.requireNonNull(aURI, MessageCodes.JPA_003);
 
         myService = Optional.empty();
         myID = URI.create(aURI);
@@ -61,7 +61,7 @@ public class ServiceImage {
      * @param aID An image ID
      */
     public ServiceImage(final URI aID) {
-        Objects.requireNonNull(aID, MessageCodes.EXC_003);
+        Objects.requireNonNull(aID, MessageCodes.JPA_003);
 
         myService = Optional.empty();
         myID = aID;
@@ -76,7 +76,7 @@ public class ServiceImage {
      * @param aService A service for the image
      */
     public ServiceImage(final String aURI, final ImageInfoService aService) {
-        Objects.requireNonNull(aURI, MessageCodes.EXC_003);
+        Objects.requireNonNull(aURI, MessageCodes.JPA_003);
 
         myID = URI.create(aURI);
         myService = Optional.ofNullable(aService);
@@ -91,7 +91,7 @@ public class ServiceImage {
      * @param aService A service for the image
      */
     public ServiceImage(final URI aID, final ImageInfoService aService) {
-        Objects.requireNonNull(aID, MessageCodes.EXC_003);
+        Objects.requireNonNull(aID, MessageCodes.JPA_003);
 
         myID = aID;
         myService = Optional.ofNullable(aService);
@@ -107,7 +107,7 @@ public class ServiceImage {
      * @param aHeight An image height
      */
     public ServiceImage(final String aURI, final int aWidth, final int aHeight) {
-        Objects.requireNonNull(aURI, MessageCodes.EXC_003);
+        Objects.requireNonNull(aURI, MessageCodes.JPA_003);
 
         myService = Optional.empty();
         myID = URI.create(aURI);
@@ -125,7 +125,7 @@ public class ServiceImage {
      * @param aHeight An image height
      */
     public ServiceImage(final URI aID, final int aWidth, final int aHeight) {
-        Objects.requireNonNull(aID, MessageCodes.EXC_003);
+        Objects.requireNonNull(aID, MessageCodes.JPA_003);
 
         myID = aID;
         myWidth = aWidth;
@@ -251,7 +251,7 @@ public class ServiceImage {
      */
     @JsonSetter(Constants.ID)
     public ServiceImage setID(final String aURI) {
-        Objects.requireNonNull(aURI, MessageCodes.EXC_003);
+        Objects.requireNonNull(aURI, MessageCodes.JPA_003);
         myID = URI.create(aURI);
         return this;
     }
@@ -264,7 +264,7 @@ public class ServiceImage {
      */
     @JsonIgnore
     public ServiceImage setID(final URI aURI) {
-        Objects.requireNonNull(aURI, MessageCodes.EXC_003);
+        Objects.requireNonNull(aURI, MessageCodes.JPA_003);
         myID = aURI;
         return this;
     }
@@ -293,7 +293,19 @@ public class ServiceImage {
 
     @JsonIgnore
     protected final void setMediaTypeFromExt(final String aURI) {
-        final String mimeType = FileUtils.getMimeType(aURI);
+        final String fragment = '#' + URI.create(aURI).getFragment();
+        final String mimeType;
+        final String uri;
+        final int index;
+
+        // If we have a fragment on our URI, remove it before checking media type
+        if ((index = aURI.indexOf(fragment)) != -1) {
+            uri = aURI.substring(0, index);
+        } else {
+            uri = aURI;
+        }
+
+        mimeType = FileUtils.getMimeType(uri);
 
         try {
             if (mimeType != null) {
@@ -302,7 +314,8 @@ public class ServiceImage {
                 myFormat = Optional.ofNullable(MediaType.parse(aURI));
             }
         } catch (final IllegalArgumentException details) {
-            getLogger().warn(MessageCodes.EXC_013, aURI);
+            getLogger().warn(MessageCodes.JPA_013, aURI);
+            myFormat = Optional.empty();
         }
     }
 

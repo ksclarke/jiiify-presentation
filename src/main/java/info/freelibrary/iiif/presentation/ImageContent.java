@@ -19,6 +19,7 @@ import info.freelibrary.iiif.presentation.services.APIComplianceLevel;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.util.MessageCodes;
 import info.freelibrary.iiif.presentation.utils.Constants;
+import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.StringUtils;
@@ -31,6 +32,10 @@ import info.freelibrary.util.StringUtils;
 public class ImageContent extends Content<ImageContent> {
 
     private static final String TYPE = "oa:Annotation";
+
+    private static final String MOTIVATION = "sc:painting";
+
+    private static final String RDF_NIL = "rdf:nil";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageContent.class, Constants.BUNDLE_NAME);
 
@@ -65,6 +70,18 @@ public class ImageContent extends Content<ImageContent> {
         super(new Type(TYPE));
     }
 
+    @JsonGetter(Constants.MOTIVATION)
+    public String getMotivation() {
+        return MOTIVATION;
+    }
+
+    @JsonSetter(Constants.MOTIVATION)
+    private void setMotivation(final String aMotivation) {
+        if (!MOTIVATION.equals(aMotivation)) {
+            throw new I18nRuntimeException();
+        }
+    }
+
     /**
      * Adds a image resource.
      *
@@ -73,7 +90,7 @@ public class ImageContent extends Content<ImageContent> {
      */
     @JsonIgnore
     public ImageContent addResource(final ImageResource aResource) {
-        Objects.requireNonNull(aResource, MessageCodes.EXC_006);
+        Objects.requireNonNull(aResource, MessageCodes.JPA_006);
         myResources.add(aResource);
         return this;
     }
@@ -86,7 +103,7 @@ public class ImageContent extends Content<ImageContent> {
      */
     @JsonIgnore
     public ImageContent setDefaultResource(final ImageResource aResource) {
-        Objects.requireNonNull(aResource, MessageCodes.EXC_006);
+        Objects.requireNonNull(aResource, MessageCodes.JPA_006);
         myDefaultResource = Optional.of(aResource);
         return this;
     }
@@ -98,7 +115,11 @@ public class ImageContent extends Content<ImageContent> {
      */
     @JsonIgnore
     public Optional<ImageResource> getDefaultResource() {
-        return myDefaultResource.isEmpty() ? Optional.empty() : myDefaultResource;
+        if (myDefaultResource == null) {
+            myDefaultResource = Optional.empty();
+        }
+
+        return myDefaultResource;
     }
 
     /**
@@ -121,13 +142,44 @@ public class ImageContent extends Content<ImageContent> {
         final Map<String, Object> map = new TreeMap<>();
 
         if (!myResources.isEmpty()) {
-            map.put(Constants.TYPE, Constants.OA_CHOICE);
+            final Optional<ImageResource> defaultResource = getDefaultResource();
 
-            if (getDefaultResource().isPresent()) {
-                map.put(Constants.DEFAULT, myDefaultResource);
+            if (myResources.size() > 1 || defaultResource.isPresent()) {
+                final List<Object> itemList = new ArrayList<>();
+
+                map.put(Constants.TYPE, Constants.OA_CHOICE);
+
+                if (defaultResource.isPresent()) {
+                    map.put(Constants.DEFAULT, myDefaultResource);
+                }
+
+                for (final ImageResource resource : myResources) {
+                    if (resource == null) {
+                        itemList.add(RDF_NIL);
+                    } else {
+                        itemList.add(resource);
+                    }
+                }
+
+                map.put(Constants.ITEM, itemList);
+            } else if (myResources.size() == 1) {
+                final ImageResource resource = myResources.get(0);
+                final Optional<ImageInfoService> service = resource.getService();
+
+                map.put(Constants.ID, resource.getID());
+                map.put(Constants.TYPE, resource.getType());
+                map.put(Constants.HEIGHT, resource.getHeight());
+                map.put(Constants.WIDTH, resource.getWidth());
+                map.put(Constants.FORMAT, resource.getFormat());
+
+                if (resource.getLabel() != null) {
+                    map.put(Constants.LABEL, resource.getLabel());
+                }
+
+                if (service.isPresent()) {
+                    map.put(Constants.SERVICE, resource.getService());
+                }
             }
-
-            map.put(Constants.ITEM, myResources);
         }
 
         return map;
@@ -140,6 +192,8 @@ public class ImageContent extends Content<ImageContent> {
      */
     @JsonSetter(Constants.RESOURCE)
     private void setResourcesMap(final Map<String, Object> aResourceMap) {
+        LOGGER.trace(aResourceMap.toString());
+
         if (!aResourceMap.isEmpty()) {
             final Map<String, Object> defaultItem = (Map<String, Object>) aResourceMap.get(Constants.DEFAULT);
             final List<Map<String, Object>> items = (List<Map<String, Object>>) aResourceMap.get(Constants.ITEM);
@@ -149,9 +203,17 @@ public class ImageContent extends Content<ImageContent> {
             }
 
             if (items != null) {
-                for (final Map<String, Object> map : items) {
-                    myResources.add(buildImageResource(map));
+                for (final Object object : items) {
+                    if (object instanceof String && RDF_NIL.equals(object.toString())) {
+                        myResources.add(null);
+                    } else {
+                        myResources.add(buildImageResource((Map<String, Object>) object));
+                    }
                 }
+            }
+
+            if (defaultItem == null && items == null && aResourceMap.get(Constants.ID) != null) {
+                myResources.add(buildImageResource(aResourceMap));
             }
         }
     }
@@ -159,8 +221,8 @@ public class ImageContent extends Content<ImageContent> {
     private ImageResource buildImageResource(final Map<String, Object> aImageResourceMap) {
         final ImageResource resource = new ImageResource(URI.create((String) aImageResourceMap.get(Constants.ID)));
         final String label = (String) aImageResourceMap.get(Constants.LABEL);
-        final int width = (int) aImageResourceMap.get(Constants.WIDTH);
-        final int height = (int) aImageResourceMap.get(Constants.HEIGHT);
+        final int width = (int) aImageResourceMap.getOrDefault(Constants.WIDTH, 0);
+        final int height = (int) aImageResourceMap.getOrDefault(Constants.HEIGHT, 0);
         final Map<String, Object> service = (Map<String, Object>) aImageResourceMap.get(Constants.SERVICE);
 
         if (StringUtils.trimToNull(label) != null) {

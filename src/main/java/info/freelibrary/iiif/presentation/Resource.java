@@ -24,6 +24,7 @@ import info.freelibrary.iiif.presentation.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.properties.Type;
 import info.freelibrary.iiif.presentation.properties.ViewingHint;
 import info.freelibrary.iiif.presentation.properties.ViewingHint.Option;
+import info.freelibrary.iiif.presentation.services.Service;
 import info.freelibrary.iiif.presentation.util.MessageCodes;
 import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.util.Logger;
@@ -34,18 +35,21 @@ import info.freelibrary.util.LoggerFactory;
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.LABEL, Constants.ID, Constants.TYPE, Constants.DESCRIPTION,
-    Constants.LOGO, Constants.THUMBNAIL, Constants.METADATA, Constants.SEQUENCES })
+    Constants.ATTRIBUTION, Constants.LICENSE, Constants.WITHIN, Constants.LOGO, Constants.THUMBNAIL,
+    Constants.METADATA, Constants.SEQUENCES, Constants.SERVICE })
 public class Resource<T extends Resource<T>> {
 
-    @JsonProperty("@type")
+    @JsonProperty(Constants.TYPE)
     protected final Type myType;
 
-    @JsonProperty("@id")
+    @JsonProperty(Constants.ID)
     private URI myID;
 
     private Label myLabel;
 
-    @JsonProperty("metadata")
+    private URI myWithin;
+
+    @JsonProperty(Constants.METADATA)
     private Metadata myMetadata;
 
     private Description myDescription;
@@ -61,6 +65,8 @@ public class Resource<T extends Resource<T>> {
     private ViewingHint myViewingHint;
 
     private SeeAlso mySeeAlso;
+
+    private Service myService;
 
     /**
      * Creates a new resource from the supplied type.
@@ -226,7 +232,7 @@ public class Resource<T extends Resource<T>> {
      * @param aLabel The label to set
      * @return The resource
      */
-    @JsonSetter(Constants.LABEL)
+    @JsonIgnore
     public T setLabel(final String aLabel) {
         myLabel = new Label(aLabel);
         return (T) this;
@@ -238,9 +244,31 @@ public class Resource<T extends Resource<T>> {
      * @param aLabel The label
      * @return The resource
      */
-    @JsonIgnore
+    @JsonSetter(Constants.LABEL)
     public T setLabel(final Label aLabel) {
         myLabel = aLabel;
+        return (T) this;
+    }
+
+    /**
+     * Gets a service.
+     *
+     * @return A service
+     */
+    @JsonGetter(Constants.SERVICE)
+    public Service getService() {
+        return myService;
+    }
+
+    /**
+     * Sets a service.
+     *
+     * @param aService A service
+     * @return The resource
+     */
+    @JsonSetter(Constants.SERVICE)
+    public T setService(final Service aService) {
+        myService = aService;
         return (T) this;
     }
 
@@ -294,7 +322,6 @@ public class Resource<T extends Resource<T>> {
      * @param aDescription A description
      * @return The resource
      */
-    @JsonIgnore
     public T setDescription(final Description aDescription) {
         myDescription = aDescription;
         return (T) this;
@@ -361,7 +388,7 @@ public class Resource<T extends Resource<T>> {
      * @param aAttribution An attribution
      * @return The resource
      */
-    @JsonIgnore
+    @JsonProperty
     public T setAttribution(final Attribution aAttribution) {
         myAttribution = aAttribution;
         return (T) this;
@@ -372,7 +399,7 @@ public class Resource<T extends Resource<T>> {
      *
      * @return The license
      */
-    @JsonGetter(Constants.LICENSE)
+    @JsonProperty
     public License getLicense() {
         return myLicense;
     }
@@ -383,7 +410,7 @@ public class Resource<T extends Resource<T>> {
      * @param aLicense A license
      * @return The resource
      */
-    @JsonIgnore
+    @JsonProperty
     public T setLicense(final License aLicense) {
         myLicense = aLicense;
         return (T) this;
@@ -466,6 +493,40 @@ public class Resource<T extends Resource<T>> {
     @JsonIgnore
     public T setID(final URI aID) {
         myID = aID;
+        return (T) this;
+    }
+
+    /**
+     * Gets the within link.
+     *
+     * @return The within link
+     */
+    @JsonGetter(Constants.WITHIN)
+    public URI getWithin() {
+        return myWithin;
+    }
+
+    /**
+     * Sets the within link.
+     *
+     * @param aWithin A within link
+     * @return The resource
+     */
+    @JsonIgnore
+    public T setWithin(final String aWithin) {
+        myWithin = URI.create(aWithin);
+        return (T) this;
+    }
+
+    /**
+     * Sets the within link.
+     *
+     * @param aWithin A within link
+     * @return The resource
+     */
+    @JsonSetter(Constants.WITHIN)
+    public T setWithin(final URI aWithin) {
+        myWithin = aWithin;
         return (T) this;
     }
 
@@ -582,7 +643,7 @@ public class Resource<T extends Resource<T>> {
         }
 
         for (int index = 0; index < aNumber; index++) {
-            Objects.requireNonNull(aArgs[index], getLogger().getMessage(MessageCodes.EXC_012, aNames[index]));
+            Objects.requireNonNull(aArgs[index], getLogger().getMessage(MessageCodes.JPA_012, aNames[index]));
         }
     }
 

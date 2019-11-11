@@ -10,7 +10,7 @@ Jiiify Presentation is a [IIIF Presentation](http://iiif.io/api/presentation) li
 A very simple example of using jiiify-presentation follows:
 
     final Manifestor manifestor = new Manifestor();
-    final Manifest manifest = manifestor.read(new File("src/test/resources/json/z1960050.json"));
+    final Manifest manifest = manifestor.readManifest(new File("src/test/resources/json/z1960050.json"));
 
     manifest.getMetadata().add("Contributor", "Your Name Here");
     manifestor.write(manifest, File.createTempFile("z1960050", ".json"));

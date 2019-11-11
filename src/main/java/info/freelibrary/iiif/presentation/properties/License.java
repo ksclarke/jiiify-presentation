@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
@@ -43,12 +44,22 @@ public class License {
     }
 
     /**
+     * Creates a new license property.
+     */
+    @SuppressWarnings("unused")
+    private License(final String aURL) throws MalformedURLException {
+        myURLs = new ArrayList<>(LIST_PADDING + 1);
+        myURLs.add(new URL(aURL));
+    }
+
+    /**
      * Add URL value(s) to the License.
      *
      * @param aValue A string version of a license value URL
      * @return The license
      * @throws MalformedURLException If a supplied value isn't a valid URL
      */
+    @JsonIgnore
     public License addValue(final String... aValue) throws MalformedURLException {
         final URL[] urls = new URL[aValue.length];
         int index = 0;
@@ -70,6 +81,7 @@ public class License {
      * @return The license
      * @throws MalformedURLException If a supplied value isn't a valid URL
      */
+    @JsonIgnore
     public License setValue(final String... aValue) throws MalformedURLException {
         myURLs.clear();
         return addValue(aValue);
@@ -81,6 +93,7 @@ public class License {
      * @param aURL Additional license URL(s)
      * @return True if the supplied URL(s) were added
      */
+    @JsonIgnore
     public License addValue(final URL... aURL) {
         if (!Collections.addAll(myURLs, aURL)) {
             throw new UnsupportedOperationException();
@@ -95,6 +108,7 @@ public class License {
      * @param aURL A list of license URLs
      * @return The license
      */
+    @JsonIgnore
     public License setValue(final URL... aURL) {
         myURLs.clear();
         return addValue(aURL);
@@ -105,6 +119,7 @@ public class License {
      *
      * @return The URLs for the licenses
      */
+    @JsonIgnore
     public List<URL> getURLs() {
         return myURLs;
     }
@@ -114,6 +129,7 @@ public class License {
      *
      * @return The number of license URLs
      */
+    @JsonIgnore
     public int count() {
         return getURLs().size();
     }
@@ -123,8 +139,9 @@ public class License {
      *
      * @return The URLs for the licenses as strings
      */
+    @JsonIgnore
     public List<String> getStrings() {
-        final List<String> list = new ArrayList<String>(myURLs.size());
+        final List<String> list = new ArrayList<>(myURLs.size());
 
         for (final URL url : getURLs()) {
             list.add(url.toExternalForm());
@@ -138,6 +155,7 @@ public class License {
      *
      * @return The first URL
      */
+    @JsonIgnore
     public URL getURL() {
         if (myURLs.isEmpty()) {
             return null;
@@ -151,6 +169,7 @@ public class License {
      *
      * @return The first URL as a string
      */
+    @JsonIgnore
     public String getString() {
         return getURL().toExternalForm();
     }

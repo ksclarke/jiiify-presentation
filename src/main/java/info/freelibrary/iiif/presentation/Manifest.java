@@ -151,10 +151,10 @@ public class Manifest extends Resource<Manifest> {
      * @return The manifest
      */
     public Manifest addContext(final String... aContext) {
-        Objects.requireNonNull(aContext, MessageCodes.EXC_007);
+        Objects.requireNonNull(aContext, MessageCodes.JPA_007);
 
         for (final String uri : aContext) {
-            Objects.requireNonNull(aContext, MessageCodes.EXC_007);
+            Objects.requireNonNull(aContext, MessageCodes.JPA_007);
 
             myContexts.add(URI.create(uri));
         }
@@ -213,10 +213,10 @@ public class Manifest extends Resource<Manifest> {
      * @return The manifest
      */
     public Manifest addSequence(final Sequence... aSequence) {
-        Objects.requireNonNull(aSequence, MessageCodes.EXC_008);
+        Objects.requireNonNull(aSequence, MessageCodes.JPA_008);
 
         for (final Sequence sequence : aSequence) {
-            Objects.requireNonNull(sequence, MessageCodes.EXC_008);
+            Objects.requireNonNull(sequence, MessageCodes.JPA_008);
 
             if (!mySequences.add(sequence)) {
                 throw new UnsupportedOperationException();
