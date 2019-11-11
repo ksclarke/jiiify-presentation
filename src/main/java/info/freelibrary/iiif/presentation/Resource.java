@@ -25,8 +25,8 @@ import info.freelibrary.iiif.presentation.properties.Type;
 import info.freelibrary.iiif.presentation.properties.ViewingHint;
 import info.freelibrary.iiif.presentation.properties.ViewingHint.Option;
 import info.freelibrary.iiif.presentation.services.Service;
-import info.freelibrary.iiif.presentation.util.MessageCodes;
 import info.freelibrary.iiif.presentation.utils.Constants;
+import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 

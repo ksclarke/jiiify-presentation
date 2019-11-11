@@ -8,7 +8,7 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-import info.freelibrary.iiif.presentation.util.MessageCodes;
+import info.freelibrary.iiif.presentation.utils.MessageCodes;
 
 /**
  * A property value that can be used in the label, description, attribution and the label and value fields.
