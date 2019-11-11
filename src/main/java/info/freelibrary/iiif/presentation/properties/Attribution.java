@@ -33,8 +33,8 @@ public class Attribution extends I18nProperty<Attribution> {
 
     @Override
     @JsonGetter(Constants.ATTRIBUTION)
-    protected Object getValue() {
-        return super.getValue();
+    protected Object getJsonValue() {
+        return super.getJsonValue();
     }
 
 }

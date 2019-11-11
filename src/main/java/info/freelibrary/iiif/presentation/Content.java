@@ -9,11 +9,8 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.properties.Type;
 import info.freelibrary.iiif.presentation.utils.Constants;
-import info.freelibrary.util.I18nRuntimeException;
 
 class Content<T extends Content<T>> extends Resource<T> {
-
-    private static final String MOTIVATION = "sc:painting";
 
     private static final int REQ_ARG_COUNT = 2;
 
@@ -44,11 +41,6 @@ class Content<T extends Content<T>> extends Resource<T> {
         super(aType);
     }
 
-    @JsonGetter(Constants.MOTIVATION)
-    public String getMotivation() {
-        return MOTIVATION;
-    }
-
     @JsonGetter(Constants.ON)
     public URI getOn() {
         return myOn;
@@ -64,12 +56,5 @@ class Content<T extends Content<T>> extends Resource<T> {
     public T setOn(final String aURI) {
         myOn = URI.create(aURI);
         return (T) this;
-    }
-
-    @JsonSetter(Constants.MOTIVATION)
-    private void setMotivation(final String aMotivation) {
-        if (!MOTIVATION.equals(aMotivation)) {
-            throw new I18nRuntimeException();
-        }
     }
 }

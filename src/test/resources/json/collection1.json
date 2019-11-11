@@ -1,0 +1,15 @@
+{
+  "@context" : "http://iiif.io/api/presentation/2/context.json",
+  "label" : "label-a",
+  "@id" : "ID-a",
+  "@type" : "sc:Collection",
+  "manifests" : [ {
+    "@type" : "sc:Manifest",
+    "@id" : "http://iiif.io/api/presentation/2.1/example/fixtures/1/manifest.json",
+    "label" : "Test 1 Manifest: Minimum Required Fields"
+  }, {
+    "@type" : "sc:Manifest",
+    "@id" : "http://iiif.io/api/presentation/2.1/example/fixtures/2/manifest.json",
+    "label" : "Test 2 Manifest: Metadata Pairs"
+  } ]
+}

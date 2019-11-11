@@ -19,6 +19,7 @@ import info.freelibrary.iiif.presentation.services.APIComplianceLevel;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.util.MessageCodes;
 import info.freelibrary.iiif.presentation.utils.Constants;
+import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.StringUtils;
@@ -31,6 +32,8 @@ import info.freelibrary.util.StringUtils;
 public class ImageContent extends Content<ImageContent> {
 
     private static final String TYPE = "oa:Annotation";
+
+    private static final String MOTIVATION = "sc:painting";
 
     private static final String RDF_NIL = "rdf:nil";
 
@@ -65,6 +68,18 @@ public class ImageContent extends Content<ImageContent> {
      */
     private ImageContent() {
         super(new Type(TYPE));
+    }
+
+    @JsonGetter(Constants.MOTIVATION)
+    public String getMotivation() {
+        return MOTIVATION;
+    }
+
+    @JsonSetter(Constants.MOTIVATION)
+    private void setMotivation(final String aMotivation) {
+        if (!MOTIVATION.equals(aMotivation)) {
+            throw new I18nRuntimeException();
+        }
     }
 
     /**
@@ -206,8 +221,8 @@ public class ImageContent extends Content<ImageContent> {
     private ImageResource buildImageResource(final Map<String, Object> aImageResourceMap) {
         final ImageResource resource = new ImageResource(URI.create((String) aImageResourceMap.get(Constants.ID)));
         final String label = (String) aImageResourceMap.get(Constants.LABEL);
-        final int width = (int) aImageResourceMap.get(Constants.WIDTH);
-        final int height = (int) aImageResourceMap.get(Constants.HEIGHT);
+        final int width = (int) aImageResourceMap.getOrDefault(Constants.WIDTH, 0);
+        final int height = (int) aImageResourceMap.getOrDefault(Constants.HEIGHT, 0);
         final Map<String, Object> service = (Map<String, Object>) aImageResourceMap.get(Constants.SERVICE);
 
         if (StringUtils.trimToNull(label) != null) {

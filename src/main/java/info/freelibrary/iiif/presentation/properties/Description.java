@@ -33,7 +33,7 @@ public class Description extends I18nProperty<Description> {
 
     @Override
     @JsonGetter(Constants.DESCRIPTION)
-    protected Object getValue() {
-        return super.getValue();
+    protected Object getJsonValue() {
+        return super.getJsonValue();
     }
 }

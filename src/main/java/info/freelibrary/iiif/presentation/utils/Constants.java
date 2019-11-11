@@ -52,6 +52,8 @@ public final class Constants {
 
     public static final String SEQUENCES = "sequences";
 
+    public static final String MANIFESTS = "manifests";
+
     public static final String SEQUENCE = "sequence";
 
     public static final String CANVASES = "canvases";
@@ -85,6 +87,8 @@ public final class Constants {
     public static final String PHYSICAL_SCALE = "physicalScale";
 
     public static final String PHYSICAL_UNITS = "physicalUnits";
+
+    public static final String START_CANVAS = "startCanvas";
 
     private Constants() {
         super();
