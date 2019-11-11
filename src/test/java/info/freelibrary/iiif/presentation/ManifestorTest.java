@@ -49,7 +49,7 @@ public class ManifestorTest {
      */
     @Test
     public final void testReadFileNoVertx(final TestContext aContext) {
-        testManifest(new Manifestor().read(MANIFEST), aContext);
+        testManifest(new Manifestor().readManifest(MANIFEST), aContext);
     }
 
     /**
@@ -59,7 +59,7 @@ public class ManifestorTest {
      */
     @Test
     public final void testReadFile(final TestContext aContext) {
-        testManifest(new Manifestor(myVertx).read(MANIFEST), aContext);
+        testManifest(new Manifestor(myVertx).readManifest(MANIFEST), aContext);
     }
 
     /**
@@ -79,7 +79,7 @@ public class ManifestorTest {
             }
         });
 
-        new Manifestor().read(MANIFEST, promise);
+        new Manifestor().readManifest(MANIFEST, promise);
     }
 
     /**
@@ -99,7 +99,7 @@ public class ManifestorTest {
             }
         });
 
-        new Manifestor(myVertx).read(MANIFEST, promise);
+        new Manifestor(myVertx).readManifest(MANIFEST, promise);
     }
 
     /**

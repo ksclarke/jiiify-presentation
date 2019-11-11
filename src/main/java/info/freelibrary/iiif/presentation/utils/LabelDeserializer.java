@@ -12,35 +12,34 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
-import info.freelibrary.iiif.presentation.properties.Description;
+import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.Value;
 import info.freelibrary.iiif.presentation.util.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
-public class DescriptionDeserializer extends StdDeserializer<Description> {
+public class LabelDeserializer extends StdDeserializer<Label> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DescriptionDeserializer.class,
-            Constants.BUNDLE_NAME);
-
-    /**
-     * The <code>serialVersionUID</code> of CustomMetadataSerializer.
-     */
-    private static final long serialVersionUID = -1205197208026340074L;
+    private static final Logger LOGGER = LoggerFactory.getLogger(LabelDeserializer.class, Constants.BUNDLE_NAME);
 
     /**
-     * Creates a new metadata deserializer.
+     * The <code>serialVersionUID</code> for the AttributionDeserializer.
      */
-    public DescriptionDeserializer() {
+    private static final long serialVersionUID = -8410562011325554054L;
+
+    /**
+     * Creates a new attribution deserializer.
+     */
+    public LabelDeserializer() {
         this(null);
     }
 
     /**
-     * Creates a new metadata deserializer.
+     * Creates a new attribution deserializer.
      *
      * @param aClass A class
      */
-    public DescriptionDeserializer(final Class<?> aClass) {
+    public LabelDeserializer(final Class<?> aClass) {
         super(aClass);
     }
 
@@ -48,10 +47,10 @@ public class DescriptionDeserializer extends StdDeserializer<Description> {
      *
      */
     @Override
-    public Description deserialize(final JsonParser aParser, final DeserializationContext aContext)
-            throws IOException, JsonProcessingException {
+    public Label deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException,
+            JsonProcessingException {
         final JsonNode node = aParser.getCodec().readTree(aParser);
-        final Description description;
+        final Label label;
 
         if (node.isArray()) {
             final List<Value> values = new ArrayList<>();
@@ -69,19 +68,14 @@ public class DescriptionDeserializer extends StdDeserializer<Description> {
                 }
             }
 
-            description = new Description(values.toArray(new Value[] {}));
+            label = new Label(values.toArray(new Value[] {}));
         } else if (node.isTextual()) {
-            description = new Description(node.textValue());
-        } else if (node.isObject()) {
-            final String value = node.get(Constants.I18N_VALUE).textValue();
-            final String lang = node.get(Constants.I18N_LANG).textValue();
-
-            description = new Description(new Value(value, lang));
+            label = new Label(node.textValue());
         } else {
-            throw new JsonParseException(aParser, LOGGER.getMessage(MessageCodes.JPA_016, node.getClass().getName() +
-                    ": " + node.toPrettyString()), aParser.getCurrentLocation());
+            throw new JsonParseException(aParser, LOGGER.getMessage(MessageCodes.JPA_016, node.getClass().getName()),
+                    aParser.getCurrentLocation());
         }
 
-        return description;
+        return label;
     }
 }

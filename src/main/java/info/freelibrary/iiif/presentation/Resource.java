@@ -232,7 +232,7 @@ public class Resource<T extends Resource<T>> {
      * @param aLabel The label to set
      * @return The resource
      */
-    @JsonSetter(Constants.LABEL)
+    @JsonIgnore
     public T setLabel(final String aLabel) {
         myLabel = new Label(aLabel);
         return (T) this;
@@ -244,7 +244,7 @@ public class Resource<T extends Resource<T>> {
      * @param aLabel The label
      * @return The resource
      */
-    @JsonIgnore
+    @JsonSetter(Constants.LABEL)
     public T setLabel(final Label aLabel) {
         myLabel = aLabel;
         return (T) this;

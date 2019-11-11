@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
@@ -24,6 +26,10 @@ public class FixturesTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(FixturesTest.class, Constants.BUNDLE_NAME);
 
     private static final String FIXTURE_PATH = "src/test/resources/fixtures/2.1/{}/manifest.json";
+
+    private static final String COLLECTION_TEST_FILE = "src/test/resources/fixtures/2.1/collection.json";
+
+    private static final String JSON_EXT = ".json";
 
     private String myTestID;
 
@@ -205,6 +211,134 @@ public class FixturesTest {
         test(StringUtils.format(FIXTURE_PATH, 34));
     }
 
+    @Test
+    public final void testFixture35() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 35));
+    }
+
+    @Ignore // Skip for now: https://iiif.io/api/presentation/2.1/#advanced-association-features
+    @Test
+    public final void testFixture36() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 36));
+    }
+
+    @Test
+    public final void testFixture37() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 37));
+    }
+
+    @Ignore // Skip for now: https://iiif.io/api/presentation/2.1/#advanced-association-features
+    @Test
+    public final void testFixture38() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 38));
+    }
+
+    @Ignore // Skip for now: https://iiif.io/api/presentation/2.1/#advanced-association-features
+    @Test
+    public final void testFixture39() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 39));
+    }
+
+    @Ignore // Skip for now: don't currently support multiple metadata labels with one value
+    @Test
+    public final void testFixture40() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 40));
+    }
+
+    @Ignore // Skip for now: https://iiif.io/api/presentation/2.1/#advanced-association-features
+    @Test
+    public final void testFixture41() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 41));
+    }
+
+    // There is no fixture #42
+
+    @Test
+    public final void testFixture43() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 43));
+    }
+
+    @Test
+    public final void testFixture44() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 44));
+    }
+
+    @Test
+    public final void testFixture45() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 45));
+    }
+
+    @Test
+    public final void testFixture46() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 46));
+    }
+
+    @Test
+    public final void testFixture47() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 47));
+    }
+
+    @Test
+    public final void testFixture48() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 48));
+    }
+
+    // No 49 or 50 fixtures
+
+    @Test
+    public final void testFixture51() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 51));
+    }
+
+    @Test
+    public final void testFixture52() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 52));
+    }
+
+    @Test
+    public final void testFixture54() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 54));
+    }
+
+    @Test
+    public final void testFixture61() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 61));
+    }
+
+    @Test
+    public final void testFixture62() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 62));
+    }
+
+    @Test
+    public final void testFixture63() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 63));
+    }
+
+    @Test
+    public final void testFixture64() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 64));
+    }
+
+    @Test
+    public final void testFixture65() throws IOException {
+        test(StringUtils.format(FIXTURE_PATH, 65));
+    }
+
+    @Test
+    public final void testCollectionFixture() throws IOException {
+        final File outputFile = File.createTempFile(myTestID, JSON_EXT);
+        final File testFile = new File(COLLECTION_TEST_FILE);
+        final JsonObject expected = new JsonObject(StringUtils.read(testFile));
+        final Manifestor manifestor = new Manifestor();
+        final Collection collection = manifestor.readCollection(testFile);
+        final JsonObject found;
+
+        manifestor.write(collection, outputFile);
+        found = new JsonObject(StringUtils.read(outputFile));
+        assertEquals(expected, found);
+    }
+
     private void test(final String aFixtureFilePath) throws IOException {
         test(aFixtureFilePath, false);
     }
@@ -223,9 +357,9 @@ public class FixturesTest {
     }
 
     private TestData prepareTest(final File aFixtureFile, final boolean aFormatCheck) throws IOException {
-        final File outputFile = File.createTempFile(myTestID, ".json");
+        final File outputFile = File.createTempFile(myTestID, JSON_EXT);
         final Manifestor manifestor = new Manifestor();
-        final Manifest manifest = manifestor.read(aFixtureFile);
+        final Manifest manifest = manifestor.readManifest(aFixtureFile);
         final JsonObject expected;
         final JsonObject found;
 

@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -21,6 +22,8 @@ public class Range extends Resource<Range> {
 
     private ViewingDirection myViewingDirection;
 
+    private Optional<URI> myStartCanvas;
+
     /**
      * Creates a IIIF presentation range.
      *
@@ -39,6 +42,28 @@ public class Range extends Resource<Range> {
      */
     public Range(final URI aID, final Label aLabel) {
         super(TYPE, aID, aLabel, REQ_ARG_COUNT);
+    }
+
+    /**
+     * Sets the optional start canvas.
+     *
+     * @param aStartCanvas A start canvas
+     * @return The range
+     */
+    @JsonSetter(Constants.START_CANVAS)
+    public Range setStartCanvas(final URI aStartCanvas) {
+        myStartCanvas = Optional.ofNullable(aStartCanvas);
+        return this;
+    }
+
+    /**
+     * Gets the optional start canvas.
+     *
+     * @return The optional start canvas
+     */
+    @JsonGetter(Constants.START_CANVAS)
+    public Optional<URI> getStartCanvas() {
+        return myStartCanvas;
     }
 
     /**

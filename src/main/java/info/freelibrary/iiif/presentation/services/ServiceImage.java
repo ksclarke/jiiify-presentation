@@ -293,7 +293,19 @@ public class ServiceImage {
 
     @JsonIgnore
     protected final void setMediaTypeFromExt(final String aURI) {
-        final String mimeType = FileUtils.getMimeType(aURI);
+        final String fragment = '#' + URI.create(aURI).getFragment();
+        final String mimeType;
+        final String uri;
+        final int index;
+
+        // If we have a fragment on our URI, remove it before checking media type
+        if ((index = aURI.indexOf(fragment)) != -1) {
+            uri = aURI.substring(0, index);
+        } else {
+            uri = aURI;
+        }
+
+        mimeType = FileUtils.getMimeType(uri);
 
         try {
             if (mimeType != null) {
@@ -303,6 +315,7 @@ public class ServiceImage {
             }
         } catch (final IllegalArgumentException details) {
             getLogger().warn(MessageCodes.JPA_013, aURI);
+            myFormat = Optional.empty();
         }
     }
 

@@ -2,12 +2,15 @@
 package info.freelibrary.iiif.presentation.properties;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import info.freelibrary.iiif.presentation.utils.Constants;
+import info.freelibrary.iiif.presentation.utils.LabelDeserializer;
 
 /**
  * A label property.
  */
+@JsonDeserialize(using = LabelDeserializer.class)
 public class Label extends I18nProperty<Label> {
 
     /**
@@ -30,8 +33,8 @@ public class Label extends I18nProperty<Label> {
 
     @Override
     @JsonGetter(Constants.LABEL)
-    protected Object getValue() {
-        return super.getValue();
+    protected Object getJsonValue() {
+        return super.getJsonValue();
     }
 
 }

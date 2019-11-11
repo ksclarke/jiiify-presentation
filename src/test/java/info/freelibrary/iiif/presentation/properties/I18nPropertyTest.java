@@ -13,7 +13,6 @@ import org.junit.Test;
 /**
  * A internationalized property test.
  */
-@SuppressWarnings({ "rawtypes", "unchecked" })
 public class I18nPropertyTest {
 
     private static final String ONE = "one";
@@ -118,7 +117,7 @@ public class I18nPropertyTest {
      */
     @Test
     public void testGetValueSimple() {
-        assertEquals(ONE, new I18nProperty(ONE).getValue());
+        assertEquals(ONE, new I18nProperty(ONE).getJsonValue());
     }
 
     /**
@@ -127,7 +126,7 @@ public class I18nPropertyTest {
     @Test
     public void testGetValueSimpleValueTwo() {
         final List<String> expected = Arrays.asList(new String[] { ONE, TWO });
-        assertEquals(expected, new I18nProperty(new Value(ONE), new Value(TWO)).getValue());
+        assertEquals(expected, new I18nProperty(new Value(ONE), new Value(TWO)).getJsonValue());
     }
 
     /**
@@ -139,7 +138,7 @@ public class I18nPropertyTest {
 
         i18np.getValues().remove(0);
 
-        assertEquals(null, i18np.getValue());
+        assertEquals(null, i18np.getJsonValue());
     }
 
     /**
@@ -148,9 +147,8 @@ public class I18nPropertyTest {
     @Test
     public void testGetValueSimpleValue() {
         final Value value = new Value(ONE, "eng");
-        final List<Value> values = Arrays.asList(new Value[] { value });
 
-        assertEquals(values, new I18nProperty(value).getValue());
+        assertEquals(value, new I18nProperty(value).getJsonValue());
     }
 
 }

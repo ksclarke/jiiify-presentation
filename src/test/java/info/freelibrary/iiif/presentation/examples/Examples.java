@@ -22,7 +22,7 @@ public class Examples {
     @Test
     public final void testReadmeExample() throws IOException {
         final Manifestor manifestor = new Manifestor();
-        final Manifest manifest = manifestor.read(new File("src/test/resources/json/z1960050.json"));
+        final Manifest manifest = manifestor.readManifest(new File("src/test/resources/json/z1960050.json"));
 
         manifest.getMetadata().add("Contributor", "Your Name Here");
         manifestor.write(manifest, File.createTempFile("z1960050", ".json"));
