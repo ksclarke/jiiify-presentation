@@ -4,7 +4,7 @@ package info.freelibrary.iiif.presentation;
 import java.net.URI;
 
 /**
- * An annotation list resource.
+ * An ordered list of annotations, typically associated with a single canvas.
  */
 public class AnnotationList extends Resource<AnnotationList> {
 

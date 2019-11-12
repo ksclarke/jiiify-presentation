@@ -30,7 +30,10 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.core.json.jackson.DatabindCodec;
 
 /**
- * A presentation manifest.
+ * The overall description of the structure and properties of the digital representation of an object. It carries
+ * information needed for the viewer to present the digitized content to the user, such as a title and other
+ * descriptive information about the object or the intellectual work that it conveys. Each manifest describes how to
+ * present a single object such as a book, a photograph, or a statue.
  */
 public class Manifest extends Resource<Manifest> {
 

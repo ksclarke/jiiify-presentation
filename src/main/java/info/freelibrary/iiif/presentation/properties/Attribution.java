@@ -8,7 +8,11 @@ import info.freelibrary.iiif.presentation.utils.AttributionDeserializer;
 import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
- * An attribution property.
+ * Text that must be shown when the resource it is associated with is displayed or used. For example, this could be
+ * used to present copyright or ownership statements, or simply an acknowledgement of the owning and/or publishing
+ * institution. Clients should try to match the language preferred by the user, and if the preferred language is
+ * unknown or unavailable, then the client may choose which value to display. If there are multiple values of the same
+ * or unspecified language, then all of those values must be displayed.
  */
 @JsonDeserialize(using = AttributionDeserializer.class)
 public class Attribution extends I18nProperty<Attribution> {

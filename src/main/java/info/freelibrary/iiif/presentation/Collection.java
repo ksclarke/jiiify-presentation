@@ -22,7 +22,9 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.core.json.jackson.DatabindCodec;
 
 /**
- * A collection resource.
+ * An ordered list of manifests, and/or further collections. Collections allow easy advertising and browsing of the
+ * manifests in a hierarchical structure, potentially with its own descriptive information. They can also provide
+ * clients with a means to locate all of the manifests known to the publishing institution.
  */
 public class Collection extends Resource<Collection> {
 
@@ -189,7 +191,7 @@ public class Collection extends Resource<Collection> {
     }
 
     /**
-     * A reference to a manifest.
+     * The reference to a manifest that's included in a collection.
      */
     public static class Manifest {
 

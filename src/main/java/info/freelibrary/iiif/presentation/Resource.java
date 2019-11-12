@@ -37,7 +37,7 @@ import info.freelibrary.util.LoggerFactory;
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.LABEL, Constants.ID, Constants.TYPE, Constants.DESCRIPTION,
     Constants.ATTRIBUTION, Constants.LICENSE, Constants.WITHIN, Constants.LOGO, Constants.THUMBNAIL,
     Constants.METADATA, Constants.SEQUENCES, Constants.SERVICE })
-public class Resource<T extends Resource<T>> {
+class Resource<T extends Resource<T>> {
 
     @JsonProperty(Constants.TYPE)
     protected final Type myType;

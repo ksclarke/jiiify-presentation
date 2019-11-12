@@ -12,7 +12,10 @@ import info.freelibrary.iiif.presentation.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
- * A range resource.
+ * An ordered list of canvases, and/or further ranges. Ranges allow canvases, or parts thereof, to be grouped together
+ * in some way. This could be for textual reasons, such as to distinguish books, chapters, verses, sections,
+ * non-content-bearing pages, the table of contents or similar. Equally, physical features might be important such as
+ * quires or gatherings, sections that have been added later and so forth.
  */
 public class Range extends Resource<Range> {
 

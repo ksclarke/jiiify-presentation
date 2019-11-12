@@ -16,7 +16,9 @@ import info.freelibrary.iiif.presentation.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
- * A sequence resource.
+ * The order of the views of the object. Multiple sequences are allowed to cover situations when there are multiple
+ * equally valid orders through the content, such as when a manuscript’s pages are rebound or archival collections are
+ * reordered.
  */
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.LABEL, Constants.ID, Constants.TYPE })
 public class Sequence extends Resource<Sequence> {

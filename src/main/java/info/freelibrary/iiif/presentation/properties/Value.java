@@ -11,10 +11,8 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
- * A property value that can be used to handle IIIF's
- * <a href= "http://iiif.io/api/presentation/2.1/#language-of-property-values">language of property values</a> JSON-LD
- * consideration. This pattern may be used in label, description, attribution and the label and value fields of the
- * metadata construction. It's more complex than a simple string or array of string values, so warrants its own class.
+ * An internationalized text value used by {@link Attribution}, {@link Description}, and {@link Metadata}. It's more
+ * complex than a simple string or array of string values, so warrants its own class.
  */
 @JsonPropertyOrder({ "@value", "@language" })
 @JsonInclude(JsonInclude.Include.NON_EMPTY)

@@ -5,6 +5,8 @@
 
 Jiiify Presentation is a [IIIF Presentation](http://iiif.io/api/presentation) library for Java. It does not contain a server. It's just for working with IIIF presentation manifests.
 
+[Semantic versioning](https://semver.org/) will be used once the library reaches version 1.0.0. Until that time, breaking changes will happen at 0.x and bug fix changes at 0.x.x.
+
 ### Getting Started
 
 A very simple example of using jiiify-presentation follows:

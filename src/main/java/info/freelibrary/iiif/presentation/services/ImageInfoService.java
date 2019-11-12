@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
- * An Image Info service that will return image info about a particular item.
+ * A service that will return information about a particular image.
  */
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.ID, Constants.PROFILE })
 public class ImageInfoService implements Service {

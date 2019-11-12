@@ -7,7 +7,7 @@ import java.io.IOException;
 import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.Manifest;
-import info.freelibrary.iiif.presentation.Manifestor;
+import info.freelibrary.iiif.presentation.io.Manifestor;
 
 /**
  * Examples from documentation.

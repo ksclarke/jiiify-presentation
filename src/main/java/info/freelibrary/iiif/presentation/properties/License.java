@@ -11,7 +11,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * A license property.
+ * A link to an external resource that describes the license or rights statement under which the resource may be used.
+ * The rationale for this being a URI and not a human readable label is that typically there is one license for many
+ * resources, and the text is too long to be displayed to the user along with the object. If displaying the text is a
+ * requirement, then it is recommended to include the information using the attribution property instead.
  */
 public class License {
 

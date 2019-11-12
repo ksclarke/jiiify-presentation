@@ -11,7 +11,7 @@ import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
 /**
- * The Image Info profile level.
+ * The profile levels supported by a IIIF Image API service.
  */
 public enum APIComplianceLevel {
 

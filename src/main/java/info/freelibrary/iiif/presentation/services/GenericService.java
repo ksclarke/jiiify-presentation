@@ -21,7 +21,7 @@ import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
 /**
- * A generic service class for services that do not fit into one of our pre-existing types.
+ * A generic service class for other service implementations.
  */
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.ID, Constants.PROFILE })
 public class GenericService implements Service<GenericService> {

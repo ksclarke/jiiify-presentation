@@ -2,7 +2,7 @@
 package info.freelibrary.iiif.presentation.utils;
 
 /**
- * Constants for the Jiiify Presentation project.
+ * Constants used in this software library.
  */
 public final class Constants {
 

@@ -18,6 +18,12 @@ import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+/**
+ * A link to a machine readable document that semantically describes the resource with the seeAlso property, such as
+ * an XML or RDF description. This document could be used for search and discovery or inferencing purposes, or just to
+ * provide a longer description of the resource. The profile and format properties of the document should be given to
+ * help the client to make appropriate use of the document.
+ */
 public class SeeAlso {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SeeAlso.class, Constants.BUNDLE_NAME);

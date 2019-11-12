@@ -25,7 +25,7 @@ import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.StringUtils;
 
 /**
- * A content resource.
+ * An image resource that is associated with a {@link Canvas}.
  */
 @JsonPropertyOrder({ Constants.TYPE, Constants.LABEL, Constants.ID, Constants.MOTIVATION, Constants.ON,
     Constants.RESOURCE, Constants.OA_CHOICE, Constants.ITEM })

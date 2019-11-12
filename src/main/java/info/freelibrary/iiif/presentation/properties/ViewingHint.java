@@ -19,14 +19,16 @@ import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
 /**
- * Creates a viewing hint.
+ * A hint to the client as to the most appropriate method of displaying the resource. This specification defines the
+ * values specified in the table below. Other values may be given, and if they are, they must be URIs.
  */
 public class ViewingHint {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ViewingHint.class, BUNDLE_NAME);
 
     /**
-     * The supported out of the box viewing hints.
+     * The supported out of the box viewing hints: individuals, paged, continuous, multi-part, non-paged, top, and
+     * facing-pages.
      */
     public enum Option {
 

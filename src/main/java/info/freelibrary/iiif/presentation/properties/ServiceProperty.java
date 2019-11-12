@@ -10,8 +10,8 @@ import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.common.net.MediaType;
 
+import info.freelibrary.iiif.presentation.ServiceImage;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
-import info.freelibrary.iiif.presentation.services.ServiceImage;
 
 /**
  * A property that relies on a service.

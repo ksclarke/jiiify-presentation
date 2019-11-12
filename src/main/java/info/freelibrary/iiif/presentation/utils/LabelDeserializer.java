@@ -17,6 +17,9 @@ import info.freelibrary.iiif.presentation.properties.Value;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+/**
+ * Deserializes labels from JSON documents into {@link Label} objects.
+ */
 public class LabelDeserializer extends StdDeserializer<Label> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LabelDeserializer.class, Constants.BUNDLE_NAME);

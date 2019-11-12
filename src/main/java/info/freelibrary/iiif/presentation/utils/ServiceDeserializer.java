@@ -20,6 +20,9 @@ import info.freelibrary.iiif.presentation.services.Service;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+/**
+ * Deserializes services from JSON documents into {@link Service} implementations.
+ */
 public class ServiceDeserializer extends StdDeserializer<Service> {
 
     /**

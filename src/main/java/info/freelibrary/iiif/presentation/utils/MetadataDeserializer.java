@@ -14,11 +14,11 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 
-import info.freelibrary.iiif.presentation.properties.Value;
 import info.freelibrary.iiif.presentation.properties.Metadata;
+import info.freelibrary.iiif.presentation.properties.Value;
 
 /**
- * A custom deserializer for the Metadata class.
+ * Deserializes metadata in a JSON document into a {@link Metadata} object.
  */
 public class MetadataDeserializer extends StdDeserializer<Metadata> {
 

@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import info.freelibrary.iiif.presentation.io.Manifestor;
 import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.util.Logger;

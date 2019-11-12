@@ -18,7 +18,10 @@ import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
 
 /**
- * A canvas resource.
+ * A virtual container that represents a page or view and has content resources associated with it or with parts of
+ * it. The canvas provides a frame of reference for the layout of the content. The concept of a canvas is borrowed
+ * from standards like PDF and HTML, or applications like Photoshop and Powerpoint, where the display starts from a
+ * blank canvas and images, text and other resources are &quot;painted&quot; on to it.
  */
 @JsonPropertyOrder({ Constants.TYPE, Constants.LABEL, Constants.ID, Constants.WIDTH, Constants.HEIGHT,
     Constants.THUMBNAIL, Constants.IMAGE_CONTENT, Constants.OTHER_CONTENT })

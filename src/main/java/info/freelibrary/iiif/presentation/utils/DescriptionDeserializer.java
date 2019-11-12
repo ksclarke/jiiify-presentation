@@ -17,6 +17,9 @@ import info.freelibrary.iiif.presentation.properties.Value;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+/**
+ * Deserializes descriptions from JSON documents into {@link Description} objects.
+ */
 public class DescriptionDeserializer extends StdDeserializer<Description> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DescriptionDeserializer.class,

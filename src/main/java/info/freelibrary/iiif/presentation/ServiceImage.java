@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.services;
+package info.freelibrary.iiif.presentation;
 
 import static info.freelibrary.iiif.presentation.utils.Constants.BUNDLE_NAME;
 
@@ -15,6 +15,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.google.common.net.MediaType;
 
+import info.freelibrary.iiif.presentation.properties.Logo;
+import info.freelibrary.iiif.presentation.properties.Thumbnail;
+import info.freelibrary.iiif.presentation.services.ImageInfoService;
+import info.freelibrary.iiif.presentation.services.Service;
 import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.util.FileUtils;
@@ -22,7 +26,8 @@ import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
 /**
- * An image.
+ * An image resource from a {@link Service} that is used as an {@link ImageResource}, and in {@link Logo}s and
+ * {@link Thumbnail}s.
  */
 @JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.FORMAT, Constants.WIDTH, Constants.HEIGHT,
     Constants.SERVICE })

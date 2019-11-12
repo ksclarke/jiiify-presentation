@@ -1,13 +1,16 @@
 
-package info.freelibrary.iiif.presentation;
+package info.freelibrary.iiif.presentation.io;
 
 import java.io.File;
+
+import info.freelibrary.iiif.presentation.Collection;
+import info.freelibrary.iiif.presentation.Manifest;
 
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 
 /**
- * The manifestor reads and writes manifests.
+ * The manifestor reads and writes manifests and collection documents.
  */
 public class Manifestor {
 

@@ -6,7 +6,7 @@ import java.net.URI;
 import info.freelibrary.iiif.presentation.properties.Type;
 
 /**
- * A content resource.
+ * Other, non-image, resources that are associated with a {@link Canvas}.
  */
 public class OtherContent extends Content<OtherContent> {
 

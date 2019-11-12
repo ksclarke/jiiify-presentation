@@ -8,7 +8,10 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * A IIIF presentation type property.
+ * The type of the resource (e.g., <code>sc:Manifest</code>, <code>sc:Sequence</code>, and <code>sc:Canvas</code>,
+ * etc.). For the resource types defined by this specification, the value of @type will be described in the sections
+ * below. For content resources, the type may be drawn from other vocabularies. Recommendations for basic types such
+ * as image, text or audio are also given in the sections below.
  */
 public class Type {
 

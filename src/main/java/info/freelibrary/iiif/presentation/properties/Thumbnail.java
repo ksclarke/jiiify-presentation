@@ -9,7 +9,10 @@ import info.freelibrary.iiif.presentation.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
- * A thumbnail property.
+ * A small image that depicts or pictorially represents the resource that the property is attached to, such as the
+ * title page, a significant image or rendering of a canvas with multiple content resources associated with it. It is
+ * recommended that a IIIF Image API service be available for this image for manipulations such as resizing. If a
+ * resource has multiple thumbnails, then each of them should be different.
  */
 public class Thumbnail extends ServiceProperty<Thumbnail> {
 

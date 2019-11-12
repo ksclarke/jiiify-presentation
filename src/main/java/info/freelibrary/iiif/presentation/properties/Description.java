@@ -8,7 +8,11 @@ import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.iiif.presentation.utils.DescriptionDeserializer;
 
 /**
- * A description property.
+ * A longer-form prose description of the object or resource that the property is attached to, intended to be conveyed
+ * to the user as a full text description, rather than a simple label and value. It may be in simple HTML or plain
+ * text. It can duplicate any of the information from the metadata fields, along with additional information required
+ * to understand what is being displayed. Clients should have a way to display the descriptions of manifests and
+ * canvases, and may have a way to view the information about other resources.
  */
 @JsonDeserialize(using = DescriptionDeserializer.class)
 public class Description extends I18nProperty<Description> {

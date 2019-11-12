@@ -17,6 +17,9 @@ import info.freelibrary.iiif.presentation.properties.Value;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+/**
+ * Deserializes attributions from JSON documents into {@link Attribution} objects.
+ */
 public class AttributionDeserializer extends StdDeserializer<Attribution> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AttributionDeserializer.class,

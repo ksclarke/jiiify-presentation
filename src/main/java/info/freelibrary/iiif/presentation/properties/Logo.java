@@ -9,7 +9,10 @@ import info.freelibrary.iiif.presentation.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
- * A logo property.
+ * A small image that represents an individual or organization associated with the resource it is attached to. This
+ * could be the logo of the owning or hosting institution. The logo must be clearly rendered when the resource is
+ * displayed or used, without cropping, rotating or otherwise distorting the image. It is recommended that a IIIF
+ * Image API service be available for this image for manipulations such as resizing.
  */
 public class Logo extends ServiceProperty<Logo> {
 

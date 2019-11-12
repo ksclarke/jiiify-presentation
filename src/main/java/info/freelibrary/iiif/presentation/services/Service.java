@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import info.freelibrary.iiif.presentation.utils.ServiceDeserializer;
 
 /**
- * An abstract service to be subclasses by actual IIIF services.
+ * A service interface to be implemented by actual services (like GeoJSON and ImageInfo).
  */
 @JsonDeserialize(using = ServiceDeserializer.class)
 public interface Service<T> {

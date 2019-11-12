@@ -8,7 +8,9 @@ import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.iiif.presentation.utils.LabelDeserializer;
 
 /**
- * A label property.
+ * A human readable label, name or title for the resource. This property is intended to be displayed as a short,
+ * textual surrogate for the resource if a human needs to make a distinction between it and similar resources, for
+ * example between pages or between a choice of images to display.
  */
 @JsonDeserialize(using = LabelDeserializer.class)
 public class Label extends I18nProperty<Label> {
