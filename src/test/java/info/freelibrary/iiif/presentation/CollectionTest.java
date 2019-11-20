@@ -2,13 +2,16 @@
 package info.freelibrary.iiif.presentation;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.properties.NavDate;
@@ -23,12 +26,34 @@ public class CollectionTest {
 
     private static final File TEST_FILE1 = new File("src/test/resources/json/collection1.json");
 
+    private String myID;
+
+    private String myLabel;
+
+    /**
+     * Sets up the testing environment.
+     */
+    @Before
+    public void setUp() {
+        myID = UUID.randomUUID().toString();
+        myLabel = "label-" + UUID.randomUUID().toString();
+    }
+
+    /**
+     * Tests that an empty collection doesn't return a null manifests list.
+     */
+    @Test
+    public void testGetCollectionNotNull() {
+        assertNotNull(new Collection(myID, myLabel).getManifests());
+        assertEquals(0, new Collection(myID, myLabel).getManifests().size());
+    }
+
     /**
      * Tests setting a navDate.
      */
     @Test
     public void testNavDate1() throws IOException {
-        final Collection collection = new Collection("ID-b", "label-b");
+        final Collection collection = new Collection(myID, myLabel);
         final NavDate navDate = NavDate.now();
 
         collection.setNavDate(navDate);
@@ -77,7 +102,7 @@ public class CollectionTest {
      */
     @Test
     public void testNavDate2() {
-        final Collection collection = new Collection("ID-c", "label-c");
+        final Collection collection = new Collection(myID, myLabel);
         final ZonedDateTime zonedDateTime = NavDate.now().getZonedDateTime();
         final NavDate navDate = new NavDate(zonedDateTime);
 
