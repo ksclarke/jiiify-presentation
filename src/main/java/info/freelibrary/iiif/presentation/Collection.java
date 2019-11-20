@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
@@ -40,7 +41,7 @@ public class Collection extends Resource<Collection> {
 
     private NavDate myNavDate;
 
-    private List<Collection.Manifest> myManifests;
+    private List<Manifest> myManifests;
 
     /**
      * Creates a IIIF presentation collection.
@@ -147,7 +148,11 @@ public class Collection extends Resource<Collection> {
      * @return The manifests associated with this collection
      */
     @JsonGetter(Constants.MANIFESTS)
-    public List<Collection.Manifest> getManifests() {
+    public List<Manifest> getManifests() {
+        if (myManifests == null) {
+            myManifests = new ArrayList<>();
+        }
+
         return myManifests;
     }
 
@@ -158,7 +163,7 @@ public class Collection extends Resource<Collection> {
      * @return
      */
     @JsonSetter(Constants.MANIFESTS)
-    public Collection setManifests(final List<Collection.Manifest> aManifestList) {
+    public Collection setManifests(final List<Manifest> aManifestList) {
         myManifests = aManifestList;
         return this;
     }
