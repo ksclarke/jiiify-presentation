@@ -121,6 +121,20 @@ class I18nProperty<T extends I18nProperty<T>> {
         return !myValues.isEmpty();
     }
 
+    @Override
+    public boolean equals(final Object aObject) {
+        if (aObject != null && getClass().getName().equals(aObject.getClass().getName())) {
+            return getJsonValue().equals(((I18nProperty) aObject).getJsonValue());
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return getJsonValue().hashCode();
+    }
+
     /**
      * Gets the value(s) of the property; this might be a single String or it might be a List that contains plain
      * strings and/or I18n Value(s).

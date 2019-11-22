@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 
+import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.NavDate;
 import info.freelibrary.util.StringUtils;
 
@@ -37,6 +39,17 @@ public class CollectionTest {
     public void setUp() {
         myID = UUID.randomUUID().toString();
         myLabel = "label-" + UUID.randomUUID().toString();
+    }
+
+    /**
+     * Tests the Collection.Manifest manifest constructor.
+     */
+    @Test
+    public void testCollectionManifestManifestConstructor() {
+        final Collection.Manifest manifest = new Collection.Manifest(new Manifest(myID, myLabel));
+
+        assertEquals(URI.create(myID), manifest.getID());
+        assertEquals(new Label(myLabel), manifest.getLabel());
     }
 
     /**

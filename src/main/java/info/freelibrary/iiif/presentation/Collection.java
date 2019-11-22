@@ -213,6 +213,16 @@ public class Collection extends Resource<Collection> {
         }
 
         /**
+         * Create a brief collection manifest from a full work manifest.
+         *
+         * @param aManifest A full manifest
+         */
+        public Manifest(final info.freelibrary.iiif.presentation.Manifest aManifest) {
+            setID(aManifest.getID());
+            setLabel(aManifest.getLabel());
+        }
+
+        /**
          * Create a new collection manifest from the supplied ID and label.
          *
          * @param aID A manifest ID
@@ -279,16 +289,6 @@ public class Collection extends Resource<Collection> {
         }
 
         /**
-         * Sets the collection manifest type.
-         *
-         * @return The collection manifest type
-         */
-        @JsonSetter(Constants.TYPE)
-        public Manifest setType(final Type aType) {
-            return this;
-        }
-
-        /**
          * Gets the collection manifest label.
          *
          * @return The collection manifest label
@@ -319,6 +319,16 @@ public class Collection extends Resource<Collection> {
         @JsonIgnore
         public Manifest setLabel(final String aLabel) {
             myLabel = new Label(aLabel);
+            return this;
+        }
+
+        /**
+         * Gives Jackson a way to "set" this, though it's a static string in this class.
+         *
+         * @return The collection manifest type
+         */
+        @JsonSetter(Constants.TYPE)
+        private Manifest setType(final Type aType) {
             return this;
         }
     }

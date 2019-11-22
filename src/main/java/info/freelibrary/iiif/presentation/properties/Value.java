@@ -86,4 +86,30 @@ public class Value {
         return this;
     }
 
+    @Override
+    public boolean equals(final Object aObject) {
+        if (aObject != null && aObject instanceof Value) {
+            final Value value = (Value) aObject;
+            final Optional<String> langOpt = value.getLang();
+            final String otherLang = langOpt != null && langOpt.isPresent() ? langOpt.get() : "";
+            final String otherValue = value.getValue() != null ? value.getValue() : "";
+            final String thisLang = myLang != null && myLang.isPresent() ? myLang.get() : "";
+            final String thisValue = myValue != null ? myValue : "";
+
+            return thisValue.equals(otherValue) && thisLang.equals(otherLang);
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 17;
+
+        hash = hash * 23 + (myValue == null ? 1 : myValue.hashCode());
+        hash = hash * 23 + (myLang == null || myLang.isEmpty() ? 1 : myLang.get().hashCode());
+
+        return hash;
+    }
+
 }

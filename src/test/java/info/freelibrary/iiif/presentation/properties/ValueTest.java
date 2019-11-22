@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation.properties;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -23,6 +24,28 @@ public class ValueTest {
         final Value value = new Value(asdf);
 
         assertEquals(asdf, value.getValue());
+    }
+
+    /**
+     * Tests the hashCode() function.
+     */
+    @Test
+    public void testValueHashCode() {
+        final Value value1 = new Value(ONE, ENG);
+        final Value value2 = new Value(ONE, ENG);
+
+        assertEquals(value1.hashCode(), value2.hashCode());
+    }
+
+    /**
+     * Tests the hashCode() function.
+     */
+    @Test
+    public void testValueEquals() {
+        final Value value1 = new Value(ONE, ENG);
+        final Value value2 = new Value(ONE, ENG);
+
+        assertTrue(value1.equals(value2));
     }
 
     /**

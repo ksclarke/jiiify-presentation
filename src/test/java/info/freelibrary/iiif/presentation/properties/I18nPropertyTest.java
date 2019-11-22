@@ -3,6 +3,7 @@ package info.freelibrary.iiif.presentation.properties;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
@@ -20,6 +21,12 @@ public class I18nPropertyTest {
     private static final String TWO = "two";
 
     private static final String THREE = "three";
+
+    private static final String FOUR = "four";
+
+    private static final String ENG = "eng";
+
+    private static final String FRE = "fre";
 
     /**
      * Tests construction of an internationalized property.
@@ -54,6 +61,72 @@ public class I18nPropertyTest {
         final List<Value> values = i18np.getValues();
 
         assertEquals(2, values.size());
+    }
+
+    /**
+     * Test of hashCode with double values
+     */
+    @Test
+    public void testHashCodeDoubleValue() {
+        final I18nProperty i18np1 = new I18nProperty(new Value(ONE, ENG));
+        final I18nProperty i18np2 = new I18nProperty(new Value(ONE, ENG));
+
+        assertEquals(i18np1.hashCode(), i18np2.hashCode());
+    }
+
+    /**
+     * Test of hashCode with double values
+     */
+    @Test
+    public void testHashCodeDifferentDoubleValue() {
+        final I18nProperty i18np1 = new I18nProperty(new Value(ONE, ENG));
+        final I18nProperty i18np2 = new I18nProperty(new Value(ONE, FRE));
+
+        assertNotEquals(i18np1.hashCode(), i18np2.hashCode());
+    }
+
+    /**
+     * Test of hashCode override.
+     */
+    @Test
+    public void testHashCode() {
+        final I18nProperty i18np1 = new I18nProperty(ONE, TWO);
+        final I18nProperty i18np2 = new I18nProperty(ONE, TWO);
+
+        assertEquals(i18np1.hashCode(), i18np2.hashCode());
+    }
+
+    /**
+     * Test of hashCode override for multiple values.
+     */
+    @Test
+    public void testHashCodeMultipleValues() {
+        final I18nProperty i18np1 = new I18nProperty(ONE).addValue(TWO, THREE);
+        final I18nProperty i18np2 = new I18nProperty(ONE).addValue(TWO, THREE);
+
+        assertEquals(i18np1.hashCode(), i18np2.hashCode());
+    }
+
+    /**
+     * Test of hashCode override for multiple values.
+     */
+    @Test
+    public void testNotEqualHashCode() {
+        final I18nProperty i18np1 = new I18nProperty(ONE);
+        final I18nProperty i18np2 = new I18nProperty(TWO);
+
+        assertNotEquals(i18np1.hashCode(), i18np2.hashCode());
+    }
+
+    /**
+     * Test of hashCode override for multiple values.
+     */
+    @Test
+    public void testNotEqualHashCodeMultipleValues() {
+        final I18nProperty i18np1 = new I18nProperty(ONE).addValue(TWO, THREE);
+        final I18nProperty i18np2 = new I18nProperty(ONE).addValue(TWO, FOUR);
+
+        assertNotEquals(i18np1.hashCode(), i18np2.hashCode());
     }
 
     /**
@@ -146,7 +219,7 @@ public class I18nPropertyTest {
      */
     @Test
     public void testGetValueSimpleValue() {
-        final Value value = new Value(ONE, "eng");
+        final Value value = new Value(ONE, ENG);
 
         assertEquals(value, new I18nProperty(value).getJsonValue());
     }
