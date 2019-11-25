@@ -42,6 +42,24 @@ public class Sequence extends Resource<Sequence> {
     }
 
     /**
+     * Creates a IIIF presentation sequence resource with the supplied ID.
+     */
+    public Sequence(final String aID) {
+        super(TYPE, REQ_ARG_COUNT);
+        myCanvases = new ArrayList<>();
+        setID(aID);
+    }
+
+    /**
+     * Creates a IIIF presentation sequence resource with the supplied ID.
+     */
+    public Sequence(final URI aID) {
+        super(TYPE, REQ_ARG_COUNT);
+        myCanvases = new ArrayList<>();
+        setID(aID);
+    }
+
+    /**
      * Sets the optional start canvas.
      *
      * @param aStartCanvas A start canvas
@@ -94,6 +112,7 @@ public class Sequence extends Resource<Sequence> {
     @JsonIgnore
     public Sequence setCanvases(final List<Canvas> aCanvases) {
         myCanvases.clear();
+        myCanvases.addAll(aCanvases);
         return this;
     }
 
