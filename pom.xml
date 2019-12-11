@@ -5,7 +5,7 @@
 
   <artifactId>jiiify-presentation</artifactId>
   <packaging>jar</packaging>
-  <version>0.1.2</version>
+  <version>0.1.3-SNAPSHOT</version>
   <name>jiiify-presentation</name>
   <description>A Java Library for the IIIF Presentation API</description>
   <url>http://projects.freelibrary.info/jiiify-presentation</url>
