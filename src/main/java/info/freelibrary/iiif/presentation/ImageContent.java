@@ -165,12 +165,24 @@ public class ImageContent extends Content<ImageContent> {
             } else if (myResources.size() == 1) {
                 final ImageResource resource = myResources.get(0);
                 final Optional<ImageInfoService> service = resource.getService();
+                final int height = resource.getHeight();
+                final int width = resource.getWidth();
+                final String format = resource.getFormat();
 
                 map.put(Constants.ID, resource.getID());
                 map.put(Constants.TYPE, resource.getType());
-                map.put(Constants.HEIGHT, resource.getHeight());
-                map.put(Constants.WIDTH, resource.getWidth());
-                map.put(Constants.FORMAT, resource.getFormat());
+
+                if (height != 0) {
+                    map.put(Constants.HEIGHT, height);
+                }
+
+                if (width != 0) {
+                    map.put(Constants.WIDTH, width);
+                }
+
+                if (format != null) {
+                    map.put(Constants.FORMAT, format);
+                }
 
                 if (resource.getLabel() != null) {
                     map.put(Constants.LABEL, resource.getLabel());
