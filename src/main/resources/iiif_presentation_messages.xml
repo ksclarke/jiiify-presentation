@@ -14,7 +14,7 @@
   <entry key="JPA-008">Sequence cannot be null</entry>
   <entry key="JPA-009">SeeAlso ID cannot be null</entry>
   <entry key="JPA-010">{} isn't a viewingHint or URI</entry>
-  <entry key="JPA-011">Width ({}) and height ({}) must be above zero</entry>
+  <entry key="JPA-011">Width ({}) and height ({}) must not be negative numbers</entry>
   <entry key="JPA-012">{} is required</entry>
   <entry key="JPA-013">{} is not a recognizable media type</entry>
   <entry key="JPA-014">Output file content from failed test: {}</entry>
