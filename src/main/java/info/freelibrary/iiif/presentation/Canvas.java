@@ -241,7 +241,7 @@ public class Canvas extends Resource<Canvas> {
      */
     @JsonIgnore
     private void setWidthHeight(final int aWidth, final int aHeight) {
-        if ((aWidth > 0) && (aHeight > 0)) {
+        if ((aWidth >= 0) && (aHeight >= 0)) {
             myWidth = aWidth;
             myHeight = aHeight;
         } else {
