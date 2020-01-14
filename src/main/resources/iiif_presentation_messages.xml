@@ -20,5 +20,7 @@
   <entry key="JPA-014">Output file content from failed test: {}</entry>
   <entry key="JPA-015">Image content resource map: {}</entry>
   <entry key="JPA-016">Unexpected JSON node: {}</entry>
+  <entry key="JPA-017">Illegal viewing direction argument: {}</entry>
+  <entry key="JPA-018">Failed to catch illegal viewing direction argument</entry>
 
 </properties>

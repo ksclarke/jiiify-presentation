@@ -2,13 +2,27 @@
 package info.freelibrary.iiif.presentation.properties;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
+
+import info.freelibrary.iiif.presentation.utils.Constants;
+import info.freelibrary.iiif.presentation.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
 
 /**
  * A viewingDirection test.
  */
 public class ViewingDirectionTest {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ViewingDirection.class, Constants.BUNDLE_NAME);
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testIllegalArgumentException() {
+        ViewingDirection.fromString("SOME_BOGUS_VALUE");
+        fail(LOGGER.getMessage(MessageCodes.JPA_018));
+    }
 
     /**
      * Tests parsing a left to right direction.
@@ -16,7 +30,7 @@ public class ViewingDirectionTest {
     @Test
     public void testParsingLeftToRight() {
         assertEquals(ViewingDirection.LEFT_TO_RIGHT, ViewingDirection.fromString(ViewingDirection.values()[0]
-                .toString()).get());
+                .toString()));
     }
 
     /**
@@ -25,7 +39,7 @@ public class ViewingDirectionTest {
     @Test
     public void testParsingRightToLeft() {
         assertEquals(ViewingDirection.RIGHT_TO_LEFT, ViewingDirection.fromString(ViewingDirection.values()[1]
-                .toString()).get());
+                .toString()));
     }
 
     /**
@@ -34,7 +48,7 @@ public class ViewingDirectionTest {
     @Test
     public void testParsingTopToBottom() {
         assertEquals(ViewingDirection.TOP_TO_BOTTOM, ViewingDirection.fromString(ViewingDirection.values()[2]
-                .toString()).get());
+                .toString()));
     }
 
     /**
@@ -43,7 +57,7 @@ public class ViewingDirectionTest {
     @Test
     public void testParsingBottomToTop() {
         assertEquals(ViewingDirection.BOTTOM_TO_TOP, ViewingDirection.fromString(ViewingDirection.values()[3]
-                .toString()).get());
+                .toString()));
     }
 
     /**
