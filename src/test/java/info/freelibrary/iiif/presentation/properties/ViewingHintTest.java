@@ -47,6 +47,14 @@ public class ViewingHintTest {
     }
 
     /**
+     * Tests the viewingHint constructor with a simple string value.
+     */
+    @Test
+    public void testSimpleConstructor() {
+        assertEquals(VALUES[1], new ViewingHint(VALUES[1]).getString());
+    }
+
+    /**
      * Tests getting the viewing hint option.
      */
     @Test

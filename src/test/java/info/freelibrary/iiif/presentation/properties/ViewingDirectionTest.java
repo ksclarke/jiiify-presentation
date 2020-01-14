@@ -11,6 +11,42 @@ import org.junit.Test;
 public class ViewingDirectionTest {
 
     /**
+     * Tests parsing a left to right direction.
+     */
+    @Test
+    public void testParsingLeftToRight() {
+        assertEquals(ViewingDirection.LEFT_TO_RIGHT, ViewingDirection.fromString(ViewingDirection.values()[0]
+                .toString()).get());
+    }
+
+    /**
+     * Tests parsing a right to left direction.
+     */
+    @Test
+    public void testParsingRightToLeft() {
+        assertEquals(ViewingDirection.RIGHT_TO_LEFT, ViewingDirection.fromString(ViewingDirection.values()[1]
+                .toString()).get());
+    }
+
+    /**
+     * Tests parsing a top to bottom direction.
+     */
+    @Test
+    public void testParsingTopToBottom() {
+        assertEquals(ViewingDirection.TOP_TO_BOTTOM, ViewingDirection.fromString(ViewingDirection.values()[2]
+                .toString()).get());
+    }
+
+    /**
+     * Tests parsing a bottom to top direction.
+     */
+    @Test
+    public void testParsingBottomToTop() {
+        assertEquals(ViewingDirection.BOTTOM_TO_TOP, ViewingDirection.fromString(ViewingDirection.values()[3]
+                .toString()).get());
+    }
+
+    /**
      * Tests the number of viewingDirection options.
      */
     @Test

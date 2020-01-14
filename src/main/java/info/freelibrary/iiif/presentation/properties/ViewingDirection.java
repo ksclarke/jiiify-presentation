@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.properties;
 
+import java.util.Optional;
+
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
@@ -24,4 +26,20 @@ public enum ViewingDirection {
         return myValue;
     }
 
+    /**
+     * Create a ViewingDirection from a supplied string; it may be empty if the supplied string doesn't correspond to
+     * a valid ViewingDirection value.
+     *
+     * @param aValue A ViewingDirection value
+     * @return The ViewingDirection for the supplied value
+     */
+    public static Optional<ViewingDirection> fromString(final String aValue) {
+        for (final ViewingDirection direction : values()) {
+            if (direction.toString().equalsIgnoreCase(aValue)) {
+                return Optional.of(direction);
+            }
+        }
+
+        return Optional.empty();
+    }
 }
