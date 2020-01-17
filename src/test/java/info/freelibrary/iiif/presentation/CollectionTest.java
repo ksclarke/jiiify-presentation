@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNotNull;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.NavDate;
 import info.freelibrary.util.StringUtils;
 
+import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 
 /**
@@ -32,6 +34,8 @@ public class CollectionTest {
 
     private String myLabel;
 
+    private Vertx myVertx;
+
     /**
      * Sets up the testing environment.
      */
@@ -39,6 +43,7 @@ public class CollectionTest {
     public void setUp() {
         myID = UUID.randomUUID().toString();
         myLabel = "label-" + UUID.randomUUID().toString();
+        myVertx = Vertx.factory.vertx();
     }
 
     /**
@@ -65,7 +70,7 @@ public class CollectionTest {
      * Tests setting a navDate.
      */
     @Test
-    public void testNavDate1() throws IOException {
+    public void testNavDate1() {
         final Collection collection = new Collection(myID, myLabel);
         final NavDate navDate = NavDate.now();
 
@@ -75,6 +80,8 @@ public class CollectionTest {
 
     /**
      * Tests writing a simple collection manifest
+     *
+     * @throws IOException If there is trouble reading the test JSON file
      */
     @Test
     public void testWritingCollection() throws IOException {
@@ -101,6 +108,8 @@ public class CollectionTest {
 
     /**
      * Tests reading a collection
+     *
+     * @throws IOException If there is trouble reading the test JSON file.
      */
     @Test
     public void testReadingCollection() throws IOException {
@@ -123,4 +132,26 @@ public class CollectionTest {
         assertEquals(navDate, collection.getNavDate());
     }
 
+    /**
+     * Tests reading a collection document from JSON.
+     */
+    @Test
+    public void testFromJSON() {
+        final JsonObject json = new JsonObject(myVertx.fileSystem().readFileBlocking(TEST_FILE1.getAbsolutePath()));
+        final Collection collection = Collection.fromJSON(json);
+
+        assertEquals(json, collection.toJSON());
+    }
+
+    /**
+     * Tests reading a collection document from a JSON string.
+     */
+    @Test
+    public void testFromString() {
+        final String json = myVertx.fileSystem().readFileBlocking(TEST_FILE1.getAbsolutePath()).toString(
+                StandardCharsets.UTF_8);
+        final Collection collection = Collection.fromString(json);
+
+        assertEquals(new JsonObject(json), collection.toJSON());
+    }
 }
