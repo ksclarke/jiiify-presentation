@@ -279,6 +279,17 @@ public class Manifest extends Resource<Manifest> {
     }
 
     /**
+     * Returns a Manifest from its JSON representation.
+     *
+     * @param aJsonString A manifest in string form
+     * @return The manifest
+     */
+    @JsonIgnore
+    public static Manifest fromString(final String aJsonString) {
+        return fromJSON(new JsonObject(aJsonString));
+    }
+
+    /**
      * Method used internally to set context from JSON.
      *
      * @param aContext A manifest context

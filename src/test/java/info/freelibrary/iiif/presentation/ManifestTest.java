@@ -56,6 +56,8 @@ public class ManifestTest extends AbstractTest {
 
     private Manifest myManifest;
 
+    private Vertx myVertx;
+
     /**
      * Sets up the manifest testing environment.
      *
@@ -126,6 +128,7 @@ public class ManifestTest extends AbstractTest {
         }
 
         sequence.addCanvas(canvas1, canvas2);
+        myVertx = Vertx.factory.vertx();
     }
 
     /**
@@ -133,7 +136,7 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public void testToJSON() {
-        final Buffer buffer = Vertx.factory.vertx().fileSystem().readFileBlocking(SINAI_JSON);
+        final Buffer buffer = myVertx.fileSystem().readFileBlocking(SINAI_JSON);
         final JsonObject expected = new JsonObject(buffer);
 
         assertEquals(expected, myManifest.toJSON());
@@ -144,7 +147,7 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public void testToString() {
-        final Buffer buffer = Vertx.factory.vertx().fileSystem().readFileBlocking(SINAI_JSON);
+        final Buffer buffer = myVertx.fileSystem().readFileBlocking(SINAI_JSON);
         final String expected = new JsonObject(buffer).encodePrettily();
 
         assertEquals(expected, myManifest.toString());
@@ -155,9 +158,20 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public void testFromJSON() {
-        final JsonObject json = new JsonObject(Vertx.factory.vertx().fileSystem().readFileBlocking(SINAI_JSON));
+        final JsonObject json = new JsonObject(myVertx.fileSystem().readFileBlocking(SINAI_JSON));
         final Manifest manifest = Manifest.fromJSON(json);
 
         assertEquals(json, manifest.toJSON());
+    }
+
+    /**
+     * Tests manifest creation fromString().
+     */
+    @Test
+    public void testFromString() {
+        final String json = myVertx.fileSystem().readFileBlocking(SINAI_JSON).toString(StandardCharsets.UTF_8);
+        final Manifest manifest = Manifest.fromString(json);
+
+        assertEquals(new JsonObject(json), new JsonObject(manifest.toString()));
     }
 }
