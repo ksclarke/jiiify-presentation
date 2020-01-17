@@ -196,6 +196,17 @@ public class Collection extends Resource<Collection> {
     }
 
     /**
+     * Returns a collection manifest from its JSON representation.
+     *
+     * @param aJsonString A collection manifest in string form
+     * @return The collection manifest
+     */
+    @JsonIgnore
+    public static Collection fromString(final String aJsonString) {
+        return Json.decodeValue(aJsonString, Collection.class);
+    }
+
+    /**
      * The reference to a manifest that's included in a collection.
      */
     public static class Manifest {
