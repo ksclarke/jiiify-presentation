@@ -17,9 +17,9 @@ after_success:
   - src/main/tools/travis/get_build_key $encrypted_fdf3b6311250_key $encrypted_fdf3b6311250_iv
   - src/main/tools/travis/deploy
 
-cache:
-  directories:
-    - $HOME/.m2
+#cache:
+#  directories:
+#    - $HOME/.m2
 
 # The only branch we build on is master; all other builds are done on PRs to master
 branches:
