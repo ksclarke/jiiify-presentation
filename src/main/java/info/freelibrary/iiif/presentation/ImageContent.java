@@ -139,7 +139,40 @@ public class ImageContent extends Content<ImageContent> {
      */
     @JsonGetter(Constants.RESOURCE)
     private Map<String, Object> getResourcesMap() {
-        final Map<String, Object> map = new TreeMap<>();
+        // Since we're supplying the resource map, we need to supply the order too
+        @SuppressWarnings("checkstyle:BooleanExpressionComplexity")
+        final Map<String, Object> map = new TreeMap<>((a1stKey, a2ndKey) -> {
+            if (Constants.TYPE.equals(a1stKey) && !Constants.ID.equals(a2ndKey)) {
+                return -1;
+            } else if (Constants.ID.equals(a1stKey)) {
+                return -1;
+            } else if (Constants.DEFAULT.equals(a1stKey) && !Constants.TYPE.equals(a2ndKey) && !Constants.ID.equals(
+                    a2ndKey)) {
+                return -1;
+            } else if (Constants.ITEM.equals(a1stKey) && !Constants.ID.equals(a2ndKey) && !Constants.TYPE.equals(
+                    a2ndKey) && !Constants.DEFAULT.equals(a2ndKey)) {
+                return -1;
+            } else if (Constants.WIDTH.equals(a1stKey) && !Constants.TYPE.equals(a2ndKey) && !Constants.ID.equals(
+                    a2ndKey)) {
+                return -1;
+            } else if (Constants.HEIGHT.equals(a1stKey) && !Constants.TYPE.equals(a2ndKey) && !Constants.ID.equals(
+                    a2ndKey) && !Constants.WIDTH.equals(a2ndKey)) {
+                return -1;
+            } else if (Constants.FORMAT.equals(a1stKey) && !Constants.TYPE.equals(a2ndKey) && !Constants.ID.equals(
+                    a2ndKey) && !Constants.WIDTH.equals(a2ndKey) && !Constants.HEIGHT.equals(a2ndKey)) {
+                return -1;
+            } else if (Constants.LABEL.equals(a1stKey) && !Constants.TYPE.equals(a2ndKey) && !Constants.ID.equals(
+                    a2ndKey) && !Constants.WIDTH.equals(a2ndKey) && !Constants.HEIGHT.equals(a2ndKey) &&
+                    !Constants.FORMAT.equals(a2ndKey)) {
+                return -1;
+            } else if (Constants.SERVICE.equals(a1stKey) && !Constants.TYPE.equals(a2ndKey) && !Constants.ID.equals(
+                    a2ndKey) && !Constants.WIDTH.equals(a2ndKey) && !Constants.HEIGHT.equals(a2ndKey) &&
+                    !Constants.FORMAT.equals(a2ndKey) && !Constants.LABEL.equals(a2ndKey)) {
+                return -1;
+            } else {
+                return 1;
+            }
+        });
 
         if (!myResources.isEmpty()) {
             final Optional<ImageResource> defaultResource = getDefaultResource();

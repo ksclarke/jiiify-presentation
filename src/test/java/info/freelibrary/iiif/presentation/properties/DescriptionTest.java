@@ -17,9 +17,9 @@ public class DescriptionTest {
      */
     @Test
     public void testStringConstructor() {
-        final Description description = new Description(VALUE);
+        final Summary summary = new Summary(VALUE);
 
-        assertEquals(VALUE, description.getString());
+        assertEquals(VALUE, summary.getString());
     }
 
     /**
@@ -27,9 +27,9 @@ public class DescriptionTest {
      */
     @Test
     public void testValueConstructor() {
-        final Description description = new Description(new Value(VALUE));
+        final Summary summary = new Summary(new Value(VALUE));
 
-        assertEquals(VALUE, description.getString());
+        assertEquals(VALUE, summary.getString());
     }
 
 }

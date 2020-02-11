@@ -169,9 +169,9 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public void testFromString() {
-        final String json = myVertx.fileSystem().readFileBlocking(SINAI_JSON).toString(StandardCharsets.UTF_8);
-        final Manifest manifest = Manifest.fromString(json);
+        final String expected = myVertx.fileSystem().readFileBlocking(SINAI_JSON).toString(StandardCharsets.UTF_8);
+        final Manifest manifest = Manifest.fromString(expected);
 
-        assertEquals(new JsonObject(json), new JsonObject(manifest.toString()));
+        assertEquals(expected, manifest.toString() + System.lineSeparator());
     }
 }

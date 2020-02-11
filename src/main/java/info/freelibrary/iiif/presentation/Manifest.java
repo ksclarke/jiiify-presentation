@@ -14,10 +14,10 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.iiif.presentation.properties.Description;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.NavDate;
+import info.freelibrary.iiif.presentation.properties.Summary;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.properties.Type;
 import info.freelibrary.iiif.presentation.properties.ViewingDirection;
@@ -100,7 +100,7 @@ public class Manifest extends Resource<Manifest> {
      * @param aDescription A manifest description
      * @param aThumbnail A manifest thumbnail
      */
-    public Manifest(final URI aID, final Label aLabel, final Metadata aMetadata, final Description aDescription,
+    public Manifest(final URI aID, final Label aLabel, final Metadata aMetadata, final Summary aDescription,
             final Thumbnail aThumbnail) {
         super(TYPE, aID, aLabel, aMetadata, aDescription, aThumbnail, REQ_ARG_COUNT);
     }

@@ -190,6 +190,6 @@ public class ManifestorTest {
      */
     private void testManifest(final Manifest aManifest, final TestContext aContext) {
         final JsonObject expected = new JsonObject(myVertx.fileSystem().readFileBlocking(MANIFEST.getAbsolutePath()));
-        aContext.assertEquals(expected.toString(), aManifest.toJSON().toString());
+        aContext.assertEquals(expected, aManifest.toJSON());
     }
 }

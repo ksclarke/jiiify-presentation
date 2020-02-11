@@ -83,7 +83,7 @@
     </module>
   </module>
   <module name="SuppressionFilter">
-    <property name="file" value="/home/kevin/Workspace/jiiify-presentation/src/main/tools/checkstyle/checkstyle-suppressions.xml" />
+    <property name="file" value="/home/kevin/Workspace/jiiify-presentation-ucla/src/main/tools/checkstyle/checkstyle-suppressions.xml" />
   </module>
   <module name="FileTabCharacter">
     <property name="eachLine" value="true" />

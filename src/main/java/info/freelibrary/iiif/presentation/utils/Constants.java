@@ -10,19 +10,19 @@ public final class Constants {
     public static final String BUNDLE_NAME = "iiif_presentation_messages";
 
     /* The name of the ID property. */
-    public static final String ID = "@id";
+    public static final String ID = "id";
 
     public static final String THUMBNAIL = "thumbnail";
 
-    public static final String TYPE = "@type";
+    public static final String TYPE = "type";
 
     public static final String METADATA = "metadata";
 
-    public static final String WITHIN = "within";
+    public static final String PART_OF = "partOf";
 
     public static final String LABEL = "label";
 
-    public static final String DESCRIPTION = "description";
+    public static final String SUMMARY = "summary";
 
     public static final String SERVICE = "service";
 
@@ -30,13 +30,13 @@ public final class Constants {
 
     public static final String PROFILE = "profile";
 
-    public static final String LICENSE = "license";
+    public static final String RIGHTS = "rights";
 
     public static final String ATTRIBUTION = "attribution";
 
     public static final String LOGO = "logo";
 
-    public static final String VIEWING_HINT = "viewingHint";
+    public static final String BEHAVIOR = "behavior";
 
     public static final String NAV_DATE = "navDate";
 

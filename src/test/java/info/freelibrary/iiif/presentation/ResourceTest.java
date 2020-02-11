@@ -7,15 +7,15 @@ import java.net.URI;
 import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.properties.Attribution;
-import info.freelibrary.iiif.presentation.properties.Description;
+import info.freelibrary.iiif.presentation.properties.Behavior;
+import info.freelibrary.iiif.presentation.properties.Behavior.Option;
+import info.freelibrary.iiif.presentation.properties.Summary;
 import info.freelibrary.iiif.presentation.properties.Label;
-import info.freelibrary.iiif.presentation.properties.License;
+import info.freelibrary.iiif.presentation.properties.Rights;
 import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
-import info.freelibrary.iiif.presentation.properties.ViewingHint;
-import info.freelibrary.iiif.presentation.properties.ViewingHint.Option;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
 
 /**
@@ -51,12 +51,12 @@ public class ResourceTest extends AbstractTest {
         test.setID(AAAA);
         test.setLabel(BBBB);
         test.setMetadata(new Metadata("myLabel", "myValue"));
-        test.setDescription("a description");
+        test.setSummary("a description");
         test.setThumbnail(new Thumbnail(ASDF_JPG, service));
         test.setAttribution("an attribution");
-        test.setLicense(SILS_URL);
+        test.setRights(SILS_URL);
         test.setLogo(new Logo(ASDF_JPG, service));
-        test.setViewingHint(Option.CONTINUOUS);
+        test.setBehavior(Option.CONTINUOUS);
         test.setSeeAlso("http://www.unc.edu");
 
         // System.out.println(JsonObject.mapFrom(test).encodePrettily());
@@ -75,12 +75,12 @@ public class ResourceTest extends AbstractTest {
         test.setID(AAAA);
         test.setLabel(new Label(BBBB).addValue("cccc"));
         test.setMetadata(new Metadata("myLabel1", "myValue1").add("myLabel2", "myValue2")); // addValue?
-        test.setDescription(new Description("a first description", "a second description"));
+        test.setSummary(new Summary("a first description", "a second description"));
         test.setThumbnail(new Thumbnail("dddd.jpg", service).addImage("eeee.jpg", service)); // should be value too?
         test.setAttribution(new Attribution("a first attribution").addValue("a second attribution"));
-        test.setLicense(new License("http://ils.unc.edu/license1").addValue("http://ils.unc.edu/license2"));
+        test.setRights(new Rights("http://ils.unc.edu/license1").addValue("http://ils.unc.edu/license2"));
         test.setLogo(new Logo("ffff.jpg", service).addImage("gggg.jpg", service));
-        test.setViewingHint(new ViewingHint(Option.CONTINUOUS).addValue("http://ils.unc.edu/viewingHint"));
+        test.setBehavior(new Behavior(Option.CONTINUOUS).addValue("http://ils.unc.edu/behavior"));
         test.setSeeAlso(new SeeAlso("http://1.unc.edu").addValue("http://2.unc.edu"));
 
         // System.out.println(JsonObject.mapFrom(test).encodePrettily());
