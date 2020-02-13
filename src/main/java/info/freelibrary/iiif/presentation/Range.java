@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.properties.Label;
+import info.freelibrary.iiif.presentation.properties.NavDate;
 import info.freelibrary.iiif.presentation.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.utils.Constants;
 
@@ -26,6 +27,8 @@ public class Range extends Resource<Range> {
     private ViewingDirection myViewingDirection;
 
     private Optional<URI> myStartCanvas;
+
+    private NavDate myNavDate;
 
     /**
      * Creates a IIIF presentation range.
@@ -67,6 +70,28 @@ public class Range extends Resource<Range> {
     @JsonGetter(Constants.START_CANVAS)
     public Optional<URI> getStartCanvas() {
         return myStartCanvas;
+    }
+
+    /**
+     * Sets a navigation date.
+     *
+     * @param aNavDate The navigation date
+     * @return The range
+     */
+    @JsonSetter(Constants.NAV_DATE)
+    public Range setNavDate(final NavDate aNavDate) {
+        myNavDate = aNavDate;
+        return this;
+    }
+
+    /**
+     * Gets a navigation date.
+     *
+     * @return The navigation date
+     */
+    @JsonGetter(Constants.NAV_DATE)
+    public NavDate getNavDate() {
+        return myNavDate;
     }
 
     /**

@@ -10,12 +10,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * A date that the client can use for navigation purposes when presenting the resource to the user in a time-based
- * user interface, such as a calendar or timeline. The value must be an xsd:dateTime literal in UTC, expressed in the
- * form “YYYY-MM-DDThh:mm:ssZ”. If the exact time is not known, then “00:00:00” should be used. Similarly, the month
- * or day should be 01 if not known. There must be at most one navDate associated with any given resource. More
- * descriptive date ranges, intended for display directly to the user, should be included in the metadata property for
- * human consumption.
+ * A date that clients may use for navigation purposes when presenting the resource to the user in a date-based user
+ * interface, such as a calendar or timeline. More descriptive date ranges, intended for display directly to the user,
+ * should be included in the metadata property for human consumption. If the resource contains Canvases that have the
+ * duration property, the datetime given corresponds to the navigation datetime of the start of the resource. For
+ * example, a Range that includes a Canvas that represents a set of video content recording a historical event, the
+ * navDate is the datetime of the first moment of the recorded event.
  */
 public class NavDate {
 

@@ -8,6 +8,7 @@ import java.net.URI;
 import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.properties.Label;
+import info.freelibrary.iiif.presentation.properties.NavDate;
 
 /**
  * Tests for a presentation canvas.
@@ -40,6 +41,16 @@ public class CanvasTest {
     @Test
     public final void testGetWidth() {
         assertEquals(100, new Canvas(TEST_URI, TEST_LABEL, 100, 100).getWidth());
+    }
+
+    /**
+     * Tests setting and getting a navDate on the canvas.
+     */
+    @Test
+    public final void testNavDate() {
+        final NavDate navDate = NavDate.now();
+
+        assertEquals(navDate, new Canvas(TEST_URI, TEST_LABEL, 100, 100).setNavDate(navDate).getNavDate());
     }
 
     /**
