@@ -43,7 +43,7 @@ public class Manifest extends Resource<Manifest> {
 
     private static final String TYPE = "sc:Manifest";
 
-    private static final URI CONTEXT = URI.create("http://iiif.io/api/presentation/2/context.json");
+    private static final URI CONTEXT = URI.create("http://iiif.io/api/presentation/3/context.json");
 
     private static final int REQ_ARG_COUNT = 3;
 
@@ -82,13 +82,13 @@ public class Manifest extends Resource<Manifest> {
      * @param aID A manifest ID
      * @param aLabel A manifest label
      * @param aMetadata A manifest's metadata
-     * @param aDescription A manifest description
+     * @param aSummary A manifest description
      * @param aThumbnail A manifest thumbnail
      * @throws URISyntaxException If the supplied ID is not a valid URI
      */
-    public Manifest(final String aID, final String aLabel, final Metadata aMetadata, final String aDescription,
+    public Manifest(final String aID, final String aLabel, final Metadata aMetadata, final String aSummary,
             final Thumbnail aThumbnail) throws URISyntaxException {
-        super(TYPE, aID, aLabel, aMetadata, aDescription, aThumbnail, REQ_ARG_COUNT);
+        super(TYPE, aID, aLabel, aMetadata, aSummary, aThumbnail, REQ_ARG_COUNT);
     }
 
     /**
@@ -97,12 +97,12 @@ public class Manifest extends Resource<Manifest> {
      * @param aID A manifest ID
      * @param aLabel A manifest label
      * @param aMetadata A manifest's metadata
-     * @param aDescription A manifest description
+     * @param aSummary A manifest description
      * @param aThumbnail A manifest thumbnail
      */
-    public Manifest(final URI aID, final Label aLabel, final Metadata aMetadata, final Summary aDescription,
+    public Manifest(final URI aID, final Label aLabel, final Metadata aMetadata, final Summary aSummary,
             final Thumbnail aThumbnail) {
-        super(TYPE, aID, aLabel, aMetadata, aDescription, aThumbnail, REQ_ARG_COUNT);
+        super(TYPE, aID, aLabel, aMetadata, aSummary, aThumbnail, REQ_ARG_COUNT);
     }
 
     /**

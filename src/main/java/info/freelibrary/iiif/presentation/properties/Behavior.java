@@ -19,8 +19,8 @@ import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
 /**
- * A hint to the client as to the most appropriate method of displaying the resource. This specification defines the
- * values specified in the table below. Other values may be given, and if they are, they must be URIs.
+ * A set of user experience features that the publisher of the content would prefer the client to use when presenting
+ * the resource.
  */
 public class Behavior {
 

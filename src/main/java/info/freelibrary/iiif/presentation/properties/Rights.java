@@ -11,10 +11,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * A link to an external resource that describes the license or rights statement under which the resource may be used.
- * The rationale for this being a URI and not a human readable label is that typically there is one license for many
- * resources, and the text is too long to be displayed to the user along with the object. If displaying the text is a
- * requirement, then it is recommended to include the information using the attribution property instead.
+ * A string that identifies a license or rights statement that applies to the content of the resource, such as the
+ * JSON of a Manifest or the pixels of an image. The value must be drawn from the set of Creative Commons license
+ * URIs, the RightsStatements.org rights statement URIs, or those added via the extension mechanism. The inclusion of
+ * this property is informative, and for example could be used to display an icon representing the rights assertions.
  */
 public class Rights {
 
@@ -58,7 +58,7 @@ public class Rights {
     /**
      * Add URL value(s) to the rights.
      *
-     * @param aValue A string version of a license value URL
+     * @param aValue A string version of a rights value URL
      * @return The rights
      * @throws MalformedURLException If a supplied value isn't a valid URL
      */

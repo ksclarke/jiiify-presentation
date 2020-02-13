@@ -91,13 +91,13 @@ public class CollectionTest {
         final Collection.Manifest manifest2 = new Collection.Manifest();
         final JsonObject expected = new JsonObject(StringUtils.read(TEST_FILE1));
 
-        manifest1.setID("http://iiif.io/api/presentation/2.1/example/fixtures/1/manifest.json");
-        manifest1.setLabel("Test 1 Manifest: Minimum Required Fields");
+        manifest1.setID("http://iiif.library.ucla.edu/asdf1234/manifest");
+        manifest1.setLabel("A placeholder fake manifest: 1");
 
         list.add(manifest1);
 
-        manifest2.setID("http://iiif.io/api/presentation/2.1/example/fixtures/2/manifest.json");
-        manifest2.setLabel("Test 2 Manifest: Metadata Pairs");
+        manifest2.setID("http://iiif.library.ucla.edu/1234asdf/manifest");
+        manifest2.setLabel("A placeholder fake manifest: 2");
 
         list.add(manifest2);
 

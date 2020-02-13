@@ -33,7 +33,7 @@ public class LabelTest extends AbstractTest {
     @Before
     public void setUp() {
         myManifest = new Manifest(AAAA, "bbbb");
-        myJSON = new JsonObject().put(Constants.CONTEXT, "http://iiif.io/api/presentation/2/context.json");
+        myJSON = new JsonObject().put(Constants.CONTEXT, "http://iiif.io/api/presentation/3/context.json");
     }
 
     /**

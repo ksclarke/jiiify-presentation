@@ -51,6 +51,7 @@
 
     <!-- Test related versions -->
     <opencsv.version>4.6</opencsv.version>
+    <lorem.version>2.1</lorem.version>
   </properties>
 
   <dependencies>
@@ -100,6 +101,12 @@
       <groupId>io.vertx</groupId>
       <artifactId>vertx-unit</artifactId>
       <version>${vertx.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.thedeanda</groupId>
+      <artifactId>lorem</artifactId>
+      <version>${lorem.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>

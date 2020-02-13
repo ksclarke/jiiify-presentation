@@ -8,28 +8,26 @@ import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.iiif.presentation.utils.SummaryDeserializer;
 
 /**
- * A longer-form prose description of the object or resource that the property is attached to, intended to be conveyed
- * to the user as a full text description, rather than a simple label and value. It may be in simple HTML or plain
- * text. It can duplicate any of the information from the metadata fields, along with additional information required
- * to understand what is being displayed. Clients should have a way to display the descriptions of manifests and
- * canvases, and may have a way to view the information about other resources.
+ * A short textual summary intended to be conveyed to the user when the metadata entries for the resource are not
+ * being displayed. This could be used as a brief description for item level search results, for small-screen
+ * environments, or as an alternative user interface when the metadata property is not currently being rendered.
  */
 @JsonDeserialize(using = SummaryDeserializer.class)
 public class Summary extends I18nProperty<Summary> {
 
     /**
-     * Creates a description from the supplied I18n value(s).
+     * Creates a summary from the supplied I18n value(s).
      *
-     * @param aValue A list of I18n values for description
+     * @param aValue A list of I18n values for the summary
      */
     public Summary(final Value... aValue) {
         super(aValue);
     }
 
     /**
-     * Creates a description from the supplied String(s).
+     * Creates a summary from the supplied String(s).
      *
-     * @param aValue A list of string values for description
+     * @param aValue A list of string values for the summary
      */
     public Summary(final String... aValue) {
         super(aValue);
