@@ -82,7 +82,7 @@ public class Manifest extends Resource<Manifest> {
      * @param aID A manifest ID
      * @param aLabel A manifest label
      * @param aMetadata A manifest's metadata
-     * @param aSummary A manifest description
+     * @param aSummary A manifest summary
      * @param aThumbnail A manifest thumbnail
      * @throws URISyntaxException If the supplied ID is not a valid URI
      */
@@ -97,7 +97,7 @@ public class Manifest extends Resource<Manifest> {
      * @param aID A manifest ID
      * @param aLabel A manifest label
      * @param aMetadata A manifest's metadata
-     * @param aSummary A manifest description
+     * @param aSummary A manifest summary
      * @param aThumbnail A manifest thumbnail
      */
     public Manifest(final URI aID, final Label aLabel, final Metadata aMetadata, final Summary aSummary,

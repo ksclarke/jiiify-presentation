@@ -32,7 +32,7 @@ public class Value {
     }
 
     /**
-     * Creates an I18n value for use in label, description, attribution and metadata properties.
+     * Creates an I18n value for use in label, summary, attribution and metadata properties.
      *
      * @param aValue A string value
      * @param aLang A language code

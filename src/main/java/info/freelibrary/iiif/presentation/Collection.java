@@ -69,12 +69,12 @@ public class Collection extends Resource<Collection> {
      * @param aID A collection ID
      * @param aLabel A collection label
      * @param aMetadata A collection's metadata
-     * @param aDescription A collection description
+     * @param aSummary A collection summary
      * @param aThumbnail A collection thumbnail
      */
-    public Collection(final String aID, final String aLabel, final Metadata aMetadata, final String aDescription,
+    public Collection(final String aID, final String aLabel, final Metadata aMetadata, final String aSummary,
             final Thumbnail aThumbnail) {
-        super(TYPE, aID, aLabel, aMetadata, aDescription, aThumbnail, REQ_ARG_COUNT);
+        super(TYPE, aID, aLabel, aMetadata, aSummary, aThumbnail, REQ_ARG_COUNT);
     }
 
     /**
@@ -83,12 +83,12 @@ public class Collection extends Resource<Collection> {
      * @param aID A collection ID
      * @param aLabel A collection label
      * @param aMetadata A collection's metadata
-     * @param aDescription A collection description
+     * @param aSummary A collection summary
      * @param aThumbnail A collection thumbnail
      */
-    public Collection(final URI aID, final Label aLabel, final Metadata aMetadata, final Summary aDescription,
+    public Collection(final URI aID, final Label aLabel, final Metadata aMetadata, final Summary aSummary,
             final Thumbnail aThumbnail) {
-        super(TYPE, aID, aLabel, aMetadata, aDescription, aThumbnail, REQ_ARG_COUNT);
+        super(TYPE, aID, aLabel, aMetadata, aSummary, aThumbnail, REQ_ARG_COUNT);
     }
 
     /**

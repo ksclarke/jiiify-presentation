@@ -6,14 +6,14 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 /**
- * A description test.
+ * A test of summary.
  */
-public class DescriptionTest {
+public class SummaryTest {
 
     private static final String VALUE = "asdf";
 
     /**
-     * Tests a description constructor.
+     * Tests a summary constructor.
      */
     @Test
     public void testStringConstructor() {
@@ -23,7 +23,7 @@ public class DescriptionTest {
     }
 
     /**
-     * Tests a description constructed from a value.
+     * Tests a summary constructed from a value.
      */
     @Test
     public void testValueConstructor() {

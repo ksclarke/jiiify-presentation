@@ -155,15 +155,14 @@ class Resource<T extends Resource<T>> {
      * @param aType A type
      * @param aLabel A label is required
      * @param aMetadata A metadata property
-     * @param aDescription A description is recommended
+     * @param aSummary A summary property
      * @param aThumbnail A thumbnail property
      * @param aNumber The number of required arguments
      */
     protected Resource(final String aType, final String aID, final String aLabel, final Metadata aMetadata,
-            final String aDescription, final Thumbnail aThumbnail, final int aNumber) {
-        checkArgs(new Object[] { aType, aID, aLabel, aMetadata, aDescription, aThumbnail }, new String[] {
-            Constants.TYPE, Constants.ID, Constants.LABEL, Constants.METADATA, Constants.SUMMARY,
-            Constants.THUMBNAIL }, aNumber);
+            final String aSummary, final Thumbnail aThumbnail, final int aNumber) {
+        checkArgs(new Object[] { aType, aID, aLabel, aMetadata, aSummary, aThumbnail }, new String[] { Constants.TYPE,
+            Constants.ID, Constants.LABEL, Constants.METADATA, Constants.SUMMARY, Constants.THUMBNAIL }, aNumber);
         myType = new Type(aType); // always required
 
         if (aID != null) {
@@ -177,8 +176,8 @@ class Resource<T extends Resource<T>> {
         myMetadata = aMetadata;
         myThumbnail = aThumbnail;
 
-        if (aDescription != null) {
-            mySummary = new Summary(aDescription);
+        if (aSummary != null) {
+            mySummary = new Summary(aSummary);
         }
     }
 
@@ -189,21 +188,20 @@ class Resource<T extends Resource<T>> {
      * @param aType A type
      * @param aLabel A label is required
      * @param aMetadata A metadata property
-     * @param aDescription A description is recommended
+     * @param aSummary A summary property
      * @param aThumbnail A thumbnail property
      * @param aNumber The number of required arguments
      */
     protected Resource(final String aType, final URI aID, final Label aLabel, final Metadata aMetadata,
-            final Summary aDescription, final Thumbnail aThumbnail, final int aNumber) {
-        checkArgs(new Object[] { aType, aID, aLabel, aMetadata, aDescription, aThumbnail }, new String[] {
-            Constants.TYPE, Constants.ID, Constants.LABEL, Constants.METADATA, Constants.SUMMARY,
-            Constants.THUMBNAIL }, aNumber);
+            final Summary aSummary, final Thumbnail aThumbnail, final int aNumber) {
+        checkArgs(new Object[] { aType, aID, aLabel, aMetadata, aSummary, aThumbnail }, new String[] { Constants.TYPE,
+            Constants.ID, Constants.LABEL, Constants.METADATA, Constants.SUMMARY, Constants.THUMBNAIL }, aNumber);
         myType = new Type(aType); // always required
 
         myID = aID;
         myLabel = aLabel;
         myMetadata = aMetadata;
-        mySummary = aDescription;
+        mySummary = aSummary;
         myThumbnail = aThumbnail;
     }
 
