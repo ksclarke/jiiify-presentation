@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
 
 /**
- * A property value that can be used in the label, description, attribution and the label and value fields.
+ * A property value that can be used in the label, summary, attribution and the label and value fields.
  */
 class I18nProperty<T extends I18nProperty<T>> {
 

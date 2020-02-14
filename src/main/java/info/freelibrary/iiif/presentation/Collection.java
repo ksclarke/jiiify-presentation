@@ -9,10 +9,10 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.iiif.presentation.properties.Description;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.NavDate;
+import info.freelibrary.iiif.presentation.properties.Summary;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.properties.Type;
 import info.freelibrary.iiif.presentation.utils.Constants;
@@ -33,7 +33,7 @@ public class Collection extends Resource<Collection> {
         DatabindCodec.mapper().findAndRegisterModules();
     }
 
-    private static final URI CONTEXT = URI.create("http://iiif.io/api/presentation/2/context.json");
+    private static final URI CONTEXT = URI.create("http://iiif.io/api/presentation/3/context.json");
 
     private static final String TYPE = "sc:Collection";
 
@@ -69,12 +69,12 @@ public class Collection extends Resource<Collection> {
      * @param aID A collection ID
      * @param aLabel A collection label
      * @param aMetadata A collection's metadata
-     * @param aDescription A collection description
+     * @param aSummary A collection summary
      * @param aThumbnail A collection thumbnail
      */
-    public Collection(final String aID, final String aLabel, final Metadata aMetadata, final String aDescription,
+    public Collection(final String aID, final String aLabel, final Metadata aMetadata, final String aSummary,
             final Thumbnail aThumbnail) {
-        super(TYPE, aID, aLabel, aMetadata, aDescription, aThumbnail, REQ_ARG_COUNT);
+        super(TYPE, aID, aLabel, aMetadata, aSummary, aThumbnail, REQ_ARG_COUNT);
     }
 
     /**
@@ -83,12 +83,12 @@ public class Collection extends Resource<Collection> {
      * @param aID A collection ID
      * @param aLabel A collection label
      * @param aMetadata A collection's metadata
-     * @param aDescription A collection description
+     * @param aSummary A collection summary
      * @param aThumbnail A collection thumbnail
      */
-    public Collection(final URI aID, final Label aLabel, final Metadata aMetadata, final Description aDescription,
+    public Collection(final URI aID, final Label aLabel, final Metadata aMetadata, final Summary aSummary,
             final Thumbnail aThumbnail) {
-        super(TYPE, aID, aLabel, aMetadata, aDescription, aThumbnail, REQ_ARG_COUNT);
+        super(TYPE, aID, aLabel, aMetadata, aSummary, aThumbnail, REQ_ARG_COUNT);
     }
 
     /**

@@ -20,7 +20,8 @@ import info.freelibrary.iiif.presentation.utils.Constants;
  * equally valid orders through the content, such as when a manuscript’s pages are rebound or archival collections are
  * reordered.
  */
-@JsonPropertyOrder({ Constants.CONTEXT, Constants.LABEL, Constants.ID, Constants.TYPE })
+@JsonPropertyOrder({ Constants.CONTEXT, Constants.LABEL, Constants.ID, Constants.TYPE, Constants.START_CANVAS,
+    Constants.CANVASES })
 public class Sequence extends Resource<Sequence> {
 
     private static final String TYPE = "sc:Sequence";

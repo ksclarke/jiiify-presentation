@@ -43,7 +43,7 @@ public class MetadataTest extends AbstractTest {
     public void setUp() {
         myManifest = new Manifest(AAAA, BBBB);
 
-        myJSON = new JsonObject().put(Constants.CONTEXT, "http://iiif.io/api/presentation/2/context.json");
+        myJSON = new JsonObject().put(Constants.CONTEXT, "http://iiif.io/api/presentation/3/context.json");
         myJSON.put(Constants.LABEL, BBBB).put(Constants.ID, AAAA).put(Constants.TYPE, "sc:Manifest");
     }
 

@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
- * An internationalized text value used by {@link Attribution}, {@link Description}, and {@link Metadata}. It's more
+ * An internationalized text value used by {@link Attribution}, {@link Summary}, and {@link Metadata}. It's more
  * complex than a simple string or array of string values, so warrants its own class.
  */
 @JsonPropertyOrder({ "@value", "@language" })
@@ -32,7 +32,7 @@ public class Value {
     }
 
     /**
-     * Creates an I18n value for use in label, description, attribution and metadata properties.
+     * Creates an I18n value for use in label, summary, attribution and metadata properties.
      *
      * @param aValue A string value
      * @param aLang A language code

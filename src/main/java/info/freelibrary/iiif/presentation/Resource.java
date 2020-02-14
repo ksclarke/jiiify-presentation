@@ -14,16 +14,16 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 import info.freelibrary.iiif.presentation.properties.Attribution;
-import info.freelibrary.iiif.presentation.properties.Description;
+import info.freelibrary.iiif.presentation.properties.Behavior;
+import info.freelibrary.iiif.presentation.properties.Behavior.Option;
 import info.freelibrary.iiif.presentation.properties.Label;
-import info.freelibrary.iiif.presentation.properties.License;
 import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Metadata;
+import info.freelibrary.iiif.presentation.properties.Rights;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
+import info.freelibrary.iiif.presentation.properties.Summary;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.properties.Type;
-import info.freelibrary.iiif.presentation.properties.ViewingHint;
-import info.freelibrary.iiif.presentation.properties.ViewingHint.Option;
 import info.freelibrary.iiif.presentation.services.Service;
 import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
@@ -34,8 +34,8 @@ import info.freelibrary.util.LoggerFactory;
  * A resource that can be used as a base for more specific IIIF presentation resources.
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-@JsonPropertyOrder({ Constants.CONTEXT, Constants.LABEL, Constants.ID, Constants.TYPE, Constants.DESCRIPTION,
-    Constants.ATTRIBUTION, Constants.LICENSE, Constants.WITHIN, Constants.LOGO, Constants.THUMBNAIL,
+@JsonPropertyOrder({ Constants.CONTEXT, Constants.LABEL, Constants.ID, Constants.TYPE, Constants.SUMMARY,
+    Constants.ATTRIBUTION, Constants.RIGHTS, Constants.PART_OF, Constants.LOGO, Constants.THUMBNAIL,
     Constants.METADATA, Constants.SEQUENCES, Constants.SERVICE })
 class Resource<T extends Resource<T>> {
 
@@ -47,22 +47,22 @@ class Resource<T extends Resource<T>> {
 
     private Label myLabel;
 
-    private URI myWithin;
+    private URI myPartOfLink;
 
     @JsonProperty(Constants.METADATA)
     private Metadata myMetadata;
 
-    private Description myDescription;
+    private Summary mySummary;
 
     private Thumbnail myThumbnail;
 
     private Attribution myAttribution;
 
-    private License myLicense;
+    private Rights myRights;
 
     private Logo myLogo;
 
-    private ViewingHint myViewingHint;
+    private Behavior myBehavior;
 
     private SeeAlso mySeeAlso;
 
@@ -155,15 +155,14 @@ class Resource<T extends Resource<T>> {
      * @param aType A type
      * @param aLabel A label is required
      * @param aMetadata A metadata property
-     * @param aDescription A description is recommended
+     * @param aSummary A summary property
      * @param aThumbnail A thumbnail property
      * @param aNumber The number of required arguments
      */
     protected Resource(final String aType, final String aID, final String aLabel, final Metadata aMetadata,
-            final String aDescription, final Thumbnail aThumbnail, final int aNumber) {
-        checkArgs(new Object[] { aType, aID, aLabel, aMetadata, aDescription, aThumbnail }, new String[] {
-            Constants.TYPE, Constants.ID, Constants.LABEL, Constants.METADATA, Constants.DESCRIPTION,
-            Constants.THUMBNAIL }, aNumber);
+            final String aSummary, final Thumbnail aThumbnail, final int aNumber) {
+        checkArgs(new Object[] { aType, aID, aLabel, aMetadata, aSummary, aThumbnail }, new String[] { Constants.TYPE,
+            Constants.ID, Constants.LABEL, Constants.METADATA, Constants.SUMMARY, Constants.THUMBNAIL }, aNumber);
         myType = new Type(aType); // always required
 
         if (aID != null) {
@@ -177,8 +176,8 @@ class Resource<T extends Resource<T>> {
         myMetadata = aMetadata;
         myThumbnail = aThumbnail;
 
-        if (aDescription != null) {
-            myDescription = new Description(aDescription);
+        if (aSummary != null) {
+            mySummary = new Summary(aSummary);
         }
     }
 
@@ -189,21 +188,20 @@ class Resource<T extends Resource<T>> {
      * @param aType A type
      * @param aLabel A label is required
      * @param aMetadata A metadata property
-     * @param aDescription A description is recommended
+     * @param aSummary A summary property
      * @param aThumbnail A thumbnail property
      * @param aNumber The number of required arguments
      */
     protected Resource(final String aType, final URI aID, final Label aLabel, final Metadata aMetadata,
-            final Description aDescription, final Thumbnail aThumbnail, final int aNumber) {
-        checkArgs(new Object[] { aType, aID, aLabel, aMetadata, aDescription, aThumbnail }, new String[] {
-            Constants.TYPE, Constants.ID, Constants.LABEL, Constants.METADATA, Constants.DESCRIPTION,
-            Constants.THUMBNAIL }, aNumber);
+            final Summary aSummary, final Thumbnail aThumbnail, final int aNumber) {
+        checkArgs(new Object[] { aType, aID, aLabel, aMetadata, aSummary, aThumbnail }, new String[] { Constants.TYPE,
+            Constants.ID, Constants.LABEL, Constants.METADATA, Constants.SUMMARY, Constants.THUMBNAIL }, aNumber);
         myType = new Type(aType); // always required
 
         myID = aID;
         myLabel = aLabel;
         myMetadata = aMetadata;
-        myDescription = aDescription;
+        mySummary = aSummary;
         myThumbnail = aThumbnail;
     }
 
@@ -295,35 +293,35 @@ class Resource<T extends Resource<T>> {
     }
 
     /**
-     * Gets the description.
+     * Gets the summary.
      *
-     * @return The description
+     * @return The summary
      */
     @JsonUnwrapped
-    public Description getDescription() {
-        return myDescription;
+    public Summary getSummary() {
+        return mySummary;
     }
 
     /**
-     * Sets the description.
+     * Sets the summary.
      *
-     * @param aDescription A description
+     * @param aSummary A summary
      * @return The resource
      */
     @JsonIgnore
-    public T setDescription(final String aDescription) {
-        myDescription = new Description(aDescription);
+    public T setSummary(final String aSummary) {
+        mySummary = new Summary(aSummary);
         return (T) this;
     }
 
     /**
-     * Sets the description.
+     * Sets the summary.
      *
-     * @param aDescription A description
+     * @param aSummary A summary
      * @return The resource
      */
-    public T setDescription(final Description aDescription) {
-        myDescription = aDescription;
+    public T setSummary(final Summary aSummary) {
+        mySummary = aSummary;
         return (T) this;
     }
 
@@ -395,37 +393,37 @@ class Resource<T extends Resource<T>> {
     }
 
     /**
-     * Gets the license.
+     * Gets the rights.
      *
-     * @return The license
+     * @return The rights
      */
     @JsonProperty
-    public License getLicense() {
-        return myLicense;
+    public Rights getRights() {
+        return myRights;
     }
 
     /**
-     * Sets the license.
+     * Sets the rights.
      *
-     * @param aLicense A license
+     * @param aRights A rights
      * @return The resource
      */
     @JsonProperty
-    public T setLicense(final License aLicense) {
-        myLicense = aLicense;
+    public T setRights(final Rights aRights) {
+        myRights = aRights;
         return (T) this;
     }
 
     /**
-     * Sets the license.
+     * Sets the rights.
      *
-     * @param aURL A license URL
+     * @param aURL A rights URL
      * @return The resource
      * @throws MalformedURLException If the supplied URL string isn't a valid URL
      */
     @JsonIgnore
-    public T setLicense(final String aURL) throws MalformedURLException {
-        myLicense = new License(aURL);
+    public T setRights(final String aURL) throws MalformedURLException {
+        myRights = new Rights(aURL);
         return (T) this;
     }
 
@@ -497,36 +495,36 @@ class Resource<T extends Resource<T>> {
     }
 
     /**
-     * Gets the within link.
+     * Gets the partOf link.
      *
-     * @return The within link
+     * @return The partOf link
      */
-    @JsonGetter(Constants.WITHIN)
-    public URI getWithin() {
-        return myWithin;
+    @JsonGetter(Constants.PART_OF)
+    public URI getPartOfLink() {
+        return myPartOfLink;
     }
 
     /**
-     * Sets the within link.
+     * Sets the partOf link.
      *
-     * @param aWithin A within link
+     * @param aPartOfLink A partOf link
      * @return The resource
      */
     @JsonIgnore
-    public T setWithin(final String aWithin) {
-        myWithin = URI.create(aWithin);
+    public T setPartOfLink(final String aPartOfLink) {
+        myPartOfLink = URI.create(aPartOfLink);
         return (T) this;
     }
 
     /**
-     * Sets the within link.
+     * Sets the partOf link.
      *
-     * @param aWithin A within link
+     * @param aPartOfLink A partOf link
      * @return The resource
      */
-    @JsonSetter(Constants.WITHIN)
-    public T setWithin(final URI aWithin) {
-        myWithin = aWithin;
+    @JsonSetter(Constants.PART_OF)
+    public T setPartOfLink(final URI aPartOfLink) {
+        myPartOfLink = aPartOfLink;
         return (T) this;
     }
 
@@ -541,47 +539,47 @@ class Resource<T extends Resource<T>> {
     }
 
     /**
-     * Sets the viewing hint.
+     * Sets the behavior.
      *
-     * @param aViewingHint The viewing hint
+     * @param aBehavior The behavior
      * @return The resource
      */
     @JsonIgnore
-    public T setViewingHint(final ViewingHint aViewingHint) {
-        myViewingHint = aViewingHint;
+    public T setBehavior(final Behavior aBehavior) {
+        myBehavior = aBehavior;
         return (T) this;
     }
 
     /**
-     * Sets the viewing hint.
+     * Sets the behavior.
      *
-     * @param aViewingHint The viewing hint
+     * @param aBehavior The behavior
      * @return The resource
      */
-    public T setViewingHint(final String aViewingHint) {
-        myViewingHint = new ViewingHint(aViewingHint);
+    public T setBehavior(final String aBehavior) {
+        myBehavior = new Behavior(aBehavior);
         return (T) this;
     }
 
     /**
-     * Sets the viewing hint.
+     * Sets the behavior.
      *
-     * @param aViewingHint The viewing hint
+     * @param aBehavior The behavior
      * @return The resource
      */
-    public T setViewingHint(final Option aViewingHint) {
-        myViewingHint = new ViewingHint(aViewingHint);
+    public T setBehavior(final Option aBehavior) {
+        myBehavior = new Behavior(aBehavior);
         return (T) this;
     }
 
     /**
-     * Gets the viewing hint.
+     * Gets the behavior.
      *
-     * @return The viewing hint
+     * @return The behavior
      */
     @JsonUnwrapped
-    public ViewingHint getViewingHint() {
-        return myViewingHint;
+    public Behavior getBehavior() {
+        return myBehavior;
     }
 
     /**
