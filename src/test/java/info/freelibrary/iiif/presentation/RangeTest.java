@@ -8,6 +8,7 @@ import java.net.URI;
 import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.properties.Label;
+import info.freelibrary.iiif.presentation.properties.NavDate;
 import info.freelibrary.iiif.presentation.properties.ViewingDirection;
 
 /**
@@ -33,6 +34,16 @@ public class RangeTest {
     @Test
     public void testRangeURILabel() {
         assertEquals(ID, new Range(ID, new Label(LABEL)).getID());
+    }
+
+    /**
+     * Tests setting and getting a navDate on a range.
+     */
+    @Test
+    public final void testNavDate() {
+        final NavDate navDate = NavDate.now();
+
+        assertEquals(navDate, new Range(ID, new Label(LABEL)).setNavDate(navDate).getNavDate());
     }
 
     /**

@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.properties.Label;
+import info.freelibrary.iiif.presentation.properties.NavDate;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.properties.Type;
 import info.freelibrary.iiif.presentation.utils.Constants;
@@ -38,6 +39,8 @@ public class Canvas extends Resource<Canvas> {
     private List<ImageContent> myImageContent;
 
     private List<OtherContent> myOtherContent;
+
+    private NavDate myNavDate;
 
     /**
      * Creates a IIIF presentation canvas.
@@ -146,6 +149,28 @@ public class Canvas extends Resource<Canvas> {
     public Canvas setHeight(final int aHeight) {
         myHeight = aHeight;
         return this;
+    }
+
+    /**
+     * Sets a navigation date.
+     *
+     * @param aNavDate The navigation date
+     * @return The canvas
+     */
+    @JsonSetter(Constants.NAV_DATE)
+    public Canvas setNavDate(final NavDate aNavDate) {
+        myNavDate = aNavDate;
+        return this;
+    }
+
+    /**
+     * Gets a navigation date.
+     *
+     * @return The navigation date
+     */
+    @JsonGetter(Constants.NAV_DATE)
+    public NavDate getNavDate() {
+        return myNavDate;
     }
 
     /**
