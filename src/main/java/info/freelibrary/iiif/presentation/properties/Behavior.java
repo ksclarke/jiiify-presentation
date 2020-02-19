@@ -32,8 +32,8 @@ public class Behavior {
      */
     public enum Option {
 
-        INDIVIDUALS("individuals"), PAGED("paged"), CONTINUOUS("continuous"), MULTIPART("multi-part"), NONPAGED(
-                "non-paged"), TOP("top"), FACINGPAGES("facing-pages");
+        REPEAT("repeat"), NOREPEAT("no-repeat"), INDIVIDUALS("individuals"), PAGED("paged"), CONTINUOUS("continuous"),
+        MULTIPART("multi-part"), NONPAGED("non-paged"), TOP("top"), FACINGPAGES("facing-pages");
 
         private final String myValue;
 
