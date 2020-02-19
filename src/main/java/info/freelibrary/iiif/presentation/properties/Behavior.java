@@ -34,8 +34,8 @@ public class Behavior {
 
         AUTOADVANCE("auto-advance"), NOAUTOADVANCE("no-auto-advance"), REPEAT("repeat"), NOREPEAT("no-repeat"),
         UNORDERED("unordered"), INDIVIDUALS("individuals"), PAGED("paged"), CONTINUOUS("continuous"),
-        MULTIPART("multi-part"), NONPAGED("non-paged"), TOP("top"), FACINGPAGES("facing-pages"), NONAV("no-nav"),
-        HIDDEN("hidden");
+        MULTIPART("multi-part"), NONPAGED("non-paged"), TOP("top"), FACINGPAGES("facing-pages"),
+        THUMBNAILNAV("thumbnail-nav"), NONAV("no-nav"), HIDDEN("hidden");
 
         private final String myValue;
 

@@ -17,11 +17,11 @@ public class BehaviorTest {
 
     private static final Option[] HINTS = new Option[] { Option.AUTOADVANCE, Option.NOAUTOADVANCE, Option.REPEAT,
         Option.NOREPEAT, Option.UNORDERED, Option.INDIVIDUALS, Option.PAGED, Option.CONTINUOUS, Option.MULTIPART,
-        Option.NONPAGED, Option.TOP, Option.FACINGPAGES, Option.NONAV, Option.HIDDEN };
+        Option.NONPAGED, Option.TOP, Option.FACINGPAGES, Option.THUMBNAILNAV, Option.NONAV, Option.HIDDEN };
 
     private static final String[] VALUES = new String[] { "auto-advance", "no-auto-advance", "repeat", "no-repeat",
-        "unordered", "individuals", "paged", "continuous", "multi-part", "non-paged", "top", "facing-pages", "no-nav",
-        "hidden" };
+        "unordered", "individuals", "paged", "continuous", "multi-part", "non-paged", "top", "facing-pages",
+        "thumbnail-nav", "no-nav", "hidden" };
 
     private static final URI[] URIS = new URI[] { URI.create("http://library.unc.edu"), URI.create(
             "http://library.ucla.edu") };
