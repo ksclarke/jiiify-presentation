@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.utils;
 
+import java.io.File;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,6 +12,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
  * Utilities for running tests.
  */
 public final class TestUtils {
+
+    public static final String TEST_DIR = "src/test/resources/json";
 
     private TestUtils() {
     }
