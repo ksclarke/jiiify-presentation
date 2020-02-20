@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
@@ -25,7 +26,7 @@ import info.freelibrary.iiif.presentation.utils.MessageCodes;
  * blank canvas and images, text and other resources are &quot;painted&quot; on to it.
  */
 @JsonPropertyOrder({ Constants.TYPE, Constants.LABEL, Constants.ID, Constants.WIDTH, Constants.HEIGHT,
-    Constants.THUMBNAIL, Constants.IMAGE_CONTENT, Constants.OTHER_CONTENT })
+    Constants.DURATION, Constants.THUMBNAIL, Constants.IMAGE_CONTENT, Constants.OTHER_CONTENT })
 public class Canvas extends Resource<Canvas> {
 
     private static final String TYPE = "sc:Canvas";
@@ -35,6 +36,8 @@ public class Canvas extends Resource<Canvas> {
     private int myWidth;
 
     private int myHeight;
+
+    private double myDuration;
 
     private List<ImageContent> myImageContent;
 
@@ -75,6 +78,36 @@ public class Canvas extends Resource<Canvas> {
      * @param aLabel A canvas label
      * @param aWidth A canvas width
      * @param aHeight A canvas height
+     * @param aDuration A canvas duration
+     */
+    public Canvas(final String aID, final String aLabel, final int aWidth, final int aHeight, final double aDuration) {
+        super(TYPE, aID, aLabel, REQ_ARG_COUNT);
+        setWidthHeight(aWidth, aHeight);
+        setDuration(aDuration);
+    }
+
+    /**
+     * Creates a IIIF presentation canvas.
+     *
+     * @param aID A canvas ID
+     * @param aLabel A canvas label
+     * @param aWidth A canvas width
+     * @param aHeight A canvas height
+     * @param aDuration A canvas duration
+     */
+    public Canvas(final URI aID, final Label aLabel, final int aWidth, final int aHeight, final double aDuration) {
+        super(TYPE, aID, aLabel, REQ_ARG_COUNT);
+        setWidthHeight(aWidth, aHeight);
+        setDuration(aDuration);
+    }
+
+    /**
+     * Creates a IIIF presentation canvas.
+     *
+     * @param aID A canvas ID
+     * @param aLabel A canvas label
+     * @param aWidth A canvas width
+     * @param aHeight A canvas height
      * @param aThumbnail A canvas thumbnail
      */
     public Canvas(final String aID, final String aLabel, final int aWidth, final int aHeight,
@@ -98,6 +131,42 @@ public class Canvas extends Resource<Canvas> {
         super(TYPE, aID, aLabel, REQ_ARG_COUNT);
         setWidthHeight(aWidth, aHeight);
         setThumbnail(aThumbnail);
+    }
+
+    /**
+     * Creates a IIIF presentation canvas.
+     *
+     * @param aID A canvas ID
+     * @param aLabel A canvas label
+     * @param aWidth A canvas width
+     * @param aHeight A canvas height
+     * @param aDuration A canvas duration
+     * @param aThumbnail A canvas thumbnail
+     */
+    public Canvas(final String aID, final String aLabel, final int aWidth, final int aHeight, final double aDuration,
+            final Thumbnail aThumbnail) {
+        super(TYPE, aID, aLabel, REQ_ARG_COUNT);
+        setWidthHeight(aWidth, aHeight);
+        setThumbnail(aThumbnail);
+        setDuration(aDuration);
+    }
+
+    /**
+     * Creates a IIIF presentation canvas.
+     *
+     * @param aID A canvas ID
+     * @param aLabel A canvas label
+     * @param aWidth A canvas width
+     * @param aHeight A canvas height
+     * @param aDuration A canvas duration
+     * @param aThumbnail A canvas thumbnail
+     */
+    public Canvas(final URI aID, final Label aLabel, final int aWidth, final int aHeight, final double aDuration,
+            final Thumbnail aThumbnail) {
+        super(TYPE, aID, aLabel, REQ_ARG_COUNT);
+        setWidthHeight(aWidth, aHeight);
+        setThumbnail(aThumbnail);
+        setDuration(aDuration);
     }
 
     /**
@@ -171,6 +240,33 @@ public class Canvas extends Resource<Canvas> {
     @JsonGetter(Constants.NAV_DATE)
     public NavDate getNavDate() {
         return myNavDate;
+    }
+
+    /**
+     * Gets the duration of the canvas.
+     *
+     * @return The duration of the canvas
+     */
+    @JsonGetter(Constants.DURATION)
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public double getDuration() {
+        return myDuration;
+    }
+
+    /**
+     * Sets the duration of the canvas. Duration must be positive and finite.
+     *
+     * @param aDuration A canvas duration
+     * @return The canvas
+     */
+    @JsonSetter(Constants.DURATION)
+    public Canvas setDuration(final double aDuration) {
+        if ((aDuration > 0) && (Double.isFinite(aDuration))) {
+            myDuration = aDuration;
+            return this;
+        } else {
+            throw new IllegalArgumentException(getLogger().getMessage(MessageCodes.JPA_019, aDuration));
+        }
     }
 
     /**
