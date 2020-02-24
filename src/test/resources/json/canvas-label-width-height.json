@@ -1,0 +1,7 @@
+{
+  "type" : "sc:Canvas",
+  "label" : "My Test Canvas",
+  "id" : "http://example.org/iiif/book1/canvas/p1",
+  "width" : 100,
+  "height" : 100
+}

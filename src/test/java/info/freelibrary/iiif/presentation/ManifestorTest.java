@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import info.freelibrary.iiif.presentation.io.Manifestor;
+import info.freelibrary.iiif.presentation.utils.TestUtils;
 
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
@@ -26,7 +27,7 @@ import io.vertx.ext.unit.junit.VertxUnitRunner;
 @RunWith(VertxUnitRunner.class)
 public class ManifestorTest {
 
-    private static final File MANIFEST = new File("src/test/resources/json/z1960050.json");
+    private static final File MANIFEST = new File(TestUtils.TEST_DIR, "z1960050.json");
 
     private static final File TMP_DIR = new File(System.getProperty("java.io.tmpdir"));
 

@@ -3,6 +3,7 @@ package info.freelibrary.iiif.presentation;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -18,6 +19,7 @@ import com.opencsv.CSVReader;
 
 import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
+import info.freelibrary.iiif.presentation.utils.TestUtils;
 
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
@@ -28,7 +30,7 @@ import io.vertx.core.json.JsonObject;
  */
 public class ManifestTest extends AbstractTest {
 
-    private static final String SINAI_JSON = "src/test/resources/json/z1960050.json";
+    private static final String SINAI_JSON = new File(TestUtils.TEST_DIR, "z1960050.json").getAbsolutePath();
 
     private static final String SERVER = "https://sinai-images.library.ucla.edu/iiif/";
 

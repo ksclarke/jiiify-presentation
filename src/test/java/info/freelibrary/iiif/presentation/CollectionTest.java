@@ -18,6 +18,7 @@ import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.NavDate;
+import info.freelibrary.iiif.presentation.utils.TestUtils;
 import info.freelibrary.util.StringUtils;
 
 import io.vertx.core.Vertx;
@@ -28,7 +29,7 @@ import io.vertx.core.json.JsonObject;
  */
 public class CollectionTest {
 
-    private static final File TEST_FILE1 = new File("src/test/resources/json/collection1.json");
+    private static final File TEST_FILE1 = new File(TestUtils.TEST_DIR, "collection1.json");
 
     private String myID;
 

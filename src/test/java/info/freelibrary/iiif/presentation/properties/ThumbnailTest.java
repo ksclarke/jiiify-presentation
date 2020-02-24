@@ -32,8 +32,6 @@ public class ThumbnailTest {
 
     private static final String TN_FULL_SINGLE = "thumbnail-full-single.json";
 
-    private static final File TEST_DIR = new File("src/test/resources/json");
-
     /**
      * Tests constructing a new thumbnail.
      *
@@ -43,7 +41,7 @@ public class ThumbnailTest {
     @Test
     public void testFullSingleURI() throws JsonProcessingException, IOException {
         final Thumbnail thumbnail = new Thumbnail(THUMBNAIL_ID_1, 1000, 1000);
-        final File expected = new File(TEST_DIR, TN_FULL_SINGLE);
+        final File expected = new File(TestUtils.TEST_DIR, TN_FULL_SINGLE);
 
         assertEquals(StringUtils.read(expected), TestUtils.toJson(thumbnail, true));
     }
@@ -57,7 +55,7 @@ public class ThumbnailTest {
     @Test
     public void testFullSingleString() throws JsonProcessingException, IOException {
         final Thumbnail thumbnail = new Thumbnail(THUMBNAIL_ID_1.toString(), 1000, 1000);
-        final File expected = new File(TEST_DIR, TN_FULL_SINGLE);
+        final File expected = new File(TestUtils.TEST_DIR, TN_FULL_SINGLE);
 
         assertEquals(StringUtils.read(expected), TestUtils.toJson(thumbnail, true));
     }
@@ -71,7 +69,7 @@ public class ThumbnailTest {
     @Test
     public void testFullSingleService() throws JsonProcessingException, IOException {
         final Thumbnail thumbnail = new Thumbnail(THUMBNAIL_ID_1, new ImageInfoService(PAGE_ID_1));
-        final File expected = new File(TEST_DIR, "thumbnail-full-single-service.json");
+        final File expected = new File(TestUtils.TEST_DIR, "thumbnail-full-single-service.json");
 
         assertEquals(StringUtils.read(expected), TestUtils.toJson(thumbnail, true));
     }
@@ -85,7 +83,7 @@ public class ThumbnailTest {
     @Test
     public void testSimpleTwo() throws JsonProcessingException, IOException {
         final Thumbnail thumbnail = new Thumbnail(THUMBNAIL_ID_1, THUMBNAIL_ID_2);
-        final File expected = new File(TEST_DIR, "thumbnail-simple-two.json");
+        final File expected = new File(TestUtils.TEST_DIR, "thumbnail-simple-two.json");
 
         assertEquals(StringUtils.read(expected), TestUtils.toJson(thumbnail, false));
     }
@@ -99,7 +97,7 @@ public class ThumbnailTest {
     @Test
     public void testSimpleOne() throws JsonProcessingException, IOException {
         final Thumbnail thumbnail = new Thumbnail(THUMBNAIL_ID_1);
-        final File expected = new File(TEST_DIR, "thumbnail-simple-one.json");
+        final File expected = new File(TestUtils.TEST_DIR, "thumbnail-simple-one.json");
 
         assertEquals(StringUtils.read(expected), TestUtils.toJson(thumbnail, false));
     }
