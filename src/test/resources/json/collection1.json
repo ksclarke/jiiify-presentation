@@ -1,15 +1,15 @@
 {
   "@context" : "http://iiif.io/api/presentation/3/context.json",
-  "label" : "label-a",
+  "label" : { "none": ["label-a"]},
   "id" : "ID-a",
   "type" : "sc:Collection",
   "manifests" : [ {
     "type" : "sc:Manifest",
     "id" : "http://iiif.library.ucla.edu/asdf1234/manifest",
-    "label" : "A placeholder fake manifest: 1"
+    "label" : { "none" : ["A placeholder fake manifest: 1"]}
   }, {
     "type" : "sc:Manifest",
     "id" : "http://iiif.library.ucla.edu/1234asdf/manifest",
-    "label" : "A placeholder fake manifest: 2"
+    "label" : { "none" : ["A placeholder fake manifest: 2"]}
   } ]
 }

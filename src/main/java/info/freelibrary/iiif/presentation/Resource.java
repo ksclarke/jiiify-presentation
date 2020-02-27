@@ -34,7 +34,7 @@ import info.freelibrary.util.LoggerFactory;
  * A resource that can be used as a base for more specific IIIF presentation resources.
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-@JsonPropertyOrder({ Constants.CONTEXT, Constants.LABEL, Constants.ID, Constants.TYPE, Constants.SUMMARY,
+@JsonPropertyOrder({ Constants.CONTEXT, Constants.TYPE, Constants.ID, Constants.LABEL, Constants.SUMMARY,
     Constants.ATTRIBUTION, Constants.RIGHTS, Constants.PART_OF, Constants.LOGO, Constants.THUMBNAIL,
     Constants.METADATA, Constants.SEQUENCES, Constants.SERVICE })
 class Resource<T extends Resource<T>> {

@@ -30,9 +30,9 @@ public class CollectionTest {
 
     private static final File TEST_FILE1 = new File("src/test/resources/json/collection1.json");
 
-    private String myID;
+    private URI myID;
 
-    private String myLabel;
+    private Label myLabel;
 
     private Vertx myVertx;
 
@@ -41,8 +41,8 @@ public class CollectionTest {
      */
     @Before
     public void setUp() {
-        myID = UUID.randomUUID().toString();
-        myLabel = "label-" + UUID.randomUUID().toString();
+        myID = URI.create(UUID.randomUUID().toString());
+        myLabel = new Label("label-" + UUID.randomUUID().toString());
         myVertx = Vertx.factory.vertx();
     }
 
@@ -53,8 +53,8 @@ public class CollectionTest {
     public void testCollectionManifestManifestConstructor() {
         final Collection.Manifest manifest = new Collection.Manifest(new Manifest(myID, myLabel));
 
-        assertEquals(URI.create(myID), manifest.getID());
-        assertEquals(new Label(myLabel), manifest.getLabel());
+        assertEquals(myID, manifest.getID());
+        assertEquals(myLabel, manifest.getLabel());
     }
 
     /**

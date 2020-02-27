@@ -150,7 +150,8 @@ public class ManifestTest extends AbstractTest {
         final Buffer buffer = myVertx.fileSystem().readFileBlocking(SINAI_JSON);
         final String expected = new JsonObject(buffer).encodePrettily();
 
-        assertEquals(expected, myManifest.toString());
+        // Wrap our on-disk JSON to normalize any spacing issues; we care about the contents, not spacing
+        assertEquals(new JsonObject(expected).encodePrettily(), myManifest.toString());
     }
 
     /**
@@ -172,6 +173,7 @@ public class ManifestTest extends AbstractTest {
         final String expected = myVertx.fileSystem().readFileBlocking(SINAI_JSON).toString(StandardCharsets.UTF_8);
         final Manifest manifest = Manifest.fromString(expected);
 
-        assertEquals(expected, manifest.toString() + System.lineSeparator());
+        // Wrap our on-disk JSON to normalize any spacing issues; we care about the contents, not spacing
+        assertEquals(new JsonObject(expected).encodePrettily(), manifest.toString());
     }
 }

@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import info.freelibrary.iiif.presentation.utils.Constants;
-import info.freelibrary.iiif.presentation.utils.SummaryDeserializer;
 
 /**
  * A short textual summary intended to be conveyed to the user when the metadata entries for the resource are not
@@ -16,21 +15,21 @@ import info.freelibrary.iiif.presentation.utils.SummaryDeserializer;
 public class Summary extends I18nProperty<Summary> {
 
     /**
-     * Creates a summary from the supplied I18n value(s).
+     * Creates a summary from the supplied internationalization(s).
      *
-     * @param aValue A list of I18n values for the summary
+     * @param aI18nStrings An array of internationalizations for the summary
      */
-    public Summary(final Value... aValue) {
-        super(aValue);
+    public Summary(final I18n... aI18nStrings) {
+        super(aI18nStrings);
     }
 
     /**
-     * Creates a summary from the supplied String(s).
+     * Creates a summary from the supplied string(s).
      *
-     * @param aValue A list of string values for the summary
+     * @param aStrings An array of strings for the summary
      */
-    public Summary(final String... aValue) {
-        super(aValue);
+    public Summary(final String... aStrings) {
+        super(aStrings);
     }
 
     @Override
@@ -38,4 +37,5 @@ public class Summary extends I18nProperty<Summary> {
     protected Object getJsonValue() {
         return super.getJsonValue();
     }
+
 }

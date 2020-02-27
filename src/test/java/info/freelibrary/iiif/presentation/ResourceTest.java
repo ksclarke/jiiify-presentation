@@ -87,11 +87,11 @@ public class ResourceTest extends AbstractTest {
         final JsonObject json;
 
         test.setID(AAAA);
-        test.setLabel(new Label(BBBB).addValue("cccc"));
+        test.setLabel(new Label(BBBB).addStrings("cccc"));
         test.setMetadata(new Metadata("myLabel1", "myValue1").add("myLabel2", "myValue2")); // addValue?
         test.setSummary(new Summary(myLorem.getWords(5, 8), myLorem.getWords(5, 8)));
         test.setThumbnail(new Thumbnail("dddd.jpg", service).addImage("eeee.jpg", service)); // should be value too?
-        test.setAttribution(new Attribution(myLorem.getWords(5, 8)).addValue(myLorem.getWords(5, 8)));
+        test.setAttribution(new Attribution(myLorem.getWords(5, 8)).addStrings(myLorem.getWords(5, 8)));
         test.setRights(new Rights("http://ils.unc.edu/license1").addValue("http://ils.unc.edu/license2"));
         test.setLogo(new Logo("ffff.jpg", service).addImage("gggg.jpg", service));
         test.setBehavior(new Behavior(Option.CONTINUOUS).addValue("http://ils.unc.edu/behavior"));

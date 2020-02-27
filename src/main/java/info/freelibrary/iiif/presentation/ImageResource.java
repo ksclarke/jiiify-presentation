@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.google.common.net.MediaType;
 
+import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.utils.Constants;
 
@@ -22,7 +23,7 @@ import info.freelibrary.iiif.presentation.utils.Constants;
 @JsonInclude(Include.NON_EMPTY)
 public class ImageResource extends ServiceImage {
 
-    private String myLabel;
+    private Label myLabel;
 
     /**
      * Creates an image resource with the supplied ID URI.
@@ -120,8 +121,20 @@ public class ImageResource extends ServiceImage {
      * @param aLabel The image resource label
      * @return The image resource
      */
-    @JsonSetter(Constants.LABEL)
+    @JsonIgnore
     public ImageResource setLabel(final String aLabel) {
+        myLabel = new Label(aLabel);
+        return this;
+    }
+
+    /**
+     * Sets the image resource label.
+     *
+     * @param aLabel The image resource label
+     * @return The image resource
+     */
+    @JsonSetter(Constants.LABEL)
+    public ImageResource setLabel(final Label aLabel) {
         myLabel = aLabel;
         return this;
     }
@@ -132,7 +145,7 @@ public class ImageResource extends ServiceImage {
      * @return The image resource label
      */
     @JsonGetter(Constants.LABEL)
-    public String getLabel() {
+    public Label getLabel() {
         return myLabel;
     }
 

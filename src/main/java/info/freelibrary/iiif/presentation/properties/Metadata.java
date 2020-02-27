@@ -2,51 +2,24 @@
 package info.freelibrary.iiif.presentation.properties;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
-import info.freelibrary.iiif.presentation.utils.MetadataDeserializer;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
 /**
- * A list of short descriptive entries, given as pairs of human readable label and value to be displayed to the user.
- * The value should be either simple HTML, including links and text markup, or plain text, and the label should be
- * plain text. There are no semantics conveyed by this information, and clients should not use it for discovery or
- * other purposes. This list of descriptive pairs should be able to be displayed in a tabular form in the user
- * interface. Clients should have a way to display the information about manifests and canvases, and may have a way to
- * view the information about other resources. The client should display the pairs in the order provided by the
- * description. A pair might be used to convey the author of the work, information about its creation, a brief
- * physical description, or ownership information, amongst other use cases. The client is not expected to take any
- * action on this information beyond displaying the label and value. An example pair of label and value might be a
- * label of &quot;Author&quot; and a value of &quot;Jehan Froissart&quot;.
- * <p>
- * An example representation in JSON:
- * </p>
- * <pre><code>
- * &quot;metadata&quot;: [
- *   { &quot;label&quot;: &quot;Author&quot;, &quot;value&quot;: &quot;Anne Author&quot; },
- *   { &quot;label&quot;: &quot;Published&quot;, &quot;value&quot;: [
- *       { &quot;@value&quot;: &quot;Paris, circa 1400&quot;, &quot;@language&quot;: &quot;en&quot; },
- *       { &quot;@value&quot;: &quot;Paris, environ 1400&quot;, &quot;@language&quot;: &quot;fr&quot; }
- *     ]
- *   },
- *   { &quot;label&quot;: &quot;Notes&quot;, &quot;value&quot;: [&quot;Note 1&quot;, &quot;Note 2&quot;] },
- *   { &quot;label&quot;: &quot;Source&quot;,
- *       &quot;value&quot;: &quot;From: &lt;a href='http://example.org/1.html'&gt;link&lt;/a&gt;&quot;
- *   }
- * ]
- * </code></pre>
+ * An ordered list of descriptions to be displayed to the user when they interact with the resource, given as pairs of
+ * human readable label and value entries. The content of these entries is intended for presentation only; descriptive
+ * semantics should not be inferred. An entry might be used to convey information about the creation of the object, a
+ * physical description, ownership information, or other purposes.
  */
 @JsonDeserialize(using = MetadataDeserializer.class)
 public class Metadata {
@@ -72,27 +45,27 @@ public class Metadata {
     }
 
     /**
-     * Creates metadata from the supplied label and string values list.
+     * Creates metadata from the supplied label and value.
      *
      * @param aLabel A metadata label
-     * @param aValue A list of string values
+     * @param aValue A metadata value
      */
-    public Metadata(final String aLabel, final String... aValue) {
+    public Metadata(final Label aLabel, final Value aValue) {
         getEntries().add(new Metadata.Entry(aLabel, aValue));
     }
 
     /**
-     * Creates metadata from the supplied label and I18n values list.
+     * Creates metadata from the supplied label and value strings.
      *
-     * @param aLabel A metadata label
-     * @param aValue A list of I18n values
+     * @param aLabel A metadata label in string form
+     * @param aValue A metadata value in string form
      */
-    public Metadata(final String aLabel, final Value... aValue) {
+    public Metadata(final String aLabel, final String aValue) {
         getEntries().add(new Metadata.Entry(aLabel, aValue));
     }
 
     /**
-     * Add the supplied metadata.
+     * Adds the supplied metadata entry.
      *
      * @param aMetadataEntry A metadata entry
      * @return The metadata
@@ -106,13 +79,13 @@ public class Metadata {
     }
 
     /**
-     * Add the supplied metadata.
+     * Adds the supplied metadata.
      *
-     * @param aLabel A metadata label
-     * @param aValue A metadata values list
+     * @param aLabel A metadata label in string form
+     * @param aValue A metadata value in string form
      * @return The metadata
      */
-    public Metadata add(final String aLabel, final String... aValue) {
+    public Metadata add(final String aLabel, final String aValue) {
         if (!getEntries().add(new Metadata.Entry(aLabel, aValue))) {
             throw new UnsupportedOperationException();
         }
@@ -121,91 +94,18 @@ public class Metadata {
     }
 
     /**
-     * Add the supplied metadata.
+     * Adds the supplied metadata.
      *
      * @param aLabel A metadata label
-     * @param aValue A metadata values list
+     * @param aValue A metadata value
      * @return The metadata
      */
-    public Metadata add(final String aLabel, final Value... aValue) {
+    public Metadata add(final Label aLabel, final Value aValue) {
         if (!getEntries().add(new Metadata.Entry(aLabel, aValue))) {
             throw new UnsupportedOperationException();
         }
 
         return this;
-    }
-
-    /**
-     * Gets the first metadata value for the supplied label.
-     *
-     * @param aLabel A metadata element name
-     * @return The first metadata value for the supplied name
-     */
-    @JsonIgnore
-    public Optional<String> getValue(final String aLabel) {
-        final Iterator<Metadata.Entry> iterator = myEntries.iterator();
-
-        while (iterator.hasNext()) {
-            final Metadata.Entry entry = iterator.next();
-
-            if (entry.getLabel().equals(aLabel)) {
-                return Optional.of(entry.getString());
-            }
-        }
-
-        return Optional.empty();
-    }
-
-    /**
-     * Gets the first metadata value for the supplied label with the supplied language code.
-     *
-     * @param aLabel A metadata element name
-     * @param aLangCode A language code (e.g. 'eng')
-     * @return The first metadata value for the supplied name
-     */
-    @JsonIgnore
-    public Optional<String> getValue(final String aLabel, final String aLangCode) {
-        final Iterator<Metadata.Entry> entryIterator = myEntries.iterator();
-
-        while (entryIterator.hasNext()) {
-            final Metadata.Entry entry = entryIterator.next();
-
-            if (entry.getLabel().equals(aLabel)) {
-                final Iterator<Value> valuesIterator = entry.myValues.iterator();
-
-                while (valuesIterator.hasNext()) {
-                    final Value value = valuesIterator.next();
-                    final Optional<String> lang = value.getLang();
-
-                    if (lang.isPresent() && lang.get().equals(aLangCode)) {
-                        return Optional.of(value.getValue());
-                    }
-                }
-            }
-        }
-
-        return Optional.empty();
-    }
-
-    /**
-     * Gets the metadata values for the supplied label.
-     *
-     * @param aLabel A metadata element name
-     * @return The values for the supplied name
-     */
-    @JsonIgnore
-    public List<Value> getValues(final String aLabel) {
-        final Iterator<Metadata.Entry> iterator = myEntries.iterator();
-
-        while (iterator.hasNext()) {
-            final Metadata.Entry entry = iterator.next();
-
-            if (entry.getLabel().equals(aLabel)) {
-                return entry.getValues();
-            }
-        }
-
-        return new ArrayList();
     }
 
     /**
@@ -223,48 +123,41 @@ public class Metadata {
     }
 
     /**
-     * A metadata entry with a label and values.
+     * A metadata entry with a label and value.
      */
     @JsonPropertyOrder({ "label", "value" })
     public class Entry {
 
-        private final String myLabel;
+        private final Label myLabel;
 
-        private final List<Value> myValues;
+        private final Value myValue;
 
         /**
-         * Creates a metadata entry from the supplied label and string values.
+         * Creates a metadata entry from the supplied label and value.
          *
-         * @param aLabel A metadata label
-         * @param aValue A list of string values
+         * @param aLabel A metadata label in string form
+         * @param aValue A metadata value in string form
          */
-        public Entry(final String aLabel, final String... aValue) {
-            Objects.requireNonNull(aLabel, MessageCodes.JPA_002);
-            myValues = new ArrayList<>();
-            myLabel = aLabel;
-            addValues(aValue);
+        public Entry(final String aLabel, final String aValue) {
+            Objects.requireNonNull(aLabel, LOGGER.getMessage(MessageCodes.JPA_002));
+            Objects.requireNonNull(aValue, LOGGER.getMessage(MessageCodes.JPA_022));
+
+            myLabel = new Label(aLabel);
+            myValue = new Value(aValue);
         }
 
         /**
-         * Creates a metadata entry from the supplied label and I18n values.
+         * Creates a metadata entry from the supplied label and value.
          *
          * @param aLabel A metadata label
-         * @param aValue A list of I18n values
+         * @param aValue A metadata value
          */
-        public Entry(final String aLabel, final Value... aValue) {
-            Objects.requireNonNull(aLabel, MessageCodes.JPA_002);
-            myValues = new ArrayList<>();
-            myLabel = aLabel;
-            addValues(aValue);
-        }
+        public Entry(final Label aLabel, final Value aValue) {
+            Objects.requireNonNull(aLabel, LOGGER.getMessage(MessageCodes.JPA_002));
+            Objects.requireNonNull(aValue, LOGGER.getMessage(MessageCodes.JPA_022));
 
-        /**
-         * Returns true if the metadata entry has values; else, false
-         *
-         * @return True if the metadata entry has values; else, false
-         */
-        public boolean hasValues() {
-            return !myValues.isEmpty();
+            myLabel = aLabel;
+            myValue = aValue;
         }
 
         /**
@@ -273,129 +166,18 @@ public class Metadata {
          * @return The label for the metadata entry
          */
         @JsonGetter(Constants.LABEL)
-        public String getLabel() {
+        public Label getLabel() {
             return myLabel;
         }
 
         /**
-         * Gets the first string value from the metadata entry; if the entry only contains I18n values, the string
-         * value of the first language/value pair will be returned. If no string or I18n values exist, a null is
-         * returned.
+         * Gets the metadata entry's value.
          *
-         * @return The first string value of the metadata entry
-         */
-        @JsonIgnore
-        public String getString() {
-            if (hasValues()) {
-                return myValues.get(0).getValue();
-            }
-
-            return null;
-        }
-
-        /**
-         * Gets the metadata entry's string values.
-         *
-         * @return The metadata entry's string values
-         */
-        @JsonIgnore
-        public List<Value> getValues() {
-            return myValues;
-        }
-
-        /**
-         * Sets the supplied values in the metadata entry, clearing any previously existing ones.
-         *
-         * @param aValue A list of values
-         * @return The metadata entry
-         */
-        @JsonIgnore
-        public Entry setValues(final String... aValue) {
-            myValues.clear();
-            return addValues(aValue);
-        }
-
-        /**
-         * Sets the supplied values in the metadata entry, clearing any previously existing ones.
-         *
-         * @param aValue A list of values
-         * @return The metadata entry
-         */
-        @JsonIgnore
-        public Entry setValues(final Value... aValue) {
-            myValues.clear();
-            return addValues(aValue);
-        }
-
-        /**
-         * Adds the supplied values to the metadata entry.
-         *
-         * @param aValue A list of values
-         * @return The metadata entry
-         */
-        public final Entry addValues(final String... aValue) {
-            Objects.requireNonNull(aValue, LOGGER.getMessage(MessageCodes.JPA_001));
-
-            for (final String value : aValue) {
-                Objects.requireNonNull(value, LOGGER.getMessage(MessageCodes.JPA_001));
-
-                if (!myValues.add(new Value(value))) {
-                    throw new UnsupportedOperationException();
-                }
-            }
-
-            return this;
-        }
-
-        /**
-         * Adds the supplied values to the metadata entry.
-         *
-         * @param aValue A list of values
-         * @return The metadata entry
-         */
-        public final Entry addValues(final Value... aValue) {
-            Objects.requireNonNull(aValue, LOGGER.getMessage(MessageCodes.JPA_001));
-
-            for (final Value value : aValue) {
-                Objects.requireNonNull(value, LOGGER.getMessage(MessageCodes.JPA_001));
-
-                if (!myValues.add(value)) {
-                    throw new UnsupportedOperationException();
-                }
-            }
-
-            return this;
-        }
-
-        /**
-         * Returns the metadata entry's values.
-         *
-         * @return The metadata entry's values
+         * @return The metadata entry's value
          */
         @JsonGetter(Constants.VALUE)
-        private Object getJsonValue() {
-            if (hasValues()) {
-                if ((myValues.size() == 1) && !myValues.get(0).getLang().isPresent()) {
-                    return myValues.get(0).getValue();
-                } else {
-                    final List<Object> list = new ArrayList<>();
-                    final Iterator<Value> iterator = myValues.iterator();
-
-                    while (iterator.hasNext()) {
-                        final Value entry = iterator.next();
-
-                        if (entry.getLang().isPresent()) {
-                            list.add(entry);
-                        } else {
-                            list.add(entry.getValue());
-                        }
-                    }
-
-                    return list;
-                }
-            } else {
-                return null;
-            }
+        public Value getValue() {
+            return myValue;
         }
     }
 }
