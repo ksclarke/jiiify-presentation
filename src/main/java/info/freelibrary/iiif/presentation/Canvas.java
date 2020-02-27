@@ -80,7 +80,8 @@ public class Canvas extends Resource<Canvas> {
      * @param aHeight A canvas height
      * @param aDuration A canvas duration
      */
-    public Canvas(final String aID, final String aLabel, final int aWidth, final int aHeight, final double aDuration) {
+    public Canvas(final String aID, final String aLabel, final int aWidth, final int aHeight,
+            final double aDuration) {
         super(TYPE, aID, aLabel, REQ_ARG_COUNT);
         setWidthHeight(aWidth, aHeight);
         setDuration(aDuration);
@@ -265,7 +266,7 @@ public class Canvas extends Resource<Canvas> {
             myDuration = aDuration;
             return this;
         } else {
-            throw new IllegalArgumentException(getLogger().getMessage(MessageCodes.JPA_019, aDuration));
+            throw new IllegalArgumentException(getLogger().getMessage(MessageCodes.JPA_024, aDuration));
         }
     }
 
