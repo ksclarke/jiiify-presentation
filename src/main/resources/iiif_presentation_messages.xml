@@ -27,5 +27,6 @@
   <entry key="JPA-021">Unable to add string to internationalized value</entry>
   <entry key="JPA-022">Value cannot be null</entry>
   <entry key="JPA-023">Metadata contents should always be an array of objects with label and value</entry>
+  <entry key="JPA-024">Duration ({}) must be positive and finite</entry>
 
 </properties>

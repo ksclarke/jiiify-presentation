@@ -35,8 +35,6 @@ public class LogoTest {
 
     private static final String LOGO_ADD_IMAGE = "logo-addimage-string-imageinfoservice.json";
 
-    private static final File TEST_DIR = new File("src/test/resources/json");
-
     private static final ImageInfoService SERVICE = new ImageInfoService("http://example.org/asdf");
 
     private static final String MIME_TYPE = "image/jpeg";
@@ -49,7 +47,7 @@ public class LogoTest {
     @Test
     public void testLogoStringArray() throws IOException {
         final Logo logo = new Logo(LOGO_ID_1.toString(), LOGO_ID_2.toString());
-        final File expected = new File(TEST_DIR, LOGO_SIMPLE_2);
+        final File expected = new File(TestUtils.TEST_DIR, LOGO_SIMPLE_2);
 
         assertEquals(StringUtils.read(expected), TestUtils.toJson(logo));
     }
@@ -62,7 +60,7 @@ public class LogoTest {
     @Test
     public void testLogoURIArray() throws IOException {
         final Logo logo = new Logo(LOGO_ID_1, LOGO_ID_2);
-        final File expected = new File(TEST_DIR, LOGO_SIMPLE_2);
+        final File expected = new File(TestUtils.TEST_DIR, LOGO_SIMPLE_2);
 
         assertEquals(StringUtils.read(expected), TestUtils.toJson(logo));
     }
@@ -75,7 +73,7 @@ public class LogoTest {
     @Test
     public void testLogoStringIntInt() throws IOException {
         final Logo logo = new Logo(LOGO_ID_1.toString(), 1000, 1000);
-        final File expected = new File(TEST_DIR, LOGO_ID_W_H);
+        final File expected = new File(TestUtils.TEST_DIR, LOGO_ID_W_H);
 
         assertEquals(StringUtils.read(expected), TestUtils.toJson(logo));
     }
@@ -88,7 +86,7 @@ public class LogoTest {
     @Test
     public void testLogoURIIntInt() throws IOException {
         final Logo logo = new Logo(LOGO_ID_1, 1000, 1000);
-        final File expected = new File(TEST_DIR, LOGO_ID_W_H);
+        final File expected = new File(TestUtils.TEST_DIR, LOGO_ID_W_H);
 
         assertEquals(StringUtils.read(expected), TestUtils.toJson(logo));
     }
@@ -101,7 +99,7 @@ public class LogoTest {
     @Test
     public void testLogoStringImageInfoService() throws IOException {
         final Logo logo = new Logo(LOGO_ID_1.toString(), SERVICE);
-        final File expected = new File(TEST_DIR, LOGO_IMAGE_SERVICE);
+        final File expected = new File(TestUtils.TEST_DIR, LOGO_IMAGE_SERVICE);
 
         assertEquals(StringUtils.read(expected), TestUtils.toJson(logo, true));
     }
@@ -114,7 +112,7 @@ public class LogoTest {
     @Test
     public void testLogoURIImageInfoService() throws IOException {
         final Logo logo = new Logo(LOGO_ID_1, SERVICE);
-        final File expected = new File(TEST_DIR, LOGO_IMAGE_SERVICE);
+        final File expected = new File(TestUtils.TEST_DIR, LOGO_IMAGE_SERVICE);
 
         assertEquals(StringUtils.read(expected), TestUtils.toJson(logo, true));
     }
@@ -127,7 +125,7 @@ public class LogoTest {
     @Test
     public void testAddImageStringIntInt() throws IOException {
         final Logo logo = new Logo(LOGO_ID_1, 1000, 1000);
-        final File expected = new File(TEST_DIR, LOGO_ID_W_H_DOUBLE);
+        final File expected = new File(TestUtils.TEST_DIR, LOGO_ID_W_H_DOUBLE);
 
         logo.addImage(LOGO_ID_2.toString(), 500, 500);
 
@@ -142,7 +140,7 @@ public class LogoTest {
     @Test
     public void testAddImageURIIntInt() throws IOException {
         final Logo logo = new Logo(LOGO_ID_1, 1000, 1000);
-        final File expected = new File(TEST_DIR, LOGO_ID_W_H_DOUBLE);
+        final File expected = new File(TestUtils.TEST_DIR, LOGO_ID_W_H_DOUBLE);
 
         logo.addImage(LOGO_ID_2, 500, 500);
 
@@ -157,7 +155,7 @@ public class LogoTest {
     @Test
     public void testAddImageStringImageInfoService() throws IOException {
         final Logo logo = new Logo(LOGO_ID_1, 1000, 1000);
-        final File expected = new File(TEST_DIR, LOGO_ADD_IMAGE);
+        final File expected = new File(TestUtils.TEST_DIR, LOGO_ADD_IMAGE);
 
         logo.addImage(LOGO_ID_2.toString(), SERVICE);
 
@@ -172,7 +170,7 @@ public class LogoTest {
     @Test
     public void testAddImageURIImageInfoService() throws IOException {
         final Logo logo = new Logo(LOGO_ID_1, 1000, 1000);
-        final File expected = new File(TEST_DIR, LOGO_ADD_IMAGE);
+        final File expected = new File(TestUtils.TEST_DIR, LOGO_ADD_IMAGE);
 
         logo.addImage(LOGO_ID_2, SERVICE);
 
@@ -243,7 +241,7 @@ public class LogoTest {
     @Test
     public void testGetService() throws IOException {
         final Logo logo = new Logo(LOGO_ID_1, SERVICE);
-        final File expected = new File(TEST_DIR, "imageinfoservice.json");
+        final File expected = new File(TestUtils.TEST_DIR, "imageinfoservice.json");
 
         assertEquals(StringUtils.read(expected), TestUtils.toJson(logo.getService().get(), true));
     }
