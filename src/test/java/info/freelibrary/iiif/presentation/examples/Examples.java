@@ -9,7 +9,6 @@ import org.junit.Test;
 import info.freelibrary.iiif.presentation.Manifest;
 import info.freelibrary.iiif.presentation.io.Manifestor;
 import info.freelibrary.iiif.presentation.utils.TestUtils;
-import info.freelibrary.util.StringUtils;
 
 /**
  * Examples from documentation.
