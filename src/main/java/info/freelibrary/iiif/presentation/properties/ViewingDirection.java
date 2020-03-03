@@ -35,17 +35,17 @@ public enum ViewingDirection {
      * Create a ViewingDirection from a supplied string; it may be empty if the supplied string doesn't correspond to
      * a valid ViewingDirection value.
      *
-     * @param aValue A ViewingDirection value
+     * @param aString A ViewingDirection value
      * @return The ViewingDirection for the supplied value
      * @throws IllegalArgumentException If the supplied value isn't a viewing direction
      */
-    public static ViewingDirection fromString(final String aValue) {
+    public static ViewingDirection fromString(final String aString) {
         for (final ViewingDirection direction : values()) {
-            if (direction.toString().equalsIgnoreCase(aValue)) {
+            if (direction.toString().equalsIgnoreCase(aString)) {
                 return direction;
             }
         }
 
-        throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_016, aValue));
+        throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_016, aString));
     }
 }

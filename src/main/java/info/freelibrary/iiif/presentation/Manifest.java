@@ -58,12 +58,12 @@ public class Manifest extends Resource<Manifest> {
     /**
      * Creates a IIIF presentation manifest.
      *
-     * @param aID A manifest ID
-     * @param aLabel A manifest label
+     * @param aIdString A manifest ID in string form
+     * @param aLabelString A manifest label in string form
      * @throws IllegalArgumentException If the supplied ID is not a valid URI
      */
-    public Manifest(final String aID, final String aLabel) {
-        super(TYPE, aID, aLabel, REQ_ARG_COUNT);
+    public Manifest(final String aIdString, final String aLabelString) {
+        super(TYPE, aIdString, aLabelString, REQ_ARG_COUNT);
     }
 
     /**
@@ -79,16 +79,16 @@ public class Manifest extends Resource<Manifest> {
     /**
      * Creates a IIIF presentation manifest.
      *
-     * @param aID A manifest ID
-     * @param aLabel A manifest label
+     * @param aIdString A manifest ID in string form
+     * @param aLabelString A manifest label in string form
      * @param aMetadata A manifest's metadata
-     * @param aSummary A manifest summary
+     * @param aSummaryString A manifest summary in string form
      * @param aThumbnail A manifest thumbnail
      * @throws URISyntaxException If the supplied ID is not a valid URI
      */
-    public Manifest(final String aID, final String aLabel, final Metadata aMetadata, final String aSummary,
-            final Thumbnail aThumbnail) throws URISyntaxException {
-        super(TYPE, aID, aLabel, aMetadata, aSummary, aThumbnail, REQ_ARG_COUNT);
+    public Manifest(final String aIdString, final String aLabelString, final Metadata aMetadata,
+            final String aSummaryString, final Thumbnail aThumbnail) throws URISyntaxException {
+        super(TYPE, aIdString, aLabelString, aMetadata, aSummaryString, aThumbnail, REQ_ARG_COUNT);
     }
 
     /**
@@ -137,27 +137,27 @@ public class Manifest extends Resource<Manifest> {
     }
 
     /**
-     * Adds a new context URI to the manifest
+     * Adds an array of new context URIs to the manifest.
      *
-     * @param aContext Manifest context URIs(s)
+     * @param aUriArray Manifest context URIs(s)
      * @return The manifest
      */
-    public Manifest addContext(final URI... aContext) {
-        Collections.addAll(myContexts, aContext);
+    public Manifest addContext(final URI... aUriArray) {
+        Collections.addAll(myContexts, aUriArray);
         return this;
     }
 
     /**
-     * Adds a new context URI to the manifest
+     * Adds an array of new context URIs, in string form, to the manifest.
      *
-     * @param aContext Manifest context URI(s)
+     * @param aStringArray Manifest context URI(s) in string form
      * @return The manifest
      */
-    public Manifest addContext(final String... aContext) {
-        Objects.requireNonNull(aContext, MessageCodes.JPA_007);
+    public Manifest addContext(final String... aStringArray) {
+        Objects.requireNonNull(aStringArray, MessageCodes.JPA_007);
 
-        for (final String uri : aContext) {
-            Objects.requireNonNull(aContext, MessageCodes.JPA_007);
+        for (final String uri : aStringArray) {
+            Objects.requireNonNull(aStringArray, MessageCodes.JPA_007);
 
             myContexts.add(URI.create(uri));
         }
@@ -292,11 +292,11 @@ public class Manifest extends Resource<Manifest> {
     /**
      * Method used internally to set context from JSON.
      *
-     * @param aContext A manifest context
+     * @param aContextString A manifest context in string form
      */
     @JsonSetter(Constants.CONTEXT)
-    private void setContext(final String aContext) {
-        if (!CONTEXT.equals(URI.create(aContext))) {
+    private void setContext(final String aContextString) {
+        if (!CONTEXT.equals(URI.create(aContextString))) {
             throw new I18nRuntimeException();
         }
     }

@@ -19,39 +19,39 @@ public class Label extends I18nProperty<Label> {
     /**
      * Creates a label from the supplied internationalizations.
      *
-     * @param aI18ns An array of internationalizations for the label
+     * @param aI18nArray An array of internationalizations for the label
      * @throws IllegalArgumentException If the supplied internationalizations have HTML markup
      */
-    public Label(final I18n... aI18ns) throws IllegalArgumentException {
-        super(I18nUtils.validateI18ns(false, aI18ns));
+    public Label(final I18n... aI18nArray) throws IllegalArgumentException {
+        super(I18nUtils.validateI18ns(false, aI18nArray));
     }
 
     /**
      * Creates a label from the supplied string(s).
      *
-     * @param aStrings An array of strings for label
+     * @param aStringArray An array of strings for label
      * @throws IllegalArgumentException If the supplied string(s) have HTML markup
      */
-    public Label(final String... aStrings) throws IllegalArgumentException {
-        super(I18nUtils.createI18ns(false, aStrings));
+    public Label(final String... aStringArray) throws IllegalArgumentException {
+        super(I18nUtils.createI18ns(false, aStringArray));
     }
 
     /**
-     * Sets the string value of the label, removing all other previous values.
+     * Sets the internationalization value of the label, removing all other previous values.
      *
-     * @param aValue A string value
-     * @return True if the property's value was set
+     * @param aStringArray An array of strings
+     * @return True if the property's string value was set
      * @throws IllegalArgumentException If the supplied strings contain HTML markup
      */
     @Override
     @JsonIgnore
-    public Label setStrings(final String... aValue) throws IllegalArgumentException {
+    public Label setStrings(final String... aStringArray) throws IllegalArgumentException {
         myI18ns.clear();
-        return addI18ns(I18nUtils.createI18ns(false, aValue));
+        return addI18ns(I18nUtils.createI18ns(false, aStringArray));
     }
 
     /**
-     * Sets the internationalizations of the label, removing all other previous values.
+     * Sets the internationalizations of the label, removing all other previous internationalizations.
      *
      * @param aI18nArray An array of internationalizations
      * @return True if the property's internationalizations were set successfully

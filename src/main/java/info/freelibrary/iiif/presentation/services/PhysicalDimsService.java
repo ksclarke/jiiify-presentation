@@ -42,12 +42,12 @@ public class PhysicalDimsService implements Service {
      *
      * @param aID An ID for the item to get physical dimensions from
      * @param aScale A physical dimensions scale
-     * @param aUnits A physical dimensions unit
+     * @param aUnitsString A physical dimensions unit
      */
-    public PhysicalDimsService(final URI aID, final double aScale, final String aUnits) {
+    public PhysicalDimsService(final URI aID, final double aScale, final String aUnitsString) {
         myID = aID;
         myPhysicalScale = aScale;
-        myPhysicalUnits = aUnits;
+        myPhysicalUnits = aUnitsString;
     }
 
     @Override
@@ -123,12 +123,12 @@ public class PhysicalDimsService implements Service {
     /**
      * Sets the physical units.
      *
-     * @param aPhysicalUnits The physical units
+     * @param aPhysicalUnitsString The physical units
      * @return The physical dimensions service
      */
     @JsonSetter(Constants.PHYSICAL_SCALE)
-    public PhysicalDimsService setPhysicalUnits(final String aPhysicalUnits) {
-        myPhysicalUnits = aPhysicalUnits;
+    public PhysicalDimsService setPhysicalUnits(final String aPhysicalUnitsString) {
+        myPhysicalUnits = aPhysicalUnitsString;
         return this;
     }
 
@@ -136,13 +136,13 @@ public class PhysicalDimsService implements Service {
      * Sets the physical scale and units in a single method.
      *
      * @param aPhysicalScale The physical scale
-     * @param aPhysicalUnits The physical units
+     * @param aPhysicalUnitsString The physical units
      * @return The physical dimensions service
      */
     @JsonIgnore
-    public PhysicalDimsService setPhysicalDims(final double aPhysicalScale, final String aPhysicalUnits) {
+    public PhysicalDimsService setPhysicalDims(final double aPhysicalScale, final String aPhysicalUnitsString) {
         myPhysicalScale = aPhysicalScale;
-        myPhysicalUnits = aPhysicalUnits;
+        myPhysicalUnits = aPhysicalUnitsString;
         return this;
     }
 

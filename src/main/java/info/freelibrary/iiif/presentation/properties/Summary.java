@@ -17,19 +17,19 @@ public class Summary extends I18nProperty<Summary> {
     /**
      * Creates a summary from the supplied internationalization(s).
      *
-     * @param aI18nStrings An array of internationalizations for the summary
+     * @param aI18nArray An array of internationalizations for the summary
      */
-    public Summary(final I18n... aI18nStrings) {
-        super(aI18nStrings);
+    public Summary(final I18n... aI18nArray) {
+        super(aI18nArray);
     }
 
     /**
      * Creates a summary from the supplied string(s).
      *
-     * @param aStrings An array of strings for the summary
+     * @param aStringArray An array of strings for the summary
      */
-    public Summary(final String... aStrings) {
-        super(aStrings);
+    public Summary(final String... aStringArray) {
+        super(aStringArray);
     }
 
     @Override

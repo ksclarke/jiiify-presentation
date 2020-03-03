@@ -13,19 +13,19 @@ public class Value extends I18nProperty<Value> {
     /**
      * Creates a value from the supplied internationalization(s).
      *
-     * @param aStringList An array of internationalizations for the value
+     * @param aI18nArray An array of internationalizations for the value
      */
-    public Value(final I18n... aStringList) {
-        super(aStringList);
+    public Value(final I18n... aI18nArray) {
+        super(aI18nArray);
     }
 
     /**
      * Creates a value from the supplied string(s).
      *
-     * @param aStringList An array of strings for the value
+     * @param aStringArray An array of strings for the value
      */
-    public Value(final String... aStringList) {
-        super(aStringList);
+    public Value(final String... aStringArray) {
+        super(aStringArray);
     }
 
     @Override

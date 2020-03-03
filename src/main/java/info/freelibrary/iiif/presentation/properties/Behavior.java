@@ -33,9 +33,9 @@ public class Behavior {
     public enum Option {
 
         AUTOADVANCE("auto-advance"), NOAUTOADVANCE("no-auto-advance"), REPEAT("repeat"), NOREPEAT("no-repeat"),
-        UNORDERED("unordered"), INDIVIDUALS("individuals"), PAGED("paged"), CONTINUOUS("continuous"),
-        MULTIPART("multi-part"), NONPAGED("non-paged"), TOP("top"), FACINGPAGES("facing-pages"),
-        THUMBNAILNAV("thumbnail-nav"), NONAV("no-nav"), HIDDEN("hidden");
+        UNORDERED("unordered"), INDIVIDUALS("individuals"), PAGED("paged"), CONTINUOUS("continuous"), MULTIPART(
+                "multi-part"), NONPAGED("non-paged"), TOP("top"), FACINGPAGES("facing-pages"), THUMBNAILNAV(
+                        "thumbnail-nav"), NONAV("no-nav"), HIDDEN("hidden");
 
         private final String myValue;
 
@@ -55,10 +55,10 @@ public class Behavior {
     /**
      * Creates a new behavior from one of the specified options.
      *
-     * @param aValue A behavior
+     * @param aOptionArray A behavior option
      */
-    public Behavior(final Option... aValue) {
-        for (final Option opt : aValue) {
+    public Behavior(final Option... aOptionArray) {
+        for (final Option opt : aOptionArray) {
             myValues.add(new Value(opt));
         }
     }
@@ -66,10 +66,10 @@ public class Behavior {
     /**
      * Creates a new behavior from a URI.
      *
-     * @param aValue A behavior
+     * @param aUriArray A behavior in URI form
      */
-    public Behavior(final URI... aValue) {
-        for (final URI uri : aValue) {
+    public Behavior(final URI... aUriArray) {
+        for (final URI uri : aUriArray) {
             myValues.add(new Value(uri));
         }
     }
@@ -77,11 +77,11 @@ public class Behavior {
     /**
      * Creates a new behavior from a String.
      *
-     * @param aValue A behavior
+     * @param aStringArray A behavior in string form
      */
-    public Behavior(final String... aValue) {
-        for (final String value : aValue) {
-            myValues.add(new Value(value));
+    public Behavior(final String... aStringArray) {
+        for (final String string : aStringArray) {
+            myValues.add(new Value(string));
         }
     }
 
@@ -134,12 +134,12 @@ public class Behavior {
     /**
      * Adds the value(s) of the behavior.
      *
-     * @param aValue The behavior value
+     * @param aOptionArray An array of behavior options
      * @return The behavior
      */
-    public Behavior addValue(final Option... aValue) {
-        for (final Option value : aValue) {
-            myValues.add(new Value(value));
+    public Behavior addValue(final Option... aOptionArray) {
+        for (final Option option : aOptionArray) {
+            myValues.add(new Value(option));
         }
 
         return this;
@@ -148,33 +148,33 @@ public class Behavior {
     /**
      * Sets the value of the behavior to one of the out of the box options. This deletes all previous values.
      *
-     * @param aValue The behavior value
+     * @param aOptionArray Behavior options
      * @return The behavior
      */
-    public Behavior setValue(final Option... aValue) {
+    public Behavior setValue(final Option... aOptionArray) {
         myValues.clear();
-        return addValue(aValue);
+        return addValue(aOptionArray);
     }
 
     /**
-     * Sets the value of the behavior to a URI value. The deletes all previous values.
+     * Sets the value of the behavior to an array of URIs. The deletes all previous values.
      *
-     * @param aValue The behavior value
+     * @param aUriArray Behavior URIs
      * @return The behavior
      */
-    public Behavior setValue(final URI... aValue) {
+    public Behavior setValue(final URI... aUriArray) {
         myValues.clear();
-        return addValue(aValue);
+        return addValue(aUriArray);
     }
 
     /**
      * Adds the value(s) to the behavior.
      *
-     * @param aValue The behavior value
+     * @param aUriArray The behavior value
      * @return The behavior
      */
-    public Behavior addValue(final URI... aValue) {
-        for (final URI uri : aValue) {
+    public Behavior addValue(final URI... aUriArray) {
+        for (final URI uri : aUriArray) {
             myValues.add(new Value(uri));
         }
 
@@ -184,26 +184,26 @@ public class Behavior {
     /**
      * Sets the value of the behavior. The deletes all previous values.
      *
-     * @param aValue The behavior value
+     * @param aStringArray The behavior value in string form
      * @return The behavior
      */
-    public Behavior setValue(final String... aValue) {
+    public Behavior setValue(final String... aStringArray) {
         myValues.clear();
-        return addValue(aValue);
+        return addValue(aStringArray);
     }
 
     /**
      * Adds the value(s) to the behavior.
      *
-     * @param aValue New values to add to the behavior
+     * @param aStringArray New values, in string form, to add to the behavior
      * @return The behavior
      */
-    public Behavior addValue(final String... aValue) {
-        final Behavior.Value[] array = new Behavior.Value[aValue.length];
+    public Behavior addValue(final String... aStringArray) {
+        final Behavior.Value[] array = new Behavior.Value[aStringArray.length];
         int index = 0;
 
         // Make sure the supplied values are valid before adding
-        for (final String value : aValue) {
+        for (final String value : aStringArray) {
             array[index++] = new Value(value);
         }
 
@@ -224,7 +224,7 @@ public class Behavior {
      * @return The value of the behavior
      */
     @JsonGetter(Constants.BEHAVIOR)
-    private Object getValueJson() {
+    private Object getJsonValue() {
         if (myValues.size() == 1) {
             return myValues.get(0).getString();
         } else if (myValues.size() > 1) {
@@ -255,10 +255,10 @@ public class Behavior {
         /**
          * Create a new behavior from the supplied string.
          *
-         * @param aValue A string representation of the behavior value
+         * @param aString A string representation of the behavior value
          */
-        public Value(final String aValue) {
-            final String value = aValue.toUpperCase(Locale.US).replaceAll("\\-", "");
+        public Value(final String aString) {
+            final String value = aString.toUpperCase(Locale.US).replaceAll("\\-", "");
 
             for (final Option option : Option.values()) {
                 if (option.name().equals(value)) {
@@ -269,9 +269,9 @@ public class Behavior {
 
             if (myOption == null) {
                 try {
-                    myURI = URI.create(aValue);
+                    myURI = URI.create(aString);
                 } catch (final IllegalArgumentException uriDetails) {
-                    throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_010, aValue), uriDetails);
+                    throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_010, aString), uriDetails);
                 }
             }
         }

@@ -47,21 +47,21 @@ public class ServiceImage {
     private Optional<ImageInfoService> myService;
 
     /**
-     * Creates an image
+     * Creates an image from the supplied string ID.
      *
-     * @param aURI An image ID
+     * @param aIdString An image URI ID in string form
      */
-    public ServiceImage(final String aURI) {
-        Objects.requireNonNull(aURI, MessageCodes.JPA_003);
+    public ServiceImage(final String aIdString) {
+        Objects.requireNonNull(aIdString, MessageCodes.JPA_003);
 
         myService = Optional.empty();
-        myID = URI.create(aURI);
+        myID = URI.create(aIdString);
 
-        setMediaTypeFromExt(aURI);
+        setMediaTypeFromExt(aIdString);
     }
 
     /**
-     * Creates an image
+     * Creates an image from the supplied URI ID.
      *
      * @param aID An image ID
      */
@@ -75,22 +75,22 @@ public class ServiceImage {
     }
 
     /**
-     * Creates an image.
+     * Creates an image from the supplied URI ID, in string form, and image information service.
      *
-     * @param aURI A URI image ID
+     * @param aUriString A URI image ID in string form
      * @param aService A service for the image
      */
-    public ServiceImage(final String aURI, final ImageInfoService aService) {
-        Objects.requireNonNull(aURI, MessageCodes.JPA_003);
+    public ServiceImage(final String aUriString, final ImageInfoService aService) {
+        Objects.requireNonNull(aUriString, MessageCodes.JPA_003);
 
-        myID = URI.create(aURI);
+        myID = URI.create(aUriString);
         myService = Optional.ofNullable(aService);
 
-        setMediaTypeFromExt(aURI);
+        setMediaTypeFromExt(aUriString);
     }
 
     /**
-     * Creates an image.
+     * Creates an image from the supplied URI ID and image information service.
      *
      * @param aID An image ID
      * @param aService A service for the image
@@ -107,19 +107,19 @@ public class ServiceImage {
     /**
      * Creates an image.
      *
-     * @param aURI An image ID
+     * @param aUriString An image ID in string form
      * @param aWidth An image width
      * @param aHeight An image height
      */
-    public ServiceImage(final String aURI, final int aWidth, final int aHeight) {
-        Objects.requireNonNull(aURI, MessageCodes.JPA_003);
+    public ServiceImage(final String aUriString, final int aWidth, final int aHeight) {
+        Objects.requireNonNull(aUriString, MessageCodes.JPA_003);
 
         myService = Optional.empty();
-        myID = URI.create(aURI);
+        myID = URI.create(aUriString);
         myWidth = aWidth;
         myHeight = aHeight;
 
-        setMediaTypeFromExt(aURI);
+        setMediaTypeFromExt(aUriString);
     }
 
     /**
@@ -153,12 +153,12 @@ public class ServiceImage {
     /**
      * Sets the format of the image from a file extension or media type.
      *
-     * @param aMediaType A string representation of media type or file extension
+     * @param aMediaTypeString A string representation of media type or file extension
      * @return The image
      */
     @JsonSetter(Constants.FORMAT)
-    public ServiceImage setFormat(final String aMediaType) {
-        setMediaTypeFromExt(aMediaType);
+    public ServiceImage setFormat(final String aMediaTypeString) {
+        setMediaTypeFromExt(aMediaTypeString);
         return this;
     }
 
@@ -249,15 +249,15 @@ public class ServiceImage {
     }
 
     /**
-     * Sets the image ID.
+     * Sets the image ID from the supplied URI in string form.
      *
-     * @param aURI The image ID
+     * @param aIdString The image URI ID in string form
      * @return The image
      */
     @JsonSetter(Constants.ID)
-    public ServiceImage setID(final String aURI) {
-        Objects.requireNonNull(aURI, MessageCodes.JPA_003);
-        myID = URI.create(aURI);
+    public ServiceImage setID(final String aIdString) {
+        Objects.requireNonNull(aIdString, MessageCodes.JPA_003);
+        myID = URI.create(aIdString);
         return this;
     }
 
@@ -297,17 +297,17 @@ public class ServiceImage {
     }
 
     @JsonIgnore
-    protected final void setMediaTypeFromExt(final String aURI) {
-        final String fragment = '#' + URI.create(aURI).getFragment();
+    protected final void setMediaTypeFromExt(final String aUriString) {
+        final String fragment = '#' + URI.create(aUriString).getFragment();
         final String mimeType;
         final String uri;
         final int index;
 
         // If we have a fragment on our URI, remove it before checking media type
-        if ((index = aURI.indexOf(fragment)) != -1) {
-            uri = aURI.substring(0, index);
+        if ((index = aUriString.indexOf(fragment)) != -1) {
+            uri = aUriString.substring(0, index);
         } else {
-            uri = aURI;
+            uri = aUriString;
         }
 
         mimeType = FileUtils.getMimeType(uri);
@@ -316,10 +316,10 @@ public class ServiceImage {
             if (mimeType != null) {
                 myFormat = Optional.ofNullable(MediaType.parse(mimeType));
             } else {
-                myFormat = Optional.ofNullable(MediaType.parse(aURI));
+                myFormat = Optional.ofNullable(MediaType.parse(aUriString));
             }
         } catch (final IllegalArgumentException details) {
-            getLogger().warn(MessageCodes.JPA_013, aURI);
+            getLogger().warn(MessageCodes.JPA_013, aUriString);
             myFormat = Optional.empty();
         }
     }

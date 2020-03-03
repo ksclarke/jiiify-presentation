@@ -31,14 +31,14 @@ public class SeeAlso {
     private final List<Value> myValues;
 
     /**
-     * Creates a new see also.
+     * Creates a new see also from an array of URI IDs in string form.
      *
      * @param aID The see also's ID(s)
      */
-    public SeeAlso(final String... aID) {
+    public SeeAlso(final String... aIdStringArray) {
         myValues = new ArrayList<>();
 
-        for (final String id : aID) {
+        for (final String id : aIdStringArray) {
             Objects.requireNonNull(id, LOGGER.getMessage(MessageCodes.JPA_009));
 
             if (!myValues.add(new Value(URI.create(id)))) {
@@ -50,12 +50,12 @@ public class SeeAlso {
     /**
      * Creates a new see also.
      *
-     * @param aID The see also's ID(s)
+     * @param aIdArray The see also's ID(s)
      */
-    public SeeAlso(final URI... aID) {
+    public SeeAlso(final URI... aIdArray) {
         myValues = new ArrayList<>();
 
-        for (final URI uri : aID) {
+        for (final URI uri : aIdArray) {
             Objects.requireNonNull(uri, LOGGER.getMessage(MessageCodes.JPA_009));
 
             if (!myValues.add(new Value(uri))) {
@@ -68,11 +68,11 @@ public class SeeAlso {
     /**
      * Creates a new see also.
      *
-     * @param aID The see also's ID
+     * @param aIdString The see also's ID in string form
      * @param aMediaType A media type
      */
-    public SeeAlso(final String aID, final MediaType aMediaType) {
-        this(URI.create(aID), aMediaType);
+    public SeeAlso(final String aIdString, final MediaType aMediaType) {
+        this(URI.create(aIdString), aMediaType);
     }
 
     /**
@@ -96,22 +96,22 @@ public class SeeAlso {
      * Creates a new see also.
      *
      * @param aID The see also's ID
-     * @param aMediaType A media type
+     * @param aMediaTypeString A media type in string form
      * @param aProfile A profile
      */
-    public SeeAlso(final URI aID, final String aMediaType, final URI aProfile) {
-        this(aID, MediaType.parse(aMediaType), aProfile);
+    public SeeAlso(final URI aID, final String aMediaTypeString, final URI aProfile) {
+        this(aID, MediaType.parse(aMediaTypeString), aProfile);
     }
 
     /**
      * Creates a new see also.
      *
-     * @param aID The see also's ID
+     * @param aIdString The see also's ID in string form
      * @param aMediaType A media type
-     * @param aProfile A profile
+     * @param aProfileString A profile in string form
      */
-    public SeeAlso(final String aID, final MediaType aMediaType, final String aProfile) {
-        this(URI.create(aID), aMediaType, URI.create(aProfile));
+    public SeeAlso(final String aIdString, final MediaType aMediaType, final String aProfileString) {
+        this(URI.create(aIdString), aMediaType, URI.create(aProfileString));
     }
 
     /**
@@ -191,11 +191,11 @@ public class SeeAlso {
     /**
      * Adds a see also value.
      *
-     * @param aID A see also value
+     * @param aIdStringArray An array of see also IDs in string form
      * @return The see also
      */
-    public SeeAlso addValue(final String... aID) {
-        for (final String id : aID) {
+    public SeeAlso addValue(final String... aIdStringArray) {
+        for (final String id : aIdStringArray) {
             Objects.requireNonNull(id, MessageCodes.JPA_003);
 
             if (!myValues.add(new Value(URI.create(id)))) {
@@ -209,11 +209,11 @@ public class SeeAlso {
     /**
      * Adds a see also value.
      *
-     * @param aID A see also value
+     * @param aIdArray A see also value
      * @return The see also
      */
-    public SeeAlso addValue(final URI... aID) {
-        for (final URI id : aID) {
+    public SeeAlso addValue(final URI... aIdArray) {
+        for (final URI id : aIdArray) {
             Objects.requireNonNull(id, MessageCodes.JPA_003);
 
             if (!myValues.add(new Value(id))) {

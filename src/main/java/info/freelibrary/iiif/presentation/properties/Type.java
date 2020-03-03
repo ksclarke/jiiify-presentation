@@ -20,19 +20,19 @@ public class Type {
     /**
      * Creates a type property from the supplied types.
      *
-     * @param aType A list of types
+     * @param aTypeStringArray An array of types in string form
      */
-    public Type(final String... aType) {
-        myTypes = new ArrayList<>(aType.length);
-        Collections.addAll(myTypes, aType);
+    public Type(final String... aTypeStringArray) {
+        myTypes = new ArrayList<>(aTypeStringArray.length);
+        Collections.addAll(myTypes, aTypeStringArray);
     }
 
     /**
      * Creates an empty type.
      */
     @SuppressWarnings("unused")
-    private Type(final String aType) {
-        this(new String[] { aType });
+    private Type(final String aTypeString) {
+        this(new String[] { aTypeString });
     }
 
     /**
@@ -56,23 +56,23 @@ public class Type {
     /**
      * Sets the value of the type.
      *
-     * @param aType The value of the type property
+     * @param aTypeStringArray An array of types in string form
      * @return The type property
      */
-    public Type setValue(final String... aType) {
+    public Type setValue(final String... aTypeStringArray) {
         myTypes = new ArrayList<>();
-        Collections.addAll(myTypes, aType);
+        Collections.addAll(myTypes, aTypeStringArray);
         return this;
     }
 
     /**
      * Adds a value to the type property.
      *
-     * @param aType A type value
+     * @param aTypeString A type value
      * @return The type property
      */
-    public Type addValue(final String aType) {
-        if (!myTypes.add(aType)) {
+    public Type addValue(final String aTypeString) {
+        if (!myTypes.add(aTypeString)) {
             throw new UnsupportedOperationException();
         }
 

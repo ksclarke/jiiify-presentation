@@ -32,8 +32,8 @@ public class NavDate {
         myZonedDateTime = zdt.format(DateTimeFormatter.ISO_INSTANT);
     }
 
-    private NavDate(final String aZonedDateTime) {
-        myZonedDateTime = aZonedDateTime;
+    private NavDate(final String aZonedDateTimeString) {
+        myZonedDateTime = aZonedDateTimeString;
     }
 
     /**

@@ -50,11 +50,11 @@ public class ImageContent extends Content<ImageContent> {
     /**
      * Creates image content.
      *
-     * @param aID An image content ID
+     * @param aIdString An image content ID in string form
      * @param aCanvas A canvas for the image content
      */
-    public ImageContent(final String aID, final Canvas aCanvas) {
-        super(TYPE, aID, aCanvas);
+    public ImageContent(final String aIdString, final Canvas aCanvas) {
+        super(TYPE, aIdString, aCanvas);
     }
 
     /**
@@ -87,11 +87,11 @@ public class ImageContent extends Content<ImageContent> {
     /**
      * Sets the motivation of the image content.
      *
-     * @param aMotivation A motivation in string form
+     * @param aMotivationString A motivation in string form
      */
     @JsonSetter(Constants.MOTIVATION)
-    private void setMotivation(final String aMotivation) {
-        if (!MOTIVATION.equals(aMotivation)) {
+    private void setMotivation(final String aMotivationString) {
+        if (!MOTIVATION.equals(aMotivationString)) {
             throw new I18nRuntimeException();
         }
     }
@@ -152,7 +152,7 @@ public class ImageContent extends Content<ImageContent> {
      * @return The resources map
      */
     @JsonGetter(Constants.RESOURCE)
-    private Map<String, Object> getResourcesMap() {
+    private Map<String, Object> getResourceMap() {
         // Since we're supplying the resource map, we need to supply the order too
         @SuppressWarnings("checkstyle:BooleanExpressionComplexity")
         final Map<String, Object> map = new TreeMap<>((a1stKey, a2ndKey) -> {
@@ -247,15 +247,15 @@ public class ImageContent extends Content<ImageContent> {
     /**
      * Builds the ImageContent's ImageResoures from the JSON resources map.
      *
-     * @param aResourceMap A JSON representation of the resources map
+     * @param aMap A JSON representation of the resources map
      */
     @JsonSetter(Constants.RESOURCE)
-    private void setResourcesMap(final Map<String, Object> aResourceMap) {
-        LOGGER.trace(aResourceMap.toString());
+    private void setResourceMap(final Map<String, Object> aMap) {
+        LOGGER.trace(aMap.toString());
 
-        if (!aResourceMap.isEmpty()) {
-            final Map<String, Object> defaultItem = (Map<String, Object>) aResourceMap.get(Constants.DEFAULT);
-            final List<Map<String, Object>> items = (List<Map<String, Object>>) aResourceMap.get(Constants.ITEM);
+        if (!aMap.isEmpty()) {
+            final Map<String, Object> defaultItem = (Map<String, Object>) aMap.get(Constants.DEFAULT);
+            final List<Map<String, Object>> items = (List<Map<String, Object>>) aMap.get(Constants.ITEM);
 
             if (defaultItem != null) {
                 myDefaultResource = Optional.of(buildImageResource(defaultItem));
@@ -271,8 +271,8 @@ public class ImageContent extends Content<ImageContent> {
                 }
             }
 
-            if (defaultItem == null && items == null && aResourceMap.get(Constants.ID) != null) {
-                myResources.add(buildImageResource(aResourceMap));
+            if (defaultItem == null && items == null && aMap.get(Constants.ID) != null) {
+                myResources.add(buildImageResource(aMap));
             }
         }
     }
@@ -280,15 +280,15 @@ public class ImageContent extends Content<ImageContent> {
     /**
      * Builds an image resource from the Map that Jackson creates
      *
-     * @param aImageResourceMap A map of the image resources
+     * @param aMap A map of the image resources
      * @return The newly built image resource
      */
-    private ImageResource buildImageResource(final Map<String, Object> aImageResourceMap) {
-        final ImageResource resource = new ImageResource(URI.create((String) aImageResourceMap.get(Constants.ID)));
-        final LinkedHashMap labelMap = (LinkedHashMap) aImageResourceMap.get(Constants.LABEL);
-        final int width = (int) aImageResourceMap.getOrDefault(Constants.WIDTH, 0);
-        final int height = (int) aImageResourceMap.getOrDefault(Constants.HEIGHT, 0);
-        final Map<String, Object> service = (Map<String, Object>) aImageResourceMap.get(Constants.SERVICE);
+    private ImageResource buildImageResource(final Map<String, Object> aMap) {
+        final ImageResource resource = new ImageResource(URI.create((String) aMap.get(Constants.ID)));
+        final LinkedHashMap labelMap = (LinkedHashMap) aMap.get(Constants.LABEL);
+        final int width = (int) aMap.getOrDefault(Constants.WIDTH, 0);
+        final int height = (int) aMap.getOrDefault(Constants.HEIGHT, 0);
+        final Map<String, Object> service = (Map<String, Object>) aMap.get(Constants.SERVICE);
 
         if (labelMap != null) {
             final Iterator<String> iterator = labelMap.keySet().iterator();

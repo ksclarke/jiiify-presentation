@@ -22,7 +22,7 @@ class I18nProperty<T extends I18nProperty<T>> {
     protected final List<I18n> myI18ns;
 
     /**
-     * Creates a property from a list of internationalizations.
+     * Creates a property from an array of internationalizations.
      *
      * @param aName A name of the property
      * @param aI18nArray An array of internationalizations for the property
@@ -33,7 +33,7 @@ class I18nProperty<T extends I18nProperty<T>> {
     }
 
     /**
-     * Creates a property from a list of string(s).
+     * Creates a property from an array of string(s).
      *
      * @param aName A name of the property
      * @param aStringArray An array of strings for the property
@@ -58,12 +58,12 @@ class I18nProperty<T extends I18nProperty<T>> {
     /**
      * Sets the internationalization of the property, removing all other previous internationalizations.
      *
-     * @param aValue A string value
+     * @param aI18nArray An array of I18n(s).
      * @return True if the property's value was set
      */
-    public T setI18ns(final I18n... aValue) {
+    public T setI18ns(final I18n... aI18nArray) {
         myI18ns.clear();
-        return addI18ns(aValue);
+        return addI18ns(aI18nArray);
     }
 
     /**

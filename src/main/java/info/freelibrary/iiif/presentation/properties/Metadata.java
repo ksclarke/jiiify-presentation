@@ -57,11 +57,11 @@ public class Metadata {
     /**
      * Creates metadata from the supplied label and value strings.
      *
-     * @param aLabel A metadata label in string form
-     * @param aValue A metadata value in string form
+     * @param aLabelString A metadata label in string form
+     * @param aValueString A metadata value in string form
      */
-    public Metadata(final String aLabel, final String aValue) {
-        getEntries().add(new Metadata.Entry(aLabel, aValue));
+    public Metadata(final String aLabelString, final String aValueString) {
+        getEntries().add(new Metadata.Entry(aLabelString, aValueString));
     }
 
     /**
@@ -81,12 +81,12 @@ public class Metadata {
     /**
      * Adds the supplied metadata.
      *
-     * @param aLabel A metadata label in string form
-     * @param aValue A metadata value in string form
+     * @param aLabelString A metadata label in string form
+     * @param aValueString A metadata value in string form
      * @return The metadata
      */
-    public Metadata add(final String aLabel, final String aValue) {
-        if (!getEntries().add(new Metadata.Entry(aLabel, aValue))) {
+    public Metadata add(final String aLabelString, final String aValueString) {
+        if (!getEntries().add(new Metadata.Entry(aLabelString, aValueString))) {
             throw new UnsupportedOperationException();
         }
 
@@ -135,15 +135,15 @@ public class Metadata {
         /**
          * Creates a metadata entry from the supplied label and value.
          *
-         * @param aLabel A metadata label in string form
-         * @param aValue A metadata value in string form
+         * @param aLabelString A metadata label in string form
+         * @param aValueString A metadata value in string form
          */
-        public Entry(final String aLabel, final String aValue) {
-            Objects.requireNonNull(aLabel, LOGGER.getMessage(MessageCodes.JPA_002));
-            Objects.requireNonNull(aValue, LOGGER.getMessage(MessageCodes.JPA_022));
+        public Entry(final String aLabelString, final String aValueString) {
+            Objects.requireNonNull(aLabelString, LOGGER.getMessage(MessageCodes.JPA_002));
+            Objects.requireNonNull(aValueString, LOGGER.getMessage(MessageCodes.JPA_022));
 
-            myLabel = new Label(aLabel);
-            myValue = new Value(aValue);
+            myLabel = new Label(aLabelString);
+            myValue = new Value(aValueString);
         }
 
         /**

@@ -38,11 +38,11 @@ public class ImageInfoService implements Service {
      * Creates a new Image Info IIIF service.
      *
      * @param aLevel A compliance level for the service
-     * @param aID An ID for the item to request from the service
+     * @param aIdString A string version of the ID for the item to request from the service
      */
-    public ImageInfoService(final APIComplianceLevel aLevel, final String aID) {
+    public ImageInfoService(final APIComplianceLevel aLevel, final String aIdString) {
         myLevel = aLevel;
-        myID = URI.create(aID);
+        myID = URI.create(aIdString);
     }
 
     /**
@@ -58,11 +58,11 @@ public class ImageInfoService implements Service {
     /**
      * Creates a new Image Info IIIF service.
      *
-     * @param aID An ID for the item to request from the service
+     * @param aIdString A string version of the ID for the item to request from the service
      */
-    public ImageInfoService(final String aID) {
+    public ImageInfoService(final String aIdString) {
         myLevel = DEFAULT_LEVEL;
-        myID = URI.create(aID);
+        myID = URI.create(aIdString);
     }
 
     /**

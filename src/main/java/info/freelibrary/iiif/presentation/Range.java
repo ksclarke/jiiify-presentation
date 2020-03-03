@@ -33,11 +33,11 @@ public class Range extends Resource<Range> {
     /**
      * Creates a IIIF presentation range.
      *
-     * @param aID A range ID
-     * @param aLabel A descriptive label for the range
+     * @param aIdString A range ID in string form
+     * @param aLabelString A descriptive label, in string form, for the range
      */
-    public Range(final String aID, final String aLabel) {
-        super(TYPE, aID, aLabel, REQ_ARG_COUNT);
+    public Range(final String aIdString, final String aLabelString) {
+        super(TYPE, aIdString, aLabelString, REQ_ARG_COUNT);
     }
 
     /**
