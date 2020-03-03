@@ -37,17 +37,16 @@ import io.vertx.core.json.jackson.DatabindCodec;
  */
 public class Manifest extends Resource<Manifest> {
 
+    // We need to find JDK 8+ types for parsing our JSON
     static {
         DatabindCodec.mapper().findAndRegisterModules();
     }
 
     private static final String TYPE = "sc:Manifest";
 
-    private static final URI CONTEXT = URI.create("http://iiif.io/api/presentation/3/context.json");
-
     private static final int REQ_ARG_COUNT = 3;
 
-    private final List<URI> myContexts = Stream.of(CONTEXT).collect(Collectors.toList());
+    private final List<URI> myContexts = Stream.of(Constants.CONTEXT_URI).collect(Collectors.toList());
 
     private final List<Sequence> mySequences = new ArrayList<>();
 
@@ -133,7 +132,7 @@ public class Manifest extends Resource<Manifest> {
      */
     @JsonIgnore
     public URI getContext() {
-        return CONTEXT;
+        return Constants.CONTEXT_URI;
     }
 
     /**
@@ -296,18 +295,19 @@ public class Manifest extends Resource<Manifest> {
      */
     @JsonSetter(Constants.CONTEXT)
     private void setContext(final String aContext) {
-        if (!CONTEXT.equals(URI.create(aContext))) {
+        if (!Constants.CONTEXT_URI.equals(URI.create(aContext))) {
             throw new I18nRuntimeException();
         }
     }
 
     /**
-     * Gets the manifest context.
+     * Gets the manifest context. The manifest can either have a single context or an array of contexts (Cf.
+     * https://iiif.io/api/presentation/3.0/#46-linked-data-context-and-extensions)
      *
      * @return The manifest context
      */
     @JsonGetter(Constants.CONTEXT)
-    private Object getContextJson() {
+    private Object getContextsForJSON() {
         if (myContexts.size() == 1) {
             return myContexts.get(0);
         } else if (myContexts.size() > 1) {

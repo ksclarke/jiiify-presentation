@@ -5,8 +5,6 @@ import java.net.URI;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import info.freelibrary.iiif.presentation.utils.ServiceDeserializer;
-
 /**
  * A service interface to be implemented by actual services (like GeoJSON and ImageInfo).
  */

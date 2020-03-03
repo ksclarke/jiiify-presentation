@@ -215,19 +215,13 @@ public class Behavior {
     }
 
     /**
-     * Gets the raw value of the behavior
-     * <p>
-     * For a behavior with a single value this will be a <code>String</code> and for a behavior with multiple values
-     * this will be a <code>List&lt;Behavior.Value&gt;</code>.
-     * </p>
+     * Gets the map value of the behavior.
      *
      * @return The value of the behavior
      */
     @JsonGetter(Constants.BEHAVIOR)
-    private Object getJsonValue() {
-        if (myValues.size() == 1) {
-            return myValues.get(0).getString();
-        } else if (myValues.size() > 1) {
+    private Object toMap() {
+        if (myValues.size() > 1) {
             return myValues;
         } else {
             return null;
@@ -328,7 +322,7 @@ public class Behavior {
          */
         public URI getURI() {
             if (myURI == null) {
-                throw new ClassCastException("Value is an Option, not a URI");
+                throw new ClassCastException(LOGGER.getMessage(MessageCodes.JPA_025));
             }
 
             return myURI;
@@ -342,7 +336,7 @@ public class Behavior {
          */
         public Option getOption() {
             if (myOption == null) {
-                throw new ClassCastException("Value is a URI, not an Option");
+                throw new ClassCastException(LOGGER.getMessage(MessageCodes.JPA_026));
             }
 
             return myOption;

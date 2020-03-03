@@ -29,11 +29,10 @@ import io.vertx.core.json.jackson.DatabindCodec;
  */
 public class Collection extends Resource<Collection> {
 
+    // We initialize this here (in addition to in Manifest) in case someone is using collections without manifests
     static {
         DatabindCodec.mapper().findAndRegisterModules();
     }
-
-    private static final URI CONTEXT = URI.create("http://iiif.io/api/presentation/3/context.json");
 
     private static final String TYPE = "sc:Collection";
 
@@ -127,7 +126,7 @@ public class Collection extends Resource<Collection> {
      */
     @JsonGetter(Constants.CONTEXT)
     public URI getContext() {
-        return CONTEXT;
+        return Constants.CONTEXT_URI;
     }
 
     /**
@@ -137,7 +136,7 @@ public class Collection extends Resource<Collection> {
      */
     @JsonSetter(Constants.CONTEXT)
     private void setContext(final String aContext) {
-        if (!CONTEXT.equals(URI.create(aContext))) {
+        if (!Constants.CONTEXT_URI.equals(URI.create(aContext))) {
             throw new I18nRuntimeException();
         }
     }

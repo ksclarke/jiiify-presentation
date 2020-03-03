@@ -178,19 +178,14 @@ public class Rights {
     }
 
     /**
-     * Return the value of the rights property. It may be a single URL or may be an list of URLs.
+     * Return a list of the rights URLs.
      *
-     * @return The value of the rights property
+     * @return A list of the rights URLs
      */
     @JsonValue
-    private Object getValue() {
-        final List<URL> urls = getURLs();
-        final int size = urls.size();
-
-        if (size == 1) {
-            return urls.get(0);
-        } else if (size > 1) {
-            return urls;
+    private Object toList() {
+        if (myURLs.size() > 1) {
+            return myURLs;
         } else {
             return null;
         }

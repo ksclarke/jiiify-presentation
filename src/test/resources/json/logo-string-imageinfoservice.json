@@ -1,10 +1,14 @@
 {
-  "id" : "http://example.org/images/logo1.jpg",
-  "type" : "dctypes:Image",
-  "format" : "image/jpeg",
-  "service" : {
-    "@context" : "http://iiif.io/api/image/2/context.json",
-    "id" : "http://example.org/asdf",
-    "profile" : "http://iiif.io/api/image/2/level0.json"
-  }
+    "logo": [
+        {
+            "id": "http://example.org/images/logo1.jpg",
+            "type": "dctypes:Image",
+            "format": "image/jpeg",
+            "service": {
+                "@context": "http://iiif.io/api/presentation/3/context.json",
+                "id": "http://example.org/asdf",
+                "profile": "http://iiif.io/api/image/3/level0.json"
+            }
+        }
+    ]
 }

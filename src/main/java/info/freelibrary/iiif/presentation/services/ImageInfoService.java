@@ -15,7 +15,7 @@ import info.freelibrary.iiif.presentation.utils.Constants;
 public class ImageInfoService implements Service {
 
     /* The context for this service */
-    public static final URI CONTEXT = URI.create("http://iiif.io/api/image/2/context.json");
+    public static final URI CONTEXT = Constants.CONTEXT_URI;
 
     private static final APIComplianceLevel DEFAULT_LEVEL = APIComplianceLevel.ZERO;
 

@@ -12,8 +12,11 @@ import org.junit.Test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
+import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.iiif.presentation.utils.TestUtils;
 import info.freelibrary.util.StringUtils;
+
+import io.vertx.core.json.JsonObject;
 
 /**
  * A thumbnail test.
@@ -41,9 +44,11 @@ public class ThumbnailTest {
     @Test
     public void testFullSingleURI() throws JsonProcessingException, IOException {
         final Thumbnail thumbnail = new Thumbnail(THUMBNAIL_ID_1, 1000, 1000);
-        final File expected = new File(TestUtils.TEST_DIR, TN_FULL_SINGLE);
+        final File testFile = new File(TestUtils.TEST_DIR, TN_FULL_SINGLE);
+        final JsonObject expected = new JsonObject(StringUtils.read(testFile));
+        final JsonObject found = new JsonObject(TestUtils.toJson(Constants.THUMBNAIL, thumbnail));
 
-        assertEquals(StringUtils.read(expected), TestUtils.toJson(thumbnail, true));
+        assertEquals(expected, found);
     }
 
     /**
@@ -55,9 +60,11 @@ public class ThumbnailTest {
     @Test
     public void testFullSingleString() throws JsonProcessingException, IOException {
         final Thumbnail thumbnail = new Thumbnail(THUMBNAIL_ID_1.toString(), 1000, 1000);
-        final File expected = new File(TestUtils.TEST_DIR, TN_FULL_SINGLE);
+        final File testFile = new File(TestUtils.TEST_DIR, TN_FULL_SINGLE);
+        final JsonObject expected = new JsonObject(StringUtils.read(testFile));
+        final JsonObject found = new JsonObject(TestUtils.toJson(Constants.THUMBNAIL, thumbnail));
 
-        assertEquals(StringUtils.read(expected), TestUtils.toJson(thumbnail, true));
+        assertEquals(expected, found);
     }
 
     /**
@@ -69,9 +76,11 @@ public class ThumbnailTest {
     @Test
     public void testFullSingleService() throws JsonProcessingException, IOException {
         final Thumbnail thumbnail = new Thumbnail(THUMBNAIL_ID_1, new ImageInfoService(PAGE_ID_1));
-        final File expected = new File(TestUtils.TEST_DIR, "thumbnail-full-single-service.json");
+        final File testFile = new File(TestUtils.TEST_DIR, "thumbnail-full-single-service.json");
+        final JsonObject expected = new JsonObject(StringUtils.read(testFile));
+        final JsonObject found = new JsonObject(TestUtils.toJson(Constants.THUMBNAIL, thumbnail));
 
-        assertEquals(StringUtils.read(expected), TestUtils.toJson(thumbnail, true));
+        assertEquals(expected, found);
     }
 
     /**
@@ -83,9 +92,11 @@ public class ThumbnailTest {
     @Test
     public void testSimpleTwo() throws JsonProcessingException, IOException {
         final Thumbnail thumbnail = new Thumbnail(THUMBNAIL_ID_1, THUMBNAIL_ID_2);
-        final File expected = new File(TestUtils.TEST_DIR, "thumbnail-simple-two.json");
+        final File testFile = new File(TestUtils.TEST_DIR, "thumbnail-simple-two.json");
+        final JsonObject expected = new JsonObject(StringUtils.read(testFile));
+        final JsonObject found = new JsonObject(TestUtils.toJson(Constants.THUMBNAIL, thumbnail));
 
-        assertEquals(StringUtils.read(expected), TestUtils.toJson(thumbnail, false));
+        assertEquals(expected, found);
     }
 
     /**
@@ -97,9 +108,11 @@ public class ThumbnailTest {
     @Test
     public void testSimpleOne() throws JsonProcessingException, IOException {
         final Thumbnail thumbnail = new Thumbnail(THUMBNAIL_ID_1);
-        final File expected = new File(TestUtils.TEST_DIR, "thumbnail-simple-one.json");
+        final File testFile = new File(TestUtils.TEST_DIR, "thumbnail-simple-one.json");
+        final JsonObject expected = new JsonObject(StringUtils.read(testFile));
+        final JsonObject found = new JsonObject(TestUtils.toJson(Constants.THUMBNAIL, thumbnail));
 
-        assertEquals(StringUtils.read(expected), TestUtils.toJson(thumbnail, false));
+        assertEquals(expected, found);
     }
 
 }

@@ -30,8 +30,8 @@ public class Value extends I18nProperty<Value> {
 
     @Override
     @JsonGetter(Constants.VALUE)
-    protected Object getJsonValue() {
-        return super.getJsonValue();
+    protected Object toMap() {
+        return super.toMap();
     }
 
 }

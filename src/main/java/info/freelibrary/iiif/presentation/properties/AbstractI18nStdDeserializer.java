@@ -15,17 +15,17 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
  *
  * @param <T> The class being deserialized
  */
-abstract class AbstractStdDeserializer<T> extends StdDeserializer<T> {
+abstract class AbstractI18nStdDeserializer<T> extends StdDeserializer<T> {
 
     /**
-     * The <code>serialVersionUID</code> for AbstractStdDeserializer.
+     * The <code>serialVersionUID</code> for AbstractI18nStdDeserializer.
      */
     private static final long serialVersionUID = 433758172553865194L;
 
     /**
      * Creates a new deserializer.
      */
-    AbstractStdDeserializer() {
+    AbstractI18nStdDeserializer() {
         this(null);
     }
 
@@ -34,7 +34,7 @@ abstract class AbstractStdDeserializer<T> extends StdDeserializer<T> {
      *
      * @param aClass A class
      */
-    AbstractStdDeserializer(final Class<?> aClass) {
+    AbstractI18nStdDeserializer(final Class<?> aClass) {
         super(aClass);
     }
 

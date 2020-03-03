@@ -58,7 +58,7 @@ public class CanvasTest {
      */
     @Test
     public final void testCanvasURILabelIntInt() {
-        assertEquals(TEST_URI, new Canvas(URI.create(TEST_URI), new Label(TEST_LABEL), 200, 200).getID().toString());
+        assertEquals(URI.create(TEST_URI), new Canvas(URI.create(TEST_URI), new Label(TEST_LABEL), 200, 200).getID());
     }
 
     /**

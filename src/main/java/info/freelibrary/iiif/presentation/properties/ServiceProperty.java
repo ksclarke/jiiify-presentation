@@ -209,37 +209,26 @@ class ServiceProperty<T extends ServiceProperty<T>> {
     }
 
     /**
-     * Returns the value of the property. If there is just one image, a single image is returned; else, a list of
-     * images.
+     * Returns a list of service images, used as the value of the property. This method serializes service properties.
      *
-     * @return The value of the property
+     * @return A list of service images
      */
     @JsonValue
-    protected Object getValue() {
-        final List<ServiceImage> list = getImages();
+    protected Object toList() {
+        final List<ServiceImage> serviceImageList = getImages();
 
-        if (list.size() == 1) {
-            final ServiceImage serviceImage = list.get(0);
-            final Optional<ImageInfoService> service = serviceImage.getService();
+        if (serviceImageList.size() > 0) {
+            final List<Object> listForJsonMapping = new ArrayList<>();
 
-            if (service.isPresent() || hasWidthHeight(serviceImage)) {
-                return serviceImage;
-            } else {
-                // Not going to output format and type if no width, height, or service
-                return serviceImage.getID();
-            }
-        } else if (list.size() > 1) {
-            final List<Object> objects = new ArrayList<>();
-
-            for (final ServiceImage serviceImage : list) {
+            for (final ServiceImage serviceImage : serviceImageList) {
                 if (serviceImage.getService().isPresent() || hasWidthHeight(serviceImage)) {
-                    objects.add(serviceImage);
+                    listForJsonMapping.add(serviceImage);
                 } else {
-                    objects.add(serviceImage.getID());
+                    listForJsonMapping.add(serviceImage.getID());
                 }
             }
 
-            return objects;
+            return listForJsonMapping;
         } else {
             return null;
         }

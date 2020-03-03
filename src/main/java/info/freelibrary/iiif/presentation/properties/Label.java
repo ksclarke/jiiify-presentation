@@ -89,8 +89,8 @@ public class Label extends I18nProperty<Label> {
 
     @Override
     @JsonGetter(Constants.LABEL)
-    protected Object getJsonValue() {
-        return super.getJsonValue();
+    protected Object toMap() {
+        return super.toMap();
     }
 
 }

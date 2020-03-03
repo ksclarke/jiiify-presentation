@@ -28,5 +28,11 @@
   <entry key="JPA-022">Value cannot be null</entry>
   <entry key="JPA-023">Metadata contents should always be an array of objects with label and value</entry>
   <entry key="JPA-024">Duration ({}) must be positive and finite</entry>
+  <entry key="JPA-025">Value is an Option, not a URI</entry>
+  <entry key="JPA-026">Value is a URI, not an Option</entry>
+  <entry key="JPA-027">Number of arguments is not equal to the number of names</entry>
+  <entry key="JPA-028">Logo contents should always be an array of logo strings</entry>
+  <entry key="JPA-029">Thumbnail contents should always be an array of thumbnail strings</entry>
+  <entry key="JPA-030">Image contents should always have a set of keys over which to iterate</entry>
 
 </properties>

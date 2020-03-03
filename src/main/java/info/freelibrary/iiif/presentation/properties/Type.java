@@ -85,11 +85,15 @@ public class Type {
      * @return The value of the type
      */
     @JsonValue
-    private Object getValue() {
-        if (myTypes.size() == 1) {
+    private Object toJsonValue() {
+        final int typeCount = myTypes.size();
+
+        if (typeCount > 0) {
             return myTypes.get(0);
-        } else {
+        } else if (typeCount > 0) {
             return myTypes;
+        } else {
+            return null;
         }
     }
 }

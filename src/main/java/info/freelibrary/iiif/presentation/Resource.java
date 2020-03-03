@@ -72,7 +72,7 @@ class Resource<T extends Resource<T>> {
      * Creates a new resource from the supplied type.
      *
      * @param aType A resource type in string form
-     * @param aNumber The number of required arguments
+     * @param aNumber the number of required arguments
      */
     protected Resource(final String aType, final int aNumber) {
         checkArgs(new Object[] { aType }, new String[] { Constants.TYPE }, aNumber);
@@ -353,7 +353,6 @@ class Resource<T extends Resource<T>> {
      * @param aThumbnail A thumbnail
      * @return The resource
      */
-    @JsonIgnore
     public T setThumbnail(final Thumbnail aThumbnail) {
         myThumbnail = aThumbnail;
         return (T) this;
@@ -365,6 +364,7 @@ class Resource<T extends Resource<T>> {
      * @param aURI A thumbnail URI ID in string form
      * @return The resource
      */
+    @JsonIgnore
     public T setThumbnail(final String aURI) {
         myThumbnail = new Thumbnail(aURI);
         return (T) this;
@@ -455,7 +455,7 @@ class Resource<T extends Resource<T>> {
      * @param aLogo A logo
      * @return The resource
      */
-    @JsonIgnore
+    @JsonSetter(Constants.LOGO)
     public T setLogo(final Logo aLogo) {
         myLogo = aLogo;
         return (T) this;
@@ -467,6 +467,7 @@ class Resource<T extends Resource<T>> {
      * @param aLogo A logo URI ID in string form
      * @return The resource
      */
+    @JsonIgnore
     public T setLogo(final String aLogo) {
         myLogo = new Logo(aLogo);
         return (T) this;

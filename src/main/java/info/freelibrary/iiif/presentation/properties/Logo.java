@@ -4,6 +4,7 @@ package info.freelibrary.iiif.presentation.properties;
 import java.net.URI;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.utils.Constants;
@@ -14,6 +15,7 @@ import info.freelibrary.iiif.presentation.utils.Constants;
  * displayed or used, without cropping, rotating or otherwise distorting the image. It is recommended that a IIIF
  * Image API service be available for this image for manipulations such as resizing.
  */
+@JsonDeserialize(using = LogoDeserializer.class)
 public class Logo extends ServiceProperty<Logo> {
 
     /**
@@ -79,8 +81,8 @@ public class Logo extends ServiceProperty<Logo> {
 
     @Override
     @JsonGetter(Constants.LOGO)
-    protected Object getValue() {
-        return super.getValue();
+    protected Object toList() {
+        return super.toList(); // serializer
     }
 
 }
