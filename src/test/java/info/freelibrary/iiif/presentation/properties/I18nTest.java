@@ -18,6 +18,7 @@ import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.StringUtils;
 
 /**
  * Tests internationalizations.
@@ -162,7 +163,7 @@ public class I18nTest {
         final I18n i18n = new I18n(I18n.DEFAULT_LANG, myTestString);
 
         if (!i18n.addString(myTestString)) {
-            fail(LOGGER.getMessage(MessageCodes.JPA_021));
+            fail(LOGGER.getMessage(MessageCodes.JPA_021, myTestString));
         }
 
         assertEquals(2, i18n.size());
@@ -177,7 +178,7 @@ public class I18nTest {
         final List<String> strings = Arrays.asList(myTestString, myTestString);
 
         if (!i18n.addStrings(strings)) {
-            fail(LOGGER.getMessage(MessageCodes.JPA_021));
+            fail(LOGGER.getMessage(MessageCodes.JPA_021, StringUtils.toString(strings.toArray(), ' ')));
         }
 
         assertEquals(3, i18n.size());

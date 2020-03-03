@@ -23,8 +23,8 @@
   <entry key="JPA-017">Illegal viewing direction argument: {}</entry>
   <entry key="JPA-018">Failed to catch illegal viewing direction argument</entry>
   <entry key="JPA-019">String not allowed to contain HTML: {}</entry>
-  <entry key="JPA-020">Supplied locale's language code is undefined</entry>
-  <entry key="JPA-021">Unable to add string to internationalized value</entry>
+  <entry key="JPA-020">Supplied locale's language code is undefined: {}</entry>
+  <entry key="JPA-021">Unable to add string(s) to internationalized value: {}</entry>
   <entry key="JPA-022">Value cannot be null</entry>
   <entry key="JPA-023">Metadata contents should always be an array of objects with label and value</entry>
   <entry key="JPA-024">Duration ({}) must be positive and finite</entry>

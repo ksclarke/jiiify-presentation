@@ -318,7 +318,7 @@ public class I18n implements Iterable<String> {
      */
     private Locale checkLangTag(final Locale aLocale) throws IllegalArgumentException {
         if ("und".equals(aLocale.toLanguageTag())) {
-            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_020));
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_020, aLocale.getDisplayName()));
         }
 
         return aLocale;

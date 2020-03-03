@@ -40,8 +40,7 @@ public final class I18nUtils {
      * @return An array of internationalizations guaranteed not to contain HTML markup
      */
     public static I18n[] stripHTML(final I18n... aI18nsArray) {
-        // This is just a placeholder for this for now
-        return aI18nsArray;
+        throw new UnsupportedOperationException();
     }
 
     /**

@@ -33,7 +33,8 @@ public class SeeAlso {
     /**
      * Creates a new see also from an array of URI IDs in string form.
      *
-     * @param aID The see also's ID(s)
+     * @param aIdStringArray The see also's ID(s)
+     * @throws UnsupportedOperationException If an ID string can not be set
      */
     public SeeAlso(final String... aIdStringArray) {
         myValues = new ArrayList<>();
