@@ -278,7 +278,7 @@ public class ImageContent extends Content<ImageContent> {
     }
 
     /**
-     * Build an image resource from the Map that Jackson creates
+     * Builds an image resource from the Map that Jackson creates
      *
      * @param aImageResourceMap A map of the image resources
      * @return The newly built image resource
