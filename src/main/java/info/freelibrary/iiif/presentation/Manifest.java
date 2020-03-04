@@ -212,13 +212,13 @@ public class Manifest extends Resource<Manifest> {
     /**
      * Adds one or more sequences to the manifest.
      *
-     * @param aSequence An array of sequences to add to the manifest
+     * @param aSequenceArray An array of sequences to add to the manifest
      * @return The manifest
      */
-    public Manifest addSequence(final Sequence... aSequence) {
-        Objects.requireNonNull(aSequence, MessageCodes.JPA_008);
+    public Manifest addSequence(final Sequence... aSequenceArray) {
+        Objects.requireNonNull(aSequenceArray, MessageCodes.JPA_008);
 
-        for (final Sequence sequence : aSequence) {
+        for (final Sequence sequence : aSequenceArray) {
             Objects.requireNonNull(sequence, MessageCodes.JPA_008);
 
             if (!mySequences.add(sequence)) {
@@ -242,13 +242,13 @@ public class Manifest extends Resource<Manifest> {
     /**
      * Sets the manifest sequences to the supplied one(s).
      *
-     * @param aSequence An array of sequences to set
+     * @param aSequenceArray An array of sequences to set
      * @return The manifest
      */
     @JsonGetter(Constants.SEQUENCES)
-    public Manifest setSequences(final Sequence... aSequence) {
+    public Manifest setSequences(final Sequence... aSequenceArray) {
         mySequences.clear();
-        return addSequence(aSequence);
+        return addSequence(aSequenceArray);
     }
 
     /**
