@@ -19,10 +19,10 @@ public class Logo extends ServiceProperty<Logo> {
     /**
      * Creates a logo property from an array of ID strings.
      *
-     * @param aIdStringArray An array of IDs in string form
+     * @param aIdArray An array of IDs in string form
      */
-    public Logo(final String... aIdStringArray) {
-        addImage(aIdStringArray);
+    public Logo(final String... aIdArray) {
+        addImage(aIdArray);
     }
 
     /**
@@ -37,12 +37,12 @@ public class Logo extends ServiceProperty<Logo> {
     /**
      * Creates a logo property.
      *
-     * @param aUriString A URI image ID
+     * @param aID A URI image ID
      * @param aWidth An image width
      * @param aHeight An image height
      */
-    public Logo(final String aUriString, final int aWidth, final int aHeight) {
-        addImage(aUriString, aWidth, aHeight);
+    public Logo(final String aID, final int aWidth, final int aHeight) {
+        addImage(aID, aWidth, aHeight);
     }
 
     /**
@@ -59,11 +59,11 @@ public class Logo extends ServiceProperty<Logo> {
     /**
      * Creates a logo property.
      *
-     * @param aIdString An ID for the logo image in string form
+     * @param aID An ID for the logo image in string form
      * @param aService A service for the logo image
      */
-    public Logo(final String aIdString, final ImageInfoService aService) {
-        addImage(URI.create(aIdString), aService);
+    public Logo(final String aID, final ImageInfoService aService) {
+        addImage(URI.create(aID), aService);
     }
 
     /**

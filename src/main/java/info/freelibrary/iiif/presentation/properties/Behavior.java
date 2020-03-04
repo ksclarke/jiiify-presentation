@@ -255,10 +255,10 @@ public class Behavior {
         /**
          * Create a new behavior from the supplied string.
          *
-         * @param aString A string representation of the behavior value
+         * @param aValue A string representation of the behavior value
          */
-        public Value(final String aString) {
-            final String value = aString.toUpperCase(Locale.US).replaceAll("\\-", "");
+        public Value(final String aValue) {
+            final String value = aValue.toUpperCase(Locale.US).replaceAll("\\-", "");
 
             for (final Option option : Option.values()) {
                 if (option.name().equals(value)) {
@@ -269,9 +269,9 @@ public class Behavior {
 
             if (myOption == null) {
                 try {
-                    myURI = URI.create(aString);
+                    myURI = URI.create(aValue);
                 } catch (final IllegalArgumentException uriDetails) {
-                    throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_010, aString), uriDetails);
+                    throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_010, aValue), uriDetails);
                 }
             }
         }

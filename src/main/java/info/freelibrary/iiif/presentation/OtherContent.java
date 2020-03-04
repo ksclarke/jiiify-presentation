@@ -15,11 +15,11 @@ public class OtherContent extends Content<OtherContent> {
     /**
      * Creates a IIIF presentation content resource.
      *
-     * @param aIdString An other content ID in string form
+     * @param aID An other content ID in string form
      * @param aCanvas A canvas for other content
      */
-    public OtherContent(final String aIdString, final Canvas aCanvas) {
-        super(TYPE, aIdString, aCanvas);
+    public OtherContent(final String aID, final Canvas aCanvas) {
+        super(TYPE, aID, aCanvas);
     }
 
     /**

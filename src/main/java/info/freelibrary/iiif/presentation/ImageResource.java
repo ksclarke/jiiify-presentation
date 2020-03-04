@@ -28,11 +28,11 @@ public class ImageResource extends ServiceImage {
     /**
      * Creates an image resource with the supplied ID URI.
      *
-     * @param aUriString An image resource ID in string form
+     * @param aURI An image resource ID in string form
      */
-    public ImageResource(final String aUriString) {
-        super(aUriString);
-        setMediaTypeFromExt(aUriString);
+    public ImageResource(final String aURI) {
+        super(aURI);
+        setMediaTypeFromExt(aURI);
     }
 
     /**
@@ -48,12 +48,12 @@ public class ImageResource extends ServiceImage {
     /**
      * Creates an image resource with the supplied ID URI and image info service.
      *
-     * @param aUriString An image resource ID in string form
+     * @param aURI An image resource ID in string form
      * @param aService An image info service
      */
-    public ImageResource(final String aUriString, final ImageInfoService aService) {
-        super(aUriString, aService);
-        setMediaTypeFromExt(aUriString);
+    public ImageResource(final String aURI, final ImageInfoService aService) {
+        super(aURI, aService);
+        setMediaTypeFromExt(aURI);
     }
 
     /**
@@ -70,13 +70,13 @@ public class ImageResource extends ServiceImage {
     /**
      * Sets the format of the image resource.
      *
-     * @param aMediaTypeString A string representation of media type
+     * @param aMediaType A string representation of media type
      * @return The image resource
      */
     @Override
     @JsonSetter(Constants.FORMAT)
-    public ImageResource setFormat(final String aMediaTypeString) {
-        return (ImageResource) super.setFormat(aMediaTypeString);
+    public ImageResource setFormat(final String aMediaType) {
+        return (ImageResource) super.setFormat(aMediaType);
     }
 
     /**
@@ -118,12 +118,12 @@ public class ImageResource extends ServiceImage {
     /**
      * Sets the image resource label.
      *
-     * @param aLabelString The image resource label in string form
+     * @param aLabel The image resource label in string form
      * @return The image resource
      */
     @JsonIgnore
-    public ImageResource setLabel(final String aLabelString) {
-        myLabel = new Label(aLabelString);
+    public ImageResource setLabel(final String aLabel) {
+        myLabel = new Label(aLabel);
         return this;
     }
 

@@ -48,10 +48,10 @@ public class GenericService implements Service<GenericService> {
     /**
      * Creates a service for the supplied ID.
      *
-     * @param aServiceIDString A service ID in string form
+     * @param aServiceID A service ID in string form
      */
-    public GenericService(final String aServiceIDString) {
-        myID = URI.create(aServiceIDString);
+    public GenericService(final String aServiceID) {
+        myID = URI.create(aServiceID);
     }
 
     @Override
@@ -73,11 +73,11 @@ public class GenericService implements Service<GenericService> {
     /**
      * Sets the service's context.
      *
-     * @param aContextString The service's context in string form
+     * @param aContext The service's context in string form
      * @return This service
      */
-    public GenericService setContext(final String aContextString) {
-        myContext = URI.create(aContextString);
+    public GenericService setContext(final String aContext) {
+        myContext = URI.create(aContext);
         return this;
     }
 
@@ -104,11 +104,11 @@ public class GenericService implements Service<GenericService> {
     /**
      * Sets the profile URI for this service.
      *
-     * @param aProfileString A profile URI, in string form, for this service
+     * @param aProfile A profile URI, in string form, for this service
      * @return This service
      */
-    public GenericService setProfile(final String aProfileString) {
-        myProfile = URI.create(aProfileString);
+    public GenericService setProfile(final String aProfile) {
+        myProfile = URI.create(aProfile);
         return this;
     }
 
@@ -136,23 +136,23 @@ public class GenericService implements Service<GenericService> {
     /**
      * Sets the ID for this service link.
      *
-     * @param aIdString The ID, in string form, for this service link
+     * @param aID The ID, in string form, for this service link
      * @return This service
      */
-    public GenericService setID(final String aIdString) {
-        myID = URI.create(aIdString);
+    public GenericService setID(final String aID) {
+        myID = URI.create(aID);
         return this;
     }
 
     /**
      * Sets the format from a file extension or media type.
      *
-     * @param aMediaTypeString A string representation of media type or file extension
+     * @param aMediaType A string representation of media type or file extension
      * @return The Service
      */
     @JsonSetter(Constants.FORMAT)
-    public GenericService setFormat(final String aMediaTypeString) {
-        setMediaTypeFromExt(aMediaTypeString);
+    public GenericService setFormat(final String aMediaType) {
+        setMediaTypeFromExt(aMediaType);
         return this;
     }
 
@@ -189,17 +189,17 @@ public class GenericService implements Service<GenericService> {
     }
 
     @JsonIgnore
-    private void setMediaTypeFromExt(final String aUriString) {
-        final String mimeType = FileUtils.getMimeType(aUriString);
+    private void setMediaTypeFromExt(final String aURI) {
+        final String mimeType = FileUtils.getMimeType(aURI);
 
         try {
             if (mimeType != null) {
                 myFormat = Optional.ofNullable(MediaType.parse(mimeType));
             } else {
-                myFormat = Optional.ofNullable(MediaType.parse(aUriString));
+                myFormat = Optional.ofNullable(MediaType.parse(aURI));
             }
         } catch (final IllegalArgumentException details) {
-            LOGGER.warn(MessageCodes.JPA_013, aUriString);
+            LOGGER.warn(MessageCodes.JPA_013, aURI);
         }
     }
 

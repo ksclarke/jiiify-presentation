@@ -27,11 +27,11 @@ class ServiceProperty<T extends ServiceProperty<T>> {
     /**
      * Adds image to the property.
      *
-     * @param aIdStringArray An array of URI IDs, in string form, for the image
+     * @param aIdArray An array of URI IDs, in string form, for the image
      * @return The property
      */
-    protected T addImage(final String... aIdStringArray) {
-        for (final String id : aIdStringArray) {
+    protected T addImage(final String... aIdArray) {
+        for (final String id : aIdArray) {
             if (!getImages().add(new ServiceImage(id))) {
                 throw new UnsupportedOperationException();
             }
@@ -59,13 +59,13 @@ class ServiceProperty<T extends ServiceProperty<T>> {
     /**
      * Adds image to the property.
      *
-     * @param aIdString The URI ID, in string form, for the image
+     * @param aID The URI ID, in string form, for the image
      * @param aWidth A image width
      * @param aHeight A image height
      * @return The property
      */
-    public T addImage(final String aIdString, final int aWidth, final int aHeight) {
-        if (!getImages().add(new ServiceImage(aIdString, aWidth, aHeight))) {
+    public T addImage(final String aID, final int aWidth, final int aHeight) {
+        if (!getImages().add(new ServiceImage(aID, aWidth, aHeight))) {
             throw new UnsupportedOperationException();
         }
 
@@ -91,12 +91,12 @@ class ServiceProperty<T extends ServiceProperty<T>> {
     /**
      * Adds image to the property.
      *
-     * @param aIdString The URI ID, in string form, for the image
+     * @param aID The URI ID, in string form, for the image
      * @param aService A service for the image
      * @return The property
      */
-    public T addImage(final String aIdString, final ImageInfoService aService) {
-        if (!getImages().add(new ServiceImage(aIdString, aService))) {
+    public T addImage(final String aID, final ImageInfoService aService) {
+        if (!getImages().add(new ServiceImage(aID, aService))) {
             throw new UnsupportedOperationException();
         }
 
@@ -197,11 +197,11 @@ class ServiceProperty<T extends ServiceProperty<T>> {
     /**
      * Adds service image(s) to the property.
      *
-     * @param aServiceImageArray An array of service images
+     * @param aImageArray An array of service images
      * @return The property
      */
-    protected T addImage(final ServiceImage... aServiceImageArray) {
-        if (!Collections.addAll(getImages(), aServiceImageArray)) {
+    protected T addImage(final ServiceImage... aImageArray) {
+        if (!Collections.addAll(getImages(), aImageArray)) {
             throw new UnsupportedOperationException();
         }
 

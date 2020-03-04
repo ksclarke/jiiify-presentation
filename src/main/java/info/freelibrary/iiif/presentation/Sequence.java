@@ -45,12 +45,12 @@ public class Sequence extends Resource<Sequence> {
     /**
      * Creates a IIIF presentation sequence resource with the supplied ID string.
      *
-     * @param aIdString An ID in string form
+     * @param aID An ID in string form
      */
-    public Sequence(final String aIdString) {
+    public Sequence(final String aID) {
         super(TYPE, REQ_ARG_COUNT);
         myCanvases = new ArrayList<>();
-        setID(aIdString);
+        setID(aID);
     }
 
     /**

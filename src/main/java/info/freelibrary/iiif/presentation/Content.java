@@ -24,24 +24,24 @@ class Content<T extends Content<T>> extends Resource<T> {
     /**
      * Creates a IIIF presentation content resource.
      *
-     * @param aTypeString The type in string form
-     * @param aIdString The ID in string form
+     * @param aType The type in string form
+     * @param aID The ID in string form
      * @param aCanvas A canvas
      */
-    protected Content(final String aTypeString, final String aIdString, final Canvas aCanvas) {
-        super(aTypeString, aIdString, REQ_ARG_COUNT);
+    protected Content(final String aType, final String aID, final Canvas aCanvas) {
+        super(aType, aID, REQ_ARG_COUNT);
         myOn = aCanvas.getID();
     }
 
     /**
      * Creates a IIIF presentation content resource.
      *
-     * @param aTypeString The type in string form
+     * @param aType The type in string form
      * @param aID A URI ID
      * @param aCanvas A canvas
      */
-    protected Content(final String aTypeString, final URI aID, final Canvas aCanvas) {
-        super(aTypeString, aID, REQ_ARG_COUNT);
+    protected Content(final String aType, final URI aID, final Canvas aCanvas) {
+        super(aType, aID, REQ_ARG_COUNT);
         myOn = aCanvas.getID();
     }
 
@@ -66,8 +66,8 @@ class Content<T extends Content<T>> extends Resource<T> {
     }
 
     @JsonSetter(Constants.ON)
-    public T setOn(final String aUriString) {
-        myOn = URI.create(aUriString);
+    public T setOn(final String aURI) {
+        myOn = URI.create(aURI);
         return (T) this;
     }
 }

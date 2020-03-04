@@ -58,12 +58,12 @@ public class Manifest extends Resource<Manifest> {
     /**
      * Creates a IIIF presentation manifest.
      *
-     * @param aIdString A manifest ID in string form
-     * @param aLabelString A manifest label in string form
+     * @param aID A manifest ID in string form
+     * @param aLabel A manifest label in string form
      * @throws IllegalArgumentException If the supplied ID is not a valid URI
      */
-    public Manifest(final String aIdString, final String aLabelString) {
-        super(TYPE, aIdString, aLabelString, REQ_ARG_COUNT);
+    public Manifest(final String aID, final String aLabel) {
+        super(TYPE, aID, aLabel, REQ_ARG_COUNT);
     }
 
     /**
@@ -79,16 +79,16 @@ public class Manifest extends Resource<Manifest> {
     /**
      * Creates a IIIF presentation manifest.
      *
-     * @param aIdString A manifest ID in string form
-     * @param aLabelString A manifest label in string form
+     * @param aID A manifest ID in string form
+     * @param aLabel A manifest label in string form
      * @param aMetadata A manifest's metadata
-     * @param aSummaryString A manifest summary in string form
+     * @param aSummary A manifest summary in string form
      * @param aThumbnail A manifest thumbnail
      * @throws URISyntaxException If the supplied ID is not a valid URI
      */
-    public Manifest(final String aIdString, final String aLabelString, final Metadata aMetadata,
-            final String aSummaryString, final Thumbnail aThumbnail) throws URISyntaxException {
-        super(TYPE, aIdString, aLabelString, aMetadata, aSummaryString, aThumbnail, REQ_ARG_COUNT);
+    public Manifest(final String aID, final String aLabel, final Metadata aMetadata, final String aSummary,
+            final Thumbnail aThumbnail) throws URISyntaxException {
+        super(TYPE, aID, aLabel, aMetadata, aSummary, aThumbnail, REQ_ARG_COUNT);
     }
 
     /**
@@ -139,25 +139,25 @@ public class Manifest extends Resource<Manifest> {
     /**
      * Adds an array of new context URIs to the manifest.
      *
-     * @param aUriArray Manifest context URIs(s)
+     * @param aContextArray Manifest context URIs(s)
      * @return The manifest
      */
-    public Manifest addContext(final URI... aUriArray) {
-        Collections.addAll(myContexts, aUriArray);
+    public Manifest addContext(final URI... aContextArray) {
+        Collections.addAll(myContexts, aContextArray);
         return this;
     }
 
     /**
      * Adds an array of new context URIs, in string form, to the manifest.
      *
-     * @param aStringArray Manifest context URI(s) in string form
+     * @param aContextArray Manifest context URI(s) in string form
      * @return The manifest
      */
-    public Manifest addContext(final String... aStringArray) {
-        Objects.requireNonNull(aStringArray, MessageCodes.JPA_007);
+    public Manifest addContext(final String... aContextArray) {
+        Objects.requireNonNull(aContextArray, MessageCodes.JPA_007);
 
-        for (final String uri : aStringArray) {
-            Objects.requireNonNull(aStringArray, MessageCodes.JPA_007);
+        for (final String uri : aContextArray) {
+            Objects.requireNonNull(aContextArray, MessageCodes.JPA_007);
 
             myContexts.add(URI.create(uri));
         }
@@ -212,7 +212,7 @@ public class Manifest extends Resource<Manifest> {
     /**
      * Adds one or more sequences to the manifest.
      *
-     * @param aSequence Sequence(s) to add to the manifest
+     * @param aSequence An array of sequences to add to the manifest
      * @return The manifest
      */
     public Manifest addSequence(final Sequence... aSequence) {
@@ -242,7 +242,7 @@ public class Manifest extends Resource<Manifest> {
     /**
      * Sets the manifest sequences to the supplied one(s).
      *
-     * @param aSequence The manifest's sequence(s)
+     * @param aSequence An array of sequences to set
      * @return The manifest
      */
     @JsonGetter(Constants.SEQUENCES)
@@ -292,11 +292,11 @@ public class Manifest extends Resource<Manifest> {
     /**
      * Method used internally to set context from JSON.
      *
-     * @param aContextString A manifest context in string form
+     * @param aContext A manifest context in string form
      */
     @JsonSetter(Constants.CONTEXT)
-    private void setContext(final String aContextString) {
-        if (!CONTEXT.equals(URI.create(aContextString))) {
+    private void setContext(final String aContext) {
+        if (!CONTEXT.equals(URI.create(aContext))) {
             throw new I18nRuntimeException();
         }
     }

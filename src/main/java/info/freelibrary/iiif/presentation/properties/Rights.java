@@ -25,13 +25,13 @@ public class Rights {
     /**
      * Creates a rights property from the supplied URL(s).
      *
-     * @param aStringArray An array of URLs, in string form, for the rights(s)
+     * @param aUrlArray An array of URLs, in string form, for the rights(s)
      * @throws MalformedURLException If the supplied URL string isn't a valid URL
      */
-    public Rights(final String... aStringArray) throws MalformedURLException {
-        myURLs = new ArrayList<>(aStringArray.length + LIST_PADDING);
+    public Rights(final String... aUrlArray) throws MalformedURLException {
+        myURLs = new ArrayList<>(aUrlArray.length + LIST_PADDING);
 
-        for (final String url : aStringArray) {
+        for (final String url : aUrlArray) {
             myURLs.add(new URL(url));
         }
     }
@@ -50,9 +50,9 @@ public class Rights {
      * Creates a new rights property.
      */
     @SuppressWarnings("unused")
-    private Rights(final String aUrlString) throws MalformedURLException {
+    private Rights(final String aURL) throws MalformedURLException {
         myURLs = new ArrayList<>(LIST_PADDING + 1);
-        myURLs.add(new URL(aUrlString));
+        myURLs.add(new URL(aURL));
     }
 
     /**

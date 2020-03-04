@@ -46,11 +46,11 @@ public class Collection extends Resource<Collection> {
     /**
      * Creates a IIIF presentation collection.
      *
-     * @param aIdString A collection ID in string form
-     * @param aLabelString A collection label in string form
+     * @param aID A collection ID in string form
+     * @param aLabel A collection label in string form
      */
-    public Collection(final String aIdString, final String aLabelString) {
-        super(TYPE, aIdString, aLabelString, REQ_ARG_COUNT);
+    public Collection(final String aID, final String aLabel) {
+        super(TYPE, aID, aLabel, REQ_ARG_COUNT);
     }
 
     /**
@@ -66,15 +66,15 @@ public class Collection extends Resource<Collection> {
     /**
      * Creates a IIIF presentation collection.
      *
-     * @param aIdString A collection ID in string form
-     * @param aLabelString A collection label in string form
+     * @param aID A collection ID in string form
+     * @param aLabel A collection label in string form
      * @param aMetadata A collection's metadata
-     * @param aSummaryString A collection summary in string form
+     * @param aSummary A collection summary in string form
      * @param aThumbnail A collection thumbnail
      */
-    public Collection(final String aIdString, final String aLabelString, final Metadata aMetadata,
-            final String aSummaryString, final Thumbnail aThumbnail) {
-        super(TYPE, aIdString, aLabelString, aMetadata, aSummaryString, aThumbnail, REQ_ARG_COUNT);
+    public Collection(final String aID, final String aLabel, final Metadata aMetadata, final String aSummary,
+            final Thumbnail aThumbnail) {
+        super(TYPE, aID, aLabel, aMetadata, aSummary, aThumbnail, REQ_ARG_COUNT);
     }
 
     /**
@@ -133,11 +133,11 @@ public class Collection extends Resource<Collection> {
     /**
      * Method used internally to set context from JSON.
      *
-     * @param aContextString A manifest context in string form
+     * @param aContext A manifest context in string form
      */
     @JsonSetter(Constants.CONTEXT)
-    private void setContext(final String aContextString) {
-        if (!CONTEXT.equals(URI.create(aContextString))) {
+    private void setContext(final String aContext) {
+        if (!CONTEXT.equals(URI.create(aContext))) {
             throw new I18nRuntimeException();
         }
     }
@@ -236,12 +236,12 @@ public class Collection extends Resource<Collection> {
         /**
          * Create a new collection manifest from the supplied ID and label.
          *
-         * @param aIdString A manifest ID
-         * @param aLabelString A manifest label
+         * @param aID A manifest ID
+         * @param aLabel A manifest label
          */
-        public Manifest(final String aIdString, final String aLabelString) {
-            setID(aIdString);
-            setLabel(aLabelString);
+        public Manifest(final String aID, final String aLabel) {
+            setID(aID);
+            setLabel(aLabel);
         }
 
         /**
@@ -280,12 +280,12 @@ public class Collection extends Resource<Collection> {
         /**
          * Sets the collection manifest ID.
          *
-         * @param aIDString A collection manifest ID in string form
+         * @param aID A collection manifest ID in string form
          * @return The manifest
          */
         @JsonSetter(Constants.ID)
-        public Manifest setID(final String aIDString) {
-            myID = URI.create(aIDString);
+        public Manifest setID(final String aID) {
+            myID = URI.create(aID);
             return this;
         }
 
@@ -324,12 +324,12 @@ public class Collection extends Resource<Collection> {
         /**
          * Sets the collection manifest label.
          *
-         * @param aLabelString The collection manifest label
+         * @param aLabel The collection manifest label
          * @return The manifest
          */
         @JsonIgnore
-        public Manifest setLabel(final String aLabelString) {
-            myLabel = new Label(aLabelString);
+        public Manifest setLabel(final String aLabel) {
+            myLabel = new Label(aLabel);
             return this;
         }
 

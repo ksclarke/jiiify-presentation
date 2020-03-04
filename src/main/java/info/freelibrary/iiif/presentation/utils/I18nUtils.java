@@ -36,10 +36,10 @@ public final class I18nUtils {
     /**
      * Strips HTML tags from the strings in the supplied internationalizations.
      *
-     * @param aI18nsArray An array of internationalizations
+     * @param aI18nArray An array of internationalizations
      * @return An array of internationalizations guaranteed not to contain HTML markup
      */
-    public static I18n[] stripHTML(final I18n... aI18nsArray) {
+    public static I18n[] stripHTML(final I18n... aI18nArray) {
         throw new UnsupportedOperationException();
     }
 
@@ -47,16 +47,16 @@ public final class I18nUtils {
      * Validate the contents of a supplied I18n array.
      *
      * @param aHtmlAllowed Whether HTML markup is allowed in the I18n strings
-     * @param aI18nsArray A supplied array of internationalizations
+     * @param aI18nArray A supplied array of internationalizations
      * @return A clean array of internationalizations
      * @throws IllegalArgumentException If HTML is disallowed and one of the supplied I18ns contains markup
      */
-    public static I18n[] validateI18ns(final boolean aHtmlAllowed, final I18n... aI18nsArray)
+    public static I18n[] validateI18ns(final boolean aHtmlAllowed, final I18n... aI18nArray)
             throws IllegalArgumentException {
         final I18n[] i18ns;
 
         if (aHtmlAllowed) {
-            i18ns = aI18nsArray;
+            i18ns = aI18nArray;
 
             // Just confirm all our I18ns have their HTML allowed flag set properly
             for (int index = 0; index < i18ns.length; index++) {
@@ -69,11 +69,11 @@ public final class I18nUtils {
                 }
             }
         } else {
-            i18ns = new I18n[aI18nsArray.length];
+            i18ns = new I18n[aI18nArray.length];
 
-            for (int index = 0; index < aI18nsArray.length; index++) {
-                final String langTag = aI18nsArray[index].getLang();
-                final List<String> strings = aI18nsArray[index].getStrings();
+            for (int index = 0; index < aI18nArray.length; index++) {
+                final String langTag = aI18nArray[index].getLang();
+                final List<String> strings = aI18nArray[index].getStrings();
 
                 // Confirm our strings don't have disallowed HTML markup
                 for (final String string : strings) {
@@ -83,10 +83,10 @@ public final class I18nUtils {
                 }
 
                 // Confirm our I18ns are all set to disallow HTML markup
-                if (aI18nsArray[index].allowsHTML()) {
+                if (aI18nArray[index].allowsHTML()) {
                     i18ns[index] = new I18n(langTag, strings, aHtmlAllowed);
                 } else {
-                    i18ns[index] = aI18nsArray[index];
+                    i18ns[index] = aI18nArray[index];
                 }
             }
         }
@@ -98,15 +98,15 @@ public final class I18nUtils {
      * Creates an array of I18ns from an array of strings, checking for HTML if it isn't allowed.
      *
      * @param aHtmlAllowed Whether HTML markup is allowed in the I18n
-     * @param aStringsArray The strings to convert into I18ns
+     * @param aStringArray The strings to convert into I18ns
      * @return An array of I18ns
      * @throws IllegalArgumentException If HTML is not allowed, but one of the strings contains markup
      */
-    public static I18n[] createI18ns(final boolean aHtmlAllowed, final String... aStringsArray)
+    public static I18n[] createI18ns(final boolean aHtmlAllowed, final String... aStringArray)
             throws IllegalArgumentException {
         final List<I18n> i18ns = new ArrayList<>();
 
-        for (final String string : aStringsArray) {
+        for (final String string : aStringArray) {
             if (!aHtmlAllowed && hasHTML(string)) {
                 throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_019, string));
             }

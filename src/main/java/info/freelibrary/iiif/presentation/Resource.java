@@ -71,27 +71,27 @@ class Resource<T extends Resource<T>> {
     /**
      * Creates a new resource from the supplied type.
      *
-     * @param aTypeString A resource type in string form
+     * @param aType A resource type in string form
      * @param aNumber The number of required arguments
      */
-    protected Resource(final String aTypeString, final int aNumber) {
-        checkArgs(new Object[] { aTypeString }, new String[] { Constants.TYPE }, aNumber);
-        myType = new Type(aTypeString); // always required
+    protected Resource(final String aType, final int aNumber) {
+        checkArgs(new Object[] { aType }, new String[] { Constants.TYPE }, aNumber);
+        myType = new Type(aType); // always required
     }
 
     /**
      * Creates a new resource from the supplied ID and type.
      *
-     * @param aIdString An ID in string form
-     * @param aTypeString A resource type in string form
+     * @param aID An ID in string form
+     * @param aType A resource type in string form
      * @param aNumber The number of required arguments
      */
-    protected Resource(final String aTypeString, final String aIdString, final int aNumber) {
-        checkArgs(new Object[] { aTypeString, aIdString }, new String[] { Constants.TYPE, Constants.ID }, aNumber);
-        myType = new Type(aTypeString); // always required
+    protected Resource(final String aType, final String aID, final int aNumber) {
+        checkArgs(new Object[] { aType, aID }, new String[] { Constants.TYPE, Constants.ID }, aNumber);
+        myType = new Type(aType); // always required
 
-        if (aIdString != null) {
-            myID = URI.create(aIdString);
+        if (aID != null) {
+            myID = URI.create(aID);
         }
     }
 
@@ -99,12 +99,12 @@ class Resource<T extends Resource<T>> {
      * Creates a new resource from the supplied ID and type.
      *
      * @param aID An ID in string form
-     * @param aTypeString A resource type in string form
+     * @param aType A resource type in string form
      * @param aNumber The number of required arguments
      */
-    protected Resource(final String aTypeString, final URI aID, final int aNumber) {
-        checkArgs(new Object[] { aTypeString, aID }, new String[] { Constants.TYPE, Constants.ID }, aNumber);
-        myType = new Type(aTypeString); // always required
+    protected Resource(final String aType, final URI aID, final int aNumber) {
+        checkArgs(new Object[] { aType, aID }, new String[] { Constants.TYPE, Constants.ID }, aNumber);
+        myType = new Type(aType); // always required
 
         myID = aID;
     }
@@ -112,26 +112,25 @@ class Resource<T extends Resource<T>> {
     /**
      * Creates a new resource from a supplied ID, type, and label.
      *
-     * @param aIdString A URI in string form
-     * @param aTypeString A type of resource in string form
-     * @param aLabelString A label in string form
+     * @param aID A URI in string form
+     * @param aType A type of resource in string form
+     * @param aLabel A label in string form
      * @param aNumber The number of required arguments
      */
-    protected Resource(final String aTypeString, final String aIdString, final String aLabelString,
-            final int aNumber) {
-        final Object[] argsArray = new Object[] { aTypeString, aIdString, aLabelString };
+    protected Resource(final String aType, final String aID, final String aLabel, final int aNumber) {
+        final Object[] argsArray = new Object[] { aType, aID, aLabel };
         final String[] namesArray = new String[] { Constants.TYPE, Constants.ID, Constants.LABEL };
 
         checkArgs(argsArray, namesArray, aNumber);
 
-        myType = new Type(aTypeString); // always required
+        myType = new Type(aType); // always required
 
-        if (aIdString != null) {
-            myID = URI.create(aIdString);
+        if (aID != null) {
+            myID = URI.create(aID);
         }
 
-        if (aLabelString != null) {
-            myLabel = new Label(aLabelString);
+        if (aLabel != null) {
+            myLabel = new Label(aLabel);
         }
     }
 
@@ -139,17 +138,17 @@ class Resource<T extends Resource<T>> {
      * Creates a new resource from a supplied ID and label.
      *
      * @param aID A URI ID (preferably and HTTP based one)
-     * @param aTypeString A type of resource in string form
+     * @param aType A type of resource in string form
      * @param aLabel A label for the resource
      * @param aNumber The number of required arguments
      */
-    protected Resource(final String aTypeString, final URI aID, final Label aLabel, final int aNumber) {
-        final Object[] argsArray = new Object[] { aTypeString, aID, aLabel };
+    protected Resource(final String aType, final URI aID, final Label aLabel, final int aNumber) {
+        final Object[] argsArray = new Object[] { aType, aID, aLabel };
         final String[] namesArray = new String[] { Constants.TYPE, Constants.ID, Constants.LABEL };
 
         checkArgs(argsArray, namesArray, aNumber);
 
-        myType = new Type(aTypeString);
+        myType = new Type(aType);
         myID = aID;
         myLabel = aLabel;
     }
@@ -157,38 +156,37 @@ class Resource<T extends Resource<T>> {
     /**
      * Creates a new resource from string values.
      *
-     * @param aIdString An ID in string form
-     * @param aTypeString A type in string form
-     * @param aLabelString A label in string form
+     * @param aID An ID in string form
+     * @param aType A type in string form
+     * @param aLabel A label in string form
      * @param aMetadata A metadata property
-     * @param aSummaryString A summary property in string form
+     * @param aSummary A summary property in string form
      * @param aThumbnail A thumbnail property
      * @param aNumber The number of required arguments
      */
-    protected Resource(final String aTypeString, final String aIdString, final String aLabelString,
-            final Metadata aMetadata, final String aSummaryString, final Thumbnail aThumbnail, final int aNumber) {
-        final Object[] argsArray = new Object[] { aTypeString, aIdString, aLabelString, aMetadata, aSummaryString,
-            aThumbnail };
+    protected Resource(final String aType, final String aID, final String aLabel, final Metadata aMetadata,
+            final String aSummary, final Thumbnail aThumbnail, final int aNumber) {
+        final Object[] argsArray = new Object[] { aType, aID, aLabel, aMetadata, aSummary, aThumbnail };
         final String[] namesArray = new String[] { Constants.TYPE, Constants.ID, Constants.LABEL, Constants.METADATA,
             Constants.SUMMARY, Constants.THUMBNAIL };
 
         checkArgs(argsArray, namesArray, aNumber);
 
-        myType = new Type(aTypeString); // always required
+        myType = new Type(aType); // always required
 
-        if (aIdString != null) {
-            myID = URI.create(aIdString);
+        if (aID != null) {
+            myID = URI.create(aID);
         }
 
-        if (aLabelString != null) {
-            myLabel = new Label(aLabelString);
+        if (aLabel != null) {
+            myLabel = new Label(aLabel);
         }
 
         myMetadata = aMetadata;
         myThumbnail = aThumbnail;
 
-        if (aSummaryString != null) {
-            mySummary = new Summary(aSummaryString);
+        if (aSummary != null) {
+            mySummary = new Summary(aSummary);
         }
     }
 
@@ -196,22 +194,22 @@ class Resource<T extends Resource<T>> {
      * Creates a new resource from properties.
      *
      * @param aID An ID
-     * @param aTypeString A type in string form
+     * @param aType A type in string form
      * @param aLabel A label is required
      * @param aMetadata A metadata property
      * @param aSummary A summary property
      * @param aThumbnail A thumbnail property
      * @param aNumber The number of required arguments
      */
-    protected Resource(final String aTypeString, final URI aID, final Label aLabel, final Metadata aMetadata,
+    protected Resource(final String aType, final URI aID, final Label aLabel, final Metadata aMetadata,
             final Summary aSummary, final Thumbnail aThumbnail, final int aNumber) {
-        final Object[] argsArray = new Object[] { aTypeString, aID, aLabel, aMetadata, aSummary, aThumbnail };
+        final Object[] argsArray = new Object[] { aType, aID, aLabel, aMetadata, aSummary, aThumbnail };
         final String[] namesArray = new String[] { Constants.TYPE, Constants.ID, Constants.LABEL, Constants.METADATA,
             Constants.SUMMARY, Constants.THUMBNAIL };
 
         checkArgs(argsArray, namesArray, aNumber);
 
-        myType = new Type(aTypeString); // always required
+        myType = new Type(aType); // always required
         myID = aID;
         myLabel = aLabel;
         myMetadata = aMetadata;
@@ -241,12 +239,12 @@ class Resource<T extends Resource<T>> {
     /**
      * Sets the label from the supplied string.
      *
-     * @param aLabelString The string form of the label to set
+     * @param aLabel The string form of the label to set
      * @return The resource
      */
     @JsonIgnore
-    public T setLabel(final String aLabelString) {
-        myLabel = new Label(aLabelString);
+    public T setLabel(final String aLabel) {
+        myLabel = new Label(aLabel);
         return (T) this;
     }
 
@@ -319,12 +317,12 @@ class Resource<T extends Resource<T>> {
     /**
      * Sets the summary.
      *
-     * @param aSummaryString A summary in string form
+     * @param aSummary A summary in string form
      * @return The resource
      */
     @JsonIgnore
-    public T setSummary(final String aSummaryString) {
-        mySummary = new Summary(aSummaryString);
+    public T setSummary(final String aSummary) {
+        mySummary = new Summary(aSummary);
         return (T) this;
     }
 
@@ -364,11 +362,11 @@ class Resource<T extends Resource<T>> {
     /**
      * Sets the thumbnail.
      *
-     * @param aUriString A thumbnail URI ID in string form
+     * @param aURI A thumbnail URI ID in string form
      * @return The resource
      */
-    public T setThumbnail(final String aUriString) {
-        myThumbnail = new Thumbnail(aUriString);
+    public T setThumbnail(final String aURI) {
+        myThumbnail = new Thumbnail(aURI);
         return (T) this;
     }
 
@@ -385,12 +383,12 @@ class Resource<T extends Resource<T>> {
     /**
      * Sets the attribution.
      *
-     * @param aAttributionString An attribution in string form
+     * @param aAttribution An attribution in string form
      * @return The resource
      */
     @JsonIgnore
-    public T setAttribution(final String aAttributionString) {
-        myAttribution = new Attribution(aAttributionString);
+    public T setAttribution(final String aAttribution) {
+        myAttribution = new Attribution(aAttribution);
         return (T) this;
     }
 
@@ -431,13 +429,13 @@ class Resource<T extends Resource<T>> {
     /**
      * Sets the rights from the supplied string.
      *
-     * @param aRightsString A rights URL in string form
+     * @param aRightsURL A rights URL in string form
      * @return The resource
      * @throws MalformedURLException If the supplied URL string isn't a valid URL
      */
     @JsonIgnore
-    public T setRights(final String aRightsString) throws MalformedURLException {
-        myRights = new Rights(aRightsString);
+    public T setRights(final String aRightsURL) throws MalformedURLException {
+        myRights = new Rights(aRightsURL);
         return (T) this;
     }
 
@@ -466,11 +464,11 @@ class Resource<T extends Resource<T>> {
     /**
      * Sets the logo from the supplied string.
      *
-     * @param aLogoString A logo URI ID in string form
+     * @param aLogo A logo URI ID in string form
      * @return The resource
      */
-    public T setLogo(final String aLogoString) {
-        myLogo = new Logo(aLogoString);
+    public T setLogo(final String aLogo) {
+        myLogo = new Logo(aLogo);
         return (T) this;
     }
 
@@ -487,12 +485,12 @@ class Resource<T extends Resource<T>> {
     /**
      * Sets the ID from the supplied string.
      *
-     * @param aIdString An URI ID in string form
+     * @param aID An URI ID in string form
      * @return The resource
      */
     @JsonIgnore
-    public T setID(final String aIdString) {
-        myID = URI.create(aIdString);
+    public T setID(final String aID) {
+        myID = URI.create(aID);
         return (T) this;
     }
 
@@ -567,11 +565,11 @@ class Resource<T extends Resource<T>> {
     /**
      * Sets the behavior from the supplied string.
      *
-     * @param aBehaviorString The behavior in string form
+     * @param aBehavior The behavior in string form
      * @return The resource
      */
-    public T setBehavior(final String aBehaviorString) {
-        myBehavior = new Behavior(aBehaviorString);
+    public T setBehavior(final String aBehavior) {
+        myBehavior = new Behavior(aBehavior);
         return (T) this;
     }
 
@@ -621,12 +619,12 @@ class Resource<T extends Resource<T>> {
     /**
      * Sets see also reference from the supplied string.
      *
-     * @param aSeeAlsoString See also reference supplied as a string
+     * @param aSeeAlso See also reference supplied as a string
      * @return The resource
      */
     @JsonSetter(Constants.SEE_ALSO)
-    public T setSeeAlso(final String aSeeAlsoString) {
-        mySeeAlso = new SeeAlso(aSeeAlsoString);
+    public T setSeeAlso(final String aSeeAlso) {
+        mySeeAlso = new SeeAlso(aSeeAlso);
         return (T) this;
     }
 

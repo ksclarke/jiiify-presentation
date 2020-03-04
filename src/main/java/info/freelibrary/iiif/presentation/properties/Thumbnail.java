@@ -19,10 +19,10 @@ public class Thumbnail extends ServiceProperty<Thumbnail> {
     /**
      * Creates a thumbnail property.
      *
-     * @param aIdStringArray An array of thumbnail IDs in string form
+     * @param aIdArray An array of thumbnail IDs in string form
      */
-    public Thumbnail(final String... aIdStringArray) {
-        addImage(aIdStringArray);
+    public Thumbnail(final String... aIdArray) {
+        addImage(aIdArray);
     }
 
     /**
@@ -37,12 +37,12 @@ public class Thumbnail extends ServiceProperty<Thumbnail> {
     /**
      * Creates a thumbnail property.
      *
-     * @param aUriString A URI image ID in string form
+     * @param aID A URI image ID in string form
      * @param aWidth An image width
      * @param aHeight An image height
      */
-    public Thumbnail(final String aUriString, final int aWidth, final int aHeight) {
-        addImage(aUriString, aWidth, aHeight);
+    public Thumbnail(final String aID, final int aWidth, final int aHeight) {
+        addImage(aID, aWidth, aHeight);
     }
 
     /**
@@ -59,11 +59,11 @@ public class Thumbnail extends ServiceProperty<Thumbnail> {
     /**
      * Creates a thumbnail property.
      *
-     * @param aIdString An ID for the thumbnail image in string form
+     * @param aID An ID for the thumbnail image in string form
      * @param aService A service for the thumbnail image
      */
-    public Thumbnail(final String aIdString, final ImageInfoService aService) {
-        addImage(URI.create(aIdString), aService);
+    public Thumbnail(final String aID, final ImageInfoService aService) {
+        addImage(URI.create(aID), aService);
     }
 
     /**

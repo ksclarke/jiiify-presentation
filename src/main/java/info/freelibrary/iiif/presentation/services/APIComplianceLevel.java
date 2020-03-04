@@ -26,10 +26,10 @@ public enum APIComplianceLevel {
     /**
      * Creates an Image Info profile level.
      *
-     * @param aLevelString A profile level
+     * @param aLevel A profile level
      */
-    APIComplianceLevel(final String aLevelString) {
-        myURL = aLevelString;
+    APIComplianceLevel(final String aLevel) {
+        myURL = aLevel;
     }
 
     /**
@@ -67,12 +67,12 @@ public enum APIComplianceLevel {
     /**
      * Gets a compliance level from a string value.
      *
-     * @param aProfileString A string form of the compliance level
+     * @param aProfile A string form of the compliance level
      * @return A compliance level
      */
-    public static APIComplianceLevel fromProfile(final String aProfileString) {
+    public static APIComplianceLevel fromProfile(final String aProfile) {
         for (final APIComplianceLevel level : APIComplianceLevel.values()) {
-            if (level.string().equals(aProfileString)) {
+            if (level.string().equals(aProfile)) {
                 return level;
             }
         }

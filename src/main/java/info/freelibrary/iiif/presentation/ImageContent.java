@@ -50,11 +50,11 @@ public class ImageContent extends Content<ImageContent> {
     /**
      * Creates image content.
      *
-     * @param aIdString An image content ID in string form
+     * @param aID An image content ID in string form
      * @param aCanvas A canvas for the image content
      */
-    public ImageContent(final String aIdString, final Canvas aCanvas) {
-        super(TYPE, aIdString, aCanvas);
+    public ImageContent(final String aID, final Canvas aCanvas) {
+        super(TYPE, aID, aCanvas);
     }
 
     /**
@@ -87,11 +87,11 @@ public class ImageContent extends Content<ImageContent> {
     /**
      * Sets the motivation of the image content.
      *
-     * @param aMotivationString A motivation in string form
+     * @param aMotivation A motivation in string form
      */
     @JsonSetter(Constants.MOTIVATION)
-    private void setMotivation(final String aMotivationString) {
-        if (!MOTIVATION.equals(aMotivationString)) {
+    private void setMotivation(final String aMotivation) {
+        if (!MOTIVATION.equals(aMotivation)) {
             throw new I18nRuntimeException();
         }
     }
