@@ -236,8 +236,8 @@ public class Collection extends Resource<Collection> {
         /**
          * Create a new collection manifest from the supplied ID and label.
          *
-         * @param aID A manifest ID
-         * @param aLabel A manifest label
+         * @param aID A manifest ID in string form
+         * @param aLabel A manifest label in string form
          */
         public Manifest(final String aID, final String aLabel) {
             setID(aID);
@@ -324,7 +324,7 @@ public class Collection extends Resource<Collection> {
         /**
          * Sets the collection manifest label.
          *
-         * @param aLabel The collection manifest label
+         * @param aLabel The collection manifest label in string form
          * @return The manifest
          */
         @JsonIgnore

@@ -55,7 +55,7 @@ public class Behavior {
     /**
      * Creates a new behavior from one of the specified options.
      *
-     * @param aOptionArray A behavior option
+     * @param aOptionArray An array of behavior options
      */
     public Behavior(final Option... aOptionArray) {
         for (final Option opt : aOptionArray) {
@@ -66,7 +66,7 @@ public class Behavior {
     /**
      * Creates a new behavior from a URI.
      *
-     * @param aUriArray A behavior in URI form
+     * @param aUriArray An array of behaviors in URI form
      */
     public Behavior(final URI... aUriArray) {
         for (final URI uri : aUriArray) {
@@ -77,7 +77,7 @@ public class Behavior {
     /**
      * Creates a new behavior from a String.
      *
-     * @param aStringArray A behavior in string form
+     * @param aStringArray An array of behaviors in string form
      */
     public Behavior(final String... aStringArray) {
         for (final String string : aStringArray) {
@@ -170,7 +170,7 @@ public class Behavior {
     /**
      * Adds the value(s) to the behavior.
      *
-     * @param aUriArray The behavior value
+     * @param aUriArray An array of behaviors in URI form
      * @return The behavior
      */
     public Behavior addValue(final URI... aUriArray) {
@@ -184,7 +184,7 @@ public class Behavior {
     /**
      * Sets the value of the behavior. The deletes all previous values.
      *
-     * @param aStringArray The behavior value in string form
+     * @param aStringArray An array of behaviors in string form
      * @return The behavior
      */
     public Behavior setValue(final String... aStringArray) {
