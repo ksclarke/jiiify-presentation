@@ -307,7 +307,7 @@ public class Manifest extends Resource<Manifest> {
      * @return The manifest context
      */
     @JsonGetter(Constants.CONTEXT)
-    private Object getContextsForJSON() {
+    private Object getJsonContext() {
         if (myContexts.size() == 1) {
             return myContexts.get(0);
         } else if (myContexts.size() > 1) {

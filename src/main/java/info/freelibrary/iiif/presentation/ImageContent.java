@@ -182,18 +182,18 @@ public class ImageContent extends Content<ImageContent> {
     /**
      * Builds the ImageContent's ImageResoures from the JSON resources map.
      *
-     * @param aResourceMap A JSON representation of the resources map
+     * @param aResourcesMap A JSON representation of the resources map
      */
     @JsonSetter(Constants.RESOURCE)
-    private void setResourcesMap(final Map<String, Object> aResourceMap) {
-        LOGGER.trace(aResourceMap.toString());
+    private void setMap(final Map<String, Object> aResourcesMap) {
+        LOGGER.trace(aResourcesMap.toString());
 
-        if (!aResourceMap.isEmpty()) {
-            final Map<String, Object> defaultItem = (Map<String, Object>) aResourceMap.get(Constants.DEFAULT);
-            final List<Map<String, Object>> items = (List<Map<String, Object>>) aResourceMap.get(Constants.ITEM);
+        if (!aResourcesMap.isEmpty()) {
+            final Map<String, Object> defaultItem = (Map<String, Object>) aResourcesMap.get(Constants.DEFAULT);
+            final List<Map<String, Object>> items = (List<Map<String, Object>>) aResourcesMap.get(Constants.ITEM);
 
             if (defaultItem != null) {
-                myDefaultResource = Optional.of(buildImageResource(defaultItem));
+                myDefaultResource = Optional.of(deserializeResource(defaultItem));
             }
 
             if (items != null) {
@@ -201,29 +201,30 @@ public class ImageContent extends Content<ImageContent> {
                     if (object instanceof String && RDF_NIL.equals(object.toString())) {
                         myResources.add(null);
                     } else {
-                        myResources.add(buildImageResource((Map<String, Object>) object));
+                        myResources.add(deserializeResource((Map<String, Object>) object));
                     }
                 }
             }
 
-            if (defaultItem == null && items == null && aResourceMap.get(Constants.ID) != null) {
-                myResources.add(buildImageResource(aResourceMap));
+            if (defaultItem == null && items == null && aResourcesMap.get(Constants.ID) != null) {
+                myResources.add(deserializeResource(aResourcesMap));
             }
         }
     }
 
     /**
-     * Build an image resource from the Map that Jackson creates
+     * Deserializes an image resource from the Map that Jackson creates. This is a candidate for a custom
+     * deserializer.
      *
-     * @param aImageResourceMap A map of the image resources
+     * @param aResourceMap A map of the image resources
      * @return The newly built image resource
      */
-    private ImageResource buildImageResource(final Map<String, Object> aImageResourceMap) {
-        final ImageResource resource = new ImageResource(URI.create((String) aImageResourceMap.get(Constants.ID)));
-        final LinkedHashMap labelMap = (LinkedHashMap) aImageResourceMap.get(Constants.LABEL);
-        final int width = (int) aImageResourceMap.getOrDefault(Constants.WIDTH, 0);
-        final int height = (int) aImageResourceMap.getOrDefault(Constants.HEIGHT, 0);
-        final Map<String, Object> service = (Map<String, Object>) aImageResourceMap.get(Constants.SERVICE);
+    private ImageResource deserializeResource(final Map<String, Object> aResourceMap) {
+        final ImageResource resource = new ImageResource(URI.create((String) aResourceMap.get(Constants.ID)));
+        final LinkedHashMap labelMap = (LinkedHashMap) aResourceMap.get(Constants.LABEL);
+        final int width = (int) aResourceMap.getOrDefault(Constants.WIDTH, 0);
+        final int height = (int) aResourceMap.getOrDefault(Constants.HEIGHT, 0);
+        final Map<String, Object> service = (Map<String, Object>) aResourceMap.get(Constants.SERVICE);
 
         if (labelMap != null) {
             final Iterator<String> iterator = labelMap.keySet().iterator();

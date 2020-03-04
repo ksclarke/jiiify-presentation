@@ -204,7 +204,7 @@ public class GenericService implements Service<GenericService> {
     }
 
     @JsonValue
-    private Object getJsonValue() {
+    private Object toJsonValue() {
         if (myID != null) {
             if (myProfile == null && myContext == null && myFormat == null) {
                 return myID;

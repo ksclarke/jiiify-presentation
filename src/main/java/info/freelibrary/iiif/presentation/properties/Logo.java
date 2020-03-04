@@ -30,7 +30,7 @@ public class Logo extends ServiceProperty<Logo> {
     /**
      * Creates a logo property from an array of URI IDs.
      *
-     * @param aIdArray A logo ID
+     * @param aIdArray A logo ID array
      */
     public Logo(final URI... aIdArray) {
         addImage(aIdArray);
