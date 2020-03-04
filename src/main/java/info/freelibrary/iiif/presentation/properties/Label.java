@@ -2,10 +2,11 @@
 package info.freelibrary.iiif.presentation.properties;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import info.freelibrary.iiif.presentation.utils.Constants;
-import info.freelibrary.iiif.presentation.utils.LabelDeserializer;
+import info.freelibrary.iiif.presentation.utils.I18nUtils;
 
 /**
  * A human readable label, name or title for the resource. This property is intended to be displayed as a short,
@@ -16,21 +17,74 @@ import info.freelibrary.iiif.presentation.utils.LabelDeserializer;
 public class Label extends I18nProperty<Label> {
 
     /**
-     * Creates a label from the supplied I18n value(s).
+     * Creates a label from the supplied internationalizations.
      *
-     * @param aValue A list of I18n values for the label
+     * @param aI18nArray An array of internationalizations for the label
+     * @throws IllegalArgumentException If the supplied internationalizations have HTML markup
      */
-    public Label(final Value... aValue) {
-        super(aValue);
+    public Label(final I18n... aI18nArray) throws IllegalArgumentException {
+        super(I18nUtils.validateI18ns(false, aI18nArray));
     }
 
     /**
-     * Creates a label from the supplied String(s).
+     * Creates a label from the supplied string(s).
      *
-     * @param aValue A list of string values for label
+     * @param aStringArray An array of strings for label
+     * @throws IllegalArgumentException If the supplied string(s) have HTML markup
      */
-    public Label(final String... aValue) {
-        super(aValue);
+    public Label(final String... aStringArray) throws IllegalArgumentException {
+        super(I18nUtils.createI18ns(false, aStringArray));
+    }
+
+    /**
+     * Sets the internationalization value of the label, removing all other previous values.
+     *
+     * @param aStringArray An array of strings
+     * @return True if the property's string value was set
+     * @throws IllegalArgumentException If the supplied strings contain HTML markup
+     */
+    @Override
+    @JsonIgnore
+    public Label setStrings(final String... aStringArray) throws IllegalArgumentException {
+        myI18ns.clear();
+        return addI18ns(I18nUtils.createI18ns(false, aStringArray));
+    }
+
+    /**
+     * Sets the internationalizations of the label, removing all other previous internationalizations.
+     *
+     * @param aI18nArray An array of internationalizations
+     * @return True if the property's internationalizations were set successfully
+     * @throws IllegalArgumentException If the supplied internationalizations contain HTML markup
+     */
+    @Override
+    public Label setI18ns(final I18n... aI18nArray) {
+        myI18ns.clear();
+        return addI18ns(I18nUtils.validateI18ns(false, aI18nArray));
+    }
+
+    /**
+     * Adds an array of strings to the label.
+     *
+     * @param aStringArray An array of strings
+     * @return The label
+     */
+    @Override
+    public Label addStrings(final String... aStringArray) {
+        super.addI18ns(I18nUtils.createI18ns(false, aStringArray));
+        return this;
+    }
+
+    /**
+     * Adds an internationalization to the label.
+     *
+     * @param aI18nArray An array of internationalizations
+     * @return The label
+     */
+    @Override
+    public Label addI18ns(final I18n... aI18nArray) {
+        super.addI18ns(I18nUtils.validateI18ns(false, aI18nArray));
+        return this;
     }
 
     @Override

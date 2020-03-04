@@ -46,8 +46,8 @@ public class Collection extends Resource<Collection> {
     /**
      * Creates a IIIF presentation collection.
      *
-     * @param aID A collection ID
-     * @param aLabel A collection label
+     * @param aID A collection ID in string form
+     * @param aLabel A collection label in string form
      */
     public Collection(final String aID, final String aLabel) {
         super(TYPE, aID, aLabel, REQ_ARG_COUNT);
@@ -66,10 +66,10 @@ public class Collection extends Resource<Collection> {
     /**
      * Creates a IIIF presentation collection.
      *
-     * @param aID A collection ID
-     * @param aLabel A collection label
+     * @param aID A collection ID in string form
+     * @param aLabel A collection label in string form
      * @param aMetadata A collection's metadata
-     * @param aSummary A collection summary
+     * @param aSummary A collection summary in string form
      * @param aThumbnail A collection thumbnail
      */
     public Collection(final String aID, final String aLabel, final Metadata aMetadata, final String aSummary,
@@ -133,7 +133,7 @@ public class Collection extends Resource<Collection> {
     /**
      * Method used internally to set context from JSON.
      *
-     * @param aContext A manifest context
+     * @param aContext A manifest context in string form
      */
     @JsonSetter(Constants.CONTEXT)
     private void setContext(final String aContext) {
@@ -236,8 +236,8 @@ public class Collection extends Resource<Collection> {
         /**
          * Create a new collection manifest from the supplied ID and label.
          *
-         * @param aID A manifest ID
-         * @param aLabel A manifest label
+         * @param aID A manifest ID in string form
+         * @param aLabel A manifest label in string form
          */
         public Manifest(final String aID, final String aLabel) {
             setID(aID);
@@ -280,7 +280,7 @@ public class Collection extends Resource<Collection> {
         /**
          * Sets the collection manifest ID.
          *
-         * @param aID A collection manifest ID
+         * @param aID A collection manifest ID in string form
          * @return The manifest
          */
         @JsonSetter(Constants.ID)
@@ -324,7 +324,7 @@ public class Collection extends Resource<Collection> {
         /**
          * Sets the collection manifest label.
          *
-         * @param aLabel The collection manifest label
+         * @param aLabel The collection manifest label in string form
          * @return The manifest
          */
         @JsonIgnore

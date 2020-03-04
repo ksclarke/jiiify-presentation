@@ -17,32 +17,32 @@ import info.freelibrary.iiif.presentation.utils.Constants;
 public class Logo extends ServiceProperty<Logo> {
 
     /**
-     * Creates a logo property.
+     * Creates a logo property from an array of ID strings.
      *
-     * @param aID A logo ID
+     * @param aIdArray An array of IDs in string form
      */
-    public Logo(final String... aID) {
-        addImage(aID);
+    public Logo(final String... aIdArray) {
+        addImage(aIdArray);
+    }
+
+    /**
+     * Creates a logo property from an array of URI IDs.
+     *
+     * @param aIdArray A logo ID
+     */
+    public Logo(final URI... aIdArray) {
+        addImage(aIdArray);
     }
 
     /**
      * Creates a logo property.
      *
-     * @param aID A logo ID
-     */
-    public Logo(final URI... aID) {
-        addImage(aID);
-    }
-
-    /**
-     * Creates a logo property.
-     *
-     * @param aURI A URI image ID
+     * @param aID A URI image ID
      * @param aWidth An image width
      * @param aHeight An image height
      */
-    public Logo(final String aURI, final int aWidth, final int aHeight) {
-        addImage(aURI, aWidth, aHeight);
+    public Logo(final String aID, final int aWidth, final int aHeight) {
+        addImage(aID, aWidth, aHeight);
     }
 
     /**
@@ -59,7 +59,7 @@ public class Logo extends ServiceProperty<Logo> {
     /**
      * Creates a logo property.
      *
-     * @param aID An ID for the logo image
+     * @param aID An ID for the logo image in string form
      * @param aService A service for the logo image
      */
     public Logo(final String aID, final ImageInfoService aService) {

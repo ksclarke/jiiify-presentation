@@ -48,7 +48,7 @@ public class GenericService implements Service<GenericService> {
     /**
      * Creates a service for the supplied ID.
      *
-     * @param aServiceID A service ID
+     * @param aServiceID A service ID in string form
      */
     public GenericService(final String aServiceID) {
         myID = URI.create(aServiceID);
@@ -73,7 +73,7 @@ public class GenericService implements Service<GenericService> {
     /**
      * Sets the service's context.
      *
-     * @param aContext The service's context
+     * @param aContext The service's context in string form
      * @return This service
      */
     public GenericService setContext(final String aContext) {
@@ -104,7 +104,7 @@ public class GenericService implements Service<GenericService> {
     /**
      * Sets the profile URI for this service.
      *
-     * @param aProfile A profile URI for this service
+     * @param aProfile A profile URI, in string form, for this service
      * @return This service
      */
     public GenericService setProfile(final String aProfile) {
@@ -136,7 +136,7 @@ public class GenericService implements Service<GenericService> {
     /**
      * Sets the ID for this service link.
      *
-     * @param aID The ID for this service link
+     * @param aID The ID, in string form, for this service link
      * @return This service
      */
     public GenericService setID(final String aID) {

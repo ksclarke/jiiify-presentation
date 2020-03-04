@@ -38,7 +38,7 @@ public class ImageInfoService implements Service {
      * Creates a new Image Info IIIF service.
      *
      * @param aLevel A compliance level for the service
-     * @param aID An ID for the item to request from the service
+     * @param aID A string version of the ID for the item to request from the service
      */
     public ImageInfoService(final APIComplianceLevel aLevel, final String aID) {
         myLevel = aLevel;
@@ -58,7 +58,7 @@ public class ImageInfoService implements Service {
     /**
      * Creates a new Image Info IIIF service.
      *
-     * @param aID An ID for the item to request from the service
+     * @param aID A string version of the ID for the item to request from the service
      */
     public ImageInfoService(final String aID) {
         myLevel = DEFAULT_LEVEL;

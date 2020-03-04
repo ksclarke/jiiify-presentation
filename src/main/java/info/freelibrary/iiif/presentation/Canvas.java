@@ -80,7 +80,8 @@ public class Canvas extends Resource<Canvas> {
      * @param aHeight A canvas height
      * @param aDuration A canvas duration
      */
-    public Canvas(final String aID, final String aLabel, final int aWidth, final int aHeight, final double aDuration) {
+    public Canvas(final String aID, final String aLabel, final int aWidth, final int aHeight,
+            final double aDuration) {
         super(TYPE, aID, aLabel, REQ_ARG_COUNT);
         setWidthHeight(aWidth, aHeight);
         setDuration(aDuration);
@@ -265,47 +266,47 @@ public class Canvas extends Resource<Canvas> {
             myDuration = aDuration;
             return this;
         } else {
-            throw new IllegalArgumentException(getLogger().getMessage(MessageCodes.JPA_019, aDuration));
+            throw new IllegalArgumentException(getLogger().getMessage(MessageCodes.JPA_024, aDuration));
         }
     }
 
     /**
      * Sets the canvas' image content.
      *
-     * @param aImageContent A canvas image content
+     * @param aContentArray A canvas image content
      * @return The canvas
      */
-    public Canvas setImageContent(final ImageContent... aImageContent) {
+    public Canvas setImageContent(final ImageContent... aContentArray) {
         if (myImageContent != null) {
             myImageContent.clear();
         }
 
-        return addImageContent(aImageContent);
+        return addImageContent(aContentArray);
     }
 
     /**
      * Sets the canvas' other content.
      *
-     * @param aOtherContent A canvas other content
+     * @param aContentArray A canvas other content
      * @return The canvas
      */
     @JsonIgnore
-    public Canvas setOtherContent(final OtherContent... aOtherContent) {
+    public Canvas setOtherContent(final OtherContent... aContentArray) {
         if (myOtherContent != null) {
             myOtherContent.clear();
         }
 
-        return addOtherContent(aOtherContent);
+        return addOtherContent(aContentArray);
     }
 
     /**
      * Adds image content to the canvas.
      *
-     * @param aImageContent Image content to be added to the canvas
+     * @param aContentArray Image content to be added to the canvas
      * @return The canvas
      */
-    public Canvas addImageContent(final ImageContent... aImageContent) {
-        if (!Collections.addAll(getImageContent(), aImageContent)) {
+    public Canvas addImageContent(final ImageContent... aContentArray) {
+        if (!Collections.addAll(getImageContent(), aContentArray)) {
             throw new UnsupportedOperationException();
         }
 
@@ -315,11 +316,11 @@ public class Canvas extends Resource<Canvas> {
     /**
      * Adds other content to the canvas.
      *
-     * @param aOtherContent Other content to be added to the canvas
+     * @param aContentArray Other content to be added to the canvas
      * @return The canvas
      */
-    public Canvas addOtherContent(final OtherContent... aOtherContent) {
-        if (Collections.addAll(getOtherContent(), aOtherContent)) {
+    public Canvas addOtherContent(final OtherContent... aContentArray) {
+        if (Collections.addAll(getOtherContent(), aContentArray)) {
             throw new UnsupportedOperationException();
         }
 

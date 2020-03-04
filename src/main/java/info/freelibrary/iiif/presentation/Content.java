@@ -10,6 +10,11 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.iiif.presentation.properties.Type;
 import info.freelibrary.iiif.presentation.utils.Constants;
 
+/**
+ * A package-level content class that extends Resource and is extended by other public classes.
+ *
+ * @param <T> The class that's extending this content
+ */
 class Content<T extends Content<T>> extends Resource<T> {
 
     private static final int REQ_ARG_COUNT = 2;
@@ -18,6 +23,10 @@ class Content<T extends Content<T>> extends Resource<T> {
 
     /**
      * Creates a IIIF presentation content resource.
+     *
+     * @param aType The type in string form
+     * @param aID The ID in string form
+     * @param aCanvas A canvas
      */
     protected Content(final String aType, final String aID, final Canvas aCanvas) {
         super(aType, aID, REQ_ARG_COUNT);
@@ -26,6 +35,10 @@ class Content<T extends Content<T>> extends Resource<T> {
 
     /**
      * Creates a IIIF presentation content resource.
+     *
+     * @param aType The type in string form
+     * @param aID A URI ID
+     * @param aCanvas A canvas
      */
     protected Content(final String aType, final URI aID, final Canvas aCanvas) {
         super(aType, aID, REQ_ARG_COUNT);

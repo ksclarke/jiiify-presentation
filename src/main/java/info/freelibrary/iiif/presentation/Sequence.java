@@ -43,7 +43,9 @@ public class Sequence extends Resource<Sequence> {
     }
 
     /**
-     * Creates a IIIF presentation sequence resource with the supplied ID.
+     * Creates a IIIF presentation sequence resource with the supplied ID string.
+     *
+     * @param aID An ID in string form
      */
     public Sequence(final String aID) {
         super(TYPE, REQ_ARG_COUNT);
@@ -107,36 +109,36 @@ public class Sequence extends Resource<Sequence> {
     /**
      * Sets this sequence's canvases to the supplied list of canvases.
      *
-     * @param aCanvases A list of canvases
+     * @param aCanvasList A list of canvases
      * @return The sequence
      */
     @JsonIgnore
-    public Sequence setCanvases(final List<Canvas> aCanvases) {
+    public Sequence setCanvases(final List<Canvas> aCanvasList) {
         myCanvases.clear();
-        myCanvases.addAll(aCanvases);
+        myCanvases.addAll(aCanvasList);
         return this;
     }
 
     /**
-     * Sets this sequence's canvases to the supplied list of canvases.
+     * Sets this sequence's canvases to the supplied array of canvases.
      *
-     * @param aCanvas A list of canvases
+     * @param aCanvasArray An array of canvases
      * @return The sequence
      */
     @JsonIgnore
-    public Sequence setCanvases(final Canvas... aCanvas) {
+    public Sequence setCanvases(final Canvas... aCanvasArray) {
         myCanvases.clear();
-        return addCanvas(aCanvas);
+        return addCanvas(aCanvasArray);
     }
 
     /**
-     * Adds a canvas to this sequence.
+     * Adds an array of canvases to this sequence.
      *
-     * @param aCanvas A canvas to add to this sequence
+     * @param aCanvasArray An array of canvases to add to this sequence
      * @return The sequence
      */
-    public Sequence addCanvas(final Canvas... aCanvas) {
-        if (!Collections.addAll(myCanvases, aCanvas)) {
+    public Sequence addCanvas(final Canvas... aCanvasArray) {
+        if (!Collections.addAll(myCanvases, aCanvasArray)) {
             throw new UnsupportedOperationException();
         }
 

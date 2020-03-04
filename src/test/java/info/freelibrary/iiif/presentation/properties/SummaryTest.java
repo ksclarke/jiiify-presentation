@@ -12,6 +12,8 @@ public class SummaryTest {
 
     private static final String VALUE = "asdf";
 
+    private static final String LANG = "none";
+
     /**
      * Tests a summary constructor.
      */
@@ -27,7 +29,7 @@ public class SummaryTest {
      */
     @Test
     public void testValueConstructor() {
-        final Summary summary = new Summary(new Value(VALUE));
+        final Summary summary = new Summary(new I18n(LANG, VALUE));
 
         assertEquals(VALUE, summary.getString());
     }

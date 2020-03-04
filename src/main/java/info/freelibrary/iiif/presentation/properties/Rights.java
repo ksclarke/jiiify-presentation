@@ -25,13 +25,13 @@ public class Rights {
     /**
      * Creates a rights property from the supplied URL(s).
      *
-     * @param aURL A URL (or URLs) for the rights(s)
+     * @param aUrlArray An array of URLs, in string form, for the rights(s)
      * @throws MalformedURLException If the supplied URL string isn't a valid URL
      */
-    public Rights(final String... aURL) throws MalformedURLException {
-        myURLs = new ArrayList<>(aURL.length + LIST_PADDING);
+    public Rights(final String... aUrlArray) throws MalformedURLException {
+        myURLs = new ArrayList<>(aUrlArray.length + LIST_PADDING);
 
-        for (final String url : aURL) {
+        for (final String url : aUrlArray) {
             myURLs.add(new URL(url));
         }
     }
@@ -39,11 +39,11 @@ public class Rights {
     /**
      * Creates a rights property from the supplied URL(s).
      *
-     * @param aURL A URL (or URLs) for the rights(s)
+     * @param aUrlArray A URL (or URLs) for the rights
      */
-    public Rights(final URL... aURL) {
-        myURLs = new ArrayList<>(aURL.length + LIST_PADDING);
-        Collections.addAll(myURLs, aURL);
+    public Rights(final URL... aUrlArray) {
+        myURLs = new ArrayList<>(aUrlArray.length + LIST_PADDING);
+        Collections.addAll(myURLs, aUrlArray);
     }
 
     /**
@@ -56,19 +56,19 @@ public class Rights {
     }
 
     /**
-     * Add URL value(s) to the rights.
+     * Add URLs, in string form, to the rights.
      *
-     * @param aValue A string version of a rights value URL
+     * @param aStringArray An array of rights value URLs in string form
      * @return The rights
-     * @throws MalformedURLException If a supplied value isn't a valid URL
+     * @throws MalformedURLException If a supplied string isn't a valid URL
      */
     @JsonIgnore
-    public Rights addValue(final String... aValue) throws MalformedURLException {
-        final URL[] urls = new URL[aValue.length];
+    public Rights addValue(final String... aStringArray) throws MalformedURLException {
+        final URL[] urls = new URL[aStringArray.length];
         int index = 0;
 
         // Check the string values before we start adding them
-        for (final String value : aValue) {
+        for (final String value : aStringArray) {
             urls[index++] = new URL(value);
         }
 
@@ -78,27 +78,27 @@ public class Rights {
     }
 
     /**
-     * Sets the value of the rights to the supplied values, deleting the rest.
+     * Sets the value of the rights to the supplied strings, deleting the rest.
      *
-     * @param aValue A list of string URLs
+     * @param aStringArray A list of URLs in string form
      * @return The rights
-     * @throws MalformedURLException If a supplied value isn't a valid URL
+     * @throws MalformedURLException If a supplied string isn't a valid URL
      */
     @JsonIgnore
-    public Rights setValue(final String... aValue) throws MalformedURLException {
+    public Rights setValue(final String... aStringArray) throws MalformedURLException {
         myURLs.clear();
-        return addValue(aValue);
+        return addValue(aStringArray);
     }
 
     /**
      * Add additional rights URL(s).
      *
-     * @param aURL Additional rights URL(s)
+     * @param aUrlArray Additional rights URL(s)
      * @return True if the supplied URL(s) were added
      */
     @JsonIgnore
-    public Rights addValue(final URL... aURL) {
-        if (!Collections.addAll(myURLs, aURL)) {
+    public Rights addValue(final URL... aUrlArray) {
+        if (!Collections.addAll(myURLs, aUrlArray)) {
             throw new UnsupportedOperationException();
         }
 
@@ -106,15 +106,15 @@ public class Rights {
     }
 
     /**
-     * Sets the value of rights to the supplied values, deleting the rest.
+     * Sets the value of rights to the supplied URLs, deleting the rest.
      *
-     * @param aURL A list of rights URLs
+     * @param aUrlArray An array of rights URLs
      * @return The rights
      */
     @JsonIgnore
-    public Rights setValue(final URL... aURL) {
+    public Rights setValue(final URL... aUrlArray) {
         myURLs.clear();
-        return addValue(aURL);
+        return addValue(aUrlArray);
     }
 
     /**

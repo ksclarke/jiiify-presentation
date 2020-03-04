@@ -6,10 +6,13 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.thedeanda.lorem.LoremIpsum;
+
 import info.freelibrary.iiif.presentation.AbstractTest;
 import info.freelibrary.iiif.presentation.Manifest;
 import info.freelibrary.iiif.presentation.utils.Constants;
 
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
 /**
@@ -23,9 +26,15 @@ public class LabelTest extends AbstractTest {
 
     private static final String AAAA = "aaaa";
 
+    private static final String ENG = "eng";
+
+    private static final String NONE = "none";
+
     private Manifest myManifest;
 
     private JsonObject myJSON;
+
+    private LoremIpsum myLorem;
 
     /**
      * Sets up the testing environment.
@@ -34,6 +43,7 @@ public class LabelTest extends AbstractTest {
     public void setUp() {
         myManifest = new Manifest(AAAA, "bbbb");
         myJSON = new JsonObject().put(Constants.CONTEXT, "http://iiif.io/api/presentation/3/context.json");
+        myLorem = LoremIpsum.getInstance();
     }
 
     /**
@@ -41,8 +51,10 @@ public class LabelTest extends AbstractTest {
      */
     @Test
     public void testValueConstructor() {
-        final Label label = new Label(new Value(ASDF));
-        assertEquals(ASDF, label.getString());
+        final String labelText = myLorem.getWords(3, 6);
+        final Label label = new Label(new I18n(ENG, labelText));
+
+        assertEquals(labelText, label.getString());
     }
 
     /**
@@ -50,10 +62,13 @@ public class LabelTest extends AbstractTest {
      */
     @Test
     public void testSingleLabelObj() {
-        myManifest.setLabel(new Label(ASDF));
-        myJSON.put(Constants.LABEL, ASDF).put(Constants.ID, AAAA).put(Constants.TYPE, MANIFEST);
+        final JsonObject labelJSON = new JsonObject();
 
-        assertEquals(JsonObject.mapFrom(myManifest), myJSON);
+        myManifest.setLabel(new Label(ASDF));
+        labelJSON.put(NONE, new JsonArray().add(ASDF));
+        myJSON.put(Constants.TYPE, MANIFEST).put(Constants.ID, AAAA).put(Constants.LABEL, labelJSON);
+
+        assertEquals(myJSON, JsonObject.mapFrom(myManifest));
     }
 
     /**
@@ -61,10 +76,13 @@ public class LabelTest extends AbstractTest {
      */
     @Test
     public void testSingleLabel() {
-        myManifest.setLabel(ASDF);
-        myJSON.put(Constants.LABEL, ASDF).put(Constants.ID, AAAA).put(Constants.TYPE, MANIFEST);
+        final JsonObject labelJSON = new JsonObject();
 
-        assertEquals(JsonObject.mapFrom(myManifest), myJSON);
+        myManifest.setLabel(ASDF);
+        labelJSON.put(NONE, new JsonArray().add(ASDF));
+        myJSON.put(Constants.LABEL, labelJSON).put(Constants.ID, AAAA).put(Constants.TYPE, MANIFEST);
+
+        assertEquals(myJSON, JsonObject.mapFrom(myManifest));
     }
 
 }

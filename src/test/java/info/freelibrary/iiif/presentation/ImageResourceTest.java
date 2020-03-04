@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import com.google.common.net.MediaType;
 
+import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
 
 /**
@@ -97,7 +98,7 @@ public class ImageResourceTest {
      */
     @Test
     public void testSetLabel() {
-        final String label = "MY LABEL";
+        final Label label = new Label("MY LABEL");
 
         assertEquals(label, new ImageResource(IMAGE_URI).setLabel(label).getLabel());
     }

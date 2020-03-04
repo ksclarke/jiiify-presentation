@@ -25,6 +25,7 @@ cache:
 branches:
   only:
   - master
+  - pres-3.0
 
 notifications:
   email:

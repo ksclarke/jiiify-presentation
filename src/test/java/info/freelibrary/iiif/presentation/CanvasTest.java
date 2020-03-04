@@ -14,6 +14,8 @@ import info.freelibrary.iiif.presentation.properties.NavDate;
 import info.freelibrary.iiif.presentation.utils.TestUtils;
 import info.freelibrary.util.StringUtils;
 
+import io.vertx.core.json.JsonObject;
+
 /**
  * Tests for a presentation canvas.
  */
@@ -38,11 +40,17 @@ public class CanvasTest {
      */
     @Test
     public final void testCanvasStringStringIntInt() throws IOException {
+        final JsonObject expected;
+        final JsonObject found;
+
         myCanvas = new Canvas(TEST_URI, TEST_LABEL, 100, 100);
         myCanvasFile = new File(TestUtils.TEST_DIR, CANVAS_LABEL_W_H);
 
-        assertEquals(TEST_URI, myCanvas.getID().toString());
-        assertEquals(StringUtils.read(myCanvasFile), TestUtils.toJson(myCanvas, true));
+        expected = new JsonObject(StringUtils.read(myCanvasFile));
+        found = new JsonObject(TestUtils.toJson(myCanvas, true));
+
+        assertEquals(URI.create(TEST_URI), myCanvas.getID());
+        assertEquals(expected, found);
     }
 
     /**
@@ -60,11 +68,17 @@ public class CanvasTest {
      */
     @Test
     public final void testCanvasStringStringIntIntDouble() throws IOException {
+        final JsonObject expected;
+        final JsonObject found;
+
         myCanvas = new Canvas(TEST_URI, TEST_LABEL, 100, 100, 60.0d);
         myCanvasFile = new File(TestUtils.TEST_DIR, CANVAS_LABEL_W_H_D);
 
-        assertEquals(TEST_URI, myCanvas.getID().toString());
-        assertEquals(StringUtils.read(myCanvasFile), TestUtils.toJson(myCanvas, true));
+        expected = new JsonObject(StringUtils.read(myCanvasFile));
+        found = new JsonObject(TestUtils.toJson(myCanvas, true));
+
+        assertEquals(URI.create(TEST_URI), myCanvas.getID());
+        assertEquals(expected, found);
     }
 
     /**
@@ -74,11 +88,17 @@ public class CanvasTest {
      */
     @Test
     public final void testCanvasStringStringIntIntInt() throws IOException {
+        final JsonObject expected;
+        final JsonObject found;
+
         myCanvas = new Canvas(TEST_URI, TEST_LABEL, 100, 100, 60);
         myCanvasFile = new File(TestUtils.TEST_DIR, CANVAS_LABEL_W_H_D);
 
-        assertEquals(TEST_URI, myCanvas.getID().toString());
-        assertEquals(StringUtils.read(myCanvasFile), TestUtils.toJson(myCanvas, true));
+        expected = new JsonObject(StringUtils.read(myCanvasFile));
+        found = new JsonObject(TestUtils.toJson(myCanvas, true));
+
+        assertEquals(URI.create(TEST_URI), myCanvas.getID());
+        assertEquals(expected, found);
     }
 
     /**

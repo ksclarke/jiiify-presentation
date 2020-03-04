@@ -20,11 +20,11 @@ public class Type {
     /**
      * Creates a type property from the supplied types.
      *
-     * @param aType A list of types
+     * @param aTypeArray An array of types in string form
      */
-    public Type(final String... aType) {
-        myTypes = new ArrayList<>(aType.length);
-        Collections.addAll(myTypes, aType);
+    public Type(final String... aTypeArray) {
+        myTypes = new ArrayList<>(aTypeArray.length);
+        Collections.addAll(myTypes, aTypeArray);
     }
 
     /**
@@ -56,12 +56,12 @@ public class Type {
     /**
      * Sets the value of the type.
      *
-     * @param aType The value of the type property
+     * @param aTypeArray An array of types in string form
      * @return The type property
      */
-    public Type setValue(final String... aType) {
+    public Type setValue(final String... aTypeArray) {
         myTypes = new ArrayList<>();
-        Collections.addAll(myTypes, aType);
+        Collections.addAll(myTypes, aTypeArray);
         return this;
     }
 

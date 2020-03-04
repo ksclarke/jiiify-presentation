@@ -1,8 +1,6 @@
 
 package info.freelibrary.iiif.presentation.utils;
 
-import java.io.File;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

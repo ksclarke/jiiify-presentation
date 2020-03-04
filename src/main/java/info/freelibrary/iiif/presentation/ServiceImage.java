@@ -47,21 +47,21 @@ public class ServiceImage {
     private Optional<ImageInfoService> myService;
 
     /**
-     * Creates an image
+     * Creates an image from the supplied string ID.
      *
-     * @param aURI An image ID
+     * @param aID An image URI ID in string form
      */
-    public ServiceImage(final String aURI) {
-        Objects.requireNonNull(aURI, MessageCodes.JPA_003);
+    public ServiceImage(final String aID) {
+        Objects.requireNonNull(aID, MessageCodes.JPA_003);
 
         myService = Optional.empty();
-        myID = URI.create(aURI);
+        myID = URI.create(aID);
 
-        setMediaTypeFromExt(aURI);
+        setMediaTypeFromExt(aID);
     }
 
     /**
-     * Creates an image
+     * Creates an image from the supplied URI ID.
      *
      * @param aID An image ID
      */
@@ -75,9 +75,9 @@ public class ServiceImage {
     }
 
     /**
-     * Creates an image.
+     * Creates an image from the supplied URI ID, in string form, and image information service.
      *
-     * @param aURI A URI image ID
+     * @param aURI A URI image ID in string form
      * @param aService A service for the image
      */
     public ServiceImage(final String aURI, final ImageInfoService aService) {
@@ -90,7 +90,7 @@ public class ServiceImage {
     }
 
     /**
-     * Creates an image.
+     * Creates an image from the supplied URI ID and image information service.
      *
      * @param aID An image ID
      * @param aService A service for the image
@@ -107,7 +107,7 @@ public class ServiceImage {
     /**
      * Creates an image.
      *
-     * @param aURI An image ID
+     * @param aURI An image ID in string form
      * @param aWidth An image width
      * @param aHeight An image height
      */
@@ -249,15 +249,15 @@ public class ServiceImage {
     }
 
     /**
-     * Sets the image ID.
+     * Sets the image ID from the supplied URI in string form.
      *
-     * @param aURI The image ID
+     * @param aID The image URI ID in string form
      * @return The image
      */
     @JsonSetter(Constants.ID)
-    public ServiceImage setID(final String aURI) {
-        Objects.requireNonNull(aURI, MessageCodes.JPA_003);
-        myID = URI.create(aURI);
+    public ServiceImage setID(final String aID) {
+        Objects.requireNonNull(aID, MessageCodes.JPA_003);
+        myID = URI.create(aID);
         return this;
     }
 

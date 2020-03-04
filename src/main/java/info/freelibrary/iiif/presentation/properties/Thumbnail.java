@@ -19,30 +19,30 @@ public class Thumbnail extends ServiceProperty<Thumbnail> {
     /**
      * Creates a thumbnail property.
      *
-     * @param aID A thumbnail ID
+     * @param aIdArray An array of thumbnail IDs in string form
      */
-    public Thumbnail(final String... aID) {
-        addImage(aID);
+    public Thumbnail(final String... aIdArray) {
+        addImage(aIdArray);
     }
 
     /**
      * Creates a thumbnail property.
      *
-     * @param aID A thumbnail ID
+     * @param aIdArray An array of thumbnail IDs
      */
-    public Thumbnail(final URI... aID) {
-        addImage(aID);
+    public Thumbnail(final URI... aIdArray) {
+        addImage(aIdArray);
     }
 
     /**
      * Creates a thumbnail property.
      *
-     * @param aURI A URI image ID
+     * @param aID A URI image ID in string form
      * @param aWidth An image width
      * @param aHeight An image height
      */
-    public Thumbnail(final String aURI, final int aWidth, final int aHeight) {
-        addImage(aURI, aWidth, aHeight);
+    public Thumbnail(final String aID, final int aWidth, final int aHeight) {
+        addImage(aID, aWidth, aHeight);
     }
 
     /**
@@ -59,7 +59,7 @@ public class Thumbnail extends ServiceProperty<Thumbnail> {
     /**
      * Creates a thumbnail property.
      *
-     * @param aID An ID for the thumbnail image
+     * @param aID An ID for the thumbnail image in string form
      * @param aService A service for the thumbnail image
      */
     public Thumbnail(final String aID, final ImageInfoService aService) {

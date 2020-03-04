@@ -27,11 +27,11 @@ class ServiceProperty<T extends ServiceProperty<T>> {
     /**
      * Adds image to the property.
      *
-     * @param aID The URI ID for the image
+     * @param aIdArray An array of URI IDs, in string form, for the image
      * @return The property
      */
-    protected T addImage(final String... aID) {
-        for (final String id : aID) {
+    protected T addImage(final String... aIdArray) {
+        for (final String id : aIdArray) {
             if (!getImages().add(new ServiceImage(id))) {
                 throw new UnsupportedOperationException();
             }
@@ -43,11 +43,11 @@ class ServiceProperty<T extends ServiceProperty<T>> {
     /**
      * Adds image to the property.
      *
-     * @param aID The URI ID for the image
+     * @param aIdArray An array of URI IDs for the image
      * @return The property
      */
-    protected T addImage(final URI... aID) {
-        for (final URI id : aID) {
+    protected T addImage(final URI... aIdArray) {
+        for (final URI id : aIdArray) {
             if (!getImages().add(new ServiceImage(id))) {
                 throw new UnsupportedOperationException();
             }
@@ -59,7 +59,7 @@ class ServiceProperty<T extends ServiceProperty<T>> {
     /**
      * Adds image to the property.
      *
-     * @param aID The URI ID for the image
+     * @param aID The URI ID, in string form, for the image
      * @param aWidth A image width
      * @param aHeight A image height
      * @return The property
@@ -91,7 +91,7 @@ class ServiceProperty<T extends ServiceProperty<T>> {
     /**
      * Adds image to the property.
      *
-     * @param aID The URI ID for the image
+     * @param aID The URI ID, in string form, for the image
      * @param aService A service for the image
      * @return The property
      */
@@ -195,13 +195,13 @@ class ServiceProperty<T extends ServiceProperty<T>> {
     }
 
     /**
-     * Adds image(s) to the property.
+     * Adds service image(s) to the property.
      *
-     * @param aImage A list of images
+     * @param aImageArray An array of service images
      * @return The property
      */
-    protected T addImage(final ServiceImage... aImage) {
-        if (!Collections.addAll(getImages(), aImage)) {
+    protected T addImage(final ServiceImage... aImageArray) {
+        if (!Collections.addAll(getImages(), aImageArray)) {
             throw new UnsupportedOperationException();
         }
 

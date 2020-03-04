@@ -3,88 +3,104 @@ package info.freelibrary.iiif.presentation.properties;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
+import info.freelibrary.util.StringUtils;
 
 /**
- * A property value that can be used in the label, summary, attribution and the label and value fields.
+ * A base class for label, summary, attribution and metadata's label and value fields.
  */
 class I18nProperty<T extends I18nProperty<T>> {
 
-    private final List<Value> myValues;
+    protected final List<I18n> myI18ns;
 
     /**
-     * Creates a property from a list of I18n Value(s).
+     * Creates a property from an array of internationalizations.
      *
      * @param aName A name of the property
-     * @param aValue A value for the property
+     * @param aI18nArray An array of internationalizations for the property
      */
-    I18nProperty(final Value... aValue) {
-        myValues = new ArrayList<>();
-        addValue(aValue);
+    I18nProperty(final I18n... aI18nArray) {
+        myI18ns = new ArrayList<>();
+        addI18ns(aI18nArray);
     }
 
     /**
-     * Creates a property from a list of String(s).
+     * Creates a property from an array of string(s).
      *
      * @param aName A name of the property
-     * @param aValue A value for the property
+     * @param aStringArray An array of strings for the property
      */
-    I18nProperty(final String... aValue) {
-        myValues = new ArrayList<>();
-        addValue(aValue);
+    I18nProperty(final String... aStringArray) {
+        myI18ns = new ArrayList<>();
+        addStrings(aStringArray);
     }
 
     /**
-     * Sets the string value of the property, removing all other previous values.
+     * Sets the string value of the property, removing all other previous strings.
      *
-     * @param aValue A string value
+     * @param aStringArray A string value
      * @return True if the property's value was set
      */
-    public T setValue(final String... aValue) {
-        myValues.clear();
-        return addValue(aValue);
+    @JsonIgnore
+    public T setStrings(final String... aStringArray) {
+        myI18ns.clear();
+        return addStrings(aStringArray);
     }
 
     /**
-     * Gets a List of the property's String values.
+     * Sets the internationalization of the property, removing all other previous internationalizations.
      *
-     * @return A List of the property's String values
+     * @param aI18nArray An array of I18n(s).
+     * @return True if the property's value was set
      */
-    public List<Value> getValues() {
-        return myValues;
+    public T setI18ns(final I18n... aI18nArray) {
+        myI18ns.clear();
+        return addI18ns(aI18nArray);
     }
 
     /**
-     * Returns the first string value (regardless of language) if any. If there isn't one it returns a null;
+     * Gets a list of the property's internationalizations.
      *
-     * @return A String value for the property
+     * @return A list of the property's internationalizations
+     */
+    public List<I18n> getI18ns() {
+        return myI18ns;
+    }
+
+    /**
+     * Returns the first string value (regardless of language). If there isn't one it returns a null;
+     *
+     * @return A string value for the property
      */
     public String getString() {
-        if (hasValues()) {
-            return myValues.get(0).getValue();
+        if (hasStrings()) {
+            return myI18ns.get(0).getStrings().get(0);
         } else {
             return null;
         }
     }
 
     /**
-     * Adds a String value to the property. Useful for adding secondary or tertiary, etc., values.
+     * Adds a string value to the property.
      *
-     * @param aValue A String property value
-     * @return A String value to the property
+     * @param aStringArray An array of strings to add to the property
+     * @return The property
      */
-    public final T addValue(final String... aValue) {
-        Objects.requireNonNull(aValue, MessageCodes.JPA_001);
+    public T addStrings(final String... aStringArray) {
+        Objects.requireNonNull(aStringArray, MessageCodes.JPA_001);
 
-        for (final String value : aValue) {
-            Objects.requireNonNull(value, MessageCodes.JPA_001);
+        for (final String string : aStringArray) {
+            Objects.requireNonNull(string, MessageCodes.JPA_001);
 
-            if (!myValues.add(new Value(value))) {
+            if (!myI18ns.add(new I18n(I18n.DEFAULT_LANG, string))) {
                 throw new UnsupportedOperationException();
             }
         }
@@ -93,18 +109,18 @@ class I18nProperty<T extends I18nProperty<T>> {
     }
 
     /**
-     * Adds a I18n Value to the property. Useful for adding secondary or tertiary, etc., values.
+     * Adds an internationalization to the property.
      *
-     * @param aValue A I18N property value
-     * @return A String value to the property
+     * @param aI18nArray A list of internationalizations
+     * @return The property
      */
-    public final T addValue(final Value... aValue) {
-        Objects.requireNonNull(aValue, MessageCodes.JPA_001);
+    public T addI18ns(final I18n... aI18nArray) {
+        Objects.requireNonNull(aI18nArray, MessageCodes.JPA_001);
 
-        for (final Value value : aValue) {
-            Objects.requireNonNull(value, MessageCodes.JPA_001);
+        for (final I18n i18n : aI18nArray) {
+            Objects.requireNonNull(i18n, MessageCodes.JPA_001);
 
-            if (!myValues.add(value)) {
+            if (!myI18ns.add(i18n)) {
                 throw new UnsupportedOperationException();
             }
         }
@@ -113,12 +129,12 @@ class I18nProperty<T extends I18nProperty<T>> {
     }
 
     /**
-     * Returns whether the property has a value.
+     * Returns whether the property has any internationalizations.
      *
-     * @return True if the property has a value; else, false
+     * @return True if the property has internationalizations; else, false
      */
-    public boolean hasValues() {
-        return !myValues.isEmpty();
+    public boolean hasStrings() {
+        return !myI18ns.isEmpty();
     }
 
     @Override
@@ -135,39 +151,47 @@ class I18nProperty<T extends I18nProperty<T>> {
         return getJsonValue().hashCode();
     }
 
+    @Override
+    public String toString() {
+        if (hasStrings()) {
+            final Iterator<I18n> iterator = myI18ns.iterator();
+            final StringBuilder builder = new StringBuilder();
+            final String eol = System.lineSeparator();
+
+            while (iterator.hasNext()) {
+                final I18n i18n = iterator.next();
+                final String[] strings = i18n.getStrings().toArray(new String[i18n.size()]);
+
+                builder.append(i18n.getLang()).append('=').append(StringUtils.toString(strings, '|')).append(eol);
+            }
+
+            return builder.toString();
+        } else {
+            return null;
+        }
+    }
+
     /**
-     * Gets the value(s) of the property; this might be a single String or it might be a List that contains plain
-     * strings and/or I18n Value(s).
+     * Gets the JSON value of the property.
      *
      * @return The value(s) of the property
      */
     @JsonValue
     protected Object getJsonValue() {
-        if (hasValues()) {
-            if (myValues.size() == 1) {
-                if (myValues.get(0).getLang().isPresent()) {
-                    return myValues.get(0);
-                } else {
-                    return myValues.get(0).getValue();
-                }
-            } else {
-                final List<Object> list = new ArrayList<>();
-                final Iterator<Value> iterator = myValues.iterator();
+        if (hasStrings()) {
+            final Map<String, Object> map = new LinkedHashMap<>(); // maintains insertion order
+            final Iterator<I18n> iterator = myI18ns.iterator();
 
-                while (iterator.hasNext()) {
-                    final Value entry = iterator.next();
+            while (iterator.hasNext()) {
+                final I18n i18n = iterator.next();
 
-                    if (entry.getLang().isPresent()) {
-                        list.add(entry);
-                    } else {
-                        list.add(entry.getValue());
-                    }
-                }
-
-                return list;
+                map.put(i18n.getLang(), i18n.getStrings());
             }
+
+            return map;
         } else {
             return null;
         }
     }
+
 }

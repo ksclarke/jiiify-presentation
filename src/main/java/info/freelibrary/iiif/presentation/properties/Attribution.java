@@ -4,7 +4,6 @@ package info.freelibrary.iiif.presentation.properties;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import info.freelibrary.iiif.presentation.utils.AttributionDeserializer;
 import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
@@ -18,21 +17,21 @@ import info.freelibrary.iiif.presentation.utils.Constants;
 public class Attribution extends I18nProperty<Attribution> {
 
     /**
-     * Creates an attribution from the supplied I18n value(s).
+     * Creates an attribution from the supplied internationalizations.
      *
-     * @param aValue A list of I18n values for attribution
+     * @param aI18nArray An array of internationalizations for attribution
      */
-    public Attribution(final Value... aValue) {
-        super(aValue);
+    public Attribution(final I18n... aI18nArray) {
+        super(aI18nArray);
     }
 
     /**
      * Creates an attribution from the supplied String(s).
      *
-     * @param aValue A list of string values for attribution
+     * @param aStringArray An array of string values for attribution
      */
-    public Attribution(final String... aValue) {
-        super(aValue);
+    public Attribution(final String... aStringArray) {
+        super(aStringArray);
     }
 
     @Override
