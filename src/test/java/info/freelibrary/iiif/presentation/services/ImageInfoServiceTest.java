@@ -7,12 +7,12 @@ import java.net.URI;
 
 import org.junit.Test;
 
-import info.freelibrary.iiif.presentation.utils.Constants;
-
 /**
  * A ImageInfoService test.
  */
 public class ImageInfoServiceTest {
+
+    public static final URI CONTEXT = URI.create("http://iiif.io/api/image/3/context.json");
 
     private static final URI ID = URI.create("asdf");
 
@@ -29,7 +29,7 @@ public class ImageInfoServiceTest {
      */
     @Test
     public void testGetContext() {
-        assertEquals(Constants.CONTEXT_URI, new ImageInfoService(APIComplianceLevel.ZERO, ID).getContext());
+        assertEquals(CONTEXT, new ImageInfoService(APIComplianceLevel.ZERO, ID).getContext());
     }
 
     /**

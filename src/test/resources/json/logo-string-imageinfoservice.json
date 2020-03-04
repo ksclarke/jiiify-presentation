@@ -5,7 +5,7 @@
             "type": "dctypes:Image",
             "format": "image/jpeg",
             "service": {
-                "@context": "http://iiif.io/api/presentation/3/context.json",
+                "@context": "http://iiif.io/api/image/3/context.json",
                 "id": "http://example.org/asdf",
                 "profile": "http://iiif.io/api/image/3/level0.json"
             }
