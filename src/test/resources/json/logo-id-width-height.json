@@ -1,1 +1,11 @@
-{"id":"http://example.org/images/logo1.jpg","type":"dctypes:Image","format":"image/jpeg","width":1000,"height":1000}
+{
+    "logo": [
+        {
+            "id": "http://example.org/images/logo1.jpg",
+            "type": "dctypes:Image",
+            "format": "image/jpeg",
+            "width": 1000,
+            "height": 1000
+        }
+    ]
+}

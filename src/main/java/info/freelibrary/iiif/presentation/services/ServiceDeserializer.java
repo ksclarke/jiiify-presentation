@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.utils;
+package info.freelibrary.iiif.presentation.services;
 
 import java.io.IOException;
 import java.net.URI;
@@ -11,19 +11,15 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
-import info.freelibrary.iiif.presentation.services.APIComplianceLevel;
-import info.freelibrary.iiif.presentation.services.GenericService;
-import info.freelibrary.iiif.presentation.services.GeoJSONService;
-import info.freelibrary.iiif.presentation.services.ImageInfoService;
-import info.freelibrary.iiif.presentation.services.PhysicalDimsService;
-import info.freelibrary.iiif.presentation.services.Service;
+import info.freelibrary.iiif.presentation.utils.Constants;
+import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
 /**
  * Deserializes services from JSON documents into {@link Service} implementations.
  */
-public class ServiceDeserializer extends StdDeserializer<Service> {
+class ServiceDeserializer extends StdDeserializer<Service> {
 
     /**
      * The <code>serialVersionUID</code> for ServiceDeserializer.
@@ -35,7 +31,7 @@ public class ServiceDeserializer extends StdDeserializer<Service> {
     /**
      * Creates a new metadata deserializer.
      */
-    public ServiceDeserializer() {
+    ServiceDeserializer() {
         this(null);
     }
 
@@ -44,7 +40,7 @@ public class ServiceDeserializer extends StdDeserializer<Service> {
      *
      * @param aClass A class
      */
-    public ServiceDeserializer(final Class<?> aClass) {
+    ServiceDeserializer(final Class<?> aClass) {
         super(aClass);
     }
 

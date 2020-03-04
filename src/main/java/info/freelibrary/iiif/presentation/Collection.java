@@ -14,7 +14,6 @@ import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.NavDate;
 import info.freelibrary.iiif.presentation.properties.Summary;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
-import info.freelibrary.iiif.presentation.properties.Type;
 import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.util.I18nRuntimeException;
 
@@ -29,11 +28,10 @@ import io.vertx.core.json.jackson.DatabindCodec;
  */
 public class Collection extends Resource<Collection> {
 
+    // We initialize this here (in addition to in Manifest) in case someone is using collections without manifests
     static {
         DatabindCodec.mapper().findAndRegisterModules();
     }
-
-    private static final URI CONTEXT = URI.create("http://iiif.io/api/presentation/3/context.json");
 
     private static final String TYPE = "sc:Collection";
 
@@ -95,7 +93,7 @@ public class Collection extends Resource<Collection> {
      * Creates a IIIF presentation collection.
      */
     private Collection() {
-        super(new Type(TYPE));
+        super(TYPE);
     }
 
     /**
@@ -127,7 +125,7 @@ public class Collection extends Resource<Collection> {
      */
     @JsonGetter(Constants.CONTEXT)
     public URI getContext() {
-        return CONTEXT;
+        return Constants.CONTEXT_URI;
     }
 
     /**
@@ -137,7 +135,7 @@ public class Collection extends Resource<Collection> {
      */
     @JsonSetter(Constants.CONTEXT)
     private void setContext(final String aContext) {
-        if (!CONTEXT.equals(URI.create(aContext))) {
+        if (!Constants.CONTEXT_URI.equals(URI.create(aContext))) {
             throw new I18nRuntimeException();
         }
     }
@@ -295,8 +293,8 @@ public class Collection extends Resource<Collection> {
          * @return The collection manifest type
          */
         @JsonGetter(Constants.TYPE)
-        public Type getType() {
-            return new Type(TYPE);
+        public String getType() {
+            return TYPE;
         }
 
         /**
@@ -339,7 +337,7 @@ public class Collection extends Resource<Collection> {
          * @return The collection manifest type
          */
         @JsonSetter(Constants.TYPE)
-        private Manifest setType(final Type aType) {
+        private Manifest setType(final String aType) {
             return this;
         }
     }

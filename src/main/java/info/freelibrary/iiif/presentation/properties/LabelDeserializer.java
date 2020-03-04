@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 /**
  * Deserializes labels from JSON documents into {@link Label} objects.
  */
-class LabelDeserializer extends AbstractStdDeserializer<Label> {
+class LabelDeserializer extends AbstractI18nStdDeserializer<Label> {
 
     /**
      * The <code>serialVersionUID</code> of LabelSerializer.

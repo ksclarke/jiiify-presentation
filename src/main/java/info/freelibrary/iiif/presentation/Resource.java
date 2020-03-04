@@ -23,7 +23,6 @@ import info.freelibrary.iiif.presentation.properties.Rights;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.properties.Summary;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
-import info.freelibrary.iiif.presentation.properties.Type;
 import info.freelibrary.iiif.presentation.services.Service;
 import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
@@ -40,7 +39,7 @@ import info.freelibrary.util.LoggerFactory;
 class Resource<T extends Resource<T>> {
 
     @JsonProperty(Constants.TYPE)
-    protected final Type myType;
+    protected final String myType;
 
     @JsonProperty(Constants.ID)
     private URI myID;
@@ -72,11 +71,11 @@ class Resource<T extends Resource<T>> {
      * Creates a new resource from the supplied type.
      *
      * @param aType A resource type in string form
-     * @param aNumber The number of required arguments
+     * @param aNumber the number of required arguments
      */
     protected Resource(final String aType, final int aNumber) {
         checkArgs(new Object[] { aType }, new String[] { Constants.TYPE }, aNumber);
-        myType = new Type(aType); // always required
+        myType = aType; // always required
     }
 
     /**
@@ -88,7 +87,7 @@ class Resource<T extends Resource<T>> {
      */
     protected Resource(final String aType, final String aID, final int aNumber) {
         checkArgs(new Object[] { aType, aID }, new String[] { Constants.TYPE, Constants.ID }, aNumber);
-        myType = new Type(aType); // always required
+        myType = aType; // always required
 
         if (aID != null) {
             myID = URI.create(aID);
@@ -104,7 +103,7 @@ class Resource<T extends Resource<T>> {
      */
     protected Resource(final String aType, final URI aID, final int aNumber) {
         checkArgs(new Object[] { aType, aID }, new String[] { Constants.TYPE, Constants.ID }, aNumber);
-        myType = new Type(aType); // always required
+        myType = aType; // always required
 
         myID = aID;
     }
@@ -123,7 +122,7 @@ class Resource<T extends Resource<T>> {
 
         checkArgs(argsArray, namesArray, aNumber);
 
-        myType = new Type(aType); // always required
+        myType = aType; // always required
 
         if (aID != null) {
             myID = URI.create(aID);
@@ -148,7 +147,7 @@ class Resource<T extends Resource<T>> {
 
         checkArgs(argsArray, namesArray, aNumber);
 
-        myType = new Type(aType);
+        myType = aType;
         myID = aID;
         myLabel = aLabel;
     }
@@ -172,7 +171,7 @@ class Resource<T extends Resource<T>> {
 
         checkArgs(argsArray, namesArray, aNumber);
 
-        myType = new Type(aType); // always required
+        myType = aType; // always required
 
         if (aID != null) {
             myID = URI.create(aID);
@@ -209,7 +208,7 @@ class Resource<T extends Resource<T>> {
 
         checkArgs(argsArray, namesArray, aNumber);
 
-        myType = new Type(aType); // always required
+        myType = aType; // always required
         myID = aID;
         myLabel = aLabel;
         myMetadata = aMetadata;
@@ -222,7 +221,7 @@ class Resource<T extends Resource<T>> {
      *
      * @param aType A type of resource
      */
-    protected Resource(final Type aType) {
+    protected Resource(final String aType) {
         myType = aType;
     }
 
@@ -353,7 +352,6 @@ class Resource<T extends Resource<T>> {
      * @param aThumbnail A thumbnail
      * @return The resource
      */
-    @JsonIgnore
     public T setThumbnail(final Thumbnail aThumbnail) {
         myThumbnail = aThumbnail;
         return (T) this;
@@ -365,6 +363,7 @@ class Resource<T extends Resource<T>> {
      * @param aURI A thumbnail URI ID in string form
      * @return The resource
      */
+    @JsonIgnore
     public T setThumbnail(final String aURI) {
         myThumbnail = new Thumbnail(aURI);
         return (T) this;
@@ -455,7 +454,7 @@ class Resource<T extends Resource<T>> {
      * @param aLogo A logo
      * @return The resource
      */
-    @JsonIgnore
+    @JsonSetter(Constants.LOGO)
     public T setLogo(final Logo aLogo) {
         myLogo = aLogo;
         return (T) this;
@@ -467,6 +466,7 @@ class Resource<T extends Resource<T>> {
      * @param aLogo A logo URI ID in string form
      * @return The resource
      */
+    @JsonIgnore
     public T setLogo(final String aLogo) {
         myLogo = new Logo(aLogo);
         return (T) this;
@@ -546,7 +546,7 @@ class Resource<T extends Resource<T>> {
      * @return The type
      */
     @JsonGetter(Constants.TYPE)
-    public Type getType() {
+    public String getType() {
         return myType;
     }
 

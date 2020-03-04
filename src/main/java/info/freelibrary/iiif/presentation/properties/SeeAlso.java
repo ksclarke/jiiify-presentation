@@ -4,6 +4,7 @@ package info.freelibrary.iiif.presentation.properties;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -246,36 +247,31 @@ public class SeeAlso {
     }
 
     @JsonValue
-    private Object getJsonValue() {
-        if (myValues.size() == 1) {
-            final Value value = myValues.get(0);
-            final String id = value.getID().toString();
-
-            if (value.getFormat().isPresent() || value.getProfile().isPresent()) {
-                return value;
-            } else {
-                return id;
-            }
-        } else {
-            final List<Object> list = new ArrayList<>();
+    private Object toList() {
+        if (myValues.size() > 0) {
+            final List<Object> seeAlsoList = new ArrayList<>();
 
             for (final Value value : myValues) {
                 final String id = value.getID().toString();
                 final String format = value.getFormatAsString();
                 final String profile = value.getProfileAsString();
+                final Map map;
 
                 if ((id != null) && (format != null) && (profile != null)) {
-                    list.add(ImmutableMap.of(Constants.ID, id, Constants.FORMAT, format, Constants.PROFILE, profile));
+                    map = ImmutableMap.of(Constants.ID, id, Constants.FORMAT, format, Constants.PROFILE, profile);
+                    seeAlsoList.add(map);
                 } else if ((id != null) && (format != null)) {
-                    list.add(ImmutableMap.of(Constants.ID, id, Constants.FORMAT, format));
+                    seeAlsoList.add(ImmutableMap.of(Constants.ID, id, Constants.FORMAT, format));
                 } else if ((id != null) && (profile != null)) {
-                    list.add(ImmutableMap.of(Constants.ID, id, Constants.FORMAT, format));
+                    seeAlsoList.add(ImmutableMap.of(Constants.ID, id, Constants.FORMAT, format));
                 } else if (id != null) {
-                    list.add(id);
+                    seeAlsoList.add(id);
                 }
             }
 
-            return list;
+            return seeAlsoList;
+        } else {
+            return null;
         }
     }
 

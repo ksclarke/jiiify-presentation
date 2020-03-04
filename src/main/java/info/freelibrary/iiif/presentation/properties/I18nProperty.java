@@ -140,7 +140,7 @@ class I18nProperty<T extends I18nProperty<T>> {
     @Override
     public boolean equals(final Object aObject) {
         if (aObject != null && getClass().getName().equals(aObject.getClass().getName())) {
-            return getJsonValue().equals(((I18nProperty) aObject).getJsonValue());
+            return toMap().equals(((I18nProperty) aObject).toMap());
         } else {
             return false;
         }
@@ -148,7 +148,7 @@ class I18nProperty<T extends I18nProperty<T>> {
 
     @Override
     public int hashCode() {
-        return getJsonValue().hashCode();
+        return toMap().hashCode();
     }
 
     @Override
@@ -177,7 +177,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      * @return The value(s) of the property
      */
     @JsonValue
-    protected Object getJsonValue() {
+    protected Object toMap() {
         if (hasStrings()) {
             final Map<String, Object> map = new LinkedHashMap<>(); // maintains insertion order
             final Iterator<I18n> iterator = myI18ns.iterator();

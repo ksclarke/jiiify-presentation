@@ -16,7 +16,7 @@ import info.freelibrary.util.LoggerFactory;
 /**
  * Deserializes metadata in a JSON document into a {@link Metadata} object.
  */
-class MetadataDeserializer extends AbstractStdDeserializer<Metadata> {
+class MetadataDeserializer extends AbstractI18nStdDeserializer<Metadata> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MetadataDeserializer.class, Constants.BUNDLE_NAME);
 
@@ -58,8 +58,8 @@ class MetadataDeserializer extends AbstractStdDeserializer<Metadata> {
 
                 metadata.add(label, value);
             }
-        } else { // Metadata's contents should now always be an array
-            throw new RuntimeException(LOGGER.getMessage(MessageCodes.JPA_023));
+        } else {
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_023));
         }
 
         return metadata;

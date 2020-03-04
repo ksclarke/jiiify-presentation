@@ -15,11 +15,11 @@ import org.junit.Test;
  */
 public class APIComplianceLevelTest {
 
-    public static final String IMAGE_INFO_LEVEL_0 = "http://iiif.io/api/image/2/level0.json";
+    public static final String IMAGE_INFO_LEVEL_0 = "http://iiif.io/api/image/3/level0.json";
 
-    public static final String IMAGE_INFO_LEVEL_1 = "http://iiif.io/api/image/2/level1.json";
+    public static final String IMAGE_INFO_LEVEL_1 = "http://iiif.io/api/image/3/level1.json";
 
-    public static final String IMAGE_INFO_LEVEL_2 = "http://iiif.io/api/image/2/level2.json";
+    public static final String IMAGE_INFO_LEVEL_2 = "http://iiif.io/api/image/3/level2.json";
 
     /**
      * Tests API compliance level zero.

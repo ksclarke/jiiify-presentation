@@ -1,10 +1,14 @@
 {
-  "id" : "http://example.org/images/book1-page1/full/80,100/0/default.jpg",
-  "type" : "dctypes:Image",
-  "format" : "image/jpeg",
-  "service" : {
-    "@context" : "http://iiif.io/api/image/2/context.json",
-    "id" : "http://example.org/images/book1-page1",
-    "profile" : "http://iiif.io/api/image/2/level0.json"
-  }
+    "thumbnail": [
+        {
+            "id": "http://example.org/images/book1-page1/full/80,100/0/default.jpg",
+            "type": "dctypes:Image",
+            "format": "image/jpeg",
+            "service": {
+                "@context": "http://iiif.io/api/image/3/context.json",
+                "id": "http://example.org/images/book1-page1",
+                "profile": "http://iiif.io/api/image/3/level0.json"
+            }
+        }
+    ]
 }

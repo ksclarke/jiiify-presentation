@@ -8,6 +8,8 @@ import java.net.URL;
 
 import org.junit.Test;
 
+import info.freelibrary.util.I18nRuntimeException;
+
 /**
  * A rights test.
  */
@@ -19,7 +21,7 @@ public class RightsTest {
         try {
             RIGHTS_URL = new URL("http://example.org/license");
         } catch (final MalformedURLException details) {
-            throw new RuntimeException();
+            throw new I18nRuntimeException(details);
         }
     }
 

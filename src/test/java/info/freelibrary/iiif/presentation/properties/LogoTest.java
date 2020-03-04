@@ -13,8 +13,11 @@ import org.junit.Test;
 import com.google.common.net.MediaType;
 
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
+import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.iiif.presentation.utils.TestUtils;
 import info.freelibrary.util.StringUtils;
+
+import io.vertx.core.json.JsonObject;
 
 /**
  * A logo test.
@@ -47,9 +50,11 @@ public class LogoTest {
     @Test
     public void testLogoStringArray() throws IOException {
         final Logo logo = new Logo(LOGO_ID_1.toString(), LOGO_ID_2.toString());
-        final File expected = new File(TestUtils.TEST_DIR, LOGO_SIMPLE_2);
+        final File testFile = new File(TestUtils.TEST_DIR, LOGO_SIMPLE_2);
+        final JsonObject expected = new JsonObject(StringUtils.read(testFile));
+        final JsonObject found = new JsonObject(TestUtils.toJson(Constants.LOGO, logo));
 
-        assertEquals(StringUtils.read(expected), TestUtils.toJson(logo));
+        assertEquals(expected, found);
     }
 
     /**
@@ -60,9 +65,11 @@ public class LogoTest {
     @Test
     public void testLogoURIArray() throws IOException {
         final Logo logo = new Logo(LOGO_ID_1, LOGO_ID_2);
-        final File expected = new File(TestUtils.TEST_DIR, LOGO_SIMPLE_2);
+        final File testFile = new File(TestUtils.TEST_DIR, LOGO_SIMPLE_2);
+        final JsonObject expected = new JsonObject(StringUtils.read(testFile));
+        final JsonObject found = new JsonObject(TestUtils.toJson(Constants.LOGO, logo));
 
-        assertEquals(StringUtils.read(expected), TestUtils.toJson(logo));
+        assertEquals(expected, found);
     }
 
     /**
@@ -73,9 +80,11 @@ public class LogoTest {
     @Test
     public void testLogoStringIntInt() throws IOException {
         final Logo logo = new Logo(LOGO_ID_1.toString(), 1000, 1000);
-        final File expected = new File(TestUtils.TEST_DIR, LOGO_ID_W_H);
+        final File testFile = new File(TestUtils.TEST_DIR, LOGO_ID_W_H);
+        final JsonObject expected = new JsonObject(StringUtils.read(testFile));
+        final JsonObject found = new JsonObject(TestUtils.toJson(Constants.LOGO, logo));
 
-        assertEquals(StringUtils.read(expected), TestUtils.toJson(logo));
+        assertEquals(expected, found);
     }
 
     /**
@@ -86,9 +95,11 @@ public class LogoTest {
     @Test
     public void testLogoURIIntInt() throws IOException {
         final Logo logo = new Logo(LOGO_ID_1, 1000, 1000);
-        final File expected = new File(TestUtils.TEST_DIR, LOGO_ID_W_H);
+        final File testFile = new File(TestUtils.TEST_DIR, LOGO_ID_W_H);
+        final JsonObject expected = new JsonObject(StringUtils.read(testFile));
+        final JsonObject found = new JsonObject(TestUtils.toJson(Constants.LOGO, logo));
 
-        assertEquals(StringUtils.read(expected), TestUtils.toJson(logo));
+        assertEquals(expected, found);
     }
 
     /**
@@ -99,9 +110,11 @@ public class LogoTest {
     @Test
     public void testLogoStringImageInfoService() throws IOException {
         final Logo logo = new Logo(LOGO_ID_1.toString(), SERVICE);
-        final File expected = new File(TestUtils.TEST_DIR, LOGO_IMAGE_SERVICE);
+        final File testFile = new File(TestUtils.TEST_DIR, LOGO_IMAGE_SERVICE);
+        final JsonObject expected = new JsonObject(StringUtils.read(testFile));
+        final JsonObject found = new JsonObject(TestUtils.toJson(Constants.LOGO, logo));
 
-        assertEquals(StringUtils.read(expected), TestUtils.toJson(logo, true));
+        assertEquals(expected, found);
     }
 
     /**
@@ -112,9 +125,11 @@ public class LogoTest {
     @Test
     public void testLogoURIImageInfoService() throws IOException {
         final Logo logo = new Logo(LOGO_ID_1, SERVICE);
-        final File expected = new File(TestUtils.TEST_DIR, LOGO_IMAGE_SERVICE);
+        final File testFile = new File(TestUtils.TEST_DIR, LOGO_IMAGE_SERVICE);
+        final JsonObject expected = new JsonObject(StringUtils.read(testFile));
+        final JsonObject found = new JsonObject(TestUtils.toJson(Constants.LOGO, logo));
 
-        assertEquals(StringUtils.read(expected), TestUtils.toJson(logo, true));
+        assertEquals(expected, found);
     }
 
     /**
@@ -125,11 +140,14 @@ public class LogoTest {
     @Test
     public void testAddImageStringIntInt() throws IOException {
         final Logo logo = new Logo(LOGO_ID_1, 1000, 1000);
-        final File expected = new File(TestUtils.TEST_DIR, LOGO_ID_W_H_DOUBLE);
+        final File testFile = new File(TestUtils.TEST_DIR, LOGO_ID_W_H_DOUBLE);
+        final JsonObject expected = new JsonObject(StringUtils.read(testFile));
+        final JsonObject found;
 
         logo.addImage(LOGO_ID_2.toString(), 500, 500);
+        found = new JsonObject(TestUtils.toJson(Constants.LOGO, logo));
 
-        assertEquals(StringUtils.read(expected), TestUtils.toJson(logo, true));
+        assertEquals(expected, found);
     }
 
     /**
@@ -140,11 +158,14 @@ public class LogoTest {
     @Test
     public void testAddImageURIIntInt() throws IOException {
         final Logo logo = new Logo(LOGO_ID_1, 1000, 1000);
-        final File expected = new File(TestUtils.TEST_DIR, LOGO_ID_W_H_DOUBLE);
+        final File testFile = new File(TestUtils.TEST_DIR, LOGO_ID_W_H_DOUBLE);
+        final JsonObject expected = new JsonObject(StringUtils.read(testFile));
+        final JsonObject found;
 
         logo.addImage(LOGO_ID_2, 500, 500);
+        found = new JsonObject(TestUtils.toJson(Constants.LOGO, logo));
 
-        assertEquals(StringUtils.read(expected), TestUtils.toJson(logo, true));
+        assertEquals(expected, found);
     }
 
     /**
@@ -155,11 +176,14 @@ public class LogoTest {
     @Test
     public void testAddImageStringImageInfoService() throws IOException {
         final Logo logo = new Logo(LOGO_ID_1, 1000, 1000);
-        final File expected = new File(TestUtils.TEST_DIR, LOGO_ADD_IMAGE);
+        final File testFile = new File(TestUtils.TEST_DIR, LOGO_ADD_IMAGE);
+        final JsonObject expected = new JsonObject(StringUtils.read(testFile));
+        final JsonObject found;
 
         logo.addImage(LOGO_ID_2.toString(), SERVICE);
+        found = new JsonObject(TestUtils.toJson(Constants.LOGO, logo));
 
-        assertEquals(StringUtils.read(expected), TestUtils.toJson(logo, true));
+        assertEquals(expected, found);
     }
 
     /**
@@ -170,11 +194,14 @@ public class LogoTest {
     @Test
     public void testAddImageURIImageInfoService() throws IOException {
         final Logo logo = new Logo(LOGO_ID_1, 1000, 1000);
-        final File expected = new File(TestUtils.TEST_DIR, LOGO_ADD_IMAGE);
+        final File testFile = new File(TestUtils.TEST_DIR, LOGO_ADD_IMAGE);
+        final JsonObject expected = new JsonObject(StringUtils.read(testFile));
+        final JsonObject found;
 
         logo.addImage(LOGO_ID_2, SERVICE);
+        found = new JsonObject(TestUtils.toJson(Constants.LOGO, logo));
 
-        assertEquals(StringUtils.read(expected), TestUtils.toJson(logo, true));
+        assertEquals(expected, found);
     }
 
     /**

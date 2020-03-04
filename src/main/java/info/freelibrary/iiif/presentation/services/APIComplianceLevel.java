@@ -16,8 +16,8 @@ import info.freelibrary.util.LoggerFactory;
 public enum APIComplianceLevel {
 
     // Compliance levels
-    ZERO("http://iiif.io/api/image/2/level0.json"), ONE("http://iiif.io/api/image/2/level1.json"), TWO(
-            "http://iiif.io/api/image/2/level2.json");
+    ZERO("http://iiif.io/api/image/3/level0.json"), ONE("http://iiif.io/api/image/3/level1.json"), TWO(
+            "http://iiif.io/api/image/3/level2.json");
 
     private static final Logger LOGGER = LoggerFactory.getLogger(APIComplianceLevel.class, Constants.BUNDLE_NAME);
 

@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 /**
  * Deserializes attributions from JSON documents into {@link Attribution} objects.
  */
-class AttributionDeserializer extends AbstractStdDeserializer<Attribution> {
+class AttributionDeserializer extends AbstractI18nStdDeserializer<Attribution> {
 
     /**
      * The <code>serialVersionUID</code> for AttributionDeserializer.

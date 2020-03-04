@@ -201,7 +201,7 @@ public class I18nPropertyTest {
 
         i18np.getI18ns().remove(0);
 
-        assertEquals(null, i18np.getJsonValue());
+        assertEquals(null, i18np.toMap());
     }
 
 }

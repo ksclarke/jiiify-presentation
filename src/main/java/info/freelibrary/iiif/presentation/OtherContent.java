@@ -3,8 +3,6 @@ package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
 
-import info.freelibrary.iiif.presentation.properties.Type;
-
 /**
  * Other, non-image, resources that are associated with a {@link Canvas}.
  */
@@ -36,6 +34,6 @@ public class OtherContent extends Content<OtherContent> {
      * Creates a IIIF presentation content resource.
      */
     private OtherContent() {
-        super(new Type(TYPE));
+        super(TYPE);
     }
 }

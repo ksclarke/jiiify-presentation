@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.utils;
 
+import java.net.URI;
+
 /**
  * Constants used in this software library.
  */
@@ -8,6 +10,9 @@ public final class Constants {
 
     /* The name of the project's resource bundle. */
     public static final String BUNDLE_NAME = "iiif_presentation_messages";
+
+    /* The presentation API context */
+    public static final URI CONTEXT_URI = URI.create("http://iiif.io/api/presentation/3/context.json");
 
     /* The name of the ID property. */
     public static final String ID = "id";

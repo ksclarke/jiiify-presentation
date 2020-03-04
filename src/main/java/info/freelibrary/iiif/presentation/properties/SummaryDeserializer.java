@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 /**
  * Deserializes summaries from JSON documents into {@link Summary} objects.
  */
-class SummaryDeserializer extends AbstractStdDeserializer<Summary> {
+class SummaryDeserializer extends AbstractI18nStdDeserializer<Summary> {
 
     /**
      * The <code>serialVersionUID</code> of SummarySerializer.

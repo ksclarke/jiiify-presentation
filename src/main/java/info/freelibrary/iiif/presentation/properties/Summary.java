@@ -34,8 +34,8 @@ public class Summary extends I18nProperty<Summary> {
 
     @Override
     @JsonGetter(Constants.SUMMARY)
-    protected Object getJsonValue() {
-        return super.getJsonValue();
+    protected Object toMap() {
+        return super.toMap();
     }
 
 }

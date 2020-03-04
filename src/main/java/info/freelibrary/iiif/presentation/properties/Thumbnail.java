@@ -4,6 +4,7 @@ package info.freelibrary.iiif.presentation.properties;
 import java.net.URI;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.utils.Constants;
@@ -14,6 +15,7 @@ import info.freelibrary.iiif.presentation.utils.Constants;
  * recommended that a IIIF Image API service be available for this image for manipulations such as resizing. If a
  * resource has multiple thumbnails, then each of them should be different.
  */
+@JsonDeserialize(using = ThumbnailDeserializer.class)
 public class Thumbnail extends ServiceProperty<Thumbnail> {
 
     /**
@@ -78,8 +80,8 @@ public class Thumbnail extends ServiceProperty<Thumbnail> {
 
     @Override
     @JsonGetter(Constants.THUMBNAIL)
-    protected Object getValue() {
-        return super.getValue();
+    protected Object toList() {
+        return super.toList();
     }
 
 }

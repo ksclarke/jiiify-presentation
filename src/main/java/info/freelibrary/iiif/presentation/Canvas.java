@@ -15,7 +15,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.NavDate;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
-import info.freelibrary.iiif.presentation.properties.Type;
 import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
 
@@ -174,7 +173,7 @@ public class Canvas extends Resource<Canvas> {
      * Creates a blank new canvas.
      */
     private Canvas() {
-        super(new Type(TYPE));
+        super(TYPE);
     }
 
     /**

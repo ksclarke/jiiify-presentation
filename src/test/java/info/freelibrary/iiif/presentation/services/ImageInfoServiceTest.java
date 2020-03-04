@@ -12,7 +12,7 @@ import org.junit.Test;
  */
 public class ImageInfoServiceTest {
 
-    public static final URI CONTEXT = URI.create("http://iiif.io/api/image/2/context.json");
+    public static final URI CONTEXT = URI.create("http://iiif.io/api/image/3/context.json");
 
     private static final URI ID = URI.create("asdf");
 

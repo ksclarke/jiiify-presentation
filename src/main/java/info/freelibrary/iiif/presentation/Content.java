@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.iiif.presentation.properties.Type;
 import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
@@ -50,7 +49,7 @@ class Content<T extends Content<T>> extends Resource<T> {
      *
      * @param aType A type of Content
      */
-    protected Content(final Type aType) {
+    protected Content(final String aType) {
         super(aType);
     }
 

@@ -18,10 +18,10 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.properties.I18n;
 import info.freelibrary.iiif.presentation.properties.Label;
-import info.freelibrary.iiif.presentation.properties.Type;
 import info.freelibrary.iiif.presentation.services.APIComplianceLevel;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.utils.Constants;
+import info.freelibrary.iiif.presentation.utils.ImageContentComparator;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.Logger;
@@ -71,7 +71,7 @@ public class ImageContent extends Content<ImageContent> {
      * Creates image content.
      */
     private ImageContent() {
-        super(new Type(TYPE));
+        super(TYPE);
     }
 
     /**
@@ -152,93 +152,27 @@ public class ImageContent extends Content<ImageContent> {
      * @return The resources map
      */
     @JsonGetter(Constants.RESOURCE)
-    private Map<String, Object> getResourceMap() {
-        // Since we're supplying the resource map, we need to supply the order too
-        @SuppressWarnings("checkstyle:BooleanExpressionComplexity")
-        final Map<String, Object> map = new TreeMap<>((a1stKey, a2ndKey) -> {
-            if (Constants.TYPE.equals(a1stKey) && !Constants.ID.equals(a2ndKey)) {
-                return -1;
-            } else if (Constants.ID.equals(a1stKey)) {
-                return -1;
-            } else if (Constants.DEFAULT.equals(a1stKey) && !Constants.TYPE.equals(a2ndKey) && !Constants.ID.equals(
-                    a2ndKey)) {
-                return -1;
-            } else if (Constants.ITEM.equals(a1stKey) && !Constants.ID.equals(a2ndKey) && !Constants.TYPE.equals(
-                    a2ndKey) && !Constants.DEFAULT.equals(a2ndKey)) {
-                return -1;
-            } else if (Constants.WIDTH.equals(a1stKey) && !Constants.TYPE.equals(a2ndKey) && !Constants.ID.equals(
-                    a2ndKey)) {
-                return -1;
-            } else if (Constants.HEIGHT.equals(a1stKey) && !Constants.TYPE.equals(a2ndKey) && !Constants.ID.equals(
-                    a2ndKey) && !Constants.WIDTH.equals(a2ndKey)) {
-                return -1;
-            } else if (Constants.FORMAT.equals(a1stKey) && !Constants.TYPE.equals(a2ndKey) && !Constants.ID.equals(
-                    a2ndKey) && !Constants.WIDTH.equals(a2ndKey) && !Constants.HEIGHT.equals(a2ndKey)) {
-                return -1;
-            } else if (Constants.LABEL.equals(a1stKey) && !Constants.TYPE.equals(a2ndKey) && !Constants.ID.equals(
-                    a2ndKey) && !Constants.WIDTH.equals(a2ndKey) && !Constants.HEIGHT.equals(a2ndKey) &&
-                    !Constants.FORMAT.equals(a2ndKey)) {
-                return -1;
-            } else if (Constants.SERVICE.equals(a1stKey) && !Constants.TYPE.equals(a2ndKey) && !Constants.ID.equals(
-                    a2ndKey) && !Constants.WIDTH.equals(a2ndKey) && !Constants.HEIGHT.equals(a2ndKey) &&
-                    !Constants.FORMAT.equals(a2ndKey) && !Constants.LABEL.equals(a2ndKey)) {
-                return -1;
-            } else {
-                return 1;
-            }
-        });
+    private Map<String, Object> toMap() {
+        final Map<String, Object> map = new TreeMap<>(new ImageContentComparator());
 
         if (!myResources.isEmpty()) {
-            final Optional<ImageResource> defaultResource = getDefaultResource();
+            final List<Object> itemList = new ArrayList<>();
 
-            if (myResources.size() > 1 || defaultResource.isPresent()) {
-                final List<Object> itemList = new ArrayList<>();
+            map.put(Constants.TYPE, Constants.OA_CHOICE);
 
-                map.put(Constants.TYPE, Constants.OA_CHOICE);
+            if (myDefaultResource.isPresent()) {
+                map.put(Constants.DEFAULT, myDefaultResource);
+            }
 
-                if (defaultResource.isPresent()) {
-                    map.put(Constants.DEFAULT, myDefaultResource);
-                }
-
-                for (final ImageResource resource : myResources) {
-                    if (resource == null) {
-                        itemList.add(RDF_NIL);
-                    } else {
-                        itemList.add(resource);
-                    }
-                }
-
-                map.put(Constants.ITEM, itemList);
-            } else if (myResources.size() == 1) {
-                final ImageResource resource = myResources.get(0);
-                final Optional<ImageInfoService> service = resource.getService();
-                final int height = resource.getHeight();
-                final int width = resource.getWidth();
-                final String format = resource.getFormat();
-
-                map.put(Constants.ID, resource.getID());
-                map.put(Constants.TYPE, resource.getType());
-
-                if (height != 0) {
-                    map.put(Constants.HEIGHT, height);
-                }
-
-                if (width != 0) {
-                    map.put(Constants.WIDTH, width);
-                }
-
-                if (format != null) {
-                    map.put(Constants.FORMAT, format);
-                }
-
-                if (resource.getLabel() != null) {
-                    map.put(Constants.LABEL, resource.getLabel());
-                }
-
-                if (service.isPresent()) {
-                    map.put(Constants.SERVICE, resource.getService());
+            for (final ImageResource resource : myResources) {
+                if (resource == null) {
+                    itemList.add(RDF_NIL);
+                } else {
+                    itemList.add(resource);
                 }
             }
+
+            map.put(Constants.ITEM, itemList);
         }
 
         return map;
@@ -247,18 +181,18 @@ public class ImageContent extends Content<ImageContent> {
     /**
      * Builds the ImageContent's ImageResoures from the JSON resources map.
      *
-     * @param aMap A JSON representation of the resources map
+     * @param aResourcesMap A JSON representation of the resources map
      */
     @JsonSetter(Constants.RESOURCE)
-    private void setResourceMap(final Map<String, Object> aMap) {
-        LOGGER.trace(aMap.toString());
+    private void setMap(final Map<String, Object> aResourcesMap) {
+        LOGGER.trace(aResourcesMap.toString());
 
-        if (!aMap.isEmpty()) {
-            final Map<String, Object> defaultItem = (Map<String, Object>) aMap.get(Constants.DEFAULT);
-            final List<Map<String, Object>> items = (List<Map<String, Object>>) aMap.get(Constants.ITEM);
+        if (!aResourcesMap.isEmpty()) {
+            final Map<String, Object> defaultItem = (Map<String, Object>) aResourcesMap.get(Constants.DEFAULT);
+            final List<Map<String, Object>> items = (List<Map<String, Object>>) aResourcesMap.get(Constants.ITEM);
 
             if (defaultItem != null) {
-                myDefaultResource = Optional.of(buildImageResource(defaultItem));
+                myDefaultResource = Optional.of(deserializeResource(defaultItem));
             }
 
             if (items != null) {
@@ -266,29 +200,30 @@ public class ImageContent extends Content<ImageContent> {
                     if (object instanceof String && RDF_NIL.equals(object.toString())) {
                         myResources.add(null);
                     } else {
-                        myResources.add(buildImageResource((Map<String, Object>) object));
+                        myResources.add(deserializeResource((Map<String, Object>) object));
                     }
                 }
             }
 
-            if (defaultItem == null && items == null && aMap.get(Constants.ID) != null) {
-                myResources.add(buildImageResource(aMap));
+            if (defaultItem == null && items == null && aResourcesMap.get(Constants.ID) != null) {
+                myResources.add(deserializeResource(aResourcesMap));
             }
         }
     }
 
     /**
-     * Builds an image resource from the Map that Jackson creates
+     * Deserializes an image resource from the Map that Jackson creates. This is a candidate for a custom
+     * deserializer.
      *
-     * @param aMap A map of the image resources
+     * @param aResourceMap A map of the image resources
      * @return The newly built image resource
      */
-    private ImageResource buildImageResource(final Map<String, Object> aMap) {
-        final ImageResource resource = new ImageResource(URI.create((String) aMap.get(Constants.ID)));
-        final LinkedHashMap labelMap = (LinkedHashMap) aMap.get(Constants.LABEL);
-        final int width = (int) aMap.getOrDefault(Constants.WIDTH, 0);
-        final int height = (int) aMap.getOrDefault(Constants.HEIGHT, 0);
-        final Map<String, Object> service = (Map<String, Object>) aMap.get(Constants.SERVICE);
+    private ImageResource deserializeResource(final Map<String, Object> aResourceMap) {
+        final ImageResource resource = new ImageResource(URI.create((String) aResourceMap.get(Constants.ID)));
+        final LinkedHashMap labelMap = (LinkedHashMap) aResourceMap.get(Constants.LABEL);
+        final int width = (int) aResourceMap.getOrDefault(Constants.WIDTH, 0);
+        final int height = (int) aResourceMap.getOrDefault(Constants.HEIGHT, 0);
+        final Map<String, Object> service = (Map<String, Object>) aResourceMap.get(Constants.SERVICE);
 
         if (labelMap != null) {
             final Iterator<String> iterator = labelMap.keySet().iterator();
@@ -299,7 +234,7 @@ public class ImageContent extends Content<ImageContent> {
 
                 resource.setLabel(new Label(new I18n(langTag, langStrings)));
             } else {
-                throw new RuntimeException(); // FIXME
+                throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_030));
             }
         }
 
