@@ -81,8 +81,6 @@ public class MetadataTest extends AbstractTest {
         metadata.add(new Label(new I18n(FRE, AAAA)), new Value(new I18n(FRE, BBBB)));
         metadata.add(new Label(new I18n(ENG, CCCC)), new Value(new I18n(ENG, DDDD)));
 
-        System.out.println(new Label(new I18n(FRE, AAAA)).toString());
-
         myManifest.setMetadata(metadata);
         myJSON.put(Constants.METADATA, new JsonArray().add(metadata1).add(metadata2));
 

@@ -18,7 +18,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.properties.I18n;
 import info.freelibrary.iiif.presentation.properties.Label;
-import info.freelibrary.iiif.presentation.properties.Type;
 import info.freelibrary.iiif.presentation.services.APIComplianceLevel;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.utils.Constants;
@@ -72,7 +71,7 @@ public class ImageContent extends Content<ImageContent> {
      * Creates image content.
      */
     private ImageContent() {
-        super(new Type(TYPE));
+        super(TYPE);
     }
 
     /**

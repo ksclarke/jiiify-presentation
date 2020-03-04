@@ -19,7 +19,6 @@ import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.NavDate;
 import info.freelibrary.iiif.presentation.properties.Summary;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
-import info.freelibrary.iiif.presentation.properties.Type;
 import info.freelibrary.iiif.presentation.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
@@ -108,7 +107,7 @@ public class Manifest extends Resource<Manifest> {
      * A private constructor used for serialization purposes.
      */
     private Manifest() {
-        super(new Type(TYPE));
+        super(TYPE);
     }
 
     /**

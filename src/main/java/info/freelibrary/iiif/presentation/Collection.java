@@ -14,7 +14,6 @@ import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.NavDate;
 import info.freelibrary.iiif.presentation.properties.Summary;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
-import info.freelibrary.iiif.presentation.properties.Type;
 import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.util.I18nRuntimeException;
 
@@ -94,7 +93,7 @@ public class Collection extends Resource<Collection> {
      * Creates a IIIF presentation collection.
      */
     private Collection() {
-        super(new Type(TYPE));
+        super(TYPE);
     }
 
     /**
@@ -294,8 +293,8 @@ public class Collection extends Resource<Collection> {
          * @return The collection manifest type
          */
         @JsonGetter(Constants.TYPE)
-        public Type getType() {
-            return new Type(TYPE);
+        public String getType() {
+            return TYPE;
         }
 
         /**
@@ -338,7 +337,7 @@ public class Collection extends Resource<Collection> {
          * @return The collection manifest type
          */
         @JsonSetter(Constants.TYPE)
-        private Manifest setType(final Type aType) {
+        private Manifest setType(final String aType) {
             return this;
         }
     }
