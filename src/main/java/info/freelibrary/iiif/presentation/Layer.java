@@ -6,8 +6,10 @@ import java.net.URI;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.ViewingDirection;
+import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
@@ -63,6 +65,17 @@ public class Layer extends Resource<Layer> {
     @JsonGetter(Constants.VIEWING_DIRECTION)
     public ViewingDirection getViewingDirection() {
         return myViewingDirection;
+    }
+
+    @Override
+    @JsonSetter(Constants.BEHAVIOR)
+    public Layer setBehaviors(final Behavior... aBehaviorArray) {
+        return super.setBehaviors(checkBehaviors(ResourceBehavior.class, aBehaviorArray));
+    }
+
+    @Override
+    public Layer addBehaviors(final Behavior... aBehaviorArray) {
+        return super.addBehaviors(checkBehaviors(ResourceBehavior.class, aBehaviorArray));
     }
 
 }

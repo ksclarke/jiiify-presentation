@@ -9,11 +9,13 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.NavDate;
 import info.freelibrary.iiif.presentation.properties.Summary;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
+import info.freelibrary.iiif.presentation.properties.behaviors.CollectionBehavior;
 import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.util.I18nRuntimeException;
 
@@ -94,6 +96,17 @@ public class Collection extends Resource<Collection> {
      */
     private Collection() {
         super(TYPE);
+    }
+
+    @Override
+    @JsonSetter(Constants.BEHAVIOR)
+    public Collection setBehaviors(final Behavior... aBehaviorArray) {
+        return super.setBehaviors(checkBehaviors(CollectionBehavior.class, aBehaviorArray));
+    }
+
+    @Override
+    public Collection addBehaviors(final Behavior... aBehaviorArray) {
+        return super.addBehaviors(checkBehaviors(CollectionBehavior.class, aBehaviorArray));
     }
 
     /**

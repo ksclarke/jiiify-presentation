@@ -3,6 +3,12 @@ package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+
+import info.freelibrary.iiif.presentation.properties.Behavior;
+import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
+import info.freelibrary.iiif.presentation.utils.Constants;
+
 /**
  * Other, non-image, resources that are associated with a {@link Canvas}.
  */
@@ -36,4 +42,16 @@ public class OtherContent extends Content<OtherContent> {
     private OtherContent() {
         super(TYPE);
     }
+
+    @Override
+    @JsonSetter(Constants.BEHAVIOR)
+    public OtherContent setBehaviors(final Behavior... aBehaviorArray) {
+        return super.setBehaviors(checkBehaviors(ResourceBehavior.class, aBehaviorArray));
+    }
+
+    @Override
+    public OtherContent addBehaviors(final Behavior... aBehaviorArray) {
+        return super.addBehaviors(checkBehaviors(ResourceBehavior.class, aBehaviorArray));
+    }
+
 }

@@ -7,9 +7,11 @@ import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.NavDate;
 import info.freelibrary.iiif.presentation.properties.ViewingDirection;
+import info.freelibrary.iiif.presentation.properties.behaviors.RangeBehavior;
 import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
@@ -48,6 +50,17 @@ public class Range extends Resource<Range> {
      */
     public Range(final URI aID, final Label aLabel) {
         super(TYPE, aID, aLabel, REQ_ARG_COUNT);
+    }
+
+    @Override
+    @JsonSetter(Constants.BEHAVIOR)
+    public Range setBehaviors(final Behavior... aBehaviorArray) {
+        return super.setBehaviors(checkBehaviors(RangeBehavior.class, aBehaviorArray));
+    }
+
+    @Override
+    public Range addBehaviors(final Behavior... aBehaviorArray) {
+        return super.addBehaviors(checkBehaviors(RangeBehavior.class, aBehaviorArray));
     }
 
     /**

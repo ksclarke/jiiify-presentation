@@ -12,9 +12,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.NavDate;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
+import info.freelibrary.iiif.presentation.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
 
@@ -174,6 +176,17 @@ public class Canvas extends Resource<Canvas> {
      */
     private Canvas() {
         super(TYPE);
+    }
+
+    @Override
+    @JsonSetter(Constants.BEHAVIOR)
+    public Canvas setBehaviors(final Behavior... aBehaviorArray) {
+        return super.setBehaviors(checkBehaviors(CanvasBehavior.class, aBehaviorArray));
+    }
+
+    @Override
+    public Canvas addBehaviors(final Behavior... aBehaviorArray) {
+        return super.addBehaviors(checkBehaviors(CanvasBehavior.class, aBehaviorArray));
     }
 
     /**

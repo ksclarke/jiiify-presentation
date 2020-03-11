@@ -10,6 +10,8 @@ import org.junit.Test;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.NavDate;
 import info.freelibrary.iiif.presentation.properties.ViewingDirection;
+import info.freelibrary.iiif.presentation.properties.behaviors.ManifestBehavior;
+import info.freelibrary.iiif.presentation.properties.behaviors.RangeBehavior;
 
 /**
  * A range test.
@@ -55,4 +57,44 @@ public class RangeTest {
         assertEquals(ViewingDirection.LEFT_TO_RIGHT, range.getViewingDirection());
     }
 
+    /**
+     * Test setting range behaviors.
+     */
+    @Test
+    public final void testSetBehaviors() {
+        final Range range = new Range(ID, new Label(LABEL));
+
+        assertEquals(2, range.setBehaviors(RangeBehavior.AUTOADVANCE, RangeBehavior.INDIVIDUALS).getBehaviors()
+                .size());
+    }
+
+    /**
+     * Test setting disallowed range behaviors.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public final void testSetDisallowedBehaviors() {
+        final Range range = new Range(ID, new Label(LABEL));
+
+        range.setBehaviors(RangeBehavior.AUTOADVANCE, ManifestBehavior.AUTOADVANCE);
+    }
+
+    /**
+     * Test adding range behaviors.
+     */
+    @Test
+    public final void testAddBehaviors() {
+        final Range range = new Range(ID, new Label(LABEL));
+
+        assertEquals(1, range.addBehaviors(RangeBehavior.AUTOADVANCE).getBehaviors().size());
+    }
+
+    /**
+     * Test adding disallowed range behaviors.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public final void testAddDisallowedBehaviors() {
+        final Range range = new Range(ID, new Label(LABEL));
+
+        range.addBehaviors(RangeBehavior.AUTOADVANCE, ManifestBehavior.INDIVIDUALS);
+    }
 }

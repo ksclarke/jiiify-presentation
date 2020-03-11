@@ -14,12 +14,14 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.NavDate;
 import info.freelibrary.iiif.presentation.properties.Summary;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.properties.ViewingDirection;
+import info.freelibrary.iiif.presentation.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.util.I18nRuntimeException;
@@ -108,6 +110,17 @@ public class Manifest extends Resource<Manifest> {
      */
     private Manifest() {
         super(TYPE);
+    }
+
+    @Override
+    @JsonSetter(Constants.BEHAVIOR)
+    public Manifest setBehaviors(final Behavior... aBehaviorArray) {
+        return super.setBehaviors(checkBehaviors(ManifestBehavior.class, aBehaviorArray));
+    }
+
+    @Override
+    public Manifest addBehaviors(final Behavior... aBehaviorArray) {
+        return super.addBehaviors(checkBehaviors(ManifestBehavior.class, aBehaviorArray));
     }
 
     /**
