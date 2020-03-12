@@ -14,8 +14,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class CanvasBehaviorTest {
 
-    private static final String NONPAGED = "non-paged";
-
     /* Expected values */
     private static final String[] VALUES = { "auto-advance", "no-auto-advance", "facing-pages", "non-paged" };
 
@@ -26,7 +24,7 @@ public class CanvasBehaviorTest {
      */
     @Test
     public final void testJsonSerialization() throws JsonProcessingException {
-        assertEquals(QUOTE + NONPAGED + QUOTE, new ObjectMapper().writeValueAsString(CanvasBehavior.NONPAGED));
+        assertEquals(QUOTE + VALUES[3] + QUOTE, new ObjectMapper().writeValueAsString(CanvasBehavior.NONPAGED));
     }
 
     /**
@@ -34,7 +32,7 @@ public class CanvasBehaviorTest {
      */
     @Test
     public final void testToString() {
-        assertEquals(NONPAGED, CanvasBehavior.NONPAGED.toString());
+        assertEquals(VALUES[3], CanvasBehavior.NONPAGED.toString());
     }
 
     /**

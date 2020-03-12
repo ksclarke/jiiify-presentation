@@ -14,8 +14,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class ManifestBehaviorTest {
 
-    private static final String REPEAT = "repeat";
-
     private static final String[] VALUES = { "auto-advance", "no-auto-advance", "individuals", "continuous", "repeat",
         "no-repeat", "paged", "unordered" };
 
@@ -26,7 +24,7 @@ public class ManifestBehaviorTest {
      */
     @Test
     public final void testJsonSerialization() throws JsonProcessingException {
-        assertEquals(QUOTE + REPEAT + QUOTE, new ObjectMapper().writeValueAsString(ManifestBehavior.REPEAT));
+        assertEquals(QUOTE + VALUES[4] + QUOTE, new ObjectMapper().writeValueAsString(ManifestBehavior.REPEAT));
     }
 
     /**
@@ -34,7 +32,7 @@ public class ManifestBehaviorTest {
      */
     @Test
     public final void testToString() {
-        assertEquals(REPEAT, ManifestBehavior.REPEAT.toString());
+        assertEquals(VALUES[4], ManifestBehavior.REPEAT.toString());
     }
 
     /**

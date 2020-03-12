@@ -14,8 +14,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class ResourceBehaviorTest {
 
-    private static final String HIDDEN = "hidden";
-
     /* The expected values. */
     private static final String[] VALUES = { "hidden" };
 
@@ -26,7 +24,7 @@ public class ResourceBehaviorTest {
      */
     @Test
     public final void testJsonSerialization() throws JsonProcessingException {
-        assertEquals(QUOTE + HIDDEN + QUOTE, new ObjectMapper().writeValueAsString(ResourceBehavior.HIDDEN));
+        assertEquals(QUOTE + VALUES[0] + QUOTE, new ObjectMapper().writeValueAsString(ResourceBehavior.HIDDEN));
     }
 
     /**
@@ -34,7 +32,7 @@ public class ResourceBehaviorTest {
      */
     @Test
     public final void testToString() {
-        assertEquals(HIDDEN, ResourceBehavior.HIDDEN.toString());
+        assertEquals(VALUES[0], ResourceBehavior.HIDDEN.toString());
     }
 
     /**
