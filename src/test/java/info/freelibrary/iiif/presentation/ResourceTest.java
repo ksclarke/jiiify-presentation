@@ -25,7 +25,6 @@ import info.freelibrary.iiif.presentation.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.properties.behaviors.CollectionBehavior;
 import info.freelibrary.iiif.presentation.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
-import info.freelibrary.iiif.presentation.properties.behaviors.UriBehavior;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.utils.Constants;
 
@@ -99,7 +98,7 @@ public class ResourceTest extends AbstractTest {
         test.setAttribution(new Attribution(myLorem.getWords(5, 8)).addStrings(myLorem.getWords(5, 8)));
         test.setRights(new Rights("http://ils.unc.edu/license1").addValue("http://ils.unc.edu/license2"));
         test.setLogo(new Logo("ffff.jpg", service).addImage("gggg.jpg", service));
-        test.setBehaviors(new UriBehavior("http://ils.unc.edu/behavior"));
+        test.setBehaviors(ManifestBehavior.AUTOADVANCE);
         test.setSeeAlso(new SeeAlso("http://1.unc.edu").addValue("http://2.unc.edu"));
 
         json = JsonObject.mapFrom(test);
