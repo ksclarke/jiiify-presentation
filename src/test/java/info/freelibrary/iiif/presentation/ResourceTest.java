@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -13,7 +14,6 @@ import com.thedeanda.lorem.LoremIpsum;
 
 import info.freelibrary.iiif.presentation.properties.Attribution;
 import info.freelibrary.iiif.presentation.properties.Behavior;
-import info.freelibrary.iiif.presentation.properties.Behavior.Option;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Metadata;
@@ -21,6 +21,10 @@ import info.freelibrary.iiif.presentation.properties.Rights;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.properties.Summary;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
+import info.freelibrary.iiif.presentation.properties.behaviors.CanvasBehavior;
+import info.freelibrary.iiif.presentation.properties.behaviors.CollectionBehavior;
+import info.freelibrary.iiif.presentation.properties.behaviors.ManifestBehavior;
+import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.utils.Constants;
 
@@ -67,7 +71,7 @@ public class ResourceTest extends AbstractTest {
         test.setAttribution(myLorem.getWords(5, 8));
         test.setRights(SILS_URL);
         test.setLogo(new Logo(ASDF_JPG, service));
-        test.setBehavior(Option.CONTINUOUS);
+        test.setBehaviors(ResourceBehavior.HIDDEN);
         test.setSeeAlso("http://www.unc.edu");
 
         json = JsonObject.mapFrom(test);
@@ -94,12 +98,64 @@ public class ResourceTest extends AbstractTest {
         test.setAttribution(new Attribution(myLorem.getWords(5, 8)).addStrings(myLorem.getWords(5, 8)));
         test.setRights(new Rights("http://ils.unc.edu/license1").addValue("http://ils.unc.edu/license2"));
         test.setLogo(new Logo("ffff.jpg", service).addImage("gggg.jpg", service));
-        test.setBehavior(new Behavior(Option.CONTINUOUS).addValue("http://ils.unc.edu/behavior"));
+        test.setBehaviors(ManifestBehavior.AUTOADVANCE);
         test.setSeeAlso(new SeeAlso("http://1.unc.edu").addValue("http://2.unc.edu"));
 
         json = JsonObject.mapFrom(test);
 
         assertEquals(AAAA, json.getString(Constants.ID));
+    }
+
+    /**
+     * Tests setting behaviors.
+     */
+    @Test
+    public void testSetBehaviors() {
+        final TestResource resource = new TestResource();
+
+        resource.setBehaviors(CanvasBehavior.AUTOADVANCE, ManifestBehavior.CONTINUOUS);
+        assertEquals(2, resource.getBehaviors().size());
+
+        resource.setBehaviors(CollectionBehavior.INDIVIDUALS);
+        assertEquals(1, resource.getBehaviors().size());
+    }
+
+    /**
+     * Tests adding rather than setting a behavior.
+     */
+    @Test
+    public void testAddBehaviors() {
+        final TestResource resource = new TestResource();
+
+        resource.setBehaviors(CanvasBehavior.AUTOADVANCE, ManifestBehavior.CONTINUOUS);
+        assertEquals(2, resource.getBehaviors().size());
+
+        resource.addBehaviors(CollectionBehavior.INDIVIDUALS);
+        assertEquals(3, resource.getBehaviors().size());
+    }
+
+    /**
+     * Tests removing behaviors from the resource.
+     */
+    @Test
+    public void testRemoveBehaviors() {
+        final TestResource resource = new TestResource();
+
+        resource.setBehaviors(CanvasBehavior.AUTOADVANCE, ManifestBehavior.CONTINUOUS).clearBehaviors();
+        assertEquals(0, resource.getBehaviors().size());
+    }
+
+    /**
+     * Tests getting an unmodifiable list and trying to add something to it.
+     */
+    @Test(expected = UnsupportedOperationException.class)
+    public void testGetBehaviors() {
+        final TestResource resource = new TestResource();
+        final List<Behavior> behaviors;
+
+        resource.setBehaviors(CanvasBehavior.AUTOADVANCE, ManifestBehavior.CONTINUOUS);
+        behaviors = resource.getBehaviors();
+        behaviors.add(CollectionBehavior.CONTINUOUS);
     }
 
     /**

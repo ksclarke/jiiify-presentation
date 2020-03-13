@@ -12,7 +12,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.ViewingDirection;
+import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
@@ -155,4 +157,14 @@ public class Sequence extends Resource<Sequence> {
         return myCanvases;
     }
 
+    @Override
+    @JsonSetter(Constants.BEHAVIOR)
+    public Sequence setBehaviors(final Behavior... aBehaviorArray) {
+        return super.setBehaviors(checkBehaviors(ResourceBehavior.class, aBehaviorArray));
+    }
+
+    @Override
+    public Sequence addBehaviors(final Behavior... aBehaviorArray) {
+        return super.addBehaviors(checkBehaviors(ResourceBehavior.class, aBehaviorArray));
+    }
 }

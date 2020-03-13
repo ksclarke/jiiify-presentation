@@ -18,6 +18,8 @@ import org.junit.Test;
 import com.opencsv.CSVReader;
 
 import info.freelibrary.iiif.presentation.properties.Metadata;
+import info.freelibrary.iiif.presentation.properties.behaviors.CanvasBehavior;
+import info.freelibrary.iiif.presentation.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.utils.TestUtils;
 
@@ -178,4 +180,46 @@ public class ManifestTest extends AbstractTest {
         // Wrap our on-disk JSON to normalize any spacing issues; we care about the contents, not spacing
         assertEquals(new JsonObject(expected).encodePrettily(), manifest.toString());
     }
+
+    /**
+     * Test setting manifest behaviors.
+     */
+    @Test
+    public final void testSetBehaviors() {
+        final Manifest manifest = new Manifest(MANIFEST_URI, TEST_TITLE);
+
+        assertEquals(2, manifest.setBehaviors(ManifestBehavior.INDIVIDUALS, ManifestBehavior.AUTOADVANCE)
+                .getBehaviors().size());
+    }
+
+    /**
+     * Test setting disallowed manifest behaviors.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public final void testSetDisallowedBehaviors() {
+        final Manifest manifest = new Manifest(MANIFEST_URI, TEST_TITLE);
+
+        manifest.setBehaviors(ManifestBehavior.AUTOADVANCE, CanvasBehavior.NONPAGED);
+    }
+
+    /**
+     * Test adding manifest behaviors.
+     */
+    @Test
+    public final void testAddBehaviors() {
+        final Manifest manifest = new Manifest(MANIFEST_URI, TEST_TITLE);
+
+        assertEquals(1, manifest.addBehaviors(ManifestBehavior.CONTINUOUS).getBehaviors().size());
+    }
+
+    /**
+     * Test adding disallowed manifest behaviors.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public final void testAddDisallowedBehaviors() {
+        final Manifest manifest = new Manifest(MANIFEST_URI, TEST_TITLE);
+
+        manifest.addBehaviors(ManifestBehavior.CONTINUOUS, CanvasBehavior.AUTOADVANCE);
+    }
+
 }

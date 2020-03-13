@@ -69,4 +69,5 @@ class Content<T extends Content<T>> extends Resource<T> {
         myOn = URI.create(aURI);
         return (T) this;
     }
+
 }

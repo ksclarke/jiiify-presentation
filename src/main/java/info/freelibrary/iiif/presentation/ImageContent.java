@@ -16,8 +16,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.I18n;
 import info.freelibrary.iiif.presentation.properties.Label;
+import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.services.APIComplianceLevel;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.utils.Constants;
@@ -144,6 +146,17 @@ public class ImageContent extends Content<ImageContent> {
     @JsonIgnore
     public List<ImageResource> getResources() {
         return myResources;
+    }
+
+    @Override
+    @JsonSetter(Constants.BEHAVIOR)
+    public ImageContent setBehaviors(final Behavior... aBehaviorArray) {
+        return super.setBehaviors(checkBehaviors(ResourceBehavior.class, aBehaviorArray));
+    }
+
+    @Override
+    public ImageContent addBehaviors(final Behavior... aBehaviorArray) {
+        return super.addBehaviors(checkBehaviors(ResourceBehavior.class, aBehaviorArray));
     }
 
     /**

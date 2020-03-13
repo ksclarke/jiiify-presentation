@@ -34,5 +34,6 @@
   <entry key="JPA-028">Logo contents should always be an array of logo strings</entry>
   <entry key="JPA-029">Thumbnail contents should always be an array of thumbnail strings</entry>
   <entry key="JPA-030">Image contents should always have a set of keys over which to iterate</entry>
+  <entry key="JPA-031">'{}' is required to be an implementation of '{}'</entry>
 
 </properties>

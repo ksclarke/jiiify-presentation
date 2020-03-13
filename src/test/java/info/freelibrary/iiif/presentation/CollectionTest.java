@@ -18,6 +18,8 @@ import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.NavDate;
+import info.freelibrary.iiif.presentation.properties.behaviors.CollectionBehavior;
+import info.freelibrary.iiif.presentation.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.utils.TestUtils;
 import info.freelibrary.util.StringUtils;
 
@@ -154,5 +156,46 @@ public class CollectionTest {
         final Collection collection = Collection.fromString(json);
 
         assertEquals(new JsonObject(json), collection.toJSON());
+    }
+
+    /**
+     * Test setting collection behaviors.
+     */
+    @Test
+    public final void testSetBehaviors() {
+        final Collection collection = new Collection(myID, myLabel);
+
+        assertEquals(2, collection.setBehaviors(CollectionBehavior.AUTOADVANCE, CollectionBehavior.INDIVIDUALS)
+                .getBehaviors().size());
+    }
+
+    /**
+     * Test setting disallowed collection behaviors.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public final void testSetDisallowedBehaviors() {
+        final Collection collection = new Collection(myID, myLabel);
+
+        collection.setBehaviors(CollectionBehavior.AUTOADVANCE, ManifestBehavior.NOAUTOADVANCE);
+    }
+
+    /**
+     * Test adding collection behaviors.
+     */
+    @Test
+    public final void testAddBehaviors() {
+        final Collection collection = new Collection(myID, myLabel);
+
+        assertEquals(1, collection.addBehaviors(CollectionBehavior.AUTOADVANCE).getBehaviors().size());
+    }
+
+    /**
+     * Test adding disallowed collection behaviors.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public final void testAddDisallowedBehaviors() {
+        final Collection collection = new Collection(myID, myLabel);
+
+        collection.addBehaviors(CollectionBehavior.CONTINUOUS, ManifestBehavior.AUTOADVANCE);
     }
 }

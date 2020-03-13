@@ -11,6 +11,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.properties.ViewingDirection;
+import info.freelibrary.iiif.presentation.properties.behaviors.CanvasBehavior;
+import info.freelibrary.iiif.presentation.properties.behaviors.ManifestBehavior;
+import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
 
 public class SequenceTest {
 
@@ -61,6 +64,46 @@ public class SequenceTest {
     public final void testAddCanvas() {
         final Sequence sequence = new Sequence().addCanvas(myCanvas);
         assertEquals(myID, sequence.getCanvases().get(0).getID().toString());
+    }
+
+    /**
+     * Test setting sequence behaviors.
+     */
+    @Test
+    public final void testSetBehaviors() {
+        final Sequence sequence = new Sequence(myID);
+
+        assertEquals(1, sequence.setBehaviors(ResourceBehavior.HIDDEN).getBehaviors().size());
+    }
+
+    /**
+     * Test setting disallowed sequence behaviors.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public final void testSetDisallowedBehaviors() {
+        final Sequence sequence = new Sequence(myID);
+
+        sequence.setBehaviors(ManifestBehavior.AUTOADVANCE);
+    }
+
+    /**
+     * Test adding sequence behaviors.
+     */
+    @Test
+    public final void testAddBehaviors() {
+        final Sequence sequence = new Sequence(myID);
+
+        assertEquals(1, sequence.addBehaviors(ResourceBehavior.HIDDEN).getBehaviors().size());
+    }
+
+    /**
+     * Test adding disallowed sequence behaviors.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public final void testAddDisallowedBehaviors() {
+        final Sequence sequence = new Sequence(myID);
+
+        sequence.addBehaviors(ManifestBehavior.CONTINUOUS, CanvasBehavior.AUTOADVANCE);
     }
 
 }

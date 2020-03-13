@@ -7,6 +7,10 @@ import java.net.URI;
 
 import org.junit.Test;
 
+import info.freelibrary.iiif.presentation.properties.behaviors.CanvasBehavior;
+import info.freelibrary.iiif.presentation.properties.behaviors.ManifestBehavior;
+import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
+
 /**
  * Other content test.
  */
@@ -30,6 +34,46 @@ public class OtherContentTest {
     @Test
     public void testOtherContentURICanvas() {
         assertEquals(ID, new OtherContent(ID, CANVAS).getID());
+    }
+
+    /**
+     * Test setting other content behaviors.
+     */
+    @Test
+    public final void testSetBehaviors() {
+        final OtherContent content = new OtherContent(ID, CANVAS);
+
+        assertEquals(1, content.setBehaviors(ResourceBehavior.HIDDEN).getBehaviors().size());
+    }
+
+    /**
+     * Test setting disallowed other content behaviors.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public final void testSetDisallowedBehaviors() {
+        final OtherContent content = new OtherContent(ID, CANVAS);
+
+        content.setBehaviors(ManifestBehavior.AUTOADVANCE);
+    }
+
+    /**
+     * Test adding other content behaviors.
+     */
+    @Test
+    public final void testAddBehaviors() {
+        final OtherContent content = new OtherContent(ID, CANVAS);
+
+        assertEquals(1, content.addBehaviors(ResourceBehavior.HIDDEN).getBehaviors().size());
+    }
+
+    /**
+     * Test adding disallowed other content behaviors.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public final void testAddDisallowedBehaviors() {
+        final OtherContent content = new OtherContent(ID, CANVAS);
+
+        content.addBehaviors(ManifestBehavior.CONTINUOUS, CanvasBehavior.AUTOADVANCE);
     }
 
 }

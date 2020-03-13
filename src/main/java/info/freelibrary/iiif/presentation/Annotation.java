@@ -3,6 +3,12 @@ package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+
+import info.freelibrary.iiif.presentation.properties.Behavior;
+import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
+import info.freelibrary.iiif.presentation.utils.Constants;
+
 /**
  * Content resources and commentary are associated with a canvas via an annotation. This provides a single, coherent
  * method for aligning information, and provides a standards based framework for distinguishing parts of resources and
@@ -31,6 +37,17 @@ public class Annotation extends Resource<Annotation> {
      */
     public Annotation(final String aID) {
         super(TYPE, URI.create(aID), REQ_ARG_COUNT);
+    }
+
+    @Override
+    @JsonSetter(Constants.BEHAVIOR)
+    public Annotation setBehaviors(final Behavior... aBehaviorArray) {
+        return super.setBehaviors(checkBehaviors(ResourceBehavior.class, aBehaviorArray));
+    }
+
+    @Override
+    public Annotation addBehaviors(final Behavior... aBehaviorArray) {
+        return super.addBehaviors(checkBehaviors(ResourceBehavior.class, aBehaviorArray));
     }
 
 }

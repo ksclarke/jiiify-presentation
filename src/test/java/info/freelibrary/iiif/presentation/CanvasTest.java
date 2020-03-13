@@ -11,6 +11,8 @@ import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.NavDate;
+import info.freelibrary.iiif.presentation.properties.behaviors.CanvasBehavior;
+import info.freelibrary.iiif.presentation.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.utils.TestUtils;
 import info.freelibrary.util.StringUtils;
 
@@ -242,4 +244,46 @@ public class CanvasTest {
     public final void testSetInfiniteDurationInConstructor() {
         myCanvas = new Canvas(TEST_URI, TEST_LABEL, 100, 100, Double.POSITIVE_INFINITY);
     }
+
+    /**
+     * Test setting canvas behaviors.
+     */
+    @Test
+    public final void testSetBehaviors() {
+        final Canvas canvas = new Canvas(TEST_URI, TEST_LABEL, 100, 100);
+
+        assertEquals(2, canvas.setBehaviors(CanvasBehavior.FACINGPAGES, CanvasBehavior.AUTOADVANCE).getBehaviors()
+                .size());
+    }
+
+    /**
+     * Test setting disallowed canvas behaviors.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public final void testSetDisallowedBehaviors() {
+        final Canvas canvas = new Canvas(TEST_URI, TEST_LABEL, 100, 100);
+
+        canvas.setBehaviors(CanvasBehavior.FACINGPAGES, ManifestBehavior.AUTOADVANCE);
+    }
+
+    /**
+     * Test adding canvas behaviors.
+     */
+    @Test
+    public final void testAddBehaviors() {
+        final Canvas canvas = new Canvas(TEST_URI, TEST_LABEL, 100, 100);
+
+        assertEquals(1, canvas.addBehaviors(CanvasBehavior.FACINGPAGES).getBehaviors().size());
+    }
+
+    /**
+     * Test adding disallowed canvas behaviors.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public final void testAddDisallowedBehaviors() {
+        final Canvas canvas = new Canvas(TEST_URI, TEST_LABEL, 100, 100);
+
+        canvas.addBehaviors(CanvasBehavior.FACINGPAGES, ManifestBehavior.AUTOADVANCE);
+    }
+
 }

@@ -3,6 +3,10 @@ package info.freelibrary.iiif.presentation;
 
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
@@ -15,7 +19,6 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 import info.freelibrary.iiif.presentation.properties.Attribution;
 import info.freelibrary.iiif.presentation.properties.Behavior;
-import info.freelibrary.iiif.presentation.properties.Behavior.Option;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Metadata;
@@ -61,7 +64,7 @@ class Resource<T extends Resource<T>> {
 
     private Logo myLogo;
 
-    private Behavior myBehavior;
+    private List<Behavior> myBehaviors;
 
     private SeeAlso mySeeAlso;
 
@@ -551,47 +554,54 @@ class Resource<T extends Resource<T>> {
     }
 
     /**
-     * Sets the behavior.
+     * Sets the behaviors for this resource. Different types of resources allow different types of behaviors. For
+     * instance, on a <code>Manifest</code> resource the <code>setBehaviors(Behavior aBehavior)</code> method only
+     * allows a ManifestBehavior to be passed. If a CollectionBehavior, for instance, is passed, an
+     * <code>IllegalArgumentException</code> will be thrown. Manifests, collections, canvases, and ranges have their
+     * own behaviors. Other resources use the <code>ResourceBehavior</code> class.
      *
-     * @param aBehavior The behavior
+     * @param aBehaviorArray The behaviors to set for this resource
      * @return The resource
+     * @throws IllegalArgumentException If a passed behavior is not appropriate for the type of resource in hand
      */
-    @JsonIgnore
-    public T setBehavior(final Behavior aBehavior) {
-        myBehavior = aBehavior;
+    @JsonSetter(Constants.BEHAVIOR)
+    public T setBehaviors(final Behavior... aBehaviorArray) {
+        final List<Behavior> behaviors = getBehaviorsList();
+
+        behaviors.clear();
+        behaviors.addAll(Arrays.asList(aBehaviorArray));
         return (T) this;
     }
 
     /**
-     * Sets the behavior from the supplied string.
+     * Gets the resource's behaviors in an unmodifiable list.
      *
-     * @param aBehavior The behavior in string form
+     * @return The resource's behaviors
+     */
+    @JsonGetter(Constants.BEHAVIOR)
+    public List<Behavior> getBehaviors() {
+        return Collections.unmodifiableList(getBehaviorsList());
+    }
+
+    /**
+     * Adds behaviors to the resource.
+     *
+     * @param aBehaviorArray An array of behaviors to add to the resource
      * @return The resource
      */
-    public T setBehavior(final String aBehavior) {
-        myBehavior = new Behavior(aBehavior);
+    public T addBehaviors(final Behavior... aBehaviorArray) {
+        getBehaviorsList().addAll(Arrays.asList(aBehaviorArray));
         return (T) this;
     }
 
     /**
-     * Sets the behavior.
+     * Removes the behaviors associated with this resource.
      *
-     * @param aBehavior The behavior
      * @return The resource
      */
-    public T setBehavior(final Option aBehavior) {
-        myBehavior = new Behavior(aBehavior);
+    public T clearBehaviors() {
+        getBehaviorsList().clear();
         return (T) this;
-    }
-
-    /**
-     * Gets the behavior.
-     *
-     * @return The behavior
-     */
-    @JsonUnwrapped
-    public Behavior getBehavior() {
-        return myBehavior;
     }
 
     /**
@@ -636,6 +646,36 @@ class Resource<T extends Resource<T>> {
     @JsonIgnore
     protected Logger getLogger() {
         return LoggerFactory.getLogger(getClass(), Constants.BUNDLE_NAME);
+    }
+
+    /**
+     * Checks that the supplied behaviors are all implementations of a particular class.
+     *
+     * @param aClass A class that implements Behavior
+     * @param aBehaviorArray An array of behaviors
+     */
+    protected Behavior[] checkBehaviors(final Class aClass, final Behavior... aBehaviorArray) {
+        for (final Behavior behavior : aBehaviorArray) {
+            if (!(aClass.isInstance(behavior))) {
+                throw new IllegalArgumentException(getLogger().getMessage(MessageCodes.JPA_031, behavior.getClass()
+                        .getSimpleName(), aClass.getSimpleName()));
+            }
+        }
+
+        return aBehaviorArray;
+    }
+
+    /**
+     * Gets a list of resource behaviors, initializing the list if this hasn't been done already.
+     *
+     * @return A list of resource behaviors
+     */
+    private List<Behavior> getBehaviorsList() {
+        if (myBehaviors == null) {
+            myBehaviors = new ArrayList<>();
+        }
+
+        return myBehaviors;
     }
 
     /**
