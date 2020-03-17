@@ -17,11 +17,11 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
-import info.freelibrary.iiif.presentation.properties.Attribution;
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Metadata;
+import info.freelibrary.iiif.presentation.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.properties.Rights;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.properties.Summary;
@@ -37,7 +37,7 @@ import info.freelibrary.util.LoggerFactory;
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.TYPE, Constants.ID, Constants.LABEL, Constants.SUMMARY,
-    Constants.ATTRIBUTION, Constants.RIGHTS, Constants.PART_OF, Constants.LOGO, Constants.THUMBNAIL,
+    Constants.REQUIRED_STATEMENT, Constants.RIGHTS, Constants.PART_OF, Constants.LOGO, Constants.THUMBNAIL,
     Constants.METADATA, Constants.SEQUENCES, Constants.SERVICE })
 class Resource<T extends Resource<T>> {
 
@@ -58,7 +58,8 @@ class Resource<T extends Resource<T>> {
 
     private Thumbnail myThumbnail;
 
-    private Attribution myAttribution;
+    @JsonProperty(Constants.REQUIRED_STATEMENT)
+    private RequiredStatement myRequiredStatement;
 
     private Rights myRights;
 
@@ -373,36 +374,24 @@ class Resource<T extends Resource<T>> {
     }
 
     /**
-     * Gets the attribution.
+     * Gets the required statement.
      *
-     * @return The attribution
+     * @return The required statement
      */
-    @JsonUnwrapped
-    public Attribution getAttribution() {
-        return myAttribution;
+    @JsonGetter(Constants.REQUIRED_STATEMENT)
+    public RequiredStatement getRequiredStatement() {
+        return myRequiredStatement;
     }
 
     /**
-     * Sets the attribution.
+     * Sets the required statement.
      *
-     * @param aAttribution An attribution in string form
+     * @param aReqStatement A required statement
      * @return The resource
      */
     @JsonIgnore
-    public T setAttribution(final String aAttribution) {
-        myAttribution = new Attribution(aAttribution);
-        return (T) this;
-    }
-
-    /**
-     * Sets the attribution.
-     *
-     * @param aAttribution An attribution
-     * @return The resource
-     */
-    @JsonProperty
-    public T setAttribution(final Attribution aAttribution) {
-        myAttribution = aAttribution;
+    public T setRequiredStatement(final RequiredStatement aReqStatement) {
+        myRequiredStatement = aReqStatement;
         return (T) this;
     }
 

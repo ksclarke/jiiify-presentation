@@ -35,5 +35,6 @@
   <entry key="JPA-029">Thumbnail contents should always be an array of thumbnail strings</entry>
   <entry key="JPA-030">Image contents should always have a set of keys over which to iterate</entry>
   <entry key="JPA-031">'{}' is required to be an implementation of '{}'</entry>
+  <entry key="JPA-032">Supplied entry was a {} entry not a {} entry</entry>
 
 </properties>

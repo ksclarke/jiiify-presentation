@@ -12,15 +12,16 @@ import org.junit.Test;
 import com.thedeanda.lorem.Lorem;
 import com.thedeanda.lorem.LoremIpsum;
 
-import info.freelibrary.iiif.presentation.properties.Attribution;
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Metadata;
+import info.freelibrary.iiif.presentation.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.properties.Rights;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.properties.Summary;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
+import info.freelibrary.iiif.presentation.properties.Value;
 import info.freelibrary.iiif.presentation.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.properties.behaviors.CollectionBehavior;
 import info.freelibrary.iiif.presentation.properties.behaviors.ManifestBehavior;
@@ -61,6 +62,8 @@ public class ResourceTest extends AbstractTest {
     public void testSingleValues() throws MalformedURLException {
         final TestResource test = new TestResource();
         final ImageInfoService service = new ImageInfoService(URI.create(SILS_URL));
+        final Label label = new Label(myLorem.getWords(1));
+        final Value value = new Value(myLorem.getWords(1));
         final JsonObject json;
 
         test.setID(AAAA);
@@ -68,7 +71,7 @@ public class ResourceTest extends AbstractTest {
         test.setMetadata(new Metadata("myLabel", "myValue"));
         test.setSummary(myLorem.getWords(5, 8));
         test.setThumbnail(new Thumbnail(ASDF_JPG, service));
-        test.setAttribution(myLorem.getWords(5, 8));
+        test.setRequiredStatement(new RequiredStatement(label, value));
         test.setRights(SILS_URL);
         test.setLogo(new Logo(ASDF_JPG, service));
         test.setBehaviors(ResourceBehavior.HIDDEN);
@@ -95,7 +98,7 @@ public class ResourceTest extends AbstractTest {
         test.setMetadata(new Metadata("myLabel1", "myValue1").add("myLabel2", "myValue2")); // addValue?
         test.setSummary(new Summary(myLorem.getWords(5, 8), myLorem.getWords(5, 8)));
         test.setThumbnail(new Thumbnail("dddd.jpg", service).addImage("eeee.jpg", service)); // should be value too?
-        test.setAttribution(new Attribution(myLorem.getWords(5, 8)).addStrings(myLorem.getWords(5, 8)));
+        test.setRequiredStatement(new RequiredStatement(myLorem.getWords(1), myLorem.getWords(1)));
         test.setRights(new Rights("http://ils.unc.edu/license1").addValue("http://ils.unc.edu/license2"));
         test.setLogo(new Logo("ffff.jpg", service).addImage("gggg.jpg", service));
         test.setBehaviors(ManifestBehavior.AUTOADVANCE);

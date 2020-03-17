@@ -37,7 +37,7 @@ public final class Constants {
 
     public static final String RIGHTS = "rights";
 
-    public static final String ATTRIBUTION = "attribution";
+    public static final String REQUIRED_STATEMENT = "requiredStatement";
 
     public static final String LOGO = "logo";
 
