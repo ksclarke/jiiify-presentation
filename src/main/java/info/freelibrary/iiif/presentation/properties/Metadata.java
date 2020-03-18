@@ -3,10 +3,7 @@ package info.freelibrary.iiif.presentation.properties;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
@@ -22,7 +19,7 @@ import info.freelibrary.util.LoggerFactory;
  * physical description, ownership information, or other purposes.
  */
 @JsonDeserialize(using = MetadataDeserializer.class)
-public class Metadata {
+public class Metadata extends I18nEntry {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Metadata.class, Constants.BUNDLE_NAME);
 
@@ -41,6 +38,7 @@ public class Metadata {
      * @param aMetadataEntry A metadata entry
      */
     public Metadata(final Metadata.Entry aMetadataEntry) {
+        checkEntryType(aMetadataEntry);
         getEntries().add(aMetadataEntry);
     }
 
@@ -71,6 +69,8 @@ public class Metadata {
      * @return The metadata
      */
     public Metadata add(final Metadata.Entry aMetadataEntry) {
+        checkEntryType(aMetadataEntry);
+
         if (!getEntries().add(aMetadataEntry)) {
             throw new UnsupportedOperationException();
         }
@@ -122,62 +122,24 @@ public class Metadata {
         return myEntries;
     }
 
+    @Override
+    protected Logger getLogger() {
+        return LOGGER;
+    }
+
     /**
-     * A metadata entry with a label and value.
+     * Checks whether the supplied entry is a metadata entry.
+     *
+     * @param aMetadataEntry A metadata entry
+     * @throws IllegalArgumentException If the supplied entry isn't a metadata entry
      */
-    @JsonPropertyOrder({ "label", "value" })
-    public class Entry {
+    private void checkEntryType(final Metadata.Entry aMetadataEntry) throws IllegalArgumentException {
+        final Class outerClass = aMetadataEntry.getOuterClass();
+        final Class thisClass = getClass();
 
-        private final Label myLabel;
-
-        private final Value myValue;
-
-        /**
-         * Creates a metadata entry from the supplied label and value.
-         *
-         * @param aLabel A metadata label in string form
-         * @param aValue A metadata value in string form
-         */
-        public Entry(final String aLabel, final String aValue) {
-            Objects.requireNonNull(aLabel, LOGGER.getMessage(MessageCodes.JPA_002));
-            Objects.requireNonNull(aValue, LOGGER.getMessage(MessageCodes.JPA_022));
-
-            myLabel = new Label(aLabel);
-            myValue = new Value(aValue);
-        }
-
-        /**
-         * Creates a metadata entry from the supplied label and value.
-         *
-         * @param aLabel A metadata label
-         * @param aValue A metadata value
-         */
-        public Entry(final Label aLabel, final Value aValue) {
-            Objects.requireNonNull(aLabel, LOGGER.getMessage(MessageCodes.JPA_002));
-            Objects.requireNonNull(aValue, LOGGER.getMessage(MessageCodes.JPA_022));
-
-            myLabel = aLabel;
-            myValue = aValue;
-        }
-
-        /**
-         * Gets the label for the metadata entry.
-         *
-         * @return The label for the metadata entry
-         */
-        @JsonGetter(Constants.LABEL)
-        public Label getLabel() {
-            return myLabel;
-        }
-
-        /**
-         * Gets the metadata entry's value.
-         *
-         * @return The metadata entry's value
-         */
-        @JsonGetter(Constants.VALUE)
-        public Value getValue() {
-            return myValue;
+        if (!outerClass.equals(thisClass)) {
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_032, outerClass, thisClass));
         }
     }
+
 }
