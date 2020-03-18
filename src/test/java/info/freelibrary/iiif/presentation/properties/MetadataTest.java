@@ -86,16 +86,7 @@ public class MetadataTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testRequiredStatementEntry() {
-        final JsonObject label1 = new JsonObject().put(NONE, new JsonArray().add(AAAA));
-        final JsonObject value1 = new JsonObject().put(NONE, new JsonArray().add(BBBB));
-        final JsonObject metadataObject = new JsonObject().put(Constants.LABEL, label1).put(Constants.VALUE, value1);
-        final RequiredStatement reqStatement = new RequiredStatement(AAAA, BBBB);
-        final JsonArray metadata = new JsonArray();
-
-        myManifest.setMetadata(new Metadata(reqStatement.getEntries().get(0)));
-        myJSON.put(Constants.METADATA, metadata.add(metadataObject));
-
-        assertEquals(myJSON, JsonObject.mapFrom(myManifest));
+        myManifest.setMetadata(new Metadata(new RequiredStatement(AAAA, BBBB).getEntries().get(0)));
     }
 
     /**
