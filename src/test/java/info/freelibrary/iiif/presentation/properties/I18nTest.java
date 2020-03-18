@@ -76,14 +76,6 @@ public class I18nTest {
     }
 
     /**
-     * Tests that an exception is thrown when HTML is supplied but not allowed.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public final void testExplicitlyDisallowedHTML() {
-        new I18n(I18n.DEFAULT_LANG, myTestHTML, false);
-    }
-
-    /**
      * Tests that HTML is allowed when appropriate.
      */
     @Test
