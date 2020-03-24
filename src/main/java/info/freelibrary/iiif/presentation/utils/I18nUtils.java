@@ -25,7 +25,11 @@ public final class I18nUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(I18nUtils.class, Constants.BUNDLE_NAME);
 
-    private static final Pattern PATTERN = Pattern.compile("^<[a-zA-Z0-9\\-]+>.*</[a-zA-Z0-9\\-]+>$", Pattern.DOTALL);
+    private static final Pattern ANY_TAG_PATTERN = Pattern.compile(".*<[a-zA-Z0-9\\-]+\\s*\\/?\\s*>.*",
+            Pattern.DOTALL);
+
+    private static final Pattern FRAGMENT_PATTERN = Pattern.compile("^<[a-zA-Z0-9\\-]+>.*</[a-zA-Z0-9\\-]+>$",
+            Pattern.DOTALL);
 
     private static final String CDATA_PATTERN = "<\\!\\[CDATA\\[.*\\]\\]\\>";
 
@@ -48,20 +52,31 @@ public final class I18nUtils {
     }
 
     /**
-     * Determines whether the supplied string has HTML markup in it.
+     * Determines whether the supplied string is an HTML fragment.
      *
-     * @param aString A string to check for HTML markup
-     * @return True if the supplied string contains HTML markup; else, false
+     * @param aString A string to check for an HTML fragment
+     * @return True if the supplied string contains an HTML fragment; else, false
      */
-    public static boolean hasHTML(final String aString) {
-        return PATTERN.matcher(aString).matches();
+    public static boolean isHtmlFragment(final String aString) {
+        return FRAGMENT_PATTERN.matcher(aString).matches();
+    }
+
+    /**
+     * Determines whether the supplied string contains an HTML tag. This is a course pattern match, just intended to
+     * give a rough sense of whether it should be processed for HTML elements.
+     *
+     * @param aString A string to check for an HTML tag
+     * @return True if the supplied string contains and HTML fragment; else, false.
+     */
+    public static boolean hasHtml(final String aString) {
+        return ANY_TAG_PATTERN.matcher(aString).matches();
     }
 
     /**
      * Strips HTML from a single string.
      *
-     * @param aString
-     * @return
+     * @param aString A string that may contain HTML elements
+     * @return A string without an HTML elements
      */
     public static String stripHTML(final String aString) {
         return Jsoup.clean(aString.replaceAll(CDATA_PATTERN, EMPTY), Whitelist.none());
@@ -213,7 +228,10 @@ public final class I18nUtils {
 
             // If our internationalization isn't supposed to have HTML, strip any that's found there
             if (!aHtmlAllowed) {
-                LOGGER.warn(MessageCodes.JPA_033, string);
+                if (I18nUtils.hasHtml(string)) {
+                    // We don't really need to see this warning unless there might be HTML in the string
+                    LOGGER.warn(MessageCodes.JPA_033, string);
+                }
 
                 // Since our strings don't have language codes, we'll just use the default of "none"
                 i18n = new I18n(I18n.DEFAULT_LANG, stripHTML(string), aHtmlAllowed);

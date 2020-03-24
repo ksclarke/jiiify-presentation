@@ -108,7 +108,7 @@ public class I18nUtilsTest {
      */
     @Test
     public final void testHasHTML() {
-        assertTrue(I18nUtils.hasHTML("<p>asdf<br/>test</p>"));
+        assertTrue(I18nUtils.isHtmlFragment("<p>asdf<br/>test</p>"));
     }
 
     /**
@@ -117,7 +117,7 @@ public class I18nUtilsTest {
      */
     @Test
     public final void testHasBadHTMLBecauseSpace() {
-        assertFalse(I18nUtils.hasHTML("<p>asdf</p> "));
+        assertFalse(I18nUtils.isHtmlFragment("<p>asdf</p> "));
     }
 
     /**
@@ -126,7 +126,38 @@ public class I18nUtilsTest {
      */
     @Test
     public final void testHasBadHTMLBecauseMissingTag() {
-        assertFalse(I18nUtils.hasHTML("<p>asdf"));
+        assertFalse(I18nUtils.isHtmlFragment("<p>asdf"));
     }
 
+    /**
+     * Tests for the presence of a generic start tag.
+     */
+    @Test
+    public final void testForAnyTag() {
+        assertTrue(I18nUtils.hasHtml("<asdf>"));
+    }
+
+    /**
+     * Tests for the presence of a spaced empty tag.
+     */
+    @Test
+    public final void testForAnyTagSpaced() {
+        assertTrue(I18nUtils.hasHtml("<asdf />"));
+    }
+
+    /**
+     * Tests for the presence of a weirdly spaced empty tag.
+     */
+    @Test
+    public final void testForAnyTagDoubleSpaced() {
+        assertTrue(I18nUtils.hasHtml("<asdf / >"));
+    }
+
+    /**
+     * Tests for the presence of a non-spaced empty tag.
+     */
+    @Test
+    public final void testForAnyTagNoSpace() {
+        assertTrue(I18nUtils.hasHtml("<asdf/>"));
+    }
 }
