@@ -13,9 +13,9 @@ import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
 /**
- * A test of metadata.
+ * A test of required statement.
  */
-public class MetadataTest {
+public class RequiredStatementTest {
 
     private static final String AAAA = "aaaa";
 
@@ -49,48 +49,48 @@ public class MetadataTest {
     }
 
     /**
-     * Tests creating a single metadata pair.
+     * Tests creating a single required statement.
      */
     @Test
     public void testSinglePairJson() {
         final JsonObject label1 = new JsonObject().put(NONE, new JsonArray().add(AAAA));
         final JsonObject value1 = new JsonObject().put(NONE, new JsonArray().add(BBBB));
-        final JsonObject metadataObject = new JsonObject().put(Constants.LABEL, label1).put(Constants.VALUE, value1);
-        final JsonArray metadata = new JsonArray();
+        final JsonArray requiredStatement = new JsonArray();
+        final JsonObject rsObject = new JsonObject().put(Constants.LABEL, label1).put(Constants.VALUE, value1);
 
-        myManifest.setMetadata(new Metadata(AAAA, BBBB));
-        myJSON.put(Constants.METADATA, metadata.add(metadataObject));
+        myManifest.setRequiredStatement(new RequiredStatement(AAAA, BBBB));
+        myJSON.put(Constants.REQUIRED_STATEMENT, requiredStatement.add(rsObject));
 
         assertEquals(myJSON, JsonObject.mapFrom(myManifest));
     }
 
     /**
-     * Tests creating a single metadata pair from an entry.
+     * Tests creating a single required statement from an entry.
      */
     @Test
-    public void testMetadataEntry() {
+    public void testReqStatementEntry() {
         final JsonObject label1 = new JsonObject().put(NONE, new JsonArray().add(AAAA));
         final JsonObject value1 = new JsonObject().put(NONE, new JsonArray().add(BBBB));
-        final JsonObject metadataObject = new JsonObject().put(Constants.LABEL, label1).put(Constants.VALUE, value1);
-        final Metadata otherMetadata = new Metadata(AAAA, BBBB);
-        final JsonArray metadata = new JsonArray();
+        final JsonArray requiredStatement = new JsonArray();
+        final JsonObject rsObject = new JsonObject().put(Constants.LABEL, label1).put(Constants.VALUE, value1);
+        final RequiredStatement otherReqStatement = new RequiredStatement(AAAA, BBBB);
 
-        myManifest.setMetadata(new Metadata(otherMetadata.getEntries().get(0)));
-        myJSON.put(Constants.METADATA, metadata.add(metadataObject));
+        myManifest.setRequiredStatement(new RequiredStatement(otherReqStatement.getEntries().get(0)));
+        myJSON.put(Constants.REQUIRED_STATEMENT, requiredStatement.add(rsObject));
 
         assertEquals(myJSON, JsonObject.mapFrom(myManifest));
     }
 
     /**
-     * Tests creating a single metadata pair from a required statement entry.
+     * Tests creating a required statement from a metadata entry.
      */
     @Test(expected = IllegalArgumentException.class)
-    public void testRequiredStatementEntry() {
-        myManifest.setMetadata(new Metadata(new RequiredStatement(AAAA, BBBB).getEntries().get(0)));
+    public void testMetadataEntry() {
+        myManifest.setRequiredStatement(new RequiredStatement(new Metadata(AAAA, BBBB).getEntries().get(0)));
     }
 
     /**
-     * Tests adding metadata.
+     * Tests adding required statements.
      */
     @Test
     public void testDoublePairJson() {
@@ -98,15 +98,15 @@ public class MetadataTest {
         final JsonObject value1 = new JsonObject().put(FRE, new JsonArray().add(BBBB));
         final JsonObject label2 = new JsonObject().put(ENG, new JsonArray().add(CCCC));
         final JsonObject value2 = new JsonObject().put(ENG, new JsonArray().add(DDDD));
-        final JsonObject metadata1 = new JsonObject().put(Constants.LABEL, label1).put(Constants.VALUE, value1);
-        final JsonObject metadata2 = new JsonObject().put(Constants.LABEL, label2).put(Constants.VALUE, value2);
-        final Metadata metadata = new Metadata();
+        final JsonObject reqStatement1 = new JsonObject().put(Constants.LABEL, label1).put(Constants.VALUE, value1);
+        final JsonObject reqStatement2 = new JsonObject().put(Constants.LABEL, label2).put(Constants.VALUE, value2);
+        final RequiredStatement requiredStatement = new RequiredStatement();
 
-        metadata.add(new Label(new I18n(FRE, AAAA)), new Value(new I18n(FRE, BBBB)));
-        metadata.add(new Label(new I18n(ENG, CCCC)), new Value(new I18n(ENG, DDDD)));
+        requiredStatement.add(new Label(new I18n(FRE, AAAA)), new Value(new I18n(FRE, BBBB)));
+        requiredStatement.add(new Label(new I18n(ENG, CCCC)), new Value(new I18n(ENG, DDDD)));
 
-        myManifest.setMetadata(metadata);
-        myJSON.put(Constants.METADATA, new JsonArray().add(metadata1).add(metadata2));
+        myManifest.setRequiredStatement(requiredStatement);
+        myJSON.put(Constants.REQUIRED_STATEMENT, new JsonArray().add(reqStatement1).add(reqStatement2));
 
         assertEquals(myJSON, JsonObject.mapFrom(myManifest));
     }

@@ -21,7 +21,7 @@ class MetadataDeserializer extends AbstractI18nStdDeserializer<Metadata> {
     private static final Logger LOGGER = LoggerFactory.getLogger(MetadataDeserializer.class, Constants.BUNDLE_NAME);
 
     /**
-     * The <code>serialVersionUID</code> of CustomMetadataSerializer.
+     * The <code>serialVersionUID</code> of MetadataDeserializer.
      */
     private static final long serialVersionUID = -3905197508023348074L;
 
