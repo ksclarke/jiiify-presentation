@@ -38,7 +38,7 @@ public final class I18nUtils {
     private static final String IMAGE_TAG = "img";
 
     /* Tags from index position three on are tags that should have content in them */
-    private static final String[] TAGS = { LINK_TAG, IMAGE_TAG, "br", "p", "b", "i", "small", "span", "sub", "sup" };
+    private static final String[] TAGS = { IMAGE_TAG, "br", LINK_TAG, "p", "b", "i", "small", "span", "sub", "sup" };
 
     private static final String[] LINK_ATTRIBUTES = { "href" };
 
@@ -174,7 +174,7 @@ public final class I18nUtils {
 
         for (final Element element : cleanHTML.getAllElements()) {
             // We start with third position tag because earlier ones are empty elements by definition
-            for (int index = 3; index < TAGS.length; index++) {
+            for (int index = 2; index < TAGS.length; index++) {
                 if (TAGS[index].equals(element.tagName()) && element.children().isEmpty() && (!element.hasText() ||
                         element.text().trim().equals(EMPTY))) {
                     element.remove();
