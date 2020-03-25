@@ -25,8 +25,7 @@ public final class I18nUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(I18nUtils.class, Constants.BUNDLE_NAME);
 
-    private static final Pattern ANY_TAG_PATTERN = Pattern.compile(".*<[a-zA-Z0-9\\-]+\\s*\\/?\\s*>.*",
-            Pattern.DOTALL);
+    private static final Pattern ANY_TAG_PATTERN = Pattern.compile("<[a-zA-Z0-9\\-]+\\s*\\/?\\s*>", Pattern.DOTALL);
 
     private static final Pattern FRAGMENT_PATTERN = Pattern.compile("^<[a-zA-Z0-9\\-]+>.*</[a-zA-Z0-9\\-]+>$",
             Pattern.DOTALL);
@@ -68,8 +67,8 @@ public final class I18nUtils {
      * @param aString A string to check for an HTML tag
      * @return True if the supplied string contains and HTML fragment; else, false.
      */
-    public static boolean hasHtml(final String aString) {
-        return ANY_TAG_PATTERN.matcher(aString).matches();
+    public static boolean hasHTML(final String aString) {
+        return ANY_TAG_PATTERN.matcher(aString).find();
     }
 
     /**
@@ -228,7 +227,7 @@ public final class I18nUtils {
 
             // If our internationalization isn't supposed to have HTML, strip any that's found there
             if (!aHtmlAllowed) {
-                if (hasHtml(string)) {
+                if (hasHTML(string)) {
                     // We don't really need to see this warning unless there might be HTML in the string
                     LOGGER.warn(MessageCodes.JPA_033, string);
                 }

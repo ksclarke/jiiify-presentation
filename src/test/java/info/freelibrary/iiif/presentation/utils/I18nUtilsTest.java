@@ -134,7 +134,7 @@ public class I18nUtilsTest {
      */
     @Test
     public final void testForAnyTag() {
-        assertTrue(I18nUtils.hasHtml("<asdf>"));
+        assertTrue(I18nUtils.hasHTML("<asdf>"));
     }
 
     /**
@@ -142,7 +142,7 @@ public class I18nUtilsTest {
      */
     @Test
     public final void testForAnyTagSpaced() {
-        assertTrue(I18nUtils.hasHtml("<asdf />"));
+        assertTrue(I18nUtils.hasHTML("<asdf />"));
     }
 
     /**
@@ -150,7 +150,7 @@ public class I18nUtilsTest {
      */
     @Test
     public final void testForAnyTagDoubleSpaced() {
-        assertTrue(I18nUtils.hasHtml("<asdf / >"));
+        assertTrue(I18nUtils.hasHTML("<asdf / >"));
     }
 
     /**
@@ -158,6 +158,6 @@ public class I18nUtilsTest {
      */
     @Test
     public final void testForAnyTagNoSpace() {
-        assertTrue(I18nUtils.hasHtml("<asdf/>"));
+        assertTrue(I18nUtils.hasHTML("<asdf/>"));
     }
 }
