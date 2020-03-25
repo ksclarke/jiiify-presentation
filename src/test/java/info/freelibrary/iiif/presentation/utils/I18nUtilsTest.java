@@ -112,7 +112,7 @@ public class I18nUtilsTest {
     }
 
     /**
-     * Tests whether bad HTML is recognized. The spec says there can't be write space on the outside of the root level
+     * Tests whether bad HTML is recognized. The spec says there can't be whitespace on the outside of the root level
      * element.
      */
     @Test
