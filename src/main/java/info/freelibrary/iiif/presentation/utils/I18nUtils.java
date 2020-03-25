@@ -228,7 +228,7 @@ public final class I18nUtils {
 
             // If our internationalization isn't supposed to have HTML, strip any that's found there
             if (!aHtmlAllowed) {
-                if (I18nUtils.hasHtml(string)) {
+                if (hasHtml(string)) {
                     // We don't really need to see this warning unless there might be HTML in the string
                     LOGGER.warn(MessageCodes.JPA_033, string);
                 }
