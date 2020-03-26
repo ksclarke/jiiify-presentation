@@ -23,6 +23,48 @@ public class I18nUtilsTest {
     }
 
     /**
+     * Test stripping HTML with less than and greater than signs.
+     */
+    @Test
+    public final void testStrippingHtmlWithLtGt() {
+        assertEquals("If A<B then B>A", I18nUtils.stripHTML("<p>If A<B then B>A</p>"));
+    }
+
+    /**
+     * Test stripping text with less than and greater than signs.
+     */
+    @Test
+    public final void testStrippingWithLtGt() {
+        final String text = "If Z<B then C>A";
+        assertEquals(text, I18nUtils.stripHTML(text));
+    }
+
+    /**
+     * Test cleaning text with less than and greater than signs.
+     */
+    @Test
+    public final void testCleaningWithLtGt() {
+        final String text = "If E<B then C>A";
+        assertEquals(text, I18nUtils.cleanHTML(text));
+    }
+
+    /**
+     * Test cleaning HTML with less than and greater than signs should encode the &lt; and &gt;.
+     */
+    @Test
+    public final void testCleaningHtmlWithLtGt() {
+        assertEquals("<p>If Q&lt;B then C&gt;A</p>", I18nUtils.cleanHTML("<p>If Q<B then C>A</p>"));
+    }
+
+    /**
+     * Test cleaning HTML with less than and greater than signs.
+     */
+    @Test
+    public final void testCleaningHtmlWithInput() {
+        assertEquals("<p>If D&lt;B then C&gt;A</p>", I18nUtils.cleanHTML("<p>If D<B <input/>then C>A</p>"));
+    }
+
+    /**
      * Tests stripping HTML from multiple internationalizations.
      */
     @Test

@@ -11,6 +11,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Document.OutputSettings;
 import org.jsoup.nodes.Document.OutputSettings.Syntax;
 import org.jsoup.nodes.Element;
+import org.jsoup.parser.Parser;
 import org.jsoup.safety.Cleaner;
 import org.jsoup.safety.Whitelist;
 
@@ -78,7 +79,8 @@ public final class I18nUtils {
      * @return A string without an HTML elements
      */
     public static String stripHTML(final String aString) {
-        return Jsoup.clean(aString.replaceAll(CDATA_PATTERN, EMPTY), Whitelist.none());
+        return Parser.unescapeEntities(Jsoup.clean(encodeSingleBrackets(aString.replaceAll(CDATA_PATTERN, EMPTY)),
+                Whitelist.none()), false);
     }
 
     /**
@@ -152,45 +154,50 @@ public final class I18nUtils {
      * @throws IllegalArgumentException If the supplied HTML fragment doesn't have a single HTML root element.
      */
     public static String cleanHTML(final String aString) {
-        final OutputSettings settings = new OutputSettings();
-        final Whitelist whitelist = Whitelist.none();
-        final Cleaner htmlCleaner;
-        final Document dirtyHTML;
-        final Document cleanHTML;
-        final Element body;
+        if (isHtmlFragment(aString)) {
+            final OutputSettings settings = new OutputSettings();
+            final Whitelist whitelist = Whitelist.none();
+            final Cleaner htmlCleaner;
+            final Document dirtyHTML;
+            final Document cleanHTML;
+            final Element body;
 
-        settings.charset(StandardCharsets.UTF_8).indentAmount(0).prettyPrint(false).outline(false);
-        settings.syntax(Syntax.xml); // Spec: "The content must be well-formed XML"
-        whitelist.addTags(TAGS);
-        whitelist.addAttributes(LINK_TAG, LINK_ATTRIBUTES);
-        whitelist.addAttributes(IMAGE_TAG, IMAGE_ATTRIBUTES);
-        whitelist.addProtocols(LINK_TAG, LINK_ATTRIBUTES[0], PROTOCOLS);
+            settings.charset(StandardCharsets.UTF_8).indentAmount(0).prettyPrint(false).outline(false);
+            settings.syntax(Syntax.xml); // Spec: "The content must be well-formed XML"
+            whitelist.addTags(TAGS);
+            whitelist.addAttributes(LINK_TAG, LINK_ATTRIBUTES);
+            whitelist.addAttributes(IMAGE_TAG, IMAGE_ATTRIBUTES);
+            whitelist.addProtocols(LINK_TAG, LINK_ATTRIBUTES[0], PROTOCOLS);
 
-        dirtyHTML = Jsoup.parseBodyFragment(aString.replaceAll(CDATA_PATTERN, EMPTY));
-        htmlCleaner = new Cleaner(whitelist);
-        cleanHTML = htmlCleaner.clean(dirtyHTML);
-        cleanHTML.outputSettings(settings);
+            dirtyHTML = Jsoup.parseBodyFragment(encodeSingleBrackets(aString.replaceAll(CDATA_PATTERN, EMPTY)));
+            htmlCleaner = new Cleaner(whitelist);
+            cleanHTML = htmlCleaner.clean(dirtyHTML);
+            cleanHTML.outputSettings(settings);
 
-        for (final Element element : cleanHTML.getAllElements()) {
-            // We start with third position tag because earlier ones are empty elements by definition
-            for (int index = 2; index < TAGS.length; index++) {
-                if (TAGS[index].equals(element.tagName()) && element.children().isEmpty() && (!element.hasText() ||
-                        element.text().trim().equals(EMPTY))) {
-                    element.remove();
+            for (final Element element : cleanHTML.getAllElements()) {
+                // We start with third position tag because earlier ones are empty elements by definition
+                for (int index = 2; index < TAGS.length; index++) {
+                    if (TAGS[index].equals(element.tagName()) && element.children().isEmpty() && (!element
+                            .hasText() || element.text().trim().equals(EMPTY))) {
+                        element.remove();
+                    }
                 }
             }
+
+            // JSoup adds an HTML tag and body wrapper, which we don't want/need for our HTML fragments.
+            body = cleanHTML.body();
+
+            // If we don't have a single root node beneath the body element, our string input was invalid.
+            if (body.childrenSize() != 1) {
+                final String htmlFragment = body.children().toString();
+                throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_032, htmlFragment));
+            }
+
+            return body.children().toString();
+        } else {
+            return Parser.unescapeEntities(Jsoup.clean(encodeSingleBrackets(aString.replaceAll(CDATA_PATTERN, EMPTY)),
+                    Whitelist.none()), false);
         }
-
-        // JSoup adds an HTML tag and body wrapper, which we don't want/need for our HTML fragments.
-        body = cleanHTML.body();
-
-        // If we don't have a single root node beneath the body element, our string input was invalid.
-        if (body.childrenSize() != 1) {
-            final String htmlFragment = body.children().toString();
-            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_032, htmlFragment));
-        }
-
-        return body.children().toString();
     }
 
     /**
@@ -243,5 +250,77 @@ public final class I18nUtils {
         }
 
         return i18ns.toArray(new I18n[i18ns.size()]);
+    }
+
+    /**
+     * This is a workaround for Jsoup not properly handling text that has a stand-alone &lt; character. It's
+     * <strike>probably</strike> definitely not perfect (i.e. this obviously isn't a full-fledged HTML parser).
+     *
+     * @param aString A string to check for less than characters.
+     * @return A string with less than characters HTML encoded
+     */
+    private static String encodeSingleBrackets(final String aString) {
+        if (aString.indexOf('<') != -1) {
+            final StringBuilder builder = new StringBuilder(aString);
+            final String lt = "<";
+            final String gt = ">";
+            final String sp = " ";
+
+            int start = 0;
+
+            // Move through character sequence in string, checking character relationships
+            do {
+                start = builder.indexOf(lt, start);
+
+                final int nextGt = builder.indexOf(gt, start);
+                final int nextSpace = builder.indexOf(sp, start);
+
+                // Check opening tag for possibilities other than an actual HTML element
+                if (hasSpace(start, nextSpace, nextGt) && hasNoAttribute(builder, start, nextGt) && isNotComment(
+                        builder, start) && isNotPI(builder, nextGt)) {
+                    builder.replace(start, start + 1, "&lt;");
+                }
+            } while (++start != 0); // i.e., while we're able to find a positive start index
+
+            return builder.toString();
+        } else {
+            return aString;
+        }
+    }
+
+    // Makes an attempt to determine if the space in the element was because on an attribute
+    private static boolean hasNoAttribute(final StringBuilder aBuilder, final int aStart, final int aGtIndex) {
+        for (int index = aGtIndex - 1; index >= aStart; index--) {
+            switch (aBuilder.charAt(index)) {
+                case '\'':
+                case '"':
+                    return false;
+                case ' ':
+                    continue;
+                default:
+                    return true;
+            }
+        }
+
+        return true;
+    }
+
+    // A preliminary check to see if the element name might have a space in it
+    private static boolean hasSpace(final int aStartIndex, final int aSpaceIndex, final int aGtIndex) {
+        return aSpaceIndex < aGtIndex && aStartIndex != -1 && aSpaceIndex != -1;
+    }
+
+    // A properly formed XML comment starts with: <!--
+    private static boolean isNotComment(final StringBuilder aBuilder, final int aStartIndex) {
+        if (aBuilder.length() < aStartIndex + 5) {
+            return true;
+        }
+
+        return !"!--".equals(aBuilder.substring(aStartIndex + 1, aStartIndex + 4));
+    }
+
+    // A properly formed PI will have a question mark before the closing bracket
+    private static boolean isNotPI(final StringBuilder aBuilder, final int aGtIndex) {
+        return aBuilder.charAt(aGtIndex - 1) != '?';
     }
 }
