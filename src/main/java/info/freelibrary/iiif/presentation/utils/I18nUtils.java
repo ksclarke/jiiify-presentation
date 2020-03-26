@@ -288,7 +288,7 @@ public final class I18nUtils {
         }
     }
 
-    // Makes an attempt to determine if the space in the element was because on an attribute
+    // Makes an attempt to determine if the space in the element was because of an attribute
     private static boolean hasNoAttribute(final StringBuilder aBuilder, final int aStart, final int aGtIndex) {
         for (int index = aGtIndex - 1; index >= aStart; index--) {
             switch (aBuilder.charAt(index)) {
