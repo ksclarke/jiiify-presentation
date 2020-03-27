@@ -15,6 +15,24 @@ import info.freelibrary.iiif.presentation.properties.I18n;
 public class I18nUtilsTest {
 
     /**
+     * Tests a href attribute.
+     */
+    @Test
+    public final void testLinkHref() {
+        final String html = "<a href=\"http://example.org\">test</a>";
+        assertEquals(html, I18nUtils.cleanHTML(html));
+    }
+
+    /**
+     * Tests image src and alt attributes.
+     */
+    @Test
+    public final void testImageSrcAlt() {
+        final String html = "<span>See <a href=\"http://example.org\">test</a></span>";
+        assertEquals(html, I18nUtils.cleanHTML(html));
+    }
+
+    /**
      * Tests stripping HTML tags from supplied text.
      */
     @Test
