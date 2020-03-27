@@ -137,7 +137,7 @@ public class RequiredStatement extends I18nEntry {
         final Class thisClass = getClass();
 
         if (!outerClass.equals(thisClass)) {
-            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_032, outerClass, thisClass));
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_034, outerClass, thisClass));
         }
     }
 

@@ -3,7 +3,6 @@ package info.freelibrary.iiif.presentation.properties;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -149,14 +148,9 @@ public class I18n implements Iterable<String> {
         myLocale = checkLangTag(aLocale);
         isAllowingHTML = aHtmlValueAllowed;
 
-        for (final String string : aStringList) {
-            if (!isAllowingHTML && I18nUtils.hasHTML(string)) {
-                throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_019, string));
-            }
-        }
-
-        // Make sure we have a mutable list
-        if (IMMUTABLES.contains(aStringList.getClass().getName())) {
+        if (!isAllowingHTML) {
+            myStrings = I18nUtils.stripHTML(aStringList);
+        } else if (IMMUTABLES.contains(aStringList.getClass().getName())) {
             myStrings = new ArrayList(aStringList);
         } else {
             myStrings = aStringList;
@@ -226,17 +220,17 @@ public class I18n implements Iterable<String> {
      * @return True if the new string was successfully added; else, false
      */
     public boolean addString(final String aString) {
-        return myStrings.add(aString);
+        return myStrings.add(!allowsHTML() ? I18nUtils.stripHTML(aString) : aString);
     }
 
     /**
-     * Adds all the strings in the supplied collection to the internationalization
+     * Adds all the strings in the supplied list to the internationalization
      *
-     * @param aStringCollection A collection of strings to add
+     * @param aStringList A list of strings to add
      * @return True if the new strings were successfully added; else, false
      */
-    public boolean addStrings(final Collection<String> aStringCollection) {
-        return myStrings.addAll(aStringCollection);
+    public boolean addStrings(final List<String> aStringList) {
+        return myStrings.addAll(!allowsHTML() ? I18nUtils.stripHTML(aStringList) : aStringList);
     }
 
     /**
