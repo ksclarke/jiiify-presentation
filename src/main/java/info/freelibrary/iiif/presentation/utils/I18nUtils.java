@@ -155,7 +155,6 @@ public final class I18nUtils {
      */
     public static String cleanHTML(final String aString) {
         if (isHtmlFragment(aString)) {
-            System.out.println("html frag");
             final OutputSettings settings = new OutputSettings();
             final Whitelist whitelist = Whitelist.none();
             final Cleaner htmlCleaner;
@@ -196,9 +195,7 @@ public final class I18nUtils {
 
             return body.children().toString();
         } else {
-            System.out.println("text");
-            return Parser.unescapeEntities(Jsoup.clean(encodeSingleBrackets(aString.replaceAll(CDATA_PATTERN, EMPTY)),
-                    Whitelist.none()), false);
+            return stripHTML(aString);
         }
     }
 
