@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -18,6 +19,7 @@ import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.NavDate;
+import info.freelibrary.iiif.presentation.properties.Start;
 import info.freelibrary.iiif.presentation.properties.Summary;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.properties.ViewingDirection;
@@ -28,7 +30,6 @@ import info.freelibrary.util.I18nRuntimeException;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
-import io.vertx.core.json.jackson.DatabindCodec;
 
 /**
  * The overall description of the structure and properties of the digital representation of an object. It carries
@@ -37,11 +38,6 @@ import io.vertx.core.json.jackson.DatabindCodec;
  * present a single object such as a book, a photograph, or a statue.
  */
 public class Manifest extends Resource<Manifest> {
-
-    // We need to find JDK 8+ types for parsing our JSON
-    static {
-        DatabindCodec.mapper().findAndRegisterModules();
-    }
 
     private static final String TYPE = "sc:Manifest";
 
@@ -54,6 +50,8 @@ public class Manifest extends Resource<Manifest> {
     private NavDate myNavDate;
 
     private ViewingDirection myViewingDirection;
+
+    private Optional<Start> myStart = Optional.empty();
 
     /**
      * Creates a IIIF presentation manifest.
@@ -260,6 +258,28 @@ public class Manifest extends Resource<Manifest> {
     public Manifest setSequences(final Sequence... aSequenceArray) {
         mySequences.clear();
         return addSequence(aSequenceArray);
+    }
+
+    /**
+     * Sets the optional start.
+     *
+     * @param aStart A start
+     * @return The range
+     */
+    @JsonSetter(Constants.START)
+    public Manifest setStart(final Start aStart) {
+        myStart = Optional.ofNullable(aStart);
+        return this;
+    }
+
+    /**
+     * Gets the optional start.
+     *
+     * @return The optional start
+     */
+    @JsonGetter(Constants.START)
+    public Optional<Start> getStart() {
+        return myStart;
     }
 
     /**

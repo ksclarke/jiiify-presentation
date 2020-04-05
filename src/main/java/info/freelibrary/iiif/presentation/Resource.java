@@ -32,6 +32,8 @@ import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+import io.vertx.core.json.jackson.DatabindCodec;
+
 /**
  * A resource that can be used as a base for more specific IIIF presentation resources.
  */
@@ -40,6 +42,11 @@ import info.freelibrary.util.LoggerFactory;
     Constants.REQUIRED_STATEMENT, Constants.RIGHTS, Constants.PART_OF, Constants.LOGO, Constants.THUMBNAIL,
     Constants.METADATA, Constants.SEQUENCES, Constants.SERVICE })
 class Resource<T extends Resource<T>> {
+
+    // We initialize this here so it loads for manifests and collections
+    static {
+        DatabindCodec.mapper().findAndRegisterModules();
+    }
 
     @JsonProperty(Constants.TYPE)
     protected final String myType;

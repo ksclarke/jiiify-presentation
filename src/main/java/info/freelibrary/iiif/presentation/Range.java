@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.NavDate;
+import info.freelibrary.iiif.presentation.properties.Start;
 import info.freelibrary.iiif.presentation.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.properties.behaviors.RangeBehavior;
 import info.freelibrary.iiif.presentation.utils.Constants;
@@ -28,7 +29,7 @@ public class Range extends Resource<Range> {
 
     private ViewingDirection myViewingDirection;
 
-    private Optional<URI> myStart;
+    private Optional<Start> myStart = Optional.empty();
 
     private NavDate myNavDate;
 
@@ -66,11 +67,11 @@ public class Range extends Resource<Range> {
     /**
      * Sets the optional start.
      *
-     * @param aStart A start canvas
+     * @param aStart A start
      * @return The range
      */
     @JsonSetter(Constants.START)
-    public Range setStart(final URI aStart) {
+    public Range setStart(final Start aStart) {
         myStart = Optional.ofNullable(aStart);
         return this;
     }
@@ -81,7 +82,7 @@ public class Range extends Resource<Range> {
      * @return The optional start
      */
     @JsonGetter(Constants.START)
-    public Optional<URI> getStart() {
+    public Optional<Start> getStart() {
         return myStart;
     }
 

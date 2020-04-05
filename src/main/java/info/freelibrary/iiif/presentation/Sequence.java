@@ -5,7 +5,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -34,8 +33,6 @@ public class Sequence extends Resource<Sequence> {
 
     private final List<Canvas> myCanvases;
 
-    private Optional<URI> myStart;
-
     /**
      * Creates a IIIF presentation sequence resource.
      */
@@ -62,28 +59,6 @@ public class Sequence extends Resource<Sequence> {
         super(TYPE, REQ_ARG_COUNT);
         myCanvases = new ArrayList<>();
         setID(aID);
-    }
-
-    /**
-     * Sets the optional start.
-     *
-     * @param aStart A start
-     * @return The sequence
-     */
-    @JsonSetter(Constants.START)
-    public Sequence setStart(final URI aStart) {
-        myStart = Optional.ofNullable(aStart);
-        return this;
-    }
-
-    /**
-     * Gets the optional start.
-     *
-     * @return The optional start
-     */
-    @JsonGetter(Constants.START)
-    public Optional<URI> getStart() {
-        return myStart;
     }
 
     /**
