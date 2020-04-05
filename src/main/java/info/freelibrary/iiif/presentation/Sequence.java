@@ -22,7 +22,7 @@ import info.freelibrary.iiif.presentation.utils.Constants;
  * equally valid orders through the content, such as when a manuscript’s pages are rebound or archival collections are
  * reordered.
  */
-@JsonPropertyOrder({ Constants.CONTEXT, Constants.LABEL, Constants.ID, Constants.TYPE, Constants.START_CANVAS,
+@JsonPropertyOrder({ Constants.CONTEXT, Constants.LABEL, Constants.ID, Constants.TYPE, Constants.START,
     Constants.CANVASES })
 public class Sequence extends Resource<Sequence> {
 
@@ -34,7 +34,7 @@ public class Sequence extends Resource<Sequence> {
 
     private final List<Canvas> myCanvases;
 
-    private Optional<URI> myStartCanvas;
+    private Optional<URI> myStart;
 
     /**
      * Creates a IIIF presentation sequence resource.
@@ -65,25 +65,25 @@ public class Sequence extends Resource<Sequence> {
     }
 
     /**
-     * Sets the optional start canvas.
+     * Sets the optional start.
      *
-     * @param aStartCanvas A start canvas
+     * @param aStart A start
      * @return The sequence
      */
-    @JsonSetter(Constants.START_CANVAS)
-    public Sequence setStartCanvas(final URI aStartCanvas) {
-        myStartCanvas = Optional.ofNullable(aStartCanvas);
+    @JsonSetter(Constants.START)
+    public Sequence setStart(final URI aStart) {
+        myStart = Optional.ofNullable(aStart);
         return this;
     }
 
     /**
-     * Gets the optional start canvas.
+     * Gets the optional start.
      *
-     * @return The optional start canvas
+     * @return The optional start
      */
-    @JsonGetter(Constants.START_CANVAS)
-    public Optional<URI> getStartCanvas() {
-        return myStartCanvas;
+    @JsonGetter(Constants.START)
+    public Optional<URI> getStart() {
+        return myStart;
     }
 
     /**

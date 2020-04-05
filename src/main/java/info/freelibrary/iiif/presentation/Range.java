@@ -28,7 +28,7 @@ public class Range extends Resource<Range> {
 
     private ViewingDirection myViewingDirection;
 
-    private Optional<URI> myStartCanvas;
+    private Optional<URI> myStart;
 
     private NavDate myNavDate;
 
@@ -64,25 +64,25 @@ public class Range extends Resource<Range> {
     }
 
     /**
-     * Sets the optional start canvas.
+     * Sets the optional start.
      *
-     * @param aStartCanvas A start canvas
+     * @param aStart A start canvas
      * @return The range
      */
-    @JsonSetter(Constants.START_CANVAS)
-    public Range setStartCanvas(final URI aStartCanvas) {
-        myStartCanvas = Optional.ofNullable(aStartCanvas);
+    @JsonSetter(Constants.START)
+    public Range setStart(final URI aStart) {
+        myStart = Optional.ofNullable(aStart);
         return this;
     }
 
     /**
-     * Gets the optional start canvas.
+     * Gets the optional start.
      *
-     * @return The optional start canvas
+     * @return The optional start
      */
-    @JsonGetter(Constants.START_CANVAS)
-    public Optional<URI> getStartCanvas() {
-        return myStartCanvas;
+    @JsonGetter(Constants.START)
+    public Optional<URI> getStart() {
+        return myStart;
     }
 
     /**

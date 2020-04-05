@@ -38,8 +38,8 @@ public class SequenceTest {
     }
 
     @Test
-    public final void testSetStartCanvas() {
-        assertEquals(URI.create(myID), new Sequence().setStartCanvas(URI.create(myID)).getStartCanvas().get());
+    public final void testSetStart() {
+        assertEquals(URI.create(myID), new Sequence().setStart(URI.create(myID)).getStart().get());
     }
 
     @Test
