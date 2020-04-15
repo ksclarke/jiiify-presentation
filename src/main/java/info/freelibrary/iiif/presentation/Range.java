@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.NavDate;
+import info.freelibrary.iiif.presentation.properties.Start;
 import info.freelibrary.iiif.presentation.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.properties.behaviors.RangeBehavior;
 import info.freelibrary.iiif.presentation.utils.Constants;
@@ -28,7 +29,7 @@ public class Range extends Resource<Range> {
 
     private ViewingDirection myViewingDirection;
 
-    private Optional<URI> myStartCanvas;
+    private Optional<Start> myStart = Optional.empty();
 
     private NavDate myNavDate;
 
@@ -64,25 +65,25 @@ public class Range extends Resource<Range> {
     }
 
     /**
-     * Sets the optional start canvas.
+     * Sets the optional start.
      *
-     * @param aStartCanvas A start canvas
+     * @param aStart A start
      * @return The range
      */
-    @JsonSetter(Constants.START_CANVAS)
-    public Range setStartCanvas(final URI aStartCanvas) {
-        myStartCanvas = Optional.ofNullable(aStartCanvas);
+    @JsonSetter(Constants.START)
+    public Range setStart(final Start aStart) {
+        myStart = Optional.ofNullable(aStart);
         return this;
     }
 
     /**
-     * Gets the optional start canvas.
+     * Gets the optional start.
      *
-     * @return The optional start canvas
+     * @return The optional start
      */
-    @JsonGetter(Constants.START_CANVAS)
-    public Optional<URI> getStartCanvas() {
-        return myStartCanvas;
+    @JsonGetter(Constants.START)
+    public Optional<Start> getStart() {
+        return myStart;
     }
 
     /**

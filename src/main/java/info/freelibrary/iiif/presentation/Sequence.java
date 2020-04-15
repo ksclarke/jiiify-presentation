@@ -5,7 +5,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -22,7 +21,7 @@ import info.freelibrary.iiif.presentation.utils.Constants;
  * equally valid orders through the content, such as when a manuscript’s pages are rebound or archival collections are
  * reordered.
  */
-@JsonPropertyOrder({ Constants.CONTEXT, Constants.LABEL, Constants.ID, Constants.TYPE, Constants.START_CANVAS,
+@JsonPropertyOrder({ Constants.CONTEXT, Constants.LABEL, Constants.ID, Constants.TYPE, Constants.START,
     Constants.CANVASES })
 public class Sequence extends Resource<Sequence> {
 
@@ -33,8 +32,6 @@ public class Sequence extends Resource<Sequence> {
     private ViewingDirection myViewingDirection;
 
     private final List<Canvas> myCanvases;
-
-    private Optional<URI> myStartCanvas;
 
     /**
      * Creates a IIIF presentation sequence resource.
@@ -62,28 +59,6 @@ public class Sequence extends Resource<Sequence> {
         super(TYPE, REQ_ARG_COUNT);
         myCanvases = new ArrayList<>();
         setID(aID);
-    }
-
-    /**
-     * Sets the optional start canvas.
-     *
-     * @param aStartCanvas A start canvas
-     * @return The sequence
-     */
-    @JsonSetter(Constants.START_CANVAS)
-    public Sequence setStartCanvas(final URI aStartCanvas) {
-        myStartCanvas = Optional.ofNullable(aStartCanvas);
-        return this;
-    }
-
-    /**
-     * Gets the optional start canvas.
-     *
-     * @return The optional start canvas
-     */
-    @JsonGetter(Constants.START_CANVAS)
-    public Optional<URI> getStartCanvas() {
-        return myStartCanvas;
     }
 
     /**

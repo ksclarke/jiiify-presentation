@@ -21,7 +21,6 @@ import info.freelibrary.util.I18nRuntimeException;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
-import io.vertx.core.json.jackson.DatabindCodec;
 
 /**
  * An ordered list of manifests, and/or further collections. Collections allow easy advertising and browsing of the
@@ -29,11 +28,6 @@ import io.vertx.core.json.jackson.DatabindCodec;
  * clients with a means to locate all of the manifests known to the publishing institution.
  */
 public class Collection extends Resource<Collection> {
-
-    // We initialize this here (in addition to in Manifest) in case someone is using collections without manifests
-    static {
-        DatabindCodec.mapper().findAndRegisterModules();
-    }
 
     private static final String TYPE = "sc:Collection";
 

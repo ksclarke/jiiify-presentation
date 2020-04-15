@@ -38,11 +38,6 @@ public class SequenceTest {
     }
 
     @Test
-    public final void testSetStartCanvas() {
-        assertEquals(URI.create(myID), new Sequence().setStartCanvas(URI.create(myID)).getStartCanvas().get());
-    }
-
-    @Test
     public final void testSetViewingDirection() {
         assertEquals(ViewingDirection.LEFT_TO_RIGHT, new Sequence().setViewingDirection(
                 ViewingDirection.LEFT_TO_RIGHT).getViewingDirection());

@@ -38,5 +38,7 @@
   <entry key="JPA-032">Supplied HTML text must have a single root element: {}</entry>
   <entry key="JPA-033">Stripping disallowed HTML markup in following string: {}</entry>
   <entry key="JPA-034">Supplied entry was a {} entry not a {} entry</entry>
+  <entry key="JPA-035">IIIF Image API URL does not have a dot before format: {}</entry>
+  <entry key="JPA-036">IIIF Image API URL does not have the correct number of components: {}</entry>
 
 </properties>

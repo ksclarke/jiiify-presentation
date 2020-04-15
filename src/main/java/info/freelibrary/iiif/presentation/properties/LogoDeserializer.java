@@ -20,7 +20,7 @@ import info.freelibrary.util.LoggerFactory;
 /**
  * A deserializer for the Logo class.
  */
-public class LogoDeserializer extends StdDeserializer {
+class LogoDeserializer extends StdDeserializer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LogoDeserializer.class, Constants.BUNDLE_NAME);
 

@@ -75,6 +75,10 @@ public final class Constants {
 
     public static final String ON = "on";
 
+    public static final String SOURCE = "source";
+
+    public static final String SELECTOR = "selector";
+
     public static final String RESOURCE = "resource";
 
     public static final String RESOURCES = "resources";
@@ -95,7 +99,7 @@ public final class Constants {
 
     public static final String PHYSICAL_UNITS = "physicalUnits";
 
-    public static final String START_CANVAS = "startCanvas";
+    public static final String START = "start";
 
     private Constants() {
         super();

@@ -20,7 +20,7 @@ import info.freelibrary.util.LoggerFactory;
 /**
  * A deserializer for the Thumbnail class.
  */
-public class ThumbnailDeserializer extends StdDeserializer {
+class ThumbnailDeserializer extends StdDeserializer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ThumbnailDeserializer.class, Constants.BUNDLE_NAME);
 
