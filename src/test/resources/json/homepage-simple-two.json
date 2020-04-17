@@ -1,0 +1,14 @@
+{
+  "homepage": [
+    {
+      "id": "https://example.com/info/",
+      "type": "Text",
+      "label": { "none": [ "Homepage for Example Object" ] }
+    },
+    {
+      "id": "https://example.com/info2/",
+      "type": "Text",
+      "label": { "none": [ "Homepage 2 for Example Object" ] }
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "homepage": [
+    {
+      "id": "https://example.com/info/",
+      "type": "Text",
+      "label": { "none": [ "Homepage for Example Object" ] }
+    }
+  ]
+}
