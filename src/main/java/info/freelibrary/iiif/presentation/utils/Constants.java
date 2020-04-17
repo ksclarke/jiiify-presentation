@@ -39,6 +39,8 @@ public final class Constants {
 
     public static final String REQUIRED_STATEMENT = "requiredStatement";
 
+    public static final String HOMEPAGE = "homepage";
+
     public static final String LOGO = "logo";
 
     public static final String BEHAVIOR = "behavior";
@@ -94,6 +96,8 @@ public final class Constants {
     public static final String DEFAULT = "default";
 
     public static final String OA_CHOICE = "oa:Choice";
+
+    public static final String TEXT = "Text";
 
     public static final String PHYSICAL_SCALE = "physicalScale";
 

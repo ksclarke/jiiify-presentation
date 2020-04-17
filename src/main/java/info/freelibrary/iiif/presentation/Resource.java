@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 import info.freelibrary.iiif.presentation.properties.Behavior;
+import info.freelibrary.iiif.presentation.properties.Homepage;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Metadata;
@@ -39,8 +40,8 @@ import io.vertx.core.json.jackson.DatabindCodec;
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.TYPE, Constants.ID, Constants.LABEL, Constants.SUMMARY,
-    Constants.REQUIRED_STATEMENT, Constants.RIGHTS, Constants.PART_OF, Constants.LOGO, Constants.THUMBNAIL,
-    Constants.METADATA, Constants.SEQUENCES, Constants.SERVICE })
+    Constants.REQUIRED_STATEMENT, Constants.RIGHTS, Constants.PART_OF, Constants.HOMEPAGE, Constants.LOGO,
+    Constants.THUMBNAIL, Constants.METADATA, Constants.SEQUENCES, Constants.SERVICE })
 class Resource<T extends Resource<T>> {
 
     // We initialize this here so it loads for manifests and collections
@@ -69,6 +70,8 @@ class Resource<T extends Resource<T>> {
     private RequiredStatement myRequiredStatement;
 
     private Rights myRights;
+
+    private List<Homepage> myHomepages;
 
     private Logo myLogo;
 
@@ -435,6 +438,35 @@ class Resource<T extends Resource<T>> {
     public T setRights(final String aRightsURL) throws MalformedURLException {
         myRights = new Rights(aRightsURL);
         return (T) this;
+    }
+
+    /**
+     * Sets the homepages for this resource.
+     *
+     * @param aHomepageArray The homepages to set for this resource
+     * @return The resource
+     */
+    @JsonSetter(Constants.HOMEPAGE)
+    public T setHomepages(final Homepage... aHomepageArray) {
+        final List<Homepage> homepages = getHomepages();
+
+        homepages.clear();
+        homepages.addAll(Arrays.asList(aHomepageArray));
+        return (T) this;
+    }
+
+    /**
+     * Gets a list of resource homepages, initializing the list if this hasn't been done already.
+     *
+     * @return The resource's homepages
+     */
+    @JsonGetter(Constants.HOMEPAGE)
+    public List<Homepage> getHomepages() {
+        if (myHomepages == null) {
+            myHomepages = new ArrayList<>();
+        }
+
+        return myHomepages;
     }
 
     /**

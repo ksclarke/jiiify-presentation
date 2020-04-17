@@ -13,6 +13,7 @@ import com.thedeanda.lorem.Lorem;
 import com.thedeanda.lorem.LoremIpsum;
 
 import info.freelibrary.iiif.presentation.properties.Behavior;
+import info.freelibrary.iiif.presentation.properties.Homepage;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Metadata;
@@ -44,6 +45,8 @@ public class ResourceTest extends AbstractTest {
 
     private static final String SILS_URL = "http://ils.unc.edu";
 
+    private static final String EXAMPLE_URL = "http://example.org";
+
     private final Lorem myLorem = LoremIpsum.getInstance();
 
     /**
@@ -73,6 +76,7 @@ public class ResourceTest extends AbstractTest {
         test.setThumbnail(new Thumbnail(ASDF_JPG, service));
         test.setRequiredStatement(new RequiredStatement(label, value));
         test.setRights(SILS_URL);
+        test.setHomepages(new Homepage(SILS_URL, Constants.TEXT, AAAA));
         test.setLogo(new Logo(ASDF_JPG, service));
         test.setBehaviors(ResourceBehavior.HIDDEN);
         test.setSeeAlso("http://www.unc.edu");
@@ -100,6 +104,8 @@ public class ResourceTest extends AbstractTest {
         test.setThumbnail(new Thumbnail("dddd.jpg", service).addImage("eeee.jpg", service)); // should be value too?
         test.setRequiredStatement(new RequiredStatement(myLorem.getWords(1), myLorem.getWords(1)));
         test.setRights(new Rights("http://ils.unc.edu/license1").addValue("http://ils.unc.edu/license2"));
+        test.setHomepages(new Homepage(SILS_URL, Constants.TEXT, AAAA),
+                new Homepage(EXAMPLE_URL, Constants.TEXT, BBBB));
         test.setLogo(new Logo("ffff.jpg", service).addImage("gggg.jpg", service));
         test.setBehaviors(ManifestBehavior.AUTOADVANCE);
         test.setSeeAlso(new SeeAlso("http://1.unc.edu").addValue("http://2.unc.edu"));
