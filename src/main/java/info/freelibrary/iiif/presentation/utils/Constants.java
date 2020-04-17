@@ -97,7 +97,7 @@ public final class Constants {
 
     public static final String OA_CHOICE = "oa:Choice";
 
-    public static final String OA_TEXT = "Text";
+    public static final String TEXT = "Text";
 
     public static final String PHYSICAL_SCALE = "physicalScale";
 

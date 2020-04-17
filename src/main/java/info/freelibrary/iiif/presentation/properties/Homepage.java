@@ -41,16 +41,6 @@ public class Homepage {
         this(URI.create(aID), aType, new Label(aLabel));
     }
 
-    public Homepage(final URI aID, final String aType, final Label aLabel, final String aFormat) {
-        this(aID, aType, aLabel);
-        setFormat(aFormat);
-    }
-
-    public Homepage(final String aID, final String aType, final String aLabel, final String aFormat) {
-        this(aID, aType, aLabel);
-        setFormat(aFormat);
-    }
-
     /**
      * Gets the ID.
      *

@@ -448,7 +448,7 @@ class Resource<T extends Resource<T>> {
      */
     @JsonSetter(Constants.HOMEPAGE)
     public T setHomepages(final Homepage... aHomepageArray) {
-        final List<Homepage> homepages = getHomepagesList();
+        final List<Homepage> homepages = getHomepages();
 
         homepages.clear();
         homepages.addAll(Arrays.asList(aHomepageArray));
@@ -456,34 +456,17 @@ class Resource<T extends Resource<T>> {
     }
 
     /**
-     * Gets the resource's homepages in an unmodifiable list.
+     * Gets a list of resource homepages, initializing the list if this hasn't been done already.
      *
      * @return The resource's homepages
      */
     @JsonGetter(Constants.HOMEPAGE)
     public List<Homepage> getHomepages() {
-        return Collections.unmodifiableList(getHomepagesList());
-    }
+        if (myHomepages == null) {
+            myHomepages = new ArrayList<>();
+        }
 
-    /**
-     * Adds homepages to the resource.
-     *
-     * @param aHomepageArray The homepages to add to the resource
-     * @return The resource
-     */
-    public T addHomepages(final Homepage... aHomepageArray) {
-        getHomepagesList().addAll(Arrays.asList(aHomepageArray));
-        return (T) this;
-    }
-
-    /**
-     * Removes the homepages associated with this resource.
-     *
-     * @return The resource
-     */
-    public T clearHomepages() {
-        getHomepagesList().clear();
-        return (T) this;
+        return myHomepages;
     }
 
     /**
@@ -708,19 +691,6 @@ class Resource<T extends Resource<T>> {
         }
 
         return aBehaviorArray;
-    }
-
-    /**
-     * Gets a list of resource homepages, initializing the list if this hasn't been done already.
-     *
-     * @return A list of resource homepages
-     */
-    private List<Homepage> getHomepagesList() {
-        if (myHomepages == null) {
-            myHomepages = new ArrayList<>();
-        }
-
-        return myHomepages;
     }
 
     /**

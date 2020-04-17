@@ -56,7 +56,7 @@ public class HomepageTest {
      */
     @Test
     public final void testHomepageURIStringLabel() throws IOException {
-        myHomepage = new Homepage(TEST_URI_1, Constants.OA_TEXT, TEST_LABEL_1);
+        myHomepage = new Homepage(TEST_URI_1, Constants.TEXT, TEST_LABEL_1);
         myHomepageFile = HOMEPAGE_SIMPLE_ONE;
 
         myManifest.setHomepages(myHomepage);
@@ -71,38 +71,8 @@ public class HomepageTest {
      */
     @Test
     public final void testHomepageStringStringString() throws IOException {
-        myHomepage = new Homepage(TEST_URI_1.toString(), Constants.OA_TEXT, TEST_LABEL_1.getString());
+        myHomepage = new Homepage(TEST_URI_1.toString(), Constants.TEXT, TEST_LABEL_1.getString());
         myHomepageFile = HOMEPAGE_SIMPLE_ONE;
-
-        myManifest.setHomepages(myHomepage);
-
-        check();
-    }
-
-    /**
-     * Tests a homepage constructor and homepage serialization.
-     *
-     * @throws IOException If there is trouble reading the homepage file or serializing the constructed homepage
-     */
-    @Test
-    public final void testHomepageURIStringLabelString() throws IOException {
-        myHomepage = new Homepage(TEST_URI_1, Constants.OA_TEXT, TEST_LABEL_1, TEST_FORMAT);
-        myHomepageFile = HOMEPAGE_FULL_ONE;
-
-        myManifest.setHomepages(myHomepage);
-
-        check();
-    }
-
-    /**
-     * Tests a homepage constructor and homepage serialization.
-     *
-     * @throws IOException If there is trouble reading the homepage file or serializing the constructed homepage
-     */
-    @Test
-    public final void testHomepageStringStringStringString() throws IOException {
-        myHomepage = new Homepage(TEST_URI_1.toString(), Constants.OA_TEXT, TEST_LABEL_1.getString(), TEST_FORMAT);
-        myHomepageFile = HOMEPAGE_FULL_ONE;
 
         myManifest.setHomepages(myHomepage);
 
@@ -116,7 +86,7 @@ public class HomepageTest {
      */
     @Test
     public final void testSetFormat() throws IOException {
-        myHomepage = new Homepage(TEST_URI_1, Constants.OA_TEXT, TEST_LABEL_1).setFormat(TEST_FORMAT);
+        myHomepage = new Homepage(TEST_URI_1, Constants.TEXT, TEST_LABEL_1).setFormat(TEST_FORMAT);
         myHomepageFile = HOMEPAGE_FULL_ONE;
 
         myManifest.setHomepages(myHomepage);
@@ -131,10 +101,10 @@ public class HomepageTest {
      */
     @Test
     public final void testMultiValues() throws IOException {
-        myHomepage = new Homepage(TEST_URI_1, Constants.OA_TEXT, TEST_LABEL_1);
+        myHomepage = new Homepage(TEST_URI_1, Constants.TEXT, TEST_LABEL_1);
         myHomepageFile = HOMEPAGE_SIMPLE_TWO;
 
-        myManifest.setHomepages(myHomepage, new Homepage(TEST_URI_2, Constants.OA_TEXT, TEST_LABEL_2));
+        myManifest.setHomepages(myHomepage, new Homepage(TEST_URI_2, Constants.TEXT, TEST_LABEL_2));
 
         check();
     }
