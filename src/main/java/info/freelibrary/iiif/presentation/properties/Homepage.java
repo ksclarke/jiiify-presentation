@@ -31,12 +31,26 @@ public class Homepage {
     @JsonProperty(Constants.FORMAT)
     private String myFormat;
 
+    /**
+     * Creates a IIIF presentation homepage.
+     *
+     * @param aID A homepage ID
+     * @param aType A homepage type
+     * @param aLabel A homepage label
+     */
     public Homepage(final URI aID, final String aType, final Label aLabel) {
         myID = aID;
         myType = aType;
         myLabel = aLabel;
     }
 
+    /**
+     * Creates a IIIF presentation homepage.
+     *
+     * @param aID A homepage ID in string form
+     * @param aType A homepage type
+     * @param aLabel A homepage label in string form
+     */
     public Homepage(final String aID, final String aType, final String aLabel) {
         this(URI.create(aID), aType, new Label(aLabel));
     }
