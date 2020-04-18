@@ -45,6 +45,8 @@ public final class Constants {
 
     public static final String BEHAVIOR = "behavior";
 
+    public static final String TIMEMODE = "timeMode";
+
     public static final String NAV_DATE = "navDate";
 
     public static final String VIEWING_DIRECTION = "viewingDirection";
