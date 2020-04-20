@@ -30,8 +30,6 @@ public class HomepageTest {
 
     private static final String TEST_FORMAT = "text/html";
 
-    // TODO: add language property per IIIF-691
-
     private static final File HOMEPAGE_SIMPLE_ONE = new File(TestUtils.TEST_DIR, "homepage-simple-one.json");
 
     private static final File HOMEPAGE_SIMPLE_TWO = new File(TestUtils.TEST_DIR, "homepage-simple-two.json");
