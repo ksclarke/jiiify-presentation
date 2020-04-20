@@ -3,13 +3,19 @@ package info.freelibrary.iiif.presentation;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 
 import org.junit.Test;
 
+import info.freelibrary.iiif.presentation.properties.TimeMode;
 import info.freelibrary.iiif.presentation.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
+import info.freelibrary.iiif.presentation.utils.TestUtils;
+import info.freelibrary.util.StringUtils;
+import io.vertx.core.json.JsonObject;
 
 /**
  * Tests an annotation.
@@ -17,6 +23,8 @@ import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
 public class AnnotationTest {
 
     private static final URI ID = URI.create("http://example.org/id");
+
+    private static final File ANNOTATION_TIMEMODE = new File(TestUtils.TEST_DIR, "annotation-timemode.json");
 
     /**
      * Tests constructing an annotation.
@@ -74,4 +82,18 @@ public class AnnotationTest {
         annotation.addBehaviors(ManifestBehavior.CONTINUOUS, CanvasBehavior.AUTOADVANCE);
     }
 
+    /**
+     * Tests setting and getting a time mode, and serializing an annotation with a time mode.
+     *
+     * @throws IOException If there is trouble reading the annotation file or serializing the constructed annotation
+     */
+    @Test
+    public final void testTimeMode() throws IOException {
+        final Annotation annotation = new Annotation(ID).setTimeMode(TimeMode.TRIM);
+        final JsonObject expected = new JsonObject(StringUtils.read(ANNOTATION_TIMEMODE));
+        final JsonObject found = new JsonObject(TestUtils.toJson(annotation));
+
+        assertEquals(TimeMode.TRIM, annotation.getTimeMode());
+        assertEquals(expected, found);
+    }
 }

@@ -3,9 +3,11 @@ package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.properties.Behavior;
+import info.freelibrary.iiif.presentation.properties.TimeMode;
 import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.utils.Constants;
 
@@ -20,6 +22,9 @@ public class Annotation extends Resource<Annotation> {
     private static final String TYPE = "sc:Annotation";
 
     private static final int REQ_ARG_COUNT = 1;
+
+    @JsonProperty(Constants.TIMEMODE)
+    private TimeMode myTimeMode;
 
     /**
      * Creates a IIIF presentation annotation resource.
@@ -50,4 +55,23 @@ public class Annotation extends Resource<Annotation> {
         return super.addBehaviors(checkBehaviors(ResourceBehavior.class, aBehaviorArray));
     }
 
+    /**
+     * Gets the time mode.
+     *
+     * @return The time mode
+     */
+    public TimeMode getTimeMode() {
+        return myTimeMode;
+    }
+
+    /**
+     * Sets the time mode.
+     *
+     * @param aTimeMode A time mode
+     * @return The annotation
+     */
+    public Annotation setTimeMode(final TimeMode aTimeMode) {
+        myTimeMode = aTimeMode;
+        return this;
+    }
 }
