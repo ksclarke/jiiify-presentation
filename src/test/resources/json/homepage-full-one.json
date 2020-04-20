@@ -4,7 +4,8 @@
       "id": "https://example.com/info/",
       "type": "Text",
       "label": { "none": [ "Homepage for Example Object" ] },
-      "format": "text/html"
+      "format": "text/html",
+      "language": [ "fa", "ug" ]
     }
   ]
 }

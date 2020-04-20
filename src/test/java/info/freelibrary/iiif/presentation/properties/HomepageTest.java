@@ -80,18 +80,27 @@ public class HomepageTest {
     }
 
     /**
-     * Tests setting a homepage's format.
+     * Tests setting a homepage's format and language.
      *
      * @throws IOException If there is trouble reading the homepage file or serializing the constructed homepage
      */
     @Test
-    public final void testSetFormat() throws IOException {
-        myHomepage = new Homepage(TEST_URI_1, Constants.TEXT, TEST_LABEL_1).setFormat(TEST_FORMAT);
+    public final void testSetters() throws IOException {
+        myHomepage = new Homepage(TEST_URI_1, Constants.TEXT, TEST_LABEL_1);
+        myHomepage.setFormat(TEST_FORMAT).setLanguages("fa", "ug");
         myHomepageFile = HOMEPAGE_FULL_ONE;
 
         myManifest.setHomepages(myHomepage);
 
         check();
+    }
+
+    /**
+     * Tests setting a homepage's language with an invalid language tag.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public final void testSetLanguagesInvalid() {
+        new Homepage(TEST_URI_1, Constants.TEXT, TEST_LABEL_1).setLanguages("???");
     }
 
     /**

@@ -91,7 +91,7 @@ public final class Constants {
 
     public static final String I18N_VALUE = "@value";
 
-    public static final String I18N_LANG = "@language";
+    public static final String LANGUAGE = "language";
 
     public static final String ITEM = "item";
 

@@ -17,7 +17,7 @@ import info.freelibrary.iiif.presentation.utils.Constants;
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.LABEL, Constants.FORMAT })
-public class Homepage {
+public class Homepage extends Localized<Homepage> {
 
     @JsonProperty(Constants.ID)
     private final URI myID;
