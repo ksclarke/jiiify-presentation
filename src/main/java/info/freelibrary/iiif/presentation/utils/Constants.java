@@ -43,6 +43,8 @@ public final class Constants {
 
     public static final String LOGO = "logo";
 
+    public static final String RENDERING = "rendering";
+
     public static final String BEHAVIOR = "behavior";
 
     public static final String TIMEMODE = "timeMode";

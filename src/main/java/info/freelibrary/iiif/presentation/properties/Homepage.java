@@ -1,10 +1,14 @@
 package info.freelibrary.iiif.presentation.properties;
 
 import java.net.URI;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import info.freelibrary.iiif.presentation.utils.Constants;
 
@@ -17,16 +21,12 @@ import info.freelibrary.iiif.presentation.utils.Constants;
 @JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.LABEL, Constants.FORMAT })
 public class Homepage extends Localized<Homepage> {
 
-    @JsonProperty(Constants.ID)
     private final URI myID;
 
-    @JsonProperty(Constants.TYPE)
     private final String myType;
 
-    @JsonProperty(Constants.LABEL)
     private final Label myLabel;
 
-    @JsonProperty(Constants.FORMAT)
     private String myFormat;
 
     /**
@@ -51,6 +51,26 @@ public class Homepage extends Localized<Homepage> {
      */
     public Homepage(final String aID, final String aType, final String aLabel) {
         this(URI.create(aID), aType, new Label(aLabel));
+    }
+
+    @JsonCreator
+    Homepage(
+            @JsonProperty(Constants.ID) final URI aId,
+            @JsonProperty(Constants.TYPE) final String aType,
+            @JsonProperty(Constants.LABEL) final Label aLabel,
+            @JsonProperty(Constants.FORMAT) final String aFormat,
+            @JsonProperty(Constants.LANGUAGE) final String[] aLanguages) {
+
+        // Required properties
+        this(aId, aType, aLabel);
+
+        // Optional properties
+        if (aFormat != null) {
+            setFormat(aFormat);
+        }
+        if (aLanguages != null) {
+            setLanguages(aLanguages);
+        }
     }
 
     /**
@@ -98,5 +118,44 @@ public class Homepage extends Localized<Homepage> {
     public Homepage setFormat(final String aFormat) {
         myFormat = aFormat;
         return this;
+    }
+
+    /**
+     * Gets the JSON value of the property.
+     *
+     * @return The value(s) of the property
+     */
+    @JsonValue
+    protected Object toMap() {
+        final Map<String, Object> map = new LinkedHashMap<>();
+
+        // Required properties
+        map.put(Constants.ID, getID());
+        map.put(Constants.TYPE, getType());
+        map.put(Constants.LABEL, getLabel().toMap());
+
+        // Optional properties
+        if (getFormat() != null) {
+            map.put(Constants.FORMAT, getFormat());
+        }
+        if (getLanguages() != null) {
+            map.put(Constants.LANGUAGE, getLanguages());
+        }
+
+        return map;
+    }
+
+    @Override
+    public int hashCode() {
+        return toMap().hashCode();
+    }
+
+    @Override
+    public boolean equals(final Object aObject) {
+        if (aObject != null && getClass().getName().equals(aObject.getClass().getName())) {
+            return toMap().equals(((Homepage) aObject).toMap());
+        } else {
+            return false;
+        }
     }
 }
