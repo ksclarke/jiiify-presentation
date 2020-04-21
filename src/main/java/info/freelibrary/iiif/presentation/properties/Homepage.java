@@ -18,7 +18,7 @@ import info.freelibrary.iiif.presentation.utils.Constants;
  * management system or other cataloging system.
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.LABEL, Constants.FORMAT })
+@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.LABEL, Constants.FORMAT, Constants.LANGUAGE })
 public class Homepage extends Localized<Homepage> {
 
     @JsonProperty(Constants.ID)
