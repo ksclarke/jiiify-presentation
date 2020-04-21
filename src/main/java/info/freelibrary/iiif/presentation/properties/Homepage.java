@@ -4,7 +4,7 @@ import java.net.URI;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -21,12 +21,16 @@ import info.freelibrary.iiif.presentation.utils.Constants;
 @JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.LABEL, Constants.FORMAT })
 public class Homepage extends Localized<Homepage> {
 
-    private final URI myID;
+    @JsonProperty(Constants.ID)
+    private URI myID;
 
-    private final String myType;
+    @JsonProperty(Constants.TYPE)
+    private String myType;
 
-    private final Label myLabel;
+    @JsonProperty(Constants.LABEL)
+    private Label myLabel;
 
+    @JsonProperty(Constants.FORMAT)
     private String myFormat;
 
     /**
@@ -53,24 +57,7 @@ public class Homepage extends Localized<Homepage> {
         this(URI.create(aID), aType, new Label(aLabel));
     }
 
-    @JsonCreator
-    Homepage(
-            @JsonProperty(Constants.ID) final URI aId,
-            @JsonProperty(Constants.TYPE) final String aType,
-            @JsonProperty(Constants.LABEL) final Label aLabel,
-            @JsonProperty(Constants.FORMAT) final String aFormat,
-            @JsonProperty(Constants.LANGUAGE) final String[] aLanguages) {
-
-        // Required properties
-        this(aId, aType, aLabel);
-
-        // Optional properties
-        if (aFormat != null) {
-            setFormat(aFormat);
-        }
-        if (aLanguages != null) {
-            setLanguages(aLanguages);
-        }
+    Homepage() {
     }
 
     /**
@@ -83,6 +70,29 @@ public class Homepage extends Localized<Homepage> {
     }
 
     /**
+     * Sets the ID.
+     *
+     * @param aID The ID of the homepage
+     * @return The homepage
+     */
+    public Homepage setID(final URI aID) {
+        myID = aID;
+        return this;
+    }
+
+    /**
+     * Sets the ID from the supplied string.
+     *
+     * @param aID The ID of the homepage in string form
+     * @return The homepage
+     */
+    @JsonIgnore
+    public Homepage setID(final String aID) {
+        myID = URI.create(aID);
+        return this;
+    }
+
+    /**
      * Gets the type.
      *
      * @return The type
@@ -92,12 +102,46 @@ public class Homepage extends Localized<Homepage> {
     }
 
     /**
+     * Sets the type.
+     *
+     * @param aType The type of the homepage
+     * @return The homepage
+     */
+    public Homepage setType(final String aType) {
+        myType = aType;
+        return this;
+    }
+
+    /**
      * Gets the label.
      *
      * @return The label
      */
     public Label getLabel() {
         return myLabel;
+    }
+
+    /**
+     * Sets the label.
+     *
+     * @param aLabel The label of the homepage
+     * @return The homepage
+     */
+    public Homepage setLabel(final Label aLabel) {
+        myLabel = aLabel;
+        return this;
+    }
+
+    /**
+     * Sets the label from the supplied string.
+     *
+     * @param aLabel The label of the homepage in string form
+     * @return The homepage
+     */
+    @JsonIgnore
+    public Homepage setLabel(final String aLabel) {
+        myLabel = new Label(aLabel);
+        return this;
     }
 
     /**

@@ -127,7 +127,35 @@ public class HomepageTest {
     }
 
     /**
-     * Tests setting a homepage's format.
+     * Tests getting and setting a homepage's ID.
+     */
+    @Test
+    public final void testSetID() {
+        myHomepage = new Homepage(TEST_URI_2, Constants.TEXT, TEST_LABEL_1).setID(TEST_URI_1);
+        assertEquals(TEST_URI_1, myHomepage.getID());
+    }
+
+    /**
+     * Tests getting and setting a homepage's type.
+     */
+    @Test
+    public final void testSetType() {
+        myHomepage = new Homepage(TEST_URI_1, "Dataset", TEST_LABEL_1).setType(Constants.TEXT);
+        assertEquals(Constants.TEXT, myHomepage.getType());
+    }
+
+    /**
+     * Tests getting and setting a homepage's label.
+     */
+    @Test
+    public final void testSetLabel() {
+        myHomepage = new Homepage(TEST_URI_1, Constants.TEXT, TEST_LABEL_2).setLabel(TEST_LABEL_1);
+        assertEquals(TEST_LABEL_1, myHomepage.getLabel());
+    }
+
+
+    /**
+     * Tests getting and setting a homepage's format.
      */
     @Test
     public final void testSetFormat() {
@@ -136,7 +164,7 @@ public class HomepageTest {
     }
 
     /**
-     * Tests setting a homepage's language.
+     * Tests getting and setting a homepage's language.
      */
     @Test
     public final void testSetLanguage() {
