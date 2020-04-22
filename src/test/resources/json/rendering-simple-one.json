@@ -1,0 +1,9 @@
+{
+  "rendering": [
+    {
+      "id": "https://example.org/1.pdf",
+      "type": "Text",
+      "label": { "none": [ "PDF Rendering of Book" ] }
+    }
+  ]
+}
