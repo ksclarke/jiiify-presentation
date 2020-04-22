@@ -22,6 +22,7 @@ import info.freelibrary.iiif.presentation.properties.Homepage;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Metadata;
+import info.freelibrary.iiif.presentation.properties.Rendering;
 import info.freelibrary.iiif.presentation.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.properties.Rights;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
@@ -74,6 +75,8 @@ class Resource<T extends Resource<T>> {
     private List<Homepage> myHomepages;
 
     private Logo myLogo;
+
+    private List<Rendering> myRenderings;
 
     private List<Behavior> myBehaviors;
 
@@ -501,6 +504,35 @@ class Resource<T extends Resource<T>> {
     public T setLogo(final String aLogo) {
         myLogo = new Logo(aLogo);
         return (T) this;
+    }
+
+    /**
+     * Sets the renderings for this resource.
+     *
+     * @param aRenderingArray The renderings to set for this resource
+     * @return The resource
+     */
+    @JsonSetter(Constants.RENDERING)
+    public T setRenderings(final Rendering... aRenderingArray) {
+        final List<Rendering> renderings = getRenderings();
+
+        renderings.clear();
+        renderings.addAll(Arrays.asList(aRenderingArray));
+        return (T) this;
+    }
+
+    /**
+     * Gets a list of resource renderings, initializing the list if this hasn't been done already.
+     *
+     * @return The resource's renderings
+     */
+    @JsonGetter(Constants.RENDERING)
+    public List<Rendering> getRenderings() {
+        if (myRenderings == null) {
+            myRenderings = new ArrayList<>();
+        }
+
+        return myRenderings;
     }
 
     /**
