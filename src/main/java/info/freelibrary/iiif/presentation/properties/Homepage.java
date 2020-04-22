@@ -170,7 +170,7 @@ public class Homepage extends Localized<Homepage> {
      * @return The value(s) of the property
      */
     @JsonValue
-    protected Object toMap() {
+    private Object toMap() {
         final Map<String, Object> map = new LinkedHashMap<>();
 
         // Required properties
