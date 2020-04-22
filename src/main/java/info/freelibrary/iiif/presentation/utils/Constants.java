@@ -43,6 +43,8 @@ public final class Constants {
 
     public static final String LOGO = "logo";
 
+    public static final String RENDERING = "rendering";
+
     public static final String BEHAVIOR = "behavior";
 
     public static final String TIMEMODE = "timeMode";
@@ -91,7 +93,7 @@ public final class Constants {
 
     public static final String I18N_VALUE = "@value";
 
-    public static final String I18N_LANG = "@language";
+    public static final String LANGUAGE = "language";
 
     public static final String ITEM = "item";
 
