@@ -22,6 +22,7 @@ import info.freelibrary.iiif.presentation.properties.Homepage;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Metadata;
+import info.freelibrary.iiif.presentation.properties.PartOf;
 import info.freelibrary.iiif.presentation.properties.Rendering;
 import info.freelibrary.iiif.presentation.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.properties.Rights;
@@ -58,7 +59,7 @@ class Resource<T extends Resource<T>> {
 
     private Label myLabel;
 
-    private URI myPartOfLink;
+    private List<PartOf> myPartOfs;
 
     @JsonProperty(Constants.METADATA)
     private Metadata myMetadata;
@@ -570,37 +571,32 @@ class Resource<T extends Resource<T>> {
     }
 
     /**
-     * Gets the partOf link.
+     * Sets the partOfs for this resource.
      *
-     * @return The partOf link
-     */
-    @JsonGetter(Constants.PART_OF)
-    public URI getPartOfLink() {
-        return myPartOfLink;
-    }
-
-    /**
-     * Sets the partOf link.
-     *
-     * @param aPartOfLink A partOf link
-     * @return The resource
-     */
-    @JsonIgnore
-    public T setPartOfLink(final String aPartOfLink) {
-        myPartOfLink = URI.create(aPartOfLink);
-        return (T) this;
-    }
-
-    /**
-     * Sets the partOf link.
-     *
-     * @param aPartOfLink A partOf link
+     * @param aPartOfArray The partOfs to set for this resource
      * @return The resource
      */
     @JsonSetter(Constants.PART_OF)
-    public T setPartOfLink(final URI aPartOfLink) {
-        myPartOfLink = aPartOfLink;
+    public T setPartOfs(final PartOf... aPartOfArray) {
+        final List<PartOf> partOfs = getPartOfs();
+
+        partOfs.clear();
+        partOfs.addAll(Arrays.asList(aPartOfArray));
         return (T) this;
+    }
+
+    /**
+     * Gets a list of resource partOfs, initializing the list if this hasn't been done already.
+     *
+     * @return The resource's partOfs
+     */
+    @JsonGetter(Constants.PART_OF)
+    public List<PartOf> getPartOfs() {
+        if (myPartOfs == null) {
+            myPartOfs = new ArrayList<>();
+        }
+
+        return myPartOfs;
     }
 
     /**

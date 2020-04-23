@@ -1,0 +1,12 @@
+{
+  "partOf": [
+    {
+      "id": "https://example.org/iiif/1",
+      "type": "Manifest"
+    },
+    {
+      "id": "https://example.org/iiif/2",
+      "type": "Manifest"
+    }
+  ]
+}
