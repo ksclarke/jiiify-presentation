@@ -15,8 +15,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import info.freelibrary.iiif.presentation.Manifest;
 import info.freelibrary.iiif.presentation.utils.Constants;
+import info.freelibrary.iiif.presentation.utils.ResourceTypes;
 import info.freelibrary.iiif.presentation.utils.TestUtils;
 import info.freelibrary.util.StringUtils;
+
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.json.jackson.DatabindCodec;
 
@@ -60,7 +62,7 @@ public class PartOfTest {
      */
     @Test
     public final void testPartOfURIString() throws IOException {
-        myPartOf = new PartOf(TEST_URI_1, Constants.MANIFEST);
+        myPartOf = new PartOf(TEST_URI_1, ResourceTypes.MANIFEST);
         myPartOfFile = PART_OF_SIMPLE_ONE;
 
         myManifest.setPartOfs(myPartOf);
@@ -77,7 +79,7 @@ public class PartOfTest {
      */
     @Test
     public final void testPartOfStringString() throws IOException {
-        myPartOf = new PartOf(TEST_URI_1.toString(), Constants.MANIFEST);
+        myPartOf = new PartOf(TEST_URI_1.toString(), ResourceTypes.MANIFEST);
         myPartOfFile = PART_OF_SIMPLE_ONE;
 
         myManifest.setPartOfs(myPartOf);
@@ -94,7 +96,7 @@ public class PartOfTest {
      */
     @Test
     public final void testFullPartOf() throws IOException {
-        myPartOf = new PartOf(TEST_URI_1, Constants.MANIFEST);
+        myPartOf = new PartOf(TEST_URI_1, ResourceTypes.MANIFEST);
         myPartOf.setLabel(TEST_LABEL).setLanguages(ISO_639_2_NAHUATL, ISO_639_2_VIETNAMESE);
         myPartOfFile = PART_OF_FULL_ONE;
 
@@ -112,10 +114,10 @@ public class PartOfTest {
      */
     @Test
     public final void testMultiValues() throws IOException {
-        myPartOf = new PartOf(TEST_URI_1, Constants.MANIFEST);
+        myPartOf = new PartOf(TEST_URI_1, ResourceTypes.MANIFEST);
         myPartOfFile = PART_OF_SIMPLE_TWO;
 
-        myManifest.setPartOfs(myPartOf, new PartOf(TEST_URI_2, Constants.MANIFEST));
+        myManifest.setPartOfs(myPartOf, new PartOf(TEST_URI_2, ResourceTypes.MANIFEST));
 
         checkDeserialization();
         checkSerialization();
@@ -126,7 +128,7 @@ public class PartOfTest {
      */
     @Test
     public final void testSetID() {
-        myPartOf = new PartOf(TEST_URI_2, Constants.MANIFEST).setID(TEST_URI_1);
+        myPartOf = new PartOf(TEST_URI_2, ResourceTypes.MANIFEST).setID(TEST_URI_1);
         assertEquals(TEST_URI_1, myPartOf.getID());
     }
 
@@ -135,8 +137,8 @@ public class PartOfTest {
      */
     @Test
     public final void testSetType() {
-        myPartOf = new PartOf(TEST_URI_1, "Dataset").setType(Constants.MANIFEST);
-        assertEquals(Constants.MANIFEST, myPartOf.getType());
+        myPartOf = new PartOf(TEST_URI_1, ResourceTypes.DATASET).setType(ResourceTypes.MANIFEST);
+        assertEquals(ResourceTypes.MANIFEST, myPartOf.getType());
     }
 
     /**
@@ -144,7 +146,7 @@ public class PartOfTest {
      */
     @Test
     public final void testSetLabel() {
-        myPartOf = new PartOf(TEST_URI_1, Constants.MANIFEST).setLabel(TEST_LABEL);
+        myPartOf = new PartOf(TEST_URI_1, ResourceTypes.MANIFEST).setLabel(TEST_LABEL);
         assertEquals(TEST_LABEL, myPartOf.getLabel());
     }
 
@@ -153,7 +155,7 @@ public class PartOfTest {
      */
     @Test
     public final void testSetLanguage() {
-        myPartOf = new PartOf(TEST_URI_1, Constants.MANIFEST).setLanguages(ISO_639_2_NAHUATL,
+        myPartOf = new PartOf(TEST_URI_1, ResourceTypes.MANIFEST).setLanguages(ISO_639_2_NAHUATL,
                 ISO_639_2_VIETNAMESE);
         assertEquals(Arrays.asList(ISO_639_2_NAHUATL, ISO_639_2_VIETNAMESE), myPartOf.getLanguages());
     }
@@ -163,7 +165,7 @@ public class PartOfTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testSetLanguagesInvalid() {
-        new PartOf(TEST_URI_1, Constants.MANIFEST).setLanguages("???");
+        new PartOf(TEST_URI_1, ResourceTypes.MANIFEST).setLanguages("???");
     }
 
     /**

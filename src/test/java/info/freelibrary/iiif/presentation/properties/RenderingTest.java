@@ -15,8 +15,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import info.freelibrary.iiif.presentation.Manifest;
 import info.freelibrary.iiif.presentation.utils.Constants;
+import info.freelibrary.iiif.presentation.utils.ResourceTypes;
 import info.freelibrary.iiif.presentation.utils.TestUtils;
 import info.freelibrary.util.StringUtils;
+
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.json.jackson.DatabindCodec;
 
@@ -64,7 +66,7 @@ public class RenderingTest {
      */
     @Test
     public final void testRenderingURIStringLabel() throws IOException {
-        myRendering = new Rendering(TEST_URI_1, Constants.TEXT, TEST_LABEL_1);
+        myRendering = new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1);
         myRenderingFile = RENDERING_SIMPLE_ONE;
 
         myManifest.setRenderings(myRendering);
@@ -81,7 +83,7 @@ public class RenderingTest {
      */
     @Test
     public final void testRenderingStringStringString() throws IOException {
-        myRendering = new Rendering(TEST_URI_1.toString(), Constants.TEXT, TEST_LABEL_1.getString());
+        myRendering = new Rendering(TEST_URI_1.toString(), ResourceTypes.TEXT, TEST_LABEL_1.getString());
         myRenderingFile = RENDERING_SIMPLE_ONE;
 
         myManifest.setRenderings(myRendering);
@@ -98,7 +100,7 @@ public class RenderingTest {
      */
     @Test
     public final void testFullRendering() throws IOException {
-        myRendering = new Rendering(TEST_URI_1, Constants.TEXT, TEST_LABEL_1);
+        myRendering = new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1);
         myRendering.setFormat(TEST_FORMAT).setLanguages(ISO_639_1_WELSH, ISO_639_2_CHEROKEE);
         myRenderingFile = RENDERING_FULL_ONE;
 
@@ -116,10 +118,10 @@ public class RenderingTest {
      */
     @Test
     public final void testMultiValues() throws IOException {
-        myRendering = new Rendering(TEST_URI_1, Constants.TEXT, TEST_LABEL_1);
+        myRendering = new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1);
         myRenderingFile = RENDERING_SIMPLE_TWO;
 
-        myManifest.setRenderings(myRendering, new Rendering(TEST_URI_2, Constants.TEXT, TEST_LABEL_2));
+        myManifest.setRenderings(myRendering, new Rendering(TEST_URI_2, ResourceTypes.TEXT, TEST_LABEL_2));
 
         checkDeserialization();
         checkSerialization();
@@ -130,7 +132,7 @@ public class RenderingTest {
      */
     @Test
     public final void testSetID() {
-        myRendering = new Rendering(TEST_URI_2, Constants.TEXT, TEST_LABEL_1).setID(TEST_URI_1);
+        myRendering = new Rendering(TEST_URI_2, ResourceTypes.TEXT, TEST_LABEL_1).setID(TEST_URI_1);
         assertEquals(TEST_URI_1, myRendering.getID());
     }
 
@@ -139,8 +141,8 @@ public class RenderingTest {
      */
     @Test
     public final void testSetType() {
-        myRendering = new Rendering(TEST_URI_1, "Video", TEST_LABEL_1).setType(Constants.TEXT);
-        assertEquals(Constants.TEXT, myRendering.getType());
+        myRendering = new Rendering(TEST_URI_1, "Video", TEST_LABEL_1).setType(ResourceTypes.TEXT);
+        assertEquals(ResourceTypes.TEXT, myRendering.getType());
     }
 
     /**
@@ -148,7 +150,7 @@ public class RenderingTest {
      */
     @Test
     public final void testSetLabel() {
-        myRendering = new Rendering(TEST_URI_1, Constants.TEXT, TEST_LABEL_2).setLabel(TEST_LABEL_1);
+        myRendering = new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_2).setLabel(TEST_LABEL_1);
         assertEquals(TEST_LABEL_1, myRendering.getLabel());
     }
 
@@ -157,7 +159,7 @@ public class RenderingTest {
      */
     @Test
     public final void testSetFormat() {
-        myRendering = new Rendering(TEST_URI_1, Constants.TEXT, TEST_LABEL_1).setFormat(TEST_FORMAT);
+        myRendering = new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1).setFormat(TEST_FORMAT);
         assertEquals(TEST_FORMAT, myRendering.getFormat());
     }
 
@@ -166,7 +168,7 @@ public class RenderingTest {
      */
     @Test
     public final void testSetLanguage() {
-        myRendering = new Rendering(TEST_URI_1, Constants.TEXT, TEST_LABEL_1)
+        myRendering = new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1)
                 .setLanguages(ISO_639_1_WELSH, ISO_639_2_CHEROKEE);
         assertEquals(Arrays.asList(ISO_639_1_WELSH, ISO_639_2_CHEROKEE), myRendering.getLanguages());
     }
@@ -176,7 +178,7 @@ public class RenderingTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testSetLanguagesInvalid() {
-        new Rendering(TEST_URI_1, Constants.TEXT, TEST_LABEL_1).setLanguages("???");
+        new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1).setLanguages("???");
     }
 
     /**

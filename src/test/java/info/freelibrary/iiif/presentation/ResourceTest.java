@@ -29,6 +29,7 @@ import info.freelibrary.iiif.presentation.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.utils.Constants;
+import info.freelibrary.iiif.presentation.utils.ResourceTypes;
 
 import io.vertx.core.json.JsonObject;
 
@@ -76,7 +77,7 @@ public class ResourceTest extends AbstractTest {
         test.setThumbnail(new Thumbnail(ASDF_JPG, service));
         test.setRequiredStatement(new RequiredStatement(label, value));
         test.setRights(SILS_URL);
-        test.setHomepages(new Homepage(SILS_URL, Constants.TEXT, AAAA));
+        test.setHomepages(new Homepage(SILS_URL, ResourceTypes.TEXT, AAAA));
         test.setLogo(new Logo(ASDF_JPG, service));
         test.setBehaviors(ResourceBehavior.HIDDEN);
         test.setSeeAlso("http://www.unc.edu");
@@ -104,8 +105,8 @@ public class ResourceTest extends AbstractTest {
         test.setThumbnail(new Thumbnail("dddd.jpg", service).addImage("eeee.jpg", service)); // should be value too?
         test.setRequiredStatement(new RequiredStatement(myLorem.getWords(1), myLorem.getWords(1)));
         test.setRights(new Rights("http://ils.unc.edu/license1").addValue("http://ils.unc.edu/license2"));
-        test.setHomepages(new Homepage(SILS_URL, Constants.TEXT, AAAA),
-                new Homepage(EXAMPLE_URL, Constants.TEXT, BBBB));
+        test.setHomepages(new Homepage(SILS_URL, ResourceTypes.TEXT, AAAA),
+                new Homepage(EXAMPLE_URL, ResourceTypes.TEXT, BBBB));
         test.setLogo(new Logo("ffff.jpg", service).addImage("gggg.jpg", service));
         test.setBehaviors(ManifestBehavior.AUTOADVANCE);
         test.setSeeAlso(new SeeAlso("http://1.unc.edu").addValue("http://2.unc.edu"));
