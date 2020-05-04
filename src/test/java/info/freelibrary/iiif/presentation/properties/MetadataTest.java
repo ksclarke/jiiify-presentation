@@ -6,8 +6,8 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
+import info.freelibrary.iiif.presentation.Constants;
 import info.freelibrary.iiif.presentation.Manifest;
-import info.freelibrary.iiif.presentation.utils.Constants;
 
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;

@@ -13,7 +13,6 @@ import com.google.common.net.MediaType;
 
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
-import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
  * An image resource that's used in {@link ImageContent}.

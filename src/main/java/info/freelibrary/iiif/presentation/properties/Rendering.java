@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-import info.freelibrary.iiif.presentation.utils.Constants;
+import info.freelibrary.iiif.presentation.Constants;
 
 /**
  * A resource that is an alternative, non-IIIF representation of the resource that has the <code>rendering</code>

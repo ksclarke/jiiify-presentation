@@ -17,7 +17,6 @@ import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.NavDate;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.properties.behaviors.CanvasBehavior;
-import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
 
 /**

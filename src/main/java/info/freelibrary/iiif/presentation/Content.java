@@ -7,8 +7,6 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.iiif.presentation.utils.Constants;
-
 /**
  * A package-level content class that extends Resource and is extended by other public classes.
  *

@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.iiif.presentation.utils.Constants;
+import info.freelibrary.iiif.presentation.Constants;
 
 /**
  * A physical dimensions service that provides information useful for rulers, etc.

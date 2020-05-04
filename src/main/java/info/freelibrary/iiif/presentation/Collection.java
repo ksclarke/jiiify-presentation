@@ -16,7 +16,6 @@ import info.freelibrary.iiif.presentation.properties.NavDate;
 import info.freelibrary.iiif.presentation.properties.Summary;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.properties.behaviors.CollectionBehavior;
-import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.util.I18nRuntimeException;
 
 import io.vertx.core.json.Json;

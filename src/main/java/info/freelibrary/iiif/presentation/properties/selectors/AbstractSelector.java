@@ -3,7 +3,7 @@ package info.freelibrary.iiif.presentation.properties.selectors;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import info.freelibrary.iiif.presentation.utils.Constants;
+import info.freelibrary.iiif.presentation.Constants;
 
 /**
  * An abstract selector that other selectors can extend.

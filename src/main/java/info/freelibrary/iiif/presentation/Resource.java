@@ -30,7 +30,6 @@ import info.freelibrary.iiif.presentation.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.properties.Summary;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.services.Service;
-import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;

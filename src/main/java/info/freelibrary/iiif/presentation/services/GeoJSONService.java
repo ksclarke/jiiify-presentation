@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.iiif.presentation.utils.Constants;
+import info.freelibrary.iiif.presentation.Constants;
 
 /**
  * An external service that provides GeoJSON information.

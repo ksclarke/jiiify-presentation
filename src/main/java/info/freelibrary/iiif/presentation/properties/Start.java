@@ -10,8 +10,8 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import info.freelibrary.iiif.presentation.Constants;
 import info.freelibrary.iiif.presentation.properties.selectors.Selector;
-import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
  * A Canvas, or part of a Canvas, which the client should show on initialization for the resource that has the start

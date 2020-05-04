@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import info.freelibrary.iiif.presentation.utils.Constants;
+import info.freelibrary.iiif.presentation.Constants;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 

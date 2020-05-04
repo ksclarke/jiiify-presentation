@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
-import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
  * Other, non-image, resources that are associated with a {@link Canvas}.

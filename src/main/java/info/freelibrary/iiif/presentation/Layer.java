@@ -10,7 +10,6 @@ import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
-import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
  * An ordered list of annotation lists. Layers allow higher level groupings of annotations to be recorded. For

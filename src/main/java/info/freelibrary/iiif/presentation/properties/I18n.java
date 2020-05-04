@@ -17,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.common.collect.ImmutableMap;
 
-import info.freelibrary.iiif.presentation.utils.Constants;
+import info.freelibrary.iiif.presentation.Constants;
 import info.freelibrary.iiif.presentation.utils.I18nUtils;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.util.Logger;

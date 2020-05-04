@@ -3,7 +3,7 @@ package info.freelibrary.iiif.presentation.properties;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 
-import info.freelibrary.iiif.presentation.utils.Constants;
+import info.freelibrary.iiif.presentation.Constants;
 
 /**
  * A human readable internationalized value.

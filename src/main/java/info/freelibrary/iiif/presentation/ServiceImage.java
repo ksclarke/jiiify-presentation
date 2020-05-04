@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation;
 
-import static info.freelibrary.iiif.presentation.utils.Constants.BUNDLE_NAME;
+import static info.freelibrary.iiif.presentation.Constants.BUNDLE_NAME;
 
 import java.net.URI;
 import java.util.Objects;
@@ -19,7 +19,6 @@ import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.services.Service;
-import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.util.FileUtils;
 import info.freelibrary.util.Logger;

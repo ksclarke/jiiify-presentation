@@ -14,7 +14,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
-import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
  * The order of the views of the object. Multiple sequences are allowed to cover situations when there are multiple

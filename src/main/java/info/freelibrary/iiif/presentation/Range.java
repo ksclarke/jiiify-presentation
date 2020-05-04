@@ -13,7 +13,6 @@ import info.freelibrary.iiif.presentation.properties.NavDate;
 import info.freelibrary.iiif.presentation.properties.Start;
 import info.freelibrary.iiif.presentation.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.properties.behaviors.RangeBehavior;
-import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
  * An ordered list of canvases, and/or further ranges. Ranges allow canvases, or parts thereof, to be grouped together

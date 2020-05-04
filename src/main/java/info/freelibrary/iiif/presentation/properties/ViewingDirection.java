@@ -3,7 +3,7 @@ package info.freelibrary.iiif.presentation.properties;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-import info.freelibrary.iiif.presentation.utils.Constants;
+import info.freelibrary.iiif.presentation.Constants;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;

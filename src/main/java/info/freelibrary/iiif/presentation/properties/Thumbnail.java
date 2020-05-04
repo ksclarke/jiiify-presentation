@@ -6,8 +6,8 @@ import java.net.URI;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import info.freelibrary.iiif.presentation.Constants;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
-import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
  * A small image that depicts or pictorially represents the resource that the property is attached to, such as the

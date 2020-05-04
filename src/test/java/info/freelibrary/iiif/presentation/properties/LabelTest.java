@@ -9,8 +9,8 @@ import org.junit.Test;
 import com.thedeanda.lorem.LoremIpsum;
 
 import info.freelibrary.iiif.presentation.AbstractTest;
+import info.freelibrary.iiif.presentation.Constants;
 import info.freelibrary.iiif.presentation.Manifest;
-import info.freelibrary.iiif.presentation.utils.Constants;
 
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;

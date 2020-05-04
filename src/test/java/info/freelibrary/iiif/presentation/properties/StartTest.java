@@ -9,8 +9,8 @@ import com.thedeanda.lorem.Lorem;
 import com.thedeanda.lorem.LoremIpsum;
 
 import info.freelibrary.iiif.presentation.AbstractTest;
+import info.freelibrary.iiif.presentation.Constants;
 import info.freelibrary.iiif.presentation.properties.selectors.AudioContentSelector;
-import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.util.StringUtils;
 
 import io.vertx.core.json.JsonObject;

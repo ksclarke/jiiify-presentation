@@ -4,7 +4,7 @@ package info.freelibrary.iiif.presentation.properties;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import info.freelibrary.iiif.presentation.utils.Constants;
+import info.freelibrary.iiif.presentation.Constants;
 
 /**
  * A short textual summary intended to be conveyed to the user when the metadata entries for the resource are not
