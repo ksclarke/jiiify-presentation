@@ -15,6 +15,7 @@ import org.jsoup.parser.Parser;
 import org.jsoup.safety.Cleaner;
 import org.jsoup.safety.Whitelist;
 
+import info.freelibrary.iiif.presentation.Constants;
 import info.freelibrary.iiif.presentation.properties.I18n;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;

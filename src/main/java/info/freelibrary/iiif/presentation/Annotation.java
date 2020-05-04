@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.TimeMode;
 import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
-import info.freelibrary.iiif.presentation.utils.Constants;
 
 /**
  * Content resources and commentary are associated with a canvas via an annotation. This provides a single, coherent

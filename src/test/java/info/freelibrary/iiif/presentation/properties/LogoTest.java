@@ -12,8 +12,8 @@ import org.junit.Test;
 
 import com.google.common.net.MediaType;
 
+import info.freelibrary.iiif.presentation.Constants;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
-import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.iiif.presentation.utils.TestUtils;
 import info.freelibrary.util.StringUtils;
 

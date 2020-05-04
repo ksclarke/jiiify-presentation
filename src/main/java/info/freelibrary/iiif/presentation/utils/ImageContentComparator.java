@@ -4,6 +4,8 @@ package info.freelibrary.iiif.presentation.utils;
 import java.util.Comparator;
 import java.util.Objects;
 
+import info.freelibrary.iiif.presentation.Constants;
+
 /**
  * A comparator that returns the sort order of the {@code ImageContent} properties.
  */

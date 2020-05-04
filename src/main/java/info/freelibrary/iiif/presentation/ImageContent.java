@@ -22,7 +22,6 @@ import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.services.APIComplianceLevel;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
-import info.freelibrary.iiif.presentation.utils.Constants;
 import info.freelibrary.iiif.presentation.utils.ImageContentComparator;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.util.I18nRuntimeException;
