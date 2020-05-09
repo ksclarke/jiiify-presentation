@@ -7,34 +7,32 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.Metadata;
-import info.freelibrary.iiif.presentation.properties.NavDate;
 import info.freelibrary.iiif.presentation.properties.Summary;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.properties.behaviors.CollectionBehavior;
+import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.util.I18nRuntimeException;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 
 /**
- * An ordered list of manifests, and/or further collections. Collections allow easy advertising and browsing of the
- * manifests in a hierarchical structure, potentially with its own descriptive information. They can also provide
- * clients with a means to locate all of the manifests known to the publishing institution.
+ * An ordered list of manifests and/or collections. Collections allow easy advertising and browsing of the manifests
+ * in a hierarchical structure, potentially with its own descriptive information. They can also provide clients with a
+ * means to locate all of the manifests known to the publishing institution.
  */
-public class Collection extends Resource<Collection> {
-
-    private static final String TYPE = "sc:Collection";
+public class Collection extends NavigableResource<Collection> {
 
     private static final int REQ_ARG_COUNT = 3;
 
-    private NavDate myNavDate;
-
-    private List<Manifest> myManifests;
+    private List<Item> myItems;
 
     /**
      * Creates a IIIF presentation collection.
@@ -43,7 +41,7 @@ public class Collection extends Resource<Collection> {
      * @param aLabel A collection label in string form
      */
     public Collection(final String aID, final String aLabel) {
-        super(TYPE, aID, aLabel, REQ_ARG_COUNT);
+        super(ResourceTypes.COLLECTION, aID, aLabel, REQ_ARG_COUNT);
     }
 
     /**
@@ -53,7 +51,7 @@ public class Collection extends Resource<Collection> {
      * @param aLabel A collection label
      */
     public Collection(final URI aID, final Label aLabel) {
-        super(TYPE, aID, aLabel, REQ_ARG_COUNT);
+        super(ResourceTypes.COLLECTION, aID, aLabel, REQ_ARG_COUNT);
     }
 
     /**
@@ -67,7 +65,7 @@ public class Collection extends Resource<Collection> {
      */
     public Collection(final String aID, final String aLabel, final Metadata aMetadata, final String aSummary,
             final Thumbnail aThumbnail) {
-        super(TYPE, aID, aLabel, aMetadata, aSummary, aThumbnail, REQ_ARG_COUNT);
+        super(ResourceTypes.COLLECTION, aID, aLabel, aMetadata, aSummary, aThumbnail, REQ_ARG_COUNT);
     }
 
     /**
@@ -81,14 +79,14 @@ public class Collection extends Resource<Collection> {
      */
     public Collection(final URI aID, final Label aLabel, final Metadata aMetadata, final Summary aSummary,
             final Thumbnail aThumbnail) {
-        super(TYPE, aID, aLabel, aMetadata, aSummary, aThumbnail, REQ_ARG_COUNT);
+        super(ResourceTypes.COLLECTION, aID, aLabel, aMetadata, aSummary, aThumbnail, REQ_ARG_COUNT);
     }
 
     /**
      * Creates a IIIF presentation collection.
      */
     private Collection() {
-        super(TYPE);
+        super(ResourceTypes.COLLECTION);
     }
 
     @Override
@@ -103,31 +101,9 @@ public class Collection extends Resource<Collection> {
     }
 
     /**
-     * Sets a navigation date.
+     * Gets the context.
      *
-     * @param aNavDate The navigation date
-     * @return The collection
-     */
-    @JsonSetter(Constants.NAV_DATE)
-    public Collection setNavDate(final NavDate aNavDate) {
-        myNavDate = aNavDate;
-        return this;
-    }
-
-    /**
-     * Gets a navigation date.
-     *
-     * @return The navigation date
-     */
-    @JsonGetter(Constants.NAV_DATE)
-    public NavDate getNavDate() {
-        return myNavDate;
-    }
-
-    /**
-     * Gets the first manifest context.
-     *
-     * @return The manifest context
+     * @return The context
      */
     @JsonGetter(Constants.CONTEXT)
     public URI getContext() {
@@ -142,33 +118,33 @@ public class Collection extends Resource<Collection> {
     @JsonSetter(Constants.CONTEXT)
     private void setContext(final String aContext) {
         if (!Constants.CONTEXT_URI.equals(URI.create(aContext))) {
-            throw new I18nRuntimeException();
+            throw new I18nRuntimeException(MessageCodes.JPA_037, aContext);
         }
     }
 
     /**
-     * Gets the manifests associated with this collection.
+     * Gets the items associated with this collection.
      *
-     * @return The manifests associated with this collection
+     * @return The items associated with this collection
      */
-    @JsonGetter(Constants.MANIFESTS)
-    public List<Manifest> getManifests() {
-        if (myManifests == null) {
-            myManifests = new ArrayList<>();
+    @JsonGetter(Constants.ITEMS)
+    public List<Item> getItems() {
+        if (myItems == null) {
+            myItems = new ArrayList<>();
         }
 
-        return myManifests;
+        return myItems;
     }
 
     /**
-     * Sets the manifests associated with this collection. 544
+     * Sets the items associated with this collection.
      *
-     * @param aManifestList
-     * @return
+     * @param aItemList A list of manifests and/or collections
+     * @return This collection
      */
-    @JsonSetter(Constants.MANIFESTS)
-    public Collection setManifests(final List<Manifest> aManifestList) {
-        myManifests = aManifestList;
+    @JsonSetter(Constants.ITEMS)
+    public Collection setItems(final List<Item> aItemList) {
+        myItems = aItemList;
         return this;
     }
 
@@ -213,18 +189,49 @@ public class Collection extends Resource<Collection> {
     /**
      * The reference to a manifest that's included in a collection.
      */
-    public static class Manifest {
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonPropertyOrder({ Constants.TYPE, Constants.ID, Constants.LABEL, Constants.THUMBNAIL })
+    public static class Item {
 
-        private static final String TYPE = "sc:Manifest";
+        /**
+         * The type of collection item.
+         */
+        public enum Type {
+            Manifest(ResourceTypes.MANIFEST), Collection(ResourceTypes.COLLECTION);
+
+            /**
+             * Serialization value for Item.Type.
+             */
+            private String myValue;
+
+            /**
+             * Create a new Item.Type.
+             *
+             * @param aValue A value.
+             */
+            Type(final String aValue) {
+                myValue = aValue;
+            }
+
+            @Override
+            public String toString() {
+                return myValue;
+            }
+        }
 
         private URI myID;
 
+        private Type myType;
+
         private Label myLabel;
 
+        private Thumbnail myThumbnail;
+
         /**
-         * Create a new collection manifest.
+         * Create a new collection item.
          */
-        public Manifest() {
+        public Item(final Item.Type aType) {
+            myType = aType;
         }
 
         /**
@@ -232,37 +239,70 @@ public class Collection extends Resource<Collection> {
          *
          * @param aManifest A full manifest
          */
-        public Manifest(final info.freelibrary.iiif.presentation.Manifest aManifest) {
+        public Item(final Manifest aManifest) {
+            final Thumbnail thumbnail = aManifest.getThumbnail();
+
+            if (thumbnail != null) {
+                setThumbnail(thumbnail);
+            }
+
             setID(aManifest.getID());
+            setType(Item.Type.valueOf(ResourceTypes.MANIFEST));
             setLabel(aManifest.getLabel());
         }
 
         /**
-         * Create a new collection manifest from the supplied ID and label.
+         * Create a brief collection child from a full collection.
          *
-         * @param aID A manifest ID in string form
-         * @param aLabel A manifest label in string form
+         * @param aCollection A full collection
          */
-        public Manifest(final String aID, final String aLabel) {
+        public Item(final Collection aCollection) {
+            final Thumbnail thumbnail = aCollection.getThumbnail();
+
+            if (thumbnail != null) {
+                setThumbnail(thumbnail);
+            }
+
+            setID(aCollection.getID());
+            setType(Item.Type.valueOf(ResourceTypes.COLLECTION));
+            setLabel(aCollection.getLabel());
+        }
+
+        /**
+         * Create a new item from the supplied ID and label.
+         *
+         * @param aID An item ID in string form
+         * @param aLabel An item label in string form
+         */
+        public Item(final Item.Type aType, final String aID, final String aLabel) {
             setID(aID);
+            setType(aType);
             setLabel(aLabel);
         }
 
         /**
-         * Create a new collection manifest from the supplied ID and label.
+         * Create a new item from the supplied ID and label.
          *
-         * @param aID A manifest ID
-         * @param aLabel A manifest label
+         * @param aID An item ID
+         * @param aLabel An item label
          */
-        public Manifest(final URI aID, final Label aLabel) {
-            myID = aID;
-            myLabel = aLabel;
+        public Item(final Item.Type aType, final URI aID, final Label aLabel) {
+            setID(aID);
+            setType(aType);
+            setLabel(aLabel);
         }
 
         /**
-         * Gets the collection manifest ID.
+         * Allows Jackson to create a new item.
+         */
+        @SuppressWarnings("unused")
+        private Item() {
+        }
+
+        /**
+         * Gets the item ID.
          *
-         * @return The collection manifest ID
+         * @return The item ID
          */
         @JsonGetter(Constants.ID)
         public URI getID() {
@@ -270,43 +310,71 @@ public class Collection extends Resource<Collection> {
         }
 
         /**
-         * Sets the collection manifest ID.
+         * Sets the item ID.
          *
-         * @param aID A collection manifest ID
-         * @return The manifest
+         * @param aID An item ID
+         * @return The item
          */
         @JsonIgnore
-        public Manifest setID(final URI aID) {
+        public Item setID(final URI aID) {
             myID = aID;
             return this;
         }
 
         /**
-         * Sets the collection manifest ID.
+         * Sets the item ID.
          *
-         * @param aID A collection manifest ID in string form
-         * @return The manifest
+         * @param aID An item ID in string form
+         * @return The item
          */
         @JsonSetter(Constants.ID)
-        public Manifest setID(final String aID) {
+        public Item setID(final String aID) {
             myID = URI.create(aID);
             return this;
         }
 
         /**
-         * Gets the collection manifest type.
+         * Gets the item type.
          *
-         * @return The collection manifest type
+         * @return The item type
          */
         @JsonGetter(Constants.TYPE)
-        public String getType() {
-            return TYPE;
+        public Item.Type getType() {
+            return myType;
         }
 
         /**
-         * Gets the collection manifest label.
+         * Sets the type for this item.
          *
-         * @return The collection manifest label
+         * @return The item type
+         */
+        @JsonIgnore
+        public Item setType(final Item.Type aType) {
+            myType = aType;
+            return this;
+        }
+
+        /**
+         * Gets the item thumbnail.
+         */
+        @JsonGetter(Constants.THUMBNAIL)
+        public Thumbnail getThumbnail() {
+            return myThumbnail;
+        }
+
+        /**
+         * Sets the item thumbnail.
+         */
+        @JsonSetter(Constants.THUMBNAIL)
+        public Item setThumbnail(final Thumbnail aThumbnail) {
+            myThumbnail = aThumbnail;
+            return this;
+        }
+
+        /**
+         * Gets the item label.
+         *
+         * @return The item label
          */
         @JsonGetter(Constants.LABEL)
         public Label getLabel() {
@@ -314,36 +382,37 @@ public class Collection extends Resource<Collection> {
         }
 
         /**
-         * Sets the collection manifest label.
+         * Sets the item label.
          *
-         * @param aLabel The collection manifest label
-         * @return The manifest
+         * @param aLabel The item label
+         * @return The item
          */
         @JsonSetter(Constants.LABEL)
-        public Manifest setLabel(final Label aLabel) {
+        public Item setLabel(final Label aLabel) {
             myLabel = aLabel;
             return this;
         }
 
         /**
-         * Sets the collection manifest label.
+         * Sets the item label.
          *
-         * @param aLabel The collection manifest label in string form
-         * @return The manifest
+         * @param aLabel The item label in string form
+         * @return The item
          */
         @JsonIgnore
-        public Manifest setLabel(final String aLabel) {
+        public Item setLabel(final String aLabel) {
             myLabel = new Label(aLabel);
             return this;
         }
 
         /**
-         * Gives Jackson a way to "set" this, though it's a static string in this class.
+         * Allows Jackson to set the item type.
          *
-         * @return The collection manifest type
+         * @return The collection item type
          */
         @JsonSetter(Constants.TYPE)
-        private Manifest setType(final String aType) {
+        private Item setType(final String aType) {
+            myType = Type.valueOf(aType);
             return this;
         }
     }

@@ -18,14 +18,15 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.Metadata;
-import info.freelibrary.iiif.presentation.properties.NavDate;
-import info.freelibrary.iiif.presentation.properties.Start;
+import info.freelibrary.iiif.presentation.properties.StartCanvas;
 import info.freelibrary.iiif.presentation.properties.Summary;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.properties.behaviors.ManifestBehavior;
+import info.freelibrary.iiif.presentation.utils.ContextListComparator;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
-import info.freelibrary.util.I18nRuntimeException;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
@@ -36,21 +37,21 @@ import io.vertx.core.json.JsonObject;
  * descriptive information about the object or the intellectual work that it conveys. Each manifest describes how to
  * present a single object such as a book, a photograph, or a statue.
  */
-public class Manifest extends Resource<Manifest> {
+public class Manifest extends NavigableResource<Manifest> {
 
-    private static final String TYPE = "sc:Manifest";
+    private static final Logger LOGGER = LoggerFactory.getLogger(Manifest.class, Constants.BUNDLE_NAME);
 
     private static final int REQ_ARG_COUNT = 3;
 
     private final List<URI> myContexts = Stream.of(Constants.CONTEXT_URI).collect(Collectors.toList());
 
-    private final List<Sequence> mySequences = new ArrayList<>();
+    private final List<Canvas> myCanvases = new ArrayList<>();
 
-    private NavDate myNavDate;
+    private Optional<Range> myRange = Optional.empty();
+
+    private Optional<StartCanvas> myStartCanvas = Optional.empty();
 
     private ViewingDirection myViewingDirection;
-
-    private Optional<Start> myStart = Optional.empty();
 
     /**
      * Creates a IIIF presentation manifest.
@@ -60,7 +61,7 @@ public class Manifest extends Resource<Manifest> {
      * @throws IllegalArgumentException If the supplied ID is not a valid URI
      */
     public Manifest(final String aID, final String aLabel) {
-        super(TYPE, aID, aLabel, REQ_ARG_COUNT);
+        super(ResourceTypes.MANIFEST, aID, aLabel, REQ_ARG_COUNT);
     }
 
     /**
@@ -70,7 +71,7 @@ public class Manifest extends Resource<Manifest> {
      * @param aLabel A manifest label
      */
     public Manifest(final URI aID, final Label aLabel) {
-        super(TYPE, aID, aLabel, REQ_ARG_COUNT);
+        super(ResourceTypes.MANIFEST, aID, aLabel, REQ_ARG_COUNT);
     }
 
     /**
@@ -85,7 +86,7 @@ public class Manifest extends Resource<Manifest> {
      */
     public Manifest(final String aID, final String aLabel, final Metadata aMetadata, final String aSummary,
             final Thumbnail aThumbnail) throws URISyntaxException {
-        super(TYPE, aID, aLabel, aMetadata, aSummary, aThumbnail, REQ_ARG_COUNT);
+        super(ResourceTypes.MANIFEST, aID, aLabel, aMetadata, aSummary, aThumbnail, REQ_ARG_COUNT);
     }
 
     /**
@@ -99,14 +100,14 @@ public class Manifest extends Resource<Manifest> {
      */
     public Manifest(final URI aID, final Label aLabel, final Metadata aMetadata, final Summary aSummary,
             final Thumbnail aThumbnail) {
-        super(TYPE, aID, aLabel, aMetadata, aSummary, aThumbnail, REQ_ARG_COUNT);
+        super(ResourceTypes.MANIFEST, aID, aLabel, aMetadata, aSummary, aThumbnail, REQ_ARG_COUNT);
     }
 
     /**
      * A private constructor used for serialization purposes.
      */
     private Manifest() {
-        super(TYPE);
+        super(ResourceTypes.MANIFEST);
     }
 
     @Override
@@ -121,7 +122,8 @@ public class Manifest extends Resource<Manifest> {
     }
 
     /**
-     * Gets the manifest context.
+     * Gets an unmodifiable list of manifest contexts. To remove contexts, use {@link Manifest#removeContext(URI)
+     * removeContext} or {@link Manifest#clearContexts() clearContexts()}.
      *
      * @return The manifest context
      */
@@ -130,12 +132,48 @@ public class Manifest extends Resource<Manifest> {
         if (myContexts.isEmpty()) {
             return null;
         } else {
-            return myContexts;
+            return Collections.unmodifiableList(myContexts);
         }
     }
 
     /**
-     * Gets the first manifest context.
+     * Clears all contexts, but the required one.
+     */
+    public Manifest clearContexts() {
+        myContexts.clear();
+        myContexts.add(Constants.CONTEXT_URI);
+
+        return this;
+    }
+
+    /**
+     * Tests whether the manifest contains the supplied context.
+     *
+     * @param aContextURI A context to check
+     * @return True if the manifest contains the supplied context; else, false
+     */
+    public boolean containsContext(final URI aContextURI) {
+        return myContexts.contains(aContextURI);
+    }
+
+    /**
+     * Remove the supplied context. This will not remove the default required context though. If that's supplied, an
+     * {@link UnsupportedOperationException} will be thrown.
+     *
+     * @param aContextURI A context to be removed from the contexts list
+     * @return True if the context was removed; else, false
+     * @throws UnsupportedOperationException If the required context is supplied to be removed
+     */
+    public boolean removeContext(final URI aContextURI) throws UnsupportedOperationException {
+        if (Constants.CONTEXT_URI.equals(aContextURI)) {
+            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_039, Constants.CONTEXT_URI));
+        }
+
+        return myContexts.remove(aContextURI);
+    }
+
+    /**
+     * Gets the primary manifest context.
      *
      * @return The manifest context
      */
@@ -150,8 +188,18 @@ public class Manifest extends Resource<Manifest> {
      * @param aContextArray Manifest context URIs(s)
      * @return The manifest
      */
-    public Manifest addContext(final URI... aContextArray) {
-        Collections.addAll(myContexts, aContextArray);
+    public Manifest addContexts(final URI... aContextArray) {
+        Objects.requireNonNull(aContextArray, MessageCodes.JPA_007);
+
+        for (final URI uri : aContextArray) {
+            Objects.requireNonNull(uri, MessageCodes.JPA_007);
+
+            if (!Constants.CONTEXT_URI.equals(uri)) {
+                myContexts.add(uri);
+            }
+        }
+
+        Collections.sort(myContexts, new ContextListComparator());
         return this;
     }
 
@@ -161,38 +209,19 @@ public class Manifest extends Resource<Manifest> {
      * @param aContextArray Manifest context URI(s) in string form
      * @return The manifest
      */
-    public Manifest addContext(final String... aContextArray) {
+    public Manifest addContexts(final String... aContextArray) {
         Objects.requireNonNull(aContextArray, MessageCodes.JPA_007);
 
         for (final String uri : aContextArray) {
-            Objects.requireNonNull(aContextArray, MessageCodes.JPA_007);
+            Objects.requireNonNull(uri, MessageCodes.JPA_007);
 
-            myContexts.add(URI.create(uri));
+            if (!Constants.CONTEXT_URI.toString().equals(uri)) {
+                myContexts.add(URI.create(uri));
+            }
         }
 
+        Collections.sort(myContexts, new ContextListComparator());
         return this;
-    }
-
-    /**
-     * Sets a navigation date.
-     *
-     * @param aNavDate The navigation date
-     * @return The manifest
-     */
-    @JsonSetter(Constants.NAV_DATE)
-    public Manifest setNavDate(final NavDate aNavDate) {
-        myNavDate = aNavDate;
-        return this;
-    }
-
-    /**
-     * Gets a navigation date.
-     *
-     * @return The navigation date
-     */
-    @JsonGetter(Constants.NAV_DATE)
-    public NavDate getNavDate() {
-        return myNavDate;
     }
 
     /**
@@ -218,18 +247,18 @@ public class Manifest extends Resource<Manifest> {
     }
 
     /**
-     * Adds one or more sequences to the manifest.
+     * Adds one or more canvases to the manifest.
      *
-     * @param aSequenceArray An array of sequences to add to the manifest
+     * @param aCanvasArray An array of canvases to add to the manifest
      * @return The manifest
      */
-    public Manifest addSequence(final Sequence... aSequenceArray) {
-        Objects.requireNonNull(aSequenceArray, MessageCodes.JPA_008);
+    public Manifest addCanvas(final Canvas... aCanvasArray) {
+        Objects.requireNonNull(aCanvasArray, MessageCodes.JPA_008);
 
-        for (final Sequence sequence : aSequenceArray) {
-            Objects.requireNonNull(sequence, MessageCodes.JPA_008);
+        for (final Canvas canvas : aCanvasArray) {
+            Objects.requireNonNull(canvas, MessageCodes.JPA_008);
 
-            if (!mySequences.add(sequence)) {
+            if (!myCanvases.add(canvas)) {
                 throw new UnsupportedOperationException();
             }
         }
@@ -238,47 +267,69 @@ public class Manifest extends Resource<Manifest> {
     }
 
     /**
-     * Gets the manifest's sequences.
+     * Gets the manifest's canvases.
      *
-     * @return The manifest's sequences
+     * @return The manifest's canvases
      */
-    @JsonGetter(Constants.SEQUENCES)
-    public List<Sequence> getSequences() {
-        return mySequences;
+    @JsonGetter(Constants.ITEMS)
+    public List<Canvas> getCanvases() {
+        return myCanvases;
     }
 
     /**
-     * Sets the manifest sequences to the supplied one(s).
+     * Sets the manifest canvases to the supplied one(s).
      *
-     * @param aSequenceArray An array of sequences to set
+     * @param aCanvasArray An array of canvases to set
      * @return The manifest
      */
-    @JsonGetter(Constants.SEQUENCES)
-    public Manifest setSequences(final Sequence... aSequenceArray) {
-        mySequences.clear();
-        return addSequence(aSequenceArray);
+    @JsonGetter(Constants.ITEMS)
+    public Manifest setCanvases(final Canvas... aCanvasArray) {
+        myCanvases.clear();
+        return addCanvas(aCanvasArray);
     }
 
     /**
-     * Sets the optional start.
+     * Sets the optional start canvas.
      *
-     * @param aStart A start
-     * @return The range
+     * @param aStartCanvas A start canvas
+     * @return The manifest
      */
     @JsonSetter(Constants.START)
-    public Manifest setStart(final Start aStart) {
-        myStart = Optional.ofNullable(aStart);
+    public Manifest setStartCanvas(final StartCanvas aStartCanvas) {
+        myStartCanvas = Optional.ofNullable(aStartCanvas);
         return this;
     }
 
     /**
-     * Gets the optional start.
+     * Gets the optional start canvas.
      *
-     * @return The optional start
+     * @return The optional start canvas
      */
     @JsonGetter(Constants.START)
-    public Optional<Start> getStart() {
-        return myStart;
+    public Optional<StartCanvas> getStartCanvas() {
+        return myStartCanvas;
+    }
+
+    /**
+     * Gets the manifest's range.
+     *
+     * @return The manifest's range
+     */
+    @JsonGetter(Constants.STRUCTURES)
+    public Optional<Range> getRange() {
+        return myRange;
+    }
+
+    /**
+     * Sets the manifest's range.
+     *
+     * @param aRange A range to set in the manifest
+     * @return The manifest
+     */
+    @JsonSetter(Constants.STRUCTURES)
+    public Manifest setRange(final Range aRange) {
+        myRange = Optional.ofNullable(aRange);
+        return this;
     }
 
     /**
@@ -286,13 +337,11 @@ public class Manifest extends Resource<Manifest> {
      *
      * @return A JsonObject of the Manifest
      */
-    @JsonIgnore
     public JsonObject toJSON() {
         return JsonObject.mapFrom(this);
     }
 
     @Override
-    @JsonIgnore
     public String toString() {
         return toJSON().encodePrettily();
     }
@@ -326,9 +375,41 @@ public class Manifest extends Resource<Manifest> {
      */
     @JsonSetter(Constants.CONTEXT)
     private void setContext(final String aContext) {
-        if (!Constants.CONTEXT_URI.equals(URI.create(aContext))) {
-            throw new I18nRuntimeException();
+        setContexts(List.of(aContext));
+    }
+
+    /**
+     * Method used internally to set context from JSON.
+     *
+     * @param aContext A manifest context in string form
+     */
+    @JsonSetter(Constants.CONTEXT)
+    private void setContexts(final List<String> aContextList) {
+        final List<URI> contextList = new ArrayList<>();
+        final List<Integer> indices = new ArrayList<>();
+
+        for (int index = 0; index < aContextList.size(); index++) {
+            final URI context = URI.create(aContextList.get(index));
+
+            if (Constants.CONTEXT_URI.equals(context)) {
+                indices.add(index); // We may have more than one required context in supplied list
+
+                if (indices.size() == 1) { // Only keep one if this is the case
+                    contextList.add(context);
+                }
+            } else {
+                contextList.add(context);
+            }
         }
+
+        // Remove required context; we'll add it back at the end
+        if (indices.size() > 0) {
+            contextList.remove(indices.get(0).intValue());
+        }
+
+        myContexts.clear();
+        myContexts.addAll(contextList);
+        myContexts.add(Constants.CONTEXT_URI); // Add required context at end
     }
 
     /**

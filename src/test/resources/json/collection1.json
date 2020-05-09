@@ -2,13 +2,13 @@
   "@context" : "http://iiif.io/api/presentation/3/context.json",
   "label" : { "none": ["label-a"]},
   "id" : "ID-a",
-  "type" : "sc:Collection",
-  "manifests" : [ {
-    "type" : "sc:Manifest",
+  "type" : "Collection",
+  "items" : [ {
+    "type" : "Manifest",
     "id" : "http://iiif.library.ucla.edu/asdf1234/manifest",
     "label" : { "none" : ["A placeholder fake manifest: 1"]}
   }, {
-    "type" : "sc:Manifest",
+    "type" : "Manifest",
     "id" : "http://iiif.library.ucla.edu/1234asdf/manifest",
     "label" : { "none" : ["A placeholder fake manifest: 2"]}
   } ]

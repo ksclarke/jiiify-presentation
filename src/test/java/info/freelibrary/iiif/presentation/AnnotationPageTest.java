@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.net.URI;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.properties.behaviors.CanvasBehavior;
@@ -14,24 +15,29 @@ import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
 /**
  * An annotation list for testing.
  */
-public class AnnotationListTest {
+public class AnnotationPageTest extends AbstractTest {
 
-    private static final URI ID = URI.create("http://example.org/id");
+    private String myID;
 
-    /**
-     * Tests constructing an annotation list.
-     */
-    @Test
-    public void testAnnotationListString() {
-        assertEquals(ID.toString(), new AnnotationList(ID.toString()).getID().toString());
+    @Before
+    public void setUp() {
+        myID = LOREM_IPSUM.getUrl();
     }
 
     /**
      * Tests constructing an annotation list.
      */
     @Test
-    public void testAnnotationListURI() {
-        assertEquals(ID, new AnnotationList(ID).getID());
+    public void testAnnotationPageStringId() {
+        assertEquals(myID, new AnnotationPage(myID).getID().toString());
+    }
+
+    /**
+     * Tests constructing an annotation list.
+     */
+    @Test
+    public void testAnnotationPageUriId() {
+        assertEquals(URI.create(myID), new AnnotationPage(URI.create(myID)).getID());
     }
 
     /**
@@ -39,9 +45,7 @@ public class AnnotationListTest {
      */
     @Test
     public final void testSetBehaviors() {
-        final AnnotationList list = new AnnotationList(ID);
-
-        assertEquals(1, list.setBehaviors(ResourceBehavior.HIDDEN).getBehaviors().size());
+        assertEquals(1, new AnnotationPage(myID).setBehaviors(ResourceBehavior.HIDDEN).getBehaviors().size());
     }
 
     /**
@@ -49,9 +53,7 @@ public class AnnotationListTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testSetDisallowedBehaviors() {
-        final AnnotationList list = new AnnotationList(ID);
-
-        list.setBehaviors(ManifestBehavior.AUTOADVANCE);
+        new AnnotationPage(myID).setBehaviors(ManifestBehavior.AUTOADVANCE);
     }
 
     /**
@@ -59,9 +61,7 @@ public class AnnotationListTest {
      */
     @Test
     public final void testAddBehaviors() {
-        final AnnotationList list = new AnnotationList(ID);
-
-        assertEquals(1, list.addBehaviors(ResourceBehavior.HIDDEN).getBehaviors().size());
+        assertEquals(1, new AnnotationPage(myID).addBehaviors(ResourceBehavior.HIDDEN).getBehaviors().size());
     }
 
     /**
@@ -69,9 +69,7 @@ public class AnnotationListTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testAddDisallowedBehaviors() {
-        final AnnotationList list = new AnnotationList(ID);
-
-        list.addBehaviors(ManifestBehavior.CONTINUOUS, CanvasBehavior.AUTOADVANCE);
+        new AnnotationPage(myID).addBehaviors(ManifestBehavior.CONTINUOUS, CanvasBehavior.AUTOADVANCE);
     }
 
 }

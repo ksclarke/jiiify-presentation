@@ -1,0 +1,20 @@
+{
+    "type": "Range",
+    "id": "MY_RANGE_ID",
+    "label": {
+        "none": [
+            "My range label"
+        ]
+    },
+    "items": [
+        {
+            "type": "Range",
+            "id": "MY_SUBRANGE_ID",
+            "label": {
+                "none": [
+                    "My subrange label"
+                ]
+            }
+        }
+    ]
+}

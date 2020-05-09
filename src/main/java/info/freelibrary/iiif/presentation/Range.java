@@ -2,17 +2,26 @@
 package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Label;
-import info.freelibrary.iiif.presentation.properties.NavDate;
-import info.freelibrary.iiif.presentation.properties.Start;
+import info.freelibrary.iiif.presentation.properties.StartSelector;
 import info.freelibrary.iiif.presentation.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.properties.behaviors.RangeBehavior;
+import info.freelibrary.iiif.presentation.utils.MessageCodes;
+import info.freelibrary.util.I18nRuntimeException;
+
+import io.vertx.core.json.Json;
+import io.vertx.core.json.JsonObject;
 
 /**
  * An ordered list of canvases, and/or further ranges. Ranges allow canvases, or parts thereof, to be grouped together
@@ -20,17 +29,15 @@ import info.freelibrary.iiif.presentation.properties.behaviors.RangeBehavior;
  * non-content-bearing pages, the table of contents or similar. Equally, physical features might be important such as
  * quires or gatherings, sections that have been added later and so forth.
  */
-public class Range extends Resource<Range> {
-
-    private static final String TYPE = "sc:Range";
+public class Range extends NavigableResource<Range> {
 
     private static final int REQ_ARG_COUNT = 3;
 
+    private final List<Item> myItems = new ArrayList<>();
+
+    private Optional<StartSelector> myStartSelector = Optional.empty();
+
     private ViewingDirection myViewingDirection;
-
-    private Optional<Start> myStart = Optional.empty();
-
-    private NavDate myNavDate;
 
     /**
      * Creates a IIIF presentation range.
@@ -39,7 +46,7 @@ public class Range extends Resource<Range> {
      * @param aLabel A descriptive label, in string form, for the range
      */
     public Range(final String aID, final String aLabel) {
-        super(TYPE, aID, aLabel, REQ_ARG_COUNT);
+        super(ResourceTypes.RANGE, aID, aLabel, REQ_ARG_COUNT);
     }
 
     /**
@@ -49,7 +56,14 @@ public class Range extends Resource<Range> {
      * @param aLabel A descriptive label for the range
      */
     public Range(final URI aID, final Label aLabel) {
-        super(TYPE, aID, aLabel, REQ_ARG_COUNT);
+        super(ResourceTypes.RANGE, aID, aLabel, REQ_ARG_COUNT);
+    }
+
+    /**
+     * Allows Jackson to create a new range during deserialization.
+     */
+    private Range() {
+        super(ResourceTypes.RANGE);
     }
 
     @Override
@@ -64,47 +78,25 @@ public class Range extends Resource<Range> {
     }
 
     /**
-     * Sets the optional start.
+     * Sets the optional start selector.
      *
-     * @param aStart A start
+     * @param aStartSelector A start selector
      * @return The range
      */
     @JsonSetter(Constants.START)
-    public Range setStart(final Start aStart) {
-        myStart = Optional.ofNullable(aStart);
+    public Range setStartSelector(final StartSelector aStartSelector) {
+        myStartSelector = Optional.ofNullable(aStartSelector);
         return this;
     }
 
     /**
-     * Gets the optional start.
+     * Gets the optional start selector.
      *
-     * @return The optional start
+     * @return The optional start selector
      */
     @JsonGetter(Constants.START)
-    public Optional<Start> getStart() {
-        return myStart;
-    }
-
-    /**
-     * Sets a navigation date.
-     *
-     * @param aNavDate The navigation date
-     * @return The range
-     */
-    @JsonSetter(Constants.NAV_DATE)
-    public Range setNavDate(final NavDate aNavDate) {
-        myNavDate = aNavDate;
-        return this;
-    }
-
-    /**
-     * Gets a navigation date.
-     *
-     * @return The navigation date
-     */
-    @JsonGetter(Constants.NAV_DATE)
-    public NavDate getNavDate() {
-        return myNavDate;
+    public Optional<StartSelector> getStartSelector() {
+        return myStartSelector;
     }
 
     /**
@@ -129,4 +121,180 @@ public class Range extends Resource<Range> {
         return myViewingDirection;
     }
 
+    /**
+     * Gets a list of range resources.
+     *
+     * @return A list of range resources
+     */
+    @JsonGetter(Constants.ITEMS)
+    public List<Item> getItems() {
+        return myItems;
+    }
+
+    /**
+     * Sets the range's items.
+     *
+     * @param aItemList A list of items
+     * @return This range
+     */
+    @JsonSetter(Constants.ITEMS)
+    public Range setItems(final List<Item> aItemList) {
+        myItems.clear();
+        myItems.addAll(aItemList);
+        return this;
+    }
+
+    /**
+     * Clears the currently set items from this range.
+     */
+    public Range clearItems() {
+        myItems.clear();
+        return this;
+    }
+
+    /**
+     * Returns a JsonObject of the Range.
+     *
+     * @return A JSON representation of the range
+     */
+    public JsonObject toJSON() {
+        return JsonObject.mapFrom(this);
+    }
+
+    @Override
+    public String toString() {
+        return toJSON().encode();
+    }
+
+    /**
+     * Returns a Range from its JSON representation.
+     *
+     * @param aJsonObject A range in JSON form
+     * @return The range
+     */
+    @JsonIgnore
+    public static Range fromJSON(final JsonObject aJsonObject) {
+        return Json.decodeValue(aJsonObject.toString(), Range.class);
+    }
+
+    /**
+     * Returns a Range from its JSON representation.
+     *
+     * @param aJsonString A range in string form
+     * @return The range
+     */
+    @JsonIgnore
+    public static Range fromString(final String aJsonString) {
+        return fromJSON(new JsonObject(aJsonString));
+    }
+
+    /**
+     * A wrapper for the types of resources that can be put into a range's items: Canvas, Range, and SpecificResource.
+     */
+    @JsonDeserialize(using = RangeItemDeserializer.class)
+    public static class Item {
+
+        private Canvas myCanvas;
+
+        private Range myRange;
+
+        private SpecificResource mySpecificResource;
+
+        /**
+         * Creates a new range item from a canvas. The range item represents a reference to the canvas rather than an
+         * embedded canvas.
+         *
+         * @param aCanvas A canvas to use as a range item
+         */
+        public Item(final Canvas aCanvas) {
+            this(aCanvas, false);
+        }
+
+        /**
+         * Creates a new range item from a canvas; the canvas is either embedded or referenced depending on the
+         * boolean flag passed to the constructor.
+         *
+         * @param aCanvas A canvas to use as a range item
+         * @param aEmbeddedCanvas Whether a canvas should be embedded or a reference to it created
+         */
+        public Item(final Canvas aCanvas, final boolean aEmbeddedCanvas) {
+            if (aEmbeddedCanvas) {
+                myCanvas = aCanvas;
+            } else {
+                myCanvas = new Canvas(aCanvas.getID());
+            }
+        }
+
+        /**
+         * Creates a new range item from another range.
+         *
+         * @param aRange
+         */
+        public Item(final Range aRange) {
+            myRange = aRange;
+        }
+
+        /**
+         * Creates a new range item from a specific resource
+         *
+         * @param aSpecificResource
+         */
+        public Item(final SpecificResource aSpecificResource) {
+            mySpecificResource = aSpecificResource;
+        }
+
+        /**
+         * Gets the ID from the resource wrapped by this item.
+         *
+         * @return A resource ID
+         */
+        @JsonIgnore
+        public URI getID() {
+            if (mySpecificResource != null) {
+                return mySpecificResource.getID();
+            } else if (myCanvas != null) {
+                return myCanvas.getID();
+            } else if (myRange != null) {
+                return myRange.getID();
+            } else {
+                throw new I18nRuntimeException(Constants.BUNDLE_NAME, MessageCodes.JPA_040);
+            }
+        }
+
+        /**
+         * Gets the type of the resource wrapped by this item.
+         *
+         * @return The resource type
+         */
+        @JsonIgnore
+        public String getType() {
+            if (mySpecificResource != null) {
+                return mySpecificResource.getType();
+            } else if (myCanvas != null) {
+                return myCanvas.getType();
+            } else if (myRange != null) {
+                return myRange.getType();
+            } else {
+                throw new I18nRuntimeException(Constants.BUNDLE_NAME, MessageCodes.JPA_040);
+            }
+        }
+
+        /**
+         * Gets the resource wrapped by this item.
+         *
+         * @return The item's resource
+         */
+        @JsonValue
+        public Object getResource() {
+            if (mySpecificResource != null) {
+                return mySpecificResource;
+            } else if (myCanvas != null) {
+                return myCanvas;
+            } else if (myRange != null) {
+                return myRange;
+            } else {
+                throw new I18nRuntimeException(Constants.BUNDLE_NAME, MessageCodes.JPA_040);
+            }
+        }
+    }
 }

@@ -1,5 +1,5 @@
 {
-    "type":"sc:Annotation",
+    "type":"Annotation",
     "id": "http://example.org/id",
     "timeMode": "trim"
 }

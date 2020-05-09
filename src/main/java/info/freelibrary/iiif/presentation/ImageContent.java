@@ -30,13 +30,11 @@ import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.StringUtils;
 
 /**
- * An image content that is associated with a {@link Canvas}.
+ * An annotation that places image resources on a Canvas.
  */
 @JsonPropertyOrder({ Constants.TYPE, Constants.LABEL, Constants.ID, Constants.MOTIVATION, Constants.ON,
     Constants.RESOURCE, Constants.OA_CHOICE, Constants.ITEM })
 public class ImageContent extends Content<ImageContent> {
-
-    private static final String TYPE = "oa:Annotation";
 
     private static final String MOTIVATION = "sc:painting";
 
@@ -55,7 +53,7 @@ public class ImageContent extends Content<ImageContent> {
      * @param aCanvas A canvas for the image content
      */
     public ImageContent(final String aID, final Canvas aCanvas) {
-        super(TYPE, aID, aCanvas);
+        super(ResourceTypes.ANNOTATION, aID, aCanvas);
     }
 
     /**
@@ -65,14 +63,14 @@ public class ImageContent extends Content<ImageContent> {
      * @param aCanvas A canvas for the image content
      */
     public ImageContent(final URI aID, final Canvas aCanvas) {
-        super(TYPE, aID, aCanvas);
+        super(ResourceTypes.ANNOTATION, aID, aCanvas);
     }
 
     /**
      * Creates image content.
      */
     private ImageContent() {
-        super(TYPE);
+        super(ResourceTypes.ANNOTATION);
     }
 
     /**
@@ -93,7 +91,7 @@ public class ImageContent extends Content<ImageContent> {
     @JsonSetter(Constants.MOTIVATION)
     private void setMotivation(final String aMotivation) {
         if (!MOTIVATION.equals(aMotivation)) {
-            throw new I18nRuntimeException();
+            throw new I18nRuntimeException(MessageCodes.JPA_038, MOTIVATION);
         }
     }
 

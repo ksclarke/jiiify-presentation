@@ -2,11 +2,13 @@
 package info.freelibrary.iiif.presentation;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URLDecoder;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,8 +42,6 @@ public class ManifestTest extends AbstractTest {
 
     private static final String MANIFEST_URI = SERVER + MANIFEST_ID + "/manifest";
 
-    private static final String SEQUENCE_URI = SERVER + MANIFEST_ID + "/sequence/sequence-0";
-
     private static final String THUMBNAIL_PATH = "/0,1022,6132,6132/150,150/0/default.jpg";
 
     private static final String MANIFEST_THUMBNAIL_URI = SERVER + "ark:%2F21198%2Fz1d79t3q" + THUMBNAIL_PATH;
@@ -74,7 +74,6 @@ public class ManifestTest extends AbstractTest {
         final List<String[]> firstCanvas = reader1.readAll();
         final List<String[]> secondCanvas = reader2.readAll();
         final Metadata metadata = new Metadata();
-        final Sequence sequence = new Sequence();
 
         reader1.close();
         reader2.close();
@@ -87,17 +86,17 @@ public class ManifestTest extends AbstractTest {
         myManifest.setMetadata(metadata);
         myManifest.setLogo(LOGO_URI);
         myManifest.setThumbnail(MANIFEST_THUMBNAIL_URI);
-        myManifest.setSequences(sequence);
-
-        sequence.setID(SEQUENCE_URI).setLabel(URLDecoder.decode(MANIFEST_ID, StandardCharsets.UTF_8.name()));
 
         final String canvas1ID = SERVER + MANIFEST_ID + "/canvas/canvas-1";
         final String canvas1Label = "GeoNF-frg68a_001r_K-64-001";
         final String canvas1Thumb = SERVER + "ark:%2F21198%2Fz10v8vhm" + THUMBNAIL_PATH;
         final Canvas canvas1 = new Canvas(canvas1ID, canvas1Label, WIDTH, HEIGHT).setThumbnail(canvas1Thumb);
         final ImageContent content1 = new ImageContent(SERVER + MANIFEST_ID + "/imageanno/imageanno-1", canvas1);
+        final AnnotationPage page1 = new AnnotationPage(SERVER + MANIFEST_ID + "/pageanno/pageanno-1");
+        final AnnotationPage page2 = new AnnotationPage(SERVER + MANIFEST_ID + "/pageanno/pageanno-2");
 
-        canvas1.addImageContent(content1);
+        canvas1.addPage(page1.addImageContent(content1));
+        myManifest.addCanvas(canvas1);
 
         for (final String[] values : firstCanvas) {
             final String id = SERVER + values[1] + THUMBNAIL_PATH;
@@ -117,7 +116,8 @@ public class ManifestTest extends AbstractTest {
         final Canvas canvas2 = new Canvas(canvas2ID, canvas2Label, WIDTH, HEIGHT).setThumbnail(canvas2Thumb);
         final ImageContent content2 = new ImageContent(SERVER + MANIFEST_ID + "/imageanno/imageanno-2", canvas2);
 
-        canvas2.addImageContent(content2);
+        canvas2.addPage(page2.addImageContent(content2));
+        myManifest.addCanvas(canvas2);
 
         for (final String[] values : secondCanvas) {
             final String id = SERVER + values[1] + THUMBNAIL_PATH;
@@ -131,8 +131,58 @@ public class ManifestTest extends AbstractTest {
             }
         }
 
-        sequence.addCanvas(canvas1, canvas2);
         myVertx = Vertx.factory.vertx();
+    }
+
+    /**
+     * Tests clearing the manifests.
+     */
+    @Test
+    public void testClearManifests() {
+        assertEquals(1, myManifest.getContexts().size());
+        myManifest.addContexts(LOREM_IPSUM.getUrl(), LOREM_IPSUM.getUrl());
+        assertEquals(3, myManifest.getContexts().size());
+        assertEquals(1, myManifest.clearContexts().getContexts().size());
+    }
+
+    /**
+     * Tests adding a context URI.
+     */
+    @Test
+    public void testAddUriContexts() {
+        assertEquals(1, myManifest.getContexts().size());
+        myManifest.addContexts(URI.create(LOREM_IPSUM.getUrl()), URI.create(LOREM_IPSUM.getUrl()));
+        assertEquals(3, myManifest.getContexts().size());
+    }
+
+    /**
+     * Tests {@link Manifest#getContext() getContext} method.
+     */
+    @Test
+    public void testGetPrimaryContext() {
+        assertEquals(Constants.CONTEXT_URI, myManifest.addContexts(URI.create(LOREM_IPSUM.getUrl())).getContext());
+    }
+
+    /**
+     * Tests {@link Manifest#removeContext(URI) removeContext} method.
+     */
+    @Test
+    public void testRemoveContext() {
+        final URI uri = URI.create(LOREM_IPSUM.getUrl());
+
+        myManifest.addContexts(uri, URI.create(LOREM_IPSUM.getUrl()));
+        assertTrue(myManifest.containsContext(uri));
+        assertTrue(myManifest.removeContext(uri));
+        assertFalse(myManifest.containsContext(uri));
+        assertEquals(2, myManifest.getContexts().size());
+    }
+
+    /**
+     * Tests getting an exception on trying to remove the required context.
+     */
+    @Test(expected = UnsupportedOperationException.class)
+    public void testRemovePrimaryContext() {
+        myManifest.removeContext(Constants.CONTEXT_URI);
     }
 
     /**
@@ -186,9 +236,7 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public final void testSetBehaviors() {
-        final Manifest manifest = new Manifest(MANIFEST_URI, TEST_TITLE);
-
-        assertEquals(2, manifest.setBehaviors(ManifestBehavior.INDIVIDUALS, ManifestBehavior.AUTOADVANCE)
+        assertEquals(2, myManifest.setBehaviors(ManifestBehavior.INDIVIDUALS, ManifestBehavior.AUTOADVANCE)
                 .getBehaviors().size());
     }
 
@@ -197,9 +245,7 @@ public class ManifestTest extends AbstractTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testSetDisallowedBehaviors() {
-        final Manifest manifest = new Manifest(MANIFEST_URI, TEST_TITLE);
-
-        manifest.setBehaviors(ManifestBehavior.AUTOADVANCE, CanvasBehavior.NONPAGED);
+        myManifest.setBehaviors(ManifestBehavior.AUTOADVANCE, CanvasBehavior.NONPAGED);
     }
 
     /**
@@ -207,9 +253,7 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public final void testAddBehaviors() {
-        final Manifest manifest = new Manifest(MANIFEST_URI, TEST_TITLE);
-
-        assertEquals(1, manifest.addBehaviors(ManifestBehavior.CONTINUOUS).getBehaviors().size());
+        assertEquals(1, myManifest.addBehaviors(ManifestBehavior.CONTINUOUS).getBehaviors().size());
     }
 
     /**
@@ -217,9 +261,7 @@ public class ManifestTest extends AbstractTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testAddDisallowedBehaviors() {
-        final Manifest manifest = new Manifest(MANIFEST_URI, TEST_TITLE);
-
-        manifest.addBehaviors(ManifestBehavior.CONTINUOUS, CanvasBehavior.AUTOADVANCE);
+        myManifest.addBehaviors(ManifestBehavior.CONTINUOUS, CanvasBehavior.AUTOADVANCE);
     }
 
 }

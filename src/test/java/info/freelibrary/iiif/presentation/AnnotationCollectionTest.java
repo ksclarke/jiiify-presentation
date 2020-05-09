@@ -16,7 +16,7 @@ import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
 /**
  * A layer test.
  */
-public class LayerTest {
+public class AnnotationCollectionTest {
 
     private static final URI ID = URI.create("http://example.org/id");
 
@@ -26,16 +26,16 @@ public class LayerTest {
      * Tests layer constructor.
      */
     @Test
-    public void testLayerStringString() {
-        assertEquals(ID.toString(), new Layer(ID.toString(), LABEL).getID().toString());
+    public void testConstructorStringIdStringLabel() {
+        assertEquals(ID.toString(), new AnnotationCollection(ID.toString(), LABEL).getID().toString());
     }
 
     /**
      * Tests layer constructor.
      */
     @Test
-    public void testLayerURILabel() {
-        assertEquals(ID, new Layer(ID, new Label(LABEL)).getID());
+    public void testConstructorUriIdLabel() {
+        assertEquals(ID, new AnnotationCollection(ID, new Label(LABEL)).getID());
     }
 
     /**
@@ -43,8 +43,9 @@ public class LayerTest {
      */
     @Test
     public void testGetSetViewingDirection() {
-        final Layer layer = new Layer(ID.toString(), LABEL).setViewingDirection(ViewingDirection.LEFT_TO_RIGHT);
-        assertEquals(ViewingDirection.LEFT_TO_RIGHT, layer.getViewingDirection());
+        final AnnotationCollection annotationCollection = new AnnotationCollection(ID.toString(), LABEL)
+                .setViewingDirection(ViewingDirection.LEFT_TO_RIGHT);
+        assertEquals(ViewingDirection.LEFT_TO_RIGHT, annotationCollection.getViewingDirection());
     }
 
     /**
@@ -52,9 +53,9 @@ public class LayerTest {
      */
     @Test
     public final void testSetBehaviors() {
-        final Layer layer = new Layer(ID.toString(), LABEL);
+        final AnnotationCollection annotationCollection = new AnnotationCollection(ID.toString(), LABEL);
 
-        assertEquals(1, layer.setBehaviors(ResourceBehavior.HIDDEN).getBehaviors().size());
+        assertEquals(1, annotationCollection.setBehaviors(ResourceBehavior.HIDDEN).getBehaviors().size());
     }
 
     /**
@@ -62,9 +63,9 @@ public class LayerTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testSetDisallowedBehaviors() {
-        final Layer layer = new Layer(ID.toString(), LABEL);
+        final AnnotationCollection annotationCollection = new AnnotationCollection(ID.toString(), LABEL);
 
-        layer.setBehaviors(ManifestBehavior.AUTOADVANCE);
+        annotationCollection.setBehaviors(ManifestBehavior.AUTOADVANCE);
     }
 
     /**
@@ -72,9 +73,9 @@ public class LayerTest {
      */
     @Test
     public final void testAddBehaviors() {
-        final Layer layer = new Layer(ID.toString(), LABEL);
+        final AnnotationCollection annotationCollection = new AnnotationCollection(ID.toString(), LABEL);
 
-        assertEquals(1, layer.addBehaviors(ResourceBehavior.HIDDEN).getBehaviors().size());
+        assertEquals(1, annotationCollection.addBehaviors(ResourceBehavior.HIDDEN).getBehaviors().size());
     }
 
     /**
@@ -82,9 +83,9 @@ public class LayerTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testAddDisallowedBehaviors() {
-        final Layer layer = new Layer(ID.toString(), LABEL);
+        final AnnotationCollection annotationCollection = new AnnotationCollection(ID.toString(), LABEL);
 
-        layer.addBehaviors(ManifestBehavior.CONTINUOUS, CanvasBehavior.AUTOADVANCE);
+        annotationCollection.addBehaviors(ManifestBehavior.CONTINUOUS, CanvasBehavior.AUTOADVANCE);
     }
 
 }

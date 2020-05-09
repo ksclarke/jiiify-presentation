@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.Constants;
 import info.freelibrary.iiif.presentation.Manifest;
+import info.freelibrary.iiif.presentation.ResourceTypes;
 
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
@@ -45,7 +46,7 @@ public class RequiredStatementTest {
         myManifest = new Manifest(AAAA, BBBB);
         labelJSON.put(NONE, new JsonArray().add(BBBB));
         myJSON = new JsonObject().put(Constants.CONTEXT, "http://iiif.io/api/presentation/3/context.json");
-        myJSON.put(Constants.TYPE, "sc:Manifest").put(Constants.ID, AAAA).put(Constants.LABEL, labelJSON);
+        myJSON.put(Constants.TYPE, ResourceTypes.MANIFEST).put(Constants.ID, AAAA).put(Constants.LABEL, labelJSON);
     }
 
     /**

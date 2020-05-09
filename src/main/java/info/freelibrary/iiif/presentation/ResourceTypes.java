@@ -1,4 +1,5 @@
-package info.freelibrary.iiif.presentation.utils;
+
+package info.freelibrary.iiif.presentation;
 
 /**
  * Types defined by the IIIF Presentation API and the Web Annotation Data Model, and those drawn from other
@@ -14,11 +15,11 @@ public final class ResourceTypes {
 
     public static final String RANGE = "Range";
 
-    public static final String ANNOTATIONPAGE = "AnnotationPage";
+    public static final String ANNOTATION_PAGE = "AnnotationPage";
 
     public static final String ANNOTATION = "Annotation";
 
-    public static final String ANNOTATIONCOLLECTION = "AnnotationCollection";
+    public static final String ANNOTATION_COLLECTION = "AnnotationCollection";
 
     public static final String DATASET = "Dataset";
 
@@ -27,6 +28,8 @@ public final class ResourceTypes {
     public static final String MODEL = "Model";
 
     public static final String SOUND = "Sound";
+
+    public static final String SPECIFIC_RESOURCE = "SpecificResource";
 
     public static final String TEXT = "Text";
 

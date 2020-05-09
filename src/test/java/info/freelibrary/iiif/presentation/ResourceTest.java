@@ -28,7 +28,6 @@ import info.freelibrary.iiif.presentation.properties.behaviors.CollectionBehavio
 import info.freelibrary.iiif.presentation.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
-import info.freelibrary.iiif.presentation.utils.ResourceTypes;
 
 import io.vertx.core.json.JsonObject;
 
