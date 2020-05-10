@@ -51,7 +51,7 @@ class Resource<T extends Resource<T>> {
     }
 
     @JsonProperty(Constants.TYPE)
-    protected String myType = "Unknown";
+    protected String myType;
 
     @JsonProperty(Constants.ID)
     private URI myID;

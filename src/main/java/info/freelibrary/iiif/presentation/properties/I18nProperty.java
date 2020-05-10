@@ -11,13 +11,18 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import info.freelibrary.iiif.presentation.Constants;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.StringUtils;
 
 /**
  * A base class for label, summary, attribution and metadata's label and value fields.
  */
 class I18nProperty<T extends I18nProperty<T>> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(I18nProperty.class, Constants.BUNDLE_NAME);
 
     protected final List<I18n> myI18ns;
 
@@ -101,7 +106,7 @@ class I18nProperty<T extends I18nProperty<T>> {
             Objects.requireNonNull(string, MessageCodes.JPA_001);
 
             if (!myI18ns.add(new I18n(I18n.DEFAULT_LANG, string))) {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_043, string));
             }
         }
 
@@ -121,7 +126,7 @@ class I18nProperty<T extends I18nProperty<T>> {
             Objects.requireNonNull(i18n, MessageCodes.JPA_001);
 
             if (!myI18ns.add(i18n)) {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_043, i18n.toString()));
             }
         }
 

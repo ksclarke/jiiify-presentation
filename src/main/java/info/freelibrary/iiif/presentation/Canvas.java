@@ -18,6 +18,9 @@ import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.StringUtils;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
@@ -31,6 +34,8 @@ import io.vertx.core.json.JsonObject;
 @JsonPropertyOrder({ Constants.TYPE, Constants.LABEL, Constants.ID, Constants.WIDTH, Constants.HEIGHT,
     Constants.DURATION, Constants.THUMBNAIL, Constants.ITEMS })
 public class Canvas extends NavigableResource<Canvas> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Canvas.class, Constants.BUNDLE_NAME);
 
     private static final int REQ_ARG_COUNT = 3;
 
@@ -212,7 +217,8 @@ public class Canvas extends NavigableResource<Canvas> {
      */
     public Canvas addPage(final AnnotationPage... aPageArray) {
         if (!Collections.addAll(getPages(), aPageArray)) {
-            throw new UnsupportedOperationException();
+            final String message = LOGGER.getMessage(MessageCodes.JPA_049, StringUtils.toString(aPageArray, ' '));
+            throw new UnsupportedOperationException(message);
         }
 
         return this;

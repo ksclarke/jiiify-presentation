@@ -71,7 +71,7 @@ public class RequiredStatement extends I18nEntry {
         checkEntryType(aReqStatementEntry);
 
         if (!getEntries().add(aReqStatementEntry)) {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_045, aReqStatementEntry));
         }
 
         return this;
@@ -85,8 +85,10 @@ public class RequiredStatement extends I18nEntry {
      * @return The required statement
      */
     public RequiredStatement add(final String aLabel, final String aValue) {
-        if (!getEntries().add(new RequiredStatement.Entry(aLabel, aValue))) {
-            throw new UnsupportedOperationException();
+        final RequiredStatement.Entry requiredStmtEntry = new RequiredStatement.Entry(aLabel, aValue);
+
+        if (!getEntries().add(requiredStmtEntry)) {
+            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_045, requiredStmtEntry));
         }
 
         return this;
@@ -100,8 +102,10 @@ public class RequiredStatement extends I18nEntry {
      * @return The required statement
      */
     public RequiredStatement add(final Label aLabel, final Value aValue) {
-        if (!getEntries().add(new RequiredStatement.Entry(aLabel, aValue))) {
-            throw new UnsupportedOperationException();
+        final RequiredStatement.Entry requiredStmtEntry = new RequiredStatement.Entry(aLabel, aValue);
+
+        if (!getEntries().add(requiredStmtEntry)) {
+            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_045, requiredStmtEntry));
         }
 
         return this;

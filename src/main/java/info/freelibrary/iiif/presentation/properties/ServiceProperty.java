@@ -10,13 +10,20 @@ import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.common.net.MediaType;
 
+import info.freelibrary.iiif.presentation.Constants;
 import info.freelibrary.iiif.presentation.ServiceImage;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
+import info.freelibrary.iiif.presentation.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.StringUtils;
 
 /**
  * A property that relies on a service.
  */
 class ServiceProperty<T extends ServiceProperty<T>> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServiceProperty.class, Constants.BUNDLE_NAME);
 
     private List<ServiceImage> myImages;
 
@@ -33,7 +40,7 @@ class ServiceProperty<T extends ServiceProperty<T>> {
     protected T addImage(final String... aIdArray) {
         for (final String id : aIdArray) {
             if (!getImages().add(new ServiceImage(id))) {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_048, id));
             }
         }
 
@@ -48,8 +55,10 @@ class ServiceProperty<T extends ServiceProperty<T>> {
      */
     protected T addImage(final URI... aIdArray) {
         for (final URI id : aIdArray) {
-            if (!getImages().add(new ServiceImage(id))) {
-                throw new UnsupportedOperationException();
+            final ServiceImage serviceImage = new ServiceImage(id);
+
+            if (!getImages().add(serviceImage)) {
+                throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_048, serviceImage));
             }
         }
 
@@ -65,8 +74,10 @@ class ServiceProperty<T extends ServiceProperty<T>> {
      * @return The property
      */
     public T addImage(final String aID, final int aWidth, final int aHeight) {
-        if (!getImages().add(new ServiceImage(aID, aWidth, aHeight))) {
-            throw new UnsupportedOperationException();
+        final ServiceImage serviceImage = new ServiceImage(aID, aWidth, aHeight);
+
+        if (!getImages().add(serviceImage)) {
+            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_048, serviceImage));
         }
 
         return (T) this;
@@ -81,8 +92,10 @@ class ServiceProperty<T extends ServiceProperty<T>> {
      * @return The property
      */
     public T addImage(final URI aURI, final int aWidth, final int aHeight) {
-        if (!getImages().add(new ServiceImage(aURI, aWidth, aHeight))) {
-            throw new UnsupportedOperationException();
+        final ServiceImage serviceImage = new ServiceImage(aURI, aWidth, aHeight);
+
+        if (!getImages().add(serviceImage)) {
+            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_048, serviceImage));
         }
 
         return (T) this;
@@ -96,8 +109,10 @@ class ServiceProperty<T extends ServiceProperty<T>> {
      * @return The property
      */
     public T addImage(final String aID, final ImageInfoService aService) {
-        if (!getImages().add(new ServiceImage(aID, aService))) {
-            throw new UnsupportedOperationException();
+        final ServiceImage serviceImage = new ServiceImage(aID, aService);
+
+        if (!getImages().add(serviceImage)) {
+            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_048, serviceImage));
         }
 
         return (T) this;
@@ -111,8 +126,10 @@ class ServiceProperty<T extends ServiceProperty<T>> {
      * @return The property
      */
     public T addImage(final URI aID, final ImageInfoService aService) {
-        if (!getImages().add(new ServiceImage(aID, aService))) {
-            throw new UnsupportedOperationException();
+        final ServiceImage serviceImage = new ServiceImage(aID, aService);
+
+        if (!getImages().add(serviceImage)) {
+            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_048, serviceImage));
         }
 
         return (T) this;
@@ -202,7 +219,8 @@ class ServiceProperty<T extends ServiceProperty<T>> {
      */
     protected T addImage(final ServiceImage... aImageArray) {
         if (!Collections.addAll(getImages(), aImageArray)) {
-            throw new UnsupportedOperationException();
+            final String message = LOGGER.getMessage(MessageCodes.JPA_048, StringUtils.toString(aImageArray, ' '));
+            throw new UnsupportedOperationException(message);
         }
 
         return (T) this;

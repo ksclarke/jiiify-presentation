@@ -123,7 +123,7 @@ public class Manifest extends NavigableResource<Manifest> {
 
     /**
      * Gets an unmodifiable list of manifest contexts. To remove contexts, use {@link Manifest#removeContext(URI)
-     * removeContext} or {@link Manifest#clearContexts() clearContexts()}.
+     * removeContext} or {@link Manifest#clearContexts() clearContexts}.
      *
      * @return The manifest context
      */
@@ -259,7 +259,7 @@ public class Manifest extends NavigableResource<Manifest> {
             Objects.requireNonNull(canvas, MessageCodes.JPA_008);
 
             if (!myCanvases.add(canvas)) {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_051, canvas));
             }
         }
 

@@ -10,6 +10,12 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import info.freelibrary.iiif.presentation.Constants;
+import info.freelibrary.iiif.presentation.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.StringUtils;
+
 /**
  * A string that identifies a license or rights statement that applies to the content of the resource, such as the
  * JSON of a Manifest or the pixels of an image. The value must be drawn from the set of Creative Commons license
@@ -17,6 +23,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * this property is informative, and for example could be used to display an icon representing the rights assertions.
  */
 public class Rights {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Rights.class, Constants.BUNDLE_NAME);
 
     private static final int LIST_PADDING = 2;
 
@@ -99,7 +107,8 @@ public class Rights {
     @JsonIgnore
     public Rights addValue(final URL... aUrlArray) {
         if (!Collections.addAll(myURLs, aUrlArray)) {
-            throw new UnsupportedOperationException();
+            final String message = LOGGER.getMessage(MessageCodes.JPA_046, StringUtils.toString(aUrlArray, ' '));
+            throw new UnsupportedOperationException(message);
         }
 
         return this;

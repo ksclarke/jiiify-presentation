@@ -293,6 +293,11 @@ public class ServiceImage {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return String.join(":", getClass().getSimpleName(), getID().toString());
+    }
+
     @JsonIgnore
     protected final void setMediaTypeFromExt(final String aURI) {
         final String fragment = '#' + URI.create(aURI).getFragment();

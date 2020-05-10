@@ -279,4 +279,9 @@ public class ImageContent extends Content<ImageContent> {
 
         return resource;
     }
+
+    @Override
+    public String toString() {
+        return String.join(":", getClass().getSimpleName(), getID().toString());
+    }
 }

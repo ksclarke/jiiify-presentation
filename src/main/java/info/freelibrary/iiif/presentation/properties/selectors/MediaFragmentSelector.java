@@ -3,6 +3,10 @@ package info.freelibrary.iiif.presentation.properties.selectors;
 
 import java.net.URI;
 
+import info.freelibrary.iiif.presentation.Constants;
+import info.freelibrary.iiif.presentation.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.StringUtils;
 
 /**
@@ -13,6 +17,8 @@ public class MediaFragmentSelector extends AbstractSelector implements FragmentS
     protected static final String X_COORDINATE = "x";
 
     protected static final String Y_COORDINATE = "y";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MediaFragmentSelector.class, Constants.BUNDLE_NAME);
 
     // https://www.w3.org/TR/annotation-model/#fragment-selector
     private static final URI FRAGMENT_STANDARD = URI.create("http://www.w3.org/TR/media-frags/");
@@ -36,7 +42,7 @@ public class MediaFragmentSelector extends AbstractSelector implements FragmentS
 
         // A fragment has four coordinates: x, y, width, and height
         if (parts.length != 4) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_042, aFragment));
         }
 
         myX = Integer.parseInt(parts[0]);

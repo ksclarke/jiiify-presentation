@@ -230,7 +230,7 @@ public class GenericService implements Service<GenericService> {
                 return ImmutableMap.copyOf(map);
             }
         } else {
-            throw new NullPointerException();
+            return null;
         }
     }
 }

@@ -45,5 +45,15 @@
   <entry key="JPA-039">Cannot remove required context: {}</entry>
   <entry key="JPA-040">Range item does not have canvas, range, or specific resource!</entry>
   <entry key="JPA-041">Expected Canvas, Range, or SpecificResource... found: {}</entry>
+  <entry key="JPA-042">MediaFragmentSelector does not have the required four parts: {}</entry>
+  <entry key="JPA-043">I18n couldn't be added to I18nProperty: {}</entry>
+  <entry key="JPA-044">Unable to add metadata: {}</entry>
+  <entry key="JPA-045">Unable to add required statement: {}</entry>
+  <entry key="JPA-046">Unable to add rights URLs: {}</entry>
+  <entry key="JPA-047">Unable to add seeAlso: {}</entry>
+  <entry key="JPA-048">Unable to add ServiceImage to ServiceProperty: {}</entry>
+  <entry key="JPA-049">Unable to add AnnotationPage to Canvas: [{}]</entry>
+  <entry key="JPA-050">Unable to add ImageContent to AnnotationPage: [{}]</entry>
+  <entry key="JPA-051">Unable to add Canvas to Manifest: {}</entry>
 
 </properties>

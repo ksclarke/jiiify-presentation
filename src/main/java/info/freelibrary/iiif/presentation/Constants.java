@@ -14,6 +14,8 @@ public final class Constants {
     /* The presentation API context */
     public static final URI CONTEXT_URI = URI.create("http://iiif.io/api/presentation/3/context.json");
 
+    public static final String EMPTY = "";
+
     /* The name of the ID property. */
     public static final String ID = "id";
 

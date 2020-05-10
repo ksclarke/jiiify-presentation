@@ -11,11 +11,17 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
+import info.freelibrary.iiif.presentation.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.StringUtils;
 
 /**
  * An ordered list of annotations, typically associated with a single canvas.
  */
 public class AnnotationPage extends Resource<AnnotationPage> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationPage.class, Constants.BUNDLE_NAME);
 
     private static final int REQ_ARG_COUNT = 2;
 
@@ -69,7 +75,8 @@ public class AnnotationPage extends Resource<AnnotationPage> {
      */
     public AnnotationPage addImageContent(final ImageContent... aContentArray) {
         if (!Collections.addAll(getImageContent(), aContentArray)) {
-            throw new UnsupportedOperationException();
+            final String message = LOGGER.getMessage(MessageCodes.JPA_050, StringUtils.toString(aContentArray, ' '));
+            throw new UnsupportedOperationException(message);
         }
 
         return this;
@@ -100,4 +107,8 @@ public class AnnotationPage extends Resource<AnnotationPage> {
         return super.addBehaviors(checkBehaviors(ResourceBehavior.class, aBehaviorArray));
     }
 
+    @Override
+    public String toString() {
+        return String.join(":", getClass().getSimpleName(), getID().toString());
+    }
 }
