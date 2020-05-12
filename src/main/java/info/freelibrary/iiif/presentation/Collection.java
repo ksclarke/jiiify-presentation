@@ -228,10 +228,19 @@ public class Collection extends NavigableResource<Collection> {
         private Thumbnail myThumbnail;
 
         /**
-         * Create a new collection item.
+         * Create a new collection item from a type and ID in string form.
          */
-        public Item(final Item.Type aType) {
-            myType = aType;
+        public Item(final Item.Type aType, final String aID) {
+            setType(aType);
+            setID(aID);
+        }
+
+        /**
+         * Create a new collection item from a type and URI ID.
+         */
+        public Item(final Item.Type aType, final URI aID) {
+            setType(aType);
+            setID(aID);
         }
 
         /**
@@ -408,7 +417,7 @@ public class Collection extends NavigableResource<Collection> {
         /**
          * Allows Jackson to set the item type.
          *
-         * @return The collection item type
+         * @return The item
          */
         @JsonSetter(Constants.TYPE)
         private Item setType(final String aType) {

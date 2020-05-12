@@ -122,9 +122,9 @@ public class Range extends NavigableResource<Range> {
     }
 
     /**
-     * Gets a list of range resources.
+     * Gets a list of the range's items.
      *
-     * @return A list of range resources
+     * @return A list of range items
      */
     @JsonGetter(Constants.ITEMS)
     public List<Item> getItems() {

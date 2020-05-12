@@ -27,7 +27,7 @@ public class RangeItemDeserializer extends StdDeserializer<Range.Item> {
     private static final long serialVersionUID = 8695899539799954605L;
 
     /**
-     * Creates a new label deserializer.
+     * Creates a new Range.Item deserializer.
      */
     RangeItemDeserializer() {
         this(null);

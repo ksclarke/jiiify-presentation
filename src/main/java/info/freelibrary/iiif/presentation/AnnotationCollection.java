@@ -44,7 +44,7 @@ public class AnnotationCollection extends Resource<AnnotationCollection> {
      * Sets the viewing direction.
      *
      * @param aViewingDirection A viewing direction
-     * @return The layer
+     * @return The annotation collection
      */
     @JsonSetter(Constants.VIEWING_DIRECTION)
     public AnnotationCollection setViewingDirection(final ViewingDirection aViewingDirection) {

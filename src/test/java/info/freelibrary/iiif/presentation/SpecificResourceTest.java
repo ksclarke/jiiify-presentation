@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.properties.selectors.AudioContentSelector;
 import info.freelibrary.iiif.presentation.properties.selectors.Selector;
+import info.freelibrary.iiif.presentation.properties.selectors.VisualContentSelector;
 import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.StringUtils;
 
@@ -90,7 +91,8 @@ public class SpecificResourceTest extends AbstractTest {
      */
     @Test
     public final void testSetSelector() {
-        assertEquals(SELECTOR, new SpecificResource(myID, myOtherID, SELECTOR).getSelector());
+        assertEquals(SELECTOR, new SpecificResource(myID, myOtherID, new VisualContentSelector()).setSelector(
+                SELECTOR).getSelector());
     }
 
     /**

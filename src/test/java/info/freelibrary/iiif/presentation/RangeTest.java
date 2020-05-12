@@ -136,7 +136,7 @@ public class RangeTest extends AbstractTest {
     }
 
     /**
-     * SPECIFIC_RESOURCE_ITEM_JSON Tests constructing a range.
+     * Tests constructing a range.
      */
     @Test
     public void testRangeStringString() {

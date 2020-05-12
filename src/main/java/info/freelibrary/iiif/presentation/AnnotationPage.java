@@ -28,7 +28,7 @@ public class AnnotationPage extends Resource<AnnotationPage> {
     private List<ImageContent> myImageContent;
 
     /**
-     * Creates an annotation page resource.
+     * Creates an annotation page.
      *
      * @param aID An annotation page ID
      */
@@ -37,9 +37,9 @@ public class AnnotationPage extends Resource<AnnotationPage> {
     }
 
     /**
-     * Creates an annotation list resource.
+     * Creates an annotation page.
      *
-     * @param aID An annotation list ID
+     * @param aID An annotation page ID
      */
     public AnnotationPage(final URI aID) {
         super(ResourceTypes.ANNOTATION_PAGE, aID, REQ_ARG_COUNT);
@@ -53,10 +53,10 @@ public class AnnotationPage extends Resource<AnnotationPage> {
     }
 
     /**
-     * Sets the canvas' image content.
+     * Sets the annotation page's image content.
      *
-     * @param aContentArray A canvas image content
-     * @return The canvas
+     * @param aContentArray An array of image content
+     * @return The annotation page
      */
     @JsonGetter(Constants.ITEMS)
     public AnnotationPage setImageContent(final ImageContent... aContentArray) {
@@ -68,10 +68,10 @@ public class AnnotationPage extends Resource<AnnotationPage> {
     }
 
     /**
-     * Adds image content to the canvas.
+     * Adds image content to the annotation page.
      *
-     * @param aContentArray Image content to be added to the canvas
-     * @return The canvas
+     * @param aContentArray Image content to be added to the annotation page
+     * @return The annotation page
      */
     public AnnotationPage addImageContent(final ImageContent... aContentArray) {
         if (!Collections.addAll(getImageContent(), aContentArray)) {
@@ -83,9 +83,9 @@ public class AnnotationPage extends Resource<AnnotationPage> {
     }
 
     /**
-     * Gets the canvas' image content.
+     * Gets the annotation page's image content.
      *
-     * @return The canvas' image content
+     * @return The annotation page's image content
      */
     @JsonGetter(Constants.ITEMS)
     public List<ImageContent> getImageContent() {

@@ -13,7 +13,7 @@ import info.freelibrary.iiif.presentation.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
 
 /**
- * An annotation list for testing.
+ * An annotation page for testing.
  */
 public class AnnotationPageTest extends AbstractTest {
 
@@ -25,7 +25,7 @@ public class AnnotationPageTest extends AbstractTest {
     }
 
     /**
-     * Tests constructing an annotation list.
+     * Tests constructing an annotation page.
      */
     @Test
     public void testAnnotationPageStringId() {
@@ -33,7 +33,7 @@ public class AnnotationPageTest extends AbstractTest {
     }
 
     /**
-     * Tests constructing an annotation list.
+     * Tests constructing an annotation page.
      */
     @Test
     public void testAnnotationPageUriId() {
@@ -41,7 +41,7 @@ public class AnnotationPageTest extends AbstractTest {
     }
 
     /**
-     * Test setting annotation list behaviors.
+     * Test setting annotation page behaviors.
      */
     @Test
     public final void testSetBehaviors() {
@@ -49,7 +49,7 @@ public class AnnotationPageTest extends AbstractTest {
     }
 
     /**
-     * Test setting disallowed annotation list behaviors.
+     * Test setting disallowed annotation page behaviors.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testSetDisallowedBehaviors() {
@@ -57,7 +57,7 @@ public class AnnotationPageTest extends AbstractTest {
     }
 
     /**
-     * Test adding annotation list behaviors.
+     * Test adding annotation page behaviors.
      */
     @Test
     public final void testAddBehaviors() {
@@ -65,7 +65,7 @@ public class AnnotationPageTest extends AbstractTest {
     }
 
     /**
-     * Test adding disallowed annotation list behaviors.
+     * Test adding disallowed annotation page behaviors.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testAddDisallowedBehaviors() {

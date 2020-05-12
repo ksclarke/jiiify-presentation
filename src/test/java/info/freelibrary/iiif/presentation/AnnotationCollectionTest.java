@@ -14,7 +14,7 @@ import info.freelibrary.iiif.presentation.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
 
 /**
- * A layer test.
+ * Tests of {@link AnnotationCollection}.
  */
 public class AnnotationCollectionTest {
 
@@ -23,7 +23,7 @@ public class AnnotationCollectionTest {
     private static final String LABEL = "My great label";
 
     /**
-     * Tests layer constructor.
+     * Tests an {@link AnnotationCollection} constructor.
      */
     @Test
     public void testConstructorStringIdStringLabel() {
@@ -31,7 +31,7 @@ public class AnnotationCollectionTest {
     }
 
     /**
-     * Tests layer constructor.
+     * Tests an {@link AnnotationCollection} constructor.
      */
     @Test
     public void testConstructorUriIdLabel() {
@@ -39,7 +39,7 @@ public class AnnotationCollectionTest {
     }
 
     /**
-     * Tests viewing direction on a layer.
+     * Tests viewing direction on a {@link AnnotationCollection}.
      */
     @Test
     public void testGetSetViewingDirection() {
@@ -49,7 +49,7 @@ public class AnnotationCollectionTest {
     }
 
     /**
-     * Test setting layer behaviors.
+     * Test setting {@link AnnotationCollection} behaviors.
      */
     @Test
     public final void testSetBehaviors() {
@@ -59,7 +59,7 @@ public class AnnotationCollectionTest {
     }
 
     /**
-     * Test setting disallowed layer behaviors.
+     * Test setting disallowed {@link AnnotationCollection} behaviors.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testSetDisallowedBehaviors() {
@@ -69,7 +69,7 @@ public class AnnotationCollectionTest {
     }
 
     /**
-     * Test adding layer behaviors.
+     * Test adding {@link AnnotationCollection} behaviors.
      */
     @Test
     public final void testAddBehaviors() {
@@ -79,7 +79,7 @@ public class AnnotationCollectionTest {
     }
 
     /**
-     * Test adding disallowed layer behaviors.
+     * Test adding disallowed {@link AnnotationCollection} behaviors.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testAddDisallowedBehaviors() {

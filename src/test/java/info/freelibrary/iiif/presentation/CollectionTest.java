@@ -90,21 +90,17 @@ public class CollectionTest {
     @Test
     public void testWritingCollection() throws IOException {
         final Collection collection = new Collection("ID-a", "label-a");
+        final String manifestOneID = "http://iiif.library.ucla.edu/asdf1234/manifest";
+        final String manifestTwoID = "http://iiif.library.ucla.edu/1234asdf/manifest";
         final List<Collection.Item> items = new ArrayList<>();
-        final Collection.Item manifest1 = new Collection.Item(Item.Type.Manifest);
-        final Collection.Item manifest2 = new Collection.Item(Item.Type.Manifest);
+        final Collection.Item manifest1 = new Collection.Item(Item.Type.Manifest, manifestOneID);
+        final Collection.Item manifest2 = new Collection.Item(Item.Type.Manifest, manifestTwoID);
         final JsonObject expected = new JsonObject(StringUtils.read(TEST_FILE1));
 
-        manifest1.setID("http://iiif.library.ucla.edu/asdf1234/manifest");
         manifest1.setLabel("A placeholder fake manifest: 1");
-
         items.add(manifest1);
-
-        manifest2.setID("http://iiif.library.ucla.edu/1234asdf/manifest");
         manifest2.setLabel("A placeholder fake manifest: 2");
-
         items.add(manifest2);
-
         collection.setItems(items);
 
         assertEquals(expected, collection.toJSON());

@@ -135,10 +135,10 @@ public class ManifestTest extends AbstractTest {
     }
 
     /**
-     * Tests clearing the manifests.
+     * Tests clearing the contexts.
      */
     @Test
-    public void testClearManifests() {
+    public void testClearContexts() {
         assertEquals(1, myManifest.getContexts().size());
         myManifest.addContexts(LOREM_IPSUM.getUrl(), LOREM_IPSUM.getUrl());
         assertEquals(3, myManifest.getContexts().size());
