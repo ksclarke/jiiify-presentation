@@ -1,3 +1,4 @@
+
 package info.freelibrary.iiif.presentation.properties;
 
 import static org.junit.Assert.assertEquals;
@@ -15,7 +16,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import info.freelibrary.iiif.presentation.Constants;
 import info.freelibrary.iiif.presentation.Manifest;
-import info.freelibrary.iiif.presentation.utils.ResourceTypes;
+import info.freelibrary.iiif.presentation.ResourceTypes;
 import info.freelibrary.iiif.presentation.utils.TestUtils;
 import info.freelibrary.util.StringUtils;
 
@@ -62,7 +63,7 @@ public class RenderingTest {
      * Tests a rendering constructor and rendering (de)serialization.
      *
      * @throws IOException If there is trouble reading or deserializing the rendering file or serializing the
-     * constructed rendering
+     *         constructed rendering
      */
     @Test
     public final void testRenderingURIStringLabel() throws IOException {
@@ -79,7 +80,7 @@ public class RenderingTest {
      * Tests a rendering constructor and rendering (de)serialization.
      *
      * @throws IOException If there is trouble reading or deserializing the rendering file or serializing the
-     * constructed rendering
+     *         constructed rendering
      */
     @Test
     public final void testRenderingStringStringString() throws IOException {
@@ -96,7 +97,7 @@ public class RenderingTest {
      * Tests rendering (de)serialization.
      *
      * @throws IOException If there is trouble reading or deserializing the rendering file or serializing the
-     * constructed rendering
+     *         constructed rendering
      */
     @Test
     public final void testFullRendering() throws IOException {
@@ -114,7 +115,7 @@ public class RenderingTest {
      * Tests (de)serialization of multiple renderings.
      *
      * @throws IOException If there is trouble reading or deserializing the rendering file or serializing the
-     * constructed renderings
+     *         constructed renderings
      */
     @Test
     public final void testMultiValues() throws IOException {
@@ -141,7 +142,7 @@ public class RenderingTest {
      */
     @Test
     public final void testSetType() {
-        myRendering = new Rendering(TEST_URI_1, "Video", TEST_LABEL_1).setType(ResourceTypes.TEXT);
+        myRendering = new Rendering(TEST_URI_1, ResourceTypes.VIDEO, TEST_LABEL_1).setType(ResourceTypes.TEXT);
         assertEquals(ResourceTypes.TEXT, myRendering.getType());
     }
 
@@ -168,8 +169,8 @@ public class RenderingTest {
      */
     @Test
     public final void testSetLanguage() {
-        myRendering = new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1)
-                .setLanguages(ISO_639_1_WELSH, ISO_639_2_CHEROKEE);
+        myRendering = new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1).setLanguages(ISO_639_1_WELSH,
+                ISO_639_2_CHEROKEE);
         assertEquals(Arrays.asList(ISO_639_1_WELSH, ISO_639_2_CHEROKEE), myRendering.getLanguages());
     }
 
@@ -187,8 +188,8 @@ public class RenderingTest {
      * @throws IOException If there is trouble reading or deserializing the rendering file
      */
     public final void checkDeserialization() throws IOException {
-        final String renderingJsonValue = new JsonObject(StringUtils.read(myRenderingFile))
-                .getJsonArray(Constants.RENDERING).toString();
+        final String renderingJsonValue = new JsonObject(StringUtils.read(myRenderingFile)).getJsonArray(
+                Constants.RENDERING).toString();
 
         final List<Rendering> expected = myManifest.getRenderings();
         final List<Rendering> found = DatabindCodec.mapper().readValue(renderingJsonValue,
@@ -206,8 +207,8 @@ public class RenderingTest {
      */
     public final void checkSerialization() throws IOException {
         final JsonObject expected = new JsonObject(StringUtils.read(myRenderingFile));
-        final JsonObject found = new JsonObject(
-                TestUtils.toJson(Constants.RENDERING, myManifest.getRenderings(), true, true));
+        final JsonObject found = new JsonObject(TestUtils.toJson(Constants.RENDERING, myManifest.getRenderings(),
+                true, true));
 
         assertEquals(expected, found);
     }

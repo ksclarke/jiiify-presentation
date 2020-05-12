@@ -14,6 +14,8 @@ public final class Constants {
     /* The presentation API context */
     public static final URI CONTEXT_URI = URI.create("http://iiif.io/api/presentation/3/context.json");
 
+    public static final String EMPTY = "";
+
     /* The name of the ID property. */
     public static final String ID = "id";
 
@@ -39,6 +41,8 @@ public final class Constants {
 
     public static final String REQUIRED_STATEMENT = "requiredStatement";
 
+    public static final String STRUCTURES = "structures";
+
     public static final String HOMEPAGE = "homepage";
 
     public static final String LOGO = "logo";
@@ -63,11 +67,7 @@ public final class Constants {
 
     public static final String SEE_ALSO = "seeAlso";
 
-    public static final String SEQUENCES = "sequences";
-
     public static final String MANIFESTS = "manifests";
-
-    public static final String SEQUENCE = "sequence";
 
     public static final String CANVASES = "canvases";
 
@@ -96,6 +96,8 @@ public final class Constants {
     public static final String LANGUAGE = "language";
 
     public static final String ITEM = "item";
+
+    public static final String ITEMS = "items";
 
     public static final String DEFAULT = "default";
 

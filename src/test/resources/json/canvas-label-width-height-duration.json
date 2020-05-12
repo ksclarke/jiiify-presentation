@@ -1,5 +1,5 @@
 {
-  "type" : "sc:Canvas",
+  "type" : "Canvas",
   "label" : { "none" : ["My Test Canvas"] },
   "id" : "http://example.org/iiif/book1/canvas/p1",
   "width" : 100,

@@ -12,46 +12,42 @@ import info.freelibrary.iiif.presentation.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
 
 /**
- * An ordered list of annotation lists. Layers allow higher level groupings of annotations to be recorded. For
- * example, all of the English translation annotations of a medieval French document could be kept separate from the
- * transcription or an edition in modern French.
+ * A collection of annotations.
  */
-public class Layer extends Resource<Layer> {
-
-    private static final String TYPE = "sc:Layer";
+public class AnnotationCollection extends Resource<AnnotationCollection> {
 
     private static final int REQ_ARG_COUNT = 3;
 
     private ViewingDirection myViewingDirection;
 
     /**
-     * Creates a IIIF presentation layer resource.
+     * Creates a collection of annotations.
      *
-     * @param aID A layer ID in string form
-     * @param aLabel A descriptive label, in string form, for the layer
+     * @param aID A collection ID in string form
+     * @param aLabel A descriptive label, in string form, for the collection
      */
-    public Layer(final String aID, final String aLabel) {
-        super(TYPE, aID, aLabel, REQ_ARG_COUNT);
+    public AnnotationCollection(final String aID, final String aLabel) {
+        super(ResourceTypes.ANNOTATION_COLLECTION, aID, aLabel, REQ_ARG_COUNT);
     }
 
     /**
-     * Creates a IIIF presentation layer resource.
+     * Creates a collection of annotations.
      *
-     * @param aID A layer ID
-     * @param aLabel A descriptive label for the layer
+     * @param aID A collection ID
+     * @param aLabel A descriptive label for the collection
      */
-    public Layer(final URI aID, final Label aLabel) {
-        super(TYPE, aID, aLabel, REQ_ARG_COUNT);
+    public AnnotationCollection(final URI aID, final Label aLabel) {
+        super(ResourceTypes.ANNOTATION_COLLECTION, aID, aLabel, REQ_ARG_COUNT);
     }
 
     /**
      * Sets the viewing direction.
      *
      * @param aViewingDirection A viewing direction
-     * @return The layer
+     * @return The annotation collection
      */
     @JsonSetter(Constants.VIEWING_DIRECTION)
-    public Layer setViewingDirection(final ViewingDirection aViewingDirection) {
+    public AnnotationCollection setViewingDirection(final ViewingDirection aViewingDirection) {
         myViewingDirection = aViewingDirection;
         return this;
     }
@@ -68,12 +64,12 @@ public class Layer extends Resource<Layer> {
 
     @Override
     @JsonSetter(Constants.BEHAVIOR)
-    public Layer setBehaviors(final Behavior... aBehaviorArray) {
+    public AnnotationCollection setBehaviors(final Behavior... aBehaviorArray) {
         return super.setBehaviors(checkBehaviors(ResourceBehavior.class, aBehaviorArray));
     }
 
     @Override
-    public Layer addBehaviors(final Behavior... aBehaviorArray) {
+    public AnnotationCollection addBehaviors(final Behavior... aBehaviorArray) {
         return super.addBehaviors(checkBehaviors(ResourceBehavior.class, aBehaviorArray));
     }
 

@@ -18,6 +18,7 @@ import info.freelibrary.iiif.presentation.Constants;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.StringUtils;
 
 /**
  * A link to a machine readable document that semantically describes the resource with the seeAlso property, such as
@@ -44,7 +45,7 @@ public class SeeAlso {
             Objects.requireNonNull(id, LOGGER.getMessage(MessageCodes.JPA_009));
 
             if (!myValues.add(new Value(URI.create(id)))) {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_047, id));
             }
         }
     }
@@ -61,7 +62,7 @@ public class SeeAlso {
             Objects.requireNonNull(uri, LOGGER.getMessage(MessageCodes.JPA_009));
 
             if (!myValues.add(new Value(uri))) {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_047, uri));
             }
         }
 
@@ -84,13 +85,15 @@ public class SeeAlso {
      * @param aMediaType A media type
      */
     public SeeAlso(final URI aID, final MediaType aMediaType) {
-        myValues = new ArrayList<>();
-
         Objects.requireNonNull(aID, MessageCodes.JPA_003);
         Objects.requireNonNull(aMediaType, MessageCodes.JPA_004);
 
-        if (!myValues.add(new Value(aID, Optional.of(aMediaType)))) {
-            throw new UnsupportedOperationException();
+        final Value value = new Value(aID, Optional.of(aMediaType));
+
+        myValues = new ArrayList<>();
+
+        if (!myValues.add(value)) {
+            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_047, value));
         }
     }
 
@@ -124,14 +127,16 @@ public class SeeAlso {
      * @param aProfile A profile
      */
     public SeeAlso(final URI aID, final MediaType aMediaType, final URI aProfile) {
-        myValues = new ArrayList<>();
-
         Objects.requireNonNull(aID, MessageCodes.JPA_003);
         Objects.requireNonNull(aMediaType, MessageCodes.JPA_004);
         Objects.requireNonNull(aProfile, MessageCodes.JPA_005);
 
-        if (!myValues.add(new Value(aID, Optional.of(aMediaType), Optional.of(aProfile)))) {
-            throw new UnsupportedOperationException();
+        final Value value = new Value(aID, Optional.of(aMediaType), Optional.of(aProfile));
+
+        myValues = new ArrayList<>();
+
+        if (!myValues.add(value)) {
+            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_047, value));
         }
     }
 
@@ -200,8 +205,10 @@ public class SeeAlso {
         for (final String id : aIdArray) {
             Objects.requireNonNull(id, MessageCodes.JPA_003);
 
-            if (!myValues.add(new Value(URI.create(id)))) {
-                throw new UnsupportedOperationException();
+            final Value value = new Value(URI.create(id));
+
+            if (!myValues.add(value)) {
+                throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_047, value));
             }
         }
 
@@ -218,8 +225,10 @@ public class SeeAlso {
         for (final URI id : aIdArray) {
             Objects.requireNonNull(id, MessageCodes.JPA_003);
 
-            if (!myValues.add(new Value(id))) {
-                throw new UnsupportedOperationException();
+            final Value value = new Value(id);
+
+            if (!myValues.add(value)) {
+                throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_047, value));
             }
         }
 
@@ -369,6 +378,14 @@ public class SeeAlso {
         @JsonGetter(Constants.FORMAT)
         private String getFormatAsString() {
             return myFormat.isPresent() ? myFormat.get().toString() : null;
+        }
+
+        @Override
+        public String toString() {
+            final String format = StringUtils.trimTo(getFormatAsString(), Constants.EMPTY);
+            final String profile = StringUtils.trimTo(getProfileAsString(), Constants.EMPTY);
+
+            return String.join(" : ", myID.toString(), format, profile);
         }
     }
 }

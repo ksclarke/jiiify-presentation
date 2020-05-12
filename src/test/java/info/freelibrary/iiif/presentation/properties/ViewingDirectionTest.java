@@ -19,7 +19,7 @@ public class ViewingDirectionTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(ViewingDirection.class, Constants.BUNDLE_NAME);
 
     @Test(expected = IllegalArgumentException.class)
-    public void testIllegalArgumentException() {
+    public void testIllegalArgumentExceptionOnFromString() {
         ViewingDirection.fromString("SOME_BOGUS_VALUE");
         fail(LOGGER.getMessage(MessageCodes.JPA_018));
     }

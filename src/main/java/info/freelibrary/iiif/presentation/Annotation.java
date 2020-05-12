@@ -18,8 +18,6 @@ import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
  */
 public class Annotation extends Resource<Annotation> {
 
-    private static final String TYPE = "sc:Annotation";
-
     private static final int REQ_ARG_COUNT = 1;
 
     @JsonProperty(Constants.TIMEMODE)
@@ -31,7 +29,7 @@ public class Annotation extends Resource<Annotation> {
      * @param aID An annotation ID
      */
     public Annotation(final URI aID) {
-        super(TYPE, aID, REQ_ARG_COUNT);
+        super(ResourceTypes.ANNOTATION, aID, REQ_ARG_COUNT);
     }
 
     /**
@@ -40,7 +38,7 @@ public class Annotation extends Resource<Annotation> {
      * @param aID An annotation ID
      */
     public Annotation(final String aID) {
-        super(TYPE, URI.create(aID), REQ_ARG_COUNT);
+        super(ResourceTypes.ANNOTATION, URI.create(aID), REQ_ARG_COUNT);
     }
 
     @Override

@@ -13,8 +13,6 @@ import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
  */
 public class OtherContent extends Content<OtherContent> {
 
-    private static final String TYPE = "sc:AnnotationList";
-
     /**
      * Creates a IIIF presentation content resource.
      *
@@ -22,7 +20,7 @@ public class OtherContent extends Content<OtherContent> {
      * @param aCanvas A canvas for other content
      */
     public OtherContent(final String aID, final Canvas aCanvas) {
-        super(TYPE, aID, aCanvas);
+        super(ResourceTypes.ANNOTATION_PAGE, aID, aCanvas);
     }
 
     /**
@@ -32,14 +30,14 @@ public class OtherContent extends Content<OtherContent> {
      * @param aCanvas A canvas for other content
      */
     public OtherContent(final URI aID, final Canvas aCanvas) {
-        super(TYPE, aID, aCanvas);
+        super(ResourceTypes.ANNOTATION_PAGE, aID, aCanvas);
     }
 
     /**
      * Creates a IIIF presentation content resource.
      */
     private OtherContent() {
-        super(TYPE);
+        super(ResourceTypes.ANNOTATION_PAGE);
     }
 
     @Override

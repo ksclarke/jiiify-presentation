@@ -85,6 +85,11 @@ abstract class I18nEntry {
         protected Class getOuterClass() {
             return I18nEntry.this.getClass();
         }
+
+        @Override
+        public String toString() {
+            return myLabel + ":" + myValue;
+        }
     }
 
 }

@@ -42,7 +42,7 @@ import io.vertx.core.json.jackson.DatabindCodec;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.TYPE, Constants.ID, Constants.LABEL, Constants.SUMMARY,
     Constants.REQUIRED_STATEMENT, Constants.RIGHTS, Constants.PART_OF, Constants.HOMEPAGE, Constants.LOGO,
-    Constants.THUMBNAIL, Constants.METADATA, Constants.SEQUENCES, Constants.SERVICE })
+    Constants.THUMBNAIL, Constants.METADATA, Constants.ITEMS, Constants.SERVICE })
 class Resource<T extends Resource<T>> {
 
     // We initialize this here so it loads for manifests and collections
@@ -51,7 +51,7 @@ class Resource<T extends Resource<T>> {
     }
 
     @JsonProperty(Constants.TYPE)
-    protected final String myType;
+    protected String myType;
 
     @JsonProperty(Constants.ID)
     private URI myID;
@@ -121,7 +121,6 @@ class Resource<T extends Resource<T>> {
     protected Resource(final String aType, final URI aID, final int aNumber) {
         checkArgs(new Object[] { aType, aID }, new String[] { Constants.TYPE, Constants.ID }, aNumber);
         myType = aType; // always required
-
         myID = aID;
     }
 
@@ -239,7 +238,7 @@ class Resource<T extends Resource<T>> {
      * @param aType A type of resource
      */
     protected Resource(final String aType) {
-        myType = aType;
+        myType = aType; // Always required
     }
 
     /**

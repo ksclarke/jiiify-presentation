@@ -16,6 +16,7 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 
+import info.freelibrary.iiif.presentation.Collection.Item;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.NavDate;
 import info.freelibrary.iiif.presentation.properties.behaviors.CollectionBehavior;
@@ -50,11 +51,11 @@ public class CollectionTest {
     }
 
     /**
-     * Tests the Collection.Manifest manifest constructor.
+     * Tests the Collection.Item manifest constructor.
      */
     @Test
     public void testCollectionManifestManifestConstructor() {
-        final Collection.Manifest manifest = new Collection.Manifest(new Manifest(myID, myLabel));
+        final Collection.Item manifest = new Collection.Item(new Manifest(myID, myLabel));
 
         assertEquals(myID, manifest.getID());
         assertEquals(myLabel, manifest.getLabel());
@@ -65,8 +66,8 @@ public class CollectionTest {
      */
     @Test
     public void testGetCollectionNotNull() {
-        assertNotNull(new Collection(myID, myLabel).getManifests());
-        assertEquals(0, new Collection(myID, myLabel).getManifests().size());
+        assertNotNull(new Collection(myID, myLabel).getItems());
+        assertEquals(0, new Collection(myID, myLabel).getItems().size());
     }
 
     /**
@@ -89,22 +90,18 @@ public class CollectionTest {
     @Test
     public void testWritingCollection() throws IOException {
         final Collection collection = new Collection("ID-a", "label-a");
-        final List<Collection.Manifest> list = new ArrayList<>();
-        final Collection.Manifest manifest1 = new Collection.Manifest();
-        final Collection.Manifest manifest2 = new Collection.Manifest();
+        final String manifestOneID = "http://iiif.library.ucla.edu/asdf1234/manifest";
+        final String manifestTwoID = "http://iiif.library.ucla.edu/1234asdf/manifest";
+        final List<Collection.Item> items = new ArrayList<>();
+        final Collection.Item manifest1 = new Collection.Item(Item.Type.Manifest, manifestOneID);
+        final Collection.Item manifest2 = new Collection.Item(Item.Type.Manifest, manifestTwoID);
         final JsonObject expected = new JsonObject(StringUtils.read(TEST_FILE1));
 
-        manifest1.setID("http://iiif.library.ucla.edu/asdf1234/manifest");
         manifest1.setLabel("A placeholder fake manifest: 1");
-
-        list.add(manifest1);
-
-        manifest2.setID("http://iiif.library.ucla.edu/1234asdf/manifest");
+        items.add(manifest1);
         manifest2.setLabel("A placeholder fake manifest: 2");
-
-        list.add(manifest2);
-
-        collection.setManifests(list);
+        items.add(manifest2);
+        collection.setItems(items);
 
         assertEquals(expected, collection.toJSON());
     }

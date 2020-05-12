@@ -47,8 +47,6 @@ public final class I18nUtils {
 
     private static final String[] PROTOCOLS = { "http", "https", "mailto" };
 
-    private static final String EMPTY = "";
-
     private I18nUtils() {
     }
 
@@ -80,8 +78,8 @@ public final class I18nUtils {
      * @return A string without an HTML elements
      */
     public static String stripHTML(final String aString) {
-        return Parser.unescapeEntities(Jsoup.clean(encodeSingleBrackets(aString.replaceAll(CDATA_PATTERN, EMPTY)),
-                Whitelist.none()), false);
+        return Parser.unescapeEntities(Jsoup.clean(encodeSingleBrackets(aString.replaceAll(CDATA_PATTERN,
+                Constants.EMPTY)), Whitelist.none()), false);
     }
 
     /**
@@ -158,6 +156,7 @@ public final class I18nUtils {
         if (isHtmlFragment(aString)) {
             final OutputSettings settings = new OutputSettings();
             final Whitelist whitelist = Whitelist.none();
+            final String bodyFragment;
             final Cleaner htmlCleaner;
             final Document dirtyHTML;
             final Document cleanHTML;
@@ -170,7 +169,8 @@ public final class I18nUtils {
             whitelist.addAttributes(IMAGE_TAG, IMAGE_ATTRIBUTES);
             whitelist.addProtocols(LINK_TAG, LINK_ATTRIBUTES[0], PROTOCOLS);
 
-            dirtyHTML = Jsoup.parseBodyFragment(encodeSingleBrackets(aString.replaceAll(CDATA_PATTERN, EMPTY)));
+            bodyFragment = encodeSingleBrackets(aString.replaceAll(CDATA_PATTERN, Constants.EMPTY));
+            dirtyHTML = Jsoup.parseBodyFragment(bodyFragment);
             htmlCleaner = new Cleaner(whitelist);
             cleanHTML = htmlCleaner.clean(dirtyHTML);
             cleanHTML.outputSettings(settings);
@@ -179,7 +179,7 @@ public final class I18nUtils {
                 // We start with third position tag because earlier ones are empty elements by definition
                 for (int index = 2; index < TAGS.length; index++) {
                     if (TAGS[index].equals(element.tagName()) && element.children().isEmpty() && (!element
-                            .hasText() || element.text().trim().equals(EMPTY))) {
+                            .hasText() || element.text().trim().equals(Constants.EMPTY))) {
                         element.remove();
                     }
                 }

@@ -1,0 +1,8 @@
+{
+    "type": "SpecificResource",
+    "id": "{}",
+    "source": "{}",
+    "selector": {
+        "type": "AudioContentSelector"
+    }
+}

@@ -72,7 +72,7 @@ public class Metadata extends I18nEntry {
         checkEntryType(aMetadataEntry);
 
         if (!getEntries().add(aMetadataEntry)) {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_044, aMetadataEntry));
         }
 
         return this;
@@ -86,8 +86,10 @@ public class Metadata extends I18nEntry {
      * @return The metadata
      */
     public Metadata add(final String aLabel, final String aValue) {
-        if (!getEntries().add(new Metadata.Entry(aLabel, aValue))) {
-            throw new UnsupportedOperationException();
+        final Metadata.Entry metadataEntry = new Metadata.Entry(aLabel, aValue);
+
+        if (!getEntries().add(metadataEntry)) {
+            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_044, metadataEntry));
         }
 
         return this;
@@ -101,8 +103,10 @@ public class Metadata extends I18nEntry {
      * @return The metadata
      */
     public Metadata add(final Label aLabel, final Value aValue) {
-        if (!getEntries().add(new Metadata.Entry(aLabel, aValue))) {
-            throw new UnsupportedOperationException();
+        final Metadata.Entry metadataEntry = new Metadata.Entry(aLabel, aValue);
+
+        if (!getEntries().add(metadataEntry)) {
+            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_044, metadataEntry));
         }
 
         return this;

@@ -33,8 +33,6 @@ import info.freelibrary.util.LoggerFactory;
 @JsonInclude(Include.NON_DEFAULT)
 public class ServiceImage {
 
-    private static final String TYPE = "dctypes:Image";
-
     private Optional<MediaType> myFormat;
 
     private int myWidth;
@@ -146,7 +144,7 @@ public class ServiceImage {
      */
     @JsonGetter(Constants.TYPE)
     public String getType() {
-        return TYPE;
+        return ResourceTypes.IMAGE;
     }
 
     /**
@@ -293,6 +291,11 @@ public class ServiceImage {
     public ServiceImage setService(final ImageInfoService aService) {
         myService = Optional.ofNullable(aService);
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return String.join(":", getClass().getSimpleName(), getID().toString());
     }
 
     @JsonIgnore

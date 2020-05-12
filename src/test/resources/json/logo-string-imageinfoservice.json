@@ -2,7 +2,7 @@
     "logo": [
         {
             "id": "http://example.org/images/logo1.jpg",
-            "type": "dctypes:Image",
+            "type": "Image",
             "format": "image/jpeg",
             "service": {
                 "@context": "http://iiif.io/api/image/3/context.json",

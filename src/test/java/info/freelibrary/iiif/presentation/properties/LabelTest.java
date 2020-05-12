@@ -11,6 +11,7 @@ import com.thedeanda.lorem.LoremIpsum;
 import info.freelibrary.iiif.presentation.AbstractTest;
 import info.freelibrary.iiif.presentation.Constants;
 import info.freelibrary.iiif.presentation.Manifest;
+import info.freelibrary.iiif.presentation.ResourceTypes;
 
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
@@ -19,8 +20,6 @@ import io.vertx.core.json.JsonObject;
  * Tests a label.
  */
 public class LabelTest extends AbstractTest {
-
-    private static final String MANIFEST = "sc:Manifest";
 
     private static final String ASDF = "asdf";
 
@@ -66,7 +65,7 @@ public class LabelTest extends AbstractTest {
 
         myManifest.setLabel(new Label(ASDF));
         labelJSON.put(NONE, new JsonArray().add(ASDF));
-        myJSON.put(Constants.TYPE, MANIFEST).put(Constants.ID, AAAA).put(Constants.LABEL, labelJSON);
+        myJSON.put(Constants.TYPE, ResourceTypes.MANIFEST).put(Constants.ID, AAAA).put(Constants.LABEL, labelJSON);
 
         assertEquals(myJSON, JsonObject.mapFrom(myManifest));
     }
@@ -80,7 +79,7 @@ public class LabelTest extends AbstractTest {
 
         myManifest.setLabel(ASDF);
         labelJSON.put(NONE, new JsonArray().add(ASDF));
-        myJSON.put(Constants.LABEL, labelJSON).put(Constants.ID, AAAA).put(Constants.TYPE, MANIFEST);
+        myJSON.put(Constants.LABEL, labelJSON).put(Constants.ID, AAAA).put(Constants.TYPE, ResourceTypes.MANIFEST);
 
         assertEquals(myJSON, JsonObject.mapFrom(myManifest));
     }

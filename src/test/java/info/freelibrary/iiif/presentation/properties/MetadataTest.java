@@ -45,7 +45,7 @@ public class MetadataTest {
         myManifest = new Manifest(AAAA, BBBB);
         labelJSON.put(NONE, new JsonArray().add(BBBB));
         myJSON = new JsonObject().put(Constants.CONTEXT, "http://iiif.io/api/presentation/3/context.json");
-        myJSON.put(Constants.TYPE, "sc:Manifest").put(Constants.ID, AAAA).put(Constants.LABEL, labelJSON);
+        myJSON.put(Constants.TYPE, "Manifest").put(Constants.ID, AAAA).put(Constants.LABEL, labelJSON);
     }
 
     /**

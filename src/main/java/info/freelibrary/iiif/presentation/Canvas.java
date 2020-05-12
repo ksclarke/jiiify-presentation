@@ -9,15 +9,21 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Label;
-import info.freelibrary.iiif.presentation.properties.NavDate;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.StringUtils;
+
+import io.vertx.core.json.Json;
+import io.vertx.core.json.JsonObject;
 
 /**
  * A virtual container that represents a page or view and has content resources associated with it or with parts of
@@ -26,10 +32,10 @@ import info.freelibrary.iiif.presentation.utils.MessageCodes;
  * blank canvas and images, text and other resources are &quot;painted&quot; on to it.
  */
 @JsonPropertyOrder({ Constants.TYPE, Constants.LABEL, Constants.ID, Constants.WIDTH, Constants.HEIGHT,
-    Constants.DURATION, Constants.THUMBNAIL, Constants.IMAGE_CONTENT, Constants.OTHER_CONTENT })
-public class Canvas extends Resource<Canvas> {
+    Constants.DURATION, Constants.THUMBNAIL, Constants.ITEMS })
+public class Canvas extends NavigableResource<Canvas> {
 
-    private static final String TYPE = "sc:Canvas";
+    private static final Logger LOGGER = LoggerFactory.getLogger(Canvas.class, Constants.BUNDLE_NAME);
 
     private static final int REQ_ARG_COUNT = 3;
 
@@ -39,11 +45,7 @@ public class Canvas extends Resource<Canvas> {
 
     private double myDuration;
 
-    private List<ImageContent> myImageContent;
-
-    private List<OtherContent> myOtherContent;
-
-    private NavDate myNavDate;
+    private List<AnnotationPage> myPageList;
 
     /**
      * Creates a IIIF presentation canvas.
@@ -54,7 +56,7 @@ public class Canvas extends Resource<Canvas> {
      * @param aHeight A canvas height
      */
     public Canvas(final String aID, final String aLabel, final int aWidth, final int aHeight) {
-        super(TYPE, aID, aLabel, REQ_ARG_COUNT);
+        super(ResourceTypes.CANVAS, aID, aLabel, REQ_ARG_COUNT);
         setWidthHeight(aWidth, aHeight);
     }
 
@@ -67,7 +69,7 @@ public class Canvas extends Resource<Canvas> {
      * @param aHeight A canvas height
      */
     public Canvas(final URI aID, final Label aLabel, final int aWidth, final int aHeight) {
-        super(TYPE, aID, aLabel, REQ_ARG_COUNT);
+        super(ResourceTypes.CANVAS, aID, aLabel, REQ_ARG_COUNT);
         setWidthHeight(aWidth, aHeight);
     }
 
@@ -82,7 +84,7 @@ public class Canvas extends Resource<Canvas> {
      */
     public Canvas(final String aID, final String aLabel, final int aWidth, final int aHeight,
             final double aDuration) {
-        super(TYPE, aID, aLabel, REQ_ARG_COUNT);
+        super(ResourceTypes.CANVAS, aID, aLabel, REQ_ARG_COUNT);
         setWidthHeight(aWidth, aHeight);
         setDuration(aDuration);
     }
@@ -97,7 +99,7 @@ public class Canvas extends Resource<Canvas> {
      * @param aDuration A canvas duration
      */
     public Canvas(final URI aID, final Label aLabel, final int aWidth, final int aHeight, final double aDuration) {
-        super(TYPE, aID, aLabel, REQ_ARG_COUNT);
+        super(ResourceTypes.CANVAS, aID, aLabel, REQ_ARG_COUNT);
         setWidthHeight(aWidth, aHeight);
         setDuration(aDuration);
     }
@@ -113,7 +115,7 @@ public class Canvas extends Resource<Canvas> {
      */
     public Canvas(final String aID, final String aLabel, final int aWidth, final int aHeight,
             final Thumbnail aThumbnail) {
-        super(TYPE, aID, aLabel, REQ_ARG_COUNT);
+        super(ResourceTypes.CANVAS, aID, aLabel, REQ_ARG_COUNT);
         setWidthHeight(aWidth, aHeight);
         setThumbnail(aThumbnail);
     }
@@ -129,7 +131,7 @@ public class Canvas extends Resource<Canvas> {
      */
     public Canvas(final URI aID, final Label aLabel, final int aWidth, final int aHeight,
             final Thumbnail aThumbnail) {
-        super(TYPE, aID, aLabel, REQ_ARG_COUNT);
+        super(ResourceTypes.CANVAS, aID, aLabel, REQ_ARG_COUNT);
         setWidthHeight(aWidth, aHeight);
         setThumbnail(aThumbnail);
     }
@@ -146,7 +148,7 @@ public class Canvas extends Resource<Canvas> {
      */
     public Canvas(final String aID, final String aLabel, final int aWidth, final int aHeight, final double aDuration,
             final Thumbnail aThumbnail) {
-        super(TYPE, aID, aLabel, REQ_ARG_COUNT);
+        super(ResourceTypes.CANVAS, aID, aLabel, REQ_ARG_COUNT);
         setWidthHeight(aWidth, aHeight);
         setThumbnail(aThumbnail);
         setDuration(aDuration);
@@ -164,17 +166,21 @@ public class Canvas extends Resource<Canvas> {
      */
     public Canvas(final URI aID, final Label aLabel, final int aWidth, final int aHeight, final double aDuration,
             final Thumbnail aThumbnail) {
-        super(TYPE, aID, aLabel, REQ_ARG_COUNT);
+        super(ResourceTypes.CANVAS, aID, aLabel, REQ_ARG_COUNT);
         setWidthHeight(aWidth, aHeight);
         setThumbnail(aThumbnail);
         setDuration(aDuration);
     }
 
+    Canvas(final URI aID) {
+        super(ResourceTypes.CANVAS, aID, 2);
+    }
+
     /**
      * Creates a blank new canvas.
      */
-    private Canvas() {
-        super(TYPE);
+    Canvas() {
+        super(ResourceTypes.CANVAS);
     }
 
     @Override
@@ -189,11 +195,56 @@ public class Canvas extends Resource<Canvas> {
     }
 
     /**
+     * Sets the canvas' annotation pages.
+     *
+     * @param aPageArray An array of annotation pages
+     * @return The canvas
+     */
+    @JsonSetter(Constants.ITEMS)
+    public Canvas setPages(final AnnotationPage... aPageArray) {
+        if (myPageList != null) {
+            myPageList.clear();
+        }
+
+        return addPage(aPageArray);
+    }
+
+    /**
+     * Adds an annotation page to the canvas.
+     *
+     * @param aPageArray An annotation page
+     * @return The canvas
+     */
+    public Canvas addPage(final AnnotationPage... aPageArray) {
+        if (!Collections.addAll(getPages(), aPageArray)) {
+            final String message = LOGGER.getMessage(MessageCodes.JPA_049, StringUtils.toString(aPageArray, ' '));
+            throw new UnsupportedOperationException(message);
+        }
+
+        return this;
+    }
+
+    /**
+     * Gets the canvas' annotation pages.
+     *
+     * @return The canvas' annotation pages
+     */
+    @JsonGetter(Constants.ITEMS)
+    public List<AnnotationPage> getPages() {
+        if (myPageList == null) {
+            myPageList = new ArrayList<>();
+        }
+
+        return myPageList;
+    }
+
+    /**
      * Gets the width of the canvas.
      *
      * @return The width of the canvas
      */
     @JsonGetter(Constants.WIDTH)
+    @JsonInclude(Include.NON_DEFAULT)
     public int getWidth() {
         return myWidth;
     }
@@ -216,6 +267,7 @@ public class Canvas extends Resource<Canvas> {
      * @return The height of the canvas
      */
     @JsonGetter(Constants.HEIGHT)
+    @JsonInclude(Include.NON_DEFAULT)
     public int getHeight() {
         return myHeight;
     }
@@ -230,28 +282,6 @@ public class Canvas extends Resource<Canvas> {
     public Canvas setHeight(final int aHeight) {
         myHeight = aHeight;
         return this;
-    }
-
-    /**
-     * Sets a navigation date.
-     *
-     * @param aNavDate The navigation date
-     * @return The canvas
-     */
-    @JsonSetter(Constants.NAV_DATE)
-    public Canvas setNavDate(final NavDate aNavDate) {
-        myNavDate = aNavDate;
-        return this;
-    }
-
-    /**
-     * Gets a navigation date.
-     *
-     * @return The navigation date
-     */
-    @JsonGetter(Constants.NAV_DATE)
-    public NavDate getNavDate() {
-        return myNavDate;
     }
 
     /**
@@ -282,88 +312,49 @@ public class Canvas extends Resource<Canvas> {
     }
 
     /**
-     * Sets the canvas' image content.
+     * Returns a JsonObject of the Canvas.
      *
-     * @param aContentArray A canvas image content
-     * @return The canvas
+     * @return The canvas as a JSON object
      */
-    public Canvas setImageContent(final ImageContent... aContentArray) {
-        if (myImageContent != null) {
-            myImageContent.clear();
+    public JsonObject toJSON() {
+        final JsonObject json = JsonObject.mapFrom(this);
+
+        // If zero width/height, we're outputting a canvas reference so shouldn't include them
+        if (json.containsKey(Constants.WIDTH) && json.containsKey(Constants.HEIGHT)) {
+            if (json.getInteger(Constants.WIDTH) == 0 && json.getInteger(Constants.HEIGHT) == 0) {
+                json.remove(Constants.WIDTH);
+                json.remove(Constants.HEIGHT);
+            }
         }
 
-        return addImageContent(aContentArray);
+        return json;
+    }
+
+    @Override
+    public String toString() {
+        return toJSON().encode();
     }
 
     /**
-     * Sets the canvas' other content.
+     * Returns a Canvas from its JSON representation.
      *
-     * @param aContentArray A canvas other content
+     * @param aJsonObject A canvas in JSON form
      * @return The canvas
      */
     @JsonIgnore
-    public Canvas setOtherContent(final OtherContent... aContentArray) {
-        if (myOtherContent != null) {
-            myOtherContent.clear();
-        }
-
-        return addOtherContent(aContentArray);
+    public static Canvas fromJSON(final JsonObject aJsonObject) {
+        return Json.decodeValue(aJsonObject.toString(), Canvas.class);
     }
 
     /**
-     * Adds image content to the canvas.
+     * Returns a Canvas from its JSON representation.
      *
-     * @param aContentArray Image content to be added to the canvas
+     * @param aJsonString A canvas in string form
      * @return The canvas
      */
-    public Canvas addImageContent(final ImageContent... aContentArray) {
-        if (!Collections.addAll(getImageContent(), aContentArray)) {
-            throw new UnsupportedOperationException();
-        }
-
-        return this;
-    }
-
-    /**
-     * Adds other content to the canvas.
-     *
-     * @param aContentArray Other content to be added to the canvas
-     * @return The canvas
-     */
-    public Canvas addOtherContent(final OtherContent... aContentArray) {
-        if (Collections.addAll(getOtherContent(), aContentArray)) {
-            throw new UnsupportedOperationException();
-        }
-
-        return this;
-    }
-
-    /**
-     * Gets the canvas' image content.
-     *
-     * @return The canvas' image content
-     */
-    @JsonGetter(Constants.IMAGE_CONTENT)
-    public List<ImageContent> getImageContent() {
-        if (myImageContent == null) {
-            myImageContent = new ArrayList<>();
-        }
-
-        return myImageContent;
-    }
-
-    /**
-     * Gets the canvas' other content.
-     *
-     * @return The canvas' other content
-     */
-    @JsonGetter(Constants.OTHER_CONTENT)
-    public List<OtherContent> getOtherContent() {
-        if (myOtherContent == null) {
-            myOtherContent = new ArrayList<>();
-        }
-
-        return myOtherContent;
+    @JsonIgnore
+    public static Canvas fromString(final String aJsonString) {
+        return fromJSON(new JsonObject(aJsonString));
     }
 
     /**
