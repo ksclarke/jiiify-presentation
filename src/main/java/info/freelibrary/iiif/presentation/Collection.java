@@ -4,6 +4,7 @@ package info.freelibrary.iiif.presentation;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,8 +14,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Label;
-import info.freelibrary.iiif.presentation.properties.Metadata;
-import info.freelibrary.iiif.presentation.properties.Summary;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.properties.behaviors.CollectionBehavior;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
@@ -30,7 +29,9 @@ import io.vertx.core.json.JsonObject;
  */
 public class Collection extends NavigableResource<Collection> {
 
-    private static final int REQ_ARG_COUNT = 3;
+    private Optional<AccompanyingCanvas> myAccompanyingCanvas;
+
+    private Optional<PlaceholderCanvas> myPlaceholderCanvas;
 
     private List<Item> myItems;
 
@@ -41,7 +42,7 @@ public class Collection extends NavigableResource<Collection> {
      * @param aLabel A collection label in string form
      */
     public Collection(final String aID, final String aLabel) {
-        super(ResourceTypes.COLLECTION, aID, aLabel, REQ_ARG_COUNT);
+        super(ResourceTypes.COLLECTION, aID, aLabel, 3);
     }
 
     /**
@@ -51,35 +52,7 @@ public class Collection extends NavigableResource<Collection> {
      * @param aLabel A collection label
      */
     public Collection(final URI aID, final Label aLabel) {
-        super(ResourceTypes.COLLECTION, aID, aLabel, REQ_ARG_COUNT);
-    }
-
-    /**
-     * Creates a IIIF presentation collection.
-     *
-     * @param aID A collection ID in string form
-     * @param aLabel A collection label in string form
-     * @param aMetadata A collection's metadata
-     * @param aSummary A collection summary in string form
-     * @param aThumbnail A collection thumbnail
-     */
-    public Collection(final String aID, final String aLabel, final Metadata aMetadata, final String aSummary,
-            final Thumbnail aThumbnail) {
-        super(ResourceTypes.COLLECTION, aID, aLabel, aMetadata, aSummary, aThumbnail, REQ_ARG_COUNT);
-    }
-
-    /**
-     * Creates a IIIF presentation collection.
-     *
-     * @param aID A collection ID
-     * @param aLabel A collection label
-     * @param aMetadata A collection's metadata
-     * @param aSummary A collection summary
-     * @param aThumbnail A collection thumbnail
-     */
-    public Collection(final URI aID, final Label aLabel, final Metadata aMetadata, final Summary aSummary,
-            final Thumbnail aThumbnail) {
-        super(ResourceTypes.COLLECTION, aID, aLabel, aMetadata, aSummary, aThumbnail, REQ_ARG_COUNT);
+        super(ResourceTypes.COLLECTION, aID, aLabel, 3);
     }
 
     /**
@@ -87,6 +60,50 @@ public class Collection extends NavigableResource<Collection> {
      */
     private Collection() {
         super(ResourceTypes.COLLECTION);
+    }
+
+    /**
+     * Gets the placeholder canvas.
+     *
+     * @return A placeholder canvas
+     */
+    @JsonGetter(Constants.PLACEHOLDER_CANVAS)
+    public Optional<PlaceholderCanvas> getPlaceholderCanvas() {
+        return myPlaceholderCanvas;
+    }
+
+    /**
+     * Sets the placeholder canvas
+     *
+     * @param aCanvas A placeholder canvas
+     * @return This collection
+     */
+    @JsonSetter(Constants.PLACEHOLDER_CANVAS)
+    public Collection setPlaceholderCanvas(final PlaceholderCanvas aCanvas) {
+        myPlaceholderCanvas = Optional.ofNullable(aCanvas);
+        return this;
+    }
+
+    /**
+     * Gets the accompanying canvas.
+     *
+     * @return The accompanying canvas
+     */
+    @JsonGetter(Constants.ACCOMPANYING_CANVAS)
+    public Optional<AccompanyingCanvas> getAccompanyingCanvas() {
+        return myAccompanyingCanvas;
+    }
+
+    /**
+     * Sets the accompanying canvas.
+     *
+     * @param aCanvas An accompanying canvas
+     * @return This collection
+     */
+    @JsonSetter(Constants.ACCOMPANYING_CANVAS)
+    public Collection setAccompanyingCanvas(final AccompanyingCanvas aCanvas) {
+        myAccompanyingCanvas = Optional.ofNullable(aCanvas);
+        return this;
     }
 
     @Override

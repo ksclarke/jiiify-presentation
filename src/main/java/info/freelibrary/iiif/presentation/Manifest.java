@@ -2,7 +2,6 @@
 package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -17,10 +16,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Label;
-import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.StartCanvas;
-import info.freelibrary.iiif.presentation.properties.Summary;
-import info.freelibrary.iiif.presentation.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.utils.ContextListComparator;
@@ -41,11 +37,13 @@ public class Manifest extends NavigableResource<Manifest> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Manifest.class, Constants.BUNDLE_NAME);
 
-    private static final int REQ_ARG_COUNT = 3;
-
     private final List<URI> myContexts = Stream.of(Constants.CONTEXT_URI).collect(Collectors.toList());
 
     private final List<Canvas> myCanvases = new ArrayList<>();
+
+    private Optional<AccompanyingCanvas> myAccompanyingCanvas;
+
+    private Optional<PlaceholderCanvas> myPlaceholderCanvas;
 
     private Optional<Range> myRange = Optional.empty();
 
@@ -61,7 +59,7 @@ public class Manifest extends NavigableResource<Manifest> {
      * @throws IllegalArgumentException If the supplied ID is not a valid URI
      */
     public Manifest(final String aID, final String aLabel) {
-        super(ResourceTypes.MANIFEST, aID, aLabel, REQ_ARG_COUNT);
+        super(ResourceTypes.MANIFEST, aID, aLabel, 3);
     }
 
     /**
@@ -71,36 +69,7 @@ public class Manifest extends NavigableResource<Manifest> {
      * @param aLabel A manifest label
      */
     public Manifest(final URI aID, final Label aLabel) {
-        super(ResourceTypes.MANIFEST, aID, aLabel, REQ_ARG_COUNT);
-    }
-
-    /**
-     * Creates a IIIF presentation manifest.
-     *
-     * @param aID A manifest ID in string form
-     * @param aLabel A manifest label in string form
-     * @param aMetadata A manifest's metadata
-     * @param aSummary A manifest summary in string form
-     * @param aThumbnail A manifest thumbnail
-     * @throws URISyntaxException If the supplied ID is not a valid URI
-     */
-    public Manifest(final String aID, final String aLabel, final Metadata aMetadata, final String aSummary,
-            final Thumbnail aThumbnail) throws URISyntaxException {
-        super(ResourceTypes.MANIFEST, aID, aLabel, aMetadata, aSummary, aThumbnail, REQ_ARG_COUNT);
-    }
-
-    /**
-     * Creates a IIIF presentation manifest.
-     *
-     * @param aID A manifest ID
-     * @param aLabel A manifest label
-     * @param aMetadata A manifest's metadata
-     * @param aSummary A manifest summary
-     * @param aThumbnail A manifest thumbnail
-     */
-    public Manifest(final URI aID, final Label aLabel, final Metadata aMetadata, final Summary aSummary,
-            final Thumbnail aThumbnail) {
-        super(ResourceTypes.MANIFEST, aID, aLabel, aMetadata, aSummary, aThumbnail, REQ_ARG_COUNT);
+        super(ResourceTypes.MANIFEST, aID, aLabel, 3);
     }
 
     /**
@@ -108,6 +77,50 @@ public class Manifest extends NavigableResource<Manifest> {
      */
     private Manifest() {
         super(ResourceTypes.MANIFEST);
+    }
+
+    /**
+     * Gets the placeholder canvas.
+     *
+     * @return A placeholder canvas
+     */
+    @JsonGetter(Constants.PLACEHOLDER_CANVAS)
+    public Optional<PlaceholderCanvas> getPlaceholderCanvas() {
+        return myPlaceholderCanvas;
+    }
+
+    /**
+     * Sets the placeholder canvas
+     *
+     * @param aCanvas A placeholder canvas
+     * @return This manifest
+     */
+    @JsonSetter(Constants.PLACEHOLDER_CANVAS)
+    public Manifest setPlaceholderCanvas(final PlaceholderCanvas aCanvas) {
+        myPlaceholderCanvas = Optional.ofNullable(aCanvas);
+        return this;
+    }
+
+    /**
+     * Gets the accompanying canvas.
+     *
+     * @return The accompanying canvas
+     */
+    @JsonGetter(Constants.ACCOMPANYING_CANVAS)
+    public Optional<AccompanyingCanvas> getAccompanyingCanvas() {
+        return myAccompanyingCanvas;
+    }
+
+    /**
+     * Sets the accompanying canvas.
+     *
+     * @param aCanvas An accompanying canvas
+     * @return This manifest
+     */
+    @JsonSetter(Constants.ACCOMPANYING_CANVAS)
+    public Manifest setAccompanyingCanvas(final AccompanyingCanvas aCanvas) {
+        myAccompanyingCanvas = Optional.ofNullable(aCanvas);
+        return this;
     }
 
     @Override

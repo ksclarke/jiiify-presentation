@@ -27,7 +27,8 @@ public class ImageContentTest {
      */
     @Test
     public void testConstructor() {
-        assertEquals(URI.create(ID), new ImageContent(ID, new Canvas(CANVAS_ID, CANVAS_LABEL, 100, 100)).getID());
+        final Canvas canvas = new Canvas(CANVAS_ID, CANVAS_LABEL).setWidthHeight(100, 100);
+        assertEquals(URI.create(ID), new ImageContent(ID, canvas).getID());
     }
 
     /**
@@ -35,7 +36,8 @@ public class ImageContentTest {
      */
     @Test
     public final void testSetBehaviors() {
-        final ImageContent content = new ImageContent(ID, new Canvas(CANVAS_ID, CANVAS_LABEL, 100, 100));
+        final Canvas canvas = new Canvas(CANVAS_ID, CANVAS_LABEL).setWidthHeight(100, 100);
+        final ImageContent content = new ImageContent(ID, canvas);
 
         assertEquals(1, content.setBehaviors(ResourceBehavior.HIDDEN).getBehaviors().size());
     }
@@ -45,7 +47,8 @@ public class ImageContentTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testSetDisallowedBehaviors() {
-        final ImageContent content = new ImageContent(ID, new Canvas(CANVAS_ID, CANVAS_LABEL, 100, 100));
+        final Canvas canvas = new Canvas(CANVAS_ID, CANVAS_LABEL).setWidthHeight(100, 100);
+        final ImageContent content = new ImageContent(ID, canvas);
 
         content.setBehaviors(ManifestBehavior.AUTOADVANCE);
     }
@@ -55,7 +58,8 @@ public class ImageContentTest {
      */
     @Test
     public final void testAddBehaviors() {
-        final ImageContent content = new ImageContent(ID, new Canvas(CANVAS_ID, CANVAS_LABEL, 100, 100));
+        final Canvas canvas = new Canvas(CANVAS_ID, CANVAS_LABEL).setWidthHeight(100, 100);
+        final ImageContent content = new ImageContent(ID, canvas);
 
         assertEquals(1, content.addBehaviors(ResourceBehavior.HIDDEN).getBehaviors().size());
     }
@@ -65,7 +69,8 @@ public class ImageContentTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testAddDisallowedBehaviors() {
-        final ImageContent content = new ImageContent(ID, new Canvas(CANVAS_ID, CANVAS_LABEL, 100, 100));
+        final Canvas canvas = new Canvas(CANVAS_ID, CANVAS_LABEL).setWidthHeight(100, 100);
+        final ImageContent content = new ImageContent(ID, canvas);
 
         content.addBehaviors(ManifestBehavior.CONTINUOUS, CanvasBehavior.AUTOADVANCE);
     }

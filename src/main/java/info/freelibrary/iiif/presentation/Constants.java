@@ -109,6 +109,10 @@ public final class Constants {
 
     public static final String START = "start";
 
+    public static final String PLACEHOLDER_CANVAS = "placeholderCanvas";
+
+    public static final String ACCOMPANYING_CANVAS = "accompanyingCanvas";
+
     private Constants() {
         super();
     }

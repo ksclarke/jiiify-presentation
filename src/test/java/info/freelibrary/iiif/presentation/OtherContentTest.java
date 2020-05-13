@@ -18,7 +18,7 @@ public class OtherContentTest {
 
     private static final URI ID = URI.create("http://example.org/id");
 
-    private static final Canvas CANVAS = new Canvas("aaaa", "a  label", 100, 100);
+    private static final Canvas CANVAS = new Canvas("aaaa", "a  label").setWidthHeight(100, 100);
 
     /**
      * Tests constructing other content.

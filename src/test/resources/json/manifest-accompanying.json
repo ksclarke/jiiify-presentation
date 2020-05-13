@@ -1,0 +1,9 @@
+{
+  "@context" : "http://iiif.io/api/presentation/3/context.json",
+  "type" : "Manifest",
+  "id" : "70222204-b134-4434-ae4d-88e593bf5712",
+  "accompanyingCanvas" : {
+    "type" : "Canvas",
+    "id" : "a7398622-0eb4-49f3-9ad2-7f56c4dc640b"
+  }
+}

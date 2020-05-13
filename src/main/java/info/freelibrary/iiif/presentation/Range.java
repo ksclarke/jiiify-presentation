@@ -31,9 +31,11 @@ import io.vertx.core.json.JsonObject;
  */
 public class Range extends NavigableResource<Range> {
 
-    private static final int REQ_ARG_COUNT = 3;
-
     private final List<Item> myItems = new ArrayList<>();
+
+    private Optional<AccompanyingCanvas> myAccompanyingCanvas;
+
+    private Optional<PlaceholderCanvas> myPlaceholderCanvas;
 
     private Optional<StartSelector> myStartSelector = Optional.empty();
 
@@ -43,10 +45,28 @@ public class Range extends NavigableResource<Range> {
      * Creates a IIIF presentation range.
      *
      * @param aID A range ID in string form
+     */
+    public Range(final String aID) {
+        super(ResourceTypes.RANGE, URI.create(aID), 2);
+    }
+
+    /**
+     * Creates a IIIF presentation range.
+     *
+     * @param aID A range ID
+     */
+    public Range(final URI aID) {
+        super(ResourceTypes.RANGE, aID, 2);
+    }
+
+    /**
+     * Creates a IIIF presentation range.
+     *
+     * @param aID A range ID in string form
      * @param aLabel A descriptive label, in string form, for the range
      */
     public Range(final String aID, final String aLabel) {
-        super(ResourceTypes.RANGE, aID, aLabel, REQ_ARG_COUNT);
+        super(ResourceTypes.RANGE, aID, aLabel, 3);
     }
 
     /**
@@ -56,7 +76,7 @@ public class Range extends NavigableResource<Range> {
      * @param aLabel A descriptive label for the range
      */
     public Range(final URI aID, final Label aLabel) {
-        super(ResourceTypes.RANGE, aID, aLabel, REQ_ARG_COUNT);
+        super(ResourceTypes.RANGE, aID, aLabel, 3);
     }
 
     /**
@@ -64,6 +84,50 @@ public class Range extends NavigableResource<Range> {
      */
     private Range() {
         super(ResourceTypes.RANGE);
+    }
+
+    /**
+     * Gets the placeholder canvas.
+     *
+     * @return A placeholder canvas
+     */
+    @JsonGetter(Constants.PLACEHOLDER_CANVAS)
+    public Optional<PlaceholderCanvas> getPlaceholderCanvas() {
+        return myPlaceholderCanvas;
+    }
+
+    /**
+     * Sets the placeholder canvas
+     *
+     * @param aCanvas A placeholder canvas
+     * @return This range
+     */
+    @JsonSetter(Constants.PLACEHOLDER_CANVAS)
+    public Range setPlaceholderCanvas(final PlaceholderCanvas aCanvas) {
+        myPlaceholderCanvas = Optional.ofNullable(aCanvas);
+        return this;
+    }
+
+    /**
+     * Gets the accompanying canvas.
+     *
+     * @return The accompanying canvas
+     */
+    @JsonGetter(Constants.ACCOMPANYING_CANVAS)
+    public Optional<AccompanyingCanvas> getAccompanyingCanvas() {
+        return myAccompanyingCanvas;
+    }
+
+    /**
+     * Sets the accompanying canvas.
+     *
+     * @param aCanvas An accompanying canvas
+     * @return This range
+     */
+    @JsonSetter(Constants.ACCOMPANYING_CANVAS)
+    public Range setAccompanyingCanvas(final AccompanyingCanvas aCanvas) {
+        myAccompanyingCanvas = Optional.ofNullable(aCanvas);
+        return this;
     }
 
     @Override

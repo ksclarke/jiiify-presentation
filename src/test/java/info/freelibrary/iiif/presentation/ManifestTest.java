@@ -87,10 +87,10 @@ public class ManifestTest extends AbstractTest {
         myManifest.setLogo(LOGO_URI);
         myManifest.setThumbnail(MANIFEST_THUMBNAIL_URI);
 
-        final String canvas1ID = SERVER + MANIFEST_ID + "/canvas/canvas-1";
-        final String canvas1Label = "GeoNF-frg68a_001r_K-64-001";
-        final String canvas1Thumb = SERVER + "ark:%2F21198%2Fz10v8vhm" + THUMBNAIL_PATH;
-        final Canvas canvas1 = new Canvas(canvas1ID, canvas1Label, WIDTH, HEIGHT).setThumbnail(canvas1Thumb);
+        final String id1 = SERVER + MANIFEST_ID + "/canvas/canvas-1";
+        final String label1 = "GeoNF-frg68a_001r_K-64-001";
+        final String thumb1 = SERVER + "ark:%2F21198%2Fz10v8vhm" + THUMBNAIL_PATH;
+        final Canvas canvas1 = new Canvas(id1, label1).setWidthHeight(WIDTH, HEIGHT).setThumbnail(thumb1);
         final ImageContent content1 = new ImageContent(SERVER + MANIFEST_ID + "/imageanno/imageanno-1", canvas1);
         final AnnotationPage page1 = new AnnotationPage(SERVER + MANIFEST_ID + "/pageanno/pageanno-1");
         final AnnotationPage page2 = new AnnotationPage(SERVER + MANIFEST_ID + "/pageanno/pageanno-2");
@@ -110,10 +110,10 @@ public class ManifestTest extends AbstractTest {
             }
         }
 
-        final String canvas2ID = SERVER + MANIFEST_ID + "/canvas/canvas-2";
-        final String canvas2Label = "GeoNF-frg68a_001v_K-64-002";
-        final String canvas2Thumb = SERVER + "ark:%2F21198%2Fz1gq7dfx" + THUMBNAIL_PATH;
-        final Canvas canvas2 = new Canvas(canvas2ID, canvas2Label, WIDTH, HEIGHT).setThumbnail(canvas2Thumb);
+        final String id2 = SERVER + MANIFEST_ID + "/canvas/canvas-2";
+        final String label2 = "GeoNF-frg68a_001v_K-64-002";
+        final String thumb2 = SERVER + "ark:%2F21198%2Fz1gq7dfx" + THUMBNAIL_PATH;
+        final Canvas canvas2 = new Canvas(id2, label2).setWidthHeight(WIDTH, HEIGHT).setThumbnail(thumb2);
         final ImageContent content2 = new ImageContent(SERVER + MANIFEST_ID + "/imageanno/imageanno-2", canvas2);
 
         canvas2.addPage(page2.addImageContent(content2));
