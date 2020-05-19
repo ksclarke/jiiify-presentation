@@ -11,14 +11,12 @@ import info.freelibrary.iiif.presentation.properties.TimeMode;
 import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
 
 /**
- * Content resources and commentary are associated with a canvas via an annotation. This provides a single, coherent
- * method for aligning information, and provides a standards based framework for distinguishing parts of resources and
- * parts of canvases. As annotations can be added later, it promotes a distributed system in which publishers can
- * align their content with the descriptions created by others.
+ * ContentAnnotation resources and commentary are associated with a canvas via an annotation. This provides a single,
+ * coherent method for aligning information, and provides a standards based framework for distinguishing parts of
+ * resources and parts of canvases. As annotations can be added later, it promotes a distributed system in which
+ * publishers can align their content with the descriptions created by others.
  */
 public class Annotation extends Resource<Annotation> {
-
-    private static final int REQ_ARG_COUNT = 1;
 
     @JsonProperty(Constants.TIMEMODE)
     private TimeMode myTimeMode;
@@ -29,7 +27,7 @@ public class Annotation extends Resource<Annotation> {
      * @param aID An annotation ID
      */
     public Annotation(final URI aID) {
-        super(ResourceTypes.ANNOTATION, aID, REQ_ARG_COUNT);
+        super(ResourceTypes.ANNOTATION, aID, 1);
     }
 
     /**
@@ -38,7 +36,7 @@ public class Annotation extends Resource<Annotation> {
      * @param aID An annotation ID
      */
     public Annotation(final String aID) {
-        super(ResourceTypes.ANNOTATION, URI.create(aID), REQ_ARG_COUNT);
+        super(ResourceTypes.ANNOTATION, URI.create(aID), 1);
     }
 
     @Override

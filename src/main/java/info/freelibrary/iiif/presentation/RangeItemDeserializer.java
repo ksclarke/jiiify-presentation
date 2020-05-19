@@ -17,7 +17,7 @@ import info.freelibrary.util.LoggerFactory;
 /**
  * Deserializes a Range's Item.
  */
-public class RangeItemDeserializer extends StdDeserializer<Range.Item> {
+class RangeItemDeserializer extends StdDeserializer<Range.Item> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RangeItemDeserializer.class, Constants.BUNDLE_NAME);
 

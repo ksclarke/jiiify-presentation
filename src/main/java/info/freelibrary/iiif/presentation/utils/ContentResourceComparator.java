@@ -7,13 +7,13 @@ import java.util.Objects;
 import info.freelibrary.iiif.presentation.Constants;
 
 /**
- * A comparator that returns the sort order of the {@code ImageContent} properties.
+ * A comparator that returns the sort order of the {@code ImageAnnotation} properties.
  */
-public class ImageContentComparator implements Comparator<String> {
+public class ContentResourceComparator implements Comparator<String> {
 
     // This is the sort order we want
     private static final String[] KEYS = new String[] { Constants.ID, Constants.TYPE, Constants.DEFAULT,
-        Constants.ITEM, Constants.WIDTH, Constants.HEIGHT, Constants.FORMAT, Constants.LABEL, Constants.SERVICE };
+        Constants.ITEMS, Constants.WIDTH, Constants.HEIGHT, Constants.FORMAT, Constants.LABEL, Constants.SERVICE };
 
     @Override
     public int compare(final String aFirstKey, final String aSecondKey) {

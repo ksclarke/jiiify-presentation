@@ -91,44 +91,38 @@ public class ManifestTest extends AbstractTest {
         final String label1 = "GeoNF-frg68a_001r_K-64-001";
         final String thumb1 = SERVER + "ark:%2F21198%2Fz10v8vhm" + THUMBNAIL_PATH;
         final Canvas canvas1 = new Canvas(id1, label1).setWidthHeight(WIDTH, HEIGHT).setThumbnail(thumb1);
-        final ImageContent content1 = new ImageContent(SERVER + MANIFEST_ID + "/imageanno/imageanno-1", canvas1);
+        final ContentAnnotation content1 = new ContentAnnotation(SERVER + MANIFEST_ID + "/imageanno/imageanno-1",
+                canvas1);
         final AnnotationPage page1 = new AnnotationPage(SERVER + MANIFEST_ID + "/pageanno/pageanno-1");
         final AnnotationPage page2 = new AnnotationPage(SERVER + MANIFEST_ID + "/pageanno/pageanno-2");
 
-        canvas1.addPage(page1.addImageContent(content1));
+        canvas1.addPage(page1.addAnnotations(content1));
         myManifest.addCanvas(canvas1);
 
         for (final String[] values : firstCanvas) {
             final String id = SERVER + values[1] + THUMBNAIL_PATH;
             final ImageInfoService service = new ImageInfoService(SERVER + values[1]);
-            final ImageResource resource = new ImageResource(id, service);
+            final ImageContent resource = new ImageContent(id).setService(service);
 
-            if (values.length == 2) {
-                content1.addResource(resource.setWidth(WIDTH).setHeight(HEIGHT).setLabel(values[0]));
-            } else if (values.length == 3) {
-                content1.setDefaultResource(resource.setWidth(WIDTH).setHeight(HEIGHT).setLabel(values[0]));
-            }
+            content1.addContents(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(values[0]));
         }
 
         final String id2 = SERVER + MANIFEST_ID + "/canvas/canvas-2";
         final String label2 = "GeoNF-frg68a_001v_K-64-002";
         final String thumb2 = SERVER + "ark:%2F21198%2Fz1gq7dfx" + THUMBNAIL_PATH;
         final Canvas canvas2 = new Canvas(id2, label2).setWidthHeight(WIDTH, HEIGHT).setThumbnail(thumb2);
-        final ImageContent content2 = new ImageContent(SERVER + MANIFEST_ID + "/imageanno/imageanno-2", canvas2);
+        final ContentAnnotation content2 = new ContentAnnotation(SERVER + MANIFEST_ID + "/imageanno/imageanno-2",
+                canvas2);
 
-        canvas2.addPage(page2.addImageContent(content2));
+        canvas2.addPage(page2.addAnnotations(content2));
         myManifest.addCanvas(canvas2);
 
         for (final String[] values : secondCanvas) {
             final String id = SERVER + values[1] + THUMBNAIL_PATH;
             final ImageInfoService service = new ImageInfoService(SERVER + values[1]);
-            final ImageResource resource = new ImageResource(id, service);
+            final ImageContent resource = new ImageContent(id).setService(service);
 
-            if (values.length == 2) {
-                content2.addResource(resource.setWidth(WIDTH).setHeight(HEIGHT).setLabel(values[0]));
-            } else if (values.length == 3) {
-                content2.setDefaultResource(resource.setWidth(WIDTH).setHeight(HEIGHT).setLabel(values[0]));
-            }
+            content2.addContents(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(values[0]));
         }
 
         myVertx = Vertx.factory.vertx();
@@ -201,11 +195,10 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public void testToString() {
-        final Buffer buffer = myVertx.fileSystem().readFileBlocking(SINAI_JSON);
-        final String expected = new JsonObject(buffer).encodePrettily();
+        final JsonObject expected = new JsonObject(myVertx.fileSystem().readFileBlocking(SINAI_JSON));
 
         // Wrap our on-disk JSON to normalize any spacing issues; we care about the contents, not spacing
-        assertEquals(new JsonObject(expected).encodePrettily(), myManifest.toString());
+        assertEquals(expected.encodePrettily(), new JsonObject(myManifest.toString()).encodePrettily());
     }
 
     /**

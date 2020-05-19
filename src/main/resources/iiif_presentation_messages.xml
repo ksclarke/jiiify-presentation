@@ -55,5 +55,7 @@
   <entry key="JPA-049">Unable to add AnnotationPage to Canvas: [{}]</entry>
   <entry key="JPA-050">Unable to add ImageContent to AnnotationPage: [{}]</entry>
   <entry key="JPA-051">Unable to add Canvas to Manifest: {}</entry>
+  <entry key="JPA-052">Unexpected and currently unsupported content resource type</entry>
+  <entry key="JPA-053">Type set on service image must be: {}</entry>
 
 </properties>

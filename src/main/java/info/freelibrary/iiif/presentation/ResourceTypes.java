@@ -27,6 +27,8 @@ public final class ResourceTypes {
 
     public static final String MODEL = "Model";
 
+    public static final String CHOICE = "Choice";
+
     public static final String SOUND = "Sound";
 
     public static final String SPECIFIC_RESOURCE = "SpecificResource";

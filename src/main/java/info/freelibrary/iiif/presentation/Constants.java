@@ -79,7 +79,9 @@ public final class Constants {
 
     public static final String OTHER_CONTENT = "otherContent";
 
-    public static final String ON = "on";
+    public static final String TARGET = "target";
+
+    public static final String BODY = "body";
 
     public static final String SOURCE = "source";
 
@@ -100,8 +102,6 @@ public final class Constants {
     public static final String ITEMS = "items";
 
     public static final String DEFAULT = "default";
-
-    public static final String OA_CHOICE = "oa:Choice";
 
     public static final String PHYSICAL_SCALE = "physicalScale";
 

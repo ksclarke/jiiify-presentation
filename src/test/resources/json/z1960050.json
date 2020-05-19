@@ -85,28 +85,10 @@
                         {
                             "type": "Annotation",
                             "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1960050/imageanno/imageanno-1",
-                            "motivation": "sc:painting",
-                            "on": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1960050/canvas/canvas-1",
-                            "resource": {
-                                "type": "oa:Choice",
-                                "default": {
-                                    "type": "Image",
-                                    "label": {
-                                        "none": [
-                                            "GeoNF-frg68a_001r_K-64-001_PSH_color"
-                                        ]
-                                    },
-                                    "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz10v8vhm/0,1022,6132,6132/150,150/0/default.jpg",
-                                    "width": 6132,
-                                    "height": 8176,
-                                    "format": "image/jpeg",
-                                    "service": {
-                                        "@context": "http://iiif.io/api/image/3/context.json",
-                                        "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz10v8vhm",
-                                        "profile": "http://iiif.io/api/image/3/level0.json"
-                                    }
-                                },
-                                "item": [
+                            "motivation": "painting",
+                            "body": {
+                                "type": "Choice",
+                                "items": [
                                     {
                                         "type": "Image",
                                         "label": {
@@ -346,7 +328,8 @@
                                         }
                                     }
                                 ]
-                            }
+                            },
+                             "target": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1960050/canvas/canvas-1"
                         }
                     ]
                 }
@@ -373,28 +356,10 @@
                         {
                             "type": "Annotation",
                             "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1960050/imageanno/imageanno-2",
-                            "motivation": "sc:painting",
-                            "on": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1960050/canvas/canvas-2",
-                            "resource": {
-                                "type": "oa:Choice",
-                                "default": {
-                                    "type": "Image",
-                                    "label": {
-                                        "none": [
-                                            "GeoNF-frg68a_001v_K-64-002_PSH_color"
-                                        ]
-                                    },
-                                    "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1gq7dfx/0,1022,6132,6132/150,150/0/default.jpg",
-                                    "width": 6132,
-                                    "height": 8176,
-                                    "format": "image/jpeg",
-                                    "service": {
-                                        "@context": "http://iiif.io/api/image/3/context.json",
-                                        "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1gq7dfx",
-                                        "profile": "http://iiif.io/api/image/3/level0.json"
-                                    }
-                                },
-                                "item": [
+                            "motivation": "painting",
+                            "body": {
+                                "type": "Choice",
+                                "items": [
                                     {
                                         "type": "Image",
                                         "label": {
@@ -634,7 +599,8 @@
                                         }
                                     }
                                 ]
-                            }
+                            },
+                            "target": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1960050/canvas/canvas-2"
                         }
                     ]
                 }

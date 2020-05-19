@@ -2,286 +2,160 @@
 package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.TreeMap;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.iiif.presentation.properties.Behavior;
-import info.freelibrary.iiif.presentation.properties.I18n;
-import info.freelibrary.iiif.presentation.properties.Label;
-import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
-import info.freelibrary.iiif.presentation.services.APIComplianceLevel;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
-import info.freelibrary.iiif.presentation.utils.ImageContentComparator;
-import info.freelibrary.iiif.presentation.utils.MessageCodes;
-import info.freelibrary.util.I18nRuntimeException;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.StringUtils;
+
+import io.vertx.core.json.Json;
+import io.vertx.core.json.JsonObject;
 
 /**
- * An annotation that places image resources on a Canvas.
+ * Image content that can be associated with a {@link ContentAnnotation}.
  */
-@JsonPropertyOrder({ Constants.TYPE, Constants.LABEL, Constants.ID, Constants.MOTIVATION, Constants.ON,
-    Constants.RESOURCE, Constants.OA_CHOICE, Constants.ITEM })
-public class ImageContent extends Content<ImageContent> {
+@JsonPropertyOrder({ Constants.TYPE, Constants.LABEL, Constants.ID, Constants.THUMBNAIL, Constants.WIDTH,
+    Constants.HEIGHT, Constants.FORMAT, Constants.SERVICE })
+public class ImageContent extends AbstractContentResource<ImageContent> implements ContentResource {
 
-    private static final String MOTIVATION = "sc:painting";
+    private Optional<ImageInfoService> myService;
 
-    private static final String RDF_NIL = "rdf:nil";
+    private int myWidth;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ImageContent.class, Constants.BUNDLE_NAME);
-
-    private final List<ImageResource> myResources = new ArrayList<>();
-
-    private Optional<ImageResource> myDefaultResource;
+    private int myHeight;
 
     /**
-     * Creates image content.
+     * Creates image content with the supplied ID.
      *
-     * @param aID An image content ID in string form
-     * @param aCanvas A canvas for the image content
+     * @param aURI An image content ID in string form
      */
-    public ImageContent(final String aID, final Canvas aCanvas) {
-        super(ResourceTypes.ANNOTATION, aID, aCanvas);
+    public ImageContent(final String aURI) {
+        super(ResourceTypes.IMAGE, aURI);
+        setMediaTypeFromExt(aURI);
     }
 
     /**
-     * Creates image content.
+     * Creates image content with the supplied ID.
      *
-     * @param aID An image content ID
-     * @param aCanvas A canvas for the image content
+     * @param aURI An image content ID
      */
-    public ImageContent(final URI aID, final Canvas aCanvas) {
-        super(ResourceTypes.ANNOTATION, aID, aCanvas);
+    public ImageContent(final URI aURI) {
+        super(ResourceTypes.IMAGE, aURI);
+        setMediaTypeFromExt(aURI.toString());
     }
 
     /**
-     * Creates image content.
+     * Constructs an image content resource for Jackson's deserialization process.
      */
     private ImageContent() {
-        super(ResourceTypes.ANNOTATION);
+        super(ResourceTypes.IMAGE);
     }
 
     /**
-     * Gets the motivation of the image content.
+     * Sets the width and height of the image.
      *
-     * @return The motivation
-     */
-    @JsonGetter(Constants.MOTIVATION)
-    public String getMotivation() {
-        return MOTIVATION;
-    }
-
-    /**
-     * Sets the motivation of the image content.
-     *
-     * @param aMotivation A motivation in string form
-     */
-    @JsonSetter(Constants.MOTIVATION)
-    private void setMotivation(final String aMotivation) {
-        if (!MOTIVATION.equals(aMotivation)) {
-            throw new I18nRuntimeException(MessageCodes.JPA_038, MOTIVATION);
-        }
-    }
-
-    /**
-     * Adds a image resource.
-     *
-     * @param aResource An image resource
-     * @return The image content
+     * @param aWidth An image width
+     * @param aHeight An image height
+     * @return This image content
      */
     @JsonIgnore
-    public ImageContent addResource(final ImageResource aResource) {
-        Objects.requireNonNull(aResource, MessageCodes.JPA_006);
-        myResources.add(aResource);
+    public ImageContent setWidthHeight(final int aWidth, final int aHeight) {
+        setWidth(aWidth);
+        setHeight(aHeight);
+
         return this;
     }
 
     /**
-     * Sets the default image resource.
+     * Gets the image's width.
      *
-     * @param aResource An image resource
+     * @return The image's width
+     */
+    @JsonGetter(Constants.WIDTH)
+    @JsonInclude(Include.NON_DEFAULT)
+    public int getWidth() {
+        return myWidth;
+    }
+
+    /**
+     * Gets the image's height.
+     *
+     * @return The image's height
+     */
+    @JsonGetter(Constants.HEIGHT)
+    @JsonInclude(Include.NON_DEFAULT)
+    public int getHeight() {
+        return myHeight;
+    }
+
+    /**
+     * Gets the image's associated service.
+     *
+     * @return The image's associated service
+     */
+    @JsonGetter(Constants.SERVICE)
+    public Optional<ImageInfoService> getService() {
+        return myService == null || myService.isEmpty() ? Optional.empty() : myService;
+    }
+
+    /**
+     * Sets the image's associated service
+     *
+     * @param aService The image's associated service
      * @return The image content
      */
-    @JsonIgnore
-    public ImageContent setDefaultResource(final ImageResource aResource) {
-        Objects.requireNonNull(aResource, MessageCodes.JPA_006);
-        myDefaultResource = Optional.of(aResource);
+    @JsonSetter(Constants.SERVICE)
+    public ImageContent setService(final ImageInfoService aService) {
+        myService = Optional.ofNullable(aService);
         return this;
     }
 
     /**
-     * Gets the default image resource, if there is one.
+     * Returns image content from its JSON representation.
      *
-     * @return The default image resource
+     * @param aJsonObject A image content resource in JSON form
+     * @return The image content
      */
-    @JsonIgnore
-    public Optional<ImageResource> getDefaultResource() {
-        if (myDefaultResource == null) {
-            myDefaultResource = Optional.empty();
-        }
-
-        return myDefaultResource;
+    public static ImageContent fromJSON(final JsonObject aJsonObject) {
+        return Json.decodeValue(aJsonObject.toString(), ImageContent.class);
     }
 
     /**
-     * Gets the image resources.
+     * Returns image content from its JSON representation.
      *
-     * @return The image resources
+     * @param aJsonString A image content resource in string form
+     * @return The image content
      */
-    @JsonIgnore
-    public List<ImageResource> getResources() {
-        return myResources;
-    }
-
-    @Override
-    @JsonSetter(Constants.BEHAVIOR)
-    public ImageContent setBehaviors(final Behavior... aBehaviorArray) {
-        return super.setBehaviors(checkBehaviors(ResourceBehavior.class, aBehaviorArray));
-    }
-
-    @Override
-    public ImageContent addBehaviors(final Behavior... aBehaviorArray) {
-        return super.addBehaviors(checkBehaviors(ResourceBehavior.class, aBehaviorArray));
+    public static ImageContent fromString(final String aJsonString) {
+        return fromJSON(new JsonObject(aJsonString));
     }
 
     /**
-     * Gets the resources map.
+     * Sets the image width.
      *
-     * @return The resources map
+     * @param aWidth The image's width
+     * @return The image
      */
-    @JsonGetter(Constants.RESOURCE)
-    private Map<String, Object> toMap() {
-        final Map<String, Object> map = new TreeMap<>(new ImageContentComparator());
-
-        if (!myResources.isEmpty()) {
-            final List<Object> itemList = new ArrayList<>();
-
-            map.put(Constants.TYPE, Constants.OA_CHOICE);
-
-            if (myDefaultResource.isPresent()) {
-                map.put(Constants.DEFAULT, myDefaultResource);
-            }
-
-            for (final ImageResource resource : myResources) {
-                if (resource == null) {
-                    itemList.add(RDF_NIL);
-                } else {
-                    itemList.add(resource);
-                }
-            }
-
-            map.put(Constants.ITEM, itemList);
-        }
-
-        return map;
+    @JsonSetter(Constants.WIDTH)
+    private ImageContent setWidth(final int aWidth) {
+        myWidth = aWidth;
+        return this;
     }
 
     /**
-     * Builds the ImageContent's ImageResoures from the JSON resources map.
+     * Sets the image height.
      *
-     * @param aResourcesMap A JSON representation of the resources map
+     * @param aHeight The image's height
+     * @return The image
      */
-    @JsonSetter(Constants.RESOURCE)
-    private void setMap(final Map<String, Object> aResourcesMap) {
-        LOGGER.trace(aResourcesMap.toString());
-
-        if (!aResourcesMap.isEmpty()) {
-            final Map<String, Object> defaultItem = (Map<String, Object>) aResourcesMap.get(Constants.DEFAULT);
-            final List<Map<String, Object>> items = (List<Map<String, Object>>) aResourcesMap.get(Constants.ITEM);
-
-            if (defaultItem != null) {
-                myDefaultResource = Optional.of(deserializeResource(defaultItem));
-            }
-
-            if (items != null) {
-                for (final Object object : items) {
-                    if (object instanceof String && RDF_NIL.equals(object.toString())) {
-                        myResources.add(null);
-                    } else {
-                        myResources.add(deserializeResource((Map<String, Object>) object));
-                    }
-                }
-            }
-
-            if (defaultItem == null && items == null && aResourcesMap.get(Constants.ID) != null) {
-                myResources.add(deserializeResource(aResourcesMap));
-            }
-        }
-    }
-
-    /**
-     * Deserializes an image resource from the Map that Jackson creates. This is a candidate for a custom
-     * deserializer.
-     *
-     * @param aResourceMap A map of the image resources
-     * @return The newly built image resource
-     */
-    private ImageResource deserializeResource(final Map<String, Object> aResourceMap) {
-        final ImageResource resource = new ImageResource(URI.create((String) aResourceMap.get(Constants.ID)));
-        final LinkedHashMap labelMap = (LinkedHashMap) aResourceMap.get(Constants.LABEL);
-        final int width = (int) aResourceMap.getOrDefault(Constants.WIDTH, 0);
-        final int height = (int) aResourceMap.getOrDefault(Constants.HEIGHT, 0);
-        final Map<String, Object> service = (Map<String, Object>) aResourceMap.get(Constants.SERVICE);
-
-        if (labelMap != null) {
-            final Iterator<String> iterator = labelMap.keySet().iterator();
-
-            if (iterator.hasNext()) {
-                final String langTag = iterator.next();
-                final List<String> langStrings = (List<String>) labelMap.get(langTag);
-
-                resource.setLabel(new Label(new I18n(langTag, langStrings)));
-            } else {
-                throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_030));
-            }
-        }
-
-        if (width != 0) {
-            try {
-                resource.setWidth(width);
-            } catch (final NumberFormatException details) {
-                LOGGER.error(details, details.getMessage());
-                resource.setWidth(0);
-            }
-        }
-
-        if (height != 0) {
-            try {
-                resource.setHeight(height);
-            } catch (final NumberFormatException details) {
-                LOGGER.error(details, details.getMessage());
-                resource.setHeight(0);
-            }
-        }
-
-        if (service != null) {
-            final String profile = StringUtils.trimToNull((String) service.get(Constants.PROFILE));
-            final String id = StringUtils.trimToNull((String) service.get(Constants.ID));
-
-            if (profile != null && id != null) {
-                resource.setService(new ImageInfoService(APIComplianceLevel.fromProfile(profile), id));
-            } else if (id != null) {
-                resource.setService(new ImageInfoService(id));
-            }
-        }
-
-        return resource;
-    }
-
-    @Override
-    public String toString() {
-        return String.join(":", getClass().getSimpleName(), getID().toString());
+    @JsonSetter(Constants.HEIGHT)
+    private ImageContent setHeight(final int aHeight) {
+        myHeight = aHeight;
+        return this;
     }
 }

@@ -59,7 +59,7 @@ public class CanvasTest {
     /**
      * Tests setting a canvas' width to zero.
      */
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public final void testSetZeroWidth() {
         assertEquals(0, new Canvas(TEST_URI, TEST_LABEL).setWidthHeight(0, 100).getWidth());
     }
@@ -67,7 +67,7 @@ public class CanvasTest {
     /**
      * Tests setting a canvas' height to zero.
      */
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public final void testSetZeroHeight() {
         assertEquals(0, new Canvas(TEST_URI, TEST_LABEL).setWidthHeight(100, 0).getHeight());
     }
@@ -85,7 +85,7 @@ public class CanvasTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testSetInfiniteDuration() {
-        myCanvas = new Canvas(TEST_URI, TEST_LABEL).setDuration(Double.POSITIVE_INFINITY);
+        myCanvas = new Canvas(TEST_URI, TEST_LABEL).setDuration(Float.POSITIVE_INFINITY);
     }
 
     /**

@@ -1,8 +1,6 @@
 
 package info.freelibrary.iiif.presentation;
 
-import static info.freelibrary.iiif.presentation.Constants.BUNDLE_NAME;
-
 import java.net.URI;
 import java.util.Objects;
 import java.util.Optional;
@@ -21,17 +19,19 @@ import info.freelibrary.iiif.presentation.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.services.Service;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.util.FileUtils;
+import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
 /**
- * An image resource from a {@link Service} that is used as an {@link ImageResource}, and in {@link Logo}s and
+ * An image resource from a {@link Service} that is used as an {@link ImageContent}, and in {@link Logo}s and
  * {@link Thumbnail}s.
  */
 @JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.FORMAT, Constants.WIDTH, Constants.HEIGHT,
     Constants.SERVICE })
-@JsonInclude(Include.NON_DEFAULT)
 public class ServiceImage {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServiceImage.class, Constants.BUNDLE_NAME);
 
     private Optional<MediaType> myFormat;
 
@@ -44,7 +44,7 @@ public class ServiceImage {
     private Optional<ImageInfoService> myService;
 
     /**
-     * Creates an image from the supplied string ID.
+     * Creates a service image from the supplied string ID.
      *
      * @param aID An image URI ID in string form
      */
@@ -58,7 +58,7 @@ public class ServiceImage {
     }
 
     /**
-     * Creates an image from the supplied URI ID.
+     * Creates a service image from the supplied URI ID.
      *
      * @param aID An image ID
      */
@@ -72,7 +72,7 @@ public class ServiceImage {
     }
 
     /**
-     * Creates an image from the supplied URI ID, in string form, and image information service.
+     * Creates a service image from the supplied URI ID, in string form, and image information service.
      *
      * @param aURI A URI image ID in string form
      * @param aService A service for the image
@@ -87,7 +87,7 @@ public class ServiceImage {
     }
 
     /**
-     * Creates an image from the supplied URI ID and image information service.
+     * Creates a service image from the supplied URI ID and image information service.
      *
      * @param aID An image ID
      * @param aService A service for the image
@@ -102,7 +102,7 @@ public class ServiceImage {
     }
 
     /**
-     * Creates an image.
+     * Creates a service image.
      *
      * @param aURI An image ID in string form
      * @param aWidth An image width
@@ -120,7 +120,7 @@ public class ServiceImage {
     }
 
     /**
-     * Creates an image.
+     * Creates a service image.
      *
      * @param aID An image ID
      * @param aWidth An image width
@@ -138,9 +138,15 @@ public class ServiceImage {
     }
 
     /**
-     * Gets the image type.
+     * Constructs a service image for Jackson's deserialization process.
+     */
+    protected ServiceImage() {
+    }
+
+    /**
+     * Gets the service image type.
      *
-     * @return The image type
+     * @return The service image type
      */
     @JsonGetter(Constants.TYPE)
     public String getType() {
@@ -148,10 +154,10 @@ public class ServiceImage {
     }
 
     /**
-     * Sets the format of the image from a file extension or media type.
+     * Sets the format of the service image from a file extension or media type.
      *
      * @param aMediaType A string representation of media type or file extension
-     * @return The image
+     * @return The service image
      */
     @JsonSetter(Constants.FORMAT)
     public ServiceImage setFormat(final String aMediaType) {
@@ -160,10 +166,10 @@ public class ServiceImage {
     }
 
     /**
-     * Sets the format of the image.
+     * Sets the format of the service image.
      *
      * @param aMediaType A media type
-     * @return The image
+     * @return The service image
      */
     @JsonIgnore
     public ServiceImage setFormatMediaType(final MediaType aMediaType) {
@@ -172,73 +178,66 @@ public class ServiceImage {
     }
 
     /**
-     * Gets the format of the image.
+     * Gets the format of the service image.
      *
-     * @return A string representation of the format
+     * @return A string representation of the service image's format
      */
     @JsonGetter(Constants.FORMAT)
     public String getFormat() {
-        return myFormat.isPresent() ? myFormat.get().toString() : null;
+        return myFormat != null && myFormat.isPresent() ? myFormat.get().toString() : null;
     }
 
     /**
-     * Gets the media type format of the image.
+     * Gets the media type format of the service image.
      *
-     * @return The media type format of the image
+     * @return The media type format of the service image
      */
     @JsonIgnore
     public Optional<MediaType> getFormatMediaType() {
-        return myFormat;
+        return myFormat == null ? Optional.empty() : myFormat;
     }
 
     /**
-     * Sets the image width.
+     * Sets the width and height of the service image.
      *
-     * @param aWidth The image width
-     * @return The image
+     * @param aWidth An image width
+     * @param aHeight An image height
+     * @return This service image
      */
-    @JsonSetter(Constants.WIDTH)
-    public ServiceImage setWidth(final int aWidth) {
-        myWidth = aWidth;
+    @JsonIgnore
+    public ServiceImage setWidthHeight(final int aWidth, final int aHeight) {
+        setWidth(aWidth);
+        setHeight(aHeight);
+
         return this;
     }
 
     /**
-     * Sets the image height.
+     * Gets the service image's width.
      *
-     * @param aHeight The image height
-     * @return The image
-     */
-    @JsonSetter(Constants.HEIGHT)
-    public ServiceImage setHeight(final int aHeight) {
-        myHeight = aHeight;
-        return this;
-    }
-
-    /**
-     * Gets the image width.
-     *
-     * @return The image width
+     * @return The service image's width
      */
     @JsonGetter(Constants.WIDTH)
+    @JsonInclude(Include.NON_DEFAULT)
     public int getWidth() {
         return myWidth;
     }
 
     /**
-     * Gets the image height.
+     * Gets the service image's height.
      *
-     * @return The image height
+     * @return The service image's height
      */
     @JsonGetter(Constants.HEIGHT)
+    @JsonInclude(Include.NON_DEFAULT)
     public int getHeight() {
         return myHeight;
     }
 
     /**
-     * Gets the image ID
+     * Gets the service image ID
      *
-     * @return The image ID
+     * @return The service image's ID
      */
     @JsonGetter(Constants.ID)
     public URI getID() {
@@ -246,10 +245,10 @@ public class ServiceImage {
     }
 
     /**
-     * Sets the image ID from the supplied URI in string form.
+     * Sets the service image ID from the supplied ID in string form.
      *
-     * @param aID The image URI ID in string form
-     * @return The image
+     * @param aID The service image's URI ID in string form
+     * @return The service image
      */
     @JsonSetter(Constants.ID)
     public ServiceImage setID(final String aID) {
@@ -259,10 +258,10 @@ public class ServiceImage {
     }
 
     /**
-     * Sets the image ID.
+     * Sets the service image ID.
      *
-     * @param aURI The image ID
-     * @return The image
+     * @param aURI The service image ID
+     * @return The service image
      */
     @JsonIgnore
     public ServiceImage setID(final URI aURI) {
@@ -272,20 +271,21 @@ public class ServiceImage {
     }
 
     /**
-     * Gets the image's service.
+     * Gets the service image's associated service.
      *
-     * @return The image's service
+     * @return The service image's associated service
      */
     @JsonGetter(Constants.SERVICE)
+    @JsonInclude(Include.NON_EMPTY)
     public Optional<ImageInfoService> getService() {
-        return myService.isEmpty() ? Optional.empty() : myService;
+        return myService == null || myService.isEmpty() ? Optional.empty() : myService;
     }
 
     /**
-     * Sets the image's service
+     * Sets the service image's associated service
      *
-     * @param aService The image's service
-     * @return The image
+     * @param aService The service image's associated service
+     * @return The service image
      */
     @JsonSetter(Constants.SERVICE)
     public ServiceImage setService(final ImageInfoService aService) {
@@ -298,6 +298,11 @@ public class ServiceImage {
         return String.join(":", getClass().getSimpleName(), getID().toString());
     }
 
+    /**
+     * Tries to set the service image's media type from the ID extension.
+     *
+     * @param aURI The service image's ID
+     */
     @JsonIgnore
     protected final void setMediaTypeFromExt(final String aURI) {
         final String fragment = '#' + URI.create(aURI).getFragment();
@@ -321,12 +326,49 @@ public class ServiceImage {
                 myFormat = Optional.ofNullable(MediaType.parse(aURI));
             }
         } catch (final IllegalArgumentException details) {
-            getLogger().warn(MessageCodes.JPA_013, aURI);
+            LOGGER.warn(MessageCodes.JPA_013, aURI);
             myFormat = Optional.empty();
         }
     }
 
-    protected Logger getLogger() {
-        return LoggerFactory.getLogger(ServiceImage.class, BUNDLE_NAME);
+    /**
+     * Sets the service image width.
+     *
+     * @param aWidth The service image's width
+     * @return The service image
+     */
+    @JsonSetter(Constants.WIDTH)
+    private ServiceImage setWidth(final int aWidth) {
+        myWidth = aWidth;
+        return this;
+    }
+
+    /**
+     * Sets the service image height.
+     *
+     * @param aHeight The service image's height
+     * @return The service image
+     */
+    @JsonSetter(Constants.HEIGHT)
+    private ServiceImage setHeight(final int aHeight) {
+        myHeight = aHeight;
+        return this;
+    }
+
+    /**
+     * Sets the type of service image. This method is just used by Jackson's deserialization process. It doesn't
+     * actually change the hard-coded type value.
+     *
+     * @param aType The service image type
+     * @return This service image
+     */
+    @JsonSetter(Constants.TYPE)
+    private ServiceImage setType(final String aType) {
+        // The value is hard-coded; this method is just used by Jackson
+        if (!ResourceTypes.IMAGE.equals(aType)) {
+            throw new I18nRuntimeException(MessageCodes.JPA_053, ResourceTypes.IMAGE);
+        }
+
+        return this;
     }
 }

@@ -16,6 +16,7 @@ import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.properties.behaviors.CollectionBehavior;
+import info.freelibrary.iiif.presentation.services.Service;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.util.I18nRuntimeException;
 
@@ -34,6 +35,8 @@ public class Collection extends NavigableResource<Collection> {
     private Optional<PlaceholderCanvas> myPlaceholderCanvas;
 
     private List<Item> myItems;
+
+    private Service myService;
 
     /**
      * Creates a IIIF presentation collection.
@@ -103,6 +106,28 @@ public class Collection extends NavigableResource<Collection> {
     @JsonSetter(Constants.ACCOMPANYING_CANVAS)
     public Collection setAccompanyingCanvas(final AccompanyingCanvas aCanvas) {
         myAccompanyingCanvas = Optional.ofNullable(aCanvas);
+        return this;
+    }
+
+    /**
+     * Gets a service.
+     *
+     * @return A service
+     */
+    @JsonGetter(Constants.SERVICE)
+    public Service getService() {
+        return myService;
+    }
+
+    /**
+     * Sets a service.
+     *
+     * @param aService A service
+     * @return The collection
+     */
+    @JsonSetter(Constants.SERVICE)
+    public Collection setService(final Service aService) {
+        myService = aService;
         return this;
     }
 
@@ -204,7 +229,8 @@ public class Collection extends NavigableResource<Collection> {
     }
 
     /**
-     * The reference to a manifest that's included in a collection.
+     * A wrapper for things embedded in or referenced from a collection (e&#46;g&#46; manifests and other
+     * collections).
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonPropertyOrder({ Constants.TYPE, Constants.ID, Constants.LABEL, Constants.THUMBNAIL })

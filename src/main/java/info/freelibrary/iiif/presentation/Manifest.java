@@ -19,6 +19,7 @@ import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.StartCanvas;
 import info.freelibrary.iiif.presentation.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.properties.behaviors.ManifestBehavior;
+import info.freelibrary.iiif.presentation.services.Service;
 import info.freelibrary.iiif.presentation.utils.ContextListComparator;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.util.Logger;
@@ -50,6 +51,8 @@ public class Manifest extends NavigableResource<Manifest> {
     private Optional<StartCanvas> myStartCanvas = Optional.empty();
 
     private ViewingDirection myViewingDirection;
+
+    private Service myService;
 
     /**
      * Creates a IIIF presentation manifest.
@@ -120,6 +123,28 @@ public class Manifest extends NavigableResource<Manifest> {
     @JsonSetter(Constants.ACCOMPANYING_CANVAS)
     public Manifest setAccompanyingCanvas(final AccompanyingCanvas aCanvas) {
         myAccompanyingCanvas = Optional.ofNullable(aCanvas);
+        return this;
+    }
+
+    /**
+     * Gets a service.
+     *
+     * @return A service
+     */
+    @JsonGetter(Constants.SERVICE)
+    public Service getService() {
+        return myService;
+    }
+
+    /**
+     * Sets a service.
+     *
+     * @param aService A service
+     * @return The manifest
+     */
+    @JsonSetter(Constants.SERVICE)
+    public Manifest setService(final Service aService) {
+        myService = aService;
         return this;
     }
 

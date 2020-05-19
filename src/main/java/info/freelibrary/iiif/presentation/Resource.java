@@ -29,7 +29,6 @@ import info.freelibrary.iiif.presentation.properties.Rights;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.properties.Summary;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
-import info.freelibrary.iiif.presentation.services.Service;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -44,6 +43,8 @@ import io.vertx.core.json.jackson.DatabindCodec;
     Constants.REQUIRED_STATEMENT, Constants.RIGHTS, Constants.PART_OF, Constants.HOMEPAGE, Constants.LOGO,
     Constants.THUMBNAIL, Constants.METADATA, Constants.ITEMS, Constants.SERVICE })
 class Resource<T extends Resource<T>> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Resource.class, Constants.BUNDLE_NAME);
 
     // We initialize this here so it loads for manifests and collections
     static {
@@ -81,8 +82,6 @@ class Resource<T extends Resource<T>> {
     private List<Behavior> myBehaviors;
 
     private SeeAlso mySeeAlso;
-
-    private Service myService;
 
     /**
      * Creates a new resource from the supplied type.
@@ -272,28 +271,6 @@ class Resource<T extends Resource<T>> {
     @JsonSetter(Constants.LABEL)
     public T setLabel(final Label aLabel) {
         myLabel = aLabel;
-        return (T) this;
-    }
-
-    /**
-     * Gets a service.
-     *
-     * @return A service
-     */
-    @JsonGetter(Constants.SERVICE)
-    public Service getService() {
-        return myService;
-    }
-
-    /**
-     * Sets a service.
-     *
-     * @param aService A service
-     * @return The resource
-     */
-    @JsonSetter(Constants.SERVICE)
-    public T setService(final Service aService) {
-        myService = aService;
         return (T) this;
     }
 
@@ -693,16 +670,6 @@ class Resource<T extends Resource<T>> {
     }
 
     /**
-     * Gets a logger for the resource.
-     *
-     * @return A logger
-     */
-    @JsonIgnore
-    protected Logger getLogger() {
-        return LoggerFactory.getLogger(getClass(), Constants.BUNDLE_NAME);
-    }
-
-    /**
      * Checks that the supplied behaviors are all implementations of a particular class.
      *
      * @param aClass A class that implements Behavior
@@ -711,7 +678,7 @@ class Resource<T extends Resource<T>> {
     protected Behavior[] checkBehaviors(final Class aClass, final Behavior... aBehaviorArray) {
         for (final Behavior behavior : aBehaviorArray) {
             if (!(aClass.isInstance(behavior))) {
-                throw new IllegalArgumentException(getLogger().getMessage(MessageCodes.JPA_031, behavior.getClass()
+                throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_031, behavior.getClass()
                         .getSimpleName(), aClass.getSimpleName()));
             }
         }
@@ -747,7 +714,7 @@ class Resource<T extends Resource<T>> {
         }
 
         for (int index = 0; index < aNumber; index++) {
-            final String message = getLogger().getMessage(MessageCodes.JPA_012, aNamesArray[index]);
+            final String message = LOGGER.getMessage(MessageCodes.JPA_012, aNamesArray[index]);
 
             Objects.requireNonNull(aArgsArray[index], message);
         }

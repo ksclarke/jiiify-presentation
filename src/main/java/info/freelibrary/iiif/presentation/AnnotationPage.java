@@ -23,17 +23,15 @@ public class AnnotationPage extends Resource<AnnotationPage> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationPage.class, Constants.BUNDLE_NAME);
 
-    private static final int REQ_ARG_COUNT = 2;
-
-    private List<ImageContent> myImageContent;
+    private List<ContentAnnotation> myAnnotations;
 
     /**
      * Creates an annotation page.
      *
-     * @param aID An annotation page ID
+     * @param aID An annotation page ID in string form
      */
     public AnnotationPage(final String aID) {
-        super(ResourceTypes.ANNOTATION_PAGE, aID, REQ_ARG_COUNT);
+        super(ResourceTypes.ANNOTATION_PAGE, aID, 2);
     }
 
     /**
@@ -42,7 +40,7 @@ public class AnnotationPage extends Resource<AnnotationPage> {
      * @param aID An annotation page ID
      */
     public AnnotationPage(final URI aID) {
-        super(ResourceTypes.ANNOTATION_PAGE, aID, REQ_ARG_COUNT);
+        super(ResourceTypes.ANNOTATION_PAGE, aID, 2);
     }
 
     /**
@@ -53,47 +51,47 @@ public class AnnotationPage extends Resource<AnnotationPage> {
     }
 
     /**
-     * Sets the annotation page's image content.
+     * Sets the annotation page's contents.
      *
-     * @param aContentArray An array of image content
+     * @param aContentArray A content array
      * @return The annotation page
      */
     @JsonGetter(Constants.ITEMS)
-    public AnnotationPage setImageContent(final ImageContent... aContentArray) {
-        if (myImageContent != null) {
-            myImageContent.clear();
+    public AnnotationPage setAnnotations(final ContentAnnotation... aContentArray) {
+        if (myAnnotations != null) {
+            myAnnotations.clear();
         }
 
-        return addImageContent(aContentArray);
+        return addAnnotations(aContentArray);
     }
 
     /**
-     * Adds image content to the annotation page.
+     * Adds content to the annotation page.
      *
-     * @param aContentArray Image content to be added to the annotation page
+     * @param aContentArray Content to be added to the annotation page
      * @return The annotation page
      */
-    public AnnotationPage addImageContent(final ImageContent... aContentArray) {
-        if (!Collections.addAll(getImageContent(), aContentArray)) {
-            final String message = LOGGER.getMessage(MessageCodes.JPA_050, StringUtils.toString(aContentArray, ' '));
-            throw new UnsupportedOperationException(message);
+    public AnnotationPage addAnnotations(final ContentAnnotation... aContentArray) {
+        if (!Collections.addAll(getAnnotations(), aContentArray)) {
+            final String contents = StringUtils.toString(aContentArray, '|');
+            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_050, contents));
         }
 
         return this;
     }
 
     /**
-     * Gets the annotation page's image content.
+     * Gets the annotation page's content.
      *
-     * @return The annotation page's image content
+     * @return The annotation page's content
      */
     @JsonGetter(Constants.ITEMS)
-    public List<ImageContent> getImageContent() {
-        if (myImageContent == null) {
-            myImageContent = new ArrayList<>();
+    public List<ContentAnnotation> getAnnotations() {
+        if (myAnnotations == null) {
+            myAnnotations = new ArrayList<>();
         }
 
-        return myImageContent;
+        return myAnnotations;
     }
 
     @Override

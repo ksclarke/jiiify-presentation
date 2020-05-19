@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import info.freelibrary.iiif.presentation.io.Manifestor;
+import info.freelibrary.iiif.presentation.utils.Manifestor;
 import info.freelibrary.iiif.presentation.utils.TestUtils;
 
 import io.vertx.core.Promise;

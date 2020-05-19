@@ -7,6 +7,6 @@ package info.freelibrary.iiif.presentation.properties.selectors;
  */
 public interface ContentSelector extends Selector {
 
-    // Content selectors have a hard-coded type; nothing really needs to be done with them.
+    // ContentAnnotation selectors have a hard-coded type; nothing really needs to be done with them.
 
 }

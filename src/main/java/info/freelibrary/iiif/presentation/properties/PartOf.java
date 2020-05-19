@@ -1,7 +1,10 @@
+
 package info.freelibrary.iiif.presentation.properties;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -16,7 +19,7 @@ import info.freelibrary.iiif.presentation.Constants;
  * discovery of further relevant information. Similarly, a Manifest can reference a containing Collection using
  * <code>partOf</code> to aid in navigation.
  */
-public class PartOf extends Localized<PartOf> {
+public class PartOf implements Localized<PartOf> {
 
     @JsonProperty(Constants.ID)
     private URI myID;
@@ -26,6 +29,8 @@ public class PartOf extends Localized<PartOf> {
 
     @JsonProperty(Constants.LABEL)
     private Label myLabel;
+
+    private List<String> myLanguages;
 
     /**
      * Creates a IIIF presentation partOf.
@@ -136,6 +141,18 @@ public class PartOf extends Localized<PartOf> {
     }
 
     /**
+     * Gets the languages of the partOf.
+     */
+    @Override
+    public List<String> getLanguages() {
+        if (myLanguages == null) {
+            myLanguages = new ArrayList<>();
+        }
+
+        return myLanguages;
+    }
+
+    /**
      * Gets the JSON value of the property.
      *
      * @return The value(s) of the property
@@ -143,6 +160,7 @@ public class PartOf extends Localized<PartOf> {
     @JsonValue
     private Object toMap() {
         final Map<String, Object> map = new LinkedHashMap<>();
+        final List<String> languages = getLanguages();
 
         // Required properties
         map.put(Constants.ID, getID());
@@ -152,8 +170,9 @@ public class PartOf extends Localized<PartOf> {
         if (getLabel() != null) {
             map.put(Constants.LABEL, getLabel());
         }
-        if (getLanguages() != null) {
-            map.put(Constants.LANGUAGE, getLanguages());
+
+        if (languages != null && languages.size() > 0) {
+            map.put(Constants.LANGUAGE, languages);
         }
 
         return map;

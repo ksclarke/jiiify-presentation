@@ -1,7 +1,10 @@
+
 package info.freelibrary.iiif.presentation.properties;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -19,7 +22,7 @@ import info.freelibrary.iiif.presentation.Constants;
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.LABEL, Constants.FORMAT, Constants.LANGUAGE })
-public class Rendering extends Localized<Rendering> {
+public class Rendering implements Localized<Rendering> {
 
     @JsonProperty(Constants.ID)
     private URI myID;
@@ -32,6 +35,8 @@ public class Rendering extends Localized<Rendering> {
 
     @JsonProperty(Constants.FORMAT)
     private String myFormat;
+
+    private List<String> myLanguages;
 
     /**
      * Creates a IIIF presentation rendering.
@@ -165,6 +170,18 @@ public class Rendering extends Localized<Rendering> {
     }
 
     /**
+     * Gets the languages of the partOf.
+     */
+    @Override
+    public List<String> getLanguages() {
+        if (myLanguages == null) {
+            myLanguages = new ArrayList<>();
+        }
+
+        return myLanguages;
+    }
+
+    /**
      * Gets the JSON value of the property.
      *
      * @return The value(s) of the property
@@ -172,6 +189,7 @@ public class Rendering extends Localized<Rendering> {
     @JsonValue
     private Object toMap() {
         final Map<String, Object> map = new LinkedHashMap<>();
+        final List<String> languages = getLanguages();
 
         // Required properties
         map.put(Constants.ID, getID());
@@ -182,8 +200,9 @@ public class Rendering extends Localized<Rendering> {
         if (getFormat() != null) {
             map.put(Constants.FORMAT, getFormat());
         }
-        if (getLanguages() != null) {
-            map.put(Constants.LANGUAGE, getLanguages());
+
+        if (languages != null && languages.size() > 0) {
+            map.put(Constants.LANGUAGE, languages);
         }
 
         return map;

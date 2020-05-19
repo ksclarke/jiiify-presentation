@@ -38,7 +38,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
 
     private int myHeight;
 
-    private double myDuration;
+    private float myDuration;
 
     private List<AnnotationPage> myPageList;
 
@@ -173,13 +173,13 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      */
     @JsonIgnore
     public T setWidthHeight(final int aWidth, final int aHeight) {
-        if ((aWidth >= 0) && (aHeight >= 0)) {
+        if ((aWidth > 0) && (aHeight > 0)) {
             myWidth = aWidth;
             myHeight = aHeight;
 
             return (T) this;
         } else {
-            throw new IllegalArgumentException(getLogger().getMessage(MessageCodes.JPA_011, aWidth, aHeight));
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_011, aWidth, aHeight));
         }
     }
 
@@ -189,8 +189,8 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      * @return The duration of the canvas
      */
     @JsonGetter(Constants.DURATION)
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public double getDuration() {
+    @JsonInclude(Include.NON_DEFAULT)
+    public float getDuration() {
         return myDuration;
     }
 
@@ -201,12 +201,12 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      * @return The canvas
      */
     @JsonSetter(Constants.DURATION)
-    public T setDuration(final double aDuration) {
+    public T setDuration(final float aDuration) {
         if ((aDuration > 0) && (Double.isFinite(aDuration))) {
             myDuration = aDuration;
             return (T) this;
         } else {
-            throw new IllegalArgumentException(getLogger().getMessage(MessageCodes.JPA_024, aDuration));
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_024, aDuration));
         }
     }
 
