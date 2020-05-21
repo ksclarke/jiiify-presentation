@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +16,8 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Label;
+import info.freelibrary.iiif.presentation.properties.Metadata;
+import info.freelibrary.iiif.presentation.properties.Summary;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.properties.behaviors.CollectionBehavior;
 import info.freelibrary.iiif.presentation.services.Service;
@@ -39,27 +43,55 @@ public class Collection extends NavigableResource<Collection> {
     private Service myService;
 
     /**
-     * Creates a IIIF presentation collection.
+     * Creates a new collection.
      *
      * @param aID A collection ID in string form
      * @param aLabel A collection label in string form
      */
     public Collection(final String aID, final String aLabel) {
-        super(ResourceTypes.COLLECTION, aID, aLabel, 3);
+        super(ResourceTypes.COLLECTION, aID, aLabel);
     }
 
     /**
-     * Creates a IIIF presentation collection.
+     * Creates a new collection.
      *
      * @param aID A collection ID
      * @param aLabel A collection label
      */
     public Collection(final URI aID, final Label aLabel) {
-        super(ResourceTypes.COLLECTION, aID, aLabel, 3);
+        super(ResourceTypes.COLLECTION, aID, aLabel);
     }
 
     /**
-     * Creates a IIIF presentation collection.
+     * Creates a new collection.
+     *
+     * @param aID A collection ID in string form
+     * @param aLabel A descriptive label in string form
+     * @param aMetadata A collection's metadata
+     * @param aSummary A summary in string form
+     * @param aThumbnail A thumbnail
+     */
+    public Collection(final String aID, final String aLabel, final Metadata aMetadata, final String aSummary,
+            final Thumbnail aThumbnail) {
+        super(ResourceTypes.COLLECTION, aID, aLabel, aMetadata, aSummary, aThumbnail);
+    }
+
+    /**
+     * Creates a new collection.
+     *
+     * @param aID A collection ID
+     * @param aLabel A descriptive label
+     * @param aMetadata A collection's metadata
+     * @param aSummary A summary
+     * @param aThumbnail A thumbnail
+     */
+    public Collection(final URI aID, final Label aLabel, final Metadata aMetadata, final Summary aSummary,
+            final Thumbnail aThumbnail) {
+        super(ResourceTypes.COLLECTION, aID, aLabel, aMetadata, aSummary, aThumbnail);
+    }
+
+    /**
+     * Creates a new collection.
      */
     private Collection() {
         super(ResourceTypes.COLLECTION);
@@ -83,7 +115,7 @@ public class Collection extends NavigableResource<Collection> {
      */
     @JsonSetter(Constants.PLACEHOLDER_CANVAS)
     public Collection setPlaceholderCanvas(final PlaceholderCanvas aCanvas) {
-        myPlaceholderCanvas = Optional.ofNullable(aCanvas);
+        myPlaceholderCanvas = Optional.of(aCanvas);
         return this;
     }
 
@@ -105,7 +137,7 @@ public class Collection extends NavigableResource<Collection> {
      */
     @JsonSetter(Constants.ACCOMPANYING_CANVAS)
     public Collection setAccompanyingCanvas(final AccompanyingCanvas aCanvas) {
-        myAccompanyingCanvas = Optional.ofNullable(aCanvas);
+        myAccompanyingCanvas = Optional.of(aCanvas);
         return this;
     }
 
@@ -127,7 +159,7 @@ public class Collection extends NavigableResource<Collection> {
      */
     @JsonSetter(Constants.SERVICE)
     public Collection setService(final Service aService) {
-        myService = aService;
+        myService = checkNotNull(aService);
         return this;
     }
 
@@ -186,7 +218,7 @@ public class Collection extends NavigableResource<Collection> {
      */
     @JsonSetter(Constants.ITEMS)
     public Collection setItems(final List<Item> aItemList) {
-        myItems = aItemList;
+        myItems = checkNotNull(aItemList);
         return this;
     }
 
@@ -365,11 +397,11 @@ public class Collection extends NavigableResource<Collection> {
          * Sets the item ID.
          *
          * @param aID An item ID
-         * @return The item
+         * @return This item
          */
         @JsonIgnore
         public Item setID(final URI aID) {
-            myID = aID;
+            myID = checkNotNull(aID);
             return this;
         }
 
@@ -377,7 +409,7 @@ public class Collection extends NavigableResource<Collection> {
          * Sets the item ID.
          *
          * @param aID An item ID in string form
-         * @return The item
+         * @return This item
          */
         @JsonSetter(Constants.ID)
         public Item setID(final String aID) {
@@ -402,7 +434,7 @@ public class Collection extends NavigableResource<Collection> {
          */
         @JsonIgnore
         public Item setType(final Item.Type aType) {
-            myType = aType;
+            myType = checkNotNull(aType);
             return this;
         }
 
@@ -419,7 +451,7 @@ public class Collection extends NavigableResource<Collection> {
          */
         @JsonSetter(Constants.THUMBNAIL)
         public Item setThumbnail(final Thumbnail aThumbnail) {
-            myThumbnail = aThumbnail;
+            myThumbnail = checkNotNull(aThumbnail);
             return this;
         }
 
@@ -437,11 +469,11 @@ public class Collection extends NavigableResource<Collection> {
          * Sets the item label.
          *
          * @param aLabel The item label
-         * @return The item
+         * @return This item
          */
         @JsonSetter(Constants.LABEL)
         public Item setLabel(final Label aLabel) {
-            myLabel = aLabel;
+            myLabel = checkNotNull(aLabel);
             return this;
         }
 

@@ -16,7 +16,7 @@ import io.vertx.core.json.JsonObject;
 public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> {
 
     /**
-     * Creates a IIIF presentation canvas.
+     * Creates a new accompanying canvas.
      *
      * @param aID An accompanying canvas ID
      */
@@ -25,7 +25,7 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> {
     }
 
     /**
-     * Creates a IIIF presentation canvas.
+     * Creates a new accompanying canvas.
      *
      * @param aID An accompanying canvas ID
      */
@@ -34,7 +34,7 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> {
     }
 
     /**
-     * Creates a IIIF presentation canvas.
+     * Creates a new accompanying canvas.
      *
      * @param aID An accompanying canvas ID
      * @param aLabel An accompanying canvas label
@@ -44,7 +44,7 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> {
     }
 
     /**
-     * Creates a IIIF presentation canvas.
+     * Creates a new accompanying canvas.
      *
      * @param aID An accompanying canvas ID in string form
      * @param aLabel A accompanying canvas label in string form
@@ -53,6 +53,9 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> {
         super(aID, aLabel);
     }
 
+    /**
+     * Creates a new accompanying canvas.
+     */
     @SuppressWarnings("unused")
     private AccompanyingCanvas() {
         super();

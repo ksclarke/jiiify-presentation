@@ -16,7 +16,10 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Label;
+import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.StartCanvas;
+import info.freelibrary.iiif.presentation.properties.Summary;
+import info.freelibrary.iiif.presentation.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.services.Service;
@@ -55,24 +58,52 @@ public class Manifest extends NavigableResource<Manifest> {
     private Service myService;
 
     /**
-     * Creates a IIIF presentation manifest.
+     * Creates a new manifest.
      *
      * @param aID A manifest ID in string form
      * @param aLabel A manifest label in string form
      * @throws IllegalArgumentException If the supplied ID is not a valid URI
      */
     public Manifest(final String aID, final String aLabel) {
-        super(ResourceTypes.MANIFEST, aID, aLabel, 3);
+        super(ResourceTypes.MANIFEST, aID, aLabel);
     }
 
     /**
-     * Creates a IIIF presentation manifest.
+     * Creates a new manifest.
      *
      * @param aID A manifest ID
      * @param aLabel A manifest label
      */
     public Manifest(final URI aID, final Label aLabel) {
-        super(ResourceTypes.MANIFEST, aID, aLabel, 3);
+        super(ResourceTypes.MANIFEST, aID, aLabel);
+    }
+
+    /**
+     * Creates a new manifest.
+     *
+     * @param aID A manifest ID in string form
+     * @param aLabel A descriptive label in string form
+     * @param aMetadata A manifest's metadata
+     * @param aSummary A summary in string form
+     * @param aThumbnail A thumbnail
+     */
+    public Manifest(final String aID, final String aLabel, final Metadata aMetadata, final String aSummary,
+            final Thumbnail aThumbnail) {
+        super(ResourceTypes.MANIFEST, aID, aLabel, aMetadata, aSummary, aThumbnail);
+    }
+
+    /**
+     * Creates a new manifest.
+     *
+     * @param aID A manifest ID
+     * @param aLabel A descriptive label
+     * @param aMetadata A manifest's metadata
+     * @param aSummary A summary
+     * @param aThumbnail A thumbnail
+     */
+    public Manifest(final URI aID, final Label aLabel, final Metadata aMetadata, final Summary aSummary,
+            final Thumbnail aThumbnail) {
+        super(ResourceTypes.MANIFEST, aID, aLabel, aMetadata, aSummary, aThumbnail);
     }
 
     /**

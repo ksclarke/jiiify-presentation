@@ -20,7 +20,7 @@ import io.vertx.core.json.JsonObject;
 public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas> {
 
     /**
-     * Creates a IIIF presentation canvas.
+     * Creates a new placeholder canvas.
      *
      * @param aID A placeholder canvas ID
      */
@@ -29,7 +29,7 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas> {
     }
 
     /**
-     * Creates a IIIF presentation canvas.
+     * Creates a new placeholder canvas.
      *
      * @param aID A placeholder canvas ID
      */
@@ -38,7 +38,7 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas> {
     }
 
     /**
-     * Creates a IIIF presentation canvas.
+     * Creates a new placeholder canvas.
      *
      * @param aID A placeholder canvas ID
      * @param aLabel A placeholder canvas label
@@ -48,7 +48,7 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas> {
     }
 
     /**
-     * Creates a IIIF presentation canvas.
+     * Creates a new placeholder canvas.
      *
      * @param aID A placeholder canvas ID in string form
      * @param aLabel A placeholder canvas label in string form
@@ -57,6 +57,9 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas> {
         super(aID, aLabel);
     }
 
+    /**
+     * Creates a new placeholder canvas.
+     */
     @SuppressWarnings("unused")
     private PlaceholderCanvas() {
         super();

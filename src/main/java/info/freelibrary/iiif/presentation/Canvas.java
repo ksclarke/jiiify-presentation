@@ -28,7 +28,7 @@ public class Canvas extends AbstractCanvas<Canvas> {
     private Optional<PlaceholderCanvas> myPlaceholderCanvas;
 
     /**
-     * Creates a IIIF presentation canvas.
+     * Creates a new canvas.
      *
      * @param aID A canvas ID
      */
@@ -37,16 +37,16 @@ public class Canvas extends AbstractCanvas<Canvas> {
     }
 
     /**
-     * Creates a IIIF presentation canvas.
+     * Creates a new canvas.
      *
-     * @param aID A canvas ID
+     * @param aID A canvas ID in string form
      */
     public Canvas(final String aID) {
         super(aID);
     }
 
     /**
-     * Creates a IIIF presentation canvas.
+     * Creates a new canvas.
      *
      * @param aID A canvas ID
      * @param aLabel A canvas label
@@ -56,7 +56,7 @@ public class Canvas extends AbstractCanvas<Canvas> {
     }
 
     /**
-     * Creates a IIIF presentation canvas.
+     * Creates a new canvas.
      *
      * @param aID A canvas ID in string form
      * @param aLabel A canvas label in string form
@@ -68,7 +68,8 @@ public class Canvas extends AbstractCanvas<Canvas> {
     /**
      * Creates a blank new canvas.
      */
-    Canvas() {
+    @SuppressWarnings("unused")
+    private Canvas() {
         super();
     }
 

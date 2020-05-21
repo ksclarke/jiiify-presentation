@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,7 +19,7 @@ import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.StringUtils;
 
 /**
- * An ordered list of annotations, typically associated with a single canvas.
+ * A page of annotations.
  */
 public class AnnotationPage extends Resource<AnnotationPage> {
 
@@ -26,21 +28,21 @@ public class AnnotationPage extends Resource<AnnotationPage> {
     private List<ContentAnnotation> myAnnotations;
 
     /**
-     * Creates an annotation page.
+     * Creates a new annotation page.
      *
      * @param aID An annotation page ID in string form
      */
     public AnnotationPage(final String aID) {
-        super(ResourceTypes.ANNOTATION_PAGE, aID, 2);
+        super(ResourceTypes.ANNOTATION_PAGE, aID);
     }
 
     /**
-     * Creates an annotation page.
+     * Creates a new annotation page.
      *
      * @param aID An annotation page ID
      */
     public AnnotationPage(final URI aID) {
-        super(ResourceTypes.ANNOTATION_PAGE, aID, 2);
+        super(ResourceTypes.ANNOTATION_PAGE, aID);
     }
 
     /**
@@ -72,7 +74,7 @@ public class AnnotationPage extends Resource<AnnotationPage> {
      * @return The annotation page
      */
     public AnnotationPage addAnnotations(final ContentAnnotation... aContentArray) {
-        if (!Collections.addAll(getAnnotations(), aContentArray)) {
+        if (!Collections.addAll(getAnnotations(), checkNotNull(aContentArray))) {
             final String contents = StringUtils.toString(aContentArray, '|');
             throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_050, contents));
         }

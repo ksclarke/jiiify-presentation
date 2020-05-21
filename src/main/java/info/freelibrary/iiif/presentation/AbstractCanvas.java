@@ -32,8 +32,6 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractCanvas.class, Constants.BUNDLE_NAME);
 
-    private static final int REQ_ARG_COUNT = 3;
-
     private int myWidth;
 
     private int myHeight;
@@ -43,47 +41,47 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     private List<AnnotationPage> myPageList;
 
     /**
-     * Creates a IIIF presentation canvas.
+     * Creates a new canvas.
      *
      * @param aID A canvas ID in string form
      * @param aLabel A canvas label in string form
      */
-    AbstractCanvas(final String aID, final String aLabel) {
-        super(ResourceTypes.CANVAS, aID, aLabel, REQ_ARG_COUNT);
+    protected AbstractCanvas(final String aID, final String aLabel) {
+        super(ResourceTypes.CANVAS, aID, aLabel);
     }
 
     /**
-     * Creates a IIIF presentation canvas.
+     * Creates a new canvas.
      *
      * @param aID A canvas ID
      * @param aLabel A canvas label
      */
-    AbstractCanvas(final URI aID, final Label aLabel) {
-        super(ResourceTypes.CANVAS, aID, aLabel, REQ_ARG_COUNT);
+    protected AbstractCanvas(final URI aID, final Label aLabel) {
+        super(ResourceTypes.CANVAS, aID, aLabel);
     }
 
     /**
-     * Creates a IIIF presentation canvas.
+     * Creates a new canvas.
      *
      * @param aID A canvas ID
      */
-    AbstractCanvas(final URI aID) {
-        super(ResourceTypes.CANVAS, aID, 2);
+    protected AbstractCanvas(final URI aID) {
+        super(ResourceTypes.CANVAS, aID);
     }
 
     /**
-     * Creates a IIIF presentation canvas.
+     * Creates a new canvas.
      *
      * @param aID A canvas ID in string form
      */
-    AbstractCanvas(final String aID) {
-        super(ResourceTypes.CANVAS, URI.create(aID), 2);
+    protected AbstractCanvas(final String aID) {
+        super(ResourceTypes.CANVAS, URI.create(aID));
     }
 
     /**
-     * Creates a blank new canvas.
+     * Creates a new canvas.
      */
-    AbstractCanvas() {
+    protected AbstractCanvas() {
         super(ResourceTypes.CANVAS);
     }
 

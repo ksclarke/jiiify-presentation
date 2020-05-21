@@ -42,41 +42,41 @@ public class Range extends NavigableResource<Range> {
     private ViewingDirection myViewingDirection;
 
     /**
-     * Creates a IIIF presentation range.
+     * Creates a new range.
      *
      * @param aID A range ID in string form
      */
     public Range(final String aID) {
-        super(ResourceTypes.RANGE, URI.create(aID), 2);
+        super(ResourceTypes.RANGE, URI.create(aID));
     }
 
     /**
-     * Creates a IIIF presentation range.
+     * Creates a new range.
      *
      * @param aID A range ID
      */
     public Range(final URI aID) {
-        super(ResourceTypes.RANGE, aID, 2);
+        super(ResourceTypes.RANGE, aID);
     }
 
     /**
-     * Creates a IIIF presentation range.
+     * Creates a new range.
      *
      * @param aID A range ID in string form
      * @param aLabel A descriptive label, in string form, for the range
      */
     public Range(final String aID, final String aLabel) {
-        super(ResourceTypes.RANGE, aID, aLabel, 3);
+        super(ResourceTypes.RANGE, aID, aLabel);
     }
 
     /**
-     * Creates a IIIF presentation range.
+     * Creates a new range.
      *
      * @param aID A range ID
      * @param aLabel A descriptive label for the range
      */
     public Range(final URI aID, final Label aLabel) {
-        super(ResourceTypes.RANGE, aID, aLabel, 3);
+        super(ResourceTypes.RANGE, aID, aLabel);
     }
 
     /**

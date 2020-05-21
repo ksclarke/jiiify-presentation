@@ -1,13 +1,14 @@
 
 package info.freelibrary.iiif.presentation;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -87,11 +88,9 @@ class Resource<T extends Resource<T>> {
      * Creates a new resource from the supplied type.
      *
      * @param aType A resource type in string form
-     * @param aNumber the number of required arguments
      */
-    protected Resource(final String aType, final int aNumber) {
-        checkArgs(new Object[] { aType }, new String[] { Constants.TYPE }, aNumber);
-        myType = aType; // always required
+    protected Resource(final String aType) {
+        myType = checkNotNull(aType);
     }
 
     /**
@@ -99,15 +98,10 @@ class Resource<T extends Resource<T>> {
      *
      * @param aID An ID in string form
      * @param aType A resource type in string form
-     * @param aNumber The number of required arguments
      */
-    protected Resource(final String aType, final String aID, final int aNumber) {
-        checkArgs(new Object[] { aType, aID }, new String[] { Constants.TYPE, Constants.ID }, aNumber);
-        myType = aType; // always required
-
-        if (aID != null) {
-            myID = URI.create(aID);
-        }
+    protected Resource(final String aType, final String aID) {
+        myType = checkNotNull(aType);
+        myID = URI.create(aID);
     }
 
     /**
@@ -115,12 +109,10 @@ class Resource<T extends Resource<T>> {
      *
      * @param aID An ID in string form
      * @param aType A resource type in string form
-     * @param aNumber The number of required arguments
      */
-    protected Resource(final String aType, final URI aID, final int aNumber) {
-        checkArgs(new Object[] { aType, aID }, new String[] { Constants.TYPE, Constants.ID }, aNumber);
-        myType = aType; // always required
-        myID = aID;
+    protected Resource(final String aType, final URI aID) {
+        myType = checkNotNull(aType);
+        myID = checkNotNull(aID);
     }
 
     /**
@@ -129,23 +121,11 @@ class Resource<T extends Resource<T>> {
      * @param aID A URI in string form
      * @param aType A type of resource in string form
      * @param aLabel A label in string form
-     * @param aNumber The number of required arguments
      */
-    protected Resource(final String aType, final String aID, final String aLabel, final int aNumber) {
-        final Object[] argsArray = new Object[] { aType, aID, aLabel };
-        final String[] namesArray = new String[] { Constants.TYPE, Constants.ID, Constants.LABEL };
-
-        checkArgs(argsArray, namesArray, aNumber);
-
-        myType = aType; // always required
-
-        if (aID != null) {
-            myID = URI.create(aID);
-        }
-
-        if (aLabel != null) {
-            myLabel = new Label(aLabel);
-        }
+    protected Resource(final String aType, final String aID, final String aLabel) {
+        myType = checkNotNull(aType);
+        myID = URI.create(aID);
+        myLabel = new Label(aLabel);
     }
 
     /**
@@ -154,17 +134,11 @@ class Resource<T extends Resource<T>> {
      * @param aID A URI ID (preferably and HTTP based one)
      * @param aType A type of resource in string form
      * @param aLabel A label for the resource
-     * @param aNumber The number of required arguments
      */
-    protected Resource(final String aType, final URI aID, final Label aLabel, final int aNumber) {
-        final Object[] argsArray = new Object[] { aType, aID, aLabel };
-        final String[] namesArray = new String[] { Constants.TYPE, Constants.ID, Constants.LABEL };
-
-        checkArgs(argsArray, namesArray, aNumber);
-
-        myType = aType;
-        myID = aID;
-        myLabel = aLabel;
+    protected Resource(final String aType, final URI aID, final Label aLabel) {
+        myType = checkNotNull(aType);
+        myID = checkNotNull(aID);
+        myLabel = checkNotNull(aLabel);
     }
 
     /**
@@ -176,32 +150,10 @@ class Resource<T extends Resource<T>> {
      * @param aMetadata A metadata property
      * @param aSummary A summary property in string form
      * @param aThumbnail A thumbnail property
-     * @param aNumber The number of required arguments
      */
     protected Resource(final String aType, final String aID, final String aLabel, final Metadata aMetadata,
-            final String aSummary, final Thumbnail aThumbnail, final int aNumber) {
-        final Object[] argsArray = new Object[] { aType, aID, aLabel, aMetadata, aSummary, aThumbnail };
-        final String[] namesArray = new String[] { Constants.TYPE, Constants.ID, Constants.LABEL, Constants.METADATA,
-            Constants.SUMMARY, Constants.THUMBNAIL };
-
-        checkArgs(argsArray, namesArray, aNumber);
-
-        myType = aType; // always required
-
-        if (aID != null) {
-            myID = URI.create(aID);
-        }
-
-        if (aLabel != null) {
-            myLabel = new Label(aLabel);
-        }
-
-        myMetadata = aMetadata;
-        myThumbnail = aThumbnail;
-
-        if (aSummary != null) {
-            mySummary = new Summary(aSummary);
-        }
+            final String aSummary, final Thumbnail aThumbnail) {
+        this(aType, URI.create(aID), new Label(aLabel), aMetadata, new Summary(aSummary), aThumbnail);
     }
 
     /**
@@ -213,31 +165,15 @@ class Resource<T extends Resource<T>> {
      * @param aMetadata A metadata property
      * @param aSummary A summary property
      * @param aThumbnail A thumbnail property
-     * @param aNumber The number of required arguments
      */
     protected Resource(final String aType, final URI aID, final Label aLabel, final Metadata aMetadata,
-            final Summary aSummary, final Thumbnail aThumbnail, final int aNumber) {
-        final Object[] argsArray = new Object[] { aType, aID, aLabel, aMetadata, aSummary, aThumbnail };
-        final String[] namesArray = new String[] { Constants.TYPE, Constants.ID, Constants.LABEL, Constants.METADATA,
-            Constants.SUMMARY, Constants.THUMBNAIL };
-
-        checkArgs(argsArray, namesArray, aNumber);
-
-        myType = aType; // always required
-        myID = aID;
-        myLabel = aLabel;
-        myMetadata = aMetadata;
-        mySummary = aSummary;
-        myThumbnail = aThumbnail;
-    }
-
-    /**
-     * Creates a new resource from the supplied type.
-     *
-     * @param aType A type of resource
-     */
-    protected Resource(final String aType) {
-        myType = aType; // Always required
+            final Summary aSummary, final Thumbnail aThumbnail) {
+        myType = checkNotNull(aType);
+        myID = checkNotNull(aID);
+        myLabel = checkNotNull(aLabel);
+        myMetadata = checkNotNull(aMetadata);
+        mySummary = checkNotNull(aSummary);
+        myThumbnail = checkNotNull(aThumbnail);
     }
 
     /**
@@ -698,26 +634,4 @@ class Resource<T extends Resource<T>> {
 
         return myBehaviors;
     }
-
-    /**
-     * This lets us define required parameters at the subclass level with a minimal amount of code.
-     *
-     * @param aArgsArray An array of arguments passed to the constructor
-     * @param aNamesArray An array of names corresponding to the arguments passed to the constructor
-     * @param aNumber The number of required arguments
-     */
-    private void checkArgs(final Object[] aArgsArray, final String[] aNamesArray, final int aNumber) {
-        if (aArgsArray.length < aNumber) {
-            throw new IndexOutOfBoundsException(String.valueOf(aNumber));
-        } else if (aArgsArray.length != aNamesArray.length) {
-            throw new IllegalArgumentException("Number of arguments is not equal to the number of names");
-        }
-
-        for (int index = 0; index < aNumber; index++) {
-            final String message = LOGGER.getMessage(MessageCodes.JPA_012, aNamesArray[index]);
-
-            Objects.requireNonNull(aArgsArray[index], message);
-        }
-    }
-
 }

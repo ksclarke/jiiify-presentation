@@ -1,12 +1,13 @@
 
 package info.freelibrary.iiif.presentation;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.TreeMap;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
@@ -46,29 +47,29 @@ public class ContentAnnotation extends Resource<ContentAnnotation> {
     private URI myTarget;
 
     /**
-     * Creates a IIIF presentation content resource.
+     * Creates a new content resource.
      *
-     * @param aID The ID in string form
+     * @param aID An ID in string form
      * @param aCanvas A canvas
      */
     protected ContentAnnotation(final String aID, final Canvas aCanvas) {
-        super(ResourceTypes.ANNOTATION, aID, 2);
+        super(ResourceTypes.ANNOTATION, aID);
         myTarget = aCanvas.getID();
     }
 
     /**
-     * Creates a IIIF presentation content resource.
+     * Creates a new content resource.
      *
-     * @param aID A URI ID
+     * @param aID An ID
      * @param aCanvas A canvas
      */
     protected ContentAnnotation(final URI aID, final Canvas aCanvas) {
-        super(ResourceTypes.ANNOTATION, aID, 2);
+        super(ResourceTypes.ANNOTATION, aID);
         myTarget = aCanvas.getID();
     }
 
     /**
-     * Creates a content annotation.
+     * Creates a new content annotation.
      */
     protected ContentAnnotation() {
         super(ResourceTypes.ANNOTATION);
@@ -81,8 +82,7 @@ public class ContentAnnotation extends Resource<ContentAnnotation> {
      * @return This content annotation
      */
     public ContentAnnotation addContents(final ContentResource... aContentArray) {
-        Objects.requireNonNull(aContentArray);
-        Collections.addAll(getContents(), aContentArray);
+        Collections.addAll(getContents(), checkNotNull(aContentArray));
         return this;
     }
 
@@ -140,7 +140,7 @@ public class ContentAnnotation extends Resource<ContentAnnotation> {
      */
     @JsonIgnore
     public ContentAnnotation setTarget(final URI aURI) {
-        myTarget = aURI;
+        myTarget = checkNotNull(aURI);
         return this;
     }
 

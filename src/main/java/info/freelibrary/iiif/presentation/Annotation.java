@@ -27,7 +27,7 @@ public class Annotation extends Resource<Annotation> {
      * @param aID An annotation ID
      */
     public Annotation(final URI aID) {
-        super(ResourceTypes.ANNOTATION, aID, 1);
+        super(ResourceTypes.ANNOTATION, aID);
     }
 
     /**
@@ -36,7 +36,7 @@ public class Annotation extends Resource<Annotation> {
      * @param aID An annotation ID
      */
     public Annotation(final String aID) {
-        super(ResourceTypes.ANNOTATION, URI.create(aID), 1);
+        super(ResourceTypes.ANNOTATION, URI.create(aID));
     }
 
     @Override

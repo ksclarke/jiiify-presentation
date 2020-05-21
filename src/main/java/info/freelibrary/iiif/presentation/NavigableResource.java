@@ -20,91 +20,74 @@ class NavigableResource<T extends Resource<T>> extends Resource<T> {
     private NavDate myNavDate;
 
     /**
-     * Creates a IIIF presentation navigable resource.
+     * Creates a navigable resource.
      *
      * @param aType A resource type in string form
      */
-    NavigableResource(final String aType) {
+    protected NavigableResource(final String aType) {
         super(aType);
     }
 
     /**
-     * Creates a IIIF presentation navigable resource.
+     * Creates a navigable resource.
      *
      * @param aType A resource type in string form
-     * @param aID A range ID in string form
-     * @param aReqArgCount A required number of arguments
+     * @param aID An ID in string form
      */
-    NavigableResource(final String aType, final URI aID, final int aReqArgCount) {
-        super(aType, aID, aReqArgCount);
+    protected NavigableResource(final String aType, final URI aID) {
+        super(aType, aID);
     }
 
     /**
-     * Creates a IIIF presentation navigable resource.
+     * Creates a navigable resource.
      *
      * @param aType A resource type in string form
-     * @param aID A range ID in string form
-     * @param aLabel A descriptive label, in string form, for the range
-     * @param aReqArgCount A required number of arguments
+     * @param aID An ID in string form
+     * @param aLabel A descriptive label, in string form
      */
-    NavigableResource(final String aType, final String aID, final String aLabel, final int aReqArgCount) {
-        super(aType, aID, aLabel, aReqArgCount);
+    protected NavigableResource(final String aType, final String aID, final String aLabel) {
+        super(aType, aID, aLabel);
     }
 
     /**
-     * Creates a IIIF presentation navigable resource.
+     * Creates a navigable resource.
      *
      * @param aType A resource type in string form
-     * @param aID A range resource ID
-     * @param aLabel A descriptive label for the range resource
-     * @param aReqArgCount A required number of arguments
+     * @param aID An ID
+     * @param aLabel A descriptive label
      */
-    NavigableResource(final String aType, final URI aID, final Label aLabel, final int aReqArgCount) {
-        super(aType, aID, aLabel, aReqArgCount);
+    protected NavigableResource(final String aType, final URI aID, final Label aLabel) {
+        super(aType, aID, aLabel);
     }
 
     /**
-     * Creates a IIIF presentation navigable resource.
+     * Creates a navigable resource.
      *
      * @param aType A resource type in string form
-     * @param aID A manifest ID in string form
-     * @param aLabel A manifest label in string form
-     * @param aMetadata A manifest's metadata
-     * @param aSummary A manifest summary in string form
-     * @param aThumbnail A manifest thumbnail
-     * @param aReqArgCount A required argument count
+     * @param aID An ID in string form
+     * @param aLabel A descriptive label in string form
+     * @param aMetadata A resource's metadata
+     * @param aSummary A summary in string form
+     * @param aThumbnail A thumbnail
      */
-    NavigableResource(final String aType, final String aID, final String aLabel, final Metadata aMetadata,
-            final String aSummary, final Thumbnail aThumbnail, final int aReqArgCount) {
-        super(aType, aID, aLabel, aMetadata, aSummary, aThumbnail, aReqArgCount);
+    protected NavigableResource(final String aType, final String aID, final String aLabel, final Metadata aMetadata,
+            final String aSummary, final Thumbnail aThumbnail) {
+        super(aType, aID, aLabel, aMetadata, aSummary, aThumbnail);
     }
 
     /**
-     * Creates a IIIF presentation navigable resource.
+     * Creates a navigable resource.
      *
      * @param aType A resource type in string form
-     * @param aID A manifest ID
-     * @param aLabel A manifest label
-     * @param aMetadata A manifest's metadata
-     * @param aSummary A manifest summary
-     * @param aThumbnail A manifest thumbnail
-     * @param aReqArgCount A required argument count
+     * @param aID An ID
+     * @param aLabel A descriptive label
+     * @param aMetadata A resource's metadata
+     * @param aSummary A summary
+     * @param aThumbnail A thumbnail
      */
-    NavigableResource(final String aType, final URI aID, final Label aLabel, final Metadata aMetadata,
-            final Summary aSummary, final Thumbnail aThumbnail, final int aReqArgCount) {
-        super(aType, aID, aLabel, aMetadata, aSummary, aThumbnail, aReqArgCount);
-    }
-
-    /**
-     * Sets a navigation date.
-     *
-     * @param aNavDate The navigation date
-     * @return The canvas
-     */
-    @JsonSetter(Constants.NAV_DATE)
-    public T setNavDate(final NavDate aNavDate) {
-        myNavDate = aNavDate;
-        return (T) this;
+    protected NavigableResource(final String aType, final URI aID, final Label aLabel, final Metadata aMetadata,
+            final Summary aSummary, final Thumbnail aThumbnail) {
+        super(aType, aID, aLabel, aMetadata, aSummary, aThumbnail);
     }
 
     /**
@@ -117,4 +100,15 @@ class NavigableResource<T extends Resource<T>> extends Resource<T> {
         return myNavDate;
     }
 
+    /**
+     * Sets a navigation date.
+     *
+     * @param aNavDate The navigation date
+     * @return The navigable resource
+     */
+    @JsonSetter(Constants.NAV_DATE)
+    protected T setNavDate(final NavDate aNavDate) {
+        myNavDate = aNavDate;
+        return (T) this;
+    }
 }

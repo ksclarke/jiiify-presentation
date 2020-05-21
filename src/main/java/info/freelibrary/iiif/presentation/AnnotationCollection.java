@@ -16,8 +16,6 @@ import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
  */
 public class AnnotationCollection extends Resource<AnnotationCollection> {
 
-    private static final int REQ_ARG_COUNT = 3;
-
     private ViewingDirection myViewingDirection;
 
     /**
@@ -27,7 +25,7 @@ public class AnnotationCollection extends Resource<AnnotationCollection> {
      * @param aLabel A descriptive label, in string form, for the collection
      */
     public AnnotationCollection(final String aID, final String aLabel) {
-        super(ResourceTypes.ANNOTATION_COLLECTION, aID, aLabel, REQ_ARG_COUNT);
+        super(ResourceTypes.ANNOTATION_COLLECTION, aID, aLabel);
     }
 
     /**
@@ -37,7 +35,7 @@ public class AnnotationCollection extends Resource<AnnotationCollection> {
      * @param aLabel A descriptive label for the collection
      */
     public AnnotationCollection(final URI aID, final Label aLabel) {
-        super(ResourceTypes.ANNOTATION_COLLECTION, aID, aLabel, REQ_ARG_COUNT);
+        super(ResourceTypes.ANNOTATION_COLLECTION, aID, aLabel);
     }
 
     /**

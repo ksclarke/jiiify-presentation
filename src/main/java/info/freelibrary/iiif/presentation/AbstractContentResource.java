@@ -38,7 +38,7 @@ abstract class AbstractContentResource<T extends Resource<T>> extends Resource<T
      * @param aID The resource ID in string form
      */
     protected AbstractContentResource(final String aType, final String aID) {
-        super(aType, aID, 2);
+        super(aType, aID);
         setMediaTypeFromExt(aID);
     }
 
@@ -49,7 +49,7 @@ abstract class AbstractContentResource<T extends Resource<T>> extends Resource<T
      * @param aID The resource ID
      */
     protected AbstractContentResource(final String aType, final URI aID) {
-        super(aType, aID, 2);
+        super(aType, aID);
         setMediaTypeFromExt(aID.toString());
     }
 
