@@ -82,7 +82,7 @@ class Resource<T extends Resource<T>> {
 
     private List<Behavior> myBehaviors;
 
-    private SeeAlso mySeeAlso;
+    private List<SeeAlso> mySeeAlsoRefs;
 
     /**
      * Creates a new resource from the supplied type.
@@ -574,34 +574,38 @@ class Resource<T extends Resource<T>> {
     /**
      * Gets see also reference(s).
      *
-     * @return The see also reference
+     * @return The see also reference(s)
      */
     @JsonGetter(Constants.SEE_ALSO)
-    public SeeAlso getSeeAlso() {
-        return mySeeAlso;
+    public List<SeeAlso> getSeeAlsoRefs() {
+        if (mySeeAlsoRefs == null) {
+            mySeeAlsoRefs = new ArrayList<>();
+        }
+
+        return mySeeAlsoRefs;
     }
 
     /**
      * Sets see also reference(s).
      *
-     * @param aSeeAlso See also reference(s)
+     * @param aSeeAlsoArray See also reference(s)
      * @return The resource
      */
     @JsonIgnore
-    public T setSeeAlso(final SeeAlso aSeeAlso) {
-        mySeeAlso = aSeeAlso;
+    public T setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
+        Collections.addAll(getSeeAlsoRefs(), aSeeAlsoArray);
         return (T) this;
     }
 
     /**
-     * Sets see also reference from the supplied string.
+     * Sets see also reference(s).
      *
-     * @param aSeeAlso See also reference supplied as a string
+     * @param aSeeAlsoList See also reference(s)
      * @return The resource
      */
     @JsonSetter(Constants.SEE_ALSO)
-    public T setSeeAlso(final String aSeeAlso) {
-        mySeeAlso = new SeeAlso(aSeeAlso);
+    public T setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
+        getSeeAlsoRefs().addAll(aSeeAlsoList);
         return (T) this;
     }
 

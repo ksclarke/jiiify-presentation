@@ -78,7 +78,7 @@ public class ResourceTest extends AbstractTest {
         test.setHomepages(new Homepage(SILS_URL, ResourceTypes.TEXT, AAAA));
         test.setLogo(new Logo(ASDF_JPG, service));
         test.setBehaviors(ResourceBehavior.HIDDEN);
-        test.setSeeAlso("http://www.unc.edu");
+        test.setSeeAlsoRefs(new SeeAlso(LOREM_IPSUM.getUrl(), ResourceTypes.DATASET));
 
         json = JsonObject.mapFrom(test);
 
@@ -107,7 +107,7 @@ public class ResourceTest extends AbstractTest {
                 ResourceTypes.TEXT, BBBB));
         test.setLogo(new Logo("ffff.jpg", service).addImage("gggg.jpg", service));
         test.setBehaviors(ManifestBehavior.AUTOADVANCE);
-        test.setSeeAlso(new SeeAlso("http://1.unc.edu").addValue("http://2.unc.edu"));
+        test.setSeeAlsoRefs(new SeeAlso(LOREM_IPSUM.getUrl(), ResourceTypes.DATASET));
 
         json = JsonObject.mapFrom(test);
 

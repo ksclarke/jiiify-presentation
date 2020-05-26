@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation;
 
+import java.util.UUID;
+
 import org.junit.BeforeClass;
 
 import com.thedeanda.lorem.LoremIpsum;
@@ -30,4 +32,12 @@ public abstract class AbstractTest {
         LOREM_IPSUM = LoremIpsum.getInstance();
     }
 
+    /**
+     * Gets an ID for testing purposes.
+     *
+     * @return A string UUID
+     */
+    protected String getID() {
+        return UUID.randomUUID().toString();
+    }
 }

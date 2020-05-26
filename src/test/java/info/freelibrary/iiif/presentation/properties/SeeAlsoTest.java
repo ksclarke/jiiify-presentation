@@ -6,84 +6,75 @@ import static org.junit.Assert.assertEquals;
 import java.net.URI;
 import java.util.Optional;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.google.common.net.MediaType;
 
+import info.freelibrary.iiif.presentation.AbstractTest;
+import info.freelibrary.iiif.presentation.ResourceTypes;
+
 /**
  * A seeAlso test.
  */
-public class SeeAlsoTest {
+public class SeeAlsoTest extends AbstractTest {
 
-    private static final URI URI_ONE = URI.create("http://www.example.org/one");
+    private static final String JPEG_FORMAT = "image/jpeg";
 
-    private static final URI URI_TWO = URI.create("http://www.example.org/two");
+    private static final MediaType MIME_TYPE = MediaType.parse(JPEG_FORMAT);
 
-    private static final MediaType MIME_TYPE = MediaType.parse("image/jpeg");
+    private String myID;
 
     /**
-     * Tests constructing a seeAlso.
+     * Sets up the testing environment.
      */
-    @Test
-    public void testSeeAlsoStringArray() {
-        assertEquals(2, new SeeAlso(URI_ONE.toString(), URI_TWO.toString()).getValues().size());
+    @Before
+    public void setUp() {
+        myID = LOREM_IPSUM.getUrl();
     }
 
     /**
      * Tests constructing a seeAlso.
      */
     @Test
-    public void testSeeAlsoURIArray() {
-        assertEquals(2, new SeeAlso(URI_ONE, URI_TWO).getValues().size());
+    public void testSeeAlsoStringConstructor() {
+        final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.DATASET);
+
+        assertEquals(URI.create(myID), seeAlso.getID());
+        assertEquals(ResourceTypes.DATASET, seeAlso.getType());
     }
 
     /**
      * Tests constructing a seeAlso.
      */
     @Test
-    public void testSeeAlsoStringMediaType() {
-        assertEquals(URI_ONE, new SeeAlso(URI_ONE.toString(), MIME_TYPE).getID());
+    public void testSeeAlsoURIConstructor() {
+        final SeeAlso seeAlso = new SeeAlso(URI.create(myID), ResourceTypes.TEXT);
+
+        assertEquals(URI.create(myID), seeAlso.getID());
+        assertEquals(ResourceTypes.TEXT, seeAlso.getType());
     }
 
     /**
-     * Tests constructing a seeAlso.
+     * Tests getting a seeAlso profile.
      */
     @Test
-    public void testSeeAlsoStringString() {
-        assertEquals(URI_ONE, new SeeAlso(URI_ONE.toString(), MIME_TYPE.toString()).getID());
+    public void testSetGetProfile() {
+        final SeeAlso seeAlso = new SeeAlso(URI.create(myID), ResourceTypes.TEXT);
+        final String url = LOREM_IPSUM.getUrl();
+
+        assertEquals(URI.create(url), seeAlso.setProfile(url).getProfile().get());
     }
 
     /**
-     * Tests constructing a seeAlso.
+     * Tests getting a seeAlso profile with URI.
      */
     @Test
-    public void testSeeAlsoURIMediaType() {
-        assertEquals(URI_ONE, new SeeAlso(URI_ONE, MIME_TYPE).getID());
-    }
+    public void testSetGetProfileURI() {
+        final SeeAlso seeAlso = new SeeAlso(URI.create(myID), ResourceTypes.TEXT);
+        final URI uri = URI.create(LOREM_IPSUM.getUrl());
 
-    /**
-     * Tests constructing a seeAlso.
-     */
-    @Test
-    public void testSeeAlsoStringStringString() {
-        assertEquals(URI_ONE, new SeeAlso(URI_ONE.toString(), MIME_TYPE.toString(), URI_TWO.toString()).getID());
-    }
-
-    /**
-     * Tests constructing a seeAlso.
-     */
-    @Test
-    public void testSeeAlsoStringMediaTypeString() {
-        assertEquals(URI_ONE, new SeeAlso(URI_ONE.toString(), MIME_TYPE, URI_TWO.toString()).getID());
-    }
-
-    /**
-     * Tests constructing a seeAlso.
-     */
-    @Test
-    public void testGetValues() {
-        final SeeAlso seeAlso = new SeeAlso(URI_ONE, MIME_TYPE, URI_TWO);
-        assertEquals(1, seeAlso.getValues().size());
+        assertEquals(uri, seeAlso.setProfile(uri).getProfile().get());
     }
 
     /**
@@ -91,17 +82,26 @@ public class SeeAlsoTest {
      */
     @Test
     public void testGetProfileEmpty() {
-        final SeeAlso seeAlso = new SeeAlso(URI_ONE);
+        final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.DATASET);
         assertEquals(Optional.empty(), seeAlso.getProfile());
     }
 
     /**
-     * Tests getting a seeAlso profile.
+     * Tests setting and getting a format.
      */
     @Test
-    public void testGetProfile() {
-        final SeeAlso seeAlso = new SeeAlso(URI_ONE, MIME_TYPE, URI_TWO);
-        assertEquals(URI_TWO, seeAlso.getProfile().get());
+    public void testSetGetFormat() {
+        final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.DATASET);
+        assertEquals(JPEG_FORMAT, seeAlso.setFormat(MIME_TYPE).getFormat().get());
+    }
+
+    /**
+     * Tests setting and getting a format as a MediaType.
+     */
+    @Test
+    public void testSetGetFormatMediaType() {
+        final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.DATASET);
+        assertEquals(JPEG_FORMAT, seeAlso.setFormat(MediaType.parse(JPEG_FORMAT)).getFormat().get());
     }
 
     /**
@@ -109,43 +109,28 @@ public class SeeAlsoTest {
      */
     @Test
     public void testGetFormatEmpty() {
-        final SeeAlso seeAlso = new SeeAlso(URI_ONE);
+        final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.DATASET);
         assertEquals(Optional.empty(), seeAlso.getFormat());
     }
 
     /**
-     * Tests getting a format.
+     * Tests setting and getting a label.
      */
     @Test
-    public void testGetFormat() {
-        final SeeAlso seeAlso = new SeeAlso(URI_ONE, MIME_TYPE, URI_TWO);
-        assertEquals(MIME_TYPE.toString(), seeAlso.getFormat().get());
+    public void testSetGetLabel() {
+        final String text = LOREM_IPSUM.getWords(4);
+        final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.DATASET);
+
+        assertEquals(Optional.of(new Label(text)), seeAlso.setLabel(text).getLabel());
     }
 
     /**
-     * Tests getting a format media-type.
+     * Tests getting an empty label.
      */
     @Test
-    public void testGetFormatMediaTypeEmpty() {
-        final SeeAlso seeAlso = new SeeAlso(URI_ONE);
-        assertEquals(Optional.empty(), seeAlso.getFormatMediaType());
-    }
-
-    /**
-     * Tests getting a format media-type.
-     */
-    @Test
-    public void testGetFormatMediaType() {
-        final SeeAlso seeAlso = new SeeAlso(URI_ONE, MIME_TYPE, URI_TWO);
-        assertEquals(MIME_TYPE, seeAlso.getFormatMediaType().get());
-    }
-
-    /**
-     * Tests counting the number of seeAlso(s).
-     */
-    @Test
-    public void testCount() {
-        assertEquals(1, new SeeAlso(URI_ONE).count());
+    public void testGetLabelEmpty() {
+        final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.DATASET);
+        assertEquals(Optional.empty(), seeAlso.getFormat());
     }
 
 }

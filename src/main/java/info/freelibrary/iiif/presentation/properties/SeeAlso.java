@@ -1,24 +1,21 @@
 
 package info.freelibrary.iiif.presentation.properties;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.google.common.collect.ImmutableMap;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.google.common.net.MediaType;
 
 import info.freelibrary.iiif.presentation.Constants;
-import info.freelibrary.iiif.presentation.utils.MessageCodes;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.StringUtils;
+import info.freelibrary.iiif.presentation.ResourceTypes;
+
+import io.vertx.core.json.Json;
+import io.vertx.core.json.JsonObject;
 
 /**
  * A link to a machine readable document that semantically describes the resource with the seeAlso property, such as
@@ -28,364 +25,251 @@ import info.freelibrary.util.StringUtils;
  */
 public class SeeAlso {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SeeAlso.class, Constants.BUNDLE_NAME);
+    private URI myID;
 
-    private final List<Value> myValues;
+    private String myType;
+
+    private MediaType myFormat;
+
+    private URI myProfile;
+
+    private Label myLabel;
 
     /**
-     * Creates a new see also from an array of URI IDs in string form.
+     * Creates a new see also value from the supplied string ID and string type. Constant values for type can be found
+     * in {@link ResourceTypes}.
      *
-     * @param aIdArray The see also's ID(s)
-     * @throws UnsupportedOperationException If an ID string can not be set
+     * @param aID A string ID
+     * @param aType A type
      */
-    public SeeAlso(final String... aIdArray) {
-        myValues = new ArrayList<>();
-
-        for (final String id : aIdArray) {
-            Objects.requireNonNull(id, LOGGER.getMessage(MessageCodes.JPA_009));
-
-            if (!myValues.add(new Value(URI.create(id)))) {
-                throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_047, id));
-            }
-        }
+    public SeeAlso(final String aID, final String aType) {
+        myID = URI.create(aID);
+        myType = checkNotNull(aType);
     }
 
     /**
-     * Creates a new see also.
+     * Creates a new see also value from the supplied ID and string type. Constant values for type can be found in
+     * {@link ResourceTypes}.
      *
-     * @param aIdArray The see also's ID(s)
+     * @param aID An ID
+     * @param aType A type
      */
-    public SeeAlso(final URI... aIdArray) {
-        myValues = new ArrayList<>();
-
-        for (final URI uri : aIdArray) {
-            Objects.requireNonNull(uri, LOGGER.getMessage(MessageCodes.JPA_009));
-
-            if (!myValues.add(new Value(uri))) {
-                throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_047, uri));
-            }
-        }
-
+    public SeeAlso(final URI aID, final String aType) {
+        myID = checkNotNull(aID);
+        myType = checkNotNull(aType);
     }
 
     /**
-     * Creates a new see also.
-     *
-     * @param aID The see also's ID in string form
-     * @param aMediaType A media type
+     * Constructs the see also reference for Jackson's deserialization process.
      */
-    public SeeAlso(final String aID, final MediaType aMediaType) {
-        this(URI.create(aID), aMediaType);
+    @SuppressWarnings("unused")
+    private SeeAlso() {
     }
 
     /**
-     * Creates a new see also.
+     * Gets see also reference's ID.
      *
-     * @param aID The see also's ID
-     * @param aMediaType A media type
+     * @return The ID
      */
-    public SeeAlso(final URI aID, final MediaType aMediaType) {
-        Objects.requireNonNull(aID, MessageCodes.JPA_003);
-        Objects.requireNonNull(aMediaType, MessageCodes.JPA_004);
-
-        final Value value = new Value(aID, Optional.of(aMediaType));
-
-        myValues = new ArrayList<>();
-
-        if (!myValues.add(value)) {
-            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_047, value));
-        }
-    }
-
-    /**
-     * Creates a new see also.
-     *
-     * @param aID The see also's ID
-     * @param aMediaType A media type in string form
-     * @param aProfile A profile
-     */
-    public SeeAlso(final URI aID, final String aMediaType, final URI aProfile) {
-        this(aID, MediaType.parse(aMediaType), aProfile);
-    }
-
-    /**
-     * Creates a new see also.
-     *
-     * @param aID The see also's ID in string form
-     * @param aMediaType A media type
-     * @param aProfile A profile in string form
-     */
-    public SeeAlso(final String aID, final MediaType aMediaType, final String aProfile) {
-        this(URI.create(aID), aMediaType, URI.create(aProfile));
-    }
-
-    /**
-     * Creates a new see also.
-     *
-     * @param aID The see also's ID
-     * @param aMediaType A media type
-     * @param aProfile A profile
-     */
-    public SeeAlso(final URI aID, final MediaType aMediaType, final URI aProfile) {
-        Objects.requireNonNull(aID, MessageCodes.JPA_003);
-        Objects.requireNonNull(aMediaType, MessageCodes.JPA_004);
-        Objects.requireNonNull(aProfile, MessageCodes.JPA_005);
-
-        final Value value = new Value(aID, Optional.of(aMediaType), Optional.of(aProfile));
-
-        myValues = new ArrayList<>();
-
-        if (!myValues.add(value)) {
-            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_047, value));
-        }
-    }
-
-    /**
-     * Gets the first see also value's ID.
-     *
-     * @return The first see also value's ID
-     */
+    @JsonGetter(Constants.ID)
     public URI getID() {
-        if (myValues.isEmpty()) {
-            return null;
-        } else {
-            return myValues.get(0).getID();
-        }
+        return myID;
     }
 
     /**
-     * Gets the first see also value's profile.
+     * Sets the see also reference's ID in string form.
      *
-     * @return The first see also value's profile
+     * @param aID An ID in string form
+     * @return This see also reference
+     */
+    @JsonSetter(Constants.ID)
+    public SeeAlso setID(final String aID) {
+        myID = URI.create(aID);
+        return this;
+    }
+
+    /**
+     * Sets the see also reference's ID.
+     *
+     * @param aID An ID
+     * @return This see also reference
      */
     @JsonIgnore
-    public Optional<URI> getProfile() {
-        if (myValues.isEmpty()) {
-            return Optional.empty();
-        } else {
-            return myValues.get(0).getProfile();
-        }
+    public SeeAlso setID(final URI aID) {
+        myID = checkNotNull(aID);
+        return this;
     }
 
     /**
-     * Gets the first see also value's format.
+     * Gets see also reference's type.
      *
-     * @return The first see also value's format
+     * @return The reference's type
      */
-    @JsonIgnore
-    public Optional<String> getFormat() {
-        if (myValues.isEmpty()) {
-            return Optional.empty();
-        } else {
-            return myValues.get(0).getFormat();
-        }
+    @JsonGetter(Constants.TYPE)
+    public String getType() {
+        return myType;
     }
 
     /**
-     * Gets the first see also value's format media type.
+     * Sets the see also reference's type.
      *
-     * @return The first see also value's format media type
+     * @param aType A type
+     * @return This see also reference
+     */
+    @JsonSetter(Constants.TYPE)
+    public SeeAlso setType(final String aType) {
+        myType = checkNotNull(aType);
+        return this;
+    }
+
+    /**
+     * Gets the see also reference's format as a media type.
+     *
+     * @return An optional format
      */
     @JsonIgnore
     public Optional<MediaType> getFormatMediaType() {
-        if (myValues.isEmpty()) {
-            return Optional.empty();
-        } else {
-            return myValues.get(0).getFormatMediaType();
-        }
+        return Optional.ofNullable(myFormat);
     }
 
     /**
-     * Adds a see also value.
+     * Get see also reference's format.
      *
-     * @param aIdArray An array of see also IDs in string form
-     * @return The see also
+     * @return An optional format
      */
-    public SeeAlso addValue(final String... aIdArray) {
-        for (final String id : aIdArray) {
-            Objects.requireNonNull(id, MessageCodes.JPA_003);
+    @JsonGetter(Constants.FORMAT)
+    public Optional<String> getFormat() {
+        return myFormat != null ? Optional.of(myFormat.toString()) : Optional.empty();
+    }
 
-            final Value value = new Value(URI.create(id));
-
-            if (!myValues.add(value)) {
-                throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_047, value));
-            }
-        }
-
+    /**
+     * Sets see also reference's format in string form.
+     *
+     * @param aFormat
+     * @return This see also reference
+     * @throws IllegalArgumentException If the supplied string isn't a media type
+     */
+    @JsonSetter(Constants.FORMAT)
+    public SeeAlso setFormat(final String aFormat) throws IllegalArgumentException {
+        myFormat = MediaType.parse(aFormat);
         return this;
     }
 
     /**
-     * Adds a see also value.
+     * Sets see also reference's format.
      *
-     * @param aIdArray A see also value
-     * @return The see also
+     * @param aFormat
+     * @return This see also reference
+     * @throws IllegalArgumentException If the supplied string isn't a media type
      */
-    public SeeAlso addValue(final URI... aIdArray) {
-        for (final URI id : aIdArray) {
-            Objects.requireNonNull(id, MessageCodes.JPA_003);
-
-            final Value value = new Value(id);
-
-            if (!myValues.add(value)) {
-                throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_047, value));
-            }
-        }
-
+    @JsonIgnore
+    public SeeAlso setFormat(final MediaType aMediaType) {
+        myFormat = checkNotNull(aMediaType);
         return this;
     }
 
     /**
-     * Returns number of see also values.
+     * Gets the see also reference's profile.
      *
-     * @return The number of see also values
+     * @return An optional profile URI
      */
-    @JsonIgnore
-    public int count() {
-        return myValues.size();
+    @JsonGetter(Constants.PROFILE)
+    public Optional<URI> getProfile() {
+        return Optional.ofNullable(myProfile);
     }
 
     /**
-     * Gets the see also values.
+     * Sets the see also reference's profile.
      *
-     * @return The see also values
+     * @param aProfile A profile
+     * @return This see also reference
      */
     @JsonIgnore
-    public List<Value> getValues() {
-        return myValues;
-    }
-
-    @JsonValue
-    private Object toList() {
-        if (myValues.size() > 0) {
-            final List<Object> seeAlsoList = new ArrayList<>();
-
-            for (final Value value : myValues) {
-                final String id = value.getID().toString();
-                final String format = value.getFormatAsString();
-                final String profile = value.getProfileAsString();
-                final Map map;
-
-                if ((id != null) && (format != null) && (profile != null)) {
-                    map = ImmutableMap.of(Constants.ID, id, Constants.FORMAT, format, Constants.PROFILE, profile);
-                    seeAlsoList.add(map);
-                } else if ((id != null) && (format != null)) {
-                    seeAlsoList.add(ImmutableMap.of(Constants.ID, id, Constants.FORMAT, format));
-                } else if ((id != null) && (profile != null)) {
-                    seeAlsoList.add(ImmutableMap.of(Constants.ID, id, Constants.FORMAT, format));
-                } else if (id != null) {
-                    seeAlsoList.add(id);
-                }
-            }
-
-            return seeAlsoList;
-        } else {
-            return null;
-        }
+    public SeeAlso setProfile(final URI aProfile) {
+        myProfile = checkNotNull(aProfile);
+        return this;
     }
 
     /**
-     * A see also value.
+     * Sets the see also reference's profile in string form.
+     *
+     * @param aProfile A profile in string form
+     * @return This see also reference
      */
-    public final class Value {
-
-        private final URI myID;
-
-        private final Optional<MediaType> myFormat;
-
-        private final Optional<URI> myProfile;
-
-        /**
-         * Creates a new see also value from the supplied string ID.
-         *
-         * @param aID A string ID
-         */
-        private Value(final URI aID) {
-            myID = aID;
-            myFormat = Optional.empty();
-            myProfile = Optional.empty();
-        }
-
-        /**
-         * Creates a new see also value from the supplied ID.
-         *
-         * @param aID An ID
-         */
-        private Value(final URI aID, final Optional<MediaType> aMediaType) {
-            myID = aID;
-            myFormat = aMediaType;
-            myProfile = Optional.empty();
-        }
-
-        /**
-         * Creates a new see also value.
-         *
-         * @param aID An ID
-         * @param aFormat A format
-         * @param aProfile A profile
-         */
-        private Value(final URI aID, final Optional<MediaType> aFormat, final Optional<URI> aProfile) {
-            myID = aID;
-            myFormat = aFormat;
-            myProfile = aProfile;
-        }
-
-        /**
-         * Get ID.
-         *
-         * @return The ID
-         */
-        @JsonGetter(Constants.ID)
-        public URI getID() {
-            return myID;
-        }
-
-        /**
-         * Get format.
-         *
-         * @return The format
-         */
-        @JsonIgnore
-        public Optional<MediaType> getFormatMediaType() {
-            return myFormat;
-        }
-
-        /**
-         * Get format.
-         *
-         * @return The format
-         */
-        @JsonIgnore
-        public Optional<String> getFormat() {
-            return myFormat.isPresent() ? Optional.of(myFormat.get().toString()) : Optional.empty();
-        }
-
-        /**
-         * Get profile.
-         *
-         * @return The profile
-         */
-        @JsonIgnore
-        public Optional<URI> getProfile() {
-            return myProfile;
-        }
-
-        @JsonGetter(Constants.PROFILE)
-        private String getProfileAsString() {
-            return myProfile.isPresent() ? myProfile.get().toString() : null;
-        }
-
-        @JsonGetter(Constants.FORMAT)
-        private String getFormatAsString() {
-            return myFormat.isPresent() ? myFormat.get().toString() : null;
-        }
-
-        @Override
-        public String toString() {
-            final String format = StringUtils.trimTo(getFormatAsString(), Constants.EMPTY);
-            final String profile = StringUtils.trimTo(getProfileAsString(), Constants.EMPTY);
-
-            return String.join(" : ", myID.toString(), format, profile);
-        }
+    @JsonSetter(Constants.PROFILE)
+    public SeeAlso setProfile(final String aProfile) {
+        myProfile = URI.create(aProfile);
+        return this;
     }
+
+    /**
+     * Gets a see also reference's descriptive label.
+     *
+     * @return An optional descriptive label
+     */
+    @JsonGetter(Constants.LABEL)
+    public Optional<Label> getLabel() {
+        return Optional.ofNullable(myLabel);
+    }
+
+    /**
+     * Sets the see also reference's descriptive label.
+     *
+     * @param aLabel A descriptive label
+     * @return This see also reference
+     */
+    @JsonSetter(Constants.LABEL)
+    public SeeAlso setLabel(final Label aLabel) {
+        myLabel = checkNotNull(aLabel);
+        return this;
+    }
+
+    /**
+     * Sets the see also reference's descriptive label in string form.
+     *
+     * @param aLabel A descriptive label in string form
+     * @return This see also reference
+     */
+    @JsonIgnore
+    public SeeAlso setLabel(final String aLabel) {
+        myLabel = new Label(aLabel);
+        return this;
+    }
+
+    /**
+     * Returns a JsonObject of the SeeAlso.
+     *
+     * @return A JsonObject of the SeeAlso
+     */
+    public JsonObject toJSON() {
+        return JsonObject.mapFrom(this);
+    }
+
+    @Override
+    public String toString() {
+        return toJSON().encodePrettily();
+    }
+
+    /**
+     * Returns a SeeAlso from its JSON representation.
+     *
+     * @param aJsonObject A SeeAlso in JSON form
+     * @return This SeeAlso
+     */
+    @JsonIgnore
+    public static SeeAlso fromJSON(final JsonObject aJsonObject) {
+        return Json.decodeValue(aJsonObject.toString(), SeeAlso.class);
+    }
+
+    /**
+     * Returns a SeeAlso from its JSON representation.
+     *
+     * @param aJsonString A SeeAlso in string form
+     * @return This SeeAlso
+     */
+    @JsonIgnore
+    public static SeeAlso fromString(final String aJsonString) {
+        return fromJSON(new JsonObject(aJsonString));
+    }
+
 }
