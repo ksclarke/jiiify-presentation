@@ -31,13 +31,21 @@
 
   <developers>
     <developer>
-      <email>ksclarke@ksclarke.io</email>
+      <id>ksclarke</id>
       <name>Kevin S. Clarke</name>
-      <url>http://kevinclarke.info</url>
+      <email>ksclarke@ksclarke.io</email>
       <roles>
         <role>developer</role>
       </roles>
       <timezone>America/New_York</timezone>
+    </developer>
+    <developer>
+      <id>markmatney</id>
+      <name>Mark A. Matney, Jr.</name>
+      <email>mmatney@library.ucla.edu</email>
+      <organization>UCLA Library</organization>
+      <organizationUrl>http://github.com/uclalibrary</organizationUrl>
+      <timezone>America/Los_Angeles</timezone>
     </developer>
   </developers>
 
