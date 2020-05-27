@@ -5,6 +5,7 @@ import java.net.URI;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
@@ -16,8 +17,9 @@ import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 
 /**
- * Sound content that can be associated with a {@link ContentAnnotation}.
+ * Sound content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
  */
+@JsonPropertyOrder({ Constants.TYPE, Constants.ID, Constants.FORMAT, Constants.DURATION })
 public class SoundContent extends AbstractContentResource<SoundContent> implements ContentResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SoundContent.class, Constants.BUNDLE_NAME);

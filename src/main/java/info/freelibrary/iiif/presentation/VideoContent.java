@@ -16,7 +16,7 @@ import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 
 /**
- * Video content that can be associated with a {@link ContentAnnotation}.
+ * Video content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
  */
 public class VideoContent extends AbstractContentResource<VideoContent> implements ContentResource {
 

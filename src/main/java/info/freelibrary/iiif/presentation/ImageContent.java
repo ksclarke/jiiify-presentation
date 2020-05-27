@@ -17,7 +17,7 @@ import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 
 /**
- * Image content that can be associated with a {@link ContentAnnotation}.
+ * Image content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
  */
 @JsonPropertyOrder({ Constants.TYPE, Constants.LABEL, Constants.ID, Constants.THUMBNAIL, Constants.WIDTH,
     Constants.HEIGHT, Constants.FORMAT, Constants.SERVICE })

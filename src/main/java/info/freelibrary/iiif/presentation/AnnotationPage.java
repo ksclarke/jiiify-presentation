@@ -21,11 +21,11 @@ import info.freelibrary.util.StringUtils;
 /**
  * A page of annotations.
  */
-public class AnnotationPage extends Resource<AnnotationPage> {
+public class AnnotationPage<T> extends Resource<AnnotationPage<T>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationPage.class, Constants.BUNDLE_NAME);
 
-    private List<ContentAnnotation> myAnnotations;
+    private List<T> myAnnotations;
 
     /**
      * Creates a new annotation page.
@@ -53,29 +53,31 @@ public class AnnotationPage extends Resource<AnnotationPage> {
     }
 
     /**
-     * Sets the annotation page's contents.
+     * Sets the annotation page's annotations.
      *
-     * @param aContentArray A content array
+     * @param aAnnotationArray An annotation array
      * @return The annotation page
      */
     @JsonGetter(Constants.ITEMS)
-    public AnnotationPage setAnnotations(final ContentAnnotation... aContentArray) {
+    @SafeVarargs
+    public final AnnotationPage<T> setAnnotations(final T... aAnnotationArray) {
         if (myAnnotations != null) {
             myAnnotations.clear();
         }
 
-        return addAnnotations(aContentArray);
+        return addAnnotations(aAnnotationArray);
     }
 
     /**
-     * Adds content to the annotation page.
+     * Adds annotations to the annotation page.
      *
-     * @param aContentArray Content to be added to the annotation page
+     * @param aAnnotationArray Annotations to be added to the annotation page
      * @return The annotation page
      */
-    public AnnotationPage addAnnotations(final ContentAnnotation... aContentArray) {
-        if (!Collections.addAll(getAnnotations(), checkNotNull(aContentArray))) {
-            final String contents = StringUtils.toString(aContentArray, '|');
+    @SafeVarargs
+    public final AnnotationPage<T> addAnnotations(final T... aAnnotationArray) {
+        if (!Collections.addAll(getAnnotations(), checkNotNull(aAnnotationArray))) {
+            final String contents = StringUtils.toString(aAnnotationArray, '|');
             throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_050, contents));
         }
 
@@ -83,12 +85,12 @@ public class AnnotationPage extends Resource<AnnotationPage> {
     }
 
     /**
-     * Gets the annotation page's content.
+     * Gets the annotation page's annotations.
      *
-     * @return The annotation page's content
+     * @return The annotation page's annotations
      */
     @JsonGetter(Constants.ITEMS)
-    public List<ContentAnnotation> getAnnotations() {
+    public List<T> getAnnotations() {
         if (myAnnotations == null) {
             myAnnotations = new ArrayList<>();
         }
@@ -98,12 +100,12 @@ public class AnnotationPage extends Resource<AnnotationPage> {
 
     @Override
     @JsonSetter(Constants.BEHAVIOR)
-    public AnnotationPage setBehaviors(final Behavior... aBehaviorArray) {
+    public AnnotationPage<T> setBehaviors(final Behavior... aBehaviorArray) {
         return super.setBehaviors(checkBehaviors(ResourceBehavior.class, aBehaviorArray));
     }
 
     @Override
-    public AnnotationPage addBehaviors(final Behavior... aBehaviorArray) {
+    public AnnotationPage<T> addBehaviors(final Behavior... aBehaviorArray) {
         return super.addBehaviors(checkBehaviors(ResourceBehavior.class, aBehaviorArray));
     }
 

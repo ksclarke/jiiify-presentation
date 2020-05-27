@@ -29,7 +29,7 @@ public class AnnotationPageTest extends AbstractTest {
      */
     @Test
     public void testAnnotationPageStringId() {
-        assertEquals(myID, new AnnotationPage(myID).getID().toString());
+        assertEquals(myID, new AnnotationPage<PaintingAnnotation>(myID).getID().toString());
     }
 
     /**
@@ -37,7 +37,7 @@ public class AnnotationPageTest extends AbstractTest {
      */
     @Test
     public void testAnnotationPageUriId() {
-        assertEquals(URI.create(myID), new AnnotationPage(URI.create(myID)).getID());
+        assertEquals(URI.create(myID), new AnnotationPage<PaintingAnnotation>(URI.create(myID)).getID());
     }
 
     /**
@@ -45,7 +45,8 @@ public class AnnotationPageTest extends AbstractTest {
      */
     @Test
     public final void testSetBehaviors() {
-        assertEquals(1, new AnnotationPage(myID).setBehaviors(ResourceBehavior.HIDDEN).getBehaviors().size());
+        assertEquals(1, new AnnotationPage<PaintingAnnotation>(myID).setBehaviors(ResourceBehavior.HIDDEN)
+                .getBehaviors().size());
     }
 
     /**
@@ -53,7 +54,7 @@ public class AnnotationPageTest extends AbstractTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testSetDisallowedBehaviors() {
-        new AnnotationPage(myID).setBehaviors(ManifestBehavior.AUTOADVANCE);
+        new AnnotationPage<PaintingAnnotation>(myID).setBehaviors(ManifestBehavior.AUTOADVANCE);
     }
 
     /**
@@ -61,7 +62,8 @@ public class AnnotationPageTest extends AbstractTest {
      */
     @Test
     public final void testAddBehaviors() {
-        assertEquals(1, new AnnotationPage(myID).addBehaviors(ResourceBehavior.HIDDEN).getBehaviors().size());
+        assertEquals(1, new AnnotationPage<PaintingAnnotation>(myID).addBehaviors(ResourceBehavior.HIDDEN)
+                .getBehaviors().size());
     }
 
     /**
@@ -69,7 +71,8 @@ public class AnnotationPageTest extends AbstractTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testAddDisallowedBehaviors() {
-        new AnnotationPage(myID).addBehaviors(ManifestBehavior.CONTINUOUS, CanvasBehavior.AUTOADVANCE);
+        new AnnotationPage<PaintingAnnotation>(myID).addBehaviors(ManifestBehavior.CONTINUOUS,
+                CanvasBehavior.AUTOADVANCE);
     }
 
 }

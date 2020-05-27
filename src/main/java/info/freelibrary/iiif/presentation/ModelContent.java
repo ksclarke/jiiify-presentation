@@ -4,7 +4,7 @@ package info.freelibrary.iiif.presentation;
 import java.net.URI;
 
 /**
- * Model content that can be associated with a {@link ContentAnnotation}.
+ * Model content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
  */
 public class ModelContent extends AbstractContentResource<ModelContent> implements ContentResource {
 

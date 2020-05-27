@@ -101,6 +101,8 @@ public final class Constants {
 
     public static final String ITEMS = "items";
 
+    public static final String ANNOTATIONS = "annotations";
+
     public static final String DEFAULT = "default";
 
     public static final String PHYSICAL_SCALE = "physicalScale";

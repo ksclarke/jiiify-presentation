@@ -4,7 +4,7 @@ package info.freelibrary.iiif.presentation;
 import java.net.URI;
 
 /**
- * Dataset content that can be associated with a {@link ContentAnnotation}.
+ * Dataset content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
  */
 public class DatasetContent extends AbstractContentResource<DatasetContent> implements ContentResource {
 

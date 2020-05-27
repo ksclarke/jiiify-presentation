@@ -1,25 +1,25 @@
 {
     "@context": "http://iiif.io/api/presentation/3/context.json",
-    "id": "https://example.org/iiif/video/manifest",
     "type": "Manifest",
+    "id": "https://example.org/iiif/video/manifest",
     "label": { "en": [ "Video Example 3" ] },
     "items": [
       {
-        "id": "https://example.org/iiif/video/canvas/segment1",
         "type": "Canvas",
+        "id": "https://example.org/iiif/video/canvas/segment1",
         "duration": 3600,
         "items": [
           {
-            "id": "https://example.org/iiif/video/annotation/segment1/page",
             "type": "AnnotationPage",
+            "id": "https://example.org/iiif/video/annotation/segment1/page",
             "items": [
               {
-                "id": "https://example.org/iiif/video/annotation/segment1-video",
                 "type": "Annotation",
+                "id": "https://example.org/iiif/video/annotation/segment1-video",
                 "motivation": "painting",
                 "body": {
-                  "id": "http://iiif.io/api/presentation/3/example/fixtures/resources/video-sample.mp4",
                   "type": "Video",
+                  "id": "http://iiif.io/api/presentation/3/example/fixtures/resources/video-sample.mp4",
                   "format": "video/mp4",
                   "duration": 3600
                 },

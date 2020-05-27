@@ -38,7 +38,9 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
 
     private float myDuration;
 
-    private List<AnnotationPage> myPageList;
+    private List<AnnotationPage<PaintingAnnotation>> myPaintingPageList;
+
+    private List<AnnotationPage<SupplementingAnnotation>> mySupplementingPageList;
 
     /**
      * Creates a new canvas.
@@ -97,28 +99,30 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     }
 
     /**
-     * Sets the canvas' annotation pages.
+     * Sets the canvas' annotation pages for painting annotations.
      *
      * @param aPageArray An array of annotation pages
      * @return The canvas
      */
     @JsonSetter(Constants.ITEMS)
-    public T setPages(final AnnotationPage... aPageArray) {
-        if (myPageList != null) {
-            myPageList.clear();
+    @SafeVarargs
+    public final T setPaintingPages(final AnnotationPage<PaintingAnnotation>... aPageArray) {
+        if (myPaintingPageList != null) {
+            myPaintingPageList.clear();
         }
 
-        return addPage(aPageArray);
+        return addPaintingPages(aPageArray);
     }
 
     /**
-     * Adds an annotation page to the canvas.
+     * Adds an annotation page for painting annotations to the canvas.
      *
      * @param aPageArray An annotation page
      * @return The canvas
      */
-    public T addPage(final AnnotationPage... aPageArray) {
-        if (!Collections.addAll(getPages(), aPageArray)) {
+    @SafeVarargs
+    public final T addPaintingPages(final AnnotationPage<PaintingAnnotation>... aPageArray) {
+        if (!Collections.addAll(getPaintingPages(), aPageArray)) {
             final String message = LOGGER.getMessage(MessageCodes.JPA_049, StringUtils.toString(aPageArray, ' '));
             throw new UnsupportedOperationException(message);
         }
@@ -127,17 +131,63 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     }
 
     /**
-     * Gets the canvas' annotation pages.
+     * Gets the canvas' annotation pages for painting annotations.
      *
-     * @return The canvas' annotation pages
+     * @return The canvas' annotation pages for painting annotations
      */
     @JsonGetter(Constants.ITEMS)
-    public List<AnnotationPage> getPages() {
-        if (myPageList == null) {
-            myPageList = new ArrayList<>();
+    public List<AnnotationPage<PaintingAnnotation>> getPaintingPages() {
+        if (myPaintingPageList == null) {
+            myPaintingPageList = new ArrayList<>();
         }
 
-        return myPageList;
+        return myPaintingPageList;
+    }
+
+    /**
+     * Sets the canvas' annotation pages for non-painting annotations.
+     *
+     * @param aPageArray An array of annotation pages
+     * @return The canvas
+     */
+    @JsonSetter(Constants.ANNOTATIONS)
+    @SafeVarargs
+    public final T setSupplementingPages(final AnnotationPage<SupplementingAnnotation>... aPageArray) {
+        if (mySupplementingPageList != null) {
+            mySupplementingPageList.clear();
+        }
+
+        return addSupplementingPages(aPageArray);
+    }
+
+    /**
+     * Adds an annotation page for non-painting annotations to the canvas.
+     *
+     * @param aPageArray An annotation page
+     * @return The canvas
+     */
+    @SafeVarargs
+    public final T addSupplementingPages(final AnnotationPage<SupplementingAnnotation>... aPageArray) {
+        if (!Collections.addAll(getSupplementingPages(), aPageArray)) {
+            final String message = LOGGER.getMessage(MessageCodes.JPA_049, StringUtils.toString(aPageArray, ' '));
+            throw new UnsupportedOperationException(message);
+        }
+
+        return (T) this;
+    }
+
+    /**
+     * Gets the canvas' annotation pages for non-painting annotations.
+     *
+     * @return The canvas' non-painting annotation pages
+     */
+    @JsonGetter(Constants.ANNOTATIONS)
+    public List<AnnotationPage<SupplementingAnnotation>> getSupplementingPages() {
+        if (mySupplementingPageList == null) {
+            mySupplementingPageList = new ArrayList<>();
+        }
+
+        return mySupplementingPageList;
     }
 
     /**

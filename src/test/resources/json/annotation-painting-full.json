@@ -1,0 +1,13 @@
+{
+  "type": "Annotation",
+  "id": "a8bb567c-fa5a-4a35-9b21-e1f9c6ba4648",
+  "motivation": "painting",
+  "timeMode": "loop",
+  "body": {
+    "type": "Sound",
+    "id": "bc7c572d-6bf5-48c9-8329-51a961f1019d.mp3",
+    "format": "audio/mpeg",
+    "duration": 3600
+  },
+  "target": "cc16ed46-cfbc-458a-9a7b-16364a5af377"
+}

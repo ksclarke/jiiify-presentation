@@ -4,7 +4,7 @@ package info.freelibrary.iiif.presentation;
 import java.net.URI;
 
 /**
- * Text content that can be associated with a {@link ContentAnnotation}.
+ * Text content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
  */
 public class TextContent extends AbstractContentResource<TextContent> implements ContentResource {
 

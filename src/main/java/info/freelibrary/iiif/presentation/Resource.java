@@ -532,7 +532,7 @@ class Resource<T extends Resource<T>> {
      * @throws IllegalArgumentException If a passed behavior is not appropriate for the type of resource in hand
      */
     @JsonSetter(Constants.BEHAVIOR)
-    public T setBehaviors(final Behavior... aBehaviorArray) {
+    protected T setBehaviors(final Behavior... aBehaviorArray) {
         final List<Behavior> behaviors = getBehaviorsList();
 
         behaviors.clear();
@@ -556,7 +556,7 @@ class Resource<T extends Resource<T>> {
      * @param aBehaviorArray An array of behaviors to add to the resource
      * @return The resource
      */
-    public T addBehaviors(final Behavior... aBehaviorArray) {
+    protected T addBehaviors(final Behavior... aBehaviorArray) {
         getBehaviorsList().addAll(Arrays.asList(aBehaviorArray));
         return (T) this;
     }
