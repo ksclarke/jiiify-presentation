@@ -90,12 +90,12 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     @Override
     @JsonSetter(Constants.BEHAVIOR)
     public T setBehaviors(final Behavior... aBehaviorArray) {
-        return super.setBehaviors(checkBehaviors(CanvasBehavior.class, aBehaviorArray));
+        return super.setBehaviors(checkBehaviors(CanvasBehavior.class, true, aBehaviorArray));
     }
 
     @Override
     public T addBehaviors(final Behavior... aBehaviorArray) {
-        return super.addBehaviors(checkBehaviors(CanvasBehavior.class, aBehaviorArray));
+        return super.addBehaviors(checkBehaviors(CanvasBehavior.class, false, aBehaviorArray));
     }
 
     /**

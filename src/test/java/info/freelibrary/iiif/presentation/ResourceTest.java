@@ -106,7 +106,7 @@ public class ResourceTest extends AbstractTest {
         test.setHomepages(new Homepage(SILS_URL, ResourceTypes.TEXT, AAAA), new Homepage(EXAMPLE_URL,
                 ResourceTypes.TEXT, BBBB));
         test.setLogo(new Logo("ffff.jpg", service).addImage("gggg.jpg", service));
-        test.setBehaviors(ManifestBehavior.AUTOADVANCE);
+        test.setBehaviors(ManifestBehavior.AUTO_ADVANCE);
         test.setSeeAlsoRefs(new SeeAlso(LOREM_IPSUM.getUrl(), ResourceTypes.DATASET));
 
         json = JsonObject.mapFrom(test);
@@ -121,7 +121,7 @@ public class ResourceTest extends AbstractTest {
     public void testSetBehaviors() {
         final TestResource resource = new TestResource();
 
-        resource.setBehaviors(CanvasBehavior.AUTOADVANCE, ManifestBehavior.CONTINUOUS);
+        resource.setBehaviors(CanvasBehavior.AUTO_ADVANCE, ManifestBehavior.CONTINUOUS);
         assertEquals(2, resource.getBehaviors().size());
 
         resource.setBehaviors(CollectionBehavior.INDIVIDUALS);
@@ -135,7 +135,7 @@ public class ResourceTest extends AbstractTest {
     public void testAddBehaviors() {
         final TestResource resource = new TestResource();
 
-        resource.setBehaviors(CanvasBehavior.AUTOADVANCE, ManifestBehavior.CONTINUOUS);
+        resource.setBehaviors(CanvasBehavior.AUTO_ADVANCE, ManifestBehavior.CONTINUOUS);
         assertEquals(2, resource.getBehaviors().size());
 
         resource.addBehaviors(CollectionBehavior.INDIVIDUALS);
@@ -149,7 +149,7 @@ public class ResourceTest extends AbstractTest {
     public void testRemoveBehaviors() {
         final TestResource resource = new TestResource();
 
-        resource.setBehaviors(CanvasBehavior.AUTOADVANCE, ManifestBehavior.CONTINUOUS).clearBehaviors();
+        resource.setBehaviors(CanvasBehavior.AUTO_ADVANCE, ManifestBehavior.CONTINUOUS).clearBehaviors();
         assertEquals(0, resource.getBehaviors().size());
     }
 
@@ -161,7 +161,7 @@ public class ResourceTest extends AbstractTest {
         final TestResource resource = new TestResource();
         final List<Behavior> behaviors;
 
-        resource.setBehaviors(CanvasBehavior.AUTOADVANCE, ManifestBehavior.CONTINUOUS);
+        resource.setBehaviors(CanvasBehavior.AUTO_ADVANCE, ManifestBehavior.CONTINUOUS);
         behaviors = resource.getBehaviors();
         behaviors.add(CollectionBehavior.CONTINUOUS);
     }

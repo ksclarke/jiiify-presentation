@@ -15,8 +15,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class CollectionBehaviorTest {
 
     /* The expected values */
-    private static final String[] VALUES = { "auto-advance", "no-auto-advance", "individuals", "continuous", "repeat",
-        "no-repeat", "paged", "unordered", "multi-part", "together" };
+    private static final String[] VALUES = { BehaviorConstants.AUTO_ADVANCE, BehaviorConstants.NO_AUTO_ADVANCE,
+        BehaviorConstants.INDIVIDUALS, BehaviorConstants.CONTINUOUS, BehaviorConstants.REPEAT,
+        BehaviorConstants.NO_REPEAT, BehaviorConstants.PAGED, BehaviorConstants.UNORDERED,
+        BehaviorConstants.MULTI_PART, BehaviorConstants.TOGETHER };
 
     /**
      * Tests the JSON serialization.
@@ -25,7 +27,8 @@ public class CollectionBehaviorTest {
      */
     @Test
     public final void testJsonSerialization() throws JsonProcessingException {
-        assertEquals(QUOTE + VALUES[9] + QUOTE, new ObjectMapper().writeValueAsString(CollectionBehavior.TOGETHER));
+        assertEquals(QUOTE + BehaviorConstants.TOGETHER + QUOTE, new ObjectMapper().writeValueAsString(
+                CollectionBehavior.TOGETHER));
     }
 
     /**
@@ -33,7 +36,7 @@ public class CollectionBehaviorTest {
      */
     @Test
     public final void testToString() {
-        assertEquals(VALUES[9], CollectionBehavior.TOGETHER.toString());
+        assertEquals(BehaviorConstants.TOGETHER, CollectionBehavior.TOGETHER.toString());
     }
 
     /**

@@ -176,7 +176,7 @@ public class RangeTest extends AbstractTest {
      */
     @Test
     public final void testSetBehaviors() {
-        final RangeBehavior[] behaviors = new RangeBehavior[] { RangeBehavior.AUTOADVANCE,
+        final RangeBehavior[] behaviors = new RangeBehavior[] { RangeBehavior.AUTO_ADVANCE,
             RangeBehavior.INDIVIDUALS };
 
         assertEquals(2, getRange().setBehaviors(behaviors).getBehaviors().size());
@@ -187,7 +187,7 @@ public class RangeTest extends AbstractTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testSetDisallowedBehaviors() {
-        getRange().setBehaviors(RangeBehavior.AUTOADVANCE, ManifestBehavior.AUTOADVANCE);
+        getRange().setBehaviors(RangeBehavior.AUTO_ADVANCE, ManifestBehavior.AUTO_ADVANCE);
     }
 
     /**
@@ -195,7 +195,7 @@ public class RangeTest extends AbstractTest {
      */
     @Test
     public final void testAddBehaviors() {
-        assertEquals(1, getRange().addBehaviors(RangeBehavior.AUTOADVANCE).getBehaviors().size());
+        assertEquals(1, getRange().addBehaviors(RangeBehavior.AUTO_ADVANCE).getBehaviors().size());
     }
 
     /**
@@ -203,7 +203,7 @@ public class RangeTest extends AbstractTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testAddDisallowedBehaviors() {
-        getRange().addBehaviors(RangeBehavior.AUTOADVANCE, ManifestBehavior.INDIVIDUALS);
+        getRange().addBehaviors(RangeBehavior.AUTO_ADVANCE, ManifestBehavior.INDIVIDUALS);
     }
 
     private Range getRange() {

@@ -65,7 +65,7 @@ public class AnnotationCollectionTest {
     public final void testSetDisallowedBehaviors() {
         final AnnotationCollection annotationCollection = new AnnotationCollection(ID.toString(), LABEL);
 
-        annotationCollection.setBehaviors(ManifestBehavior.AUTOADVANCE);
+        annotationCollection.setBehaviors(ManifestBehavior.AUTO_ADVANCE);
     }
 
     /**
@@ -85,7 +85,7 @@ public class AnnotationCollectionTest {
     public final void testAddDisallowedBehaviors() {
         final AnnotationCollection annotationCollection = new AnnotationCollection(ID.toString(), LABEL);
 
-        annotationCollection.addBehaviors(ManifestBehavior.CONTINUOUS, CanvasBehavior.AUTOADVANCE);
+        annotationCollection.addBehaviors(ManifestBehavior.CONTINUOUS, CanvasBehavior.AUTO_ADVANCE);
     }
 
 }

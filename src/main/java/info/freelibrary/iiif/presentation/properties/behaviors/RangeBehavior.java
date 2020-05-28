@@ -7,9 +7,10 @@ import info.freelibrary.iiif.presentation.properties.Behavior;
 
 public enum RangeBehavior implements Behavior {
 
-    AUTOADVANCE("auto-advance"), NOAUTOADVANCE("no-auto-advance"), INDIVIDUALS("individuals"), NONAV("no-nav"),
-    CONTINUOUS("continuous"), PAGED("paged"), UNORDERED("unordered"), THUMBNAILNAV("thumbnail-nav"), SEQUENCE(
-            "sequence");
+    AUTO_ADVANCE(BehaviorConstants.AUTO_ADVANCE), NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE), INDIVIDUALS(
+            BehaviorConstants.INDIVIDUALS), NO_NAV(BehaviorConstants.NO_NAV), CONTINUOUS(BehaviorConstants.CONTINUOUS),
+    PAGED(BehaviorConstants.PAGED), UNORDERED(BehaviorConstants.UNORDERED), THUMBNAIL_NAV(
+            BehaviorConstants.THUMBNAIL_NAV), SEQUENCE(BehaviorConstants.SEQUENCE);
 
     private final String myValue;
 

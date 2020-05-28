@@ -25,13 +25,14 @@ import info.freelibrary.iiif.presentation.utils.ContentResourceComparator;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+
 import io.vertx.core.json.jackson.DatabindCodec;
 
 /**
  * Content resources and commentary are associated with a canvas via an annotation. This provides a single, coherent
  * method for aligning information, and provides a standards based framework for distinguishing parts of resources and
- * parts of canvases. As annotations can be added later, it promotes a distributed system in which publishers can align
- * their content with the descriptions created by others.
+ * parts of canvases. As annotations can be added later, it promotes a distributed system in which publishers can
+ * align their content with the descriptions created by others.
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.TYPE, Constants.ID, Constants.MOTIVATION, Constants.LABEL,
@@ -175,8 +176,8 @@ abstract class AbstractAnnotation extends Resource<AbstractAnnotation> {
     }
 
     /**
-     * Sets the motivation of the annotation. This method is just used by Jackson's deserialization process. It doesn't
-     * actually change the hard-coded motivation value.
+     * Sets the motivation of the annotation. This method is just used by Jackson's deserialization process. It
+     * doesn't actually change the hard-coded motivation value.
      *
      * @param aMotivation A motivation in string form
      */
@@ -192,7 +193,7 @@ abstract class AbstractAnnotation extends Resource<AbstractAnnotation> {
     @Override
     @JsonSetter(Constants.BEHAVIOR)
     protected AbstractAnnotation setBehaviors(final Behavior... aBehaviorArray) {
-        return super.setBehaviors(checkBehaviors(ResourceBehavior.class, aBehaviorArray));
+        return super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorArray));
     }
 
     /**
@@ -203,7 +204,7 @@ abstract class AbstractAnnotation extends Resource<AbstractAnnotation> {
      */
     @Override
     protected AbstractAnnotation addBehaviors(final Behavior... aBehaviorArray) {
-        return super.addBehaviors(checkBehaviors(ResourceBehavior.class, aBehaviorArray));
+        return super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorArray));
     }
 
     /**

@@ -7,9 +7,11 @@ import info.freelibrary.iiif.presentation.properties.Behavior;
 
 public enum CollectionBehavior implements Behavior {
 
-    AUTOADVANCE("auto-advance"), NOAUTOADVANCE("no-auto-advance"), INDIVIDUALS("individuals"), CONTINUOUS(
-            "continuous"), REPEAT("repeat"), NOREPEAT("no-repeat"), PAGED("paged"), UNORDERED("unordered"), MULTIPART(
-                    "multi-part"), TOGETHER("together");
+    AUTO_ADVANCE(BehaviorConstants.AUTO_ADVANCE), NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE), INDIVIDUALS(
+            BehaviorConstants.INDIVIDUALS), CONTINUOUS(BehaviorConstants.CONTINUOUS), REPEAT(
+                    BehaviorConstants.REPEAT), NO_REPEAT(BehaviorConstants.NO_REPEAT), PAGED(BehaviorConstants.PAGED),
+    UNORDERED(BehaviorConstants.UNORDERED), MULTI_PART(BehaviorConstants.MULTI_PART), TOGETHER(
+            BehaviorConstants.TOGETHER);
 
     private final String myValue;
 

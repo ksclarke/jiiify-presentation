@@ -162,7 +162,7 @@ public class CollectionTest {
     public final void testSetBehaviors() {
         final Collection collection = new Collection(myID, myLabel);
 
-        assertEquals(2, collection.setBehaviors(CollectionBehavior.AUTOADVANCE, CollectionBehavior.INDIVIDUALS)
+        assertEquals(2, collection.setBehaviors(CollectionBehavior.AUTO_ADVANCE, CollectionBehavior.INDIVIDUALS)
                 .getBehaviors().size());
     }
 
@@ -173,7 +173,7 @@ public class CollectionTest {
     public final void testSetDisallowedBehaviors() {
         final Collection collection = new Collection(myID, myLabel);
 
-        collection.setBehaviors(CollectionBehavior.AUTOADVANCE, ManifestBehavior.NOAUTOADVANCE);
+        collection.setBehaviors(CollectionBehavior.AUTO_ADVANCE, ManifestBehavior.NO_AUTO_ADVANCE);
     }
 
     /**
@@ -183,7 +183,7 @@ public class CollectionTest {
     public final void testAddBehaviors() {
         final Collection collection = new Collection(myID, myLabel);
 
-        assertEquals(1, collection.addBehaviors(CollectionBehavior.AUTOADVANCE).getBehaviors().size());
+        assertEquals(1, collection.addBehaviors(CollectionBehavior.AUTO_ADVANCE).getBehaviors().size());
     }
 
     /**
@@ -193,6 +193,6 @@ public class CollectionTest {
     public final void testAddDisallowedBehaviors() {
         final Collection collection = new Collection(myID, myLabel);
 
-        collection.addBehaviors(CollectionBehavior.CONTINUOUS, ManifestBehavior.AUTOADVANCE);
+        collection.addBehaviors(CollectionBehavior.CONTINUOUS, ManifestBehavior.AUTO_ADVANCE);
     }
 }

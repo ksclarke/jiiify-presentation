@@ -63,12 +63,12 @@ public class AnnotationCollection extends Resource<AnnotationCollection> {
     @Override
     @JsonSetter(Constants.BEHAVIOR)
     public AnnotationCollection setBehaviors(final Behavior... aBehaviorArray) {
-        return super.setBehaviors(checkBehaviors(ResourceBehavior.class, aBehaviorArray));
+        return super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorArray));
     }
 
     @Override
     public AnnotationCollection addBehaviors(final Behavior... aBehaviorArray) {
-        return super.addBehaviors(checkBehaviors(ResourceBehavior.class, aBehaviorArray));
+        return super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorArray));
     }
 
 }

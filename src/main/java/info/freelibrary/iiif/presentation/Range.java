@@ -133,12 +133,12 @@ public class Range extends NavigableResource<Range> {
     @Override
     @JsonSetter(Constants.BEHAVIOR)
     public Range setBehaviors(final Behavior... aBehaviorArray) {
-        return super.setBehaviors(checkBehaviors(RangeBehavior.class, aBehaviorArray));
+        return super.setBehaviors(checkBehaviors(RangeBehavior.class, true, aBehaviorArray));
     }
 
     @Override
     public Range addBehaviors(final Behavior... aBehaviorArray) {
-        return super.addBehaviors(checkBehaviors(RangeBehavior.class, aBehaviorArray));
+        return super.addBehaviors(checkBehaviors(RangeBehavior.class, false, aBehaviorArray));
     }
 
     /**

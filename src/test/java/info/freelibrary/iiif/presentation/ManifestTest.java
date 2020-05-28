@@ -229,7 +229,7 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public final void testSetBehaviors() {
-        assertEquals(2, myManifest.setBehaviors(ManifestBehavior.INDIVIDUALS, ManifestBehavior.AUTOADVANCE)
+        assertEquals(2, myManifest.setBehaviors(ManifestBehavior.INDIVIDUALS, ManifestBehavior.AUTO_ADVANCE)
                 .getBehaviors().size());
     }
 
@@ -238,7 +238,7 @@ public class ManifestTest extends AbstractTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testSetDisallowedBehaviors() {
-        myManifest.setBehaviors(ManifestBehavior.AUTOADVANCE, CanvasBehavior.NONPAGED);
+        myManifest.setBehaviors(ManifestBehavior.AUTO_ADVANCE, CanvasBehavior.NON_PAGED);
     }
 
     /**
@@ -254,7 +254,7 @@ public class ManifestTest extends AbstractTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testAddDisallowedBehaviors() {
-        myManifest.addBehaviors(ManifestBehavior.CONTINUOUS, CanvasBehavior.AUTOADVANCE);
+        myManifest.addBehaviors(ManifestBehavior.CONTINUOUS, CanvasBehavior.AUTO_ADVANCE);
     }
 
 }

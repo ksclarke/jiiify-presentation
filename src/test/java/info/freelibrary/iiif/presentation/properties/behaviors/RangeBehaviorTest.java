@@ -15,8 +15,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class RangeBehaviorTest {
 
     /* The expected values. */
-    private static final String[] VALUES = { "auto-advance", "no-auto-advance", "individuals", "no-nav", "continuous",
-        "paged", "unordered", "thumbnail-nav", "sequence" };
+    private static final String[] VALUES = { BehaviorConstants.AUTO_ADVANCE, BehaviorConstants.NO_AUTO_ADVANCE,
+        BehaviorConstants.INDIVIDUALS, BehaviorConstants.NO_NAV, BehaviorConstants.CONTINUOUS,
+        BehaviorConstants.PAGED, BehaviorConstants.UNORDERED, BehaviorConstants.THUMBNAIL_NAV,
+        BehaviorConstants.SEQUENCE };
 
     /**
      * Tests the JSON serialization.
@@ -25,7 +27,8 @@ public class RangeBehaviorTest {
      */
     @Test
     public final void testJsonSerialization() throws JsonProcessingException {
-        assertEquals(QUOTE + VALUES[8] + QUOTE, new ObjectMapper().writeValueAsString(RangeBehavior.SEQUENCE));
+        assertEquals(QUOTE + BehaviorConstants.SEQUENCE + QUOTE, new ObjectMapper().writeValueAsString(
+                RangeBehavior.SEQUENCE));
     }
 
     /**
@@ -33,7 +36,7 @@ public class RangeBehaviorTest {
      */
     @Test
     public final void testToString() {
-        assertEquals(VALUES[8], RangeBehavior.SEQUENCE.toString());
+        assertEquals(BehaviorConstants.SEQUENCE, RangeBehavior.SEQUENCE.toString());
     }
 
     /**

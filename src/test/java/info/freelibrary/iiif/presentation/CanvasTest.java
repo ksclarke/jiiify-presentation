@@ -118,7 +118,7 @@ public class CanvasTest {
      */
     @Test
     public final void testSetBehaviors() {
-        myCanvas.setBehaviors(CanvasBehavior.FACINGPAGES, CanvasBehavior.AUTOADVANCE);
+        myCanvas.setBehaviors(CanvasBehavior.FACING_PAGES, CanvasBehavior.AUTO_ADVANCE);
 
         assertEquals(2, myCanvas.getBehaviors().size());
     }
@@ -128,7 +128,7 @@ public class CanvasTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testSetDisallowedBehaviors() {
-        myCanvas.setBehaviors(CanvasBehavior.FACINGPAGES, ManifestBehavior.AUTOADVANCE);
+        myCanvas.setBehaviors(CanvasBehavior.FACING_PAGES, ManifestBehavior.AUTO_ADVANCE);
     }
 
     /**
@@ -136,7 +136,7 @@ public class CanvasTest {
      */
     @Test
     public final void testAddBehaviors() {
-        assertEquals(1, myCanvas.addBehaviors(CanvasBehavior.FACINGPAGES).getBehaviors().size());
+        assertEquals(1, myCanvas.addBehaviors(CanvasBehavior.FACING_PAGES).getBehaviors().size());
     }
 
     /**
@@ -144,7 +144,7 @@ public class CanvasTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testAddDisallowedBehaviors() {
-        myCanvas.addBehaviors(CanvasBehavior.FACINGPAGES, ManifestBehavior.AUTOADVANCE);
+        myCanvas.addBehaviors(CanvasBehavior.FACING_PAGES, ManifestBehavior.AUTO_ADVANCE);
     }
 
     /**

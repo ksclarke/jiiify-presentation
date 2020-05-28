@@ -67,7 +67,7 @@ public class SupplementingAnnotationTest extends AbstractTest {
     public final void testSetDisallowedBehaviors() {
         final SupplementingAnnotation anno = new SupplementingAnnotation(myAnnoID, myCanvas);
 
-        anno.setBehaviors(ManifestBehavior.AUTOADVANCE);
+        anno.setBehaviors(ManifestBehavior.AUTO_ADVANCE);
     }
 
     /**
@@ -87,7 +87,7 @@ public class SupplementingAnnotationTest extends AbstractTest {
     public final void testAddDisallowedBehaviors() {
         final SupplementingAnnotation anno = new SupplementingAnnotation(myAnnoID, myCanvas);
 
-        anno.addBehaviors(ManifestBehavior.CONTINUOUS, CanvasBehavior.AUTOADVANCE);
+        anno.addBehaviors(ManifestBehavior.CONTINUOUS, CanvasBehavior.AUTO_ADVANCE);
     }
 
     /**

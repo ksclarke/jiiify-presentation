@@ -54,7 +54,7 @@ public class AnnotationPageTest extends AbstractTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testSetDisallowedBehaviors() {
-        new AnnotationPage<PaintingAnnotation>(myID).setBehaviors(ManifestBehavior.AUTOADVANCE);
+        new AnnotationPage<PaintingAnnotation>(myID).setBehaviors(ManifestBehavior.AUTO_ADVANCE);
     }
 
     /**
@@ -72,7 +72,7 @@ public class AnnotationPageTest extends AbstractTest {
     @Test(expected = IllegalArgumentException.class)
     public final void testAddDisallowedBehaviors() {
         new AnnotationPage<PaintingAnnotation>(myID).addBehaviors(ManifestBehavior.CONTINUOUS,
-                CanvasBehavior.AUTOADVANCE);
+                CanvasBehavior.AUTO_ADVANCE);
     }
 
 }

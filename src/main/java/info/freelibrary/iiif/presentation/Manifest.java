@@ -182,12 +182,12 @@ public class Manifest extends NavigableResource<Manifest> {
     @Override
     @JsonSetter(Constants.BEHAVIOR)
     public Manifest setBehaviors(final Behavior... aBehaviorArray) {
-        return super.setBehaviors(checkBehaviors(ManifestBehavior.class, aBehaviorArray));
+        return super.setBehaviors(checkBehaviors(ManifestBehavior.class, true, aBehaviorArray));
     }
 
     @Override
     public Manifest addBehaviors(final Behavior... aBehaviorArray) {
-        return super.addBehaviors(checkBehaviors(ManifestBehavior.class, aBehaviorArray));
+        return super.addBehaviors(checkBehaviors(ManifestBehavior.class, false, aBehaviorArray));
     }
 
     /**

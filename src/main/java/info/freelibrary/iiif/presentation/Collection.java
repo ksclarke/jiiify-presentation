@@ -166,12 +166,12 @@ public class Collection extends NavigableResource<Collection> {
     @Override
     @JsonSetter(Constants.BEHAVIOR)
     public Collection setBehaviors(final Behavior... aBehaviorArray) {
-        return super.setBehaviors(checkBehaviors(CollectionBehavior.class, aBehaviorArray));
+        return super.setBehaviors(checkBehaviors(CollectionBehavior.class, true, aBehaviorArray));
     }
 
     @Override
     public Collection addBehaviors(final Behavior... aBehaviorArray) {
-        return super.addBehaviors(checkBehaviors(CollectionBehavior.class, aBehaviorArray));
+        return super.addBehaviors(checkBehaviors(CollectionBehavior.class, false, aBehaviorArray));
     }
 
     /**

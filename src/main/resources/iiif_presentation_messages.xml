@@ -57,5 +57,7 @@
   <entry key="JPA-051">Unable to add Canvas to Manifest: {}</entry>
   <entry key="JPA-052">Unexpected and currently unsupported content resource type</entry>
   <entry key="JPA-053">Type set on service image must be: {}</entry>
+  <entry key="JPA-054">Supplied behavior ('{}') conflicts with an existing behavior: {}</entry>
+  <entry key="JPA-055">Supplied behavior ('{}') conflicts with another supplied behavior: {}</entry>
 
 </properties>

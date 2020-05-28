@@ -30,7 +30,7 @@ import info.freelibrary.iiif.presentation.properties.Rights;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.properties.Summary;
 import info.freelibrary.iiif.presentation.properties.Thumbnail;
-import info.freelibrary.iiif.presentation.utils.MessageCodes;
+import info.freelibrary.iiif.presentation.properties.behaviors.DisjointChecker;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
@@ -613,14 +613,15 @@ class Resource<T extends Resource<T>> {
      * Checks that the supplied behaviors are all implementations of a particular class.
      *
      * @param aClass A class that implements Behavior
+     * @param aCleanComparison If the comparison does not check pre-existing behaviors
      * @param aBehaviorArray An array of behaviors
      */
-    protected Behavior[] checkBehaviors(final Class aClass, final Behavior... aBehaviorArray) {
-        for (final Behavior behavior : aBehaviorArray) {
-            if (!(aClass.isInstance(behavior))) {
-                throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_031, behavior.getClass()
-                        .getSimpleName(), aClass.getSimpleName()));
-            }
+    protected Behavior[] checkBehaviors(final Class aClass, final boolean aCleanComparison,
+            final Behavior... aBehaviorArray) {
+        if (aCleanComparison) {
+            new DisjointChecker().check(aClass, aBehaviorArray);
+        } else {
+            new DisjointChecker(getBehaviorsList()).check(aClass, aBehaviorArray);
         }
 
         return aBehaviorArray;

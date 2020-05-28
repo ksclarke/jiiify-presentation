@@ -7,7 +7,8 @@ import info.freelibrary.iiif.presentation.properties.Behavior;
 
 public enum CanvasBehavior implements Behavior {
 
-    AUTOADVANCE("auto-advance"), NOAUTOADVANCE("no-auto-advance"), FACINGPAGES("facing-pages"), NONPAGED("non-paged");
+    AUTO_ADVANCE(BehaviorConstants.AUTO_ADVANCE), NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE), FACING_PAGES(
+            BehaviorConstants.FACING_PAGES), NON_PAGED(BehaviorConstants.NON_PAGED);
 
     private final String myValue;
 

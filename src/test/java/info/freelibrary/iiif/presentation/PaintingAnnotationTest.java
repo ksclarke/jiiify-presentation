@@ -67,7 +67,7 @@ public class PaintingAnnotationTest extends AbstractTest {
     public final void testSetDisallowedBehaviors() {
         final PaintingAnnotation anno = new PaintingAnnotation(myAnnoID, myCanvas);
 
-        anno.setBehaviors(ManifestBehavior.AUTOADVANCE);
+        anno.setBehaviors(ManifestBehavior.AUTO_ADVANCE);
     }
 
     /**
@@ -87,7 +87,7 @@ public class PaintingAnnotationTest extends AbstractTest {
     public final void testAddDisallowedBehaviors() {
         final PaintingAnnotation anno = new PaintingAnnotation(myAnnoID, myCanvas);
 
-        anno.addBehaviors(ManifestBehavior.CONTINUOUS, CanvasBehavior.AUTOADVANCE);
+        anno.addBehaviors(ManifestBehavior.CONTINUOUS, CanvasBehavior.AUTO_ADVANCE);
     }
 
     /**

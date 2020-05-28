@@ -101,12 +101,12 @@ public class AnnotationPage<T> extends Resource<AnnotationPage<T>> {
     @Override
     @JsonSetter(Constants.BEHAVIOR)
     public AnnotationPage<T> setBehaviors(final Behavior... aBehaviorArray) {
-        return super.setBehaviors(checkBehaviors(ResourceBehavior.class, aBehaviorArray));
+        return super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorArray));
     }
 
     @Override
     public AnnotationPage<T> addBehaviors(final Behavior... aBehaviorArray) {
-        return super.addBehaviors(checkBehaviors(ResourceBehavior.class, aBehaviorArray));
+        return super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorArray));
     }
 
     @Override

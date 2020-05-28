@@ -7,7 +7,7 @@ import info.freelibrary.iiif.presentation.properties.Behavior;
 
 public enum ResourceBehavior implements Behavior {
 
-    HIDDEN("hidden");
+    HIDDEN(BehaviorConstants.HIDDEN);
 
     private final String myValue;
 
