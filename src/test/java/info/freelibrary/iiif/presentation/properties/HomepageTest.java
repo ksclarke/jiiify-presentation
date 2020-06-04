@@ -1,6 +1,8 @@
+
 package info.freelibrary.iiif.presentation.properties;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,10 +51,6 @@ public class HomepageTest {
 
     private Manifest myManifest;
 
-    private Homepage myHomepage;
-
-    private File myHomepageFile;
-
     @Before
     public final void setUp() {
         myManifest = new Manifest("https://example.org/iiif/book1/manifest", "Book 1");
@@ -61,70 +59,55 @@ public class HomepageTest {
     /**
      * Tests a homepage constructor and homepage (de)serialization.
      *
-     * @throws IOException If there is trouble reading or deserializing the homepage file or serializing the constructed
-     * homepage
+     * @throws IOException If there is trouble reading or deserializing the homepage file or serializing the
+     *         constructed homepage
      */
     @Test
-    public final void testHomepageURIStringLabel() throws IOException {
-        myHomepage = new Homepage(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1);
-        myHomepageFile = HOMEPAGE_SIMPLE_ONE;
+    public final void testHomepageUriStringLabel() throws IOException {
+        myManifest.setHomepages(new Homepage(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1));
 
-        myManifest.setHomepages(myHomepage);
-
-        checkDeserialization();
-        checkSerialization();
+        checkDeserialization(HOMEPAGE_SIMPLE_ONE);
+        checkSerialization(HOMEPAGE_SIMPLE_ONE);
     }
 
     /**
      * Tests a homepage constructor and homepage (de)serialization.
      *
-     * @throws IOException If there is trouble reading or deserializing the homepage file or serializing the constructed
-     * homepage
+     * @throws IOException If there is trouble reading the homepage
      */
     @Test
     public final void testHomepageStringStringString() throws IOException {
-        myHomepage = new Homepage(TEST_URI_1.toString(), ResourceTypes.TEXT, TEST_LABEL_1.getString());
-        myHomepageFile = HOMEPAGE_SIMPLE_ONE;
-
-        myManifest.setHomepages(myHomepage);
-
-        checkDeserialization();
-        checkSerialization();
+        myManifest.setHomepages(new Homepage(TEST_URI_1.toString(), ResourceTypes.TEXT, TEST_LABEL_1.getString()));
     }
 
     /**
      * Tests homepage (de)serialization.
      *
-     * @throws IOException If there is trouble reading or deserializing the homepage file or serializing the constructed
-     * homepage
+     * @throws IOException If there is trouble reading or deserializing the homepage file or serializing the
+     *         constructed homepage
      */
     @Test
     public final void testFullHomepage() throws IOException {
-        myHomepage = new Homepage(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1);
-        myHomepage.setFormat(TEST_FORMAT).setLanguages(ISO_639_1_PERSIAN, ISO_639_1_UIGHUR);
-        myHomepageFile = HOMEPAGE_FULL_ONE;
+        myManifest.setHomepages(new Homepage(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1).setFormat(TEST_FORMAT)
+                .setLanguages(ISO_639_1_PERSIAN, ISO_639_1_UIGHUR));
 
-        myManifest.setHomepages(myHomepage);
-
-        checkDeserialization();
-        checkSerialization();
+        checkDeserialization(HOMEPAGE_FULL_ONE);
+        checkSerialization(HOMEPAGE_FULL_ONE);
     }
 
     /**
      * Tests (de)serialization of multiple homepages.
      *
-     * @throws IOException If there is trouble reading or deserializing the homepage file or serializing the constructed
-     * homepages
+     * @throws IOException If there is trouble reading or deserializing the homepage file or serializing the
+     *         constructed homepages
      */
     @Test
     public final void testMultiValues() throws IOException {
-        myHomepage = new Homepage(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1);
-        myHomepageFile = HOMEPAGE_SIMPLE_TWO;
+        myManifest.setHomepages(new Homepage(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1), new Homepage(TEST_URI_2,
+                ResourceTypes.TEXT, TEST_LABEL_2));
 
-        myManifest.setHomepages(myHomepage, new Homepage(TEST_URI_2, ResourceTypes.TEXT, TEST_LABEL_2));
-
-        checkDeserialization();
-        checkSerialization();
+        checkDeserialization(HOMEPAGE_SIMPLE_TWO);
+        checkSerialization(HOMEPAGE_SIMPLE_TWO);
     }
 
     /**
@@ -132,8 +115,8 @@ public class HomepageTest {
      */
     @Test
     public final void testSetID() {
-        myHomepage = new Homepage(TEST_URI_2, ResourceTypes.TEXT, TEST_LABEL_1).setID(TEST_URI_1);
-        assertEquals(TEST_URI_1, myHomepage.getID());
+        assertEquals(TEST_URI_1, new Homepage(TEST_URI_2, ResourceTypes.TEXT, TEST_LABEL_1).setID(TEST_URI_1)
+                .getID());
     }
 
     /**
@@ -141,8 +124,8 @@ public class HomepageTest {
      */
     @Test
     public final void testSetType() {
-        myHomepage = new Homepage(TEST_URI_1, ResourceTypes.DATASET, TEST_LABEL_1).setType(ResourceTypes.TEXT);
-        assertEquals(ResourceTypes.TEXT, myHomepage.getType());
+        assertEquals(ResourceTypes.TEXT, new Homepage(TEST_URI_1, ResourceTypes.DATASET, TEST_LABEL_1).setType(
+                ResourceTypes.TEXT).getType());
     }
 
     /**
@@ -150,18 +133,17 @@ public class HomepageTest {
      */
     @Test
     public final void testSetLabel() {
-        myHomepage = new Homepage(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_2).setLabel(TEST_LABEL_1);
-        assertEquals(TEST_LABEL_1, myHomepage.getLabel());
+        assertEquals(TEST_LABEL_1, new Homepage(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_2).setLabel(TEST_LABEL_1)
+                .getLabel());
     }
-
 
     /**
      * Tests getting and setting a homepage's format.
      */
     @Test
     public final void testSetFormat() {
-        myHomepage = new Homepage(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1).setFormat(TEST_FORMAT);
-        assertEquals(TEST_FORMAT, myHomepage.getFormat());
+        assertEquals(TEST_FORMAT, new Homepage(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1).setFormat(TEST_FORMAT)
+                .getFormat().get());
     }
 
     /**
@@ -169,9 +151,8 @@ public class HomepageTest {
      */
     @Test
     public final void testSetLanguage() {
-        myHomepage = new Homepage(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1)
-                .setLanguages(ISO_639_1_PERSIAN, ISO_639_1_UIGHUR);
-        assertEquals(Arrays.asList(ISO_639_1_PERSIAN, ISO_639_1_UIGHUR), myHomepage.getLanguages());
+        assertEquals(Arrays.asList(ISO_639_1_PERSIAN, ISO_639_1_UIGHUR), new Homepage(TEST_URI_1, ResourceTypes.TEXT,
+                TEST_LABEL_1).setLanguages(ISO_639_1_PERSIAN, ISO_639_1_UIGHUR).getLanguages());
     }
 
     /**
@@ -183,33 +164,94 @@ public class HomepageTest {
     }
 
     /**
-     * Checks that the file is deserialized to the representation specified by the homepage(s)
+     * Tests that hash codes are consistently the same for Homepage(s) that are equal.
+     *
+     * @throws IOException If there is trouble reading the test fixture
+     */
+    @Test
+    public final void testHashCode() throws IOException {
+        final Homepage homepage1 = Homepage.fromJSON(getFullFixtureAsJSON());
+        final Homepage homepage2 = Homepage.fromJSON(getFullFixtureAsJSON());
+
+        assertEquals(homepage1.hashCode(), homepage2.hashCode());
+    }
+
+    /**
+     * Tests that Homepage(s) with the same contents are equal.
+     *
+     * @throws IOException If there is trouble reading the test fixture
+     */
+    @Test
+    public final void testEquals() throws IOException {
+        final Homepage homepage1 = Homepage.fromJSON(getFullFixtureAsJSON());
+        final Homepage homepage2 = Homepage.fromJSON(getFullFixtureAsJSON());
+
+        assertTrue(homepage1.equals(homepage2));
+    }
+
+    /**
+     * Tests conversion to and from the homepage string representation.
+     *
+     * @throws IOException If there is trouble reading from the test fixtures file
+     */
+    @Test
+    public final void testToFromString() throws IOException {
+        final JsonObject json = getFullFixtureAsJSON();
+        assertEquals(json.encodePrettily(), Homepage.fromString(json.toString()).toString());
+    }
+
+    /**
+     * Tests conversion to and from the homepage JSON representation.
+     *
+     * @throws IOException If there is trouble reading from the test fixtures file
+     */
+    @Test
+    public final void testToFromJsonObject() throws IOException {
+        final JsonObject json = getFullFixtureAsJSON();
+        assertEquals(json, Homepage.fromJSON(json).toJSON());
+    }
+
+    /**
+     * Checks that the file is deserialized to the representation specified by the homepage(s).
      *
      * @throws IOException If there is trouble reading or deserializing the homepage file
      */
-    public final void checkDeserialization() throws IOException {
-        final String homepageJsonValue = new JsonObject(StringUtils.read(myHomepageFile))
-                .getJsonArray(Constants.HOMEPAGE).toString();
+    private void checkDeserialization(final File aExpected) throws IOException {
+        final String json = new JsonObject(StringUtils.read(aExpected)).getJsonArray(Constants.HOMEPAGE).toString();
+        final TypeReference<List<Homepage>> typeRef = new TypeReference<>() {};
 
-        final List<Homepage> expected = myManifest.getHomepages();
-        final List<Homepage> found = DatabindCodec.mapper().readValue(homepageJsonValue,
-                new TypeReference<List<Homepage>>() {});
+        final List<Homepage> expected = DatabindCodec.mapper().readValue(json, typeRef);
+        final List<Homepage> found = myManifest.getHomepages();
 
+        // Check that our lists contain the same number of elements
+        assertEquals(expected.size(), found.size());
+
+        // Check that our lists' element are the same
         for (int index = 0; index < expected.size(); index++) {
             assertEquals(expected.get(index), found.get(index));
         }
     }
 
     /**
-     * Checks that the homepage(s) is serialized to the representation specified by the file
+     * Checks that the homepage(s) is serialized to the representation specified by the file.
      *
      * @throws IOException If there is trouble reading the homepage file or serializing the constructed homepage(s)
      */
-    public final void checkSerialization() throws IOException {
-        final JsonObject expected = new JsonObject(StringUtils.read(myHomepageFile));
-        final JsonObject found = new JsonObject(
-                TestUtils.toJson(Constants.HOMEPAGE, myManifest.getHomepages(), true, true));
+    private void checkSerialization(final File aExpected) throws IOException {
+        final JsonObject expected = new JsonObject(StringUtils.read(aExpected));
+        final JsonObject found = new JsonObject(TestUtils.toJson(Constants.HOMEPAGE, myManifest.getHomepages(),
+                true));
 
         assertEquals(expected, found);
+    }
+
+    /**
+     * Gets the full test fixture as a JsonObject.
+     *
+     * @return A JsonObject containing the test fixture's contents
+     * @throws IOException If there is trouble reading the test fixture file
+     */
+    private JsonObject getFullFixtureAsJSON() throws IOException {
+        return new JsonObject(StringUtils.read(HOMEPAGE_FULL_ONE)).getJsonArray(Constants.HOMEPAGE).getJsonObject(0);
     }
 }

@@ -3,15 +3,17 @@ package info.freelibrary.iiif.presentation.properties;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import info.freelibrary.iiif.presentation.Constants;
+
+import io.vertx.core.json.Json;
+import io.vertx.core.json.JsonObject;
 
 /**
  * A containing resource that includes the resource that has the <code>partOf</code> property. For example, the
@@ -19,32 +21,24 @@ import info.freelibrary.iiif.presentation.Constants;
  * discovery of further relevant information. Similarly, a Manifest can reference a containing Collection using
  * <code>partOf</code> to aid in navigation.
  */
-public class PartOf implements Localized<PartOf> {
-
-    @JsonProperty(Constants.ID)
-    private URI myID;
-
-    @JsonProperty(Constants.TYPE)
-    private String myType;
-
-    @JsonProperty(Constants.LABEL)
-    private Label myLabel;
+@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.FORMAT, Constants.LABEL, Constants.LANGUAGE,
+    Constants.PROFILE })
+public class PartOf extends AbstractLinkProperty<PartOf> implements Localized<PartOf> {
 
     private List<String> myLanguages;
 
     /**
-     * Creates a IIIF presentation partOf.
+     * Creates a partOf reference.
      *
      * @param aID A partOf ID
      * @param aType A partOf type
      */
     public PartOf(final URI aID, final String aType) {
-        myID = aID;
-        myType = aType;
+        super(aID, aType);
     }
 
     /**
-     * Creates a IIIF presentation partOf.
+     * Creates a partOf reference.
      *
      * @param aID A partOf ID in string form
      * @param aType A partOf type
@@ -53,96 +47,54 @@ public class PartOf implements Localized<PartOf> {
         this(URI.create(aID), aType);
     }
 
-    PartOf() {
+    /**
+     * Creates a new partOf for Jackson's deserialization.
+     */
+    @SuppressWarnings("unused")
+    private PartOf() {
     }
 
-    /**
-     * Gets the ID.
-     *
-     * @return The ID
-     */
-    public URI getID() {
-        return myID;
-    }
-
-    /**
-     * Sets the ID.
-     *
-     * @param aID The ID of the partOf
-     * @return The partOf
-     */
+    @Override
     public PartOf setID(final URI aID) {
-        myID = aID;
-        return this;
+        return (PartOf) super.setID(aID);
     }
 
     /**
      * Sets the ID from the supplied string.
      *
-     * @param aID The ID of the partOf in string form
-     * @return The partOf
+     * @param aID The ID in string form
+     * @return The resource whose ID is being set
      */
     @JsonIgnore
     public PartOf setID(final String aID) {
-        myID = URI.create(aID);
-        return this;
+        return (PartOf) super.setID(URI.create(aID));
     }
 
-    /**
-     * Gets the type.
-     *
-     * @return The type
-     */
-    public String getType() {
-        return myType;
-    }
-
-    /**
-     * Sets the type.
-     *
-     * @param aType The type of the partOf
-     * @return The partOf
-     */
+    @Override
     public PartOf setType(final String aType) {
-        myType = aType;
-        return this;
+        return (PartOf) super.setType(aType);
     }
 
     /**
-     * Gets the label.
+     * Gets an optional descriptive label.
      *
-     * @return The label
+     * @return An optional descriptive label
      */
-    public Label getLabel() {
-        return myLabel;
+    public Optional<Label> getLabel() {
+        return Optional.ofNullable(super.getNullableLabel());
     }
 
-    /**
-     * Sets the label.
-     *
-     * @param aLabel The label of the partOf
-     * @return The partOf
-     */
+    @Override
     public PartOf setLabel(final Label aLabel) {
-        myLabel = aLabel;
-        return this;
+        return (PartOf) super.setLabel(aLabel);
     }
 
-    /**
-     * Sets the label from the supplied string.
-     *
-     * @param aLabel The label of the partOf in string form
-     * @return The partOf
-     */
+    @Override
     @JsonIgnore
     public PartOf setLabel(final String aLabel) {
-        myLabel = new Label(aLabel);
-        return this;
+        return (PartOf) super.setLabel(aLabel);
     }
 
-    /**
-     * Gets the languages of the partOf.
-     */
     @Override
     public List<String> getLanguages() {
         if (myLanguages == null) {
@@ -152,43 +104,56 @@ public class PartOf implements Localized<PartOf> {
         return myLanguages;
     }
 
-    /**
-     * Gets the JSON value of the property.
-     *
-     * @return The value(s) of the property
-     */
-    @JsonValue
-    private Object toMap() {
-        final Map<String, Object> map = new LinkedHashMap<>();
-        final List<String> languages = getLanguages();
-
-        // Required properties
-        map.put(Constants.ID, getID());
-        map.put(Constants.TYPE, getType());
-
-        // Optional properties
-        if (getLabel() != null) {
-            map.put(Constants.LABEL, getLabel());
-        }
-
-        if (languages != null && languages.size() > 0) {
-            map.put(Constants.LANGUAGE, languages);
-        }
-
-        return map;
+    @Override
+    public PartOf setLanguages(final String... aLangArray) {
+        return (PartOf) Localized.super.setLanguages(aLangArray);
     }
 
     @Override
     public int hashCode() {
-        return toMap().hashCode();
+        return 31 * super.hashCode() + Objects.hash(getLanguages());
     }
 
     @Override
     public boolean equals(final Object aObject) {
-        if (aObject != null && getClass().getName().equals(aObject.getClass().getName())) {
-            return toMap().equals(((PartOf) aObject).toMap());
-        } else {
+        if (!super.equals(aObject)) {
             return false;
         }
+
+        if (getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        return getLanguages().equals(((PartOf) aObject).getLanguages());
+    }
+
+    /**
+     * Returns a JsonObject of this resource.
+     *
+     * @return A JsonObject of this resource
+     */
+    @Override
+    public JsonObject toJSON() {
+        return JsonObject.mapFrom(this);
+    }
+
+    /**
+     * Returns a PartOf from its JSON representation.
+     *
+     * @param aJsonObject A PartOf in JSON form
+     * @return This PartOf
+     */
+    public static PartOf fromJSON(final JsonObject aJsonObject) {
+        return Json.decodeValue(aJsonObject.toString(), PartOf.class);
+    }
+
+    /**
+     * Returns a PartOf from its JSON representation.
+     *
+     * @param aJsonString A PartOf in string form
+     * @return This PartOf
+     */
+    public static PartOf fromString(final String aJsonString) {
+        return fromJSON(new JsonObject(aJsonString));
     }
 }

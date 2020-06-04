@@ -21,13 +21,13 @@ import info.freelibrary.util.StringUtils;
 /**
  * A property that relies on a service.
  */
-class ServiceProperty<T extends ServiceProperty<T>> {
+class ServiceImageProperty<T extends ServiceImageProperty<T>> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ServiceProperty.class, Constants.BUNDLE_NAME);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServiceImageProperty.class, Constants.BUNDLE_NAME);
 
     private List<ServiceImage> myImages;
 
-    protected ServiceProperty() {
+    protected ServiceImageProperty() {
         super();
     }
 

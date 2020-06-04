@@ -19,6 +19,11 @@ import info.freelibrary.util.LoggerFactory;
  */
 public interface Localized<T> {
 
+    /**
+     * Gets this localized external resource's languages.
+     *
+     * @return The localized external resource's languages
+     */
     @JsonGetter(Constants.LANGUAGE)
     @JsonInclude(Include.NON_EMPTY)
     List<String> getLanguages();
@@ -31,7 +36,7 @@ public interface Localized<T> {
      * @throws IllegalArgumentException If the language tag is invalid
      */
     @JsonSetter(Constants.LANGUAGE)
-    default T setLanguages(final String... aLangArray) throws IllegalArgumentException {
+    default Localized<T> setLanguages(final String... aLangArray) throws IllegalArgumentException {
         final List<String> languages = getLanguages();
 
         languages.clear();
@@ -47,6 +52,6 @@ public interface Localized<T> {
             languages.add(tag);
         }
 
-        return (T) this;
+        return this;
     }
 }

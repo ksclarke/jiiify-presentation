@@ -62,14 +62,12 @@ class Resource<T extends Resource<T>> {
 
     private List<PartOf> myPartOfs;
 
-    @JsonProperty(Constants.METADATA)
     private Metadata myMetadata;
 
     private Summary mySummary;
 
     private Thumbnail myThumbnail;
 
-    @JsonProperty(Constants.REQUIRED_STATEMENT)
     private RequiredStatement myRequiredStatement;
 
     private Rights myRights;
@@ -226,7 +224,7 @@ class Resource<T extends Resource<T>> {
      * @param aMetadata A metadata
      * @return The resource
      */
-    @JsonIgnore
+    @JsonSetter(Constants.METADATA)
     public T setMetadata(final Metadata aMetadata) {
         myMetadata = aMetadata;
         return (T) this;
@@ -314,7 +312,7 @@ class Resource<T extends Resource<T>> {
      * @param aReqStatement A required statement
      * @return The resource
      */
-    @JsonIgnore
+    @JsonSetter(Constants.REQUIRED_STATEMENT)
     public T setRequiredStatement(final RequiredStatement aReqStatement) {
         myRequiredStatement = aReqStatement;
         return (T) this;

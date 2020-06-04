@@ -1,13 +1,14 @@
 
 package info.freelibrary.iiif.presentation.properties;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.net.URI;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.google.common.net.MediaType;
 
@@ -23,28 +24,18 @@ import io.vertx.core.json.JsonObject;
  * provide a longer description of the resource. The profile and format properties of the document should be given to
  * help the client to make appropriate use of the document.
  */
-public class SeeAlso {
-
-    private URI myID;
-
-    private String myType;
-
-    private MediaType myFormat;
-
-    private URI myProfile;
-
-    private Label myLabel;
+@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.FORMAT, Constants.LABEL, Constants.PROFILE })
+public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
 
     /**
      * Creates a new see also value from the supplied string ID and string type. Constant values for type can be found
      * in {@link ResourceTypes}.
      *
-     * @param aID A string ID
+     * @param aID An ID in string form
      * @param aType A type
      */
     public SeeAlso(final String aID, final String aType) {
-        myID = URI.create(aID);
-        myType = checkNotNull(aType);
+        super(aID, aType);
     }
 
     /**
@@ -55,8 +46,7 @@ public class SeeAlso {
      * @param aType A type
      */
     public SeeAlso(final URI aID, final String aType) {
-        myID = checkNotNull(aID);
-        myType = checkNotNull(aType);
+        super(aID, aType);
     }
 
     /**
@@ -67,187 +57,101 @@ public class SeeAlso {
     }
 
     /**
-     * Gets see also reference's ID.
-     *
-     * @return The ID
-     */
-    @JsonGetter(Constants.ID)
-    public URI getID() {
-        return myID;
-    }
-
-    /**
-     * Sets the see also reference's ID in string form.
+     * Sets the ID in string form.
      *
      * @param aID An ID in string form
-     * @return This see also reference
+     * @return The resource whose ID is being set
      */
     @JsonSetter(Constants.ID)
     public SeeAlso setID(final String aID) {
-        myID = URI.create(aID);
-        return this;
+        return (SeeAlso) super.setID(URI.create(aID));
     }
 
-    /**
-     * Sets the see also reference's ID.
-     *
-     * @param aID An ID
-     * @return This see also reference
-     */
+    @Override
     @JsonIgnore
     public SeeAlso setID(final URI aID) {
-        myID = checkNotNull(aID);
-        return this;
+        return (SeeAlso) super.setID(aID);
     }
 
-    /**
-     * Gets see also reference's type.
-     *
-     * @return The reference's type
-     */
-    @JsonGetter(Constants.TYPE)
-    public String getType() {
-        return myType;
-    }
-
-    /**
-     * Sets the see also reference's type.
-     *
-     * @param aType A type
-     * @return This see also reference
-     */
+    @Override
     @JsonSetter(Constants.TYPE)
     public SeeAlso setType(final String aType) {
-        myType = checkNotNull(aType);
-        return this;
+        return (SeeAlso) super.setType(aType);
     }
 
-    /**
-     * Gets the see also reference's format as a media type.
-     *
-     * @return An optional format
-     */
+    @Override
     @JsonIgnore
     public Optional<MediaType> getFormatMediaType() {
-        return Optional.ofNullable(myFormat);
+        return super.getFormatMediaType();
     }
 
-    /**
-     * Get see also reference's format.
-     *
-     * @return An optional format
-     */
+    @Override
     @JsonGetter(Constants.FORMAT)
+    @JsonInclude(Include.NON_EMPTY)
     public Optional<String> getFormat() {
-        return myFormat != null ? Optional.of(myFormat.toString()) : Optional.empty();
+        return super.getFormat();
     }
 
-    /**
-     * Sets see also reference's format in string form.
-     *
-     * @param aFormat
-     * @return This see also reference
-     * @throws IllegalArgumentException If the supplied string isn't a media type
-     */
+    @Override
     @JsonSetter(Constants.FORMAT)
     public SeeAlso setFormat(final String aFormat) throws IllegalArgumentException {
-        myFormat = MediaType.parse(aFormat);
-        return this;
+        return (SeeAlso) super.setFormat(aFormat);
     }
 
-    /**
-     * Sets see also reference's format.
-     *
-     * @param aFormat
-     * @return This see also reference
-     * @throws IllegalArgumentException If the supplied string isn't a media type
-     */
+    @Override
     @JsonIgnore
     public SeeAlso setFormat(final MediaType aMediaType) {
-        myFormat = checkNotNull(aMediaType);
-        return this;
+        return (SeeAlso) super.setFormat(aMediaType);
     }
 
-    /**
-     * Gets the see also reference's profile.
-     *
-     * @return An optional profile URI
-     */
+    @Override
     @JsonGetter(Constants.PROFILE)
     public Optional<URI> getProfile() {
-        return Optional.ofNullable(myProfile);
+        return super.getProfile();
     }
 
-    /**
-     * Sets the see also reference's profile.
-     *
-     * @param aProfile A profile
-     * @return This see also reference
-     */
+    @Override
     @JsonIgnore
     public SeeAlso setProfile(final URI aProfile) {
-        myProfile = checkNotNull(aProfile);
-        return this;
+        return (SeeAlso) super.setProfile(aProfile);
     }
 
-    /**
-     * Sets the see also reference's profile in string form.
-     *
-     * @param aProfile A profile in string form
-     * @return This see also reference
-     */
+    @Override
     @JsonSetter(Constants.PROFILE)
     public SeeAlso setProfile(final String aProfile) {
-        myProfile = URI.create(aProfile);
-        return this;
+        return (SeeAlso) super.setProfile(aProfile);
     }
 
     /**
-     * Gets a see also reference's descriptive label.
+     * Gets an optional descriptive label.
      *
      * @return An optional descriptive label
      */
     @JsonGetter(Constants.LABEL)
     public Optional<Label> getLabel() {
-        return Optional.ofNullable(myLabel);
-    }
-
-    /**
-     * Sets the see also reference's descriptive label.
-     *
-     * @param aLabel A descriptive label
-     * @return This see also reference
-     */
-    @JsonSetter(Constants.LABEL)
-    public SeeAlso setLabel(final Label aLabel) {
-        myLabel = checkNotNull(aLabel);
-        return this;
-    }
-
-    /**
-     * Sets the see also reference's descriptive label in string form.
-     *
-     * @param aLabel A descriptive label in string form
-     * @return This see also reference
-     */
-    @JsonIgnore
-    public SeeAlso setLabel(final String aLabel) {
-        myLabel = new Label(aLabel);
-        return this;
-    }
-
-    /**
-     * Returns a JsonObject of the SeeAlso.
-     *
-     * @return A JsonObject of the SeeAlso
-     */
-    public JsonObject toJSON() {
-        return JsonObject.mapFrom(this);
+        return Optional.ofNullable(super.getNullableLabel());
     }
 
     @Override
-    public String toString() {
-        return toJSON().encodePrettily();
+    @JsonSetter(Constants.LABEL)
+    public SeeAlso setLabel(final Label aLabel) {
+        return (SeeAlso) super.setLabel(aLabel);
+    }
+
+    @Override
+    @JsonIgnore
+    public SeeAlso setLabel(final String aLabel) {
+        return (SeeAlso) super.setLabel(aLabel);
+    }
+
+    /**
+     * Returns a JsonObject of this resource.
+     *
+     * @return A JsonObject of this resource
+     */
+    @Override
+    public JsonObject toJSON() {
+        return JsonObject.mapFrom(this);
     }
 
     /**
@@ -256,7 +160,6 @@ public class SeeAlso {
      * @param aJsonObject A SeeAlso in JSON form
      * @return This SeeAlso
      */
-    @JsonIgnore
     public static SeeAlso fromJSON(final JsonObject aJsonObject) {
         return Json.decodeValue(aJsonObject.toString(), SeeAlso.class);
     }
@@ -267,7 +170,6 @@ public class SeeAlso {
      * @param aJsonString A SeeAlso in string form
      * @return This SeeAlso
      */
-    @JsonIgnore
     public static SeeAlso fromString(final String aJsonString) {
         return fromJSON(new JsonObject(aJsonString));
     }

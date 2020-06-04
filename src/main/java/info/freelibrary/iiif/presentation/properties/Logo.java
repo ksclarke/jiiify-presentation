@@ -16,7 +16,7 @@ import info.freelibrary.iiif.presentation.services.ImageInfoService;
  * Image API service be available for this image for manipulations such as resizing.
  */
 @JsonDeserialize(using = LogoDeserializer.class)
-public class Logo extends ServiceProperty<Logo> {
+public class Logo extends ServiceImageProperty<Logo> {
 
     /**
      * Creates a logo property from an array of ID strings.

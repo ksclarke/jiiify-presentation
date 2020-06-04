@@ -3,17 +3,19 @@ package info.freelibrary.iiif.presentation.properties;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.google.common.net.MediaType;
 
 import info.freelibrary.iiif.presentation.Constants;
+
+import io.vertx.core.json.Json;
+import io.vertx.core.json.JsonObject;
 
 /**
  * A resource that is an alternative, non-IIIF representation of the resource that has the <code>rendering</code>
@@ -22,19 +24,7 @@ import info.freelibrary.iiif.presentation.Constants;
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.LABEL, Constants.FORMAT, Constants.LANGUAGE })
-public class Rendering implements Localized<Rendering> {
-
-    @JsonProperty(Constants.ID)
-    private URI myID;
-
-    @JsonProperty(Constants.TYPE)
-    private String myType;
-
-    @JsonProperty(Constants.LABEL)
-    private Label myLabel;
-
-    @JsonProperty(Constants.FORMAT)
-    private String myFormat;
+public class Rendering extends AbstractLinkProperty<Rendering> implements Localized<Rendering> {
 
     private List<String> myLanguages;
 
@@ -46,9 +36,7 @@ public class Rendering implements Localized<Rendering> {
      * @param aLabel A rendering label
      */
     public Rendering(final URI aID, final String aType, final Label aLabel) {
-        myID = aID;
-        myType = aType;
-        myLabel = aLabel;
+        super(aID, aType, aLabel);
     }
 
     /**
@@ -62,116 +50,76 @@ public class Rendering implements Localized<Rendering> {
         this(URI.create(aID), aType, new Label(aLabel));
     }
 
-    Rendering() {
+    /**
+     * Constructs the rendering for Jackson's deserialization process.
+     */
+    @SuppressWarnings("unused")
+    private Rendering() {
     }
 
-    /**
-     * Gets the ID.
-     *
-     * @return The ID
-     */
-    public URI getID() {
-        return myID;
-    }
-
-    /**
-     * Sets the ID.
-     *
-     * @param aID The ID of the rendering
-     * @return The rendering
-     */
+    @Override
     public Rendering setID(final URI aID) {
-        myID = aID;
-        return this;
+        return (Rendering) super.setID(aID);
     }
 
     /**
-     * Sets the ID from the supplied string.
+     * Sets the ID in string form.
      *
-     * @param aID The ID of the rendering in string form
-     * @return The rendering
+     * @param aID An ID in string form
+     * @return The resource whose ID is being set
      */
     @JsonIgnore
     public Rendering setID(final String aID) {
-        myID = URI.create(aID);
-        return this;
+        return (Rendering) super.setID(URI.create(aID));
     }
 
-    /**
-     * Gets the type.
-     *
-     * @return The type
-     */
-    public String getType() {
-        return myType;
-    }
-
-    /**
-     * Sets the type.
-     *
-     * @param aType The type of the rendering
-     * @return The rendering
-     */
+    @Override
     public Rendering setType(final String aType) {
-        myType = aType;
-        return this;
+        return (Rendering) super.setType(aType);
     }
 
     /**
-     * Gets the label.
+     * Gets a descriptive label.
      *
-     * @return The label
+     * @return A descriptive label
      */
     public Label getLabel() {
-        return myLabel;
+        return super.getNullableLabel();
     }
 
-    /**
-     * Sets the label.
-     *
-     * @param aLabel The label of the rendering
-     * @return The rendering
-     */
+    @Override
     public Rendering setLabel(final Label aLabel) {
-        myLabel = aLabel;
-        return this;
+        return (Rendering) super.setLabel(aLabel);
     }
 
-    /**
-     * Sets the label from the supplied string.
-     *
-     * @param aLabel The label of the rendering in string form
-     * @return The rendering
-     */
+    @Override
     @JsonIgnore
     public Rendering setLabel(final String aLabel) {
-        myLabel = new Label(aLabel);
-        return this;
+        return (Rendering) super.setLabel(new Label(aLabel));
     }
 
-    /**
-     * Gets the format.
-     *
-     * @return The format
-     */
-    public String getFormat() {
-        return myFormat;
+    @Override
+    @JsonIgnore
+    public Optional<MediaType> getFormatMediaType() {
+        return super.getFormatMediaType();
     }
 
-    /**
-     * Sets the format.
-     *
-     * @param aFormat The format of the rendering
-     * @return The rendering
-     */
+    @Override
+    public Optional<String> getFormat() {
+        return super.getFormat();
+    }
+
+    @Override
+    @JsonIgnore
+    public Rendering setFormat(final MediaType aMediaType) {
+        return (Rendering) super.setFormat(aMediaType);
+    }
+
+    @Override
     public Rendering setFormat(final String aFormat) {
-        myFormat = aFormat;
-        return this;
+        return (Rendering) super.setFormat(aFormat);
     }
 
-    /**
-     * Gets the languages of the partOf.
-     */
     @Override
     public List<String> getLanguages() {
         if (myLanguages == null) {
@@ -181,44 +129,56 @@ public class Rendering implements Localized<Rendering> {
         return myLanguages;
     }
 
-    /**
-     * Gets the JSON value of the property.
-     *
-     * @return The value(s) of the property
-     */
-    @JsonValue
-    private Object toMap() {
-        final Map<String, Object> map = new LinkedHashMap<>();
-        final List<String> languages = getLanguages();
-
-        // Required properties
-        map.put(Constants.ID, getID());
-        map.put(Constants.TYPE, getType());
-        map.put(Constants.LABEL, getLabel().toMap());
-
-        // Optional properties
-        if (getFormat() != null) {
-            map.put(Constants.FORMAT, getFormat());
-        }
-
-        if (languages != null && languages.size() > 0) {
-            map.put(Constants.LANGUAGE, languages);
-        }
-
-        return map;
+    @Override
+    public Rendering setLanguages(final String... aLangArray) {
+        return (Rendering) Localized.super.setLanguages(aLangArray);
     }
 
     @Override
     public int hashCode() {
-        return toMap().hashCode();
+        return 31 * super.hashCode() + Objects.hash(getLanguages());
     }
 
     @Override
     public boolean equals(final Object aObject) {
-        if (aObject != null && getClass().getName().equals(aObject.getClass().getName())) {
-            return toMap().equals(((Rendering) aObject).toMap());
-        } else {
+        if (!super.equals(aObject)) {
             return false;
         }
+
+        if (getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        return getLanguages().equals(((Rendering) aObject).getLanguages());
+    }
+
+    /**
+     * Returns a JsonObject of this resource.
+     *
+     * @return A JsonObject of this resource
+     */
+    @Override
+    public JsonObject toJSON() {
+        return JsonObject.mapFrom(this);
+    }
+
+    /**
+     * Returns a rendering from its JSON representation.
+     *
+     * @param aJsonObject A rendering in JSON form
+     * @return This rendering
+     */
+    public static Rendering fromJSON(final JsonObject aJsonObject) {
+        return Json.decodeValue(aJsonObject.toString(), Rendering.class);
+    }
+
+    /**
+     * Returns a rendering from its JSON representation.
+     *
+     * @param aJsonString A rendering in string form
+     * @return This rendering
+     */
+    public static Rendering fromString(final String aJsonString) {
+        return fromJSON(new JsonObject(aJsonString));
     }
 }

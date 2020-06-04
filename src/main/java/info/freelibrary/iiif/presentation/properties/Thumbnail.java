@@ -16,7 +16,7 @@ import info.freelibrary.iiif.presentation.services.ImageInfoService;
  * resource has multiple thumbnails, then each of them should be different.
  */
 @JsonDeserialize(using = ThumbnailDeserializer.class)
-public class Thumbnail extends ServiceProperty<Thumbnail> {
+public class Thumbnail extends ServiceImageProperty<Thumbnail> {
 
     /**
      * Creates a thumbnail property.

@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation.properties;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,10 +51,6 @@ public class RenderingTest {
 
     private Manifest myManifest;
 
-    private Rendering myRendering;
-
-    private File myRenderingFile;
-
     @Before
     public final void setUp() {
         myManifest = new Manifest("https://example.org/iiif/book1/manifest", "Book 1");
@@ -67,30 +64,19 @@ public class RenderingTest {
      */
     @Test
     public final void testRenderingURIStringLabel() throws IOException {
-        myRendering = new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1);
-        myRenderingFile = RENDERING_SIMPLE_ONE;
+        myManifest.setRenderings(new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1));
 
-        myManifest.setRenderings(myRendering);
-
-        checkDeserialization();
-        checkSerialization();
+        checkDeserialization(RENDERING_SIMPLE_ONE);
+        checkSerialization(RENDERING_SIMPLE_ONE);
     }
 
     /**
-     * Tests a rendering constructor and rendering (de)serialization.
-     *
-     * @throws IOException If there is trouble reading or deserializing the rendering file or serializing the
-     *         constructed rendering
+     * Tests a rendering constructor.
      */
     @Test
-    public final void testRenderingStringStringString() throws IOException {
-        myRendering = new Rendering(TEST_URI_1.toString(), ResourceTypes.TEXT, TEST_LABEL_1.getString());
-        myRenderingFile = RENDERING_SIMPLE_ONE;
-
-        myManifest.setRenderings(myRendering);
-
-        checkDeserialization();
-        checkSerialization();
+    public final void testRenderingStringStringString() {
+        assertEquals(TEST_URI_1, new Rendering(TEST_URI_1.toString(), ResourceTypes.TEXT, TEST_LABEL_1.getString())
+                .getID());
     }
 
     /**
@@ -101,14 +87,11 @@ public class RenderingTest {
      */
     @Test
     public final void testFullRendering() throws IOException {
-        myRendering = new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1);
-        myRendering.setFormat(TEST_FORMAT).setLanguages(ISO_639_1_WELSH, ISO_639_2_CHEROKEE);
-        myRenderingFile = RENDERING_FULL_ONE;
+        myManifest.setRenderings(new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1).setFormat(TEST_FORMAT)
+                .setLanguages(ISO_639_1_WELSH, ISO_639_2_CHEROKEE));
 
-        myManifest.setRenderings(myRendering);
-
-        checkDeserialization();
-        checkSerialization();
+        checkDeserialization(RENDERING_FULL_ONE);
+        checkSerialization(RENDERING_FULL_ONE);
     }
 
     /**
@@ -119,13 +102,11 @@ public class RenderingTest {
      */
     @Test
     public final void testMultiValues() throws IOException {
-        myRendering = new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1);
-        myRenderingFile = RENDERING_SIMPLE_TWO;
+        myManifest.setRenderings(new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1), new Rendering(
+                TEST_URI_2, ResourceTypes.TEXT, TEST_LABEL_2));
 
-        myManifest.setRenderings(myRendering, new Rendering(TEST_URI_2, ResourceTypes.TEXT, TEST_LABEL_2));
-
-        checkDeserialization();
-        checkSerialization();
+        checkDeserialization(RENDERING_SIMPLE_TWO);
+        checkSerialization(RENDERING_SIMPLE_TWO);
     }
 
     /**
@@ -133,8 +114,8 @@ public class RenderingTest {
      */
     @Test
     public final void testSetID() {
-        myRendering = new Rendering(TEST_URI_2, ResourceTypes.TEXT, TEST_LABEL_1).setID(TEST_URI_1);
-        assertEquals(TEST_URI_1, myRendering.getID());
+        assertEquals(TEST_URI_1, new Rendering(TEST_URI_2, ResourceTypes.TEXT, TEST_LABEL_1).setID(TEST_URI_1)
+                .getID());
     }
 
     /**
@@ -142,8 +123,8 @@ public class RenderingTest {
      */
     @Test
     public final void testSetType() {
-        myRendering = new Rendering(TEST_URI_1, ResourceTypes.VIDEO, TEST_LABEL_1).setType(ResourceTypes.TEXT);
-        assertEquals(ResourceTypes.TEXT, myRendering.getType());
+        assertEquals(ResourceTypes.TEXT, new Rendering(TEST_URI_1, ResourceTypes.VIDEO, TEST_LABEL_1).setType(
+                ResourceTypes.TEXT).getType());
     }
 
     /**
@@ -151,8 +132,8 @@ public class RenderingTest {
      */
     @Test
     public final void testSetLabel() {
-        myRendering = new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_2).setLabel(TEST_LABEL_1);
-        assertEquals(TEST_LABEL_1, myRendering.getLabel());
+        assertEquals(TEST_LABEL_1, new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_2).setLabel(TEST_LABEL_1)
+                .getLabel());
     }
 
     /**
@@ -160,8 +141,8 @@ public class RenderingTest {
      */
     @Test
     public final void testSetFormat() {
-        myRendering = new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1).setFormat(TEST_FORMAT);
-        assertEquals(TEST_FORMAT, myRendering.getFormat());
+        assertEquals(TEST_FORMAT, new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1).setFormat(TEST_FORMAT)
+                .getFormat().get());
     }
 
     /**
@@ -169,9 +150,8 @@ public class RenderingTest {
      */
     @Test
     public final void testSetLanguage() {
-        myRendering = new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1).setLanguages(ISO_639_1_WELSH,
-                ISO_639_2_CHEROKEE);
-        assertEquals(Arrays.asList(ISO_639_1_WELSH, ISO_639_2_CHEROKEE), myRendering.getLanguages());
+        assertEquals(Arrays.asList(ISO_639_1_WELSH, ISO_639_2_CHEROKEE), new Rendering(TEST_URI_1, ResourceTypes.TEXT,
+                TEST_LABEL_1).setLanguages(ISO_639_1_WELSH, ISO_639_2_CHEROKEE).getLanguages());
     }
 
     /**
@@ -183,33 +163,95 @@ public class RenderingTest {
     }
 
     /**
-     * Checks that the file is deserialized to the representation specified by the rendering(s)
+     * Tests that hash codes are consistently the same for Rendering(s) that are equal.
+     *
+     * @throws IOException If there is trouble reading the test fixture
+     */
+    @Test
+    public final void testHashCode() throws IOException {
+        final Rendering rendering1 = Rendering.fromJSON(getFullFixtureAsJSON());
+        final Rendering rendering2 = Rendering.fromJSON(getFullFixtureAsJSON());
+
+        assertEquals(rendering1.hashCode(), rendering2.hashCode());
+    }
+
+    /**
+     * Tests that Rendering(s) with the same contents are equal.
+     *
+     * @throws IOException If there is trouble reading the test fixture
+     */
+    @Test
+    public final void testEquals() throws IOException {
+        final Rendering rendering1 = Rendering.fromJSON(getFullFixtureAsJSON());
+        final Rendering rendering2 = Rendering.fromJSON(getFullFixtureAsJSON());
+
+        assertTrue(rendering1.equals(rendering2));
+    }
+
+    /**
+     * Tests conversion to and from the rendering string representation.
+     *
+     * @throws IOException If there is trouble reading from the test fixtures file
+     */
+    @Test
+    public final void testToFromString() throws IOException {
+        final JsonObject json = getFullFixtureAsJSON();
+        assertEquals(json.encodePrettily(), Rendering.fromString(json.toString()).toString());
+    }
+
+    /**
+     * Tests conversion to and from the rendering JSON representation.
+     *
+     * @throws IOException If there is trouble reading from the test fixtures file
+     */
+    @Test
+    public final void testToFromJsonObject() throws IOException {
+        final JsonObject json = getFullFixtureAsJSON();
+        assertEquals(json, Rendering.fromJSON(json).toJSON());
+    }
+
+    /**
+     * Checks that the file is deserialized to the representation specified by the rendering(s).
      *
      * @throws IOException If there is trouble reading or deserializing the rendering file
      */
-    public final void checkDeserialization() throws IOException {
-        final String renderingJsonValue = new JsonObject(StringUtils.read(myRenderingFile)).getJsonArray(
-                Constants.RENDERING).toString();
+    private void checkDeserialization(final File aExpected) throws IOException {
+        final String json = new JsonObject(StringUtils.read(aExpected)).getJsonArray(Constants.RENDERING).toString();
+        final TypeReference<List<Rendering>> typeRef = new TypeReference<>() {};
 
-        final List<Rendering> expected = myManifest.getRenderings();
-        final List<Rendering> found = DatabindCodec.mapper().readValue(renderingJsonValue,
-                new TypeReference<List<Rendering>>() {});
+        final List<Rendering> expected = DatabindCodec.mapper().readValue(json, typeRef);
+        final List<Rendering> found = myManifest.getRenderings();
 
+        // Check that the lists contain the same number of elements
+        assertEquals(expected.size(), found.size());
+
+        // Check that the contents of the lists are the same
         for (int index = 0; index < expected.size(); index++) {
             assertEquals(expected.get(index), found.get(index));
         }
     }
 
     /**
-     * Checks that the rendering(s) is serialized to the representation specified by the file
+     * Checks that the rendering(s) is serialized to the representation specified by the file.
      *
      * @throws IOException If there is trouble reading the rendering file or serializing the constructed rendering(s)
      */
-    public final void checkSerialization() throws IOException {
-        final JsonObject expected = new JsonObject(StringUtils.read(myRenderingFile));
+    private void checkSerialization(final File aExpected) throws IOException {
+        final JsonObject expected = new JsonObject(StringUtils.read(aExpected));
         final JsonObject found = new JsonObject(TestUtils.toJson(Constants.RENDERING, myManifest.getRenderings(),
-                true, true));
+                true));
 
         assertEquals(expected, found);
+    }
+
+    /**
+     * Gets the full test fixture as a JsonObject.
+     *
+     * @return A JsonObject containing the test fixture's contents
+     * @throws IOException If there is trouble reading the test fixture file
+     */
+    private JsonObject getFullFixtureAsJSON() throws IOException {
+        return new JsonObject(StringUtils.read(RENDERING_FULL_ONE)).getJsonArray(Constants.RENDERING).getJsonObject(
+                0);
     }
 }

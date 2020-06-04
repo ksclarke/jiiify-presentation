@@ -3,18 +3,20 @@ package info.freelibrary.iiif.presentation.properties;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.google.common.net.MediaType;
 
 import info.freelibrary.iiif.presentation.Constants;
+
+import io.vertx.core.json.Json;
+import io.vertx.core.json.JsonObject;
 
 /**
  * A web page that is about the object represented by the resource that has the <code>homepage</code> property. The
@@ -23,19 +25,7 @@ import info.freelibrary.iiif.presentation.Constants;
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.LABEL, Constants.FORMAT, Constants.LANGUAGE })
-public class Homepage implements Localized<Homepage> {
-
-    @JsonProperty(Constants.ID)
-    private URI myID;
-
-    @JsonProperty(Constants.TYPE)
-    private String myType;
-
-    @JsonProperty(Constants.LABEL)
-    private Label myLabel;
-
-    @JsonProperty(Constants.FORMAT)
-    private String myFormat;
+public class Homepage extends AbstractLinkProperty<Homepage> implements Localized<Homepage> {
 
     private List<String> myLanguages;
 
@@ -47,9 +37,7 @@ public class Homepage implements Localized<Homepage> {
      * @param aLabel A homepage label
      */
     public Homepage(final URI aID, final String aType, final Label aLabel) {
-        myID = aID;
-        myType = aType;
-        myLabel = aLabel;
+        super(aID, aType, aLabel);
     }
 
     /**
@@ -60,33 +48,19 @@ public class Homepage implements Localized<Homepage> {
      * @param aLabel A homepage label in string form
      */
     public Homepage(final String aID, final String aType, final String aLabel) {
-        this(URI.create(aID), aType, new Label(aLabel));
+        super(URI.create(aID), aType, new Label(aLabel));
     }
 
     /**
      * Creates a homepage for Jackson's deserialization process.
      */
-    Homepage() {
+    @SuppressWarnings("unused")
+    private Homepage() {
     }
 
-    /**
-     * Gets the ID.
-     *
-     * @return The ID
-     */
-    public URI getID() {
-        return myID;
-    }
-
-    /**
-     * Sets the ID.
-     *
-     * @param aID The ID of the homepage
-     * @return The homepage
-     */
+    @Override
     public Homepage setID(final URI aID) {
-        myID = aID;
-        return this;
+        return (Homepage) super.setID(aID);
     }
 
     /**
@@ -97,28 +71,12 @@ public class Homepage implements Localized<Homepage> {
      */
     @JsonIgnore
     public Homepage setID(final String aID) {
-        myID = URI.create(aID);
-        return this;
+        return (Homepage) super.setID(URI.create(aID));
     }
 
-    /**
-     * Gets the type.
-     *
-     * @return The type
-     */
-    public String getType() {
-        return myType;
-    }
-
-    /**
-     * Sets the type.
-     *
-     * @param aType The type of the homepage
-     * @return The homepage
-     */
+    @Override
     public Homepage setType(final String aType) {
-        myType = aType;
-        return this;
+        return (Homepage) super.setType(aType);
     }
 
     /**
@@ -127,56 +85,46 @@ public class Homepage implements Localized<Homepage> {
      * @return The label
      */
     public Label getLabel() {
-        return myLabel;
+        return super.getNullableLabel();
     }
 
-    /**
-     * Sets the label.
-     *
-     * @param aLabel The label of the homepage
-     * @return The homepage
-     */
+    @Override
     public Homepage setLabel(final Label aLabel) {
-        myLabel = aLabel;
-        return this;
+        return (Homepage) super.setLabel(aLabel);
     }
 
-    /**
-     * Sets the label from the supplied string.
-     *
-     * @param aLabel The label of the homepage in string form
-     * @return The homepage
-     */
+    @Override
     @JsonIgnore
     public Homepage setLabel(final String aLabel) {
-        myLabel = new Label(aLabel);
-        return this;
+        return (Homepage) super.setLabel(new Label(aLabel));
     }
 
-    /**
-     * Gets the format.
-     *
-     * @return The format
-     */
-    public String getFormat() {
-        return myFormat;
+    @Override
+    @JsonIgnore
+    public Optional<MediaType> getFormatMediaType() {
+        return super.getFormatMediaType();
     }
 
-    /**
-     * Sets the format.
-     *
-     * @param aFormat The format of the homepage
-     * @return The homepage
-     */
+    @Override
+    public Optional<String> getFormat() {
+        return super.getFormat();
+    }
+
+    @Override
+    @JsonIgnore
+    public Homepage setFormat(final MediaType aMediaType) {
+        return (Homepage) super.setFormat(aMediaType);
+    }
+
+    @Override
     public Homepage setFormat(final String aFormat) {
-        myFormat = aFormat;
-        return this;
+        return (Homepage) super.setFormat(aFormat);
     }
 
     /**
-     * Gets the homepage's languages.
+     * Gets the resource's languages.
      *
-     * @return A list of the homepage's languages
+     * @return A list of the resource's languages
      */
     @Override
     @JsonGetter(Constants.LANGUAGE)
@@ -188,44 +136,56 @@ public class Homepage implements Localized<Homepage> {
         return myLanguages;
     }
 
-    /**
-     * Gets the JSON value of the property.
-     *
-     * @return The value(s) of the property
-     */
-    @JsonValue
-    private Object toMap() {
-        final Map<String, Object> map = new LinkedHashMap<>();
-        final List<String> languages = getLanguages();
-
-        // Required properties
-        map.put(Constants.ID, getID());
-        map.put(Constants.TYPE, getType());
-        map.put(Constants.LABEL, getLabel().toMap());
-
-        // Optional properties
-        if (getFormat() != null) {
-            map.put(Constants.FORMAT, getFormat());
-        }
-
-        if (languages != null && languages.size() > 0) {
-            map.put(Constants.LANGUAGE, languages);
-        }
-
-        return map;
+    @Override
+    public Homepage setLanguages(final String... aLangArray) {
+        return (Homepage) Localized.super.setLanguages(aLangArray);
     }
 
     @Override
     public int hashCode() {
-        return toMap().hashCode();
+        return 31 * super.hashCode() + Objects.hash(getLanguages());
     }
 
     @Override
     public boolean equals(final Object aObject) {
-        if (aObject != null && getClass().getName().equals(aObject.getClass().getName())) {
-            return toMap().equals(((Homepage) aObject).toMap());
-        } else {
+        if (!super.equals(aObject)) {
             return false;
         }
+
+        if (getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        return getLanguages().equals(((Homepage) aObject).getLanguages());
+    }
+
+    /**
+     * Returns a JsonObject of this resource.
+     *
+     * @return A JsonObject of this resource
+     */
+    @Override
+    public JsonObject toJSON() {
+        return JsonObject.mapFrom(this);
+    }
+
+    /**
+     * Returns a homepage from its JSON representation.
+     *
+     * @param aJsonObject A homepage in JSON form
+     * @return This homepage
+     */
+    public static Homepage fromJSON(final JsonObject aJsonObject) {
+        return Json.decodeValue(aJsonObject.toString(), Homepage.class);
+    }
+
+    /**
+     * Returns a homepage from its JSON representation.
+     *
+     * @param aJsonString A homepage in string form
+     * @return This homepage
+     */
+    public static Homepage fromString(final String aJsonString) {
+        return fromJSON(new JsonObject(aJsonString));
     }
 }

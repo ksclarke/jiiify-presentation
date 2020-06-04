@@ -1,6 +1,8 @@
+
 package info.freelibrary.iiif.presentation.properties;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,82 +47,61 @@ public class PartOfTest {
 
     private Manifest myManifest;
 
-    private PartOf myPartOf;
-
-    private File myPartOfFile;
-
     @Before
     public final void setUp() {
         myManifest = new Manifest("https://example.org/iiif/book1/manifest", "Book 1");
     }
 
     /**
-     * Tests a partOf constructor and partOf (de)serialization.
+     * Tests a partOf URI ID constructor and partOf (de)serialization.
      *
      * @throws IOException If there is trouble reading or deserializing the partOf file or serializing the constructed
-     * partOf
+     *         partOf
      */
     @Test
     public final void testPartOfURIString() throws IOException {
-        myPartOf = new PartOf(TEST_URI_1, ResourceTypes.MANIFEST);
-        myPartOfFile = PART_OF_SIMPLE_ONE;
+        myManifest.setPartOfs(new PartOf(TEST_URI_1, ResourceTypes.MANIFEST));
 
-        myManifest.setPartOfs(myPartOf);
-
-        checkDeserialization();
-        checkSerialization();
+        checkDeserialization(PART_OF_SIMPLE_ONE);
+        checkSerialization(PART_OF_SIMPLE_ONE);
     }
 
     /**
-     * Tests a partOf constructor and partOf (de)serialization.
-     *
-     * @throws IOException If there is trouble reading or deserializing the partOf file or serializing the constructed
-     * partOf
+     * Tests a partOf string ID constructor.
      */
     @Test
-    public final void testPartOfStringString() throws IOException {
-        myPartOf = new PartOf(TEST_URI_1.toString(), ResourceTypes.MANIFEST);
-        myPartOfFile = PART_OF_SIMPLE_ONE;
-
-        myManifest.setPartOfs(myPartOf);
-
-        checkDeserialization();
-        checkSerialization();
+    public final void testPartOfStringString() {
+        new PartOf(TEST_URI_1.toString(), ResourceTypes.MANIFEST);
     }
 
     /**
-     * Tests partOf (de)serialization.
+     * Tests partOf (de)serialization of a full example.
      *
      * @throws IOException If there is trouble reading or deserializing the partOf file or serializing the constructed
-     * partOf
+     *         partOf
      */
     @Test
     public final void testFullPartOf() throws IOException {
-        myPartOf = new PartOf(TEST_URI_1, ResourceTypes.MANIFEST);
-        myPartOf.setLabel(TEST_LABEL).setLanguages(ISO_639_2_NAHUATL, ISO_639_2_VIETNAMESE);
-        myPartOfFile = PART_OF_FULL_ONE;
+        myManifest.setPartOfs(new PartOf(TEST_URI_1, ResourceTypes.MANIFEST).setLabel(TEST_LABEL).setLanguages(
+                ISO_639_2_NAHUATL, ISO_639_2_VIETNAMESE));
 
-        myManifest.setPartOfs(myPartOf);
-
-        checkDeserialization();
-        checkSerialization();
+        checkDeserialization(PART_OF_FULL_ONE);
+        checkSerialization(PART_OF_FULL_ONE);
     }
 
     /**
      * Tests (de)serialization of multiple partOfs.
      *
      * @throws IOException If there is trouble reading or deserializing the partOf file or serializing the constructed
-     * partOfs
+     *         partOfs
      */
     @Test
     public final void testMultiValues() throws IOException {
-        myPartOf = new PartOf(TEST_URI_1, ResourceTypes.MANIFEST);
-        myPartOfFile = PART_OF_SIMPLE_TWO;
+        myManifest.setPartOfs(new PartOf(TEST_URI_1, ResourceTypes.MANIFEST), new PartOf(TEST_URI_2,
+                ResourceTypes.MANIFEST));
 
-        myManifest.setPartOfs(myPartOf, new PartOf(TEST_URI_2, ResourceTypes.MANIFEST));
-
-        checkDeserialization();
-        checkSerialization();
+        checkDeserialization(PART_OF_SIMPLE_TWO);
+        checkSerialization(PART_OF_SIMPLE_TWO);
     }
 
     /**
@@ -128,8 +109,7 @@ public class PartOfTest {
      */
     @Test
     public final void testSetID() {
-        myPartOf = new PartOf(TEST_URI_2, ResourceTypes.MANIFEST).setID(TEST_URI_1);
-        assertEquals(TEST_URI_1, myPartOf.getID());
+        assertEquals(TEST_URI_1, new PartOf(TEST_URI_2, ResourceTypes.MANIFEST).setID(TEST_URI_1).getID());
     }
 
     /**
@@ -137,8 +117,8 @@ public class PartOfTest {
      */
     @Test
     public final void testSetType() {
-        myPartOf = new PartOf(TEST_URI_1, ResourceTypes.DATASET).setType(ResourceTypes.MANIFEST);
-        assertEquals(ResourceTypes.MANIFEST, myPartOf.getType());
+        assertEquals(ResourceTypes.MANIFEST, new PartOf(TEST_URI_1, ResourceTypes.DATASET).setType(
+                ResourceTypes.MANIFEST).getType());
     }
 
     /**
@@ -146,8 +126,8 @@ public class PartOfTest {
      */
     @Test
     public final void testSetLabel() {
-        myPartOf = new PartOf(TEST_URI_1, ResourceTypes.MANIFEST).setLabel(TEST_LABEL);
-        assertEquals(TEST_LABEL, myPartOf.getLabel());
+        assertEquals(TEST_LABEL, new PartOf(TEST_URI_1, ResourceTypes.MANIFEST).setLabel(TEST_LABEL).getLabel()
+                .get());
     }
 
     /**
@@ -155,9 +135,8 @@ public class PartOfTest {
      */
     @Test
     public final void testSetLanguage() {
-        myPartOf = new PartOf(TEST_URI_1, ResourceTypes.MANIFEST).setLanguages(ISO_639_2_NAHUATL,
-                ISO_639_2_VIETNAMESE);
-        assertEquals(Arrays.asList(ISO_639_2_NAHUATL, ISO_639_2_VIETNAMESE), myPartOf.getLanguages());
+        assertEquals(Arrays.asList(ISO_639_2_NAHUATL, ISO_639_2_VIETNAMESE), new PartOf(TEST_URI_1,
+                ResourceTypes.MANIFEST).setLanguages(ISO_639_2_NAHUATL, ISO_639_2_VIETNAMESE).getLanguages());
     }
 
     /**
@@ -169,18 +148,69 @@ public class PartOfTest {
     }
 
     /**
+     * Tests that hash codes are consistently the same for PartOfs that are equal.
+     *
+     * @throws IOException If there is trouble reading the test fixture
+     */
+    @Test
+    public final void testHashCode() throws IOException {
+        final PartOf partOf1 = PartOf.fromJSON(getFullFixtureAsJSON());
+        final PartOf partOf2 = PartOf.fromJSON(getFullFixtureAsJSON());
+
+        assertEquals(partOf1.hashCode(), partOf2.hashCode());
+    }
+
+    /**
+     * Tests that PartOfs with the same contents are equal.
+     *
+     * @throws IOException If there is trouble reading the test fixture
+     */
+    @Test
+    public final void testEquals() throws IOException {
+        final PartOf partOf1 = PartOf.fromJSON(getFullFixtureAsJSON());
+        final PartOf partOf2 = PartOf.fromJSON(getFullFixtureAsJSON());
+
+        assertTrue(partOf1.equals(partOf2));
+    }
+
+    /**
+     * Tests conversion to and from the partOf string representation.
+     *
+     * @throws IOException If there is trouble reading from the test fixtures file
+     */
+    @Test
+    public final void testToFromString() throws IOException {
+        final JsonObject json = getFullFixtureAsJSON();
+        assertEquals(json.encodePrettily(), PartOf.fromString(json.toString()).toString());
+    }
+
+    /**
+     * Tests conversion to and from the partOf JSON representation.
+     *
+     * @throws IOException If there is trouble reading from the test fixtures file
+     */
+    @Test
+    public final void testToFromJsonObject() throws IOException {
+        final JsonObject json = getFullFixtureAsJSON();
+        assertEquals(json, PartOf.fromJSON(json).toJSON());
+    }
+
+    /**
      * Checks that the file is deserialized to the representation specified by the partOf(s)
      *
+     * @param An expected JSON value encapsulated in a test fixtures file
      * @throws IOException If there is trouble reading or deserializing the partOf file
      */
-    public final void checkDeserialization() throws IOException {
-        final String partOfJsonValue = new JsonObject(StringUtils.read(myPartOfFile)).getJsonArray(Constants.PART_OF)
-                .toString();
+    private void checkDeserialization(final File aExpected) throws IOException {
+        final String json = new JsonObject(StringUtils.read(aExpected)).getJsonArray(Constants.PART_OF).toString();
 
-        final List<PartOf> expected = myManifest.getPartOfs();
-        final List<PartOf> found = DatabindCodec.mapper().readValue(partOfJsonValue,
-                new TypeReference<List<PartOf>>() {});
+        final List<PartOf> expected = DatabindCodec.mapper().readValue(json, new TypeReference<List<PartOf>>() {});
+        final List<PartOf> found = myManifest.getPartOfs();
 
+        // Check that both lists have the same number of elements
+        assertEquals(expected.size(), found.size());
+
+        // Check that the lists' elements are equal
         for (int index = 0; index < expected.size(); index++) {
             assertEquals(expected.get(index), found.get(index));
         }
@@ -191,11 +221,20 @@ public class PartOfTest {
      *
      * @throws IOException If there is trouble reading the partOf file or serializing the constructed partOf(s)
      */
-    public final void checkSerialization() throws IOException {
-        final JsonObject expected = new JsonObject(StringUtils.read(myPartOfFile));
-        final JsonObject found = new JsonObject(
-                TestUtils.toJson(Constants.PART_OF, myManifest.getPartOfs(), true, true));
+    private void checkSerialization(final File aExpected) throws IOException {
+        final JsonObject expected = new JsonObject(StringUtils.read(aExpected));
+        final JsonObject found = new JsonObject(TestUtils.toJson(Constants.PART_OF, myManifest.getPartOfs(), true));
 
         assertEquals(expected, found);
+    }
+
+    /**
+     * Gets the full test fixture as a JsonObject.
+     *
+     * @return A JsonObject containing the test fixture's contents
+     * @throws IOException If there is trouble reading the test fixture file
+     */
+    private JsonObject getFullFixtureAsJSON() throws IOException {
+        return new JsonObject(StringUtils.read(PART_OF_FULL_ONE)).getJsonArray(Constants.PART_OF).getJsonObject(0);
     }
 }
