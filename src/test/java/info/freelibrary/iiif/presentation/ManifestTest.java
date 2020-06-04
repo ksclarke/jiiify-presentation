@@ -17,7 +17,10 @@ import org.junit.Test;
 import com.opencsv.CSVReader;
 
 import info.freelibrary.iiif.presentation.properties.Metadata;
+import info.freelibrary.iiif.presentation.properties.ViewingDirection;
+import info.freelibrary.iiif.presentation.properties.ViewingHint;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
+import info.freelibrary.iiif.presentation.utils.Constants;
 
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
@@ -129,6 +132,32 @@ public class ManifestTest extends AbstractTest {
 
         sequence.addCanvas(canvas1, canvas2);
         myVertx = Vertx.factory.vertx();
+    }
+
+    /**
+     * Test the order of the properties that come out of manifest serialization.
+     */
+    @Test
+    public void testOrder() {
+        final Manifest manifest = new Manifest(MANIFEST_URI, TEST_TITLE);
+        final String[] names;
+
+        // Construct a simple manifest
+        manifest.setViewingHint(ViewingHint.Option.INDIVIDUALS);
+        manifest.setViewingDirection(ViewingDirection.RIGHT_TO_LEFT);
+        manifest.addSequence(new Sequence());
+
+        // Get the order of the names from serialization
+        names = new JsonObject(manifest.toString()).fieldNames().toArray(new String[] {});
+
+        // Test that the order is the same
+        assertEquals(Constants.CONTEXT, names[0]);
+        assertEquals(Constants.ID, names[1]);
+        assertEquals(Constants.TYPE, names[2]);
+        assertEquals(Constants.LABEL, names[3]);
+        assertEquals(Constants.VIEWING_HINT, names[4]);
+        assertEquals(Constants.VIEWING_DIRECTION, names[5]);
+        assertEquals(Constants.SEQUENCES, names[6]);
     }
 
     /**

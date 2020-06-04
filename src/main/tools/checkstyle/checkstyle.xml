@@ -47,8 +47,6 @@
     </module>
     <module name="JavadocMethod">
       <property name="scope" value="public" />
-      <property name="allowMissingParamTags" value="true" />
-      <property name="allowMissingReturnTag" value="true" />
     </module>
     <module name="NeedBraces" />
     <module name="LeftCurly" />

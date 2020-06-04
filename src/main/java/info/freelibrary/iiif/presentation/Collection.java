@@ -159,8 +159,8 @@ public class Collection extends Resource<Collection> {
     /**
      * Sets the manifests associated with this collection. 544
      *
-     * @param aManifestList
-     * @return
+     * @param aManifestList A list of manifests
+     * @return This collection
      */
     @JsonSetter(Constants.MANIFESTS)
     public Collection setManifests(final List<Manifest> aManifestList) {
