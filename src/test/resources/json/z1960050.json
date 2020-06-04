@@ -1,8 +1,8 @@
 {
   "@context" : "http://iiif.io/api/presentation/2/context.json",
-  "label" : "Georgian NF Fragment 68a",
   "@id" : "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1960050/manifest",
   "@type" : "sc:Manifest",
+  "label" : "Georgian NF Fragment 68a",
   "logo" : "https://sinai-images.library.ucla.edu/images/logos/iiif_logo.png",
   "thumbnail" : "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1d79t3q/0,1022,6132,6132/150,150/0/default.jpg",
   "metadata" : [ {

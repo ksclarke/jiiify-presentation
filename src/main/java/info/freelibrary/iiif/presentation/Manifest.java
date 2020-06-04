@@ -12,6 +12,8 @@ import java.util.stream.Stream;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.properties.Description;
@@ -35,6 +37,10 @@ import io.vertx.core.json.jackson.DatabindCodec;
  * descriptive information about the object or the intellectual work that it conveys. Each manifest describes how to
  * present a single object such as a book, a photograph, or a statue.
  */
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonPropertyOrder({ Constants.CONTEXT, Constants.ID, Constants.TYPE, Constants.LABEL, Constants.VIEWING_HINT,
+    Constants.VIEWING_DIRECTION, Constants.DESCRIPTION, Constants.ATTRIBUTION, Constants.LICENSE, Constants.WITHIN,
+    Constants.LOGO, Constants.THUMBNAIL, Constants.METADATA, Constants.SEQUENCES, Constants.SERVICE })
 public class Manifest extends Resource<Manifest> {
 
     static {

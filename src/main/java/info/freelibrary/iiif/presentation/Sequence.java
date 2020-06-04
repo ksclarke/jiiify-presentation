@@ -43,6 +43,8 @@ public class Sequence extends Resource<Sequence> {
 
     /**
      * Creates a IIIF presentation sequence resource with the supplied ID.
+     *
+     * @param aID An ID
      */
     public Sequence(final String aID) {
         super(TYPE, REQ_ARG_COUNT);
@@ -52,6 +54,8 @@ public class Sequence extends Resource<Sequence> {
 
     /**
      * Creates a IIIF presentation sequence resource with the supplied ID.
+     *
+     * @param aID An ID
      */
     public Sequence(final URI aID) {
         super(TYPE, REQ_ARG_COUNT);
