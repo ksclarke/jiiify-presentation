@@ -315,6 +315,9 @@ abstract class AbstractAnnotation extends Resource<AbstractAnnotation> {
             case ResourceTypes.MODEL:
                 getBody().add(mapper.convertValue(aMap, ModelContent.class));
                 break;
+            case ResourceTypes.CANVAS:
+                getBody().add(mapper.convertValue(aMap, CanvasContent.class));
+                break;
             default:
                 LOGGER.warn(MessageCodes.JPA_052, type);
         }

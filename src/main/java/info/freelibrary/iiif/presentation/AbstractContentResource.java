@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.google.common.net.MediaType;
 
@@ -22,6 +23,7 @@ import info.freelibrary.util.LoggerFactory;
 /**
  * An abstract content resource class that specific content types can extend.
  */
+@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.FORMAT, Constants.LANGUAGE })
 abstract class AbstractContentResource<T extends Resource<T>> extends Resource<T> implements Localized<T> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractContentResource.class,
@@ -108,8 +110,13 @@ abstract class AbstractContentResource<T extends Resource<T>> extends Resource<T
      * @return A string representation of the format
      */
     @JsonGetter(Constants.FORMAT)
-    public String getFormat() {
-        return myFormat.isPresent() ? myFormat.get().toString() : null;
+    public Optional<String> getFormat() {
+        if (myFormat.isPresent()) {
+            final MediaType mediaType = myFormat.get();
+            return Optional.of(mediaType.type() + "/" + mediaType.subtype()); // skip encoding
+        } else {
+            return Optional.empty();
+        }
     }
 
     /**
@@ -145,7 +152,7 @@ abstract class AbstractContentResource<T extends Resource<T>> extends Resource<T
                 myFormat = Optional.ofNullable(MediaType.parse(aURI));
             }
         } catch (final IllegalArgumentException details) {
-            LOGGER.warn(MessageCodes.JPA_013, aURI);
+            LOGGER.debug(MessageCodes.JPA_013, aURI); // This is fine
             myFormat = Optional.empty();
         }
     }

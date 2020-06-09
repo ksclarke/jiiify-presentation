@@ -1,0 +1,54 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "type": "Manifest",
+  "id": "https://example.org/iiif/canvas-on-canvas/manifest",
+  "label": {
+    "en": [
+      "Canvas on Canvas example"
+    ]
+  },
+  "items": [
+    {
+      "type": "Canvas",
+      "id": "https://example.org/iiif/canvas/canvas1",
+      "items": [
+        {
+          "type": "AnnotationPage",
+          "id": "https://example.org/iiif/canvas/annotation/canvas1/page",
+          "items": [
+            {
+              "type": "Annotation",
+              "id": "https://example.org/iiif/canvas/annotation/canvas1-canvas",
+              "motivation": "painting",
+              "body": {
+                "format": "application/json",
+                "type": "Canvas",
+                "id": "https://example.org/iiif/canvas/canvas2"
+              },
+              "target": "https://example.org/iiif/canvas/canvas1"
+            }
+          ]
+        }
+      ],
+      "annotations": [
+        {
+          "type": "AnnotationPage",
+          "id": "https://example.org/iiif/canvas/annotation/canvas1/page",
+          "items": [
+            {
+              "type": "Annotation",
+              "id": "https://example.org/iiif/canvas/annotation/canvas1-canvas",
+              "motivation": "supplementing",
+              "body": {
+                "type": "Canvas",
+                "id": "https://example.org/iiif/canvas/canvas2",
+                "format": "application/json"
+              },
+              "target": "https://example.org/iiif/canvas/canvas1"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
