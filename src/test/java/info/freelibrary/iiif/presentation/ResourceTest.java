@@ -21,7 +21,6 @@ import info.freelibrary.iiif.presentation.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.properties.Rights;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.properties.Summary;
-import info.freelibrary.iiif.presentation.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.properties.Value;
 import info.freelibrary.iiif.presentation.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.properties.behaviors.CollectionBehavior;
@@ -72,7 +71,7 @@ public class ResourceTest extends AbstractTest {
         test.setLabel(BBBB);
         test.setMetadata(new Metadata("myLabel", "myValue"));
         test.setSummary(myLorem.getWords(5, 8));
-        test.setThumbnail(new Thumbnail(ASDF_JPG, service));
+        test.setThumbnails(new ImageContent(ASDF_JPG).setService(service));
         test.setRequiredStatement(new RequiredStatement(label, value));
         test.setRights(SILS_URL);
         test.setHomepages(new Homepage(SILS_URL, ResourceTypes.TEXT, AAAA));
@@ -100,7 +99,7 @@ public class ResourceTest extends AbstractTest {
         test.setLabel(new Label(BBBB).addStrings("cccc"));
         test.setMetadata(new Metadata("myLabel1", "myValue1").add("myLabel2", "myValue2")); // addValue?
         test.setSummary(new Summary(myLorem.getWords(5, 8), myLorem.getWords(5, 8)));
-        test.setThumbnail(new Thumbnail("dddd.jpg", service).addImage("eeee.jpg", service)); // should be value too?
+        test.setThumbnails(new ImageContent("dddd.jpg").setService(service));
         test.setRequiredStatement(new RequiredStatement(myLorem.getWords(1), myLorem.getWords(1)));
         test.setRights(new Rights("http://ils.unc.edu/license1").addValue("http://ils.unc.edu/license2"));
         test.setHomepages(new Homepage(SILS_URL, ResourceTypes.TEXT, AAAA), new Homepage(EXAMPLE_URL,

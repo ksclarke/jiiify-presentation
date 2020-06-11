@@ -20,7 +20,7 @@ import io.vertx.core.json.JsonObject;
  * blank canvas and images, text and other resources are &quot;painted&quot; on to it.
  */
 @JsonPropertyOrder({ Constants.TYPE, Constants.LABEL, Constants.ID, Constants.WIDTH, Constants.HEIGHT,
-    Constants.DURATION, Constants.THUMBNAIL, Constants.ITEMS })
+    Constants.DURATION, Constants.THUMBNAIL, Constants.ITEMS, Constants.ANNOTATIONS })
 public class Canvas extends AbstractCanvas<Canvas> {
 
     private Optional<AccompanyingCanvas> myAccompanyingCanvas;

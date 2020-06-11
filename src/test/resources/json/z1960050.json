@@ -11,7 +11,11 @@
         "https://sinai-images.library.ucla.edu/images/logos/iiif_logo.png"
     ],
     "thumbnail": [
-        "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1d79t3q/0,1022,6132,6132/150,150/0/default.jpg"
+        {
+            "type": "Image",
+            "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1d79t3q/0,1022,6132,6132/150,150/0/default.jpg",
+            "format": "image/jpeg"
+        }
     ],
     "metadata": [
         {
@@ -75,7 +79,11 @@
             "width": 6132,
             "height": 8176,
             "thumbnail": [
-                "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz10v8vhm/0,1022,6132,6132/150,150/0/default.jpg"
+                {
+                    "type": "Image",
+                    "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz10v8vhm/0,1022,6132,6132/150,150/0/default.jpg",
+                    "format": "image/jpeg"
+                }
             ],
             "items": [
                 {
@@ -346,7 +354,11 @@
             "width": 6132,
             "height": 8176,
             "thumbnail": [
-                "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1gq7dfx/0,1022,6132,6132/150,150/0/default.jpg"
+                {
+                    "type": "Image",
+                    "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1gq7dfx/0,1022,6132,6132/150,150/0/default.jpg",
+                    "format": "image/jpeg"
+                }
             ],
             "items": [
                 {

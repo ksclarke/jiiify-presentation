@@ -13,6 +13,7 @@ import org.junit.Test;
 import info.freelibrary.iiif.presentation.properties.NavDate;
 import info.freelibrary.iiif.presentation.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.properties.behaviors.ManifestBehavior;
+import info.freelibrary.iiif.presentation.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.utils.TestUtils;
 import info.freelibrary.util.StringUtils;
 import io.vertx.core.json.JsonObject;
@@ -26,9 +27,13 @@ public class CanvasTest {
 
     private static final String TEST_LABEL = "p. 1";
 
-    private static final File CANVAS = new File(TestUtils.TEST_DIR, "canvas-annotations.json");
+    private static final File CANVAS_FILE = new File(TestUtils.TEST_DIR, "canvas-full.json");
 
     private Canvas myCanvas;
+
+    private final URI myThumbnailID = URI.create("https://example.org/iiif/book1/page1/full/64,64/0/default.jpg");
+
+    private final URI myThumbnailServiceID = URI.create("https://example.org/iiif/book1/page1");
 
     private final URI myPaintingPageID = URI.create("https://example.org/iiif/book1/page/p1/1");
 
@@ -148,7 +153,7 @@ public class CanvasTest {
     }
 
     /**
-     * Tests serializing and deserializing a canvas with annotations.
+     * Tests serializing and deserializing a canvas.
      *
      * @throws IOException If there is trouble reading the canvas file or serializing the constructed canvas
      */
@@ -166,12 +171,14 @@ public class CanvasTest {
                 .setBody(textContent).setTarget(myCanvas.getID());
 
         myCanvas.setWidthHeight(1000, 750);
+        myCanvas.setThumbnails(new ImageContent(myThumbnailID).setWidthHeight(64, 64)
+                .setService(new ImageInfoService(myThumbnailServiceID)));
         myCanvas.setPaintingPages(new AnnotationPage<PaintingAnnotation>(myPaintingPageID)
                 .addAnnotations(paintingAnno));
         myCanvas.setSupplementingPages(new AnnotationPage<SupplementingAnnotation>(mySupplementingPageID)
                 .addAnnotations(supplementingAnno));
 
-        expected = new JsonObject(StringUtils.read(CANVAS));
+        expected = new JsonObject(StringUtils.read(CANVAS_FILE));
         found = new JsonObject(TestUtils.toJson(myCanvas));
 
         assertEquals(expected, found);

@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Homepage;
@@ -29,7 +30,6 @@ import info.freelibrary.iiif.presentation.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.properties.Rights;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.properties.Summary;
-import info.freelibrary.iiif.presentation.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.properties.behaviors.DisjointChecker;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -66,7 +66,9 @@ class Resource<T extends Resource<T>> {
 
     private Summary mySummary;
 
-    private Thumbnail myThumbnail;
+    @JsonProperty(Constants.THUMBNAIL)
+    @JsonDeserialize(contentUsing = ThumbnailDeserializer.class)
+    private List<Thumbnail> myThumbnails;
 
     private RequiredStatement myRequiredStatement;
 
@@ -147,7 +149,7 @@ class Resource<T extends Resource<T>> {
      * @param aLabel A label in string form
      * @param aMetadata A metadata property
      * @param aSummary A summary property in string form
-     * @param aThumbnail A thumbnail property
+     * @param aThumbnail A thumbnail
      */
     protected Resource(final String aType, final String aID, final String aLabel, final Metadata aMetadata,
             final String aSummary, final Thumbnail aThumbnail) {
@@ -162,7 +164,7 @@ class Resource<T extends Resource<T>> {
      * @param aLabel A label is required
      * @param aMetadata A metadata property
      * @param aSummary A summary property
-     * @param aThumbnail A thumbnail property
+     * @param aThumbnail A thumbnail
      */
     protected Resource(final String aType, final URI aID, final Label aLabel, final Metadata aMetadata,
             final Summary aSummary, final Thumbnail aThumbnail) {
@@ -171,7 +173,7 @@ class Resource<T extends Resource<T>> {
         myLabel = checkNotNull(aLabel);
         myMetadata = checkNotNull(aMetadata);
         mySummary = checkNotNull(aSummary);
-        myThumbnail = checkNotNull(aThumbnail);
+        setThumbnails(checkNotNull(aThumbnail));
     }
 
     /**
@@ -264,35 +266,31 @@ class Resource<T extends Resource<T>> {
     }
 
     /**
-     * Gets the thumbnail.
+     * Gets a list of resource thumbnails, initializing the list if this hasn't been done already.
      *
-     * @return The thumbnail
+     * @return The resource's thumbnails
      */
-    @JsonUnwrapped
-    public Thumbnail getThumbnail() {
-        return myThumbnail;
+    @JsonGetter(Constants.THUMBNAIL)
+    public List<Thumbnail> getThumbnails() {
+        if (myThumbnails == null) {
+            myThumbnails = new ArrayList<>();
+        }
+
+        return myThumbnails;
     }
 
     /**
-     * Sets the thumbnail.
+     * Sets the thumbnails for this resource.
      *
-     * @param aThumbnail A thumbnail
+     * @param aThumbnailArray The thumbnails to set for this resource
      * @return The resource
      */
-    public T setThumbnail(final Thumbnail aThumbnail) {
-        myThumbnail = aThumbnail;
-        return (T) this;
-    }
+    @JsonSetter(Constants.THUMBNAIL)
+    public T setThumbnails(final Thumbnail... aThumbnailArray) {
+        final List<Thumbnail> thumbnails = getThumbnails();
 
-    /**
-     * Sets the thumbnail.
-     *
-     * @param aURI A thumbnail URI ID in string form
-     * @return The resource
-     */
-    @JsonIgnore
-    public T setThumbnail(final String aURI) {
-        myThumbnail = new Thumbnail(aURI);
+        thumbnails.clear();
+        thumbnails.addAll(Arrays.asList(aThumbnailArray));
         return (T) this;
     }
 

@@ -14,7 +14,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.google.common.net.MediaType;
 
 import info.freelibrary.iiif.presentation.properties.Logo;
-import info.freelibrary.iiif.presentation.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.services.Service;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;

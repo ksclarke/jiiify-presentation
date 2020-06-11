@@ -10,7 +10,6 @@ import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.NavDate;
 import info.freelibrary.iiif.presentation.properties.Summary;
-import info.freelibrary.iiif.presentation.properties.Thumbnail;
 
 /**
  * A navigable resource.

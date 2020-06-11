@@ -4,6 +4,20 @@
   "id": "https://example.org/iiif/book1/canvas/p1",
   "width": 1000,
   "height": 750,
+  "thumbnail": [
+    {
+      "type": "Image",
+      "id": "https://example.org/iiif/book1/page1/full/64,64/0/default.jpg",
+      "width": 64,
+      "height": 64,
+      "format": "image/jpeg",
+      "service": {
+        "@context": "http://iiif.io/api/image/3/context.json",
+        "id": "https://example.org/iiif/book1/page1",
+        "profile": "http://iiif.io/api/image/3/level0.json"
+      }
+    }
+  ],
   "items": [
     {
       "type": "AnnotationPage",

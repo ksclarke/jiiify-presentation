@@ -48,6 +48,16 @@ public class VideoContentTest {
     }
 
     /**
+     * Tests setting and getting video content width and height.
+     */
+    @Test
+    public final void testSetGetWidthHeight() {
+        final VideoContent video = new VideoContent(URI.create(myID)).setWidthHeight(480, 360);
+        assertEquals(480, video.getWidth());
+        assertEquals(360, video.getHeight());
+    }
+
+    /**
      * Tests setting and getting video content duration.
      */
     @Test

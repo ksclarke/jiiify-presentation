@@ -4,7 +4,9 @@ package info.freelibrary.iiif.presentation;
 import java.net.URI;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
@@ -18,9 +20,15 @@ import io.vertx.core.json.JsonObject;
 /**
  * Video content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
  */
-public class VideoContent extends AbstractContentResource<VideoContent> implements ContentResource {
+@JsonPropertyOrder({ Constants.TYPE, Constants.ID, Constants.THUMBNAIL, Constants.WIDTH, Constants.HEIGHT,
+    Constants.DURATION, Constants.FORMAT, Constants.LANGUAGE })
+public class VideoContent extends AbstractContentResource<VideoContent> implements Thumbnail {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VideoContent.class, Constants.BUNDLE_NAME);
+
+    private int myWidth;
+
+    private int myHeight;
 
     private float myDuration;
 
@@ -47,6 +55,43 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
      */
     private VideoContent() {
         super(ResourceTypes.VIDEO);
+    }
+
+    /**
+     * Gets the video's width.
+     *
+     * @return The video's width
+     */
+    @JsonGetter(Constants.WIDTH)
+    @JsonInclude(Include.NON_DEFAULT)
+    public int getWidth() {
+        return myWidth;
+    }
+
+    /**
+     * Gets the video's height.
+     *
+     * @return The video's height
+     */
+    @JsonGetter(Constants.HEIGHT)
+    @JsonInclude(Include.NON_DEFAULT)
+    public int getHeight() {
+        return myHeight;
+    }
+
+    /**
+     * Sets the width and height of the video.
+     *
+     * @param aWidth A video width
+     * @param aHeight A video height
+     * @return This video content
+     */
+    @JsonIgnore
+    public VideoContent setWidthHeight(final int aWidth, final int aHeight) {
+        setWidth(aWidth);
+        setHeight(aHeight);
+
+        return this;
     }
 
     /**
@@ -94,5 +139,29 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
      */
     public static VideoContent fromString(final String aJsonString) {
         return fromJSON(new JsonObject(aJsonString));
+    }
+
+    /**
+     * Sets the video width.
+     *
+     * @param aWidth The video's width
+     * @return The video
+     */
+    @JsonSetter(Constants.WIDTH)
+    private VideoContent setWidth(final int aWidth) {
+        myWidth = aWidth;
+        return this;
+    }
+
+    /**
+     * Sets the video height.
+     *
+     * @param aHeight The video's height
+     * @return The video
+     */
+    @JsonSetter(Constants.HEIGHT)
+    private VideoContent setHeight(final int aHeight) {
+        myHeight = aHeight;
+        return this;
     }
 }

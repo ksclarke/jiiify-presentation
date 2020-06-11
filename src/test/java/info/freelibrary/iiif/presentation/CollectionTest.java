@@ -92,6 +92,7 @@ public class CollectionTest {
         final Collection collection = new Collection("ID-a", "label-a");
         final String manifestOneID = "http://iiif.library.ucla.edu/asdf1234/manifest";
         final String manifestTwoID = "http://iiif.library.ucla.edu/1234asdf/manifest";
+        final String thumbnailID = "http://brand.ucla.edu/images/logo-ucla.svg";
         final List<Collection.Item> items = new ArrayList<>();
         final Collection.Item manifest1 = new Collection.Item(Item.Type.Manifest, manifestOneID);
         final Collection.Item manifest2 = new Collection.Item(Item.Type.Manifest, manifestTwoID);
@@ -102,6 +103,7 @@ public class CollectionTest {
         manifest2.setLabel("A placeholder fake manifest: 2");
         items.add(manifest2);
         collection.setItems(items);
+        collection.setThumbnails(new ImageContent(thumbnailID));
 
         assertEquals(expected, collection.toJSON());
     }

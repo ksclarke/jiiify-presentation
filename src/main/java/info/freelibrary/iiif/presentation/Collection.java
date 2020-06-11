@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +19,6 @@ import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.Summary;
-import info.freelibrary.iiif.presentation.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.properties.behaviors.CollectionBehavior;
 import info.freelibrary.iiif.presentation.services.Service;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
@@ -300,7 +300,7 @@ public class Collection extends NavigableResource<Collection> {
 
         private Label myLabel;
 
-        private Thumbnail myThumbnail;
+        private List<Thumbnail> myThumbnails;
 
         /**
          * Create a new collection item from a type and ID in string form.
@@ -324,10 +324,10 @@ public class Collection extends NavigableResource<Collection> {
          * @param aManifest A full manifest
          */
         public Item(final Manifest aManifest) {
-            final Thumbnail thumbnail = aManifest.getThumbnail();
+            final List<Thumbnail> thumbnails = aManifest.getThumbnails();
 
-            if (thumbnail != null) {
-                setThumbnail(thumbnail);
+            if (thumbnails.size() > 0) {
+                setThumbnails(thumbnails.toArray(new Thumbnail[thumbnails.size()]));
             }
 
             setID(aManifest.getID());
@@ -341,10 +341,10 @@ public class Collection extends NavigableResource<Collection> {
          * @param aCollection A full collection
          */
         public Item(final Collection aCollection) {
-            final Thumbnail thumbnail = aCollection.getThumbnail();
+            final List<Thumbnail> thumbnails = aCollection.getThumbnails();
 
-            if (thumbnail != null) {
-                setThumbnail(thumbnail);
+            if (thumbnails.size() > 0) {
+                setThumbnails(thumbnails.toArray(new Thumbnail[thumbnails.size()]));
             }
 
             setID(aCollection.getID());
@@ -439,19 +439,31 @@ public class Collection extends NavigableResource<Collection> {
         }
 
         /**
-         * Gets the item thumbnail.
+         * Gets a list of resource thumbnails, initializing the list if this hasn't been done already.
+         *
+         * @return The resource's thumbnails
          */
         @JsonGetter(Constants.THUMBNAIL)
-        public Thumbnail getThumbnail() {
-            return myThumbnail;
+        public List<Thumbnail> getThumbnails() {
+            if (myThumbnails == null) {
+                myThumbnails = new ArrayList<>();
+            }
+
+            return myThumbnails;
         }
 
         /**
-         * Sets the item thumbnail.
+         * Sets the thumbnails for this resource.
+         *
+         * @param aThumbnailArray The thumbnails to set for this resource
+         * @return The resource
          */
         @JsonSetter(Constants.THUMBNAIL)
-        public Item setThumbnail(final Thumbnail aThumbnail) {
-            myThumbnail = checkNotNull(aThumbnail);
+        public Item setThumbnails(final Thumbnail... aThumbnailArray) {
+            final List<Thumbnail> thumbnails = getThumbnails();
+
+            thumbnails.clear();
+            thumbnails.addAll(Arrays.asList(aThumbnailArray));
             return this;
         }
 

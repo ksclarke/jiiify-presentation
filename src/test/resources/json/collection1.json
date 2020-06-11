@@ -1,8 +1,13 @@
 {
   "@context" : "http://iiif.io/api/presentation/3/context.json",
-  "label" : { "none": ["label-a"]},
-  "id" : "ID-a",
   "type" : "Collection",
+  "id" : "ID-a",
+  "label" : { "none": ["label-a"]},
+  "thumbnail": [ {
+    "type": "Image",
+    "id": "http://brand.ucla.edu/images/logo-ucla.svg",
+    "format": "image/svg+xml"
+  } ],
   "items" : [ {
     "type" : "Manifest",
     "id" : "http://iiif.library.ucla.edu/asdf1234/manifest",

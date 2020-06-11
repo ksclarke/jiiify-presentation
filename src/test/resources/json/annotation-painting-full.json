@@ -6,8 +6,16 @@
   "body": {
     "type": "Sound",
     "id": "bc7c572d-6bf5-48c9-8329-51a961f1019d.mp3",
-    "format": "audio/mpeg",
-    "duration": 3600
+    "thumbnail": [
+      {
+        "type": "Sound",
+        "id": "2df373a0-0701-4d04-b4dd-efd5c1a611ec.ogg",
+        "duration": 4.2,
+        "format": "audio/ogg"
+      }
+    ],
+    "duration": 3600,
+    "format": "audio/mpeg"
   },
   "target": "cc16ed46-cfbc-458a-9a7b-16364a5af377"
 }

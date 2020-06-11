@@ -3,10 +3,13 @@ package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 /**
  * Dataset content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
  */
-public class DatasetContent extends AbstractContentResource<DatasetContent> implements ContentResource {
+@JsonPropertyOrder({ Constants.TYPE, Constants.ID, Constants.THUMBNAIL, Constants.FORMAT, Constants.LANGUAGE })
+public class DatasetContent extends AbstractContentResource<DatasetContent> implements Thumbnail {
 
     /**
      * Creates a dataset content resource.

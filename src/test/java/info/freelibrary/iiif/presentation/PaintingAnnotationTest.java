@@ -34,6 +34,8 @@ public class PaintingAnnotationTest extends AbstractTest {
 
     private final URI mySoundContentID = URI.create("bc7c572d-6bf5-48c9-8329-51a961f1019d" + ".mp3");
 
+    private final URI myThumbnailID = URI.create("2df373a0-0701-4d04-b4dd-efd5c1a611ec" + ".ogg");
+
     /**
      * Tests constructing a painting annotation.
      */
@@ -107,7 +109,8 @@ public class PaintingAnnotationTest extends AbstractTest {
      */
     @Test
     public final void testSerialization() throws IOException {
-        final SoundContent content = new SoundContent(mySoundContentID).setDuration(3600);
+        final SoundContent content = new SoundContent(mySoundContentID).setDuration(3600)
+                .setThumbnails(new SoundContent(myThumbnailID).setDuration(4.2f));
         final PaintingAnnotation annotation = new PaintingAnnotation(myAnnoID, myCanvas).setBody(content)
                 .setTarget(myCanvasID).setTimeMode(TimeMode.LOOP);
         final JsonObject expected = new JsonObject(StringUtils.read(ANNOTATION));
