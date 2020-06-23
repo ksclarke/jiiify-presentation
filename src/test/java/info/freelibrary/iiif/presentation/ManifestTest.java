@@ -1,9 +1,7 @@
 
 package info.freelibrary.iiif.presentation;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileReader;
@@ -46,8 +44,6 @@ public class ManifestTest extends AbstractTest {
 
     private static final String MANIFEST_THUMBNAIL_URI = SERVER + "ark:%2F21198%2Fz1d79t3q" + THUMBNAIL_PATH;
 
-    private static final String LOGO_URI = "https://sinai-images.library.ucla.edu/images/logos/iiif_logo.png";
-
     private static final String TEST_TITLE = "Georgian NF Fragment 68a";
 
     private static final List<String[]> METADATA_PAIRS = Stream.of(new String[] { "Title", TEST_TITLE },
@@ -84,7 +80,6 @@ public class ManifestTest extends AbstractTest {
 
         myManifest = new Manifest(MANIFEST_URI, TEST_TITLE);
         myManifest.setMetadata(metadata);
-        myManifest.setLogo(LOGO_URI);
         myManifest.setThumbnails(new ImageContent(MANIFEST_THUMBNAIL_URI));
 
         final String id1 = SERVER + MANIFEST_ID + "/canvas/canvas-1";

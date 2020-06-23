@@ -53,8 +53,8 @@
     <jackson.version>2.10.1</jackson.version>
     <jackson.databind.version>2.10.1</jackson.databind.version>
     <guava.version>28.1-jre</guava.version>
-    <freelib.utils.version>1.0.1</freelib.utils.version>
-    <freelib.maven.version>0.0.3</freelib.maven.version>
+    <freelib.utils.version>1.1.0</freelib.utils.version>
+    <freelib.maven.version>0.1.0</freelib.maven.version>
     <jsoup.version>1.13.1</jsoup.version>
     <vertx.version>3.8.2</vertx.version>
 
@@ -225,7 +225,7 @@
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>3.8.2</version>
+    <version>3.8.8</version>
   </parent>
 
 </project>

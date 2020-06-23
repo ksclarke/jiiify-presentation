@@ -2,17 +2,19 @@
 package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Homepage;
 import info.freelibrary.iiif.presentation.properties.Label;
-import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.PartOf;
+import info.freelibrary.iiif.presentation.properties.Provider;
 import info.freelibrary.iiif.presentation.properties.Rendering;
 import info.freelibrary.iiif.presentation.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
@@ -48,6 +50,18 @@ public class ModelContent extends AbstractContentResource<ModelContent> implemen
      */
     private ModelContent() {
         super(ResourceTypes.MODEL);
+    }
+
+    @Override
+    @JsonSetter(Constants.PROVIDER)
+    public ModelContent setProviders(final Provider... aProviderArray) {
+        return setProviders(Arrays.asList(aProviderArray));
+    }
+
+    @Override
+    @JsonIgnore
+    public ModelContent setProviders(final List<Provider> aProviderList) {
+        return (ModelContent) super.setProviders(aProviderList);
     }
 
     @Override
@@ -134,16 +148,6 @@ public class ModelContent extends AbstractContentResource<ModelContent> implemen
     @Override
     public ModelContent setID(final URI aID) {
         return (ModelContent) super.setID(aID);
-    }
-
-    @Override
-    public ModelContent setLogo(final String aLogo) {
-        return (ModelContent) super.setLogo(aLogo);
-    }
-
-    @Override
-    public ModelContent setLogo(final Logo aLogo) {
-        return (ModelContent) super.setLogo(aLogo);
     }
 
     @Override

@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,9 +16,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Homepage;
 import info.freelibrary.iiif.presentation.properties.Label;
-import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.PartOf;
+import info.freelibrary.iiif.presentation.properties.Provider;
 import info.freelibrary.iiif.presentation.properties.Rendering;
 import info.freelibrary.iiif.presentation.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
@@ -66,6 +67,18 @@ public class ImageContent extends AbstractContentResource<ImageContent> implemen
      */
     private ImageContent() {
         super(ResourceTypes.IMAGE);
+    }
+
+    @Override
+    @JsonSetter(Constants.PROVIDER)
+    public ImageContent setProviders(final Provider... aProviderArray) {
+        return setProviders(Arrays.asList(aProviderArray));
+    }
+
+    @Override
+    @JsonIgnore
+    public ImageContent setProviders(final List<Provider> aProviderList) {
+        return (ImageContent) super.setProviders(aProviderList);
     }
 
     @Override
@@ -152,16 +165,6 @@ public class ImageContent extends AbstractContentResource<ImageContent> implemen
     @Override
     public ImageContent setID(final URI aID) {
         return (ImageContent) super.setID(aID);
-    }
-
-    @Override
-    public ImageContent setLogo(final String aLogo) {
-        return (ImageContent) super.setLogo(aLogo);
-    }
-
-    @Override
-    public ImageContent setLogo(final Logo aLogo) {
-        return (ImageContent) super.setLogo(aLogo);
     }
 
     @Override

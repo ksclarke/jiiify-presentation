@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -18,9 +18,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Homepage;
 import info.freelibrary.iiif.presentation.properties.Label;
-import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.PartOf;
+import info.freelibrary.iiif.presentation.properties.Provider;
 import info.freelibrary.iiif.presentation.properties.Rendering;
 import info.freelibrary.iiif.presentation.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
@@ -76,10 +76,11 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      * @param aMetadata A collection's metadata
      * @param aSummary A summary in string form
      * @param aThumbnail A thumbnail
+     * @param aProvider A resource provider
      */
     public Collection(final String aID, final String aLabel, final Metadata aMetadata, final String aSummary,
-            final Thumbnail aThumbnail) {
-        super(ResourceTypes.COLLECTION, aID, aLabel, aMetadata, aSummary, aThumbnail);
+            final Thumbnail aThumbnail, final Provider aProvider) {
+        super(ResourceTypes.COLLECTION, aID, aLabel, aMetadata, aSummary, aThumbnail, aProvider);
     }
 
     /**
@@ -90,10 +91,11 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      * @param aMetadata A collection's metadata
      * @param aSummary A summary
      * @param aThumbnail A thumbnail
+     * @param aProvider A resource provider
      */
     public Collection(final URI aID, final Label aLabel, final Metadata aMetadata, final Summary aSummary,
-            final Thumbnail aThumbnail) {
-        super(ResourceTypes.COLLECTION, aID, aLabel, aMetadata, aSummary, aThumbnail);
+            final Thumbnail aThumbnail, final Provider aProvider) {
+        super(ResourceTypes.COLLECTION, aID, aLabel, aMetadata, aSummary, aThumbnail, aProvider);
     }
 
     /**
@@ -245,6 +247,18 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     }
 
     @Override
+    @JsonSetter(Constants.PROVIDER)
+    public Collection setProviders(final Provider... aProviderArray) {
+        return setProviders(Arrays.asList(aProviderArray));
+    }
+
+    @Override
+    @JsonIgnore
+    public Collection setProviders(final List<Provider> aProviderList) {
+        return (Collection) super.setProviders(aProviderList);
+    }
+
+    @Override
     public Collection setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
         return (Collection) super.setSeeAlsoRefs(aSeeAlsoArray);
     }
@@ -302,16 +316,6 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     @Override
     public Collection setID(final URI aID) {
         return (Collection) super.setID(aID);
-    }
-
-    @Override
-    public Collection setLogo(final String aLogo) {
-        return (Collection) super.setLogo(aLogo);
-    }
-
-    @Override
-    public Collection setLogo(final Logo aLogo) {
-        return (Collection) super.setLogo(aLogo);
     }
 
     @Override
@@ -442,6 +446,9 @@ public class Collection extends NavigableResource<Collection> implements Resourc
 
         /**
          * Create a new collection item from a type and ID in string form.
+         *
+         * @param aID An ID in string form
+         * @param aType A type of resource referenced from the collection
          */
         public Item(final Item.Type aType, final String aID) {
             setType(aType);
@@ -450,6 +457,9 @@ public class Collection extends NavigableResource<Collection> implements Resourc
 
         /**
          * Create a new collection item from a type and URI ID.
+         *
+         * @param aID An ID
+         * @param aType A type of resource referenced from the collection
          */
         public Item(final Item.Type aType, final URI aID) {
             setType(aType);
@@ -494,6 +504,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
          * Create a new item from the supplied ID and label.
          *
          * @param aID An item ID in string form
+         * @param aType A type of resource referenced from the collection
          * @param aLabel An item label in string form
          */
         public Item(final Item.Type aType, final String aID, final String aLabel) {
@@ -506,6 +517,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
          * Create a new item from the supplied ID and label.
          *
          * @param aID An item ID
+         * @param aType A type of resource referenced from the collection
          * @param aLabel An item label
          */
         public Item(final Item.Type aType, final URI aID, final Label aLabel) {
@@ -568,6 +580,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         /**
          * Sets the type for this item.
          *
+         * @param aType A type of resource referenced from the collection
          * @return The item type
          */
         @JsonIgnore

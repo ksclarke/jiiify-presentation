@@ -2,17 +2,19 @@
 package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Homepage;
 import info.freelibrary.iiif.presentation.properties.Label;
-import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.PartOf;
+import info.freelibrary.iiif.presentation.properties.Provider;
 import info.freelibrary.iiif.presentation.properties.Rendering;
 import info.freelibrary.iiif.presentation.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
@@ -48,6 +50,18 @@ public class TextContent extends AbstractContentResource<TextContent> implements
      */
     private TextContent() {
         super(ResourceTypes.TEXT);
+    }
+
+    @Override
+    @JsonSetter(Constants.PROVIDER)
+    public TextContent setProviders(final Provider... aProviderArray) {
+        return setProviders(Arrays.asList(aProviderArray));
+    }
+
+    @Override
+    @JsonIgnore
+    public TextContent setProviders(final List<Provider> aProviderList) {
+        return (TextContent) super.setProviders(aProviderList);
     }
 
     @Override
@@ -134,16 +148,6 @@ public class TextContent extends AbstractContentResource<TextContent> implements
     @Override
     public TextContent setID(final URI aID) {
         return (TextContent) super.setID(aID);
-    }
-
-    @Override
-    public TextContent setLogo(final String aLogo) {
-        return (TextContent) super.setLogo(aLogo);
-    }
-
-    @Override
-    public TextContent setLogo(final Logo aLogo) {
-        return (TextContent) super.setLogo(aLogo);
     }
 
     @Override

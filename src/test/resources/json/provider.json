@@ -1,0 +1,35 @@
+{
+  "id": "37731199-bb7e-4f61-b27c-c5bfefdd09bc",
+  "type": "Agent",
+  "label": {
+    "none": [
+      "Dis Odio Harum Sonet Hendrerit"
+    ]
+  },
+  "homepage": [
+    {
+      "id": "https://ucla.edu/homepage",
+      "type": "Text",
+      "label": {
+        "none": [
+          "Vim Integer Comprehensam Accusata Dicta"
+        ]
+      }
+    }
+  ],
+  "logo": [
+    {
+      "id": "https://ucla.edu/logo.jpg",
+      "type": "Image",
+      "format": "image/jpg",
+      "height": 100,
+      "width": 100
+    }
+  ],
+  "seeAlso": [
+    {
+      "id": "https://ucla.edu/seeAlso",
+      "type": "Text"
+    }
+  ]
+}

@@ -28,7 +28,7 @@ import info.freelibrary.util.LoggerFactory;
  */
 @JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.FORMAT, Constants.WIDTH, Constants.HEIGHT,
     Constants.SERVICE })
-public class ServiceImage {
+public class ServiceImage<T> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ServiceImage.class, Constants.BUNDLE_NAME);
 
@@ -159,7 +159,7 @@ public class ServiceImage {
      * @return The service image
      */
     @JsonSetter(Constants.FORMAT)
-    public ServiceImage setFormat(final String aMediaType) {
+    public ServiceImage<T> setFormat(final String aMediaType) {
         setMediaTypeFromExt(aMediaType);
         return this;
     }
@@ -171,7 +171,7 @@ public class ServiceImage {
      * @return The service image
      */
     @JsonIgnore
-    public ServiceImage setFormatMediaType(final MediaType aMediaType) {
+    public ServiceImage<T> setFormatMediaType(final MediaType aMediaType) {
         myFormat = Optional.ofNullable(aMediaType);
         return this;
     }
@@ -182,8 +182,10 @@ public class ServiceImage {
      * @return A string representation of the service image's format
      */
     @JsonGetter(Constants.FORMAT)
-    public String getFormat() {
-        return myFormat != null && myFormat.isPresent() ? myFormat.get().toString() : null;
+    @JsonInclude(Include.NON_EMPTY)
+    public Optional<String> getFormat() {
+        return myFormat != null && myFormat.isPresent() ? Optional.of(myFormat.get().type() + '/' + myFormat.get()
+                .subtype()) : Optional.empty();
     }
 
     /**
@@ -204,7 +206,7 @@ public class ServiceImage {
      * @return This service image
      */
     @JsonIgnore
-    public ServiceImage setWidthHeight(final int aWidth, final int aHeight) {
+    public ServiceImage<T> setWidthHeight(final int aWidth, final int aHeight) {
         setWidth(aWidth);
         setHeight(aHeight);
 
@@ -250,7 +252,7 @@ public class ServiceImage {
      * @return The service image
      */
     @JsonSetter(Constants.ID)
-    public ServiceImage setID(final String aID) {
+    public ServiceImage<T> setID(final String aID) {
         Objects.requireNonNull(aID, MessageCodes.JPA_003);
         myID = URI.create(aID);
         return this;
@@ -263,7 +265,7 @@ public class ServiceImage {
      * @return The service image
      */
     @JsonIgnore
-    public ServiceImage setID(final URI aURI) {
+    public ServiceImage<T> setID(final URI aURI) {
         Objects.requireNonNull(aURI, MessageCodes.JPA_003);
         myID = aURI;
         return this;
@@ -287,7 +289,7 @@ public class ServiceImage {
      * @return The service image
      */
     @JsonSetter(Constants.SERVICE)
-    public ServiceImage setService(final ImageInfoService aService) {
+    public ServiceImage<T> setService(final ImageInfoService aService) {
         myService = Optional.ofNullable(aService);
         return this;
     }
@@ -303,7 +305,7 @@ public class ServiceImage {
      * @param aURI The service image's ID
      */
     @JsonIgnore
-    protected final void setMediaTypeFromExt(final String aURI) {
+    private void setMediaTypeFromExt(final String aURI) {
         final String fragment = '#' + URI.create(aURI).getFragment();
         final String mimeType;
         final String uri;
@@ -337,7 +339,7 @@ public class ServiceImage {
      * @return The service image
      */
     @JsonSetter(Constants.WIDTH)
-    private ServiceImage setWidth(final int aWidth) {
+    private ServiceImage<T> setWidth(final int aWidth) {
         myWidth = aWidth;
         return this;
     }
@@ -349,7 +351,7 @@ public class ServiceImage {
      * @return The service image
      */
     @JsonSetter(Constants.HEIGHT)
-    private ServiceImage setHeight(final int aHeight) {
+    private ServiceImage<T> setHeight(final int aHeight) {
         myHeight = aHeight;
         return this;
     }
@@ -362,7 +364,7 @@ public class ServiceImage {
      * @return This service image
      */
     @JsonSetter(Constants.TYPE)
-    private ServiceImage setType(final String aType) {
+    private ServiceImage<T> setType(final String aType) {
         // The value is hard-coded; this method is just used by Jackson
         if (!ResourceTypes.IMAGE.equals(aType)) {
             throw new I18nRuntimeException(MessageCodes.JPA_053, ResourceTypes.IMAGE);

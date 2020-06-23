@@ -2,19 +2,21 @@
 package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Homepage;
 import info.freelibrary.iiif.presentation.properties.Label;
-import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.PartOf;
+import info.freelibrary.iiif.presentation.properties.Provider;
 import info.freelibrary.iiif.presentation.properties.Rendering;
 import info.freelibrary.iiif.presentation.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
@@ -81,6 +83,18 @@ public class Canvas extends AbstractCanvas<Canvas> implements Resource<Canvas>, 
     @SuppressWarnings("unused")
     private Canvas() {
         super();
+    }
+
+    @Override
+    @JsonSetter(Constants.PROVIDER)
+    public Canvas setProviders(final Provider... aProviderArray) {
+        return setProviders(Arrays.asList(aProviderArray));
+    }
+
+    @Override
+    @JsonIgnore
+    public Canvas setProviders(final List<Provider> aProviderList) {
+        return (Canvas) super.setProviders(aProviderList);
     }
 
     /**
@@ -270,16 +284,6 @@ public class Canvas extends AbstractCanvas<Canvas> implements Resource<Canvas>, 
     @Override
     public Canvas setID(final URI aID) {
         return (Canvas) super.setID(aID);
-    }
-
-    @Override
-    public Canvas setLogo(final String aLogo) {
-        return (Canvas) super.setLogo(aLogo);
-    }
-
-    @Override
-    public Canvas setLogo(final Logo aLogo) {
-        return (Canvas) super.setLogo(aLogo);
     }
 
     @Override
