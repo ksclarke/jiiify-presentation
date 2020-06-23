@@ -13,8 +13,16 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import info.freelibrary.iiif.presentation.properties.Behavior;
+import info.freelibrary.iiif.presentation.properties.Homepage;
 import info.freelibrary.iiif.presentation.properties.Label;
+import info.freelibrary.iiif.presentation.properties.Logo;
+import info.freelibrary.iiif.presentation.properties.Metadata;
+import info.freelibrary.iiif.presentation.properties.PartOf;
+import info.freelibrary.iiif.presentation.properties.Rendering;
+import info.freelibrary.iiif.presentation.properties.RequiredStatement;
+import info.freelibrary.iiif.presentation.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.properties.StartSelector;
+import info.freelibrary.iiif.presentation.properties.Summary;
 import info.freelibrary.iiif.presentation.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.properties.behaviors.RangeBehavior;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
@@ -29,7 +37,7 @@ import io.vertx.core.json.JsonObject;
  * non-content-bearing pages, the table of contents or similar. Equally, physical features might be important such as
  * quires or gatherings, sections that have been added later and so forth.
  */
-public class Range extends NavigableResource<Range> {
+public class Range extends NavigableResource<Range> implements Resource<Range> {
 
     private final List<Item> myItems = new ArrayList<>();
 
@@ -131,14 +139,30 @@ public class Range extends NavigableResource<Range> {
     }
 
     @Override
+    public Range clearBehaviors() {
+        return (Range) super.clearBehaviors();
+    }
+
+    @Override
     @JsonSetter(Constants.BEHAVIOR)
     public Range setBehaviors(final Behavior... aBehaviorArray) {
-        return super.setBehaviors(checkBehaviors(RangeBehavior.class, true, aBehaviorArray));
+        return (Range) super.setBehaviors(checkBehaviors(RangeBehavior.class, true, aBehaviorArray));
+    }
+
+    @Override
+    @JsonSetter(Constants.BEHAVIOR)
+    public Range setBehaviors(final List<Behavior> aBehaviorList) {
+        return (Range) super.setBehaviors(checkBehaviors(RangeBehavior.class, true, aBehaviorList));
     }
 
     @Override
     public Range addBehaviors(final Behavior... aBehaviorArray) {
-        return super.addBehaviors(checkBehaviors(RangeBehavior.class, false, aBehaviorArray));
+        return (Range) super.addBehaviors(checkBehaviors(RangeBehavior.class, false, aBehaviorArray));
+    }
+
+    @Override
+    public Range addBehaviors(final List<Behavior> aBehaviorList) {
+        return (Range) super.addBehaviors(checkBehaviors(RangeBehavior.class, false, aBehaviorList));
     }
 
     /**
@@ -214,6 +238,121 @@ public class Range extends NavigableResource<Range> {
     public Range clearItems() {
         myItems.clear();
         return this;
+    }
+
+    @Override
+    public Range setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
+        return (Range) super.setSeeAlsoRefs(aSeeAlsoArray);
+    }
+
+    @Override
+    public Range setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
+        return (Range) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public Range setPartOfs(final PartOf... aPartOfArray) {
+        return (Range) super.setPartOfs(aPartOfArray);
+    }
+
+    @Override
+    public Range setPartOfs(final List<PartOf> aPartOfList) {
+        return (Range) super.setPartOfs(aPartOfList);
+    }
+
+    @Override
+    public Range setRenderings(final Rendering... aRenderingArray) {
+        return (Range) super.setRenderings(aRenderingArray);
+    }
+
+    @Override
+    public Range setRenderings(final List<Rendering> aRenderingList) {
+        return (Range) super.setRenderings(aRenderingList);
+    }
+
+    @Override
+    public Range setHomepages(final Homepage... aHomepageArray) {
+        return (Range) super.setHomepages(aHomepageArray);
+    }
+
+    @Override
+    public Range setHomepages(final List<Homepage> aHomepageList) {
+        return (Range) super.setHomepages(aHomepageList);
+    }
+
+    @Override
+    public Range setThumbnails(final Thumbnail... aThumbnailArray) {
+        return (Range) super.setThumbnails(aThumbnailArray);
+    }
+
+    @Override
+    public Range setThumbnails(final List<Thumbnail> aThumbnailList) {
+        return (Range) super.setThumbnails(aThumbnailList);
+    }
+
+    @Override
+    public Range setID(final String aID) {
+        return (Range) super.setID(aID);
+    }
+
+    @Override
+    public Range setID(final URI aID) {
+        return (Range) super.setID(aID);
+    }
+
+    @Override
+    public Range setLogo(final String aLogo) {
+        return (Range) super.setLogo(aLogo);
+    }
+
+    @Override
+    public Range setLogo(final Logo aLogo) {
+        return (Range) super.setLogo(aLogo);
+    }
+
+    @Override
+    public Range setRights(final String... aRightsArray) {
+        return (Range) super.setRights(aRightsArray);
+    }
+
+    @Override
+    public Range setRights(final URI... aRightsArray) {
+        return (Range) super.setRights(aRightsArray);
+    }
+
+    @Override
+    public Range setRights(final List<URI> aRightsList) {
+        return (Range) super.setRights(aRightsList);
+    }
+
+    @Override
+    public Range setRequiredStatement(final RequiredStatement aStatement) {
+        return (Range) super.setRequiredStatement(aStatement);
+    }
+
+    @Override
+    public Range setSummary(final String aSummary) {
+        return (Range) super.setSummary(aSummary);
+    }
+
+    @Override
+    public Range setSummary(final Summary aSummary) {
+        return (Range) super.setSummary(aSummary);
+    }
+
+    @Override
+    public Range setMetadata(final Metadata aMetadata) {
+        return (Range) super.setMetadata(aMetadata);
+    }
+
+    @Override
+    public Range setLabel(final String aLabel) {
+        return (Range) super.setLabel(aLabel);
+    }
+
+    @Override
+    public Range setLabel(final Label aLabel) {
+        return (Range) super.setLabel(aLabel);
     }
 
     /**

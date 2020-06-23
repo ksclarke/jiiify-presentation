@@ -93,7 +93,7 @@ public class DisjointChecker {
      * @param aBehaviorArray An array of behaviors to be set
      * @throws IllegalArgumentException If the behaviors are disjointed
      */
-    public void check(final Class aClass, final Behavior... aBehaviorArray) throws IllegalArgumentException {
+    public void check(final Class<?> aClass, final Behavior... aBehaviorArray) throws IllegalArgumentException {
         for (int index = 0; index < aBehaviorArray.length; index++) {
             final Behavior behavior = aBehaviorArray[index];
             final Set<String> disjoints;

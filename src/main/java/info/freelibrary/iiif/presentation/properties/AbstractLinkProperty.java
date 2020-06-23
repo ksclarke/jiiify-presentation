@@ -250,7 +250,7 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> {
     @Override
     public boolean equals(final Object aObject) {
         if (aObject instanceof AbstractLinkProperty) {
-            final AbstractLinkProperty otherLink = (AbstractLinkProperty) aObject;
+            final AbstractLinkProperty<?> otherLink = (AbstractLinkProperty<?>) aObject;
 
             return Objects.equals(myID, otherLink.myID) //
                     && Objects.equals(myType, otherLink.myType) //

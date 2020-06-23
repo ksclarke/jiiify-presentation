@@ -33,6 +33,26 @@ public class Summary extends I18nProperty<Summary> {
     }
 
     @Override
+    public Summary setStrings(final String... aStringArray) {
+        return (Summary) super.setStrings(aStringArray);
+    }
+
+    @Override
+    public Summary setI18ns(final I18n... aI18nArray) {
+        return (Summary) super.setI18ns(aI18nArray);
+    }
+
+    @Override
+    public Summary addStrings(final String... aStringArray) {
+        return (Summary) super.addStrings(aStringArray);
+    }
+
+    @Override
+    public Summary addI18ns(final I18n... aI18nArray) {
+        return (Summary) super.addI18ns(aI18nArray);
+    }
+
+    @Override
     @JsonGetter(Constants.SUMMARY)
     protected Object toMap() {
         return super.toMap();

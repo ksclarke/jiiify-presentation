@@ -29,6 +29,26 @@ public class Value extends I18nProperty<Value> {
     }
 
     @Override
+    public Value setStrings(final String... aStringArray) {
+        return (Value) super.setStrings(aStringArray);
+    }
+
+    @Override
+    public Value setI18ns(final I18n... aI18nArray) {
+        return (Value) super.setI18ns(aI18nArray);
+    }
+
+    @Override
+    public Value addStrings(final String... aStringArray) {
+        return (Value) super.addStrings(aStringArray);
+    }
+
+    @Override
+    public Value addI18ns(final I18n... aI18nArray) {
+        return (Value) super.addI18ns(aI18nArray);
+    }
+
+    @Override
     @JsonGetter(Constants.VALUE)
     protected Object toMap() {
         return super.toMap();

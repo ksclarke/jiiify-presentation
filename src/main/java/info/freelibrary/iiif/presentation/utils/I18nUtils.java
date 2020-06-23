@@ -89,7 +89,7 @@ public final class I18nUtils {
      * @return A list of strings without any HTML
      */
     public static List<String> stripHTML(final List<String> aStringList) {
-        final List<String> list = new ArrayList(aStringList);
+        final List<String> list = new ArrayList<>(aStringList);
 
         for (int index = 0; index < aStringList.size(); index++) {
             list.set(index, stripHTML(list.get(index)));

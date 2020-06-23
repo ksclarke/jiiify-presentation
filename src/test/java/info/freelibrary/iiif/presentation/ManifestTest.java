@@ -93,8 +93,10 @@ public class ManifestTest extends AbstractTest {
         final Canvas canvas1 = new Canvas(id1, label1).setWidthHeight(WIDTH, HEIGHT).setThumbnails(thumb1);
         final PaintingAnnotation content1 = new PaintingAnnotation(SERVER + MANIFEST_ID + "/imageanno/imageanno-1",
                 canvas1);
-        final AnnotationPage page1 = new AnnotationPage(SERVER + MANIFEST_ID + "/pageanno/pageanno-1");
-        final AnnotationPage page2 = new AnnotationPage(SERVER + MANIFEST_ID + "/pageanno/pageanno-2");
+        final AnnotationPage<PaintingAnnotation> page1 = new AnnotationPage<>(SERVER + MANIFEST_ID +
+                "/pageanno/pageanno-1");
+        final AnnotationPage<PaintingAnnotation> page2 = new AnnotationPage<>(SERVER + MANIFEST_ID +
+                "/pageanno/pageanno-2");
 
         canvas1.addPaintingPages(page1.addAnnotations(content1));
         myManifest.addCanvas(canvas1);

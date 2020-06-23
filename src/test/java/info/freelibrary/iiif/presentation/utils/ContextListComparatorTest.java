@@ -45,7 +45,7 @@ public class ContextListComparatorTest extends AbstractTest {
         assertTrue(preSort.remove(Constants.CONTEXT_URI));
 
         // Sort list items
-        Collections.sort(CONTEXTS, new ContextListComparator());
+        Collections.sort(CONTEXTS, new ContextListComparator<>());
 
         // Check that the last URI in the list is our required one and
         // that list has same pre-sort order minus the required context

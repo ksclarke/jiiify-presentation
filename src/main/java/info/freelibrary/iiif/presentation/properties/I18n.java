@@ -151,7 +151,7 @@ public class I18n implements Iterable<String> {
         if (!isAllowingHTML) {
             myStrings = I18nUtils.stripHTML(aStringList);
         } else if (IMMUTABLES.contains(aStringList.getClass().getName())) {
-            myStrings = new ArrayList(aStringList);
+            myStrings = new ArrayList<>(aStringList);
         } else {
             myStrings = aStringList;
         }

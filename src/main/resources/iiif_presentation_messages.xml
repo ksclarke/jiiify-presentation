@@ -53,12 +53,14 @@
   <entry key="JPA-047">Unable to add seeAlso: {}</entry>
   <entry key="JPA-048">Unable to add ServiceImage to ServiceProperty: {}</entry>
   <entry key="JPA-049">Unable to add AnnotationPage to Canvas: [{}]</entry>
-  <entry key="JPA-050">Unable to add ImageContent to AnnotationPage: [{}]</entry>
+  <entry key="JPA-050">Unable to add annotation(s) to AnnotationPage: [{}]</entry>
   <entry key="JPA-051">Unable to add Canvas to Manifest: {}</entry>
   <entry key="JPA-052">Unexpected and currently unsupported content resource type</entry>
   <entry key="JPA-053">Type set on service image must be: {}</entry>
   <entry key="JPA-054">Supplied behavior ('{}') conflicts with an existing behavior: {}</entry>
   <entry key="JPA-055">Supplied behavior ('{}') conflicts with another supplied behavior: {}</entry>
   <entry key="JPA-056">Expected Image, Sound, Video, Text, Model, or Dataset... found: {}</entry>
+  <entry key="JPA-057">Method setBehaviors() shouldn't be called without checkBehaviors()</entry>
+  <entry key="JPA-058">Method addBehaviors() shouldn't be called without checkBehaviors()</entry>
 
 </properties>

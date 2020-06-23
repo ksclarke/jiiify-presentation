@@ -2,8 +2,20 @@
 package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+
+import info.freelibrary.iiif.presentation.properties.Behavior;
+import info.freelibrary.iiif.presentation.properties.Homepage;
 import info.freelibrary.iiif.presentation.properties.Label;
+import info.freelibrary.iiif.presentation.properties.Logo;
+import info.freelibrary.iiif.presentation.properties.Metadata;
+import info.freelibrary.iiif.presentation.properties.PartOf;
+import info.freelibrary.iiif.presentation.properties.Rendering;
+import info.freelibrary.iiif.presentation.properties.RequiredStatement;
+import info.freelibrary.iiif.presentation.properties.SeeAlso;
+import info.freelibrary.iiif.presentation.properties.Summary;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
@@ -13,7 +25,8 @@ import io.vertx.core.json.JsonObject;
  * accompanyingCanvas property. Examples include an image to show while a duration-only Canvas is playing audio; or
  * background audio to play while a user is navigating an image-only Manifest.
  */
-public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> {
+public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> implements Resource<AccompanyingCanvas>,
+        CanvasResource<AccompanyingCanvas> {
 
     /**
      * Creates a new accompanying canvas.
@@ -60,6 +73,210 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> {
     private AccompanyingCanvas() {
         super();
     }
+
+    @Override
+    public AccompanyingCanvas clearBehaviors() {
+        return (AccompanyingCanvas) super.clearBehaviors();
+    }
+
+    @Override
+    @JsonSetter(Constants.BEHAVIOR)
+    public AccompanyingCanvas setBehaviors(final Behavior... aBehaviorArray) {
+        return (AccompanyingCanvas) super.setBehaviors(aBehaviorArray);
+    }
+
+    @Override
+    @JsonSetter(Constants.BEHAVIOR)
+    public AccompanyingCanvas setBehaviors(final List<Behavior> aBehaviorList) {
+        return (AccompanyingCanvas) super.setBehaviors(aBehaviorList);
+    }
+
+    @Override
+    public AccompanyingCanvas addBehaviors(final Behavior... aBehaviorArray) {
+        return (AccompanyingCanvas) super.addBehaviors(aBehaviorArray);
+    }
+
+    @Override
+    public AccompanyingCanvas addBehaviors(final List<Behavior> aBehaviorList) {
+        return (AccompanyingCanvas) super.addBehaviors(aBehaviorList);
+    }
+
+    @Override
+    public AccompanyingCanvas setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
+        return (AccompanyingCanvas) super.setSeeAlsoRefs(aSeeAlsoArray);
+    }
+
+    @Override
+    public AccompanyingCanvas setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
+        return (AccompanyingCanvas) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public AccompanyingCanvas setPartOfs(final PartOf... aPartOfArray) {
+        return (AccompanyingCanvas) super.setPartOfs(aPartOfArray);
+    }
+
+    @Override
+    public AccompanyingCanvas setPartOfs(final List<PartOf> aPartOfList) {
+        return (AccompanyingCanvas) super.setPartOfs(aPartOfList);
+    }
+
+    @Override
+    public AccompanyingCanvas setRenderings(final Rendering... aRenderingArray) {
+        return (AccompanyingCanvas) super.setRenderings(aRenderingArray);
+    }
+
+    @Override
+    public AccompanyingCanvas setRenderings(final List<Rendering> aRenderingList) {
+        return (AccompanyingCanvas) super.setRenderings(aRenderingList);
+    }
+
+    @Override
+    public AccompanyingCanvas setHomepages(final Homepage... aHomepageArray) {
+        return (AccompanyingCanvas) super.setHomepages(aHomepageArray);
+    }
+
+    @Override
+    public AccompanyingCanvas setHomepages(final List<Homepage> aHomepageList) {
+        return (AccompanyingCanvas) super.setHomepages(aHomepageList);
+    }
+
+    @Override
+    public AccompanyingCanvas setThumbnails(final Thumbnail... aThumbnailArray) {
+        return (AccompanyingCanvas) super.setThumbnails(aThumbnailArray);
+    }
+
+    @Override
+    public AccompanyingCanvas setThumbnails(final List<Thumbnail> aThumbnailList) {
+        return (AccompanyingCanvas) super.setThumbnails(aThumbnailList);
+    }
+
+    @Override
+    public AccompanyingCanvas setID(final String aID) {
+        return (AccompanyingCanvas) super.setID(aID);
+    }
+
+    @Override
+    public AccompanyingCanvas setID(final URI aID) {
+        return (AccompanyingCanvas) super.setID(aID);
+    }
+
+    @Override
+    public AccompanyingCanvas setLogo(final String aLogo) {
+        return (AccompanyingCanvas) super.setLogo(aLogo);
+    }
+
+    @Override
+    public AccompanyingCanvas setLogo(final Logo aLogo) {
+        return (AccompanyingCanvas) super.setLogo(aLogo);
+    }
+
+    @Override
+    public AccompanyingCanvas setRights(final String... aRightsArray) {
+        return (AccompanyingCanvas) super.setRights(aRightsArray);
+    }
+
+    @Override
+    public AccompanyingCanvas setRights(final URI... aRightsArray) {
+        return (AccompanyingCanvas) super.setRights(aRightsArray);
+    }
+
+    @Override
+    public AccompanyingCanvas setRights(final List<URI> aRightsList) {
+        return (AccompanyingCanvas) super.setRights(aRightsList);
+    }
+
+    @Override
+    public AccompanyingCanvas setRequiredStatement(final RequiredStatement aStatement) {
+        return (AccompanyingCanvas) super.setRequiredStatement(aStatement);
+    }
+
+    @Override
+    public AccompanyingCanvas setSummary(final String aSummary) {
+        return (AccompanyingCanvas) super.setSummary(aSummary);
+    }
+
+    @Override
+    public AccompanyingCanvas setSummary(final Summary aSummary) {
+        return (AccompanyingCanvas) super.setSummary(aSummary);
+    }
+
+    @Override
+    public AccompanyingCanvas setMetadata(final Metadata aMetadata) {
+        return (AccompanyingCanvas) super.setMetadata(aMetadata);
+    }
+
+    @Override
+    public AccompanyingCanvas setLabel(final String aLabel) {
+        return (AccompanyingCanvas) super.setLabel(aLabel);
+    }
+
+    @Override
+    public AccompanyingCanvas setLabel(final Label aLabel) {
+        return (AccompanyingCanvas) super.setLabel(aLabel);
+    }
+
+    // begin AbstractCanvas
+
+    @Override
+    public AccompanyingCanvas setDuration(final float aDuration) {
+        return (AccompanyingCanvas) super.setDuration(aDuration);
+    }
+
+    @Override
+    public AccompanyingCanvas setWidthHeight(final int aWidth, final int aHeight) {
+        return (AccompanyingCanvas) super.setWidthHeight(aWidth, aHeight);
+    }
+
+    @Override
+    @SafeVarargs
+    public final AccompanyingCanvas addSupplementingPages(
+            final AnnotationPage<SupplementingAnnotation>... aPageArray) {
+        return (AccompanyingCanvas) super.addSupplementingPages(aPageArray);
+    }
+
+    @Override
+    public final AccompanyingCanvas addSupplementingPages(
+            final List<AnnotationPage<SupplementingAnnotation>> aPageList) {
+        return (AccompanyingCanvas) super.addSupplementingPages(aPageList);
+    }
+
+    @Override
+    @SafeVarargs
+    public final AccompanyingCanvas setSupplementingPages(
+            final AnnotationPage<SupplementingAnnotation>... aPageArray) {
+        return (AccompanyingCanvas) super.setSupplementingPages(aPageArray);
+    }
+
+    @Override
+    public final AccompanyingCanvas setSupplementingPages(
+            final List<AnnotationPage<SupplementingAnnotation>> aPageList) {
+        return (AccompanyingCanvas) super.setSupplementingPages(aPageList);
+    }
+
+    @Override
+    @SafeVarargs
+    public final AccompanyingCanvas addPaintingPages(final AnnotationPage<PaintingAnnotation>... aPageArray) {
+        return (AccompanyingCanvas) super.addPaintingPages(aPageArray);
+    }
+
+    @Override
+    public final AccompanyingCanvas addPaintingPages(final List<AnnotationPage<PaintingAnnotation>> aPageList) {
+        return (AccompanyingCanvas) super.addPaintingPages(aPageList);
+    }
+
+    @Override
+    @SafeVarargs
+    public final AccompanyingCanvas setPaintingPages(final AnnotationPage<PaintingAnnotation>... aPageArray) {
+        return (AccompanyingCanvas) super.setPaintingPages(aPageArray);
+    }
+
+    @Override
+    public final AccompanyingCanvas setPaintingPages(final List<AnnotationPage<PaintingAnnotation>> aPageList) {
+        return (AccompanyingCanvas) super.setPaintingPages(aPageList);
+    }
+
+    // end AbstractCanvas
 
     /**
      * Returns an AccompanyingCanvas from its JSON representation.

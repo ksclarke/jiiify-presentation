@@ -2,14 +2,26 @@
 package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.iiif.presentation.properties.Behavior;
+import info.freelibrary.iiif.presentation.properties.Homepage;
+import info.freelibrary.iiif.presentation.properties.Label;
+import info.freelibrary.iiif.presentation.properties.Logo;
+import info.freelibrary.iiif.presentation.properties.Metadata;
+import info.freelibrary.iiif.presentation.properties.PartOf;
+import info.freelibrary.iiif.presentation.properties.Rendering;
+import info.freelibrary.iiif.presentation.properties.RequiredStatement;
+import info.freelibrary.iiif.presentation.properties.SeeAlso;
+import info.freelibrary.iiif.presentation.properties.Summary;
+import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -22,7 +34,7 @@ import io.vertx.core.json.JsonObject;
  */
 @JsonPropertyOrder({ Constants.TYPE, Constants.ID, Constants.THUMBNAIL, Constants.WIDTH, Constants.HEIGHT,
     Constants.DURATION, Constants.FORMAT, Constants.LANGUAGE })
-public class VideoContent extends AbstractContentResource<VideoContent> implements Thumbnail {
+public class VideoContent extends AbstractContentResource<VideoContent> implements Thumbnail, Resource<VideoContent> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VideoContent.class, Constants.BUNDLE_NAME);
 
@@ -55,6 +67,147 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
      */
     private VideoContent() {
         super(ResourceTypes.VIDEO);
+    }
+
+    @Override
+    public VideoContent clearBehaviors() {
+        return (VideoContent) super.clearBehaviors();
+    }
+
+    @Override
+    @JsonSetter(Constants.BEHAVIOR)
+    public VideoContent setBehaviors(final Behavior... aBehaviorArray) {
+        return (VideoContent) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorArray));
+    }
+
+    @Override
+    public VideoContent setBehaviors(final List<Behavior> aBehaviorList) {
+        return (VideoContent) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorList));
+    }
+
+    @Override
+    public VideoContent addBehaviors(final Behavior... aBehaviorArray) {
+        return (VideoContent) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorArray));
+    }
+
+    @Override
+    public VideoContent addBehaviors(final List<Behavior> aBehaviorList) {
+        return (VideoContent) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorList));
+    }
+
+    @Override
+    public VideoContent setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
+        return (VideoContent) super.setSeeAlsoRefs(aSeeAlsoArray);
+    }
+
+    @Override
+    public VideoContent setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
+        return (VideoContent) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public VideoContent setPartOfs(final PartOf... aPartOfArray) {
+        return (VideoContent) super.setPartOfs(aPartOfArray);
+    }
+
+    @Override
+    public VideoContent setPartOfs(final List<PartOf> aPartOfList) {
+        return (VideoContent) super.setPartOfs(aPartOfList);
+    }
+
+    @Override
+    public VideoContent setRenderings(final Rendering... aRenderingArray) {
+        return (VideoContent) super.setRenderings(aRenderingArray);
+    }
+
+    @Override
+    public VideoContent setRenderings(final List<Rendering> aRenderingList) {
+        return (VideoContent) super.setRenderings(aRenderingList);
+    }
+
+    @Override
+    public VideoContent setHomepages(final Homepage... aHomepageArray) {
+        return (VideoContent) super.setHomepages(aHomepageArray);
+    }
+
+    @Override
+    public VideoContent setHomepages(final List<Homepage> aHomepageList) {
+        return (VideoContent) super.setHomepages(aHomepageList);
+    }
+
+    @Override
+    public VideoContent setThumbnails(final Thumbnail... aThumbnailArray) {
+        return (VideoContent) super.setThumbnails(aThumbnailArray);
+    }
+
+    @Override
+    public VideoContent setThumbnails(final List<Thumbnail> aThumbnailList) {
+        return (VideoContent) super.setThumbnails(aThumbnailList);
+    }
+
+    @Override
+    public VideoContent setID(final String aID) {
+        return (VideoContent) super.setID(aID);
+    }
+
+    @Override
+    public VideoContent setID(final URI aID) {
+        return (VideoContent) super.setID(aID);
+    }
+
+    @Override
+    public VideoContent setLogo(final String aLogo) {
+        return (VideoContent) super.setLogo(aLogo);
+    }
+
+    @Override
+    public VideoContent setLogo(final Logo aLogo) {
+        return (VideoContent) super.setLogo(aLogo);
+    }
+
+    @Override
+    public VideoContent setRights(final String... aRightsArray) {
+        return (VideoContent) super.setRights(aRightsArray);
+    }
+
+    @Override
+    public VideoContent setRights(final URI... aRightsArray) {
+        return (VideoContent) super.setRights(aRightsArray);
+    }
+
+    @Override
+    public VideoContent setRights(final List<URI> aRightsList) {
+        return (VideoContent) super.setRights(aRightsList);
+    }
+
+    @Override
+    public VideoContent setRequiredStatement(final RequiredStatement aStatement) {
+        return (VideoContent) super.setRequiredStatement(aStatement);
+    }
+
+    @Override
+    public VideoContent setSummary(final String aSummary) {
+        return (VideoContent) super.setSummary(aSummary);
+    }
+
+    @Override
+    public VideoContent setSummary(final Summary aSummary) {
+        return (VideoContent) super.setSummary(aSummary);
+    }
+
+    @Override
+    public VideoContent setMetadata(final Metadata aMetadata) {
+        return (VideoContent) super.setMetadata(aMetadata);
+    }
+
+    @Override
+    public VideoContent setLabel(final String aLabel) {
+        return (VideoContent) super.setLabel(aLabel);
+    }
+
+    @Override
+    public VideoContent setLabel(final Label aLabel) {
+        return (VideoContent) super.setLabel(aLabel);
     }
 
     /**

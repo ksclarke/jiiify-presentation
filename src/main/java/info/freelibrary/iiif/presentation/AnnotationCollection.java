@@ -2,19 +2,29 @@
 package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.properties.Behavior;
+import info.freelibrary.iiif.presentation.properties.Homepage;
 import info.freelibrary.iiif.presentation.properties.Label;
+import info.freelibrary.iiif.presentation.properties.Logo;
+import info.freelibrary.iiif.presentation.properties.Metadata;
+import info.freelibrary.iiif.presentation.properties.PartOf;
+import info.freelibrary.iiif.presentation.properties.Rendering;
+import info.freelibrary.iiif.presentation.properties.RequiredStatement;
+import info.freelibrary.iiif.presentation.properties.SeeAlso;
+import info.freelibrary.iiif.presentation.properties.Summary;
 import info.freelibrary.iiif.presentation.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
 
 /**
  * A collection of annotations.
  */
-public class AnnotationCollection extends Resource<AnnotationCollection> {
+public class AnnotationCollection extends AbstractResource<AnnotationCollection> implements
+        Resource<AnnotationCollection> {
 
     private ViewingDirection myViewingDirection;
 
@@ -61,14 +71,146 @@ public class AnnotationCollection extends Resource<AnnotationCollection> {
     }
 
     @Override
+    public AnnotationCollection clearBehaviors() {
+        return (AnnotationCollection) super.clearBehaviors();
+    }
+
+    @Override
     @JsonSetter(Constants.BEHAVIOR)
     public AnnotationCollection setBehaviors(final Behavior... aBehaviorArray) {
-        return super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorArray));
+        return (AnnotationCollection) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true,
+                aBehaviorArray));
+    }
+
+    @Override
+    public AnnotationCollection setBehaviors(final List<Behavior> aBehaviorList) {
+        return (AnnotationCollection) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorList));
     }
 
     @Override
     public AnnotationCollection addBehaviors(final Behavior... aBehaviorArray) {
-        return super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorArray));
+        return (AnnotationCollection) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false,
+                aBehaviorArray));
     }
 
+    @Override
+    public AnnotationCollection addBehaviors(final List<Behavior> aBehaviorList) {
+        return (AnnotationCollection) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false,
+                aBehaviorList));
+    }
+
+    @Override
+    public AnnotationCollection setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
+        return (AnnotationCollection) super.setSeeAlsoRefs(aSeeAlsoArray);
+    }
+
+    @Override
+    public AnnotationCollection setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
+        return (AnnotationCollection) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public AnnotationCollection setPartOfs(final PartOf... aPartOfArray) {
+        return (AnnotationCollection) super.setPartOfs(aPartOfArray);
+    }
+
+    @Override
+    public AnnotationCollection setPartOfs(final List<PartOf> aPartOfList) {
+        return (AnnotationCollection) super.setPartOfs(aPartOfList);
+    }
+
+    @Override
+    public AnnotationCollection setRenderings(final Rendering... aRenderingArray) {
+        return (AnnotationCollection) super.setRenderings(aRenderingArray);
+    }
+
+    @Override
+    public AnnotationCollection setRenderings(final List<Rendering> aRenderingList) {
+        return (AnnotationCollection) super.setRenderings(aRenderingList);
+    }
+
+    @Override
+    public AnnotationCollection setHomepages(final Homepage... aHomepageArray) {
+        return (AnnotationCollection) super.setHomepages(aHomepageArray);
+    }
+
+    @Override
+    public AnnotationCollection setHomepages(final List<Homepage> aHomepageList) {
+        return (AnnotationCollection) super.setHomepages(aHomepageList);
+    }
+
+    @Override
+    public AnnotationCollection setThumbnails(final Thumbnail... aThumbnailArray) {
+        return (AnnotationCollection) super.setThumbnails(aThumbnailArray);
+    }
+
+    @Override
+    public AnnotationCollection setThumbnails(final List<Thumbnail> aThumbnailList) {
+        return (AnnotationCollection) super.setThumbnails(aThumbnailList);
+    }
+
+    @Override
+    public AnnotationCollection setID(final String aID) {
+        return (AnnotationCollection) super.setID(aID);
+    }
+
+    @Override
+    public AnnotationCollection setID(final URI aID) {
+        return (AnnotationCollection) super.setID(aID);
+    }
+
+    @Override
+    public AnnotationCollection setLogo(final String aLogo) {
+        return (AnnotationCollection) super.setLogo(aLogo);
+    }
+
+    @Override
+    public AnnotationCollection setLogo(final Logo aLogo) {
+        return (AnnotationCollection) super.setLogo(aLogo);
+    }
+
+    @Override
+    public AnnotationCollection setRights(final String... aRightsArray) {
+        return (AnnotationCollection) super.setRights(aRightsArray);
+    }
+
+    @Override
+    public AnnotationCollection setRights(final URI... aRightsArray) {
+        return (AnnotationCollection) super.setRights(aRightsArray);
+    }
+
+    @Override
+    public AnnotationCollection setRights(final List<URI> aRightsList) {
+        return (AnnotationCollection) super.setRights(aRightsList);
+    }
+
+    @Override
+    public AnnotationCollection setRequiredStatement(final RequiredStatement aStatement) {
+        return (AnnotationCollection) super.setRequiredStatement(aStatement);
+    }
+
+    @Override
+    public AnnotationCollection setSummary(final String aSummary) {
+        return (AnnotationCollection) super.setSummary(aSummary);
+    }
+
+    @Override
+    public AnnotationCollection setSummary(final Summary aSummary) {
+        return (AnnotationCollection) super.setSummary(aSummary);
+    }
+
+    @Override
+    public AnnotationCollection setMetadata(final Metadata aMetadata) {
+        return (AnnotationCollection) super.setMetadata(aMetadata);
+    }
+
+    @Override
+    public AnnotationCollection setLabel(final String aLabel) {
+        return (AnnotationCollection) super.setLabel(aLabel);
+    }
+
+    @Override
+    public AnnotationCollection setLabel(final Label aLabel) {
+        return (AnnotationCollection) super.setLabel(aLabel);
+    }
 }

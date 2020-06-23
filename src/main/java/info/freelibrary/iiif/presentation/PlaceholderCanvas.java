@@ -2,8 +2,20 @@
 package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+
+import info.freelibrary.iiif.presentation.properties.Behavior;
+import info.freelibrary.iiif.presentation.properties.Homepage;
 import info.freelibrary.iiif.presentation.properties.Label;
+import info.freelibrary.iiif.presentation.properties.Logo;
+import info.freelibrary.iiif.presentation.properties.Metadata;
+import info.freelibrary.iiif.presentation.properties.PartOf;
+import info.freelibrary.iiif.presentation.properties.Rendering;
+import info.freelibrary.iiif.presentation.properties.RequiredStatement;
+import info.freelibrary.iiif.presentation.properties.SeeAlso;
+import info.freelibrary.iiif.presentation.properties.Summary;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
@@ -17,7 +29,8 @@ import io.vertx.core.json.JsonObject;
  * initial presentation of a single resource. A placeholder Canvas is likely to have different dimensions to those of
  * the Canvas(es) of the resource that has the placeholderCanvas property.
  */
-public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas> {
+public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas> implements Resource<PlaceholderCanvas>,
+        CanvasResource<PlaceholderCanvas> {
 
     /**
      * Creates a new placeholder canvas.
@@ -64,6 +77,210 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas> {
     private PlaceholderCanvas() {
         super();
     }
+
+    @Override
+    public PlaceholderCanvas clearBehaviors() {
+        return (PlaceholderCanvas) super.clearBehaviors();
+    }
+
+    @Override
+    @JsonSetter(Constants.BEHAVIOR)
+    public PlaceholderCanvas setBehaviors(final Behavior... aBehaviorArray) {
+        return (PlaceholderCanvas) super.setBehaviors(aBehaviorArray);
+    }
+
+    @Override
+    @JsonSetter(Constants.BEHAVIOR)
+    public PlaceholderCanvas setBehaviors(final List<Behavior> aBehaviorList) {
+        return (PlaceholderCanvas) super.setBehaviors(aBehaviorList);
+    }
+
+    @Override
+    public PlaceholderCanvas addBehaviors(final Behavior... aBehaviorArray) {
+        return (PlaceholderCanvas) super.addBehaviors(aBehaviorArray);
+    }
+
+    @Override
+    public PlaceholderCanvas addBehaviors(final List<Behavior> aBehaviorList) {
+        return (PlaceholderCanvas) super.addBehaviors(aBehaviorList);
+    }
+
+    @Override
+    public PlaceholderCanvas setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
+        return (PlaceholderCanvas) super.setSeeAlsoRefs(aSeeAlsoArray);
+    }
+
+    @Override
+    public PlaceholderCanvas setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
+        return (PlaceholderCanvas) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public PlaceholderCanvas setPartOfs(final PartOf... aPartOfArray) {
+        return (PlaceholderCanvas) super.setPartOfs(aPartOfArray);
+    }
+
+    @Override
+    public PlaceholderCanvas setPartOfs(final List<PartOf> aPartOfList) {
+        return (PlaceholderCanvas) super.setPartOfs(aPartOfList);
+    }
+
+    @Override
+    public PlaceholderCanvas setRenderings(final Rendering... aRenderingArray) {
+        return (PlaceholderCanvas) super.setRenderings(aRenderingArray);
+    }
+
+    @Override
+    public PlaceholderCanvas setRenderings(final List<Rendering> aRenderingList) {
+        return (PlaceholderCanvas) super.setRenderings(aRenderingList);
+    }
+
+    @Override
+    public PlaceholderCanvas setHomepages(final Homepage... aHomepageArray) {
+        return (PlaceholderCanvas) super.setHomepages(aHomepageArray);
+    }
+
+    @Override
+    public PlaceholderCanvas setHomepages(final List<Homepage> aHomepageList) {
+        return (PlaceholderCanvas) super.setHomepages(aHomepageList);
+    }
+
+    @Override
+    public PlaceholderCanvas setThumbnails(final Thumbnail... aThumbnailArray) {
+        return (PlaceholderCanvas) super.setThumbnails(aThumbnailArray);
+    }
+
+    @Override
+    public PlaceholderCanvas setThumbnails(final List<Thumbnail> aThumbnailList) {
+        return (PlaceholderCanvas) super.setThumbnails(aThumbnailList);
+    }
+
+    @Override
+    public PlaceholderCanvas setID(final String aID) {
+        return (PlaceholderCanvas) super.setID(aID);
+    }
+
+    @Override
+    public PlaceholderCanvas setID(final URI aID) {
+        return (PlaceholderCanvas) super.setID(aID);
+    }
+
+    @Override
+    public PlaceholderCanvas setLogo(final String aLogo) {
+        return (PlaceholderCanvas) super.setLogo(aLogo);
+    }
+
+    @Override
+    public PlaceholderCanvas setLogo(final Logo aLogo) {
+        return (PlaceholderCanvas) super.setLogo(aLogo);
+    }
+
+    @Override
+    public PlaceholderCanvas setRights(final String... aRightsArray) {
+        return (PlaceholderCanvas) super.setRights(aRightsArray);
+    }
+
+    @Override
+    public PlaceholderCanvas setRights(final URI... aRightsArray) {
+        return (PlaceholderCanvas) super.setRights(aRightsArray);
+    }
+
+    @Override
+    public PlaceholderCanvas setRights(final List<URI> aRightsList) {
+        return (PlaceholderCanvas) super.setRights(aRightsList);
+    }
+
+    @Override
+    public PlaceholderCanvas setRequiredStatement(final RequiredStatement aStatement) {
+        return (PlaceholderCanvas) super.setRequiredStatement(aStatement);
+    }
+
+    @Override
+    public PlaceholderCanvas setSummary(final String aSummary) {
+        return (PlaceholderCanvas) super.setSummary(aSummary);
+    }
+
+    @Override
+    public PlaceholderCanvas setSummary(final Summary aSummary) {
+        return (PlaceholderCanvas) super.setSummary(aSummary);
+    }
+
+    @Override
+    public PlaceholderCanvas setMetadata(final Metadata aMetadata) {
+        return (PlaceholderCanvas) super.setMetadata(aMetadata);
+    }
+
+    @Override
+    public PlaceholderCanvas setLabel(final String aLabel) {
+        return (PlaceholderCanvas) super.setLabel(aLabel);
+    }
+
+    @Override
+    public PlaceholderCanvas setLabel(final Label aLabel) {
+        return (PlaceholderCanvas) super.setLabel(aLabel);
+    }
+
+    // begin AbstractCanvas
+
+    @Override
+    public PlaceholderCanvas setDuration(final float aDuration) {
+        return (PlaceholderCanvas) super.setDuration(aDuration);
+    }
+
+    @Override
+    public PlaceholderCanvas setWidthHeight(final int aWidth, final int aHeight) {
+        return (PlaceholderCanvas) super.setWidthHeight(aWidth, aHeight);
+    }
+
+    @Override
+    @SafeVarargs
+    public final PlaceholderCanvas addSupplementingPages(
+            final AnnotationPage<SupplementingAnnotation>... aPageArray) {
+        return (PlaceholderCanvas) super.addSupplementingPages(aPageArray);
+    }
+
+    @Override
+    public final PlaceholderCanvas addSupplementingPages(
+            final List<AnnotationPage<SupplementingAnnotation>> aPageList) {
+        return (PlaceholderCanvas) super.addSupplementingPages(aPageList);
+    }
+
+    @Override
+    @SafeVarargs
+    public final PlaceholderCanvas setSupplementingPages(
+            final AnnotationPage<SupplementingAnnotation>... aPageArray) {
+        return (PlaceholderCanvas) super.setSupplementingPages(aPageArray);
+    }
+
+    @Override
+    public final PlaceholderCanvas setSupplementingPages(
+            final List<AnnotationPage<SupplementingAnnotation>> aPageArray) {
+        return (PlaceholderCanvas) super.setSupplementingPages(aPageArray);
+    }
+
+    @Override
+    @SafeVarargs
+    public final PlaceholderCanvas addPaintingPages(final AnnotationPage<PaintingAnnotation>... aPageArray) {
+        return (PlaceholderCanvas) super.addPaintingPages(aPageArray);
+    }
+
+    @Override
+    public final PlaceholderCanvas addPaintingPages(final List<AnnotationPage<PaintingAnnotation>> aPageArray) {
+        return (PlaceholderCanvas) super.addPaintingPages(aPageArray);
+    }
+
+    @Override
+    @SafeVarargs
+    public final PlaceholderCanvas setPaintingPages(final AnnotationPage<PaintingAnnotation>... aPageArray) {
+        return (PlaceholderCanvas) super.setPaintingPages(aPageArray);
+    }
+
+    @Override
+    public final PlaceholderCanvas setPaintingPages(final List<AnnotationPage<PaintingAnnotation>> aPageArray) {
+        return (PlaceholderCanvas) super.setPaintingPages(aPageArray);
+    }
+
+    // end AbstractCanvas
 
     /**
      * Returns a PlaceholderCanvas from its JSON representation.

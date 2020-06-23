@@ -115,7 +115,7 @@ public final class TestUtils {
         if (aList) {
             final SequenceWriter sequenceWriter = mapper.writer().writeValuesAsArray(writer);
 
-            for (final Object object : (List) aObject) {
+            for (final Object object : (List<?>) aObject) {
                 sequenceWriter.write(object);
             }
             sequenceWriter.close();

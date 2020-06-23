@@ -2,13 +2,28 @@
 package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.google.common.net.MediaType;
+
+import info.freelibrary.iiif.presentation.properties.Behavior;
+import info.freelibrary.iiif.presentation.properties.Homepage;
+import info.freelibrary.iiif.presentation.properties.Label;
+import info.freelibrary.iiif.presentation.properties.Logo;
+import info.freelibrary.iiif.presentation.properties.Metadata;
+import info.freelibrary.iiif.presentation.properties.PartOf;
+import info.freelibrary.iiif.presentation.properties.Rendering;
+import info.freelibrary.iiif.presentation.properties.RequiredStatement;
+import info.freelibrary.iiif.presentation.properties.SeeAlso;
+import info.freelibrary.iiif.presentation.properties.Summary;
+import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
 
 /**
  * Canvas content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
  */
-public class CanvasContent extends AbstractContentResource<CanvasContent> implements ContentResource {
+public class CanvasContent extends AbstractContentResource<CanvasContent> implements ContentResource,
+        Resource<CanvasContent> {
 
     /**
      * Creates a canvas content resource.
@@ -38,4 +53,144 @@ public class CanvasContent extends AbstractContentResource<CanvasContent> implem
         super.setFormatMediaType(MediaType.JSON_UTF_8);
     }
 
+    @Override
+    public CanvasContent clearBehaviors() {
+        return (CanvasContent) super.clearBehaviors();
+    }
+
+    @Override
+    @JsonSetter(Constants.BEHAVIOR)
+    public CanvasContent setBehaviors(final Behavior... aBehaviorArray) {
+        return (CanvasContent) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorArray));
+    }
+
+    @Override
+    public CanvasContent setBehaviors(final List<Behavior> aBehaviorList) {
+        return (CanvasContent) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorList));
+    }
+
+    @Override
+    public CanvasContent addBehaviors(final Behavior... aBehaviorArray) {
+        return (CanvasContent) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorArray));
+    }
+
+    @Override
+    public CanvasContent addBehaviors(final List<Behavior> aBehaviorList) {
+        return (CanvasContent) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorList));
+    }
+
+    @Override
+    public CanvasContent setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
+        return (CanvasContent) super.setSeeAlsoRefs(aSeeAlsoArray);
+    }
+
+    @Override
+    public CanvasContent setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
+        return (CanvasContent) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public CanvasContent setPartOfs(final PartOf... aPartOfArray) {
+        return (CanvasContent) super.setPartOfs(aPartOfArray);
+    }
+
+    @Override
+    public CanvasContent setPartOfs(final List<PartOf> aPartOfList) {
+        return (CanvasContent) super.setPartOfs(aPartOfList);
+    }
+
+    @Override
+    public CanvasContent setRenderings(final Rendering... aRenderingArray) {
+        return (CanvasContent) super.setRenderings(aRenderingArray);
+    }
+
+    @Override
+    public CanvasContent setRenderings(final List<Rendering> aRenderingList) {
+        return (CanvasContent) super.setRenderings(aRenderingList);
+    }
+
+    @Override
+    public CanvasContent setHomepages(final Homepage... aHomepageArray) {
+        return (CanvasContent) super.setHomepages(aHomepageArray);
+    }
+
+    @Override
+    public CanvasContent setHomepages(final List<Homepage> aHomepageList) {
+        return (CanvasContent) super.setHomepages(aHomepageList);
+    }
+
+    @Override
+    public CanvasContent setThumbnails(final Thumbnail... aThumbnailArray) {
+        return (CanvasContent) super.setThumbnails(aThumbnailArray);
+    }
+
+    @Override
+    public CanvasContent setThumbnails(final List<Thumbnail> aThumbnailList) {
+        return (CanvasContent) super.setThumbnails(aThumbnailList);
+    }
+
+    @Override
+    public CanvasContent setID(final String aID) {
+        return (CanvasContent) super.setID(aID);
+    }
+
+    @Override
+    public CanvasContent setID(final URI aID) {
+        return (CanvasContent) super.setID(aID);
+    }
+
+    @Override
+    public CanvasContent setLogo(final String aLogo) {
+        return (CanvasContent) super.setLogo(aLogo);
+    }
+
+    @Override
+    public CanvasContent setLogo(final Logo aLogo) {
+        return (CanvasContent) super.setLogo(aLogo);
+    }
+
+    @Override
+    public CanvasContent setRights(final String... aRightsArray) {
+        return (CanvasContent) super.setRights(aRightsArray);
+    }
+
+    @Override
+    public CanvasContent setRights(final URI... aRightsArray) {
+        return (CanvasContent) super.setRights(aRightsArray);
+    }
+
+    @Override
+    public CanvasContent setRights(final List<URI> aRightsList) {
+        return (CanvasContent) super.setRights(aRightsList);
+    }
+
+    @Override
+    public CanvasContent setRequiredStatement(final RequiredStatement aStatement) {
+        return (CanvasContent) super.setRequiredStatement(aStatement);
+    }
+
+    @Override
+    public CanvasContent setSummary(final String aSummary) {
+        return (CanvasContent) super.setSummary(aSummary);
+    }
+
+    @Override
+    public CanvasContent setSummary(final Summary aSummary) {
+        return (CanvasContent) super.setSummary(aSummary);
+    }
+
+    @Override
+    public CanvasContent setMetadata(final Metadata aMetadata) {
+        return (CanvasContent) super.setMetadata(aMetadata);
+    }
+
+    @Override
+    public CanvasContent setLabel(final String aLabel) {
+        return (CanvasContent) super.setLabel(aLabel);
+    }
+
+    @Override
+    public CanvasContent setLabel(final Label aLabel) {
+        return (CanvasContent) super.setLabel(aLabel);
+    }
 }

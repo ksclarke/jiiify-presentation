@@ -115,6 +115,8 @@ public final class Constants {
 
     public static final String ACCOMPANYING_CANVAS = "accompanyingCanvas";
 
+    public static final String UNCHECKED = "unchecked";
+
     private Constants() {
         super();
     }

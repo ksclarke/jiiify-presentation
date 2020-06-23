@@ -81,8 +81,7 @@ public class Label extends I18nProperty<Label> {
      */
     @Override
     public Label addStrings(final String... aStringArray) {
-        super.addI18ns(I18nUtils.createI18ns(false, aStringArray));
-        return this;
+        return (Label) super.addI18ns(I18nUtils.createI18ns(false, aStringArray));
     }
 
     /**
@@ -93,8 +92,7 @@ public class Label extends I18nProperty<Label> {
      */
     @Override
     public Label addI18ns(final I18n... aI18nArray) {
-        super.addI18ns(I18nUtils.validateI18ns(false, aI18nArray));
-        return this;
+        return (Label) super.addI18ns(I18nUtils.validateI18ns(false, aI18nArray));
     }
 
     @Override

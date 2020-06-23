@@ -138,8 +138,8 @@ public class Metadata extends I18nEntry {
      * @throws IllegalArgumentException If the supplied entry isn't a metadata entry
      */
     private void checkEntryType(final Metadata.Entry aMetadataEntry) throws IllegalArgumentException {
-        final Class outerClass = aMetadataEntry.getOuterClass();
-        final Class thisClass = getClass();
+        final Class<?> outerClass = aMetadataEntry.getOuterClass();
+        final Class<?> thisClass = getClass();
 
         if (!outerClass.equals(thisClass)) {
             throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_034, outerClass, thisClass));

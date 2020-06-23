@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
@@ -11,6 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.iiif.presentation.properties.Behavior;
+import info.freelibrary.iiif.presentation.properties.Homepage;
+import info.freelibrary.iiif.presentation.properties.Label;
+import info.freelibrary.iiif.presentation.properties.Logo;
+import info.freelibrary.iiif.presentation.properties.Metadata;
+import info.freelibrary.iiif.presentation.properties.PartOf;
+import info.freelibrary.iiif.presentation.properties.Rendering;
+import info.freelibrary.iiif.presentation.properties.RequiredStatement;
+import info.freelibrary.iiif.presentation.properties.SeeAlso;
+import info.freelibrary.iiif.presentation.properties.Summary;
+import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.services.ImageInfoService;
 
 import io.vertx.core.json.Json;
@@ -21,7 +33,7 @@ import io.vertx.core.json.JsonObject;
  */
 @JsonPropertyOrder({ Constants.TYPE, Constants.LABEL, Constants.ID, Constants.THUMBNAIL, Constants.WIDTH,
     Constants.HEIGHT, Constants.FORMAT, Constants.LANGUAGE, Constants.SERVICE })
-public class ImageContent extends AbstractContentResource<ImageContent> implements Thumbnail {
+public class ImageContent extends AbstractContentResource<ImageContent> implements Thumbnail, Resource<ImageContent> {
 
     private Optional<ImageInfoService> myService;
 
@@ -54,6 +66,147 @@ public class ImageContent extends AbstractContentResource<ImageContent> implemen
      */
     private ImageContent() {
         super(ResourceTypes.IMAGE);
+    }
+
+    @Override
+    public ImageContent clearBehaviors() {
+        return (ImageContent) super.clearBehaviors();
+    }
+
+    @Override
+    @JsonSetter(Constants.BEHAVIOR)
+    public ImageContent setBehaviors(final Behavior... aBehaviorArray) {
+        return (ImageContent) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorArray));
+    }
+
+    @Override
+    public ImageContent setBehaviors(final List<Behavior> aBehaviorList) {
+        return (ImageContent) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorList));
+    }
+
+    @Override
+    public ImageContent addBehaviors(final Behavior... aBehaviorArray) {
+        return (ImageContent) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorArray));
+    }
+
+    @Override
+    public ImageContent addBehaviors(final List<Behavior> aBehaviorList) {
+        return (ImageContent) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorList));
+    }
+
+    @Override
+    public ImageContent setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
+        return (ImageContent) super.setSeeAlsoRefs(aSeeAlsoArray);
+    }
+
+    @Override
+    public ImageContent setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
+        return (ImageContent) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public ImageContent setPartOfs(final PartOf... aPartOfArray) {
+        return (ImageContent) super.setPartOfs(aPartOfArray);
+    }
+
+    @Override
+    public ImageContent setPartOfs(final List<PartOf> aPartOfList) {
+        return (ImageContent) super.setPartOfs(aPartOfList);
+    }
+
+    @Override
+    public ImageContent setRenderings(final Rendering... aRenderingArray) {
+        return (ImageContent) super.setRenderings(aRenderingArray);
+    }
+
+    @Override
+    public ImageContent setRenderings(final List<Rendering> aRenderingList) {
+        return (ImageContent) super.setRenderings(aRenderingList);
+    }
+
+    @Override
+    public ImageContent setHomepages(final Homepage... aHomepageArray) {
+        return (ImageContent) super.setHomepages(aHomepageArray);
+    }
+
+    @Override
+    public ImageContent setHomepages(final List<Homepage> aHomepageList) {
+        return (ImageContent) super.setHomepages(aHomepageList);
+    }
+
+    @Override
+    public ImageContent setThumbnails(final Thumbnail... aThumbnailArray) {
+        return (ImageContent) super.setThumbnails(aThumbnailArray);
+    }
+
+    @Override
+    public ImageContent setThumbnails(final List<Thumbnail> aThumbnailList) {
+        return (ImageContent) super.setThumbnails(aThumbnailList);
+    }
+
+    @Override
+    public ImageContent setID(final String aID) {
+        return (ImageContent) super.setID(aID);
+    }
+
+    @Override
+    public ImageContent setID(final URI aID) {
+        return (ImageContent) super.setID(aID);
+    }
+
+    @Override
+    public ImageContent setLogo(final String aLogo) {
+        return (ImageContent) super.setLogo(aLogo);
+    }
+
+    @Override
+    public ImageContent setLogo(final Logo aLogo) {
+        return (ImageContent) super.setLogo(aLogo);
+    }
+
+    @Override
+    public ImageContent setRights(final String... aRightsArray) {
+        return (ImageContent) super.setRights(aRightsArray);
+    }
+
+    @Override
+    public ImageContent setRights(final URI... aRightsArray) {
+        return (ImageContent) super.setRights(aRightsArray);
+    }
+
+    @Override
+    public ImageContent setRights(final List<URI> aRightsList) {
+        return (ImageContent) super.setRights(aRightsList);
+    }
+
+    @Override
+    public ImageContent setRequiredStatement(final RequiredStatement aStatement) {
+        return (ImageContent) super.setRequiredStatement(aStatement);
+    }
+
+    @Override
+    public ImageContent setSummary(final String aSummary) {
+        return (ImageContent) super.setSummary(aSummary);
+    }
+
+    @Override
+    public ImageContent setSummary(final Summary aSummary) {
+        return (ImageContent) super.setSummary(aSummary);
+    }
+
+    @Override
+    public ImageContent setMetadata(final Metadata aMetadata) {
+        return (ImageContent) super.setMetadata(aMetadata);
+    }
+
+    @Override
+    public ImageContent setLabel(final String aLabel) {
+        return (ImageContent) super.setLabel(aLabel);
+    }
+
+    @Override
+    public ImageContent setLabel(final Label aLabel) {
+        return (ImageContent) super.setLabel(aLabel);
     }
 
     /**

@@ -82,7 +82,7 @@ abstract class I18nEntry {
          * @return The outer class
          */
         @JsonIgnore
-        protected Class getOuterClass() {
+        protected Class<?> getOuterClass() {
             return I18nEntry.this.getClass();
         }
 

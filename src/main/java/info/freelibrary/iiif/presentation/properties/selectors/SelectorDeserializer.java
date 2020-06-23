@@ -14,7 +14,7 @@ import info.freelibrary.iiif.presentation.Constants;
 /**
  * A deserializer for classes that implement the Selector interface.
  */
-public class SelectorDeserializer extends StdDeserializer<Selector> {
+class SelectorDeserializer extends StdDeserializer<Selector> {
 
     /**
      * The <code>serialVersionUID</code> for SelectorDeserializer.
@@ -24,7 +24,7 @@ public class SelectorDeserializer extends StdDeserializer<Selector> {
     /**
      * Creates a new deserializer.
      */
-    public SelectorDeserializer() {
+    SelectorDeserializer() {
         this(null);
     }
 

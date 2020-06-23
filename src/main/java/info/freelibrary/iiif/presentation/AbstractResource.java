@@ -1,0 +1,591 @@
+
+package info.freelibrary.iiif.presentation;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import info.freelibrary.iiif.presentation.properties.Behavior;
+import info.freelibrary.iiif.presentation.properties.Homepage;
+import info.freelibrary.iiif.presentation.properties.Label;
+import info.freelibrary.iiif.presentation.properties.Logo;
+import info.freelibrary.iiif.presentation.properties.Metadata;
+import info.freelibrary.iiif.presentation.properties.PartOf;
+import info.freelibrary.iiif.presentation.properties.Rendering;
+import info.freelibrary.iiif.presentation.properties.RequiredStatement;
+import info.freelibrary.iiif.presentation.properties.SeeAlso;
+import info.freelibrary.iiif.presentation.properties.Summary;
+import info.freelibrary.iiif.presentation.properties.behaviors.DisjointChecker;
+import info.freelibrary.iiif.presentation.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+
+import io.vertx.core.json.jackson.DatabindCodec;
+
+/**
+ * A resource that can be used as a base for more specific IIIF presentation resources.
+ */
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonPropertyOrder({ Constants.CONTEXT, Constants.TYPE, Constants.ID, Constants.LABEL, Constants.SUMMARY,
+    Constants.REQUIRED_STATEMENT, Constants.RIGHTS, Constants.PART_OF, Constants.HOMEPAGE, Constants.LOGO,
+    Constants.THUMBNAIL, Constants.METADATA, Constants.ITEMS, Constants.SERVICE })
+abstract class AbstractResource<T extends AbstractResource<T>> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractResource.class, Constants.BUNDLE_NAME);
+
+    // We initialize this here so it loads for manifests and collections
+    static {
+        DatabindCodec.mapper().findAndRegisterModules();
+    }
+
+    @JsonProperty(Constants.TYPE)
+    protected String myType;
+
+    @JsonProperty(Constants.ID)
+    private URI myID;
+
+    private Label myLabel;
+
+    private List<PartOf> myPartOfs;
+
+    private Metadata myMetadata;
+
+    private Summary mySummary;
+
+    @JsonProperty(Constants.THUMBNAIL)
+    @JsonDeserialize(contentUsing = ThumbnailDeserializer.class)
+    private List<Thumbnail> myThumbnails;
+
+    private RequiredStatement myRequiredStatement;
+
+    private List<URI> myRights;
+
+    private List<Homepage> myHomepages;
+
+    private Logo myLogo;
+
+    private List<Rendering> myRenderings;
+
+    private List<Behavior> myBehaviors;
+
+    private List<SeeAlso> mySeeAlsoRefs;
+
+    /**
+     * Creates a new resource from the supplied type.
+     *
+     * @param aType A resource type
+     */
+    protected AbstractResource(final String aType) {
+        myType = checkNotNull(aType);
+    }
+
+    /**
+     * Creates a new resource from the supplied ID and type.
+     *
+     * @param aType A resource type
+     * @param aID A URI ID in string form
+     */
+    protected AbstractResource(final String aType, final String aID) {
+        myType = checkNotNull(aType);
+        myID = URI.create(aID);
+    }
+
+    /**
+     * Creates a new resource from the supplied ID and type.
+     *
+     * @param aType A resource type
+     * @param aID A URI ID
+     */
+    protected AbstractResource(final String aType, final URI aID) {
+        myType = checkNotNull(aType);
+        myID = checkNotNull(aID);
+    }
+
+    /**
+     * Creates a new resource from a supplied ID, type, and label.
+     *
+     * @param aType A type of resource
+     * @param aID A URI ID in string form
+     * @param aLabel A label in string form
+     */
+    protected AbstractResource(final String aType, final String aID, final String aLabel) {
+        myType = checkNotNull(aType);
+        myID = URI.create(aID);
+        myLabel = new Label(aLabel);
+    }
+
+    /**
+     * Creates a new resource from a supplied ID and label.
+     *
+     * @param aType A type of resource
+     * @param aID A URI ID
+     * @param aLabel A label for the resource
+     */
+    protected AbstractResource(final String aType, final URI aID, final Label aLabel) {
+        myType = checkNotNull(aType);
+        myID = checkNotNull(aID);
+        myLabel = checkNotNull(aLabel);
+    }
+
+    /**
+     * Creates a new resource from string values.
+     *
+     * @param aType A type in string form
+     * @param aID An ID in string form
+     * @param aLabel A label in string form
+     * @param aMetadata A metadata property
+     * @param aSummary A summary property in string form
+     * @param aThumbnail A thumbnail
+     */
+    protected AbstractResource(final String aType, final String aID, final String aLabel, final Metadata aMetadata,
+            final String aSummary, final Thumbnail aThumbnail) {
+        this(aType, URI.create(aID), new Label(aLabel), aMetadata, new Summary(aSummary), aThumbnail);
+    }
+
+    /**
+     * Creates a new resource from properties.
+     *
+     * @param aType A resource type
+     * @param aID A URI ID
+     * @param aLabel A label
+     * @param aMetadata A metadata property
+     * @param aSummary A summary property
+     * @param aThumbnail A thumbnail
+     */
+    protected AbstractResource(final String aType, final URI aID, final Label aLabel, final Metadata aMetadata,
+            final Summary aSummary, final Thumbnail aThumbnail) {
+        myType = checkNotNull(aType);
+        myID = checkNotNull(aID);
+        myLabel = checkNotNull(aLabel);
+        myMetadata = checkNotNull(aMetadata);
+        mySummary = checkNotNull(aSummary);
+        setThumbnails(checkNotNull(aThumbnail));
+    }
+
+    /**
+     * Gets the label.
+     *
+     * @return The label
+     */
+    @JsonUnwrapped
+    public Label getLabel() {
+        return myLabel;
+    }
+
+    @JsonIgnore
+    protected AbstractResource<T> setLabel(final String aLabel) {
+        myLabel = new Label(aLabel);
+        return this;
+    }
+
+    @JsonSetter(Constants.LABEL)
+    protected AbstractResource<T> setLabel(final Label aLabel) {
+        checkNotNull(aLabel);
+        myLabel = aLabel;
+        return this;
+    }
+
+    /**
+     * Gets the metadata.
+     *
+     * @return The metadata
+     */
+    @JsonGetter(Constants.METADATA)
+    public Metadata getMetadata() {
+        return myMetadata;
+    }
+
+    @JsonSetter(Constants.METADATA)
+    protected AbstractResource<T> setMetadata(final Metadata aMetadata) {
+        checkNotNull(aMetadata);
+        myMetadata = aMetadata;
+        return this;
+    }
+
+    /**
+     * Gets the summary.
+     *
+     * @return The summary
+     */
+    @JsonUnwrapped
+    public Summary getSummary() {
+        return mySummary;
+    }
+
+    @JsonIgnore
+    protected AbstractResource<T> setSummary(final String aSummary) {
+        mySummary = new Summary(aSummary);
+        return this;
+    }
+
+    protected AbstractResource<T> setSummary(final Summary aSummary) {
+        checkNotNull(aSummary);
+        mySummary = aSummary;
+        return this;
+    }
+
+    /**
+     * Gets a list of resource thumbnails, initializing the list if this hasn't been done already.
+     *
+     * @return The resource's thumbnails
+     */
+    @JsonGetter(Constants.THUMBNAIL)
+    public List<Thumbnail> getThumbnails() {
+        if (myThumbnails == null) {
+            myThumbnails = new ArrayList<>();
+        }
+
+        return myThumbnails;
+    }
+
+    @JsonSetter(Constants.THUMBNAIL)
+    protected AbstractResource<T> setThumbnails(final Thumbnail... aThumbnailArray) {
+        return setThumbnails(Arrays.asList(aThumbnailArray));
+    }
+
+    @JsonIgnore
+    protected AbstractResource<T> setThumbnails(final List<Thumbnail> aThumbnailList) {
+        final List<Thumbnail> thumbnails = getThumbnails();
+
+        checkNotNull(aThumbnailList);
+        thumbnails.clear();
+        thumbnails.addAll(aThumbnailList);
+
+        return this;
+    }
+
+    /**
+     * Gets the required statement.
+     *
+     * @return The required statement
+     */
+    @JsonGetter(Constants.REQUIRED_STATEMENT)
+    public RequiredStatement getRequiredStatement() {
+        return myRequiredStatement;
+    }
+
+    @JsonSetter(Constants.REQUIRED_STATEMENT)
+    protected AbstractResource<T> setRequiredStatement(final RequiredStatement aStatement) {
+        checkNotNull(aStatement);
+        myRequiredStatement = aStatement;
+        return this;
+    }
+
+    /**
+     * Gets the rights.
+     *
+     * @return The rights
+     */
+    @JsonProperty
+    public List<URI> getRights() {
+        if (myRights == null) {
+            myRights = new ArrayList<>();
+        }
+
+        return myRights;
+    }
+
+    @JsonProperty
+    protected AbstractResource<T> setRights(final List<URI> aRightsList) {
+        checkNotNull(aRightsList);
+        myRights = aRightsList;
+        return this;
+    }
+
+    @JsonIgnore
+    protected AbstractResource<T> setRights(final String... aRightsArray) {
+        final List<URI> list = getRights();
+
+        checkNotNull(aRightsArray);
+        list.clear();
+
+        for (final String rights : aRightsArray) {
+            list.add(URI.create(rights));
+        }
+
+        return this;
+    }
+
+    @JsonIgnore
+    protected AbstractResource<T> setRights(final URI... aRightsArray) {
+        final List<URI> list = getRights();
+
+        checkNotNull(aRightsArray);
+        list.clear();
+        Collections.addAll(list, aRightsArray);
+
+        return this;
+    }
+
+    @JsonSetter(Constants.HOMEPAGE)
+    protected AbstractResource<T> setHomepages(final Homepage... aHomepageArray) {
+        return setHomepages(Arrays.asList(aHomepageArray));
+    }
+
+    @JsonIgnore
+    protected AbstractResource<T> setHomepages(final List<Homepage> aHomepageList) {
+        final List<Homepage> homepages = getHomepages();
+
+        checkNotNull(aHomepageList);
+        homepages.clear();
+        homepages.addAll(aHomepageList);
+
+        return this;
+    }
+
+    /**
+     * Gets a list of resource homepages, initializing the list if this hasn't been done already.
+     *
+     * @return The resource's homepages
+     */
+    @JsonGetter(Constants.HOMEPAGE)
+    public List<Homepage> getHomepages() {
+        if (myHomepages == null) {
+            myHomepages = new ArrayList<>();
+        }
+
+        return myHomepages;
+    }
+
+    /**
+     * Gets the logo.
+     *
+     * @return The logo
+     */
+    @JsonUnwrapped
+    public Logo getLogo() {
+        return myLogo;
+    }
+
+    @JsonSetter(Constants.LOGO)
+    protected AbstractResource<T> setLogo(final Logo aLogo) {
+        checkNotNull(aLogo);
+        myLogo = aLogo;
+        return this;
+    }
+
+    @JsonIgnore
+    protected AbstractResource<T> setLogo(final String aLogo) {
+        myLogo = new Logo(aLogo);
+        return this;
+    }
+
+    @JsonSetter(Constants.RENDERING)
+    protected AbstractResource<T> setRenderings(final Rendering... aRenderingArray) {
+        return setRenderings(Arrays.asList(aRenderingArray));
+    }
+
+    @JsonIgnore
+    protected AbstractResource<T> setRenderings(final List<Rendering> aRenderingList) {
+        final List<Rendering> renderings = getRenderings();
+
+        checkNotNull(renderings);
+        renderings.clear();
+        renderings.addAll(aRenderingList);
+
+        return this;
+    }
+
+    /**
+     * Gets a list of resource renderings, initializing the list if this hasn't been done already.
+     *
+     * @return The resource's renderings
+     */
+    @JsonGetter(Constants.RENDERING)
+    public List<Rendering> getRenderings() {
+        if (myRenderings == null) {
+            myRenderings = new ArrayList<>();
+        }
+
+        return myRenderings;
+    }
+
+    /**
+     * Gets the ID.
+     *
+     * @return The ID
+     */
+    @JsonGetter(Constants.ID)
+    public URI getID() {
+        return myID;
+    }
+
+    @JsonIgnore
+    protected AbstractResource<T> setID(final String aID) {
+        myID = URI.create(aID);
+        return this;
+    }
+
+    @JsonIgnore
+    protected AbstractResource<T> setID(final URI aID) {
+        checkNotNull(aID);
+        myID = aID;
+        return this;
+    }
+
+    @JsonSetter(Constants.PART_OF)
+    protected AbstractResource<T> setPartOfs(final PartOf... aPartOfArray) {
+        return setPartOfs(Arrays.asList(aPartOfArray));
+    }
+
+    @JsonIgnore
+    protected AbstractResource<T> setPartOfs(final List<PartOf> aPartOfList) {
+        final List<PartOf> partOfs = getPartOfs();
+
+        checkNotNull(aPartOfList);
+        partOfs.clear();
+        partOfs.addAll(aPartOfList);
+
+        return this;
+    }
+
+    /**
+     * Gets a list of resource partOfs, initializing the list if this hasn't been done already.
+     *
+     * @return The resource's partOfs
+     */
+    @JsonGetter(Constants.PART_OF)
+    public List<PartOf> getPartOfs() {
+        if (myPartOfs == null) {
+            myPartOfs = new ArrayList<>();
+        }
+
+        return myPartOfs;
+    }
+
+    /**
+     * Gets the type.
+     *
+     * @return The type
+     */
+    @JsonGetter(Constants.TYPE)
+    public String getType() {
+        return myType;
+    }
+
+    @JsonSetter(Constants.BEHAVIOR)
+    protected AbstractResource<T> setBehaviors(final Behavior... aBehaviorArray) {
+        final List<Behavior> behaviors = getBehaviorsList();
+
+        checkNotNull(aBehaviorArray);
+        behaviors.clear();
+        behaviors.addAll(Arrays.asList(aBehaviorArray));
+
+        return this;
+    }
+
+    @JsonIgnore
+    protected AbstractResource<T> setBehaviors(final List<Behavior> aBehaviorList) {
+        // We implement this so it can be overridden, but it should never actually be called because all behavior
+        // setting should go through checkBehaviors() first, which returns an array for setBehaviors(Behavior...)
+        throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_057));
+    }
+
+    /**
+     * Gets the resource's behaviors in an unmodifiable list.
+     *
+     * @return The resource's behaviors
+     */
+    @JsonGetter(Constants.BEHAVIOR)
+    public List<Behavior> getBehaviors() {
+        return Collections.unmodifiableList(getBehaviorsList());
+    }
+
+    protected AbstractResource<T> addBehaviors(final Behavior... aBehaviorArray) {
+        getBehaviorsList().addAll(Arrays.asList(aBehaviorArray));
+        return this;
+    }
+
+    protected AbstractResource<T> addBehaviors(final List<Behavior> aBehaviorList) {
+        // We implement this so it can be overridden, but it should never actually be called because all behavior
+        // adding should go through checkBehaviors() first, which returns an array for addBehaviors(Behavior...)
+        throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_058));
+    }
+
+    protected AbstractResource<T> clearBehaviors() {
+        getBehaviorsList().clear();
+        return this;
+    }
+
+    /**
+     * Gets see also reference(s).
+     *
+     * @return The see also reference(s)
+     */
+    @JsonGetter(Constants.SEE_ALSO)
+    public List<SeeAlso> getSeeAlsoRefs() {
+        if (mySeeAlsoRefs == null) {
+            mySeeAlsoRefs = new ArrayList<>();
+        }
+
+        return mySeeAlsoRefs;
+    }
+
+    @JsonIgnore
+    protected AbstractResource<T> setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
+        Collections.addAll(getSeeAlsoRefs(), aSeeAlsoArray);
+        return this;
+    }
+
+    @JsonSetter(Constants.SEE_ALSO)
+    protected AbstractResource<T> setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
+        getSeeAlsoRefs().addAll(aSeeAlsoList);
+        return this;
+    }
+
+    /**
+     * Checks that the supplied behaviors are all implementations of a particular class.
+     *
+     * @param aClass A class that implements Behavior
+     * @param aCleanComparison If the comparison does not check pre-existing behaviors
+     * @param aBehaviorList A list of behaviors
+     */
+    protected Behavior[] checkBehaviors(final Class<?> aClass, final boolean aCleanComparison,
+            final List<Behavior> aBehaviorList) {
+        return checkBehaviors(aClass, aCleanComparison, aBehaviorList.toArray(new Behavior[0]));
+    }
+
+    /**
+     * Checks that the supplied behaviors are all implementations of a particular class.
+     *
+     * @param aClass A class that implements Behavior
+     * @param aCleanComparison If the comparison does not check pre-existing behaviors
+     * @param aBehaviorArray An array of behaviors
+     */
+    protected Behavior[] checkBehaviors(final Class<?> aClass, final boolean aCleanComparison,
+            final Behavior... aBehaviorArray) {
+        if (aCleanComparison) {
+            new DisjointChecker().check(aClass, aBehaviorArray);
+        } else {
+            new DisjointChecker(getBehaviorsList()).check(aClass, aBehaviorArray);
+        }
+
+        return aBehaviorArray;
+    }
+
+    /**
+     * Gets a list of resource behaviors, initializing the list if this hasn't been done already.
+     *
+     * @return A list of resource behaviors
+     */
+    private List<Behavior> getBehaviorsList() {
+        if (myBehaviors == null) {
+            myBehaviors = new ArrayList<>();
+        }
+
+        return myBehaviors;
+    }
+}

@@ -24,7 +24,8 @@ import info.freelibrary.util.LoggerFactory;
  * An abstract content resource class that specific content types can extend.
  */
 @JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.FORMAT, Constants.LANGUAGE })
-abstract class AbstractContentResource<T extends Resource<T>> extends Resource<T> implements Localized<T> {
+abstract class AbstractContentResource<T extends AbstractResource<AbstractContentResource<T>>> extends
+        AbstractResource<AbstractContentResource<T>> implements Localized<T> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractContentResource.class,
             Constants.BUNDLE_NAME);
@@ -87,9 +88,9 @@ abstract class AbstractContentResource<T extends Resource<T>> extends Resource<T
      * @return The content resource
      */
     @JsonSetter(Constants.FORMAT)
-    public T setFormat(final String aMediaType) {
+    protected AbstractContentResource<T> setFormat(final String aMediaType) {
         setMediaTypeFromExt(aMediaType);
-        return (T) this;
+        return this;
     }
 
     /**
@@ -99,9 +100,9 @@ abstract class AbstractContentResource<T extends Resource<T>> extends Resource<T
      * @return The content resource
      */
     @JsonIgnore
-    public T setFormatMediaType(final MediaType aMediaType) {
+    protected AbstractContentResource<T> setFormatMediaType(final MediaType aMediaType) {
         myFormat = Optional.ofNullable(aMediaType);
-        return (T) this;
+        return this;
     }
 
     /**

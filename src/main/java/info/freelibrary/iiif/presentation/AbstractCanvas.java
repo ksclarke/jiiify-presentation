@@ -3,6 +3,7 @@ package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,7 +19,6 @@ import info.freelibrary.iiif.presentation.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.StringUtils;
 
 import io.vertx.core.json.JsonObject;
 
@@ -28,7 +28,7 @@ import io.vertx.core.json.JsonObject;
  * from standards like PDF and HTML, or applications like Photoshop and Powerpoint, where the display starts from a
  * blank canvas and images, text and other resources are &quot;painted&quot; on to it.
  */
-abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableResource<T> {
+abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableResource<AbstractCanvas<T>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractCanvas.class, Constants.BUNDLE_NAME);
 
@@ -89,24 +89,29 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
 
     @Override
     @JsonSetter(Constants.BEHAVIOR)
-    public T setBehaviors(final Behavior... aBehaviorArray) {
-        return super.setBehaviors(checkBehaviors(CanvasBehavior.class, true, aBehaviorArray));
+    protected AbstractCanvas<T> setBehaviors(final Behavior... aBehaviorArray) {
+        return (AbstractCanvas<T>) super.setBehaviors(checkBehaviors(CanvasBehavior.class, true, aBehaviorArray));
     }
 
     @Override
-    public T addBehaviors(final Behavior... aBehaviorArray) {
-        return super.addBehaviors(checkBehaviors(CanvasBehavior.class, false, aBehaviorArray));
+    @JsonSetter(Constants.BEHAVIOR)
+    protected AbstractCanvas<T> setBehaviors(final List<Behavior> aBehaviorList) {
+        return (AbstractCanvas<T>) super.setBehaviors(checkBehaviors(CanvasBehavior.class, true, aBehaviorList));
     }
 
-    /**
-     * Sets the canvas' annotation pages for painting annotations.
-     *
-     * @param aPageArray An array of annotation pages
-     * @return The canvas
-     */
+    @Override
+    protected AbstractCanvas<T> addBehaviors(final Behavior... aBehaviorArray) {
+        return (AbstractCanvas<T>) super.addBehaviors(checkBehaviors(CanvasBehavior.class, false, aBehaviorArray));
+    }
+
+    @Override
+    protected AbstractCanvas<T> addBehaviors(final List<Behavior> aBehaviorList) {
+        return (AbstractCanvas<T>) super.addBehaviors(checkBehaviors(CanvasBehavior.class, false, aBehaviorList));
+    }
+
     @JsonSetter(Constants.ITEMS)
-    @SafeVarargs
-    public final T setPaintingPages(final AnnotationPage<PaintingAnnotation>... aPageArray) {
+    @SuppressWarnings("unchecked") // Moved SafeVarargs to extending classes where method can be final
+    protected AbstractCanvas<T> setPaintingPages(final AnnotationPage<PaintingAnnotation>... aPageArray) {
         if (myPaintingPageList != null) {
             myPaintingPageList.clear();
         }
@@ -114,20 +119,31 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         return addPaintingPages(aPageArray);
     }
 
-    /**
-     * Adds an annotation page for painting annotations to the canvas.
-     *
-     * @param aPageArray An annotation page
-     * @return The canvas
-     */
-    @SafeVarargs
-    public final T addPaintingPages(final AnnotationPage<PaintingAnnotation>... aPageArray) {
+    @JsonIgnore
+    protected AbstractCanvas<T> setPaintingPages(final List<AnnotationPage<PaintingAnnotation>> aPageList) {
+        if (myPaintingPageList != null) {
+            myPaintingPageList.clear();
+        }
+
+        return addPaintingPages(aPageList);
+    }
+
+    @SuppressWarnings("unchecked") // Moved SafeVarargs to extending classes where method can be final
+    protected AbstractCanvas<T> addPaintingPages(final AnnotationPage<PaintingAnnotation>... aPageArray) {
         if (!Collections.addAll(getPaintingPages(), aPageArray)) {
-            final String message = LOGGER.getMessage(MessageCodes.JPA_049, StringUtils.toString(aPageArray, ' '));
+            final String message = LOGGER.getMessage(MessageCodes.JPA_049, getListIDs(Arrays.asList(aPageArray)));
             throw new UnsupportedOperationException(message);
         }
 
-        return (T) this;
+        return this;
+    }
+
+    protected AbstractCanvas<T> addPaintingPages(final List<AnnotationPage<PaintingAnnotation>> aPageList) {
+        if (!getPaintingPages().addAll(aPageList)) {
+            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_049, getListIDs(aPageList)));
+        }
+
+        return this;
     }
 
     /**
@@ -144,15 +160,9 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         return myPaintingPageList;
     }
 
-    /**
-     * Sets the canvas' annotation pages for non-painting annotations.
-     *
-     * @param aPageArray An array of annotation pages
-     * @return The canvas
-     */
     @JsonSetter(Constants.ANNOTATIONS)
-    @SafeVarargs
-    public final T setSupplementingPages(final AnnotationPage<SupplementingAnnotation>... aPageArray) {
+    @SuppressWarnings("unchecked") // Moved SafeVarargs to extending classes where method can be final
+    protected AbstractCanvas<T> setSupplementingPages(final AnnotationPage<SupplementingAnnotation>... aPageArray) {
         if (mySupplementingPageList != null) {
             mySupplementingPageList.clear();
         }
@@ -160,20 +170,31 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         return addSupplementingPages(aPageArray);
     }
 
-    /**
-     * Adds an annotation page for non-painting annotations to the canvas.
-     *
-     * @param aPageArray An annotation page
-     * @return The canvas
-     */
-    @SafeVarargs
-    public final T addSupplementingPages(final AnnotationPage<SupplementingAnnotation>... aPageArray) {
-        if (!Collections.addAll(getSupplementingPages(), aPageArray)) {
-            final String message = LOGGER.getMessage(MessageCodes.JPA_049, StringUtils.toString(aPageArray, ' '));
-            throw new UnsupportedOperationException(message);
+    @JsonIgnore
+    protected AbstractCanvas<T> setSupplementingPages(final List<AnnotationPage<SupplementingAnnotation>> aPageList) {
+        if (mySupplementingPageList != null) {
+            mySupplementingPageList.clear();
         }
 
-        return (T) this;
+        return addSupplementingPages(aPageList);
+    }
+
+    @SuppressWarnings("unchecked") // Moved SafeVarargs to extending classes where method can be final
+    protected AbstractCanvas<T> addSupplementingPages(final AnnotationPage<SupplementingAnnotation>... aPageArray) {
+        if (!Collections.addAll(getSupplementingPages(), aPageArray)) {
+            final List<AnnotationPage<SupplementingAnnotation>> list = Arrays.asList(aPageArray);
+            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_049, getListIDs(list)));
+        }
+
+        return this;
+    }
+
+    protected AbstractCanvas<T> addSupplementingPages(final List<AnnotationPage<SupplementingAnnotation>> aPageList) {
+        if (!getSupplementingPages().addAll(aPageList)) {
+            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_049, getListIDs(aPageList)));
+        }
+
+        return this;
     }
 
     /**
@@ -212,20 +233,13 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         return myHeight;
     }
 
-    /**
-     * Sets the width of the canvas.
-     *
-     * @param aWidth The desired width of the canvas
-     * @param aHeight The desired height of the canvas
-     * @return The canvas
-     */
     @JsonIgnore
-    public T setWidthHeight(final int aWidth, final int aHeight) {
+    protected AbstractCanvas<T> setWidthHeight(final int aWidth, final int aHeight) {
         if ((aWidth > 0) && (aHeight > 0)) {
             myWidth = aWidth;
             myHeight = aHeight;
 
-            return (T) this;
+            return this;
         } else {
             throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_011, aWidth, aHeight));
         }
@@ -242,17 +256,11 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         return myDuration;
     }
 
-    /**
-     * Sets the duration of the canvas. Duration must be positive and finite.
-     *
-     * @param aDuration A canvas duration
-     * @return The canvas
-     */
     @JsonSetter(Constants.DURATION)
-    public T setDuration(final float aDuration) {
+    protected AbstractCanvas<T> setDuration(final float aDuration) {
         if ((aDuration > 0) && (Double.isFinite(aDuration))) {
             myDuration = aDuration;
-            return (T) this;
+            return this;
         } else {
             throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_024, aDuration));
         }
@@ -289,9 +297,9 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      * @return The canvas
      */
     @JsonSetter(Constants.WIDTH)
-    private T setWidth(final int aWidth) {
+    private AbstractCanvas<T> setWidth(final int aWidth) {
         myWidth = aWidth;
-        return (T) this;
+        return this;
     }
 
     /**
@@ -301,8 +309,28 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      * @return The canvas
      */
     @JsonSetter(Constants.HEIGHT)
-    private T setHeight(final int aHeight) {
+    private AbstractCanvas<T> setHeight(final int aHeight) {
         myHeight = aHeight;
-        return (T) this;
+        return this;
+    }
+
+    /**
+     * Get the IDs of the annotation pages in the supplied list and return them as a single string.
+     *
+     * @param aAnnotationPageList A list of annotation pages
+     * @return A string containing the IDs
+     */
+    private <A extends Annotation<A>> String getListIDs(final List<AnnotationPage<A>> aAnnotationPageList) {
+        final StringBuilder builder = new StringBuilder();
+
+        for (final AnnotationPage<A> page : aAnnotationPageList) {
+            builder.append(page.getID()).append('|');
+        }
+
+        if (builder.length() > 0) {
+            builder.deleteCharAt(builder.length() - 1);
+        }
+
+        return builder.toString();
     }
 }

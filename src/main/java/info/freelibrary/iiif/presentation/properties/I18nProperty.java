@@ -55,7 +55,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      * @return True if the property's value was set
      */
     @JsonIgnore
-    public T setStrings(final String... aStringArray) {
+    protected I18nProperty<T> setStrings(final String... aStringArray) {
         myI18ns.clear();
         return addStrings(aStringArray);
     }
@@ -66,7 +66,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      * @param aI18nArray An array of I18n(s).
      * @return True if the property's value was set
      */
-    public T setI18ns(final I18n... aI18nArray) {
+    protected I18nProperty<T> setI18ns(final I18n... aI18nArray) {
         myI18ns.clear();
         return addI18ns(aI18nArray);
     }
@@ -99,7 +99,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      * @param aStringArray An array of strings to add to the property
      * @return The property
      */
-    public T addStrings(final String... aStringArray) {
+    protected I18nProperty<T> addStrings(final String... aStringArray) {
         Objects.requireNonNull(aStringArray, MessageCodes.JPA_001);
 
         for (final String string : aStringArray) {
@@ -110,7 +110,7 @@ class I18nProperty<T extends I18nProperty<T>> {
             }
         }
 
-        return (T) this;
+        return this;
     }
 
     /**
@@ -119,7 +119,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      * @param aI18nArray A list of internationalizations
      * @return The property
      */
-    public T addI18ns(final I18n... aI18nArray) {
+    protected I18nProperty<T> addI18ns(final I18n... aI18nArray) {
         Objects.requireNonNull(aI18nArray, MessageCodes.JPA_001);
 
         for (final I18n i18n : aI18nArray) {
@@ -130,7 +130,7 @@ class I18nProperty<T extends I18nProperty<T>> {
             }
         }
 
-        return (T) this;
+        return this;
     }
 
     /**
@@ -145,7 +145,7 @@ class I18nProperty<T extends I18nProperty<T>> {
     @Override
     public boolean equals(final Object aObject) {
         if (aObject != null && getClass().getName().equals(aObject.getClass().getName())) {
-            return toMap().equals(((I18nProperty) aObject).toMap());
+            return toMap().equals(((I18nProperty<?>) aObject).toMap());
         } else {
             return false;
         }

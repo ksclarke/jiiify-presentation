@@ -39,9 +39,9 @@ import io.vertx.core.json.jackson.DatabindCodec;
     Constants.SUMMARY, Constants.REQUIRED_STATEMENT, Constants.RIGHTS, Constants.PART_OF, Constants.HOMEPAGE,
     Constants.LOGO, Constants.THUMBNAIL, Constants.METADATA, Constants.ITEMS, Constants.SERVICE, Constants.TIMEMODE,
     Constants.BODY, Constants.TARGET })
-abstract class AbstractAnnotation extends Resource<AbstractAnnotation> {
+public class Annotation<T extends Annotation<T>> extends AbstractResource<Annotation<T>> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractAnnotation.class, Constants.BUNDLE_NAME);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Annotation.class, Constants.BUNDLE_NAME);
 
     private static final String RDF_NIL = "rdf:nil";
 
@@ -61,7 +61,7 @@ abstract class AbstractAnnotation extends Resource<AbstractAnnotation> {
      * @param aID An ID
      * @param aCanvas A canvas
      */
-    protected AbstractAnnotation(final URI aID, final Canvas aCanvas) {
+    protected Annotation(final URI aID, final Canvas aCanvas) {
         super(ResourceTypes.ANNOTATION, aID);
         myTarget = aCanvas.getID();
     }
@@ -72,7 +72,7 @@ abstract class AbstractAnnotation extends Resource<AbstractAnnotation> {
      * @param aID An ID in string form
      * @param aCanvas A canvas
      */
-    protected AbstractAnnotation(final String aID, final Canvas aCanvas) {
+    protected Annotation(final String aID, final Canvas aCanvas) {
         super(ResourceTypes.ANNOTATION, URI.create(aID));
         myTarget = aCanvas.getID();
     }
@@ -80,7 +80,7 @@ abstract class AbstractAnnotation extends Resource<AbstractAnnotation> {
     /**
      * Creates an annotation.
      */
-    protected AbstractAnnotation() {
+    protected Annotation() {
         super(ResourceTypes.ANNOTATION);
     }
 
@@ -98,37 +98,28 @@ abstract class AbstractAnnotation extends Resource<AbstractAnnotation> {
         return myBody;
     }
 
-    /**
-     * Clears the content resources.
-     *
-     * @return This annotation
-     */
-    protected AbstractAnnotation clearBody() {
+    protected Annotation<T> clearBody() {
         getBody().clear();
         return this;
     }
 
-    /**
-     * Sets the content resources.
-     *
-     * @param aContentArray An array of content resources
-     * @return This annotation
-     */
     @JsonIgnore
-    protected AbstractAnnotation setBody(final ContentResource... aContentArray) {
-        clearBody().addBody(aContentArray);
+    protected Annotation<T> setBody(final ContentResource... aContentArray) {
+        return clearBody().addBody(aContentArray);
+    }
+
+    @JsonIgnore
+    protected Annotation<T> setBody(final List<ContentResource> aContentArray) {
+        return setBody(aContentArray.toArray(new ContentResource[] {}));
+    }
+
+    protected Annotation<T> addBody(final ContentResource... aContentArray) {
+        Collections.addAll(getBody(), checkNotNull(aContentArray));
         return this;
     }
 
-    /**
-     * Adds content resources to this annotation.
-     *
-     * @param aContentArray An array of content resources
-     * @return This annotation
-     */
-    protected AbstractAnnotation addBody(final ContentResource... aContentArray) {
-        Collections.addAll(getBody(), checkNotNull(aContentArray));
-        return this;
+    protected Annotation<T> addBody(final List<ContentResource> aContentArray) {
+        return addBody(aContentArray.toArray(new ContentResource[] {}));
     }
 
     /**
@@ -141,26 +132,14 @@ abstract class AbstractAnnotation extends Resource<AbstractAnnotation> {
         return myTarget;
     }
 
-    /**
-     * Sets the target of this annotation.
-     *
-     * @param aURI A target URI
-     * @return This annotation
-     */
     @JsonIgnore
-    protected AbstractAnnotation setTarget(final URI aURI) {
+    protected Annotation<T> setTarget(final URI aURI) {
         myTarget = checkNotNull(aURI);
         return this;
     }
 
-    /**
-     * Sets the target of this annotation in string form.
-     *
-     * @param aURI A target URI supplied in string form
-     * @return This annotation
-     */
     @JsonSetter(Constants.TARGET)
-    protected AbstractAnnotation setTarget(final String aURI) {
+    protected Annotation<T> setTarget(final String aURI) {
         myTarget = checkNotNull(URI.create(aURI));
         return this;
     }
@@ -176,35 +155,34 @@ abstract class AbstractAnnotation extends Resource<AbstractAnnotation> {
     }
 
     /**
-     * Sets the motivation of the annotation. This method is just used by Jackson's deserialization process. It
-     * doesn't actually change the hard-coded motivation value.
+     * Sets the motivation of the annotation.
      *
      * @param aMotivation A motivation in string form
      */
     @JsonSetter(Constants.MOTIVATION)
-    abstract void setMotivation(String aMotivation);
-
-    /**
-     * Sets the behaviors of the annotation.
-     *
-     * @param aBehaviorArray An array of behaviors
-     * @return This annotation
-     */
-    @Override
-    @JsonSetter(Constants.BEHAVIOR)
-    protected AbstractAnnotation setBehaviors(final Behavior... aBehaviorArray) {
-        return super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorArray));
+    protected void setMotivation(final String aMotivation) {
+        myMotivation = aMotivation;
     }
 
-    /**
-     * Adds the behaviors to the annotation.
-     *
-     * @param aBehaviorArray An array of behaviors
-     * @return This annotation
-     */
     @Override
-    protected AbstractAnnotation addBehaviors(final Behavior... aBehaviorArray) {
-        return super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorArray));
+    @JsonSetter(Constants.BEHAVIOR)
+    protected Annotation<T> setBehaviors(final Behavior... aBehaviorArray) {
+        return (Annotation<T>) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorArray));
+    }
+
+    @Override
+    protected Annotation<T> setBehaviors(final List<Behavior> aBehaviorList) {
+        return (Annotation<T>) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorList));
+    }
+
+    @Override
+    protected Annotation<T> addBehaviors(final Behavior... aBehaviorArray) {
+        return (Annotation<T>) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorArray));
+    }
+
+    @Override
+    protected Annotation<T> addBehaviors(final List<Behavior> aBehaviorList) {
+        return (Annotation<T>) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorList));
     }
 
     /**
@@ -216,13 +194,7 @@ abstract class AbstractAnnotation extends Resource<AbstractAnnotation> {
         return myTimeMode;
     }
 
-    /**
-     * Sets the time mode.
-     *
-     * @param aTimeMode A time mode
-     * @return This annotation
-     */
-    protected AbstractAnnotation setTimeMode(final TimeMode aTimeMode) {
+    protected Annotation<T> setTimeMode(final TimeMode aTimeMode) {
         myTimeMode = aTimeMode;
         return this;
     }
@@ -275,15 +247,15 @@ abstract class AbstractAnnotation extends Resource<AbstractAnnotation> {
             // If it's not an items array, it's a single content resource
             if (itemsObject == null) {
                 deserializeContentMap(aContentMap);
-            } else {
-                for (final Object object : (List<Map<String, Object>>) itemsObject) {
+            } else if (itemsObject instanceof List<?>) {
+                for (final Object object : (List<?>) itemsObject) {
                     if (object instanceof String && RDF_NIL.equals(object.toString())) {
                         getBody().add(null);
-                    } else if (object instanceof Map) {
-                        deserializeContentMap((Map<String, Object>) object);
+                    } else if (object instanceof Map<?, ?>) {
+                        deserializeContentMap((Map<?, ?>) object);
                     }
                 }
-            }
+            } // Else, nothing. All content resources should be lists now.
         }
     }
 
@@ -292,7 +264,7 @@ abstract class AbstractAnnotation extends Resource<AbstractAnnotation> {
      *
      * @param aMap A content resources map
      */
-    private void deserializeContentMap(final Map<String, Object> aMap) {
+    private void deserializeContentMap(final Map<?, ?> aMap) {
         final String type = (String) aMap.get(Constants.TYPE);
         final ObjectMapper mapper = DatabindCodec.mapper();
 

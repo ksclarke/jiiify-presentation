@@ -16,8 +16,14 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.properties.Behavior;
+import info.freelibrary.iiif.presentation.properties.Homepage;
 import info.freelibrary.iiif.presentation.properties.Label;
+import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Metadata;
+import info.freelibrary.iiif.presentation.properties.PartOf;
+import info.freelibrary.iiif.presentation.properties.Rendering;
+import info.freelibrary.iiif.presentation.properties.RequiredStatement;
+import info.freelibrary.iiif.presentation.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.properties.Summary;
 import info.freelibrary.iiif.presentation.properties.behaviors.CollectionBehavior;
 import info.freelibrary.iiif.presentation.services.Service;
@@ -32,7 +38,7 @@ import io.vertx.core.json.JsonObject;
  * in a hierarchical structure, potentially with its own descriptive information. They can also provide clients with a
  * means to locate all of the manifests known to the publishing institution.
  */
-public class Collection extends NavigableResource<Collection> {
+public class Collection extends NavigableResource<Collection> implements Resource<Collection> {
 
     private Optional<AccompanyingCanvas> myAccompanyingCanvas;
 
@@ -40,7 +46,7 @@ public class Collection extends NavigableResource<Collection> {
 
     private List<Item> myItems;
 
-    private Service myService;
+    private Service<?> myService;
 
     /**
      * Creates a new collection.
@@ -147,7 +153,7 @@ public class Collection extends NavigableResource<Collection> {
      * @return A service
      */
     @JsonGetter(Constants.SERVICE)
-    public Service getService() {
+    public Service<?> getService() {
         return myService;
     }
 
@@ -158,20 +164,36 @@ public class Collection extends NavigableResource<Collection> {
      * @return The collection
      */
     @JsonSetter(Constants.SERVICE)
-    public Collection setService(final Service aService) {
+    public Collection setService(final Service<?> aService) {
         myService = checkNotNull(aService);
         return this;
     }
 
     @Override
+    public Collection clearBehaviors() {
+        return (Collection) super.clearBehaviors();
+    }
+
+    @Override
     @JsonSetter(Constants.BEHAVIOR)
     public Collection setBehaviors(final Behavior... aBehaviorArray) {
-        return super.setBehaviors(checkBehaviors(CollectionBehavior.class, true, aBehaviorArray));
+        return (Collection) super.setBehaviors(checkBehaviors(CollectionBehavior.class, true, aBehaviorArray));
+    }
+
+    @Override
+    @JsonSetter(Constants.BEHAVIOR)
+    public Collection setBehaviors(final List<Behavior> aBehaviorList) {
+        return (Collection) super.setBehaviors(checkBehaviors(CollectionBehavior.class, true, aBehaviorList));
     }
 
     @Override
     public Collection addBehaviors(final Behavior... aBehaviorArray) {
-        return super.addBehaviors(checkBehaviors(CollectionBehavior.class, false, aBehaviorArray));
+        return (Collection) super.addBehaviors(checkBehaviors(CollectionBehavior.class, false, aBehaviorArray));
+    }
+
+    @Override
+    public Collection addBehaviors(final List<Behavior> aBehaviorList) {
+        return (Collection) super.addBehaviors(checkBehaviors(CollectionBehavior.class, false, aBehaviorList));
     }
 
     /**
@@ -220,6 +242,121 @@ public class Collection extends NavigableResource<Collection> {
     public Collection setItems(final List<Item> aItemList) {
         myItems = checkNotNull(aItemList);
         return this;
+    }
+
+    @Override
+    public Collection setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
+        return (Collection) super.setSeeAlsoRefs(aSeeAlsoArray);
+    }
+
+    @Override
+    public Collection setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
+        return (Collection) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public Collection setPartOfs(final PartOf... aPartOfArray) {
+        return (Collection) super.setPartOfs(aPartOfArray);
+    }
+
+    @Override
+    public Collection setPartOfs(final List<PartOf> aPartOfList) {
+        return (Collection) super.setPartOfs(aPartOfList);
+    }
+
+    @Override
+    public Collection setRenderings(final Rendering... aRenderingArray) {
+        return (Collection) super.setRenderings(aRenderingArray);
+    }
+
+    @Override
+    public Collection setRenderings(final List<Rendering> aRenderingList) {
+        return (Collection) super.setRenderings(aRenderingList);
+    }
+
+    @Override
+    public Collection setHomepages(final Homepage... aHomepageArray) {
+        return (Collection) super.setHomepages(aHomepageArray);
+    }
+
+    @Override
+    public Collection setHomepages(final List<Homepage> aHomepageList) {
+        return (Collection) super.setHomepages(aHomepageList);
+    }
+
+    @Override
+    public Collection setThumbnails(final Thumbnail... aThumbnailArray) {
+        return (Collection) super.setThumbnails(aThumbnailArray);
+    }
+
+    @Override
+    public Collection setThumbnails(final List<Thumbnail> aThumbnailList) {
+        return (Collection) super.setThumbnails(aThumbnailList);
+    }
+
+    @Override
+    public Collection setID(final String aID) {
+        return (Collection) super.setID(aID);
+    }
+
+    @Override
+    public Collection setID(final URI aID) {
+        return (Collection) super.setID(aID);
+    }
+
+    @Override
+    public Collection setLogo(final String aLogo) {
+        return (Collection) super.setLogo(aLogo);
+    }
+
+    @Override
+    public Collection setLogo(final Logo aLogo) {
+        return (Collection) super.setLogo(aLogo);
+    }
+
+    @Override
+    public Collection setRights(final String... aRightsArray) {
+        return (Collection) super.setRights(aRightsArray);
+    }
+
+    @Override
+    public Collection setRights(final URI... aRightsArray) {
+        return (Collection) super.setRights(aRightsArray);
+    }
+
+    @Override
+    public Collection setRights(final List<URI> aRightsList) {
+        return (Collection) super.setRights(aRightsList);
+    }
+
+    @Override
+    public Collection setRequiredStatement(final RequiredStatement aStatement) {
+        return (Collection) super.setRequiredStatement(aStatement);
+    }
+
+    @Override
+    public Collection setSummary(final String aSummary) {
+        return (Collection) super.setSummary(aSummary);
+    }
+
+    @Override
+    public Collection setSummary(final Summary aSummary) {
+        return (Collection) super.setSummary(aSummary);
+    }
+
+    @Override
+    public Collection setMetadata(final Metadata aMetadata) {
+        return (Collection) super.setMetadata(aMetadata);
+    }
+
+    @Override
+    public Collection setLabel(final String aLabel) {
+        return (Collection) super.setLabel(aLabel);
+    }
+
+    @Override
+    public Collection setLabel(final Label aLabel) {
+        return (Collection) super.setLabel(aLabel);
     }
 
     /**
@@ -272,6 +409,7 @@ public class Collection extends NavigableResource<Collection> {
          * The type of collection item.
          */
         public enum Type {
+
             Manifest(ResourceTypes.MANIFEST), Collection(ResourceTypes.COLLECTION);
 
             /**

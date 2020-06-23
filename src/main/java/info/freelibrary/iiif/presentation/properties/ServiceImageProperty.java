@@ -37,14 +37,14 @@ class ServiceImageProperty<T extends ServiceImageProperty<T>> {
      * @param aIdArray An array of URI IDs, in string form, for the image
      * @return The property
      */
-    protected T addImage(final String... aIdArray) {
+    protected ServiceImageProperty<T> addImage(final String... aIdArray) {
         for (final String id : aIdArray) {
             if (!getImages().add(new ServiceImage(id))) {
                 throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_048, id));
             }
         }
 
-        return (T) this;
+        return this;
     }
 
     /**
@@ -53,7 +53,7 @@ class ServiceImageProperty<T extends ServiceImageProperty<T>> {
      * @param aIdArray An array of URI IDs for the image
      * @return The property
      */
-    protected T addImage(final URI... aIdArray) {
+    protected ServiceImageProperty<T> addImage(final URI... aIdArray) {
         for (final URI id : aIdArray) {
             final ServiceImage serviceImage = new ServiceImage(id);
 
@@ -62,7 +62,7 @@ class ServiceImageProperty<T extends ServiceImageProperty<T>> {
             }
         }
 
-        return (T) this;
+        return this;
     }
 
     /**
@@ -73,14 +73,14 @@ class ServiceImageProperty<T extends ServiceImageProperty<T>> {
      * @param aHeight A image height
      * @return The property
      */
-    public T addImage(final String aID, final int aWidth, final int aHeight) {
+    protected ServiceImageProperty<T> addImage(final String aID, final int aWidth, final int aHeight) {
         final ServiceImage serviceImage = new ServiceImage(aID, aWidth, aHeight);
 
         if (!getImages().add(serviceImage)) {
             throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_048, serviceImage));
         }
 
-        return (T) this;
+        return this;
     }
 
     /**
@@ -91,14 +91,14 @@ class ServiceImageProperty<T extends ServiceImageProperty<T>> {
      * @param aHeight A image height
      * @return The property
      */
-    public T addImage(final URI aURI, final int aWidth, final int aHeight) {
+    protected ServiceImageProperty<T> addImage(final URI aURI, final int aWidth, final int aHeight) {
         final ServiceImage serviceImage = new ServiceImage(aURI, aWidth, aHeight);
 
         if (!getImages().add(serviceImage)) {
             throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_048, serviceImage));
         }
 
-        return (T) this;
+        return this;
     }
 
     /**
@@ -108,14 +108,14 @@ class ServiceImageProperty<T extends ServiceImageProperty<T>> {
      * @param aService A service for the image
      * @return The property
      */
-    public T addImage(final String aID, final ImageInfoService aService) {
+    protected ServiceImageProperty<T> addImage(final String aID, final ImageInfoService aService) {
         final ServiceImage serviceImage = new ServiceImage(aID, aService);
 
         if (!getImages().add(serviceImage)) {
             throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_048, serviceImage));
         }
 
-        return (T) this;
+        return this;
     }
 
     /**
@@ -125,14 +125,14 @@ class ServiceImageProperty<T extends ServiceImageProperty<T>> {
      * @param aService A service for the image
      * @return The property
      */
-    public T addImage(final URI aID, final ImageInfoService aService) {
+    protected ServiceImageProperty<T> addImage(final URI aID, final ImageInfoService aService) {
         final ServiceImage serviceImage = new ServiceImage(aID, aService);
 
         if (!getImages().add(serviceImage)) {
             throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_048, serviceImage));
         }
 
-        return (T) this;
+        return this;
     }
 
     /**
@@ -217,13 +217,13 @@ class ServiceImageProperty<T extends ServiceImageProperty<T>> {
      * @param aImageArray An array of service images
      * @return The property
      */
-    protected T addImage(final ServiceImage... aImageArray) {
+    protected ServiceImageProperty<T> addImage(final ServiceImage... aImageArray) {
         if (!Collections.addAll(getImages(), aImageArray)) {
             final String message = LOGGER.getMessage(MessageCodes.JPA_048, StringUtils.toString(aImageArray, ' '));
             throw new UnsupportedOperationException(message);
         }
 
-        return (T) this;
+        return this;
     }
 
     /**

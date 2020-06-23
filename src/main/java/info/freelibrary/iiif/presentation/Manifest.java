@@ -15,8 +15,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.properties.Behavior;
+import info.freelibrary.iiif.presentation.properties.Homepage;
 import info.freelibrary.iiif.presentation.properties.Label;
+import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Metadata;
+import info.freelibrary.iiif.presentation.properties.PartOf;
+import info.freelibrary.iiif.presentation.properties.Rendering;
+import info.freelibrary.iiif.presentation.properties.RequiredStatement;
+import info.freelibrary.iiif.presentation.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.properties.StartCanvas;
 import info.freelibrary.iiif.presentation.properties.Summary;
 import info.freelibrary.iiif.presentation.properties.ViewingDirection;
@@ -36,7 +42,7 @@ import io.vertx.core.json.JsonObject;
  * descriptive information about the object or the intellectual work that it conveys. Each manifest describes how to
  * present a single object such as a book, a photograph, or a statue.
  */
-public class Manifest extends NavigableResource<Manifest> {
+public class Manifest extends NavigableResource<Manifest> implements Resource<Manifest> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Manifest.class, Constants.BUNDLE_NAME);
 
@@ -54,7 +60,7 @@ public class Manifest extends NavigableResource<Manifest> {
 
     private ViewingDirection myViewingDirection;
 
-    private Service myService;
+    private Service<?> myService;
 
     /**
      * Creates a new manifest.
@@ -162,7 +168,7 @@ public class Manifest extends NavigableResource<Manifest> {
      * @return A service
      */
     @JsonGetter(Constants.SERVICE)
-    public Service getService() {
+    public Service<?> getService() {
         return myService;
     }
 
@@ -173,20 +179,36 @@ public class Manifest extends NavigableResource<Manifest> {
      * @return The manifest
      */
     @JsonSetter(Constants.SERVICE)
-    public Manifest setService(final Service aService) {
+    public Manifest setService(final Service<?> aService) {
         myService = aService;
         return this;
     }
 
     @Override
+    public Manifest clearBehaviors() {
+        return (Manifest) super.clearBehaviors();
+    }
+
+    @Override
     @JsonSetter(Constants.BEHAVIOR)
     public Manifest setBehaviors(final Behavior... aBehaviorArray) {
-        return super.setBehaviors(checkBehaviors(ManifestBehavior.class, true, aBehaviorArray));
+        return (Manifest) super.setBehaviors(checkBehaviors(ManifestBehavior.class, true, aBehaviorArray));
+    }
+
+    @Override
+    @JsonSetter(Constants.BEHAVIOR)
+    public Manifest setBehaviors(final List<Behavior> aBehaviorList) {
+        return (Manifest) super.setBehaviors(checkBehaviors(ManifestBehavior.class, true, aBehaviorList));
     }
 
     @Override
     public Manifest addBehaviors(final Behavior... aBehaviorArray) {
-        return super.addBehaviors(checkBehaviors(ManifestBehavior.class, false, aBehaviorArray));
+        return (Manifest) super.addBehaviors(checkBehaviors(ManifestBehavior.class, false, aBehaviorArray));
+    }
+
+    @Override
+    public Manifest addBehaviors(final List<Behavior> aBehaviorList) {
+        return (Manifest) super.addBehaviors(checkBehaviors(ManifestBehavior.class, false, aBehaviorList));
     }
 
     /**
@@ -267,7 +289,7 @@ public class Manifest extends NavigableResource<Manifest> {
             }
         }
 
-        Collections.sort(myContexts, new ContextListComparator());
+        Collections.sort(myContexts, new ContextListComparator<>());
         return this;
     }
 
@@ -288,7 +310,7 @@ public class Manifest extends NavigableResource<Manifest> {
             }
         }
 
-        Collections.sort(myContexts, new ContextListComparator());
+        Collections.sort(myContexts, new ContextListComparator<>());
         return this;
     }
 
@@ -398,6 +420,121 @@ public class Manifest extends NavigableResource<Manifest> {
     public Manifest setRange(final Range aRange) {
         myRange = Optional.ofNullable(aRange);
         return this;
+    }
+
+    @Override
+    public Manifest setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
+        return (Manifest) super.setSeeAlsoRefs(aSeeAlsoArray);
+    }
+
+    @Override
+    public Manifest setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
+        return (Manifest) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public Manifest setPartOfs(final PartOf... aPartOfArray) {
+        return (Manifest) super.setPartOfs(aPartOfArray);
+    }
+
+    @Override
+    public Manifest setPartOfs(final List<PartOf> aPartOfList) {
+        return (Manifest) super.setPartOfs(aPartOfList);
+    }
+
+    @Override
+    public Manifest setRenderings(final Rendering... aRenderingArray) {
+        return (Manifest) super.setRenderings(aRenderingArray);
+    }
+
+    @Override
+    public Manifest setRenderings(final List<Rendering> aRenderingList) {
+        return (Manifest) super.setRenderings(aRenderingList);
+    }
+
+    @Override
+    public Manifest setHomepages(final Homepage... aHomepageArray) {
+        return (Manifest) super.setHomepages(aHomepageArray);
+    }
+
+    @Override
+    public Manifest setHomepages(final List<Homepage> aHomepageList) {
+        return (Manifest) super.setHomepages(aHomepageList);
+    }
+
+    @Override
+    public Manifest setThumbnails(final Thumbnail... aThumbnailArray) {
+        return (Manifest) super.setThumbnails(aThumbnailArray);
+    }
+
+    @Override
+    public Manifest setThumbnails(final List<Thumbnail> aThumbnailList) {
+        return (Manifest) super.setThumbnails(aThumbnailList);
+    }
+
+    @Override
+    public Manifest setID(final String aID) {
+        return (Manifest) super.setID(aID);
+    }
+
+    @Override
+    public Manifest setID(final URI aID) {
+        return (Manifest) super.setID(aID);
+    }
+
+    @Override
+    public Manifest setLogo(final String aLogo) {
+        return (Manifest) super.setLogo(aLogo);
+    }
+
+    @Override
+    public Manifest setLogo(final Logo aLogo) {
+        return (Manifest) super.setLogo(aLogo);
+    }
+
+    @Override
+    public Manifest setRights(final String... aRightsArray) {
+        return (Manifest) super.setRights(aRightsArray);
+    }
+
+    @Override
+    public Manifest setRights(final URI... aRightsArray) {
+        return (Manifest) super.setRights(aRightsArray);
+    }
+
+    @Override
+    public Manifest setRights(final List<URI> aRightsList) {
+        return (Manifest) super.setRights(aRightsList);
+    }
+
+    @Override
+    public Manifest setRequiredStatement(final RequiredStatement aStatement) {
+        return (Manifest) super.setRequiredStatement(aStatement);
+    }
+
+    @Override
+    public Manifest setSummary(final String aSummary) {
+        return (Manifest) super.setSummary(aSummary);
+    }
+
+    @Override
+    public Manifest setSummary(final Summary aSummary) {
+        return (Manifest) super.setSummary(aSummary);
+    }
+
+    @Override
+    public Manifest setMetadata(final Metadata aMetadata) {
+        return (Manifest) super.setMetadata(aMetadata);
+    }
+
+    @Override
+    public Manifest setLabel(final String aLabel) {
+        return (Manifest) super.setLabel(aLabel);
+    }
+
+    @Override
+    public Manifest setLabel(final Label aLabel) {
+        return (Manifest) super.setLabel(aLabel);
     }
 
     /**

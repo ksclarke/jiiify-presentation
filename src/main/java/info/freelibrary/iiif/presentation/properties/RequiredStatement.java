@@ -137,8 +137,8 @@ public class RequiredStatement extends I18nEntry {
      * @throws IllegalArgumentException If the supplied entry isn't a required statement entry
      */
     private void checkEntryType(final RequiredStatement.Entry aReqStatementEntry) throws IllegalArgumentException {
-        final Class outerClass = aReqStatementEntry.getOuterClass();
-        final Class thisClass = getClass();
+        final Class<?> outerClass = aReqStatementEntry.getOuterClass();
+        final Class<?> thisClass = getClass();
 
         if (!outerClass.equals(thisClass)) {
             throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_034, outerClass, thisClass));

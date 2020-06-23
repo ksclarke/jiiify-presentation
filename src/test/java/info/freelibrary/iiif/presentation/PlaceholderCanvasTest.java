@@ -194,7 +194,7 @@ public class PlaceholderCanvasTest extends AbstractTest {
      * @return A JSON string
      * @throws IOException If there is trouble reading the test fixture
      */
-    private String getFixture(final Class aClass) throws IOException {
+    private String getFixture(final Class<?> aClass) throws IOException {
         return StringUtils.read(new File(DIR, StringUtils.format(FILE, aClass.getSimpleName().toLowerCase(
                 Locale.US))));
     }

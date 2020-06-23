@@ -14,7 +14,7 @@ import info.freelibrary.iiif.presentation.properties.Summary;
 /**
  * A navigable resource.
  */
-class NavigableResource<T extends Resource<T>> extends Resource<T> {
+class NavigableResource<T extends NavigableResource<T>> extends AbstractResource<NavigableResource<T>> {
 
     private NavDate myNavDate;
 
@@ -106,8 +106,8 @@ class NavigableResource<T extends Resource<T>> extends Resource<T> {
      * @return The navigable resource
      */
     @JsonSetter(Constants.NAV_DATE)
-    protected T setNavDate(final NavDate aNavDate) {
+    protected NavigableResource<T> setNavDate(final NavDate aNavDate) {
         myNavDate = aNavDate;
-        return (T) this;
+        return this;
     }
 }
