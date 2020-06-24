@@ -14,8 +14,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.AbstractTest;
+import info.freelibrary.iiif.presentation.ImageContent;
 import info.freelibrary.iiif.presentation.ResourceTypes;
-import info.freelibrary.iiif.presentation.ServiceImage;
 import info.freelibrary.util.StringUtils;
 
 import io.vertx.core.json.JsonObject;
@@ -33,7 +33,7 @@ public class ProviderTest extends AbstractTest {
 
     private Homepage myHomepage;
 
-    private ServiceImage<Logo> myLogo;
+    private ImageContent myLogo;
 
     private SeeAlso mySeeAlso;
 
@@ -45,7 +45,7 @@ public class ProviderTest extends AbstractTest {
         myID = URI.create(UUID.randomUUID().toString());
         myLabel = new Label(LOREM_IPSUM.getTitle(5));
         myHomepage = new Homepage(LOREM_IPSUM.getUrl(), LOREM_IPSUM.getTitle(5));
-        myLogo = new ServiceImage<>(StringUtils.format("http://library.ucla.edu/images/{}/image.jpg", myID));
+        myLogo = new ImageContent(StringUtils.format("http://library.ucla.edu/images/{}/image.jpg", myID));
         mySeeAlso = new SeeAlso(LOREM_IPSUM.getUrl(), ResourceTypes.TEXT);
     }
 
@@ -129,7 +129,7 @@ public class ProviderTest extends AbstractTest {
      */
     @Test
     public final void testSetLogosListOfLogo() {
-        final List<ServiceImage<Logo>> list = Arrays.asList(myLogo);
+        final List<ImageContent> list = Arrays.asList(myLogo);
         final Provider provider = new Provider(myID, myLabel);
 
         assertEquals(0, provider.getLogos().size());

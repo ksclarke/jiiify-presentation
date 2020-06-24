@@ -18,8 +18,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.Constants;
+import info.freelibrary.iiif.presentation.ImageContent;
 import info.freelibrary.iiif.presentation.ResourceTypes;
-import info.freelibrary.iiif.presentation.ServiceImage;
 import info.freelibrary.util.IllegalArgumentI18nException;
 
 import io.vertx.core.json.Json;
@@ -38,7 +38,7 @@ public class Provider {
 
     private List<Homepage> myHomepages;
 
-    private List<ServiceImage<Logo>> myLogos;
+    private List<ImageContent> myLogos;
 
     private List<SeeAlso> mySeeAlsoRefs;
 
@@ -71,7 +71,7 @@ public class Provider {
      * @param aHomepage A homepage
      * @param aLogo A logo
      */
-    public Provider(final URI aID, final Label aLabel, final Homepage aHomepage, final ServiceImage<Logo> aLogo) {
+    public Provider(final URI aID, final Label aLabel, final Homepage aHomepage, final ImageContent aLogo) {
         myID = checkNotNull(aID);
         myLabel = checkNotNull(aLabel);
         getLogos().add(checkNotNull(aLogo));
@@ -216,7 +216,7 @@ public class Provider {
      */
     @JsonSetter(Constants.LOGO)
     @SafeVarargs
-    public final Provider setLogos(final ServiceImage<Logo>... aLogoArray) {
+    public final Provider setLogos(final ImageContent... aLogoArray) {
         return setLogos(Arrays.asList(aLogoArray));
     }
 
@@ -227,8 +227,8 @@ public class Provider {
      * @return The provider
      */
     @JsonIgnore
-    public Provider setLogos(final List<ServiceImage<Logo>> aLogoList) {
-        final List<ServiceImage<Logo>> logos = getLogos();
+    public Provider setLogos(final List<ImageContent> aLogoList) {
+        final List<ImageContent> logos = getLogos();
 
         checkNotNull(aLogoList);
         logos.clear();
@@ -243,7 +243,7 @@ public class Provider {
      * @return The provider's logos
      */
     @JsonGetter(Constants.LOGO)
-    public List<ServiceImage<Logo>> getLogos() {
+    public List<ImageContent> getLogos() {
         if (myLogos == null) {
             myLogos = new ArrayList<>();
         }
