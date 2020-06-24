@@ -16,6 +16,8 @@ public final class Constants {
 
     public static final String EMPTY = "";
 
+    public static final String EOL = System.lineSeparator();
+
     /* The name of the ID property. */
     public static final String ID = "id";
 
@@ -54,6 +56,8 @@ public final class Constants {
     public static final String TIMEMODE = "timeMode";
 
     public static final String NAV_DATE = "navDate";
+
+    public static final String PROVIDER = "provider";
 
     public static final String VIEWING_DIRECTION = "viewingDirection";
 

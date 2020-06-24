@@ -2,16 +2,18 @@
 package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Homepage;
 import info.freelibrary.iiif.presentation.properties.Label;
-import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.PartOf;
+import info.freelibrary.iiif.presentation.properties.Provider;
 import info.freelibrary.iiif.presentation.properties.Rendering;
 import info.freelibrary.iiif.presentation.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
@@ -76,6 +78,18 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas> impleme
     @SuppressWarnings("unused")
     private PlaceholderCanvas() {
         super();
+    }
+
+    @Override
+    @JsonSetter(Constants.PROVIDER)
+    public PlaceholderCanvas setProviders(final Provider... aProviderArray) {
+        return setProviders(Arrays.asList(aProviderArray));
+    }
+
+    @Override
+    @JsonIgnore
+    public PlaceholderCanvas setProviders(final List<Provider> aProviderList) {
+        return (PlaceholderCanvas) super.setProviders(aProviderList);
     }
 
     @Override
@@ -163,16 +177,6 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas> impleme
     @Override
     public PlaceholderCanvas setID(final URI aID) {
         return (PlaceholderCanvas) super.setID(aID);
-    }
-
-    @Override
-    public PlaceholderCanvas setLogo(final String aLogo) {
-        return (PlaceholderCanvas) super.setLogo(aLogo);
-    }
-
-    @Override
-    public PlaceholderCanvas setLogo(final Logo aLogo) {
-        return (PlaceholderCanvas) super.setLogo(aLogo);
     }
 
     @Override

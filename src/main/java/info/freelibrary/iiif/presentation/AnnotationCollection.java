@@ -2,17 +2,19 @@
 package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Homepage;
 import info.freelibrary.iiif.presentation.properties.Label;
-import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.PartOf;
+import info.freelibrary.iiif.presentation.properties.Provider;
 import info.freelibrary.iiif.presentation.properties.Rendering;
 import info.freelibrary.iiif.presentation.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
@@ -46,6 +48,18 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
      */
     public AnnotationCollection(final URI aID, final Label aLabel) {
         super(ResourceTypes.ANNOTATION_COLLECTION, aID, aLabel);
+    }
+
+    @Override
+    @JsonSetter(Constants.PROVIDER)
+    public AnnotationCollection setProviders(final Provider... aProviderArray) {
+        return setProviders(Arrays.asList(aProviderArray));
+    }
+
+    @Override
+    @JsonIgnore
+    public AnnotationCollection setProviders(final List<Provider> aProviderList) {
+        return (AnnotationCollection) super.setProviders(aProviderList);
     }
 
     /**
@@ -157,16 +171,6 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
     @Override
     public AnnotationCollection setID(final URI aID) {
         return (AnnotationCollection) super.setID(aID);
-    }
-
-    @Override
-    public AnnotationCollection setLogo(final String aLogo) {
-        return (AnnotationCollection) super.setLogo(aLogo);
-    }
-
-    @Override
-    public AnnotationCollection setLogo(final Logo aLogo) {
-        return (AnnotationCollection) super.setLogo(aLogo);
     }
 
     @Override

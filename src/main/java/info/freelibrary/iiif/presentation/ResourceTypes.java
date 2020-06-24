@@ -37,6 +37,8 @@ public final class ResourceTypes {
 
     public static final String VIDEO = "Video";
 
+    public static final String AGENT = "Agent";
+
     private ResourceTypes() {
         super();
     }

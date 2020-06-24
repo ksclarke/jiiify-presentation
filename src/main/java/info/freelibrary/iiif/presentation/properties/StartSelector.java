@@ -26,7 +26,9 @@ public class StartSelector extends StartCanvas {
     /**
      * Creates a start from the supplied ID in string form.
      *
-     * @param aID A start ID
+     * @param aID A start ID in string form
+     * @param aSource A source for the selector in string form
+     * @param aSelector A type of selector
      */
     public StartSelector(final String aID, final String aSource, final Selector aSelector) {
         super(aID);
@@ -39,6 +41,8 @@ public class StartSelector extends StartCanvas {
      * Creates a start from the supplied ID.
      *
      * @param aID A start ID
+     * @param aSource A source for the selector
+     * @param aSelector A type of selector
      */
     public StartSelector(final URI aID, final URI aSource, final Selector aSelector) {
         super(aID);

@@ -11,9 +11,12 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.google.common.net.MediaType;
 
 import info.freelibrary.iiif.presentation.Constants;
+import info.freelibrary.iiif.presentation.ResourceTypes;
+import info.freelibrary.util.IllegalArgumentI18nException;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
@@ -33,22 +36,20 @@ public class Homepage extends AbstractLinkProperty<Homepage> implements Localize
      * Creates a IIIF presentation homepage.
      *
      * @param aID A homepage ID
-     * @param aType A homepage type
      * @param aLabel A homepage label
      */
-    public Homepage(final URI aID, final String aType, final Label aLabel) {
-        super(aID, aType, aLabel);
+    public Homepage(final URI aID, final Label aLabel) {
+        super(aID, ResourceTypes.TEXT, aLabel);
     }
 
     /**
      * Creates a IIIF presentation homepage.
      *
      * @param aID A homepage ID in string form
-     * @param aType A homepage type
      * @param aLabel A homepage label in string form
      */
-    public Homepage(final String aID, final String aType, final String aLabel) {
-        super(URI.create(aID), aType, new Label(aLabel));
+    public Homepage(final String aID, final String aLabel) {
+        super(URI.create(aID), ResourceTypes.TEXT, new Label(aLabel));
     }
 
     /**
@@ -56,6 +57,7 @@ public class Homepage extends AbstractLinkProperty<Homepage> implements Localize
      */
     @SuppressWarnings("unused")
     private Homepage() {
+        super(ResourceTypes.TEXT);
     }
 
     @Override
@@ -75,8 +77,13 @@ public class Homepage extends AbstractLinkProperty<Homepage> implements Localize
     }
 
     @Override
-    public Homepage setType(final String aType) {
-        return (Homepage) super.setType(aType);
+    @JsonSetter(Constants.TYPE)
+    protected Homepage setType(final String aType) {
+        if (!ResourceTypes.TEXT.equals(aType)) {
+            throw new IllegalArgumentI18nException(aType);
+        }
+
+        return this;
     }
 
     /**

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.NavDate;
+import info.freelibrary.iiif.presentation.properties.Provider;
 import info.freelibrary.iiif.presentation.properties.Summary;
 
 /**
@@ -68,10 +69,11 @@ class NavigableResource<T extends NavigableResource<T>> extends AbstractResource
      * @param aMetadata A resource's metadata
      * @param aSummary A summary in string form
      * @param aThumbnail A thumbnail
+     * @param aProvider A resource provider
      */
     protected NavigableResource(final String aType, final String aID, final String aLabel, final Metadata aMetadata,
-            final String aSummary, final Thumbnail aThumbnail) {
-        super(aType, aID, aLabel, aMetadata, aSummary, aThumbnail);
+            final String aSummary, final Thumbnail aThumbnail, final Provider aProvider) {
+        super(aType, aID, aLabel, aMetadata, aSummary, aThumbnail, aProvider);
     }
 
     /**
@@ -83,10 +85,11 @@ class NavigableResource<T extends NavigableResource<T>> extends AbstractResource
      * @param aMetadata A resource's metadata
      * @param aSummary A summary
      * @param aThumbnail A thumbnail
+     * @param aProvider A resource provider
      */
     protected NavigableResource(final String aType, final URI aID, final Label aLabel, final Metadata aMetadata,
-            final Summary aSummary, final Thumbnail aThumbnail) {
-        super(aType, aID, aLabel, aMetadata, aSummary, aThumbnail);
+            final Summary aSummary, final Thumbnail aThumbnail, final Provider aProvider) {
+        super(aType, aID, aLabel, aMetadata, aSummary, aThumbnail, aProvider);
     }
 
     /**

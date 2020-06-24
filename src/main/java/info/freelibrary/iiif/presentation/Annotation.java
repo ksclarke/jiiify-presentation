@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -37,8 +37,8 @@ import io.vertx.core.json.jackson.DatabindCodec;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.TYPE, Constants.ID, Constants.MOTIVATION, Constants.LABEL,
     Constants.SUMMARY, Constants.REQUIRED_STATEMENT, Constants.RIGHTS, Constants.PART_OF, Constants.HOMEPAGE,
-    Constants.LOGO, Constants.THUMBNAIL, Constants.METADATA, Constants.ITEMS, Constants.SERVICE, Constants.TIMEMODE,
-    Constants.BODY, Constants.TARGET })
+    Constants.THUMBNAIL, Constants.METADATA, Constants.ITEMS, Constants.SERVICE, Constants.TIMEMODE, Constants.BODY,
+    Constants.TARGET })
 public class Annotation<T extends Annotation<T>> extends AbstractResource<Annotation<T>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Annotation.class, Constants.BUNDLE_NAME);

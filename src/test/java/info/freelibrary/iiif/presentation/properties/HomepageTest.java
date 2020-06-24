@@ -1,8 +1,7 @@
 
 package info.freelibrary.iiif.presentation.properties;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +16,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import info.freelibrary.iiif.presentation.Constants;
 import info.freelibrary.iiif.presentation.Manifest;
-import info.freelibrary.iiif.presentation.ResourceTypes;
 import info.freelibrary.iiif.presentation.utils.TestUtils;
 import info.freelibrary.util.StringUtils;
 
@@ -64,7 +62,7 @@ public class HomepageTest {
      */
     @Test
     public final void testHomepageUriStringLabel() throws IOException {
-        myManifest.setHomepages(new Homepage(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1));
+        myManifest.setHomepages(new Homepage(TEST_URI_1, TEST_LABEL_1));
 
         checkDeserialization(HOMEPAGE_SIMPLE_ONE);
         checkSerialization(HOMEPAGE_SIMPLE_ONE);
@@ -77,7 +75,7 @@ public class HomepageTest {
      */
     @Test
     public final void testHomepageStringStringString() throws IOException {
-        myManifest.setHomepages(new Homepage(TEST_URI_1.toString(), ResourceTypes.TEXT, TEST_LABEL_1.getString()));
+        myManifest.setHomepages(new Homepage(TEST_URI_1.toString(), TEST_LABEL_1.getString()));
     }
 
     /**
@@ -88,8 +86,8 @@ public class HomepageTest {
      */
     @Test
     public final void testFullHomepage() throws IOException {
-        myManifest.setHomepages(new Homepage(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1).setFormat(TEST_FORMAT)
-                .setLanguages(ISO_639_1_PERSIAN, ISO_639_1_UIGHUR));
+        myManifest.setHomepages(new Homepage(TEST_URI_1, TEST_LABEL_1).setFormat(TEST_FORMAT).setLanguages(
+                ISO_639_1_PERSIAN, ISO_639_1_UIGHUR));
 
         checkDeserialization(HOMEPAGE_FULL_ONE);
         checkSerialization(HOMEPAGE_FULL_ONE);
@@ -103,8 +101,7 @@ public class HomepageTest {
      */
     @Test
     public final void testMultiValues() throws IOException {
-        myManifest.setHomepages(new Homepage(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1), new Homepage(TEST_URI_2,
-                ResourceTypes.TEXT, TEST_LABEL_2));
+        myManifest.setHomepages(new Homepage(TEST_URI_1, TEST_LABEL_1), new Homepage(TEST_URI_2, TEST_LABEL_2));
 
         checkDeserialization(HOMEPAGE_SIMPLE_TWO);
         checkSerialization(HOMEPAGE_SIMPLE_TWO);
@@ -115,17 +112,7 @@ public class HomepageTest {
      */
     @Test
     public final void testSetID() {
-        assertEquals(TEST_URI_1, new Homepage(TEST_URI_2, ResourceTypes.TEXT, TEST_LABEL_1).setID(TEST_URI_1)
-                .getID());
-    }
-
-    /**
-     * Tests getting and setting a homepage's type.
-     */
-    @Test
-    public final void testSetType() {
-        assertEquals(ResourceTypes.TEXT, new Homepage(TEST_URI_1, ResourceTypes.DATASET, TEST_LABEL_1).setType(
-                ResourceTypes.TEXT).getType());
+        assertEquals(TEST_URI_1, new Homepage(TEST_URI_2, TEST_LABEL_1).setID(TEST_URI_1).getID());
     }
 
     /**
@@ -133,8 +120,7 @@ public class HomepageTest {
      */
     @Test
     public final void testSetLabel() {
-        assertEquals(TEST_LABEL_1, new Homepage(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_2).setLabel(TEST_LABEL_1)
-                .getLabel());
+        assertEquals(TEST_LABEL_1, new Homepage(TEST_URI_1, TEST_LABEL_2).setLabel(TEST_LABEL_1).getLabel());
     }
 
     /**
@@ -142,8 +128,7 @@ public class HomepageTest {
      */
     @Test
     public final void testSetFormat() {
-        assertEquals(TEST_FORMAT, new Homepage(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1).setFormat(TEST_FORMAT)
-                .getFormat().get());
+        assertEquals(TEST_FORMAT, new Homepage(TEST_URI_1, TEST_LABEL_1).setFormat(TEST_FORMAT).getFormat().get());
     }
 
     /**
@@ -151,8 +136,8 @@ public class HomepageTest {
      */
     @Test
     public final void testSetLanguage() {
-        assertEquals(Arrays.asList(ISO_639_1_PERSIAN, ISO_639_1_UIGHUR), new Homepage(TEST_URI_1, ResourceTypes.TEXT,
-                TEST_LABEL_1).setLanguages(ISO_639_1_PERSIAN, ISO_639_1_UIGHUR).getLanguages());
+        assertEquals(Arrays.asList(ISO_639_1_PERSIAN, ISO_639_1_UIGHUR), new Homepage(TEST_URI_1, TEST_LABEL_1)
+                .setLanguages(ISO_639_1_PERSIAN, ISO_639_1_UIGHUR).getLanguages());
     }
 
     /**
@@ -160,7 +145,7 @@ public class HomepageTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testSetLanguagesInvalid() {
-        new Homepage(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1).setLanguages("???");
+        new Homepage(TEST_URI_1, TEST_LABEL_1).setLanguages("???");
     }
 
     /**

@@ -2,14 +2,18 @@
 package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Homepage;
 import info.freelibrary.iiif.presentation.properties.Label;
-import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.PartOf;
+import info.freelibrary.iiif.presentation.properties.Provider;
 import info.freelibrary.iiif.presentation.properties.Rendering;
 import info.freelibrary.iiif.presentation.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
@@ -58,6 +62,18 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation> implement
     @SuppressWarnings("unused")
     private PaintingAnnotation() {
         super();
+    }
+
+    @Override
+    @JsonSetter(Constants.PROVIDER)
+    public PaintingAnnotation setProviders(final Provider... aProviderArray) {
+        return setProviders(Arrays.asList(aProviderArray));
+    }
+
+    @Override
+    @JsonIgnore
+    public PaintingAnnotation setProviders(final List<Provider> aProviderList) {
+        return (PaintingAnnotation) super.setProviders(aProviderList);
     }
 
     @Override
@@ -192,16 +208,6 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation> implement
     @Override
     public PaintingAnnotation setID(final URI aID) {
         return (PaintingAnnotation) super.setID(aID);
-    }
-
-    @Override
-    public PaintingAnnotation setLogo(final String aLogo) {
-        return (PaintingAnnotation) super.setLogo(aLogo);
-    }
-
-    @Override
-    public PaintingAnnotation setLogo(final Logo aLogo) {
-        return (PaintingAnnotation) super.setLogo(aLogo);
     }
 
     @Override

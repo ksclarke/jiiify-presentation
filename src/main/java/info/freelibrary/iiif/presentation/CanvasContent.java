@@ -2,17 +2,19 @@
 package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.google.common.net.MediaType;
 
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Homepage;
 import info.freelibrary.iiif.presentation.properties.Label;
-import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.PartOf;
+import info.freelibrary.iiif.presentation.properties.Provider;
 import info.freelibrary.iiif.presentation.properties.Rendering;
 import info.freelibrary.iiif.presentation.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
@@ -51,6 +53,18 @@ public class CanvasContent extends AbstractContentResource<CanvasContent> implem
     private CanvasContent() {
         super(ResourceTypes.CANVAS);
         super.setFormatMediaType(MediaType.JSON_UTF_8);
+    }
+
+    @Override
+    @JsonSetter(Constants.PROVIDER)
+    public CanvasContent setProviders(final Provider... aProviderArray) {
+        return setProviders(Arrays.asList(aProviderArray));
+    }
+
+    @Override
+    @JsonIgnore
+    public CanvasContent setProviders(final List<Provider> aProviderList) {
+        return (CanvasContent) super.setProviders(aProviderList);
     }
 
     @Override
@@ -137,16 +151,6 @@ public class CanvasContent extends AbstractContentResource<CanvasContent> implem
     @Override
     public CanvasContent setID(final URI aID) {
         return (CanvasContent) super.setID(aID);
-    }
-
-    @Override
-    public CanvasContent setLogo(final String aLogo) {
-        return (CanvasContent) super.setLogo(aLogo);
-    }
-
-    @Override
-    public CanvasContent setLogo(final Logo aLogo) {
-        return (CanvasContent) super.setLogo(aLogo);
     }
 
     @Override

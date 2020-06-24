@@ -2,9 +2,11 @@
 package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -13,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Homepage;
 import info.freelibrary.iiif.presentation.properties.Label;
-import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.PartOf;
+import info.freelibrary.iiif.presentation.properties.Provider;
 import info.freelibrary.iiif.presentation.properties.Rendering;
 import info.freelibrary.iiif.presentation.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
@@ -64,6 +66,18 @@ public class SoundContent extends AbstractContentResource<SoundContent> implemen
      */
     private SoundContent() {
         super(ResourceTypes.SOUND);
+    }
+
+    @Override
+    @JsonSetter(Constants.PROVIDER)
+    public SoundContent setProviders(final Provider... aProviderArray) {
+        return setProviders(Arrays.asList(aProviderArray));
+    }
+
+    @Override
+    @JsonIgnore
+    public SoundContent setProviders(final List<Provider> aProviderList) {
+        return (SoundContent) super.setProviders(aProviderList);
     }
 
     @Override
@@ -150,16 +164,6 @@ public class SoundContent extends AbstractContentResource<SoundContent> implemen
     @Override
     public SoundContent setID(final URI aID) {
         return (SoundContent) super.setID(aID);
-    }
-
-    @Override
-    public SoundContent setLogo(final String aLogo) {
-        return (SoundContent) super.setLogo(aLogo);
-    }
-
-    @Override
-    public SoundContent setLogo(final Logo aLogo) {
-        return (SoundContent) super.setLogo(aLogo);
     }
 
     @Override

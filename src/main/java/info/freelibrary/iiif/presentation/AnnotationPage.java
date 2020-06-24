@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -16,9 +16,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Homepage;
 import info.freelibrary.iiif.presentation.properties.Label;
-import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.PartOf;
+import info.freelibrary.iiif.presentation.properties.Provider;
 import info.freelibrary.iiif.presentation.properties.Rendering;
 import info.freelibrary.iiif.presentation.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
@@ -61,6 +61,18 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
      */
     private AnnotationPage() {
         super(ResourceTypes.ANNOTATION_PAGE);
+    }
+
+    @Override
+    @JsonSetter(Constants.PROVIDER)
+    public AnnotationPage<T> setProviders(final Provider... aProviderArray) {
+        return setProviders(Arrays.asList(aProviderArray));
+    }
+
+    @Override
+    @JsonIgnore
+    public AnnotationPage<T> setProviders(final List<Provider> aProviderList) {
+        return (AnnotationPage<T>) super.setProviders(aProviderList);
     }
 
     /**
@@ -223,16 +235,6 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
     @Override
     public AnnotationPage<T> setID(final URI aID) {
         return (AnnotationPage<T>) super.setID(aID);
-    }
-
-    @Override
-    public AnnotationPage<T> setLogo(final String aLogo) {
-        return (AnnotationPage<T>) super.setLogo(aLogo);
-    }
-
-    @Override
-    public AnnotationPage<T> setLogo(final Logo aLogo) {
-        return (AnnotationPage<T>) super.setLogo(aLogo);
     }
 
     @Override

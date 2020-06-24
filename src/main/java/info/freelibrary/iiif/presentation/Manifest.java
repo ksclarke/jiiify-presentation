@@ -3,6 +3,7 @@ package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -17,9 +18,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Homepage;
 import info.freelibrary.iiif.presentation.properties.Label;
-import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.PartOf;
+import info.freelibrary.iiif.presentation.properties.Provider;
 import info.freelibrary.iiif.presentation.properties.Rendering;
 import info.freelibrary.iiif.presentation.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
@@ -91,10 +92,11 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @param aMetadata A manifest's metadata
      * @param aSummary A summary in string form
      * @param aThumbnail A thumbnail
+     * @param aProvider A resource provider
      */
     public Manifest(final String aID, final String aLabel, final Metadata aMetadata, final String aSummary,
-            final Thumbnail aThumbnail) {
-        super(ResourceTypes.MANIFEST, aID, aLabel, aMetadata, aSummary, aThumbnail);
+            final Thumbnail aThumbnail, final Provider aProvider) {
+        super(ResourceTypes.MANIFEST, aID, aLabel, aMetadata, aSummary, aThumbnail, aProvider);
     }
 
     /**
@@ -105,10 +107,11 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @param aMetadata A manifest's metadata
      * @param aSummary A summary
      * @param aThumbnail A thumbnail
+     * @param aProvider A resource provider
      */
     public Manifest(final URI aID, final Label aLabel, final Metadata aMetadata, final Summary aSummary,
-            final Thumbnail aThumbnail) {
-        super(ResourceTypes.MANIFEST, aID, aLabel, aMetadata, aSummary, aThumbnail);
+            final Thumbnail aThumbnail, final Provider aProvider) {
+        super(ResourceTypes.MANIFEST, aID, aLabel, aMetadata, aSummary, aThumbnail, aProvider);
     }
 
     /**
@@ -116,6 +119,18 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      */
     private Manifest() {
         super(ResourceTypes.MANIFEST);
+    }
+
+    @Override
+    @JsonSetter(Constants.PROVIDER)
+    public Manifest setProviders(final Provider... aProviderArray) {
+        return setProviders(Arrays.asList(aProviderArray));
+    }
+
+    @Override
+    @JsonIgnore
+    public Manifest setProviders(final List<Provider> aProviderList) {
+        return (Manifest) super.setProviders(aProviderList);
     }
 
     /**
@@ -228,6 +243,8 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
 
     /**
      * Clears all contexts, but the required one.
+     *
+     * @return The manifest
      */
     public Manifest clearContexts() {
         myContexts.clear();
@@ -480,16 +497,6 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     @Override
     public Manifest setID(final URI aID) {
         return (Manifest) super.setID(aID);
-    }
-
-    @Override
-    public Manifest setLogo(final String aLogo) {
-        return (Manifest) super.setLogo(aLogo);
-    }
-
-    @Override
-    public Manifest setLogo(final Logo aLogo) {
-        return (Manifest) super.setLogo(aLogo);
     }
 
     @Override

@@ -7,9 +7,9 @@ import java.util.List;
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Homepage;
 import info.freelibrary.iiif.presentation.properties.Label;
-import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.PartOf;
+import info.freelibrary.iiif.presentation.properties.Provider;
 import info.freelibrary.iiif.presentation.properties.Rendering;
 import info.freelibrary.iiif.presentation.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
@@ -176,27 +176,27 @@ public interface Resource<T extends Resource<T>> {
     T setHomepages(List<Homepage> aHomepageList);
 
     /**
-     * Gets the logo.
+     * Gets a list of resource providers, initializing the list if this hasn't been done already.
      *
-     * @return The logo
+     * @return The resource's providers
      */
-    Logo getLogo();
+    List<Provider> getProviders();
 
     /**
-     * Sets the logo.
+     * Sets the providers for this resource.
      *
-     * @param aLogo A logo
+     * @param aProviderArray The providers to set for this resource
      * @return The resource
      */
-    T setLogo(Logo aLogo);
+    T setProviders(Provider... aProviderArray);
 
     /**
-     * Sets the logo from the supplied string.
+     * Sets the providers for this resource.
      *
-     * @param aLogo A logo URI ID in string form
+     * @param aProviderList The providers to set for this resource
      * @return The resource
      */
-    T setLogo(String aLogo);
+    T setProviders(List<Provider> aProviderList);
 
     /**
      * Gets a list of resource renderings, initializing the list if this hasn't been done already.

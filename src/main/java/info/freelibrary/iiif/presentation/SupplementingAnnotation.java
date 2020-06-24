@@ -2,14 +2,18 @@
 package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Homepage;
 import info.freelibrary.iiif.presentation.properties.Label;
-import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.PartOf;
+import info.freelibrary.iiif.presentation.properties.Provider;
 import info.freelibrary.iiif.presentation.properties.Rendering;
 import info.freelibrary.iiif.presentation.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
@@ -58,6 +62,18 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     @SuppressWarnings("unused")
     private SupplementingAnnotation() {
         super();
+    }
+
+    @Override
+    @JsonSetter(Constants.PROVIDER)
+    public SupplementingAnnotation setProviders(final Provider... aProviderArray) {
+        return setProviders(Arrays.asList(aProviderArray));
+    }
+
+    @Override
+    @JsonIgnore
+    public SupplementingAnnotation setProviders(final List<Provider> aProviderList) {
+        return (SupplementingAnnotation) super.setProviders(aProviderList);
     }
 
     @Override
@@ -192,16 +208,6 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     @Override
     public SupplementingAnnotation setID(final URI aID) {
         return (SupplementingAnnotation) super.setID(aID);
-    }
-
-    @Override
-    public SupplementingAnnotation setLogo(final String aLogo) {
-        return (SupplementingAnnotation) super.setLogo(aLogo);
-    }
-
-    @Override
-    public SupplementingAnnotation setLogo(final Logo aLogo) {
-        return (SupplementingAnnotation) super.setLogo(aLogo);
     }
 
     @Override

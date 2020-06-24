@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -21,9 +21,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Homepage;
 import info.freelibrary.iiif.presentation.properties.Label;
-import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.PartOf;
+import info.freelibrary.iiif.presentation.properties.Provider;
 import info.freelibrary.iiif.presentation.properties.Rendering;
 import info.freelibrary.iiif.presentation.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
@@ -40,7 +40,7 @@ import io.vertx.core.json.jackson.DatabindCodec;
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.TYPE, Constants.ID, Constants.LABEL, Constants.SUMMARY,
-    Constants.REQUIRED_STATEMENT, Constants.RIGHTS, Constants.PART_OF, Constants.HOMEPAGE, Constants.LOGO,
+    Constants.REQUIRED_STATEMENT, Constants.PROVIDER, Constants.RIGHTS, Constants.PART_OF, Constants.HOMEPAGE,
     Constants.THUMBNAIL, Constants.METADATA, Constants.ITEMS, Constants.SERVICE })
 abstract class AbstractResource<T extends AbstractResource<T>> {
 
@@ -65,6 +65,8 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
 
     private Summary mySummary;
 
+    private List<Provider> myProviders;
+
     @JsonProperty(Constants.THUMBNAIL)
     @JsonDeserialize(contentUsing = ThumbnailDeserializer.class)
     private List<Thumbnail> myThumbnails;
@@ -74,8 +76,6 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
     private List<URI> myRights;
 
     private List<Homepage> myHomepages;
-
-    private Logo myLogo;
 
     private List<Rendering> myRenderings;
 
@@ -149,10 +149,11 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @param aMetadata A metadata property
      * @param aSummary A summary property in string form
      * @param aThumbnail A thumbnail
+     * @param aProvider A resource provider
      */
     protected AbstractResource(final String aType, final String aID, final String aLabel, final Metadata aMetadata,
-            final String aSummary, final Thumbnail aThumbnail) {
-        this(aType, URI.create(aID), new Label(aLabel), aMetadata, new Summary(aSummary), aThumbnail);
+            final String aSummary, final Thumbnail aThumbnail, final Provider aProvider) {
+        this(aType, URI.create(aID), new Label(aLabel), aMetadata, new Summary(aSummary), aThumbnail, aProvider);
     }
 
     /**
@@ -164,15 +165,17 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @param aMetadata A metadata property
      * @param aSummary A summary property
      * @param aThumbnail A thumbnail
+     * @param aProvider A resource provider
      */
     protected AbstractResource(final String aType, final URI aID, final Label aLabel, final Metadata aMetadata,
-            final Summary aSummary, final Thumbnail aThumbnail) {
+            final Summary aSummary, final Thumbnail aThumbnail, final Provider aProvider) {
         myType = checkNotNull(aType);
         myID = checkNotNull(aID);
         myLabel = checkNotNull(aLabel);
         myMetadata = checkNotNull(aMetadata);
         mySummary = checkNotNull(aSummary);
         setThumbnails(checkNotNull(aThumbnail));
+        setProviders(checkNotNull(aProvider));
     }
 
     /**
@@ -360,27 +363,34 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
         return myHomepages;
     }
 
-    /**
-     * Gets the logo.
-     *
-     * @return The logo
-     */
-    @JsonUnwrapped
-    public Logo getLogo() {
-        return myLogo;
-    }
-
-    @JsonSetter(Constants.LOGO)
-    protected AbstractResource<T> setLogo(final Logo aLogo) {
-        checkNotNull(aLogo);
-        myLogo = aLogo;
-        return this;
+    @JsonSetter(Constants.PROVIDER)
+    protected AbstractResource<T> setProviders(final Provider... aProviderArray) {
+        return setProviders(Arrays.asList(aProviderArray));
     }
 
     @JsonIgnore
-    protected AbstractResource<T> setLogo(final String aLogo) {
-        myLogo = new Logo(aLogo);
+    protected AbstractResource<T> setProviders(final List<Provider> aProviderList) {
+        final List<Provider> providers = getProviders();
+
+        checkNotNull(aProviderList);
+        providers.clear();
+        providers.addAll(aProviderList);
+
         return this;
+    }
+
+    /**
+     * Gets a list of resource providers, initializing the list if this hasn't been done already.
+     *
+     * @return The resource's providers
+     */
+    @JsonGetter(Constants.PROVIDER)
+    public List<Provider> getProviders() {
+        if (myProviders == null) {
+            myProviders = new ArrayList<>();
+        }
+
+        return myProviders;
     }
 
     @JsonSetter(Constants.RENDERING)

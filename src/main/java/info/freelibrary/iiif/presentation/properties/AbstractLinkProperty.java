@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.properties;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 import java.net.URI;
 import java.util.Objects;
@@ -84,6 +84,15 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> {
      * Creates an abstract link property for the Jackson deserialization process.
      */
     protected AbstractLinkProperty() {
+    }
+
+    /**
+     * Creates an abstract link property with a supplied type.
+     *
+     * @param aType The type of link property
+     */
+    protected AbstractLinkProperty(final String aType) {
+        myType = checkNotNull(aType);
     }
 
     /**

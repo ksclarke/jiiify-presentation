@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
@@ -14,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Homepage;
 import info.freelibrary.iiif.presentation.properties.Label;
-import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.PartOf;
+import info.freelibrary.iiif.presentation.properties.Provider;
 import info.freelibrary.iiif.presentation.properties.Rendering;
 import info.freelibrary.iiif.presentation.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
@@ -67,6 +68,18 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
      */
     private VideoContent() {
         super(ResourceTypes.VIDEO);
+    }
+
+    @Override
+    @JsonSetter(Constants.PROVIDER)
+    public VideoContent setProviders(final Provider... aProviderArray) {
+        return setProviders(Arrays.asList(aProviderArray));
+    }
+
+    @Override
+    @JsonIgnore
+    public VideoContent setProviders(final List<Provider> aProviderList) {
+        return (VideoContent) super.setProviders(aProviderList);
     }
 
     @Override
@@ -153,16 +166,6 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
     @Override
     public VideoContent setID(final URI aID) {
         return (VideoContent) super.setID(aID);
-    }
-
-    @Override
-    public VideoContent setLogo(final String aLogo) {
-        return (VideoContent) super.setLogo(aLogo);
-    }
-
-    @Override
-    public VideoContent setLogo(final Logo aLogo) {
-        return (VideoContent) super.setLogo(aLogo);
     }
 
     @Override

@@ -3,6 +3,7 @@ package info.freelibrary.iiif.presentation;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,9 +16,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Homepage;
 import info.freelibrary.iiif.presentation.properties.Label;
-import info.freelibrary.iiif.presentation.properties.Logo;
 import info.freelibrary.iiif.presentation.properties.Metadata;
 import info.freelibrary.iiif.presentation.properties.PartOf;
+import info.freelibrary.iiif.presentation.properties.Provider;
 import info.freelibrary.iiif.presentation.properties.Rendering;
 import info.freelibrary.iiif.presentation.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
@@ -92,6 +93,18 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
      */
     private Range() {
         super(ResourceTypes.RANGE);
+    }
+
+    @Override
+    @JsonSetter(Constants.PROVIDER)
+    public Range setProviders(final Provider... aProviderArray) {
+        return setProviders(Arrays.asList(aProviderArray));
+    }
+
+    @Override
+    @JsonIgnore
+    public Range setProviders(final List<Provider> aProviderList) {
+        return (Range) super.setProviders(aProviderList);
     }
 
     /**
@@ -234,6 +247,8 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
 
     /**
      * Clears the currently set items from this range.
+     *
+     * @return The range
      */
     public Range clearItems() {
         myItems.clear();
@@ -298,16 +313,6 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     @Override
     public Range setID(final URI aID) {
         return (Range) super.setID(aID);
-    }
-
-    @Override
-    public Range setLogo(final String aLogo) {
-        return (Range) super.setLogo(aLogo);
-    }
-
-    @Override
-    public Range setLogo(final Logo aLogo) {
-        return (Range) super.setLogo(aLogo);
     }
 
     @Override
