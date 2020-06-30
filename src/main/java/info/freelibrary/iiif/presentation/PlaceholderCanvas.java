@@ -18,6 +18,7 @@ import info.freelibrary.iiif.presentation.properties.Rendering;
 import info.freelibrary.iiif.presentation.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.properties.Summary;
+import info.freelibrary.iiif.presentation.properties.selectors.MediaFragmentSelector;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
@@ -234,6 +235,82 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas> impleme
     @Override
     public PlaceholderCanvas setWidthHeight(final int aWidth, final int aHeight) {
         return (PlaceholderCanvas) super.setWidthHeight(aWidth, aHeight);
+    }
+
+    @Override
+    @SafeVarargs
+    public final PlaceholderCanvas paintWith(final ContentResource... aContentArray) throws IllegalArgumentException {
+        return (PlaceholderCanvas) super.paintWith(aContentArray);
+    }
+
+    @Override
+    public final PlaceholderCanvas paintWith(final List<ContentResource> aContentList) throws IllegalArgumentException {
+        return (PlaceholderCanvas) super.paintWith(aContentList);
+    }
+
+    @Override
+    @SafeVarargs
+    public final PlaceholderCanvas paintWith(final MediaFragmentSelector aCanvasRegion,
+            final ContentResource... aContentArray) throws IllegalArgumentException {
+        return (PlaceholderCanvas) super.paintWith(aCanvasRegion, aContentArray);
+    }
+
+    @Override
+    @SafeVarargs
+    public final PlaceholderCanvas paintWith(final String aCanvasRegion, final ContentResource... aContentArray)
+            throws IllegalArgumentException {
+        return (PlaceholderCanvas) super.paintWith(aCanvasRegion, aContentArray);
+    }
+
+    @Override
+    public final PlaceholderCanvas paintWith(final MediaFragmentSelector aCanvasRegion,
+            final List<ContentResource> aContentList) throws IllegalArgumentException {
+        return (PlaceholderCanvas) super.paintWith(aCanvasRegion, aContentList);
+    }
+
+    @Override
+    public final PlaceholderCanvas paintWith(final String aCanvasRegion, final List<ContentResource> aContentList)
+            throws IllegalArgumentException {
+        return (PlaceholderCanvas) super.paintWith(aCanvasRegion, aContentList);
+    }
+
+    @Override
+    @SafeVarargs
+    public final PlaceholderCanvas supplementWith(final ContentResource... aContentArray)
+            throws IllegalArgumentException {
+        return (PlaceholderCanvas) super.supplementWith(aContentArray);
+    }
+
+    @Override
+    public final PlaceholderCanvas supplementWith(final List<ContentResource> aContentList)
+            throws IllegalArgumentException {
+        return (PlaceholderCanvas) super.supplementWith(aContentList);
+    }
+
+    @Override
+    @SafeVarargs
+    public final PlaceholderCanvas supplementWith(final MediaFragmentSelector aCanvasRegion,
+            final ContentResource... aContentArray) throws IllegalArgumentException {
+        return (PlaceholderCanvas) super.supplementWith(aCanvasRegion, aContentArray);
+    }
+
+    @Override
+    @SafeVarargs
+    public final PlaceholderCanvas supplementWith(final String aCanvasRegion, final ContentResource... aContentArray)
+            throws IllegalArgumentException {
+        return (PlaceholderCanvas) super.supplementWith(aCanvasRegion, aContentArray);
+    }
+
+    @Override
+    public final PlaceholderCanvas supplementWith(final MediaFragmentSelector aCanvasRegion,
+            final List<ContentResource> aContentList) throws IllegalArgumentException {
+        return (PlaceholderCanvas) super.supplementWith(aCanvasRegion, aContentList);
+    }
+
+    @Override
+    public final PlaceholderCanvas supplementWith(final String aCanvasRegion, final List<ContentResource> aContentList)
+            throws IllegalArgumentException {
+        return (PlaceholderCanvas) super.supplementWith(aCanvasRegion, aContentList);
     }
 
     @Override

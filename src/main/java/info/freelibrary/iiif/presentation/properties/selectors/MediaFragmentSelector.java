@@ -1,158 +1,172 @@
 
 package info.freelibrary.iiif.presentation.properties.selectors;
 
+import java.io.StringReader;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.github.tkurz.media.fragments.FragmentParser;
+import com.github.tkurz.media.fragments.ParseException;
+import com.github.tkurz.media.fragments.base.MediaFragment;
+import com.github.tkurz.media.fragments.spatial.SpatialFragment;
+import com.github.tkurz.media.fragments.temporal.Clocktime;
+import com.github.tkurz.media.fragments.temporal.NPTFragment;
 import info.freelibrary.iiif.presentation.Constants;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.StringUtils;
 
 /**
- * A fragment selector selects regions of interest in a resource.
+ * A media fragment selector selects a region of interest in a resource with spatial and/or temporal dimensions.
  */
-public class MediaFragmentSelector extends AbstractSelector implements FragmentSelector {
-
-    protected static final String X_COORDINATE = "x";
-
-    protected static final String Y_COORDINATE = "y";
+public class MediaFragmentSelector implements FragmentSelector {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MediaFragmentSelector.class, Constants.BUNDLE_NAME);
 
-    // https://www.w3.org/TR/annotation-model/#fragment-selector
-    private static final URI FRAGMENT_STANDARD = URI.create("http://www.w3.org/TR/media-frags/");
-
-    private int myX;
-
-    private int myY;
-
-    private int myWidth;
-
-    private int myHeight;
+    private final MediaFragment myMediaFragment;
 
     /**
-     * Creates a fragment selector from the supplied string of comma delimited integers.
+     * Creates a media fragment selector from the supplied string.
      *
-     * @param aFragment A fragment representation in string form
-     * @throws IllegalArgumentException If the supplied string isn't a valid fragment representation
+     * @param aFragment A media fragment string
+     * @throws IllegalArgumentException If the supplied string isn't a valid media fragment
      */
     public MediaFragmentSelector(final String aFragment) throws IllegalArgumentException {
-        final String[] parts = aFragment.split(",");
-
-        // A fragment has four coordinates: x, y, width, and height
-        if (parts.length != 4) {
-            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_042, aFragment));
+        try {
+            myMediaFragment = new FragmentParser(new StringReader(aFragment)).run(MediaFragment.Type.FRAGMENT);
+        } catch (final ParseException details) {
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_042, aFragment, details));
         }
-
-        myX = Integer.parseInt(parts[0]);
-        myY = Integer.parseInt(parts[1]);
-        myWidth = Integer.parseInt(parts[2]);
-        myHeight = Integer.parseInt(parts[3]);
     }
 
     /**
-     * Creates a fragment selector from the supplied coordinates.
+     * Creates a media fragment selector from the supplied spatial dimensions.
      *
-     * @param aX An X position
-     * @param aY A Y position
-     * @param aWidth A width
-     * @param aHeight A height
+     * @param aX A x-coordinate
+     * @param aY A y-coordinate
+     * @param aWidth A width value
+     * @param aHeight a A height value
      */
     public MediaFragmentSelector(final int aX, final int aY, final int aWidth, final int aHeight) {
-        myX = aX;
-        myY = aY;
-        myWidth = aWidth;
-        myHeight = aHeight;
+        myMediaFragment = new MediaFragment();
+        myMediaFragment.setSpatialFragment(createSpatialFragment(aX, aY, aWidth, aHeight));
     }
 
     /**
-     * Gets the X coordinate.
+     * Creates a media fragment selector from the supplied temporal dimensions.
      *
-     * @return The X coordinate
+     * <p>Users may pass either 1 or 2 temporal dimensions. Examples:</p>
+     * <ul>
+     *   <li><code>new MediaFragmentSelector(0.0f)</code> &#8594; <code>#t=0</code></li>
+     *   <li><code>new MediaFragmentSelector(0.0f, null)</code> &#8594; <code>#t=0</code></li>
+     *   <li><code>new MediaFragmentSelector(null, 1.0f)</code> &#8594; <code>#t=,1</code></li>
+     *   <li><code>new MediaFragmentSelector(0.0f, 1.0f)</code> &#8594; <code>#t=0,1</code></li>
+     * </ul>
+     * @param aTemporalArray An array of time instants
+     * @throws IllegalArgumentException If the supplied dimension cannot be used to construct a valid media fragment
      */
-    public int getX() {
-        return myX;
+    public MediaFragmentSelector(final Float... aTemporalArray) throws IllegalArgumentException {
+        myMediaFragment = new MediaFragment();
+        myMediaFragment.setTemporalFragment(createTemporalFragment(aTemporalArray));
     }
 
     /**
-     * Sets the X coordinate.
+     * Creates a media fragment selector from the supplied spatio-temporal dimensions.
      *
-     * @param aX An X coordinate
-     * @return The fragment selector
+     * <p>Users may pass either 1 or 2 temporal dimensions in the same manner as with
+     * {@link #MediaFragmentSelector(Float...)}.</p>
+     *
+     * </p>All spatial dimensions are required.</p>
+     *
+     * @param aX A x-coordinate
+     * @param aY A y-coordinate
+     * @param aWidth A width value
+     * @param aHeight a A height value
+     * @param aTemporalArray An array of time instants
+     * @throws IllegalArgumentException If the supplied dimensions cannot be used to construct a valid media fragment
      */
-    public MediaFragmentSelector setX(final int aX) {
-        myX = aX;
-        return this;
+    public MediaFragmentSelector(final int aX, final int aY, final int aWidth, final int aHeight,
+            final Float... aTemporalArray) throws IllegalArgumentException {
+        myMediaFragment = new MediaFragment();
+        myMediaFragment.setSpatialFragment(createSpatialFragment(aX, aY, aWidth, aHeight));
+        myMediaFragment.setTemporalFragment(createTemporalFragment(aTemporalArray));
     }
 
     /**
-     * Gets the Y coordinate.
+     * Creates the spatial component of a media fragment.
      *
-     * @return The Y coordinate
+     * @param aX A x-coordinate
+     * @param aY A y-coordinate
+     * @param aWidth A width value
+     * @param aHeight a A height value
+     * @return The spatial fragment
      */
-    public int getY() {
-        return myY;
+    private SpatialFragment createSpatialFragment(final int aX, final int aY, final int aWidth, final int aHeight) {
+        return new SpatialFragment(aX, aY, aWidth, aHeight);
     }
 
     /**
-     * Sets the Y coordinate.
+     * Creates the temporal component of a media fragment.
      *
-     * @param aY A Y coordinate
-     * @return The fragment selector
+     * @param aInstantsArray An array of time instants
+     * @return The temporal fragment
+     * @throws IllegalArgumentException If the supplied dimensions cannot be used to construct a valid media fragment
      */
-    public MediaFragmentSelector setY(final int aY) {
-        myY = aY;
-        return this;
-    }
+    private NPTFragment createTemporalFragment(final Float... aInstantsArray) throws IllegalArgumentException {
+        final NPTFragment temporalFragment = new NPTFragment();
+        final Float start;
+        final Float end;
 
-    /**
-     * Gets the width.
-     *
-     * @return The width
-     */
-    public int getWidth() {
-        return myWidth;
-    }
+        if (aInstantsArray.length == 1) {
+            start = aInstantsArray[0];
 
-    /**
-     * Sets the width.
-     *
-     * @param aWidth A width
-     * @return The fragment selector
-     */
-    public MediaFragmentSelector setWidth(final int aWidth) {
-        myWidth = aWidth;
-        return this;
-    }
+            if (start != null) {
+                temporalFragment.setStart(new Clocktime(aInstantsArray[0]));
+            } else {
+                throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_063));
+            }
+        } else if (aInstantsArray.length == 2) {
+            start = aInstantsArray[0];
+            end = aInstantsArray[1];
 
-    /**
-     * Gets the height.
-     *
-     * @return The height
-     */
-    public int getHeight() {
-        return myHeight;
-    }
-
-    /**
-     * Sets the height.
-     *
-     * @param aHeight A height
-     * @return The fragment selector
-     */
-    public MediaFragmentSelector setHeight(final int aHeight) {
-        myHeight = aHeight;
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return StringUtils.format("{},{},{},{}", myX, myY, myWidth, myHeight);
+            if (start != null || end != null) {
+                if (start != null) {
+                    temporalFragment.setStart(new Clocktime(start));
+                }
+                if (end != null) {
+                    temporalFragment.setEnd(new Clocktime(end));
+                }
+            } else {
+                throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_063));
+            }
+        } else {
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_062));
+        }
+        return temporalFragment;
     }
 
     @Override
     public URI getConformsTo() {
-        return FRAGMENT_STANDARD;
+        return Constants.MEDIA_FRAGMENT_SPECIFICATION_URI;
     }
+
+    /**
+     * Gets the value of the media fragment selector, with the spatial part ordered before the temporal part.
+     *
+     * @return The value
+     */
+    @Override
+    public String getValue() {
+        final List<String> list = new ArrayList<>();
+
+        if (myMediaFragment.hasSpatialFragment()) {
+            list.add(myMediaFragment.getSpatialFragment().stringValue());
+        }
+        if (myMediaFragment.hasTemporalFragment()) {
+            list.add(myMediaFragment.getTemporalFragment().stringValue());
+        }
+        return String.join("&", list);
+    }
+
 }

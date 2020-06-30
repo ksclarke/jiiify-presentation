@@ -1,0 +1,57 @@
+{
+  "type": "Canvas",
+  "label": { "none": [ "p. 1" ] },
+  "id": "https://example.org/iiif/book1/page1/canvas-1",
+  "width": 480,
+  "height": 720,
+  "items": [
+    {
+      "type": "AnnotationPage",
+      "id": "https://example.org/iiif/book1/page1/annotation/painting-page-1",
+      "items": [
+        {
+          "type": "Annotation",
+          "id": "https://example.org/iiif/book1/page1/annotation/painting-1",
+          "motivation": "painting",
+          "body": {
+            "type": "Image",
+            "id": "https://example.org/iiif/book1/page1/full/max/0/default.jpg",
+            "width": 480,
+            "height": 360,
+            "format": "image/jpeg"
+          },
+          "target": {
+            "type": "SpecificResource",
+            "source": "https://example.org/iiif/book1/page1/canvas-1",
+            "selector": {
+              "type": "FragmentSelector",
+              "conformsTo": "http://www.w3.org/TR/media-frags/",
+              "value": "xywh=0,0,480,360"
+            }
+          }
+        },
+        {
+          "type": "Annotation",
+          "id": "https://example.org/iiif/book1/page1/annotation/painting-2",
+          "motivation": "painting",
+          "body": {
+            "type": "Image",
+            "id": "https://example.org/iiif/book1/page1/full/max/0/bitonal.jpg",
+            "width": 480,
+            "height": 360,
+            "format": "image/jpeg"
+          },
+          "target": {
+            "type": "SpecificResource",
+            "source": "https://example.org/iiif/book1/page1/canvas-1",
+            "selector": {
+              "type": "FragmentSelector",
+              "conformsTo": "http://www.w3.org/TR/media-frags/",
+              "value": "xywh=0,360,480,360"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

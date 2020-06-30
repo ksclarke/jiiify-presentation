@@ -40,16 +40,17 @@ public class SelectorDeserializerTest extends AbstractTest {
     }
 
     /**
-     * Tests deserializing FragmentSelector.
+     * Tests deserializing MediaFragmentSelector.
      */
     @Test
-    public void testFragmentSelector() {
-        final JsonObject jsonObject = JsonObject.mapFrom(new MediaFragmentSelector(0, 0, 50, 50));
+    public void testMediaFragmentSelector() {
+        final String rawMediaFragment = "xywh=0,0,50,50";
+        final JsonObject jsonObject = JsonObject.mapFrom(new MediaFragmentSelector(rawMediaFragment));
         final MediaFragmentSelector selector = (MediaFragmentSelector) Json.decodeValue(jsonObject.toString(),
                 Selector.class);
 
-        assertEquals(0, selector.getX());
-        assertEquals(50, selector.getWidth());
+        assertEquals(Constants.FRAGMENT_SELECTOR, selector.getType());
+        assertEquals(rawMediaFragment, selector.getValue());
     }
 
     /**

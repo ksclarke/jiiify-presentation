@@ -91,6 +91,12 @@ public final class Constants {
 
     public static final String SELECTOR = "selector";
 
+    public static final String FRAGMENT_SELECTOR = "FragmentSelector";
+
+    public static final String CONFORMS_TO = "conformsTo";
+
+    public static final URI MEDIA_FRAGMENT_SPECIFICATION_URI = URI.create("http://www.w3.org/TR/media-frags/");
+
     public static final String RESOURCE = "resource";
 
     public static final String RESOURCES = "resources";

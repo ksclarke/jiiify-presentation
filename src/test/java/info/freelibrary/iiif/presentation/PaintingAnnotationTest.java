@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import info.freelibrary.iiif.presentation.properties.TimeMode;
 import info.freelibrary.iiif.presentation.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
+import info.freelibrary.iiif.presentation.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.utils.TestUtils;
 import info.freelibrary.util.StringUtils;
 import io.vertx.core.json.JsonObject;
@@ -36,12 +38,17 @@ public class PaintingAnnotationTest extends AbstractTest {
 
     private final URI myThumbnailID = URI.create("2df373a0-0701-4d04-b4dd-efd5c1a611ec" + ".ogg");
 
+    private final MediaFragmentSelector myFragmentSelector = new MediaFragmentSelector("xywh=0,0,1,1");
+
     /**
      * Tests constructing a painting annotation.
      */
     @Test
     public void testPaintingAnnotationURICanvas() {
-        assertEquals(myAnnoID, new PaintingAnnotation(myAnnoID, myCanvas).getID());
+        final PaintingAnnotation anno = new PaintingAnnotation(myAnnoID, myCanvas);
+
+        assertEquals(myAnnoID, anno.getID());
+        assertTrue(anno.getTarget() instanceof URI);
     }
 
     /**
@@ -49,7 +56,80 @@ public class PaintingAnnotationTest extends AbstractTest {
      */
     @Test
     public void testPaintingAnnotationStringCanvas() {
-        assertEquals(myAnnoID, new PaintingAnnotation(myAnnoID.toString(), myCanvas).getID());
+        final PaintingAnnotation anno = new PaintingAnnotation(myAnnoID.toString(), myCanvas);
+
+        assertEquals(myAnnoID, anno.getID());
+        assertTrue(anno.getTarget() instanceof URI);
+    }
+
+    /**
+     * Tests constructing a painting annotation.
+     */
+    @Test
+    public void testPaintingAnnotationURICanvasSpecificResource() {
+        final PaintingAnnotation anno = new PaintingAnnotation(myAnnoID, myCanvas, myFragmentSelector);
+
+        assertEquals(myAnnoID, anno.getID());
+        assertTrue(anno.getTarget() instanceof SpecificResource);
+    }
+
+    /**
+     * Tests constructing a painting annotation.
+     */
+    @Test
+    public void testPaintingAnnotationURICanvasString() {
+        final PaintingAnnotation anno = new PaintingAnnotation(myAnnoID, myCanvas, myFragmentSelector.getValue());
+
+        assertEquals(myAnnoID, anno.getID());
+        assertTrue(anno.getTarget() instanceof SpecificResource);
+    }
+
+    /**
+     * Tests constructing a painting annotation.
+     */
+    @Test
+    public void testPaintingAnnotationStringCanvasSpecificResource() {
+        final PaintingAnnotation anno = new PaintingAnnotation(myAnnoID.toString(), myCanvas, myFragmentSelector);
+
+        assertEquals(myAnnoID, anno.getID());
+        assertTrue(anno.getTarget() instanceof SpecificResource);
+    }
+
+    /**
+     * Tests constructing a painting annotation.
+     */
+    @Test
+    public void testPaintingAnnotationStringCanvasString() {
+        final PaintingAnnotation anno = new PaintingAnnotation(myAnnoID.toString(), myCanvas,
+                myFragmentSelector.getValue());
+
+        assertEquals(myAnnoID, anno.getID());
+        assertTrue(anno.getTarget() instanceof SpecificResource);
+    }
+
+    /**
+     * Tests setting the target.
+     */
+    @Test
+    public void testSetTarget() {
+        final PaintingAnnotation anno1 = new PaintingAnnotation(myAnnoID, myCanvas);
+        final PaintingAnnotation anno2 = new PaintingAnnotation(myAnnoID, myCanvas, myFragmentSelector);
+
+        final URI target1;
+        final SpecificResource target2;
+
+        assertTrue(anno1.getTarget() instanceof URI);
+        assertTrue(anno2.getTarget() instanceof SpecificResource);
+
+        target1 = (URI) anno1.getTarget();
+        target2 = (SpecificResource) anno2.getTarget();
+
+        // Swap the targets
+        anno1.setTarget(target2);
+        anno2.setTarget(target1);
+
+        assertTrue(anno1.getTarget() instanceof SpecificResource);
+        assertTrue(anno2.getTarget() instanceof URI);
     }
 
     /**

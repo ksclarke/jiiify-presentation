@@ -20,6 +20,7 @@ import info.freelibrary.iiif.presentation.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.properties.Summary;
 import info.freelibrary.iiif.presentation.properties.TimeMode;
 import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
+import info.freelibrary.iiif.presentation.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -38,9 +39,9 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation> implement
      * Creates a painting annotation.
      *
      * @param aID An ID
-     * @param aCanvas A canvas
+     * @param aCanvas A canvas to target
      */
-    protected PaintingAnnotation(final URI aID, final Canvas aCanvas) {
+    protected PaintingAnnotation(final URI aID, final AbstractCanvas<?> aCanvas) {
         super(aID, aCanvas);
         myMotivation = MOTIVATION;
     }
@@ -49,11 +50,58 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation> implement
      * Creates a painting annotation.
      *
      * @param aID An ID in string form
-     * @param aCanvas A canvas
+     * @param aCanvas A canvas to target
      */
-    protected PaintingAnnotation(final String aID, final Canvas aCanvas) {
-        super(aID, aCanvas);
+    protected PaintingAnnotation(final String aID, final AbstractCanvas<?> aCanvas) {
+        this(URI.create(aID), aCanvas);
+    }
+
+    /**
+     * Creates a painting annotation.
+     *
+     * @param aID An ID
+     * @param aCanvas A canvas to target
+     * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to target
+     */
+    protected PaintingAnnotation(final URI aID, final AbstractCanvas<?> aCanvas,
+            final MediaFragmentSelector aCanvasRegion) {
+        super(aID, aCanvas, aCanvasRegion);
         myMotivation = MOTIVATION;
+    }
+
+    /**
+     * Creates a painting annotation.
+     *
+     * @param aID An ID
+     * @param aCanvas A canvas to target
+     * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to target
+     */
+    protected PaintingAnnotation(final URI aID, final AbstractCanvas<?> aCanvas, final String aCanvasRegion) {
+        super(aID, aCanvas, aCanvasRegion);
+        myMotivation = MOTIVATION;
+    }
+
+    /**
+     * Creates a painting annotation.
+     *
+     * @param aID An ID in string form
+     * @param aCanvas A canvas to target
+     * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to target
+     */
+    protected PaintingAnnotation(final String aID, final AbstractCanvas<?> aCanvas,
+            final MediaFragmentSelector aCanvasRegion) {
+        this(URI.create(aID), aCanvas, aCanvasRegion);
+    }
+
+    /**
+     * Creates a painting annotation.
+     *
+     * @param aID An ID in string form
+     * @param aCanvas A canvas to target
+     * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to target
+     */
+    protected PaintingAnnotation(final String aID, final AbstractCanvas<?> aCanvas, final String aCanvasRegion) {
+        this(URI.create(aID), aCanvas, aCanvasRegion);
     }
 
     /**
@@ -111,6 +159,11 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation> implement
     }
 
     @Override
+    public Object getTarget() {
+        return super.getTarget();
+    }
+
+    @Override
     public PaintingAnnotation setTarget(final URI aURI) {
         return (PaintingAnnotation) super.setTarget(aURI);
     }
@@ -118,6 +171,11 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation> implement
     @Override
     public PaintingAnnotation setTarget(final String aURI) {
         return (PaintingAnnotation) super.setTarget(aURI);
+    }
+
+    @Override
+    public PaintingAnnotation setTarget(final SpecificResource aSpecificResource) {
+        return (PaintingAnnotation) super.setTarget(aSpecificResource);
     }
 
     @Override

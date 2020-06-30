@@ -5,6 +5,7 @@ import java.net.URI;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
@@ -17,7 +18,8 @@ import io.vertx.core.json.JsonObject;
  * A specific resource that can reference a particular region, time frame, or other aspect of another resource using a
  * selector.
  */
-@JsonPropertyOrder({ Constants.TYPE, Constants.ID, Constants.SOURCE, Constants.ITEMS })
+@JsonPropertyOrder({ Constants.TYPE, Constants.ID, Constants.SOURCE, Constants.SELECTOR })
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class SpecificResource {
 
     private Selector mySelector;
@@ -27,15 +29,35 @@ public class SpecificResource {
     private URI myID;
 
     /**
-     * Creates a new specific resource from the supplied ID, source, and selector.
+     * Creates a new specific resource from the supplied source and selector.
      *
-     * @param aID An ID
+     * @param aSource A source in string form
+     * @param aSelector A selector
+     */
+    public SpecificResource(final String aSource, final Selector aSelector) {
+        this(URI.create(aSource), aSelector);
+    }
+
+    /**
+     * Creates a new specific resource from the supplied source and selector.
+     *
      * @param aSource A source
      * @param aSelector A selector
      */
-    public SpecificResource(final String aID, final String aSource, final Selector aSelector) {
-        mySource = URI.create(aSource);
+    public SpecificResource(final URI aSource, final Selector aSelector) {
+        mySource = aSource;
         mySelector = aSelector;
+    }
+
+    /**
+     * Creates a new specific resource from the supplied ID, source, and selector.
+     *
+     * @param aID An ID in string form
+     * @param aSource A source in string form
+     * @param aSelector A selector
+     */
+    public SpecificResource(final String aID, final String aSource, final Selector aSelector) {
+        this(URI.create(aSource), aSelector);
         myID = URI.create(aID);
     }
 
@@ -47,8 +69,7 @@ public class SpecificResource {
      * @param aSelector A selector
      */
     public SpecificResource(final URI aID, final URI aSource, final Selector aSelector) {
-        mySelector = aSelector;
-        mySource = aSource;
+        this(aSource, aSelector);
         myID = aID;
     }
 

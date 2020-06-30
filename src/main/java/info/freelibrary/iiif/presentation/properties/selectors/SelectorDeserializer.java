@@ -2,19 +2,27 @@
 package info.freelibrary.iiif.presentation.properties.selectors;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import info.freelibrary.iiif.presentation.Constants;
+import info.freelibrary.iiif.presentation.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
 
 /**
  * A deserializer for classes that implement the Selector interface.
  */
 class SelectorDeserializer extends StdDeserializer<Selector> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SelectorDeserializer.class, Constants.BUNDLE_NAME);
 
     /**
      * The <code>serialVersionUID</code> for SelectorDeserializer.
@@ -49,13 +57,23 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
                     return new AudioContentSelector();
                 case "VisualContentSelector":
                     return new VisualContentSelector();
-                case "MediaFragmentSelector":
-                    final int x = node.get(MediaFragmentSelector.X_COORDINATE).asInt();
-                    final int y = node.get(MediaFragmentSelector.Y_COORDINATE).asInt();
-                    final int width = node.get(Constants.WIDTH).asInt();
-                    final int height = node.get(Constants.HEIGHT).asInt();
+                case "FragmentSelector":
+                    final String fragment = node.get(Constants.VALUE).asText();
+                    final String conformsToString = node.get(Constants.CONFORMS_TO).asText();
+                    final URI conformsTo;
 
-                    return new MediaFragmentSelector(x, y, width, height);
+                    try {
+                        conformsTo = new URI(conformsToString);
+                    } catch (final URISyntaxException details) {
+                        throw new JsonMappingException(aParser, details.getMessage(), details);
+                    }
+
+                    if (Constants.MEDIA_FRAGMENT_SPECIFICATION_URI.equals(conformsTo)) {
+                        return new MediaFragmentSelector(fragment);
+                    } else {
+                        throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_061, conformsTo),
+                                aParser.getCurrentLocation());
+                    }
                 case "ImageApiSelector":
                     final String size = getText(node, ImageApiSelector.SIZE, ImageApiSelector.DEFAULT_SIZE);
                     final String region = getText(node, ImageApiSelector.REGION, ImageApiSelector.DEFAULT_REGION);

@@ -16,9 +16,11 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.Label;
 import info.freelibrary.iiif.presentation.properties.behaviors.CanvasBehavior;
+import info.freelibrary.iiif.presentation.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.StringUtils;
 
 import io.vertx.core.json.JsonObject;
 
@@ -31,6 +33,22 @@ import io.vertx.core.json.JsonObject;
 abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableResource<AbstractCanvas<T>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractCanvas.class, Constants.BUNDLE_NAME);
+
+    private static final String PAINTING_ANNO_PAGE_ID_TEMPLATE = "{}/annotation/painting-page-{}";
+
+    private static final String PAINTING_ANNO_ID_TEMPLATE = "{}/annotation/painting-{}";
+
+    private static final String SUPPLEMENTING_ANNO_PAGE_ID_TEMPLATE = "{}/annotation/supplementing-page-{}";
+
+    private static final String SUPPLEMENTING_ANNO_ID_TEMPLATE = "{}/annotation/supplementing-{}";
+
+    private static final String CANVAS_ID_SUBSTRING_MATCH_PATTERN = "/canvas-[0-9]+$";
+
+    private static final String CANVAS_ID_SUBSTRING_REPLACE_PATTERN = Constants.EMPTY;
+
+    private static final String SPATIAL = "spatial";
+
+    private static final String TEMPORAL = "temporal";
 
     private int myWidth;
 
@@ -266,6 +284,141 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         }
     }
 
+    @SuppressWarnings("unchecked") // Moved SafeVarargs to extending classes where method can be final
+    protected AbstractCanvas<T> paintWith(final ContentResource... aContentArray) throws IllegalArgumentException {
+        final AnnotationPage<PaintingAnnotation> page;
+        final int pageCount;
+        final PaintingAnnotation anno = new PaintingAnnotation(getNextPaintingAnnoId(), this);
+
+        for (final ContentResource content : aContentArray) {
+            try {
+                if (canFrame(content)) {
+                    anno.addBody(content);
+                }
+            } catch (final ContentResourceOutOfBoundsException details) {
+                throw new IllegalArgumentException(details);
+            }
+        }
+
+        pageCount = getPaintingPages().size();
+        if (pageCount == 0) {
+            page = new AnnotationPage<>(getNextPaintingPageId());
+            addPaintingPages(page);
+        } else {
+            page = getPaintingPages().get(pageCount - 1);
+        }
+        page.addAnnotations(anno);
+
+        return this;
+    }
+
+    protected AbstractCanvas<T> paintWith(final List<ContentResource> aContentList) throws IllegalArgumentException {
+        return paintWith(aContentList.toArray(new ContentResource[] {}));
+    }
+
+    @SuppressWarnings("unchecked") // Moved SafeVarargs to extending classes where method can be final
+    protected AbstractCanvas<T> paintWith(final MediaFragmentSelector aCanvasRegion,
+            final ContentResource... aContentArray) throws IllegalArgumentException {
+        final AnnotationPage<PaintingAnnotation> page;
+        final int pageCount;
+        final PaintingAnnotation anno = new PaintingAnnotation(getNextPaintingAnnoId(), this, aCanvasRegion);
+
+        for (final ContentResource content : aContentArray) {
+            try {
+                // TODO: do bounds checking w.r.t. aCanvasRegion
+                if (canFrame(content)) {
+                    anno.addBody(content);
+                }
+            } catch (final ContentResourceOutOfBoundsException details) {
+                throw new IllegalArgumentException(details);
+            }
+        }
+
+        pageCount = getPaintingPages().size();
+        if (pageCount == 0) {
+            page = new AnnotationPage<>(getNextPaintingPageId());
+            addPaintingPages(page);
+        } else {
+            page = getPaintingPages().get(pageCount - 1);
+        }
+        page.addAnnotations(anno);
+
+        return this;
+    }
+
+    protected AbstractCanvas<T> paintWith(final String aCanvasRegion, final ContentResource... aContentArray)
+            throws IllegalArgumentException {
+        return paintWith(new MediaFragmentSelector(aCanvasRegion), aContentArray);
+
+    }
+
+    protected AbstractCanvas<T> paintWith(final MediaFragmentSelector aCanvasRegion,
+            final List<ContentResource> aContentList) throws IllegalArgumentException {
+        return paintWith(aCanvasRegion, aContentList.toArray(new ContentResource[] {}));
+    }
+
+    protected AbstractCanvas<T> paintWith(final String aCanvasRegion, final List<ContentResource> aContentList)
+            throws IllegalArgumentException {
+        return paintWith(aCanvasRegion, aContentList.toArray(new ContentResource[] {}));
+    }
+
+    @SuppressWarnings("unchecked") // Moved SafeVarargs to extending classes where method can be final
+    protected AbstractCanvas<T> supplementWith(final ContentResource... aContentArray) {
+        final AnnotationPage<SupplementingAnnotation> page;
+        final SupplementingAnnotation anno = new SupplementingAnnotation(getNextSupplementingAnnoId(), this);
+        final int pageCount = getSupplementingPages().size();
+
+        if (pageCount == 0) {
+            page = new AnnotationPage<>(getNextSupplementingPageId());
+        } else {
+            page = getSupplementingPages().get(pageCount - 1);
+        }
+        addSupplementingPages(page);
+        page.addAnnotations(anno);
+        anno.addBody(aContentArray);
+
+        return this;
+    }
+
+    protected AbstractCanvas<T> supplementWith(final List<ContentResource> aContentList)
+            throws IllegalArgumentException {
+        return supplementWith(aContentList.toArray(new ContentResource[] {}));
+    }
+
+    @SuppressWarnings("unchecked") // Moved SafeVarargs to extending classes where method can be final
+    protected AbstractCanvas<T> supplementWith(final MediaFragmentSelector aCanvasRegion,
+            final ContentResource... aContentArray) {
+        final AnnotationPage<SupplementingAnnotation> page;
+        final SupplementingAnnotation anno = new SupplementingAnnotation(getNextSupplementingAnnoId(), this,
+                aCanvasRegion);
+        final int pageCount = getSupplementingPages().size();
+
+        if (pageCount == 0) {
+            page = new AnnotationPage<>(getNextSupplementingPageId());
+        } else {
+            page = getSupplementingPages().get(pageCount - 1);
+        }
+        addSupplementingPages(page);
+        page.addAnnotations(anno);
+        anno.addBody(aContentArray);
+
+        return this;
+    }
+
+    protected AbstractCanvas<T> supplementWith(final String aCanvasRegion, final ContentResource... aContentArray) {
+        return supplementWith(new MediaFragmentSelector(aCanvasRegion), aContentArray);
+    }
+
+    protected AbstractCanvas<T> supplementWith(final MediaFragmentSelector aCanvasRegion,
+            final List<ContentResource> aContentList) throws IllegalArgumentException {
+        return supplementWith(aCanvasRegion, aContentList.toArray(new ContentResource[] {}));
+    }
+
+    protected AbstractCanvas<T> supplementWith(final String aCanvasRegion, final List<ContentResource> aContentList)
+            throws IllegalArgumentException {
+        return supplementWith(new MediaFragmentSelector(aCanvasRegion), aContentList.toArray(new ContentResource[] {}));
+    }
+
     /**
      * Returns a JsonObject of the Canvas.
      *
@@ -332,5 +485,123 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         }
 
         return builder.toString();
+    }
+
+    /**
+     * Gets the ID to use for the next {@link AnnotationPage} that will contain {@link PaintingAnnotation}s.
+     *
+     * @return The ID
+     */
+    private String getNextPaintingPageId() {
+        final String baseURI = getID().toString().replaceFirst(CANVAS_ID_SUBSTRING_MATCH_PATTERN,
+                CANVAS_ID_SUBSTRING_REPLACE_PATTERN);
+        final int index = getPaintingPages().size() + 1;
+
+        return StringUtils.format(PAINTING_ANNO_PAGE_ID_TEMPLATE, baseURI, index);
+    }
+
+    /**
+     * Gets the ID to use for the next {@link AnnotationPage} that will contain {@link SupplementingAnnotation}s.
+     *
+     * @return The ID
+     */
+    private String getNextSupplementingPageId() {
+        final String baseURI = getID().toString().replaceFirst(CANVAS_ID_SUBSTRING_MATCH_PATTERN,
+                CANVAS_ID_SUBSTRING_REPLACE_PATTERN);
+        final int index = getSupplementingPages().size() + 1;
+
+        return StringUtils.format(SUPPLEMENTING_ANNO_PAGE_ID_TEMPLATE, baseURI, index);
+    }
+
+    /**
+     * Gets the ID to use for the next {@link PaintingAnnotation}.
+     *
+     * @return The ID
+     */
+    private String getNextPaintingAnnoId() {
+        final String baseURI = getID().toString().replaceFirst(CANVAS_ID_SUBSTRING_MATCH_PATTERN,
+                CANVAS_ID_SUBSTRING_REPLACE_PATTERN);
+        final int index = getPaintingAnnoCount() + 1;
+
+        return StringUtils.format(PAINTING_ANNO_ID_TEMPLATE, baseURI, index);
+    }
+
+    /**
+     * Gets the ID to use for the next {@link SupplementingAnnotation}.
+     *
+     * @return The ID
+     */
+    private String getNextSupplementingAnnoId() {
+        final String baseURI = getID().toString().replaceFirst(CANVAS_ID_SUBSTRING_MATCH_PATTERN,
+                CANVAS_ID_SUBSTRING_REPLACE_PATTERN);
+        final int index = getSupplementingAnnoCount() + 1;
+
+        return StringUtils.format(SUPPLEMENTING_ANNO_ID_TEMPLATE, baseURI, index);
+    }
+
+    /**
+     * Gets the total number of {@link PaintingAnnotation}s on all {@link AnnotationPage}s on this canvas.
+     *
+     * @return The count
+     */
+    private int getPaintingAnnoCount() {
+        int count = 0;
+
+        for (final AnnotationPage<PaintingAnnotation> page : getPaintingPages()) {
+            count += page.getAnnotations().size();
+        }
+        return count;
+    }
+
+    /**
+     * Gets the total number of {@link SupplementingAnnotation}s on all {@link AnnotationPage}s on this canvas.
+     *
+     * @return The count
+     */
+    private int getSupplementingAnnoCount() {
+        int count = 0;
+
+        for (final AnnotationPage<SupplementingAnnotation> page : getSupplementingPages()) {
+            count += page.getAnnotations().size();
+        }
+        return count;
+    }
+
+    /**
+     * Checks if a content resource can "fit" on this canvas.
+     *
+     * @param aContent A content resoure
+     * @return True if the content resource fits within the bounds of the canvas
+     * @throws ContentResourceOutOfBoundsException If the content resource won't fit
+     */
+    private boolean canFrame(final ContentResource aContent) throws ContentResourceOutOfBoundsException {
+        if (aContent instanceof SpatialContentResource) {
+            // The canvas must have a width and height, which must not be smaller than that of the content
+            if (myWidth == 0 || myHeight == 0) {
+                throw new ContentResourceOutOfBoundsException(MessageCodes.JPA_059, aContent.getID(), SPATIAL, getID());
+            } else {
+                final SpatialContentResource<?> spatialPainting = (SpatialContentResource<?>) aContent;
+
+                if (getWidth() < spatialPainting.getWidth() || getHeight() < spatialPainting.getHeight()) {
+                    throw new ContentResourceOutOfBoundsException(MessageCodes.JPA_060, aContent.getID(), SPATIAL,
+                            getID());
+                }
+            }
+        }
+        if (aContent instanceof TemporalContentResource) {
+            // The canvas must have a duration, which must not be shorter than that of the content
+            if (myDuration == 0.0f) {
+                throw new ContentResourceOutOfBoundsException(MessageCodes.JPA_059, aContent.getID(), TEMPORAL,
+                        getID());
+            } else {
+                final TemporalContentResource<?> temporalPainting = (TemporalContentResource<?>) aContent;
+
+                if (getDuration() < temporalPainting.getDuration()) {
+                    throw new ContentResourceOutOfBoundsException(MessageCodes.JPA_060, aContent.getID(), TEMPORAL,
+                            getID());
+                }
+            }
+        }
+        return true;
     }
 }

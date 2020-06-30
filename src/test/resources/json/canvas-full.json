@@ -1,9 +1,9 @@
 {
   "type": "Canvas",
   "label": { "none": [ "p. 1" ] },
-  "id": "https://example.org/iiif/book1/canvas/p1",
-  "width": 1000,
-  "height": 750,
+  "id": "https://example.org/iiif/book1/page1/canvas-1",
+  "width": 480,
+  "height": 360,
   "thumbnail": [
     {
       "type": "Image",
@@ -21,20 +21,20 @@
   "items": [
     {
       "type": "AnnotationPage",
-      "id": "https://example.org/iiif/book1/page/p1/1",
+      "id": "https://example.org/iiif/book1/page1/annotation/painting-page-1",
       "items": [
         {
           "type": "Annotation",
-          "id": "https://example.org/iiif/book1/annotation/p0001-image",
+          "id": "https://example.org/iiif/book1/page1/annotation/painting-1",
           "motivation": "painting",
           "body": {
             "type": "Image",
             "id": "https://example.org/iiif/book1/page1/full/max/0/default.jpg",
-            "width": 2000,
-            "height": 1500,
+            "width": 480,
+            "height": 360,
             "format": "image/jpeg"
           },
-          "target": "https://example.org/iiif/book1/canvas/p1"
+          "target": "https://example.org/iiif/book1/page1/canvas-1"
         }
       ]
     }
@@ -42,18 +42,18 @@
   "annotations": [
     {
       "type": "AnnotationPage",
-      "id": "https://example.org/iiif/book1/comments/p1/1",
+      "id": "https://example.org/iiif/book1/page1/annotation/supplementing-page-1",
       "items": [
         {
           "type": "Annotation",
-          "id": "https://example.org/iiif/book1/annotation/p0001-ocr",
+          "id": "https://example.org/iiif/book1/page1/annotation/supplementing-1",
           "motivation": "supplementing",
           "body": {
             "type": "Text",
             "id": "https://example.org/iiif/book1/page1/ocr.xml",
             "format": "application/xml"
           },
-          "target": "https://example.org/iiif/book1/canvas/p1"
+          "target": "https://example.org/iiif/book1/page1/canvas-1"
         }
       ]
     }

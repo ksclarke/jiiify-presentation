@@ -34,7 +34,8 @@ import io.vertx.core.json.JsonObject;
  */
 @JsonPropertyOrder({ Constants.TYPE, Constants.LABEL, Constants.ID, Constants.THUMBNAIL, Constants.WIDTH,
     Constants.HEIGHT, Constants.FORMAT, Constants.LANGUAGE, Constants.SERVICE })
-public class ImageContent extends AbstractContentResource<ImageContent> implements Thumbnail, Resource<ImageContent> {
+public class ImageContent extends AbstractContentResource<ImageContent> implements Thumbnail, Resource<ImageContent>,
+        SpatialContentResource<ImageContent> {
 
     private Optional<ImageInfoService> myService;
 
@@ -219,6 +220,7 @@ public class ImageContent extends AbstractContentResource<ImageContent> implemen
      * @param aHeight An image height
      * @return This image content
      */
+    @Override
     @JsonIgnore
     public ImageContent setWidthHeight(final int aWidth, final int aHeight) {
         setWidth(aWidth);
@@ -232,6 +234,7 @@ public class ImageContent extends AbstractContentResource<ImageContent> implemen
      *
      * @return The image's width
      */
+    @Override
     @JsonGetter(Constants.WIDTH)
     @JsonInclude(Include.NON_DEFAULT)
     public int getWidth() {
@@ -243,6 +246,7 @@ public class ImageContent extends AbstractContentResource<ImageContent> implemen
      *
      * @return The image's height
      */
+    @Override
     @JsonGetter(Constants.HEIGHT)
     @JsonInclude(Include.NON_DEFAULT)
     public int getHeight() {

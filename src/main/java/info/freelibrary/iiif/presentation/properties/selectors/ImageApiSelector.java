@@ -10,7 +10,7 @@ import info.freelibrary.util.StringUtils;
 /**
  * A selector for IIIF Image APIs.
  */
-public class ImageApiSelector extends AbstractSelector {
+public class ImageApiSelector implements Selector {
 
     protected static final String SIZE = "size";
 

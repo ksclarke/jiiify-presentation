@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * A selector that selects an individual point in a target resource.
  */
 @JsonInclude(Include.NON_NULL)
-public class PointSelector extends AbstractSelector {
+public class PointSelector implements Selector {
 
     protected static final String X_COORDINATE = "x";
 

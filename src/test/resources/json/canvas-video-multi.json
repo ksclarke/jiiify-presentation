@@ -1,0 +1,60 @@
+{
+  "type": "Canvas",
+  "label": { "none": [ "p. 1" ] },
+  "id": "https://example.org/iiif/reel1/segment1/canvas-1",
+  "width": 480,
+  "height": 360,
+  "duration": 7200,
+  "items": [
+    {
+      "type": "AnnotationPage",
+      "id": "https://example.org/iiif/reel1/segment1/annotation/painting-page-1",
+      "items": [
+        {
+          "type": "Annotation",
+          "id": "https://example.org/iiif/reel1/segment1/annotation/painting-1",
+          "motivation": "painting",
+          "body": {
+            "type": "Video",
+            "id": "https://example.org/iiif/reel1/segment1.mp4",
+            "width": 480,
+            "height": 360,
+            "duration": 600,
+            "format": "video/mp4"
+          },
+          "target": {
+            "type": "SpecificResource",
+            "source": "https://example.org/iiif/reel1/segment1/canvas-1",
+            "selector": {
+              "type": "FragmentSelector",
+              "conformsTo": "http://www.w3.org/TR/media-frags/",
+              "value": "xywh=0,0,480,360&t=0,600"
+            }
+          }
+        },
+        {
+          "type": "Annotation",
+          "id": "https://example.org/iiif/reel1/segment1/annotation/painting-2",
+          "motivation": "painting",
+          "body": {
+            "type": "Video",
+            "id": "https://example.org/iiif/reel1/segment2.mp4",
+            "width": 480,
+            "height": 360,
+            "duration": 600,
+            "format": "video/mp4"
+          },
+          "target": {
+            "type": "SpecificResource",
+            "source": "https://example.org/iiif/reel1/segment1/canvas-1",
+            "selector": {
+              "type": "FragmentSelector",
+              "conformsTo": "http://www.w3.org/TR/media-frags/",
+              "value": "xywh=0,0,480,360&t=600,1200"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

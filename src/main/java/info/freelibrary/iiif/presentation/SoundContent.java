@@ -35,7 +35,8 @@ import io.vertx.core.json.JsonObject;
  */
 @JsonPropertyOrder({ Constants.TYPE, Constants.ID, Constants.THUMBNAIL, Constants.DURATION, Constants.FORMAT,
     Constants.LANGUAGE })
-public class SoundContent extends AbstractContentResource<SoundContent> implements Thumbnail, Resource<SoundContent> {
+public class SoundContent extends AbstractContentResource<SoundContent> implements Thumbnail, Resource<SoundContent>,
+        TemporalContentResource<SoundContent> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SoundContent.class, Constants.BUNDLE_NAME);
 
@@ -216,6 +217,7 @@ public class SoundContent extends AbstractContentResource<SoundContent> implemen
      *
      * @return The duration of the sound content
      */
+    @Override
     @JsonGetter(Constants.DURATION)
     @JsonInclude(Include.NON_DEFAULT)
     public float getDuration() {
@@ -228,6 +230,7 @@ public class SoundContent extends AbstractContentResource<SoundContent> implemen
      * @param aDuration A sound content duration
      * @return The sound content
      */
+    @Override
     @JsonSetter(Constants.DURATION)
     public SoundContent setDuration(final float aDuration) {
         if ((aDuration > 0) && (Float.isFinite(aDuration))) {

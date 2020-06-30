@@ -19,6 +19,7 @@ import info.freelibrary.iiif.presentation.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.properties.Summary;
 import info.freelibrary.iiif.presentation.properties.TimeMode;
+import info.freelibrary.iiif.presentation.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -38,9 +39,9 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
      * Creates a supplementing annotation.
      *
      * @param aID An ID
-     * @param aCanvas A canvas
+     * @param aCanvas A canvas to target
      */
-    protected SupplementingAnnotation(final URI aID, final Canvas aCanvas) {
+    protected SupplementingAnnotation(final URI aID, final AbstractCanvas<?> aCanvas) {
         super(aID, aCanvas);
         myMotivation = MOTIVATION;
     }
@@ -49,11 +50,58 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
      * Creates a supplementing annotation.
      *
      * @param aID An ID in string form
-     * @param aCanvas A canvas
+     * @param aCanvas A canvas to target
      */
-    protected SupplementingAnnotation(final String aID, final Canvas aCanvas) {
-        super(aID, aCanvas);
+    protected SupplementingAnnotation(final String aID, final AbstractCanvas<?> aCanvas) {
+        this(URI.create(aID), aCanvas);
+    }
+
+    /**
+     * Creates a supplementing annotation.
+     *
+     * @param aID An ID
+     * @param aCanvas A canvas to target
+     * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to target
+     */
+    protected SupplementingAnnotation(final URI aID, final AbstractCanvas<?> aCanvas,
+            final MediaFragmentSelector aCanvasRegion) {
+        super(aID, aCanvas, aCanvasRegion);
         myMotivation = MOTIVATION;
+    }
+
+    /**
+     * Creates a supplementing annotation.
+     *
+     * @param aID An ID
+     * @param aCanvas A canvas to target
+     * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to target
+     */
+    protected SupplementingAnnotation(final URI aID, final AbstractCanvas<?> aCanvas, final String aCanvasRegion) {
+        super(aID, aCanvas, aCanvasRegion);
+        myMotivation = MOTIVATION;
+    }
+
+    /**
+     * Creates a supplementing annotation.
+     *
+     * @param aID An ID in string form
+     * @param aCanvas A canvas to target
+     * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to target
+     */
+    protected SupplementingAnnotation(final String aID, final AbstractCanvas<?> aCanvas,
+            final MediaFragmentSelector aCanvasRegion) {
+        this(URI.create(aID), aCanvas, aCanvasRegion);
+    }
+
+    /**
+     * Creates a supplementing annotation.
+     *
+     * @param aID An ID in string form
+     * @param aCanvas A canvas to target
+     * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to target
+     */
+    protected SupplementingAnnotation(final String aID, final AbstractCanvas<?> aCanvas, final String aCanvasRegion) {
+        this(URI.create(aID), aCanvas, aCanvasRegion);
     }
 
     /**
@@ -111,6 +159,11 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     }
 
     @Override
+    public Object getTarget() {
+        return super.getTarget();
+    }
+
+    @Override
     public SupplementingAnnotation setTarget(final URI aURI) {
         return (SupplementingAnnotation) super.setTarget(aURI);
     }
@@ -118,6 +171,11 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     @Override
     public SupplementingAnnotation setTarget(final String aURI) {
         return (SupplementingAnnotation) super.setTarget(aURI);
+    }
+
+    @Override
+    public SupplementingAnnotation setTarget(final SpecificResource aSpecificResource) {
+        return (SupplementingAnnotation) super.setTarget(aSpecificResource);
     }
 
     @Override

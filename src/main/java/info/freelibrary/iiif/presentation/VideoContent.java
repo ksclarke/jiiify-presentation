@@ -35,7 +35,8 @@ import io.vertx.core.json.JsonObject;
  */
 @JsonPropertyOrder({ Constants.TYPE, Constants.ID, Constants.THUMBNAIL, Constants.WIDTH, Constants.HEIGHT,
     Constants.DURATION, Constants.FORMAT, Constants.LANGUAGE })
-public class VideoContent extends AbstractContentResource<VideoContent> implements Thumbnail, Resource<VideoContent> {
+public class VideoContent extends AbstractContentResource<VideoContent> implements Thumbnail, Resource<VideoContent>,
+        SpatialContentResource<VideoContent>, TemporalContentResource<VideoContent> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VideoContent.class, Constants.BUNDLE_NAME);
 
@@ -218,6 +219,7 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
      *
      * @return The video's width
      */
+    @Override
     @JsonGetter(Constants.WIDTH)
     @JsonInclude(Include.NON_DEFAULT)
     public int getWidth() {
@@ -229,6 +231,7 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
      *
      * @return The video's height
      */
+    @Override
     @JsonGetter(Constants.HEIGHT)
     @JsonInclude(Include.NON_DEFAULT)
     public int getHeight() {
@@ -242,6 +245,7 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
      * @param aHeight A video height
      * @return This video content
      */
+    @Override
     @JsonIgnore
     public VideoContent setWidthHeight(final int aWidth, final int aHeight) {
         setWidth(aWidth);
@@ -255,6 +259,7 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
      *
      * @return The duration of the video content
      */
+    @Override
     @JsonGetter(Constants.DURATION)
     @JsonInclude(Include.NON_DEFAULT)
     public float getDuration() {
@@ -267,6 +272,7 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
      * @param aDuration A video content's duration
      * @return The video content
      */
+    @Override
     @JsonSetter(Constants.DURATION)
     public VideoContent setDuration(final float aDuration) {
         if ((aDuration > 0) && (Float.isFinite(aDuration))) {

@@ -62,9 +62,12 @@ public interface ContentAnnotation<T extends ContentAnnotation<T>> {
     /**
      * Gets the target of this annotation.
      *
-     * @return The URI target
+     * <p>The return value is an instance of either {@link URI} or {@link SpecificResource}. Users should check the type
+     * with <code>instanceof</code> and then cast as appropriate.</p>
+     *
+     * @return The target
      */
-    URI getTarget();
+    Object getTarget();
 
     /**
      * Sets the target of this annotation.
@@ -81,6 +84,14 @@ public interface ContentAnnotation<T extends ContentAnnotation<T>> {
      * @return This annotation
      */
     T setTarget(String aURI);
+
+    /**
+     * Sets the target of this annotation.
+     *
+     * @param aSpecificResource A target specific resource
+     * @return This annotation
+     */
+    T setTarget(SpecificResource aSpecificResource);
 
     /**
      * Gets the motivation of the annotation.

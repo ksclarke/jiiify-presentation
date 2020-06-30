@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import info.freelibrary.iiif.presentation.properties.Behavior;
 import info.freelibrary.iiif.presentation.properties.TimeMode;
 import info.freelibrary.iiif.presentation.properties.behaviors.ResourceBehavior;
+import info.freelibrary.iiif.presentation.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.utils.ContentResourceComparator;
 import info.freelibrary.iiif.presentation.utils.MessageCodes;
 import info.freelibrary.util.Logger;
@@ -47,7 +48,9 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
 
     protected List<ContentResource> myBody;
 
-    protected URI myTarget;
+    protected URI myTargetURI;
+
+    protected SpecificResource myTargetSpecificResource;
 
     @JsonProperty(Constants.MOTIVATION)
     protected String myMotivation;
@@ -59,22 +62,66 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      * Creates a IIIF presentation annotation resource.
      *
      * @param aID An ID
-     * @param aCanvas A canvas
+     * @param aCanvas A canvas to target
      */
-    protected Annotation(final URI aID, final Canvas aCanvas) {
+    protected Annotation(final URI aID, final AbstractCanvas<?> aCanvas) {
         super(ResourceTypes.ANNOTATION, aID);
-        myTarget = aCanvas.getID();
+        myTargetURI = aCanvas.getID();
     }
 
     /**
      * Creates a IIIF presentation annotation resource.
      *
      * @param aID An ID in string form
-     * @param aCanvas A canvas
+     * @param aCanvas A canvas to target
      */
-    protected Annotation(final String aID, final Canvas aCanvas) {
-        super(ResourceTypes.ANNOTATION, URI.create(aID));
-        myTarget = aCanvas.getID();
+    protected Annotation(final String aID, final AbstractCanvas<?> aCanvas) {
+        this(URI.create(aID), aCanvas);
+    }
+
+    /**
+     * Creates a IIIF presentation annotation resource.
+     *
+     * @param aID An ID
+     * @param aCanvas A canvas to target
+     * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to target
+     */
+    protected Annotation(final URI aID, final AbstractCanvas<?> aCanvas, final MediaFragmentSelector aCanvasRegion) {
+        super(ResourceTypes.ANNOTATION, aID);
+        myTargetSpecificResource = new SpecificResource(aCanvas.getID(), aCanvasRegion);
+    }
+
+    /**
+     * Creates a IIIF presentation annotation resource.
+     *
+     * @param aID An ID
+     * @param aCanvas A canvas to target
+     * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to target
+     */
+    protected Annotation(final URI aID, final AbstractCanvas<?> aCanvas, final String aCanvasRegion) {
+        this(aID, aCanvas, new MediaFragmentSelector(aCanvasRegion));
+    }
+
+    /**
+     * Creates a IIIF presentation annotation resource.
+     *
+     * @param aID An ID in string form
+     * @param aCanvas A canvas to target
+     * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to target
+     */
+    protected Annotation(final String aID, final AbstractCanvas<?> aCanvas, final MediaFragmentSelector aCanvasRegion) {
+        this(URI.create(aID), aCanvas, aCanvasRegion);
+    }
+
+    /**
+     * Creates a IIIF presentation annotation resource.
+     *
+     * @param aID An ID in string form
+     * @param aCanvas A canvas to target
+     * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to target
+     */
+    protected Annotation(final String aID, final AbstractCanvas<?> aCanvas, final String aCanvasRegion) {
+        this(URI.create(aID), aCanvas, new MediaFragmentSelector(aCanvasRegion));
     }
 
     /**
@@ -122,25 +169,33 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
         return addBody(aContentArray.toArray(new ContentResource[] {}));
     }
 
-    /**
-     * Gets the target of this annotation.
-     *
-     * @return The URI target
-     */
     @JsonGetter(Constants.TARGET)
-    public URI getTarget() {
-        return myTarget;
+    public Object getTarget() {
+        if (myTargetSpecificResource != null) {
+            return myTargetSpecificResource;
+        } else {
+            return myTargetURI;
+        }
     }
 
     @JsonIgnore
     protected Annotation<T> setTarget(final URI aURI) {
-        myTarget = checkNotNull(aURI);
+        myTargetURI = checkNotNull(aURI);
+        myTargetSpecificResource = null;
         return this;
     }
 
     @JsonSetter(Constants.TARGET)
     protected Annotation<T> setTarget(final String aURI) {
-        myTarget = checkNotNull(URI.create(aURI));
+        myTargetURI = checkNotNull(URI.create(aURI));
+        myTargetSpecificResource = null;
+        return this;
+    }
+
+    @JsonSetter(Constants.TARGET)
+    protected Annotation<T> setTarget(final SpecificResource aSpecificResource) {
+        myTargetSpecificResource = checkNotNull(aSpecificResource);
+        myTargetURI = null;
         return this;
     }
 

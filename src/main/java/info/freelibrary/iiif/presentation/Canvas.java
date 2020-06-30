@@ -21,6 +21,7 @@ import info.freelibrary.iiif.presentation.properties.Rendering;
 import info.freelibrary.iiif.presentation.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.properties.Summary;
+import info.freelibrary.iiif.presentation.properties.selectors.MediaFragmentSelector;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
@@ -151,6 +152,74 @@ public class Canvas extends AbstractCanvas<Canvas> implements Resource<Canvas>, 
     @Override
     public Canvas setWidthHeight(final int aWidth, final int aHeight) {
         return (Canvas) super.setWidthHeight(aWidth, aHeight);
+    }
+
+    @Override
+    @SafeVarargs
+    public final Canvas paintWith(final ContentResource... aContentArray) {
+        return (Canvas) super.paintWith(aContentArray);
+    }
+
+    @Override
+    public final Canvas paintWith(final List<ContentResource> aContentList) {
+        return (Canvas) super.paintWith(aContentList);
+    }
+
+    @Override
+    @SafeVarargs
+    public final Canvas paintWith(final MediaFragmentSelector aCanvasRegion, final ContentResource... aContentArray) {
+        return (Canvas) super.paintWith(aCanvasRegion, aContentArray);
+    }
+
+    @Override
+    @SafeVarargs
+    public final Canvas paintWith(final String aCanvasRegion, final ContentResource... aContentArray) {
+        return (Canvas) super.paintWith(aCanvasRegion, aContentArray);
+    }
+
+    @Override
+    public final Canvas paintWith(final MediaFragmentSelector aCanvasRegion, final List<ContentResource> aContentList) {
+        return (Canvas) super.paintWith(aCanvasRegion, aContentList);
+    }
+
+    @Override
+    public final Canvas paintWith(final String aCanvasRegion, final List<ContentResource> aContentList) {
+        return (Canvas) super.paintWith(aCanvasRegion, aContentList);
+    }
+
+    @Override
+    @SafeVarargs
+    public final Canvas supplementWith(final ContentResource... aContentArray) {
+        return (Canvas) super.supplementWith(aContentArray);
+    }
+
+    @Override
+    public final Canvas supplementWith(final List<ContentResource> aContentList) {
+        return (Canvas) super.supplementWith(aContentList);
+    }
+
+    @Override
+    @SafeVarargs
+    public final Canvas supplementWith(final MediaFragmentSelector aCanvasRegion,
+            final ContentResource... aContentArray) {
+        return (Canvas) super.supplementWith(aCanvasRegion, aContentArray);
+    }
+
+    @Override
+    @SafeVarargs
+    public final Canvas supplementWith(final String aCanvasRegion, final ContentResource... aContentArray) {
+        return (Canvas) super.supplementWith(aCanvasRegion, aContentArray);
+    }
+
+    @Override
+    public final Canvas supplementWith(final MediaFragmentSelector aCanvasRegion,
+            final List<ContentResource> aContentList) {
+        return (Canvas) super.supplementWith(aCanvasRegion, aContentList);
+    }
+
+    @Override
+    public final Canvas supplementWith(final String aCanvasRegion, final List<ContentResource> aContentList) {
+        return (Canvas) super.supplementWith(aCanvasRegion, aContentList);
     }
 
     @Override

@@ -57,6 +57,7 @@
     <freelib.maven.version>0.1.0</freelib.maven.version>
     <jsoup.version>1.13.1</jsoup.version>
     <vertx.version>3.8.2</vertx.version>
+    <media-fragments-uri.version>2.4</media-fragments-uri.version>
 
     <!-- Test related versions -->
     <opencsv.version>4.6</opencsv.version>
@@ -99,6 +100,11 @@
       <groupId>io.vertx</groupId>
       <artifactId>vertx-core</artifactId>
       <version>${vertx.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.tkurz</groupId>
+      <artifactId>media-fragments-uri</artifactId>
+      <version>${media-fragments-uri.version}</version>
     </dependency>
     <!-- Below dependencies are only used for testing -->
     <dependency>

@@ -1,0 +1,40 @@
+{
+  "type": "Canvas",
+  "label": { "none": [ "p. 1" ] },
+  "id": "https://example.org/iiif/book1/page1/canvas-1",
+  "width": 480,
+  "height": 360,
+  "items": [
+    {
+      "type": "AnnotationPage",
+      "id": "https://example.org/iiif/book1/page1/annotation/painting-page-1",
+      "items": [
+        {
+          "type": "Annotation",
+          "id": "https://example.org/iiif/book1/page1/annotation/painting-1",
+          "motivation": "painting",
+          "body": {
+            "type": "Choice",
+            "items": [
+              {
+                "type": "Image",
+                "id": "https://example.org/iiif/book1/page1/full/max/0/default.jpg",
+                "width": 480,
+                "height": 360,
+                "format": "image/jpeg"
+              },
+              {
+                "type": "Image",
+                "id": "https://example.org/iiif/book1/page1/full/max/0/bitonal.jpg",
+                "width": 480,
+                "height": 360,
+                "format": "image/jpeg"
+              }
+            ]
+          },
+          "target": "https://example.org/iiif/book1/page1/canvas-1"
+        }
+      ]
+    }
+  ]
+}
