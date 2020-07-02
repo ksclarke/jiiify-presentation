@@ -5,7 +5,7 @@
 
   <artifactId>jiiify-presentation</artifactId>
   <packaging>jar</packaging>
-  <version>0.3.2-SNAPSHOT</version>
+  <version>v2-0.3.2-SNAPSHOT</version>
   <name>jiiify-presentation</name>
   <description>A Java Library for the IIIF Presentation API</description>
   <url>http://projects.freelibrary.info/jiiify-presentation</url>
@@ -41,12 +41,12 @@
   </developers>
 
   <properties>
-    <jackson.version>2.10.1</jackson.version>
-    <jackson.databind.version>2.10.1</jackson.databind.version>
-    <guava.version>28.1-jre</guava.version>
-    <freelib.utils.version>1.0.1</freelib.utils.version>
-    <freelib.maven.version>0.0.3</freelib.maven.version>
-    <vertx.version>3.8.2</vertx.version>
+    <jackson.version>2.11.1</jackson.version>
+    <jackson.databind.version>2.11.1</jackson.databind.version>
+    <guava.version>29.0-jre</guava.version>
+    <freelib.utils.version>1.1.0</freelib.utils.version>
+    <freelib.maven.version>0.1.0</freelib.maven.version>
+    <vertx.version>3.9.1</vertx.version>
 
     <!-- Test related versions -->
     <opencsv.version>4.6</opencsv.version>
@@ -124,9 +124,6 @@
             </goals>
             <configuration>
               <generatedSourcesDirectory>${project.basedir}/src/main/generated</generatedSourcesDirectory>
-              <messageFiles>
-                <messageFile>src/main/resources/iiif_presentation_messages.xml</messageFile>
-              </messageFiles>
             </configuration>
           </execution>
         </executions>
@@ -166,10 +163,6 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.jbake</groupId>
-        <artifactId>jbake-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
         <configuration>
@@ -202,7 +195,7 @@
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>3.8.6</version>
+    <version>3.8.8</version>
   </parent>
 
 </project>
