@@ -21,11 +21,10 @@ cache:
   directories:
     - $HOME/.m2
 
-# The only branch we build on is master; all other builds are done on PRs to master
+# The only branch we build on is "v3"; all other builds are done on PRs to "v3"
 branches:
   only:
-  - master
-  - pres-3.0
+  - v3
 
 notifications:
   email:
