@@ -24,7 +24,7 @@ cache:
 # The only branch we build on is master; all other builds are done on PRs to master
 branches:
   only:
-  - master
+  - v2
 
 notifications:
   email:
