@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-  <entry key="message-class-name">info.freelibrary.iiif.presentation.utils.MessageCodes</entry>
+  <entry key="message-class-name">info.freelibrary.iiif.presentation.v2.utils.MessageCodes</entry>
 
   <!-- Messages to be stored in the MessageCodes class -->
   <entry key="JPA-001">Property value cannot be null</entry>
