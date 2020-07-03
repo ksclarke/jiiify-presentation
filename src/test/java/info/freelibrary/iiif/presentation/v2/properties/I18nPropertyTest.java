@@ -30,7 +30,7 @@ public class I18nPropertyTest {
      */
     @Test
     public void testI18nPropertyValueArray() {
-        assertEquals(ONE, new I18nProperty(new Value(ONE), new Value(TWO)).getString());
+        assertEquals(ONE, new I18nProperty<>(new Value(ONE), new Value(TWO)).getString());
     }
 
     /**
@@ -38,7 +38,7 @@ public class I18nPropertyTest {
      */
     @Test
     public void testI18nPropertyStringArray() {
-        assertEquals(ONE, new I18nProperty(ONE, TWO).getString());
+        assertEquals(ONE, new I18nProperty<>(ONE, TWO).getString());
     }
 
     /**
@@ -46,7 +46,7 @@ public class I18nPropertyTest {
      */
     @Test
     public void testSetValue() {
-        assertEquals(TWO, new I18nProperty(ONE).setValue(TWO).getString());
+        assertEquals(TWO, new I18nProperty<>(ONE).setValue(TWO).getString());
     }
 
     /**
@@ -54,7 +54,7 @@ public class I18nPropertyTest {
      */
     @Test
     public void testGetValues() {
-        final I18nProperty i18np = new I18nProperty(ONE, TWO);
+        final I18nProperty<Attribution> i18np = new I18nProperty<>(ONE, TWO);
         final List<Value> values = i18np.getValues();
 
         assertEquals(2, values.size());
@@ -65,8 +65,8 @@ public class I18nPropertyTest {
      */
     @Test
     public void testHashCodeDoubleValue() {
-        final I18nProperty i18np1 = new I18nProperty(new Value(ONE, ENG));
-        final I18nProperty i18np2 = new I18nProperty(new Value(ONE, ENG));
+        final I18nProperty<Attribution> i18np1 = new I18nProperty<>(new Value(ONE, ENG));
+        final I18nProperty<Attribution> i18np2 = new I18nProperty<>(new Value(ONE, ENG));
 
         assertEquals(i18np1.hashCode(), i18np2.hashCode());
     }
@@ -76,8 +76,8 @@ public class I18nPropertyTest {
      */
     @Test
     public void testHashCodeDifferentDoubleValue() {
-        final I18nProperty i18np1 = new I18nProperty(new Value(ONE, ENG));
-        final I18nProperty i18np2 = new I18nProperty(new Value(ONE, FRE));
+        final I18nProperty<Attribution> i18np1 = new I18nProperty<>(new Value(ONE, ENG));
+        final I18nProperty<Attribution> i18np2 = new I18nProperty<>(new Value(ONE, FRE));
 
         assertNotEquals(i18np1.hashCode(), i18np2.hashCode());
     }
@@ -87,8 +87,8 @@ public class I18nPropertyTest {
      */
     @Test
     public void testHashCode() {
-        final I18nProperty i18np1 = new I18nProperty(ONE, TWO);
-        final I18nProperty i18np2 = new I18nProperty(ONE, TWO);
+        final I18nProperty<Attribution> i18np1 = new I18nProperty<>(ONE, TWO);
+        final I18nProperty<Attribution> i18np2 = new I18nProperty<>(ONE, TWO);
 
         assertEquals(i18np1.hashCode(), i18np2.hashCode());
     }
@@ -98,8 +98,8 @@ public class I18nPropertyTest {
      */
     @Test
     public void testHashCodeMultipleValues() {
-        final I18nProperty i18np1 = new I18nProperty(ONE).addValue(TWO, THREE);
-        final I18nProperty i18np2 = new I18nProperty(ONE).addValue(TWO, THREE);
+        final I18nProperty<Attribution> i18np1 = new I18nProperty<Attribution>(ONE).addValue(TWO, THREE);
+        final I18nProperty<Attribution> i18np2 = new I18nProperty<Attribution>(ONE).addValue(TWO, THREE);
 
         assertEquals(i18np1.hashCode(), i18np2.hashCode());
     }
@@ -109,8 +109,8 @@ public class I18nPropertyTest {
      */
     @Test
     public void testNotEqualHashCode() {
-        final I18nProperty i18np1 = new I18nProperty(ONE);
-        final I18nProperty i18np2 = new I18nProperty(TWO);
+        final I18nProperty<Attribution> i18np1 = new I18nProperty<>(ONE);
+        final I18nProperty<Attribution> i18np2 = new I18nProperty<>(TWO);
 
         assertNotEquals(i18np1.hashCode(), i18np2.hashCode());
     }
@@ -120,8 +120,8 @@ public class I18nPropertyTest {
      */
     @Test
     public void testNotEqualHashCodeMultipleValues() {
-        final I18nProperty i18np1 = new I18nProperty(ONE).addValue(TWO, THREE);
-        final I18nProperty i18np2 = new I18nProperty(ONE).addValue(TWO, FOUR);
+        final I18nProperty<Attribution> i18np1 = new I18nProperty<Attribution>(ONE).addValue(TWO, THREE);
+        final I18nProperty<Attribution> i18np2 = new I18nProperty<Attribution>(ONE).addValue(TWO, FOUR);
 
         assertNotEquals(i18np1.hashCode(), i18np2.hashCode());
     }
@@ -131,7 +131,7 @@ public class I18nPropertyTest {
      */
     @Test
     public void testGetString() {
-        assertEquals(ONE, new I18nProperty(ONE).getString());
+        assertEquals(ONE, new I18nProperty<>(ONE).getString());
     }
 
     /**
@@ -139,7 +139,7 @@ public class I18nPropertyTest {
      */
     @Test
     public void testGetStringNull() {
-        final I18nProperty i18np = new I18nProperty(ONE);
+        final I18nProperty<Attribution> i18np = new I18nProperty<>(ONE);
 
         i18np.getValues().remove(0);
 
@@ -151,7 +151,7 @@ public class I18nPropertyTest {
      */
     @Test
     public void testAddValueStringArray() {
-        assertEquals(3, new I18nProperty(ONE).addValue(TWO, THREE).getValues().size());
+        assertEquals(3, new I18nProperty<>(ONE).addValue(TWO, THREE).getValues().size());
     }
 
     /**
@@ -159,7 +159,7 @@ public class I18nPropertyTest {
      */
     @Test
     public void testAddValueValueArray() {
-        assertEquals(3, new I18nProperty(ONE).addValue(new Value(TWO), new Value(THREE)).getValues().size());
+        assertEquals(3, new I18nProperty<>(ONE).addValue(new Value(TWO), new Value(THREE)).getValues().size());
     }
 
     /**
@@ -167,7 +167,7 @@ public class I18nPropertyTest {
      */
     @Test
     public void testHasValues() {
-        assertTrue(new I18nProperty(ONE).hasValues());
+        assertTrue(new I18nProperty<>(ONE).hasValues());
     }
 
     /**
@@ -175,7 +175,7 @@ public class I18nPropertyTest {
      */
     @Test
     public void testHasNoValues() {
-        final I18nProperty i18np = new I18nProperty(ONE);
+        final I18nProperty<Attribution> i18np = new I18nProperty<>(ONE);
 
         i18np.getValues().remove(0);
 
@@ -187,7 +187,7 @@ public class I18nPropertyTest {
      */
     @Test
     public void testGetValueSimple() {
-        assertEquals(ONE, new I18nProperty(ONE).getJsonValue());
+        assertEquals(ONE, new I18nProperty<>(ONE).getJsonValue());
     }
 
     /**
@@ -196,7 +196,7 @@ public class I18nPropertyTest {
     @Test
     public void testGetValueSimpleValueTwo() {
         final List<String> expected = Arrays.asList(new String[] { ONE, TWO });
-        assertEquals(expected, new I18nProperty(new Value(ONE), new Value(TWO)).getJsonValue());
+        assertEquals(expected, new I18nProperty<>(new Value(ONE), new Value(TWO)).getJsonValue());
     }
 
     /**
@@ -204,7 +204,7 @@ public class I18nPropertyTest {
      */
     @Test
     public void testGetValueNull() {
-        final I18nProperty i18np = new I18nProperty(ONE);
+        final I18nProperty<Attribution> i18np = new I18nProperty<>(ONE);
 
         i18np.getValues().remove(0);
 
@@ -218,7 +218,7 @@ public class I18nPropertyTest {
     public void testGetValueSimpleValue() {
         final Value value = new Value(ONE, ENG);
 
-        assertEquals(value, new I18nProperty(value).getJsonValue());
+        assertEquals(value, new I18nProperty<>(value).getJsonValue());
     }
 
 }

@@ -30,14 +30,14 @@ class ServiceProperty<T extends ServiceProperty<T>> {
      * @param aID The URI ID for the image
      * @return The property
      */
-    protected T addImage(final String... aID) {
+    protected ServiceProperty<T> addImage(final String... aID) {
         for (final String id : aID) {
             if (!getImages().add(new ServiceImage(id))) {
                 throw new UnsupportedOperationException();
             }
         }
 
-        return (T) this;
+        return this;
     }
 
     /**
@@ -46,14 +46,14 @@ class ServiceProperty<T extends ServiceProperty<T>> {
      * @param aID The URI ID for the image
      * @return The property
      */
-    protected T addImage(final URI... aID) {
+    protected ServiceProperty<T> addImage(final URI... aID) {
         for (final URI id : aID) {
             if (!getImages().add(new ServiceImage(id))) {
                 throw new UnsupportedOperationException();
             }
         }
 
-        return (T) this;
+        return this;
     }
 
     /**
@@ -64,12 +64,12 @@ class ServiceProperty<T extends ServiceProperty<T>> {
      * @param aHeight A image height
      * @return The property
      */
-    public T addImage(final String aID, final int aWidth, final int aHeight) {
+    protected ServiceProperty<T> addImage(final String aID, final int aWidth, final int aHeight) {
         if (!getImages().add(new ServiceImage(aID, aWidth, aHeight))) {
             throw new UnsupportedOperationException();
         }
 
-        return (T) this;
+        return this;
     }
 
     /**
@@ -80,12 +80,12 @@ class ServiceProperty<T extends ServiceProperty<T>> {
      * @param aHeight A image height
      * @return The property
      */
-    public T addImage(final URI aURI, final int aWidth, final int aHeight) {
+    protected ServiceProperty<T> addImage(final URI aURI, final int aWidth, final int aHeight) {
         if (!getImages().add(new ServiceImage(aURI, aWidth, aHeight))) {
             throw new UnsupportedOperationException();
         }
 
-        return (T) this;
+        return this;
     }
 
     /**
@@ -95,12 +95,12 @@ class ServiceProperty<T extends ServiceProperty<T>> {
      * @param aService A service for the image
      * @return The property
      */
-    public T addImage(final String aID, final ImageInfoService aService) {
+    protected ServiceProperty<T> addImage(final String aID, final ImageInfoService aService) {
         if (!getImages().add(new ServiceImage(aID, aService))) {
             throw new UnsupportedOperationException();
         }
 
-        return (T) this;
+        return this;
     }
 
     /**
@@ -110,12 +110,12 @@ class ServiceProperty<T extends ServiceProperty<T>> {
      * @param aService A service for the image
      * @return The property
      */
-    public T addImage(final URI aID, final ImageInfoService aService) {
+    protected ServiceProperty<T> addImage(final URI aID, final ImageInfoService aService) {
         if (!getImages().add(new ServiceImage(aID, aService))) {
             throw new UnsupportedOperationException();
         }
 
-        return (T) this;
+        return this;
     }
 
     /**
@@ -200,12 +200,12 @@ class ServiceProperty<T extends ServiceProperty<T>> {
      * @param aImage A list of images
      * @return The property
      */
-    protected T addImage(final ServiceImage... aImage) {
+    protected ServiceProperty<T> addImage(final ServiceImage... aImage) {
         if (!Collections.addAll(getImages(), aImage)) {
             throw new UnsupportedOperationException();
         }
 
-        return (T) this;
+        return this;
     }
 
     /**

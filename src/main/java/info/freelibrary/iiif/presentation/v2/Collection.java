@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v2;
 
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,14 +10,22 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.util.I18nRuntimeException;
+
+import info.freelibrary.iiif.presentation.v2.properties.Attribution;
 import info.freelibrary.iiif.presentation.v2.properties.Description;
 import info.freelibrary.iiif.presentation.v2.properties.Label;
+import info.freelibrary.iiif.presentation.v2.properties.License;
+import info.freelibrary.iiif.presentation.v2.properties.Logo;
 import info.freelibrary.iiif.presentation.v2.properties.Metadata;
 import info.freelibrary.iiif.presentation.v2.properties.NavDate;
+import info.freelibrary.iiif.presentation.v2.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v2.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.v2.properties.Type;
+import info.freelibrary.iiif.presentation.v2.properties.ViewingHint;
+import info.freelibrary.iiif.presentation.v2.properties.ViewingHint.Option;
+import info.freelibrary.iiif.presentation.v2.services.Service;
 import info.freelibrary.iiif.presentation.v2.utils.Constants;
-import info.freelibrary.util.I18nRuntimeException;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
@@ -204,6 +213,121 @@ public class Collection extends Resource<Collection> {
     @JsonIgnore
     public static Collection fromString(final String aJsonString) {
         return Json.decodeValue(aJsonString, Collection.class);
+    }
+
+    @Override
+    public Collection setLabel(final String aLabel) {
+        return (Collection) super.setLabel(aLabel);
+    }
+
+    @Override
+    public Collection setLabel(final Label aLabel) {
+        return (Collection) super.setLabel(aLabel);
+    }
+
+    @Override
+    public Collection setService(final Service<?> aService) {
+        return (Collection) super.setService(aService);
+    }
+
+    @Override
+    public Collection setMetadata(final Metadata aMetadata) {
+        return (Collection) super.setMetadata(aMetadata);
+    }
+
+    @Override
+    public Collection setDescription(final String aDescription) {
+        return (Collection) super.setDescription(aDescription);
+    }
+
+    @Override
+    public Collection setDescription(final Description aDescription) {
+        return (Collection) super.setDescription(aDescription);
+    }
+
+    @Override
+    public Collection setThumbnail(final Thumbnail aThumbnail) {
+        return (Collection) super.setThumbnail(aThumbnail);
+    }
+
+    @Override
+    public Collection setThumbnail(final String aURI) {
+        return (Collection) super.setThumbnail(aURI);
+    }
+
+    @Override
+    public Collection setAttribution(final String aAttribution) {
+        return (Collection) super.setAttribution(aAttribution);
+    }
+
+    @Override
+    public Collection setAttribution(final Attribution aAttribution) {
+        return (Collection) super.setAttribution(aAttribution);
+    }
+
+    @Override
+    public Collection setLicense(final License aLicense) {
+        return (Collection) super.setLicense(aLicense);
+    }
+
+    @Override
+    public Collection setLicense(final String aURL) throws MalformedURLException {
+        return (Collection) super.setLicense(aURL);
+    }
+
+    @Override
+    public Collection setLogo(final Logo aLogo) {
+        return (Collection) super.setLogo(aLogo);
+    }
+
+    @Override
+    public Collection setLogo(final String aURI) {
+        return (Collection) super.setLogo(aURI);
+    }
+
+    @Override
+    public Collection setID(final String aURI) {
+        return (Collection) super.setID(aURI);
+    }
+
+    @Override
+    public Collection setID(final URI aID) {
+        return (Collection) super.setID(aID);
+    }
+
+    @Override
+    public Collection setWithin(final String aWithin) {
+        return (Collection) super.setWithin(aWithin);
+    }
+
+    @Override
+    public Collection setWithin(final URI aWithin) {
+        return (Collection) super.setWithin(aWithin);
+    }
+
+    @Override
+    public Collection setViewingHint(final ViewingHint aViewingHint) {
+        return (Collection) super.setViewingHint(aViewingHint);
+    }
+
+    @Override
+    public Collection setViewingHint(final String aViewingHint) {
+        return (Collection) super.setViewingHint(aViewingHint);
+    }
+
+    @Override
+    public Collection setViewingHint(final Option aViewingHint) {
+        return (Collection) super.setViewingHint(aViewingHint);
+    }
+
+    @Override
+    public Collection setSeeAlso(final SeeAlso aSeeAlso) {
+        return (Collection) super.setSeeAlso(aSeeAlso);
+    }
+
+    @Override
+    public Collection setSeeAlso(final String aSeeAlso) {
+        return (Collection) super.setSeeAlso(aSeeAlso);
     }
 
     /**

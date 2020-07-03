@@ -12,7 +12,7 @@ import info.freelibrary.iiif.presentation.v2.utils.Constants;
  * A service that will return information about a particular image.
  */
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.ID, Constants.PROFILE })
-public class ImageInfoService implements Service {
+public class ImageInfoService implements Service<ImageInfoService> {
 
     /* The context for this service */
     public static final URI CONTEXT = URI.create("http://iiif.io/api/image/2/context.json");

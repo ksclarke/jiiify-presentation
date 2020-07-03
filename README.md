@@ -23,6 +23,8 @@ To check the project out and build it, type:
 
     git clone https://github.com/ksclarke/jiiify-presentation.git
     cd jiiify-presentation
+    git fetch origin
+    git checkout -b v2 origin/v2
     mvn install
 
 To build the Javadocs, from the command line, run: `mvn javadoc:javadoc`

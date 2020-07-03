@@ -72,7 +72,7 @@ public class ManifestorTest {
     public final void testReadFileHandlerOfPromiseOfManifestNoVertx(final TestContext aContext) {
         final Promise<Manifest> promise = Promise.<Manifest>promise();
 
-        promise.future().setHandler(handler -> {
+        promise.future().onComplete(handler -> {
             if (handler.succeeded()) {
                 testManifest(handler.result(), aContext);
             } else {
@@ -92,7 +92,7 @@ public class ManifestorTest {
     public final void testReadFileHandlerOfPromiseOfManifest(final TestContext aContext) {
         final Promise<Manifest> promise = Promise.<Manifest>promise();
 
-        promise.future().setHandler(handler -> {
+        promise.future().onComplete(handler -> {
             if (handler.succeeded()) {
                 testManifest(handler.result(), aContext);
             } else {
@@ -144,7 +144,7 @@ public class ManifestorTest {
         final File tmpJsonFile = new File(TMP_DIR, UUID.randomUUID().toString() + JSON_EXT);
         final Promise<Void> promise = Promise.<Void>promise();
 
-        promise.future().setHandler(handler -> {
+        promise.future().onComplete(handler -> {
             if (handler.failed()) {
                 fail(handler.cause().getMessage());
             } else {
@@ -168,7 +168,7 @@ public class ManifestorTest {
         final File tmpJsonFile = new File(TMP_DIR, UUID.randomUUID().toString() + JSON_EXT);
         final Promise<Void> promise = Promise.<Void>promise();
 
-        promise.future().setHandler(handler -> {
+        promise.future().onComplete(handler -> {
             if (handler.failed()) {
                 fail(handler.cause().getMessage());
             } else {

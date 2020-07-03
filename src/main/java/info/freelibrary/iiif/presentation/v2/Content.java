@@ -47,14 +47,14 @@ class Content<T extends Content<T>> extends Resource<T> {
     }
 
     @JsonIgnore
-    public T setOn(final URI aURI) {
+    protected Content<T> setOn(final URI aURI) {
         myOn = aURI;
-        return (T) this;
+        return this;
     }
 
     @JsonSetter(Constants.ON)
-    public T setOn(final String aURI) {
+    protected Content<T> setOn(final String aURI) {
         myOn = URI.create(aURI);
-        return (T) this;
+        return this;
     }
 }

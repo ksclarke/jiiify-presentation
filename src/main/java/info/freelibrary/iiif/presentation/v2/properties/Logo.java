@@ -5,14 +5,15 @@ import java.net.URI;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 
+import info.freelibrary.iiif.presentation.v2.ServiceImage;
 import info.freelibrary.iiif.presentation.v2.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.v2.utils.Constants;
 
 /**
  * A small image that represents an individual or organization associated with the resource it is attached to. This
  * could be the logo of the owning or hosting institution. The logo must be clearly rendered when the resource is
- * displayed or used, without cropping, rotating or otherwise distorting the image. It is recommended that a IIIF
- * Image API service be available for this image for manipulations such as resizing.
+ * displayed or used, without cropping, rotating or otherwise distorting the image. It is recommended that a IIIF Image
+ * API service be available for this image for manipulations such as resizing.
  */
 public class Logo extends ServiceProperty<Logo> {
 
@@ -75,6 +76,41 @@ public class Logo extends ServiceProperty<Logo> {
      */
     public Logo(final URI aID, final ImageInfoService aService) {
         addImage(aID, aService);
+    }
+
+    @Override
+    public Logo addImage(final String... aIdArray) {
+        return (Logo) super.addImage(aIdArray);
+    }
+
+    @Override
+    public Logo addImage(final URI... aIdArray) {
+        return (Logo) super.addImage(aIdArray);
+    }
+
+    @Override
+    public Logo addImage(final String aID, final int aWidth, final int aHeight) {
+        return (Logo) super.addImage(aID, aWidth, aHeight);
+    }
+
+    @Override
+    public Logo addImage(final URI aURI, final int aWidth, final int aHeight) {
+        return (Logo) super.addImage(aURI, aWidth, aHeight);
+    }
+
+    @Override
+    public Logo addImage(final String aID, final ImageInfoService aService) {
+        return (Logo) super.addImage(aID, aService);
+    }
+
+    @Override
+    public Logo addImage(final URI aID, final ImageInfoService aService) {
+        return (Logo) super.addImage(aID, aService);
+    }
+
+    @Override
+    public Logo addImage(final ServiceImage... aImageArray) {
+        return (Logo) super.addImage(aImageArray);
     }
 
     @Override

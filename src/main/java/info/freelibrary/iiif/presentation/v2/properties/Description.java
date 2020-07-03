@@ -9,10 +9,10 @@ import info.freelibrary.iiif.presentation.v2.utils.DescriptionDeserializer;
 
 /**
  * A longer-form prose description of the object or resource that the property is attached to, intended to be conveyed
- * to the user as a full text description, rather than a simple label and value. It may be in simple HTML or plain
- * text. It can duplicate any of the information from the metadata fields, along with additional information required
- * to understand what is being displayed. Clients should have a way to display the descriptions of manifests and
- * canvases, and may have a way to view the information about other resources.
+ * to the user as a full text description, rather than a simple label and value. It may be in simple HTML or plain text.
+ * It can duplicate any of the information from the metadata fields, along with additional information required to
+ * understand what is being displayed. Clients should have a way to display the descriptions of manifests and canvases,
+ * and may have a way to view the information about other resources.
  */
 @JsonDeserialize(using = DescriptionDeserializer.class)
 public class Description extends I18nProperty<Description> {
@@ -33,6 +33,21 @@ public class Description extends I18nProperty<Description> {
      */
     public Description(final String... aValue) {
         super(aValue);
+    }
+
+    @Override
+    public Description addValue(final String... aValueArray) {
+        return (Description) super.addValue(aValueArray);
+    }
+
+    @Override
+    public Description addValue(final Value... aValueArray) {
+        return (Description) super.addValue(aValueArray);
+    }
+
+    @Override
+    public Description setValue(final String... aValueArray) {
+        return (Description) super.setValue(aValueArray);
     }
 
     @Override

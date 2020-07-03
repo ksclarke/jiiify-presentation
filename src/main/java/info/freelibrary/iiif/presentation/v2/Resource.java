@@ -13,6 +13,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+
 import info.freelibrary.iiif.presentation.v2.properties.Attribution;
 import info.freelibrary.iiif.presentation.v2.properties.Description;
 import info.freelibrary.iiif.presentation.v2.properties.Label;
@@ -27,8 +30,6 @@ import info.freelibrary.iiif.presentation.v2.properties.ViewingHint.Option;
 import info.freelibrary.iiif.presentation.v2.services.Service;
 import info.freelibrary.iiif.presentation.v2.utils.Constants;
 import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
 
 /**
  * A resource that can be used as a base for more specific IIIF presentation resources.
@@ -68,7 +69,7 @@ class Resource<T extends Resource<T>> {
 
     private SeeAlso mySeeAlso;
 
-    private Service myService;
+    private Service<?> myService;
 
     /**
      * Creates a new resource from the supplied type.
@@ -163,9 +164,10 @@ class Resource<T extends Resource<T>> {
      */
     protected Resource(final String aType, final String aID, final String aLabel, final Metadata aMetadata,
             final String aDescription, final Thumbnail aThumbnail, final int aNumber) {
-        checkArgs(new Object[] { aType, aID, aLabel, aMetadata, aDescription, aThumbnail }, new String[] {
-            Constants.TYPE, Constants.ID, Constants.LABEL, Constants.METADATA, Constants.DESCRIPTION,
-            Constants.THUMBNAIL }, aNumber);
+        checkArgs(
+                new Object[] { aType, aID, aLabel, aMetadata, aDescription, aThumbnail }, new String[] { Constants.TYPE,
+                    Constants.ID, Constants.LABEL, Constants.METADATA, Constants.DESCRIPTION, Constants.THUMBNAIL },
+                aNumber);
         myType = new Type(aType); // always required
 
         if (aID != null) {
@@ -197,9 +199,10 @@ class Resource<T extends Resource<T>> {
      */
     protected Resource(final String aType, final URI aID, final Label aLabel, final Metadata aMetadata,
             final Description aDescription, final Thumbnail aThumbnail, final int aNumber) {
-        checkArgs(new Object[] { aType, aID, aLabel, aMetadata, aDescription, aThumbnail }, new String[] {
-            Constants.TYPE, Constants.ID, Constants.LABEL, Constants.METADATA, Constants.DESCRIPTION,
-            Constants.THUMBNAIL }, aNumber);
+        checkArgs(
+                new Object[] { aType, aID, aLabel, aMetadata, aDescription, aThumbnail }, new String[] { Constants.TYPE,
+                    Constants.ID, Constants.LABEL, Constants.METADATA, Constants.DESCRIPTION, Constants.THUMBNAIL },
+                aNumber);
         myType = new Type(aType); // always required
 
         myID = aID;
@@ -235,9 +238,9 @@ class Resource<T extends Resource<T>> {
      * @return The resource
      */
     @JsonIgnore
-    public T setLabel(final String aLabel) {
+    protected Resource<T> setLabel(final String aLabel) {
         myLabel = new Label(aLabel);
-        return (T) this;
+        return this;
     }
 
     /**
@@ -247,9 +250,9 @@ class Resource<T extends Resource<T>> {
      * @return The resource
      */
     @JsonSetter(Constants.LABEL)
-    public T setLabel(final Label aLabel) {
+    protected Resource<T> setLabel(final Label aLabel) {
         myLabel = aLabel;
-        return (T) this;
+        return this;
     }
 
     /**
@@ -258,7 +261,7 @@ class Resource<T extends Resource<T>> {
      * @return A service
      */
     @JsonGetter(Constants.SERVICE)
-    public Service getService() {
+    public Service<?> getService() {
         return myService;
     }
 
@@ -269,9 +272,9 @@ class Resource<T extends Resource<T>> {
      * @return The resource
      */
     @JsonSetter(Constants.SERVICE)
-    public T setService(final Service aService) {
+    protected Resource<T> setService(final Service<?> aService) {
         myService = aService;
-        return (T) this;
+        return this;
     }
 
     /**
@@ -291,9 +294,9 @@ class Resource<T extends Resource<T>> {
      * @return The resource
      */
     @JsonIgnore
-    public T setMetadata(final Metadata aMetadata) {
+    protected Resource<T> setMetadata(final Metadata aMetadata) {
         myMetadata = aMetadata;
-        return (T) this;
+        return this;
     }
 
     /**
@@ -313,9 +316,9 @@ class Resource<T extends Resource<T>> {
      * @return The resource
      */
     @JsonIgnore
-    public T setDescription(final String aDescription) {
+    protected Resource<T> setDescription(final String aDescription) {
         myDescription = new Description(aDescription);
-        return (T) this;
+        return this;
     }
 
     /**
@@ -324,9 +327,9 @@ class Resource<T extends Resource<T>> {
      * @param aDescription A description
      * @return The resource
      */
-    public T setDescription(final Description aDescription) {
+    protected Resource<T> setDescription(final Description aDescription) {
         myDescription = aDescription;
-        return (T) this;
+        return this;
     }
 
     /**
@@ -346,9 +349,9 @@ class Resource<T extends Resource<T>> {
      * @return The resource
      */
     @JsonIgnore
-    public T setThumbnail(final Thumbnail aThumbnail) {
+    protected Resource<T> setThumbnail(final Thumbnail aThumbnail) {
         myThumbnail = aThumbnail;
-        return (T) this;
+        return this;
     }
 
     /**
@@ -357,9 +360,9 @@ class Resource<T extends Resource<T>> {
      * @param aURI A thumbnail ID
      * @return The resource
      */
-    public T setThumbnail(final String aURI) {
+    protected Resource<T> setThumbnail(final String aURI) {
         myThumbnail = new Thumbnail(aURI);
-        return (T) this;
+        return this;
     }
 
     /**
@@ -379,9 +382,9 @@ class Resource<T extends Resource<T>> {
      * @return The resource
      */
     @JsonIgnore
-    public T setAttribution(final String aAttribution) {
+    protected Resource<T> setAttribution(final String aAttribution) {
         myAttribution = new Attribution(aAttribution);
-        return (T) this;
+        return this;
     }
 
     /**
@@ -391,9 +394,9 @@ class Resource<T extends Resource<T>> {
      * @return The resource
      */
     @JsonProperty
-    public T setAttribution(final Attribution aAttribution) {
+    protected Resource<T> setAttribution(final Attribution aAttribution) {
         myAttribution = aAttribution;
-        return (T) this;
+        return this;
     }
 
     /**
@@ -413,9 +416,9 @@ class Resource<T extends Resource<T>> {
      * @return The resource
      */
     @JsonProperty
-    public T setLicense(final License aLicense) {
+    protected Resource<T> setLicense(final License aLicense) {
         myLicense = aLicense;
-        return (T) this;
+        return this;
     }
 
     /**
@@ -426,9 +429,9 @@ class Resource<T extends Resource<T>> {
      * @throws MalformedURLException If the supplied URL string isn't a valid URL
      */
     @JsonIgnore
-    public T setLicense(final String aURL) throws MalformedURLException {
+    protected Resource<T> setLicense(final String aURL) throws MalformedURLException {
         myLicense = new License(aURL);
-        return (T) this;
+        return this;
     }
 
     /**
@@ -448,9 +451,9 @@ class Resource<T extends Resource<T>> {
      * @return The resource
      */
     @JsonIgnore
-    public T setLogo(final Logo aLogo) {
+    protected Resource<T> setLogo(final Logo aLogo) {
         myLogo = aLogo;
-        return (T) this;
+        return this;
     }
 
     /**
@@ -459,9 +462,9 @@ class Resource<T extends Resource<T>> {
      * @param aURI A logo ID
      * @return The resource
      */
-    public T setLogo(final String aURI) {
+    protected Resource<T> setLogo(final String aURI) {
         myLogo = new Logo(aURI);
-        return (T) this;
+        return this;
     }
 
     /**
@@ -481,9 +484,9 @@ class Resource<T extends Resource<T>> {
      * @return The resource
      */
     @JsonIgnore
-    public T setID(final String aURI) {
+    protected Resource<T> setID(final String aURI) {
         myID = URI.create(aURI);
-        return (T) this;
+        return this;
     }
 
     /**
@@ -493,9 +496,9 @@ class Resource<T extends Resource<T>> {
      * @return The resource
      */
     @JsonIgnore
-    public T setID(final URI aID) {
+    protected Resource<T> setID(final URI aID) {
         myID = aID;
-        return (T) this;
+        return this;
     }
 
     /**
@@ -515,9 +518,9 @@ class Resource<T extends Resource<T>> {
      * @return The resource
      */
     @JsonIgnore
-    public T setWithin(final String aWithin) {
+    protected Resource<T> setWithin(final String aWithin) {
         myWithin = URI.create(aWithin);
-        return (T) this;
+        return this;
     }
 
     /**
@@ -527,9 +530,9 @@ class Resource<T extends Resource<T>> {
      * @return The resource
      */
     @JsonSetter(Constants.WITHIN)
-    public T setWithin(final URI aWithin) {
+    protected Resource<T> setWithin(final URI aWithin) {
         myWithin = aWithin;
-        return (T) this;
+        return this;
     }
 
     /**
@@ -549,9 +552,9 @@ class Resource<T extends Resource<T>> {
      * @return The resource
      */
     @JsonIgnore
-    public T setViewingHint(final ViewingHint aViewingHint) {
+    protected Resource<T> setViewingHint(final ViewingHint aViewingHint) {
         myViewingHint = aViewingHint;
-        return (T) this;
+        return this;
     }
 
     /**
@@ -560,9 +563,9 @@ class Resource<T extends Resource<T>> {
      * @param aViewingHint The viewing hint
      * @return The resource
      */
-    public T setViewingHint(final String aViewingHint) {
+    protected Resource<T> setViewingHint(final String aViewingHint) {
         myViewingHint = new ViewingHint(aViewingHint);
-        return (T) this;
+        return this;
     }
 
     /**
@@ -571,9 +574,9 @@ class Resource<T extends Resource<T>> {
      * @param aViewingHint The viewing hint
      * @return The resource
      */
-    public T setViewingHint(final Option aViewingHint) {
+    protected Resource<T> setViewingHint(final Option aViewingHint) {
         myViewingHint = new ViewingHint(aViewingHint);
-        return (T) this;
+        return this;
     }
 
     /**
@@ -603,9 +606,9 @@ class Resource<T extends Resource<T>> {
      * @return The resource
      */
     @JsonIgnore
-    public T setSeeAlso(final SeeAlso aSeeAlso) {
+    protected Resource<T> setSeeAlso(final SeeAlso aSeeAlso) {
         mySeeAlso = aSeeAlso;
-        return (T) this;
+        return this;
     }
 
     /**
@@ -615,9 +618,9 @@ class Resource<T extends Resource<T>> {
      * @return The resource
      */
     @JsonSetter(Constants.SEE_ALSO)
-    public T setSeeAlso(final String aSeeAlso) {
+    protected Resource<T> setSeeAlso(final String aSeeAlso) {
         mySeeAlso = new SeeAlso(aSeeAlso);
-        return (T) this;
+        return this;
     }
 
     /**

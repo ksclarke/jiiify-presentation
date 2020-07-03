@@ -11,19 +11,20 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+
 import info.freelibrary.iiif.presentation.v2.services.APIComplianceLevel;
 import info.freelibrary.iiif.presentation.v2.services.GenericService;
 import info.freelibrary.iiif.presentation.v2.services.GeoJSONService;
 import info.freelibrary.iiif.presentation.v2.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.v2.services.PhysicalDimsService;
 import info.freelibrary.iiif.presentation.v2.services.Service;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
 
 /**
  * Deserializes services from JSON documents into {@link Service} implementations.
  */
-public class ServiceDeserializer extends StdDeserializer<Service> {
+public class ServiceDeserializer extends StdDeserializer<Service<?>> {
 
     /**
      * The <code>serialVersionUID</code> for ServiceDeserializer.
@@ -52,10 +53,10 @@ public class ServiceDeserializer extends StdDeserializer<Service> {
      *
      */
     @Override
-    public Service deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException,
-            JsonProcessingException {
+    public Service<?> deserialize(final JsonParser aParser, final DeserializationContext aContext)
+            throws IOException, JsonProcessingException {
         final JsonNode node = aParser.getCodec().readTree(aParser);
-        final Service service;
+        final Service<?> service;
 
         if (node.isTextual()) {
             service = new GenericService(node.textValue());
@@ -87,8 +88,8 @@ public class ServiceDeserializer extends StdDeserializer<Service> {
                     final JsonNode format = node.get(Constants.FORMAT);
 
                     if (profile != null && format != null) {
-                        service = new GenericService(id).setContext(context).setProfile(profile.textValue()).setFormat(
-                                format.textValue());
+                        service = new GenericService(id).setContext(context).setProfile(profile.textValue())
+                                .setFormat(format.textValue());
                     } else if (profile != null) {
                         service = new GenericService(id).setContext(context).setProfile(profile.textValue());
                     } else if (format != null) {

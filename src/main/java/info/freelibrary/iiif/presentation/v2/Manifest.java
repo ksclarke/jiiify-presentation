@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v2;
 
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -16,18 +17,26 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.iiif.presentation.v2.properties.Description;
-import info.freelibrary.iiif.presentation.v2.properties.Label;
-import info.freelibrary.iiif.presentation.v2.properties.Metadata;
-import info.freelibrary.iiif.presentation.v2.properties.NavDate;
-import info.freelibrary.iiif.presentation.v2.properties.Thumbnail;
-import info.freelibrary.iiif.presentation.v2.properties.Type;
-import info.freelibrary.iiif.presentation.v2.properties.ViewingDirection;
-import info.freelibrary.iiif.presentation.v2.utils.Constants;
-import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
 import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+
+import info.freelibrary.iiif.presentation.v2.properties.Attribution;
+import info.freelibrary.iiif.presentation.v2.properties.Description;
+import info.freelibrary.iiif.presentation.v2.properties.Label;
+import info.freelibrary.iiif.presentation.v2.properties.License;
+import info.freelibrary.iiif.presentation.v2.properties.Logo;
+import info.freelibrary.iiif.presentation.v2.properties.Metadata;
+import info.freelibrary.iiif.presentation.v2.properties.NavDate;
+import info.freelibrary.iiif.presentation.v2.properties.SeeAlso;
+import info.freelibrary.iiif.presentation.v2.properties.Thumbnail;
+import info.freelibrary.iiif.presentation.v2.properties.Type;
+import info.freelibrary.iiif.presentation.v2.properties.ViewingDirection;
+import info.freelibrary.iiif.presentation.v2.properties.ViewingHint;
+import info.freelibrary.iiif.presentation.v2.properties.ViewingHint.Option;
+import info.freelibrary.iiif.presentation.v2.services.Service;
+import info.freelibrary.iiif.presentation.v2.utils.Constants;
+import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
@@ -35,9 +44,9 @@ import io.vertx.core.json.jackson.DatabindCodec;
 
 /**
  * The overall description of the structure and properties of the digital representation of an object. It carries
- * information needed for the viewer to present the digitized content to the user, such as a title and other
- * descriptive information about the object or the intellectual work that it conveys. Each manifest describes how to
- * present a single object such as a book, a photograph, or a statue.
+ * information needed for the viewer to present the digitized content to the user, such as a title and other descriptive
+ * information about the object or the intellectual work that it conveys. Each manifest describes how to present a
+ * single object such as a book, a photograph, or a statue.
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.ID, Constants.TYPE, Constants.LABEL, Constants.VIEWING_HINT,
@@ -297,6 +306,121 @@ public class Manifest extends Resource<Manifest> {
     @JsonIgnore
     public static Manifest fromString(final String aJsonString) {
         return fromJSON(new JsonObject(aJsonString));
+    }
+
+    @Override
+    public Manifest setLabel(final String aLabel) {
+        return (Manifest) super.setLabel(aLabel);
+    }
+
+    @Override
+    public Manifest setLabel(final Label aLabel) {
+        return (Manifest) super.setLabel(aLabel);
+    }
+
+    @Override
+    public Manifest setService(final Service<?> aService) {
+        return (Manifest) super.setService(aService);
+    }
+
+    @Override
+    public Manifest setMetadata(final Metadata aMetadata) {
+        return (Manifest) super.setMetadata(aMetadata);
+    }
+
+    @Override
+    public Manifest setDescription(final String aDescription) {
+        return (Manifest) super.setDescription(aDescription);
+    }
+
+    @Override
+    public Manifest setDescription(final Description aDescription) {
+        return (Manifest) super.setDescription(aDescription);
+    }
+
+    @Override
+    public Manifest setThumbnail(final Thumbnail aThumbnail) {
+        return (Manifest) super.setThumbnail(aThumbnail);
+    }
+
+    @Override
+    public Manifest setThumbnail(final String aURI) {
+        return (Manifest) super.setThumbnail(aURI);
+    }
+
+    @Override
+    public Manifest setAttribution(final String aAttribution) {
+        return (Manifest) super.setAttribution(aAttribution);
+    }
+
+    @Override
+    public Manifest setAttribution(final Attribution aAttribution) {
+        return (Manifest) super.setAttribution(aAttribution);
+    }
+
+    @Override
+    public Manifest setLicense(final License aLicense) {
+        return (Manifest) super.setLicense(aLicense);
+    }
+
+    @Override
+    public Manifest setLicense(final String aURL) throws MalformedURLException {
+        return (Manifest) super.setLicense(aURL);
+    }
+
+    @Override
+    public Manifest setLogo(final Logo aLogo) {
+        return (Manifest) super.setLogo(aLogo);
+    }
+
+    @Override
+    public Manifest setLogo(final String aURI) {
+        return (Manifest) super.setLogo(aURI);
+    }
+
+    @Override
+    public Manifest setID(final String aURI) {
+        return (Manifest) super.setID(aURI);
+    }
+
+    @Override
+    public Manifest setID(final URI aID) {
+        return (Manifest) super.setID(aID);
+    }
+
+    @Override
+    public Manifest setWithin(final String aWithin) {
+        return (Manifest) super.setWithin(aWithin);
+    }
+
+    @Override
+    public Manifest setWithin(final URI aWithin) {
+        return (Manifest) super.setWithin(aWithin);
+    }
+
+    @Override
+    public Manifest setViewingHint(final ViewingHint aViewingHint) {
+        return (Manifest) super.setViewingHint(aViewingHint);
+    }
+
+    @Override
+    public Manifest setViewingHint(final String aViewingHint) {
+        return (Manifest) super.setViewingHint(aViewingHint);
+    }
+
+    @Override
+    public Manifest setViewingHint(final Option aViewingHint) {
+        return (Manifest) super.setViewingHint(aViewingHint);
+    }
+
+    @Override
+    public Manifest setSeeAlso(final SeeAlso aSeeAlso) {
+        return (Manifest) super.setSeeAlso(aSeeAlso);
+    }
+
+    @Override
+    public Manifest setSeeAlso(final String aSeeAlso) {
+        return (Manifest) super.setSeeAlso(aSeeAlso);
     }
 
     /**

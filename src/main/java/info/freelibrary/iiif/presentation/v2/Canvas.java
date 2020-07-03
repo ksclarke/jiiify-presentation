@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v2;
 
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,18 +12,28 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.iiif.presentation.v2.properties.Label;
-import info.freelibrary.iiif.presentation.v2.properties.Thumbnail;
-import info.freelibrary.iiif.presentation.v2.properties.Type;
-import info.freelibrary.iiif.presentation.v2.utils.Constants;
-import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
 import info.freelibrary.util.IllegalArgumentI18nException;
 
+import info.freelibrary.iiif.presentation.v2.properties.Attribution;
+import info.freelibrary.iiif.presentation.v2.properties.Description;
+import info.freelibrary.iiif.presentation.v2.properties.Label;
+import info.freelibrary.iiif.presentation.v2.properties.License;
+import info.freelibrary.iiif.presentation.v2.properties.Logo;
+import info.freelibrary.iiif.presentation.v2.properties.Metadata;
+import info.freelibrary.iiif.presentation.v2.properties.SeeAlso;
+import info.freelibrary.iiif.presentation.v2.properties.Thumbnail;
+import info.freelibrary.iiif.presentation.v2.properties.Type;
+import info.freelibrary.iiif.presentation.v2.properties.ViewingHint;
+import info.freelibrary.iiif.presentation.v2.properties.ViewingHint.Option;
+import info.freelibrary.iiif.presentation.v2.services.Service;
+import info.freelibrary.iiif.presentation.v2.utils.Constants;
+import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
+
 /**
- * A virtual container that represents a page or view and has content resources associated with it or with parts of
- * it. The canvas provides a frame of reference for the layout of the content. The concept of a canvas is borrowed
- * from standards like PDF and HTML, or applications like Photoshop and Powerpoint, where the display starts from a
- * blank canvas and images, text and other resources are &quot;painted&quot; on to it.
+ * A virtual container that represents a page or view and has content resources associated with it or with parts of it.
+ * The canvas provides a frame of reference for the layout of the content. The concept of a canvas is borrowed from
+ * standards like PDF and HTML, or applications like Photoshop and Powerpoint, where the display starts from a blank
+ * canvas and images, text and other resources are &quot;painted&quot; on to it.
  */
 @JsonPropertyOrder({ Constants.TYPE, Constants.LABEL, Constants.ID, Constants.WIDTH, Constants.HEIGHT,
     Constants.THUMBNAIL, Constants.IMAGE_CONTENT, Constants.OTHER_CONTENT })
@@ -231,6 +242,121 @@ public class Canvas extends Resource<Canvas> {
         }
 
         return myOtherContent;
+    }
+
+    @Override
+    public Canvas setLabel(final String aLabel) {
+        return (Canvas) super.setLabel(aLabel);
+    }
+
+    @Override
+    public Canvas setLabel(final Label aLabel) {
+        return (Canvas) super.setLabel(aLabel);
+    }
+
+    @Override
+    public Canvas setService(final Service<?> aService) {
+        return (Canvas) super.setService(aService);
+    }
+
+    @Override
+    public Canvas setMetadata(final Metadata aMetadata) {
+        return (Canvas) super.setMetadata(aMetadata);
+    }
+
+    @Override
+    public Canvas setDescription(final String aDescription) {
+        return (Canvas) super.setDescription(aDescription);
+    }
+
+    @Override
+    public Canvas setDescription(final Description aDescription) {
+        return (Canvas) super.setDescription(aDescription);
+    }
+
+    @Override
+    public Canvas setThumbnail(final Thumbnail aThumbnail) {
+        return (Canvas) super.setThumbnail(aThumbnail);
+    }
+
+    @Override
+    public Canvas setThumbnail(final String aURI) {
+        return (Canvas) super.setThumbnail(aURI);
+    }
+
+    @Override
+    public Canvas setAttribution(final String aAttribution) {
+        return (Canvas) super.setAttribution(aAttribution);
+    }
+
+    @Override
+    public Canvas setAttribution(final Attribution aAttribution) {
+        return (Canvas) super.setAttribution(aAttribution);
+    }
+
+    @Override
+    public Canvas setLicense(final License aLicense) {
+        return (Canvas) super.setLicense(aLicense);
+    }
+
+    @Override
+    public Canvas setLicense(final String aURL) throws MalformedURLException {
+        return (Canvas) super.setLicense(aURL);
+    }
+
+    @Override
+    public Canvas setLogo(final Logo aLogo) {
+        return (Canvas) super.setLogo(aLogo);
+    }
+
+    @Override
+    public Canvas setLogo(final String aURI) {
+        return (Canvas) super.setLogo(aURI);
+    }
+
+    @Override
+    public Canvas setID(final String aURI) {
+        return (Canvas) super.setID(aURI);
+    }
+
+    @Override
+    public Canvas setID(final URI aID) {
+        return (Canvas) super.setID(aID);
+    }
+
+    @Override
+    public Canvas setWithin(final String aWithin) {
+        return (Canvas) super.setWithin(aWithin);
+    }
+
+    @Override
+    public Canvas setWithin(final URI aWithin) {
+        return (Canvas) super.setWithin(aWithin);
+    }
+
+    @Override
+    public Canvas setViewingHint(final ViewingHint aViewingHint) {
+        return (Canvas) super.setViewingHint(aViewingHint);
+    }
+
+    @Override
+    public Canvas setViewingHint(final String aViewingHint) {
+        return (Canvas) super.setViewingHint(aViewingHint);
+    }
+
+    @Override
+    public Canvas setViewingHint(final Option aViewingHint) {
+        return (Canvas) super.setViewingHint(aViewingHint);
+    }
+
+    @Override
+    public Canvas setSeeAlso(final SeeAlso aSeeAlso) {
+        return (Canvas) super.setSeeAlso(aSeeAlso);
+    }
+
+    @Override
+    public Canvas setSeeAlso(final String aSeeAlso) {
+        return (Canvas) super.setSeeAlso(aSeeAlso);
     }
 
     /**

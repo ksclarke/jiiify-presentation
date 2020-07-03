@@ -13,27 +13,30 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import info.freelibrary.iiif.presentation.v2.utils.Constants;
-import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
-import info.freelibrary.iiif.presentation.v2.utils.MetadataDeserializer;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+import info.freelibrary.iiif.presentation.v2.utils.Constants;
+import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
+import info.freelibrary.iiif.presentation.v2.utils.MetadataDeserializer;
+
 /**
  * A list of short descriptive entries, given as pairs of human readable label and value to be displayed to the user.
- * The value should be either simple HTML, including links and text markup, or plain text, and the label should be
- * plain text. There are no semantics conveyed by this information, and clients should not use it for discovery or
- * other purposes. This list of descriptive pairs should be able to be displayed in a tabular form in the user
- * interface. Clients should have a way to display the information about manifests and canvases, and may have a way to
- * view the information about other resources. The client should display the pairs in the order provided by the
- * description. A pair might be used to convey the author of the work, information about its creation, a brief
- * physical description, or ownership information, amongst other use cases. The client is not expected to take any
- * action on this information beyond displaying the label and value. An example pair of label and value might be a
- * label of &quot;Author&quot; and a value of &quot;Jehan Froissart&quot;.
+ * The value should be either simple HTML, including links and text markup, or plain text, and the label should be plain
+ * text. There are no semantics conveyed by this information, and clients should not use it for discovery or other
+ * purposes. This list of descriptive pairs should be able to be displayed in a tabular form in the user interface.
+ * Clients should have a way to display the information about manifests and canvases, and may have a way to view the
+ * information about other resources. The client should display the pairs in the order provided by the description. A
+ * pair might be used to convey the author of the work, information about its creation, a brief physical description, or
+ * ownership information, amongst other use cases. The client is not expected to take any action on this information
+ * beyond displaying the label and value. An example pair of label and value might be a label of &quot;Author&quot; and
+ * a value of &quot;Jehan Froissart&quot;.
  * <p>
  * An example representation in JSON:
  * </p>
- * <pre><code>
+ *
+ * <pre>
+ * <code>
  * &quot;metadata&quot;: [
  *   { &quot;label&quot;: &quot;Author&quot;, &quot;value&quot;: &quot;Anne Author&quot; },
  *   { &quot;label&quot;: &quot;Published&quot;, &quot;value&quot;: [
@@ -46,7 +49,8 @@ import info.freelibrary.util.LoggerFactory;
  *       &quot;value&quot;: &quot;From: &lt;a href='http://example.org/1.html'&gt;link&lt;/a&gt;&quot;
  *   }
  * ]
- * </code></pre>
+ * </code>
+ * </pre>
  */
 @JsonDeserialize(using = MetadataDeserializer.class)
 public class Metadata {
@@ -205,7 +209,7 @@ public class Metadata {
             }
         }
 
-        return new ArrayList();
+        return new ArrayList<>();
     }
 
     /**
@@ -278,9 +282,8 @@ public class Metadata {
         }
 
         /**
-         * Gets the first string value from the metadata entry; if the entry only contains I18n values, the string
-         * value of the first language/value pair will be returned. If no string or I18n values exist, a null is
-         * returned.
+         * Gets the first string value from the metadata entry; if the entry only contains I18n values, the string value
+         * of the first language/value pair will be returned. If no string or I18n values exist, a null is returned.
          *
          * @return The first string value of the metadata entry
          */

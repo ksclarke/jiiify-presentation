@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v2;
 
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,15 +15,27 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.iiif.presentation.v2.properties.Type;
-import info.freelibrary.iiif.presentation.v2.services.APIComplianceLevel;
-import info.freelibrary.iiif.presentation.v2.services.ImageInfoService;
-import info.freelibrary.iiif.presentation.v2.utils.Constants;
-import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
 import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.StringUtils;
+
+import info.freelibrary.iiif.presentation.v2.properties.Attribution;
+import info.freelibrary.iiif.presentation.v2.properties.Description;
+import info.freelibrary.iiif.presentation.v2.properties.Label;
+import info.freelibrary.iiif.presentation.v2.properties.License;
+import info.freelibrary.iiif.presentation.v2.properties.Logo;
+import info.freelibrary.iiif.presentation.v2.properties.Metadata;
+import info.freelibrary.iiif.presentation.v2.properties.SeeAlso;
+import info.freelibrary.iiif.presentation.v2.properties.Thumbnail;
+import info.freelibrary.iiif.presentation.v2.properties.Type;
+import info.freelibrary.iiif.presentation.v2.properties.ViewingHint;
+import info.freelibrary.iiif.presentation.v2.properties.ViewingHint.Option;
+import info.freelibrary.iiif.presentation.v2.services.APIComplianceLevel;
+import info.freelibrary.iiif.presentation.v2.services.ImageInfoService;
+import info.freelibrary.iiif.presentation.v2.services.Service;
+import info.freelibrary.iiif.presentation.v2.utils.Constants;
+import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
 
 /**
  * An image resource that is associated with a {@link Canvas}.
@@ -132,6 +145,131 @@ public class ImageContent extends Content<ImageContent> {
         return myResources;
     }
 
+    @Override
+    public ImageContent setLabel(final String aLabel) {
+        return (ImageContent) super.setLabel(aLabel);
+    }
+
+    @Override
+    public ImageContent setLabel(final Label aLabel) {
+        return (ImageContent) super.setLabel(aLabel);
+    }
+
+    @Override
+    public ImageContent setService(final Service<?> aService) {
+        return (ImageContent) super.setService(aService);
+    }
+
+    @Override
+    public ImageContent setMetadata(final Metadata aMetadata) {
+        return (ImageContent) super.setMetadata(aMetadata);
+    }
+
+    @Override
+    public ImageContent setDescription(final String aDescription) {
+        return (ImageContent) super.setDescription(aDescription);
+    }
+
+    @Override
+    public ImageContent setDescription(final Description aDescription) {
+        return (ImageContent) super.setDescription(aDescription);
+    }
+
+    @Override
+    public ImageContent setThumbnail(final Thumbnail aThumbnail) {
+        return (ImageContent) super.setThumbnail(aThumbnail);
+    }
+
+    @Override
+    public ImageContent setThumbnail(final String aURI) {
+        return (ImageContent) super.setThumbnail(aURI);
+    }
+
+    @Override
+    public ImageContent setAttribution(final String aAttribution) {
+        return (ImageContent) super.setAttribution(aAttribution);
+    }
+
+    @Override
+    public ImageContent setAttribution(final Attribution aAttribution) {
+        return (ImageContent) super.setAttribution(aAttribution);
+    }
+
+    @Override
+    public ImageContent setLicense(final License aLicense) {
+        return (ImageContent) super.setLicense(aLicense);
+    }
+
+    @Override
+    public ImageContent setLicense(final String aURL) throws MalformedURLException {
+        return (ImageContent) super.setLicense(aURL);
+    }
+
+    @Override
+    public ImageContent setLogo(final Logo aLogo) {
+        return (ImageContent) super.setLogo(aLogo);
+    }
+
+    @Override
+    public ImageContent setLogo(final String aURI) {
+        return (ImageContent) super.setLogo(aURI);
+    }
+
+    @Override
+    public ImageContent setID(final String aURI) {
+        return (ImageContent) super.setID(aURI);
+    }
+
+    @Override
+    public ImageContent setID(final URI aID) {
+        return (ImageContent) super.setID(aID);
+    }
+
+    @Override
+    public ImageContent setWithin(final String aWithin) {
+        return (ImageContent) super.setWithin(aWithin);
+    }
+
+    @Override
+    public ImageContent setWithin(final URI aWithin) {
+        return (ImageContent) super.setWithin(aWithin);
+    }
+
+    @Override
+    public ImageContent setViewingHint(final ViewingHint aViewingHint) {
+        return (ImageContent) super.setViewingHint(aViewingHint);
+    }
+
+    @Override
+    public ImageContent setViewingHint(final String aViewingHint) {
+        return (ImageContent) super.setViewingHint(aViewingHint);
+    }
+
+    @Override
+    public ImageContent setViewingHint(final Option aViewingHint) {
+        return (ImageContent) super.setViewingHint(aViewingHint);
+    }
+
+    @Override
+    public ImageContent setSeeAlso(final SeeAlso aSeeAlso) {
+        return (ImageContent) super.setSeeAlso(aSeeAlso);
+    }
+
+    @Override
+    public ImageContent setSeeAlso(final String aSeeAlso) {
+        return (ImageContent) super.setSeeAlso(aSeeAlso);
+    }
+
+    @Override
+    public ImageContent setOn(final URI aURI) {
+        return (ImageContent) super.setOn(aURI);
+    }
+
+    @Override
+    public ImageContent setOn(final String aURI) {
+        return (ImageContent) super.setOn(aURI);
+    }
+
     /**
      * Gets the resources map.
      *
@@ -207,19 +345,19 @@ public class ImageContent extends Content<ImageContent> {
         LOGGER.trace(aResourceMap.toString());
 
         if (!aResourceMap.isEmpty()) {
-            final Map<String, Object> defaultItem = (Map<String, Object>) aResourceMap.get(Constants.DEFAULT);
-            final List<Map<String, Object>> items = (List<Map<String, Object>>) aResourceMap.get(Constants.ITEM);
+            final Object defaultItem = aResourceMap.get(Constants.DEFAULT);
+            final List<?> items = (List<?>) aResourceMap.get(Constants.ITEM);
 
             if (defaultItem != null) {
                 myDefaultResource = Optional.of(buildImageResource(defaultItem));
             }
 
-            if (items != null) {
+            if (items != null && items instanceof List) {
                 for (final Object object : items) {
                     if (object instanceof String && RDF_NIL.equals(object.toString())) {
                         myResources.add(null);
                     } else {
-                        myResources.add(buildImageResource((Map<String, Object>) object));
+                        myResources.add(buildImageResource(object));
                     }
                 }
             }
@@ -230,46 +368,65 @@ public class ImageContent extends Content<ImageContent> {
         }
     }
 
-    private ImageResource buildImageResource(final Map<String, Object> aImageResourceMap) {
-        final ImageResource resource = new ImageResource(URI.create((String) aImageResourceMap.get(Constants.ID)));
-        final String label = (String) aImageResourceMap.get(Constants.LABEL);
-        final int width = (int) aImageResourceMap.getOrDefault(Constants.WIDTH, 0);
-        final int height = (int) aImageResourceMap.getOrDefault(Constants.HEIGHT, 0);
-        final Map<String, Object> service = (Map<String, Object>) aImageResourceMap.get(Constants.SERVICE);
+    private ImageResource buildImageResource(final Object aImageResourceMap) {
+        if (aImageResourceMap instanceof Map) {
+            final Map<?, ?> map = (Map<?, ?>) aImageResourceMap;
+            final ImageResource resource = new ImageResource(URI.create((String) map.get(Constants.ID)));
+            final String label = (String) map.get(Constants.LABEL);
+            final Map<?, ?> service = (Map<?, ?>) map.get(Constants.SERVICE);
+            final Object widthObj = map.get(Constants.WIDTH);
+            final Object heightObj = map.get(Constants.HEIGHT);
+            final int width;
+            final int height;
 
-        if (StringUtils.trimToNull(label) != null) {
-            resource.setLabel(label);
-        }
-
-        if (width != 0) {
-            try {
-                resource.setWidth(width);
-            } catch (final NumberFormatException details) {
-                LOGGER.error(details, details.getMessage());
-                resource.setWidth(0);
+            if (widthObj == null) {
+                width = 0;
+            } else {
+                width = Integer.parseInt(widthObj.toString());
             }
-        }
 
-        if (height != 0) {
-            try {
-                resource.setHeight(height);
-            } catch (final NumberFormatException details) {
-                LOGGER.error(details, details.getMessage());
-                resource.setHeight(0);
+            if (heightObj == null) {
+                height = 0;
+            } else {
+                height = Integer.parseInt(heightObj.toString());
             }
-        }
 
-        if (service != null) {
-            final String profile = StringUtils.trimToNull((String) service.get(Constants.PROFILE));
-            final String id = StringUtils.trimToNull((String) service.get(Constants.ID));
-
-            if (profile != null && id != null) {
-                resource.setService(new ImageInfoService(APIComplianceLevel.fromProfile(profile), id));
-            } else if (id != null) {
-                resource.setService(new ImageInfoService(id));
+            if (StringUtils.trimToNull(label) != null) {
+                resource.setLabel(label);
             }
-        }
 
-        return resource;
+            if (width != 0) {
+                try {
+                    resource.setWidth(width);
+                } catch (final NumberFormatException details) {
+                    LOGGER.error(details, details.getMessage());
+                    resource.setWidth(0);
+                }
+            }
+
+            if (height != 0) {
+                try {
+                    resource.setHeight(height);
+                } catch (final NumberFormatException details) {
+                    LOGGER.error(details, details.getMessage());
+                    resource.setHeight(0);
+                }
+            }
+
+            if (service != null) {
+                final String profile = StringUtils.trimToNull((String) service.get(Constants.PROFILE));
+                final String id = StringUtils.trimToNull((String) service.get(Constants.ID));
+
+                if (profile != null && id != null) {
+                    resource.setService(new ImageInfoService(APIComplianceLevel.fromProfile(profile), id));
+                } else if (id != null) {
+                    resource.setService(new ImageInfoService(id));
+                }
+            }
+
+            return resource;
+        } else {
+            return null;
+        }
     }
 }

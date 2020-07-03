@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v2;
 
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,7 +13,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.iiif.presentation.v2.properties.Attribution;
+import info.freelibrary.iiif.presentation.v2.properties.Description;
+import info.freelibrary.iiif.presentation.v2.properties.Label;
+import info.freelibrary.iiif.presentation.v2.properties.License;
+import info.freelibrary.iiif.presentation.v2.properties.Logo;
+import info.freelibrary.iiif.presentation.v2.properties.Metadata;
+import info.freelibrary.iiif.presentation.v2.properties.SeeAlso;
+import info.freelibrary.iiif.presentation.v2.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.v2.properties.ViewingDirection;
+import info.freelibrary.iiif.presentation.v2.properties.ViewingHint;
+import info.freelibrary.iiif.presentation.v2.properties.ViewingHint.Option;
+import info.freelibrary.iiif.presentation.v2.services.Service;
 import info.freelibrary.iiif.presentation.v2.utils.Constants;
 
 /**
@@ -154,6 +166,121 @@ public class Sequence extends Resource<Sequence> {
     @JsonGetter(Constants.CANVASES)
     public List<Canvas> getCanvases() {
         return myCanvases;
+    }
+
+    @Override
+    public Sequence setLabel(final String aLabel) {
+        return (Sequence) super.setLabel(aLabel);
+    }
+
+    @Override
+    public Sequence setLabel(final Label aLabel) {
+        return (Sequence) super.setLabel(aLabel);
+    }
+
+    @Override
+    public Sequence setService(final Service<?> aService) {
+        return (Sequence) super.setService(aService);
+    }
+
+    @Override
+    public Sequence setMetadata(final Metadata aMetadata) {
+        return (Sequence) super.setMetadata(aMetadata);
+    }
+
+    @Override
+    public Sequence setDescription(final String aDescription) {
+        return (Sequence) super.setDescription(aDescription);
+    }
+
+    @Override
+    public Sequence setDescription(final Description aDescription) {
+        return (Sequence) super.setDescription(aDescription);
+    }
+
+    @Override
+    public Sequence setThumbnail(final Thumbnail aThumbnail) {
+        return (Sequence) super.setThumbnail(aThumbnail);
+    }
+
+    @Override
+    public Sequence setThumbnail(final String aURI) {
+        return (Sequence) super.setThumbnail(aURI);
+    }
+
+    @Override
+    public Sequence setAttribution(final String aAttribution) {
+        return (Sequence) super.setAttribution(aAttribution);
+    }
+
+    @Override
+    public Sequence setAttribution(final Attribution aAttribution) {
+        return (Sequence) super.setAttribution(aAttribution);
+    }
+
+    @Override
+    public Sequence setLicense(final License aLicense) {
+        return (Sequence) super.setLicense(aLicense);
+    }
+
+    @Override
+    public Sequence setLicense(final String aURL) throws MalformedURLException {
+        return (Sequence) super.setLicense(aURL);
+    }
+
+    @Override
+    public Sequence setLogo(final Logo aLogo) {
+        return (Sequence) super.setLogo(aLogo);
+    }
+
+    @Override
+    public Sequence setLogo(final String aURI) {
+        return (Sequence) super.setLogo(aURI);
+    }
+
+    @Override
+    public Sequence setID(final String aURI) {
+        return (Sequence) super.setID(aURI);
+    }
+
+    @Override
+    public Sequence setID(final URI aID) {
+        return (Sequence) super.setID(aID);
+    }
+
+    @Override
+    public Sequence setWithin(final String aWithin) {
+        return (Sequence) super.setWithin(aWithin);
+    }
+
+    @Override
+    public Sequence setWithin(final URI aWithin) {
+        return (Sequence) super.setWithin(aWithin);
+    }
+
+    @Override
+    public Sequence setViewingHint(final ViewingHint aViewingHint) {
+        return (Sequence) super.setViewingHint(aViewingHint);
+    }
+
+    @Override
+    public Sequence setViewingHint(final String aViewingHint) {
+        return (Sequence) super.setViewingHint(aViewingHint);
+    }
+
+    @Override
+    public Sequence setViewingHint(final Option aViewingHint) {
+        return (Sequence) super.setViewingHint(aViewingHint);
+    }
+
+    @Override
+    public Sequence setSeeAlso(final SeeAlso aSeeAlso) {
+        return (Sequence) super.setSeeAlso(aSeeAlso);
+    }
+
+    @Override
+    public Sequence setSeeAlso(final String aSeeAlso) {
+        return (Sequence) super.setSeeAlso(aSeeAlso);
     }
 
 }

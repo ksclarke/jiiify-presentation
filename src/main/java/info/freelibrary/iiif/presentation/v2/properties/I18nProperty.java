@@ -8,9 +8,10 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+
+import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
 
 /**
  * A property value that can be used in the label, description, attribution and the label and value fields.
@@ -49,7 +50,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      * @param aValue A string value
      * @return True if the property's value was set
      */
-    public T setValue(final String... aValue) {
+    protected I18nProperty<T> setValue(final String... aValue) {
         myValues.clear();
         return addValue(aValue);
     }
@@ -82,7 +83,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      * @param aValue A String property value
      * @return A String value to the property
      */
-    public final T addValue(final String... aValue) {
+    protected I18nProperty<T> addValue(final String... aValue) {
         Objects.requireNonNull(aValue, LOGGER.getMessage(MessageCodes.JPA_001));
 
         for (final String value : aValue) {
@@ -93,7 +94,7 @@ class I18nProperty<T extends I18nProperty<T>> {
             }
         }
 
-        return (T) this;
+        return this;
     }
 
     /**
@@ -102,7 +103,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      * @param aValue A I18N property value
      * @return A String value to the property
      */
-    public final T addValue(final Value... aValue) {
+    protected I18nProperty<T> addValue(final Value... aValue) {
         Objects.requireNonNull(aValue, LOGGER.getMessage(MessageCodes.JPA_001));
 
         for (final Value value : aValue) {
@@ -113,7 +114,7 @@ class I18nProperty<T extends I18nProperty<T>> {
             }
         }
 
-        return (T) this;
+        return this;
     }
 
     /**
@@ -126,9 +127,10 @@ class I18nProperty<T extends I18nProperty<T>> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public boolean equals(final Object aObject) {
         if (aObject != null && getClass().getName().equals(aObject.getClass().getName())) {
-            return getJsonValue().equals(((I18nProperty) aObject).getJsonValue());
+            return getJsonValue().equals(((I18nProperty<T>) aObject).getJsonValue());
         } else {
             return false;
         }
