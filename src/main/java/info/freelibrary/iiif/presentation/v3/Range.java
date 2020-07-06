@@ -13,6 +13,8 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import info.freelibrary.util.I18nRuntimeException;
+
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -27,7 +29,6 @@ import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.RangeBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-import info.freelibrary.util.I18nRuntimeException;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
@@ -419,8 +420,8 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
         }
 
         /**
-         * Creates a new range item from a canvas; the canvas is either embedded or referenced depending on the
-         * boolean flag passed to the constructor.
+         * Creates a new range item from a canvas; the canvas is either embedded or referenced depending on the boolean
+         * flag passed to the constructor.
          *
          * @param aCanvas A canvas to use as a range item
          * @param aEmbeddedCanvas Whether a canvas should be embedded or a reference to it created
@@ -436,16 +437,16 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
         /**
          * Creates a new range item from another range.
          *
-         * @param aRange
+         * @param aRange A range item created from another range
          */
         public Item(final Range aRange) {
             myRange = aRange;
         }
 
         /**
-         * Creates a new range item from a specific resource
+         * Creates a new range item from a specific resource.
          *
-         * @param aSpecificResource
+         * @param aSpecificResource A range item created from a specific resource
          */
         public Item(final SpecificResource aSpecificResource) {
             mySpecificResource = aSpecificResource;
