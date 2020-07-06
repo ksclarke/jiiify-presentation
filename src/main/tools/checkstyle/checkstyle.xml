@@ -8,6 +8,7 @@
   <property name="severity" value="warning" />
   <module name="LineLength">
     <property name="max" value="120" />
+    <property name="fileExtensions" value="java, py, sh, txt"/>
   </module>
   <module name="TreeWalker">
     <module name="RedundantImport" />
