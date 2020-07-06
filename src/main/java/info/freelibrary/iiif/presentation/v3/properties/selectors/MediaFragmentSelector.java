@@ -13,10 +13,11 @@ import com.github.tkurz.media.fragments.spatial.SpatialFragment;
 import com.github.tkurz.media.fragments.temporal.Clocktime;
 import com.github.tkurz.media.fragments.temporal.NPTFragment;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+
+import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * A media fragment selector selects a region of interest in a resource with spatial and/or temporal dimensions.
@@ -58,7 +59,6 @@ public class MediaFragmentSelector implements FragmentSelector {
      * Creates a media fragment selector from the supplied temporal dimensions.
      * <p>
      * Users may pass either 1 or 2 temporal dimensions. Examples:
-     * </p>
      * <ul>
      * <li><code>new MediaFragmentSelector(0.0f)</code> &#8594; <code>#t=0</code></li>
      * <li><code>new MediaFragmentSelector(0.0f, null)</code> &#8594; <code>#t=0</code></li>
@@ -79,10 +79,8 @@ public class MediaFragmentSelector implements FragmentSelector {
      * <p>
      * Users may pass either 1 or 2 temporal dimensions in the same manner as with
      * {@link #MediaFragmentSelector(Float...)}.
-     * </p>
-     * </p>
+     * <p>
      * All spatial dimensions are required.
-     * </p>
      *
      * @param aX A x-coordinate
      * @param aY A y-coordinate

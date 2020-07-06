@@ -6,7 +6,7 @@
 
   <artifactId>jiiify-presentation</artifactId>
   <packaging>jar</packaging>
-  <version>v3-0.3.1-SNAPSHOT</version>
+  <version>v3-0.4.0-SNAPSHOT</version>
   <name>jiiify-presentation</name>
   <description>A Java Library for version 3 of the IIIF Presentation API</description>
   <url>http://projects.freelibrary.info/jiiify-presentation3</url>
@@ -195,10 +195,6 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.jbake</groupId>
-        <artifactId>jbake-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
         <configuration>
@@ -231,7 +227,7 @@
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>3.8.10</version>
+    <version>4.0.0</version>
   </parent>
 
 </project>
