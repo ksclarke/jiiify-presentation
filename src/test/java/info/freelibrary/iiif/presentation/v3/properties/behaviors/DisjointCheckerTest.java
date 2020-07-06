@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.behaviors;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,15 +10,16 @@ import java.util.Optional;
 
 import org.junit.Test;
 
-import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.util.StringUtils;
+
+import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 
 /**
  * Tests of {@link DiskjointChecker}.
  */
 public class DisjointCheckerTest {
 
-    private static final File DISJOINTS = new File("src/test/resources/disjoint.txt");
+    private static final File DISJOINTS = new File("src/test/resources/disjoint.data");
 
     /**
      * Tests {@link DisjointChecker#toString() toString}.
