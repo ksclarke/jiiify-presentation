@@ -6,18 +6,19 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.tkurz.media.fragments.FragmentParser;
 import com.github.tkurz.media.fragments.ParseException;
 import com.github.tkurz.media.fragments.base.MediaFragment;
 import com.github.tkurz.media.fragments.spatial.SpatialFragment;
 import com.github.tkurz.media.fragments.temporal.Clocktime;
 import com.github.tkurz.media.fragments.temporal.NPTFragment;
-
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
+import com.github.tkurz.media.fragments.temporal.TemporalFragment;
 
 import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
 
 /**
  * A media fragment selector selects a region of interest in a resource with spatial and/or temporal dimensions.
@@ -27,6 +28,18 @@ public class MediaFragmentSelector implements FragmentSelector {
     private static final Logger LOGGER = LoggerFactory.getLogger(MediaFragmentSelector.class, MessageCodes.BUNDLE);
 
     private final MediaFragment myMediaFragment;
+
+    private int myX;
+
+    private int myY;
+
+    private int myWidth;
+
+    private int myHeight;
+
+    private float myStart;
+
+    private float myEnd;
 
     /**
      * Creates a media fragment selector from the supplied string.
@@ -39,6 +52,17 @@ public class MediaFragmentSelector implements FragmentSelector {
             myMediaFragment = new FragmentParser(new StringReader(aFragment)).run(MediaFragment.Type.FRAGMENT);
         } catch (final ParseException details) {
             throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_042, aFragment, details));
+        }
+
+        if (myMediaFragment.hasSpatialFragment()) {
+            final SpatialFragment sf = myMediaFragment.getSpatialFragment();
+
+            setXYWidthHeight((int) sf.getX(), (int) sf.getY(), (int) sf.getWidth(), (int) sf.getHeight());
+        }
+        if (myMediaFragment.hasTemporalFragment()) {
+            final TemporalFragment<?> tf = myMediaFragment.getTemporalFragment();
+
+            setStartEnd((float) tf.getStart().getValue(), (float) tf.getEnd().getValue());
         }
     }
 
@@ -53,6 +77,8 @@ public class MediaFragmentSelector implements FragmentSelector {
     public MediaFragmentSelector(final int aX, final int aY, final int aWidth, final int aHeight) {
         myMediaFragment = new MediaFragment();
         myMediaFragment.setSpatialFragment(createSpatialFragment(aX, aY, aWidth, aHeight));
+
+        setXYWidthHeight(aX, aY, aWidth, aHeight);
     }
 
     /**
@@ -72,6 +98,9 @@ public class MediaFragmentSelector implements FragmentSelector {
     public MediaFragmentSelector(final Float... aTemporalArray) throws IllegalArgumentException {
         myMediaFragment = new MediaFragment();
         myMediaFragment.setTemporalFragment(createTemporalFragment(aTemporalArray));
+
+        setStartEnd((float) myMediaFragment.getTemporalFragment().getStart().getValue(),
+                (float) myMediaFragment.getTemporalFragment().getEnd().getValue());
     }
 
     /**
@@ -94,6 +123,10 @@ public class MediaFragmentSelector implements FragmentSelector {
         myMediaFragment = new MediaFragment();
         myMediaFragment.setSpatialFragment(createSpatialFragment(aX, aY, aWidth, aHeight));
         myMediaFragment.setTemporalFragment(createTemporalFragment(aTemporalArray));
+
+        setXYWidthHeight(aX, aY, aWidth, aHeight);
+        setStartEnd((float) myMediaFragment.getTemporalFragment().getStart().getValue(),
+                (float) myMediaFragment.getTemporalFragment().getEnd().getValue());
     }
 
     /**
@@ -170,6 +203,71 @@ public class MediaFragmentSelector implements FragmentSelector {
             list.add(myMediaFragment.getTemporalFragment().stringValue());
         }
         return String.join("&", list);
+    }
+
+    @JsonIgnore
+    public boolean isSpatial() {
+        return myMediaFragment.hasSpatialFragment();
+    }
+
+    @JsonIgnore
+    public boolean isTemporal() {
+        return myMediaFragment.hasTemporalFragment();
+    }
+
+    @JsonIgnore
+    public int getX() {
+        return myX;
+    }
+
+    @JsonIgnore
+    public int getY() {
+        return myY;
+    }
+
+    @JsonIgnore
+    public int getWidth() {
+        return myWidth;
+    }
+
+    @JsonIgnore
+    public int getHeight() {
+        return myHeight;
+    }
+
+    @JsonIgnore
+    public float getStart() {
+        return myStart;
+    }
+
+    public boolean hasEnd() {
+        return myMediaFragment.getTemporalFragment().getEnd() != Clocktime.INFINIT;
+    }
+
+    @JsonIgnore
+    public float getEnd() {
+        return myEnd;
+    }
+
+    @JsonIgnore
+    public float getDuration() {
+        return myEnd - myStart;
+    }
+
+    private MediaFragmentSelector setStartEnd(final float aStart, final float aEnd) {
+        myStart = aStart;
+        myEnd = aEnd;
+
+        return this;
+    }
+
+    private MediaFragmentSelector setXYWidthHeight(final int aX, final int aY, final int aWidth, final int aHeight) {
+        myX = aX;
+        myY = aY;
+        myWidth = aWidth;
+        myHeight = aHeight;
+
+        return this;
     }
 
 }

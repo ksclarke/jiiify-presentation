@@ -79,6 +79,14 @@ public class MediaFragmentSelectorTest {
     }
 
     /**
+     * Tests constructing a media fragment selector with no time.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public final void testConstructorEmptyTime() {
+        new MediaFragmentSelector("t=,");
+    }
+
+    /**
      * Tests constructing a media fragment selector with too many numeric temporal dimensions.
      */
     @Test(expected = IllegalArgumentException.class)

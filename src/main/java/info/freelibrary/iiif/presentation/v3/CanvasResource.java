@@ -60,140 +60,146 @@ public interface CanvasResource<T extends CanvasResource<T>> {
 
     /**
      * Paints content resources onto the canvas using a {@link PaintingAnnotation}.
-     *
-     * <p>Calling this method with a single {@link ContentResource} associates that resource with the canvas using an
-     * annotation with a single body.</p>
-     *
-     * <p>Calling this method with multiple {@link ContentResource}s associates those resources with the canvas using a
-     * single annotation with a <code>Choice</code> body.</p>
-     *
-     * <p>If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
+     * <p>
+     * Calling this method with a single {@link ContentResource} associates that resource with the canvas using an
+     * annotation with a single body.
+     * <p>
+     * Calling this method with multiple {@link ContentResource}s associates those resources with the canvas using a
+     * single annotation with a <code>Choice</code> body.
+     * <p>
+     * If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
-     * list returned by {@link #getPaintingPages() getPaintingPages()}.</p>
+     * list returned by {@link #getPaintingPages() getPaintingPages()}.
      *
      * @param aContentArray An array of content resources
      * @return This canvas
-     * @throws IllegalArgumentException If the content resource has dimensions which this canvas does not have, or which
-     * are not within the bounds of the dimensions of this canvas
+     * @throws ContentOutOfBoundsException If the content resource has dimensions which this canvas does not have, or
+     * which are not within the bounds of the dimensions of this canvas
      */
     T paintWith(ContentResource... aContentArray);
 
     /**
      * Paints content resources onto the canvas using a {@link PaintingAnnotation}.
-     *
-     * <p>Calling this method with a list containing a single {@link ContentResource} associates that resource with the
-     * canvas using an annotation with a single body.</p>
-     *
-     * <p>Calling this method with a list containing more than one {@link ContentResource} associates those resources
-     * with the canvas using a single annotation with a <code>Choice</code> body.</p>
-     *
-     * <p>If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
+     * <p>
+     * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
+     * canvas using an annotation with a single body.
+     * <p>
+     * Calling this method with a list containing more than one {@link ContentResource} associates those resources with
+     * the canvas using a single annotation with a <code>Choice</code> body.
+     * <p>
+     * If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
-     * list returned by {@link #getPaintingPages() getPaintingPages()}.</p>
+     * list returned by {@link #getPaintingPages() getPaintingPages()}.
      *
      * @param aContentList A list of content resources
      * @return This canvas
-     * @throws IllegalArgumentException If the content resource has dimensions which this canvas does not have, or which
-     * are not within the bounds of the dimensions of this canvas
+     * @throws ContentOutOfBoundsException If the content resource has dimensions which this canvas does not have, or
+     * which are not within the bounds of the dimensions of this canvas
      */
     T paintWith(List<ContentResource> aContentList);
 
     /**
      * Paints content resources onto the canvas using a {@link PaintingAnnotation}.
-     *
-     * <p>Calling this method with a single {@link ContentResource} associates that resource with the canvas using an
-     * annotation with a single body.</p>
-     *
-     * <p>Calling this method with multiple {@link ContentResource}s associates those resources with the canvas using a
-     * single annotation with a <code>Choice</code> body.</p>
-     *
-     * <p>If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
+     * <p>
+     * Calling this method with a single {@link ContentResource} associates that resource with the canvas using an
+     * annotation with a single body.
+     * <p>
+     * Calling this method with multiple {@link ContentResource}s associates those resources with the canvas using a
+     * single annotation with a <code>Choice</code> body.
+     * <p>
+     * If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
-     * list returned by {@link #getPaintingPages() getPaintingPages()}.</p>
+     * list returned by {@link #getPaintingPages() getPaintingPages()}.
      *
      * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to paint
      * @param aContentArray An array of content resources
      * @return This canvas
-     * @throws IllegalArgumentException If the content resource has dimensions which this canvas does not have, or which
-     * are not within the bounds of the dimensions of this canvas
+     * @throws ContentOutOfBoundsException If the content resource has dimensions which this canvas does not have, or
+     * which are not within the bounds of the dimensions of this canvas
+     * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given {@link MediaFragmentSelector}
+     * does not exist
      */
     T paintWith(MediaFragmentSelector aCanvasRegion, ContentResource... aContentArray);
 
     /**
      * Paints content resources onto the canvas using a {@link PaintingAnnotation}.
-     *
-     * <p>Calling this method with a single {@link ContentResource} associates that resource with the canvas using an
-     * annotation with a single body.</p>
-     *
-     * <p>Calling this method with multiple {@link ContentResource}s associates those resources with the canvas using a
-     * single annotation with a <code>Choice</code> body.</p>
-     *
-     * <p>If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
+     * <p>
+     * Calling this method with a single {@link ContentResource} associates that resource with the canvas using an
+     * annotation with a single body.
+     * <p>
+     * Calling this method with multiple {@link ContentResource}s associates those resources with the canvas using a
+     * single annotation with a <code>Choice</code> body.
+     * <p>
+     * If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
-     * list returned by {@link #getPaintingPages() getPaintingPages()}.</p>
+     * list returned by {@link #getPaintingPages() getPaintingPages()}.
      *
      * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to paint
      * @param aContentArray An array of content resources
      * @return This canvas
-     * @throws IllegalArgumentException If the content resource has dimensions which this canvas does not have, or which
-     * are not within the bounds of the dimensions of this canvas
+     * @throws ContentOutOfBoundsException If the content resource has dimensions which this canvas does not have, or
+     * which are not within the bounds of the dimensions of this canvas
+     * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given media fragment does not exist
      */
     T paintWith(String aCanvasRegion, ContentResource... aContentArray);
 
     /**
      * Paints content resources onto the canvas using a {@link PaintingAnnotation}.
-     *
-     * <p>Calling this method with a list containing a single {@link ContentResource} associates that resource with the
-     * canvas using an annotation with a single body.</p>
-     *
-     * <p>Calling this method with a list containing more than one {@link ContentResource} associates those resources
-     * with the canvas using a single annotation with a <code>Choice</code> body.</p>
-     *
-     * <p>If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
+     * <p>
+     * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
+     * canvas using an annotation with a single body.
+     * <p>
+     * Calling this method with a list containing more than one {@link ContentResource} associates those resources with
+     * the canvas using a single annotation with a <code>Choice</code> body.
+     * <p>
+     * If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
-     * list returned by {@link #getPaintingPages() getPaintingPages()}.</p>
+     * list returned by {@link #getPaintingPages() getPaintingPages()}.
      *
      * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to paint
      * @param aContentList A list of content resources
      * @return This canvas
-     * @throws IllegalArgumentException If the content resource has dimensions which this canvas does not have, or which
-     * are not within the bounds of the dimensions of this canvas
+     * @throws ContentOutOfBoundsException If the content resource has dimensions which this canvas does not have, or
+     * which are not within the bounds of the dimensions of this canvas
+     * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given {@link MediaFragmentSelector}
+     * does not exist
      */
     T paintWith(MediaFragmentSelector aCanvasRegion, List<ContentResource> aContentList);
 
     /**
      * Paints content resources onto the canvas using a {@link PaintingAnnotation}.
-     *
-     * <p>Calling this method with a list containing a single {@link ContentResource} associates that resource with the
-     * canvas using an annotation with a single body.</p>
-     *
-     * <p>Calling this method with a list containing more than one {@link ContentResource} associates those resources
-     * with the canvas using a single annotation with a <code>Choice</code> body.</p>
-     *
-     * <p>If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
+     * <p>
+     * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
+     * canvas using an annotation with a single body.
+     * <p>
+     * Calling this method with a list containing more than one {@link ContentResource} associates those resources with
+     * the canvas using a single annotation with a <code>Choice</code> body.
+     * <p>
+     * If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
-     * list returned by {@link #getPaintingPages() getPaintingPages()}.</p>
+     * list returned by {@link #getPaintingPages() getPaintingPages()}.
      *
      * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to paint
      * @param aContentList A list of content resources
      * @return This canvas
-     * @throws IllegalArgumentException If the content resource has dimensions which this canvas does not have, or which
-     * are not within the bounds of the dimensions of this canvas
+     * @throws ContentOutOfBoundsException If the content resource has dimensions which this canvas does not have, or
+     * which are not within the bounds of the dimensions of this canvas
+     * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given media fragment does not exist
      */
     T paintWith(String aCanvasRegion, List<ContentResource> aContentList);
 
     /**
      * Associates supplementing content resources with the canvas using a {@link SupplementingAnnotation}.
-     *
-     * <p>Calling this method with a single {@link ContentResource} associates that resource with the canvas using an
-     * annotation with a single body.</p>
-     *
-     * <p>Calling this method with multiple {@link ContentResource}s associates those resources with the canvas using a
-     * single annotation with a <code>Choice</code> body.</p>
-     *
-     * <p>If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
+     * <p>
+     * Calling this method with a single {@link ContentResource} associates that resource with the canvas using an
+     * annotation with a single body.
+     * <p>
+     * Calling this method with multiple {@link ContentResource}s associates those resources with the canvas using a
+     * single annotation with a <code>Choice</code> body.
+     * <p>
+     * If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
-     * list returned by {@link #getSupplementingPages() getSupplementingPages()}.</p>
+     * list returned by {@link #getSupplementingPages() getSupplementingPages()}.
      *
      * @param aContentArray An array of content resources
      * @return This canvas
@@ -202,16 +208,16 @@ public interface CanvasResource<T extends CanvasResource<T>> {
 
     /**
      * Associates supplementing content resources with the canvas using a {@link SupplementingAnnotation}.
-     *
-     * <p>Calling this method with a list containing a single {@link ContentResource} associates that resource with the
-     * canvas using an annotation with a single body.</p>
-     *
-     * <p>Calling this method with a list containing more than one {@link ContentResource} associates those resources
-     * with the canvas using a single annotation with a <code>Choice</code> body.</p>
-     *
-     * <p>If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
+     * <p>
+     * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
+     * canvas using an annotation with a single body.
+     * <p>
+     * Calling this method with a list containing more than one {@link ContentResource} associates those resources with
+     * the canvas using a single annotation with a <code>Choice</code> body.
+     * <p>
+     * If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
-     * list returned by {@link #getSupplementingPages() getSupplementingPages()}.</p>
+     * list returned by {@link #getSupplementingPages() getSupplementingPages()}.
      *
      * @param aContentList A list of content resources
      * @return This canvas
@@ -220,16 +226,16 @@ public interface CanvasResource<T extends CanvasResource<T>> {
 
     /**
      * Associates supplementing content resources with the canvas using a {@link SupplementingAnnotation}.
-     *
-     * <p>Calling this method with a single {@link ContentResource} associates that resource with the canvas using an
-     * annotation with a single body.</p>
-     *
-     * <p>Calling this method with multiple {@link ContentResource}s associates those resources with the canvas using a
-     * single annotation with a <code>Choice</code> body.</p>
-     *
-     * <p>If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
+     * <p>
+     * Calling this method with a single {@link ContentResource} associates that resource with the canvas using an
+     * annotation with a single body.
+     * <p>
+     * Calling this method with multiple {@link ContentResource}s associates those resources with the canvas using a
+     * single annotation with a <code>Choice</code> body.
+     * <p>
+     * If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
-     * list returned by {@link #getSupplementingPages() getSupplementingPages()}.</p>
+     * list returned by {@link #getSupplementingPages() getSupplementingPages()}.
      *
      * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to supplement
      * @param aContentArray An array of content resources
@@ -239,16 +245,16 @@ public interface CanvasResource<T extends CanvasResource<T>> {
 
     /**
      * Associates supplementing content resources with the canvas using a {@link SupplementingAnnotation}.
-     *
-     * <p>Calling this method with a single {@link ContentResource} associates that resource with the canvas using an
-     * annotation with a single body.</p>
-     *
-     * <p>Calling this method with multiple {@link ContentResource}s associates those resources with the canvas using a
-     * single annotation with a <code>Choice</code> body.</p>
-     *
-     * <p>If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
+     * <p>
+     * Calling this method with a single {@link ContentResource} associates that resource with the canvas using an
+     * annotation with a single body.
+     * <p>
+     * Calling this method with multiple {@link ContentResource}s associates those resources with the canvas using a
+     * single annotation with a <code>Choice</code> body.
+     * <p>
+     * If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
-     * list returned by {@link #getSupplementingPages() getSupplementingPages()}.</p>
+     * list returned by {@link #getSupplementingPages() getSupplementingPages()}.
      *
      * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to supplement
      * @param aContentArray An array of content resources
@@ -258,16 +264,16 @@ public interface CanvasResource<T extends CanvasResource<T>> {
 
     /**
      * Associates supplementing content resources with the canvas using a {@link SupplementingAnnotation}.
-     *
-     * <p>Calling this method with a list containing a single {@link ContentResource} associates that resource with the
-     * canvas using an annotation with a single body.</p>
-     *
-     * <p>Calling this method with a list containing more than one {@link ContentResource} associates those resources
-     * with the canvas using a single annotation with a <code>Choice</code> body.</p>
-     *
-     * <p>If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
+     * <p>
+     * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
+     * canvas using an annotation with a single body.
+     * <p>
+     * Calling this method with a list containing more than one {@link ContentResource} associates those resources with
+     * the canvas using a single annotation with a <code>Choice</code> body.
+     * <p>
+     * If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
-     * list returned by {@link #getSupplementingPages() getSupplementingPages()}.</p>
+     * list returned by {@link #getSupplementingPages() getSupplementingPages()}.
      *
      * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to supplement
      * @param aContentList A list of content resources
@@ -277,16 +283,16 @@ public interface CanvasResource<T extends CanvasResource<T>> {
 
     /**
      * Associates supplementing content resources with the canvas using a {@link SupplementingAnnotation}.
-     *
-     * <p>Calling this method with a list containing a single {@link ContentResource} associates that resource with the
-     * canvas using an annotation with a single body.</p>
-     *
-     * <p>Calling this method with a list containing more than one {@link ContentResource} associates those resources
-     * with the canvas using a single annotation with a <code>Choice</code> body.</p>
-     *
-     * <p>If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
+     * <p>
+     * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
+     * canvas using an annotation with a single body.
+     * <p>
+     * Calling this method with a list containing more than one {@link ContentResource} associates those resources with
+     * the canvas using a single annotation with a <code>Choice</code> body.
+     * <p>
+     * If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
-     * list returned by {@link #getSupplementingPages() getSupplementingPages()}.</p>
+     * list returned by {@link #getSupplementingPages() getSupplementingPages()}.
      *
      * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to supplement
      * @param aContentList A list of content resources

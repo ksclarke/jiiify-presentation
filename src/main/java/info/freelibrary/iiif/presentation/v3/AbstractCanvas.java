@@ -285,18 +285,14 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     }
 
     @SuppressWarnings("unchecked") // Moved SafeVarargs to extending classes where method can be final
-    protected AbstractCanvas<T> paintWith(final ContentResource... aContentArray) throws IllegalArgumentException {
+    protected AbstractCanvas<T> paintWith(final ContentResource... aContentArray) throws ContentOutOfBoundsException {
         final AnnotationPage<PaintingAnnotation> page;
         final int pageCount;
         final PaintingAnnotation anno = new PaintingAnnotation(getNextPaintingAnnoId(), this);
 
         for (final ContentResource content : aContentArray) {
-            try {
-                if (canFrame(content)) {
-                    anno.addBody(content);
-                }
-            } catch (final ContentResourceOutOfBoundsException details) {
-                throw new IllegalArgumentException(details);
+            if (canFrame(content)) {
+                anno.addBody(content);
             }
         }
 
@@ -312,25 +308,20 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         return this;
     }
 
-    protected AbstractCanvas<T> paintWith(final List<ContentResource> aContentList) throws IllegalArgumentException {
+    protected AbstractCanvas<T> paintWith(final List<ContentResource> aContentList) throws ContentOutOfBoundsException {
         return paintWith(aContentList.toArray(new ContentResource[] {}));
     }
 
     @SuppressWarnings("unchecked") // Moved SafeVarargs to extending classes where method can be final
     protected AbstractCanvas<T> paintWith(final MediaFragmentSelector aCanvasRegion,
-            final ContentResource... aContentArray) throws IllegalArgumentException {
+            final ContentResource... aContentArray) throws ContentOutOfBoundsException, SelectorOutOfBoundsException {
         final AnnotationPage<PaintingAnnotation> page;
         final int pageCount;
         final PaintingAnnotation anno = new PaintingAnnotation(getNextPaintingAnnoId(), this, aCanvasRegion);
 
         for (final ContentResource content : aContentArray) {
-            try {
-                // TODO: do bounds checking w.r.t. aCanvasRegion
-                if (canFrame(content)) {
-                    anno.addBody(content);
-                }
-            } catch (final ContentResourceOutOfBoundsException details) {
-                throw new IllegalArgumentException(details);
+            if (canFrame(content, aCanvasRegion)) {
+                anno.addBody(content);
             }
         }
 
@@ -347,18 +338,18 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     }
 
     protected AbstractCanvas<T> paintWith(final String aCanvasRegion, final ContentResource... aContentArray)
-            throws IllegalArgumentException {
+            throws ContentOutOfBoundsException, SelectorOutOfBoundsException {
         return paintWith(new MediaFragmentSelector(aCanvasRegion), aContentArray);
 
     }
 
     protected AbstractCanvas<T> paintWith(final MediaFragmentSelector aCanvasRegion,
-            final List<ContentResource> aContentList) throws IllegalArgumentException {
+            final List<ContentResource> aContentList) throws ContentOutOfBoundsException, SelectorOutOfBoundsException {
         return paintWith(aCanvasRegion, aContentList.toArray(new ContentResource[] {}));
     }
 
     protected AbstractCanvas<T> paintWith(final String aCanvasRegion, final List<ContentResource> aContentList)
-            throws IllegalArgumentException {
+            throws ContentOutOfBoundsException, SelectorOutOfBoundsException {
         return paintWith(aCanvasRegion, aContentList.toArray(new ContentResource[] {}));
     }
 
@@ -570,38 +561,128 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     /**
      * Checks if a content resource can "fit" on this canvas.
      *
-     * @param aContent A content resoure
-     * @return True if the content resource fits within the bounds of the canvas
-     * @throws ContentResourceOutOfBoundsException If the content resource won't fit
+     * @param aContent A content resource
+     * @return <code>true</code> if the content resource fits within the bounds of the canvas
+     * @throws ContentOutOfBoundsException If the content resource won't fit
      */
-    private boolean canFrame(final ContentResource aContent) throws ContentResourceOutOfBoundsException {
+    boolean canFrame(final ContentResource aContent) throws ContentOutOfBoundsException {
         if (aContent instanceof SpatialContentResource) {
             // The canvas must have a width and height, which must not be smaller than that of the content
             if (myWidth == 0 || myHeight == 0) {
-                throw new ContentResourceOutOfBoundsException(MessageCodes.JPA_059, aContent.getID(), SPATIAL, getID());
+                throw new ContentOutOfBoundsException(MessageCodes.JPA_059, aContent.getID(), SPATIAL, getID());
             } else {
                 final SpatialContentResource<?> spatialPainting = (SpatialContentResource<?>) aContent;
 
                 if (getWidth() < spatialPainting.getWidth() || getHeight() < spatialPainting.getHeight()) {
-                    throw new ContentResourceOutOfBoundsException(MessageCodes.JPA_060, aContent.getID(), SPATIAL,
-                            getID());
+                    throw new ContentOutOfBoundsException(MessageCodes.JPA_060, aContent.getID(), SPATIAL, getID());
                 }
             }
         }
         if (aContent instanceof TemporalContentResource) {
             // The canvas must have a duration, which must not be shorter than that of the content
             if (myDuration == 0.0f) {
-                throw new ContentResourceOutOfBoundsException(MessageCodes.JPA_059, aContent.getID(), TEMPORAL,
-                        getID());
+                throw new ContentOutOfBoundsException(MessageCodes.JPA_059, aContent.getID(), TEMPORAL, getID());
             } else {
                 final TemporalContentResource<?> temporalPainting = (TemporalContentResource<?>) aContent;
 
                 if (getDuration() < temporalPainting.getDuration()) {
-                    throw new ContentResourceOutOfBoundsException(MessageCodes.JPA_060, aContent.getID(), TEMPORAL,
-                            getID());
+                    throw new ContentOutOfBoundsException(MessageCodes.JPA_060, aContent.getID(), TEMPORAL, getID());
                 }
             }
         }
         return true;
+    }
+
+    /**
+     * Checks if a content resource can "fit" on a fragment of this canvas.
+     *
+     * @param aContent A content resource
+     * @param aCanvasRegion A {@link MediaFragmentSelector} identifying a fragment of this canvas
+     * @return <code>true</code> if the content resource fits within the bounds of the canvas fragment identified by the
+     * given {@link MediaFragmentSelector}
+     * @throws ContentOutOfBoundsException If the content resource won't fit
+     * @throws SelectorOutOfBoundsException If the canvas fragment doesn't exist
+     */
+    private boolean canFrame(final ContentResource aContent, final MediaFragmentSelector aCanvasRegion)
+            throws ContentOutOfBoundsException, SelectorOutOfBoundsException {
+        return getCanvasFragment(aCanvasRegion).canFrame(aContent);
+    }
+
+    /**
+     * Creates a temporary canvas for determining if a content resource can fit on a canvas fragment.
+     *
+     * @param aCanvasRegion A {@link MediaFragmentSelector} identifying a fragment of this canvas
+     * @return A {@link Canvas} representing the fragment
+     * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given
+     * {@link MediaFragmentSelector} doesn't exist
+     */
+    private Canvas getCanvasFragment(final MediaFragmentSelector aCanvasRegion)
+            throws SelectorOutOfBoundsException {
+        final Canvas canvasFragment = new Canvas(URI.create(getID().toString() + '#' + aCanvasRegion.getValue()));
+        final int width;
+        final int height;
+        final float duration;
+
+        if (aCanvasRegion.isSpatial()) {
+            // Check for semantic errors according to <https://www.w3.org/TR/media-frags/#error-media>
+            if (myWidth == 0 && myHeight == 0) {
+                throw new SelectorOutOfBoundsException(MessageCodes.JPA_064, aCanvasRegion.getValue(), SPATIAL,
+                        getID());
+            } else {
+                // The bounding box of the selector must be entirely within the bounds of the canvas
+                if (getWidth() < (aCanvasRegion.getX() + aCanvasRegion.getWidth())
+                        || getHeight() < (aCanvasRegion.getY() + aCanvasRegion.getHeight())) {
+                    throw new SelectorOutOfBoundsException(MessageCodes.JPA_065, aCanvasRegion.getValue(), SPATIAL,
+                            getID());
+                } else {
+                    // Use the selector's spatial dimensions
+                    width = aCanvasRegion.getWidth();
+                    height = aCanvasRegion.getHeight();
+                }
+            }
+        } else {
+            // Use the canvas' spatial dimensions
+            width = getWidth();
+            height = getHeight();
+        }
+
+        if (aCanvasRegion.isTemporal()) {
+            // Check for semantic errors
+            if (myDuration == 0.0f) {
+                throw new SelectorOutOfBoundsException(MessageCodes.JPA_064, aCanvasRegion.getValue(), TEMPORAL,
+                        getID());
+            } else {
+                // Cannot start at or beyond the duration of the canvas
+                if (getDuration() <= aCanvasRegion.getStart()) {
+                    throw new SelectorOutOfBoundsException(MessageCodes.JPA_065, aCanvasRegion.getValue(), TEMPORAL,
+                            getID());
+                }
+
+                // If an end is specified, cannot end past the duration of the canvas
+                if (aCanvasRegion.hasEnd()) {
+                    if (getDuration() < aCanvasRegion.getEnd()) {
+                        throw new SelectorOutOfBoundsException(MessageCodes.JPA_065, aCanvasRegion.getValue(), TEMPORAL,
+                                getID());
+                    } else {
+                        // Use the selector's temporal dimension
+                        duration = aCanvasRegion.getDuration();
+                    }
+                } else {
+                    // Use the interval from the start of the selector to the end of the canvas as the duration
+                    duration = getDuration() - aCanvasRegion.getStart();
+                }
+            }
+        } else {
+            // Use the canvas' temporal dimensions
+            duration = getDuration();
+        }
+
+        if (width > 0 && height > 0) {
+            canvasFragment.setWidthHeight(width, height);
+        }
+        if (duration > 0) {
+            canvasFragment.setDuration(duration);
+        }
+        return canvasFragment;
     }
 }
