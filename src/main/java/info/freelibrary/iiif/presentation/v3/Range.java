@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import info.freelibrary.util.I18nRuntimeException;
-
+import info.freelibrary.iiif.presentation.v3.id.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -48,6 +50,8 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     private Optional<PlaceholderCanvas> myPlaceholderCanvas;
 
     private Optional<StartSelector> myStartSelector = Optional.empty();
+
+    private SupplementaryAnnotations mySupplementaryAnnotations;
 
     private ViewingDirection myViewingDirection;
 
@@ -90,10 +94,61 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     /**
+     * Creates a new range, using the supplied minter to create the range ID.
+     *
+     * @param aMinter A minter that should be used to get an ID for the range
+     */
+    public Range(final Minter aMinter) {
+        super(ResourceTypes.RANGE, aMinter.getRangeID());
+    }
+
+    /**
+     * Creates a range, using the supplied minter to create the range' ID.
+     *
+     * @param aMinter A minter that will create the range ID
+     * @param aLabel A range label in string form
+     */
+    public Range(final Minter aMinter, final String aLabel) {
+        super(ResourceTypes.RANGE, aMinter.getRangeID(), new Label(aLabel));
+    }
+
+    /**
+     * Creates a range, using the supplied minter to create the range' ID.
+     *
+     * @param aMinter A minter that will create the range ID
+     * @param aLabel A range label
+     */
+    public Range(final Minter aMinter, final Label aLabel) {
+        super(ResourceTypes.RANGE, aMinter.getRangeID(), aLabel);
+    }
+
+    /**
      * Allows Jackson to create a new range during deserialization.
      */
     private Range() {
         super(ResourceTypes.RANGE);
+    }
+
+    /**
+     * Sets the supplementary annotations for this range.
+     *
+     * @param aAnnotationCollection An annotation collection that supplements the range
+     * @return The range
+     */
+    @JsonSetter(Constants.SUPPLEMENTARY)
+    public Range setSupplementaryAnnotations(final SupplementaryAnnotations aAnnotationCollection) {
+        mySupplementaryAnnotations = checkNotNull(aAnnotationCollection);
+        return this;
+    }
+
+    /**
+     * Gets the supplementary annotations for this range.
+     *
+     * @return The annotation collection linked to this range
+     */
+    @JsonGetter(Constants.SUPPLEMENTARY)
+    public Optional<SupplementaryAnnotations> getSupplementaryAnnotations() {
+        return Optional.ofNullable(mySupplementaryAnnotations);
     }
 
     @Override
@@ -420,8 +475,8 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
         }
 
         /**
-         * Creates a new range item from a canvas; the canvas is either embedded or referenced depending on the boolean
-         * flag passed to the constructor.
+         * Creates a new range item from a canvas; the canvas is either embedded or referenced depending on the
+         * boolean flag passed to the constructor.
          *
          * @param aCanvas A canvas to use as a range item
          * @param aEmbeddedCanvas Whether a canvas should be embedded or a reference to it created

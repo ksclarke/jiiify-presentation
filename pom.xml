@@ -57,6 +57,7 @@
     <freelib.maven.version>0.1.0</freelib.maven.version>
     <jsoup.version>1.13.1</jsoup.version>
     <vertx.version>3.9.1</vertx.version>
+    <combinatorics.version>3.3.0</combinatorics.version>
     <media-fragments-uri.version>2.4</media-fragments-uri.version>
 
     <!-- Test related versions -->
@@ -105,6 +106,11 @@
       <groupId>com.github.tkurz</groupId>
       <artifactId>media-fragments-uri</artifactId>
       <version>${media-fragments-uri.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.dpaukov</groupId>
+      <artifactId>combinatoricslib3</artifactId>
+      <version>${combinatorics.version}</version>
     </dependency>
     <!-- Below dependencies are only used for testing -->
     <dependency>

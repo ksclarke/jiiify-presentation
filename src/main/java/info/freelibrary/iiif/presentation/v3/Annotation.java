@@ -1,13 +1,14 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
@@ -18,22 +19,24 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
+import info.freelibrary.iiif.presentation.v3.properties.selectors.Selector;
 import info.freelibrary.iiif.presentation.v3.utils.ContentResourceComparator;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
 
 import io.vertx.core.json.jackson.DatabindCodec;
 
 /**
  * Content resources and commentary are associated with a canvas via an annotation. This provides a single, coherent
  * method for aligning information, and provides a standards based framework for distinguishing parts of resources and
- * parts of canvases. As annotations can be added later, it promotes a distributed system in which publishers can
- * align their content with the descriptions created by others.
+ * parts of canvases. As annotations can be added later, it promotes a distributed system in which publishers can align
+ * their content with the descriptions created by others.
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.TYPE, Constants.ID, Constants.MOTIVATION, Constants.LABEL,
@@ -64,19 +67,9 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      * @param aID An ID
      * @param aCanvas A canvas to target
      */
-    protected Annotation(final URI aID, final AbstractCanvas<?> aCanvas) {
+    protected <C extends CanvasResource<C>> Annotation(final URI aID, final CanvasResource<C> aCanvas) {
         super(ResourceTypes.ANNOTATION, aID);
         myTargetURI = aCanvas.getID();
-    }
-
-    /**
-     * Creates a IIIF presentation annotation resource.
-     *
-     * @param aID An ID in string form
-     * @param aCanvas A canvas to target
-     */
-    protected Annotation(final String aID, final AbstractCanvas<?> aCanvas) {
-        this(URI.create(aID), aCanvas);
     }
 
     /**
@@ -86,7 +79,8 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      * @param aCanvas A canvas to target
      * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to target
      */
-    protected Annotation(final URI aID, final AbstractCanvas<?> aCanvas, final MediaFragmentSelector aCanvasRegion) {
+    protected <C extends CanvasResource<C>> Annotation(final URI aID, final CanvasResource<C> aCanvas,
+            final MediaFragmentSelector aCanvasRegion) {
         super(ResourceTypes.ANNOTATION, aID);
         myTargetSpecificResource = new SpecificResource(aCanvas.getID(), aCanvasRegion);
     }
@@ -98,30 +92,9 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      * @param aCanvas A canvas to target
      * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to target
      */
-    protected Annotation(final URI aID, final AbstractCanvas<?> aCanvas, final String aCanvasRegion) {
+    protected <C extends CanvasResource<C>> Annotation(final URI aID, final CanvasResource<C> aCanvas,
+            final String aCanvasRegion) {
         this(aID, aCanvas, new MediaFragmentSelector(aCanvasRegion));
-    }
-
-    /**
-     * Creates a IIIF presentation annotation resource.
-     *
-     * @param aID An ID in string form
-     * @param aCanvas A canvas to target
-     * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to target
-     */
-    protected Annotation(final String aID, final AbstractCanvas<?> aCanvas, final MediaFragmentSelector aCanvasRegion) {
-        this(URI.create(aID), aCanvas, aCanvasRegion);
-    }
-
-    /**
-     * Creates a IIIF presentation annotation resource.
-     *
-     * @param aID An ID in string form
-     * @param aCanvas A canvas to target
-     * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to target
-     */
-    protected Annotation(final String aID, final AbstractCanvas<?> aCanvas, final String aCanvasRegion) {
-        this(URI.create(aID), aCanvas, new MediaFragmentSelector(aCanvasRegion));
     }
 
     /**
@@ -132,7 +105,7 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
     }
 
     /**
-     * Gets the content resources associated with this annotation.
+     * Gets the body (i.e., content resources) associated with this annotation.
      *
      * @return The content resources associated with this annotation
      */
@@ -145,39 +118,101 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
         return myBody;
     }
 
+    /**
+     * Removes the body (i.e. content resources) from this annotation.
+     *
+     * @return The annotation
+     */
     protected Annotation<T> clearBody() {
         getBody().clear();
         return this;
     }
 
+    /**
+     * Sets the body (i.e., content resources) for this annotation.
+     *
+     * @param aContentResourceArray An array of content resources
+     * @return The annotation
+     */
     @JsonIgnore
-    protected Annotation<T> setBody(final ContentResource... aContentArray) {
-        return clearBody().addBody(aContentArray);
+    protected Annotation<T> setBody(final ContentResource... aContentResourceArray) {
+        return clearBody().addBody(aContentResourceArray);
     }
 
+    /**
+     * Sets the body (i.e. content resources) for this annotation.
+     *
+     * @param aContentResourceList A list of content resources
+     * @return The annotation
+     */
     @JsonIgnore
-    protected Annotation<T> setBody(final List<ContentResource> aContentArray) {
-        return setBody(aContentArray.toArray(new ContentResource[] {}));
+    protected Annotation<T> setBody(final List<ContentResource> aContentResourceList) {
+        return setBody(aContentResourceList.toArray(new ContentResource[] {}));
     }
 
-    protected Annotation<T> addBody(final ContentResource... aContentArray) {
-        Collections.addAll(getBody(), checkNotNull(aContentArray));
+    /**
+     * Adds content resources to the body of this annotation.
+     *
+     * @param aContentResourceArray An array of content resources
+     * @return The annotation
+     */
+    protected Annotation<T> addBody(final ContentResource... aContentResourceArray) {
+        Collections.addAll(getBody(), checkNotNull(aContentResourceArray));
         return this;
     }
 
-    protected Annotation<T> addBody(final List<ContentResource> aContentArray) {
-        return addBody(aContentArray.toArray(new ContentResource[] {}));
+    /**
+     * Adds content resources to the body of this annotation.
+     *
+     * @param aContentResourceList A list of content resources
+     * @return The annotation
+     */
+    protected Annotation<T> addBody(final List<ContentResource> aContentResourceList) {
+        return addBody(aContentResourceList.toArray(new ContentResource[] {}));
     }
 
-    @JsonGetter(Constants.TARGET)
-    public Object getTarget() {
-        if (myTargetSpecificResource != null) {
-            return myTargetSpecificResource;
-        } else {
+    /**
+     * Gets the URI of the target.
+     *
+     * @return The URI of the target
+     */
+    @JsonIgnore
+    public URI getTarget() {
+        if (myTargetURI != null) {
             return myTargetURI;
+        } else {
+            final URI source = myTargetSpecificResource.getSource();
+            final Selector selector = myTargetSpecificResource.getSelector();
+
+            return URI.create(source.toString() + Constants.FRAGMENT_DELIM + selector.toString());
         }
     }
 
+    /**
+     * Gets the target if it's a specific resource; otherwise, it returns an empty Optional.
+     *
+     * @return The target if it's a specific resource
+     */
+    @JsonIgnore
+    public Optional<SpecificResource> getSpecificResourceTarget() {
+        return Optional.ofNullable(myTargetSpecificResource);
+    }
+
+    /**
+     * Returns true is the annotation's target is a specific resource.
+     *
+     * @return True if the target is a specific resource; else, false
+     */
+    public boolean hasSpecificResourceTarget() {
+        return myTargetSpecificResource != null;
+    }
+
+    /**
+     * Sets the URI target of the annotation.
+     *
+     * @param aURI A URI
+     * @return The annotation
+     */
     @JsonIgnore
     protected Annotation<T> setTarget(final URI aURI) {
         myTargetURI = checkNotNull(aURI);
@@ -185,6 +220,12 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
         return this;
     }
 
+    /**
+     * Sets the URI target of the annotation in string form.
+     *
+     * @param aURI A URI
+     * @return The annotation
+     */
     @JsonSetter(Constants.TARGET)
     protected Annotation<T> setTarget(final String aURI) {
         myTargetURI = checkNotNull(URI.create(aURI));
@@ -192,6 +233,12 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
         return this;
     }
 
+    /**
+     * Sets the target of the annotation.
+     *
+     * @param aSpecificResource A specific resource
+     * @return The annotation
+     */
     @JsonSetter(Constants.TARGET)
     protected Annotation<T> setTarget(final SpecificResource aSpecificResource) {
         myTargetSpecificResource = checkNotNull(aSpecificResource);
@@ -249,6 +296,12 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
         return myTimeMode;
     }
 
+    /**
+     * Sets the time mode of the annotation.
+     *
+     * @param aTimeMode A time mode
+     * @return The annotation
+     */
     protected Annotation<T> setTimeMode(final TimeMode aTimeMode) {
         myTimeMode = aTimeMode;
         return this;
@@ -284,6 +337,21 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
             return map;
         } else {
             return myBody.get(0);
+        }
+    }
+
+    /**
+     * Gets the target of the annotation. A target will either be a URI or a SpecificResource. This method is for
+     * Jackson's serialization process.
+     *
+     * @return The target of the annotation.
+     */
+    @JsonGetter(Constants.TARGET)
+    private Object getTargetObject() {
+        if (myTargetSpecificResource != null) {
+            return myTargetSpecificResource;
+        } else {
+            return myTargetURI;
         }
     }
 

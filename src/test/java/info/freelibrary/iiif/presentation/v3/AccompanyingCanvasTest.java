@@ -8,11 +8,15 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Locale;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import info.freelibrary.iiif.presentation.v3.id.Minter;
+import info.freelibrary.iiif.presentation.v3.id.MinterFactory;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
+import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 import info.freelibrary.util.StringUtils;
 
 import io.vertx.core.json.JsonObject;
@@ -22,7 +26,7 @@ import io.vertx.core.json.JsonObject;
  */
 public class AccompanyingCanvasTest {
 
-    private static final File DIR = new File("src/test/resources/json");
+    private static final String NOID_PATTERN = "/canvas-[a-z0-9]{4}";
 
     private static final String FILE = "{}-accompanying.json";
 
@@ -47,6 +51,44 @@ public class AccompanyingCanvasTest {
         final AccompanyingCanvas canvas = new AccompanyingCanvas(id);
 
         assertEquals(id, canvas.getID());
+    }
+
+    /**
+     * Tests {@link AccompanyingCanvas#AccompanyingCanvas(Minter) AccompanyingCanvas}.
+     */
+    @Test
+    public final void testAccompanyingCanvasMinter() {
+        final URI id = URI.create(UUID.randomUUID().toString());
+        final Minter minter = MinterFactory.getMinter(id);
+        final AccompanyingCanvas canvas = new AccompanyingCanvas(minter);
+
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID().toString()).matches());
+    }
+
+    /**
+     * Tests {@link AccompanyingCanvas#AccompanyingCanvas(Minter, Label) AccompanyingCanvas}.
+     */
+    @Test
+    public final void testAccompanyingCanvasMinterLabel() {
+        final URI id = URI.create(UUID.randomUUID().toString());
+        final Minter minter = MinterFactory.getMinter(id);
+        final Label label = new Label(StringUtils.format(LABEL, id));
+        final AccompanyingCanvas canvas = new AccompanyingCanvas(minter, label);
+
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID().toString()).matches());
+    }
+
+    /**
+     * Tests {@link AccompanyingCanvas#AccompanyingCanvas(Minter, String) AccompanyingCanvas}.
+     */
+    @Test
+    public final void testAccompanyingCanvasMinterLabelAsString() {
+        final URI id = URI.create(UUID.randomUUID().toString());
+        final Minter minter = MinterFactory.getMinter(id);
+        final String label = StringUtils.format(LABEL, id);
+        final AccompanyingCanvas canvas = new AccompanyingCanvas(minter, label);
+
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID().toString()).matches());
     }
 
     /**
@@ -195,7 +237,8 @@ public class AccompanyingCanvasTest {
      * @throws IOException If there is trouble reading the test fixture
      */
     private String getFixture(final Class<?> aClass) throws IOException {
-        return StringUtils.read(new File(DIR, StringUtils.format(FILE, aClass.getSimpleName().toLowerCase(Locale.US))));
+        final String className = aClass.getSimpleName().toLowerCase(Locale.US);
+        return StringUtils.read(new File(TestUtils.TEST_DIR, StringUtils.format(FILE, className)));
     }
 
 }

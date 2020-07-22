@@ -8,6 +8,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.iiif.presentation.v3.id.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -71,6 +72,35 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas> impleme
      */
     public PlaceholderCanvas(final String aID, final String aLabel) {
         super(aID, aLabel);
+    }
+
+    /**
+     * Creates a new placeholder canvas, using the supplied minter to create the canvas ID.
+     *
+     * @param aMinter A minter that should be used to get an ID for the canvas
+     */
+    public PlaceholderCanvas(final Minter aMinter) {
+        super(aMinter.getCanvasID());
+    }
+
+    /**
+     * Creates a new placeholder canvas, using the supplied minter to create the canvas' ID.
+     *
+     * @param aMinter A minter that will create the canvas ID
+     * @param aLabel A placeholder canvas label in string form
+     */
+    public PlaceholderCanvas(final Minter aMinter, final String aLabel) {
+        super(aMinter.getCanvasID(), new Label(aLabel));
+    }
+
+    /**
+     * Creates a new placeholder canvas, using the supplied minter to create the canvas' ID.
+     *
+     * @param aMinter A minter that will create the canvas ID
+     * @param aLabel A placeholder canvas label
+     */
+    public PlaceholderCanvas(final Minter aMinter, final Label aLabel) {
+        super(aMinter.getCanvasID(), aLabel);
     }
 
     /**
@@ -239,78 +269,87 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas> impleme
 
     @Override
     @SafeVarargs
-    public final PlaceholderCanvas paintWith(final ContentResource... aContentArray) throws IllegalArgumentException {
-        return (PlaceholderCanvas) super.paintWith(aContentArray);
+    public final PlaceholderCanvas paintWith(final Minter aMinter, final ContentResource... aContentArray)
+            throws ContentOutOfBoundsException {
+        return (PlaceholderCanvas) super.paint(this, aMinter, aContentArray);
     }
 
     @Override
-    public final PlaceholderCanvas paintWith(final List<ContentResource> aContentList) throws IllegalArgumentException {
-        return (PlaceholderCanvas) super.paintWith(aContentList);
-    }
-
-    @Override
-    @SafeVarargs
-    public final PlaceholderCanvas paintWith(final MediaFragmentSelector aCanvasRegion,
-            final ContentResource... aContentArray) throws IllegalArgumentException {
-        return (PlaceholderCanvas) super.paintWith(aCanvasRegion, aContentArray);
+    public final PlaceholderCanvas paintWith(final Minter aMinter, final List<ContentResource> aContentList)
+            throws ContentOutOfBoundsException {
+        return (PlaceholderCanvas) super.paint(this, aMinter, aContentList.toArray(new ContentResource[] {}));
     }
 
     @Override
     @SafeVarargs
-    public final PlaceholderCanvas paintWith(final String aCanvasRegion, final ContentResource... aContentArray)
-            throws IllegalArgumentException {
-        return (PlaceholderCanvas) super.paintWith(aCanvasRegion, aContentArray);
-    }
-
-    @Override
-    public final PlaceholderCanvas paintWith(final MediaFragmentSelector aCanvasRegion,
-            final List<ContentResource> aContentList) throws IllegalArgumentException {
-        return (PlaceholderCanvas) super.paintWith(aCanvasRegion, aContentList);
-    }
-
-    @Override
-    public final PlaceholderCanvas paintWith(final String aCanvasRegion, final List<ContentResource> aContentList)
-            throws IllegalArgumentException {
-        return (PlaceholderCanvas) super.paintWith(aCanvasRegion, aContentList);
+    public final PlaceholderCanvas paintWith(final Minter aMinter, final MediaFragmentSelector aCanvasRegion,
+            final ContentResource... aContentArray) throws ContentOutOfBoundsException, SelectorOutOfBoundsException {
+        return (PlaceholderCanvas) super.paint(this, aMinter, aCanvasRegion, aContentArray);
     }
 
     @Override
     @SafeVarargs
-    public final PlaceholderCanvas supplementWith(final ContentResource... aContentArray)
-            throws IllegalArgumentException {
-        return (PlaceholderCanvas) super.supplementWith(aContentArray);
+    public final PlaceholderCanvas paintWith(final Minter aMinter, final String aCanvasRegion,
+            final ContentResource... aContentArray) throws ContentOutOfBoundsException, SelectorOutOfBoundsException {
+        return (PlaceholderCanvas) super.paint(this, aMinter, new MediaFragmentSelector(aCanvasRegion),
+                aContentArray);
     }
 
     @Override
-    public final PlaceholderCanvas supplementWith(final List<ContentResource> aContentList)
-            throws IllegalArgumentException {
-        return (PlaceholderCanvas) super.supplementWith(aContentList);
+    public final PlaceholderCanvas paintWith(final Minter aMinter, final MediaFragmentSelector aCanvasRegion,
+            final List<ContentResource> aContentList) throws ContentOutOfBoundsException,
+            SelectorOutOfBoundsException {
+        return (PlaceholderCanvas) super.paint(this, aMinter, aCanvasRegion, aContentList.toArray(
+                new ContentResource[] {}));
+    }
+
+    @Override
+    public final PlaceholderCanvas paintWith(final Minter aMinter, final String aCanvasRegion,
+            final List<ContentResource> aContentList) throws ContentOutOfBoundsException,
+            SelectorOutOfBoundsException {
+        return (PlaceholderCanvas) super.paint(this, aMinter, new MediaFragmentSelector(aCanvasRegion), aContentList
+                .toArray(new ContentResource[] {}));
     }
 
     @Override
     @SafeVarargs
-    public final PlaceholderCanvas supplementWith(final MediaFragmentSelector aCanvasRegion,
-            final ContentResource... aContentArray) throws IllegalArgumentException {
-        return (PlaceholderCanvas) super.supplementWith(aCanvasRegion, aContentArray);
+    public final PlaceholderCanvas supplementWith(final Minter aMinter, final ContentResource... aContentArray) {
+        return (PlaceholderCanvas) super.supplement(this, aMinter, aContentArray);
+    }
+
+    @Override
+    public final PlaceholderCanvas supplementWith(final Minter aMinter, final List<ContentResource> aContentList) {
+        return (PlaceholderCanvas) super.supplement(this, aMinter, aContentList.toArray(new ContentResource[] {}));
+
     }
 
     @Override
     @SafeVarargs
-    public final PlaceholderCanvas supplementWith(final String aCanvasRegion, final ContentResource... aContentArray)
-            throws IllegalArgumentException {
-        return (PlaceholderCanvas) super.supplementWith(aCanvasRegion, aContentArray);
+    public final PlaceholderCanvas supplementWith(final Minter aMinter, final MediaFragmentSelector aCanvasRegion,
+            final ContentResource... aContentArray) {
+        return (PlaceholderCanvas) super.supplement(this, aMinter, aCanvasRegion, aContentArray);
     }
 
     @Override
-    public final PlaceholderCanvas supplementWith(final MediaFragmentSelector aCanvasRegion,
-            final List<ContentResource> aContentList) throws IllegalArgumentException {
-        return (PlaceholderCanvas) super.supplementWith(aCanvasRegion, aContentList);
+    @SafeVarargs
+    public final PlaceholderCanvas supplementWith(final Minter aMinter, final String aCanvasRegion,
+            final ContentResource... aContentArray) {
+        return (PlaceholderCanvas) super.supplement(this, aMinter, new MediaFragmentSelector(aCanvasRegion),
+                aContentArray);
     }
 
     @Override
-    public final PlaceholderCanvas supplementWith(final String aCanvasRegion, final List<ContentResource> aContentList)
-            throws IllegalArgumentException {
-        return (PlaceholderCanvas) super.supplementWith(aCanvasRegion, aContentList);
+    public final PlaceholderCanvas supplementWith(final Minter aMinter, final MediaFragmentSelector aCanvasRegion,
+            final List<ContentResource> aContentList) {
+        return (PlaceholderCanvas) super.supplement(this, aMinter, aCanvasRegion, aContentList.toArray(
+                new ContentResource[] {}));
+    }
+
+    @Override
+    public final PlaceholderCanvas supplementWith(final Minter aMinter, final String aCanvasRegion,
+            final List<ContentResource> aContentList) {
+        return (PlaceholderCanvas) super.supplement(this, aMinter, new MediaFragmentSelector(aCanvasRegion),
+                aContentList.toArray(new ContentResource[] {}));
     }
 
     @Override

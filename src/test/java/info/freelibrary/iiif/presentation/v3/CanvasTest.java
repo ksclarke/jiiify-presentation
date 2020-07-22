@@ -1,15 +1,21 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.util.UUID;
+import java.util.regex.Pattern;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import info.freelibrary.iiif.presentation.v3.id.Minter;
+import info.freelibrary.iiif.presentation.v3.id.MinterFactory;
+import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.NavDate;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
@@ -39,12 +45,13 @@ public class CanvasTest {
 
     /** Identifiers */
 
+    private static final String NOID_PATTERN = "/canvas-[a-z0-9]{4}";
+
     // Image, Sound, and Video are painting; Text is supplementing
 
     private static final String IMAGE_CANVAS_ID = "https://example.org/iiif/book1/page1/canvas-1";
 
-    private static final String IMAGE_PAGE_ID =
-            "https://example.org/iiif/book1/page1/annotation/painting-page-1";
+    private static final String IMAGE_PAGE_ID = "https://example.org/iiif/book1/page1/annotation/painting-page-1";
 
     private static final String IMAGE_ANNO_ID = "https://example.org/iiif/book1/page1/annotation/painting-1";
 
@@ -72,11 +79,9 @@ public class CanvasTest {
 
     private static final String VIDEO_2_ID = "https://example.org/iiif/reel1/segment2.mp4";
 
-    private static final String TEXT_PAGE_ID =
-            "https://example.org/iiif/book1/page1/annotation/supplementing-page-1";
+    private static final String TEXT_PAGE_ID = "https://example.org/iiif/book1/page1/annotation/supplementing-page-1";
 
-    private static final String TEXT_ANNO_ID =
-            "https://example.org/iiif/book1/page1/annotation/supplementing-1";
+    private static final String TEXT_ANNO_ID = "https://example.org/iiif/book1/page1/annotation/supplementing-1";
 
     private static final String TEXT_ID = "https://example.org/iiif/book1/page1/ocr.xml";
 
@@ -109,9 +114,57 @@ public class CanvasTest {
 
     private Canvas myCanvas;
 
+    private Minter myMinter;
+
     @Before
     public void setUp() {
+        final String id = UUID.randomUUID().toString();
+        final int index = id.indexOf('-');
+
+        // Each minter will take a different path through the NOIDs available in the internal list
+        myMinter = MinterFactory.getMinter(URI.create("https://example.org/iiif/" + id.substring(0, index)));
         myCanvas = new Canvas(IMAGE_CANVAS_ID, LABEL);
+    }
+
+    /****************
+     * Constructors *
+     ****************/
+
+    /**
+     * Tests {@link Canvas#Canvas(Minter) Canvas}.
+     */
+    @Test
+    public final void testCanvasMinter() {
+        final URI id = URI.create(UUID.randomUUID().toString());
+        final Minter minter = MinterFactory.getMinter(id);
+        final Canvas canvas = new Canvas(minter);
+
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID().toString()).matches());
+    }
+
+    /**
+     * Tests {@link Canvas#Canvas(Minter, Label) Canvas}.
+     */
+    @Test
+    public final void testCanvasMinterLabel() {
+        final URI id = URI.create(UUID.randomUUID().toString());
+        final Minter minter = MinterFactory.getMinter(id);
+        final Label label = new Label(LABEL);
+        final Canvas canvas = new Canvas(minter, label);
+
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID().toString()).matches());
+    }
+
+    /**
+     * Tests {@link Canvas#Canvas(Minter, String) Canvas}.
+     */
+    @Test
+    public final void testCanvasMinterLabelAsString() {
+        final URI id = URI.create(UUID.randomUUID().toString());
+        final Minter minter = MinterFactory.getMinter(id);
+        final Canvas canvas = new Canvas(minter, LABEL);
+
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID().toString()).matches());
     }
 
     /***********************
@@ -229,7 +282,7 @@ public class CanvasTest {
     public final void testPaintImageOnSpatialCanvas() {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, image);
 
         assertEquals(IMAGE_1_ID, getContentResourceID().toString());
     }
@@ -241,7 +294,7 @@ public class CanvasTest {
     public final void testPaintImageOnSpatiotemporalCanvas() {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, image);
 
         assertEquals(IMAGE_1_ID, getContentResourceID().toString());
     }
@@ -253,7 +306,7 @@ public class CanvasTest {
     public final void testPaintSoundOnTemporalCanvas() {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
 
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(sound);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, sound);
 
         assertEquals(SOUND_1_ID, getContentResourceID().toString());
     }
@@ -265,7 +318,7 @@ public class CanvasTest {
     public final void testPaintSoundOnSpatiotemporalCanvas() {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(sound);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, sound);
 
         assertEquals(SOUND_1_ID, getContentResourceID().toString());
     }
@@ -277,7 +330,7 @@ public class CanvasTest {
     public final void testPaintVideoOnSpatiotemporalCanvas() {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, video);
 
         assertEquals(VIDEO_1_ID, getContentResourceID().toString());
     }
@@ -293,7 +346,7 @@ public class CanvasTest {
     public final void testPaintImageOnSpatialCanvasNoDims() {
         final ImageContent image = new ImageContent(IMAGE_1_ID);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, image);
 
         assertEquals(IMAGE_1_ID, getContentResourceID().toString());
     }
@@ -305,7 +358,7 @@ public class CanvasTest {
     public final void testPaintImageOnSpatiotemporalCanvasNoDims() {
         final ImageContent image = new ImageContent(IMAGE_1_ID);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, image);
 
         assertEquals(IMAGE_1_ID, getContentResourceID().toString());
     }
@@ -317,7 +370,7 @@ public class CanvasTest {
     public final void testPaintSoundOnTemporalCanvasNoDims() {
         final SoundContent sound = new SoundContent(SOUND_1_ID);
 
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(sound);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, sound);
 
         assertEquals(SOUND_1_ID, getContentResourceID().toString());
     }
@@ -329,7 +382,7 @@ public class CanvasTest {
     public final void testPaintSoundOnSpatiotemporalCanvasNoDims() {
         final SoundContent sound = new SoundContent(SOUND_1_ID);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(sound);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, sound);
 
         assertEquals(SOUND_1_ID, getContentResourceID().toString());
     }
@@ -341,7 +394,7 @@ public class CanvasTest {
     public final void testPaintVideoOnSpatiotemporalCanvasNoDims() {
         final VideoContent video = new VideoContent(VIDEO_1_ID);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, video);
 
         assertEquals(VIDEO_1_ID, getContentResourceID().toString());
     }
@@ -357,7 +410,7 @@ public class CanvasTest {
     public final void testPaintImageOnTemoporalCanvas() {
         final ImageContent image = new ImageContent(IMAGE_1_ID);
 
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(image);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, image);
     }
 
     /**
@@ -367,7 +420,7 @@ public class CanvasTest {
     public final void testPaintSoundOnSpatialCanvas() {
         final SoundContent sound = new SoundContent(SOUND_1_ID);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(sound);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, sound);
     }
 
     /**
@@ -377,7 +430,7 @@ public class CanvasTest {
     public final void testPaintVideoOnSpatialCanvas() {
         final VideoContent video = new VideoContent(VIDEO_1_ID);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, video);
     }
 
     /**
@@ -387,7 +440,7 @@ public class CanvasTest {
     public final void testPaintVideoOnTemoporalCanvas() {
         final VideoContent video = new VideoContent(VIDEO_1_ID);
 
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(video);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, video);
     }
 
     /******************************************
@@ -401,7 +454,7 @@ public class CanvasTest {
     public final void testPaintImageOnSpatialCanvasOutOfBounds() {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH - 1, HEIGHT).paintWith(image);
+        myCanvas.setWidthHeight(WIDTH - 1, HEIGHT).paintWith(myMinter, image);
     }
 
     /**
@@ -411,7 +464,7 @@ public class CanvasTest {
     public final void testPaintSoundOnTemporalCanvasOutOfBounds() {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
 
-        myCanvas.setDuration(DURATION - 1).paintWith(sound);
+        myCanvas.setDuration(DURATION - 1).paintWith(myMinter, sound);
     }
 
     /**
@@ -421,7 +474,7 @@ public class CanvasTest {
     public final void testPaintVideoOnSpatiotemporalCanvasOutOfBoundsSpatial() {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT - 1).setDuration(CANVAS_DURATION).paintWith(video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT - 1).setDuration(CANVAS_DURATION).paintWith(myMinter, video);
     }
 
     /**
@@ -431,7 +484,7 @@ public class CanvasTest {
     public final void testPaintVideoOnSpatiotemporalCanvasOutOfBoundsTemporal() {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION - 1).paintWith(video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION - 1).paintWith(myMinter, video);
     }
 
     /****************************************************
@@ -446,10 +499,10 @@ public class CanvasTest {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, image);
 
         assertEquals(IMAGE_1_ID, getContentResourceID().toString());
-        assertEquals(selector.getValue(), getMediaFragment());
+        assertEquals(selector.toString(), getMediaFragment());
     }
 
     /**
@@ -460,10 +513,10 @@ public class CanvasTest {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
 
         assertEquals(IMAGE_1_ID, getContentResourceID().toString());
-        assertEquals(selector.getValue(), getMediaFragment().toString());
+        assertEquals(selector.toString(), getMediaFragment().toString());
     }
 
     /**
@@ -474,10 +527,10 @@ public class CanvasTest {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, DURATION);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
 
         assertEquals(IMAGE_1_ID, getContentResourceID().toString());
-        assertEquals(selector.getValue(), getMediaFragment());
+        assertEquals(selector.toString(), getMediaFragment());
     }
 
     /**
@@ -488,10 +541,10 @@ public class CanvasTest {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, DURATION);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
 
         assertEquals(IMAGE_1_ID, getContentResourceID().toString());
-        assertEquals(selector.getValue(), getMediaFragment());
+        assertEquals(selector.toString(), getMediaFragment());
     }
 
     /**
@@ -502,10 +555,10 @@ public class CanvasTest {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, DURATION);
 
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, sound);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
 
         assertEquals(SOUND_1_ID, getContentResourceID().toString());
-        assertEquals(selector.getValue(), getMediaFragment());
+        assertEquals(selector.toString(), getMediaFragment());
     }
 
     /**
@@ -517,13 +570,13 @@ public class CanvasTest {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, sound);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
 
         foundMediaFragment = ((MediaFragmentSelector) ((SpecificResource) myCanvas.getPaintingPages().get(0)
-                .getAnnotations().get(0).getTarget()).getSelector()).getValue();
+                .getAnnotations().get(0).getSpecificResourceTarget().get()).getSelector()).toString();
 
         assertEquals(SOUND_1_ID, getContentResourceID().toString());
-        assertEquals(selector.getValue(), foundMediaFragment);
+        assertEquals(selector.toString(), foundMediaFragment);
     }
 
     /**
@@ -534,10 +587,10 @@ public class CanvasTest {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, DURATION);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, sound);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
 
         assertEquals(SOUND_1_ID, getContentResourceID().toString());
-        assertEquals(selector.getValue(), getMediaFragment());
+        assertEquals(selector.toString(), getMediaFragment());
     }
 
     /**
@@ -548,10 +601,10 @@ public class CanvasTest {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, DURATION);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, sound);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
 
         assertEquals(SOUND_1_ID, getContentResourceID().toString());
-        assertEquals(selector.getValue(), getMediaFragment());
+        assertEquals(selector.toString(), getMediaFragment());
     }
 
     /**
@@ -562,10 +615,10 @@ public class CanvasTest {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
 
         assertEquals(VIDEO_1_ID, getContentResourceID().toString());
-        assertEquals(selector.getValue(), getMediaFragment());
+        assertEquals(selector.toString(), getMediaFragment());
     }
 
     /**
@@ -576,10 +629,10 @@ public class CanvasTest {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, CANVAS_DURATION);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
 
         assertEquals(VIDEO_1_ID, getContentResourceID().toString());
-        assertEquals(selector.getValue(), getMediaFragment());
+        assertEquals(selector.toString(), getMediaFragment());
     }
 
     /**
@@ -590,10 +643,10 @@ public class CanvasTest {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, CANVAS_DURATION);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
 
         assertEquals(VIDEO_1_ID, getContentResourceID().toString());
-        assertEquals(selector.getValue(), getMediaFragment());
+        assertEquals(selector.toString(), getMediaFragment());
     }
 
     /************************************************************************
@@ -606,12 +659,13 @@ public class CanvasTest {
     @Test
     public final void testPaintImageOnSpatialFragmentOfSpatialCanvasNoDims() {
         final ImageContent image = new ImageContent(IMAGE_1_ID);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(WIDTH / 2, HEIGHT / 2, WIDTH / 2, HEIGHT / 2);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(WIDTH / 2, HEIGHT / 2, WIDTH / 2, HEIGHT /
+                2);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, image);
 
         assertEquals(IMAGE_1_ID, getContentResourceID().toString());
-        assertEquals(selector.getValue(), getMediaFragment());
+        assertEquals(selector.toString(), getMediaFragment());
     }
 
     /**
@@ -622,10 +676,10 @@ public class CanvasTest {
         final SoundContent sound = new SoundContent(SOUND_1_ID);
         final MediaFragmentSelector selector = new MediaFragmentSelector(DURATION, 1.5f * DURATION);
 
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, sound);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
 
         assertEquals(SOUND_1_ID, getContentResourceID().toString());
-        assertEquals(selector.getValue(), getMediaFragment());
+        assertEquals(selector.toString(), getMediaFragment());
     }
 
     /**
@@ -635,13 +689,13 @@ public class CanvasTest {
     @Test
     public final void testPaintVideoOnSpatiotemporalFragmentOfSpatiotemporalCanvasNoDims() {
         final VideoContent video = new VideoContent(VIDEO_1_ID);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT,
-                CANVAS_DURATION - DURATION / 2);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, CANVAS_DURATION -
+                DURATION / 2);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
 
         assertEquals(VIDEO_1_ID, getContentResourceID().toString());
-        assertEquals(selector.getValue(), getMediaFragment());
+        assertEquals(selector.toString(), getMediaFragment());
     }
 
     /********************************************************
@@ -656,7 +710,7 @@ public class CanvasTest {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, DURATION);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, image);
     }
 
     /**
@@ -667,7 +721,7 @@ public class CanvasTest {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, image);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
     }
 
     /**
@@ -678,7 +732,7 @@ public class CanvasTest {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, DURATION);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, image);
     }
 
     /**
@@ -689,7 +743,7 @@ public class CanvasTest {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, DURATION);
 
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, image);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
     }
 
     /**
@@ -700,7 +754,7 @@ public class CanvasTest {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, DURATION);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, sound);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, sound);
     }
 
     /**
@@ -711,7 +765,7 @@ public class CanvasTest {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, sound);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
     }
 
     /**
@@ -722,7 +776,7 @@ public class CanvasTest {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, DURATION);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, sound);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, sound);
     }
 
     /**
@@ -733,7 +787,7 @@ public class CanvasTest {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, DURATION);
 
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, sound);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
     }
 
     /**
@@ -744,7 +798,7 @@ public class CanvasTest {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, DURATION);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, video);
     }
 
     /**
@@ -755,7 +809,7 @@ public class CanvasTest {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, video);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
     }
 
     /**
@@ -766,7 +820,7 @@ public class CanvasTest {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, DURATION);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, video);
     }
 
     /**
@@ -777,7 +831,7 @@ public class CanvasTest {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, DURATION);
 
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, video);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
     }
 
     /*******************************************
@@ -792,7 +846,7 @@ public class CanvasTest {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT + 1);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, image);
     }
 
     /**
@@ -803,7 +857,7 @@ public class CanvasTest {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT + 1);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
     }
 
     /**
@@ -814,7 +868,7 @@ public class CanvasTest {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, CANVAS_DURATION + 1);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
     }
 
     /**
@@ -826,7 +880,7 @@ public class CanvasTest {
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT + 1, 0.0f,
                 CANVAS_DURATION + 1);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
     }
 
     /**
@@ -837,7 +891,7 @@ public class CanvasTest {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(CANVAS_DURATION, CANVAS_DURATION + DURATION);
 
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, sound);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
     }
 
     /**
@@ -846,9 +900,10 @@ public class CanvasTest {
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testPaintSoundOnUndefinedSpatialFragmentOfSpatiotemporalCanvas() {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(WIDTH, HEIGHT, WIDTH + WIDTH, HEIGHT + HEIGHT);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(WIDTH, HEIGHT, WIDTH + WIDTH, HEIGHT +
+                HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, sound);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
     }
 
     /**
@@ -857,10 +912,10 @@ public class CanvasTest {
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testPaintSoundOnUndefinedTemporalFragmentOfSpatiotemporalCanvas() {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(CANVAS_DURATION / 2,
-                3.0f / 2 * CANVAS_DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(CANVAS_DURATION / 2, 3.0f / 2 *
+                CANVAS_DURATION);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, sound);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
     }
 
     /**
@@ -872,7 +927,7 @@ public class CanvasTest {
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH + 1, HEIGHT, 0.0f,
                 CANVAS_DURATION);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, sound);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
     }
 
     /**
@@ -883,7 +938,7 @@ public class CanvasTest {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH + 1, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
     }
 
     /**
@@ -894,7 +949,7 @@ public class CanvasTest {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, CANVAS_DURATION + 1);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
     }
 
     /**
@@ -906,7 +961,7 @@ public class CanvasTest {
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH + 1, HEIGHT, 0.0f,
                 CANVAS_DURATION);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
     }
 
     /******************************************************************
@@ -921,7 +976,7 @@ public class CanvasTest {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, DURATION);
 
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, image);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
     }
 
     /**
@@ -932,7 +987,7 @@ public class CanvasTest {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, sound);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, sound);
     }
 
     /**
@@ -943,7 +998,7 @@ public class CanvasTest {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, video);
     }
 
     /**
@@ -954,7 +1009,7 @@ public class CanvasTest {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, DURATION);
 
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, video);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
     }
 
     /***************************************************
@@ -969,7 +1024,7 @@ public class CanvasTest {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH - 1, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, image);
     }
 
     /**
@@ -980,7 +1035,7 @@ public class CanvasTest {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT - 1);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
     }
 
     /**
@@ -991,7 +1046,7 @@ public class CanvasTest {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH + 1, HEIGHT);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, CANVAS_DURATION);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
     }
 
     /**
@@ -1003,7 +1058,7 @@ public class CanvasTest {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH + 1, HEIGHT);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, CANVAS_DURATION);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
     }
 
     /**
@@ -1014,7 +1069,7 @@ public class CanvasTest {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, DURATION - 1);
 
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, sound);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
     }
 
     /**
@@ -1025,7 +1080,7 @@ public class CanvasTest {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(CANVAS_DURATION + 1);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, sound);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
     }
 
     /**
@@ -1036,7 +1091,7 @@ public class CanvasTest {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, DURATION - 1);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, sound);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
     }
 
     /**
@@ -1048,7 +1103,7 @@ public class CanvasTest {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, DURATION - 1);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, sound);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
     }
 
     /**
@@ -1059,7 +1114,7 @@ public class CanvasTest {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH - 1, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
     }
 
     /**
@@ -1070,7 +1125,7 @@ public class CanvasTest {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, DURATION - 1);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
     }
 
     /**
@@ -1079,10 +1134,11 @@ public class CanvasTest {
      */
     @Test(expected = ContentOutOfBoundsException.class)
     public final void testPaintVideoOnSpatiotemporalFragmentOfSpatiotemporalCanvasOutOfBounds() {
-        final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH + 1, HEIGHT).setDuration(DURATION);
+        final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH + 1, HEIGHT).setDuration(
+                DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, DURATION);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
     }
 
     /**********************************
@@ -1096,7 +1152,7 @@ public class CanvasTest {
     public final void testPaintImageInvalidFragment() {
         final ImageContent image = new ImageContent(IMAGE_1_ID);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith("xywh=", image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, "xywh=", image);
     }
 
     /**
@@ -1106,7 +1162,7 @@ public class CanvasTest {
     public final void testPaintSoundInvalidFragment() {
         final SoundContent sound = new SoundContent(SOUND_1_ID);
 
-        myCanvas.setDuration(CANVAS_DURATION).paintWith("t=", sound);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, "t=", sound);
     }
 
     /**
@@ -1116,7 +1172,7 @@ public class CanvasTest {
     public final void testPaintVideoInvalidFragment() {
         final VideoContent video = new VideoContent(VIDEO_1_ID);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith("xywh=&t=", video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, "xywh=&t=", video);
     }
 
     /*****************
@@ -1134,19 +1190,18 @@ public class CanvasTest {
         final JsonObject found;
 
         final ImageContent imageContent = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
-        final PaintingAnnotation paintingAnno = new PaintingAnnotation(IMAGE_ANNO_ID, myCanvas)
-                .setBody(imageContent).setTarget(myCanvas.getID());
+        final PaintingAnnotation paintingAnno = new PaintingAnnotation(IMAGE_ANNO_ID, myCanvas).setBody(imageContent)
+                .setTarget(myCanvas.getID());
         final TextContent textContent = new TextContent(TEXT_ID);
-        final SupplementingAnnotation supplementingAnno = new SupplementingAnnotation(TEXT_ANNO_ID, myCanvas)
-                .setBody(textContent).setTarget(myCanvas.getID());
+        final SupplementingAnnotation supplementingAnno = new SupplementingAnnotation(TEXT_ANNO_ID, myCanvas).setBody(
+                textContent).setTarget(myCanvas.getID());
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT);
         myCanvas.setThumbnails(new ImageContent(IMAGE_THUMBNAIL_ID).setWidthHeight(THUMBNAIL_WH, THUMBNAIL_WH)
                 .setService(new ImageInfoService(IMAGE_THUMBNAIL_SERVICE_ID)));
-        myCanvas.setPaintingPages(
-                new AnnotationPage<PaintingAnnotation>(IMAGE_PAGE_ID).addAnnotations(paintingAnno));
-        myCanvas.setSupplementingPages(
-                new AnnotationPage<SupplementingAnnotation>(TEXT_PAGE_ID).addAnnotations(supplementingAnno));
+        myCanvas.setPaintingPages(new AnnotationPage<PaintingAnnotation>(IMAGE_PAGE_ID).addAnnotations(paintingAnno));
+        myCanvas.setSupplementingPages(new AnnotationPage<SupplementingAnnotation>(TEXT_PAGE_ID).addAnnotations(
+                supplementingAnno));
 
         expected = new JsonObject(StringUtils.read(CANVAS_FULL));
         found = new JsonObject(TestUtils.toJson(myCanvas));
@@ -1169,12 +1224,13 @@ public class CanvasTest {
         final Thumbnail thumbnail = new ImageContent(IMAGE_THUMBNAIL_ID).setWidthHeight(THUMBNAIL_WH, THUMBNAIL_WH)
                 .setService(new ImageInfoService(IMAGE_THUMBNAIL_SERVICE_ID));
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setThumbnails(thumbnail).paintWith(image).supplementWith(text);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setThumbnails(thumbnail).paintWith(myMinter, image).supplementWith(
+                myMinter, text);
 
         expected = new JsonObject(StringUtils.read(CANVAS_FULL));
         found = new JsonObject(TestUtils.toJson(myCanvas));
 
-        assertEquals(expected, found);
+        assertEquals(TestUtils.stripIDs(expected), TestUtils.stripIDs(found));
     }
 
     /**
@@ -1189,12 +1245,12 @@ public class CanvasTest {
 
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, image);
 
         expected = new JsonObject(StringUtils.read(CANVAS_IMAGE));
         found = new JsonObject(TestUtils.toJson(myCanvas));
 
-        assertEquals(expected, found);
+        assertEquals(TestUtils.stripIDs(expected), TestUtils.stripIDs(found));
     }
 
     /**
@@ -1211,12 +1267,12 @@ public class CanvasTest {
         final ImageContent image1 = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
         final ImageContent image2 = new ImageContent(IMAGE_2_ID).setWidthHeight(WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(image1, image2);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, image1, image2);
 
         expected = new JsonObject(StringUtils.read(CANVAS_IMAGE_CHOICE));
         found = new JsonObject(TestUtils.toJson(myCanvas));
 
-        assertEquals(expected, found);
+        assertEquals(TestUtils.stripIDs(expected), TestUtils.stripIDs(found));
     }
 
     /**
@@ -1236,12 +1292,13 @@ public class CanvasTest {
         final String selector1 = StringUtils.format(URI_FRAGMENT_XYWH_TEMPLATE, 0, 0, WIDTH, HEIGHT);
         final String selector2 = StringUtils.format(URI_FRAGMENT_XYWH_TEMPLATE, 0, HEIGHT, WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT * 2).paintWith(selector1, image1).paintWith(selector2, image2);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT * 2).paintWith(myMinter, selector1, image1).paintWith(myMinter,
+                selector2, image2);
 
         expected = new JsonObject(StringUtils.read(CANVAS_IMAGE_MULTI));
         found = new JsonObject(TestUtils.toJson(myCanvas));
 
-        assertEquals(expected, found);
+        assertEquals(TestUtils.stripIDs(expected), TestUtils.stripIDs(found));
     }
 
     /**
@@ -1258,17 +1315,18 @@ public class CanvasTest {
         final ImageContent image1 = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
         final ImageContent image2 = new ImageContent(IMAGE_2_ID).setWidthHeight(WIDTH, HEIGHT);
 
-        final MediaFragmentSelector selector1 = new MediaFragmentSelector(StringUtils.format(URI_FRAGMENT_XYWH_TEMPLATE,
-                0, 0, WIDTH, HEIGHT));
-        final MediaFragmentSelector selector2 = new MediaFragmentSelector(StringUtils.format(URI_FRAGMENT_XYWH_TEMPLATE,
-                0, HEIGHT, WIDTH, HEIGHT));
+        final MediaFragmentSelector selector1 = new MediaFragmentSelector(StringUtils.format(
+                URI_FRAGMENT_XYWH_TEMPLATE, 0, 0, WIDTH, HEIGHT));
+        final MediaFragmentSelector selector2 = new MediaFragmentSelector(StringUtils.format(
+                URI_FRAGMENT_XYWH_TEMPLATE, 0, HEIGHT, WIDTH, HEIGHT));
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT * 2).paintWith(selector1, image1).paintWith(selector2, image2);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT * 2).paintWith(myMinter, selector1, image1).paintWith(myMinter,
+                selector2, image2);
 
         expected = new JsonObject(StringUtils.read(CANVAS_IMAGE_MULTI));
         found = new JsonObject(TestUtils.toJson(myCanvas));
 
-        assertEquals(expected, found);
+        assertEquals(TestUtils.stripIDs(expected), TestUtils.stripIDs(found));
     }
 
     /**
@@ -1283,12 +1341,12 @@ public class CanvasTest {
 
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
 
-        myCanvas = new Canvas(SOUND_CANVAS_ID, LABEL).setDuration(CANVAS_DURATION).paintWith(sound);
+        myCanvas = new Canvas(SOUND_CANVAS_ID, LABEL).setDuration(CANVAS_DURATION).paintWith(myMinter, sound);
 
         expected = new JsonObject(StringUtils.read(CANVAS_SOUND));
         found = new JsonObject(TestUtils.toJson(myCanvas));
 
-        assertEquals(expected, found);
+        assertEquals(TestUtils.stripIDs(expected), TestUtils.stripIDs(found));
     }
 
     /**
@@ -1310,13 +1368,13 @@ public class CanvasTest {
         final String selector1 = StringUtils.format(URI_FRAGMENT_T_TEMPLATE, 0, DURATION);
         final String selector2 = StringUtils.format(URI_FRAGMENT_T_TEMPLATE, DURATION, DURATION + DURATION);
 
-        myCanvas = new Canvas(SOUND_CANVAS_ID, LABEL).setDuration(CANVAS_DURATION)
-                .paintWith(selector1, sound1, sound2).paintWith(selector2, sound3);
+        myCanvas = new Canvas(SOUND_CANVAS_ID, LABEL).setDuration(CANVAS_DURATION).paintWith(myMinter, selector1,
+                sound1, sound2).paintWith(myMinter, selector2, sound3);
 
         expected = new JsonObject(StringUtils.read(CANVAS_SOUND_CHOICE_MULTI));
         found = new JsonObject(TestUtils.toJson(myCanvas));
 
-        assertEquals(expected, found);
+        assertEquals(TestUtils.stripIDs(expected), TestUtils.stripIDs(found));
     }
 
     /**
@@ -1335,18 +1393,18 @@ public class CanvasTest {
         final SoundContent sound2 = new SoundContent(SOUND_2_ID).setDuration(DURATION);
         final SoundContent sound3 = new SoundContent(SOUND_3_ID).setDuration(DURATION);
 
-        final MediaFragmentSelector selector1 = new MediaFragmentSelector(
-                StringUtils.format(URI_FRAGMENT_T_TEMPLATE, 0, DURATION));
-        final MediaFragmentSelector selector2 = new MediaFragmentSelector(
-                StringUtils.format(URI_FRAGMENT_T_TEMPLATE, DURATION, DURATION + DURATION));
+        final MediaFragmentSelector selector1 = new MediaFragmentSelector(StringUtils.format(URI_FRAGMENT_T_TEMPLATE,
+                0, DURATION));
+        final MediaFragmentSelector selector2 = new MediaFragmentSelector(StringUtils.format(URI_FRAGMENT_T_TEMPLATE,
+                DURATION, DURATION + DURATION));
 
-        myCanvas = new Canvas(SOUND_CANVAS_ID, LABEL).setDuration(CANVAS_DURATION)
-                .paintWith(selector1, sound1, sound2).paintWith(selector2, sound3);
+        myCanvas = new Canvas(SOUND_CANVAS_ID, LABEL).setDuration(CANVAS_DURATION).paintWith(myMinter, selector1,
+                sound1, sound2).paintWith(myMinter, selector2, sound3);
 
         expected = new JsonObject(StringUtils.read(CANVAS_SOUND_CHOICE_MULTI));
         found = new JsonObject(TestUtils.toJson(myCanvas));
 
-        assertEquals(expected, found);
+        assertEquals(TestUtils.stripIDs(expected), TestUtils.stripIDs(found));
     }
 
     /**
@@ -1362,12 +1420,12 @@ public class CanvasTest {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
 
         myCanvas = new Canvas(VIDEO_CANVAS_ID, LABEL).setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION)
-                .paintWith(video);
+                .paintWith(myMinter, video);
 
         expected = new JsonObject(StringUtils.read(CANVAS_VIDEO));
         found = new JsonObject(TestUtils.toJson(myCanvas));
 
-        assertEquals(expected, found);
+        assertEquals(TestUtils.stripIDs(expected), TestUtils.stripIDs(found));
     }
 
     /**
@@ -1389,12 +1447,12 @@ public class CanvasTest {
                 DURATION + DURATION);
 
         myCanvas = new Canvas(VIDEO_CANVAS_ID, LABEL).setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION)
-                .paintWith(selector1, video1).paintWith(selector2, video2);
+                .paintWith(myMinter, selector1, video1).paintWith(myMinter, selector2, video2);
 
         expected = new JsonObject(StringUtils.read(CANVAS_VIDEO_MULTI));
         found = new JsonObject(TestUtils.toJson(myCanvas));
 
-        assertEquals(expected, found);
+        assertEquals(TestUtils.stripIDs(expected), TestUtils.stripIDs(found));
     }
 
     /**
@@ -1411,18 +1469,18 @@ public class CanvasTest {
         final VideoContent video1 = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
         final VideoContent video2 = new VideoContent(VIDEO_2_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
 
-        final MediaFragmentSelector selector1 = new MediaFragmentSelector(
-                StringUtils.format(URI_FRAGMENT_XYWHT_TEMPLATE, 0, 0, WIDTH, HEIGHT, 0, DURATION));
-        final MediaFragmentSelector selector2 = new MediaFragmentSelector(
-                StringUtils.format(URI_FRAGMENT_XYWHT_TEMPLATE, 0, 0, WIDTH, HEIGHT, DURATION, DURATION + DURATION));
+        final MediaFragmentSelector selector1 = new MediaFragmentSelector(StringUtils.format(
+                URI_FRAGMENT_XYWHT_TEMPLATE, 0, 0, WIDTH, HEIGHT, 0, DURATION));
+        final MediaFragmentSelector selector2 = new MediaFragmentSelector(StringUtils.format(
+                URI_FRAGMENT_XYWHT_TEMPLATE, 0, 0, WIDTH, HEIGHT, DURATION, DURATION + DURATION));
 
         myCanvas = new Canvas(VIDEO_CANVAS_ID, LABEL).setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION)
-                .paintWith(selector1, video1).paintWith(selector2, video2);
+                .paintWith(myMinter, selector1, video1).paintWith(myMinter, selector2, video2);
 
         expected = new JsonObject(StringUtils.read(CANVAS_VIDEO_MULTI));
         found = new JsonObject(TestUtils.toJson(myCanvas));
 
-        assertEquals(expected, found);
+        assertEquals(TestUtils.stripIDs(expected), TestUtils.stripIDs(found));
     }
 
     /**
@@ -1437,7 +1495,7 @@ public class CanvasTest {
      */
     private String getMediaFragment() {
         return ((MediaFragmentSelector) ((SpecificResource) myCanvas.getPaintingPages().get(0).getAnnotations().get(0)
-                .getTarget()).getSelector()).getValue();
+                .getSpecificResourceTarget().get()).getSelector()).toString();
     }
 
 }

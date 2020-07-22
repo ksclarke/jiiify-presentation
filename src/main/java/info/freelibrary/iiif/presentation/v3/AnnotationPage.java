@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -13,6 +13,10 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+
+import info.freelibrary.iiif.presentation.v3.id.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -25,8 +29,6 @@ import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
 
 /**
  * A page of annotations.
@@ -54,6 +56,17 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
      */
     public AnnotationPage(final URI aID) {
         super(ResourceTypes.ANNOTATION_PAGE, aID);
+    }
+
+    /**
+     * Creates a new AnnotationPage for a supplied {@link CanvasResource}.
+     *
+     * @param <C> The type of CanvasResource
+     * @param aMinter An ID minter
+     * @param aCanvas A canvas resource
+     */
+    public <C extends CanvasResource<C>> AnnotationPage(final Minter aMinter, final CanvasResource<C> aCanvas) {
+        super(ResourceTypes.ANNOTATION_PAGE, aMinter.getAnnotationPageID(aCanvas));
     }
 
     /**

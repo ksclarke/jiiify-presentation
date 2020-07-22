@@ -1,12 +1,13 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.selectors;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.util.StringUtils;
+
+import info.freelibrary.iiif.presentation.v3.Constants;
 
 /**
  * Tests of the media fragment selector.
@@ -28,7 +29,7 @@ public class MediaFragmentSelectorTest {
      */
     @Test
     public final void testConstructorStringXYWH() {
-        assertEquals(XYWH_FRAGMENT, new MediaFragmentSelector(XYWH_FRAGMENT).getValue());
+        assertEquals(XYWH_FRAGMENT, new MediaFragmentSelector(XYWH_FRAGMENT).toString());
     }
 
     /**
@@ -36,7 +37,7 @@ public class MediaFragmentSelectorTest {
      */
     @Test
     public final void testConstructorIntIntIntIntXYWH() {
-        assertEquals(XYWH_FRAGMENT, new MediaFragmentSelector(X, Y, WIDTH, HEIGHT).getValue());
+        assertEquals(XYWH_FRAGMENT, new MediaFragmentSelector(X, Y, WIDTH, HEIGHT).toString());
     }
 
     /**
@@ -47,7 +48,7 @@ public class MediaFragmentSelectorTest {
         final String[] fragments = { "t=30,60", "t=30", "t=,60" };
 
         for (final String fragment : fragments) {
-            assertEquals(fragment, new MediaFragmentSelector(fragment).getValue());
+            assertEquals(fragment, new MediaFragmentSelector(fragment).toString());
         }
     }
 
@@ -56,10 +57,10 @@ public class MediaFragmentSelectorTest {
      */
     @Test
     public final void testConstructorFloatFloatT() {
-        assertEquals("t=0,30", new MediaFragmentSelector(0.0f, 30.0f).getValue());
-        assertEquals("t=0", new MediaFragmentSelector(0.0f).getValue());
-        assertEquals("t=1.5", new MediaFragmentSelector(1.5f, null).getValue());
-        assertEquals("t=,30", new MediaFragmentSelector(null, 30.0f).getValue());
+        assertEquals("t=0,30", new MediaFragmentSelector(0.0f, 30.0f).toString());
+        assertEquals("t=0", new MediaFragmentSelector(0.0f).toString());
+        assertEquals("t=1.5", new MediaFragmentSelector(1.5f, null).toString());
+        assertEquals("t=,30", new MediaFragmentSelector(null, 30.0f).toString());
     }
 
     /**
@@ -102,7 +103,7 @@ public class MediaFragmentSelectorTest {
         final String[] fragments = { "xywh=0,1,750,300&t=30,60", "xywh=0,1,750,300&t=30", "xywh=0,1,750,300&t=,60" };
 
         for (final String fragment : fragments) {
-            assertEquals(fragment, new MediaFragmentSelector(fragment).getValue());
+            assertEquals(fragment, new MediaFragmentSelector(fragment).toString());
         }
     }
 
@@ -111,10 +112,10 @@ public class MediaFragmentSelectorTest {
      */
     @Test
     public final void testConstructorIntIntIntIntFloatFloatXYWHT() {
-        assertEquals("xywh=0,1,750,300&t=0,30", new MediaFragmentSelector(X, Y, WIDTH, HEIGHT, 0.0f, 30.0f).getValue());
-        assertEquals("xywh=0,1,750,300&t=0", new MediaFragmentSelector(X, Y, WIDTH, HEIGHT, 0.0f).getValue());
-        assertEquals("xywh=0,1,750,300&t=1.5", new MediaFragmentSelector(X, Y, WIDTH, HEIGHT, 1.5f, null).getValue());
-        assertEquals("xywh=0,1,750,300&t=,30", new MediaFragmentSelector(X, Y, WIDTH, HEIGHT, null, 30.0f).getValue());
+        assertEquals("xywh=0,1,750,300&t=0,30", new MediaFragmentSelector(X, Y, WIDTH, HEIGHT, 0.0f, 30.0f).toString());
+        assertEquals("xywh=0,1,750,300&t=0", new MediaFragmentSelector(X, Y, WIDTH, HEIGHT, 0.0f).toString());
+        assertEquals("xywh=0,1,750,300&t=1.5", new MediaFragmentSelector(X, Y, WIDTH, HEIGHT, 1.5f, null).toString());
+        assertEquals("xywh=0,1,750,300&t=,30", new MediaFragmentSelector(X, Y, WIDTH, HEIGHT, null, 30.0f).toString());
     }
 
     /**
@@ -130,7 +131,7 @@ public class MediaFragmentSelectorTest {
      */
     @Test
     public final void testConformsTo() {
-        assertEquals(Constants.MEDIA_FRAGMENT_SPECIFICATION_URI, new MediaFragmentSelector(XYWH_FRAGMENT)
-                .getConformsTo());
+        assertEquals(Constants.MEDIA_FRAGMENT_SPECIFICATION_URI,
+                new MediaFragmentSelector(XYWH_FRAGMENT).getConformsTo());
     }
 }

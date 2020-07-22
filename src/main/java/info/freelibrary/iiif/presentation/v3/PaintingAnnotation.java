@@ -8,6 +8,10 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+
+import info.freelibrary.iiif.presentation.v3.id.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -22,8 +26,6 @@ import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
 
 /**
  * An annotation used for painting content resources onto a {@link Canvas}.
@@ -38,10 +40,11 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation> implement
     /**
      * Creates a painting annotation.
      *
+     * @param <C> A type of canvas to target
      * @param aID An ID
      * @param aCanvas A canvas to target
      */
-    protected PaintingAnnotation(final URI aID, final AbstractCanvas<?> aCanvas) {
+    public <C extends CanvasResource<C>> PaintingAnnotation(final URI aID, final CanvasResource<C> aCanvas) {
         super(aID, aCanvas);
         myMotivation = MOTIVATION;
     }
@@ -49,21 +52,34 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation> implement
     /**
      * Creates a painting annotation.
      *
+     * @param <C> A type of canvas to target
      * @param aID An ID in string form
      * @param aCanvas A canvas to target
      */
-    protected PaintingAnnotation(final String aID, final AbstractCanvas<?> aCanvas) {
+    public <C extends CanvasResource<C>> PaintingAnnotation(final String aID, final CanvasResource<C> aCanvas) {
         this(URI.create(aID), aCanvas);
     }
 
     /**
+     * Creates a painting annotation, using the supplied minter to create the ID.
+     *
+     * @param <C> A type of canvas to target
+     * @param aMinter A minter from which to get the painting annotation's ID
+     * @param aCanvas A canvas to target
+     */
+    public <C extends CanvasResource<C>> PaintingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas) {
+        this(aMinter.getAnnotationID(), aCanvas);
+    }
+
+    /**
      * Creates a painting annotation.
      *
+     * @param <C> A type of canvas to target
      * @param aID An ID
      * @param aCanvas A canvas to target
      * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to target
      */
-    protected PaintingAnnotation(final URI aID, final AbstractCanvas<?> aCanvas,
+    public <C extends CanvasResource<C>> PaintingAnnotation(final URI aID, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
         super(aID, aCanvas, aCanvasRegion);
         myMotivation = MOTIVATION;
@@ -72,11 +88,40 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation> implement
     /**
      * Creates a painting annotation.
      *
+     * @param <C> A type of canvas to target
+     * @param aID An ID in string form
+     * @param aCanvas A canvas to target
+     * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to target
+     */
+    public <C extends CanvasResource<C>> PaintingAnnotation(final String aID, final CanvasResource<C> aCanvas,
+            final MediaFragmentSelector aCanvasRegion) {
+        this(URI.create(aID), aCanvas, aCanvasRegion);
+    }
+
+    /**
+     * Creates a painting annotation, using the supplied minter to create the painting annotation's ID.
+     *
+     * @param <C> A type of canvas to target
+     * @param aMinter A minter from which to get the painting annotation's ID
+     * @param aCanvas A canvas to target
+     * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to target
+     */
+    public <C extends CanvasResource<C>> PaintingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
+            final MediaFragmentSelector aCanvasRegion) {
+        super(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
+        myMotivation = MOTIVATION;
+    }
+
+    /**
+     * Creates a painting annotation.
+     *
+     * @param <C> A type of canvas to target
      * @param aID An ID
      * @param aCanvas A canvas to target
      * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to target
      */
-    protected PaintingAnnotation(final URI aID, final AbstractCanvas<?> aCanvas, final String aCanvasRegion) {
+    public <C extends CanvasResource<C>> PaintingAnnotation(final URI aID, final CanvasResource<C> aCanvas,
+            final String aCanvasRegion) {
         super(aID, aCanvas, aCanvasRegion);
         myMotivation = MOTIVATION;
     }
@@ -84,24 +129,28 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation> implement
     /**
      * Creates a painting annotation.
      *
-     * @param aID An ID in string form
-     * @param aCanvas A canvas to target
-     * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to target
-     */
-    protected PaintingAnnotation(final String aID, final AbstractCanvas<?> aCanvas,
-            final MediaFragmentSelector aCanvasRegion) {
-        this(URI.create(aID), aCanvas, aCanvasRegion);
-    }
-
-    /**
-     * Creates a painting annotation.
-     *
+     * @param <C> A type of canvas to target
      * @param aID An ID in string form
      * @param aCanvas A canvas to target
      * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to target
      */
-    protected PaintingAnnotation(final String aID, final AbstractCanvas<?> aCanvas, final String aCanvasRegion) {
+    public <C extends CanvasResource<C>> PaintingAnnotation(final String aID, final CanvasResource<C> aCanvas,
+            final String aCanvasRegion) {
         this(URI.create(aID), aCanvas, aCanvasRegion);
+    }
+
+    /**
+     * Creates a painting annotation, using the supplied minter to create the painting annotation's ID.
+     *
+     * @param <C> A type of canvas to target
+     * @param aMinter A minter from which to get the painting annotation's ID
+     * @param aCanvas A canvas to target
+     * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to target
+     */
+    public <C extends CanvasResource<C>> PaintingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
+            final String aCanvasRegion) {
+        super(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
+        myMotivation = MOTIVATION;
     }
 
     /**
@@ -156,11 +205,6 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation> implement
     @Override
     public PaintingAnnotation setBody(final List<ContentResource> aBody) {
         return setBody(aBody.toArray(new ContentResource[] {}));
-    }
-
-    @Override
-    public Object getTarget() {
-        return super.getTarget();
     }
 
     @Override

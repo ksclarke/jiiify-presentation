@@ -45,11 +45,11 @@ public class SelectorDeserializerTest extends AbstractTest {
     public void testMediaFragmentSelector() {
         final String rawMediaFragment = "xywh=0,0,50,50";
         final JsonObject jsonObject = JsonObject.mapFrom(new MediaFragmentSelector(rawMediaFragment));
-        final MediaFragmentSelector selector = (MediaFragmentSelector) Json.decodeValue(jsonObject.toString(),
-                Selector.class);
+        final MediaFragmentSelector selector =
+                (MediaFragmentSelector) Json.decodeValue(jsonObject.toString(), Selector.class);
 
         assertEquals(Constants.FRAGMENT_SELECTOR, selector.getType());
-        assertEquals(rawMediaFragment, selector.getValue());
+        assertEquals(rawMediaFragment, selector.toString());
     }
 
     /**

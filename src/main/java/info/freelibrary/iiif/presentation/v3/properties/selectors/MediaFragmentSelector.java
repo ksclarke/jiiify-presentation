@@ -190,18 +190,20 @@ public class MediaFragmentSelector implements FragmentSelector {
     /**
      * Gets the value of the media fragment selector, with the spatial part ordered before the temporal part.
      *
-     * @return The value
+     * @return The value in string form
      */
     @Override
-    public String getValue() {
+    public String toString() {
         final List<String> list = new ArrayList<>();
 
         if (myMediaFragment.hasSpatialFragment()) {
             list.add(myMediaFragment.getSpatialFragment().stringValue());
         }
+
         if (myMediaFragment.hasTemporalFragment()) {
             list.add(myMediaFragment.getTemporalFragment().stringValue());
         }
+
         return String.join("&", list);
     }
 
