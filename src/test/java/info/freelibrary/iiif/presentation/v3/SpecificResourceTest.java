@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,11 +10,11 @@ import java.net.URI;
 import org.junit.Before;
 import org.junit.Test;
 
-import info.freelibrary.iiif.presentation.v3.properties.selectors.AudioContentSelector;
-import info.freelibrary.iiif.presentation.v3.properties.selectors.Selector;
-import info.freelibrary.iiif.presentation.v3.properties.selectors.VisualContentSelector;
 import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.StringUtils;
+
+import info.freelibrary.iiif.presentation.v3.properties.selectors.AudioContentSelector;
+import info.freelibrary.iiif.presentation.v3.properties.selectors.Selector;
 
 import io.vertx.core.json.JsonObject;
 
@@ -66,7 +66,7 @@ public class SpecificResourceTest extends AbstractTest {
      */
     @Test
     public final void testSetIDString() {
-        assertEquals(URI.create(myOtherID), new SpecificResource(myID, myID, SELECTOR).setID(myOtherID).getID());
+        assertEquals(URI.create(myID), new SpecificResource(myID, myOtherID, SELECTOR).getID());
     }
 
     /**
@@ -74,8 +74,8 @@ public class SpecificResourceTest extends AbstractTest {
      */
     @Test
     public final void testSetIDURI() {
-        final URI uri = URI.create(myOtherID);
-        assertEquals(uri, new SpecificResource(myID, myID, SELECTOR).setID(uri).getID());
+        final URI uri = URI.create(myID);
+        assertEquals(uri, new SpecificResource(uri, URI.create(myOtherID), SELECTOR).getID());
     }
 
     /**
@@ -91,8 +91,7 @@ public class SpecificResourceTest extends AbstractTest {
      */
     @Test
     public final void testSetSelector() {
-        assertEquals(SELECTOR, new SpecificResource(myID, myOtherID, new VisualContentSelector()).setSelector(SELECTOR)
-                .getSelector());
+        assertEquals(SELECTOR, new SpecificResource(myID, myOtherID, SELECTOR).getSelector());
     }
 
     /**
@@ -101,7 +100,7 @@ public class SpecificResourceTest extends AbstractTest {
     @Test
     public final void testSetSourceString() {
         final URI source = URI.create(myOtherID);
-        assertEquals(source, new SpecificResource(myID, myID, SELECTOR).setSource(myOtherID).getSource());
+        assertEquals(source, new SpecificResource(myID, myOtherID, SELECTOR).getSource());
     }
 
     /**
@@ -110,7 +109,7 @@ public class SpecificResourceTest extends AbstractTest {
     @Test
     public final void testSetSourceURI() {
         final URI source = URI.create(myOtherID);
-        assertEquals(source, new SpecificResource(myID, myID, SELECTOR).setSource(source).getSource());
+        assertEquals(source, new SpecificResource(URI.create(myID), source, SELECTOR).getSource());
     }
 
     /**

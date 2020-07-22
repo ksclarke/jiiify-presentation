@@ -67,5 +67,18 @@
   <entry key="JPA-061">Unknown URI fragment syntax specification: {}</entry>
   <entry key="JPA-062">Unable to generate the media fragment's temporal component: must provide exactly 1 or 2 time instants</entry>
   <entry key="JPA-063">Unable to generate the media fragment's temporal component: at least one time instant must not be null</entry>
+  <entry key="JPA-064">Canvas fragment '{}' has {} dimensions and canvas '{}' does not</entry>
+  <entry key="JPA-065">Canvas fragment '{}' has {} dimensions outside the bounds of canvas '{}'</entry>
+  <entry key="JPA-066">Content resource '{}' has {} dimensions and canvas fragment '{}' does not</entry>
+  <entry key="JPA-067">Content resource '{}' has {} dimensions outside the bounds of canvas fragment '{}'</entry>
+  <entry key="JPA-100">Unable to add ID to minter's existing IDs set because it already exists: {}</entry>
+  <entry key="JPA-101">NOID minter initialization took: {}</entry>
+  <entry key="JPA-102">The number of NOIDS generated does not match the expected number: {} vs. {}</entry>
+  <entry key="JPA-103">Test failed because expected exception was not thrown</entry>
+  <entry key="JPA-104">Iterating through all possible NOIDs took: {}</entry>
+  <entry key="JPA-105">Ran out of '{}' NOIDs while creating one for a '{}'</entry>
+  <entry key="JPA-106">NOID iterator for '{}' starts at '{}' and skips '{}' NOIDs at a time</entry>
+  <entry key="JPA-107">Could not create a new minter: {}</entry>
+  <entry key="JPA-108">Received duplicate ID from the minter: {} (count: {})</entry>
 
 </properties>

@@ -9,6 +9,8 @@ import java.net.URI;
 
 import org.junit.Test;
 
+import info.freelibrary.util.StringUtils;
+
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
@@ -16,7 +18,6 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavi
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
-import info.freelibrary.util.StringUtils;
 
 import io.vertx.core.json.JsonObject;
 
@@ -49,7 +50,7 @@ public class PaintingAnnotationTest extends AbstractTest {
         final PaintingAnnotation anno = new PaintingAnnotation(myAnnoID, myCanvas);
 
         assertEquals(myAnnoID, anno.getID());
-        assertTrue(anno.getTarget() instanceof URI);
+        assertFalse(isSpecificResourceURI(anno.getTarget()));
     }
 
     /**
@@ -60,7 +61,8 @@ public class PaintingAnnotationTest extends AbstractTest {
         final PaintingAnnotation anno = new PaintingAnnotation(myAnnoID.toString(), myCanvas);
 
         assertEquals(myAnnoID, anno.getID());
-        assertTrue(anno.getTarget() instanceof URI);
+        assertFalse(anno.hasSpecificResourceTarget());
+        assertFalse(isSpecificResourceURI(anno.getTarget()));
     }
 
     /**
@@ -71,7 +73,8 @@ public class PaintingAnnotationTest extends AbstractTest {
         final PaintingAnnotation anno = new PaintingAnnotation(myAnnoID, myCanvas, myFragmentSelector);
 
         assertEquals(myAnnoID, anno.getID());
-        assertTrue(anno.getTarget() instanceof SpecificResource);
+        assertTrue(anno.hasSpecificResourceTarget());
+        assertTrue(anno.getSpecificResourceTarget().isPresent());
     }
 
     /**
@@ -79,10 +82,11 @@ public class PaintingAnnotationTest extends AbstractTest {
      */
     @Test
     public void testPaintingAnnotationURICanvasString() {
-        final PaintingAnnotation anno = new PaintingAnnotation(myAnnoID, myCanvas, myFragmentSelector.getValue());
+        final PaintingAnnotation anno = new PaintingAnnotation(myAnnoID, myCanvas, myFragmentSelector.toString());
 
         assertEquals(myAnnoID, anno.getID());
-        assertTrue(anno.getTarget() instanceof SpecificResource);
+        assertTrue(anno.hasSpecificResourceTarget());
+        assertTrue(anno.getSpecificResourceTarget().isPresent());
     }
 
     /**
@@ -93,7 +97,8 @@ public class PaintingAnnotationTest extends AbstractTest {
         final PaintingAnnotation anno = new PaintingAnnotation(myAnnoID.toString(), myCanvas, myFragmentSelector);
 
         assertEquals(myAnnoID, anno.getID());
-        assertTrue(anno.getTarget() instanceof SpecificResource);
+        assertTrue(anno.hasSpecificResourceTarget());
+        assertTrue(anno.getSpecificResourceTarget().isPresent());
     }
 
     /**
@@ -101,11 +106,12 @@ public class PaintingAnnotationTest extends AbstractTest {
      */
     @Test
     public void testPaintingAnnotationStringCanvasString() {
-        final PaintingAnnotation anno = new PaintingAnnotation(myAnnoID.toString(), myCanvas, myFragmentSelector
-                .getValue());
+        final PaintingAnnotation anno =
+                new PaintingAnnotation(myAnnoID.toString(), myCanvas, myFragmentSelector.toString());
 
         assertEquals(myAnnoID, anno.getID());
-        assertTrue(anno.getTarget() instanceof SpecificResource);
+        assertTrue(anno.hasSpecificResourceTarget());
+        assertTrue(anno.getSpecificResourceTarget().isPresent());
     }
 
     /**
@@ -119,18 +125,18 @@ public class PaintingAnnotationTest extends AbstractTest {
         final URI target1;
         final SpecificResource target2;
 
-        assertTrue(anno1.getTarget() instanceof URI);
-        assertTrue(anno2.getTarget() instanceof SpecificResource);
+        assertFalse(isSpecificResourceURI(anno1.getTarget()));
+        assertTrue(isSpecificResourceURI(anno2.getTarget()));
 
-        target1 = (URI) anno1.getTarget();
-        target2 = (SpecificResource) anno2.getTarget();
+        target1 = anno1.getTarget();
+        target2 = anno2.getSpecificResourceTarget().get();
 
         // Swap the targets
         anno1.setTarget(target2);
         anno2.setTarget(target1);
 
-        assertTrue(anno1.getTarget() instanceof SpecificResource);
-        assertTrue(anno2.getTarget() instanceof URI);
+        assertTrue(isSpecificResourceURI(anno1.getTarget()));
+        assertFalse(isSpecificResourceURI(anno2.getTarget()));
     }
 
     /**
@@ -190,10 +196,10 @@ public class PaintingAnnotationTest extends AbstractTest {
      */
     @Test
     public final void testSerialization() throws IOException {
-        final SoundContent content = new SoundContent(mySoundContentID).setDuration(3600).setThumbnails(
-                new SoundContent(myThumbnailID).setDuration(4.2f));
-        final PaintingAnnotation annotation = new PaintingAnnotation(myAnnoID, myCanvas).setBody(content).setTarget(
-                myCanvasID).setTimeMode(TimeMode.LOOP);
+        final SoundContent content = new SoundContent(mySoundContentID).setDuration(3600)
+                .setThumbnails(new SoundContent(myThumbnailID).setDuration(4.2f));
+        final PaintingAnnotation annotation = new PaintingAnnotation(myAnnoID, myCanvas).setBody(content)
+                .setTarget(myCanvasID).setTimeMode(TimeMode.LOOP);
         final JsonObject expected = new JsonObject(StringUtils.read(ANNOTATION));
         final JsonObject found = new JsonObject(TestUtils.toJson(annotation));
 

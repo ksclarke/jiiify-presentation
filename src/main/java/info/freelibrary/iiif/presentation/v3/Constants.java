@@ -80,6 +80,8 @@ public final class Constants {
 
     public static final String OTHER_CONTENT = "otherContent";
 
+    public static final String SUPPLEMENTARY = "supplementary";
+
     public static final String TARGET = "target";
 
     public static final String BODY = "body";
@@ -123,6 +125,8 @@ public final class Constants {
     public static final String ACCOMPANYING_CANVAS = "accompanyingCanvas";
 
     public static final String UNCHECKED = "unchecked";
+
+    public static final String FRAGMENT_DELIM = "#";
 
     private Constants() {
         super();

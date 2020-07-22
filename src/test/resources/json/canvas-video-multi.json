@@ -4,7 +4,7 @@
   "id": "https://example.org/iiif/reel1/segment1/canvas-1",
   "width": 480,
   "height": 360,
-  "duration": 7200,
+  "duration": 3600,
   "items": [
     {
       "type": "AnnotationPage",
@@ -19,7 +19,7 @@
             "id": "https://example.org/iiif/reel1/segment1.mp4",
             "width": 480,
             "height": 360,
-            "duration": 600,
+            "duration": 300,
             "format": "video/mp4"
           },
           "target": {
@@ -28,7 +28,7 @@
             "selector": {
               "type": "FragmentSelector",
               "conformsTo": "http://www.w3.org/TR/media-frags/",
-              "value": "xywh=0,0,480,360&t=0,600"
+              "value": "xywh=0,0,480,360&t=0,300"
             }
           }
         },
@@ -41,7 +41,7 @@
             "id": "https://example.org/iiif/reel1/segment2.mp4",
             "width": 480,
             "height": 360,
-            "duration": 600,
+            "duration": 300,
             "format": "video/mp4"
           },
           "target": {
@@ -50,7 +50,7 @@
             "selector": {
               "type": "FragmentSelector",
               "conformsTo": "http://www.w3.org/TR/media-frags/",
-              "value": "xywh=0,0,480,360&t=600,1200"
+              "value": "xywh=0,0,480,360&t=300,600"
             }
           }
         }

@@ -81,30 +81,6 @@ public class SpecificResource {
     }
 
     /**
-     * Sets the ID in string form.
-     *
-     * @param aID The ID in string form
-     * @return This specific resource
-     */
-    @JsonSetter(Constants.ID)
-    public SpecificResource setID(final String aID) {
-        myID = URI.create(aID);
-        return this;
-    }
-
-    /**
-     * Sets the ID.
-     *
-     * @param aID The ID
-     * @return This specific resource
-     */
-    @JsonIgnore
-    public SpecificResource setID(final URI aID) {
-        myID = aID;
-        return this;
-    }
-
-    /**
      * Gets the ID.
      *
      * @return The ID
@@ -122,18 +98,6 @@ public class SpecificResource {
     @JsonGetter(Constants.TYPE)
     public String getType() {
         return ResourceTypes.SPECIFIC_RESOURCE;
-    }
-
-    /**
-     * Sets the type for a specific resource.
-     *
-     * @param aType The specific resource type
-     * @return This specific resource
-     */
-    @JsonSetter(Constants.TYPE)
-    private SpecificResource setType(final String aType) {
-        // This is just for Jackson; type is immutable
-        return this;
     }
 
     /**
@@ -157,42 +121,6 @@ public class SpecificResource {
     }
 
     /**
-     * Sets the specific resource selector.
-     *
-     * @param aSelector A selector to use for the specific resource
-     * @return This specific resource
-     */
-    @JsonSetter(Constants.SELECTOR)
-    public SpecificResource setSelector(final Selector aSelector) {
-        mySelector = aSelector;
-        return this;
-    }
-
-    /**
-     * Sets the specific resource's source.
-     *
-     * @param aSource A source in string form
-     * @return This specific resource
-     */
-    @JsonIgnore
-    public SpecificResource setSource(final String aSource) {
-        mySource = URI.create(aSource);
-        return this;
-    }
-
-    /**
-     * Sets the specific resource's source.
-     *
-     * @param aSource A source
-     * @return This specific resource
-     */
-    @JsonSetter(Constants.SOURCE)
-    public SpecificResource setSource(final URI aSource) {
-        mySource = aSource;
-        return this;
-    }
-
-    /**
      * Returns a JsonObject of the SpecificResource.
      *
      * @return The specific resource as a JSON object
@@ -204,6 +132,54 @@ public class SpecificResource {
     @Override
     public String toString() {
         return toJSON().encode();
+    }
+
+    /**
+     * Sets the ID in string form.
+     *
+     * @param aID The ID in string form
+     * @return This specific resource
+     */
+    @JsonSetter(Constants.ID)
+    private SpecificResource setID(final String aID) {
+        myID = URI.create(aID);
+        return this;
+    }
+
+    /**
+     * Sets the type for a specific resource.
+     *
+     * @param aType The specific resource type
+     * @return This specific resource
+     */
+    @JsonSetter(Constants.TYPE)
+    private SpecificResource setType(final String aType) {
+        // This is just for Jackson; type is immutable
+        return this;
+    }
+
+    /**
+     * Sets the specific resource's source.
+     *
+     * @param aSource A source in string form
+     * @return This specific resource
+     */
+    @JsonSetter(Constants.SOURCE)
+    private SpecificResource setSource(final String aSource) {
+        mySource = URI.create(aSource);
+        return this;
+    }
+
+    /**
+     * Sets the specific resource selector.
+     *
+     * @param aSelector A selector to use for the specific resource
+     * @return This specific resource
+     */
+    @JsonSetter(Constants.SELECTOR)
+    private SpecificResource setSelector(final Selector aSelector) {
+        mySelector = aSelector;
+        return this;
     }
 
     /**

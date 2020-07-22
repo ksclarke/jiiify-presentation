@@ -8,6 +8,10 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+
+import info.freelibrary.iiif.presentation.v3.id.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -21,8 +25,6 @@ import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
 
 /**
  * An annotation used for associating supplementary content resources with a {@link Canvas}.
@@ -37,10 +39,11 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     /**
      * Creates a supplementing annotation.
      *
+     * @param <C> A type of canvas
      * @param aID An ID
      * @param aCanvas A canvas to target
      */
-    protected SupplementingAnnotation(final URI aID, final AbstractCanvas<?> aCanvas) {
+    public <C extends CanvasResource<C>> SupplementingAnnotation(final URI aID, final CanvasResource<C> aCanvas) {
         super(aID, aCanvas);
         myMotivation = MOTIVATION;
     }
@@ -48,21 +51,35 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     /**
      * Creates a supplementing annotation.
      *
+     * @param <C> A type of canvas
      * @param aID An ID in string form
      * @param aCanvas A canvas to target
      */
-    protected SupplementingAnnotation(final String aID, final AbstractCanvas<?> aCanvas) {
+    public <C extends CanvasResource<C>> SupplementingAnnotation(final String aID, final CanvasResource<C> aCanvas) {
         this(URI.create(aID), aCanvas);
     }
 
     /**
+     * Creates a supplementing annotation, using the supplied minter to create the ID.
+     *
+     * @param <C> A type of canvas
+     * @param aMinter A minter that's used to create the annotation's ID
+     * @param aCanvas A canvas to target
+     */
+    public <C extends CanvasResource<C>> SupplementingAnnotation(final Minter aMinter,
+            final CanvasResource<C> aCanvas) {
+        this(aMinter.getAnnotationID(), aCanvas);
+    }
+
+    /**
      * Creates a supplementing annotation.
      *
+     * @param <C> A type of canvas
      * @param aID An ID
      * @param aCanvas A canvas to target
      * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to target
      */
-    protected SupplementingAnnotation(final URI aID, final AbstractCanvas<?> aCanvas,
+    public <C extends CanvasResource<C>> SupplementingAnnotation(final URI aID, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
         super(aID, aCanvas, aCanvasRegion);
         myMotivation = MOTIVATION;
@@ -71,11 +88,39 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     /**
      * Creates a supplementing annotation.
      *
+     * @param <C> A type of canvas
+     * @param aID An ID in string form
+     * @param aCanvas A canvas to target
+     * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to target
+     */
+    public <C extends CanvasResource<C>> SupplementingAnnotation(final String aID, final CanvasResource<C> aCanvas,
+            final MediaFragmentSelector aCanvasRegion) {
+        this(URI.create(aID), aCanvas, aCanvasRegion);
+    }
+
+    /**
+     * Creates a supplementing annotation, using the supplied minter to create the ID.
+     *
+     * @param <C> A type of canvas
+     * @param aMinter A minter used to create the annotation's ID
+     * @param aCanvas A canvas to target
+     * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to target
+     */
+    public <C extends CanvasResource<C>> SupplementingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
+            final MediaFragmentSelector aCanvasRegion) {
+        this(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
+    }
+
+    /**
+     * Creates a supplementing annotation.
+     *
+     * @param <C> A type of canvas
      * @param aID An ID
      * @param aCanvas A canvas to target
      * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to target
      */
-    protected SupplementingAnnotation(final URI aID, final AbstractCanvas<?> aCanvas, final String aCanvasRegion) {
+    public <C extends CanvasResource<C>> SupplementingAnnotation(final URI aID, final CanvasResource<C> aCanvas,
+            final String aCanvasRegion) {
         super(aID, aCanvas, aCanvasRegion);
         myMotivation = MOTIVATION;
     }
@@ -83,24 +128,27 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     /**
      * Creates a supplementing annotation.
      *
-     * @param aID An ID in string form
-     * @param aCanvas A canvas to target
-     * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to target
-     */
-    protected SupplementingAnnotation(final String aID, final AbstractCanvas<?> aCanvas,
-            final MediaFragmentSelector aCanvasRegion) {
-        this(URI.create(aID), aCanvas, aCanvasRegion);
-    }
-
-    /**
-     * Creates a supplementing annotation.
-     *
+     * @param <C> A type of canvas
      * @param aID An ID in string form
      * @param aCanvas A canvas to target
      * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to target
      */
-    protected SupplementingAnnotation(final String aID, final AbstractCanvas<?> aCanvas, final String aCanvasRegion) {
+    public <C extends CanvasResource<C>> SupplementingAnnotation(final String aID, final CanvasResource<C> aCanvas,
+            final String aCanvasRegion) {
         this(URI.create(aID), aCanvas, aCanvasRegion);
+    }
+
+    /**
+     * Creates a supplementing annotation, using the supplied minter to create the ID.
+     *
+     * @param <C> A type of canvas
+     * @param aMinter A minter used to create the supplementing annotation's ID
+     * @param aCanvas A canvas to target
+     * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to target
+     */
+    public <C extends CanvasResource<C>> SupplementingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
+            final String aCanvasRegion) {
+        this(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
     }
 
     /**
@@ -155,11 +203,6 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     @Override
     public SupplementingAnnotation setBody(final List<ContentResource> aBody) {
         return setBody(aBody.toArray(new ContentResource[] {}));
-    }
-
-    @Override
-    public Object getTarget() {
-        return super.getTarget();
     }
 
     @Override

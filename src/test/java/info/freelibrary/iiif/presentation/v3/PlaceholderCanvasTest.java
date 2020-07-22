@@ -8,11 +8,15 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Locale;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import info.freelibrary.iiif.presentation.v3.id.Minter;
+import info.freelibrary.iiif.presentation.v3.id.MinterFactory;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
+import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 import info.freelibrary.util.StringUtils;
 
 import io.vertx.core.json.JsonObject;
@@ -22,7 +26,7 @@ import io.vertx.core.json.JsonObject;
  */
 public class PlaceholderCanvasTest extends AbstractTest {
 
-    private static final File DIR = new File("src/test/resources/json");
+    private static final String NOID_PATTERN = "/canvas-[a-z0-9]{4}";
 
     private static final String FILE = "{}-placeholder.json";
 
@@ -81,6 +85,44 @@ public class PlaceholderCanvasTest extends AbstractTest {
 
         assertEquals(URI.create(myID), canvas.getID());
         assertEquals(new Label(label), canvas.getLabel());
+    }
+
+    /**
+     * Tests {@link PlaceholderCanvas#PlaceholderCanvas(Minter) PlaceholderCanvas}.
+     */
+    @Test
+    public final void testPlaceholderCanvasMinter() {
+        final URI id = URI.create(UUID.randomUUID().toString());
+        final Minter minter = MinterFactory.getMinter(id);
+        final PlaceholderCanvas canvas = new PlaceholderCanvas(minter);
+
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID().toString()).matches());
+    }
+
+    /**
+     * Tests {@link PlaceholderCanvas#PlaceholderCanvas(Minter, Label) PlaceholderCanvas}.
+     */
+    @Test
+    public final void testPlaceholderCanvasMinterLabel() {
+        final URI id = URI.create(UUID.randomUUID().toString());
+        final Minter minter = MinterFactory.getMinter(id);
+        final Label label = new Label(StringUtils.format(LABEL, id));
+        final PlaceholderCanvas canvas = new PlaceholderCanvas(minter, label);
+
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID().toString()).matches());
+    }
+
+    /**
+     * Tests {@link PlaceholderCanvas#PlaceholderCanvas(Minter, String) PlaceholderCanvas}.
+     */
+    @Test
+    public final void testPlaceholderCanvasMinterLabelAsString() {
+        final URI id = URI.create(UUID.randomUUID().toString());
+        final Minter minter = MinterFactory.getMinter(id);
+        final String label = StringUtils.format(LABEL, id);
+        final PlaceholderCanvas canvas = new PlaceholderCanvas(minter, label);
+
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID().toString()).matches());
     }
 
     /**
@@ -195,6 +237,7 @@ public class PlaceholderCanvasTest extends AbstractTest {
      * @throws IOException If there is trouble reading the test fixture
      */
     private String getFixture(final Class<?> aClass) throws IOException {
-        return StringUtils.read(new File(DIR, StringUtils.format(FILE, aClass.getSimpleName().toLowerCase(Locale.US))));
+        final String className = aClass.getSimpleName().toLowerCase(Locale.US);
+        return StringUtils.read(new File(TestUtils.TEST_DIR, StringUtils.format(FILE, className)));
     }
 }

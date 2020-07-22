@@ -30,7 +30,8 @@ public interface FragmentSelector extends Selector {
      *
      * @return The value
      */
+    @Override
     @JsonProperty(Constants.VALUE)
-    String getValue();
+    String toString();
 
 }

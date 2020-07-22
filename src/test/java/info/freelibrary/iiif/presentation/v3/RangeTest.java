@@ -8,16 +8,20 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.UUID;
+import java.util.regex.Pattern;
 
 import org.junit.Test;
 
+import info.freelibrary.util.I18nRuntimeException;
+import info.freelibrary.util.StringUtils;
+import info.freelibrary.iiif.presentation.v3.id.Minter;
+import info.freelibrary.iiif.presentation.v3.id.MinterFactory;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.NavDate;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.RangeBehavior;
-import info.freelibrary.util.I18nRuntimeException;
-import info.freelibrary.util.StringUtils;
 
 import io.vertx.core.json.JsonObject;
 
@@ -25,6 +29,10 @@ import io.vertx.core.json.JsonObject;
  * Test of Range.
  */
 public class RangeTest extends AbstractTest {
+
+    private static final String NOID_PATTERN = "/range-[a-z0-9]{4}";
+
+    private static final String LABEL = "Test Label";
 
     private static final String RANGE_ITEM_JSON;
 
@@ -49,6 +57,43 @@ public class RangeTest extends AbstractTest {
         } catch (final IOException details) {
             throw new I18nRuntimeException(details);
         }
+    }
+
+    /**
+     * Tests {@link Range#Range(Minter) Range}.
+     */
+    @Test
+    public final void testRangeMinter() {
+        final URI id = URI.create(UUID.randomUUID().toString());
+        final Minter minter = MinterFactory.getMinter(id);
+        final Range range = new Range(minter);
+
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(range.getID().toString()).matches());
+    }
+
+    /**
+     * Tests {@link Range#Range(Minter, Label) Range}.
+     */
+    @Test
+    public final void testRangeMinterLabel() {
+        final URI id = URI.create(UUID.randomUUID().toString());
+        final Minter minter = MinterFactory.getMinter(id);
+        final Label label = new Label(LABEL);
+        final Range range = new Range(minter, label);
+
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(range.getID().toString()).matches());
+    }
+
+    /**
+     * Tests {@link Range#Range(Minter, String) Range}.
+     */
+    @Test
+    public final void testRangeMinterLabelAsString() {
+        final URI id = URI.create(UUID.randomUUID().toString());
+        final Minter minter = MinterFactory.getMinter(id);
+        final Range range = new Range(minter, LABEL);
+
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(range.getID().toString()).matches());
     }
 
     /**
@@ -145,6 +190,23 @@ public class RangeTest extends AbstractTest {
     }
 
     /**
+     * Tests setting and getting supplementary annotations.
+     */
+    @Test
+    public void testGetSetSupplementaryAnnotations() {
+        final Range range = new Range(LOREM_IPSUM.getUrl());
+        final SupplementaryAnnotations annos = new SupplementaryAnnotations(getID());
+        final JsonObject supplementary;
+        final JsonObject json;
+
+        range.setSupplementaryAnnotations(annos);
+        json = range.toJSON();
+
+        assertNotNull(supplementary = json.getJsonObject(Constants.SUPPLEMENTARY));
+        assertEquals(ResourceTypes.ANNOTATION_COLLECTION, supplementary.getString(Constants.TYPE));
+    }
+
+    /**
      * Tests constructing a range.
      */
     @Test
@@ -176,7 +238,8 @@ public class RangeTest extends AbstractTest {
      */
     @Test
     public final void testSetBehaviors() {
-        final RangeBehavior[] behaviors = new RangeBehavior[] { RangeBehavior.AUTO_ADVANCE, RangeBehavior.INDIVIDUALS };
+        final RangeBehavior[] behaviors = new RangeBehavior[] { RangeBehavior.AUTO_ADVANCE,
+            RangeBehavior.INDIVIDUALS };
 
         assertEquals(2, getRange().setBehaviors(behaviors).getBehaviors().size());
     }

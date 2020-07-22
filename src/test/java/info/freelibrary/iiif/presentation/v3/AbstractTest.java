@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import java.net.URI;
 import java.util.UUID;
 
 import org.junit.BeforeClass;
@@ -39,5 +40,15 @@ public abstract class AbstractTest {
      */
     protected String getID() {
         return UUID.randomUUID().toString();
+    }
+
+    /**
+     * A test that determines if a supplied URL is a specific resource with a MediaFragmentSelector.
+     *
+     * @param aURI A URI
+     * @return True if the supplied URI represents a specific resource with a MediaFragmentSelector
+     */
+    protected boolean isSpecificResourceURI(final URI aURI) {
+        return aURI.toString().contains(Constants.FRAGMENT_DELIM);
     }
 }

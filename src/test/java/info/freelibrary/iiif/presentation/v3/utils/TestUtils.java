@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SequenceWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import io.vertx.core.json.JsonObject;
+
 /**
  * Utilities for running tests.
  */
@@ -18,7 +20,21 @@ public final class TestUtils {
 
     public static final String TEST_DIR = "src/test/resources/json";
 
+    private static final String ID_PATTERN = "\\\"id\\\":\\\"[a-zA-Z0-9\\-\\.\\:\\/\\,]*\\\"";
+
+    private static final String EMPTY_ID = "\"id\":\"\"";
+
     private TestUtils() {
+    }
+
+    /**
+     * Strips the IDs from the supplied JsonObject so that an ID-less comparison can be made.
+     *
+     * @param aJsonObject A JSON object with unique IDs
+     * @return A JSON object without unique IDs
+     */
+    public static JsonObject stripIDs(final JsonObject aJsonObject) {
+        return new JsonObject(aJsonObject.encode().replaceAll(ID_PATTERN, EMPTY_ID));
     }
 
     /**
