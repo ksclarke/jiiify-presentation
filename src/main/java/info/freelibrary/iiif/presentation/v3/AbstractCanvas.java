@@ -354,36 +354,40 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         final int pageCount = getSupplementingPages().size();
         final AnnotationPage<SupplementingAnnotation> page;
 
+        anno.addBody(aContentArray);
+
         if (pageCount == 0) {
             page = new AnnotationPage<>(aMinter.getAnnotationPageID(aCanvas));
+            addSupplementingPages(page);
         } else {
             page = getSupplementingPages().get(pageCount - 1);
         }
 
-        addSupplementingPages(page);
         page.addAnnotations(anno);
-        anno.addBody(aContentArray);
 
         return this;
     }
 
     @SuppressWarnings("unchecked") // Moved SafeVarargs to extending classes where method can be final
     protected final <C extends CanvasResource<C>> AbstractCanvas<T> supplement(final CanvasResource<C> aCanvas,
-            final Minter aMinter, final MediaFragmentSelector aCanvasRegion, final ContentResource... aContentArray) {
+            final Minter aMinter, final MediaFragmentSelector aCanvasRegion, final ContentResource... aContentArray)
+            throws SelectorOutOfBoundsException {
         final SupplementingAnnotation anno = new SupplementingAnnotation(aMinter.getAnnotationID(), aCanvas,
                 aCanvasRegion);
         final int pageCount = getSupplementingPages().size();
         final AnnotationPage<SupplementingAnnotation> page;
 
+        getCanvasFragment(aCanvasRegion); // Check that the canvas region is valid by absence of exceptions
+        anno.addBody(aContentArray);
+
         if (pageCount == 0) {
             page = new AnnotationPage<>(aMinter.getAnnotationPageID(aCanvas));
+            addSupplementingPages(page);
         } else {
             page = getSupplementingPages().get(pageCount - 1);
         }
 
-        addSupplementingPages(page);
         page.addAnnotations(anno);
-        anno.addBody(aContentArray);
 
         return this;
     }
@@ -396,12 +400,15 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     public JsonObject toJSON() {
         final JsonObject json = JsonObject.mapFrom(this);
 
-        // If zero width/height, we're outputting a canvas reference so shouldn't include them
+        // If zero width/height and/or duration, we're outputting a canvas reference so shouldn't include them
         if (json.containsKey(Constants.WIDTH) && json.containsKey(Constants.HEIGHT)) {
             if (json.getInteger(Constants.WIDTH) == 0 && json.getInteger(Constants.HEIGHT) == 0) {
                 json.remove(Constants.WIDTH);
                 json.remove(Constants.HEIGHT);
             }
+        }
+        if (json.containsKey(Constants.DURATION) && json.getInteger(Constants.DURATION) == 0) {
+            json.remove(Constants.DURATION);
         }
 
         return json;
@@ -516,7 +523,8 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      */
     private Canvas getCanvasFragment(final MediaFragmentSelector aCanvasRegion)
             throws SelectorOutOfBoundsException {
-        final Canvas canvasFragment = new Canvas(URI.create(getID().toString() + '#' + aCanvasRegion.toString()));
+        final URI canvasID = URI.create(getID().toString() + Constants.FRAGMENT_DELIM + aCanvasRegion.toString());
+        final Canvas canvasFragment = new Canvas(canvasID);
         final int width;
         final int height;
         final float duration;

@@ -284,7 +284,7 @@ public class CanvasTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, image);
 
-        assertEquals(IMAGE_1_ID, getContentResourceID().toString());
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
     }
 
     /**
@@ -296,7 +296,7 @@ public class CanvasTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, image);
 
-        assertEquals(IMAGE_1_ID, getContentResourceID().toString());
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
     }
 
     /**
@@ -308,7 +308,7 @@ public class CanvasTest {
 
         myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, sound);
 
-        assertEquals(SOUND_1_ID, getContentResourceID().toString());
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
     }
 
     /**
@@ -320,7 +320,7 @@ public class CanvasTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, sound);
 
-        assertEquals(SOUND_1_ID, getContentResourceID().toString());
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
     }
 
     /**
@@ -332,7 +332,7 @@ public class CanvasTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, video);
 
-        assertEquals(VIDEO_1_ID, getContentResourceID().toString());
+        assertEquals(VIDEO_1_ID, getPaintingContentResourceID().toString());
     }
 
     /****************************************************************
@@ -348,7 +348,7 @@ public class CanvasTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, image);
 
-        assertEquals(IMAGE_1_ID, getContentResourceID().toString());
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
     }
 
     /**
@@ -360,7 +360,7 @@ public class CanvasTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, image);
 
-        assertEquals(IMAGE_1_ID, getContentResourceID().toString());
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
     }
 
     /**
@@ -372,7 +372,7 @@ public class CanvasTest {
 
         myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, sound);
 
-        assertEquals(SOUND_1_ID, getContentResourceID().toString());
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
     }
 
     /**
@@ -384,7 +384,7 @@ public class CanvasTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, sound);
 
-        assertEquals(SOUND_1_ID, getContentResourceID().toString());
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
     }
 
     /**
@@ -396,12 +396,12 @@ public class CanvasTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, video);
 
-        assertEquals(VIDEO_1_ID, getContentResourceID().toString());
+        assertEquals(VIDEO_1_ID, getPaintingContentResourceID().toString());
     }
 
-    /*********************************************************
-     * Content resource has dimensions which canvas does not *
-     *********************************************************/
+    /***********************************************************************
+     * Content resource has dimensions which canvas to be painted does not *
+     ***********************************************************************/
 
     /**
      * Tests painting an image onto a canvas with temporal dimensions.
@@ -443,9 +443,9 @@ public class CanvasTest {
         myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, video);
     }
 
-    /******************************************
-     * Content resource is too big for canvas *
-     ******************************************/
+    /********************************************************
+     * Content resource is too big for canvas to be painted *
+     ********************************************************/
 
     /**
      * Tests painting an image outside the bounds of a canvas with spatial dimensions.
@@ -501,8 +501,8 @@ public class CanvasTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, image);
 
-        assertEquals(IMAGE_1_ID, getContentResourceID().toString());
-        assertEquals(selector.toString(), getMediaFragment());
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
     /**
@@ -515,8 +515,8 @@ public class CanvasTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
 
-        assertEquals(IMAGE_1_ID, getContentResourceID().toString());
-        assertEquals(selector.toString(), getMediaFragment().toString());
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(selector.toString(), getPaintingMediaFragment().toString());
     }
 
     /**
@@ -529,8 +529,8 @@ public class CanvasTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
 
-        assertEquals(IMAGE_1_ID, getContentResourceID().toString());
-        assertEquals(selector.toString(), getMediaFragment());
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
     /**
@@ -543,8 +543,8 @@ public class CanvasTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
 
-        assertEquals(IMAGE_1_ID, getContentResourceID().toString());
-        assertEquals(selector.toString(), getMediaFragment());
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
     /**
@@ -557,8 +557,8 @@ public class CanvasTest {
 
         myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
 
-        assertEquals(SOUND_1_ID, getContentResourceID().toString());
-        assertEquals(selector.toString(), getMediaFragment());
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
     /**
@@ -566,17 +566,13 @@ public class CanvasTest {
      */
     @Test
     public final void testPaintSoundOnSpatialFragmentOfSpatiotemporalCanvas() {
-        final String foundMediaFragment;
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
 
-        foundMediaFragment = ((MediaFragmentSelector) ((SpecificResource) myCanvas.getPaintingPages().get(0)
-                .getAnnotations().get(0).getSpecificResourceTarget().get()).getSelector()).toString();
-
-        assertEquals(SOUND_1_ID, getContentResourceID().toString());
-        assertEquals(selector.toString(), foundMediaFragment);
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
     /**
@@ -589,8 +585,8 @@ public class CanvasTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
 
-        assertEquals(SOUND_1_ID, getContentResourceID().toString());
-        assertEquals(selector.toString(), getMediaFragment());
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
     /**
@@ -603,8 +599,8 @@ public class CanvasTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
 
-        assertEquals(SOUND_1_ID, getContentResourceID().toString());
-        assertEquals(selector.toString(), getMediaFragment());
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
     /**
@@ -617,8 +613,8 @@ public class CanvasTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
 
-        assertEquals(VIDEO_1_ID, getContentResourceID().toString());
-        assertEquals(selector.toString(), getMediaFragment());
+        assertEquals(VIDEO_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
     /**
@@ -631,8 +627,8 @@ public class CanvasTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
 
-        assertEquals(VIDEO_1_ID, getContentResourceID().toString());
-        assertEquals(selector.toString(), getMediaFragment());
+        assertEquals(VIDEO_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
     /**
@@ -645,8 +641,8 @@ public class CanvasTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
 
-        assertEquals(VIDEO_1_ID, getContentResourceID().toString());
-        assertEquals(selector.toString(), getMediaFragment());
+        assertEquals(VIDEO_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
     /************************************************************************
@@ -664,8 +660,8 @@ public class CanvasTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, image);
 
-        assertEquals(IMAGE_1_ID, getContentResourceID().toString());
-        assertEquals(selector.toString(), getMediaFragment());
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
     /**
@@ -678,8 +674,8 @@ public class CanvasTest {
 
         myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
 
-        assertEquals(SOUND_1_ID, getContentResourceID().toString());
-        assertEquals(selector.toString(), getMediaFragment());
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
     /**
@@ -694,13 +690,13 @@ public class CanvasTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
 
-        assertEquals(VIDEO_1_ID, getContentResourceID().toString());
-        assertEquals(selector.toString(), getMediaFragment());
+        assertEquals(VIDEO_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
-    /********************************************************
-     * Canvas fragment has dimensions which canvas does not *
-     ********************************************************/
+    /**********************************************************************
+     * Canvas fragment to be painted has dimensions which canvas does not *
+     **********************************************************************/
 
     /**
      * Tests painting an image onto a non-existent temporal fragment of a canvas with spatial dimensions.
@@ -834,9 +830,9 @@ public class CanvasTest {
         myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
     }
 
-    /*******************************************
-     * Canvas does not contain canvas fragment *
-     *******************************************/
+    /*********************************************************
+     * Canvas does not contain canvas fragment to be painted *
+     *********************************************************/
 
     /**
      * Tests painting an image onto a non-existent spatial fragment of a canvas with spatial dimensions.
@@ -964,9 +960,9 @@ public class CanvasTest {
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
     }
 
-    /******************************************************************
-     * Content resource has dimensions which canvas fragment does not *
-     ******************************************************************/
+    /********************************************************************************
+     * Content resource has dimensions which canvas fragment to be painted does not *
+     ********************************************************************************/
 
     /**
      * Tests painting an image onto a temporal fragment of a canvas with temporal dimensions.
@@ -1012,9 +1008,9 @@ public class CanvasTest {
         myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
     }
 
-    /***************************************************
-     * Content resource is too big for canvas fragment *
-     ***************************************************/
+    /*****************************************************************
+     * Content resource is too big for canvas fragment to be painted *
+     *****************************************************************/
 
     /**
      * Tests painting an image outside the bounds of a spatial fragment of a canvas with spatial dimensions.
@@ -1173,6 +1169,203 @@ public class CanvasTest {
         final VideoContent video = new VideoContent(VIDEO_1_ID);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, "xywh=&t=", video);
+    }
+
+    /*************************************************
+     * Supplementing canvases with content resources *
+     *************************************************/
+
+    /**
+     * Tests supplementing a spatial canvas with text.
+     */
+    @Test
+    public final void testSupplementTextOnSpatialCanvas() {
+        final ContentResource text = new TextContent(TEXT_ID);
+
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).supplementWith(myMinter, text);
+
+        assertEquals(text.getID(), getSupplementingContentResourceID());
+    }
+
+    /*********************************************************
+     * Supplementing canvas fragments with content resources *
+     *********************************************************/
+
+    /**
+     * Tests supplementing a spatial fragment of a spatial canvas with text.
+     */
+    public final void testSupplementTextOnSpatialFragmentOfSpatialCanvas() {
+        final ContentResource text = new TextContent(TEXT_ID);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
+
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).supplementWith(myMinter, selector, text);
+
+        assertEquals(text.getID(), getSupplementingContentResourceID());
+        assertEquals(selector.toString(), getSupplementingMediaFragment());
+    }
+
+    /**
+     * Tests supplementing a temporal fragment of a temporal canvas with text.
+     */
+    @Test
+    public final void testSupplementTextOnTemporalFragmentOfTemporalCanvas() {
+        final ContentResource text = new TextContent(TEXT_ID);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, CANVAS_DURATION);
+
+        myCanvas.setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
+
+        assertEquals(text.getID(), getSupplementingContentResourceID());
+        assertEquals(selector.toString(), getSupplementingMediaFragment());
+    }
+
+    /**
+     * Tests supplementing a spatial fragment of a spatiotemporal canvas with text.
+     */
+    @Test
+    public final void testSupplementTextOnSpatialFragmentOfSpatiotemporalCanvas() {
+        final ContentResource text = new TextContent(TEXT_ID);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
+
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
+
+        assertEquals(text.getID(), getSupplementingContentResourceID());
+        assertEquals(selector.toString(), getSupplementingMediaFragment());
+    }
+
+    /**
+     * Tests supplementing a temporal fragment of a spatiotemporal canvas with text.
+     */
+    @Test
+    public final void testSupplementTextOnTemporalFragmentOfSpatiotemporalCanvas() {
+        final ContentResource text = new TextContent(TEXT_ID);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, CANVAS_DURATION);
+
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
+
+        assertEquals(text.getID(), getSupplementingContentResourceID());
+        assertEquals(selector.toString(), getSupplementingMediaFragment());
+    }
+
+    /**
+     * Tests supplementing a spatiotemporal fragment of a spatiotemporal canvas with text.
+     */
+    @Test
+    public final void testSupplementTextOnSpatiotemporalFragmentOfSpatiotemporalCanvas() {
+        final ContentResource text = new TextContent(TEXT_ID);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, CANVAS_DURATION);
+
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
+
+        assertEquals(text.getID(), getSupplementingContentResourceID());
+        assertEquals(selector.toString(), getSupplementingMediaFragment());
+    }
+
+    /***************************************************************************
+     * Canvas fragment to be supplemented has dimensions which canvas does not *
+     ***************************************************************************/
+
+    /**
+     * Tests supplementing a non-existent temporal fragment of a spatial canvas with text.
+     */
+    @Test(expected = SelectorOutOfBoundsException.class)
+    public final void testSupplementTextOnUndefinedTemporalFragmentOfSpatialCanvas() {
+        final ContentResource text = new TextContent(TEXT_ID);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, DURATION);
+
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).supplementWith(myMinter, selector, text);
+    }
+
+    /**
+     * Tests supplementing a non-existent spatiotemporal fragment of a spatial canvas with text.
+     */
+    @Test(expected = SelectorOutOfBoundsException.class)
+    public final void testSupplementImageOnUndefinedSpatiotemporalFragmentOfSpatialCanvas() {
+        final ContentResource text = new TextContent(TEXT_ID);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, DURATION);
+
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).supplementWith(myMinter, selector, text);
+    }
+
+    /**
+     * Tests supplementing a non-existent spatial fragment of a temporal canvas with text.
+     */
+    @Test(expected = SelectorOutOfBoundsException.class)
+    public final void testSupplementTextOnUndefinedSpatialFragmentOfTemporalCanvas() {
+        final ContentResource text = new TextContent(TEXT_ID);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
+
+        myCanvas.setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
+    }
+
+    /**
+     * Tests supplementing a non-existent spatiotemporal fragment of a temporal canvas with text.
+     */
+    @Test(expected = SelectorOutOfBoundsException.class)
+    public final void testSupplementTextOnUndefinedSpatiotemporalFragmentOfTemporalCanvas() {
+        final ContentResource text = new TextContent(TEXT_ID);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, DURATION);
+
+        myCanvas.setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
+    }
+
+    /**************************************************************
+     * Canvas to be supplemented does not contain canvas fragment *
+     **************************************************************/
+
+    /**
+     * Tests supplementing a non-existent spatial fragment of a spatial canvas with text.
+     */
+    @Test(expected = SelectorOutOfBoundsException.class)
+    public final void testSupplementTextOnUndefinedSpatialFragmentOfSpatialCanvas() {
+        final ContentResource text = new TextContent(TEXT_ID);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT + 1);
+
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).supplementWith(myMinter, selector, text);
+    }
+
+    /**
+     * Testssupplementing a non-existent temporal fragment of a temporal canvas with text.
+     */
+    @Test(expected = SelectorOutOfBoundsException.class)
+    public final void testSupplementTextOnUndefinedTemporalFragmentOfTemporalCanvas() {
+        final ContentResource text = new TextContent(TEXT_ID);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(CANVAS_DURATION, CANVAS_DURATION + DURATION);
+
+        myCanvas.setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
+    }
+
+    /**
+     * Tests supplementing a non-existent spatial fragment of a spatiotemporal canvas with text.
+     */
+    @Test(expected = SelectorOutOfBoundsException.class)
+    public final void testSupplementTextOnUndefinedSpatialFragmentOfSpatiotemporalCanvas() {
+        final ContentResource text = new TextContent(TEXT_ID);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT + 1);
+
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
+    }
+
+    /**
+     * Tests supplementing a non-existent temporal fragment of a spatiotemporal canvas with text.
+     */
+    @Test(expected = SelectorOutOfBoundsException.class)
+    public final void testSupplementTextOnUndefinedTemporalFragmentOfSpatiotemporalCanvas() {
+        final ContentResource text = new TextContent(TEXT_ID);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, CANVAS_DURATION + 1);
+
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
+    }
+
+    /**
+     * Tests supplementing a non-existent spatiotemporal fragment of a spatiotemporal canvas with text.
+     */
+    @Test(expected = SelectorOutOfBoundsException.class)
+    public final void testSupplementTextOnUndefinedSpatiotemporalFragmentOfSpatiotemporalCanvas() {
+        final ContentResource text = new TextContent(TEXT_ID);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT + 1, 0.0f,
+                CANVAS_DURATION + 1);
+
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
     }
 
     /*****************
@@ -1483,19 +1676,38 @@ public class CanvasTest {
         assertEquals(TestUtils.stripIDs(expected), TestUtils.stripIDs(found));
     }
 
+    /*********
+     * Utils *
+     *********/
+
     /**
-     * Returns the ID of the content resource painted on myCanvas.
+     * Returns the ID of the content resource associated with myCanvas via a painting annotation.
      */
-    private URI getContentResourceID() {
+    private URI getPaintingContentResourceID() {
         return myCanvas.getPaintingPages().get(0).getAnnotations().get(0).getBody().get(0).getID();
     }
 
     /**
-     * Returns the value of the media fragment of the selector that targets myCanvas.
+     * Returns the ID of the content resource associated with myCanvas via a supplementing annotation.
      */
-    private String getMediaFragment() {
-        return ((MediaFragmentSelector) ((SpecificResource) myCanvas.getPaintingPages().get(0).getAnnotations().get(0)
-                .getSpecificResourceTarget().get()).getSelector()).toString();
+    private URI getSupplementingContentResourceID() {
+        return myCanvas.getSupplementingPages().get(0).getAnnotations().get(0).getBody().get(0).getID();
+    }
+
+    /**
+     * Returns the value of the media fragment of the selector that targets myCanvas via a painting annotation.
+     */
+    private String getPaintingMediaFragment() {
+        return ((MediaFragmentSelector) myCanvas.getPaintingPages().get(0).getAnnotations().get(0)
+                .getSpecificResourceTarget().get().getSelector()).toString();
+    }
+
+    /**
+     * Returns the value of the media fragment of the selector that targets myCanvas via a supplementing annotation.
+     */
+    private String getSupplementingMediaFragment() {
+        return ((MediaFragmentSelector) myCanvas.getSupplementingPages().get(0).getAnnotations().get(0)
+                .getSpecificResourceTarget().get().getSelector()).toString();
     }
 
 }
