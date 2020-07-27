@@ -407,7 +407,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
                 json.remove(Constants.HEIGHT);
             }
         }
-        if (json.containsKey(Constants.DURATION) && json.getInteger(Constants.DURATION) == 0) {
+        if (json.containsKey(Constants.DURATION) && json.getFloat(Constants.DURATION) == 0.0f) {
             json.remove(Constants.DURATION);
         }
 
