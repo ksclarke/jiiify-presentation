@@ -20,6 +20,8 @@ import info.freelibrary.iiif.presentation.v3.properties.NavDate;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
+import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector.EndTime;
+import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector.StartTime;
 import info.freelibrary.iiif.presentation.v3.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 import info.freelibrary.util.StringUtils;
@@ -91,7 +93,7 @@ public class CanvasTest {
 
     private static final String URI_FRAGMENT_T_TEMPLATE = "t={},{}";
 
-    private static final String URI_FRAGMENT_XYWHT_TEMPLATE = "xywh={},{},{},{}&t={},{}";
+    private static final String URI_FRAGMENT_TXYWH_TEMPLATE = "t={},{}&xywh={},{},{},{}";
 
     /** Test fixtures */
 
@@ -525,7 +527,8 @@ public class CanvasTest {
     @Test
     public final void testPaintImageOnTemporalFragmentOfSpatiotemporalCanvas() {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, DURATION);
+        // A time interval with a start time of 0 and an end time of DURATION has a duration of DURATION
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
 
@@ -539,7 +542,8 @@ public class CanvasTest {
     @Test
     public final void testPaintImageOnSpatiotemporalFragmentOfSpatiotemporalCanvas() {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0,
+                WIDTH, HEIGHT);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
 
@@ -553,7 +557,7 @@ public class CanvasTest {
     @Test
     public final void testPaintSoundOnTemporalFragmentOfTemporalCanvas() {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION));
 
         myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
 
@@ -581,7 +585,7 @@ public class CanvasTest {
     @Test
     public final void testPaintSoundOnTemporalFragmentOfSpatiotemporalCanvas() {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
 
@@ -595,7 +599,8 @@ public class CanvasTest {
     @Test
     public final void testPaintSoundOnSpatiotemporalFragmentOfSpatiotemporalCanvas() {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0,
+                WIDTH, HEIGHT);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
 
@@ -623,7 +628,8 @@ public class CanvasTest {
     @Test
     public final void testPaintVideoOnTemporalFragmentOfSpatiotemporalCanvas() {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, CANVAS_DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0),
+                new EndTime(CANVAS_DURATION));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
 
@@ -637,7 +643,8 @@ public class CanvasTest {
     @Test
     public final void testPaintVideoOnSpatiotemporalFragmentOfSpatiotemporalCanvas() {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, CANVAS_DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION),
+                0, 0, WIDTH, HEIGHT);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
 
@@ -655,8 +662,9 @@ public class CanvasTest {
     @Test
     public final void testPaintImageOnSpatialFragmentOfSpatialCanvasNoDims() {
         final ImageContent image = new ImageContent(IMAGE_1_ID);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(WIDTH / 2, HEIGHT / 2, WIDTH / 2, HEIGHT /
-                2);
+        // A fragment selector with a spatial part whose top-left point is in the middle of the canvas, and whose
+        // bottom-right point is at the bottom-right corner of the canvas.
+        final MediaFragmentSelector selector = new MediaFragmentSelector(WIDTH / 2, HEIGHT / 2, WIDTH / 2, HEIGHT / 2);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, image);
 
@@ -670,7 +678,10 @@ public class CanvasTest {
     @Test
     public final void testPaintSoundOnTemporalFragmentOfTemporalCanvasNoDims() {
         final SoundContent sound = new SoundContent(SOUND_1_ID);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(DURATION, 1.5f * DURATION);
+        // A fragment selector that has a shorter duration than the canvas. The temporal part starts after the start of
+        // the canvas and ends before the end of the canvas.
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(DURATION),
+                new EndTime(1.5f * DURATION));
 
         myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
 
@@ -685,8 +696,10 @@ public class CanvasTest {
     @Test
     public final void testPaintVideoOnSpatiotemporalFragmentOfSpatiotemporalCanvasNoDims() {
         final VideoContent video = new VideoContent(VIDEO_1_ID);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, CANVAS_DURATION -
-                DURATION / 2);
+        // A fragment selector that has a shorter duration than the canvas. The temporal part starts shortly before the
+        // end of the canvas and ends at the end of the canvas.
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(CANVAS_DURATION - DURATION / 2),
+                0, 0, WIDTH, HEIGHT);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
 
@@ -704,7 +717,7 @@ public class CanvasTest {
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testPaintImageOnUndefinedTemporalFragmentOfSpatialCanvas() {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, image);
     }
@@ -726,7 +739,8 @@ public class CanvasTest {
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testPaintImageOnUndefinedSpatiotemporalFragmentOfSpatialCanvas() {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0,
+                WIDTH, HEIGHT);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, image);
     }
@@ -737,7 +751,8 @@ public class CanvasTest {
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testPaintImageOnUndefinedSpatiotemporalFragmentOfTemporalCanvas() {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0,
+                WIDTH, HEIGHT);
 
         myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
     }
@@ -748,7 +763,7 @@ public class CanvasTest {
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testPaintSoundOnUndefinedTemporalFragmentOfSpatialCanvas() {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, sound);
     }
@@ -770,7 +785,8 @@ public class CanvasTest {
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testPaintSoundOnUndefinedSpatiotemporalFragmentOfSpatialCanvas() {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0,
+                WIDTH, HEIGHT);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, sound);
     }
@@ -781,7 +797,8 @@ public class CanvasTest {
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testPaintSoundOnUndefinedSpatiotemporalFragmentOfTemporalCanvas() {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0,
+                WIDTH, HEIGHT);
 
         myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
     }
@@ -792,7 +809,7 @@ public class CanvasTest {
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testPaintVideoOnUndefinedTemporalFragmentOfSpatialCanvas() {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, video);
     }
@@ -814,7 +831,8 @@ public class CanvasTest {
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testPaintVideoOnUndefinedSpatiotemporalFragmentOfSpatialCanvas() {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0,
+                WIDTH, HEIGHT);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, video);
     }
@@ -825,7 +843,8 @@ public class CanvasTest {
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testPaintVideoOnUndefinedSpatiotemporalFragmentOfTemporalCanvas() {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0,
+                WIDTH, HEIGHT);
 
         myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
     }
@@ -840,6 +859,7 @@ public class CanvasTest {
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testPaintImageOnUndefinedSpatialFragmentOfSpatialCanvas() {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
+        // A fragment selector that is taller than the canvas.
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT + 1);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, image);
@@ -851,7 +871,8 @@ public class CanvasTest {
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testPaintImageOnUndefinedSpatialFragmentOfSpatiotemporalCanvas() {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT + 1);
+        // A fragment selector that is wider than the canvas.
+        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH + 1, HEIGHT);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
     }
@@ -862,7 +883,9 @@ public class CanvasTest {
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testPaintImageOnUndefinedTemporalFragmentOfSpatiotemporalCanvas() {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, CANVAS_DURATION + 1);
+        // A fragment selector that has a longer duration than the canvas.
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0),
+                new EndTime(CANVAS_DURATION + 1));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
     }
@@ -873,8 +896,9 @@ public class CanvasTest {
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testPaintImageOnUndefinedSpatiotemporalFragmentOfSpatiotemporalCanvas() {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT + 1, 0.0f,
-                CANVAS_DURATION + 1);
+        // A fragment selector that has a longer duration than the canvas and is taller than the canvas.
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0),
+                new EndTime(CANVAS_DURATION + 1), 0, 0, WIDTH, HEIGHT + 1);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
     }
@@ -885,7 +909,9 @@ public class CanvasTest {
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testPaintSoundOnUndefinedTemporalFragmentOfTemporalCanvas() {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(CANVAS_DURATION, CANVAS_DURATION + DURATION);
+        // A fragment selector that has a shorter duration than the canvas but extends outside the canvas.
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(CANVAS_DURATION),
+                new EndTime(CANVAS_DURATION + DURATION));
 
         myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
     }
@@ -896,8 +922,9 @@ public class CanvasTest {
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testPaintSoundOnUndefinedSpatialFragmentOfSpatiotemporalCanvas() {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(WIDTH, HEIGHT, WIDTH + WIDTH, HEIGHT +
-                HEIGHT);
+        // A fragment selector with a spatial part whose top-left point is at the bottom-right corner of the canvas, and
+        // whose bottom-right point is outside the canvas.
+        final MediaFragmentSelector selector = new MediaFragmentSelector(WIDTH, HEIGHT, WIDTH + WIDTH, HEIGHT + HEIGHT);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
     }
@@ -908,8 +935,9 @@ public class CanvasTest {
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testPaintSoundOnUndefinedTemporalFragmentOfSpatiotemporalCanvas() {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(CANVAS_DURATION / 2, 3.0f / 2 *
-                CANVAS_DURATION);
+        // A fragment selector that has the same duration as the canvas but ends after the canvas.
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(CANVAS_DURATION / 2),
+                new EndTime(3.0f / 2 * CANVAS_DURATION));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
     }
@@ -920,8 +948,8 @@ public class CanvasTest {
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testPaintSoundOnUndefinedSpatiotemporalFragmentOfSpatiotemporalCanvas() {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH + 1, HEIGHT, 0.0f,
-                CANVAS_DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION),
+                0, 0, WIDTH + 1, HEIGHT);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
     }
@@ -943,7 +971,8 @@ public class CanvasTest {
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testPaintVideoOnUndefinedTemporalFragmentOfSpatiotemporalCanvas() {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, CANVAS_DURATION + 1);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0),
+                new EndTime(CANVAS_DURATION + 1));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
     }
@@ -954,8 +983,8 @@ public class CanvasTest {
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testPaintVideoOnUndefinedSpatiotemporalFragmentOfSpatiotemporalCanvas() {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH + 1, HEIGHT, 0.0f,
-                CANVAS_DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION),
+                0, 0, WIDTH + 1, HEIGHT);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
     }
@@ -970,7 +999,7 @@ public class CanvasTest {
     @Test(expected = ContentOutOfBoundsException.class)
     public final void testPaintImageOnTemporalFragmentOfTemporalCanvas() {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION));
 
         myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
     }
@@ -1003,7 +1032,7 @@ public class CanvasTest {
     @Test(expected = ContentOutOfBoundsException.class)
     public final void testPaintVideoOnTemporalFragmentOfTemporalCanvas() {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION));
 
         myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
     }
@@ -1040,7 +1069,8 @@ public class CanvasTest {
     @Test(expected = ContentOutOfBoundsException.class)
     public final void testPaintImageOnTemporalFragmentOfSpatiotemporalCanvasOutOfBounds() {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH + 1, HEIGHT);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, CANVAS_DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0),
+                new EndTime(CANVAS_DURATION));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
     }
@@ -1052,7 +1082,8 @@ public class CanvasTest {
     @Test(expected = ContentOutOfBoundsException.class)
     public final void testPaintImageOnSpatiotemporalFragmentOfSpatiotemporalCanvasOutOfBounds() {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH + 1, HEIGHT);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, CANVAS_DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION),
+                0, 0, WIDTH, HEIGHT);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
     }
@@ -1063,7 +1094,7 @@ public class CanvasTest {
     @Test(expected = ContentOutOfBoundsException.class)
     public final void testPaintSoundOnTemporalFragmentOfTemporalCanvasOutOfBounds() {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, DURATION - 1);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION - 1));
 
         myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
     }
@@ -1085,7 +1116,7 @@ public class CanvasTest {
     @Test(expected = ContentOutOfBoundsException.class)
     public final void testPaintSoundOnTemporalFragmentOfSpatiotemporalCanvasOutOfBounds() {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, DURATION - 1);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION - 1));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
     }
@@ -1097,7 +1128,8 @@ public class CanvasTest {
     @Test(expected = ContentOutOfBoundsException.class)
     public final void testPaintSoundOnSpatiotemporalFragmentOfSpatiotemporalCanvasOutOfBounds() {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, DURATION - 1);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION - 1), 0,
+                0, WIDTH, HEIGHT);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
     }
@@ -1119,7 +1151,7 @@ public class CanvasTest {
     @Test(expected = ContentOutOfBoundsException.class)
     public final void testPaintVideoOnTemporalFragmentOfSpatiotemporalCanvasOutOfBounds() {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, DURATION - 1);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION - 1));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
     }
@@ -1130,9 +1162,9 @@ public class CanvasTest {
      */
     @Test(expected = ContentOutOfBoundsException.class)
     public final void testPaintVideoOnSpatiotemporalFragmentOfSpatiotemporalCanvasOutOfBounds() {
-        final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH + 1, HEIGHT).setDuration(
-                DURATION);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, DURATION);
+        final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH + 1, HEIGHT).setDuration(DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0,
+                WIDTH, HEIGHT);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
     }
@@ -1210,7 +1242,8 @@ public class CanvasTest {
     @Test
     public final void testSupplementTextOnTemporalFragmentOfTemporalCanvas() {
         final ContentResource text = new TextContent(TEXT_ID);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, CANVAS_DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0),
+                new EndTime(CANVAS_DURATION));
 
         myCanvas.setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
 
@@ -1238,7 +1271,8 @@ public class CanvasTest {
     @Test
     public final void testSupplementTextOnTemporalFragmentOfSpatiotemporalCanvas() {
         final ContentResource text = new TextContent(TEXT_ID);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, CANVAS_DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0),
+                new EndTime(CANVAS_DURATION));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
 
@@ -1252,7 +1286,8 @@ public class CanvasTest {
     @Test
     public final void testSupplementTextOnSpatiotemporalFragmentOfSpatiotemporalCanvas() {
         final ContentResource text = new TextContent(TEXT_ID);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, CANVAS_DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION),
+                0, 0, WIDTH, HEIGHT);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
 
@@ -1270,7 +1305,7 @@ public class CanvasTest {
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testSupplementTextOnUndefinedTemporalFragmentOfSpatialCanvas() {
         final ContentResource text = new TextContent(TEXT_ID);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).supplementWith(myMinter, selector, text);
     }
@@ -1281,7 +1316,8 @@ public class CanvasTest {
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testSupplementImageOnUndefinedSpatiotemporalFragmentOfSpatialCanvas() {
         final ContentResource text = new TextContent(TEXT_ID);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0,
+                WIDTH, HEIGHT);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).supplementWith(myMinter, selector, text);
     }
@@ -1303,7 +1339,8 @@ public class CanvasTest {
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testSupplementTextOnUndefinedSpatiotemporalFragmentOfTemporalCanvas() {
         final ContentResource text = new TextContent(TEXT_ID);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT, 0.0f, DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0,
+                WIDTH, HEIGHT);
 
         myCanvas.setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
     }
@@ -1329,7 +1366,8 @@ public class CanvasTest {
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testSupplementTextOnUndefinedTemporalFragmentOfTemporalCanvas() {
         final ContentResource text = new TextContent(TEXT_ID);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(CANVAS_DURATION, CANVAS_DURATION + DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(CANVAS_DURATION),
+                new EndTime(CANVAS_DURATION + DURATION));
 
         myCanvas.setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
     }
@@ -1351,7 +1389,8 @@ public class CanvasTest {
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testSupplementTextOnUndefinedTemporalFragmentOfSpatiotemporalCanvas() {
         final ContentResource text = new TextContent(TEXT_ID);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0.0f, CANVAS_DURATION + 1);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0),
+                new EndTime(CANVAS_DURATION + 1));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
     }
@@ -1362,8 +1401,8 @@ public class CanvasTest {
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testSupplementTextOnUndefinedSpatiotemporalFragmentOfSpatiotemporalCanvas() {
         final ContentResource text = new TextContent(TEXT_ID);
-        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT + 1, 0.0f,
-                CANVAS_DURATION + 1);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0),
+                new EndTime(CANVAS_DURATION + 1), 0, 0, WIDTH, HEIGHT + 1);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
     }
@@ -1635,9 +1674,9 @@ public class CanvasTest {
         final VideoContent video1 = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
         final VideoContent video2 = new VideoContent(VIDEO_2_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
 
-        final String selector1 = StringUtils.format(URI_FRAGMENT_XYWHT_TEMPLATE, 0, 0, WIDTH, HEIGHT, 0, DURATION);
-        final String selector2 = StringUtils.format(URI_FRAGMENT_XYWHT_TEMPLATE, 0, 0, WIDTH, HEIGHT, DURATION,
-                DURATION + DURATION);
+        final String selector1 = StringUtils.format(URI_FRAGMENT_TXYWH_TEMPLATE, 0, DURATION, 0, 0, WIDTH, HEIGHT);
+        final String selector2 = StringUtils.format(URI_FRAGMENT_TXYWH_TEMPLATE, DURATION, DURATION + DURATION, 0, 0,
+                WIDTH, HEIGHT);
 
         myCanvas = new Canvas(VIDEO_CANVAS_ID, LABEL).setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION)
                 .paintWith(myMinter, selector1, video1).paintWith(myMinter, selector2, video2);
@@ -1663,9 +1702,9 @@ public class CanvasTest {
         final VideoContent video2 = new VideoContent(VIDEO_2_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
 
         final MediaFragmentSelector selector1 = new MediaFragmentSelector(StringUtils.format(
-                URI_FRAGMENT_XYWHT_TEMPLATE, 0, 0, WIDTH, HEIGHT, 0, DURATION));
+                URI_FRAGMENT_TXYWH_TEMPLATE, 0, DURATION, 0, 0, WIDTH, HEIGHT));
         final MediaFragmentSelector selector2 = new MediaFragmentSelector(StringUtils.format(
-                URI_FRAGMENT_XYWHT_TEMPLATE, 0, 0, WIDTH, HEIGHT, DURATION, DURATION + DURATION));
+                URI_FRAGMENT_TXYWH_TEMPLATE, DURATION, DURATION + DURATION, 0, 0, WIDTH, HEIGHT));
 
         myCanvas = new Canvas(VIDEO_CANVAS_ID, LABEL).setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION)
                 .paintWith(myMinter, selector1, video1).paintWith(myMinter, selector2, video2);

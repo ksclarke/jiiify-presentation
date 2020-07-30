@@ -28,7 +28,7 @@
             "selector": {
               "type": "FragmentSelector",
               "conformsTo": "http://www.w3.org/TR/media-frags/",
-              "value": "xywh=0,0,480,360&t=0,300"
+              "value": "t=0,300&xywh=0,0,480,360"
             }
           }
         },
@@ -50,7 +50,7 @@
             "selector": {
               "type": "FragmentSelector",
               "conformsTo": "http://www.w3.org/TR/media-frags/",
-              "value": "xywh=0,0,480,360&t=300,600"
+              "value": "t=300,600&xywh=0,0,480,360"
             }
           }
         }
