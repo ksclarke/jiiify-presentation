@@ -8,6 +8,8 @@ import org.junit.Test;
 import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector.EndTime;
+import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector.StartTime;
 
 /**
  * Tests of the media fragment selector.
@@ -36,7 +38,7 @@ public class MediaFragmentSelectorTest {
      * Tests constructing a media fragment selector with numeric spatial dimensions.
      */
     @Test
-    public final void testConstructorIntIntIntIntXYWH() {
+    public final void testConstructorNumericXYWH() {
         assertEquals(XYWH_FRAGMENT, new MediaFragmentSelector(X, Y, WIDTH, HEIGHT).toString());
     }
 
@@ -53,54 +55,45 @@ public class MediaFragmentSelectorTest {
     }
 
     /**
-     * Tests constructing a media fragment selector with numeric temporal dimensions.
+     * Tests constructing a media fragment selector with StartTime and EndTime temporal dimensions.
      */
     @Test
-    public final void testConstructorFloatFloatT() {
-        assertEquals("t=0,30", new MediaFragmentSelector(0.0f, 30.0f).toString());
-        assertEquals("t=0", new MediaFragmentSelector(0.0f).toString());
-        assertEquals("t=1.5", new MediaFragmentSelector(1.5f, null).toString());
-        assertEquals("t=,30", new MediaFragmentSelector(null, 30.0f).toString());
+    public final void testConstructorStartEndT() {
+        assertEquals("t=15,45", new MediaFragmentSelector(new StartTime(15), new EndTime(45)).toString());
+        assertEquals("t=2.5", new MediaFragmentSelector(new StartTime(2.5f)).toString());
+        assertEquals("t=,45", new MediaFragmentSelector(new EndTime(45)).toString());
     }
 
     /**
-     * Tests constructing a media fragment selector with all null numeric temporal dimensions.
+     * Tests constructing a media fragment selector with a negative start time.
      */
     @Test(expected = IllegalArgumentException.class)
-    public final void testConstructorNullNullT() {
-        new MediaFragmentSelector(null, null);
+    public final void testConstructorNegativeStartEndT() {
+        new MediaFragmentSelector(new StartTime(-1), new EndTime(10));
     }
 
     /**
-     * Tests constructing a media fragment selector with no arguments.
+     * Tests constructing a media fragment selector with a start time that doesn't precede the end time.
      */
     @Test(expected = IllegalArgumentException.class)
-    public final void testConstructorNoArgs() {
-        new MediaFragmentSelector();
+    public final void testConstructorEndBeforeStartT() {
+        new MediaFragmentSelector(new StartTime(10), new EndTime(1));
     }
 
     /**
      * Tests constructing a media fragment selector with no time.
      */
     @Test(expected = IllegalArgumentException.class)
-    public final void testConstructorEmptyTime() {
+    public final void testConstructorStringEmptyTime() {
         new MediaFragmentSelector("t=,");
-    }
-
-    /**
-     * Tests constructing a media fragment selector with too many numeric temporal dimensions.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public final void testConstructorFloatFloatFloatT() {
-        new MediaFragmentSelector(0.0f, 30.0f, 60.0f);
     }
 
     /**
      * Tests constructing a media fragment selector with a spatio-temporal fragment.
      */
     @Test
-    public final void testConstructorStringXYWHT() {
-        final String[] fragments = { "xywh=0,1,750,300&t=30,60", "xywh=0,1,750,300&t=30", "xywh=0,1,750,300&t=,60" };
+    public final void testConstructorStringTXYWH() {
+        final String[] fragments = { "t=30,60&xywh=0,1,750,300", "t=30&xywh=0,1,750,300", "t=,60&xywh=0,1,750,300" };
 
         for (final String fragment : fragments) {
             assertEquals(fragment, new MediaFragmentSelector(fragment).toString());
@@ -108,22 +101,17 @@ public class MediaFragmentSelectorTest {
     }
 
     /**
-     * Tests constructing a media fragment selector with numeric spatio-temporal dimensions.
+     * Tests constructing a media fragment selector with StartTime and EndTime temporal dimensions and numeric spatial
+     * dimensions.
      */
     @Test
-    public final void testConstructorIntIntIntIntFloatFloatXYWHT() {
-        assertEquals("xywh=0,1,750,300&t=0,30", new MediaFragmentSelector(X, Y, WIDTH, HEIGHT, 0.0f, 30.0f).toString());
-        assertEquals("xywh=0,1,750,300&t=0", new MediaFragmentSelector(X, Y, WIDTH, HEIGHT, 0.0f).toString());
-        assertEquals("xywh=0,1,750,300&t=1.5", new MediaFragmentSelector(X, Y, WIDTH, HEIGHT, 1.5f, null).toString());
-        assertEquals("xywh=0,1,750,300&t=,30", new MediaFragmentSelector(X, Y, WIDTH, HEIGHT, null, 30.0f).toString());
-    }
-
-    /**
-     * Tests constructing a media fragment selector with too many numeric spatio-temporal dimensions.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public final void testConstructorIntIntIntIntFloatFloatFloatXYWHT() {
-        new MediaFragmentSelector(X, Y, WIDTH, HEIGHT, 0.0f, 30.0f, 60.0f);
+    public final void testConstructorStartEndNumericTXYWH() {
+        assertEquals("t=15,45&xywh=0,1,750,300",
+                new MediaFragmentSelector(new StartTime(15), new EndTime(45), X, Y, WIDTH, HEIGHT).toString());
+        assertEquals("t=2.5&xywh=0,1,750,300",
+                new MediaFragmentSelector(new StartTime(2.5), X, Y, WIDTH, HEIGHT).toString());
+        assertEquals("t=,45&xywh=0,1,750,300",
+                new MediaFragmentSelector(new EndTime(45), X, Y, WIDTH, HEIGHT).toString());
     }
 
     /**

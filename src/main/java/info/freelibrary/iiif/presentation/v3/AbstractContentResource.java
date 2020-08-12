@@ -131,7 +131,7 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
 
     @JsonIgnore
     protected final void setMediaTypeFromExt(final String aURI) {
-        final String fragment = '#' + URI.create(aURI).getFragment();
+        final String fragment = Constants.FRAGMENT_DELIM + URI.create(aURI).getFragment();
         final String mimeType;
         final String uri;
         final int index;
