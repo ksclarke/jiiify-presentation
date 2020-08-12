@@ -4,5 +4,5 @@ public interface TemporalContentResource<T> extends ContentResource {
 
     float getDuration();
 
-    T setDuration(float aDuration);
+    T setDuration(Number aDuration);
 }

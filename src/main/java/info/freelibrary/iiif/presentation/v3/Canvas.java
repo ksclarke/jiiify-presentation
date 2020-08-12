@@ -175,7 +175,7 @@ public class Canvas extends AbstractCanvas<Canvas> implements Resource<Canvas>, 
     // begin AbstractCanvas
 
     @Override
-    public Canvas setDuration(final float aDuration) {
+    public Canvas setDuration(final Number aDuration) {
         return (Canvas) super.setDuration(aDuration);
     }
 

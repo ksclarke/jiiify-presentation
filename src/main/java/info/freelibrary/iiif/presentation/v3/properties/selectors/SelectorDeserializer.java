@@ -129,11 +129,11 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
      * @param aDefaultValue The default string value for missing nodes
      * @return The text from the node or the default value
      */
-    private float getFloat(final JsonNode aNode, final String aNodeName, final float aDefaultValue) {
+    private float getFloat(final JsonNode aNode, final String aNodeName, final Number aDefaultValue) {
         final JsonNode node = aNode.get(aNodeName);
 
         if (node == null) {
-            return aDefaultValue;
+            return aDefaultValue.floatValue();
         } else {
             return node.floatValue();
         }

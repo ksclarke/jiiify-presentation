@@ -283,9 +283,10 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     }
 
     @JsonSetter(Constants.DURATION)
-    protected AbstractCanvas<T> setDuration(final float aDuration) {
-        if ((aDuration > 0) && (Double.isFinite(aDuration))) {
-            myDuration = aDuration;
+    protected AbstractCanvas<T> setDuration(final Number aDuration) {
+        final float tempDuration = aDuration.floatValue();
+        if ((tempDuration > 0) && (Float.isFinite(tempDuration))) {
+            myDuration = tempDuration;
             return this;
         } else {
             throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_024, aDuration));

@@ -49,7 +49,7 @@ public class PointSelector implements Selector {
      * @param aY A Y coordinate
      * @param aSecondsCount A time coordinate
      */
-    public PointSelector(final int aX, final int aY, final float aSecondsCount) {
+    public PointSelector(final int aX, final int aY, final Number aSecondsCount) {
         setX(aX);
         setY(aY);
         setSeconds(aSecondsCount);
@@ -73,7 +73,7 @@ public class PointSelector implements Selector {
      *
      * @param aSecondsCount A number of seconds since the start of the resource
      */
-    public PointSelector(final float aSecondsCount) {
+    public PointSelector(final Number aSecondsCount) {
         setSeconds(aSecondsCount);
     }
 
@@ -133,8 +133,8 @@ public class PointSelector implements Selector {
      * @return This point selector
      */
     @JsonProperty(PointSelector.T_COORDINATE)
-    public PointSelector setSeconds(final Float aSecondsCount) {
-        myT = Optional.of(Float.valueOf(aSecondsCount));
+    public PointSelector setSeconds(final Number aSecondsCount) {
+        myT = Optional.of(aSecondsCount.floatValue());
         return this;
     }
 

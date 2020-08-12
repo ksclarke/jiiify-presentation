@@ -34,7 +34,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @param aDuration A canvas duration
      * @return The canvas
      */
-    T setDuration(float aDuration);
+    T setDuration(Number aDuration);
 
     /**
      * Gets the width of the canvas.

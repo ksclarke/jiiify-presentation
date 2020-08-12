@@ -258,7 +258,7 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas> impleme
     // begin AbstractCanvas
 
     @Override
-    public PlaceholderCanvas setDuration(final float aDuration) {
+    public PlaceholderCanvas setDuration(final Number aDuration) {
         return (PlaceholderCanvas) super.setDuration(aDuration);
     }
 

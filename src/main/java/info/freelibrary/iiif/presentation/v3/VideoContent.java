@@ -274,9 +274,10 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
      */
     @Override
     @JsonSetter(Constants.DURATION)
-    public VideoContent setDuration(final float aDuration) {
-        if ((aDuration > 0) && (Float.isFinite(aDuration))) {
-            myDuration = aDuration;
+    public VideoContent setDuration(final Number aDuration) {
+        final float tempDuration = aDuration.floatValue();
+        if ((tempDuration > 0) && (Float.isFinite(tempDuration))) {
+            myDuration = tempDuration;
             return this;
         } else {
             throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_024, aDuration));

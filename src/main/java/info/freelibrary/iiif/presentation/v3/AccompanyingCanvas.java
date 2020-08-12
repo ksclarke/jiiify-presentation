@@ -254,7 +254,7 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> imple
     // begin AbstractCanvas
 
     @Override
-    public AccompanyingCanvas setDuration(final float aDuration) {
+    public AccompanyingCanvas setDuration(final Number aDuration) {
         return (AccompanyingCanvas) super.setDuration(aDuration);
     }
 

@@ -285,9 +285,9 @@ public class MediaFragmentSelector implements FragmentSelector {
         return myEnd - myStart;
     }
 
-    private MediaFragmentSelector setStartEnd(final float aStart, final float aEnd) {
-        myStart = aStart;
-        myEnd = aEnd;
+    private MediaFragmentSelector setStartEnd(final Number aStart, final Number aEnd) {
+        myStart = aStart.floatValue();
+        myEnd = aEnd.floatValue();
 
         return this;
     }
