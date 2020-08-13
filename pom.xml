@@ -6,7 +6,7 @@
 
   <artifactId>jiiify-presentation</artifactId>
   <packaging>jar</packaging>
-  <version>0.5.1-v2-SNAPSHOT</version>
+  <version>0.5.1-SNAPSHOT</version>
   <name>jiiify-presentation</name>
   <description>A Java Library for version 3 of the IIIF Presentation API</description>
   <url>http://projects.freelibrary.info/jiiify-presentation3</url>
@@ -57,6 +57,7 @@
     <freelib.maven.version>0.1.0</freelib.maven.version>
     <jsoup.version>1.13.1</jsoup.version>
     <vertx.version>3.9.1</vertx.version>
+    <maven.jar.plugin.version>2.6</maven.jar.plugin.version>
     <combinatorics.version>3.3.0</combinatorics.version>
     <media-fragments-uri.version>2.4</media-fragments-uri.version>
 
@@ -145,6 +146,14 @@
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>${maven.jar.plugin.version}</version>
+        <configuration>
+          <classifier>v3</classifier>
+        </configuration>
+      </plugin>
       <!-- Generate our MessageCodes class from the messages resource file -->
       <plugin>
         <groupId>info.freelibrary</groupId>
@@ -158,9 +167,6 @@
             </goals>
             <configuration>
               <generatedSourcesDirectory>${project.basedir}/src/main/generated</generatedSourcesDirectory>
-              <messageFiles>
-                <messageFile>src/main/resources/iiif_presentation_messages.xml</messageFile>
-              </messageFiles>
             </configuration>
           </execution>
         </executions>
@@ -173,7 +179,6 @@
           <links>
             <link>https://google.github.io/guava/releases/23.0/api/docs/</link>
             <link>https://vertx.io/docs/apidocs/</link>
-            <link>${javadocs.jdk.url}</link>
           </links>
           <sourcepath>src/main/java:src/main/generated</sourcepath>
         </configuration>
