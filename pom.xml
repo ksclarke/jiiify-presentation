@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>jiiify-presentation</artifactId>
+  <artifactId>jiiify-presentation-v3</artifactId>
   <packaging>jar</packaging>
   <version>0.5.2-SNAPSHOT</version>
   <name>jiiify-presentation</name>
@@ -68,10 +68,6 @@
     <maven.jar.plugin.version>3.2.0</maven.jar.plugin.version>
     <combinatorics.version>3.3.0</combinatorics.version>
     <media-fragments-uri.version>2.4</media-fragments-uri.version>
-
-    <version.classifier>v3</version.classifier>
-    <maven.source.classifier>${version.classifier}-sources</maven.source.classifier>
-    <maven.javadoc.classifier>${version.classifier}-javadoc</maven.javadoc.classifier>
 
     <!-- Test related versions -->
     <opencsv.version>4.6</opencsv.version>
@@ -158,14 +154,6 @@
 
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>${maven.jar.plugin.version}</version>
-        <configuration>
-          <classifier>${version.classifier}</classifier>
-        </configuration>
-      </plugin>
       <!-- Generate our MessageCodes class from the messages resource file -->
       <plugin>
         <groupId>info.freelibrary</groupId>
@@ -242,7 +230,7 @@
   <distributionManagement>
     <site>
       <id>s3.site</id>
-      <url>s3://projects.freelibrary.info/jiiify-presentation</url>
+      <url>s3://projects.freelibrary.info/jiiify-presentation-v3</url>
     </site>
   </distributionManagement>
 
