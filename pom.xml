@@ -49,6 +49,10 @@
     <vertx.version>3.9.1</vertx.version>
     <maven.jar.plugin.version>3.2.0</maven.jar.plugin.version>
 
+    <version.classifier>v2</version.classifier>
+    <maven.source.classifier>${version.classifier}-sources</maven.source.classifier>
+    <maven.javadoc.classifier>${version.classifier}-javadoc</maven.javadoc.classifier>
+
     <!-- Test related versions -->
     <opencsv.version>4.6</opencsv.version>
   </properties>
@@ -117,7 +121,7 @@
         <artifactId>maven-jar-plugin</artifactId>
         <version>${maven.jar.plugin.version}</version>
         <configuration>
-          <classifier>v2</classifier>
+          <classifier>${version.classifier}</classifier>
         </configuration>
       </plugin>
       <!-- Generate our MessageCodes class from the messages resource file -->
