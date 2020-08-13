@@ -13,8 +13,8 @@ To include the pre-compiled jiiify-presentation Jar as a dependency in your proj
 ```
   <dependency>
     <groupId>info.freelibrary</groupId>
-    <artifactId>jiiify-presentation</artifactId>
-    <version>0.5.0-v2</version>
+    <artifactId>jiiify-presentation-v2</artifactId>
+    <version>0.5.3</version>
   </dependency>
 ```
 
@@ -23,12 +23,12 @@ or
 ```
   <dependency>
     <groupId>info.freelibrary</groupId>
-    <artifactId>jiiify-presentation</artifactId>
-    <version>0.5.0-v3</version>
+    <artifactId>jiiify-presentation-v3</artifactId>
+    <version>0.5.2</version>
   </dependency>
 ```
 
-Note: You'll have to change the version number above to match the most recent version from [Maven Central](https://search.maven.org/artifact/info.freelibrary/jiiify-presentation).
+_Note: You might want to replace the version number above with the most recent from [Maven Central](https://search.maven.org/search?q=%22jiiify-presentation%22)._
 
 ### Compiling from Source
 
