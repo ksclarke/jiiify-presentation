@@ -69,6 +69,10 @@
     <combinatorics.version>3.3.0</combinatorics.version>
     <media-fragments-uri.version>2.4</media-fragments-uri.version>
 
+    <version.classifier>v3</version.classifier>
+    <maven.source.classifier>${version.classifier}-sources</maven.source.classifier>
+    <maven.javadoc.classifier>${version.classifier}-javadoc</maven.javadoc.classifier>
+
     <!-- Test related versions -->
     <opencsv.version>4.6</opencsv.version>
     <lorem.version>2.1</lorem.version>
@@ -159,7 +163,7 @@
         <artifactId>maven-jar-plugin</artifactId>
         <version>${maven.jar.plugin.version}</version>
         <configuration>
-          <classifier>v3</classifier>
+          <classifier>${version.classifier}</classifier>
         </configuration>
       </plugin>
       <!-- Generate our MessageCodes class from the messages resource file -->
