@@ -1,0 +1,4 @@
+
+# Ignore Maven source and target
+src/
+target/
