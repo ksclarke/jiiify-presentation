@@ -28,7 +28,7 @@ or
   </dependency>
 ```
 
-_Note: You might want to replace the version number above with the most recent from [Maven Central](https://search.maven.org/search?q=%22jiiify-presentation%22)._
+_Note: You might want to replace the version number above with the most recent from [Maven Central](https://search.maven.org/search?q=%22jiiify-presentation%22). I'll try to keep this README up to date, but it never hurts to go to the source._
 
 ### Compiling from Source
 
