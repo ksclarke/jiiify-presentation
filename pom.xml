@@ -9,7 +9,7 @@
   <version>0.5.1-SNAPSHOT</version>
   <name>jiiify-presentation</name>
   <description>A Java Library for version 3 of the IIIF Presentation API</description>
-  <url>http://projects.freelibrary.info/jiiify-presentation3</url>
+  <url>http://projects.freelibrary.info/jiiify-presentation</url>
 
   <licenses>
     <license>
@@ -35,7 +35,7 @@
       <name>Kevin S. Clarke</name>
       <email>ksclarke@ksclarke.io</email>
       <roles>
-        <role>developer</role>
+        <role>lead developer</role>
       </roles>
       <timezone>America/New_York</timezone>
     </developer>
@@ -43,6 +43,14 @@
       <id>markmatney</id>
       <name>Mark A. Matney, Jr.</name>
       <email>mmatney@library.ucla.edu</email>
+      <organization>UCLA Library</organization>
+      <organizationUrl>http://github.com/uclalibrary</organizationUrl>
+      <timezone>America/Los_Angeles</timezone>
+    </developer>
+    <developer>
+      <id>DRickard</id>
+      <name>David Rickard</name>
+      <email>drickard1967@library.ucla.edu</email>
       <organization>UCLA Library</organization>
       <organizationUrl>http://github.com/uclalibrary</organizationUrl>
       <timezone>America/Los_Angeles</timezone>
@@ -230,7 +238,7 @@
   <distributionManagement>
     <site>
       <id>s3.site</id>
-      <url>s3://projects.freelibrary.info/jiiify-presentation3</url>
+      <url>s3://projects.freelibrary.info/jiiify-presentation</url>
     </site>
   </distributionManagement>
 
