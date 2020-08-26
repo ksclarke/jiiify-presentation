@@ -151,18 +151,13 @@ public class ModelContent extends AbstractContentResource<ModelContent> implemen
     }
 
     @Override
-    public ModelContent setRights(final String... aRightsArray) {
-        return (ModelContent) super.setRights(aRightsArray);
+    public ModelContent setRights(final String aRights) {
+        return (ModelContent) super.setRights(aRights);
     }
 
     @Override
-    public ModelContent setRights(final URI... aRightsArray) {
-        return (ModelContent) super.setRights(aRightsArray);
-    }
-
-    @Override
-    public ModelContent setRights(final List<URI> aRightsList) {
-        return (ModelContent) super.setRights(aRightsList);
+    public ModelContent setRights(final URI aRights) {
+        return (ModelContent) super.setRights(aRights);
     }
 
     @Override

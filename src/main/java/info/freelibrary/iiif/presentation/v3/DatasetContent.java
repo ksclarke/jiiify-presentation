@@ -152,18 +152,13 @@ public class DatasetContent extends AbstractContentResource<DatasetContent> impl
     }
 
     @Override
-    public DatasetContent setRights(final String... aRightsArray) {
-        return (DatasetContent) super.setRights(aRightsArray);
+    public DatasetContent setRights(final String aRights) {
+        return (DatasetContent) super.setRights(aRights);
     }
 
     @Override
-    public DatasetContent setRights(final URI... aRightsArray) {
-        return (DatasetContent) super.setRights(aRightsArray);
-    }
-
-    @Override
-    public DatasetContent setRights(final List<URI> aRightsList) {
-        return (DatasetContent) super.setRights(aRightsList);
+    public DatasetContent setRights(final URI aRights) {
+        return (DatasetContent) super.setRights(aRights);
     }
 
     @Override

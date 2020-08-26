@@ -174,18 +174,13 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
     }
 
     @Override
-    public AnnotationCollection setRights(final String... aRightsArray) {
-        return (AnnotationCollection) super.setRights(aRightsArray);
+    public AnnotationCollection setRights(final String aRights) {
+        return (AnnotationCollection) super.setRights(aRights);
     }
 
     @Override
-    public AnnotationCollection setRights(final URI... aRightsArray) {
-        return (AnnotationCollection) super.setRights(aRightsArray);
-    }
-
-    @Override
-    public AnnotationCollection setRights(final List<URI> aRightsList) {
-        return (AnnotationCollection) super.setRights(aRightsList);
+    public AnnotationCollection setRights(final URI aRights) {
+        return (AnnotationCollection) super.setRights(aRights);
     }
 
     @Override

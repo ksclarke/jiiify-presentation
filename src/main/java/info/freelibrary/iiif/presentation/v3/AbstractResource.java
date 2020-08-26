@@ -73,7 +73,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
 
     private RequiredStatement myRequiredStatement;
 
-    private List<URI> myRights;
+    private URI myRights;
 
     private List<Homepage> myHomepages;
 
@@ -293,44 +293,20 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @return The rights
      */
     @JsonProperty
-    public List<URI> getRights() {
-        if (myRights == null) {
-            myRights = new ArrayList<>();
-        }
-
+    public URI getRights() {
         return myRights;
     }
 
     @JsonProperty
-    protected AbstractResource<T> setRights(final List<URI> aRightsList) {
-        checkNotNull(aRightsList);
-        myRights = aRightsList;
+    protected AbstractResource<T> setRights(final URI aRights) {
+        checkNotNull(aRights);
+        myRights = aRights;
         return this;
     }
 
     @JsonIgnore
-    protected AbstractResource<T> setRights(final String... aRightsArray) {
-        final List<URI> list = getRights();
-
-        checkNotNull(aRightsArray);
-        list.clear();
-
-        for (final String rights : aRightsArray) {
-            list.add(URI.create(rights));
-        }
-
-        return this;
-    }
-
-    @JsonIgnore
-    protected AbstractResource<T> setRights(final URI... aRightsArray) {
-        final List<URI> list = getRights();
-
-        checkNotNull(aRightsArray);
-        list.clear();
-        Collections.addAll(list, aRightsArray);
-
-        return this;
+    protected AbstractResource<T> setRights(final String aRights) {
+        return setRights(URI.create(aRights));
     }
 
     @JsonSetter(Constants.HOMEPAGE)

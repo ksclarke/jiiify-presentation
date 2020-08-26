@@ -151,18 +151,13 @@ public class TextContent extends AbstractContentResource<TextContent> implements
     }
 
     @Override
-    public TextContent setRights(final String... aRightsArray) {
-        return (TextContent) super.setRights(aRightsArray);
+    public TextContent setRights(final String aRights) {
+        return (TextContent) super.setRights(aRights);
     }
 
     @Override
-    public TextContent setRights(final URI... aRightsArray) {
-        return (TextContent) super.setRights(aRightsArray);
-    }
-
-    @Override
-    public TextContent setRights(final List<URI> aRightsList) {
-        return (TextContent) super.setRights(aRightsList);
+    public TextContent setRights(final URI aRights) {
+        return (TextContent) super.setRights(aRights);
     }
 
     @Override

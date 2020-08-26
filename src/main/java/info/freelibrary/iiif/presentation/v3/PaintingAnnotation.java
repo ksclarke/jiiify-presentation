@@ -313,18 +313,13 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation> implement
     }
 
     @Override
-    public PaintingAnnotation setRights(final String... aRightsArray) {
-        return (PaintingAnnotation) super.setRights(aRightsArray);
+    public PaintingAnnotation setRights(final String aRights) {
+        return (PaintingAnnotation) super.setRights(aRights);
     }
 
     @Override
-    public PaintingAnnotation setRights(final URI... aRightsArray) {
-        return (PaintingAnnotation) super.setRights(aRightsArray);
-    }
-
-    @Override
-    public PaintingAnnotation setRights(final List<URI> aRightsList) {
-        return (PaintingAnnotation) super.setRights(aRightsList);
+    public PaintingAnnotation setRights(final URI aRights) {
+        return (PaintingAnnotation) super.setRights(aRights);
     }
 
     @Override

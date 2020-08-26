@@ -311,18 +311,13 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     }
 
     @Override
-    public SupplementingAnnotation setRights(final String... aRightsArray) {
-        return (SupplementingAnnotation) super.setRights(aRightsArray);
+    public SupplementingAnnotation setRights(final String aRights) {
+        return (SupplementingAnnotation) super.setRights(aRights);
     }
 
     @Override
-    public SupplementingAnnotation setRights(final URI... aRightsArray) {
-        return (SupplementingAnnotation) super.setRights(aRightsArray);
-    }
-
-    @Override
-    public SupplementingAnnotation setRights(final List<URI> aRightsList) {
-        return (SupplementingAnnotation) super.setRights(aRightsList);
+    public SupplementingAnnotation setRights(final URI aRights) {
+        return (SupplementingAnnotation) super.setRights(aRights);
     }
 
     @Override

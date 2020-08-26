@@ -251,18 +251,13 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
     }
 
     @Override
-    public AnnotationPage<T> setRights(final String... aRightsArray) {
-        return (AnnotationPage<T>) super.setRights(aRightsArray);
+    public AnnotationPage<T> setRights(final String aRights) {
+        return (AnnotationPage<T>) super.setRights(aRights);
     }
 
     @Override
-    public AnnotationPage<T> setRights(final URI... aRightsArray) {
-        return (AnnotationPage<T>) super.setRights(aRightsArray);
-    }
-
-    @Override
-    public AnnotationPage<T> setRights(final List<URI> aRightsList) {
-        return (AnnotationPage<T>) super.setRights(aRightsList);
+    public AnnotationPage<T> setRights(final URI aRights) {
+        return (AnnotationPage<T>) super.setRights(aRights);
     }
 
     @Override

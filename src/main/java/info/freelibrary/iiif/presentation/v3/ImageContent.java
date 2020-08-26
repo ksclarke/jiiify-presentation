@@ -170,18 +170,13 @@ public class ImageContent extends AbstractContentResource<ImageContent> implemen
     }
 
     @Override
-    public ImageContent setRights(final String... aRightsArray) {
-        return (ImageContent) super.setRights(aRightsArray);
+    public ImageContent setRights(final String aRights) {
+        return (ImageContent) super.setRights(aRights);
     }
 
     @Override
-    public ImageContent setRights(final URI... aRightsArray) {
-        return (ImageContent) super.setRights(aRightsArray);
-    }
-
-    @Override
-    public ImageContent setRights(final List<URI> aRightsList) {
-        return (ImageContent) super.setRights(aRightsList);
+    public ImageContent setRights(final URI aRights) {
+        return (ImageContent) super.setRights(aRights);
     }
 
     @Override

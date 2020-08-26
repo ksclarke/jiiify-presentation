@@ -211,18 +211,13 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas> impleme
     }
 
     @Override
-    public PlaceholderCanvas setRights(final String... aRightsArray) {
-        return (PlaceholderCanvas) super.setRights(aRightsArray);
+    public PlaceholderCanvas setRights(final String aRights) {
+        return (PlaceholderCanvas) super.setRights(aRights);
     }
 
     @Override
-    public PlaceholderCanvas setRights(final URI... aRightsArray) {
-        return (PlaceholderCanvas) super.setRights(aRightsArray);
-    }
-
-    @Override
-    public PlaceholderCanvas setRights(final List<URI> aRightsList) {
-        return (PlaceholderCanvas) super.setRights(aRightsList);
+    public PlaceholderCanvas setRights(final URI aRights) {
+        return (PlaceholderCanvas) super.setRights(aRights);
     }
 
     @Override

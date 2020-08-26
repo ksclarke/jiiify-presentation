@@ -319,18 +319,13 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     }
 
     @Override
-    public Collection setRights(final String... aRightsArray) {
-        return (Collection) super.setRights(aRightsArray);
+    public Collection setRights(final String aRights) {
+        return (Collection) super.setRights(aRights);
     }
 
     @Override
-    public Collection setRights(final URI... aRightsArray) {
-        return (Collection) super.setRights(aRightsArray);
-    }
-
-    @Override
-    public Collection setRights(final List<URI> aRightsList) {
-        return (Collection) super.setRights(aRightsList);
+    public Collection setRights(final URI aRights) {
+        return (Collection) super.setRights(aRights);
     }
 
     @Override

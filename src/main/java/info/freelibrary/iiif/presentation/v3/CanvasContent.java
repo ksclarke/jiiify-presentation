@@ -154,18 +154,13 @@ public class CanvasContent extends AbstractContentResource<CanvasContent> implem
     }
 
     @Override
-    public CanvasContent setRights(final String... aRightsArray) {
-        return (CanvasContent) super.setRights(aRightsArray);
+    public CanvasContent setRights(final String aRights) {
+        return (CanvasContent) super.setRights(aRights);
     }
 
     @Override
-    public CanvasContent setRights(final URI... aRightsArray) {
-        return (CanvasContent) super.setRights(aRightsArray);
-    }
-
-    @Override
-    public CanvasContent setRights(final List<URI> aRightsList) {
-        return (CanvasContent) super.setRights(aRightsList);
+    public CanvasContent setRights(final URI aRights) {
+        return (CanvasContent) super.setRights(aRights);
     }
 
     @Override

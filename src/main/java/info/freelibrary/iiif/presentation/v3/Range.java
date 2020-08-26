@@ -372,18 +372,13 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     @Override
-    public Range setRights(final String... aRightsArray) {
-        return (Range) super.setRights(aRightsArray);
+    public Range setRights(final String aRights) {
+        return (Range) super.setRights(aRights);
     }
 
     @Override
-    public Range setRights(final URI... aRightsArray) {
-        return (Range) super.setRights(aRightsArray);
-    }
-
-    @Override
-    public Range setRights(final List<URI> aRightsList) {
-        return (Range) super.setRights(aRightsList);
+    public Range setRights(final URI aRights) {
+        return (Range) super.setRights(aRights);
     }
 
     @Override

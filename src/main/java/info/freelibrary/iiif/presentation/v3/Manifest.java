@@ -500,18 +500,13 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     @Override
-    public Manifest setRights(final String... aRightsArray) {
-        return (Manifest) super.setRights(aRightsArray);
+    public Manifest setRights(final String aRights) {
+        return (Manifest) super.setRights(aRights);
     }
 
     @Override
-    public Manifest setRights(final URI... aRightsArray) {
-        return (Manifest) super.setRights(aRightsArray);
-    }
-
-    @Override
-    public Manifest setRights(final List<URI> aRightsList) {
-        return (Manifest) super.setRights(aRightsList);
+    public Manifest setRights(final URI aRights) {
+        return (Manifest) super.setRights(aRights);
     }
 
     @Override

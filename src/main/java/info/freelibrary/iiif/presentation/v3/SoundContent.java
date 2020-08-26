@@ -168,18 +168,13 @@ public class SoundContent extends AbstractContentResource<SoundContent> implemen
     }
 
     @Override
-    public SoundContent setRights(final String... aRightsArray) {
-        return (SoundContent) super.setRights(aRightsArray);
+    public SoundContent setRights(final String aRights) {
+        return (SoundContent) super.setRights(aRights);
     }
 
     @Override
-    public SoundContent setRights(final URI... aRightsArray) {
-        return (SoundContent) super.setRights(aRightsArray);
-    }
-
-    @Override
-    public SoundContent setRights(final List<URI> aRightsList) {
-        return (SoundContent) super.setRights(aRightsList);
+    public SoundContent setRights(final URI aRights) {
+        return (SoundContent) super.setRights(aRights);
     }
 
     @Override

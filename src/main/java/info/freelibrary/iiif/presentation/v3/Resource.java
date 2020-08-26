@@ -126,31 +126,23 @@ public interface Resource<T extends Resource<T>> {
      *
      * @return The rights
      */
-    List<URI> getRights();
+    URI getRights();
 
     /**
      * Sets the rights.
      *
-     * @param aRightsList A list of rights URIs
+     * @param aRights A rights URI
      * @return The resource
      */
-    T setRights(List<URI> aRightsList);
+    T setRights(URI aRights);
 
     /**
-     * Sets the rights from the supplied strings.
+     * Sets the rights from the supplied string.
      *
-     * @param aRightsArray Rights URIs in string form
+     * @param aRights A rights URI in string form
      * @return The resource
      */
-    T setRights(String... aRightsArray);
-
-    /**
-     * Sets the rights from the supplied strings.
-     *
-     * @param aRightsArray Rights URIs
-     * @return The resource
-     */
-    T setRights(URI... aRightsArray);
+    T setRights(String aRights);
 
     /**
      * Gets a list of resource homepages, initializing the list if this hasn't been done already.

@@ -207,18 +207,13 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> imple
     }
 
     @Override
-    public AccompanyingCanvas setRights(final String... aRightsArray) {
-        return (AccompanyingCanvas) super.setRights(aRightsArray);
+    public AccompanyingCanvas setRights(final String aRights) {
+        return (AccompanyingCanvas) super.setRights(aRights);
     }
 
     @Override
-    public AccompanyingCanvas setRights(final URI... aRightsArray) {
-        return (AccompanyingCanvas) super.setRights(aRightsArray);
-    }
-
-    @Override
-    public AccompanyingCanvas setRights(final List<URI> aRightsList) {
-        return (AccompanyingCanvas) super.setRights(aRightsList);
+    public AccompanyingCanvas setRights(final URI aRights) {
+        return (AccompanyingCanvas) super.setRights(aRights);
     }
 
     @Override

@@ -122,6 +122,8 @@ public class ManifestTest extends AbstractTest {
             content2.addBody(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(values[0]));
         }
 
+        myManifest.setRights("http://creativecommons.org/licenses/by/4.0/");
+
         myVertx = Vertx.factory.vertx();
     }
 

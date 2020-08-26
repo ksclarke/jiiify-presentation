@@ -395,18 +395,13 @@ public class Canvas extends AbstractCanvas<Canvas> implements Resource<Canvas>, 
     }
 
     @Override
-    public Canvas setRights(final String... aRightsArray) {
-        return (Canvas) super.setRights(aRightsArray);
+    public Canvas setRights(final String aRights) {
+        return (Canvas) super.setRights(aRights);
     }
 
     @Override
-    public Canvas setRights(final URI... aRightsArray) {
-        return (Canvas) super.setRights(aRightsArray);
-    }
-
-    @Override
-    public Canvas setRights(final List<URI> aRightsList) {
-        return (Canvas) super.setRights(aRightsList);
+    public Canvas setRights(final URI aRights) {
+        return (Canvas) super.setRights(aRights);
     }
 
     @Override

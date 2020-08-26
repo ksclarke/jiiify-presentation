@@ -170,18 +170,13 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
     }
 
     @Override
-    public VideoContent setRights(final String... aRightsArray) {
-        return (VideoContent) super.setRights(aRightsArray);
+    public VideoContent setRights(final String aRights) {
+        return (VideoContent) super.setRights(aRights);
     }
 
     @Override
-    public VideoContent setRights(final URI... aRightsArray) {
-        return (VideoContent) super.setRights(aRightsArray);
-    }
-
-    @Override
-    public VideoContent setRights(final List<URI> aRightsList) {
-        return (VideoContent) super.setRights(aRightsList);
+    public VideoContent setRights(final URI aRights) {
+        return (VideoContent) super.setRights(aRights);
     }
 
     @Override
