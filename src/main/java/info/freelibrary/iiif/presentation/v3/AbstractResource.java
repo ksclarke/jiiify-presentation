@@ -61,7 +61,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
 
     private List<PartOf> myPartOfs;
 
-    private Metadata myMetadata;
+    private List<Metadata> myMetadata;
 
     private Summary mySummary;
 
@@ -146,14 +146,15 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @param aType A type in string form
      * @param aID An ID in string form
      * @param aLabel A label in string form
-     * @param aMetadata A metadata property
+     * @param aMetadataList A list of metadata properties
      * @param aSummary A summary property in string form
      * @param aThumbnail A thumbnail
      * @param aProvider A resource provider
      */
-    protected AbstractResource(final String aType, final String aID, final String aLabel, final Metadata aMetadata,
-            final String aSummary, final Thumbnail aThumbnail, final Provider aProvider) {
-        this(aType, URI.create(aID), new Label(aLabel), aMetadata, new Summary(aSummary), aThumbnail, aProvider);
+    protected AbstractResource(final String aType, final String aID, final String aLabel,
+            final List<Metadata> aMetadataList, final String aSummary, final Thumbnail aThumbnail,
+            final Provider aProvider) {
+        this(aType, URI.create(aID), new Label(aLabel), aMetadataList, new Summary(aSummary), aThumbnail, aProvider);
     }
 
     /**
@@ -162,17 +163,18 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @param aType A resource type
      * @param aID A URI ID
      * @param aLabel A label
-     * @param aMetadata A metadata property
+     * @param aMetadataList A list of metadata properties
      * @param aSummary A summary property
      * @param aThumbnail A thumbnail
      * @param aProvider A resource provider
      */
-    protected AbstractResource(final String aType, final URI aID, final Label aLabel, final Metadata aMetadata,
-            final Summary aSummary, final Thumbnail aThumbnail, final Provider aProvider) {
+    protected AbstractResource(final String aType, final URI aID, final Label aLabel,
+            final List<Metadata> aMetadataList, final Summary aSummary, final Thumbnail aThumbnail,
+            final Provider aProvider) {
         myType = checkNotNull(aType);
         myID = checkNotNull(aID);
         myLabel = checkNotNull(aLabel);
-        myMetadata = checkNotNull(aMetadata);
+        myMetadata = checkNotNull(aMetadataList);
         mySummary = checkNotNull(aSummary);
         setThumbnails(checkNotNull(aThumbnail));
         setProviders(checkNotNull(aProvider));
@@ -207,14 +209,27 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @return The metadata
      */
     @JsonGetter(Constants.METADATA)
-    public Metadata getMetadata() {
+    public List<Metadata> getMetadata() {
+        if (myMetadata == null) {
+            myMetadata = new ArrayList<>();
+        }
+
         return myMetadata;
     }
 
     @JsonSetter(Constants.METADATA)
-    protected AbstractResource<T> setMetadata(final Metadata aMetadata) {
-        checkNotNull(aMetadata);
-        myMetadata = aMetadata;
+    protected AbstractResource<T> setMetadata(final Metadata... aMetadataArray) {
+        return setMetadata(Arrays.asList(aMetadataArray));
+    }
+
+    @JsonIgnore
+    protected AbstractResource<T> setMetadata(final List<Metadata> aMetadataList) {
+        final List<Metadata> metadata = getMetadata();
+
+        checkNotNull(aMetadataList);
+        metadata.clear();
+        metadata.addAll(aMetadataList);
+
         return this;
     }
 

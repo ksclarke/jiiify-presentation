@@ -73,14 +73,14 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      *
      * @param aID A collection ID in string form
      * @param aLabel A descriptive label in string form
-     * @param aMetadata A collection's metadata
+     * @param aMetadataList A list of metadata properties
      * @param aSummary A summary in string form
      * @param aThumbnail A thumbnail
      * @param aProvider A resource provider
      */
-    public Collection(final String aID, final String aLabel, final Metadata aMetadata, final String aSummary,
+    public Collection(final String aID, final String aLabel, final List<Metadata> aMetadataList, final String aSummary,
             final Thumbnail aThumbnail, final Provider aProvider) {
-        super(ResourceTypes.COLLECTION, aID, aLabel, aMetadata, aSummary, aThumbnail, aProvider);
+        super(ResourceTypes.COLLECTION, aID, aLabel, aMetadataList, aSummary, aThumbnail, aProvider);
     }
 
     /**
@@ -88,14 +88,14 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      *
      * @param aID A collection ID
      * @param aLabel A descriptive label
-     * @param aMetadata A collection's metadata
+     * @param aMetadataList A list of metadata properties
      * @param aSummary A summary
      * @param aThumbnail A thumbnail
      * @param aProvider A resource provider
      */
-    public Collection(final URI aID, final Label aLabel, final Metadata aMetadata, final Summary aSummary,
+    public Collection(final URI aID, final Label aLabel, final List<Metadata> aMetadataList, final Summary aSummary,
             final Thumbnail aThumbnail, final Provider aProvider) {
-        super(ResourceTypes.COLLECTION, aID, aLabel, aMetadata, aSummary, aThumbnail, aProvider);
+        super(ResourceTypes.COLLECTION, aID, aLabel, aMetadataList, aSummary, aThumbnail, aProvider);
     }
 
     /**
@@ -344,8 +344,13 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     }
 
     @Override
-    public Collection setMetadata(final Metadata aMetadata) {
-        return (Collection) super.setMetadata(aMetadata);
+    public Collection setMetadata(final Metadata... aMetadataArray) {
+        return (Collection) super.setMetadata(aMetadataArray);
+    }
+
+    @Override
+    public Collection setMetadata(final List<Metadata> aMetadataList) {
+        return (Collection) super.setMetadata(aMetadataList);
     }
 
     @Override

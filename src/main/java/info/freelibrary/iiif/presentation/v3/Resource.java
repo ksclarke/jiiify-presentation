@@ -50,15 +50,23 @@ public interface Resource<T extends Resource<T>> {
      *
      * @return The metadata
      */
-    Metadata getMetadata();
+    List<Metadata> getMetadata();
 
     /**
      * Sets the metadata.
      *
-     * @param aMetadata A metadata
+     * @param aMetadataArray An array of metadata properties
      * @return The resource
      */
-    T setMetadata(Metadata aMetadata);
+    T setMetadata(Metadata... aMetadataArray);
+
+    /**
+     * Sets the metadata.
+     *
+     * @param aMetadataList A list of metadata properties
+     * @return The resource
+     */
+    T setMetadata(List<Metadata> aMetadataList);
 
     /**
      * Gets the summary.

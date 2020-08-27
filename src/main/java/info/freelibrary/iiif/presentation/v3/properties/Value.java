@@ -2,12 +2,14 @@
 package info.freelibrary.iiif.presentation.v3.properties;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import info.freelibrary.iiif.presentation.v3.Constants;
 
 /**
  * A human readable internationalized value.
  */
+@JsonDeserialize(using = ValueDeserializer.class)
 public class Value extends I18nProperty<Value> {
 
     /**

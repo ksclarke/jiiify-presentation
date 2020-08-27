@@ -336,8 +336,13 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     }
 
     @Override
-    public SupplementingAnnotation setMetadata(final Metadata aMetadata) {
-        return (SupplementingAnnotation) super.setMetadata(aMetadata);
+    public SupplementingAnnotation setMetadata(final Metadata... aMetadataArray) {
+        return (SupplementingAnnotation) super.setMetadata(aMetadataArray);
+    }
+
+    @Override
+    public SupplementingAnnotation setMetadata(final List<Metadata> aMetadataList) {
+        return (SupplementingAnnotation) super.setMetadata(aMetadataList);
     }
 
     @Override

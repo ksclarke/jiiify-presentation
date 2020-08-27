@@ -1,148 +1,129 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
 /**
- * An ordered list of descriptions to be displayed to the user when they interact with the resource, given as pairs of
- * human readable label and value entries. The content of these entries is intended for presentation only; descriptive
- * semantics should not be inferred. An entry might be used to convey information about the creation of the object, a
- * physical description, ownership information, or other purposes.
+ * A metadata property with a label and value.
  */
-@JsonDeserialize(using = MetadataDeserializer.class)
-public class Metadata extends I18nEntry {
+@JsonPropertyOrder({ Constants.LABEL, Constants.VALUE })
+public class Metadata {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Metadata.class, MessageCodes.BUNDLE);
 
-    private List<Metadata.Entry> myEntries;
+    private Label myLabel;
+
+    private Value myValue;
 
     /**
-     * Creates a metadata property.
+     * Constructor for Jackson deserialization.
      */
-    public Metadata() {
-        getEntries();
+    Metadata() {
     }
 
     /**
-     * Creates metadata from the supplied metadata entry.
+     * Creates a metadata property from the supplied label and value.
      *
-     * @param aMetadataEntry A metadata entry
-     */
-    public Metadata(final Metadata.Entry aMetadataEntry) {
-        checkEntryType(aMetadataEntry);
-        getEntries().add(aMetadataEntry);
-    }
-
-    /**
-     * Creates metadata from the supplied label and value.
-     *
-     * @param aLabel A metadata label
-     * @param aValue A metadata value
+     * @param aLabel A label
+     * @param aValue A value
      */
     public Metadata(final Label aLabel, final Value aValue) {
-        getEntries().add(new Metadata.Entry(aLabel, aValue));
+        setLabel(aLabel);
+        setValue(aValue);
     }
 
     /**
-     * Creates metadata from the supplied label and value strings.
+     * Creates a metadata property from the supplied label and value.
      *
-     * @param aLabel A metadata label in string form
-     * @param aValue A metadata value in string form
+     * @param aLabel A label in string form
+     * @param aValue A value in string form
      */
     public Metadata(final String aLabel, final String aValue) {
-        getEntries().add(new Metadata.Entry(aLabel, aValue));
+        this(new Label(aLabel), new Value(aValue));
     }
 
     /**
-     * Adds the supplied metadata entry.
+     * Gets the label for the metadata property.
      *
-     * @param aMetadataEntry A metadata entry
-     * @return The metadata
+     * @return The label for the metadata property
      */
-    public Metadata add(final Metadata.Entry aMetadataEntry) {
-        checkEntryType(aMetadataEntry);
+    @JsonGetter(Constants.LABEL)
+    public Label getLabel() {
+        return myLabel;
+    }
 
-        if (!getEntries().add(aMetadataEntry)) {
-            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_044, aMetadataEntry));
-        }
+    /**
+     * Sets the label for the metadata property.
+     *
+     * @param aLabel A label
+     * @return This metadata property
+     */
+    @JsonSetter(Constants.LABEL)
+    public Metadata setLabel(final Label aLabel) {
+        Objects.requireNonNull(aLabel, LOGGER.getMessage(MessageCodes.JPA_002));
+        myLabel = aLabel;
 
         return this;
     }
 
     /**
-     * Adds the supplied metadata.
+     * Sets the label for the metadata property.
      *
-     * @param aLabel A metadata label in string form
-     * @param aValue A metadata value in string form
-     * @return The metadata
+     * @param aLabel A label in string form
+     * @return This metadata property
      */
-    public Metadata add(final String aLabel, final String aValue) {
-        final Metadata.Entry metadataEntry = new Metadata.Entry(aLabel, aValue);
+    @JsonIgnore
+    public Metadata setLabel(final String aLabel) {
+        return setLabel(new Label(aLabel));
+    }
 
-        if (!getEntries().add(metadataEntry)) {
-            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_044, metadataEntry));
-        }
+    /**
+     * Gets the metadata property's value.
+     *
+     * @return The metadata property's value
+     */
+    @JsonGetter(Constants.VALUE)
+    public Value getValue() {
+        return myValue;
+    }
+
+    /**
+     * Sets the metadata property's value.
+     *
+     * @param aValue A value
+     * @return This metadata property
+     */
+    @JsonSetter(Constants.VALUE)
+    public Metadata setValue(final Value aValue) {
+        Objects.requireNonNull(aValue, LOGGER.getMessage(MessageCodes.JPA_022));
+        myValue = aValue;
 
         return this;
     }
 
     /**
-     * Adds the supplied metadata.
+     * Sets the metadata property's value.
      *
-     * @param aLabel A metadata label
-     * @param aValue A metadata value
-     * @return The metadata
+     * @param aValue A value in string form
+     * @return This metadata property
      */
-    public Metadata add(final Label aLabel, final Value aValue) {
-        final Metadata.Entry metadataEntry = new Metadata.Entry(aLabel, aValue);
-
-        if (!getEntries().add(metadataEntry)) {
-            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_044, metadataEntry));
-        }
-
-        return this;
-    }
-
-    /**
-     * Gets the metadata entries.
-     *
-     * @return The metadata entries
-     */
-    @JsonValue
-    public final List<Metadata.Entry> getEntries() {
-        if (myEntries == null) {
-            myEntries = new ArrayList<>();
-        }
-
-        return myEntries;
+    @JsonIgnore
+    public Metadata setValue(final String aValue) {
+        return setValue(new Value(aValue));
     }
 
     @Override
-    protected Logger getLogger() {
-        return LOGGER;
+    public String toString() {
+        return myLabel + ":" + myValue;
     }
-
-    /**
-     * Checks whether the supplied entry is a metadata entry.
-     *
-     * @param aMetadataEntry A metadata entry
-     * @throws IllegalArgumentException If the supplied entry isn't a metadata entry
-     */
-    private void checkEntryType(final Metadata.Entry aMetadataEntry) throws IllegalArgumentException {
-        final Class<?> outerClass = aMetadataEntry.getOuterClass();
-        final Class<?> thisClass = getClass();
-
-        if (!outerClass.equals(thisClass)) {
-            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_034, outerClass, thisClass));
-        }
-    }
-
 }

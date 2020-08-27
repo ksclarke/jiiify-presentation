@@ -177,8 +177,13 @@ public class DatasetContent extends AbstractContentResource<DatasetContent> impl
     }
 
     @Override
-    public DatasetContent setMetadata(final Metadata aMetadata) {
-        return (DatasetContent) super.setMetadata(aMetadata);
+    public DatasetContent setMetadata(final Metadata... aMetadataArray) {
+        return (DatasetContent) super.setMetadata(aMetadataArray);
+    }
+
+    @Override
+    public DatasetContent setMetadata(final List<Metadata> aMetadataList) {
+        return (DatasetContent) super.setMetadata(aMetadataList);
     }
 
     @Override

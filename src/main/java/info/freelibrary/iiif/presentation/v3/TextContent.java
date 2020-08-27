@@ -176,8 +176,13 @@ public class TextContent extends AbstractContentResource<TextContent> implements
     }
 
     @Override
-    public TextContent setMetadata(final Metadata aMetadata) {
-        return (TextContent) super.setMetadata(aMetadata);
+    public TextContent setMetadata(final Metadata... aMetadataArray) {
+        return (TextContent) super.setMetadata(aMetadataArray);
+    }
+
+    @Override
+    public TextContent setMetadata(final List<Metadata> aMetadataList) {
+        return (TextContent) super.setMetadata(aMetadataList);
     }
 
     @Override

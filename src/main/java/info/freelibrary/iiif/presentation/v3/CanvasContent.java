@@ -179,8 +179,13 @@ public class CanvasContent extends AbstractContentResource<CanvasContent> implem
     }
 
     @Override
-    public CanvasContent setMetadata(final Metadata aMetadata) {
-        return (CanvasContent) super.setMetadata(aMetadata);
+    public CanvasContent setMetadata(final Metadata... aMetadataArray) {
+        return (CanvasContent) super.setMetadata(aMetadataArray);
+    }
+
+    @Override
+    public CanvasContent setMetadata(final List<Metadata> aMetadataList) {
+        return (CanvasContent) super.setMetadata(aMetadataList);
     }
 
     @Override

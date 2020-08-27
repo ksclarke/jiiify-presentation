@@ -7,6 +7,7 @@ import java.io.IOException;
 import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.v3.Manifest;
+import info.freelibrary.iiif.presentation.v3.properties.Metadata;
 import info.freelibrary.iiif.presentation.v3.utils.Manifestor;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 
@@ -25,7 +26,7 @@ public class Examples {
         final Manifestor manifestor = new Manifestor();
         final Manifest manifest = manifestor.readManifest(new File(TestUtils.TEST_DIR, "z1960050.json"));
 
-        manifest.getMetadata().add("Contributor", "Your Name Here");
+        manifest.getMetadata().add(new Metadata("Contributor", "Your Name Here"));
         manifestor.write(manifest, File.createTempFile("z1960050", ".json"));
     }
 

@@ -397,8 +397,13 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     @Override
-    public Range setMetadata(final Metadata aMetadata) {
-        return (Range) super.setMetadata(aMetadata);
+    public Range setMetadata(final Metadata... aMetadataArray) {
+        return (Range) super.setMetadata(aMetadataArray);
+    }
+
+    @Override
+    public Range setMetadata(final List<Metadata> aMetadataList) {
+        return (Range) super.setMetadata(aMetadataList);
     }
 
     @Override

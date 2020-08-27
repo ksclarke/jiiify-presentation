@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -18,6 +19,7 @@ import org.junit.Test;
 import com.opencsv.CSVReader;
 
 import info.freelibrary.iiif.presentation.v3.properties.Metadata;
+import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.services.ImageInfoService;
@@ -69,13 +71,13 @@ public class ManifestTest extends AbstractTest {
         final CSVReader reader2 = new CSVReader(new FileReader("src/test/resources/csv/sinai-images-canvas-2.csv"));
         final List<String[]> firstCanvas = reader1.readAll();
         final List<String[]> secondCanvas = reader2.readAll();
-        final Metadata metadata = new Metadata();
+        final List<Metadata> metadata = new ArrayList<>();
 
         reader1.close();
         reader2.close();
 
         for (final String[] kvPair : METADATA_PAIRS) {
-            metadata.add(kvPair[0], kvPair[1]);
+            metadata.add(new Metadata(kvPair[0], kvPair[1]));
         }
 
         myManifest = new Manifest(MANIFEST_URI, TEST_TITLE);
@@ -122,6 +124,9 @@ public class ManifestTest extends AbstractTest {
             content2.addBody(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(values[0]));
         }
 
+        final RequiredStatement reqStmt = new RequiredStatement("Attribution",
+                "Provided courtesy of Example Institution");
+        myManifest.setRequiredStatement(reqStmt);
         myManifest.setRights("http://creativecommons.org/licenses/by/4.0/");
 
         myVertx = Vertx.factory.vertx();

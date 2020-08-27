@@ -195,8 +195,13 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
     }
 
     @Override
-    public VideoContent setMetadata(final Metadata aMetadata) {
-        return (VideoContent) super.setMetadata(aMetadata);
+    public VideoContent setMetadata(final Metadata... aMetadataArray) {
+        return (VideoContent) super.setMetadata(aMetadataArray);
+    }
+
+    @Override
+    public VideoContent setMetadata(final List<Metadata> aMetadataList) {
+        return (VideoContent) super.setMetadata(aMetadataList);
     }
 
     @Override

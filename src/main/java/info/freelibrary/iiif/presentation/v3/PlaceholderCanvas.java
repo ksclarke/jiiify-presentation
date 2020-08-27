@@ -236,8 +236,13 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas> impleme
     }
 
     @Override
-    public PlaceholderCanvas setMetadata(final Metadata aMetadata) {
-        return (PlaceholderCanvas) super.setMetadata(aMetadata);
+    public PlaceholderCanvas setMetadata(final Metadata... aMetadataArray) {
+        return (PlaceholderCanvas) super.setMetadata(aMetadataArray);
+    }
+
+    @Override
+    public PlaceholderCanvas setMetadata(final List<Metadata> aMetadataList) {
+        return (PlaceholderCanvas) super.setMetadata(aMetadataList);
     }
 
     @Override

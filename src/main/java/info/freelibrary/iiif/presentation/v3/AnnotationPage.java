@@ -276,8 +276,13 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
     }
 
     @Override
-    public AnnotationPage<T> setMetadata(final Metadata aMetadata) {
-        return (AnnotationPage<T>) super.setMetadata(aMetadata);
+    public AnnotationPage<T> setMetadata(final Metadata... aMetadataArray) {
+        return (AnnotationPage<T>) super.setMetadata(aMetadataArray);
+    }
+
+    @Override
+    public AnnotationPage<T> setMetadata(final List<Metadata> aMetadataList) {
+        return (AnnotationPage<T>) super.setMetadata(aMetadataList);
     }
 
     @Override

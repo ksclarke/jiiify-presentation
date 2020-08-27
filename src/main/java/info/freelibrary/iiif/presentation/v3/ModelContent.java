@@ -176,8 +176,13 @@ public class ModelContent extends AbstractContentResource<ModelContent> implemen
     }
 
     @Override
-    public ModelContent setMetadata(final Metadata aMetadata) {
-        return (ModelContent) super.setMetadata(aMetadata);
+    public ModelContent setMetadata(final Metadata... aMetadataArray) {
+        return (ModelContent) super.setMetadata(aMetadataArray);
+    }
+
+    @Override
+    public ModelContent setMetadata(final List<Metadata> aMetadataList) {
+        return (ModelContent) super.setMetadata(aMetadataList);
     }
 
     @Override

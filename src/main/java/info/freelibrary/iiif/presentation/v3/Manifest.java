@@ -89,14 +89,14 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      *
      * @param aID A manifest ID in string form
      * @param aLabel A descriptive label in string form
-     * @param aMetadata A manifest's metadata
+     * @param aMetadataList A list of metadata properties
      * @param aSummary A summary in string form
      * @param aThumbnail A thumbnail
      * @param aProvider A resource provider
      */
-    public Manifest(final String aID, final String aLabel, final Metadata aMetadata, final String aSummary,
+    public Manifest(final String aID, final String aLabel, final List<Metadata> aMetadataList, final String aSummary,
             final Thumbnail aThumbnail, final Provider aProvider) {
-        super(ResourceTypes.MANIFEST, aID, aLabel, aMetadata, aSummary, aThumbnail, aProvider);
+        super(ResourceTypes.MANIFEST, aID, aLabel, aMetadataList, aSummary, aThumbnail, aProvider);
     }
 
     /**
@@ -104,14 +104,14 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      *
      * @param aID A manifest ID
      * @param aLabel A descriptive label
-     * @param aMetadata A manifest's metadata
+     * @param aMetadataList A list of metadata properties
      * @param aSummary A summary
      * @param aThumbnail A thumbnail
      * @param aProvider A resource provider
      */
-    public Manifest(final URI aID, final Label aLabel, final Metadata aMetadata, final Summary aSummary,
+    public Manifest(final URI aID, final Label aLabel, final List<Metadata> aMetadataList, final Summary aSummary,
             final Thumbnail aThumbnail, final Provider aProvider) {
-        super(ResourceTypes.MANIFEST, aID, aLabel, aMetadata, aSummary, aThumbnail, aProvider);
+        super(ResourceTypes.MANIFEST, aID, aLabel, aMetadataList, aSummary, aThumbnail, aProvider);
     }
 
     /**
@@ -510,8 +510,8 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     @Override
-    public Manifest setRequiredStatement(final RequiredStatement aStatement) {
-        return (Manifest) super.setRequiredStatement(aStatement);
+    public Manifest setRequiredStatement(final RequiredStatement aRequiredStatement) {
+        return (Manifest) super.setRequiredStatement(aRequiredStatement);
     }
 
     @Override
@@ -525,8 +525,13 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     @Override
-    public Manifest setMetadata(final Metadata aMetadata) {
-        return (Manifest) super.setMetadata(aMetadata);
+    public Manifest setMetadata(final Metadata... aMetadataArray) {
+        return (Manifest) super.setMetadata(aMetadataArray);
+    }
+
+    @Override
+    public Manifest setMetadata(final List<Metadata> aMetadataList) {
+        return (Manifest) super.setMetadata(aMetadataList);
     }
 
     @Override

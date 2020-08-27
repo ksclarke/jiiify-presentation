@@ -195,8 +195,13 @@ public class ImageContent extends AbstractContentResource<ImageContent> implemen
     }
 
     @Override
-    public ImageContent setMetadata(final Metadata aMetadata) {
-        return (ImageContent) super.setMetadata(aMetadata);
+    public ImageContent setMetadata(final Metadata... aMetadataArray) {
+        return (ImageContent) super.setMetadata(aMetadataArray);
+    }
+
+    @Override
+    public ImageContent setMetadata(final List<Metadata> aMetadataList) {
+        return (ImageContent) super.setMetadata(aMetadataList);
     }
 
     @Override

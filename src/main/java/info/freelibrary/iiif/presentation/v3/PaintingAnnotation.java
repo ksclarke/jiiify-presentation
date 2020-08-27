@@ -338,8 +338,13 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation> implement
     }
 
     @Override
-    public PaintingAnnotation setMetadata(final Metadata aMetadata) {
-        return (PaintingAnnotation) super.setMetadata(aMetadata);
+    public PaintingAnnotation setMetadata(final Metadata... aMetadataArray) {
+        return (PaintingAnnotation) super.setMetadata(aMetadataArray);
+    }
+
+    @Override
+    public PaintingAnnotation setMetadata(final List<Metadata> aMetadataList) {
+        return (PaintingAnnotation) super.setMetadata(aMetadataList);
     }
 
     @Override

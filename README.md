@@ -12,7 +12,7 @@ A very simple example of using jiiify-presentation follows:
     final Manifestor manifestor = new Manifestor();
     final Manifest manifest = manifestor.readManifest(new File("src/test/resources/json/z1960050.json"));
 
-    manifest.getMetadata().add("Contributor", "Your Name Here");
+    manifest.getMetadata().add(new Metadata("Contributor", "Your Name Here"));
     manifestor.write(manifest, File.createTempFile("z1960050", ".json"));
 
 To learn more about how to use the library, consult the project's [Javadocs](https://javadoc.io/doc/info.freelibrary/jiiify-presentation-v3/latest/index.html).

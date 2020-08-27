@@ -193,8 +193,13 @@ public class SoundContent extends AbstractContentResource<SoundContent> implemen
     }
 
     @Override
-    public SoundContent setMetadata(final Metadata aMetadata) {
-        return (SoundContent) super.setMetadata(aMetadata);
+    public SoundContent setMetadata(final Metadata... aMetadataArray) {
+        return (SoundContent) super.setMetadata(aMetadataArray);
+    }
+
+    @Override
+    public SoundContent setMetadata(final List<Metadata> aMetadataList) {
+        return (SoundContent) super.setMetadata(aMetadataList);
     }
 
     @Override

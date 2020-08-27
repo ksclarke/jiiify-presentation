@@ -232,8 +232,13 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> imple
     }
 
     @Override
-    public AccompanyingCanvas setMetadata(final Metadata aMetadata) {
-        return (AccompanyingCanvas) super.setMetadata(aMetadata);
+    public AccompanyingCanvas setMetadata(final Metadata... aMetadataArray) {
+        return (AccompanyingCanvas) super.setMetadata(aMetadataArray);
+    }
+
+    @Override
+    public AccompanyingCanvas setMetadata(final List<Metadata> aMetadataList) {
+        return (AccompanyingCanvas) super.setMetadata(aMetadataList);
     }
 
     @Override

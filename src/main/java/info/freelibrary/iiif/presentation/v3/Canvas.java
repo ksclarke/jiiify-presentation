@@ -420,8 +420,13 @@ public class Canvas extends AbstractCanvas<Canvas> implements Resource<Canvas>, 
     }
 
     @Override
-    public Canvas setMetadata(final Metadata aMetadata) {
-        return (Canvas) super.setMetadata(aMetadata);
+    public Canvas setMetadata(final Metadata... aMetadataArray) {
+        return (Canvas) super.setMetadata(aMetadataArray);
+    }
+
+    @Override
+    public Canvas setMetadata(final List<Metadata> aMetadataList) {
+        return (Canvas) super.setMetadata(aMetadataList);
     }
 
     @Override

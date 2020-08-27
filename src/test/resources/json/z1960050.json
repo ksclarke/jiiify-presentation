@@ -7,6 +7,18 @@
       "Georgian NF Fragment 68a"
     ]
   },
+  "requiredStatement": {
+    "label": {
+      "none": [
+        "Attribution"
+      ]
+    },
+    "value": {
+      "none": [
+        "Provided courtesy of Example Institution"
+      ]
+    }
+  },
   "rights": "http://creativecommons.org/licenses/by/4.0/",
   "thumbnail": [
     {

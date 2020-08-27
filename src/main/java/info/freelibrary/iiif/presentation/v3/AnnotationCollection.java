@@ -199,8 +199,13 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
     }
 
     @Override
-    public AnnotationCollection setMetadata(final Metadata aMetadata) {
-        return (AnnotationCollection) super.setMetadata(aMetadata);
+    public AnnotationCollection setMetadata(final Metadata... aMetadataArray) {
+        return (AnnotationCollection) super.setMetadata(aMetadataArray);
+    }
+
+    @Override
+    public AnnotationCollection setMetadata(final List<Metadata> aMetadataList) {
+        return (AnnotationCollection) super.setMetadata(aMetadataList);
     }
 
     @Override
