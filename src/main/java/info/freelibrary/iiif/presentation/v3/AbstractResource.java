@@ -28,6 +28,7 @@ import info.freelibrary.iiif.presentation.v3.properties.Rendering;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
+import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorsDeserializer;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.DisjointChecker;
 import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.services.ServiceDeserializer;
@@ -42,8 +43,8 @@ import io.vertx.core.json.jackson.DatabindCodec;
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.TYPE, Constants.ID, Constants.LABEL, Constants.SUMMARY,
-    Constants.REQUIRED_STATEMENT, Constants.PROVIDER, Constants.RIGHTS, Constants.PART_OF, Constants.HOMEPAGE,
-    Constants.THUMBNAIL, Constants.METADATA, Constants.ITEMS, Constants.SERVICE })
+    Constants.REQUIRED_STATEMENT, Constants.PROVIDER, Constants.RIGHTS, Constants.PART_OF, Constants.BEHAVIOR,
+    Constants.HOMEPAGE, Constants.THUMBNAIL, Constants.METADATA, Constants.ITEMS, Constants.SERVICE })
 abstract class AbstractResource<T extends AbstractResource<T>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractResource.class, MessageCodes.BUNDLE);
@@ -81,6 +82,8 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
 
     private List<Rendering> myRenderings;
 
+    @JsonProperty(Constants.BEHAVIOR)
+    @JsonDeserialize(using = BehaviorsDeserializer.class)
     private List<Behavior> myBehaviors;
 
     private List<SeeAlso> mySeeAlsoRefs;
@@ -482,7 +485,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
         return myType;
     }
 
-    @JsonSetter(Constants.BEHAVIOR)
+    @JsonIgnore
     protected AbstractResource<T> setBehaviors(final Behavior... aBehaviorArray) {
         final List<Behavior> behaviors = getBehaviorsList();
 
@@ -493,7 +496,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
         return this;
     }
 
-    @JsonIgnore
+    @JsonSetter(Constants.BEHAVIOR)
     protected AbstractResource<T> setBehaviors(final List<Behavior> aBehaviorList) {
         // We implement this so it can be overridden, but it should never actually be called because all behavior
         // setting should go through checkBehaviors() first, which returns an array for setBehaviors(Behavior...)

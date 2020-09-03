@@ -13,7 +13,7 @@
   <entry key="JPA-007">Context URI cannot be null</entry>
   <entry key="JPA-008">Canvas cannot be null</entry>
   <entry key="JPA-009">SeeAlso ID cannot be null</entry>
-  <entry key="JPA-010">{} isn't a behavior or URI</entry>
+  <entry key="JPA-010">{} isn't a valid {} behavior</entry>
   <entry key="JPA-011">Width ({}) and height ({}) must not be negative numbers</entry>
   <entry key="JPA-012">{} is required</entry>
   <entry key="JPA-013">{} is not a recognizable media type</entry>

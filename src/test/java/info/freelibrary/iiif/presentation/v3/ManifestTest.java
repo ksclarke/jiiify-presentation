@@ -130,6 +130,7 @@ public class ManifestTest extends AbstractTest {
                 "Provided courtesy of Example Institution");
         myManifest.setRequiredStatement(reqStmt);
         myManifest.setRights("http://creativecommons.org/licenses/by/4.0/");
+        myManifest.setBehaviors(ManifestBehavior.PAGED);
 
         final Service service = new GenericService("https://example.org/service/example")
                 .setContext("https://example.org/example-service/context.json")
@@ -257,7 +258,7 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public final void testAddBehaviors() {
-        assertEquals(1, myManifest.addBehaviors(ManifestBehavior.CONTINUOUS).getBehaviors().size());
+        assertEquals(2, myManifest.addBehaviors(ManifestBehavior.NO_AUTO_ADVANCE).getBehaviors().size());
     }
 
     /**

@@ -38,6 +38,14 @@ public class ResourceBehaviorTest {
     }
 
     /**
+     * Tests the fromString() method.
+     */
+    @Test
+    public final void fromString() {
+        assertEquals(ResourceBehavior.HIDDEN, ResourceBehavior.fromString(BehaviorConstants.HIDDEN));
+    }
+
+    /**
      * Tests the RangeBehavior values.
      */
     @Test

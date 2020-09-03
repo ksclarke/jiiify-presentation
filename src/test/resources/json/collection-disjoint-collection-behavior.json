@@ -1,0 +1,8 @@
+{
+  "@context" : "http://iiif.io/api/presentation/3/context.json",
+  "type" : "Collection",
+  "id" : "ID-a",
+  "label" : { "none": ["label-a"]},
+  "behavior": [ "multi-part", "together" ],
+  "items": []
+}

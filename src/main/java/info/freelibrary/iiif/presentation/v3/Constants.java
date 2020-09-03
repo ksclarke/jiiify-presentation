@@ -128,6 +128,9 @@ public final class Constants {
 
     public static final String FRAGMENT_DELIM = "#";
 
+    /* A message slot as defined by info.freelibrary.util.StringUtils.format */
+    public static final String MESSAGE_SLOT = "{}";
+
     private Constants() {
         super();
     }

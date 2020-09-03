@@ -10,6 +10,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import info.freelibrary.iiif.presentation.v3.utils.TestConstants;
 
+import io.vertx.core.json.DecodeException;
+
 /**
  * A test of RangeBehavior.
  */
@@ -32,11 +34,30 @@ public class RangeBehaviorTest {
     }
 
     /**
+     * Tests the JSON deserialization of a manifest with a range with mutually exclusive behaviors.
+     *
+     * @throws DecodeException
+     */
+    @Test(expected = DecodeException.class)
+    public final void testJsonDeserializationDisjoint() {
+        // FIXME IIIF-962
+        throw new DecodeException();
+    }
+
+    /**
      * Test the toString() method.
      */
     @Test
     public final void testToString() {
         assertEquals(BehaviorConstants.SEQUENCE, RangeBehavior.SEQUENCE.toString());
+    }
+
+    /**
+     * Tests the fromString() method.
+     */
+    @Test
+    public final void fromString() {
+        assertEquals(RangeBehavior.SEQUENCE, RangeBehavior.fromString(BehaviorConstants.SEQUENCE));
     }
 
     /**

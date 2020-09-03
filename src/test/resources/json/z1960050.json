@@ -20,6 +20,7 @@
     }
   },
   "rights": "http://creativecommons.org/licenses/by/4.0/",
+  "behavior": [ "paged" ],
   "thumbnail": [
     {
       "type": "Image",
