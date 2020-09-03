@@ -20,6 +20,7 @@ import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
+import info.freelibrary.iiif.presentation.v3.services.Service;
 
 /**
  * Dataset content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
@@ -99,6 +100,16 @@ public class DatasetContent extends AbstractContentResource<DatasetContent> impl
     @Override
     public DatasetContent setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
         return (DatasetContent) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public DatasetContent setServices(final Service... aServiceArray) {
+        return (DatasetContent) super.setServices(aServiceArray);
+    }
+
+    @Override
+    public DatasetContent setServices(final List<Service> aServiceList) {
+        return (DatasetContent) super.setServices(aServiceList);
     }
 
     @Override

@@ -46,7 +46,7 @@ public class ImageContentTest {
      */
     @Test
     public void testSetGetService() {
-        assertEquals(SERVICE, new ImageContent(IMAGE_URI).setService(SERVICE).getService().get());
+        assertEquals(SERVICE, new ImageContent(IMAGE_URI).setServices(SERVICE).getServices().get(0));
     }
 
     /**

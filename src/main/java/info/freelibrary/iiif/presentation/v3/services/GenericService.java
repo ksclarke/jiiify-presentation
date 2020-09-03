@@ -2,8 +2,7 @@
 package info.freelibrary.iiif.presentation.v3.services;
 
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedHashMap;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
@@ -24,7 +23,7 @@ import info.freelibrary.util.LoggerFactory;
  * A generic service class for other service implementations.
  */
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.ID, Constants.PROFILE })
-public class GenericService implements Service<GenericService> {
+public class GenericService implements Service {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GenericService.class, MessageCodes.BUNDLE);
 
@@ -34,7 +33,7 @@ public class GenericService implements Service<GenericService> {
 
     private URI myProfile;
 
-    private Optional<MediaType> myFormat;
+    private Optional<MediaType> myFormat = Optional.ofNullable(null);
 
     /**
      * Creates a service for the supplied URI.
@@ -209,15 +208,7 @@ public class GenericService implements Service<GenericService> {
             if (myProfile == null && myContext == null && myFormat == null) {
                 return myID;
             } else {
-                final Map<String, Object> map = new HashMap<>();
-
-                if (myProfile != null) {
-                    map.put(Constants.PROFILE, myProfile);
-                }
-
-                if (myFormat.isPresent()) {
-                    map.put(Constants.FORMAT, getFormat());
-                }
+                final LinkedHashMap<String, Object> map = new LinkedHashMap<>();
 
                 if (myContext != null) {
                     map.put(Constants.CONTEXT, myContext);
@@ -225,6 +216,14 @@ public class GenericService implements Service<GenericService> {
 
                 if (myID != null) {
                     map.put(Constants.ID, myID);
+                }
+
+                if (myProfile != null) {
+                    map.put(Constants.PROFILE, myProfile);
+                }
+
+                if (myFormat.isPresent()) {
+                    map.put(Constants.FORMAT, getFormat());
                 }
 
                 return ImmutableMap.copyOf(map);

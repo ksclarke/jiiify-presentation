@@ -46,8 +46,6 @@ public class Collection extends NavigableResource<Collection> implements Resourc
 
     private List<Item> myItems;
 
-    private Service<?> myService;
-
     /**
      * Creates a new collection.
      *
@@ -149,28 +147,6 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         return this;
     }
 
-    /**
-     * Gets a service.
-     *
-     * @return A service
-     */
-    @JsonGetter(Constants.SERVICE)
-    public Service<?> getService() {
-        return myService;
-    }
-
-    /**
-     * Sets a service.
-     *
-     * @param aService A service
-     * @return The collection
-     */
-    @JsonSetter(Constants.SERVICE)
-    public Collection setService(final Service<?> aService) {
-        myService = checkNotNull(aService);
-        return this;
-    }
-
     @Override
     public Collection clearBehaviors() {
         return (Collection) super.clearBehaviors();
@@ -266,6 +242,16 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     @Override
     public Collection setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
         return (Collection) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public Collection setServices(final Service... aServiceArray) {
+        return (Collection) super.setServices(aServiceArray);
+    }
+
+    @Override
+    public Collection setServices(final List<Service> aServiceList) {
+        return (Collection) super.setServices(aServiceList);
     }
 
     @Override

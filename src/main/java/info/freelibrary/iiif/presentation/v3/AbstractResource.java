@@ -29,6 +29,8 @@ import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.DisjointChecker;
+import info.freelibrary.iiif.presentation.v3.services.Service;
+import info.freelibrary.iiif.presentation.v3.services.ServiceDeserializer;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -82,6 +84,9 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
     private List<Behavior> myBehaviors;
 
     private List<SeeAlso> mySeeAlsoRefs;
+
+    @JsonDeserialize(contentUsing = ServiceDeserializer.class)
+    private List<Service> myServices;
 
     /**
      * Creates a new resource from the supplied type.
@@ -544,6 +549,36 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
     @JsonSetter(Constants.SEE_ALSO)
     protected AbstractResource<T> setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
         getSeeAlsoRefs().addAll(aSeeAlsoList);
+        return this;
+    }
+
+    /**
+     * Gets a list of resource services, initializing the list if this hasn't been done already.
+     *
+     * @return The resource's services
+     */
+    @JsonGetter(Constants.SERVICE)
+    public List<Service> getServices() {
+        if (myServices == null) {
+            myServices = new ArrayList<>();
+        }
+
+        return myServices;
+    }
+
+    @JsonIgnore
+    protected AbstractResource<T> setServices(final Service... aServiceArray) {
+        return setServices(Arrays.asList(aServiceArray));
+    }
+
+    @JsonSetter(Constants.SERVICE)
+    protected AbstractResource<T> setServices(final List<Service> aServiceList) {
+        final List<Service> services = getServices();
+
+        checkNotNull(aServiceList);
+        services.clear();
+        services.addAll(aServiceList);
+
         return this;
     }
 

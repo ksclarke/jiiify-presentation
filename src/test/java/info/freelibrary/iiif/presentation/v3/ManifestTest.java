@@ -22,7 +22,9 @@ import info.freelibrary.iiif.presentation.v3.properties.Metadata;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
+import info.freelibrary.iiif.presentation.v3.services.GenericService;
 import info.freelibrary.iiif.presentation.v3.services.ImageInfoService;
+import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 
 import io.vertx.core.Vertx;
@@ -101,7 +103,7 @@ public class ManifestTest extends AbstractTest {
         for (final String[] values : firstCanvas) {
             final String id = SERVER + values[1] + THUMBNAIL_PATH;
             final ImageInfoService service = new ImageInfoService(SERVER + values[1]);
-            final ImageContent resource = new ImageContent(id).setService(service);
+            final ImageContent resource = new ImageContent(id).setServices(service);
 
             content1.addBody(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(values[0]));
         }
@@ -119,7 +121,7 @@ public class ManifestTest extends AbstractTest {
         for (final String[] values : secondCanvas) {
             final String id = SERVER + values[1] + THUMBNAIL_PATH;
             final ImageInfoService service = new ImageInfoService(SERVER + values[1]);
-            final ImageContent resource = new ImageContent(id).setService(service);
+            final ImageContent resource = new ImageContent(id).setServices(service);
 
             content2.addBody(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(values[0]));
         }
@@ -128,6 +130,11 @@ public class ManifestTest extends AbstractTest {
                 "Provided courtesy of Example Institution");
         myManifest.setRequiredStatement(reqStmt);
         myManifest.setRights("http://creativecommons.org/licenses/by/4.0/");
+
+        final Service service = new GenericService("https://example.org/service/example")
+                .setContext("https://example.org/example-service/context.json")
+                .setProfile("https://example.org/docs/example-service.html");
+        myManifest.setServices(service);
 
         myVertx = Vertx.factory.vertx();
     }

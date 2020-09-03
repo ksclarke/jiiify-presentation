@@ -4,8 +4,6 @@ package info.freelibrary.iiif.presentation.v3;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -22,7 +20,7 @@ import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
-import info.freelibrary.iiif.presentation.v3.services.ImageInfoService;
+import info.freelibrary.iiif.presentation.v3.services.Service;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -37,8 +35,6 @@ import io.vertx.core.json.JsonObject;
     Constants.HEIGHT, Constants.FORMAT, Constants.LANGUAGE, Constants.SERVICE })
 public class ImageContent extends AbstractContentResource<ImageContent> implements Thumbnail, Resource<ImageContent>,
         SpatialContentResource<ImageContent> {
-
-    private Optional<ImageInfoService> myService;
 
     private int myWidth;
 
@@ -117,6 +113,16 @@ public class ImageContent extends AbstractContentResource<ImageContent> implemen
     @Override
     public ImageContent setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
         return (ImageContent) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public ImageContent setServices(final Service... aServiceArray) {
+        return (ImageContent) super.setServices(aServiceArray);
+    }
+
+    @Override
+    public ImageContent setServices(final List<Service> aServiceList) {
+        return (ImageContent) super.setServices(aServiceList);
     }
 
     @Override
@@ -252,28 +258,6 @@ public class ImageContent extends AbstractContentResource<ImageContent> implemen
     @JsonInclude(Include.NON_DEFAULT)
     public int getHeight() {
         return myHeight;
-    }
-
-    /**
-     * Gets the image's associated service.
-     *
-     * @return The image's associated service
-     */
-    @JsonGetter(Constants.SERVICE)
-    public Optional<ImageInfoService> getService() {
-        return myService == null || myService.isEmpty() ? Optional.empty() : myService;
-    }
-
-    /**
-     * Sets the image's associated service
-     *
-     * @param aService The image's associated service
-     * @return The image content
-     */
-    @JsonSetter(Constants.SERVICE)
-    public ImageContent setService(final ImageInfoService aService) {
-        myService = Optional.ofNullable(aService);
-        return this;
     }
 
     /**

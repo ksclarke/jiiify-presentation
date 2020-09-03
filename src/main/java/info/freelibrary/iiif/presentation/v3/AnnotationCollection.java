@@ -21,6 +21,7 @@ import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
+import info.freelibrary.iiif.presentation.v3.services.Service;
 
 /**
  * A collection of annotations.
@@ -121,6 +122,16 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
     @Override
     public AnnotationCollection setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
         return (AnnotationCollection) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public AnnotationCollection setServices(final Service... aServiceArray) {
+        return (AnnotationCollection) super.setServices(aServiceArray);
+    }
+
+    @Override
+    public AnnotationCollection setServices(final List<Service> aServiceList) {
+        return (AnnotationCollection) super.setServices(aServiceList);
     }
 
     @Override

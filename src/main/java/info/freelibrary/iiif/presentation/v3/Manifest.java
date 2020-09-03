@@ -61,8 +61,6 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
 
     private ViewingDirection myViewingDirection;
 
-    private Service<?> myService;
-
     /**
      * Creates a new manifest.
      *
@@ -174,28 +172,6 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     @JsonSetter(Constants.ACCOMPANYING_CANVAS)
     public Manifest setAccompanyingCanvas(final AccompanyingCanvas aCanvas) {
         myAccompanyingCanvas = Optional.ofNullable(aCanvas);
-        return this;
-    }
-
-    /**
-     * Gets a service.
-     *
-     * @return A service
-     */
-    @JsonGetter(Constants.SERVICE)
-    public Service<?> getService() {
-        return myService;
-    }
-
-    /**
-     * Sets a service.
-     *
-     * @param aService A service
-     * @return The manifest
-     */
-    @JsonSetter(Constants.SERVICE)
-    public Manifest setService(final Service<?> aService) {
-        myService = aService;
         return this;
     }
 
@@ -447,6 +423,16 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     @Override
     public Manifest setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
         return (Manifest) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public Manifest setServices(final Service... aServiceArray) {
+        return (Manifest) super.setServices(aServiceArray);
+    }
+
+    @Override
+    public Manifest setServices(final List<Service> aServiceList) {
+        return (Manifest) super.setServices(aServiceList);
     }
 
     @Override

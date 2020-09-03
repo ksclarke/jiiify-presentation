@@ -12,7 +12,7 @@ import info.freelibrary.iiif.presentation.v3.Constants;
 /**
  * An external service that provides GeoJSON information.
  */
-public class GeoJSONService implements Service<GeoJSONService> {
+public class GeoJSONService implements Service {
 
     /* The context for this service */
     @JsonIgnore

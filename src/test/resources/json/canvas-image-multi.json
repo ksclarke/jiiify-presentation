@@ -18,7 +18,14 @@
             "id": "https://example.org/iiif/book1/page1/full/max/0/default.jpg",
             "width": 480,
             "height": 360,
-            "format": "image/jpeg"
+            "format": "image/jpeg",
+            "service": [
+              {
+                "@context": "http://iiif.io/api/image/3/context.json",
+                "id": "https://example.org/iiif/book1/page1",
+                "profile": "http://iiif.io/api/image/3/level0.json"
+              }
+            ]
           },
           "target": {
             "type": "SpecificResource",
@@ -39,7 +46,14 @@
             "id": "https://example.org/iiif/book1/page1/full/max/0/bitonal.jpg",
             "width": 480,
             "height": 360,
-            "format": "image/jpeg"
+            "format": "image/jpeg",
+            "service": [
+              {
+                "@context": "http://iiif.io/api/image/3/context.json",
+                "id": "https://example.org/iiif/book1/page1",
+                "profile": "http://iiif.io/api/image/3/level0.json"
+              }
+            ]
           },
           "target": {
             "type": "SpecificResource",

@@ -12,7 +12,7 @@ import info.freelibrary.iiif.presentation.v3.Constants;
 /**
  * A physical dimensions service that provides information useful for rulers, etc.
  */
-public class PhysicalDimsService implements Service<PhysicalDimsService> {
+public class PhysicalDimsService implements Service {
 
     /* The context for this service */
     @JsonIgnore

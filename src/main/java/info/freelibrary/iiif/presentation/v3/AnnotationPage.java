@@ -28,6 +28,7 @@ import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
+import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
@@ -198,6 +199,16 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
     @Override
     public AnnotationPage<T> setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
         return (AnnotationPage<T>) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public AnnotationPage<T> setServices(final Service... aServiceArray) {
+        return (AnnotationPage<T>) super.setServices(aServiceArray);
+    }
+
+    @Override
+    public AnnotationPage<T> setServices(final List<Service> aServiceList) {
+        return (AnnotationPage<T>) super.setServices(aServiceList);
     }
 
     @Override

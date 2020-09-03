@@ -25,6 +25,7 @@ import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
+import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
@@ -260,6 +261,16 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation> implement
     @Override
     public PaintingAnnotation setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
         return (PaintingAnnotation) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public PaintingAnnotation setServices(final Service... aServiceArray) {
+        return (PaintingAnnotation) super.setServices(aServiceArray);
+    }
+
+    @Override
+    public PaintingAnnotation setServices(final List<Service> aServiceList) {
+        return (PaintingAnnotation) super.setServices(aServiceList);
     }
 
     @Override

@@ -20,6 +20,7 @@ import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
+import info.freelibrary.iiif.presentation.v3.services.Service;
 
 /**
  * Text content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
@@ -98,6 +99,16 @@ public class TextContent extends AbstractContentResource<TextContent> implements
     @Override
     public TextContent setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
         return (TextContent) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public TextContent setServices(final Service... aServiceArray) {
+        return (TextContent) super.setServices(aServiceArray);
+    }
+
+    @Override
+    public TextContent setServices(final List<Service> aServiceList) {
+        return (TextContent) super.setServices(aServiceList);
     }
 
     @Override

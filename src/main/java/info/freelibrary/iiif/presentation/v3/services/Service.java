@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
  * A service interface to be implemented by actual services (like GeoJSON and ImageInfo).
  */
 @JsonDeserialize(using = ServiceDeserializer.class)
-public interface Service<T> {
+public interface Service {
 
     /**
      * Required by ImageInfo, PhysicalDims; suggested by GeoJSON.

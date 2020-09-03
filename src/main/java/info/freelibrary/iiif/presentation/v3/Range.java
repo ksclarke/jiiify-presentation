@@ -30,6 +30,7 @@ import info.freelibrary.iiif.presentation.v3.properties.StartSelector;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.RangeBehavior;
+import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 import io.vertx.core.json.Json;
@@ -319,6 +320,16 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     @Override
     public Range setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
         return (Range) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public Range setServices(final Service... aServiceArray) {
+        return (Range) super.setServices(aServiceArray);
+    }
+
+    @Override
+    public Range setServices(final List<Service> aServiceList) {
+        return (Range) super.setServices(aServiceList);
     }
 
     @Override

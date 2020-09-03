@@ -20,6 +20,7 @@ import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
+import info.freelibrary.iiif.presentation.v3.services.Service;
 
 /**
  * Model content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
@@ -98,6 +99,16 @@ public class ModelContent extends AbstractContentResource<ModelContent> implemen
     @Override
     public ModelContent setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
         return (ModelContent) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public ModelContent setServices(final Service... aServiceArray) {
+        return (ModelContent) super.setServices(aServiceArray);
+    }
+
+    @Override
+    public ModelContent setServices(final List<Service> aServiceList) {
+        return (ModelContent) super.setServices(aServiceList);
     }
 
     @Override

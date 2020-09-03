@@ -20,6 +20,7 @@ import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
+import info.freelibrary.iiif.presentation.v3.services.Service;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
@@ -158,6 +159,16 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas> impleme
     @Override
     public PlaceholderCanvas setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
         return (PlaceholderCanvas) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public PlaceholderCanvas setServices(final Service... aServiceArray) {
+        return (PlaceholderCanvas) super.setServices(aServiceArray);
+    }
+
+    @Override
+    public PlaceholderCanvas setServices(final List<Service> aServiceList) {
+        return (PlaceholderCanvas) super.setServices(aServiceList);
     }
 
     @Override

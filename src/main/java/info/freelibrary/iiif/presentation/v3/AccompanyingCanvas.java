@@ -20,6 +20,7 @@ import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
+import info.freelibrary.iiif.presentation.v3.services.Service;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
@@ -154,6 +155,16 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> imple
     @Override
     public AccompanyingCanvas setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
         return (AccompanyingCanvas) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public AccompanyingCanvas setServices(final Service... aServiceArray) {
+        return (AccompanyingCanvas) super.setServices(aServiceArray);
+    }
+
+    @Override
+    public AccompanyingCanvas setServices(final List<Service> aServiceList) {
+        return (AccompanyingCanvas) super.setServices(aServiceList);
     }
 
     @Override

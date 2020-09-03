@@ -23,6 +23,7 @@ import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
+import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -115,6 +116,16 @@ public class SoundContent extends AbstractContentResource<SoundContent> implemen
     @Override
     public SoundContent setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
         return (SoundContent) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public SoundContent setServices(final Service... aServiceArray) {
+        return (SoundContent) super.setServices(aServiceArray);
+    }
+
+    @Override
+    public SoundContent setServices(final List<Service> aServiceList) {
+        return (SoundContent) super.setServices(aServiceList);
     }
 
     @Override

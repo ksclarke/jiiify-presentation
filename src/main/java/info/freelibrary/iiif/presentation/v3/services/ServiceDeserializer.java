@@ -19,7 +19,7 @@ import info.freelibrary.util.LoggerFactory;
 /**
  * Deserializes services from JSON documents into {@link Service} implementations.
  */
-class ServiceDeserializer extends StdDeserializer<Service<?>> {
+public class ServiceDeserializer extends StdDeserializer<Service> {
 
     /**
      * The <code>serialVersionUID</code> for ServiceDeserializer.
@@ -48,10 +48,10 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> {
      *
      */
     @Override
-    public Service<?> deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException,
+    public Service deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException,
             JsonProcessingException {
         final JsonNode node = aParser.getCodec().readTree(aParser);
-        final Service<?> service;
+        final Service service;
 
         if (node.isTextual()) {
             service = new GenericService(node.textValue());

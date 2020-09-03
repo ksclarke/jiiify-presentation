@@ -20,6 +20,7 @@ import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
+import info.freelibrary.iiif.presentation.v3.services.Service;
 
 /**
  * Canvas content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
@@ -101,6 +102,16 @@ public class CanvasContent extends AbstractContentResource<CanvasContent> implem
     @Override
     public CanvasContent setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
         return (CanvasContent) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public CanvasContent setServices(final Service... aServiceArray) {
+        return (CanvasContent) super.setServices(aServiceArray);
+    }
+
+    @Override
+    public CanvasContent setServices(final List<Service> aServiceList) {
+        return (CanvasContent) super.setServices(aServiceList);
     }
 
     @Override

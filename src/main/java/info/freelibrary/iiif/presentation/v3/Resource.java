@@ -14,6 +14,7 @@ import info.freelibrary.iiif.presentation.v3.properties.Rendering;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
+import info.freelibrary.iiif.presentation.v3.services.Service;
 
 /**
  * An interface that defines methods related to all resources.
@@ -353,4 +354,26 @@ public interface Resource<T extends Resource<T>> {
      */
     T setSeeAlsoRefs(List<SeeAlso> aSeeAlsoList);
 
+    /**
+     * Gets a list of resource services, initializing the list if this hasn't been done already.
+     *
+     * @return The resource's services
+     */
+    List<Service> getServices();
+
+    /**
+     * Sets the services for this resource.
+     *
+     * @param aServiceArray The services to set for this resource
+     * @return The resource
+     */
+    T setServices(Service... aServiceArray);
+
+    /**
+     * Sets the services for this resource.
+     *
+     * @param aServiceList The services to set for this resource
+     * @return The resource
+     */
+    T setServices(List<Service> aServiceList);
 }

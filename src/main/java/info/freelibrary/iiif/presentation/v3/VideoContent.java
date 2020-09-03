@@ -23,6 +23,7 @@ import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
+import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -117,6 +118,16 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
     @Override
     public VideoContent setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
         return (VideoContent) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public VideoContent setServices(final Service... aServiceArray) {
+        return (VideoContent) super.setServices(aServiceArray);
+    }
+
+    @Override
+    public VideoContent setServices(final List<Service> aServiceList) {
+        return (VideoContent) super.setServices(aServiceList);
     }
 
     @Override

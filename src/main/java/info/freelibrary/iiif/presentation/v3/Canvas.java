@@ -23,6 +23,7 @@ import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
+import info.freelibrary.iiif.presentation.v3.services.Service;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
@@ -342,6 +343,16 @@ public class Canvas extends AbstractCanvas<Canvas> implements Resource<Canvas>, 
     @Override
     public Canvas setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
         return (Canvas) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public Canvas setServices(final Service... aServiceArray) {
+        return (Canvas) super.setServices(aServiceArray);
+    }
+
+    @Override
+    public Canvas setServices(final List<Service> aServiceList) {
+        return (Canvas) super.setServices(aServiceList);
     }
 
     @Override
