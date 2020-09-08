@@ -6,22 +6,22 @@ import java.net.URI;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
- * A service interface to be implemented by actual services (like GeoJSON and ImageInfo).
+ * A service interface to be implemented by actual services (like GeoJSON and ImageService).
  */
 @JsonDeserialize(using = ServiceDeserializer.class)
 public interface Service {
 
     /**
-     * Required by ImageInfo, PhysicalDims; suggested by GeoJSON.
+     * Gets the service context. Required by ImageService, PhysicalDims; suggested by GeoJSON.
      *
      * @return A context
      */
     URI getContext();
 
     /**
-     * Gets the ID of the item.
+     * Gets the service ID.
      *
-     * @return The ID of the item
+     * @return The ID
      */
     URI getID();
 

@@ -39,6 +39,10 @@ public final class ResourceTypes {
 
     public static final String AGENT = "Agent";
 
+    public static final String IMAGE_SERVICE_2 = "ImageService2";
+
+    public static final String IMAGE_SERVICE_3 = "ImageService3";
+
     private ResourceTypes() {
         super();
     }

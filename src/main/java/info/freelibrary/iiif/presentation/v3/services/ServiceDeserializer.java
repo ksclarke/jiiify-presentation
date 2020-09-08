@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -57,9 +58,29 @@ public class ServiceDeserializer extends StdDeserializer<Service> {
             service = new GenericService(node.textValue());
         } else if (node.isObject()) {
             final URI id = URI.create(node.get(Constants.ID).textValue());
+            final JsonNode typeNode = node.get(Constants.TYPE);
             final JsonNode contextNode = node.get(Constants.CONTEXT);
 
-            if (contextNode != null) {
+            // Image services must have a type
+            if (typeNode != null) {
+                final String type = typeNode.textValue();
+
+                if (ResourceTypes.IMAGE_SERVICE_2.equals(type)) {
+                    final String profile = node.get(Constants.PROFILE).textValue();
+                    final ImageService2.Profile level = ImageService2.Profile.fromString(profile);
+
+                    service = new ImageService2(level, id);
+                } else if (ResourceTypes.IMAGE_SERVICE_3.equals(type)) {
+                    final String profile = node.get(Constants.PROFILE).textValue();
+                    final ImageService3.Profile level = ImageService3.Profile.fromString(profile);
+
+                    service = new ImageService3(level, id);
+                } else {
+                    throw new JsonParseException(aParser,
+                            LOGGER.getMessage(MessageCodes.JPA_016, node.getClass().getName()),
+                            aParser.getCurrentLocation());
+                }
+            } else if (contextNode != null) {
                 final URI context = URI.create(contextNode.textValue());
 
                 if (PhysicalDimsService.CONTEXT.equals(context)) {
@@ -71,11 +92,6 @@ public class ServiceDeserializer extends StdDeserializer<Service> {
                     } else {
                         service = new PhysicalDimsService(id);
                     }
-                } else if (ImageInfoService.CONTEXT.equals(context)) {
-                    final String profile = node.get(Constants.PROFILE).textValue();
-                    final APIComplianceLevel level = APIComplianceLevel.fromProfile(profile);
-
-                    service = new ImageInfoService(level, id);
                 } else if (GeoJSONService.CONTEXT.equals(context)) {
                     service = new GeoJSONService(id);
                 } else {

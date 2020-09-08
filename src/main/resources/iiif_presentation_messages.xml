@@ -80,5 +80,6 @@
   <entry key="JPA-106">NOID iterator for '{}' starts at '{}' and skips '{}' NOIDs at a time</entry>
   <entry key="JPA-107">Could not create a new minter: {}</entry>
   <entry key="JPA-108">Received duplicate ID from the minter: {} (count: {})</entry>
+  <entry key="JPA-109">{} isn't a valid {} profile</entry>
 
 </properties>

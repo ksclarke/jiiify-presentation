@@ -10,7 +10,7 @@ import org.junit.Test;
 import com.google.common.net.MediaType;
 
 import info.freelibrary.iiif.presentation.v3.properties.Label;
-import info.freelibrary.iiif.presentation.v3.services.ImageInfoService;
+import info.freelibrary.iiif.presentation.v3.services.ImageService3;
 
 /**
  * Image content test.
@@ -21,7 +21,7 @@ public class ImageContentTest {
 
     private static final URI SERVICE_URI = URI.create("http://example.org/service");
 
-    private static final ImageInfoService SERVICE = new ImageInfoService(SERVICE_URI);
+    private static final ImageService3 SERVICE = new ImageService3(SERVICE_URI);
 
     private static final String IMAGE_PNG = "image/png";
 

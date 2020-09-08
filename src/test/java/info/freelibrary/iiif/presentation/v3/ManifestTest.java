@@ -23,7 +23,8 @@ import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.services.GenericService;
-import info.freelibrary.iiif.presentation.v3.services.ImageInfoService;
+import info.freelibrary.iiif.presentation.v3.services.ImageService2;
+import info.freelibrary.iiif.presentation.v3.services.ImageService3;
 import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 
@@ -46,7 +47,9 @@ public class ManifestTest extends AbstractTest {
 
     private static final String THUMBNAIL_PATH = "/0,1022,6132,6132/150,150/0/default.jpg";
 
-    private static final String MANIFEST_THUMBNAIL_URI = SERVER + "ark:%2F21198%2Fz1d79t3q" + THUMBNAIL_PATH;
+    private static final String ENCODED_MANIFEST_THUMBNAIL_ARK = "ark:%2F21198%2Fz1d79t3q";
+
+    private static final String MANIFEST_THUMBNAIL_URI = SERVER + ENCODED_MANIFEST_THUMBNAIL_ARK + THUMBNAIL_PATH;
 
     private static final String TEST_TITLE = "Georgian NF Fragment 68a";
 
@@ -82,9 +85,12 @@ public class ManifestTest extends AbstractTest {
             metadata.add(new Metadata(kvPair[0], kvPair[1]));
         }
 
+        final ImageService2 manifestThumbService = new ImageService2(ImageService2.Profile.TWO,
+                SERVER + ENCODED_MANIFEST_THUMBNAIL_ARK);
+
         myManifest = new Manifest(MANIFEST_URI, TEST_TITLE);
         myManifest.setMetadata(metadata);
-        myManifest.setThumbnails(new ImageContent(MANIFEST_THUMBNAIL_URI));
+        myManifest.setThumbnails(new ImageContent(MANIFEST_THUMBNAIL_URI).setServices(manifestThumbService));
 
         final String id1 = SERVER + MANIFEST_ID + "/canvas/canvas-1";
         final String label1 = "GeoNF-frg68a_001r_K-64-001";
@@ -102,7 +108,7 @@ public class ManifestTest extends AbstractTest {
 
         for (final String[] values : firstCanvas) {
             final String id = SERVER + values[1] + THUMBNAIL_PATH;
-            final ImageInfoService service = new ImageInfoService(SERVER + values[1]);
+            final ImageService3 service = new ImageService3(SERVER + values[1]);
             final ImageContent resource = new ImageContent(id).setServices(service);
 
             content1.addBody(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(values[0]));
@@ -120,7 +126,7 @@ public class ManifestTest extends AbstractTest {
 
         for (final String[] values : secondCanvas) {
             final String id = SERVER + values[1] + THUMBNAIL_PATH;
-            final ImageInfoService service = new ImageInfoService(SERVER + values[1]);
+            final ImageService3 service = new ImageService3(SERVER + values[1]);
             final ImageContent resource = new ImageContent(id).setServices(service);
 
             content2.addBody(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(values[0]));

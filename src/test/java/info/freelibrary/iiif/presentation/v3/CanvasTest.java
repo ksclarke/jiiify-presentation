@@ -22,7 +22,7 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavi
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector.EndTime;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector.StartTime;
-import info.freelibrary.iiif.presentation.v3.services.ImageInfoService;
+import info.freelibrary.iiif.presentation.v3.services.ImageService3;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 import info.freelibrary.util.StringUtils;
 
@@ -1422,7 +1422,7 @@ public class CanvasTest {
         final JsonObject found;
 
         final ImageContent imageContent = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT)
-                .setServices(new ImageInfoService(IMAGE_INFO_SERVICE_ID));
+                .setServices(new ImageService3(IMAGE_INFO_SERVICE_ID));
         final PaintingAnnotation paintingAnno = new PaintingAnnotation(IMAGE_ANNO_ID, myCanvas).setBody(imageContent)
                 .setTarget(myCanvas.getID());
         final TextContent textContent = new TextContent(TEXT_ID);
@@ -1431,7 +1431,7 @@ public class CanvasTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT);
         myCanvas.setThumbnails(new ImageContent(IMAGE_THUMBNAIL_ID).setWidthHeight(THUMBNAIL_WH, THUMBNAIL_WH)
-                .setServices(new ImageInfoService(IMAGE_INFO_SERVICE_ID)));
+                .setServices(new ImageService3(IMAGE_INFO_SERVICE_ID)));
         myCanvas.setPaintingPages(new AnnotationPage<PaintingAnnotation>(IMAGE_PAGE_ID).addAnnotations(paintingAnno));
         myCanvas.setSupplementingPages(new AnnotationPage<SupplementingAnnotation>(TEXT_PAGE_ID).addAnnotations(
                 supplementingAnno));
@@ -1453,10 +1453,10 @@ public class CanvasTest {
         final JsonObject found;
 
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT)
-                .setServices(new ImageInfoService(IMAGE_INFO_SERVICE_ID));
+                .setServices(new ImageService3(IMAGE_INFO_SERVICE_ID));
         final TextContent text = new TextContent(TEXT_ID);
         final Thumbnail thumbnail = new ImageContent(IMAGE_THUMBNAIL_ID).setWidthHeight(THUMBNAIL_WH, THUMBNAIL_WH)
-                .setServices(new ImageInfoService(IMAGE_INFO_SERVICE_ID));
+                .setServices(new ImageService3(IMAGE_INFO_SERVICE_ID));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setThumbnails(thumbnail).paintWith(myMinter, image).supplementWith(
                 myMinter, text);
@@ -1478,7 +1478,7 @@ public class CanvasTest {
         final JsonObject found;
 
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT)
-                .setServices(new ImageInfoService(IMAGE_INFO_SERVICE_ID));
+                .setServices(new ImageService3(IMAGE_INFO_SERVICE_ID));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, image);
 
@@ -1500,9 +1500,9 @@ public class CanvasTest {
         final JsonObject found;
 
         final ImageContent image1 = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT)
-                .setServices(new ImageInfoService(IMAGE_INFO_SERVICE_ID));
+                .setServices(new ImageService3(IMAGE_INFO_SERVICE_ID));
         final ImageContent image2 = new ImageContent(IMAGE_2_ID).setWidthHeight(WIDTH, HEIGHT)
-                .setServices(new ImageInfoService(IMAGE_INFO_SERVICE_ID));
+                .setServices(new ImageService3(IMAGE_INFO_SERVICE_ID));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, image1, image2);
 
@@ -1524,9 +1524,9 @@ public class CanvasTest {
         final JsonObject found;
 
         final ImageContent image1 = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT)
-                .setServices(new ImageInfoService(IMAGE_INFO_SERVICE_ID));
+                .setServices(new ImageService3(IMAGE_INFO_SERVICE_ID));
         final ImageContent image2 = new ImageContent(IMAGE_2_ID).setWidthHeight(WIDTH, HEIGHT)
-                .setServices(new ImageInfoService(IMAGE_INFO_SERVICE_ID));
+                .setServices(new ImageService3(IMAGE_INFO_SERVICE_ID));
 
         final String selector1 = StringUtils.format(URI_FRAGMENT_XYWH_TEMPLATE, 0, 0, WIDTH, HEIGHT);
         final String selector2 = StringUtils.format(URI_FRAGMENT_XYWH_TEMPLATE, 0, HEIGHT, WIDTH, HEIGHT);
@@ -1552,9 +1552,9 @@ public class CanvasTest {
         final JsonObject found;
 
         final ImageContent image1 = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT)
-                .setServices(new ImageInfoService(IMAGE_INFO_SERVICE_ID));
+                .setServices(new ImageService3(IMAGE_INFO_SERVICE_ID));
         final ImageContent image2 = new ImageContent(IMAGE_2_ID).setWidthHeight(WIDTH, HEIGHT)
-                .setServices(new ImageInfoService(IMAGE_INFO_SERVICE_ID));
+                .setServices(new ImageService3(IMAGE_INFO_SERVICE_ID));
 
         final MediaFragmentSelector selector1 = new MediaFragmentSelector(StringUtils.format(
                 URI_FRAGMENT_XYWH_TEMPLATE, 0, 0, WIDTH, HEIGHT));
