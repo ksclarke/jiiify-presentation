@@ -51,6 +51,9 @@
 
     <!-- Test related versions -->
     <opencsv.version>4.6</opencsv.version>
+
+    <!-- A property used by the build process -->
+    <tag.prefix>v2</tag.prefix>
   </properties>
 
   <dependencies>
