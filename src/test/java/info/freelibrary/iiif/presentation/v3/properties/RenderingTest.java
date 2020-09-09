@@ -1,7 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,11 +15,12 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
+import info.freelibrary.util.StringUtils;
+
 import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
-import info.freelibrary.util.StringUtils;
 
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.json.jackson.DatabindCodec;
@@ -50,6 +52,9 @@ public class RenderingTest {
 
     private Manifest myManifest;
 
+    /**
+     * Sets up the testing environment.
+     */
     @Before
     public final void setUp() {
         myManifest = new Manifest("https://example.org/iiif/book1/manifest", "Book 1");
@@ -74,8 +79,8 @@ public class RenderingTest {
      */
     @Test
     public final void testRenderingStringStringString() {
-        assertEquals(TEST_URI_1, new Rendering(TEST_URI_1.toString(), ResourceTypes.TEXT, TEST_LABEL_1.getString())
-                .getID());
+        assertEquals(TEST_URI_1,
+                new Rendering(TEST_URI_1.toString(), ResourceTypes.TEXT, TEST_LABEL_1.getString()).getID());
     }
 
     /**
@@ -101,8 +106,8 @@ public class RenderingTest {
      */
     @Test
     public final void testMultiValues() throws IOException {
-        myManifest.setRenderings(new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1), new Rendering(TEST_URI_2,
-                ResourceTypes.TEXT, TEST_LABEL_2));
+        myManifest.setRenderings(new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1),
+                new Rendering(TEST_URI_2, ResourceTypes.TEXT, TEST_LABEL_2));
 
         checkDeserialization(RENDERING_SIMPLE_TWO);
         checkSerialization(RENDERING_SIMPLE_TWO);
@@ -121,8 +126,8 @@ public class RenderingTest {
      */
     @Test
     public final void testSetType() {
-        assertEquals(ResourceTypes.TEXT, new Rendering(TEST_URI_1, ResourceTypes.VIDEO, TEST_LABEL_1).setType(
-                ResourceTypes.TEXT).getType());
+        assertEquals(ResourceTypes.TEXT,
+                new Rendering(TEST_URI_1, ResourceTypes.VIDEO, TEST_LABEL_1).setType(ResourceTypes.TEXT).getType());
     }
 
     /**
@@ -130,8 +135,8 @@ public class RenderingTest {
      */
     @Test
     public final void testSetLabel() {
-        assertEquals(TEST_LABEL_1, new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_2).setLabel(TEST_LABEL_1)
-                .getLabel());
+        assertEquals(TEST_LABEL_1,
+                new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_2).setLabel(TEST_LABEL_1).getLabel());
     }
 
     /**
@@ -139,8 +144,8 @@ public class RenderingTest {
      */
     @Test
     public final void testSetFormat() {
-        assertEquals(TEST_FORMAT, new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1).setFormat(TEST_FORMAT)
-                .getFormat().get());
+        assertEquals(TEST_FORMAT,
+                new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1).setFormat(TEST_FORMAT).getFormat().get());
     }
 
     /**
@@ -148,8 +153,9 @@ public class RenderingTest {
      */
     @Test
     public final void testSetLanguage() {
-        assertEquals(Arrays.asList(ISO_639_1_WELSH, ISO_639_2_CHEROKEE), new Rendering(TEST_URI_1, ResourceTypes.TEXT,
-                TEST_LABEL_1).setLanguages(ISO_639_1_WELSH, ISO_639_2_CHEROKEE).getLanguages());
+        assertEquals(Arrays.asList(ISO_639_1_WELSH, ISO_639_2_CHEROKEE),
+                new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1)
+                        .setLanguages(ISO_639_1_WELSH, ISO_639_2_CHEROKEE).getLanguages());
     }
 
     /**
@@ -236,8 +242,8 @@ public class RenderingTest {
      */
     private void checkSerialization(final File aExpected) throws IOException {
         final JsonObject expected = new JsonObject(StringUtils.read(aExpected));
-        final JsonObject found = new JsonObject(TestUtils.toJson(Constants.RENDERING, myManifest.getRenderings(),
-                true));
+        final JsonObject found =
+                new JsonObject(TestUtils.toJson(Constants.RENDERING, myManifest.getRenderings(), true));
 
         assertEquals(expected, found);
     }

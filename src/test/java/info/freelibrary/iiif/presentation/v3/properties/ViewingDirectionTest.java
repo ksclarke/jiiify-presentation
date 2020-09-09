@@ -1,13 +1,15 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * A viewingDirection test.
@@ -16,6 +18,9 @@ public class ViewingDirectionTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ViewingDirection.class, MessageCodes.BUNDLE);
 
+    /**
+     * Tests viewing direction's parsing of a bad value <code>fromString()</code>.
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testIllegalArgumentExceptionOnFromString() {
         ViewingDirection.fromString("SOME_BOGUS_VALUE");
@@ -27,8 +32,8 @@ public class ViewingDirectionTest {
      */
     @Test
     public void testParsingLeftToRight() {
-        assertEquals(ViewingDirection.LEFT_TO_RIGHT, ViewingDirection.fromString(ViewingDirection.values()[0]
-                .toString()));
+        assertEquals(ViewingDirection.LEFT_TO_RIGHT,
+                ViewingDirection.fromString(ViewingDirection.values()[0].toString()));
     }
 
     /**
@@ -36,8 +41,8 @@ public class ViewingDirectionTest {
      */
     @Test
     public void testParsingRightToLeft() {
-        assertEquals(ViewingDirection.RIGHT_TO_LEFT, ViewingDirection.fromString(ViewingDirection.values()[1]
-                .toString()));
+        assertEquals(ViewingDirection.RIGHT_TO_LEFT,
+                ViewingDirection.fromString(ViewingDirection.values()[1].toString()));
     }
 
     /**
@@ -45,8 +50,8 @@ public class ViewingDirectionTest {
      */
     @Test
     public void testParsingTopToBottom() {
-        assertEquals(ViewingDirection.TOP_TO_BOTTOM, ViewingDirection.fromString(ViewingDirection.values()[2]
-                .toString()));
+        assertEquals(ViewingDirection.TOP_TO_BOTTOM,
+                ViewingDirection.fromString(ViewingDirection.values()[2].toString()));
     }
 
     /**
@@ -54,8 +59,8 @@ public class ViewingDirectionTest {
      */
     @Test
     public void testParsingBottomToTop() {
-        assertEquals(ViewingDirection.BOTTOM_TO_TOP, ViewingDirection.fromString(ViewingDirection.values()[3]
-                .toString()));
+        assertEquals(ViewingDirection.BOTTOM_TO_TOP,
+                ViewingDirection.fromString(ViewingDirection.values()[3].toString()));
     }
 
     /**

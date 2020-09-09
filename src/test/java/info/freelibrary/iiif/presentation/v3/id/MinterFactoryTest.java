@@ -16,6 +16,9 @@ public class MinterFactoryTest {
 
     private URI myManifestID;
 
+    /**
+     * Sets up the testing environment.
+     */
     @Before
     public final void setUp() {
         myManifestID = URI.create(UUID.randomUUID().toString());

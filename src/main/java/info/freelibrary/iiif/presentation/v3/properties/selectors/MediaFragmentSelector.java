@@ -15,10 +15,11 @@ import com.github.tkurz.media.fragments.temporal.Clocktime;
 import com.github.tkurz.media.fragments.temporal.NPTFragment;
 import com.github.tkurz.media.fragments.temporal.TemporalFragment;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+
+import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * A media fragment selector selects a region of interest in a resource with spatial and/or temporal dimensions.
@@ -236,50 +237,100 @@ public class MediaFragmentSelector implements FragmentSelector {
         return String.join("&", list);
     }
 
+    /**
+     * Returns whether this selector is spatial or not.
+     *
+     * @return True if this selector is spatial; else, false
+     */
     @JsonIgnore
     public boolean isSpatial() {
         return myMediaFragment.hasSpatialFragment();
     }
 
+    /**
+     * Returns whether this selector is temporal or not.
+     *
+     * @return True if this selector is temporal; else, false
+     */
     @JsonIgnore
     public boolean isTemporal() {
         return myMediaFragment.hasTemporalFragment();
     }
 
+    /**
+     * Gets the X coordinate for this selector.
+     *
+     * @return The X coordinate for this selector
+     */
     @JsonIgnore
     public int getX() {
         return myX;
     }
 
+    /**
+     * Gets the Y coordinate for this selector.
+     *
+     * @return The Y coordinate for this selector
+     */
     @JsonIgnore
     public int getY() {
         return myY;
     }
 
+    /**
+     * Gets the width for this selector.
+     *
+     * @return The width for this selector
+     */
     @JsonIgnore
     public int getWidth() {
         return myWidth;
     }
 
+    /**
+     * Gets the height for this selector.
+     *
+     * @return The height for this selector
+     */
     @JsonIgnore
     public int getHeight() {
         return myHeight;
     }
 
+    /**
+     * Gets the start for this selector.
+     *
+     * @return The start for this selector
+     */
     @JsonIgnore
     public float getStart() {
         return myStart;
     }
 
+    /**
+     * Gets whether this selector has a temporal end.
+     *
+     * @return True if this selector has a temporal end; else, false
+     */
     public boolean hasEnd() {
         return myMediaFragment.getTemporalFragment().getEnd() != Clocktime.INFINIT;
     }
 
+    /**
+     * Gets the temporal end for this selector.
+     *
+     * @return The temporal end for this selector
+     */
     @JsonIgnore
     public float getEnd() {
         return myEnd;
     }
 
+    /**
+     * Gets the temporal duration for this selector.
+     *
+     * @return The temporal duration for this selector
+     */
     @JsonIgnore
     public float getDuration() {
         return myEnd - myStart;

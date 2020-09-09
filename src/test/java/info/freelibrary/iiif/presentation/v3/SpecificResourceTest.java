@@ -39,6 +39,9 @@ public class SpecificResourceTest extends AbstractTest {
 
     private String myOtherID;
 
+    /**
+     * Sets up the testing environment.
+     */
     @Before
     public void setUp() {
         myID = LOREM_IPSUM.getUrl();

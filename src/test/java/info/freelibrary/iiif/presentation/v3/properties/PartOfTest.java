@@ -1,7 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,11 +15,12 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
+import info.freelibrary.util.StringUtils;
+
 import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
-import info.freelibrary.util.StringUtils;
 
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.json.jackson.DatabindCodec;
@@ -46,6 +48,9 @@ public class PartOfTest {
 
     private Manifest myManifest;
 
+    /**
+     * Sets up the testing environment.
+     */
     @Before
     public final void setUp() {
         myManifest = new Manifest("https://example.org/iiif/book1/manifest", "Book 1");
@@ -81,8 +86,8 @@ public class PartOfTest {
      */
     @Test
     public final void testFullPartOf() throws IOException {
-        myManifest.setPartOfs(new PartOf(TEST_URI_1, ResourceTypes.MANIFEST).setLabel(TEST_LABEL).setLanguages(
-                ISO_639_2_NAHUATL, ISO_639_2_VIETNAMESE));
+        myManifest.setPartOfs(new PartOf(TEST_URI_1, ResourceTypes.MANIFEST).setLabel(TEST_LABEL)
+                .setLanguages(ISO_639_2_NAHUATL, ISO_639_2_VIETNAMESE));
 
         checkDeserialization(PART_OF_FULL_ONE);
         checkSerialization(PART_OF_FULL_ONE);
@@ -96,8 +101,8 @@ public class PartOfTest {
      */
     @Test
     public final void testMultiValues() throws IOException {
-        myManifest.setPartOfs(new PartOf(TEST_URI_1, ResourceTypes.MANIFEST), new PartOf(TEST_URI_2,
-                ResourceTypes.MANIFEST));
+        myManifest.setPartOfs(new PartOf(TEST_URI_1, ResourceTypes.MANIFEST),
+                new PartOf(TEST_URI_2, ResourceTypes.MANIFEST));
 
         checkDeserialization(PART_OF_SIMPLE_TWO);
         checkSerialization(PART_OF_SIMPLE_TWO);
@@ -116,8 +121,8 @@ public class PartOfTest {
      */
     @Test
     public final void testSetType() {
-        assertEquals(ResourceTypes.MANIFEST, new PartOf(TEST_URI_1, ResourceTypes.DATASET).setType(
-                ResourceTypes.MANIFEST).getType());
+        assertEquals(ResourceTypes.MANIFEST,
+                new PartOf(TEST_URI_1, ResourceTypes.DATASET).setType(ResourceTypes.MANIFEST).getType());
     }
 
     /**
@@ -133,8 +138,9 @@ public class PartOfTest {
      */
     @Test
     public final void testSetLanguage() {
-        assertEquals(Arrays.asList(ISO_639_2_NAHUATL, ISO_639_2_VIETNAMESE), new PartOf(TEST_URI_1,
-                ResourceTypes.MANIFEST).setLanguages(ISO_639_2_NAHUATL, ISO_639_2_VIETNAMESE).getLanguages());
+        assertEquals(Arrays.asList(ISO_639_2_NAHUATL, ISO_639_2_VIETNAMESE),
+                new PartOf(TEST_URI_1, ResourceTypes.MANIFEST).setLanguages(ISO_639_2_NAHUATL, ISO_639_2_VIETNAMESE)
+                        .getLanguages());
     }
 
     /**

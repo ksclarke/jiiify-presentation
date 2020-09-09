@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.net.URI;
 
@@ -19,6 +19,9 @@ public class AnnotationPageTest extends AbstractTest {
 
     private String myID;
 
+    /**
+     * Sets up the testing environment.
+     */
     @Before
     public void setUp() {
         myID = LOREM_IPSUM.getUrl();

@@ -1,7 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,10 +15,11 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
+import info.freelibrary.util.StringUtils;
+
 import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
-import info.freelibrary.util.StringUtils;
 
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.json.jackson.DatabindCodec;
@@ -49,6 +51,9 @@ public class HomepageTest {
 
     private Manifest myManifest;
 
+    /**
+     * Sets up the testing environment.
+     */
     @Before
     public final void setUp() {
         myManifest = new Manifest("https://example.org/iiif/book1/manifest", "Book 1");
@@ -57,8 +62,8 @@ public class HomepageTest {
     /**
      * Tests a homepage constructor and homepage (de)serialization.
      *
-     * @throws IOException If there is trouble reading or deserializing the homepage file or serializing the
-     *         constructed homepage
+     * @throws IOException If there is trouble reading or deserializing the homepage file or serializing the constructed
+     *         homepage
      */
     @Test
     public final void testHomepageUriStringLabel() throws IOException {
@@ -81,13 +86,13 @@ public class HomepageTest {
     /**
      * Tests homepage (de)serialization.
      *
-     * @throws IOException If there is trouble reading or deserializing the homepage file or serializing the
-     *         constructed homepage
+     * @throws IOException If there is trouble reading or deserializing the homepage file or serializing the constructed
+     *         homepage
      */
     @Test
     public final void testFullHomepage() throws IOException {
-        myManifest.setHomepages(new Homepage(TEST_URI_1, TEST_LABEL_1).setFormat(TEST_FORMAT).setLanguages(
-                ISO_639_1_PERSIAN, ISO_639_1_UIGHUR));
+        myManifest.setHomepages(new Homepage(TEST_URI_1, TEST_LABEL_1).setFormat(TEST_FORMAT)
+                .setLanguages(ISO_639_1_PERSIAN, ISO_639_1_UIGHUR));
 
         checkDeserialization(HOMEPAGE_FULL_ONE);
         checkSerialization(HOMEPAGE_FULL_ONE);
@@ -96,8 +101,8 @@ public class HomepageTest {
     /**
      * Tests (de)serialization of multiple homepages.
      *
-     * @throws IOException If there is trouble reading or deserializing the homepage file or serializing the
-     *         constructed homepages
+     * @throws IOException If there is trouble reading or deserializing the homepage file or serializing the constructed
+     *         homepages
      */
     @Test
     public final void testMultiValues() throws IOException {
