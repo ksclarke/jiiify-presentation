@@ -83,6 +83,11 @@ public class ImageContent extends Content<ImageContent> {
         super(new Type(TYPE));
     }
 
+    /**
+     * Gets the motivation for the image content.
+     *
+     * @return The image content's motivation
+     */
     @JsonGetter(Constants.MOTIVATION)
     public String getMotivation() {
         return MOTIVATION;
