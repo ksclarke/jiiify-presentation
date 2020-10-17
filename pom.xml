@@ -46,7 +46,7 @@
     <guava.version>29.0-jre</guava.version>
     <freelib.utils.version>1.1.0</freelib.utils.version>
     <freelib.maven.version>0.1.0</freelib.maven.version>
-    <vertx.version>3.9.1</vertx.version>
+    <vertx.version>3.9.4</vertx.version>
     <maven.jar.plugin.version>3.2.0</maven.jar.plugin.version>
 
     <!-- Test related versions -->
