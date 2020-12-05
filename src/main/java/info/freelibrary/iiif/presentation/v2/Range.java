@@ -81,6 +81,16 @@ public class Range extends Resource<Range> {
     }
 
     /**
+     * Clears the viewing direction.
+     *
+     * @return The range
+     */
+    public Range clearViewingDirection() {
+        myViewingDirection = null;
+        return this;
+    }
+
+    /**
      * Sets the viewing direction.
      *
      * @param aViewingDirection A viewing direction
@@ -143,6 +153,11 @@ public class Range extends Resource<Range> {
     }
 
     @Override
+    public Range clearAttribution() {
+        return (Range) super.clearAttribution();
+    }
+
+    @Override
     public Range setAttribution(final String aAttribution) {
         return (Range) super.setAttribution(aAttribution);
     }
@@ -190,6 +205,11 @@ public class Range extends Resource<Range> {
     @Override
     public Range setWithin(final URI aWithin) {
         return (Range) super.setWithin(aWithin);
+    }
+
+    @Override
+    public Range clearViewingHint() {
+        return (Range) super.clearViewingHint();
     }
 
     @Override

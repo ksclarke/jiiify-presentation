@@ -15,9 +15,11 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 
+import info.freelibrary.util.StringUtils;
+
 import info.freelibrary.iiif.presentation.v2.properties.Label;
 import info.freelibrary.iiif.presentation.v2.properties.NavDate;
-import info.freelibrary.util.StringUtils;
+import info.freelibrary.iiif.presentation.v2.properties.ViewingHint;
 
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
@@ -147,10 +149,32 @@ public class CollectionTest {
      */
     @Test
     public void testFromString() {
-        final String json = myVertx.fileSystem().readFileBlocking(TEST_FILE1.getAbsolutePath()).toString(
-                StandardCharsets.UTF_8);
+        final String json =
+                myVertx.fileSystem().readFileBlocking(TEST_FILE1.getAbsolutePath()).toString(StandardCharsets.UTF_8);
         final Collection collection = Collection.fromString(json);
 
         assertEquals(new JsonObject(json), collection.toJSON());
+    }
+
+    /**
+     * Tests the clearAttribution() method.
+     */
+    @Test
+    public void testClearAttribution() {
+        final Collection collection = new Collection(myID, myLabel).setAttribution(UUID.randomUUID().toString());
+
+        collection.clearAttribution();
+        assertTrue(collection.getAttribution() == null);
+    }
+
+    /**
+     * Test the clearViewingHint() method.
+     */
+    @Test
+    public void testClearViewingHint() {
+        final Collection collection = new Collection(myID, myLabel).setViewingHint(ViewingHint.Option.INDIVIDUALS);
+
+        collection.clearViewingHint();
+        assertTrue(collection.getViewingHint() == null);
     }
 }

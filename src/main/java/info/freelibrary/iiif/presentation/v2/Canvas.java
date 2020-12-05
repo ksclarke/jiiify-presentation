@@ -285,6 +285,11 @@ public class Canvas extends Resource<Canvas> {
     }
 
     @Override
+    public Canvas clearAttribution() {
+        return (Canvas) super.clearAttribution();
+    }
+
+    @Override
     public Canvas setAttribution(final String aAttribution) {
         return (Canvas) super.setAttribution(aAttribution);
     }
@@ -335,6 +340,11 @@ public class Canvas extends Resource<Canvas> {
     }
 
     @Override
+    public Canvas clearViewingHint() {
+        return (Canvas) super.clearViewingHint();
+    }
+
+    @Override
     public Canvas setViewingHint(final ViewingHint aViewingHint) {
         return (Canvas) super.setViewingHint(aViewingHint);
     }
@@ -367,7 +377,7 @@ public class Canvas extends Resource<Canvas> {
      */
     @JsonIgnore
     private void setWidthHeight(final int aWidth, final int aHeight) {
-        if ((aWidth >= 0) && (aHeight >= 0)) {
+        if (aWidth >= 0 && aHeight >= 0) {
             myWidth = aWidth;
             myHeight = aHeight;
         } else {

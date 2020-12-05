@@ -92,6 +92,11 @@ public class OtherContent extends Content<OtherContent> {
     }
 
     @Override
+    public OtherContent clearAttribution() {
+        return (OtherContent) super.clearAttribution();
+    }
+
+    @Override
     public OtherContent setAttribution(final String aAttribution) {
         return (OtherContent) super.setAttribution(aAttribution);
     }
@@ -139,6 +144,11 @@ public class OtherContent extends Content<OtherContent> {
     @Override
     public OtherContent setWithin(final URI aWithin) {
         return (OtherContent) super.setWithin(aWithin);
+    }
+
+    @Override
+    public OtherContent clearViewingHint() {
+        return (OtherContent) super.clearViewingHint();
     }
 
     @Override

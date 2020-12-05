@@ -256,6 +256,11 @@ public class Collection extends Resource<Collection> {
     }
 
     @Override
+    public Collection clearAttribution() {
+        return (Collection) super.clearAttribution();
+    }
+
+    @Override
     public Collection setAttribution(final String aAttribution) {
         return (Collection) super.setAttribution(aAttribution);
     }
@@ -303,6 +308,11 @@ public class Collection extends Resource<Collection> {
     @Override
     public Collection setWithin(final URI aWithin) {
         return (Collection) super.setWithin(aWithin);
+    }
+
+    @Override
+    public Collection clearViewingHint() {
+        return (Collection) super.clearViewingHint();
     }
 
     @Override

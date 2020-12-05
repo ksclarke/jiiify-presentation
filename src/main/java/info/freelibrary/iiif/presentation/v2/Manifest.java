@@ -207,6 +207,16 @@ public class Manifest extends Resource<Manifest> {
     }
 
     /**
+     * Clears the viewing direction.
+     *
+     * @return The manifest
+     */
+    public Manifest clearViewingDirection() {
+        myViewingDirection = null;
+        return this;
+    }
+
+    /**
      * Sets the viewing direction.
      *
      * @param aViewingDirection A viewing direction
@@ -349,6 +359,11 @@ public class Manifest extends Resource<Manifest> {
     }
 
     @Override
+    public Manifest clearAttribution() {
+        return (Manifest) super.clearAttribution();
+    }
+
+    @Override
     public Manifest setAttribution(final String aAttribution) {
         return (Manifest) super.setAttribution(aAttribution);
     }
@@ -396,6 +411,11 @@ public class Manifest extends Resource<Manifest> {
     @Override
     public Manifest setWithin(final URI aWithin) {
         return (Manifest) super.setWithin(aWithin);
+    }
+
+    @Override
+    public Manifest clearViewingHint() {
+        return (Manifest) super.clearViewingHint();
     }
 
     @Override

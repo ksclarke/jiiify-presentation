@@ -98,6 +98,16 @@ public class Sequence extends Resource<Sequence> {
     }
 
     /**
+     * Clears the viewing direction.
+     *
+     * @return The sequence
+     */
+    public Sequence clearViewingDirection() {
+        myViewingDirection = null;
+        return this;
+    }
+
+    /**
      * Sets the viewing direction.
      *
      * @param aViewingDirection A viewing direction
@@ -209,6 +219,11 @@ public class Sequence extends Resource<Sequence> {
     }
 
     @Override
+    public Sequence clearAttribution() {
+        return (Sequence) super.clearAttribution();
+    }
+
+    @Override
     public Sequence setAttribution(final String aAttribution) {
         return (Sequence) super.setAttribution(aAttribution);
     }
@@ -256,6 +271,11 @@ public class Sequence extends Resource<Sequence> {
     @Override
     public Sequence setWithin(final URI aWithin) {
         return (Sequence) super.setWithin(aWithin);
+    }
+
+    @Override
+    public Sequence clearViewingHint() {
+        return (Sequence) super.clearViewingHint();
     }
 
     @Override

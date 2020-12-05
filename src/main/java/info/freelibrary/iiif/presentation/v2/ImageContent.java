@@ -191,6 +191,11 @@ public class ImageContent extends Content<ImageContent> {
     }
 
     @Override
+    public ImageContent clearAttribution() {
+        return (ImageContent) super.clearAttribution();
+    }
+
+    @Override
     public ImageContent setAttribution(final String aAttribution) {
         return (ImageContent) super.setAttribution(aAttribution);
     }
@@ -238,6 +243,11 @@ public class ImageContent extends Content<ImageContent> {
     @Override
     public ImageContent setWithin(final URI aWithin) {
         return (ImageContent) super.setWithin(aWithin);
+    }
+
+    @Override
+    public ImageContent clearViewingHint() {
+        return (ImageContent) super.clearViewingHint();
     }
 
     @Override

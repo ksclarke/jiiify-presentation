@@ -376,6 +376,16 @@ class Resource<T extends Resource<T>> {
     }
 
     /**
+     * Clears the attribution.
+     *
+     * @return The resource
+     */
+    protected Resource<T> clearAttribution() {
+        myAttribution = null;
+        return this;
+    }
+
+    /**
      * Sets the attribution.
      *
      * @param aAttribution An attribution
@@ -543,6 +553,16 @@ class Resource<T extends Resource<T>> {
     @JsonGetter(Constants.TYPE)
     public Type getType() {
         return myType;
+    }
+
+    /**
+     * Clears the viewing hint.
+     *
+     * @return The resource
+     */
+    protected Resource<T> clearViewingHint() {
+        myViewingHint = null;
+        return this;
     }
 
     /**

@@ -55,6 +55,16 @@ public class Layer extends Resource<Layer> {
     }
 
     /**
+     * Clears the viewing direction.
+     *
+     * @return The layer
+     */
+    public Layer clearViewingDirection() {
+        myViewingDirection = null;
+        return this;
+    }
+
+    /**
      * Sets the viewing direction.
      *
      * @param aViewingDirection A viewing direction
@@ -117,6 +127,11 @@ public class Layer extends Resource<Layer> {
     }
 
     @Override
+    public Layer clearAttribution() {
+        return (Layer) super.clearAttribution();
+    }
+
+    @Override
     public Layer setAttribution(final String aAttribution) {
         return (Layer) super.setAttribution(aAttribution);
     }
@@ -164,6 +179,11 @@ public class Layer extends Resource<Layer> {
     @Override
     public Layer setWithin(final URI aWithin) {
         return (Layer) super.setWithin(aWithin);
+    }
+
+    @Override
+    public Layer clearViewingHint() {
+        return (Layer) super.clearViewingHint();
     }
 
     @Override

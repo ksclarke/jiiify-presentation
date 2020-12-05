@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation.v2;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.net.URI;
 import java.util.Arrays;
@@ -11,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.v2.properties.ViewingDirection;
+import info.freelibrary.iiif.presentation.v2.properties.ViewingHint;
 
 /**
  * Tests of Sequence.
@@ -61,6 +63,33 @@ public class SequenceTest {
     public final void testSetViewingDirection() {
         assertEquals(ViewingDirection.LEFT_TO_RIGHT,
                 new Sequence().setViewingDirection(ViewingDirection.LEFT_TO_RIGHT).getViewingDirection());
+    }
+
+    /**
+     * Tests clearing viewing direction.
+     */
+    @Test
+    public final void testClearViewingDirection() {
+        assertTrue(new Sequence().setViewingDirection(ViewingDirection.LEFT_TO_RIGHT).clearViewingDirection()
+                .getViewingDirection() == null);
+    }
+
+    /**
+     * Test clearing the viewing hint.
+     */
+    @Test
+    public void testClearViewingHint() {
+        final Sequence sequence = new Sequence().setViewingHint(ViewingHint.Option.INDIVIDUALS).clearViewingHint();
+        assertTrue(sequence.getViewingHint() == null);
+    }
+
+    /**
+     * Tests the clearAttribution() method.
+     */
+    @Test
+    public void testClearAttribution() {
+        final Sequence sequence = new Sequence().setAttribution(UUID.randomUUID().toString()).clearAttribution();
+        assertTrue(sequence.getAttribution() == null);
     }
 
     /**

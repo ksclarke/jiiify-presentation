@@ -84,6 +84,11 @@ public class AnnotationList extends Resource<AnnotationList> {
     }
 
     @Override
+    public AnnotationList clearAttribution() {
+        return (AnnotationList) super.clearAttribution();
+    }
+
+    @Override
     public AnnotationList setAttribution(final String aAttribution) {
         return (AnnotationList) super.setAttribution(aAttribution);
     }
@@ -131,6 +136,11 @@ public class AnnotationList extends Resource<AnnotationList> {
     @Override
     public AnnotationList setWithin(final URI aWithin) {
         return (AnnotationList) super.setWithin(aWithin);
+    }
+
+    @Override
+    public AnnotationList clearViewingHint() {
+        return (AnnotationList) super.clearViewingHint();
     }
 
     @Override

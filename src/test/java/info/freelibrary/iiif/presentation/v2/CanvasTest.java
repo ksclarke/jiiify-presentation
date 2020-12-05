@@ -1,13 +1,16 @@
 
 package info.freelibrary.iiif.presentation.v2;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.net.URI;
+import java.util.UUID;
 
 import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.v2.properties.Label;
+import info.freelibrary.iiif.presentation.v2.properties.ViewingHint;
 
 /**
  * Tests for a presentation canvas.
@@ -96,5 +99,27 @@ public class CanvasTest {
     @Test
     public final void testSetZeroHeightInConstructor() {
         assertEquals(0, new Canvas(TEST_URI, TEST_LABEL, 100, 0).getHeight());
+    }
+
+    /**
+     * Tests the clearAttribution() method.
+     */
+    @Test
+    public void testClearAttribution() {
+        final Canvas canvas = new Canvas(TEST_URI, TEST_LABEL, 100, 100).setAttribution(UUID.randomUUID().toString());
+
+        canvas.clearAttribution();
+        assertTrue(canvas.getAttribution() == null);
+    }
+
+    /**
+     * Test the clearViewingHint() method.
+     */
+    @Test
+    public void testClearViewingHint() {
+        final Canvas canvas = new Canvas(TEST_URI, TEST_LABEL, 50, 50).setViewingHint(ViewingHint.Option.INDIVIDUALS);
+
+        canvas.clearViewingHint();
+        assertTrue(canvas.getViewingHint() == null);
     }
 }

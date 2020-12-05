@@ -1,13 +1,15 @@
 
 package info.freelibrary.iiif.presentation.v2;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -49,9 +51,11 @@ public class ManifestTest extends AbstractTest {
 
     private static final String TEST_TITLE = "Georgian NF Fragment 68a";
 
-    private static final List<String[]> METADATA_PAIRS = Stream.of(new String[] { "Title", TEST_TITLE }, new String[] {
-        "Extent", "1 f" }, new String[] { "Overtext Language", "Georgian" }, new String[] { "Undertext Language(s)",
-            "Christian Palestinian Aramaic" }).collect(Collectors.toList());
+    private static final List<String[]> METADATA_PAIRS = Stream
+            .of(new String[] { "Title", TEST_TITLE }, new String[] { "Extent", "1 f" },
+                    new String[] { "Overtext Language", "Georgian" },
+                    new String[] { "Undertext Language(s)", "Christian Palestinian Aramaic" })
+            .collect(Collectors.toList());
 
     private static final int HEIGHT = 8176;
 
@@ -158,6 +162,50 @@ public class ManifestTest extends AbstractTest {
         assertEquals(Constants.VIEWING_HINT, names[4]);
         assertEquals(Constants.VIEWING_DIRECTION, names[5]);
         assertEquals(Constants.SEQUENCES, names[6]);
+    }
+
+    /**
+     * Tests clearing the viewing hint.
+     */
+    @Test
+    public void testClearViewingHint() {
+        final Manifest manifest = new Manifest(MANIFEST_URI, TEST_TITLE);
+
+        manifest.setViewingHint(ViewingHint.Option.INDIVIDUALS).clearViewingHint();
+        assertTrue(manifest.getViewingHint() == null);
+    }
+
+    /**
+     * Tests setting the viewing direction.
+     */
+    @Test
+    public void testGetSetViewingDirection() {
+        final Manifest manifest = new Manifest(MANIFEST_URI, TEST_TITLE);
+
+        manifest.setViewingDirection(ViewingDirection.LEFT_TO_RIGHT);
+        assertEquals(ViewingDirection.LEFT_TO_RIGHT, manifest.getViewingDirection());
+    }
+
+    /**
+     * Tests clearing the viewing direction.
+     */
+    @Test
+    public void testClearViewingDirection() {
+        final Manifest manifest = new Manifest(MANIFEST_URI, TEST_TITLE);
+
+        manifest.setViewingDirection(ViewingDirection.LEFT_TO_RIGHT);
+        assertTrue(manifest.clearViewingDirection().getViewingDirection() == null);
+    }
+
+    /**
+     * Tests the clearAttribution() method.
+     */
+    @Test
+    public void testClearAttribution() {
+        final Manifest manifest = new Manifest(MANIFEST_URI, TEST_TITLE).setAttribution(UUID.randomUUID().toString());
+
+        manifest.clearAttribution();
+        assertTrue(manifest.getAttribution() == null);
     }
 
     /**
