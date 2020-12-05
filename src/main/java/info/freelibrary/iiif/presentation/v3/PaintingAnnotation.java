@@ -31,8 +31,8 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 /**
  * An annotation used for painting content resources onto a {@link Canvas}.
  */
-public class PaintingAnnotation extends Annotation<PaintingAnnotation> implements Resource<PaintingAnnotation>,
-        ContentAnnotation<PaintingAnnotation> {
+public class PaintingAnnotation extends Annotation<PaintingAnnotation>
+        implements Resource<PaintingAnnotation>, ContentAnnotation<PaintingAnnotation> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PaintingAnnotation.class, MessageCodes.BUNDLE);
 
@@ -336,6 +336,11 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation> implement
     @Override
     public PaintingAnnotation setRequiredStatement(final RequiredStatement aStatement) {
         return (PaintingAnnotation) super.setRequiredStatement(aStatement);
+    }
+
+    @Override
+    public PaintingAnnotation clearRequiredStatement() {
+        return (PaintingAnnotation) super.clearRequiredStatement();
     }
 
     @Override

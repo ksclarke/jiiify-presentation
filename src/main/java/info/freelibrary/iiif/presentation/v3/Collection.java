@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -15,6 +15,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.util.I18nRuntimeException;
+
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -25,17 +27,17 @@ import info.freelibrary.iiif.presentation.v3.properties.Rendering;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
+import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CollectionBehavior;
 import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-import info.freelibrary.util.I18nRuntimeException;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 
 /**
- * An ordered list of manifests and/or collections. Collections allow easy advertising and browsing of the manifests
- * in a hierarchical structure, potentially with its own descriptive information. They can also provide clients with a
+ * An ordered list of manifests and/or collections. Collections allow easy advertising and browsing of the manifests in
+ * a hierarchical structure, potentially with its own descriptive information. They can also provide clients with a
  * means to locate all of the manifests known to the publishing institution.
  */
 public class Collection extends NavigableResource<Collection> implements Resource<Collection> {
@@ -43,6 +45,8 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     private Optional<AccompanyingCanvas> myAccompanyingCanvas;
 
     private Optional<PlaceholderCanvas> myPlaceholderCanvas;
+
+    private ViewingDirection myViewingDirection;
 
     private List<Item> myItems;
 
@@ -197,6 +201,38 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     }
 
     /**
+     * Sets the viewing direction.
+     *
+     * @param aViewingDirection A viewing direction
+     * @return The collection
+     */
+    @JsonSetter(Constants.VIEWING_DIRECTION)
+    public Collection setViewingDirection(final ViewingDirection aViewingDirection) {
+        myViewingDirection = aViewingDirection;
+        return this;
+    }
+
+    /**
+     * Gets the viewing direction.
+     *
+     * @return The viewing direction
+     */
+    @JsonGetter(Constants.VIEWING_DIRECTION)
+    public ViewingDirection getViewingDirection() {
+        return myViewingDirection;
+    }
+
+    /**
+     * Clears the viewing direction.
+     *
+     * @return The collection
+     */
+    public Collection clearViewingDirection() {
+        myViewingDirection = null;
+        return this;
+    }
+
+    /**
      * Gets the items associated with this collection.
      *
      * @return The items associated with this collection
@@ -314,9 +350,24 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         return (Collection) super.setRights(aRights);
     }
 
+    /**
+     * Sets the required statement.
+     *
+     * @return The collection
+     */
     @Override
     public Collection setRequiredStatement(final RequiredStatement aStatement) {
         return (Collection) super.setRequiredStatement(aStatement);
+    }
+
+    /**
+     * Clears the required statement.
+     *
+     * @return The collection
+     */
+    @Override
+    public Collection clearRequiredStatement() {
+        return (Collection) super.clearRequiredStatement();
     }
 
     @Override
@@ -388,8 +439,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     }
 
     /**
-     * A wrapper for things embedded in or referenced from a collection (e&#46;g&#46; manifests and other
-     * collections).
+     * A wrapper for things embedded in or referenced from a collection (e&#46;g&#46; manifests and other collections).
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonPropertyOrder({ Constants.TYPE, Constants.ID, Constants.LABEL, Constants.THUMBNAIL })

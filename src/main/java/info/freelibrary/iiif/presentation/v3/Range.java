@@ -16,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import info.freelibrary.util.I18nRuntimeException;
+
 import info.freelibrary.iiif.presentation.v3.id.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
@@ -280,6 +281,16 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     /**
+     * Clears the viewing direction.
+     *
+     * @return The range
+     */
+    public Range clearViewingDirection() {
+        myViewingDirection = null;
+        return this;
+    }
+
+    /**
      * Gets a list of the range's items.
      *
      * @return A list of range items
@@ -398,6 +409,11 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     @Override
+    public Range clearRequiredStatement() {
+        return (Range) super.clearRequiredStatement();
+    }
+
+    @Override
     public Range setSummary(final String aSummary) {
         return (Range) super.setSummary(aSummary);
     }
@@ -486,8 +502,8 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
         }
 
         /**
-         * Creates a new range item from a canvas; the canvas is either embedded or referenced depending on the
-         * boolean flag passed to the constructor.
+         * Creates a new range item from a canvas; the canvas is either embedded or referenced depending on the boolean
+         * flag passed to the constructor.
          *
          * @param aCanvas A canvas to use as a range item
          * @param aEmbeddedCanvas Whether a canvas should be embedded or a reference to it created

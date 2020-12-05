@@ -1,7 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +14,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import info.freelibrary.util.StringUtils;
+
+import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 
 import io.vertx.core.json.JsonObject;
 
@@ -48,14 +51,26 @@ public class CanvasContentTest {
     }
 
     /**
+     * Tests clearing the required statement.
+     */
+    @Test
+    public void testClearRequiredStatement() {
+        final RequiredStatement reqStatement = new RequiredStatement("stmt-id", "stmt-label");
+        final CanvasContent content = new CanvasContent(myID).setRequiredStatement(reqStatement);
+
+        assertTrue(content.getRequiredStatement() != null);
+        assertTrue(content.clearRequiredStatement().getRequiredStatement() == null);
+    }
+
+    /**
      * Tests the deserialization and serialization of canvas content on a manifest.
      *
      * @throws IOException If there is trouble reading the test fixture
      */
     @Test
     public final void testDeSerialization() throws IOException {
-        final String json = StringUtils.read(new File("src/test/resources/json/canvas-content.json"),
-                StandardCharsets.UTF_8);
+        final String json =
+                StringUtils.read(new File("src/test/resources/json/canvas-content.json"), StandardCharsets.UTF_8);
         final Manifest manifest = Manifest.fromString(json);
         final Canvas canvas = manifest.getCanvases().get(0);
 

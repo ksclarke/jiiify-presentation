@@ -26,12 +26,12 @@ import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 
 /**
- * A single Canvas that provides additional content for use while rendering the resource that has the
- * accompanyingCanvas property. Examples include an image to show while a duration-only Canvas is playing audio; or
- * background audio to play while a user is navigating an image-only Manifest.
+ * A single Canvas that provides additional content for use while rendering the resource that has the accompanyingCanvas
+ * property. Examples include an image to show while a duration-only Canvas is playing audio; or background audio to
+ * play while a user is navigating an image-only Manifest.
  */
-public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> implements Resource<AccompanyingCanvas>,
-        CanvasResource<AccompanyingCanvas> {
+public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
+        implements Resource<AccompanyingCanvas>, CanvasResource<AccompanyingCanvas> {
 
     /**
      * Creates a new accompanying canvas.
@@ -233,6 +233,11 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> imple
     }
 
     @Override
+    public AccompanyingCanvas clearRequiredStatement() {
+        return (AccompanyingCanvas) super.clearRequiredStatement();
+    }
+
+    @Override
     public AccompanyingCanvas setSummary(final String aSummary) {
         return (AccompanyingCanvas) super.setSummary(aSummary);
     }
@@ -298,24 +303,21 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> imple
     @SafeVarargs
     public final AccompanyingCanvas paintWith(final Minter aMinter, final String aCanvasRegion,
             final ContentResource... aContentArray) throws ContentOutOfBoundsException, SelectorOutOfBoundsException {
-        return (AccompanyingCanvas) super.paint(this, aMinter, new MediaFragmentSelector(aCanvasRegion),
-                aContentArray);
+        return (AccompanyingCanvas) super.paint(this, aMinter, new MediaFragmentSelector(aCanvasRegion), aContentArray);
     }
 
     @Override
     public final AccompanyingCanvas paintWith(final Minter aMinter, final MediaFragmentSelector aCanvasRegion,
-            final List<ContentResource> aContentList) throws ContentOutOfBoundsException,
-            SelectorOutOfBoundsException {
-        return (AccompanyingCanvas) super.paint(this, aMinter, aCanvasRegion, aContentList.toArray(
-                new ContentResource[] {}));
+            final List<ContentResource> aContentList) throws ContentOutOfBoundsException, SelectorOutOfBoundsException {
+        return (AccompanyingCanvas) super.paint(this, aMinter, aCanvasRegion,
+                aContentList.toArray(new ContentResource[] {}));
     }
 
     @Override
     public final AccompanyingCanvas paintWith(final Minter aMinter, final String aCanvasRegion,
-            final List<ContentResource> aContentList) throws ContentOutOfBoundsException,
-            SelectorOutOfBoundsException {
-        return (AccompanyingCanvas) super.paint(this, aMinter, new MediaFragmentSelector(aCanvasRegion), aContentList
-                .toArray(new ContentResource[] {}));
+            final List<ContentResource> aContentList) throws ContentOutOfBoundsException, SelectorOutOfBoundsException {
+        return (AccompanyingCanvas) super.paint(this, aMinter, new MediaFragmentSelector(aCanvasRegion),
+                aContentList.toArray(new ContentResource[] {}));
     }
 
     @Override
@@ -347,8 +349,8 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> imple
     @Override
     public final AccompanyingCanvas supplementWith(final Minter aMinter, final MediaFragmentSelector aCanvasRegion,
             final List<ContentResource> aContentList) {
-        return (AccompanyingCanvas) super.supplement(this, aMinter, aCanvasRegion, aContentList.toArray(
-                new ContentResource[] {}));
+        return (AccompanyingCanvas) super.supplement(this, aMinter, aCanvasRegion,
+                aContentList.toArray(new ContentResource[] {}));
     }
 
     @Override
@@ -360,27 +362,25 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> imple
 
     @Override
     @SafeVarargs
-    public final AccompanyingCanvas addSupplementingPages(
-            final AnnotationPage<SupplementingAnnotation>... aPageArray) {
+    public final AccompanyingCanvas addSupplementingPages(final AnnotationPage<SupplementingAnnotation>... aPageArray) {
         return (AccompanyingCanvas) super.addSupplementingPages(aPageArray);
     }
 
     @Override
-    public final AccompanyingCanvas addSupplementingPages(
-            final List<AnnotationPage<SupplementingAnnotation>> aPageList) {
+    public final AccompanyingCanvas
+            addSupplementingPages(final List<AnnotationPage<SupplementingAnnotation>> aPageList) {
         return (AccompanyingCanvas) super.addSupplementingPages(aPageList);
     }
 
     @Override
     @SafeVarargs
-    public final AccompanyingCanvas setSupplementingPages(
-            final AnnotationPage<SupplementingAnnotation>... aPageArray) {
+    public final AccompanyingCanvas setSupplementingPages(final AnnotationPage<SupplementingAnnotation>... aPageArray) {
         return (AccompanyingCanvas) super.setSupplementingPages(aPageArray);
     }
 
     @Override
-    public final AccompanyingCanvas setSupplementingPages(
-            final List<AnnotationPage<SupplementingAnnotation>> aPageList) {
+    public final AccompanyingCanvas
+            setSupplementingPages(final List<AnnotationPage<SupplementingAnnotation>> aPageList) {
         return (AccompanyingCanvas) super.setSupplementingPages(aPageList);
     }
 

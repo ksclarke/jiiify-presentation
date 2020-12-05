@@ -1,13 +1,15 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.net.URI;
 
 import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.v3.properties.Label;
+import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
@@ -43,9 +45,21 @@ public class AnnotationCollectionTest {
      */
     @Test
     public void testGetSetViewingDirection() {
-        final AnnotationCollection annotationCollection = new AnnotationCollection(ID.toString(), LABEL)
-                .setViewingDirection(ViewingDirection.LEFT_TO_RIGHT);
+        final AnnotationCollection annotationCollection =
+                new AnnotationCollection(ID.toString(), LABEL).setViewingDirection(ViewingDirection.LEFT_TO_RIGHT);
         assertEquals(ViewingDirection.LEFT_TO_RIGHT, annotationCollection.getViewingDirection());
+    }
+
+    /**
+     * Tests clearing the required statement.
+     */
+    @Test
+    public void testClearRequiredStatement() {
+        final AnnotationCollection annoCollection = new AnnotationCollection(ID.toString(), LABEL);
+
+        annoCollection.setRequiredStatement(new RequiredStatement("stmt-id", "stmt-label"));
+        assertTrue(annoCollection.getRequiredStatement() != null);
+        assertTrue(annoCollection.clearRequiredStatement().getRequiredStatement() == null);
     }
 
     /**

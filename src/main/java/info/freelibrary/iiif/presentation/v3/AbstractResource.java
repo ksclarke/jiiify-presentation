@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -18,6 +18,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -33,8 +36,6 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.DisjointChecke
 import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.services.ServiceDeserializer;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
 
 import io.vertx.core.json.jackson.DatabindCodec;
 
@@ -307,6 +308,11 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
     protected AbstractResource<T> setRequiredStatement(final RequiredStatement aStatement) {
         checkNotNull(aStatement);
         myRequiredStatement = aStatement;
+        return this;
+    }
+
+    protected AbstractResource<T> clearRequiredStatement() {
+        myRequiredStatement = null;
         return this;
     }
 

@@ -12,6 +12,9 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -25,8 +28,6 @@ import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
@@ -36,8 +37,8 @@ import io.vertx.core.json.JsonObject;
  */
 @JsonPropertyOrder({ Constants.TYPE, Constants.ID, Constants.THUMBNAIL, Constants.DURATION, Constants.FORMAT,
     Constants.LANGUAGE })
-public class SoundContent extends AbstractContentResource<SoundContent> implements Thumbnail, Resource<SoundContent>,
-        TemporalContentResource<SoundContent> {
+public class SoundContent extends AbstractContentResource<SoundContent>
+        implements Thumbnail, Resource<SoundContent>, TemporalContentResource<SoundContent> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SoundContent.class, MessageCodes.BUNDLE);
 
@@ -194,6 +195,11 @@ public class SoundContent extends AbstractContentResource<SoundContent> implemen
     }
 
     @Override
+    public SoundContent clearRequiredStatement() {
+        return (SoundContent) super.clearRequiredStatement();
+    }
+
+    @Override
     public SoundContent setSummary(final String aSummary) {
         return (SoundContent) super.setSummary(aSummary);
     }
@@ -245,7 +251,7 @@ public class SoundContent extends AbstractContentResource<SoundContent> implemen
     @JsonSetter(Constants.DURATION)
     public SoundContent setDuration(final Number aDuration) {
         final float tempDuration = aDuration.floatValue();
-        if ((tempDuration > 0) && (Float.isFinite(tempDuration))) {
+        if (tempDuration > 0 && Float.isFinite(tempDuration)) {
             myDuration = tempDuration;
             return this;
         } else {

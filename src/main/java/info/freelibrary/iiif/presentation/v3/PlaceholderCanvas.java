@@ -27,15 +27,15 @@ import io.vertx.core.json.JsonObject;
 
 /**
  * A single Canvas that provides additional content for use before the main content of the resource that has the
- * placeholderCanvas property is rendered, or as an advertisement or stand-in for that content. Examples include
- * images, text and sound standing in for video content before the user initiates playback; or a film poster to
- * attract user attention. The content provided by placeholderCanvas differs from a thumbnail: a client might use
- * thumbnail to summarize and navigate multiple resources, then show content from placeholderCanvas as part of the
- * initial presentation of a single resource. A placeholder Canvas is likely to have different dimensions to those of
- * the Canvas(es) of the resource that has the placeholderCanvas property.
+ * placeholderCanvas property is rendered, or as an advertisement or stand-in for that content. Examples include images,
+ * text and sound standing in for video content before the user initiates playback; or a film poster to attract user
+ * attention. The content provided by placeholderCanvas differs from a thumbnail: a client might use thumbnail to
+ * summarize and navigate multiple resources, then show content from placeholderCanvas as part of the initial
+ * presentation of a single resource. A placeholder Canvas is likely to have different dimensions to those of the
+ * Canvas(es) of the resource that has the placeholderCanvas property.
  */
-public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas> implements Resource<PlaceholderCanvas>,
-        CanvasResource<PlaceholderCanvas> {
+public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas>
+        implements Resource<PlaceholderCanvas>, CanvasResource<PlaceholderCanvas> {
 
     /**
      * Creates a new placeholder canvas.
@@ -237,6 +237,11 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas> impleme
     }
 
     @Override
+    public PlaceholderCanvas clearRequiredStatement() {
+        return (PlaceholderCanvas) super.clearRequiredStatement();
+    }
+
+    @Override
     public PlaceholderCanvas setSummary(final String aSummary) {
         return (PlaceholderCanvas) super.setSummary(aSummary);
     }
@@ -302,24 +307,21 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas> impleme
     @SafeVarargs
     public final PlaceholderCanvas paintWith(final Minter aMinter, final String aCanvasRegion,
             final ContentResource... aContentArray) throws ContentOutOfBoundsException, SelectorOutOfBoundsException {
-        return (PlaceholderCanvas) super.paint(this, aMinter, new MediaFragmentSelector(aCanvasRegion),
-                aContentArray);
+        return (PlaceholderCanvas) super.paint(this, aMinter, new MediaFragmentSelector(aCanvasRegion), aContentArray);
     }
 
     @Override
     public final PlaceholderCanvas paintWith(final Minter aMinter, final MediaFragmentSelector aCanvasRegion,
-            final List<ContentResource> aContentList) throws ContentOutOfBoundsException,
-            SelectorOutOfBoundsException {
-        return (PlaceholderCanvas) super.paint(this, aMinter, aCanvasRegion, aContentList.toArray(
-                new ContentResource[] {}));
+            final List<ContentResource> aContentList) throws ContentOutOfBoundsException, SelectorOutOfBoundsException {
+        return (PlaceholderCanvas) super.paint(this, aMinter, aCanvasRegion,
+                aContentList.toArray(new ContentResource[] {}));
     }
 
     @Override
     public final PlaceholderCanvas paintWith(final Minter aMinter, final String aCanvasRegion,
-            final List<ContentResource> aContentList) throws ContentOutOfBoundsException,
-            SelectorOutOfBoundsException {
-        return (PlaceholderCanvas) super.paint(this, aMinter, new MediaFragmentSelector(aCanvasRegion), aContentList
-                .toArray(new ContentResource[] {}));
+            final List<ContentResource> aContentList) throws ContentOutOfBoundsException, SelectorOutOfBoundsException {
+        return (PlaceholderCanvas) super.paint(this, aMinter, new MediaFragmentSelector(aCanvasRegion),
+                aContentList.toArray(new ContentResource[] {}));
     }
 
     @Override
@@ -352,8 +354,8 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas> impleme
     @Override
     public final PlaceholderCanvas supplementWith(final Minter aMinter, final MediaFragmentSelector aCanvasRegion,
             final List<ContentResource> aContentList) {
-        return (PlaceholderCanvas) super.supplement(this, aMinter, aCanvasRegion, aContentList.toArray(
-                new ContentResource[] {}));
+        return (PlaceholderCanvas) super.supplement(this, aMinter, aCanvasRegion,
+                aContentList.toArray(new ContentResource[] {}));
     }
 
     @Override
@@ -365,27 +367,25 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas> impleme
 
     @Override
     @SafeVarargs
-    public final PlaceholderCanvas addSupplementingPages(
-            final AnnotationPage<SupplementingAnnotation>... aPageArray) {
+    public final PlaceholderCanvas addSupplementingPages(final AnnotationPage<SupplementingAnnotation>... aPageArray) {
         return (PlaceholderCanvas) super.addSupplementingPages(aPageArray);
     }
 
     @Override
-    public final PlaceholderCanvas addSupplementingPages(
-            final List<AnnotationPage<SupplementingAnnotation>> aPageList) {
+    public final PlaceholderCanvas
+            addSupplementingPages(final List<AnnotationPage<SupplementingAnnotation>> aPageList) {
         return (PlaceholderCanvas) super.addSupplementingPages(aPageList);
     }
 
     @Override
     @SafeVarargs
-    public final PlaceholderCanvas setSupplementingPages(
-            final AnnotationPage<SupplementingAnnotation>... aPageArray) {
+    public final PlaceholderCanvas setSupplementingPages(final AnnotationPage<SupplementingAnnotation>... aPageArray) {
         return (PlaceholderCanvas) super.setSupplementingPages(aPageArray);
     }
 
     @Override
-    public final PlaceholderCanvas setSupplementingPages(
-            final List<AnnotationPage<SupplementingAnnotation>> aPageArray) {
+    public final PlaceholderCanvas
+            setSupplementingPages(final List<AnnotationPage<SupplementingAnnotation>> aPageArray) {
         return (PlaceholderCanvas) super.setSupplementingPages(aPageArray);
     }
 

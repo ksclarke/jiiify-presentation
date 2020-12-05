@@ -177,6 +177,11 @@ public class TextContent extends AbstractContentResource<TextContent> implements
     }
 
     @Override
+    public TextContent clearRequiredStatement() {
+        return (TextContent) super.clearRequiredStatement();
+    }
+
+    @Override
     public TextContent setSummary(final String aSummary) {
         return (TextContent) super.setSummary(aSummary);
     }

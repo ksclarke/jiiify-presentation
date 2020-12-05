@@ -49,6 +49,8 @@
       <property name="scope" value="public" />
       <property name="allowUnknownTags" value="true" />
     </module>
+    <module name="MissingJavadocType"/>
+    <module name="MissingJavadocPackage"/>
     <module name="JavadocMethod">
       <property name="scope" value="public" />
     </module>
