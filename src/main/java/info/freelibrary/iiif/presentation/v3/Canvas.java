@@ -29,10 +29,10 @@ import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 
 /**
- * A virtual container that represents a page or view and has content resources associated with it or with parts of
- * it. The canvas provides a frame of reference for the layout of the content. The concept of a canvas is borrowed
- * from standards like PDF and HTML, or applications like Photoshop and Powerpoint, where the display starts from a
- * blank canvas and images, text and other resources are &quot;painted&quot; on to it.
+ * A virtual container that represents a page or view and has content resources associated with it or with parts of it.
+ * The canvas provides a frame of reference for the layout of the content. The concept of a canvas is borrowed from
+ * standards like PDF and HTML, or applications like Photoshop and Powerpoint, where the display starts from a blank
+ * canvas and images, text and other resources are &quot;painted&quot; on to it.
  */
 @JsonPropertyOrder({ Constants.TYPE, Constants.LABEL, Constants.ID, Constants.WIDTH, Constants.HEIGHT,
     Constants.DURATION, Constants.THUMBNAIL, Constants.ITEMS, Constants.ANNOTATIONS })
@@ -219,8 +219,8 @@ public class Canvas extends AbstractCanvas<Canvas> implements Resource<Canvas>, 
     @Override
     public final Canvas paintWith(final Minter aMinter, final String aCanvasRegion,
             final List<ContentResource> aContentList) {
-        return (Canvas) super.paint(this, aMinter, new MediaFragmentSelector(aCanvasRegion), aContentList.toArray(
-                new ContentResource[] {}));
+        return (Canvas) super.paint(this, aMinter, new MediaFragmentSelector(aCanvasRegion),
+                aContentList.toArray(new ContentResource[] {}));
     }
 
     @Override
@@ -251,15 +251,14 @@ public class Canvas extends AbstractCanvas<Canvas> implements Resource<Canvas>, 
     @Override
     public final Canvas supplementWith(final Minter aMinter, final MediaFragmentSelector aCanvasRegion,
             final List<ContentResource> aContentList) {
-        return (Canvas) super.supplement(this, aMinter, aCanvasRegion, aContentList.toArray(
-                new ContentResource[] {}));
+        return (Canvas) super.supplement(this, aMinter, aCanvasRegion, aContentList.toArray(new ContentResource[] {}));
     }
 
     @Override
     public final Canvas supplementWith(final Minter aMinter, final String aCanvasRegion,
             final List<ContentResource> aContentList) {
-        return (Canvas) super.supplement(this, aMinter, new MediaFragmentSelector(aCanvasRegion), aContentList
-                .toArray(new ContentResource[] {}));
+        return (Canvas) super.supplement(this, aMinter, new MediaFragmentSelector(aCanvasRegion),
+                aContentList.toArray(new ContentResource[] {}));
     }
 
     @Override
@@ -418,6 +417,11 @@ public class Canvas extends AbstractCanvas<Canvas> implements Resource<Canvas>, 
     @Override
     public Canvas setRequiredStatement(final RequiredStatement aStatement) {
         return (Canvas) super.setRequiredStatement(aStatement);
+    }
+
+    @Override
+    public Canvas clearRequiredStatement() {
+        return (Canvas) super.clearRequiredStatement();
     }
 
     @Override

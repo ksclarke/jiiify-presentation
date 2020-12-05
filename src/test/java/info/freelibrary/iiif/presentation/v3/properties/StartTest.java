@@ -1,21 +1,25 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
 import com.thedeanda.lorem.Lorem;
 import com.thedeanda.lorem.LoremIpsum;
 
+import info.freelibrary.util.StringUtils;
+
 import info.freelibrary.iiif.presentation.v3.AbstractTest;
 import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.AudioContentSelector;
-import info.freelibrary.util.StringUtils;
 
 import io.vertx.core.json.JsonObject;
 
+/**
+ * Tests for the Start class.
+ */
 public class StartTest extends AbstractTest {
 
     private static final String CANVAS_PATTERN = "{\"type\":\"Canvas\",\"id\":\"{}\"}";
@@ -44,8 +48,9 @@ public class StartTest extends AbstractTest {
         final String idURL = myLorem.getUrl();
         final String sourceURL = myLorem.getUrl();
 
-        json.put(Constants.TYPE, ResourceTypes.SPECIFIC_RESOURCE).put(Constants.ID, idURL).put(Constants.SOURCE,
-                sourceURL).put(Constants.SELECTOR, new JsonObject().put(Constants.TYPE, selector.getType()));
+        json.put(Constants.TYPE, ResourceTypes.SPECIFIC_RESOURCE).put(Constants.ID, idURL)
+                .put(Constants.SOURCE, sourceURL)
+                .put(Constants.SELECTOR, new JsonObject().put(Constants.TYPE, selector.getType()));
 
         assertEquals(json, JsonObject.mapFrom(new StartSelector(idURL, sourceURL, selector)));
     }

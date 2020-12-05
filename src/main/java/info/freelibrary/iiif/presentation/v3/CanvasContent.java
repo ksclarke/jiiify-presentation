@@ -25,8 +25,8 @@ import info.freelibrary.iiif.presentation.v3.services.Service;
 /**
  * Canvas content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
  */
-public class CanvasContent extends AbstractContentResource<CanvasContent> implements ContentResource,
-        Resource<CanvasContent> {
+public class CanvasContent extends AbstractContentResource<CanvasContent>
+        implements ContentResource, Resource<CanvasContent> {
 
     /**
      * Creates a canvas content resource.
@@ -177,6 +177,11 @@ public class CanvasContent extends AbstractContentResource<CanvasContent> implem
     @Override
     public CanvasContent setRequiredStatement(final RequiredStatement aStatement) {
         return (CanvasContent) super.setRequiredStatement(aStatement);
+    }
+
+    @Override
+    public CanvasContent clearRequiredStatement() {
+        return (CanvasContent) super.clearRequiredStatement();
     }
 
     @Override

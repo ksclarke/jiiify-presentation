@@ -1,7 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +14,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import info.freelibrary.util.StringUtils;
+
+import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 
 import io.vertx.core.json.JsonObject;
 
@@ -48,6 +51,18 @@ public class VideoContentTest {
     }
 
     /**
+     * Tests clearing the required statement.
+     */
+    @Test
+    public void testClearRequiredStatement() {
+        final RequiredStatement reqStatement = new RequiredStatement("stmt-id", "stmt-label");
+        final VideoContent content = new VideoContent(myID).setRequiredStatement(reqStatement);
+
+        assertTrue(content.getRequiredStatement() != null);
+        assertTrue(content.clearRequiredStatement().getRequiredStatement() == null);
+    }
+
+    /**
      * Tests setting and getting video content width and height.
      */
     @Test
@@ -72,8 +87,8 @@ public class VideoContentTest {
      */
     @Test
     public final void testFixture0003() throws IOException {
-        final String json = StringUtils.read(new File("src/test/resources/fixtures/0003-mvm-video.json"),
-                StandardCharsets.UTF_8);
+        final String json =
+                StringUtils.read(new File("src/test/resources/fixtures/0003-mvm-video.json"), StandardCharsets.UTF_8);
         assertEquals(new JsonObject(json), Manifest.fromString(json).toJSON());
     }
 }

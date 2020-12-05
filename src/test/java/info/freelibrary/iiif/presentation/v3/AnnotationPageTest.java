@@ -2,12 +2,14 @@
 package info.freelibrary.iiif.presentation.v3;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.net.URI;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
@@ -41,6 +43,18 @@ public class AnnotationPageTest extends AbstractTest {
     @Test
     public void testAnnotationPageUriId() {
         assertEquals(URI.create(myID), new AnnotationPage<PaintingAnnotation>(URI.create(myID)).getID());
+    }
+
+    /**
+     * Tests clearing the required statement.
+     */
+    @Test
+    public void testClearRequiredStatement() {
+        final AnnotationPage<PaintingAnnotation> annoPage = new AnnotationPage<>(URI.create(myID));
+
+        annoPage.setRequiredStatement(new RequiredStatement("stmt-id", "stmt-label"));
+        assertTrue(annoPage.getRequiredStatement() != null);
+        assertTrue(annoPage.clearRequiredStatement().getRequiredStatement() == null);
     }
 
     /**

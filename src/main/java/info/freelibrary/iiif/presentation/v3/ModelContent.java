@@ -177,6 +177,11 @@ public class ModelContent extends AbstractContentResource<ModelContent> implemen
     }
 
     @Override
+    public ModelContent clearRequiredStatement() {
+        return (ModelContent) super.clearRequiredStatement();
+    }
+
+    @Override
     public ModelContent setSummary(final String aSummary) {
         return (ModelContent) super.setSummary(aSummary);
     }

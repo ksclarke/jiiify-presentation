@@ -30,8 +30,8 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 /**
  * An annotation used for associating supplementary content resources with a {@link Canvas}.
  */
-public class SupplementingAnnotation extends Annotation<SupplementingAnnotation> implements
-        Resource<SupplementingAnnotation>, ContentAnnotation<SupplementingAnnotation> {
+public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
+        implements Resource<SupplementingAnnotation>, ContentAnnotation<SupplementingAnnotation> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SupplementingAnnotation.class, MessageCodes.BUNDLE);
 
@@ -334,6 +334,11 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     @Override
     public SupplementingAnnotation setRequiredStatement(final RequiredStatement aStatement) {
         return (SupplementingAnnotation) super.setRequiredStatement(aStatement);
+    }
+
+    @Override
+    public SupplementingAnnotation clearRequiredStatement() {
+        return (SupplementingAnnotation) super.clearRequiredStatement();
     }
 
     @Override

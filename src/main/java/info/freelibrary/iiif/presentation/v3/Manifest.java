@@ -15,6 +15,9 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -31,17 +34,15 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavi
 import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.utils.ContextListComparator;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 
 /**
  * The overall description of the structure and properties of the digital representation of an object. It carries
- * information needed for the viewer to present the digitized content to the user, such as a title and other
- * descriptive information about the object or the intellectual work that it conveys. Each manifest describes how to
- * present a single object such as a book, a photograph, or a statue.
+ * information needed for the viewer to present the digitized content to the user, such as a title and other descriptive
+ * information about the object or the intellectual work that it conveys. Each manifest describes how to present a
+ * single object such as a book, a photograph, or a statue.
  */
 public class Manifest extends NavigableResource<Manifest> implements Resource<Manifest> {
 
@@ -330,6 +331,16 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     /**
+     * Clears the viewing direction.
+     *
+     * @return The manifest
+     */
+    public Manifest clearViewingDirection() {
+        myViewingDirection = null;
+        return this;
+    }
+
+    /**
      * Adds one or more canvases to the manifest.
      *
      * @param aCanvasArray An array of canvases to add to the manifest
@@ -501,6 +512,11 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     @Override
+    public Manifest clearRequiredStatement() {
+        return (Manifest) super.clearRequiredStatement();
+    }
+
+    @Override
     public Manifest setSummary(final String aSummary) {
         return (Manifest) super.setSummary(aSummary);
     }
@@ -602,7 +618,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
 
         // Remove required context; we'll add it back at the end
         if (indices.size() > 0) {
-            contextList.remove(indices.get(0).intValue());
+            contextList.remove((int) indices.get(0));
         }
 
         myContexts.clear();

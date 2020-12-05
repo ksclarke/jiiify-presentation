@@ -1,6 +1,9 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
+/**
+ * An interface for behavior implementations.
+ */
 public interface Behavior {
 
     /**

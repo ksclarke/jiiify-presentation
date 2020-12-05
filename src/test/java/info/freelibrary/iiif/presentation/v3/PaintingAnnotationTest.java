@@ -12,6 +12,7 @@ import org.junit.Test;
 import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.properties.Label;
+import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
@@ -112,6 +113,18 @@ public class PaintingAnnotationTest extends AbstractTest {
         assertEquals(myAnnoID, anno.getID());
         assertTrue(anno.hasSpecificResourceTarget());
         assertTrue(anno.getSpecificResourceTarget().isPresent());
+    }
+
+    /**
+     * Tests clearing the required statement.
+     */
+    @Test
+    public void testClearRequiredStatement() {
+        final PaintingAnnotation anno = new PaintingAnnotation(myAnnoID, myCanvas);
+
+        anno.setRequiredStatement(new RequiredStatement("stmt-id", "stmt-label"));
+        assertTrue(anno.getRequiredStatement() != null);
+        assertTrue(anno.clearRequiredStatement().getRequiredStatement() == null);
     }
 
     /**

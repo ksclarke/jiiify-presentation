@@ -131,6 +131,13 @@ public interface Resource<T extends Resource<T>> {
     T setRequiredStatement(RequiredStatement aStatement);
 
     /**
+     * Clears the required statement.
+     *
+     * @return The resource
+     */
+    T clearRequiredStatement();
+
+    /**
      * Gets the rights.
      *
      * @return The rights
@@ -286,8 +293,8 @@ public interface Resource<T extends Resource<T>> {
      * Sets the behaviors for this resource. Different types of resources allow different types of behaviors. For
      * instance, on a <code>Manifest</code> resource the <code>setBehaviors(Behavior aBehavior)</code> method only
      * allows a ManifestBehavior to be passed. If a CollectionBehavior, for instance, is passed, an
-     * <code>IllegalArgumentException</code> will be thrown. Manifests, collections, canvases, and ranges have their
-     * own behaviors. Other resources use the <code>ResourceBehavior</code> class.
+     * <code>IllegalArgumentException</code> will be thrown. Manifests, collections, canvases, and ranges have their own
+     * behaviors. Other resources use the <code>ResourceBehavior</code> class.
      *
      * @param aBehaviorArray The behaviors to set for this resource
      * @return The resource
@@ -299,8 +306,8 @@ public interface Resource<T extends Resource<T>> {
      * Sets the behaviors for this resource. Different types of resources allow different types of behaviors. For
      * instance, on a <code>Manifest</code> resource the <code>setBehaviors(List&lt;Behavior&gt; aBehaviorList)</code>
      * method only allows a ManifestBehavior to be passed. If a CollectionBehavior, for instance, is passed, an
-     * <code>IllegalArgumentException</code> will be thrown. Manifests, collections, canvases, and ranges have their
-     * own behaviors. Other resources use the <code>ResourceBehavior</code> class.
+     * <code>IllegalArgumentException</code> will be thrown. Manifests, collections, canvases, and ranges have their own
+     * behaviors. Other resources use the <code>ResourceBehavior</code> class.
      *
      * @param aBehaviorList The behaviors to set for this resource
      * @return The resource

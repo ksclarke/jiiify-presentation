@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
@@ -10,6 +10,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import info.freelibrary.iiif.presentation.v3.utils.TestConstants;
 
+/**
+ * Tests for the TimeMode class.
+ */
 public class TimeModeTest {
 
     /* Expected values */
@@ -22,8 +25,8 @@ public class TimeModeTest {
      */
     @Test
     public final void testJsonSerialization() throws JsonProcessingException {
-        assertEquals(TestConstants.QUOTE + VALUES[2] + TestConstants.QUOTE, new ObjectMapper().writeValueAsString(
-                TimeMode.LOOP));
+        assertEquals(TestConstants.QUOTE + VALUES[2] + TestConstants.QUOTE,
+                new ObjectMapper().writeValueAsString(TimeMode.LOOP));
     }
 
     /**

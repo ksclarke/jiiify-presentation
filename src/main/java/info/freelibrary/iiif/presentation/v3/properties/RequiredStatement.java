@@ -1,22 +1,17 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-
 /**
- * Text that must be displayed when the resource is displayed or used. For example, the requiredStatement property
- * could be used to present copyright or ownership statements, an acknowledgement of the owning and/or publishing
- * institution, or any other text that the publishing organization deems critical to display to the user.
+ * Text that must be displayed when the resource is displayed or used. For example, the requiredStatement property could
+ * be used to present copyright or ownership statements, an acknowledgement of the owning and/or publishing institution,
+ * or any other text that the publishing organization deems critical to display to the user.
  */
 public class RequiredStatement extends Metadata {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(RequiredStatement.class, MessageCodes.BUNDLE);
 
     /**
      * Constructor for Jackson deserialization.
      */
+    @SuppressWarnings("unused")
     private RequiredStatement() {
     }
 

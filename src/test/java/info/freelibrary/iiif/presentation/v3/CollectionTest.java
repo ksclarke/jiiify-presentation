@@ -15,13 +15,16 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 
+import info.freelibrary.util.StringUtils;
+
 import info.freelibrary.iiif.presentation.v3.Collection.Item;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.NavDate;
+import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
+import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CollectionBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
-import info.freelibrary.util.StringUtils;
 
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
@@ -58,6 +61,29 @@ public class CollectionTest {
 
         assertEquals(myID, manifest.getID());
         assertEquals(myLabel, manifest.getLabel());
+    }
+
+    /**
+     * Tests clearing the required statement.
+     */
+    @Test
+    public void testClearRequiredStatement() {
+        final RequiredStatement requiredStatement = new RequiredStatement("one", "two");
+        final Collection collection = new Collection(myID, myLabel).setRequiredStatement(requiredStatement);
+
+        assertTrue(collection.getRequiredStatement() != null);
+        assertTrue(collection.clearRequiredStatement().getRequiredStatement() == null);
+    }
+
+    /**
+     * Tests clearing the viewing direction.
+     */
+    @Test
+    public void testClearViewingDirection() {
+        final Collection collection = new Collection(myID, myLabel).setViewingDirection(ViewingDirection.LEFT_TO_RIGHT);
+
+        assertTrue(collection.getViewingDirection() != null);
+        assertTrue(collection.clearViewingDirection().getViewingDirection() == null);
     }
 
     /**
@@ -149,8 +175,8 @@ public class CollectionTest {
      */
     @Test
     public void testFromString() {
-        final String json = myVertx.fileSystem().readFileBlocking(TEST_FILE1.getAbsolutePath()).toString(
-                StandardCharsets.UTF_8);
+        final String json =
+                myVertx.fileSystem().readFileBlocking(TEST_FILE1.getAbsolutePath()).toString(StandardCharsets.UTF_8);
         final Collection collection = Collection.fromString(json);
 
         assertEquals(new JsonObject(json), collection.toJSON());

@@ -26,8 +26,8 @@ import info.freelibrary.iiif.presentation.v3.services.Service;
 /**
  * A collection of annotations.
  */
-public class AnnotationCollection extends AbstractResource<AnnotationCollection> implements
-        Resource<AnnotationCollection> {
+public class AnnotationCollection extends AbstractResource<AnnotationCollection>
+        implements Resource<AnnotationCollection> {
 
     private ViewingDirection myViewingDirection;
 
@@ -93,8 +93,7 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
     @Override
     @JsonSetter(Constants.BEHAVIOR)
     public AnnotationCollection setBehaviors(final Behavior... aBehaviorArray) {
-        return (AnnotationCollection) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true,
-                aBehaviorArray));
+        return (AnnotationCollection) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorArray));
     }
 
     @Override
@@ -104,14 +103,12 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
 
     @Override
     public AnnotationCollection addBehaviors(final Behavior... aBehaviorArray) {
-        return (AnnotationCollection) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false,
-                aBehaviorArray));
+        return (AnnotationCollection) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorArray));
     }
 
     @Override
     public AnnotationCollection addBehaviors(final List<Behavior> aBehaviorList) {
-        return (AnnotationCollection) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false,
-                aBehaviorList));
+        return (AnnotationCollection) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorList));
     }
 
     @Override
@@ -197,6 +194,11 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
     @Override
     public AnnotationCollection setRequiredStatement(final RequiredStatement aStatement) {
         return (AnnotationCollection) super.setRequiredStatement(aStatement);
+    }
+
+    @Override
+    public AnnotationCollection clearRequiredStatement() {
+        return (AnnotationCollection) super.clearRequiredStatement();
     }
 
     @Override

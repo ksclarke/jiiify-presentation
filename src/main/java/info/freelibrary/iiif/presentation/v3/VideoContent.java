@@ -12,6 +12,9 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -25,8 +28,6 @@ import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
@@ -196,6 +197,11 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
     }
 
     @Override
+    public VideoContent clearRequiredStatement() {
+        return (VideoContent) super.clearRequiredStatement();
+    }
+
+    @Override
     public VideoContent setSummary(final String aSummary) {
         return (VideoContent) super.setSummary(aSummary);
     }
@@ -287,7 +293,7 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
     @JsonSetter(Constants.DURATION)
     public VideoContent setDuration(final Number aDuration) {
         final float tempDuration = aDuration.floatValue();
-        if ((tempDuration > 0) && (Float.isFinite(tempDuration))) {
+        if (tempDuration > 0 && Float.isFinite(tempDuration)) {
             myDuration = tempDuration;
             return this;
         } else {

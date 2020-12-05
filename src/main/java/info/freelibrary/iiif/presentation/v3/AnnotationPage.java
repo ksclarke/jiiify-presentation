@@ -34,8 +34,8 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 /**
  * A page of annotations.
  */
-public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<AnnotationPage<T>> implements
-        Resource<AnnotationPage<T>> {
+public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<AnnotationPage<T>>
+        implements Resource<AnnotationPage<T>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationPage.class, MessageCodes.BUNDLE);
 
@@ -274,6 +274,11 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
     @Override
     public AnnotationPage<T> setRequiredStatement(final RequiredStatement aStatement) {
         return (AnnotationPage<T>) super.setRequiredStatement(aStatement);
+    }
+
+    @Override
+    public AnnotationPage<T> clearRequiredStatement() {
+        return (AnnotationPage<T>) super.clearRequiredStatement();
     }
 
     @Override

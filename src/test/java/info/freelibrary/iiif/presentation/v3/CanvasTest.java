@@ -19,6 +19,7 @@ import info.freelibrary.iiif.presentation.v3.id.Minter;
 import info.freelibrary.iiif.presentation.v3.id.MinterFactory;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.NavDate;
+import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
@@ -176,6 +177,16 @@ public class CanvasTest {
     /***********************
      * Getters and setters *
      ***********************/
+
+    /**
+     * Tests clearing the required statement.
+     */
+    @Test
+    public void testClearRequiredStatement() {
+        myCanvas.setRequiredStatement(new RequiredStatement("stmt-id", "stmt-label"));
+        assertTrue(myCanvas.getRequiredStatement() != null);
+        assertTrue(myCanvas.clearRequiredStatement().getRequiredStatement() == null);
+    }
 
     /**
      * Tests setting and getting a navDate on the canvas.

@@ -3,12 +3,16 @@ package info.freelibrary.iiif.presentation.v3.properties.behaviors;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
-import info.freelibrary.iiif.presentation.v3.properties.Behavior;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.iiif.presentation.v3.properties.Behavior;
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+
+/**
+ * The behaviors available to resources.
+ */
 public enum ResourceBehavior implements Behavior {
 
     HIDDEN(BehaviorConstants.HIDDEN);

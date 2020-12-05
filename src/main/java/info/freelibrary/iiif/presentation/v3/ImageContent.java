@@ -4,10 +4,13 @@ package info.freelibrary.iiif.presentation.v3;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
@@ -22,9 +25,6 @@ import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.services.Service;
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonSetter;
-
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 
@@ -33,8 +33,8 @@ import io.vertx.core.json.JsonObject;
  */
 @JsonPropertyOrder({ Constants.TYPE, Constants.LABEL, Constants.ID, Constants.THUMBNAIL, Constants.WIDTH,
     Constants.HEIGHT, Constants.FORMAT, Constants.LANGUAGE, Constants.SERVICE })
-public class ImageContent extends AbstractContentResource<ImageContent> implements Thumbnail, Resource<ImageContent>,
-        SpatialContentResource<ImageContent> {
+public class ImageContent extends AbstractContentResource<ImageContent>
+        implements Thumbnail, Resource<ImageContent>, SpatialContentResource<ImageContent> {
 
     private int myWidth;
 
@@ -188,6 +188,11 @@ public class ImageContent extends AbstractContentResource<ImageContent> implemen
     @Override
     public ImageContent setRequiredStatement(final RequiredStatement aStatement) {
         return (ImageContent) super.setRequiredStatement(aStatement);
+    }
+
+    @Override
+    public ImageContent clearRequiredStatement() {
+        return (ImageContent) super.clearRequiredStatement();
     }
 
     @Override
