@@ -14,7 +14,7 @@ To include the pre-compiled jiiify-presentation Jar as a dependency in your proj
   <dependency>
     <groupId>info.freelibrary</groupId>
     <artifactId>jiiify-presentation-v2</artifactId>
-    <version>0.5.4</version>
+    <version>0.5.5</version>
   </dependency>
 ```
 
@@ -24,7 +24,7 @@ or
   <dependency>
     <groupId>info.freelibrary</groupId>
     <artifactId>jiiify-presentation-v3</artifactId>
-    <version>0.5.4</version>
+    <version>0.5.5</version>
   </dependency>
 ```
 
