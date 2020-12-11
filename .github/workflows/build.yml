@@ -6,7 +6,7 @@ on:
       - main
       - gh_actions
     tags:
-      - *
+      - '*'
   pull_request:
     branches:
       - main
