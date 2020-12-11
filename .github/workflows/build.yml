@@ -32,4 +32,4 @@ jobs:
           DEFAULT_BRANCH: main
 #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: mvn -s src/test/resources/settings.xml -B package --file pom.xml \
-          | grep -v "[INFO] Downloading from central"
+          | grep -v "\[INFO\] Download\(ed\|ing\) from"
