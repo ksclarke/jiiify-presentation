@@ -12,7 +12,7 @@ on:
       - main
 
 jobs:
-  build: # Just a name for the build
+  build:
     name: Maven Builder (JDK ${{ matrix.java }})
     runs-on: ubuntu-latest
     strategy:
@@ -31,5 +31,5 @@ jobs:
         env:
           DEFAULT_BRANCH: main
 #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: mvn package -s src/test/resources/settings.xml -B -f pom.xml \
-          | grep -v "\[INFO\] Download\(ed\|ing\) from"
+        run: mvn package -s src/test/resources/settings.xml -B -f pom.xml | \
+          grep -v "\[INFO\] Download\(ed\|ing\) from"
