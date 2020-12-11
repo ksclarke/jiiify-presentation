@@ -31,4 +31,4 @@ jobs:
         env:
           DEFAULT_BRANCH: main
 #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: mvn -B package --file pom.xml
+        run: mvn -B package --file pom.xml | grep -v "[INFO] Downloading from central"
