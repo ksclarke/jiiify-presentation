@@ -31,5 +31,5 @@ jobs:
         env:
           DEFAULT_BRANCH: main
 #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: mvn package -s src/test/resources/settings.xml -B -f pom.xml | \
-          grep -v "\[INFO\] Download\(ed\|ing\) from"
+        run: sh -c 'mvn package -s src/test/resources/settings.xml -B -f pom.xml | \
+          grep -v "\[INFO\] Download\(ed\|ing\) from"'
