@@ -32,20 +32,9 @@ jobs:
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          mvn help:active-profiles verify -s src/test/resources/settings.xml -f pom.xml -B \
+          mvn help:active-profiles deploy -s src/test/resources/settings.xml -B \
             -Dorg.slf4j.simpleLogger.log.net.sourceforge.pmd=error \
             | grep -v "\[INFO\] Download\(ed\|ing\) from"
-  publish:
-    name: Artifact Publisher
-    runs-on: ubuntu-latest
-    needs: build
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-
-    steps:
-      - name: Publish artifact
-        run: |
-          echo "here!"
-
 
 
 
