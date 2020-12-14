@@ -35,13 +35,14 @@ jobs:
           mvn help:active-profiles verify -s src/test/resources/settings.xml -B \
             -Dorg.slf4j.simpleLogger.log.net.sourceforge.pmd=error \
             | grep -v "\[INFO\] Download\(ed\|ing\) from"
-      - name: Publish with Maven
+      - name: Set ENV Workflow Status
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         uses: technote-space/workflow-conclusion-action@v1
-        if: ${{ github.ref = 'gh_actions' && env.WORKFLOW_CONCLUSION == 'success' }}
         with:
           status: success
+      - name: Publish with Maven
+        if: ${{ github.ref = 'gh_actions' && env.WORKFLOW_CONCLUSION == 'success' }}
         run:
           echo "Publishing artifact!"
 
