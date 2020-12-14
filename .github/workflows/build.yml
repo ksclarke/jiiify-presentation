@@ -39,7 +39,7 @@ jobs:
     name: Artifact Publisher
     runs-on: ubuntu-latest
     needs: build
-    if: ${{ github.event.workflow_run.conclusion == 'success' }
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Publish artifact
