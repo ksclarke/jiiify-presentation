@@ -27,9 +27,10 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
           java-package: jdk
-      - name: Build with Maven 
+      - name: Run Maven 
         env:
-          DEFAULT_BRANCH: main
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mvn help:active-profiles deploy -s src/test/resources/settings.xml -B \
