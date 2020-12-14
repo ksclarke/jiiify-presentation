@@ -42,7 +42,7 @@ jobs:
         with:
           status: success
       - name: Publish with Maven
-        if: ${{ github.ref = 'gh_actions' && env.WORKFLOW_CONCLUSION == 'success' }}
+        if: ${{ github.ref = 'gh_actions' && env.WORKFLOW_CONCLUSION = 'success' }}
         run:
           echo "Publishing artifact!"
 
