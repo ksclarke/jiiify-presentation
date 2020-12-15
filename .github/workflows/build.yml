@@ -29,6 +29,9 @@ jobs:
           java-package: jdk
       - name: Run Maven 
         env:
+          BUILD_KEY: ${{ secrets.BUILD_KEY }}
+          BUILD_KEYNAME: ${{ secrets.BUILD_KEYNAME }}
+          BUILD_PASSPHRASE: ${{ secrets.BUILD_PASSPHRASE }}
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
