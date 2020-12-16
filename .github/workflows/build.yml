@@ -40,8 +40,8 @@ jobs:
             -Dorg.slf4j.simpleLogger.log.net.sourceforge.pmd=error \
             | grep -v "\[INFO\] Download\(ed\|ing\) from" && \
           mkdir -p ~/.gnupg/ && \
-          printf "$BUILD_KEY" | base64 --decode > ~/.gnupg/private.key && \
-          gpg --import ~/.gnupg/private.key
+          echo "$BUILD_KEY" | base64 --decode > ~/.gnupg/github-build.key && \
+          gpg --import ~/.gnupg/github-build.key
 
 
 
