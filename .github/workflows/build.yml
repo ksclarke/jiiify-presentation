@@ -27,6 +27,11 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
           java-package: jdk
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v3
+        with:
+          gpg-private-key: ${{ secrets.BUILD_KEY }}
+          passphrase: ${{ secrets.BUILD_PASSPHRASE }}
       - name: Run Maven 
         env:
           BUILD_KEY: ${{ secrets.BUILD_KEY }}
@@ -38,10 +43,7 @@ jobs:
         run: |
           mvn help:active-profiles deploy -s src/test/resources/settings.xml -B \
             -Dorg.slf4j.simpleLogger.log.net.sourceforge.pmd=error \
-            | grep -v "\[INFO\] Download\(ed\|ing\) from" && \
-          mkdir -p ~/.gnupg/ && \
-          echo "$BUILD_KEY" | base64 --decode > ~/.gnupg/github-build.key && \
-          gpg --import ~/.gnupg/github-build.key
+            | grep -v "\[INFO\] Download\(ed\|ing\) from"
 
 
 
