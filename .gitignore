@@ -12,3 +12,5 @@ src/main/resources/build-key.gpg
 src/main/tools/travis
 src/main/tools/eclipse
 
+# In support of using $revision in the version element in the POM
+.flattened-pom.xml

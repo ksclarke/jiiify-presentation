@@ -1,0 +1,35 @@
+name: Maven PR Build
+
+# We require all commits go through PR on GitHub
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Maven PR Builder (JDK ${{ matrix.java }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ 11, 12 ]
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Install JDK ${{ matrix.java }} and Maven
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java }}
+      - name: Set up Maven cache
+        uses: actions/cache@v2
+        env:
+          FREELIBRARY_CACHE_KEY: ${{ secrets.FREELIBRARY_CACHE_KEY }}
+        with:
+          path: ~/.m2
+          key: freelibrary-cache-${{ env.FREELIBRARY_CACHE_KEY }}
+      - name: Build with Maven
+        uses: samuelmeuli/action-maven-publish@v1
+        with:
+          maven_goals_phases: "clean verify"
+          maven_args: "-V -ntp -Dorg.slf4j.simpleLogger.log.net.sourceforge.pmd=error"

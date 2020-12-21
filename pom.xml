@@ -6,7 +6,7 @@
 
   <artifactId>jiiify-presentation-v3</artifactId>
   <packaging>jar</packaging>
-  <version>0.5.6-SNAPSHOT</version>
+  <version>${revision}</version>
   <name>jiiify-presentation</name>
   <description>A Java Library for version 3 of the IIIF Presentation API</description>
   <url>http://projects.freelibrary.info/jiiify-presentation-v3</url>
@@ -58,21 +58,25 @@
   </developers>
 
   <properties>
-    <jackson.version>2.11.1</jackson.version>
-    <jackson.databind.version>2.11.1</jackson.databind.version>
-    <guava.version>30.0-jre</guava.version>
-    <freelib.utils.version>1.1.0</freelib.utils.version>
-    <freelib.maven.version>0.1.0</freelib.maven.version>
+    <revision>0.0.0-SNAPSHOT</revision>
+
+    <jackson.version>2.12.0</jackson.version>
+    <jackson.databind.version>2.12.0</jackson.databind.version>
+    <guava.version>30.1-jre</guava.version>
+    <freelib.utils.version>2.1.0</freelib.utils.version>
     <jsoup.version>1.13.1</jsoup.version>
     <vertx.version>3.9.4</vertx.version>
-    <maven.jar.plugin.version>3.2.0</maven.jar.plugin.version>
     <combinatorics.version>3.3.0</combinatorics.version>
     <media-fragments-uri.version>2.4</media-fragments-uri.version>
+
+    <!-- Plugin related versions -->
+    <maven.jar.plugin.version>3.2.0</maven.jar.plugin.version>
+    <freelib.maven.version>0.1.2</freelib.maven.version>
 
     <!-- Test related versions -->
     <opencsv.version>4.6</opencsv.version>
     <lorem.version>2.1</lorem.version>
-    
+
     <!-- A property used by the build process -->
     <tag.prefix>v3</tag.prefix>
   </properties>
@@ -157,12 +161,6 @@
 
   <build>
     <plugins>
-      <!-- Sets the prepare_release scripts to be executable -->
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-      </plugin>
-
       <!-- Generate our MessageCodes class from the messages resource file -->
       <plugin>
         <groupId>info.freelibrary</groupId>
@@ -247,7 +245,7 @@
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>5.2.1</version>
+    <version>6.0.2</version>
   </parent>
 
 </project>
