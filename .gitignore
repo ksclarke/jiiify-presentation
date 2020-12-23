@@ -12,3 +12,5 @@ src/main/resources/build-key.gpg
 src/main/tools/travis
 src/main/tools/eclipse
 
+# Ignore work products of the POM flattening process
+.flattened-pom.xml

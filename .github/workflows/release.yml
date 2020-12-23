@@ -1,0 +1,41 @@
+name: Maven Release
+
+# Performs a Maven release using JDK 11 when a new GitHub release has been published
+on:
+  release:
+    types: [ published ]
+
+jobs:
+  publish:
+    name: Maven Artifact Publisher (JDK 11)
+    runs-on: ubuntu-latest
+    env:
+      AUTORELEASE_ARTIFACT: ${{ secrets.AUTORELEASE_ARTIFACT }}
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@v2
+      - name: Install JDK 11 and Maven
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Set up Maven cache
+        uses: actions/cache@v2
+        env:
+          FREELIBRARY_CACHE_KEY: ${{ secrets.FREELIBRARY_CACHE_KEY }}
+        with:
+          path: ~/.m2
+          key: freelibrary-cache-${{ env.FREELIBRARY_CACHE_KEY }}
+      - name: Set autorelease config
+        if: env.AUTORELEASE_ARTIFACT == null
+        run: echo "AUTORELEASE_ARTIFACT=false" >> $GITHUB_ENV
+      - name: Release with Maven
+        uses: samuelmeuli/action-maven-publish@v1
+        with:
+          gpg_private_key: ${{ secrets.BUILD_KEY }}
+          gpg_passphrase: ${{ secrets.BUILD_PASSPHRASE }}
+          nexus_username: ${{ secrets.SONATYPE_USERNAME }}
+          nexus_password: ${{ secrets.SONATYPE_PASSWORD }}
+          maven_profiles: "release"
+          maven_args: >
+            -Drevision=${{ github.event.release.tag_name }} -Dautorelease.artifact=${{ env.AUTORELEASE_ARTIFACT }} -ntp
+            -Dorg.slf4j.simpleLogger.log.net.sourceforge.pmd=error

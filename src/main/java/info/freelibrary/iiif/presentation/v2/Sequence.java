@@ -135,7 +135,7 @@ public class Sequence extends Resource<Sequence> {
      * @param aCanvases A list of canvases
      * @return The sequence
      */
-    @JsonIgnore
+    @JsonSetter(Constants.CANVASES)
     public Sequence setCanvases(final List<Canvas> aCanvases) {
         myCanvases.clear();
         myCanvases.addAll(aCanvases);
