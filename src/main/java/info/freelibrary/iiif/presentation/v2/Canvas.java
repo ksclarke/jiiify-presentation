@@ -6,6 +6,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -162,30 +163,57 @@ public class Canvas extends Resource<Canvas> {
     /**
      * Sets the canvas' image content.
      *
-     * @param aImageContent A canvas image content
+     * @param aImageContentList A list of image content
      * @return The canvas
      */
-    public Canvas setImageContent(final ImageContent... aImageContent) {
+    @JsonSetter(Constants.IMAGE_CONTENT)
+    public Canvas setImageContent(final List<ImageContent> aImageContentList) {
+        Objects.requireNonNull(aImageContentList);
+        myImageContent = aImageContentList;
+        return this;
+    }
+
+    /**
+     * Sets the canvas' image content.
+     *
+     * @param aImageContentArray An array of image content
+     * @return The canvas
+     */
+    @JsonIgnore
+    public Canvas setImageContent(final ImageContent... aImageContentArray) {
         if (myImageContent != null) {
             myImageContent.clear();
         }
 
-        return addImageContent(aImageContent);
+        return addImageContent(aImageContentArray);
     }
 
     /**
      * Sets the canvas' other content.
      *
-     * @param aOtherContent A canvas other content
+     * @param aOtherContentList A list other content
+     * @return The canvas
+     */
+    @JsonSetter(Constants.OTHER_CONTENT)
+    public Canvas setOtherContent(final List<OtherContent> aOtherContentList) {
+        Objects.requireNonNull(aOtherContentList);
+        myOtherContent = aOtherContentList;
+        return this;
+    }
+
+    /**
+     * Sets the canvas' other content.
+     *
+     * @param aOtherContentArray An array of other content
      * @return The canvas
      */
     @JsonIgnore
-    public Canvas setOtherContent(final OtherContent... aOtherContent) {
+    public Canvas setOtherContent(final OtherContent... aOtherContentArray) {
         if (myOtherContent != null) {
             myOtherContent.clear();
         }
 
-        return addOtherContent(aOtherContent);
+        return addOtherContent(aOtherContentArray);
     }
 
     /**

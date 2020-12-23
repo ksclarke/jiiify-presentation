@@ -1,0 +1,17 @@
+name: Draft Release
+
+# Any time new commits hit the 'main' branch, add them to the next release draft
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  draft-release-notes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: release-drafter/release-drafter@v5
+        with:
+          config-name: configs/release-drafter.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
