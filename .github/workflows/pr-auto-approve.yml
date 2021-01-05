@@ -6,7 +6,8 @@ name: PR Auto-Approver
 on:
   pull_request:
     branches:
-      - main
+      - v2
+      - v3
 
 jobs:
   approve-pr:

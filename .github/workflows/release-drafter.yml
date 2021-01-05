@@ -4,7 +4,8 @@ name: Draft Release
 on:
   push:
     branches:
-      - main
+      - v2
+      - v3
 
 jobs:
   draft-release-notes:
