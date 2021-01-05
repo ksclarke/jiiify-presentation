@@ -4,7 +4,6 @@ name: Draft Release
 on:
   push:
     branches:
-      - main
       - v2
       - v3
 
