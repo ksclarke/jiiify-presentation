@@ -2,3 +2,6 @@
 # Ignore Maven source and target
 src/
 target/
+
+# Ignore workflow artifacts
+.flattened-pom.xml
