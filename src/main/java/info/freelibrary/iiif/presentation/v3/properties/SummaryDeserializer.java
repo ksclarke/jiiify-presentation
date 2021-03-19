@@ -15,7 +15,7 @@ class SummaryDeserializer extends AbstractI18nStdDeserializer<Summary> {
     /**
      * The <code>serialVersionUID</code> of SummarySerializer.
      */
-    private static final long serialVersionUID = -1205197258028340974L;
+    private static final long serialVersionUID = 6825081668840056682L;
 
     /**
      * Creates a new summary deserializer.
@@ -37,8 +37,8 @@ class SummaryDeserializer extends AbstractI18nStdDeserializer<Summary> {
      * Deserializes a Summary from its JSON structure.
      */
     @Override
-    public Summary deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException,
-            JsonProcessingException {
+    public Summary deserialize(final JsonParser aParser, final DeserializationContext aContext)
+            throws IOException, JsonProcessingException {
         return new Summary(getI18nStrings(aParser.getCodec().readTree(aParser)));
     }
 }
