@@ -35,7 +35,7 @@ public class ImageService3Test {
      */
     @Test
     public void testGetContext() {
-        assertEquals(CONTEXT, new ImageService3(ImageService3.Profile.ZERO, ID).getContext());
+        assertEquals(CONTEXT, new ImageService3(ImageService3.Profile.LEVEL_ZERO, ID).getContext());
     }
 
     /**
@@ -43,9 +43,9 @@ public class ImageService3Test {
      */
     @Test
     public void testGetProfile() {
-        assertEquals(LEVEL_0, new ImageService3(ImageService3.Profile.ZERO, ID).getProfile());
-        assertEquals(LEVEL_1, new ImageService3(ImageService3.Profile.ONE, ID).getProfile());
-        assertEquals(LEVEL_2, new ImageService3(ImageService3.Profile.TWO, ID).getProfile());
+        assertEquals(LEVEL_0, new ImageService3(ImageService3.Profile.LEVEL_ZERO, ID).getProfile());
+        assertEquals(LEVEL_1, new ImageService3(ImageService3.Profile.LEVEL_ONE, ID).getProfile());
+        assertEquals(LEVEL_2, new ImageService3(ImageService3.Profile.LEVEL_TWO, ID).getProfile());
     }
 
     /**
@@ -53,8 +53,8 @@ public class ImageService3Test {
      */
     @Test
     public void testLevelZero() {
-        assertEquals(LEVEL_0, ImageService3.Profile.ZERO.string());
-        assertEquals(ImageService3.Profile.ZERO, ImageService3.Profile.valueOf("ZERO"));
+        assertEquals(LEVEL_0, ImageService3.Profile.LEVEL_ZERO.string());
+        assertEquals(ImageService3.Profile.LEVEL_ZERO, ImageService3.Profile.valueOf("LEVEL_ZERO"));
     }
 
     /**
@@ -62,8 +62,8 @@ public class ImageService3Test {
      */
     @Test
     public void testLevelOne() {
-        assertEquals(LEVEL_1, ImageService3.Profile.ONE.string());
-        assertEquals(ImageService3.Profile.ONE, ImageService3.Profile.valueOf("ONE"));
+        assertEquals(LEVEL_1, ImageService3.Profile.LEVEL_ONE.string());
+        assertEquals(ImageService3.Profile.LEVEL_ONE, ImageService3.Profile.valueOf("LEVEL_ONE"));
     }
 
     /**
@@ -71,8 +71,8 @@ public class ImageService3Test {
      */
     @Test
     public void testLevelTwo() {
-        assertEquals(LEVEL_2, ImageService3.Profile.TWO.string());
-        assertEquals(ImageService3.Profile.TWO, ImageService3.Profile.valueOf("TWO"));
+        assertEquals(LEVEL_2, ImageService3.Profile.LEVEL_TWO.string());
+        assertEquals(ImageService3.Profile.LEVEL_TWO, ImageService3.Profile.valueOf("LEVEL_TWO"));
     }
 
     /**

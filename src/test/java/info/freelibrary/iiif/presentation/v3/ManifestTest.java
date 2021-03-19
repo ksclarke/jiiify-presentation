@@ -25,8 +25,9 @@ import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.services.GenericService;
-import info.freelibrary.iiif.presentation.v3.services.ImageService2;
+import info.freelibrary.iiif.presentation.v3.services.ImageService;
 import info.freelibrary.iiif.presentation.v3.services.ImageService3;
+import info.freelibrary.iiif.presentation.v3.services.ImageService3.Profile;
 import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 
@@ -89,8 +90,8 @@ public class ManifestTest extends AbstractTest {
             metadata.add(new Metadata(kvPair[0], kvPair[1]));
         }
 
-        final ImageService2 manifestThumbService =
-                new ImageService2(ImageService2.Profile.TWO, SERVER + ENCODED_MANIFEST_THUMBNAIL_ARK);
+        final ImageService manifestThumbService =
+                new ImageService3(Profile.LEVEL_TWO, SERVER + ENCODED_MANIFEST_THUMBNAIL_ARK);
 
         myManifest = new Manifest(MANIFEST_URI, TEST_TITLE);
         myManifest.setMetadata(metadata);
@@ -112,7 +113,7 @@ public class ManifestTest extends AbstractTest {
 
         for (final String[] values : firstCanvas) {
             final String id = SERVER + values[1] + THUMBNAIL_PATH;
-            final ImageService3 service = new ImageService3(SERVER + values[1]);
+            final ImageService service = new ImageService3(Profile.LEVEL_TWO, SERVER + values[1]);
             final ImageContent resource = new ImageContent(id).setServices(service);
 
             content1.addBody(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(values[0]));
@@ -130,7 +131,7 @@ public class ManifestTest extends AbstractTest {
 
         for (final String[] values : secondCanvas) {
             final String id = SERVER + values[1] + THUMBNAIL_PATH;
-            final ImageService3 service = new ImageService3(SERVER + values[1]);
+            final ImageService service = new ImageService3(Profile.LEVEL_TWO, SERVER + values[1]);
             final ImageContent resource = new ImageContent(id).setServices(service);
 
             content2.addBody(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(values[0]));
@@ -327,5 +328,4 @@ public class ManifestTest extends AbstractTest {
     public final void testAddDisallowedBehaviors() {
         myManifest.addBehaviors(ManifestBehavior.CONTINUOUS, CanvasBehavior.AUTO_ADVANCE);
     }
-
 }
