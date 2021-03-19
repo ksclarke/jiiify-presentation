@@ -76,6 +76,17 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     /**
      * Creates a new manifest.
      *
+     * @param aID A manifest ID in string form
+     * @param aLabel A manifest label
+     * @throws IllegalArgumentException If the supplied ID is not a valid URI
+     */
+    public Manifest(final String aID, final Label aLabel) {
+        super(ResourceTypes.MANIFEST, URI.create(aID), aLabel);
+    }
+
+    /**
+     * Creates a new manifest.
+     *
      * @param aID A manifest ID
      * @param aLabel A manifest label
      */
@@ -101,6 +112,21 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     /**
      * Creates a new manifest.
      *
+     * @param aID A manifest ID in string form
+     * @param aLabel A descriptive label
+     * @param aMetadataList A list of metadata properties
+     * @param aSummary A summary in string form
+     * @param aThumbnail A thumbnail
+     * @param aProvider A resource provider
+     */
+    public Manifest(final String aID, final Label aLabel, final List<Metadata> aMetadataList, final String aSummary,
+            final Thumbnail aThumbnail, final Provider aProvider) {
+        this(URI.create(aID), aLabel, aMetadataList, new Summary(aSummary), aThumbnail, aProvider);
+    }
+
+    /**
+     * Creates a new manifest.
+     *
      * @param aID A manifest ID
      * @param aLabel A descriptive label
      * @param aMetadataList A list of metadata properties
@@ -111,6 +137,21 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     public Manifest(final URI aID, final Label aLabel, final List<Metadata> aMetadataList, final Summary aSummary,
             final Thumbnail aThumbnail, final Provider aProvider) {
         super(ResourceTypes.MANIFEST, aID, aLabel, aMetadataList, aSummary, aThumbnail, aProvider);
+    }
+
+    /**
+     * Creates a new manifest.
+     *
+     * @param aID A manifest ID in string form
+     * @param aLabel A descriptive label
+     * @param aMetadataList A list of metadata properties
+     * @param aSummary A summary
+     * @param aThumbnail A thumbnail
+     * @param aProvider A resource provider
+     */
+    public Manifest(final String aID, final Label aLabel, final List<Metadata> aMetadataList, final Summary aSummary,
+            final Thumbnail aThumbnail, final Provider aProvider) {
+        super(ResourceTypes.MANIFEST, URI.create(aID), aLabel, aMetadataList, aSummary, aThumbnail, aProvider);
     }
 
     /**

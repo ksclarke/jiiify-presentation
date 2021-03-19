@@ -63,6 +63,16 @@ public class Canvas extends AbstractCanvas<Canvas> implements Resource<Canvas>, 
     /**
      * Creates a new canvas.
      *
+     * @param aID A canvas ID in string form
+     * @param aLabel A canvas label
+     */
+    public Canvas(final String aID, final Label aLabel) {
+        super(URI.create(aID), aLabel);
+    }
+
+    /**
+     * Creates a new canvas.
+     *
      * @param aID A canvas ID
      * @param aLabel A canvas label
      */
