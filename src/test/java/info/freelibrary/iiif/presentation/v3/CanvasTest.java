@@ -138,6 +138,16 @@ public class CanvasTest {
      ****************/
 
     /**
+     * Tests the manifest constructor.
+     */
+    @Test
+    public void testConstructorStringLabel() {
+        myCanvas = new Canvas(IMAGE_CANVAS_ID, new Label(LABEL));
+        assertEquals(URI.create(IMAGE_CANVAS_ID), myCanvas.getID());
+        assertEquals(LABEL, myCanvas.getLabel().getString());
+    }
+
+    /**
      * Tests {@link Canvas#Canvas(Minter) Canvas}.
      */
     @Test

@@ -18,6 +18,7 @@ import org.junit.Test;
 
 import com.opencsv.CSVReader;
 
+import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.Metadata;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
@@ -147,6 +148,36 @@ public class ManifestTest extends AbstractTest {
         myManifest.setServices(service);
 
         myVertx = Vertx.factory.vertx();
+    }
+
+    /**
+     * Tests the manifest constructor.
+     */
+    @Test
+    public void testConstructorStringLabel() {
+        myManifest = new Manifest(MANIFEST_URI, new Label(TEST_TITLE));
+        assertEquals(URI.create(MANIFEST_URI), myManifest.getID());
+        assertEquals(TEST_TITLE, myManifest.getLabel().getString());
+    }
+
+    /**
+     * Tests the manifest constructor.
+     */
+    @Test
+    public void testConstructorStringString() {
+        myManifest = new Manifest(MANIFEST_URI, TEST_TITLE);
+        assertEquals(URI.create(MANIFEST_URI), myManifest.getID());
+        assertEquals(TEST_TITLE, myManifest.getLabel().getString());
+    }
+
+    /**
+     * Tests the manifest constructor.
+     */
+    @Test
+    public void testConstructorUriLabel() {
+        myManifest = new Manifest(URI.create(MANIFEST_URI), new Label(TEST_TITLE));
+        assertEquals(URI.create(MANIFEST_URI), myManifest.getID());
+        assertEquals(TEST_TITLE, myManifest.getLabel().getString());
     }
 
     /**
