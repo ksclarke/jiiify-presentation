@@ -6,10 +6,8 @@ import java.net.URL;
 
 /**
  * Interface for image services.
- *
- * @param <T> The type of {@link ImageService.Profile} to use for this image service
  */
-public interface ImageService<T extends ImageService.Profile> extends Service {
+public interface ImageService extends Service {
 
     /**
      * Gets the image service type.
@@ -24,7 +22,7 @@ public interface ImageService<T extends ImageService.Profile> extends Service {
      * @param aID The ID
      * @return The image service
      */
-    ImageService<T> setID(URI aID);
+    ImageService setID(URI aID);
 
     /**
      * Gets the image service profile as a string.
@@ -39,7 +37,7 @@ public interface ImageService<T extends ImageService.Profile> extends Service {
      * @param aProfile The profile
      * @return The image service
      */
-    ImageService<T> setProfile(T aProfile);
+    ImageService setProfile(Profile aProfile);
 
     /**
      * Interface for {@link ImageService} profiles.

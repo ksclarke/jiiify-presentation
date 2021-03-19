@@ -261,7 +261,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
 
     @JsonIgnore
     protected AbstractCanvas<T> setWidthHeight(final int aWidth, final int aHeight) {
-        if ((aWidth > 0) && (aHeight > 0)) {
+        if (aWidth > 0 && aHeight > 0) {
             myWidth = aWidth;
             myHeight = aHeight;
 
@@ -285,7 +285,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     @JsonSetter(Constants.DURATION)
     protected AbstractCanvas<T> setDuration(final Number aDuration) {
         final float tempDuration = aDuration.floatValue();
-        if ((tempDuration > 0) && (Float.isFinite(tempDuration))) {
+        if (tempDuration > 0 && Float.isFinite(tempDuration)) {
             myDuration = tempDuration;
             return this;
         } else {
@@ -373,8 +373,8 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     protected final <C extends CanvasResource<C>> AbstractCanvas<T> supplement(final CanvasResource<C> aCanvas,
             final Minter aMinter, final MediaFragmentSelector aCanvasRegion, final ContentResource... aContentArray)
             throws SelectorOutOfBoundsException {
-        final SupplementingAnnotation anno = new SupplementingAnnotation(aMinter.getAnnotationID(), aCanvas,
-                aCanvasRegion);
+        final SupplementingAnnotation anno =
+                new SupplementingAnnotation(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
         final int pageCount = getSupplementingPages().size();
         final AnnotationPage<SupplementingAnnotation> page;
 
@@ -505,7 +505,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      * @param aContent A content resource
      * @param aCanvasRegion A {@link MediaFragmentSelector} identifying a fragment of this canvas
      * @return <code>true</code> if the content resource fits within the bounds of the canvas fragment identified by the
-     * given {@link MediaFragmentSelector}
+     *         given {@link MediaFragmentSelector}
      * @throws ContentOutOfBoundsException If the content resource won't fit
      * @throws SelectorOutOfBoundsException If the canvas fragment doesn't exist
      */
@@ -519,11 +519,10 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      *
      * @param aCanvasRegion A {@link MediaFragmentSelector} identifying a fragment of this canvas
      * @return A {@link Canvas} representing the fragment
-     * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given
-     * {@link MediaFragmentSelector} doesn't exist
+     * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given {@link MediaFragmentSelector}
+     *         doesn't exist
      */
-    private Canvas getCanvasFragment(final MediaFragmentSelector aCanvasRegion)
-            throws SelectorOutOfBoundsException {
+    private Canvas getCanvasFragment(final MediaFragmentSelector aCanvasRegion) throws SelectorOutOfBoundsException {
         final URI canvasID = URI.create(getID().toString() + Constants.FRAGMENT_DELIM + aCanvasRegion.toString());
         final Canvas canvasFragment = new Canvas(canvasID);
         final int width;
@@ -537,8 +536,8 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
                         getID());
             } else {
                 // The bounding box of the selector must be entirely within the bounds of the canvas
-                if (getWidth() < (aCanvasRegion.getX() + aCanvasRegion.getWidth())
-                        || getHeight() < (aCanvasRegion.getY() + aCanvasRegion.getHeight())) {
+                if (getWidth() < aCanvasRegion.getX() + aCanvasRegion.getWidth() ||
+                        getHeight() < aCanvasRegion.getY() + aCanvasRegion.getHeight()) {
                     throw new SelectorOutOfBoundsException(MessageCodes.JPA_065, aCanvasRegion.toString(), SPATIAL,
                             getID());
                 } else {
@@ -587,9 +586,11 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         if (width > 0 && height > 0) {
             canvasFragment.setWidthHeight(width, height);
         }
+
         if (duration > 0) {
             canvasFragment.setDuration(duration);
         }
+
         return canvasFragment;
     }
 }

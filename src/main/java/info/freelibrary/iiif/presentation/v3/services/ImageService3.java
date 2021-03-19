@@ -8,24 +8,24 @@ import java.net.URL;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
-import info.freelibrary.iiif.presentation.v3.ResourceTypes;
-import info.freelibrary.iiif.presentation.v3.services.ImageService3.Profile;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+
 /**
  * A service that will return information about a particular image via IIIF Image API 3.
  */
-public class ImageService3 extends AbstractImageService<Profile> implements ImageService<Profile> {
+public class ImageService3 extends AbstractImageService implements ImageService {
 
     /* The context for this service */
     public static final URI CONTEXT = URI.create("http://iiif.io/api/image/3/context.json");
 
     /* The default profile level for the image info service */
-    private static final ImageService3.Profile DEFAULT_LEVEL = ImageService3.Profile.ZERO;
+    private static final ImageService3.Profile DEFAULT_LEVEL = ImageService3.Profile.LEVEL_TWO;
 
     /**
      * Creates a new IIIF Image API 3 service.
@@ -89,8 +89,8 @@ public class ImageService3 extends AbstractImageService<Profile> implements Imag
     }
 
     @Override
-    public ImageService3 setProfile(final Profile aProfile) {
-        return (ImageService3) super.setProfile(aProfile);
+    public ImageService setProfile(final ImageService.Profile aProfile) {
+        return super.setProfile(aProfile);
     }
 
     /**
@@ -113,17 +113,17 @@ public class ImageService3 extends AbstractImageService<Profile> implements Imag
         /**
          * http://iiif.io/api/image/3/level0.json
          */
-        ZERO("http://iiif.io/api/image/3/level0.json"),
+        LEVEL_ZERO("http://iiif.io/api/image/3/level0.json"),
 
         /**
          * http://iiif.io/api/image/3/level1.json
          */
-        ONE("http://iiif.io/api/image/3/level1.json"),
+        LEVEL_ONE("http://iiif.io/api/image/3/level1.json"),
 
         /**
          * http://iiif.io/api/image/3/level2.json
          */
-        TWO("http://iiif.io/api/image/3/level2.json");
+        LEVEL_TWO("http://iiif.io/api/image/3/level2.json");
 
         private static final Logger LOGGER = LoggerFactory.getLogger(ImageService3.Profile.class, MessageCodes.BUNDLE);
 

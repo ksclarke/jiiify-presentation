@@ -12,13 +12,11 @@ import info.freelibrary.iiif.presentation.v3.Constants;
 
 /**
  * Abstract base class for image services.
- *
- * @param <T> The type of {@link ImageService.Profile} to use for this image service
  */
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.TYPE, Constants.ID, Constants.PROFILE })
-abstract class AbstractImageService<T extends ImageService.Profile> {
+abstract class AbstractImageService implements ImageService {
 
-    protected T myProfile;
+    protected Profile myProfile;
 
     protected URI myID;
 
@@ -28,7 +26,7 @@ abstract class AbstractImageService<T extends ImageService.Profile> {
      * @param aProfile An image service profile
      * @param aID The ID of the service
      */
-    AbstractImageService(final T aProfile, final URI aID) {
+    AbstractImageService(final Profile aProfile, final URI aID) {
         myProfile = aProfile;
         myID = aID;
     }
@@ -44,6 +42,7 @@ abstract class AbstractImageService<T extends ImageService.Profile> {
      *
      * @return The type
      */
+    @Override
     @JsonGetter(Constants.TYPE)
     public String getType() {
         return getClass().getSimpleName();
@@ -54,13 +53,15 @@ abstract class AbstractImageService<T extends ImageService.Profile> {
      *
      * @return The profile in string form
      */
+    @Override
     @JsonGetter(Constants.PROFILE)
     public String getProfile() {
         return myProfile.string();
     }
 
+    @Override
     @JsonIgnore
-    protected AbstractImageService<T> setProfile(final T aProfile) {
+    public ImageService setProfile(final ImageService.Profile aProfile) {
         myProfile = aProfile;
         return this;
     }
@@ -70,6 +71,7 @@ abstract class AbstractImageService<T extends ImageService.Profile> {
      *
      * @return The ID
      */
+    @Override
     @JsonGetter(Constants.ID)
     public URI getID() {
         return myID;
@@ -81,8 +83,9 @@ abstract class AbstractImageService<T extends ImageService.Profile> {
      * @param aID The ID
      * @return The image service
      */
+    @Override
     @JsonIgnore
-    protected AbstractImageService<T> setID(final URI aID) {
+    public ImageService setID(final URI aID) {
         myID = aID;
         return this;
     }
@@ -94,7 +97,7 @@ abstract class AbstractImageService<T extends ImageService.Profile> {
      * @return The image service
      */
     @JsonSetter(Constants.ID)
-    protected AbstractImageService<T> setID(final String aID) {
+    protected ImageService setID(final String aID) {
         return setID(URI.create(aID));
     }
 
@@ -104,7 +107,7 @@ abstract class AbstractImageService<T extends ImageService.Profile> {
      * @param aContext The context
      */
     @JsonSetter(Constants.CONTEXT)
-    protected AbstractImageService<T> setContext(final String aContext) {
+    protected AbstractImageService setContext(final String aContext) {
         return this;
     }
 

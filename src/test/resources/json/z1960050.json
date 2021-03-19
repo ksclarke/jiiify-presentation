@@ -28,10 +28,10 @@
       "format": "image/jpeg",
       "service": [
         {
-          "@context": "http://iiif.io/api/image/2/context.json",
-          "type": "ImageService2",
+          "@context": "http://iiif.io/api/image/3/context.json",
+          "type": "ImageService3",
           "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1d79t3q",
-          "profile": "http://iiif.io/api/image/2/level2.json"
+          "profile": "http://iiif.io/api/image/3/level2.json"
         }
       ]
     }
@@ -132,7 +132,7 @@
                         "@context": "http://iiif.io/api/image/3/context.json",
                         "type": "ImageService3",
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1d79t3q",
-                        "profile": "http://iiif.io/api/image/3/level0.json"
+                        "profile": "http://iiif.io/api/image/3/level2.json"
                       }
                     ]
                   },
@@ -152,7 +152,7 @@
                         "@context": "http://iiif.io/api/image/3/context.json",
                         "type": "ImageService3",
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz18g92cc",
-                        "profile": "http://iiif.io/api/image/3/level0.json"
+                        "profile": "http://iiif.io/api/image/3/level2.json"
                       }
                     ]
                   },
@@ -172,7 +172,7 @@
                         "@context": "http://iiif.io/api/image/3/context.json",
                         "type": "ImageService3",
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1w672gs",
-                        "profile": "http://iiif.io/api/image/3/level0.json"
+                        "profile": "http://iiif.io/api/image/3/level2.json"
                       }
                     ]
                   },
@@ -192,7 +192,7 @@
                         "@context": "http://iiif.io/api/image/3/context.json",
                         "type": "ImageService3",
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1rj5167",
-                        "profile": "http://iiif.io/api/image/3/level0.json"
+                        "profile": "http://iiif.io/api/image/3/level2.json"
                       }
                     ]
                   },
@@ -212,7 +212,7 @@
                         "@context": "http://iiif.io/api/image/3/context.json",
                         "type": "ImageService3",
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1ms48gh",
-                        "profile": "http://iiif.io/api/image/3/level0.json"
+                        "profile": "http://iiif.io/api/image/3/level2.json"
                       }
                     ]
                   },
@@ -232,7 +232,7 @@
                         "@context": "http://iiif.io/api/image/3/context.json",
                         "type": "ImageService3",
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1h13hqn",
-                        "profile": "http://iiif.io/api/image/3/level0.json"
+                        "profile": "http://iiif.io/api/image/3/level2.json"
                       }
                     ]
                   },
@@ -252,7 +252,7 @@
                         "@context": "http://iiif.io/api/image/3/context.json",
                         "type": "ImageService3",
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1c82s0b",
-                        "profile": "http://iiif.io/api/image/3/level0.json"
+                        "profile": "http://iiif.io/api/image/3/level2.json"
                       }
                     ]
                   },
@@ -272,7 +272,7 @@
                         "@context": "http://iiif.io/api/image/3/context.json",
                         "type": "ImageService3",
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz13r18m5",
-                        "profile": "http://iiif.io/api/image/3/level0.json"
+                        "profile": "http://iiif.io/api/image/3/level2.json"
                       }
                     ]
                   },
@@ -292,7 +292,7 @@
                         "@context": "http://iiif.io/api/image/3/context.json",
                         "type": "ImageService3",
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1ks7787",
-                        "profile": "http://iiif.io/api/image/3/level0.json"
+                        "profile": "http://iiif.io/api/image/3/level2.json"
                       }
                     ]
                   },
@@ -312,7 +312,7 @@
                         "@context": "http://iiif.io/api/image/3/context.json",
                         "type": "ImageService3",
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1b85qvj",
-                        "profile": "http://iiif.io/api/image/3/level0.json"
+                        "profile": "http://iiif.io/api/image/3/level2.json"
                       }
                     ]
                   },
@@ -332,7 +332,7 @@
                         "@context": "http://iiif.io/api/image/3/context.json",
                         "type": "ImageService3",
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz16h5052",
-                        "profile": "http://iiif.io/api/image/3/level0.json"
+                        "profile": "http://iiif.io/api/image/3/level2.json"
                       }
                     ]
                   },
@@ -352,7 +352,7 @@
                         "@context": "http://iiif.io/api/image/3/context.json",
                         "type": "ImageService3",
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1pk0xvb",
-                        "profile": "http://iiif.io/api/image/3/level0.json"
+                        "profile": "http://iiif.io/api/image/3/level2.json"
                       }
                     ]
                   },
@@ -372,7 +372,7 @@
                         "@context": "http://iiif.io/api/image/3/context.json",
                         "type": "ImageService3",
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1d22dbh",
-                        "profile": "http://iiif.io/api/image/3/level0.json"
+                        "profile": "http://iiif.io/api/image/3/level2.json"
                       }
                     ]
                   },
@@ -392,7 +392,7 @@
                         "@context": "http://iiif.io/api/image/3/context.json",
                         "type": "ImageService3",
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz14m9m97",
-                        "profile": "http://iiif.io/api/image/3/level0.json"
+                        "profile": "http://iiif.io/api/image/3/level2.json"
                       }
                     ]
                   }
@@ -449,7 +449,7 @@
                         "@context": "http://iiif.io/api/image/3/context.json",
                         "type": "ImageService3",
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1w38c11",
-                        "profile": "http://iiif.io/api/image/3/level0.json"
+                        "profile": "http://iiif.io/api/image/3/level2.json"
                       }
                     ]
                   },
@@ -469,7 +469,7 @@
                         "@context": "http://iiif.io/api/image/3/context.json",
                         "type": "ImageService3",
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1rb7m99",
-                        "profile": "http://iiif.io/api/image/3/level0.json"
+                        "profile": "http://iiif.io/api/image/3/level2.json"
                       }
                     ]
                   },
@@ -489,7 +489,7 @@
                         "@context": "http://iiif.io/api/image/3/context.json",
                         "type": "ImageService3",
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1c542k0",
-                        "profile": "http://iiif.io/api/image/3/level0.json"
+                        "profile": "http://iiif.io/api/image/3/level2.json"
                       }
                     ]
                   },
@@ -509,7 +509,7 @@
                         "@context": "http://iiif.io/api/image/3/context.json",
                         "type": "ImageService3",
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz17d39wq",
-                        "profile": "http://iiif.io/api/image/3/level0.json"
+                        "profile": "http://iiif.io/api/image/3/level2.json"
                       }
                     ]
                   },
@@ -529,7 +529,7 @@
                         "@context": "http://iiif.io/api/image/3/context.json",
                         "type": "ImageService3",
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz13n2k3h",
-                        "profile": "http://iiif.io/api/image/3/level0.json"
+                        "profile": "http://iiif.io/api/image/3/level2.json"
                       }
                     ]
                   },
@@ -549,7 +549,7 @@
                         "@context": "http://iiif.io/api/image/3/context.json",
                         "type": "ImageService3",
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1zw22m6",
-                        "profile": "http://iiif.io/api/image/3/level0.json"
+                        "profile": "http://iiif.io/api/image/3/level2.json"
                       }
                     ]
                   },
@@ -569,7 +569,7 @@
                         "@context": "http://iiif.io/api/image/3/context.json",
                         "type": "ImageService3",
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1v419ws",
-                        "profile": "http://iiif.io/api/image/3/level0.json"
+                        "profile": "http://iiif.io/api/image/3/level2.json"
                       }
                     ]
                   },
@@ -589,7 +589,7 @@
                         "@context": "http://iiif.io/api/image/3/context.json",
                         "type": "ImageService3",
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1kk9th3",
-                        "profile": "http://iiif.io/api/image/3/level0.json"
+                        "profile": "http://iiif.io/api/image/3/level2.json"
                       }
                     ]
                   },
@@ -609,7 +609,7 @@
                         "@context": "http://iiif.io/api/image/3/context.json",
                         "type": "ImageService3",
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz12n5hzq",
-                        "profile": "http://iiif.io/api/image/3/level0.json"
+                        "profile": "http://iiif.io/api/image/3/level2.json"
                       }
                     ]
                   },
@@ -629,7 +629,7 @@
                         "@context": "http://iiif.io/api/image/3/context.json",
                         "type": "ImageService3",
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1t448sv",
-                        "profile": "http://iiif.io/api/image/3/level0.json"
+                        "profile": "http://iiif.io/api/image/3/level2.json"
                       }
                     ]
                   },
@@ -649,7 +649,7 @@
                         "@context": "http://iiif.io/api/image/3/context.json",
                         "type": "ImageService3",
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1pc3j30",
-                        "profile": "http://iiif.io/api/image/3/level0.json"
+                        "profile": "http://iiif.io/api/image/3/level2.json"
                       }
                     ]
                   },
@@ -669,7 +669,7 @@
                         "@context": "http://iiif.io/api/image/3/context.json",
                         "type": "ImageService3",
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz15d97j2",
-                        "profile": "http://iiif.io/api/image/3/level0.json"
+                        "profile": "http://iiif.io/api/image/3/level2.json"
                       }
                     ]
                   },
@@ -689,7 +689,7 @@
                         "@context": "http://iiif.io/api/image/3/context.json",
                         "type": "ImageService3",
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1vx0z84",
-                        "profile": "http://iiif.io/api/image/3/level0.json"
+                        "profile": "http://iiif.io/api/image/3/level2.json"
                       }
                     ]
                   },
@@ -709,7 +709,7 @@
                         "@context": "http://iiif.io/api/image/3/context.json",
                         "type": "ImageService3",
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1mg8563",
-                        "profile": "http://iiif.io/api/image/3/level0.json"
+                        "profile": "http://iiif.io/api/image/3/level2.json"
                       }
                     ]
                   }
