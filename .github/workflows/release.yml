@@ -30,8 +30,8 @@ jobs:
         if: ${{ env.MAVEN_CACHE_KEY }}
         with:
           path: ~/.m2
-          key: freelibrary-cache-${{ secrets.MAVEN_CACHE_KEY }}-${{ hashFiles('**/pom.xml') }}
-          restore-keys: freelibrary-cache-${{ secrets.MAVEN_CACHE_KEY }}-
+          key: maven-cache-${{ secrets.MAVEN_CACHE_KEY }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: maven-cache-${{ secrets.MAVEN_CACHE_KEY }}-
       - name: Set autorelease config
         if: env.AUTORELEASE_ARTIFACT == null
         run: echo "AUTORELEASE_ARTIFACT=false" >> $GITHUB_ENV
