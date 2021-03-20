@@ -6,7 +6,8 @@ name: PR Auto-Approver
 on:
   pull_request:
     branches:
-      - main
+      - v2
+      - v3
 
 jobs:
   approve-pr:
@@ -15,7 +16,7 @@ jobs:
     env:
       AUTO_PR_APPROVAL: ${{ secrets.AUTO_PR_APPROVAL }}
     steps:
-    - uses: hmarr/auto-approve-action@v2.0.0
+    - uses: hmarr/auto-approve-action@7782c7e2bdf62b4d79bdcded8332808fd2f179cd # v2.0.0
       if: env.AUTO_PR_APPROVAL != null
       with:
         github-token: "${{ secrets.GITHUB_TOKEN }}"
