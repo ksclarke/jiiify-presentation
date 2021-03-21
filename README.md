@@ -24,7 +24,7 @@ or
   <dependency>
     <groupId>info.freelibrary</groupId>
     <artifactId>jiiify-presentation-v3</artifactId>
-    <version>0.5.5</version>
+    <version>0.6.0</version>
   </dependency>
 ```
 
