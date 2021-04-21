@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -251,6 +252,44 @@ public class ManifestTest extends AbstractTest {
     }
 
     /**
+     * Tests setting and getting canvases.
+     */
+    @Test
+    public void testSetGetCanvases() {
+        final String cID1 = UUID.randomUUID().toString();
+        final String cID2 = UUID.randomUUID().toString();
+        final Canvas canvas1 = new Canvas(cID1);
+        final Canvas canvas2 = new Canvas(cID2);
+        final List<Canvas> canvases;
+
+        myManifest.setCanvases(canvas1, canvas2);
+        canvases = myManifest.getCanvases();
+
+        assertEquals(2, canvases.size());
+        assertEquals(cID1, canvases.get(0).getID().toString());
+        assertEquals(cID2, canvases.get(1).getID().toString());
+    }
+
+    /**
+     * Tests setting and getting canvases lists.
+     */
+    @Test
+    public void testSetGetCanvasesList() {
+        final String cID1 = UUID.randomUUID().toString();
+        final String cID2 = UUID.randomUUID().toString();
+        final Canvas canvas1 = new Canvas(cID1);
+        final Canvas canvas2 = new Canvas(cID2);
+        final List<Canvas> canvases;
+
+        myManifest.setCanvases(Arrays.asList(canvas1, canvas2));
+        canvases = myManifest.getCanvases();
+
+        assertEquals(2, canvases.size());
+        assertEquals(cID1, canvases.get(0).getID().toString());
+        assertEquals(cID2, canvases.get(1).getID().toString());
+    }
+
+    /**
      * Tests setting and getting ranges.
      */
     @Test
@@ -262,6 +301,25 @@ public class ManifestTest extends AbstractTest {
         final List<Range> ranges;
 
         myManifest.setRanges(range1, range2);
+        ranges = myManifest.getRanges();
+
+        assertEquals(2, ranges.size());
+        assertEquals(rID1, ranges.get(0).getID().toString());
+        assertEquals(rID2, ranges.get(1).getID().toString());
+    }
+
+    /**
+     * Tests setting and getting range lists.
+     */
+    @Test
+    public void testSetGetRangesList() {
+        final String rID1 = UUID.randomUUID().toString();
+        final String rID2 = UUID.randomUUID().toString();
+        final Range range1 = new Range(rID1);
+        final Range range2 = new Range(rID2);
+        final List<Range> ranges;
+
+        myManifest.setRanges(Arrays.asList(range1, range2));
         ranges = myManifest.getRanges();
 
         assertEquals(2, ranges.size());

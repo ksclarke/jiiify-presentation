@@ -430,6 +430,22 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     /**
+     * Sets the manifest's canvases from the contents of a list.
+     *
+     * @param aCanvasList A list of canvases to be set in the manifest
+     * @return The manifest
+     */
+    @JsonIgnore
+    public Manifest setCanvases(final List<Canvas> aCanvasList) {
+        final List<Canvas> canvases = getCanvases();
+
+        canvases.clear();
+        canvases.addAll(aCanvasList);
+
+        return this;
+    }
+
+    /**
      * Sets the optional start canvas.
      *
      * @param aStartCanvas A start canvas
@@ -479,6 +495,22 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     public Manifest setRanges(final Range... aRangeArray) {
         getRanges().clear();
         return addRanges(aRangeArray);
+    }
+
+    /**
+     * Sets the manifest's ranges from the contents of a list.
+     *
+     * @param aRangeList A list of ranges to be set in the manifest
+     * @return The manifest
+     */
+    @JsonIgnore
+    public Manifest setRanges(final List<Range> aRangeList) {
+        final List<Range> ranges = getRanges();
+
+        ranges.clear();
+        ranges.addAll(aRangeList);
+
+        return this;
     }
 
     @Override
