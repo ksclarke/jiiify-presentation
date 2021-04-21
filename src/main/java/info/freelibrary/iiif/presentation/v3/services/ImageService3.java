@@ -113,17 +113,17 @@ public class ImageService3 extends AbstractImageService implements ImageService 
         /**
          * http://iiif.io/api/image/3/level0.json
          */
-        LEVEL_ZERO("http://iiif.io/api/image/3/level0.json"),
+        LEVEL_ZERO("level0"),
 
         /**
          * http://iiif.io/api/image/3/level1.json
          */
-        LEVEL_ONE("http://iiif.io/api/image/3/level1.json"),
+        LEVEL_ONE("level1"),
 
         /**
          * http://iiif.io/api/image/3/level2.json
          */
-        LEVEL_TWO("http://iiif.io/api/image/3/level2.json");
+        LEVEL_TWO("level2");
 
         private static final Logger LOGGER = LoggerFactory.getLogger(ImageService3.Profile.class, MessageCodes.BUNDLE);
 
@@ -168,7 +168,7 @@ public class ImageService3 extends AbstractImageService implements ImageService 
             }
 
             throw new IllegalArgumentException(
-                    LOGGER.getMessage(MessageCodes.JPA_109, aProfile, ResourceTypes.IMAGE_SERVICE_3));
+                LOGGER.getMessage(MessageCodes.JPA_109, aProfile, ResourceTypes.IMAGE_SERVICE_3));
         }
     }
 

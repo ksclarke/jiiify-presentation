@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.net.URI;
 
@@ -16,11 +16,11 @@ public class ImageService3Test {
 
     private static final URI ID = URI.create("asdf");
 
-    private static final String LEVEL_0 = "http://iiif.io/api/image/3/level0.json";
+    private static final String LEVEL_0 = "level0";
 
-    private static final String LEVEL_1 = "http://iiif.io/api/image/3/level1.json";
+    private static final String LEVEL_1 = "level1";
 
-    private static final String LEVEL_2 = "http://iiif.io/api/image/3/level2.json";
+    private static final String LEVEL_2 = "level2";
 
     /**
      * Tests getting the image service's ID.
