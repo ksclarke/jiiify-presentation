@@ -11,7 +11,6 @@
   <entry key="JPA-005">Profile cannot be null</entry>
   <entry key="JPA-006">Image resource cannot be null</entry>
   <entry key="JPA-007">Context URI cannot be null</entry>
-  <entry key="JPA-008">Canvas cannot be null</entry>
   <entry key="JPA-009">SeeAlso ID cannot be null</entry>
   <entry key="JPA-010">{} isn't a valid {} behavior</entry>
   <entry key="JPA-011">Width ({}) and height ({}) must not be negative numbers</entry>
@@ -54,7 +53,6 @@
   <entry key="JPA-048">Unable to add ServiceImage to ServiceProperty: {}</entry>
   <entry key="JPA-049">Unable to add AnnotationPage to Canvas: [{}]</entry>
   <entry key="JPA-050">Unable to add annotation(s) to AnnotationPage: [{}]</entry>
-  <entry key="JPA-051">Unable to add Canvas to Manifest: {}</entry>
   <entry key="JPA-052">Unexpected and currently unsupported content resource type</entry>
   <entry key="JPA-053">Type set on service image must be: {}</entry>
   <entry key="JPA-054">Supplied behavior ('{}') conflicts with an existing behavior: {}</entry>

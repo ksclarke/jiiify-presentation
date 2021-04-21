@@ -87,9 +87,6 @@
       <property name="onCommentFormat" value="END GENERATED CODE" />
     </module>
   </module>
-  <module name="SuppressionFilter">
-    <property name="file" value="src/main/tools/checkstyle/checkstyle-suppressions.xml" />
-  </module>
   <module name="FileTabCharacter">
     <property name="id" value="fileTabCharacterChecker"/>
     <property name="eachLine" value="true" />
