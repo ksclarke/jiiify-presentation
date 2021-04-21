@@ -43,6 +43,10 @@ public final class ResourceTypes {
 
     public static final String IMAGE_SERVICE_3 = "ImageService3";
 
+    public static final String PHYSICAL_DIMS_SERVICE = "PhysicalDimsService";
+
+    public static final String GEO_JSON_SERVICE = "GeoJSONService";
+
     private ResourceTypes() {
         super();
     }

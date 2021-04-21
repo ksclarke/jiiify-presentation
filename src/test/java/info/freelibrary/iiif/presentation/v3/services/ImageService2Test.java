@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.net.URI;
 
@@ -11,8 +11,6 @@ import org.junit.Test;
  * A ImageService2 test.
  */
 public class ImageService2Test {
-
-    private static final URI CONTEXT = URI.create("http://iiif.io/api/image/2/context.json");
 
     private static final URI ID = URI.create("asdf");
 
@@ -31,24 +29,13 @@ public class ImageService2Test {
     }
 
     /**
-     * Tests getting the image service's context.
-     */
-    @Test
-    public void testGetContext() {
-        assertEquals(CONTEXT, new ImageService2(ImageService2.Profile.LEVEL_ZERO, ID).getContext());
-    }
-
-    /**
      * Tests getting the image service's profile.
      */
     @Test
     public void testGetProfile() {
-        assertEquals(LEVEL_0, new ImageService2(ImageService2.Profile.LEVEL_ZERO, ID)
-                .getProfile());
-        assertEquals(LEVEL_1, new ImageService2(ImageService2.Profile.LEVEL_ONE, ID)
-                .getProfile());
-        assertEquals(LEVEL_2, new ImageService2(ImageService2.Profile.LEVEL_TWO, ID)
-                .getProfile());
+        assertEquals(LEVEL_0, new ImageService2(ImageService2.Profile.LEVEL_ZERO, ID).getProfile());
+        assertEquals(LEVEL_1, new ImageService2(ImageService2.Profile.LEVEL_ONE, ID).getProfile());
+        assertEquals(LEVEL_2, new ImageService2(ImageService2.Profile.LEVEL_TWO, ID).getProfile());
     }
 
     /**

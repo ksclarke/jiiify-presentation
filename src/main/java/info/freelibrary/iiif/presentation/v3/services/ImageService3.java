@@ -5,7 +5,6 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.I18nRuntimeException;
@@ -20,9 +19,6 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  * A service that will return information about a particular image via IIIF Image API 3.
  */
 public class ImageService3 extends AbstractImageService implements ImageService {
-
-    /* The context for this service */
-    public static final URI CONTEXT = URI.create("http://iiif.io/api/image/3/context.json");
 
     /* The default profile level for the image info service */
     private static final ImageService3.Profile DEFAULT_LEVEL = ImageService3.Profile.LEVEL_TWO;
@@ -70,17 +66,6 @@ public class ImageService3 extends AbstractImageService implements ImageService 
      */
     @SuppressWarnings("unused")
     private ImageService3() {
-    }
-
-    /**
-     * Gets the service context.
-     *
-     * @return A service context
-     */
-    @Override
-    @JsonGetter(Constants.CONTEXT)
-    public URI getContext() {
-        return CONTEXT;
     }
 
     @Override

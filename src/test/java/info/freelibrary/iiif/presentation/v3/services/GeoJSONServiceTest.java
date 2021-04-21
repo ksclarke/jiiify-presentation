@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.net.URI;
 
@@ -20,7 +20,6 @@ public class GeoJSONServiceTest {
     @Test
     public void test() {
         assertEquals(ID, new GeoJSONService(ID).getID());
-        assertEquals(GeoJSONService.CONTEXT, new GeoJSONService(ID).getContext());
     }
 
 }

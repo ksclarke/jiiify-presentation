@@ -5,7 +5,6 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.I18nRuntimeException;
@@ -70,17 +69,6 @@ public class ImageService2 extends AbstractImageService implements ImageService 
      */
     @SuppressWarnings("unused")
     private ImageService2() {
-    }
-
-    /**
-     * Gets the service context.
-     *
-     * @return A service context
-     */
-    @Override
-    @JsonGetter(Constants.CONTEXT)
-    public URI getContext() {
-        return CONTEXT;
     }
 
     @Override
@@ -168,7 +156,7 @@ public class ImageService2 extends AbstractImageService implements ImageService 
             }
 
             throw new IllegalArgumentException(
-                    LOGGER.getMessage(MessageCodes.JPA_109, aProfile, ResourceTypes.IMAGE_SERVICE_2));
+                LOGGER.getMessage(MessageCodes.JPA_109, aProfile, ResourceTypes.IMAGE_SERVICE_2));
         }
     }
 

@@ -24,7 +24,6 @@
                 "format": "image/jpeg",
                 "service": [
                   {
-                    "@context": "http://iiif.io/api/image/3/context.json",
                     "type": "ImageService3",
                     "id": "https://example.org/iiif/book1/page1",
                     "profile": "level0"
@@ -39,7 +38,6 @@
                 "format": "image/jpeg",
                 "service": [
                   {
-                    "@context": "http://iiif.io/api/image/3/context.json",
                     "type": "ImageService3",
                     "id": "https://example.org/iiif/book1/page1",
                     "profile": "level0"

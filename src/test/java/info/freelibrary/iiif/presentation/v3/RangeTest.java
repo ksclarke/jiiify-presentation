@@ -293,6 +293,18 @@ public class RangeTest extends AbstractTest {
         getRange().addBehaviors(RangeBehavior.AUTO_ADVANCE, ManifestBehavior.INDIVIDUALS);
     }
 
+    /**
+     * Tests round-tripping test fixture 0024.
+     *
+     * @throws IOException
+     */
+    @Test
+    public final void testFixture0024() throws IOException {
+        final String json =
+            StringUtils.read(new File("src/test/resources/fixtures/0024-book-4-toc.json"), StandardCharsets.UTF_8);
+        assertEquals(new JsonObject(json), Manifest.fromString(json).toJSON());
+    }
+
     private Range getRange() {
         return new Range(URI.create("MY_RANGE_ID"), new Label("My range label"));
     }

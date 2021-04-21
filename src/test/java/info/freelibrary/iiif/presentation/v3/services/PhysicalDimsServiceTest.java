@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.net.URI;
 
@@ -26,7 +26,6 @@ public class PhysicalDimsServiceTest {
         PhysicalDimsService service;
 
         assertEquals(ID, new PhysicalDimsService(ID).getID());
-        assertEquals(PhysicalDimsService.CONTEXT, new PhysicalDimsService(ID).getContext());
         assertEquals(PhysicalDimsService.PROFILE, new PhysicalDimsService(ID).getProfile());
         assertEquals(SCALE, new PhysicalDimsService(ID).setPhysicalScale(SCALE).getPhysicalScale(), 0);
         assertEquals(UNITS, new PhysicalDimsService(ID).setPhysicalUnits(UNITS).getPhysicalUnits());

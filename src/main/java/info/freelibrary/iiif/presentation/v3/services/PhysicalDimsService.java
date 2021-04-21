@@ -14,10 +14,6 @@ import info.freelibrary.iiif.presentation.v3.Constants;
  */
 public class PhysicalDimsService implements Service {
 
-    /* The context for this service */
-    @JsonIgnore
-    public static final URI CONTEXT = URI.create("http://iiif.io/api/annex/services/physdim/1/context.json");
-
     /* The profile for this service */
     @JsonIgnore
     public static final URI PROFILE = URI.create("http://iiif.io/api/annex/services/physdim");
@@ -50,12 +46,6 @@ public class PhysicalDimsService implements Service {
         myPhysicalUnits = aUnits;
     }
 
-    @Override
-    @JsonGetter(Constants.CONTEXT)
-    public URI getContext() {
-        return CONTEXT;
-    }
-
     /**
      * Get service profile.
      *
@@ -86,6 +76,17 @@ public class PhysicalDimsService implements Service {
     public PhysicalDimsService setID(final URI aID) {
         myID = aID;
         return this;
+    }
+
+    /**
+     * Gets the service type.
+     *
+     * @return The service type
+     */
+    @Override
+    @JsonGetter(Constants.TYPE)
+    public String getType() {
+        return getClass().getSimpleName();
     }
 
     /**

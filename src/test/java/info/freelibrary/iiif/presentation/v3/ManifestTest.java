@@ -143,8 +143,7 @@ public class ManifestTest extends AbstractTest {
         myManifest.setRights("http://creativecommons.org/licenses/by/4.0/");
         myManifest.setBehaviors(ManifestBehavior.PAGED);
 
-        final Service service = new GenericService("https://example.org/service/example")
-            .setContext("https://example.org/example-service/context.json")
+        final Service service = new GenericService("https://example.org/service/example", "example")
             .setProfile("https://example.org/docs/example-service.html");
         myManifest.setServices(service);
 

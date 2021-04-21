@@ -13,7 +13,7 @@ import info.freelibrary.iiif.presentation.v3.Constants;
 /**
  * Abstract base class for image services.
  */
-@JsonPropertyOrder({ Constants.CONTEXT, Constants.TYPE, Constants.ID, Constants.PROFILE })
+@JsonPropertyOrder({ Constants.TYPE, Constants.ID, Constants.PROFILE })
 abstract class AbstractImageService implements ImageService {
 
     protected Profile myProfile;
@@ -99,16 +99,6 @@ abstract class AbstractImageService implements ImageService {
     @JsonSetter(Constants.ID)
     protected ImageService setID(final String aID) {
         return setID(URI.create(aID));
-    }
-
-    /**
-     * Sets the image service context.
-     *
-     * @param aContext The context
-     */
-    @JsonSetter(Constants.CONTEXT)
-    protected AbstractImageService setContext(final String aContext) {
-        return this;
     }
 
 }

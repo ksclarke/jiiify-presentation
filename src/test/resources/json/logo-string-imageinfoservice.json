@@ -6,7 +6,6 @@
             "format": "image/jpeg",
             "service": [
                 {
-                    "@context": "http://iiif.io/api/image/3/context.json",
                     "type": "ImageService3",
                     "id": "http://example.org/asdf",
                     "profile": "http://iiif.io/api/image/3/level0.json"

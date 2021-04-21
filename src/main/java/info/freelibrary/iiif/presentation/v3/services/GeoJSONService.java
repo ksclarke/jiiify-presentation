@@ -4,7 +4,6 @@ package info.freelibrary.iiif.presentation.v3.services;
 import java.net.URI;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.v3.Constants;
@@ -13,10 +12,6 @@ import info.freelibrary.iiif.presentation.v3.Constants;
  * An external service that provides GeoJSON information.
  */
 public class GeoJSONService implements Service {
-
-    /* The context for this service */
-    @JsonIgnore
-    public static final URI CONTEXT = URI.create("http://geojson.org/geojson-ld/geojson-context.jsonld");
 
     private URI myID;
 
@@ -27,12 +22,6 @@ public class GeoJSONService implements Service {
      */
     public GeoJSONService(final URI aID) {
         myID = aID;
-    }
-
-    @Override
-    @JsonGetter(Constants.CONTEXT)
-    public URI getContext() {
-        return CONTEXT;
     }
 
     /**
@@ -58,4 +47,14 @@ public class GeoJSONService implements Service {
         return this;
     }
 
+    /**
+     * Gets the service type.
+     *
+     * @return The type
+     */
+    @Override
+    @JsonGetter(Constants.TYPE)
+    public String getType() {
+        return getClass().getSimpleName();
+    }
 }

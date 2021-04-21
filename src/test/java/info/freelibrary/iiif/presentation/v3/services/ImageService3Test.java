@@ -12,8 +12,6 @@ import org.junit.Test;
  */
 public class ImageService3Test {
 
-    private static final URI CONTEXT = URI.create("http://iiif.io/api/image/3/context.json");
-
     private static final URI ID = URI.create("asdf");
 
     private static final String LEVEL_0 = "level0";
@@ -28,14 +26,6 @@ public class ImageService3Test {
     @Test
     public void testGetID() {
         assertEquals(ID, new ImageService3(ID).getID());
-    }
-
-    /**
-     * Tests getting the image service's context.
-     */
-    @Test
-    public void testGetContext() {
-        assertEquals(CONTEXT, new ImageService3(ImageService3.Profile.LEVEL_ZERO, ID).getContext());
     }
 
     /**
