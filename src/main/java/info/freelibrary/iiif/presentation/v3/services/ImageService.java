@@ -10,13 +10,6 @@ import java.net.URL;
 public interface ImageService extends Service {
 
     /**
-     * Gets the image service type.
-     *
-     * @return The type
-     */
-    String getType();
-
-    /**
      * Sets the image service ID.
      *
      * @param aID The ID

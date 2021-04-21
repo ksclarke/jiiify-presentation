@@ -50,17 +50,17 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
 
     private final List<URI> myContexts = Stream.of(Constants.CONTEXT_URI).collect(Collectors.toList());
 
-    private final List<Canvas> myCanvases = new ArrayList<>();
-
     private Optional<AccompanyingCanvas> myAccompanyingCanvas;
 
     private Optional<PlaceholderCanvas> myPlaceholderCanvas;
 
-    private Optional<Range> myRange = Optional.empty();
-
-    private Optional<StartCanvas> myStartCanvas = Optional.empty();
+    private Optional<StartCanvas> myStartCanvas;
 
     private ViewingDirection myViewingDirection;
+
+    private List<Canvas> myCanvases;
+
+    private List<Range> myRanges;
 
     /**
      * Creates a new manifest.
@@ -105,7 +105,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @param aProvider A resource provider
      */
     public Manifest(final String aID, final String aLabel, final List<Metadata> aMetadataList, final String aSummary,
-            final Thumbnail aThumbnail, final Provider aProvider) {
+        final Thumbnail aThumbnail, final Provider aProvider) {
         super(ResourceTypes.MANIFEST, aID, aLabel, aMetadataList, aSummary, aThumbnail, aProvider);
     }
 
@@ -120,7 +120,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @param aProvider A resource provider
      */
     public Manifest(final String aID, final Label aLabel, final List<Metadata> aMetadataList, final String aSummary,
-            final Thumbnail aThumbnail, final Provider aProvider) {
+        final Thumbnail aThumbnail, final Provider aProvider) {
         this(URI.create(aID), aLabel, aMetadataList, new Summary(aSummary), aThumbnail, aProvider);
     }
 
@@ -135,7 +135,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @param aProvider A resource provider
      */
     public Manifest(final URI aID, final Label aLabel, final List<Metadata> aMetadataList, final Summary aSummary,
-            final Thumbnail aThumbnail, final Provider aProvider) {
+        final Thumbnail aThumbnail, final Provider aProvider) {
         super(ResourceTypes.MANIFEST, aID, aLabel, aMetadataList, aSummary, aThumbnail, aProvider);
     }
 
@@ -150,7 +150,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @param aProvider A resource provider
      */
     public Manifest(final String aID, final Label aLabel, final List<Metadata> aMetadataList, final Summary aSummary,
-            final Thumbnail aThumbnail, final Provider aProvider) {
+        final Thumbnail aThumbnail, final Provider aProvider) {
         super(ResourceTypes.MANIFEST, URI.create(aID), aLabel, aMetadataList, aSummary, aThumbnail, aProvider);
     }
 
@@ -387,17 +387,19 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @param aCanvasArray An array of canvases to add to the manifest
      * @return The manifest
      */
-    public Manifest addCanvas(final Canvas... aCanvasArray) {
-        Objects.requireNonNull(aCanvasArray, MessageCodes.JPA_008);
+    public Manifest addCanvases(final Canvas... aCanvasArray) {
+        Collections.addAll(getCanvases(), aCanvasArray);
+        return this;
+    }
 
-        for (final Canvas canvas : aCanvasArray) {
-            Objects.requireNonNull(canvas, MessageCodes.JPA_008);
-
-            if (!myCanvases.add(canvas)) {
-                throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_051, canvas));
-            }
-        }
-
+    /**
+     * Adds one or more ranges to the manifest.
+     *
+     * @param aRangeArray An array of ranges to add to the manifest
+     * @return The manifest
+     */
+    public Manifest addRanges(final Range... aRangeArray) {
+        Collections.addAll(getRanges(), aRangeArray);
         return this;
     }
 
@@ -408,6 +410,10 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      */
     @JsonGetter(Constants.ITEMS)
     public List<Canvas> getCanvases() {
+        if (myCanvases == null) {
+            myCanvases = new ArrayList<>();
+        }
+
         return myCanvases;
     }
 
@@ -419,8 +425,24 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      */
     @JsonGetter(Constants.ITEMS)
     public Manifest setCanvases(final Canvas... aCanvasArray) {
-        myCanvases.clear();
-        return addCanvas(aCanvasArray);
+        getCanvases().clear();
+        return addCanvases(aCanvasArray);
+    }
+
+    /**
+     * Sets the manifest's canvases from the contents of a list.
+     *
+     * @param aCanvasList A list of canvases to be set in the manifest
+     * @return The manifest
+     */
+    @JsonIgnore
+    public Manifest setCanvases(final List<Canvas> aCanvasList) {
+        final List<Canvas> canvases = getCanvases();
+
+        canvases.clear();
+        canvases.addAll(aCanvasList);
+
+        return this;
     }
 
     /**
@@ -442,28 +464,52 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      */
     @JsonGetter(Constants.START)
     public Optional<StartCanvas> getStartCanvas() {
+        if (myStartCanvas == null) {
+            myStartCanvas = Optional.empty();
+        }
+
         return myStartCanvas;
     }
 
     /**
-     * Gets the manifest's range.
+     * Gets the manifest's range(s).
      *
-     * @return The manifest's range
+     * @return The manifest's ranges
      */
     @JsonGetter(Constants.STRUCTURES)
-    public Optional<Range> getRange() {
-        return myRange;
+    public List<Range> getRanges() {
+        if (myRanges == null) {
+            myRanges = new ArrayList<>();
+        }
+
+        return myRanges;
     }
 
     /**
-     * Sets the manifest's range.
+     * Sets the manifest's range(s).
      *
-     * @param aRange A range to set in the manifest
+     * @param aRangeArray An array of ranges to set in the manifest
      * @return The manifest
      */
     @JsonSetter(Constants.STRUCTURES)
-    public Manifest setRange(final Range aRange) {
-        myRange = Optional.ofNullable(aRange);
+    public Manifest setRanges(final Range... aRangeArray) {
+        getRanges().clear();
+        return addRanges(aRangeArray);
+    }
+
+    /**
+     * Sets the manifest's ranges from the contents of a list.
+     *
+     * @param aRangeList A list of ranges to be set in the manifest
+     * @return The manifest
+     */
+    @JsonIgnore
+    public Manifest setRanges(final List<Range> aRangeList) {
+        final List<Range> ranges = getRanges();
+
+        ranges.clear();
+        ranges.addAll(aRangeList);
+
         return this;
     }
 

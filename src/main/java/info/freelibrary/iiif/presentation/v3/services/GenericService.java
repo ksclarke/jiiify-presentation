@@ -13,25 +13,26 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.net.MediaType;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.FileUtils;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+
 /**
  * A generic service class for other service implementations.
  */
-@JsonPropertyOrder({ Constants.CONTEXT, Constants.ID, Constants.PROFILE })
+@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.PROFILE })
 public class GenericService implements Service {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GenericService.class, MessageCodes.BUNDLE);
 
     private URI myID;
 
-    private URI myContext;
-
     private URI myProfile;
+
+    private final String myType;
 
     private Optional<MediaType> myFormat = Optional.ofNullable(null);
 
@@ -39,45 +40,28 @@ public class GenericService implements Service {
      * Creates a service for the supplied URI.
      *
      * @param aServiceID A service ID
+     * @param aType A service type
      */
-    public GenericService(final URI aServiceID) {
+    public GenericService(final URI aServiceID, final String aType) {
         myID = aServiceID;
+        myType = aType;
     }
 
     /**
      * Creates a service for the supplied ID.
      *
      * @param aServiceID A service ID in string form
+     * @param aType A service type
      */
-    public GenericService(final String aServiceID) {
+    public GenericService(final String aServiceID, final String aType) {
         myID = URI.create(aServiceID);
+        myType = aType;
     }
 
     @Override
-    public URI getContext() {
-        return myContext;
-    }
-
-    /**
-     * Sets the service's context.
-     *
-     * @param aContext The service's context
-     * @return This service
-     */
-    public GenericService setContext(final URI aContext) {
-        myContext = aContext;
-        return this;
-    }
-
-    /**
-     * Sets the service's context.
-     *
-     * @param aContext The service's context in string form
-     * @return This service
-     */
-    public GenericService setContext(final String aContext) {
-        myContext = URI.create(aContext);
-        return this;
+    @JsonGetter(Constants.TYPE)
+    public String getType() {
+        return myType;
     }
 
     /**
@@ -205,17 +189,17 @@ public class GenericService implements Service {
     @JsonValue
     private Object toJsonValue() {
         if (myID != null) {
-            if (myProfile == null && myContext == null && myFormat == null) {
+            if (myProfile == null && myFormat == null) {
                 return myID;
             } else {
                 final LinkedHashMap<String, Object> map = new LinkedHashMap<>();
 
-                if (myContext != null) {
-                    map.put(Constants.CONTEXT, myContext);
-                }
-
                 if (myID != null) {
                     map.put(Constants.ID, myID);
+                }
+
+                if (myType != null) {
+                    map.put(Constants.TYPE, myType);
                 }
 
                 if (myProfile != null) {

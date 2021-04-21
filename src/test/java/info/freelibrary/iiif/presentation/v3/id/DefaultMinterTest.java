@@ -55,7 +55,7 @@ public class DefaultMinterTest {
     public final void testManifestConstructor() {
         final String id = myManifestID + "/canvas-kfb9";
         final Manifest manifest = new Manifest(myManifestID, new Label("Label"));
-        final Minter minter = MinterFactory.getMinter(manifest.addCanvas(new Canvas(id)));
+        final Minter minter = MinterFactory.getMinter(manifest.addCanvases(new Canvas(id)));
 
         int counter = 0;
 

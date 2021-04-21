@@ -12,17 +12,16 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 public interface Service {
 
     /**
-     * Gets the service context. Required by ImageService, PhysicalDims; suggested by GeoJSON.
-     *
-     * @return A context
-     */
-    URI getContext();
-
-    /**
      * Gets the service ID.
      *
      * @return The ID
      */
     URI getID();
 
+    /**
+     * Gets the service type.
+     *
+     * @return The type
+     */
+    String getType();
 }

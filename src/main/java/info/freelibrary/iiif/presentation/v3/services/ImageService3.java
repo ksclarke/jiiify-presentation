@@ -5,7 +5,6 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.I18nRuntimeException;
@@ -20,9 +19,6 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  * A service that will return information about a particular image via IIIF Image API 3.
  */
 public class ImageService3 extends AbstractImageService implements ImageService {
-
-    /* The context for this service */
-    public static final URI CONTEXT = URI.create("http://iiif.io/api/image/3/context.json");
 
     /* The default profile level for the image info service */
     private static final ImageService3.Profile DEFAULT_LEVEL = ImageService3.Profile.LEVEL_TWO;
@@ -72,17 +68,6 @@ public class ImageService3 extends AbstractImageService implements ImageService 
     private ImageService3() {
     }
 
-    /**
-     * Gets the service context.
-     *
-     * @return A service context
-     */
-    @Override
-    @JsonGetter(Constants.CONTEXT)
-    public URI getContext() {
-        return CONTEXT;
-    }
-
     @Override
     public ImageService3 setID(final URI aID) {
         return (ImageService3) super.setID(aID);
@@ -113,17 +98,17 @@ public class ImageService3 extends AbstractImageService implements ImageService 
         /**
          * http://iiif.io/api/image/3/level0.json
          */
-        LEVEL_ZERO("http://iiif.io/api/image/3/level0.json"),
+        LEVEL_ZERO("level0"),
 
         /**
          * http://iiif.io/api/image/3/level1.json
          */
-        LEVEL_ONE("http://iiif.io/api/image/3/level1.json"),
+        LEVEL_ONE("level1"),
 
         /**
          * http://iiif.io/api/image/3/level2.json
          */
-        LEVEL_TWO("http://iiif.io/api/image/3/level2.json");
+        LEVEL_TWO("level2");
 
         private static final Logger LOGGER = LoggerFactory.getLogger(ImageService3.Profile.class, MessageCodes.BUNDLE);
 
@@ -168,7 +153,7 @@ public class ImageService3 extends AbstractImageService implements ImageService 
             }
 
             throw new IllegalArgumentException(
-                    LOGGER.getMessage(MessageCodes.JPA_109, aProfile, ResourceTypes.IMAGE_SERVICE_3));
+                LOGGER.getMessage(MessageCodes.JPA_109, aProfile, ResourceTypes.IMAGE_SERVICE_3));
         }
     }
 

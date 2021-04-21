@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -47,9 +46,9 @@ class DefaultMinter implements Minter {
     private static final String PAGE_ID_TEMPLATE = "{}/anno-page-{}";
 
     // All the alpha-numeric characters we use in creating NOIDs; lower case L is not used because it looks like "1"
-    private static final Character[] CHARS = new Character[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
-        'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8',
-        '9', '0' };
+    private static final Character[] CHARS =
+        new Character[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+            'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
 
     /* The maximum number of NOIDs, given the size of our character array. */
     private static final int MAX_NOID_COUNT = 1500625;
@@ -200,6 +199,7 @@ class DefaultMinter implements Minter {
      *
      * @return The number of IDs that are available for use
      */
+    @Override
     public int remaining() {
         return NOIDS.size() - (myUsedNOIDs + myExistingIDs.size());
     }
@@ -233,7 +233,7 @@ class DefaultMinter implements Minter {
      */
     private void findPreexistingIDs(final Manifest aManifest) {
         final List<Canvas> canvases = aManifest.getCanvases();
-        final Optional<Range> range = aManifest.getRange();
+        final List<Range> ranges = aManifest.getRanges();
 
         for (final Canvas canvas : canvases) {
             if (!myExistingIDs.add(canvas.getID())) {
@@ -257,9 +257,9 @@ class DefaultMinter implements Minter {
             }
         }
 
-        range.ifPresent(rangeConsumer -> {
-            if (!myExistingIDs.add(rangeConsumer.getID())) {
-                LOGGER.warn(MessageCodes.JPA_100, rangeConsumer.getID());
+        ranges.forEach(range -> {
+            if (!myExistingIDs.add(range.getID())) {
+                LOGGER.warn(MessageCodes.JPA_100, range.getID());
             }
         });
     }
