@@ -6,38 +6,46 @@ on:
     types: [ published ]
 
 jobs:
-  publish:
+  release:
     name: Maven Artifact Publisher (JDK 11)
     runs-on: ubuntu-latest
     env:
       AUTORELEASE_ARTIFACT: ${{ secrets.AUTORELEASE_ARTIFACT }}
       MAVEN_CACHE_KEY: ${{ secrets.MAVEN_CACHE_KEY }}
+
     steps:
+
       - name: Check out source code
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2
+
       - name: Install JDK 11 and Maven
         uses: actions/setup-java@d202f5dbf7256730fb690ec59f6381650114feb2 # v1
         with:
           java-version: 11
+
       # If running locally in act, install Maven
       - name: Set up Maven if needed
         if: ${{ env.ACT }}
         uses: stCarolas/setup-maven@1d56b37995622db66cce1214d81014b09807fb5a # v4
         with:
           maven-version: 3.6.3
+
       - name: Set up Maven cache
         uses: actions/cache@0781355a23dac32fd3bac414512f4b903437991a # v2
         if: ${{ env.MAVEN_CACHE_KEY }}
         with:
           path: ~/.m2
-          key: freelibrary-cache-${{ secrets.MAVEN_CACHE_KEY }}-${{ hashFiles('**/pom.xml') }}
-          restore-keys: freelibrary-cache-${{ secrets.MAVEN_CACHE_KEY }}-
+          key: maven-cache-${{ secrets.MAVEN_CACHE_KEY }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: maven-cache-${{ secrets.MAVEN_CACHE_KEY }}-
+
       - name: Set autorelease config
         if: env.AUTORELEASE_ARTIFACT == null
         run: echo "AUTORELEASE_ARTIFACT=false" >> $GITHUB_ENV
+
       - name: Set release version
         shell: bash
         run: TAG_NAME="${{ github.event.release.tag_name }}" && echo "RELEASE_VERSION=${TAG_NAME%-*}" >> $GITHUB_ENV
+
       - name: Release with Maven
         uses: samuelmeuli/action-maven-publish@201a45a3f311b2ee888f252ba9f4194257545709 # v1.4.0
         with:
