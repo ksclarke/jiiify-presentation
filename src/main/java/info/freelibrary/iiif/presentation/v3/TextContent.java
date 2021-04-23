@@ -25,7 +25,7 @@ import info.freelibrary.iiif.presentation.v3.services.Service;
 /**
  * Text content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
  */
-@JsonPropertyOrder({ Constants.TYPE, Constants.ID, Constants.THUMBNAIL, Constants.FORMAT, Constants.LANGUAGE })
+@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.THUMBNAIL, Constants.FORMAT, Constants.LANGUAGE })
 public class TextContent extends AbstractContentResource<TextContent> implements Thumbnail, Resource<TextContent> {
 
     /**

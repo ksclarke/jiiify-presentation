@@ -39,7 +39,7 @@ import io.vertx.core.json.jackson.DatabindCodec;
  * their content with the descriptions created by others.
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-@JsonPropertyOrder({ Constants.CONTEXT, Constants.TYPE, Constants.ID, Constants.MOTIVATION, Constants.LABEL,
+@JsonPropertyOrder({ Constants.CONTEXT, Constants.ID, Constants.TYPE, Constants.MOTIVATION, Constants.LABEL,
     Constants.SUMMARY, Constants.REQUIRED_STATEMENT, Constants.RIGHTS, Constants.PART_OF, Constants.HOMEPAGE,
     Constants.THUMBNAIL, Constants.METADATA, Constants.ITEMS, Constants.SERVICE, Constants.TIMEMODE, Constants.BODY,
     Constants.TARGET })
@@ -80,7 +80,7 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to target
      */
     protected <C extends CanvasResource<C>> Annotation(final URI aID, final CanvasResource<C> aCanvas,
-            final MediaFragmentSelector aCanvasRegion) {
+        final MediaFragmentSelector aCanvasRegion) {
         super(ResourceTypes.ANNOTATION, aID);
         myTargetSpecificResource = new SpecificResource(aCanvas.getID(), aCanvasRegion);
     }
@@ -93,7 +93,7 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to target
      */
     protected <C extends CanvasResource<C>> Annotation(final URI aID, final CanvasResource<C> aCanvas,
-            final String aCanvasRegion) {
+        final String aCanvasRegion) {
         this(aID, aCanvas, new MediaFragmentSelector(aCanvasRegion));
     }
 

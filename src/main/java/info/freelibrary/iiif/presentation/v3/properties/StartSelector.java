@@ -16,7 +16,7 @@ import info.freelibrary.iiif.presentation.v3.properties.selectors.Selector;
 /**
  * A start canvas that uses a selector to specify a sub-canvas selection.
  */
-@JsonPropertyOrder({ Constants.TYPE, Constants.ID, Constants.SOURCE, Constants.SELECTOR })
+@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.SOURCE, Constants.SELECTOR })
 public class StartSelector extends StartCanvas {
 
     private URI mySource;

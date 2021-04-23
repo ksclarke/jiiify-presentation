@@ -1,8 +1,8 @@
 {
-  "type": "Range",
   "id": "e125bd05-9109-46f0-aab7-dbe1e5bb16f0",
+  "type": "Range",
   "placeholderCanvas": {
-    "type": "Canvas",
-    "id": "8962ffd8-0510-4705-b68a-b6773d96785c"
+    "id": "8962ffd8-0510-4705-b68a-b6773d96785c",
+    "type": "Canvas"
   }
 }

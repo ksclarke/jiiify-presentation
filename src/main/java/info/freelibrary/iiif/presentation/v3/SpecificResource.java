@@ -18,7 +18,7 @@ import io.vertx.core.json.JsonObject;
  * A specific resource that can reference a particular region, time frame, or other aspect of another resource using a
  * selector.
  */
-@JsonPropertyOrder({ Constants.TYPE, Constants.ID, Constants.SOURCE, Constants.SELECTOR })
+@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.SOURCE, Constants.SELECTOR })
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class SpecificResource {
 

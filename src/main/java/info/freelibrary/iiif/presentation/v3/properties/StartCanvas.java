@@ -14,7 +14,7 @@ import info.freelibrary.iiif.presentation.v3.ResourceTypes;
  * This property allows the client to begin with the first Canvas that contains interesting content rather than
  * requiring the user to manually navigate to find it.
  */
-@JsonPropertyOrder({ Constants.TYPE, Constants.ID })
+@JsonPropertyOrder({ Constants.ID, Constants.TYPE })
 public class StartCanvas {
 
     private URI myID;

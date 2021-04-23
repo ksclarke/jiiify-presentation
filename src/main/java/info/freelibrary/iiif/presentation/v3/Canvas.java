@@ -34,7 +34,7 @@ import io.vertx.core.json.JsonObject;
  * standards like PDF and HTML, or applications like Photoshop and Powerpoint, where the display starts from a blank
  * canvas and images, text and other resources are &quot;painted&quot; on to it.
  */
-@JsonPropertyOrder({ Constants.TYPE, Constants.LABEL, Constants.ID, Constants.WIDTH, Constants.HEIGHT,
+@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.LABEL, Constants.WIDTH, Constants.HEIGHT,
     Constants.DURATION, Constants.THUMBNAIL, Constants.ITEMS, Constants.ANNOTATIONS })
 public class Canvas extends AbstractCanvas<Canvas> implements Resource<Canvas>, CanvasResource<Canvas> {
 
@@ -209,28 +209,28 @@ public class Canvas extends AbstractCanvas<Canvas> implements Resource<Canvas>, 
     @Override
     @SafeVarargs
     public final Canvas paintWith(final Minter aMinter, final MediaFragmentSelector aCanvasRegion,
-            final ContentResource... aContentArray) {
+        final ContentResource... aContentArray) {
         return (Canvas) super.paint(this, aMinter, aCanvasRegion, aContentArray);
     }
 
     @Override
     @SafeVarargs
     public final Canvas paintWith(final Minter aMinter, final String aCanvasRegion,
-            final ContentResource... aContentArray) {
+        final ContentResource... aContentArray) {
         return (Canvas) super.paint(this, aMinter, new MediaFragmentSelector(aCanvasRegion), aContentArray);
     }
 
     @Override
     public final Canvas paintWith(final Minter aMinter, final MediaFragmentSelector aCanvasRegion,
-            final List<ContentResource> aContentList) {
+        final List<ContentResource> aContentList) {
         return (Canvas) super.paint(this, aMinter, aCanvasRegion, aContentList.toArray(new ContentResource[] {}));
     }
 
     @Override
     public final Canvas paintWith(final Minter aMinter, final String aCanvasRegion,
-            final List<ContentResource> aContentList) {
+        final List<ContentResource> aContentList) {
         return (Canvas) super.paint(this, aMinter, new MediaFragmentSelector(aCanvasRegion),
-                aContentList.toArray(new ContentResource[] {}));
+            aContentList.toArray(new ContentResource[] {}));
     }
 
     @Override
@@ -247,28 +247,28 @@ public class Canvas extends AbstractCanvas<Canvas> implements Resource<Canvas>, 
     @Override
     @SafeVarargs
     public final Canvas supplementWith(final Minter aMinter, final MediaFragmentSelector aCanvasRegion,
-            final ContentResource... aContentArray) {
+        final ContentResource... aContentArray) {
         return (Canvas) super.supplement(this, aMinter, aCanvasRegion, aContentArray);
     }
 
     @Override
     @SafeVarargs
     public final Canvas supplementWith(final Minter aMinter, final String aCanvasRegion,
-            final ContentResource... aContentArray) {
+        final ContentResource... aContentArray) {
         return (Canvas) super.supplement(this, aMinter, new MediaFragmentSelector(aCanvasRegion), aContentArray);
     }
 
     @Override
     public final Canvas supplementWith(final Minter aMinter, final MediaFragmentSelector aCanvasRegion,
-            final List<ContentResource> aContentList) {
+        final List<ContentResource> aContentList) {
         return (Canvas) super.supplement(this, aMinter, aCanvasRegion, aContentList.toArray(new ContentResource[] {}));
     }
 
     @Override
     public final Canvas supplementWith(final Minter aMinter, final String aCanvasRegion,
-            final List<ContentResource> aContentList) {
+        final List<ContentResource> aContentList) {
         return (Canvas) super.supplement(this, aMinter, new MediaFragmentSelector(aCanvasRegion),
-                aContentList.toArray(new ContentResource[] {}));
+            aContentList.toArray(new ContentResource[] {}));
     }
 
     @Override

@@ -43,7 +43,7 @@ import io.vertx.core.json.jackson.DatabindCodec;
  * A resource that can be used as a base for more specific IIIF presentation resources.
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-@JsonPropertyOrder({ Constants.CONTEXT, Constants.TYPE, Constants.ID, Constants.LABEL, Constants.SUMMARY,
+@JsonPropertyOrder({ Constants.CONTEXT, Constants.ID, Constants.TYPE, Constants.LABEL, Constants.SUMMARY,
     Constants.REQUIRED_STATEMENT, Constants.PROVIDER, Constants.RIGHTS, Constants.PART_OF, Constants.BEHAVIOR,
     Constants.HOMEPAGE, Constants.THUMBNAIL, Constants.METADATA, Constants.ITEMS, Constants.SERVICE })
 abstract class AbstractResource<T extends AbstractResource<T>> {
@@ -161,8 +161,8 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @param aProvider A resource provider
      */
     protected AbstractResource(final String aType, final String aID, final String aLabel,
-            final List<Metadata> aMetadataList, final String aSummary, final Thumbnail aThumbnail,
-            final Provider aProvider) {
+        final List<Metadata> aMetadataList, final String aSummary, final Thumbnail aThumbnail,
+        final Provider aProvider) {
         this(aType, URI.create(aID), new Label(aLabel), aMetadataList, new Summary(aSummary), aThumbnail, aProvider);
     }
 
@@ -178,8 +178,8 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @param aProvider A resource provider
      */
     protected AbstractResource(final String aType, final URI aID, final Label aLabel,
-            final List<Metadata> aMetadataList, final Summary aSummary, final Thumbnail aThumbnail,
-            final Provider aProvider) {
+        final List<Metadata> aMetadataList, final Summary aSummary, final Thumbnail aThumbnail,
+        final Provider aProvider) {
         myType = checkNotNull(aType);
         myID = checkNotNull(aID);
         myLabel = checkNotNull(aLabel);
@@ -599,7 +599,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @param aBehaviorList A list of behaviors
      */
     protected Behavior[] checkBehaviors(final Class<?> aClass, final boolean aCleanComparison,
-            final List<Behavior> aBehaviorList) {
+        final List<Behavior> aBehaviorList) {
         return checkBehaviors(aClass, aCleanComparison, aBehaviorList.toArray(new Behavior[0]));
     }
 
@@ -611,7 +611,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @param aBehaviorArray An array of behaviors
      */
     protected Behavior[] checkBehaviors(final Class<?> aClass, final boolean aCleanComparison,
-            final Behavior... aBehaviorArray) {
+        final Behavior... aBehaviorArray) {
         if (aCleanComparison) {
             new DisjointChecker().check(aClass, aBehaviorArray);
         } else {

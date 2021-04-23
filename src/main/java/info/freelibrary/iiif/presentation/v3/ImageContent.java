@@ -31,10 +31,10 @@ import io.vertx.core.json.JsonObject;
 /**
  * Image content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
  */
-@JsonPropertyOrder({ Constants.TYPE, Constants.LABEL, Constants.ID, Constants.THUMBNAIL, Constants.WIDTH,
+@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.LABEL, Constants.THUMBNAIL, Constants.WIDTH,
     Constants.HEIGHT, Constants.FORMAT, Constants.LANGUAGE, Constants.SERVICE })
 public class ImageContent extends AbstractContentResource<ImageContent>
-        implements Thumbnail, Resource<ImageContent>, SpatialContentResource<ImageContent> {
+    implements Thumbnail, Resource<ImageContent>, SpatialContentResource<ImageContent> {
 
     private int myWidth;
 

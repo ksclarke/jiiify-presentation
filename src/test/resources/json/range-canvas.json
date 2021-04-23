@@ -1,33 +1,33 @@
 {
-    "type": "Range",
-    "id": "MY_RANGE_ID",
-    "label": {
-        "none": [
-            "My Range Label"
-        ]
-    },
-    "items": [
-        {
-            "type": "Canvas",
-            "label": {
-                "none": [
-                    "My Test Canvas #1"
-                ]
-            },
-            "id": "MY_CANVAS_ID_1",
-            "width": 100,
-            "height": 100
-        },
-        {
-            "type": "Canvas",
-            "label": {
-                "none": [
-                    "My Test Canvas #2"
-                ]
-            },
-            "id": "MY_CANVAS_ID_2",
-            "width": 200,
-            "height": 200
-        }
+  "id": "MY_RANGE_ID",
+  "type": "Range",
+  "label": {
+    "none": [
+      "My Range Label"
     ]
+  },
+  "items": [
+    {
+      "id": "MY_CANVAS_ID_1",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "My Test Canvas #1"
+        ]
+      },
+      "width": 100,
+      "height": 100
+    },
+    {
+      "id": "MY_CANVAS_ID_2",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "My Test Canvas #2"
+        ]
+      },
+      "width": 200,
+      "height": 200
+    }
+  ]
 }

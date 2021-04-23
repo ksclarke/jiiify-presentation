@@ -35,10 +35,10 @@ import io.vertx.core.json.JsonObject;
 /**
  * Sound content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
  */
-@JsonPropertyOrder({ Constants.TYPE, Constants.ID, Constants.THUMBNAIL, Constants.DURATION, Constants.FORMAT,
+@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.THUMBNAIL, Constants.FORMAT, Constants.DURATION,
     Constants.LANGUAGE })
 public class SoundContent extends AbstractContentResource<SoundContent>
-        implements Thumbnail, Resource<SoundContent>, TemporalContentResource<SoundContent> {
+    implements Thumbnail, Resource<SoundContent>, TemporalContentResource<SoundContent> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SoundContent.class, MessageCodes.BUNDLE);
 

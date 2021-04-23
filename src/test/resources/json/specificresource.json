@@ -1,6 +1,6 @@
 {
-    "type": "SpecificResource",
     "id": "{}",
+    "type": "SpecificResource",
     "source": "{}",
     "selector": {
         "type": "AudioContentSelector"

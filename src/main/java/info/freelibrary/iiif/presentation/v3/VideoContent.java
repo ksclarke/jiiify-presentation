@@ -35,10 +35,10 @@ import io.vertx.core.json.JsonObject;
 /**
  * Video content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
  */
-@JsonPropertyOrder({ Constants.TYPE, Constants.ID, Constants.THUMBNAIL, Constants.WIDTH, Constants.HEIGHT,
+@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.THUMBNAIL, Constants.WIDTH, Constants.HEIGHT,
     Constants.DURATION, Constants.FORMAT, Constants.LANGUAGE })
 public class VideoContent extends AbstractContentResource<VideoContent> implements Thumbnail, Resource<VideoContent>,
-        SpatialContentResource<VideoContent>, TemporalContentResource<VideoContent> {
+    SpatialContentResource<VideoContent>, TemporalContentResource<VideoContent> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VideoContent.class, MessageCodes.BUNDLE);
 

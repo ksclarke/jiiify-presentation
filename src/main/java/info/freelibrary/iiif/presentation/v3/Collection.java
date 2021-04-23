@@ -81,7 +81,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      * @param aProvider A resource provider
      */
     public Collection(final String aID, final String aLabel, final List<Metadata> aMetadataList, final String aSummary,
-            final Thumbnail aThumbnail, final Provider aProvider) {
+        final Thumbnail aThumbnail, final Provider aProvider) {
         super(ResourceTypes.COLLECTION, aID, aLabel, aMetadataList, aSummary, aThumbnail, aProvider);
     }
 
@@ -96,7 +96,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      * @param aProvider A resource provider
      */
     public Collection(final URI aID, final Label aLabel, final List<Metadata> aMetadataList, final Summary aSummary,
-            final Thumbnail aThumbnail, final Provider aProvider) {
+        final Thumbnail aThumbnail, final Provider aProvider) {
         super(ResourceTypes.COLLECTION, aID, aLabel, aMetadataList, aSummary, aThumbnail, aProvider);
     }
 
@@ -442,7 +442,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      * A wrapper for things embedded in or referenced from a collection (e&#46;g&#46; manifests and other collections).
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonPropertyOrder({ Constants.TYPE, Constants.ID, Constants.LABEL, Constants.THUMBNAIL })
+    @JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.LABEL, Constants.THUMBNAIL })
     public static class Item {
 
         /**

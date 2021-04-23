@@ -22,7 +22,7 @@ import io.vertx.core.json.JsonObject;
  */
 public class StartTest extends AbstractTest {
 
-    private static final String CANVAS_PATTERN = "{\"type\":\"Canvas\",\"id\":\"{}\"}";
+    private static final String CANVAS_PATTERN = "{\"id\":\"{}\",\"type\":\"Canvas\"}";
 
     // Might be neat to create a IIIF LoremIpsum at some point
     private final Lorem myLorem = LoremIpsum.getInstance();
@@ -49,8 +49,8 @@ public class StartTest extends AbstractTest {
         final String sourceURL = myLorem.getUrl();
 
         json.put(Constants.TYPE, ResourceTypes.SPECIFIC_RESOURCE).put(Constants.ID, idURL)
-                .put(Constants.SOURCE, sourceURL)
-                .put(Constants.SELECTOR, new JsonObject().put(Constants.TYPE, selector.getType()));
+            .put(Constants.SOURCE, sourceURL)
+            .put(Constants.SELECTOR, new JsonObject().put(Constants.TYPE, selector.getType()));
 
         assertEquals(json, JsonObject.mapFrom(new StartSelector(idURL, sourceURL, selector)));
     }
