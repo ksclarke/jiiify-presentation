@@ -43,9 +43,9 @@ import io.vertx.core.json.jackson.DatabindCodec;
  * A resource that can be used as a base for more specific IIIF presentation resources.
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-@JsonPropertyOrder({ Constants.CONTEXT, Constants.ID, Constants.TYPE, Constants.LABEL, Constants.SUMMARY,
-    Constants.REQUIRED_STATEMENT, Constants.PROVIDER, Constants.RIGHTS, Constants.PART_OF, Constants.BEHAVIOR,
-    Constants.HOMEPAGE, Constants.THUMBNAIL, Constants.METADATA, Constants.ITEMS, Constants.SERVICE })
+@JsonPropertyOrder({ Constants.CONTEXT, Constants.ID, Constants.TYPE, Constants.LABEL, Constants.PROVIDER,
+    Constants.RIGHTS, Constants.PART_OF, Constants.BEHAVIOR, Constants.HOMEPAGE, Constants.THUMBNAIL,
+    Constants.METADATA, Constants.SUMMARY, Constants.REQUIRED_STATEMENT, Constants.ITEMS, Constants.SERVICE })
 abstract class AbstractResource<T extends AbstractResource<T>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractResource.class, MessageCodes.BUNDLE);

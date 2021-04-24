@@ -7,18 +7,6 @@
       "Georgian NF Fragment 68a"
     ]
   },
-  "requiredStatement": {
-    "label": {
-      "none": [
-        "Attribution"
-      ]
-    },
-    "value": {
-      "none": [
-        "Provided courtesy of Example Institution"
-      ]
-    }
-  },
   "rights": "http://creativecommons.org/licenses/by/4.0/",
   "behavior": [
     "paged"
@@ -87,6 +75,18 @@
       }
     }
   ],
+  "requiredStatement": {
+    "label": {
+      "none": [
+        "Attribution"
+      ]
+    },
+    "value": {
+      "none": [
+        "Provided courtesy of Example Institution"
+      ]
+    }
+  },
   "items": [
     {
       "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1960050/canvas/canvas-1",
