@@ -65,6 +65,19 @@ public class RoundTripTest {
     }
 
     /**
+     * Tests the 0004 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0004-canvas-size/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0004CanvasSize() throws IOException {
+        final JsonObject expected = getManifest("0004-canvas-size");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        assertEquals(expected.encodePrettily(), found.encodePrettily());
+    }
+
+    /**
      * Gets a cookbook manifest as a string.
      *
      * @param aManifestName A manifest file name

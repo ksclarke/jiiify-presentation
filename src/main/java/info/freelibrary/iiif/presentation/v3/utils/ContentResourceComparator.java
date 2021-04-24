@@ -13,7 +13,7 @@ public class ContentResourceComparator implements Comparator<String> {
 
     // This is the sort order we want
     private static final String[] KEYS = new String[] { Constants.ID, Constants.TYPE, Constants.DEFAULT,
-        Constants.ITEMS, Constants.HEIGHT, Constants.WIDTH, Constants.FORMAT, Constants.LABEL, Constants.SERVICE };
+        Constants.ITEMS, Constants.FORMAT, Constants.HEIGHT, Constants.WIDTH, Constants.LABEL, Constants.SERVICE };
 
     @Override
     public int compare(final String aFirstKey, final String aSecondKey) {
