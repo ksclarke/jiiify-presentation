@@ -52,6 +52,19 @@ public class RoundTripTest {
     }
 
     /**
+     * Tests the 0003 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0003-mvm-video/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0003MvmVideo() throws IOException {
+        final JsonObject expected = getManifest("0003-mvm-video");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        assertEquals(expected.encodePrettily(), found.encodePrettily());
+    }
+
+    /**
      * Gets a cookbook manifest as a string.
      *
      * @param aManifestName A manifest file name

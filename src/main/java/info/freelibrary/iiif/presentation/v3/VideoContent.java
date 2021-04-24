@@ -35,7 +35,7 @@ import io.vertx.core.json.JsonObject;
 /**
  * Video content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
  */
-@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.THUMBNAIL, Constants.WIDTH, Constants.HEIGHT,
+@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.THUMBNAIL, Constants.HEIGHT, Constants.WIDTH,
     Constants.DURATION, Constants.FORMAT, Constants.LANGUAGE })
 public class VideoContent extends AbstractContentResource<VideoContent> implements Thumbnail, Resource<VideoContent>,
     SpatialContentResource<VideoContent>, TemporalContentResource<VideoContent> {
