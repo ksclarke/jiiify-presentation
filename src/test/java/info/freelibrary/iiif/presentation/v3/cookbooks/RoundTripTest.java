@@ -78,6 +78,19 @@ public class RoundTripTest {
     }
 
     /**
+     * Tests the 0005 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0005-image-service/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0005ImageService() throws IOException {
+        final JsonObject expected = getManifest("0005-image-service");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        assertEquals(expected.encodePrettily(), found.encodePrettily());
+    }
+
+    /**
      * Gets a cookbook manifest as a string.
      *
      * @param aManifestName A manifest file name

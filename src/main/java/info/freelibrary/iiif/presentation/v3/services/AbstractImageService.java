@@ -13,7 +13,7 @@ import info.freelibrary.iiif.presentation.v3.Constants;
 /**
  * Abstract base class for image services.
  */
-@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.PROFILE })
+@JsonPropertyOrder({ Constants.ID, Constants.PROFILE, Constants.TYPE })
 abstract class AbstractImageService implements ImageService {
 
     protected Profile myProfile;
