@@ -39,11 +39,11 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
 
     private static final String TEMPORAL = "temporal";
 
+    private float myDuration;
+
     private int myWidth;
 
     private int myHeight;
-
-    private float myDuration;
 
     private List<AnnotationPage<PaintingAnnotation>> myPaintingPageList;
 
@@ -284,13 +284,8 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
 
     @JsonSetter(Constants.DURATION)
     protected AbstractCanvas<T> setDuration(final Number aDuration) {
-        final float tempDuration = aDuration.floatValue();
-        if (tempDuration > 0 && Float.isFinite(tempDuration)) {
-            myDuration = tempDuration;
-            return this;
-        } else {
-            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_024, aDuration));
-        }
+        myDuration = convertToFinitePositiveFloat(aDuration);
+        return this;
     }
 
     @SuppressWarnings("unchecked") // Moved SafeVarargs to extending classes where method can be final
@@ -527,7 +522,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         final Canvas canvasFragment = new Canvas(canvasID);
         final int width;
         final int height;
-        final float duration;
+        final double duration;
 
         if (aCanvasRegion.isSpatial()) {
             // Check for semantic errors according to <https://www.w3.org/TR/media-frags/#error-media>

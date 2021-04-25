@@ -108,7 +108,7 @@ public class PaintingAnnotationTest extends AbstractTest {
     @Test
     public void testPaintingAnnotationStringCanvasString() {
         final PaintingAnnotation anno =
-                new PaintingAnnotation(myAnnoID.toString(), myCanvas, myFragmentSelector.toString());
+            new PaintingAnnotation(myAnnoID.toString(), myCanvas, myFragmentSelector.toString());
 
         assertEquals(myAnnoID, anno.getID());
         assertTrue(anno.hasSpecificResourceTarget());
@@ -210,9 +210,9 @@ public class PaintingAnnotationTest extends AbstractTest {
     @Test
     public final void testSerialization() throws IOException {
         final SoundContent content = new SoundContent(mySoundContentID).setDuration(3600)
-                .setThumbnails(new SoundContent(myThumbnailID).setDuration(4.2f));
+            .setThumbnails(new SoundContent(myThumbnailID).setDuration(4.2d));
         final PaintingAnnotation annotation = new PaintingAnnotation(myAnnoID, myCanvas).setBody(content)
-                .setTarget(myCanvasID).setTimeMode(TimeMode.LOOP);
+            .setTarget(myCanvasID).setTimeMode(TimeMode.LOOP);
         final JsonObject expected = new JsonObject(StringUtils.read(ANNOTATION));
         final JsonObject found = new JsonObject(TestUtils.toJson(annotation));
 

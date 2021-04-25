@@ -43,9 +43,9 @@ public class CanvasTest {
 
     private static final int THUMBNAIL_WH = 64;
 
-    private static final float CANVAS_DURATION = 3600;
+    private static final double CANVAS_DURATION = 3600;
 
-    private static final float DURATION = 300;
+    private static final double DURATION = 300;
 
     /** Identifiers */
 
@@ -229,7 +229,7 @@ public class CanvasTest {
      */
     @Test
     public final void testGetDuration() {
-        assertEquals(Float.compare(300.0f, myCanvas.setDuration(DURATION).getDuration()), 0);
+        assertEquals(300.0f, myCanvas.setDuration(DURATION).getDuration(), 0);
     }
 
     /**

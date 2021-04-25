@@ -76,7 +76,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @param aContentArray An array of content resources
      * @return This canvas
      * @throws ContentOutOfBoundsException If the content resource has dimensions which this canvas does not have, or
-     * which are not within the bounds of the dimensions of this canvas
+     *         which are not within the bounds of the dimensions of this canvas
      */
     T paintWith(Minter aMinter, ContentResource... aContentArray) throws ContentOutOfBoundsException;
 
@@ -97,7 +97,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @param aContentList A list of content resources
      * @return This canvas
      * @throws ContentOutOfBoundsException If the content resource has dimensions which this canvas does not have, or
-     * which are not within the bounds of the dimensions of this canvas
+     *         which are not within the bounds of the dimensions of this canvas
      */
     T paintWith(Minter aMinter, List<ContentResource> aContentList) throws ContentOutOfBoundsException;
 
@@ -119,9 +119,9 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @param aContentArray An array of content resources
      * @return This canvas
      * @throws ContentOutOfBoundsException If the content resource has dimensions which this canvas does not have, or
-     * which are not within the bounds of the dimensions of this canvas
+     *         which are not within the bounds of the dimensions of this canvas
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given {@link MediaFragmentSelector}
-     * does not exist
+     *         does not exist
      */
     T paintWith(Minter aMinter, MediaFragmentSelector aCanvasRegion, ContentResource... aContentArray)
             throws ContentOutOfBoundsException, SelectorOutOfBoundsException;
@@ -144,7 +144,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @param aContentArray An array of content resources
      * @return This canvas
      * @throws ContentOutOfBoundsException If the content resource has dimensions which this canvas does not have, or
-     * which are not within the bounds of the dimensions of this canvas
+     *         which are not within the bounds of the dimensions of this canvas
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given media fragment does not exist
      */
     T paintWith(Minter aMinter, String aCanvasRegion, ContentResource... aContentArray)
@@ -168,9 +168,9 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @param aContentList A list of content resources
      * @return This canvas
      * @throws ContentOutOfBoundsException If the content resource has dimensions which this canvas does not have, or
-     * which are not within the bounds of the dimensions of this canvas
+     *         which are not within the bounds of the dimensions of this canvas
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given {@link MediaFragmentSelector}
-     * does not exist
+     *         does not exist
      */
     T paintWith(Minter aMinter, MediaFragmentSelector aCanvasRegion, List<ContentResource> aContentList)
             throws ContentOutOfBoundsException, SelectorOutOfBoundsException;
@@ -193,7 +193,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @param aContentList A list of content resources
      * @return This canvas
      * @throws ContentOutOfBoundsException If the content resource has dimensions which this canvas does not have, or
-     * which are not within the bounds of the dimensions of this canvas
+     *         which are not within the bounds of the dimensions of this canvas
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given media fragment does not exist
      */
     T paintWith(Minter aMinter, String aCanvasRegion, List<ContentResource> aContentList)

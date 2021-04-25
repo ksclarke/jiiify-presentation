@@ -80,5 +80,6 @@
   <entry key="JPA-107">Could not create a new minter: {}</entry>
   <entry key="JPA-108">Received duplicate ID from the minter: {} (count: {})</entry>
   <entry key="JPA-109">{} isn't a valid {} profile</entry>
+  <entry key="JPA-110">Duration must be a floating point number, not: {}</entry>
 
 </properties>

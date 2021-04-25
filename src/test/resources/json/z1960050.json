@@ -7,7 +7,6 @@
       "Georgian NF Fragment 68a"
     ]
   },
-  "rights": "http://creativecommons.org/licenses/by/4.0/",
   "behavior": [
     "paged"
   ],
@@ -75,6 +74,7 @@
       }
     }
   ],
+  "rights": "http://creativecommons.org/licenses/by/4.0/",
   "requiredStatement": {
     "label": {
       "none": [
