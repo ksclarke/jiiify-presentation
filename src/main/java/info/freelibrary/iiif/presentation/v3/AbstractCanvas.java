@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.Logger;
@@ -31,6 +32,9 @@ import io.vertx.core.json.JsonObject;
  * standards like PDF and HTML, or applications like Photoshop and Powerpoint, where the display starts from a blank
  * canvas and images, text and other resources are &quot;painted&quot; on to it.
  */
+@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.LABEL, Constants.HEIGHT, Constants.WIDTH,
+    Constants.DURATION, Constants.THUMBNAIL, Constants.PLACEHOLDER_CANVAS, Constants.ACCOMPANYING_CANVAS,
+    Constants.ITEMS, Constants.ANNOTATIONS })
 abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableResource<AbstractCanvas<T>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractCanvas.class, MessageCodes.BUNDLE);

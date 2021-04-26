@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import info.freelibrary.util.StringUtils;
@@ -24,7 +25,7 @@ import io.vertx.core.json.JsonObject;
 public class RoundTripTest {
 
     private static final boolean ORDER_SENSITIVE =
-            Boolean.parseBoolean(System.getProperty(ORDERED, Boolean.FALSE.toString()));
+            Boolean.parseBoolean(System.getProperty(ORDERED, Boolean.TRUE.toString()));
 
     /**
      * A pattern from which to pull manifest from the test resources directory.
@@ -117,6 +118,124 @@ public class RoundTripTest {
     @Test
     public final void test0007StringFormats() throws IOException {
         final JsonObject expected = getManifest("0007-string-formats");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
+     * Tests the 0008 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0008-rights/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0008Rights() throws IOException {
+        final JsonObject expected = getManifest("0008-rights");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
+     * Tests the 0009 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0009-book-1/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0009Book1() throws IOException {
+        final JsonObject expected = getManifest("0009-book-1");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
+     * Tests the 0010 RTL cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0010-book-2-viewing-direction/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0010Book2ViewingDirectionRtl() throws IOException {
+        final JsonObject expected = getManifest("0010-book-2-viewing-direction-rtl");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
+     * Tests the 0010 TTB cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0010-book-2-viewing-direction/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0010Book2ViewingDirectionTtb() throws IOException {
+        final JsonObject expected = getManifest("0010-book-2-viewing-direction-ttb");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
+     * Tests the 0011 continuous cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0011-book-3-behavior/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0011Book3BehaviorContinuous() throws IOException {
+        final JsonObject expected = getManifest("0011-book-3-behavior-continuous");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
+     * Tests the 0011 individuals cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0011-book-3-behavior/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0011Book3BehaviorIndividuals() throws IOException {
+        final JsonObject expected = getManifest("0011-book-3-behavior-individuals");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
+     * Tests the 0012 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0012-thumbnails/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    @Ignore
+    public final void test0012Thumbnails() throws IOException {
+        final JsonObject expected = getManifest("0012-thumbnails");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
+     * Tests the 0013 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0013-placeholderCanvas/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0013PlaceholderCanvas() throws IOException {
+        final JsonObject expected = getManifest("0013-placeholderCanvas");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
+     * Tests the 0014 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0014-accompanyingcanvas/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0014AccompanyingCanvas() throws IOException {
+        final JsonObject expected = getManifest("0014-accompanyingcanvas");
         final JsonObject found = Manifest.fromJSON(expected).toJSON();
 
         compare(expected, found);

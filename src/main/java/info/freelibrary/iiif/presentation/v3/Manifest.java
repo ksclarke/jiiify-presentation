@@ -105,7 +105,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @param aProvider A resource provider
      */
     public Manifest(final String aID, final String aLabel, final List<Metadata> aMetadataList, final String aSummary,
-        final Thumbnail aThumbnail, final Provider aProvider) {
+            final Thumbnail aThumbnail, final Provider aProvider) {
         super(ResourceTypes.MANIFEST, aID, aLabel, aMetadataList, aSummary, aThumbnail, aProvider);
     }
 
@@ -120,7 +120,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @param aProvider A resource provider
      */
     public Manifest(final String aID, final Label aLabel, final List<Metadata> aMetadataList, final String aSummary,
-        final Thumbnail aThumbnail, final Provider aProvider) {
+            final Thumbnail aThumbnail, final Provider aProvider) {
         this(URI.create(aID), aLabel, aMetadataList, new Summary(aSummary), aThumbnail, aProvider);
     }
 
@@ -135,7 +135,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @param aProvider A resource provider
      */
     public Manifest(final URI aID, final Label aLabel, final List<Metadata> aMetadataList, final Summary aSummary,
-        final Thumbnail aThumbnail, final Provider aProvider) {
+            final Thumbnail aThumbnail, final Provider aProvider) {
         super(ResourceTypes.MANIFEST, aID, aLabel, aMetadataList, aSummary, aThumbnail, aProvider);
     }
 
@@ -150,7 +150,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @param aProvider A resource provider
      */
     public Manifest(final String aID, final Label aLabel, final List<Metadata> aMetadataList, final Summary aSummary,
-        final Thumbnail aThumbnail, final Provider aProvider) {
+            final Thumbnail aThumbnail, final Provider aProvider) {
         super(ResourceTypes.MANIFEST, URI.create(aID), aLabel, aMetadataList, aSummary, aThumbnail, aProvider);
     }
 
