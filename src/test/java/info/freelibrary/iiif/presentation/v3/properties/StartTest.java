@@ -33,9 +33,9 @@ public class StartTest extends AbstractTest {
     @Test
     public final void testCanvasStart() {
         final String url = myLorem.getUrl();
-        final String json = StringUtils.format(CANVAS_PATTERN, url);
+        final JsonObject expected = new JsonObject(StringUtils.format(CANVAS_PATTERN, url));
 
-        assertEquals(json, JsonObject.mapFrom(new StartCanvas(url)).encode());
+        assertEquals(expected, JsonObject.mapFrom(new Start(url)));
     }
 
     /**
@@ -49,10 +49,10 @@ public class StartTest extends AbstractTest {
         final String sourceURL = myLorem.getUrl();
 
         json.put(Constants.TYPE, ResourceTypes.SPECIFIC_RESOURCE).put(Constants.ID, idURL)
-            .put(Constants.SOURCE, sourceURL)
-            .put(Constants.SELECTOR, new JsonObject().put(Constants.TYPE, selector.getType()));
+                .put(Constants.SOURCE, sourceURL)
+                .put(Constants.SELECTOR, new JsonObject().put(Constants.TYPE, selector.getType()));
 
-        assertEquals(json, JsonObject.mapFrom(new StartSelector(idURL, sourceURL, selector)));
+        assertEquals(json, JsonObject.mapFrom(new Start(idURL, sourceURL, selector)));
     }
 
     /**
@@ -61,8 +61,8 @@ public class StartTest extends AbstractTest {
     @Test
     public final void testSettingSelector() {
         final AudioContentSelector selector = new AudioContentSelector();
-        final StartSelector start = new StartSelector(myLorem.getUrl(), myLorem.getUrl(), selector);
+        final Start start = new Start(myLorem.getUrl(), myLorem.getUrl(), selector);
 
-        assertEquals(selector, start.getSelector());
+        assertEquals(selector, start.getSelector().get());
     }
 }

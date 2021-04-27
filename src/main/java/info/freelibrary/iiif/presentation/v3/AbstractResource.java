@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -45,15 +46,15 @@ import io.vertx.core.json.jackson.DatabindCodec;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.ID, Constants.TYPE, Constants.LABEL, Constants.PROVIDER,
     Constants.PART_OF, Constants.BEHAVIOR, Constants.HOMEPAGE, Constants.THUMBNAIL, Constants.SUMMARY,
-    Constants.METADATA, Constants.RIGHTS, Constants.REQUIRED_STATEMENT, Constants.VIEWING_DIRECTION, Constants.ITEMS,
-    Constants.SERVICE })
+    Constants.METADATA, Constants.START, Constants.RIGHTS, Constants.REQUIRED_STATEMENT, Constants.VIEWING_DIRECTION,
+    Constants.ITEMS, Constants.SERVICE })
 abstract class AbstractResource<T extends AbstractResource<T>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractResource.class, MessageCodes.BUNDLE);
 
     // We initialize this here so it loads for manifests and collections
     static {
-        DatabindCodec.mapper().findAndRegisterModules();
+        DatabindCodec.mapper().registerModule(new Jdk8Module().configureAbsentsAsNulls(true));
     }
 
     @JsonProperty(Constants.TYPE)

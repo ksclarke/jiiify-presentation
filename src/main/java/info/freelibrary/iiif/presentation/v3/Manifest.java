@@ -27,7 +27,7 @@ import info.freelibrary.iiif.presentation.v3.properties.Provider;
 import info.freelibrary.iiif.presentation.v3.properties.Rendering;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
-import info.freelibrary.iiif.presentation.v3.properties.StartCanvas;
+import info.freelibrary.iiif.presentation.v3.properties.Start;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
@@ -50,11 +50,11 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
 
     private final List<URI> myContexts = Stream.of(Constants.CONTEXT_URI).collect(Collectors.toList());
 
-    private Optional<AccompanyingCanvas> myAccompanyingCanvas;
+    private AccompanyingCanvas myAccompanyingCanvas;
 
-    private Optional<PlaceholderCanvas> myPlaceholderCanvas;
+    private PlaceholderCanvas myPlaceholderCanvas;
 
-    private Optional<StartCanvas> myStartCanvas;
+    private Start myStart;
 
     private ViewingDirection myViewingDirection;
 
@@ -180,7 +180,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      */
     @JsonGetter(Constants.PLACEHOLDER_CANVAS)
     public Optional<PlaceholderCanvas> getPlaceholderCanvas() {
-        return myPlaceholderCanvas;
+        return Optional.ofNullable(myPlaceholderCanvas);
     }
 
     /**
@@ -191,7 +191,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      */
     @JsonSetter(Constants.PLACEHOLDER_CANVAS)
     public Manifest setPlaceholderCanvas(final PlaceholderCanvas aCanvas) {
-        myPlaceholderCanvas = Optional.ofNullable(aCanvas);
+        myPlaceholderCanvas = aCanvas;
         return this;
     }
 
@@ -202,7 +202,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      */
     @JsonGetter(Constants.ACCOMPANYING_CANVAS)
     public Optional<AccompanyingCanvas> getAccompanyingCanvas() {
-        return myAccompanyingCanvas;
+        return Optional.ofNullable(myAccompanyingCanvas);
     }
 
     /**
@@ -213,7 +213,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      */
     @JsonSetter(Constants.ACCOMPANYING_CANVAS)
     public Manifest setAccompanyingCanvas(final AccompanyingCanvas aCanvas) {
-        myAccompanyingCanvas = Optional.ofNullable(aCanvas);
+        myAccompanyingCanvas = aCanvas;
         return this;
     }
 
@@ -446,14 +446,14 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     /**
-     * Sets the optional start canvas.
+     * Sets the optional start.
      *
-     * @param aStartCanvas A start canvas
+     * @param aStart A start
      * @return The manifest
      */
     @JsonSetter(Constants.START)
-    public Manifest setStartCanvas(final StartCanvas aStartCanvas) {
-        myStartCanvas = Optional.ofNullable(aStartCanvas);
+    public Manifest setStart(final Start aStart) {
+        myStart = aStart;
         return this;
     }
 
@@ -463,12 +463,8 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @return The optional start canvas
      */
     @JsonGetter(Constants.START)
-    public Optional<StartCanvas> getStartCanvas() {
-        if (myStartCanvas == null) {
-            myStartCanvas = Optional.empty();
-        }
-
-        return myStartCanvas;
+    public Optional<Start> getStart() {
+        return Optional.ofNullable(myStart);
     }
 
     /**

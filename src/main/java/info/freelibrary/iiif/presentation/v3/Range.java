@@ -27,7 +27,7 @@ import info.freelibrary.iiif.presentation.v3.properties.Provider;
 import info.freelibrary.iiif.presentation.v3.properties.Rendering;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
-import info.freelibrary.iiif.presentation.v3.properties.StartSelector;
+import info.freelibrary.iiif.presentation.v3.properties.Start;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.RangeBehavior;
@@ -47,11 +47,11 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
 
     private final List<Item> myItems = new ArrayList<>();
 
-    private Optional<AccompanyingCanvas> myAccompanyingCanvas;
+    private AccompanyingCanvas myAccompanyingCanvas;
 
-    private Optional<PlaceholderCanvas> myPlaceholderCanvas;
+    private PlaceholderCanvas myPlaceholderCanvas;
 
-    private Optional<StartSelector> myStartSelector = Optional.empty();
+    private Start myStart;
 
     private SupplementaryAnnotations mySupplementaryAnnotations;
 
@@ -172,7 +172,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
      */
     @JsonGetter(Constants.PLACEHOLDER_CANVAS)
     public Optional<PlaceholderCanvas> getPlaceholderCanvas() {
-        return myPlaceholderCanvas;
+        return Optional.ofNullable(myPlaceholderCanvas);
     }
 
     /**
@@ -183,7 +183,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
      */
     @JsonSetter(Constants.PLACEHOLDER_CANVAS)
     public Range setPlaceholderCanvas(final PlaceholderCanvas aCanvas) {
-        myPlaceholderCanvas = Optional.ofNullable(aCanvas);
+        myPlaceholderCanvas = aCanvas;
         return this;
     }
 
@@ -194,7 +194,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
      */
     @JsonGetter(Constants.ACCOMPANYING_CANVAS)
     public Optional<AccompanyingCanvas> getAccompanyingCanvas() {
-        return myAccompanyingCanvas;
+        return Optional.ofNullable(myAccompanyingCanvas);
     }
 
     /**
@@ -205,7 +205,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
      */
     @JsonSetter(Constants.ACCOMPANYING_CANVAS)
     public Range setAccompanyingCanvas(final AccompanyingCanvas aCanvas) {
-        myAccompanyingCanvas = Optional.ofNullable(aCanvas);
+        myAccompanyingCanvas = aCanvas;
         return this;
     }
 
@@ -237,25 +237,25 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     /**
-     * Sets the optional start selector.
+     * Sets the optional start.
      *
-     * @param aStartSelector A start selector
+     * @param aStart A start
      * @return The range
      */
     @JsonSetter(Constants.START)
-    public Range setStartSelector(final StartSelector aStartSelector) {
-        myStartSelector = Optional.ofNullable(aStartSelector);
+    public Range setStart(final Start aStart) {
+        myStart = aStart;
         return this;
     }
 
     /**
-     * Gets the optional start selector.
+     * Gets the optional start.
      *
-     * @return The optional start selector
+     * @return The optional start
      */
     @JsonGetter(Constants.START)
-    public Optional<StartSelector> getStartSelector() {
-        return myStartSelector;
+    public Optional<Start> getStart() {
+        return Optional.ofNullable(myStart);
     }
 
     /**

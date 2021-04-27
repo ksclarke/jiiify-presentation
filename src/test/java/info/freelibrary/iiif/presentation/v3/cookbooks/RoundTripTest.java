@@ -242,6 +242,19 @@ public class RoundTripTest {
     }
 
     /**
+     * Tests the 0015 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0015-start/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0015Start() throws IOException {
+        final JsonObject expected = getManifest("0015-start");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
      * Compares the expected and found manifests in an order insensitive (JSON string) or an order sensitive
      * (JsonObject) manner, depending on which test property has been set.
      *

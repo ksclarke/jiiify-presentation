@@ -10,8 +10,10 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SequenceWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.json.jackson.DatabindCodec;
 
 /**
  * Utilities for running tests.
@@ -58,8 +60,8 @@ public final class TestUtils {
      * @throws JsonProcessingException If there is a JSON processing problem
      * @throws IOException If there is trouble writing JSON to a StringWriter
      */
-    public static String toJson(final Object aObject, final boolean aIndent) throws JsonProcessingException,
-            IOException {
+    public static String toJson(final Object aObject, final boolean aIndent)
+            throws JsonProcessingException, IOException {
         return toJson(null, aObject, false, aIndent);
     }
 
@@ -119,10 +121,10 @@ public final class TestUtils {
      */
     public static String toJson(final String aName, final Object aObject, final boolean aList, final boolean aIndent)
             throws JsonProcessingException, IOException {
-        final ObjectMapper mapper = new ObjectMapper();
+        final ObjectMapper mapper = DatabindCodec.mapper();
         final StringWriter writer = new StringWriter();
 
-        mapper.findAndRegisterModules();
+        mapper.registerModule(new Jdk8Module().configureAbsentsAsNulls(true));
 
         mapper.configure(SerializationFeature.INDENT_OUTPUT, aIndent);
         mapper.configure(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT, true);

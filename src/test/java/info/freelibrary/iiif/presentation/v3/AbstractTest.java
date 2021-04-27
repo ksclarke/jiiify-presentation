@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.junit.BeforeClass;
 
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.thedeanda.lorem.LoremIpsum;
 
 import io.vertx.core.json.jackson.DatabindCodec;
@@ -27,7 +28,7 @@ public abstract class AbstractTest {
     @BeforeClass
     public static void setUpClass() throws Exception {
         // We need to register the jackson-databind-jdk8 module, among others
-        DatabindCodec.mapper().findAndRegisterModules();
+        DatabindCodec.mapper().registerModule(new Jdk8Module().configureAbsentsAsNulls(true));
 
         // Create an instance of our LoremIpsum generator for test data
         LOREM_IPSUM = LoremIpsum.getInstance();
