@@ -89,10 +89,15 @@ public class PartOf extends AbstractLinkProperty<PartOf> implements Localized<Pa
         return (PartOf) super.setLabel(aLabel);
     }
 
-    @Override
+    /**
+     * Sets the label of the PartOf.
+     *
+     * @param aLabel A PartOf's label
+     * @return The PartOf
+     */
     @JsonIgnore
     public PartOf setLabel(final String aLabel) {
-        return (PartOf) super.setLabel(aLabel);
+        return (PartOf) super.setLabel(new Label(aLabel));
     }
 
     @Override

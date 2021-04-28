@@ -19,12 +19,12 @@ import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 
 /**
- * A link to a machine readable document that semantically describes the resource with the seeAlso property, such as
- * an XML or RDF description. This document could be used for search and discovery or inferencing purposes, or just to
+ * A link to a machine readable document that semantically describes the resource with the seeAlso property, such as an
+ * XML or RDF description. This document could be used for search and discovery or inferencing purposes, or just to
  * provide a longer description of the resource. The profile and format properties of the document should be given to
  * help the client to make appropriate use of the document.
  */
-@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.FORMAT, Constants.LABEL, Constants.PROFILE })
+@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.LABEL, Constants.FORMAT, Constants.PROFILE })
 public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
 
     /**
@@ -105,7 +105,7 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
     }
 
     @Override
-    @JsonGetter(Constants.PROFILE)
+    @JsonIgnore
     public Optional<URI> getProfile() {
         return super.getProfile();
     }
@@ -116,10 +116,15 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
         return (SeeAlso) super.setProfile(aProfile);
     }
 
-    @Override
+    /**
+     * Sets the profile in string form.
+     *
+     * @param aProfile A profile in string form
+     * @return The resource whose profile is being set
+     */
     @JsonSetter(Constants.PROFILE)
     public SeeAlso setProfile(final String aProfile) {
-        return (SeeAlso) super.setProfile(aProfile);
+        return (SeeAlso) super.setProfile(URI.create(aProfile));
     }
 
     /**
@@ -138,20 +143,37 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
         return (SeeAlso) super.setLabel(aLabel);
     }
 
-    @Override
+    /**
+     * Sets the label of the SeeAlso.
+     *
+     * @param aLabel A SeeAlso's label
+     * @return The SeeAlso
+     */
     @JsonIgnore
     public SeeAlso setLabel(final String aLabel) {
-        return (SeeAlso) super.setLabel(aLabel);
+        return (SeeAlso) super.setLabel(new Label(aLabel));
     }
 
-    /**
-     * Returns a JsonObject of this resource.
-     *
-     * @return A JsonObject of this resource
-     */
     @Override
     public JsonObject toJSON() {
         return JsonObject.mapFrom(this);
+    }
+
+    @Override
+    public String toString() {
+        return toJSON().encodePrettily();
+    }
+
+    /**
+     * A private getter that Jackson uses in deserialization.
+     *
+     * @return The SeeAlso's profile URI as a string
+     */
+    @JsonGetter(Constants.PROFILE)
+    @JsonInclude(Include.NON_NULL)
+    private String getProfileAsString() {
+        final Optional<URI> profile = super.getProfile();
+        return profile.isEmpty() ? null : profile.get().toString();
     }
 
     /**

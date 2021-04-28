@@ -27,7 +27,7 @@ import info.freelibrary.iiif.presentation.v3.services.Service;
  */
 @JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.THUMBNAIL, Constants.FORMAT, Constants.LANGUAGE })
 public class DatasetContent extends AbstractContentResource<DatasetContent>
-    implements Thumbnail, Resource<DatasetContent> {
+        implements Thumbnail, Resource<DatasetContent> {
 
     /**
      * Creates a dataset content resource.

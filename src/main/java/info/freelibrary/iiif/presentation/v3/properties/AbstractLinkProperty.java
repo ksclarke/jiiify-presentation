@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.net.URI;
 import java.util.Objects;
@@ -205,18 +205,6 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> {
     }
 
     /**
-     * Sets the profile in string form.
-     *
-     * @param aProfile A profile in string form
-     * @return The resource whose profile is being set
-     */
-    @JsonIgnore
-    protected AbstractLinkProperty<T> setProfile(final String aProfile) {
-        myProfile = URI.create(aProfile);
-        return this;
-    }
-
-    /**
      * Gets a descriptive label.
      *
      * @return A descriptive label
@@ -236,18 +224,6 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> {
     @JsonSetter(Constants.LABEL)
     protected AbstractLinkProperty<T> setLabel(final Label aLabel) {
         myLabel = checkNotNull(aLabel);
-        return this;
-    }
-
-    /**
-     * Sets the descriptive label in string form.
-     *
-     * @param aLabel A descriptive label in string form
-     * @return The resource whose label is being set
-     */
-    @JsonIgnore
-    protected AbstractLinkProperty<T> setLabel(final String aLabel) {
-        myLabel = new Label(aLabel);
         return this;
     }
 

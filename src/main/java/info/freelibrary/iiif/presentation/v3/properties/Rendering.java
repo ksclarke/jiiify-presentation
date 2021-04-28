@@ -92,7 +92,12 @@ public class Rendering extends AbstractLinkProperty<Rendering> implements Locali
         return (Rendering) super.setLabel(aLabel);
     }
 
-    @Override
+    /**
+     * Sets the label of the rendering.
+     *
+     * @param aLabel A rendering's label
+     * @return The rendering
+     */
     @JsonIgnore
     public Rendering setLabel(final String aLabel) {
         return (Rendering) super.setLabel(new Label(aLabel));

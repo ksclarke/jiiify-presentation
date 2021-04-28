@@ -34,7 +34,7 @@ import io.vertx.core.json.JsonObject;
  */
 @JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.LABEL, Constants.HEIGHT, Constants.WIDTH,
     Constants.DURATION, Constants.THUMBNAIL, Constants.PLACEHOLDER_CANVAS, Constants.ACCOMPANYING_CANVAS,
-    Constants.ITEMS, Constants.ANNOTATIONS })
+    Constants.METADATA, Constants.ITEMS, Constants.ANNOTATIONS })
 abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableResource<AbstractCanvas<T>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractCanvas.class, MessageCodes.BUNDLE);
@@ -43,15 +43,15 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
 
     private static final String TEMPORAL = "temporal";
 
+    private List<AnnotationPage<PaintingAnnotation>> myPaintingPageList;
+
+    private List<AnnotationPage<SupplementingAnnotation>> mySupplementingPageList;
+
     private float myDuration;
 
     private int myWidth;
 
     private int myHeight;
-
-    private List<AnnotationPage<PaintingAnnotation>> myPaintingPageList;
-
-    private List<AnnotationPage<SupplementingAnnotation>> mySupplementingPageList;
 
     /**
      * Creates a new canvas.

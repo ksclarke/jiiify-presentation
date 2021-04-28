@@ -47,7 +47,7 @@ import io.vertx.core.json.jackson.DatabindCodec;
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.ID, Constants.TYPE, Constants.LABEL, Constants.PROVIDER,
     Constants.PART_OF, Constants.BEHAVIOR, Constants.HOMEPAGE, Constants.THUMBNAIL, Constants.SUMMARY,
     Constants.METADATA, Constants.START, Constants.RIGHTS, Constants.REQUIRED_STATEMENT, Constants.VIEWING_DIRECTION,
-    Constants.ITEMS, Constants.SERVICE })
+    Constants.RENDERING, Constants.SEE_ALSO, Constants.ITEMS, Constants.SERVICE })
 abstract class AbstractResource<T extends AbstractResource<T>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractResource.class, MessageCodes.BUNDLE);

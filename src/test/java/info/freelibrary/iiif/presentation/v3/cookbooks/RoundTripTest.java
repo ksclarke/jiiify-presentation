@@ -255,6 +255,97 @@ public class RoundTripTest {
     }
 
     /**
+     * Tests the 0024 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0024-book-4-toc/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0024Book4Toc() throws IOException {
+        final JsonObject expected = getManifest("0024-book-4-toc");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
+     * Tests the 0026 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0026-toc-opera/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0026TocOpera() throws IOException {
+        final JsonObject expected = getManifest("0026-toc-opera");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
+     * Tests the 0029 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0029-metadata-anywhere/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0029MetadataAnywhere() throws IOException {
+        final JsonObject expected = getManifest("0029-metadata-anywhere");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
+     * Tests the 0030 v1 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0030-multi-volume/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0030MultiVolumeV1() throws IOException {
+        final JsonObject expected = getManifest("0030-multi-volume_v1");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
+     * Tests the 0030 v2 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0030-multi-volume/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0030MultiVolumeV2() throws IOException {
+        final JsonObject expected = getManifest("0030-multi-volume_v2");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
+     * Tests the 0046 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0046-rendering/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0046Rendering() throws IOException {
+        final JsonObject expected = getManifest("0046-rendering");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
+     * Tests the 0053 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0053-seeAlso/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0053SeeAlso() throws IOException {
+        final JsonObject expected = getManifest("0053-seeAlso");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
      * Compares the expected and found manifests in an order insensitive (JSON string) or an order sensitive
      * (JsonObject) manner, depending on which test property has been set.
      *
