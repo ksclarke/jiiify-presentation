@@ -4,27 +4,27 @@ package info.freelibrary.iiif.presentation.v3.services;
 import java.net.URI;
 
 /**
- * Interface for image services.
+ * An interface for authentication services.
  */
-public interface ImageService extends Service {
+public interface AuthService extends Service {
 
     /**
-     * Gets the image service profile as a string.
+     * Gets the auth service profile as a string.
      *
      * @return The profile in string form
      */
     String getProfile();
 
     /**
-     * Sets the image service profile.
+     * Sets the auth service profile.
      *
      * @param aProfile The profile
-     * @return The image service
+     * @return The auth service
      */
-    ImageService setProfile(Profile aProfile);
+    AuthService setProfile(Profile aProfile);
 
     /**
-     * Interface for {@link ImageService} profiles.
+     * Interface for {@link AuthService} profiles.
      */
     public interface Profile {
 
@@ -43,5 +43,4 @@ public interface ImageService extends Service {
         URI uri();
 
     }
-
 }

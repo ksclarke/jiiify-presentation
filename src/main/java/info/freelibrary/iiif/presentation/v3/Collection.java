@@ -48,6 +48,8 @@ public class Collection extends NavigableResource<Collection> implements Resourc
 
     private ViewingDirection myViewingDirection;
 
+    private List<Service> myServiceDefinitions;
+
     private List<Item> myItems;
 
     /**
@@ -81,7 +83,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      * @param aProvider A resource provider
      */
     public Collection(final String aID, final String aLabel, final List<Metadata> aMetadataList, final String aSummary,
-        final Thumbnail aThumbnail, final Provider aProvider) {
+            final Thumbnail aThumbnail, final Provider aProvider) {
         super(ResourceTypes.COLLECTION, aID, aLabel, aMetadataList, aSummary, aThumbnail, aProvider);
     }
 
@@ -96,7 +98,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      * @param aProvider A resource provider
      */
     public Collection(final URI aID, final Label aLabel, final List<Metadata> aMetadataList, final Summary aSummary,
-        final Thumbnail aThumbnail, final Provider aProvider) {
+            final Thumbnail aThumbnail, final Provider aProvider) {
         super(ResourceTypes.COLLECTION, aID, aLabel, aMetadataList, aSummary, aThumbnail, aProvider);
     }
 
@@ -288,6 +290,48 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     @Override
     public Collection setServices(final List<Service> aServiceList) {
         return (Collection) super.setServices(aServiceList);
+    }
+
+    /**
+     * Sets the services referenced by different parts of the collection document.
+     *
+     * @param aServicesArray An array of services
+     * @return The collection document
+     */
+    @JsonIgnore
+    public Collection setServiceDefinitions(final Service... aServicesArray) {
+        return setServiceDefinitions(Arrays.asList(aServicesArray));
+    }
+
+    /**
+     * Sets the services referenced by different parts of the collection document.
+     *
+     * @param aServicesList A list of services
+     * @return The collection document
+     */
+    @JsonSetter(Constants.SERVICES)
+    public Collection setServiceDefinitions(final List<Service> aServicesList) {
+        final List<Service> servicesList = getServiceDefinitions();
+
+        checkNotNull(aServicesList);
+        servicesList.clear();
+        servicesList.addAll(aServicesList);
+
+        return this;
+    }
+
+    /**
+     * Gets the services referenced by different parts of the collection document.
+     *
+     * @return A list of services referenced by different parts of the collection document
+     */
+    @JsonGetter(Constants.SERVICES)
+    public List<Service> getServiceDefinitions() {
+        if (myServiceDefinitions == null) {
+            myServiceDefinitions = new ArrayList<>();
+        }
+
+        return myServiceDefinitions;
     }
 
     @Override

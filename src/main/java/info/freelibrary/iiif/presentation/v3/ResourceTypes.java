@@ -35,6 +35,8 @@ public final class ResourceTypes {
 
     public static final String TEXT = "Text";
 
+    public static final String TEXTUAL_BODY = "TextualBody";
+
     public static final String VIDEO = "Video";
 
     public static final String AGENT = "Agent";
@@ -42,6 +44,12 @@ public final class ResourceTypes {
     public static final String IMAGE_SERVICE_2 = "ImageService2";
 
     public static final String IMAGE_SERVICE_3 = "ImageService3";
+
+    public static final String AUTH_COOKIE_SERVICE_1 = "AuthCookieService1";
+
+    public static final String AUTH_TOKEN_SERVICE_1 = "AuthTokenService1";
+
+    public static final String AUTH_LOGOUT_SERVICE_1 = "AuthLogoutService1";
 
     public static final String PHYSICAL_DIMS_SERVICE = "PhysicalDimsService";
 

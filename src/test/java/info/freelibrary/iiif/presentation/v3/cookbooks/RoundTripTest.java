@@ -346,6 +346,20 @@ public class RoundTripTest {
     }
 
     /**
+     * Tests the example manifest from the specification (cf.
+     * https://iiif.io/api/presentation/3.0/#b-example-manifest-response)
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void testSpecExample() throws IOException {
+        final JsonObject expected = getManifest("spec-example");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
      * Compares the expected and found manifests in an order insensitive (JSON string) or an order sensitive
      * (JsonObject) manner, depending on which test property has been set.
      *

@@ -39,8 +39,8 @@
                 "service": [
                   {
                     "id": "https://iiif.io/api/image/3.0/example/reference/8c169124171e6b2253b698a22a938f07-21198-zz001hbmd9_1300412_master",
-                    "profile": "level1",
-                    "type": "ImageService3"
+                    "type": "ImageService3",
+                    "profile": "level1"
                   }
                 ]
               },
@@ -78,8 +78,8 @@
                 "service": [
                   {
                     "id": "https://iiif.io/api/image/3.0/example/reference/8c169124171e6b2253b698a22a938f07-21198-zz001hbmft_1300418_master",
-                    "profile": "level1",
-                    "type": "ImageService3"
+                    "type": "ImageService3",
+                    "profile": "level1"
                   }
                 ]
               },
@@ -117,8 +117,8 @@
                 "service": [
                   {
                     "id": "https://iiif.io/api/image/3.0/example/reference/8c169124171e6b2253b698a22a938f07-21198-zz001hbmgb_1300426_master",
-                    "profile": "level1",
-                    "type": "ImageService3"
+                    "type": "ImageService3",
+                    "profile": "level1"
                   }
                 ]
               },
@@ -156,8 +156,8 @@
                 "service": [
                   {
                     "id": "https://iiif.io/api/image/3.0/example/reference/8c169124171e6b2253b698a22a938f07-21198-zz001hbmhv_1300436_master",
-                    "profile": "level1",
-                    "type": "ImageService3"
+                    "type": "ImageService3",
+                    "profile": "level1"
                   }
                 ]
               },

@@ -55,8 +55,8 @@
                 "service": [
                   {
                     "id": "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_001",
-                    "profile": "level1",
-                    "type": "ImageService3"
+                    "type": "ImageService3",
+                    "profile": "level1"
                   }
                 ]
               },
@@ -94,8 +94,8 @@
                 "service": [
                   {
                     "id": "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_002",
-                    "profile": "level1",
-                    "type": "ImageService3"
+                    "type": "ImageService3",
+                    "profile": "level1"
                   }
                 ]
               },
@@ -133,8 +133,8 @@
                 "service": [
                   {
                     "id": "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_003",
-                    "profile": "level1",
-                    "type": "ImageService3"
+                    "type": "ImageService3",
+                    "profile": "level1"
                   }
                 ]
               },
@@ -172,8 +172,8 @@
                 "service": [
                   {
                     "id": "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_004",
-                    "profile": "level1",
-                    "type": "ImageService3"
+                    "type": "ImageService3",
+                    "profile": "level1"
                   }
                 ]
               },
@@ -211,8 +211,8 @@
                 "service": [
                   {
                     "id": "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_005",
-                    "profile": "level1",
-                    "type": "ImageService3"
+                    "type": "ImageService3",
+                    "profile": "level1"
                   }
                 ]
               },

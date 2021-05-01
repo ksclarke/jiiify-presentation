@@ -92,8 +92,8 @@
                 "service": [
                   {
                     "id": "https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother",
-                    "profile": "level1",
-                    "type": "ImageService3"
+                    "type": "ImageService3",
+                    "profile": "level1"
                   }
                 ]
               },

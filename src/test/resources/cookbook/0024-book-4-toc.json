@@ -36,8 +36,8 @@
                 "service": [
                   {
                     "id": "https://iiif.io/api/image/3.0/example/reference/d3bbf5397c6df6b894c5991195c912ab-1-21198-zz001d8m41_774608_master",
-                    "profile": "level1",
-                    "type": "ImageService3"
+                    "type": "ImageService3",
+                    "profile": "level1"
                   }
                 ]
               },
@@ -75,8 +75,8 @@
                 "service": [
                   {
                     "id": "https://iiif.io/api/image/3.0/example/reference/d3bbf5397c6df6b894c5991195c912ab-2-21198-zz001d8m5j_774612_master",
-                    "profile": "level1",
-                    "type": "ImageService3"
+                    "type": "ImageService3",
+                    "profile": "level1"
                   }
                 ]
               },
@@ -114,8 +114,8 @@
                 "service": [
                   {
                     "id": "https://iiif.io/api/image/3.0/example/reference/d3bbf5397c6df6b894c5991195c912ab-3-21198-zz001d8tm5_775004_master",
-                    "profile": "level1",
-                    "type": "ImageService3"
+                    "type": "ImageService3",
+                    "profile": "level1"
                   }
                 ]
               },
@@ -153,8 +153,8 @@
                 "service": [
                   {
                     "id": "https://iiif.io/api/image/3.0/example/reference/d3bbf5397c6df6b894c5991195c912ab-4-21198-zz001d8tnp_775007_master",
-                    "profile": "level1",
-                    "type": "ImageService3"
+                    "type": "ImageService3",
+                    "profile": "level1"
                   }
                 ]
               },
@@ -192,8 +192,8 @@
                 "service": [
                   {
                     "id": "https://iiif.io/api/image/3.0/example/reference/d3bbf5397c6df6b894c5991195c912ab-5-21198-zz001d8v6f_775077_master",
-                    "profile": "level1",
-                    "type": "ImageService3"
+                    "type": "ImageService3",
+                    "profile": "level1"
                   }
                 ]
               },
@@ -231,8 +231,8 @@
                 "service": [
                   {
                     "id": "https://iiif.io/api/image/3.0/example/reference/d3bbf5397c6df6b894c5991195c912ab-6-21198-zz001d8v7z_775085_master",
-                    "profile": "level1",
-                    "type": "ImageService3"
+                    "type": "ImageService3",
+                    "profile": "level1"
                   }
                 ]
               },

@@ -80,7 +80,7 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to target
      */
     protected <C extends CanvasResource<C>> Annotation(final URI aID, final CanvasResource<C> aCanvas,
-        final MediaFragmentSelector aCanvasRegion) {
+            final MediaFragmentSelector aCanvasRegion) {
         super(ResourceTypes.ANNOTATION, aID);
         myTargetSpecificResource = new SpecificResource(aCanvas.getID(), aCanvasRegion);
     }
@@ -93,7 +93,7 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to target
      */
     protected <C extends CanvasResource<C>> Annotation(final URI aID, final CanvasResource<C> aCanvas,
-        final String aCanvasRegion) {
+            final String aCanvasRegion) {
         this(aID, aCanvas, new MediaFragmentSelector(aCanvasRegion));
     }
 
@@ -412,6 +412,9 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
                 break;
             case ResourceTypes.CANVAS:
                 getBody().add(mapper.convertValue(aMap, CanvasContent.class));
+                break;
+            case ResourceTypes.TEXTUAL_BODY:
+                getBody().add(mapper.convertValue(aMap, TextualBody.class));
                 break;
             default:
                 LOGGER.warn(MessageCodes.JPA_052, type);

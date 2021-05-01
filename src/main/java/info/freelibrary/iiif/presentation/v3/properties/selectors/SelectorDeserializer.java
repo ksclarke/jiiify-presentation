@@ -12,10 +12,11 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+
+import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * A deserializer for classes that implement the Selector interface.
@@ -46,8 +47,8 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
     }
 
     @Override
-    public Selector deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException,
-            JsonProcessingException {
+    public Selector deserialize(final JsonParser aParser, final DeserializationContext aContext)
+            throws IOException, JsonProcessingException {
         final JsonNode node = aParser.getCodec().readTree(aParser);
         final JsonNode typeNode = node.get(Constants.TYPE);
 
@@ -59,20 +60,27 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
                     return new VisualContentSelector();
                 case "FragmentSelector":
                     final String fragment = node.get(Constants.VALUE).asText();
-                    final String conformsToString = node.get(Constants.CONFORMS_TO).asText();
-                    final URI conformsTo;
+                    final JsonNode conformsToNode = node.get(Constants.CONFORMS_TO);
 
-                    try {
-                        conformsTo = new URI(conformsToString);
-                    } catch (final URISyntaxException details) {
-                        throw new JsonMappingException(aParser, details.getMessage(), details);
-                    }
+                    // Fragment selectors SHOULD have a conformsTo but aren't required to have one
+                    if (conformsToNode != null) {
+                        final String conformsToString = conformsToNode.asText();
+                        final URI conformsTo;
 
-                    if (Constants.MEDIA_FRAGMENT_SPECIFICATION_URI.equals(conformsTo)) {
-                        return new MediaFragmentSelector(fragment);
+                        try {
+                            conformsTo = new URI(conformsToString);
+                        } catch (final URISyntaxException details) {
+                            throw new JsonMappingException(aParser, details.getMessage(), details);
+                        }
+
+                        if (Constants.MEDIA_FRAGMENT_SPECIFICATION_URI.equals(conformsTo)) {
+                            return new MediaFragmentSelector(fragment);
+                        } else {
+                            throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_061, conformsTo),
+                                    aParser.getCurrentLocation());
+                        }
                     } else {
-                        throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_061, conformsTo),
-                                aParser.getCurrentLocation());
+                        return new MediaFragmentSelector(fragment);
                     }
                 case "ImageApiSelector":
                     final String size = getText(node, ImageApiSelector.SIZE, ImageApiSelector.DEFAULT_SIZE);

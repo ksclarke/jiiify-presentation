@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,17 +52,21 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
 
     private final List<URI> myContexts = Stream.of(Constants.CONTEXT_URI).collect(Collectors.toList());
 
+    private List<AnnotationPage<? extends Annotation<?>>> myAnnotations;
+
     private AccompanyingCanvas myAccompanyingCanvas;
 
     private PlaceholderCanvas myPlaceholderCanvas;
 
-    private Start myStart;
-
     private ViewingDirection myViewingDirection;
+
+    private List<Service> myServiceDefinitions;
 
     private List<Canvas> myCanvases;
 
     private List<Range> myRanges;
+
+    private Start myStart;
 
     /**
      * Creates a new manifest.
@@ -529,6 +535,48 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
         return (Manifest) super.setServices(aServiceList);
     }
 
+    /**
+     * Sets the services referenced by different parts of the manifest.
+     *
+     * @param aServicesArray An array of services
+     * @return The manifest
+     */
+    @JsonIgnore
+    public Manifest setServiceDefinitions(final Service... aServicesArray) {
+        return setServiceDefinitions(Arrays.asList(aServicesArray));
+    }
+
+    /**
+     * Sets the services referenced by different parts of the manifest.
+     *
+     * @param aServicesList A list of services
+     * @return The manifest
+     */
+    @JsonSetter(Constants.SERVICES)
+    public Manifest setServiceDefinitions(final List<Service> aServicesList) {
+        final List<Service> servicesList = getServiceDefinitions();
+
+        checkNotNull(aServicesList);
+        servicesList.clear();
+        servicesList.addAll(aServicesList);
+
+        return this;
+    }
+
+    /**
+     * Gets the services referenced by different parts of the manifest.
+     *
+     * @return A list of services referenced by different parts of the manifest
+     */
+    @JsonGetter(Constants.SERVICES)
+    public List<Service> getServiceDefinitions() {
+        if (myServiceDefinitions == null) {
+            myServiceDefinitions = new ArrayList<>();
+        }
+
+        return myServiceDefinitions;
+    }
+
     @Override
     public Manifest setPartOfs(final PartOf... aPartOfArray) {
         return (Manifest) super.setPartOfs(aPartOfArray);
@@ -627,6 +675,49 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     @Override
     public Manifest setLabel(final Label aLabel) {
         return (Manifest) super.setLabel(aLabel);
+    }
+
+    /**
+     * Sets the manifest's annotation pages.
+     *
+     * @param aAnnotationPageList A list of annotation pages
+     * @return This manifest
+     */
+    @JsonSetter(Constants.ANNOTATIONS)
+    public Manifest setAnnotations(final List<AnnotationPage<? extends Annotation<?>>> aAnnotationPageList) {
+        final List<AnnotationPage<? extends Annotation<?>>> annotations = getAnnotations();
+
+        checkNotNull(aAnnotationPageList);
+        annotations.clear();
+        annotations.addAll(aAnnotationPageList);
+
+        return this;
+    }
+
+    /**
+     * Sets the manifest's annotation pages.
+     *
+     * @param aAnnotationPageList A list of annotation pages
+     * @return This manifest
+     */
+    @JsonIgnore
+    public Manifest setAnnotations(final AnnotationPage<? extends Annotation<?>>... aAnnotationPageList) {
+        setAnnotations(List.of(aAnnotationPageList));
+        return this;
+    }
+
+    /**
+     * Gets the manifest's annotation pages.
+     *
+     * @return This manifest's annotation pages
+     */
+    @JsonGetter(Constants.ANNOTATIONS)
+    public List<AnnotationPage<? extends Annotation<?>>> getAnnotations() {
+        if (myAnnotations == null) {
+            myAnnotations = new ArrayList<>();
+        }
+
+        return myAnnotations;
     }
 
     /**

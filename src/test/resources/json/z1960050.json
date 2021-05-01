@@ -18,8 +18,8 @@
       "service": [
         {
           "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1d79t3q",
-          "profile": "level2",
-          "type": "ImageService3"
+          "type": "ImageService3",
+          "profile": "level2"
         }
       ]
     }
@@ -131,8 +131,8 @@
                     "service": [
                       {
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1d79t3q",
-                        "profile": "level2",
-                        "type": "ImageService3"
+                        "type": "ImageService3",
+                        "profile": "level2"
                       }
                     ]
                   },
@@ -150,8 +150,8 @@
                     "service": [
                       {
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz18g92cc",
-                        "profile": "level2",
-                        "type": "ImageService3"
+                        "type": "ImageService3",
+                        "profile": "level2"
                       }
                     ]
                   },
@@ -169,8 +169,8 @@
                     "service": [
                       {
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1w672gs",
-                        "profile": "level2",
-                        "type": "ImageService3"
+                        "type": "ImageService3",
+                        "profile": "level2"
                       }
                     ]
                   },
@@ -188,8 +188,8 @@
                     "service": [
                       {
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1rj5167",
-                        "profile": "level2",
-                        "type": "ImageService3"
+                        "type": "ImageService3",
+                        "profile": "level2"
                       }
                     ]
                   },
@@ -207,8 +207,8 @@
                     "service": [
                       {
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1ms48gh",
-                        "profile": "level2",
-                        "type": "ImageService3"
+                        "type": "ImageService3",
+                        "profile": "level2"
                       }
                     ]
                   },
@@ -226,8 +226,8 @@
                     "service": [
                       {
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1h13hqn",
-                        "profile": "level2",
-                        "type": "ImageService3"
+                        "type": "ImageService3",
+                        "profile": "level2"
                       }
                     ]
                   },
@@ -245,8 +245,8 @@
                     "service": [
                       {
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1c82s0b",
-                        "profile": "level2",
-                        "type": "ImageService3"
+                        "type": "ImageService3",
+                        "profile": "level2"
                       }
                     ]
                   },
@@ -264,8 +264,8 @@
                     "service": [
                       {
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz13r18m5",
-                        "profile": "level2",
-                        "type": "ImageService3"
+                        "type": "ImageService3",
+                        "profile": "level2"
                       }
                     ]
                   },
@@ -283,8 +283,8 @@
                     "service": [
                       {
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1ks7787",
-                        "profile": "level2",
-                        "type": "ImageService3"
+                        "type": "ImageService3",
+                        "profile": "level2"
                       }
                     ]
                   },
@@ -302,8 +302,8 @@
                     "service": [
                       {
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1b85qvj",
-                        "profile": "level2",
-                        "type": "ImageService3"
+                        "type": "ImageService3",
+                        "profile": "level2"
                       }
                     ]
                   },
@@ -321,8 +321,8 @@
                     "service": [
                       {
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz16h5052",
-                        "profile": "level2",
-                        "type": "ImageService3"
+                        "type": "ImageService3",
+                        "profile": "level2"
                       }
                     ]
                   },
@@ -340,8 +340,8 @@
                     "service": [
                       {
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1pk0xvb",
-                        "profile": "level2",
-                        "type": "ImageService3"
+                        "type": "ImageService3",
+                        "profile": "level2"
                       }
                     ]
                   },
@@ -359,8 +359,8 @@
                     "service": [
                       {
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1d22dbh",
-                        "profile": "level2",
-                        "type": "ImageService3"
+                        "type": "ImageService3",
+                        "profile": "level2"
                       }
                     ]
                   },
@@ -378,8 +378,8 @@
                     "service": [
                       {
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz14m9m97",
-                        "profile": "level2",
-                        "type": "ImageService3"
+                        "type": "ImageService3",
+                        "profile": "level2"
                       }
                     ]
                   }
@@ -434,8 +434,8 @@
                     "service": [
                       {
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1w38c11",
-                        "profile": "level2",
-                        "type": "ImageService3"
+                        "type": "ImageService3",
+                        "profile": "level2"
                       }
                     ]
                   },
@@ -453,8 +453,8 @@
                     "service": [
                       {
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1rb7m99",
-                        "profile": "level2",
-                        "type": "ImageService3"
+                        "type": "ImageService3",
+                        "profile": "level2"
                       }
                     ]
                   },
@@ -472,8 +472,8 @@
                     "service": [
                       {
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1c542k0",
-                        "profile": "level2",
-                        "type": "ImageService3"
+                        "type": "ImageService3",
+                        "profile": "level2"
                       }
                     ]
                   },
@@ -491,8 +491,8 @@
                     "service": [
                       {
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz17d39wq",
-                        "profile": "level2",
-                        "type": "ImageService3"
+                        "type": "ImageService3",
+                        "profile": "level2"
                       }
                     ]
                   },
@@ -510,8 +510,8 @@
                     "service": [
                       {
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz13n2k3h",
-                        "profile": "level2",
-                        "type": "ImageService3"
+                        "type": "ImageService3",
+                        "profile": "level2"
                       }
                     ]
                   },
@@ -529,8 +529,8 @@
                     "service": [
                       {
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1zw22m6",
-                        "profile": "level2",
-                        "type": "ImageService3"
+                        "type": "ImageService3",
+                        "profile": "level2"
                       }
                     ]
                   },
@@ -548,8 +548,8 @@
                     "service": [
                       {
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1v419ws",
-                        "profile": "level2",
-                        "type": "ImageService3"
+                        "type": "ImageService3",
+                        "profile": "level2"
                       }
                     ]
                   },
@@ -567,8 +567,8 @@
                     "service": [
                       {
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1kk9th3",
-                        "profile": "level2",
-                        "type": "ImageService3"
+                        "type": "ImageService3",
+                        "profile": "level2"
                       }
                     ]
                   },
@@ -586,8 +586,8 @@
                     "service": [
                       {
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz12n5hzq",
-                        "profile": "level2",
-                        "type": "ImageService3"
+                        "type": "ImageService3",
+                        "profile": "level2"
                       }
                     ]
                   },
@@ -605,8 +605,8 @@
                     "service": [
                       {
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1t448sv",
-                        "profile": "level2",
-                        "type": "ImageService3"
+                        "type": "ImageService3",
+                        "profile": "level2"
                       }
                     ]
                   },
@@ -624,8 +624,8 @@
                     "service": [
                       {
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1pc3j30",
-                        "profile": "level2",
-                        "type": "ImageService3"
+                        "type": "ImageService3",
+                        "profile": "level2"
                       }
                     ]
                   },
@@ -643,8 +643,8 @@
                     "service": [
                       {
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz15d97j2",
-                        "profile": "level2",
-                        "type": "ImageService3"
+                        "type": "ImageService3",
+                        "profile": "level2"
                       }
                     ]
                   },
@@ -662,8 +662,8 @@
                     "service": [
                       {
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1vx0z84",
-                        "profile": "level2",
-                        "type": "ImageService3"
+                        "type": "ImageService3",
+                        "profile": "level2"
                       }
                     ]
                   },
@@ -681,8 +681,8 @@
                     "service": [
                       {
                         "id": "https://sinai-images.library.ucla.edu/iiif/ark:%2F21198%2Fz1mg8563",
-                        "profile": "level2",
-                        "type": "ImageService3"
+                        "type": "ImageService3",
+                        "profile": "level2"
                       }
                     ]
                   }

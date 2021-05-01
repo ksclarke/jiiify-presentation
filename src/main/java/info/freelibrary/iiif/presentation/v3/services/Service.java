@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation.v3.services;
 
 import java.net.URI;
+import java.util.List;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
@@ -19,9 +20,49 @@ public interface Service {
     URI getID();
 
     /**
+     * Sets the service ID.
+     *
+     * @param aID The service ID
+     * @return The service
+     */
+    Service setID(URI aID);
+
+    /**
+     * Sets the service ID in string form.
+     *
+     * @param aID The service ID in string form
+     * @return The service
+     */
+    Service setID(String aID);
+
+    /**
      * Gets the service type.
      *
      * @return The type
      */
     String getType();
+
+    /**
+     * Sets other services that are related to this service.
+     *
+     * @param aServiceList A list of services
+     * @return This service
+     */
+    Service setServices(List<Service> aServiceList);
+
+    /**
+     * Sets other services that are related to this service.
+     *
+     * @param aServiceArray An array of services
+     * @return This service
+     */
+    Service setServices(Service... aServiceArray);
+
+    /**
+     * Gets other services that are related to this service.
+     *
+     * @return A list of services
+     */
+    List<Service> getServices();
+
 }

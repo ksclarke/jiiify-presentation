@@ -1,13 +1,10 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URL;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
@@ -66,6 +63,7 @@ public class ImageService3 extends AbstractImageService implements ImageService 
      */
     @SuppressWarnings("unused")
     private ImageService3() {
+        super();
     }
 
     @Override
@@ -85,7 +83,7 @@ public class ImageService3 extends AbstractImageService implements ImageService 
      * @return The image service
      */
     @JsonSetter(Constants.PROFILE)
-    private ImageService3 setProfile(final String aProfile) {
+    private ImageService setProfile(final String aProfile) {
         myProfile = Profile.fromString(aProfile);
         return this;
     }
@@ -128,16 +126,6 @@ public class ImageService3 extends AbstractImageService implements ImageService 
             return URI.create(myProfile);
         }
 
-        @Override
-        public URL url() {
-            try {
-                return new URL(myProfile);
-            } catch (final MalformedURLException details) {
-                LOGGER.error(details, details.getMessage());
-                throw new I18nRuntimeException(details); // Should not be possible
-            }
-        }
-
         /**
          * Creates an image service profile from a string value.
          *
@@ -153,7 +141,7 @@ public class ImageService3 extends AbstractImageService implements ImageService 
             }
 
             throw new IllegalArgumentException(
-                LOGGER.getMessage(MessageCodes.JPA_109, aProfile, ResourceTypes.IMAGE_SERVICE_3));
+                    LOGGER.getMessage(MessageCodes.JPA_109, aProfile, ResourceTypes.IMAGE_SERVICE_3));
         }
     }
 

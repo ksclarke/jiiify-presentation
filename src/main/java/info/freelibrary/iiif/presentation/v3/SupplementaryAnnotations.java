@@ -7,12 +7,14 @@ import java.net.URI;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 /**
  * A link from a Range to an Annotation Collection that includes the supplementing Annotations of content resources for
  * the Range.
  */
+@JsonPropertyOrder({ Constants.ID, Constants.TYPE })
 public class SupplementaryAnnotations {
 
     private URI myID;

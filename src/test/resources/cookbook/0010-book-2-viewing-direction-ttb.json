@@ -42,8 +42,8 @@
                 "service": [
                   {
                     "id": "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_02",
-                    "profile": "level1",
-                    "type": "ImageService3"
+                    "type": "ImageService3",
+                    "profile": "level1"
                   }
                 ]
               },
@@ -81,8 +81,8 @@
                 "service": [
                   {
                     "id": "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_03",
-                    "profile": "level1",
-                    "type": "ImageService3"
+                    "type": "ImageService3",
+                    "profile": "level1"
                   }
                 ]
               },
@@ -120,8 +120,8 @@
                 "service": [
                   {
                     "id": "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_04",
-                    "profile": "level1",
-                    "type": "ImageService3"
+                    "type": "ImageService3",
+                    "profile": "level1"
                   }
                 ]
               },
@@ -159,8 +159,8 @@
                 "service": [
                   {
                     "id": "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_05",
-                    "profile": "level1",
-                    "type": "ImageService3"
+                    "type": "ImageService3",
+                    "profile": "level1"
                   }
                 ]
               },

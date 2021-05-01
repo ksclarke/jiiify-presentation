@@ -5,10 +5,9 @@ import java.net.URI;
 import java.util.LinkedHashMap;
 import java.util.Optional;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.net.MediaType;
@@ -23,18 +22,16 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 /**
  * A generic service class for other service implementations.
  */
-@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.PROFILE })
-public class GenericService implements Service {
+@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.PROFILE, Constants.FORMAT })
+public class GenericService extends AbstractService implements Service {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GenericService.class, MessageCodes.BUNDLE);
 
-    private URI myID;
+    @JsonProperty(Constants.PROFILE)
+    protected URI myProfile;
 
-    private URI myProfile;
-
-    private final String myType;
-
-    private Optional<MediaType> myFormat = Optional.ofNullable(null);
+    @JsonProperty(Constants.FORMAT)
+    protected MediaType myFormat;
 
     /**
      * Creates a service for the supplied URI.
@@ -58,17 +55,12 @@ public class GenericService implements Service {
         myType = aType;
     }
 
-    @Override
-    @JsonGetter(Constants.TYPE)
-    public String getType() {
-        return myType;
-    }
-
     /**
      * Gets the profile URI for this service.
      *
      * @return The profile URI for this service
      */
+    @JsonIgnore
     public URI getProfile() {
         return myProfile;
     }
@@ -79,6 +71,7 @@ public class GenericService implements Service {
      * @param aProfile A profile URI for this service
      * @return This service
      */
+    @JsonIgnore
     public GenericService setProfile(final URI aProfile) {
         myProfile = aProfile;
         return this;
@@ -90,41 +83,22 @@ public class GenericService implements Service {
      * @param aProfile A profile URI, in string form, for this service
      * @return This service
      */
+    @JsonIgnore
     public GenericService setProfile(final String aProfile) {
         myProfile = URI.create(aProfile);
         return this;
     }
 
-    /**
-     * Gets the ID of this service link.
-     *
-     * @return The ID of this service link.
-     */
     @Override
-    public URI getID() {
-        return myID;
-    }
-
-    /**
-     * Sets the ID for this service link.
-     *
-     * @param aID The ID for this service link
-     * @return This service
-     */
+    @JsonIgnore
     public GenericService setID(final URI aID) {
-        myID = aID;
-        return this;
+        return (GenericService) super.setID(aID);
     }
 
-    /**
-     * Sets the ID for this service link.
-     *
-     * @param aID The ID, in string form, for this service link
-     * @return This service
-     */
+    @Override
+    @JsonIgnore
     public GenericService setID(final String aID) {
-        myID = URI.create(aID);
-        return this;
+        return (GenericService) super.setID(aID);
     }
 
     /**
@@ -133,7 +107,7 @@ public class GenericService implements Service {
      * @param aMediaType A string representation of media type or file extension
      * @return The Service
      */
-    @JsonSetter(Constants.FORMAT)
+    @JsonIgnore
     public GenericService setFormat(final String aMediaType) {
         setMediaTypeFromExt(aMediaType);
         return this;
@@ -147,7 +121,7 @@ public class GenericService implements Service {
      */
     @JsonIgnore
     public GenericService setFormatMediaType(final MediaType aMediaType) {
-        myFormat = Optional.ofNullable(aMediaType);
+        myFormat = aMediaType;
         return this;
     }
 
@@ -156,9 +130,9 @@ public class GenericService implements Service {
      *
      * @return A string representation of the format
      */
-    @JsonGetter(Constants.FORMAT)
+    @JsonIgnore
     public String getFormat() {
-        return myFormat.isPresent() ? myFormat.get().toString() : null;
+        return myFormat != null ? myFormat.toString() : null;
     }
 
     /**
@@ -168,7 +142,7 @@ public class GenericService implements Service {
      */
     @JsonIgnore
     public Optional<MediaType> getFormatMediaType() {
-        return myFormat;
+        return Optional.ofNullable(myFormat);
     }
 
     @JsonIgnore
@@ -177,9 +151,9 @@ public class GenericService implements Service {
 
         try {
             if (mimeType != null) {
-                myFormat = Optional.ofNullable(MediaType.parse(mimeType));
+                myFormat = MediaType.parse(mimeType);
             } else {
-                myFormat = Optional.ofNullable(MediaType.parse(aURI));
+                myFormat = MediaType.parse(aURI);
             }
         } catch (final IllegalArgumentException details) {
             LOGGER.warn(MessageCodes.JPA_013, aURI);
@@ -187,31 +161,31 @@ public class GenericService implements Service {
     }
 
     @JsonValue
-    private Object toJsonValue() {
-        if (myID != null) {
-            if (myProfile == null && myFormat == null) {
-                return myID;
-            } else {
-                final LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+    protected Object toJsonValue() {
+        if (myID != null && myType != null) {
+            final LinkedHashMap<String, Object> map = new LinkedHashMap<>();
 
-                if (myID != null) {
-                    map.put(Constants.ID, myID);
-                }
-
-                if (myType != null) {
-                    map.put(Constants.TYPE, myType);
-                }
-
-                if (myProfile != null) {
-                    map.put(Constants.PROFILE, myProfile);
-                }
-
-                if (myFormat.isPresent()) {
-                    map.put(Constants.FORMAT, getFormat());
-                }
-
-                return ImmutableMap.copyOf(map);
+            if (myID != null) {
+                map.put(Constants.ID, myID);
             }
+
+            if (myType != null) {
+                map.put(Constants.TYPE, myType);
+            }
+
+            if (myProfile != null) {
+                map.put(Constants.PROFILE, myProfile);
+            }
+
+            if (myFormat != null) {
+                map.put(Constants.FORMAT, getFormat());
+            }
+
+            if (myServices != null && myServices.size() > 0) {
+                map.put(Constants.SERVICE, myServices);
+            }
+
+            return ImmutableMap.copyOf(map);
         } else {
             return null;
         }

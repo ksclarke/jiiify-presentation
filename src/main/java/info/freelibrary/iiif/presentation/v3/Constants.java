@@ -18,9 +18,13 @@ public final class Constants {
     /* The name of the ID property. */
     public static final String ID = "id";
 
+    public static final String V2_ID = "@id";
+
     public static final String THUMBNAIL = "thumbnail";
 
     public static final String TYPE = "type";
+
+    public static final String V2_TYPE = "@type";
 
     public static final String METADATA = "metadata";
 
@@ -31,6 +35,8 @@ public final class Constants {
     public static final String SUMMARY = "summary";
 
     public static final String SERVICE = "service";
+
+    public static final String SERVICES = "services";
 
     public static final String CONTEXT = "@context";
 
