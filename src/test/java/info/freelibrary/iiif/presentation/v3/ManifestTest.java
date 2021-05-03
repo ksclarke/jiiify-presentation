@@ -1,7 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileReader;
@@ -27,10 +28,10 @@ import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.services.GenericService;
-import info.freelibrary.iiif.presentation.v3.services.ImageService;
-import info.freelibrary.iiif.presentation.v3.services.ImageService3;
-import info.freelibrary.iiif.presentation.v3.services.ImageService3.Profile;
 import info.freelibrary.iiif.presentation.v3.services.Service;
+import info.freelibrary.iiif.presentation.v3.services.image.ImageService;
+import info.freelibrary.iiif.presentation.v3.services.image.ImageService3;
+import info.freelibrary.iiif.presentation.v3.services.image.ImageService3.Profile;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 
 import io.vertx.core.Vertx;
@@ -58,9 +59,11 @@ public class ManifestTest extends AbstractTest {
 
     private static final String TEST_TITLE = "Georgian NF Fragment 68a";
 
-    private static final List<String[]> METADATA_PAIRS = Stream.of(new String[] { "Title", TEST_TITLE },
-        new String[] { "Extent", "1 f" }, new String[] { "Overtext Language", "Georgian" },
-        new String[] { "Undertext Language(s)", "Christian Palestinian Aramaic" }).collect(Collectors.toList());
+    private static final List<String[]> METADATA_PAIRS = Stream
+            .of(new String[] { "Title", TEST_TITLE }, new String[] { "Extent", "1 f" },
+                    new String[] { "Overtext Language", "Georgian" },
+                    new String[] { "Undertext Language(s)", "Christian Palestinian Aramaic" })
+            .collect(Collectors.toList());
 
     private static final int HEIGHT = 8176;
 
@@ -91,7 +94,7 @@ public class ManifestTest extends AbstractTest {
         }
 
         final ImageService manifestThumbService =
-            new ImageService3(Profile.LEVEL_TWO, SERVER + ENCODED_MANIFEST_THUMBNAIL_ARK);
+                new ImageService3(Profile.LEVEL_TWO, SERVER + ENCODED_MANIFEST_THUMBNAIL_ARK);
 
         myManifest = new Manifest(MANIFEST_URI, TEST_TITLE);
         myManifest.setMetadata(metadata);
@@ -102,11 +105,11 @@ public class ManifestTest extends AbstractTest {
         final Thumbnail thumb1 = new ImageContent(SERVER + "ark:%2F21198%2Fz10v8vhm" + THUMBNAIL_PATH);
         final Canvas canvas1 = new Canvas(id1, label1).setWidthHeight(WIDTH, HEIGHT).setThumbnails(thumb1);
         final PaintingAnnotation content1 =
-            new PaintingAnnotation(SERVER + MANIFEST_ID + "/imageanno/imageanno-1", canvas1);
+                new PaintingAnnotation(SERVER + MANIFEST_ID + "/imageanno/imageanno-1", canvas1);
         final AnnotationPage<PaintingAnnotation> page1 =
-            new AnnotationPage<>(SERVER + MANIFEST_ID + "/pageanno/pageanno-1");
+                new AnnotationPage<>(SERVER + MANIFEST_ID + "/pageanno/pageanno-1");
         final AnnotationPage<PaintingAnnotation> page2 =
-            new AnnotationPage<>(SERVER + MANIFEST_ID + "/pageanno/pageanno-2");
+                new AnnotationPage<>(SERVER + MANIFEST_ID + "/pageanno/pageanno-2");
 
         canvas1.addPaintingPages(page1.addAnnotations(content1));
         myManifest.addCanvases(canvas1);
@@ -124,7 +127,7 @@ public class ManifestTest extends AbstractTest {
         final Thumbnail thumb2 = new ImageContent(SERVER + "ark:%2F21198%2Fz1gq7dfx" + THUMBNAIL_PATH);
         final Canvas canvas2 = new Canvas(id2, label2).setWidthHeight(WIDTH, HEIGHT).setThumbnails(thumb2);
         final PaintingAnnotation content2 =
-            new PaintingAnnotation(SERVER + MANIFEST_ID + "/imageanno/imageanno-2", canvas2);
+                new PaintingAnnotation(SERVER + MANIFEST_ID + "/imageanno/imageanno-2", canvas2);
 
         canvas2.addPaintingPages(page2.addAnnotations(content2));
         myManifest.addCanvases(canvas2);
@@ -138,13 +141,13 @@ public class ManifestTest extends AbstractTest {
         }
 
         final RequiredStatement reqStmt =
-            new RequiredStatement("Attribution", "Provided courtesy of Example Institution");
+                new RequiredStatement("Attribution", "Provided courtesy of Example Institution");
         myManifest.setRequiredStatement(reqStmt);
         myManifest.setRights("http://creativecommons.org/licenses/by/4.0/");
         myManifest.setBehaviors(ManifestBehavior.PAGED);
 
         final Service service = new GenericService("https://example.org/service/example", "example")
-            .setProfile("https://example.org/docs/example-service.html");
+                .setProfile("https://example.org/docs/example-service.html");
         myManifest.setServices(service);
 
         myVertx = Vertx.factory.vertx();
@@ -236,9 +239,8 @@ public class ManifestTest extends AbstractTest {
         final URI uri = URI.create(LOREM_IPSUM.getUrl());
 
         myManifest.addContexts(uri, URI.create(LOREM_IPSUM.getUrl()));
-        assertTrue(myManifest.containsContext(uri));
+        assertTrue(myManifest.getContexts().contains(uri));
         assertTrue(myManifest.removeContext(uri));
-        assertFalse(myManifest.containsContext(uri));
         assertEquals(2, myManifest.getContexts().size());
     }
 
@@ -384,8 +386,8 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public final void testSetBehaviors() {
-        assertEquals(2,
-            myManifest.setBehaviors(ManifestBehavior.INDIVIDUALS, ManifestBehavior.AUTO_ADVANCE).getBehaviors().size());
+        assertEquals(2, myManifest.setBehaviors(ManifestBehavior.INDIVIDUALS, ManifestBehavior.AUTO_ADVANCE)
+                .getBehaviors().size());
     }
 
     /**

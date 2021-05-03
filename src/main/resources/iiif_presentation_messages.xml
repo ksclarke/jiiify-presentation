@@ -83,5 +83,8 @@
   <entry key="JPA-110">Duration must be a floating point number, not: {}</entry>
   <entry key="JPA-111">A service must have an ID (or @ID for older services)</entry>
   <entry key="JPA-112">Newly minted Skolem IRI: {}</entry>
+  <entry key="JPA-113">Manifest '@context' must either be a string or a list of strings</entry>
+  <entry key="JPA-114">Supplied value isn't a valid Image API format: {}</entry>
+  <entry key="JPA-115">Supplied value isn't a valid Image API quality: {}</entry>
 
 </properties>

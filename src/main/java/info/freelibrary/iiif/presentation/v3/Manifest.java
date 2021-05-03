@@ -278,16 +278,6 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     /**
-     * Tests whether the manifest contains the supplied context.
-     *
-     * @param aContextURI A context to check
-     * @return True if the manifest contains the supplied context; else, false
-     */
-    public boolean containsContext(final URI aContextURI) {
-        return myContexts.contains(aContextURI);
-    }
-
-    /**
      * Remove the supplied context. This will not remove the default required context though. If that's supplied, an
      * {@link UnsupportedOperationException} will be thrown.
      *
@@ -762,42 +752,43 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @param aContext A manifest context in string form
      */
     @JsonSetter(Constants.CONTEXT)
-    private void setContext(final String aContext) {
-        setContexts(List.of(aContext));
-    }
+    private void setContexts(final Object aObject) {
+        if (aObject instanceof String) {
+            setContexts(List.of((String) aObject));
+        } else if (aObject instanceof List<?>) {
+            final List<?> genericList = (List<?>) aObject;
+            final List<URI> contextList = new ArrayList<>();
+            final List<Integer> indices = new ArrayList<>();
 
-    /**
-     * Method used internally to set context from JSON.
-     *
-     * @param aContext A manifest context in string form
-     */
-    @JsonSetter(Constants.CONTEXT)
-    private void setContexts(final List<String> aContextList) {
-        final List<URI> contextList = new ArrayList<>();
-        final List<Integer> indices = new ArrayList<>();
+            if (genericList.size() > 0 && genericList.get(0).getClass().equals(String.class)) {
+                for (int index = 0; index < genericList.size(); index++) {
+                    final URI context = URI.create((String) genericList.get(index));
 
-        for (int index = 0; index < aContextList.size(); index++) {
-            final URI context = URI.create(aContextList.get(index));
+                    if (Constants.CONTEXT_URI.equals(context)) {
+                        indices.add(index); // We may have more than one required context in supplied list
 
-            if (Constants.CONTEXT_URI.equals(context)) {
-                indices.add(index); // We may have more than one required context in supplied list
-
-                if (indices.size() == 1) { // Only keep one if this is the case
-                    contextList.add(context);
+                        if (indices.size() == 1) { // Only keep one if this is the case
+                            contextList.add(context);
+                        }
+                    } else {
+                        contextList.add(context);
+                    }
                 }
+
+                // Remove required context; we'll add it back at the end
+                if (indices.size() > 0) {
+                    contextList.remove((int) indices.get(0));
+                }
+
+                myContexts.clear();
+                myContexts.addAll(contextList);
+                myContexts.add(Constants.CONTEXT_URI); // Add required context at end
             } else {
-                contextList.add(context);
+                throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_113));
             }
+        } else {
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_113));
         }
-
-        // Remove required context; we'll add it back at the end
-        if (indices.size() > 0) {
-            contextList.remove((int) indices.get(0));
-        }
-
-        myContexts.clear();
-        myContexts.addAll(contextList);
-        myContexts.add(Constants.CONTEXT_URI); // Add required context at end
     }
 
     /**

@@ -1,8 +1,9 @@
 
-package info.freelibrary.iiif.presentation.v3.services;
+package info.freelibrary.iiif.presentation.v3.services.image;
 
 import java.net.URI;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.Logger;
@@ -72,6 +73,18 @@ public class ImageService2 extends AbstractImageService implements ImageService 
     @Override
     public ImageService setID(final URI aID) {
         return (ImageService) super.setID(aID);
+    }
+
+    @Override
+    @JsonGetter(Constants.V2_ID)
+    public URI getID() {
+        return myID;
+    }
+
+    @Override
+    @JsonGetter(Constants.V2_TYPE)
+    public String getType() {
+        return getClass().getSimpleName();
     }
 
     @Override

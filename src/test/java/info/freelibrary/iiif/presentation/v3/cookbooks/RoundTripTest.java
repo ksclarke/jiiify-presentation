@@ -346,6 +346,176 @@ public class RoundTripTest {
     }
 
     /**
+     * Tests the 0064 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0064-opera-one-canvas/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0064OperaOneCanvas() throws IOException {
+        final JsonObject expected = getManifest("0064-opera-one-canvas");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
+     * Tests the 0065 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0065-opera-multiple-canvases/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0065OperaMultipleCanvases() throws IOException {
+        final JsonObject expected = getManifest("0065-opera-multiple-canvases");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
+     * Tests the 0068 issue 1 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0068-newspaper/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0068NewspaperIssue1() throws IOException {
+        final JsonObject expected = getManifest("0068-newspaper_issue_1");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
+     * Tests the 0068 issue 2 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0068-newspaper/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0068NewspaperIssue2() throws IOException {
+        final JsonObject expected = getManifest("0068-newspaper_issue_2");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
+     * Tests the 0068 title collection cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0068-newspaper/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0068NewspaperTitleCollection() throws IOException {
+        final JsonObject expected = getManifest("0068-newspaper_title-collection");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
+     * Tests the 0117 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0117-add-image-thumbnail/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0117AddImageThumbnail() throws IOException {
+        final JsonObject expected = getManifest("0117-add-image-thumbnail");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
+     * Tests the 0118 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0118_multivalue/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0118Multivalue() throws IOException {
+        final JsonObject expected = getManifest("0118_multivalue");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
+     * Tests the 0139 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0139-geolocate-canvas-fragment/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    @Ignore
+    public final void test0139GeolocateCanvasFragment() throws IOException {
+        final JsonObject expected = getManifest("0139-geolocate-canvas-fragment");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
+     * Tests the 0202 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0202-start-canvas/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0202StartCanvas() throws IOException {
+        final JsonObject expected = getManifest("0202-start-canvas");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
+     * Tests the 0219 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0219-using-caption-file/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0219UsingCaptionFile() throws IOException {
+        final JsonObject expected = getManifest("0219-using-caption-file");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
+     * Tests the 0230 map 2 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0230-navdate/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0230NavDateMap2() throws IOException {
+        final JsonObject expected = getManifest("0230-navdate_map_2-manifest");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
+     * Tests the 0230 map 1 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0230-navdate/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0230NavDateMap1() throws IOException {
+        final JsonObject expected = getManifest("0230-navdate_map_1-manifest");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
+     * Tests the 0230 collection cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0230-navdate/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0230NavDateCollection() throws IOException {
+        final JsonObject expected = getManifest("0230-navdate-collection");
+        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+
+        compare(expected, found);
+    }
+
+    /**
      * Tests the example manifest from the specification (cf.
      * https://iiif.io/api/presentation/3.0/#b-example-manifest-response)
      *

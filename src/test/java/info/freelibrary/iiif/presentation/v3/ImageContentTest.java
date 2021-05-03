@@ -12,7 +12,7 @@ import com.google.common.net.MediaType;
 
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
-import info.freelibrary.iiif.presentation.v3.services.ImageService3;
+import info.freelibrary.iiif.presentation.v3.services.image.ImageService3;
 
 /**
  * Image content test.

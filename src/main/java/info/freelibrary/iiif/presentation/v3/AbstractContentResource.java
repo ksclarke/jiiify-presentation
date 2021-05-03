@@ -14,22 +14,23 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.google.common.net.MediaType;
 
-import info.freelibrary.iiif.presentation.v3.properties.Localized;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.FileUtils;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+
+import info.freelibrary.iiif.presentation.v3.properties.Localized;
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * An abstract content resource class that specific content types can extend.
  */
 @JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.FORMAT, Constants.LANGUAGE })
-abstract class AbstractContentResource<T extends AbstractResource<AbstractContentResource<T>>> extends
-        AbstractResource<AbstractContentResource<T>> implements Localized<T> {
+abstract class AbstractContentResource<T extends AbstractResource<AbstractContentResource<T>>>
+        extends AbstractResource<AbstractContentResource<T>> implements Localized<T> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractContentResource.class, MessageCodes.BUNDLE);
 
-    private Optional<MediaType> myFormat;
+    private MediaType myFormat;
 
     private List<String> myLanguages;
 
@@ -100,7 +101,7 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
      */
     @JsonIgnore
     protected AbstractContentResource<T> setFormatMediaType(final MediaType aMediaType) {
-        myFormat = Optional.ofNullable(aMediaType);
+        myFormat = aMediaType;
         return this;
     }
 
@@ -111,9 +112,8 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
      */
     @JsonGetter(Constants.FORMAT)
     public Optional<String> getFormat() {
-        if (myFormat.isPresent()) {
-            final MediaType mediaType = myFormat.get();
-            return Optional.of(mediaType.type() + "/" + mediaType.subtype()); // skip encoding
+        if (myFormat != null) {
+            return Optional.of(myFormat.type() + "/" + myFormat.subtype()); // skip encoding
         } else {
             return Optional.empty();
         }
@@ -126,11 +126,11 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
      */
     @JsonIgnore
     public Optional<MediaType> getFormatMediaType() {
-        return myFormat;
+        return Optional.ofNullable(myFormat);
     }
 
     @JsonIgnore
-    protected final void setMediaTypeFromExt(final String aURI) {
+    protected final void setMediaTypeFromExt(final String aURI) throws IllegalArgumentException {
         final String fragment = Constants.FRAGMENT_DELIM + URI.create(aURI).getFragment();
         final String mimeType;
         final String uri;
@@ -147,13 +147,13 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
 
         try {
             if (mimeType != null) {
-                myFormat = Optional.ofNullable(MediaType.parse(mimeType));
+                myFormat = MediaType.parse(mimeType);
             } else {
-                myFormat = Optional.ofNullable(MediaType.parse(aURI));
+                myFormat = MediaType.parse(aURI);
             }
         } catch (final IllegalArgumentException details) {
-            LOGGER.debug(MessageCodes.JPA_013, aURI); // This is fine
-            myFormat = Optional.empty();
+            LOGGER.warn(MessageCodes.JPA_013, aURI);
+            myFormat = null;
         }
     }
 }

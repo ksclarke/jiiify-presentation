@@ -19,7 +19,7 @@ import info.freelibrary.iiif.presentation.v3.Constants;
 /**
  * An abstract service class that specific services can extend.
  */
-class AbstractService implements Service {
+public abstract class AbstractService implements Service {
 
     protected List<Service> myServices;
 

@@ -19,7 +19,15 @@ import info.freelibrary.util.LoggerFactory;
 
 import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.services.image.ImageAPI;
+import info.freelibrary.iiif.presentation.v3.services.image.ImageService;
+import info.freelibrary.iiif.presentation.v3.services.image.ImageService2;
+import info.freelibrary.iiif.presentation.v3.services.image.ImageService3;
+import info.freelibrary.iiif.presentation.v3.services.image.Size;
+import info.freelibrary.iiif.presentation.v3.services.image.Tile;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+
+import io.vertx.core.json.Json;
 
 /**
  * Deserializes services from JSON documents into {@link Service} implementations.
@@ -112,12 +120,12 @@ public class ServiceDeserializer extends StdDeserializer<Service> {
                 final String profile = aNode.get(Constants.PROFILE).textValue();
                 final ImageService2.Profile level = ImageService2.Profile.fromString(profile);
 
-                service = new ImageService2(level, id).setServices(services);
+                service = deserializeImageService(aNode, new ImageService2(level, id)).setServices(services);
             } else if (ResourceTypes.IMAGE_SERVICE_3.equals(type)) {
                 final String profile = aNode.get(Constants.PROFILE).textValue();
                 final ImageService3.Profile level = ImageService3.Profile.fromString(profile);
 
-                service = new ImageService3(level, id).setServices(services);
+                service = deserializeImageService(aNode, new ImageService3(level, id)).setServices(services);
             } else if (ResourceTypes.AUTH_COOKIE_SERVICE_1.equals(type)) {
                 final JsonNode profileNode = aNode.get(Constants.PROFILE);
 
@@ -176,6 +184,73 @@ public class ServiceDeserializer extends StdDeserializer<Service> {
         }
 
         return service;
+    }
+
+    /**
+     * Deserializes the aspects of image services.
+     *
+     * @param aNode A JSON node to deserialize
+     * @param aImageService An image service
+     * @return The fleshed out service
+     */
+    private Service deserializeImageService(final JsonNode aNode, final ImageService aImageService) {
+        final List<ImageAPI.ImageQuality> qualities = new ArrayList<>();
+        final List<ImageAPI.ImageFormat> formats = new ArrayList<>();
+        final JsonNode protocolNode = aNode.get(ImageAPI.PROTOCOL);
+        final JsonNode extraQualities = aNode.get(ImageAPI.EXTRA_QUALITIES);
+        final JsonNode extraFormats = aNode.get(ImageAPI.EXTRA_FORMATS);
+        final JsonNode tilesNode = aNode.get(ImageAPI.TILES);
+        final JsonNode sizesNode = aNode.get(ImageAPI.SIZES);
+
+        if (extraQualities != null && extraQualities.isArray()) {
+            for (final JsonNode quality : extraQualities) {
+                qualities.add(ImageAPI.ImageQuality.fromString(quality.textValue()));
+            }
+
+            if (qualities.size() > 0) {
+                aImageService.setExtraQualities(qualities);
+            }
+        }
+
+        if (extraFormats != null && extraFormats.isArray()) {
+            for (final JsonNode format : extraFormats) {
+                formats.add(ImageAPI.ImageFormat.fromString(format.textValue()));
+            }
+
+            if (formats.size() > 0) {
+                aImageService.setExtraFormats(formats);
+            }
+        }
+
+        if (tilesNode != null && tilesNode.isArray()) {
+            final List<Tile> tiles = new ArrayList<>();
+
+            for (final JsonNode tile : tilesNode) {
+                tiles.add(Json.decodeValue(tile.toPrettyString(), Tile.class));
+            }
+
+            if (tiles.size() > 0) {
+                aImageService.setTiles(tiles);
+            }
+        }
+
+        if (sizesNode != null && sizesNode.isArray()) {
+            final List<Size> sizes = new ArrayList<>();
+
+            for (final JsonNode size : sizesNode) {
+                sizes.add(Json.decodeValue(size.toPrettyString(), Size.class));
+            }
+
+            if (sizes.size() > 0) {
+                aImageService.setSizes(sizes);
+            }
+        }
+
+        if (protocolNode != null) {
+            aImageService.setProtocol(protocolNode.textValue());
+        }
+
+        return aImageService;
     }
 
     /**

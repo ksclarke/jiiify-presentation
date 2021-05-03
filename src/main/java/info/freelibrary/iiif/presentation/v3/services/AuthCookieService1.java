@@ -14,6 +14,7 @@ import info.freelibrary.util.LoggerFactory;
 
 import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.services.image.ImageService3;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
