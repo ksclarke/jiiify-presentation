@@ -2,17 +2,12 @@
 package info.freelibrary.iiif.presentation.v3.properties;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.google.common.net.MediaType;
-
-import info.freelibrary.iiif.presentation.v3.Constants;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
@@ -23,10 +18,7 @@ import io.vertx.core.json.JsonObject;
  * model of a statue.
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.LABEL, Constants.FORMAT, Constants.LANGUAGE })
-public class Rendering extends AbstractLinkProperty<Rendering> implements Localized<Rendering> {
-
-    private List<String> myLanguages;
+public class Rendering extends AbstractLinkProperty<Rendering> {
 
     /**
      * Creates a IIIF presentation rendering.
@@ -126,17 +118,8 @@ public class Rendering extends AbstractLinkProperty<Rendering> implements Locali
     }
 
     @Override
-    public List<String> getLanguages() {
-        if (myLanguages == null) {
-            myLanguages = new ArrayList<>();
-        }
-
-        return myLanguages;
-    }
-
-    @Override
     public Rendering setLanguages(final String... aLangArray) {
-        return (Rendering) Localized.super.setLanguages(aLangArray);
+        return (Rendering) super.setLanguages(aLangArray);
     }
 
     @Override

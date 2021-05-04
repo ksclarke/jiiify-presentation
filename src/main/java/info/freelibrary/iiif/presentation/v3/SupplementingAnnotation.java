@@ -175,7 +175,8 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     @Override
     protected void setMotivation(final String aMotivation) {
         if (!MOTIVATION.equals(aMotivation)) {
-            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_038, MOTIVATION));
+            throw new IllegalArgumentException(
+                    LOGGER.getMessage(MessageCodes.JPA_038, SupplementingAnnotation.class.getSimpleName(), MOTIVATION));
         }
 
         myMotivation = MOTIVATION;

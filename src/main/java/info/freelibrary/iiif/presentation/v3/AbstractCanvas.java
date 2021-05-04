@@ -294,14 +294,15 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
 
     @SuppressWarnings("unchecked") // Moved SafeVarargs to extending classes where method can be final
     protected final <C extends CanvasResource<C>> AbstractCanvas<T> paint(final CanvasResource<C> aCanvas,
-            final Minter aMinter, final ContentResource... aContentArray) throws ContentOutOfBoundsException {
+            final Minter aMinter, final boolean aChoice, final ContentResource... aContentArray)
+            throws ContentOutOfBoundsException {
         final PaintingAnnotation anno = new PaintingAnnotation(aMinter.getAnnotationID(), aCanvas);
         final AnnotationPage<PaintingAnnotation> page;
         final int pageCount;
 
         for (final ContentResource content : aContentArray) {
             if (canFrame(content)) {
-                anno.addBody(content);
+                anno.addBody(content).setChoice(aChoice);
             }
         }
 
@@ -321,15 +322,15 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
 
     @SuppressWarnings("unchecked") // Moved SafeVarargs to extending classes where method can be final
     protected final <C extends CanvasResource<C>> AbstractCanvas<T> paint(final CanvasResource<C> aCanvas,
-            final Minter aMinter, final MediaFragmentSelector aCanvasRegion, final ContentResource... aContentArray)
-            throws ContentOutOfBoundsException, SelectorOutOfBoundsException {
+            final Minter aMinter, final MediaFragmentSelector aCanvasRegion, final boolean aChoice,
+            final ContentResource... aContentArray) throws ContentOutOfBoundsException, SelectorOutOfBoundsException {
         final PaintingAnnotation anno = new PaintingAnnotation(aMinter, aCanvas, aCanvasRegion);
         final AnnotationPage<PaintingAnnotation> page;
         final int pageCount;
 
         for (final ContentResource content : aContentArray) {
             if (canFrame(content, aCanvasRegion)) {
-                anno.addBody(content);
+                anno.addBody(content).setChoice(aChoice);
             }
         }
 
@@ -349,12 +350,12 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
 
     @SuppressWarnings("unchecked") // Moved SafeVarargs to extending classes where method can be final
     protected final <C extends CanvasResource<C>> AbstractCanvas<T> supplement(final CanvasResource<C> aCanvas,
-            final Minter aMinter, final ContentResource... aContentArray) {
+            final Minter aMinter, final boolean aChoice, final ContentResource... aContentArray) {
         final SupplementingAnnotation anno = new SupplementingAnnotation(aMinter.getAnnotationID(), aCanvas);
         final int pageCount = getSupplementingPages().size();
         final AnnotationPage<SupplementingAnnotation> page;
 
-        anno.addBody(aContentArray);
+        anno.addBody(aContentArray).setChoice(aChoice);
 
         if (pageCount == 0) {
             page = new AnnotationPage<>(aMinter.getAnnotationPageID(aCanvas));
@@ -370,15 +371,15 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
 
     @SuppressWarnings("unchecked") // Moved SafeVarargs to extending classes where method can be final
     protected final <C extends CanvasResource<C>> AbstractCanvas<T> supplement(final CanvasResource<C> aCanvas,
-            final Minter aMinter, final MediaFragmentSelector aCanvasRegion, final ContentResource... aContentArray)
-            throws SelectorOutOfBoundsException {
+            final Minter aMinter, final MediaFragmentSelector aCanvasRegion, final boolean aChoice,
+            final ContentResource... aContentArray) throws SelectorOutOfBoundsException {
         final SupplementingAnnotation anno =
                 new SupplementingAnnotation(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
         final int pageCount = getSupplementingPages().size();
         final AnnotationPage<SupplementingAnnotation> page;
 
         getCanvasFragment(aCanvasRegion); // Check that the canvas region is valid by absence of exceptions
-        anno.addBody(aContentArray);
+        anno.addBody(aContentArray).setChoice(aChoice);
 
         if (pageCount == 0) {
             page = new AnnotationPage<>(aMinter.getAnnotationPageID(aCanvas));

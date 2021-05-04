@@ -119,7 +119,7 @@ public class ManifestTest extends AbstractTest {
             final ImageService service = new ImageService3(Profile.LEVEL_TWO, SERVER + values[1]);
             final ImageContent resource = new ImageContent(id).setServices(service);
 
-            content1.addBody(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(values[0]));
+            content1.addBody(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(values[0])).setChoice(true);
         }
 
         final String id2 = SERVER + MANIFEST_ID + "/canvas/canvas-2";
@@ -137,7 +137,7 @@ public class ManifestTest extends AbstractTest {
             final ImageService service = new ImageService3(Profile.LEVEL_TWO, SERVER + values[1]);
             final ImageContent resource = new ImageContent(id).setServices(service);
 
-            content2.addBody(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(values[0]));
+            content2.addBody(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(values[0])).setChoice(true);
         }
 
         final RequiredStatement reqStmt =

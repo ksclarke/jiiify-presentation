@@ -95,7 +95,7 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
      * @param aAnnotationArray An annotation array
      * @return The annotation page
      */
-    @JsonGetter(Constants.ITEMS)
+    @JsonSetter(Constants.ITEMS)
     @SafeVarargs
     public final AnnotationPage<T> setAnnotations(final T... aAnnotationArray) {
         if (myAnnotations != null) {

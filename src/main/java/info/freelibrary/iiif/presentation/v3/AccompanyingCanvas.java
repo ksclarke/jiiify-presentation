@@ -283,80 +283,169 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
     @SafeVarargs
     public final AccompanyingCanvas paintWith(final Minter aMinter, final ContentResource... aContentArray)
             throws ContentOutOfBoundsException {
-        return (AccompanyingCanvas) super.paint(this, aMinter, aContentArray);
+        return (AccompanyingCanvas) super.paint(this, aMinter, false, aContentArray);
+    }
+
+    @Override
+    @SafeVarargs
+    public final AccompanyingCanvas paintWith(final Minter aMinter, final boolean aChoice,
+            final ContentResource... aContentArray) throws ContentOutOfBoundsException {
+        return (AccompanyingCanvas) super.paint(this, aMinter, aChoice, aContentArray);
     }
 
     @Override
     public final AccompanyingCanvas paintWith(final Minter aMinter, final List<ContentResource> aContentList)
             throws ContentOutOfBoundsException {
-        return (AccompanyingCanvas) super.paint(this, aMinter, aContentList.toArray(new ContentResource[] {}));
+        return (AccompanyingCanvas) super.paint(this, aMinter, false, aContentList.toArray(new ContentResource[] {}));
+    }
+
+    @Override
+    public final AccompanyingCanvas paintWith(final Minter aMinter, final boolean aChoice,
+            final List<ContentResource> aContentList) throws ContentOutOfBoundsException {
+        return (AccompanyingCanvas) super.paint(this, aMinter, aChoice, aContentList.toArray(new ContentResource[] {}));
     }
 
     @Override
     @SafeVarargs
     public final AccompanyingCanvas paintWith(final Minter aMinter, final MediaFragmentSelector aCanvasRegion,
             final ContentResource... aContentArray) throws ContentOutOfBoundsException, SelectorOutOfBoundsException {
-        return (AccompanyingCanvas) super.paint(this, aMinter, aCanvasRegion, aContentArray);
+        return (AccompanyingCanvas) super.paint(this, aMinter, aCanvasRegion, false, aContentArray);
+    }
+
+    @Override
+    @SafeVarargs
+    public final AccompanyingCanvas paintWith(final Minter aMinter, final MediaFragmentSelector aCanvasRegion,
+            final boolean aChoice, final ContentResource... aContentArray)
+            throws ContentOutOfBoundsException, SelectorOutOfBoundsException {
+        return (AccompanyingCanvas) super.paint(this, aMinter, aCanvasRegion, aChoice, aContentArray);
     }
 
     @Override
     @SafeVarargs
     public final AccompanyingCanvas paintWith(final Minter aMinter, final String aCanvasRegion,
             final ContentResource... aContentArray) throws ContentOutOfBoundsException, SelectorOutOfBoundsException {
-        return (AccompanyingCanvas) super.paint(this, aMinter, new MediaFragmentSelector(aCanvasRegion), aContentArray);
+        return (AccompanyingCanvas) super.paint(this, aMinter, new MediaFragmentSelector(aCanvasRegion), false,
+                aContentArray);
+    }
+
+    @Override
+    @SafeVarargs
+    public final AccompanyingCanvas paintWith(final Minter aMinter, final String aCanvasRegion, final boolean aChoice,
+            final ContentResource... aContentArray) throws ContentOutOfBoundsException, SelectorOutOfBoundsException {
+        return (AccompanyingCanvas) super.paint(this, aMinter, new MediaFragmentSelector(aCanvasRegion), aChoice,
+                aContentArray);
     }
 
     @Override
     public final AccompanyingCanvas paintWith(final Minter aMinter, final MediaFragmentSelector aCanvasRegion,
             final List<ContentResource> aContentList) throws ContentOutOfBoundsException, SelectorOutOfBoundsException {
-        return (AccompanyingCanvas) super.paint(this, aMinter, aCanvasRegion,
+        return (AccompanyingCanvas) super.paint(this, aMinter, aCanvasRegion, false,
+                aContentList.toArray(new ContentResource[] {}));
+    }
+
+    @Override
+    public final AccompanyingCanvas paintWith(final Minter aMinter, final MediaFragmentSelector aCanvasRegion,
+            final boolean aChoice, final List<ContentResource> aContentList)
+            throws ContentOutOfBoundsException, SelectorOutOfBoundsException {
+        return (AccompanyingCanvas) super.paint(this, aMinter, aCanvasRegion, aChoice,
                 aContentList.toArray(new ContentResource[] {}));
     }
 
     @Override
     public final AccompanyingCanvas paintWith(final Minter aMinter, final String aCanvasRegion,
             final List<ContentResource> aContentList) throws ContentOutOfBoundsException, SelectorOutOfBoundsException {
-        return (AccompanyingCanvas) super.paint(this, aMinter, new MediaFragmentSelector(aCanvasRegion),
+        return (AccompanyingCanvas) super.paint(this, aMinter, new MediaFragmentSelector(aCanvasRegion), false,
+                aContentList.toArray(new ContentResource[] {}));
+    }
+
+    @Override
+    public final AccompanyingCanvas paintWith(final Minter aMinter, final String aCanvasRegion, final boolean aChoice,
+            final List<ContentResource> aContentList) throws ContentOutOfBoundsException, SelectorOutOfBoundsException {
+        return (AccompanyingCanvas) super.paint(this, aMinter, new MediaFragmentSelector(aCanvasRegion), aChoice,
                 aContentList.toArray(new ContentResource[] {}));
     }
 
     @Override
     @SafeVarargs
     public final AccompanyingCanvas supplementWith(final Minter aMinter, final ContentResource... aContentArray) {
-        return (AccompanyingCanvas) super.supplement(this, aMinter, aContentArray);
+        return (AccompanyingCanvas) super.supplement(this, aMinter, false, aContentArray);
+    }
+
+    @Override
+    @SafeVarargs
+    public final AccompanyingCanvas supplementWith(final Minter aMinter, final boolean aChoice,
+            final ContentResource... aContentArray) {
+        return (AccompanyingCanvas) super.supplement(this, aMinter, aChoice, aContentArray);
     }
 
     @Override
     public final AccompanyingCanvas supplementWith(final Minter aMinter, final List<ContentResource> aContentList) {
-        return (AccompanyingCanvas) super.supplement(this, aMinter, aContentList.toArray(new ContentResource[] {}));
+        return (AccompanyingCanvas) super.supplement(this, aMinter, false,
+                aContentList.toArray(new ContentResource[] {}));
+    }
+
+    @Override
+    public final AccompanyingCanvas supplementWith(final Minter aMinter, final boolean aChoice,
+            final List<ContentResource> aContentList) {
+        return (AccompanyingCanvas) super.supplement(this, aMinter, aChoice,
+                aContentList.toArray(new ContentResource[] {}));
     }
 
     @Override
     @SafeVarargs
     public final AccompanyingCanvas supplementWith(final Minter aMinter, final MediaFragmentSelector aCanvasRegion,
             final ContentResource... aContentArray) {
-        return (AccompanyingCanvas) super.supplement(this, aMinter, aCanvasRegion, aContentArray);
+        return (AccompanyingCanvas) super.supplement(this, aMinter, aCanvasRegion, false, aContentArray);
+    }
+
+    @Override
+    @SafeVarargs
+    public final AccompanyingCanvas supplementWith(final Minter aMinter, final MediaFragmentSelector aCanvasRegion,
+            final boolean aChoice, final ContentResource... aContentArray) {
+        return (AccompanyingCanvas) super.supplement(this, aMinter, aCanvasRegion, aChoice, aContentArray);
     }
 
     @Override
     @SafeVarargs
     public final AccompanyingCanvas supplementWith(final Minter aMinter, final String aCanvasRegion,
             final ContentResource... aContentArray) {
-        return (AccompanyingCanvas) super.supplement(this, aMinter, new MediaFragmentSelector(aCanvasRegion),
+        return (AccompanyingCanvas) super.supplement(this, aMinter, new MediaFragmentSelector(aCanvasRegion), false,
+                aContentArray);
+    }
+
+    @Override
+    @SafeVarargs
+    public final AccompanyingCanvas supplementWith(final Minter aMinter, final String aCanvasRegion,
+            final boolean aChoice, final ContentResource... aContentArray) {
+        return (AccompanyingCanvas) super.supplement(this, aMinter, new MediaFragmentSelector(aCanvasRegion), aChoice,
                 aContentArray);
     }
 
     @Override
     public final AccompanyingCanvas supplementWith(final Minter aMinter, final MediaFragmentSelector aCanvasRegion,
             final List<ContentResource> aContentList) {
-        return (AccompanyingCanvas) super.supplement(this, aMinter, aCanvasRegion,
+        return (AccompanyingCanvas) super.supplement(this, aMinter, aCanvasRegion, false,
+                aContentList.toArray(new ContentResource[] {}));
+    }
+
+    @Override
+    public final AccompanyingCanvas supplementWith(final Minter aMinter, final MediaFragmentSelector aCanvasRegion,
+            final boolean aChoice, final List<ContentResource> aContentList) {
+        return (AccompanyingCanvas) super.supplement(this, aMinter, aCanvasRegion, aChoice,
                 aContentList.toArray(new ContentResource[] {}));
     }
 
     @Override
     public final AccompanyingCanvas supplementWith(final Minter aMinter, final String aCanvasRegion,
             final List<ContentResource> aContentList) {
-        return (AccompanyingCanvas) super.supplement(this, aMinter, new MediaFragmentSelector(aCanvasRegion),
+        return (AccompanyingCanvas) super.supplement(this, aMinter, new MediaFragmentSelector(aCanvasRegion), false,
+                aContentList.toArray(new ContentResource[] {}));
+    }
+
+    @Override
+    public final AccompanyingCanvas supplementWith(final Minter aMinter, final String aCanvasRegion,
+            final boolean aChoice, final List<ContentResource> aContentList) {
+        return (AccompanyingCanvas) super.supplement(this, aMinter, new MediaFragmentSelector(aCanvasRegion), aChoice,
                 aContentList.toArray(new ContentResource[] {}));
     }
 

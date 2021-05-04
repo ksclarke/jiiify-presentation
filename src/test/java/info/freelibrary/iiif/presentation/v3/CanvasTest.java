@@ -1529,7 +1529,7 @@ public class CanvasTest {
         final ImageContent image2 = new ImageContent(IMAGE_2_ID).setWidthHeight(WIDTH, HEIGHT)
                 .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, image1, image2);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, true, image1, image2);
 
         expected = new JsonObject(StringUtils.read(CANVAS_IMAGE_CHOICE));
         found = new JsonObject(TestUtils.toJson(myCanvas));
@@ -1635,7 +1635,7 @@ public class CanvasTest {
         final String selector2 = StringUtils.format(URI_FRAGMENT_T_TEMPLATE, DURATION, DURATION + DURATION);
 
         myCanvas = new Canvas(SOUND_CANVAS_ID, LABEL).setDuration(CANVAS_DURATION)
-                .paintWith(myMinter, selector1, sound1, sound2).paintWith(myMinter, selector2, sound3);
+                .paintWith(myMinter, selector1, true, sound1, sound2).paintWith(myMinter, selector2, sound3);
 
         expected = new JsonObject(StringUtils.read(CANVAS_SOUND_CHOICE_MULTI));
         found = new JsonObject(TestUtils.toJson(myCanvas));
@@ -1665,7 +1665,7 @@ public class CanvasTest {
                 new MediaFragmentSelector(StringUtils.format(URI_FRAGMENT_T_TEMPLATE, DURATION, DURATION + DURATION));
 
         myCanvas = new Canvas(SOUND_CANVAS_ID, LABEL).setDuration(CANVAS_DURATION)
-                .paintWith(myMinter, selector1, sound1, sound2).paintWith(myMinter, selector2, sound3);
+                .paintWith(myMinter, selector1, true, sound1, sound2).paintWith(myMinter, selector2, sound3);
 
         expected = new JsonObject(StringUtils.read(CANVAS_SOUND_CHOICE_MULTI));
         found = new JsonObject(TestUtils.toJson(myCanvas));

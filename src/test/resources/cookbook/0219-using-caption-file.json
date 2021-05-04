@@ -36,12 +36,12 @@
                   "id": "https://fixtures.iiif.io/video/indiana/lunchroom_manners/lunchroom_manners.vtt",
                   "type": "Text",
                   "format": "text/vtt",
+                  "language": "en",
                   "label": {
                     "en": [
                       "Captions in WebVTT format"
                     ]
-                  },
-                  "language": "en"
+                  }
                 }
               ],
               "target": "https://iiif.io/api/cookbook/recipe/0219-using-caption-file/canvas"

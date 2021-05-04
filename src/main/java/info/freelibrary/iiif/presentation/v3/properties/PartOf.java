@@ -2,15 +2,10 @@
 package info.freelibrary.iiif.presentation.v3.properties;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
-import info.freelibrary.iiif.presentation.v3.Constants;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
@@ -21,11 +16,7 @@ import io.vertx.core.json.JsonObject;
  * discovery of further relevant information. Similarly, a Manifest can reference a containing Collection using
  * <code>partOf</code> to aid in navigation.
  */
-@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.FORMAT, Constants.LABEL, Constants.LANGUAGE,
-    Constants.PROFILE })
-public class PartOf extends AbstractLinkProperty<PartOf> implements Localized<PartOf> {
-
-    private List<String> myLanguages;
+public class PartOf extends AbstractLinkProperty<PartOf> {
 
     /**
      * Creates a partOf reference.
@@ -101,17 +92,8 @@ public class PartOf extends AbstractLinkProperty<PartOf> implements Localized<Pa
     }
 
     @Override
-    public List<String> getLanguages() {
-        if (myLanguages == null) {
-            myLanguages = new ArrayList<>();
-        }
-
-        return myLanguages;
-    }
-
-    @Override
     public PartOf setLanguages(final String... aLangArray) {
-        return (PartOf) Localized.super.setLanguages(aLangArray);
+        return (PartOf) super.setLanguages(aLangArray);
     }
 
     @Override

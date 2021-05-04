@@ -51,6 +51,8 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
 
     protected List<ContentResource> myBody;
 
+    protected boolean myBodyContainsChoice;
+
     protected URI myTargetURI;
 
     protected SpecificResource myTargetSpecificResource;
@@ -124,6 +126,7 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      * @return The annotation
      */
     protected Annotation<T> clearBody() {
+        myBodyContainsChoice = false;
         getBody().clear();
         return this;
     }
@@ -169,6 +172,26 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      */
     protected Annotation<T> addBody(final List<ContentResource> aContentResourceList) {
         return addBody(aContentResourceList.toArray(new ContentResource[] {}));
+    }
+
+    /**
+     * Sets whether the body contains a choice between content resources or not.
+     *
+     * @param aBoolFlag A flag indicating whether the body contains a choice
+     * @return This annotation
+     */
+    protected Annotation<T> setChoice(final boolean aBoolFlag) {
+        myBodyContainsChoice = aBoolFlag;
+        return this;
+    }
+
+    /**
+     * Indicates whether the annotation's body contains a choice between content resources.
+     *
+     * @return True if body contains a choice; else, false
+     */
+    protected boolean bodyContainsChoice() {
+        return myBodyContainsChoice;
     }
 
     /**
@@ -319,22 +342,26 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
         }
 
         if (myBody.size() > 1) {
-            final Map<String, Object> map = new TreeMap<>(new ContentResourceComparator());
-            final List<Object> itemList = new ArrayList<>();
+            if (bodyContainsChoice()) {
+                final Map<String, Object> map = new TreeMap<>(new ContentResourceComparator());
+                final List<Object> itemList = new ArrayList<>();
 
-            map.put(Constants.TYPE, ResourceTypes.CHOICE);
+                map.put(Constants.TYPE, ResourceTypes.CHOICE);
 
-            for (final ContentResource resource : myBody) {
-                if (resource == null) {
-                    itemList.add(RDF_NIL);
-                } else {
-                    itemList.add(resource);
+                for (final ContentResource resource : myBody) {
+                    if (resource == null) {
+                        itemList.add(RDF_NIL);
+                    } else {
+                        itemList.add(resource);
+                    }
                 }
+
+                map.put(Constants.ITEMS, itemList);
+
+                return map;
+            } else {
+                return myBody;
             }
-
-            map.put(Constants.ITEMS, itemList);
-
-            return map;
         } else {
             return myBody.get(0);
         }
@@ -361,24 +388,37 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      * @param aContentMap A content resources map
      */
     @JsonSetter(Constants.BODY)
-    private void setMap(final Map<String, Object> aContentMap) {
-        LOGGER.trace(aContentMap.toString());
+    private void readBody(final Object aBody) {
+        if (aBody instanceof List) {
+            final List<?> list = (List<?>) aBody;
 
-        if (!aContentMap.isEmpty()) {
-            final Object itemsObject = aContentMap.get(Constants.ITEMS);
+            if (list.size() > 0 && list.get(0) instanceof Map) {
+                list.forEach(mapObject -> {
+                    deserializeContentMap((Map<?, ?>) mapObject);
+                });
+            }
+        } else if (aBody instanceof Map) {
+            final Map<?, ?> map = (Map<?, ?>) aBody;
+            final String type = map.get(Constants.TYPE).toString();
 
-            // If it's not an items array, it's a single content resource
-            if (itemsObject == null) {
-                deserializeContentMap(aContentMap);
-            } else if (itemsObject instanceof List<?>) {
-                for (final Object object : (List<?>) itemsObject) {
-                    if (object instanceof String && RDF_NIL.equals(object.toString())) {
-                        getBody().add(null);
-                    } else if (object instanceof Map<?, ?>) {
-                        deserializeContentMap((Map<?, ?>) object);
-                    }
+            if (ResourceTypes.CHOICE.equals(type)) {
+                final List<?> items = (List<?>) map.get(Constants.ITEMS);
+
+                setChoice(true);
+
+                if (items.size() > 0 && items.get(0) instanceof Map) {
+                    items.forEach(mapObject -> {
+                        deserializeContentMap((Map<?, ?>) mapObject);
+                    });
                 }
-            } // Else, nothing. All content resources should be lists now.
+            } else {
+                deserializeContentMap((Map<?, ?>) aBody);
+            }
+        } else if (aBody instanceof String && RDF_NIL.equals(aBody.toString())) {
+            getBody().add(null);
+        } else {
+            throw new IllegalArgumentException(
+                    LOGGER.getMessage(MessageCodes.JPA_116, aBody.getClass().getSimpleName()));
         }
     }
 

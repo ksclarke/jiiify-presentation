@@ -202,20 +202,6 @@ public class RoundTripTest {
     }
 
     /**
-     * Tests the 0012 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0012-thumbnails/).
-     *
-     * @throws IOException If there is trouble reading the manifest file
-     */
-    @Test
-    @Ignore
-    public final void test0012Thumbnails() throws IOException {
-        final JsonObject expected = getManifest("0012-thumbnails");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
-
-        compare(expected, found);
-    }
-
-    /**
      * Tests the 0013 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0013-placeholderCanvas/).
      *
      * @throws IOException If there is trouble reading the manifest file

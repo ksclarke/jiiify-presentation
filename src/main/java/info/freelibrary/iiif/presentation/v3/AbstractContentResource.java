@@ -71,8 +71,6 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
      * @return A list of languages
      */
     @Override
-    @JsonGetter(Constants.LANGUAGE)
-    @JsonInclude(Include.NON_EMPTY)
     public List<String> getLanguages() {
         if (myLanguages == null) {
             myLanguages = new ArrayList<>();
@@ -129,8 +127,13 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
         return Optional.ofNullable(myFormat);
     }
 
+    /**
+     * Sets the media type from the extension of the supplied URI.
+     *
+     * @param aURI A URI from which to glean a media type
+     */
     @JsonIgnore
-    protected final void setMediaTypeFromExt(final String aURI) throws IllegalArgumentException {
+    protected final void setMediaTypeFromExt(final String aURI) {
         final String fragment = Constants.FRAGMENT_DELIM + URI.create(aURI).getFragment();
         final String mimeType;
         final String uri;
@@ -152,8 +155,42 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
                 myFormat = MediaType.parse(aURI);
             }
         } catch (final IllegalArgumentException details) {
-            LOGGER.warn(MessageCodes.JPA_013, aURI);
+            LOGGER.warn(MessageCodes.JPA_013, aURI); // It's okay to not have one if we don't know it
             myFormat = null;
         }
+    }
+
+    /**
+     * Used by Jackson't serialization processes.
+     *
+     * @return A form of language ready to be serialized
+     */
+    @JsonGetter(Constants.LANGUAGE)
+    @JsonInclude(Include.NON_EMPTY)
+    private Object getLanguage() {
+        final List<String> languages = getLanguages();
+
+        if (languages.size() == 1) {
+            return languages.get(0);
+        } else {
+            return languages;
+        }
+    }
+
+    /**
+     * Used by Jackson's deserialization processes.
+     *
+     * @param aObject An object to be deserialized
+     * @return This resource
+     */
+    @JsonSetter(Constants.LANGUAGE)
+    private AbstractContentResource<T> setLanguage(final Object aObject) {
+        if (aObject instanceof String) {
+            return (AbstractContentResource<T>) setLanguages((String) aObject);
+        } else if (aObject instanceof String[]) {
+            return (AbstractContentResource<T>) setLanguages((String[]) aObject);
+        }
+
+        return this;
     }
 }

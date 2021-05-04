@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.google.common.net.MediaType;
 
@@ -24,7 +23,6 @@ import io.vertx.core.json.JsonObject;
  * provide a longer description of the resource. The profile and format properties of the document should be given to
  * help the client to make appropriate use of the document.
  */
-@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.LABEL, Constants.FORMAT, Constants.PROFILE })
 public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
 
     /**
@@ -152,6 +150,12 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
     @JsonIgnore
     public SeeAlso setLabel(final String aLabel) {
         return (SeeAlso) super.setLabel(new Label(aLabel));
+    }
+
+    @Override
+    @JsonIgnore
+    public SeeAlso setLanguages(final String... aLangArray) throws IllegalArgumentException {
+        return (SeeAlso) super.setLanguages(aLangArray);
     }
 
     @Override

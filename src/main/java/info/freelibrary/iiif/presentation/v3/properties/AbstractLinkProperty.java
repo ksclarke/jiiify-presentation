@@ -4,6 +4,8 @@ package info.freelibrary.iiif.presentation.v3.properties;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -22,8 +24,9 @@ import io.vertx.core.json.JsonObject;
 /**
  * A linking class that specific linking properties can extend.
  */
-@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.FORMAT, Constants.LABEL, Constants.PROFILE })
-abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> {
+@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.LABEL, Constants.FORMAT, Constants.PROFILE,
+    Constants.LANGUAGE })
+abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implements Localized<T> {
 
     private URI myID;
 
@@ -34,6 +37,8 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> {
     private URI myProfile;
 
     private Label myLabel;
+
+    private List<String> myLanguages;
 
     /**
      * Creates an abstract link property.
@@ -183,6 +188,21 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> {
     }
 
     /**
+     * Gets the resource's languages.
+     *
+     * @return A list of the resource's languages
+     */
+    @Override
+    @JsonIgnore
+    public List<String> getLanguages() {
+        if (myLanguages == null) {
+            myLanguages = new ArrayList<>();
+        }
+
+        return myLanguages;
+    }
+
+    /**
      * Gets the profile.
      *
      * @return An optional profile URI
@@ -263,4 +283,46 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> {
      * @return A JSON representation of this resource
      */
     public abstract JsonObject toJSON();
+
+    /**
+     * Used by Jackson's serialization processes.
+     *
+     * @return A form of language ready to be serialized
+     */
+    @JsonGetter(Constants.LANGUAGE)
+    @JsonInclude(Include.NON_EMPTY)
+    protected Object getLanguageProperty() {
+        final List<String> languages = getLanguages();
+
+        if (languages.size() == 1) {
+            return languages.get(0);
+        } else {
+            return languages;
+        }
+    }
+
+    /**
+     * Used by Jackson's deserialization processes.
+     *
+     * @param aObject An object to be deserialized
+     * @return This resource
+     */
+    @JsonSetter(Constants.LANGUAGE)
+    protected AbstractLinkProperty<T> setLanguageProperty(final Object aObject) {
+        if (aObject instanceof String) {
+            return (AbstractLinkProperty<T>) setLanguages((String) aObject);
+        } else if (aObject instanceof String[]) {
+            return (AbstractLinkProperty<T>) setLanguages((String[]) aObject);
+        } else if (aObject instanceof ArrayList) {
+            final ArrayList<?> list = (ArrayList<?>) aObject;
+
+            if (list.size() > 0 && list.get(0) instanceof String) {
+                return (AbstractLinkProperty<T>) setLanguages(list.toArray(new String[list.size()]));
+            } // FIXME
+        } else {
+            System.err.println(aObject.getClass().getSimpleName());
+        }
+
+        return this;
+    }
 }
