@@ -30,6 +30,7 @@ import info.freelibrary.iiif.presentation.v3.properties.selectors.Selector;
 import info.freelibrary.iiif.presentation.v3.utils.ContentResourceComparator;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
+import io.vertx.core.json.JsonObject;
 import io.vertx.core.json.jackson.DatabindCodec;
 
 /**
@@ -457,7 +458,7 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
                 getBody().add(mapper.convertValue(aMap, TextualBody.class));
                 break;
             default:
-                LOGGER.warn(MessageCodes.JPA_052, type);
+                getBody().add(new OtherContent(JsonObject.mapFrom(aMap)));
         }
     }
 }

@@ -1,11 +1,14 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,6 +16,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -25,6 +31,7 @@ import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentS
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.json.jackson.DatabindCodec;
 
 /**
  * A virtual container that represents a page or view and has content resources associated with it or with parts of it.
@@ -46,6 +53,8 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     private List<AnnotationPage<PaintingAnnotation>> myPaintingPageList;
 
     private List<AnnotationPage<SupplementingAnnotation>> mySupplementingPageList;
+
+    private List<AnnotationPage<? extends Annotation<?>>> myOtherAnnotations;
 
     private float myDuration;
 
@@ -190,7 +199,38 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         return myPaintingPageList;
     }
 
-    @JsonSetter(Constants.ANNOTATIONS)
+    /**
+     * Gets the canvas' annotation pages that aren't related to painting.
+     *
+     * @return The canvas' non-painting annotation pages
+     */
+    @JsonIgnore
+    public List<AnnotationPage<? extends Annotation<?>>> getOtherAnnotations() {
+        if (myOtherAnnotations == null) {
+            myOtherAnnotations = new ArrayList<>();
+        }
+
+        return myOtherAnnotations;
+    }
+
+    /**
+     * Sets the manifest's annotation pages.
+     *
+     * @param aAnnotationList A list of annotation pages
+     * @return This manifest
+     */
+    @JsonIgnore
+    public AbstractCanvas<T> setOtherAnnotations(final List<AnnotationPage<? extends Annotation<?>>> aAnnotationList) {
+        final List<AnnotationPage<? extends Annotation<?>>> annotations = getOtherAnnotations();
+
+        checkNotNull(aAnnotationList);
+        annotations.clear();
+        annotations.addAll(aAnnotationList);
+
+        return this;
+    }
+
+    @JsonIgnore
     @SuppressWarnings("unchecked") // Moved SafeVarargs to extending classes where method can be final
     protected AbstractCanvas<T> setSupplementingPages(final AnnotationPage<SupplementingAnnotation>... aPageArray) {
         if (mySupplementingPageList != null) {
@@ -232,7 +272,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      *
      * @return The canvas' non-painting annotation pages
      */
-    @JsonGetter(Constants.ANNOTATIONS)
+    @JsonIgnore
     public List<AnnotationPage<SupplementingAnnotation>> getSupplementingPages() {
         if (mySupplementingPageList == null) {
             mySupplementingPageList = new ArrayList<>();
@@ -592,5 +632,131 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         }
 
         return canvasFragment;
+    }
+
+    /**
+     * A method used by Jackson for serialization.
+     *
+     * @return A list of annotation pages
+     */
+    @JsonGetter(Constants.ANNOTATIONS)
+    private List<AnnotationPage<? extends Annotation<?>>> getAnnotations() {
+        final List<AnnotationPage<? extends Annotation<?>>> annotations = new ArrayList<>();
+
+        getSupplementingPages().forEach(page -> {
+            annotations.add(page);
+        });
+
+        getOtherAnnotations().forEach(page -> {
+            annotations.add(page);
+        });
+
+        return annotations;
+    }
+
+    /**
+     * A method used by Jackson for deserialization.
+     *
+     * @param aObject A object used by Jackson to deserialize
+     * @return This canvas
+     */
+    @SuppressWarnings("unchecked")
+    @JsonSetter(Constants.ANNOTATIONS)
+    private AbstractCanvas<T> setAnnotations(final Object aObject) {
+        final List<AnnotationPage<SupplementingAnnotation>> supplementingPages = getSupplementingPages();
+        final List<AnnotationPage<? extends Annotation<?>>> otherAnnotations = getOtherAnnotations();
+        final List<AnnotationPage<? extends Annotation<?>>> annotationList = getDeserializedPageList(aObject);
+
+        supplementingPages.clear();
+        otherAnnotations.clear();
+
+        annotationList.forEach(page -> {
+            // Check all the annotations on the page to make sure they are all supplementing annotations
+            final List<? extends Annotation<?>> annotations = page.getAnnotations();
+
+            boolean supplementingAnnotations = true;
+
+            for (final Annotation<?> annotation : annotations) {
+                if (!(annotation instanceof SupplementingAnnotation)) {
+                    supplementingAnnotations = false;
+                }
+            }
+
+            // If all the annotations on a page are supplementing, we can put the page into supplementing pages list
+            if (supplementingAnnotations) {
+                // The unchecked warning suppression on the method is for this
+                supplementingPages.add((AnnotationPage<SupplementingAnnotation>) page);
+            } else {
+                otherAnnotations.add(page);
+            }
+        });
+
+        return this;
+    }
+
+    /**
+     * Gets a list of AnnotationPage(s) from a deserialized Jackson object (which should be a list).
+     *
+     * @param aObject An object Jackson has created while deserializing the incoming JSON
+     * @return A list of AnnotationPage(s)
+     */
+    @JsonIgnore
+    private List<AnnotationPage<? extends Annotation<?>>> getDeserializedPageList(final Object aObject) {
+        final List<AnnotationPage<? extends Annotation<?>>> pagesList = new ArrayList<>();
+
+        // Incoming object should be a list of AnnotationPage(s)
+        if (aObject instanceof List) {
+            final List<?> pageList = (List<?>) aObject;
+
+            // Get each AnnotationPage object from the list and try to deserialize it
+            for (final Object pageListObject : pageList) {
+                if (pageListObject instanceof Map) {
+                    pagesList.add(getDeserializedPage((Map<?, ?>) pageListObject));
+                } // Just ignore stuff we don't know about(?)
+            }
+        } // Just ignore stuff we don't know about(?)
+
+        return pagesList;
+    }
+
+    /**
+     * Gets a AnnotationPage from a deserialized Jackson map.
+     *
+     * @param aAnnotationPageMap A map representing an AnnotationPage
+     * @return An AnnotationPage
+     */
+    @JsonIgnore
+    private AnnotationPage<? extends Annotation<?>> getDeserializedPage(final Map<?, ?> aAnnotationPageMap) {
+        final List<?> items = (List<?>) aAnnotationPageMap.get(Constants.ITEMS);
+        final ObjectMapper mapper = DatabindCodec.mapper();
+        final TypeFactory typeFactory = mapper.getTypeFactory();
+        final JavaType javaType;
+
+        // If there are annotations, we can check whether they are supplementing or "other"
+        if (items != null) {
+            boolean supplementingAnnotations = true;
+
+            for (final Object item : items) {
+                final Map<?, ?> annotation = (Map<?, ?>) item;
+
+                if (annotation != null) {
+                    if (!SupplementingAnnotation.MOTIVATION.equals(annotation.get(Constants.MOTIVATION))) {
+                        supplementingAnnotations = false;
+                    }
+                }
+            }
+
+            // Either supplementing annotation or mixed annotations (which may include supplementing annotations)
+            if (supplementingAnnotations) {
+                javaType = typeFactory.constructParametricType(AnnotationPage.class, SupplementingAnnotation.class);
+                return mapper.convertValue(aAnnotationPageMap, javaType);
+            } else {
+                javaType = typeFactory.constructParametricType(AnnotationPage.class, Annotation.class);
+                return mapper.convertValue(aAnnotationPageMap, javaType);
+            }
+        } else {
+            javaType = typeFactory.constructParametricType(AnnotationPage.class, Annotation.class);
+            return mapper.convertValue(aAnnotationPageMap, javaType);
+        }
     }
 }

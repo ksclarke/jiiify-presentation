@@ -33,9 +33,15 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
         implements Resource<SupplementingAnnotation>, ContentAnnotation<SupplementingAnnotation> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SupplementingAnnotation.class, MessageCodes.BUNDLE);
+    /**
+     * The motivation for SupplementingAnnotation(s) is "supplementing"
+     */
+    static final String MOTIVATION = "supplementing";
 
-    private static final String MOTIVATION = "supplementing";
+    /**
+     * The logger that SupplementingAnnotation uses.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(SupplementingAnnotation.class, MessageCodes.BUNDLE);
 
     /**
      * Creates a supplementing annotation.

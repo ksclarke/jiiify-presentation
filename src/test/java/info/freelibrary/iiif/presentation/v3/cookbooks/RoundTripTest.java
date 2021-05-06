@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import info.freelibrary.util.StringUtils;
@@ -428,7 +427,6 @@ public class RoundTripTest {
      * @throws IOException If there is trouble reading the manifest file
      */
     @Test
-    @Ignore
     public final void test0139GeolocateCanvasFragment() throws IOException {
         final JsonObject expected = getManifest("0139-geolocate-canvas-fragment");
         final JsonObject found = Manifest.fromJSON(expected).toJSON();
@@ -496,20 +494,6 @@ public class RoundTripTest {
     @Test
     public final void test0230NavDateCollection() throws IOException {
         final JsonObject expected = getManifest("0230-navdate-collection");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
-
-        compare(expected, found);
-    }
-
-    /**
-     * Tests the example manifest from the specification (cf.
-     * https://iiif.io/api/presentation/3.0/#b-example-manifest-response)
-     *
-     * @throws IOException If there is trouble reading the manifest file
-     */
-    @Test
-    public final void testSpecExample() throws IOException {
-        final JsonObject expected = getManifest("spec-example");
         final JsonObject found = Manifest.fromJSON(expected).toJSON();
 
         compare(expected, found);

@@ -47,8 +47,8 @@ class DefaultMinter implements Minter {
 
     // All the alpha-numeric characters we use in creating NOIDs; lower case L is not used because it looks like "1"
     private static final Character[] CHARS =
-        new Character[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
-            'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
+            new Character[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'm', 'n', 'o', 'p', 'q', 'r', 's',
+                't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
 
     /* The maximum number of NOIDs, given the size of our character array. */
     private static final int MAX_NOID_COUNT = 1500625;

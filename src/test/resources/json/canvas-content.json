@@ -36,12 +36,12 @@
           "id": "https://example.org/iiif/canvas/annotation/canvas1/page",
           "items": [
             {
-              "type": "Annotation",
               "id": "https://example.org/iiif/canvas/annotation/canvas1-canvas",
+              "type": "Annotation",
               "motivation": "supplementing",
               "body": {
-                "type": "Canvas",
                 "id": "https://example.org/iiif/canvas/canvas2",
+                "type": "Canvas",
                 "format": "application/json"
               },
               "target": "https://example.org/iiif/canvas/canvas1"

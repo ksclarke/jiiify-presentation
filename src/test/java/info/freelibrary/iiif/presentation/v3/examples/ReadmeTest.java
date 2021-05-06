@@ -14,7 +14,7 @@ import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 /**
  * Examples from documentation.
  */
-public class Examples {
+public class ReadmeTest {
 
     /**
      * Example from from the README.md
