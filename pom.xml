@@ -165,7 +165,6 @@
       <plugin>
         <groupId>info.freelibrary</groupId>
         <artifactId>freelib-maven-plugins</artifactId>
-        <version>${freelib.maven.version}</version>
         <executions>
           <execution>
             <phase>process-resources</phase>
@@ -181,13 +180,10 @@
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
-          <show>public</show>
-          <detectLinks>false</detectLinks>
           <links>
             <link>https://google.github.io/guava/releases/23.0/api/docs/</link>
             <link>https://vertx.io/docs/apidocs/</link>
           </links>
-          <sourcepath>src/main/java:src/main/generated</sourcepath>
         </configuration>
       </plugin>
       <plugin>
@@ -245,7 +241,7 @@
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>6.7.2</version>
+    <version>6.7.3</version>
   </parent>
 
 </project>
