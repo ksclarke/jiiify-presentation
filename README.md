@@ -26,6 +26,10 @@ To check the project out and build it, type:
 
 To build the Javadocs, from the command line, run: `mvn javadoc:javadoc`
 
+### Spec/Cookbook Compliance
+
+Jiiify Presentation (JP) uses the IIIF Presentation [cookbooks](https://iiif.io/api/cookbook/index.html) as an indicator of v3 support. Consult the JP [documentation](docs/cookbook-status.md) to see which cookbooks are fully supported, partially supported, or not yet supported. Not all cookbooks have been completely fleshed out yet so this list will be frequently updated until they are all completed.
+
 ### Contact
 
 If you encounter a problem, please feel free to open a ticket in the project's [issues queue](https://github.com/ksclarke/jiiify-presentation/issues "GitHub Issues Queue"). If you have a question, feel free to use the project's [discussion board](https://github.com/ksclarke/jiiify-presentation/discussions). Please specify which branch or version of jiiify-presentation you're using.
