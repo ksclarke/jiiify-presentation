@@ -1,54 +1,112 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.selectors;
 
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.StringUtils;
+
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * A selector for IIIF Image APIs.
  */
 public class ImageApiSelector implements Selector {
 
+    /**
+     * The Image API selector's size.
+     */
     protected static final String SIZE = "size";
 
+    /**
+     * The Image API selector's region.
+     */
     protected static final String REGION = "region";
 
+    /**
+     * The Image API selector's rotation.
+     */
     protected static final String ROTATION = "rotation";
 
+    /**
+     * The Image API selector's quality.
+     */
     protected static final String QUALITY = "quality";
 
+    /**
+     * The Image API selector's format.
+     */
     protected static final String FORMAT = "format";
 
+    /**
+     * The Image API selector's max size.
+     */
     protected static final String DEFAULT_SIZE = "max";
 
+    /**
+     * The Image API selector's full region.
+     */
     protected static final String DEFAULT_REGION = "full";
 
+    /**
+     * The Image API selector's default rotation.
+     */
     protected static final String DEFAULT_ROTATION = "0";
 
+    /**
+     * The Image API selector's default quality.
+     */
     protected static final String DEFAULT_QUALITY = "default";
 
+    /**
+     * The Image API selector's default format.
+     */
     protected static final String DEFAULT_FORMAT = "jpg";
 
+    /**
+     * The Image API selector's logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageApiSelector.class, MessageCodes.BUNDLE);
 
+    /**
+     * The expected number of URL delimiters.
+     */
+    private static final int EXPECTED_URL_DELIM_COUNT = 4;
+
+    /**
+     * The Image API selector's slash constant.
+     */
     private static final String SLASH = "/";
 
+    /**
+     * The Image API selector's region;
+     */
     private String myRegion = DEFAULT_REGION;
 
+    /**
+     * The Image API selector's size.
+     */
     private String mySize = DEFAULT_SIZE;
 
+    /**
+     * The Image API selector's rotation.
+     */
     private String myRotation = DEFAULT_ROTATION;
 
+    /**
+     * The Image API selector's quality.
+     */
     private String myQuality = DEFAULT_QUALITY;
 
+    /**
+     * The Image API selector's format.
+     */
     private String myFormat = DEFAULT_FORMAT;
 
     /**
      * Creates an Image API selector.
      */
     public ImageApiSelector() {
+        // This is intentionally empty
     }
 
     /**
@@ -79,7 +137,7 @@ public class ImageApiSelector implements Selector {
         final String[] parts = aUrlPath.indexOf('/') == 0 ? aUrlPath.substring(1).split(SLASH) : aUrlPath.split(SLASH);
         final int dotIndex;
 
-        if (parts.length != 4) {
+        if (parts.length != EXPECTED_URL_DELIM_COUNT) {
             throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_036, aUrlPath));
         }
 

@@ -2,7 +2,6 @@
 package info.freelibrary.iiif.presentation.v3;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,8 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import info.freelibrary.util.StringUtils;
-
-import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 
 import io.vertx.core.json.JsonObject;
 
@@ -39,18 +36,6 @@ public class SoundContentTest extends AbstractTest {
     @Test
     public final void testSetGetDuration() {
         assertEquals(1.5f, new SoundContent(myID).setDuration(1.5f).getDuration(), 0);
-    }
-
-    /**
-     * Tests clearing the required statement.
-     */
-    @Test
-    public void testClearRequiredStatement() {
-        final RequiredStatement reqStatement = new RequiredStatement("stmt-id", "stmt-label");
-        final SoundContent content = new SoundContent(myID).setRequiredStatement(reqStatement);
-
-        assertTrue(content.getRequiredStatement() != null);
-        assertTrue(content.clearRequiredStatement().getRequiredStatement() == null);
     }
 
     /**

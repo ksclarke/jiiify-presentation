@@ -7,6 +7,8 @@ import java.net.URI;
 
 import org.junit.Test;
 
+import info.freelibrary.iiif.presentation.v3.services.image.ImageService2;
+
 /**
  * A ImageService2 test.
  */

@@ -13,6 +13,7 @@ public class RequiredStatement extends Metadata {
      */
     @SuppressWarnings("unused")
     private RequiredStatement() {
+        super();
     }
 
     /**

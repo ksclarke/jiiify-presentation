@@ -9,9 +9,9 @@ import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.iiif.presentation.v3.utils.I18nUtils;
 
 /**
- * A human readable label, name or title for the resource. This property is intended to be displayed as a short,
- * textual surrogate for the resource if a human needs to make a distinction between it and similar resources, for
- * example between pages or between a choice of images to display.
+ * A human readable label, name or title for the resource. This property is intended to be displayed as a short, textual
+ * surrogate for the resource if a human needs to make a distinction between it and similar resources, for example
+ * between pages or between a choice of images to display.
  */
 @JsonDeserialize(using = LabelDeserializer.class)
 public class Label extends I18nProperty<Label> {
@@ -22,7 +22,7 @@ public class Label extends I18nProperty<Label> {
      * @param aI18nArray An array of internationalizations for the label
      * @throws IllegalArgumentException If the supplied internationalizations have HTML markup
      */
-    public Label(final I18n... aI18nArray) throws IllegalArgumentException {
+    public Label(final I18n... aI18nArray) {
         super(I18nUtils.validateI18ns(false, aI18nArray));
     }
 
@@ -32,7 +32,7 @@ public class Label extends I18nProperty<Label> {
      * @param aStringArray An array of strings for label
      * @throws IllegalArgumentException If the supplied string(s) have HTML markup
      */
-    public Label(final String... aStringArray) throws IllegalArgumentException {
+    public Label(final String... aStringArray) {
         super(I18nUtils.createI18ns(false, aStringArray));
     }
 
@@ -55,7 +55,7 @@ public class Label extends I18nProperty<Label> {
      */
     @Override
     @JsonIgnore
-    public Label setStrings(final String... aStringArray) throws IllegalArgumentException {
+    public Label setStrings(final String... aStringArray) {
         myI18ns.clear();
         return addI18ns(I18nUtils.createI18ns(false, aStringArray));
     }

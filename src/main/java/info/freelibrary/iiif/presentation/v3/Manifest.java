@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,7 +29,7 @@ import info.freelibrary.iiif.presentation.v3.properties.Provider;
 import info.freelibrary.iiif.presentation.v3.properties.Rendering;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
-import info.freelibrary.iiif.presentation.v3.properties.StartCanvas;
+import info.freelibrary.iiif.presentation.v3.properties.Start;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
@@ -44,23 +46,63 @@ import io.vertx.core.json.JsonObject;
  * information about the object or the intellectual work that it conveys. Each manifest describes how to present a
  * single object such as a book, a photograph, or a statue.
  */
+@SuppressWarnings({ "PMD.ExcessivePublicCount", "PMD.ExcessiveImports" })
 public class Manifest extends NavigableResource<Manifest> implements Resource<Manifest> {
 
+    /**
+     * The manifest's logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(Manifest.class, MessageCodes.BUNDLE);
 
+    /**
+     * The default number of contexts.
+     */
+    private static final int DEFAULT_CONTEXT_COUNT = 1;
+
+    /**
+     * The manifest's contexts.
+     */
     private final List<URI> myContexts = Stream.of(Constants.CONTEXT_URI).collect(Collectors.toList());
 
-    private Optional<AccompanyingCanvas> myAccompanyingCanvas;
+    /**
+     * The manifest's annotations.
+     */
+    private List<AnnotationPage<? extends Annotation<?>>> myAnnotations;
 
-    private Optional<PlaceholderCanvas> myPlaceholderCanvas;
+    /**
+     * The manifest's accompanying canvas.
+     */
+    private AccompanyingCanvas myAccompanyingCanvas;
 
-    private Optional<StartCanvas> myStartCanvas;
+    /**
+     * The manifest's placeholder canvas.
+     */
+    private PlaceholderCanvas myPlaceholderCanvas;
 
+    /**
+     * The manifest's viewing direction.
+     */
     private ViewingDirection myViewingDirection;
 
+    /**
+     * The manifest's service definitions.
+     */
+    private List<Service> myServiceDefinitions;
+
+    /**
+     * The manifest's canvases.
+     */
     private List<Canvas> myCanvases;
 
+    /**
+     * The manifest's ranges.
+     */
     private List<Range> myRanges;
+
+    /**
+     * The manifest's start.
+     */
+    private Start myStart;
 
     /**
      * Creates a new manifest.
@@ -105,7 +147,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @param aProvider A resource provider
      */
     public Manifest(final String aID, final String aLabel, final List<Metadata> aMetadataList, final String aSummary,
-        final Thumbnail aThumbnail, final Provider aProvider) {
+            final Thumbnail aThumbnail, final Provider aProvider) {
         super(ResourceTypes.MANIFEST, aID, aLabel, aMetadataList, aSummary, aThumbnail, aProvider);
     }
 
@@ -120,7 +162,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @param aProvider A resource provider
      */
     public Manifest(final String aID, final Label aLabel, final List<Metadata> aMetadataList, final String aSummary,
-        final Thumbnail aThumbnail, final Provider aProvider) {
+            final Thumbnail aThumbnail, final Provider aProvider) {
         this(URI.create(aID), aLabel, aMetadataList, new Summary(aSummary), aThumbnail, aProvider);
     }
 
@@ -135,7 +177,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @param aProvider A resource provider
      */
     public Manifest(final URI aID, final Label aLabel, final List<Metadata> aMetadataList, final Summary aSummary,
-        final Thumbnail aThumbnail, final Provider aProvider) {
+            final Thumbnail aThumbnail, final Provider aProvider) {
         super(ResourceTypes.MANIFEST, aID, aLabel, aMetadataList, aSummary, aThumbnail, aProvider);
     }
 
@@ -150,7 +192,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @param aProvider A resource provider
      */
     public Manifest(final String aID, final Label aLabel, final List<Metadata> aMetadataList, final Summary aSummary,
-        final Thumbnail aThumbnail, final Provider aProvider) {
+            final Thumbnail aThumbnail, final Provider aProvider) {
         super(ResourceTypes.MANIFEST, URI.create(aID), aLabel, aMetadataList, aSummary, aThumbnail, aProvider);
     }
 
@@ -180,7 +222,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      */
     @JsonGetter(Constants.PLACEHOLDER_CANVAS)
     public Optional<PlaceholderCanvas> getPlaceholderCanvas() {
-        return myPlaceholderCanvas;
+        return Optional.ofNullable(myPlaceholderCanvas);
     }
 
     /**
@@ -191,7 +233,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      */
     @JsonSetter(Constants.PLACEHOLDER_CANVAS)
     public Manifest setPlaceholderCanvas(final PlaceholderCanvas aCanvas) {
-        myPlaceholderCanvas = Optional.ofNullable(aCanvas);
+        myPlaceholderCanvas = aCanvas;
         return this;
     }
 
@@ -202,7 +244,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      */
     @JsonGetter(Constants.ACCOMPANYING_CANVAS)
     public Optional<AccompanyingCanvas> getAccompanyingCanvas() {
-        return myAccompanyingCanvas;
+        return Optional.ofNullable(myAccompanyingCanvas);
     }
 
     /**
@@ -213,7 +255,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      */
     @JsonSetter(Constants.ACCOMPANYING_CANVAS)
     public Manifest setAccompanyingCanvas(final AccompanyingCanvas aCanvas) {
-        myAccompanyingCanvas = Optional.ofNullable(aCanvas);
+        myAccompanyingCanvas = aCanvas;
         return this;
     }
 
@@ -245,8 +287,8 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     /**
-     * Gets an unmodifiable list of manifest contexts. To remove contexts, use {@link Manifest#removeContext(URI)
-     * removeContext} or {@link Manifest#clearContexts() clearContexts}.
+     * Gets an unmodifiable list of manifest contexts. To remove contexts, use {@link MANIFEST#removeContext(URI)
+     * removeContext} or {@link MANIFEST#clearContexts() clearContexts}.
      *
      * @return The manifest context
      */
@@ -272,16 +314,6 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     /**
-     * Tests whether the manifest contains the supplied context.
-     *
-     * @param aContextURI A context to check
-     * @return True if the manifest contains the supplied context; else, false
-     */
-    public boolean containsContext(final URI aContextURI) {
-        return myContexts.contains(aContextURI);
-    }
-
-    /**
      * Remove the supplied context. This will not remove the default required context though. If that's supplied, an
      * {@link UnsupportedOperationException} will be thrown.
      *
@@ -289,7 +321,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @return True if the context was removed; else, false
      * @throws UnsupportedOperationException If the required context is supplied to be removed
      */
-    public boolean removeContext(final URI aContextURI) throws UnsupportedOperationException {
+    public boolean removeContext(final URI aContextURI) {
         if (Constants.CONTEXT_URI.equals(aContextURI)) {
             throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_039, Constants.CONTEXT_URI));
         }
@@ -310,7 +342,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     /**
      * Adds an array of new context URIs to the manifest.
      *
-     * @param aContextArray Manifest context URIs(s)
+     * @param aContextArray MANIFEST context URIs(s)
      * @return The manifest
      */
     public Manifest addContexts(final URI... aContextArray) {
@@ -331,7 +363,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     /**
      * Adds an array of new context URIs, in string form, to the manifest.
      *
-     * @param aContextArray Manifest context URI(s) in string form
+     * @param aContextArray MANIFEST context URI(s) in string form
      * @return The manifest
      */
     public Manifest addContexts(final String... aContextArray) {
@@ -350,7 +382,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     /**
-     * Sets the viewing direction.
+     * Sets the viewing direction. The remove the existing viewing direction, set it to null.
      *
      * @param aViewingDirection A viewing direction
      * @return The manifest
@@ -369,16 +401,6 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     @JsonGetter(Constants.VIEWING_DIRECTION)
     public ViewingDirection getViewingDirection() {
         return myViewingDirection;
-    }
-
-    /**
-     * Clears the viewing direction.
-     *
-     * @return The manifest
-     */
-    public Manifest clearViewingDirection() {
-        myViewingDirection = null;
-        return this;
     }
 
     /**
@@ -446,14 +468,14 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     /**
-     * Sets the optional start canvas.
+     * Sets the optional start.
      *
-     * @param aStartCanvas A start canvas
+     * @param aStart A start
      * @return The manifest
      */
     @JsonSetter(Constants.START)
-    public Manifest setStartCanvas(final StartCanvas aStartCanvas) {
-        myStartCanvas = Optional.ofNullable(aStartCanvas);
+    public Manifest setStart(final Start aStart) {
+        myStart = aStart;
         return this;
     }
 
@@ -463,12 +485,8 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @return The optional start canvas
      */
     @JsonGetter(Constants.START)
-    public Optional<StartCanvas> getStartCanvas() {
-        if (myStartCanvas == null) {
-            myStartCanvas = Optional.empty();
-        }
-
-        return myStartCanvas;
+    public Optional<Start> getStart() {
+        return Optional.ofNullable(myStart);
     }
 
     /**
@@ -531,6 +549,48 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     @Override
     public Manifest setServices(final List<Service> aServiceList) {
         return (Manifest) super.setServices(aServiceList);
+    }
+
+    /**
+     * Sets the services referenced by different parts of the manifest.
+     *
+     * @param aServicesArray An array of services
+     * @return The manifest
+     */
+    @JsonIgnore
+    public Manifest setServiceDefinitions(final Service... aServicesArray) {
+        return setServiceDefinitions(Arrays.asList(aServicesArray));
+    }
+
+    /**
+     * Sets the services referenced by different parts of the manifest.
+     *
+     * @param aServicesList A list of services
+     * @return The manifest
+     */
+    @JsonSetter(Constants.SERVICES)
+    public Manifest setServiceDefinitions(final List<Service> aServicesList) {
+        final List<Service> servicesList = getServiceDefinitions();
+
+        checkNotNull(aServicesList);
+        servicesList.clear();
+        servicesList.addAll(aServicesList);
+
+        return this;
+    }
+
+    /**
+     * Gets the services referenced by different parts of the manifest.
+     *
+     * @return A list of services referenced by different parts of the manifest
+     */
+    @JsonGetter(Constants.SERVICES)
+    public List<Service> getServiceDefinitions() {
+        if (myServiceDefinitions == null) {
+            myServiceDefinitions = new ArrayList<>();
+        }
+
+        return myServiceDefinitions;
     }
 
     @Override
@@ -599,11 +659,6 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     @Override
-    public Manifest clearRequiredStatement() {
-        return (Manifest) super.clearRequiredStatement();
-    }
-
-    @Override
     public Manifest setSummary(final String aSummary) {
         return (Manifest) super.setSummary(aSummary);
     }
@@ -634,9 +689,53 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     /**
-     * Returns a JsonObject of the Manifest.
+     * Sets the manifest's annotation pages.
      *
-     * @return A JsonObject of the Manifest
+     * @param aAnnotationPageList A list of annotation pages
+     * @return This manifest
+     */
+    @JsonSetter(Constants.ANNOTATIONS)
+    public Manifest setAnnotations(final List<AnnotationPage<? extends Annotation<?>>> aAnnotationPageList) {
+        final List<AnnotationPage<? extends Annotation<?>>> annotations = getAnnotations();
+
+        checkNotNull(aAnnotationPageList);
+        annotations.clear();
+        annotations.addAll(aAnnotationPageList);
+
+        return this;
+    }
+
+    /**
+     * Sets the manifest's annotation pages.
+     *
+     * @param aAnnotationPageList A list of annotation pages
+     * @return This manifest
+     */
+    @SafeVarargs
+    @JsonIgnore
+    public final Manifest setAnnotations(final AnnotationPage<? extends Annotation<?>>... aAnnotationPageList) {
+        setAnnotations(List.of(aAnnotationPageList));
+        return this;
+    }
+
+    /**
+     * Gets the manifest's annotation pages.
+     *
+     * @return This manifest's annotation pages
+     */
+    @JsonGetter(Constants.ANNOTATIONS)
+    public List<AnnotationPage<? extends Annotation<?>>> getAnnotations() {
+        if (myAnnotations == null) {
+            myAnnotations = new ArrayList<>();
+        }
+
+        return myAnnotations;
+    }
+
+    /**
+     * Returns a JsonObject of the MANIFEST.
+     *
+     * @return A JsonObject of the MANIFEST
      */
     public JsonObject toJSON() {
         return JsonObject.mapFrom(this);
@@ -648,9 +747,9 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     /**
-     * Returns a Manifest from its JSON representation.
+     * Returns a MANIFEST from its JSON representation.
      *
-     * @param aJsonObject A Manifest in JSON form
+     * @param aJsonObject A MANIFEST in JSON form
      * @return The manifest
      */
     @JsonIgnore
@@ -659,7 +758,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     /**
-     * Returns a Manifest from its JSON representation.
+     * Returns a MANIFEST from its JSON representation.
      *
      * @param aJsonString A manifest in string form
      * @return The manifest
@@ -675,27 +774,39 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @param aContext A manifest context in string form
      */
     @JsonSetter(Constants.CONTEXT)
-    private void setContext(final String aContext) {
-        setContexts(List.of(aContext));
+    private void deserializeContexts(final Object aObject) {
+        if (aObject instanceof String) {
+            deserializeContexts(List.of((String) aObject));
+        } else if (aObject instanceof List<?>) {
+            final List<?> genericList = (List<?>) aObject;
+
+            if (!genericList.isEmpty() && genericList.get(0).getClass().equals(String.class)) {
+                setContexts(genericList);
+            } else {
+                throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_113));
+            }
+        } else {
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_113));
+        }
     }
 
     /**
-     * Method used internally to set context from JSON.
+     * Sets the manifest's contexts from a list that Jackson builds.
      *
-     * @param aContext A manifest context in string form
+     * @param aContextList A list of contexts
      */
-    @JsonSetter(Constants.CONTEXT)
-    private void setContexts(final List<String> aContextList) {
-        final List<URI> contextList = new ArrayList<>();
+    @JsonIgnore
+    private void setContexts(final List<?> aContextList) {
         final List<Integer> indices = new ArrayList<>();
+        final List<URI> contextList = new ArrayList<>();
 
         for (int index = 0; index < aContextList.size(); index++) {
-            final URI context = URI.create(aContextList.get(index));
+            final URI context = URI.create((String) aContextList.get(index));
 
             if (Constants.CONTEXT_URI.equals(context)) {
                 indices.add(index); // We may have more than one required context in supplied list
 
-                if (indices.size() == 1) { // Only keep one if this is the case
+                if (indices.size() == DEFAULT_CONTEXT_COUNT) { // Only keep one if this is the case
                     contextList.add(context);
                 }
             } else {
@@ -704,7 +815,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
         }
 
         // Remove required context; we'll add it back at the end
-        if (indices.size() > 0) {
+        if (!indices.isEmpty()) {
             contextList.remove((int) indices.get(0));
         }
 
@@ -721,9 +832,9 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      */
     @JsonGetter(Constants.CONTEXT)
     private Object getJsonContext() {
-        if (myContexts.size() == 1) {
+        if (myContexts.size() == DEFAULT_CONTEXT_COUNT) {
             return myContexts.get(0);
-        } else if (myContexts.size() > 1) {
+        } else if (!myContexts.isEmpty()) {
             return myContexts;
         } else {
             return null;

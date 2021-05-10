@@ -12,9 +12,6 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -27,7 +24,6 @@ import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.services.Service;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
@@ -35,18 +31,25 @@ import io.vertx.core.json.JsonObject;
 /**
  * Video content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
  */
-@JsonPropertyOrder({ Constants.TYPE, Constants.ID, Constants.THUMBNAIL, Constants.WIDTH, Constants.HEIGHT,
+@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.THUMBNAIL, Constants.HEIGHT, Constants.WIDTH,
     Constants.DURATION, Constants.FORMAT, Constants.LANGUAGE })
 public class VideoContent extends AbstractContentResource<VideoContent> implements Thumbnail, Resource<VideoContent>,
         SpatialContentResource<VideoContent>, TemporalContentResource<VideoContent> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(VideoContent.class, MessageCodes.BUNDLE);
+    /**
+     * The video content's duration.
+     */
+    private float myDuration;
 
+    /**
+     * The video content's width.
+     */
     private int myWidth;
 
+    /**
+     * The video content's height.
+     */
     private int myHeight;
-
-    private float myDuration;
 
     /**
      * Creates a video content resource.
@@ -197,11 +200,6 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
     }
 
     @Override
-    public VideoContent clearRequiredStatement() {
-        return (VideoContent) super.clearRequiredStatement();
-    }
-
-    @Override
     public VideoContent setSummary(final String aSummary) {
         return (VideoContent) super.setSummary(aSummary);
     }
@@ -292,13 +290,8 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
     @Override
     @JsonSetter(Constants.DURATION)
     public VideoContent setDuration(final Number aDuration) {
-        final float tempDuration = aDuration.floatValue();
-        if (tempDuration > 0 && Float.isFinite(tempDuration)) {
-            myDuration = tempDuration;
-            return this;
-        } else {
-            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_024, aDuration));
-        }
+        myDuration = convertToFinitePositiveFloat(aDuration);
+        return this;
     }
 
     /**

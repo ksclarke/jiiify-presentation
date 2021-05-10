@@ -14,17 +14,34 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public final class MinterFactory {
 
+    /**
+     * The minter name property.
+     */
     public static final String MINTER_NAME_PROPERTY = "fester.noid.minter";
 
+    /**
+     * The environmental property for the minter name.
+     */
     public static final String ENV_MINTER_NAME = "FESTER_NOID_MINTER";
 
+    /**
+     * The default minter class' name.
+     */
     private static final String DEFAULT_MINTER_NAME = DefaultMinter.class.getName();
 
+    /**
+     * A map of minters.
+     */
     private static final Map<URI, Minter> MINTERS = new HashMap<>();
 
-    /* We keep an internal modifiable env map so we can modify it during testing. */
+    /**
+     * We keep an internal modifiable environmental map so we can modify it during testing.
+     */
     private static final Map<String, String> ENV_PROPERTIES;
 
+    /**
+     * The static map initializations.
+     */
     static {
         ENV_PROPERTIES = new HashMap<>(); // MinterFactory map is modifiable
         ENV_PROPERTIES.putAll(System.getenv()); // System map is not modifiable
@@ -34,6 +51,7 @@ public final class MinterFactory {
      * Private constructor for the factory.
      */
     private MinterFactory() {
+        // This is intentionally empty
     }
 
     /**
@@ -83,7 +101,7 @@ public final class MinterFactory {
     private static Minter getNewMinter(final Manifest aManifest) {
         try {
             final Class<?> clath = Class.forName(getMinterName());
-            final Class<?>[] args = new Class[] { Manifest.class };
+            final Class<?>[] args = { Manifest.class };
 
             return MINTERS.put(aManifest.getID(), (Minter) clath.getDeclaredConstructor(args).newInstance(aManifest));
         } catch (IllegalAccessException | ClassNotFoundException | InstantiationException | NoSuchMethodException |
@@ -101,7 +119,7 @@ public final class MinterFactory {
     private static Minter getNewMinter(final URI aManifestID) {
         try {
             final Class<?> clath = Class.forName(getMinterName());
-            final Class<?>[] args = new Class[] { URI.class };
+            final Class<?>[] args = { URI.class };
 
             return MINTERS.put(aManifestID, (Minter) clath.getDeclaredConstructor(args).newInstance(aManifestID));
         } catch (IllegalAccessException | ClassNotFoundException | InstantiationException | NoSuchMethodException |
@@ -112,7 +130,7 @@ public final class MinterFactory {
 
     /**
      * Gets the name of the minter implementation.
-     * 
+     *
      * @return The name of the minter implementation
      */
     private static String getMinterName() {

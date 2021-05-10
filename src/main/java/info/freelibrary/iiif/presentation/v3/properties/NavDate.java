@@ -19,6 +19,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
  */
 public class NavDate {
 
+    /**
+     * The navDate's zoned datetime.
+     */
     private final String myZonedDateTime;
 
     /**

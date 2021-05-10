@@ -1,9 +1,11 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -15,25 +17,60 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.google.common.net.MediaType;
 
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+
 import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 import io.vertx.core.json.JsonObject;
 
 /**
  * A linking class that specific linking properties can extend.
  */
-@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.FORMAT, Constants.LABEL, Constants.PROFILE })
-abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> {
+@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.LABEL, Constants.FORMAT, Constants.PROFILE,
+    Constants.LANGUAGE })
+abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implements Localized<T> {
 
+    /**
+     * The AbstractLinkProperty logger.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractLinkProperty.class, MessageCodes.BUNDLE);
+
+    /**
+     * The size of a single value array.
+     */
+    private static final int SINGLE_VALUE_ARRAY_SIZE = 1;
+
+    /**
+     * The link property ID.
+     */
     private URI myID;
 
+    /**
+     * The link property type.
+     */
     private String myType;
 
+    /**
+     * The link property format.
+     */
     private MediaType myFormat;
 
+    /**
+     * The link property profile.
+     */
     private URI myProfile;
 
+    /**
+     * The link property label.
+     */
     private Label myLabel;
+
+    /**
+     * The link property languages.
+     */
+    private List<String> myLanguages;
 
     /**
      * Creates an abstract link property.
@@ -84,6 +121,7 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> {
      * Creates an abstract link property for the Jackson deserialization process.
      */
     protected AbstractLinkProperty() {
+        // This is intentionally empty
     }
 
     /**
@@ -162,10 +200,10 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> {
      *
      * @param aFormat A resource's format
      * @return The resource whose format is being set
-     * @throws IllegalArgumentException If the supplied string isn't a media type
+     * @If the supplied string isn't a media type
      */
     @JsonSetter(Constants.FORMAT)
-    protected AbstractLinkProperty<T> setFormat(final String aFormat) throws IllegalArgumentException {
+    protected AbstractLinkProperty<T> setFormat(final String aFormat) {
         myFormat = MediaType.parse(aFormat);
         return this;
     }
@@ -180,6 +218,21 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> {
     protected AbstractLinkProperty<T> setFormat(final MediaType aMediaType) {
         myFormat = checkNotNull(aMediaType);
         return this;
+    }
+
+    /**
+     * Gets the resource's languages.
+     *
+     * @return A list of the resource's languages
+     */
+    @Override
+    @JsonIgnore
+    public List<String> getLanguages() {
+        if (myLanguages == null) {
+            myLanguages = new ArrayList<>();
+        }
+
+        return myLanguages;
     }
 
     /**
@@ -205,18 +258,6 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> {
     }
 
     /**
-     * Sets the profile in string form.
-     *
-     * @param aProfile A profile in string form
-     * @return The resource whose profile is being set
-     */
-    @JsonIgnore
-    protected AbstractLinkProperty<T> setProfile(final String aProfile) {
-        myProfile = URI.create(aProfile);
-        return this;
-    }
-
-    /**
      * Gets a descriptive label.
      *
      * @return A descriptive label
@@ -236,18 +277,6 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> {
     @JsonSetter(Constants.LABEL)
     protected AbstractLinkProperty<T> setLabel(final Label aLabel) {
         myLabel = checkNotNull(aLabel);
-        return this;
-    }
-
-    /**
-     * Sets the descriptive label in string form.
-     *
-     * @param aLabel A descriptive label in string form
-     * @return The resource whose label is being set
-     */
-    @JsonIgnore
-    protected AbstractLinkProperty<T> setLabel(final String aLabel) {
-        myLabel = new Label(aLabel);
         return this;
     }
 
@@ -287,4 +316,47 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> {
      * @return A JSON representation of this resource
      */
     public abstract JsonObject toJSON();
+
+    /**
+     * Used by Jackson's serialization processes.
+     *
+     * @return A form of language ready to be serialized
+     */
+    @JsonGetter(Constants.LANGUAGE)
+    @JsonInclude(Include.NON_EMPTY)
+    protected Object getLanguageProperty() {
+        final List<String> languages = getLanguages();
+
+        if (languages.size() == SINGLE_VALUE_ARRAY_SIZE) {
+            return languages.get(0);
+        } else {
+            return languages;
+        }
+    }
+
+    /**
+     * Used by Jackson's deserialization processes.
+     *
+     * @param aObject An object to be deserialized
+     * @return This resource
+     * @throws IllegalArgumentException If the object supplied is unsupported
+     */
+    @JsonSetter(Constants.LANGUAGE)
+    protected AbstractLinkProperty<T> setLanguageProperty(final Object aObject) {
+        if (aObject instanceof String) {
+            return (AbstractLinkProperty<T>) setLanguages((String) aObject);
+        } else if (aObject instanceof String[]) {
+            return (AbstractLinkProperty<T>) setLanguages((String[]) aObject);
+        } else if (aObject instanceof List) {
+            final List<?> list = (List<?>) aObject;
+
+            if (!list.isEmpty() && list.get(0) instanceof String) {
+                return (AbstractLinkProperty<T>) setLanguages(list.toArray(new String[0]));
+            }
+        } else {
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_052, aObject.getClass().getName()));
+        }
+
+        return this;
+    }
 }

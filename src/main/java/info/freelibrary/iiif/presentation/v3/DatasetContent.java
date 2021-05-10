@@ -25,7 +25,7 @@ import info.freelibrary.iiif.presentation.v3.services.Service;
 /**
  * Dataset content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
  */
-@JsonPropertyOrder({ Constants.TYPE, Constants.ID, Constants.THUMBNAIL, Constants.FORMAT, Constants.LANGUAGE })
+@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.THUMBNAIL, Constants.FORMAT, Constants.LANGUAGE })
 public class DatasetContent extends AbstractContentResource<DatasetContent>
         implements Thumbnail, Resource<DatasetContent> {
 
@@ -175,11 +175,6 @@ public class DatasetContent extends AbstractContentResource<DatasetContent>
     @Override
     public DatasetContent setRequiredStatement(final RequiredStatement aStatement) {
         return (DatasetContent) super.setRequiredStatement(aStatement);
-    }
-
-    @Override
-    public DatasetContent clearRequiredStatement() {
-        return (DatasetContent) super.clearRequiredStatement();
     }
 
     @Override

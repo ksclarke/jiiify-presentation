@@ -12,19 +12,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import info.freelibrary.iiif.presentation.v3.properties.Behavior;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+
+import info.freelibrary.iiif.presentation.v3.properties.Behavior;
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * A disjoint behavior checker.
  */
 public class DisjointChecker {
 
+    /**
+     * The DisjointChecker logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(DisjointChecker.class, MessageCodes.BUNDLE);
 
-    // A map of behavior disjoints
+    /**
+     * A map of behavior disjoints.
+     */
     private static final Map<String, Set<String>> DISJOINTS = Map.ofEntries( //
             //
             // Temporal behaviors
@@ -43,7 +49,7 @@ public class DisjointChecker {
             new AbstractMap.SimpleEntry<>(FACING_PAGES, Set.of(PAGED, NON_PAGED)), //
             new AbstractMap.SimpleEntry<>(NON_PAGED, Set.of(PAGED, FACING_PAGES)), //
             //
-            // Collection behaviors
+            // COLLECTION behaviors
             //
             new AbstractMap.SimpleEntry<>(MULTI_PART, Set.of(TOGETHER)), //
             new AbstractMap.SimpleEntry<>(TOGETHER, Set.of(MULTI_PART)), //
@@ -55,6 +61,9 @@ public class DisjointChecker {
             new AbstractMap.SimpleEntry<>(NO_NAV, Set.of(SEQUENCE, THUMBNAIL_NAV)) //
     );
 
+    /**
+     * The checker's list of behaviors.
+     */
     private final List<Behavior> myBehaviors;
 
     /**
@@ -80,19 +89,13 @@ public class DisjointChecker {
      * @param aBehaviorArray An array of behaviors to be set
      * @throws IllegalArgumentException If the behaviors are disjointed
      */
-    public void check(final Class<?> aClass, final Behavior... aBehaviorArray) throws IllegalArgumentException {
+    public void check(final Class<?> aClass, final Behavior... aBehaviorArray) {
         for (int index = 0; index < aBehaviorArray.length; index++) {
             final Behavior behavior = aBehaviorArray[index];
             final Set<String> disjoints;
 
             // Check that the supplied behaviors are valid
-            if (!aClass.isInstance(behavior)) {
-                final String className = aClass.getSimpleName();
-                final String behaviorName = behavior.getClass().getSimpleName();
-
-                throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_031, behaviorName, className));
-            }
-
+            checkBehaviorValidity(aClass, behavior);
             disjoints = DISJOINTS.get(behavior.toString());
 
             // Check the existing behaviors to see if we have any conflicts
@@ -111,6 +114,21 @@ public class DisjointChecker {
                     throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_055, behavior, supplied));
                 }
             }
+        }
+    }
+
+    /**
+     * Checks that the supplied behavior is valid for the supplied class.
+     *
+     * @param aClass The class that has the behavior
+     * @param aBehavior A behavior associated with the supplied class
+     */
+    private void checkBehaviorValidity(final Class<?> aClass, final Behavior aBehavior) {
+        if (!aClass.isInstance(aBehavior)) {
+            final String className = aClass.getSimpleName();
+            final String behaviorName = aBehavior.getClass().getSimpleName();
+
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_031, behaviorName, className));
         }
     }
 

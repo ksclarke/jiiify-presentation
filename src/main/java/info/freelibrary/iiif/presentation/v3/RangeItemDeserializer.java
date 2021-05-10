@@ -10,15 +10,19 @@ import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * Deserializes a Range's Item.
  */
 class RangeItemDeserializer extends StdDeserializer<Range.Item> {
 
+    /**
+     * The logger used by the RangeItemDeserializer.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(RangeItemDeserializer.class, MessageCodes.BUNDLE);
 
     /**
@@ -46,8 +50,8 @@ class RangeItemDeserializer extends StdDeserializer<Range.Item> {
      * Deserializes a Range.Item from its JSON structure.
      */
     @Override
-    public Range.Item deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException,
-            JsonProcessingException {
+    public Range.Item deserialize(final JsonParser aParser, final DeserializationContext aContext)
+            throws IOException, JsonProcessingException {
         final TreeNode treeNode = aParser.getCodec().readTree(aParser);
 
         switch (treeNode.get(Constants.TYPE).toString().replace("\"", "")) {

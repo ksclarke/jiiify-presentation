@@ -18,6 +18,9 @@ import info.freelibrary.iiif.presentation.v3.properties.Summary;
  */
 class NavigableResource<T extends NavigableResource<T>> extends AbstractResource<NavigableResource<T>> {
 
+    /**
+     * The date of the navigable resource.
+     */
     private NavDate myNavDate;
 
     /**

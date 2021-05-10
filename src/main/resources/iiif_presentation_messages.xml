@@ -40,7 +40,7 @@
   <entry key="JPA-035">IIIF Image API URL does not have a dot before format: {}</entry>
   <entry key="JPA-036">IIIF Image API URL does not have the correct number of components: {}</entry>
   <entry key="JPA-037">Unexpected context URI: {}</entry>
-  <entry key="JPA-038">Motivation on ImageContent must be: {}</entry>
+  <entry key="JPA-038">Motivation on {} must be: {}</entry>
   <entry key="JPA-039">Cannot remove required context: {}</entry>
   <entry key="JPA-040">Range item does not have canvas, range, or specific resource!</entry>
   <entry key="JPA-041">Expected Canvas, Range, or SpecificResource... found: {}</entry>
@@ -54,7 +54,7 @@
   <entry key="JPA-049">Unable to add AnnotationPage to Canvas: [{}]</entry>
   <entry key="JPA-050">Unable to add annotation(s) to AnnotationPage: [{}]</entry>
   <entry key="JPA-051">Service doesn't contain the expected type: {}</entry>
-  <entry key="JPA-052">Unexpected and currently unsupported content resource type</entry>
+  <entry key="JPA-052">Unexpected object supplied to setLanguageProperty: {}</entry>
   <entry key="JPA-053">Type set on service image must be: {}</entry>
   <entry key="JPA-054">Supplied behavior ('{}') conflicts with an existing behavior: {}</entry>
   <entry key="JPA-055">Supplied behavior ('{}') conflicts with another supplied behavior: {}</entry>
@@ -80,5 +80,14 @@
   <entry key="JPA-107">Could not create a new minter: {}</entry>
   <entry key="JPA-108">Received duplicate ID from the minter: {} (count: {})</entry>
   <entry key="JPA-109">{} isn't a valid {} profile</entry>
+  <entry key="JPA-110">Duration must be a floating point number, not: {}</entry>
+  <entry key="JPA-111">A service must have an ID (or @ID for older services)</entry>
+  <entry key="JPA-112">Newly minted Skolem IRI: {}</entry>
+  <entry key="JPA-113">Manifest '@context' must either be a string or a list of strings</entry>
+  <entry key="JPA-114">Supplied value isn't a valid Image API format: {}</entry>
+  <entry key="JPA-115">Supplied value isn't a valid Image API quality: {}</entry>
+  <entry key="JPA-116">Unexpected Annotation body type: {}</entry>
+  <entry key="JPA-117">Won't try to build a PointSelector without a temporal or X and Y point</entry>
+  <entry key="JPA-118">The supplied value isn't a valid collection item type: {}</entry>
 
 </properties>

@@ -18,14 +18,23 @@ import io.vertx.core.json.JsonObject;
  * A specific resource that can reference a particular region, time frame, or other aspect of another resource using a
  * selector.
  */
-@JsonPropertyOrder({ Constants.TYPE, Constants.ID, Constants.SOURCE, Constants.SELECTOR })
+@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.SOURCE, Constants.SELECTOR })
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class SpecificResource {
 
+    /**
+     * The specific resource's selector.
+     */
     private Selector mySelector;
 
+    /**
+     * The specific resource's resource URI.
+     */
     private URI mySource;
 
+    /**
+     * The specific resources's ID.
+     */
     private URI myID;
 
     /**
@@ -78,6 +87,7 @@ public class SpecificResource {
      */
     @SuppressWarnings("unused")
     private SpecificResource() {
+        // This is intentionally left empty
     }
 
     /**
@@ -153,8 +163,8 @@ public class SpecificResource {
      * @return This specific resource
      */
     @JsonSetter(Constants.TYPE)
+    @SuppressWarnings("PMD.UnusedFormalParameter") // This method is just used by Jackson's deserialization processes
     private SpecificResource setType(final String aType) {
-        // This is just for Jackson; type is immutable
         return this;
     }
 

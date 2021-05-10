@@ -20,10 +20,21 @@ public enum RangeBehavior implements Behavior {
     CONTINUOUS(BehaviorConstants.CONTINUOUS), PAGED(BehaviorConstants.PAGED), UNORDERED(BehaviorConstants.UNORDERED),
     THUMBNAIL_NAV(BehaviorConstants.THUMBNAIL_NAV), SEQUENCE(BehaviorConstants.SEQUENCE);
 
+    /**
+     * The logger for the RangeBehavior.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(RangeBehavior.class, MessageCodes.BUNDLE);
 
+    /**
+     * The string form of the RangeBehavior.
+     */
     private final String myValue;
 
+    /**
+     * Creates a new RangeBehavior from the supplied string.
+     *
+     * @param aBehavior A range behavior in string form
+     */
     RangeBehavior(final String aBehavior) {
         myValue = aBehavior;
     }
@@ -41,7 +52,7 @@ public enum RangeBehavior implements Behavior {
      * @return A range behavior
      * @throws IllegalArgumentException If the behavior string doesn't correspond to a range behavior
      */
-    public static RangeBehavior fromString(final String aBehavior) throws IllegalArgumentException {
+    public static RangeBehavior fromString(final String aBehavior) {
         for (final RangeBehavior behavior : values()) {
             if (behavior.toString().equalsIgnoreCase(aBehavior)) {
                 return behavior;

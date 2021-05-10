@@ -180,11 +180,6 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
     }
 
     @Override
-    public CanvasContent clearRequiredStatement() {
-        return (CanvasContent) super.clearRequiredStatement();
-    }
-
-    @Override
     public CanvasContent setSummary(final String aSummary) {
         return (CanvasContent) super.setSummary(aSummary);
     }

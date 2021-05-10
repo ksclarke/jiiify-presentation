@@ -22,7 +22,7 @@ import io.vertx.core.json.JsonObject;
  */
 public class StartTest extends AbstractTest {
 
-    private static final String CANVAS_PATTERN = "{\"type\":\"Canvas\",\"id\":\"{}\"}";
+    private static final String CANVAS_PATTERN = "{\"id\":\"{}\",\"type\":\"Canvas\"}";
 
     // Might be neat to create a IIIF LoremIpsum at some point
     private final Lorem myLorem = LoremIpsum.getInstance();
@@ -33,9 +33,9 @@ public class StartTest extends AbstractTest {
     @Test
     public final void testCanvasStart() {
         final String url = myLorem.getUrl();
-        final String json = StringUtils.format(CANVAS_PATTERN, url);
+        final JsonObject expected = new JsonObject(StringUtils.format(CANVAS_PATTERN, url));
 
-        assertEquals(json, JsonObject.mapFrom(new StartCanvas(url)).encode());
+        assertEquals(expected, JsonObject.mapFrom(new Start(url)));
     }
 
     /**
@@ -52,7 +52,7 @@ public class StartTest extends AbstractTest {
                 .put(Constants.SOURCE, sourceURL)
                 .put(Constants.SELECTOR, new JsonObject().put(Constants.TYPE, selector.getType()));
 
-        assertEquals(json, JsonObject.mapFrom(new StartSelector(idURL, sourceURL, selector)));
+        assertEquals(json, JsonObject.mapFrom(new Start(idURL, sourceURL, selector)));
     }
 
     /**
@@ -61,8 +61,8 @@ public class StartTest extends AbstractTest {
     @Test
     public final void testSettingSelector() {
         final AudioContentSelector selector = new AudioContentSelector();
-        final StartSelector start = new StartSelector(myLorem.getUrl(), myLorem.getUrl(), selector);
+        final Start start = new Start(myLorem.getUrl(), myLorem.getUrl(), selector);
 
-        assertEquals(selector, start.getSelector());
+        assertEquals(selector, start.getSelector().get());
     }
 }

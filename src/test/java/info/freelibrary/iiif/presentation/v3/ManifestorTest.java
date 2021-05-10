@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import info.freelibrary.iiif.presentation.v3.utils.Manifestor;
+import info.freelibrary.iiif.presentation.v3.io.Manifestor;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 
 import io.vertx.core.Promise;

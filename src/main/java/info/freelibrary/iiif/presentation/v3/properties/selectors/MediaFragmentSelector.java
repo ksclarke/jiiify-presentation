@@ -5,6 +5,7 @@ import java.io.StringReader;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.tkurz.media.fragments.FragmentParser;
@@ -26,20 +27,44 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public class MediaFragmentSelector implements FragmentSelector {
 
+    /**
+     * The logger for the MediaFragmentSelector.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(MediaFragmentSelector.class, MessageCodes.BUNDLE);
 
+    /**
+     * The selector's media fragment.
+     */
     private final MediaFragment myMediaFragment;
 
+    /**
+     * The selector's x-coordinate.
+     */
     private int myX;
 
+    /**
+     * The selector's y-coordinate.
+     */
     private int myY;
 
+    /**
+     * The selector's width.
+     */
     private int myWidth;
 
+    /**
+     * The selector's height.
+     */
     private int myHeight;
 
+    /**
+     * The selector's start.
+     */
     private float myStart;
 
+    /**
+     * The selector's end.
+     */
     private float myEnd;
 
     /**
@@ -48,7 +73,7 @@ public class MediaFragmentSelector implements FragmentSelector {
      * @param aFragment A media fragment string
      * @throws IllegalArgumentException If the supplied string isn't a valid media fragment
      */
-    public MediaFragmentSelector(final String aFragment) throws IllegalArgumentException {
+    public MediaFragmentSelector(final String aFragment) {
         try {
             myMediaFragment = new FragmentParser(new StringReader(aFragment)).run(MediaFragment.Type.FRAGMENT);
         } catch (final ParseException details) {
@@ -60,6 +85,7 @@ public class MediaFragmentSelector implements FragmentSelector {
 
             setXYWidthHeight((int) sf.getX(), (int) sf.getY(), (int) sf.getWidth(), (int) sf.getHeight());
         }
+
         if (myMediaFragment.hasTemporalFragment()) {
             final TemporalFragment<?> tf = myMediaFragment.getTemporalFragment();
 
@@ -89,7 +115,7 @@ public class MediaFragmentSelector implements FragmentSelector {
      * @param aEnd The end time of an interval in seconds
      * @throws IllegalArgumentException If the supplied dimensions cannot be used to construct a valid media fragment
      */
-    public MediaFragmentSelector(final StartTime aStart, final EndTime aEnd) throws IllegalArgumentException {
+    public MediaFragmentSelector(final StartTime aStart, final EndTime aEnd) {
         myMediaFragment = new MediaFragment();
         myMediaFragment.setTemporalFragment(createTemporalFragment(aStart, aEnd));
 
@@ -103,7 +129,7 @@ public class MediaFragmentSelector implements FragmentSelector {
      * @param aStart The start time of an interval in seconds
      * @throws IllegalArgumentException If the supplied dimension cannot be used to construct a valid media fragment
      */
-    public MediaFragmentSelector(final StartTime aStart) throws IllegalArgumentException {
+    public MediaFragmentSelector(final StartTime aStart) {
         this(aStart, null);
     }
 
@@ -113,7 +139,7 @@ public class MediaFragmentSelector implements FragmentSelector {
      * @param aEnd The end time of an interval in seconds
      * @throws IllegalArgumentException If the supplied dimension cannot be used to construct a valid media fragment
      */
-    public MediaFragmentSelector(final EndTime aEnd) throws IllegalArgumentException {
+    public MediaFragmentSelector(final EndTime aEnd) {
         this(null, aEnd);
     }
 
@@ -129,7 +155,7 @@ public class MediaFragmentSelector implements FragmentSelector {
      * @throws IllegalArgumentException If the supplied dimensions cannot be used to construct a valid media fragment
      */
     public MediaFragmentSelector(final StartTime aStart, final EndTime aEnd, final int aX, final int aY,
-            final int aWidth, final int aHeight) throws IllegalArgumentException {
+            final int aWidth, final int aHeight) {
         myMediaFragment = new MediaFragment();
         myMediaFragment.setSpatialFragment(createSpatialFragment(aX, aY, aWidth, aHeight));
         myMediaFragment.setTemporalFragment(createTemporalFragment(aStart, aEnd));
@@ -150,7 +176,7 @@ public class MediaFragmentSelector implements FragmentSelector {
      * @throws IllegalArgumentException If the supplied dimensions cannot be used to construct a valid media fragment
      */
     public MediaFragmentSelector(final StartTime aStart, final int aX, final int aY, final int aWidth,
-            final int aHeight) throws IllegalArgumentException {
+            final int aHeight) {
         this(aStart, null, aX, aY, aWidth, aHeight);
     }
 
@@ -164,8 +190,7 @@ public class MediaFragmentSelector implements FragmentSelector {
      * @param aEnd The end time of an interval in seconds
      * @throws IllegalArgumentException If the supplied dimensions cannot be used to construct a valid media fragment
      */
-    public MediaFragmentSelector(final EndTime aEnd, final int aX, final int aY, final int aWidth, final int aHeight)
-            throws IllegalArgumentException {
+    public MediaFragmentSelector(final EndTime aEnd, final int aX, final int aY, final int aWidth, final int aHeight) {
         this(null, aEnd, aX, aY, aWidth, aHeight);
     }
 
@@ -190,26 +215,60 @@ public class MediaFragmentSelector implements FragmentSelector {
      * @return The temporal fragment
      * @throws IllegalArgumentException If the supplied dimensions cannot be used to construct a valid media fragment
      */
-    private NPTFragment createTemporalFragment(final StartTime aStart, final EndTime aEnd)
-            throws IllegalArgumentException {
-        final NPTFragment temporalFragment = new NPTFragment();
+    private NPTFragment createTemporalFragment(final StartTime aStart, final EndTime aEnd) {
+        final NPTFragment temporalFragment;
 
-        if (aStart != null && aEnd != null && aEnd.getClocktime().compareTo(aStart.getClocktime()) < 0) {
+        if (aStart != null && aEnd != null) {
+            checkStartTime(aStart);
+            checkEndTime(aStart, aEnd);
+
+            temporalFragment = new NPTFragment();
+            temporalFragment.setStart(aStart.getClocktime());
+            temporalFragment.setEnd(aEnd.getClocktime());
+
+            return temporalFragment;
+        } else if (aStart != null) {
+            checkStartTime(aStart);
+
+            temporalFragment = new NPTFragment();
+            temporalFragment.setStart(aStart.getClocktime());
+
+            return temporalFragment;
+        } else {
+            temporalFragment = new NPTFragment();
+            temporalFragment.setEnd(aEnd.getClocktime());
+
+            return temporalFragment;
+        }
+    }
+
+    /**
+     * Checks that the supplied start time is valid and throws an IllegalArgumentException if it isn't.
+     *
+     * @param aStart A start time
+     * @throws IllegalArgumentException If the supplied start time isn't valid
+     */
+    private void checkStartTime(final StartTime aStart) {
+        Objects.requireNonNull(aStart);
+
+        if (aStart.getClocktime().compareTo(Clocktime.ZERO) < 0) {
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_063));
+        }
+    }
+
+    /**
+     * Checks that the supplied end time is valid and throws an IllegalArgumentException if it isn't.
+     *
+     * @param aStart A start time
+     * @param aEnd An end time
+     */
+    private void checkEndTime(final StartTime aStart, final EndTime aEnd) {
+        Objects.requireNonNull(aStart);
+        Objects.requireNonNull(aEnd);
+
+        if (aEnd.getClocktime().compareTo(aStart.getClocktime()) < 0) {
             throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_062));
         }
-
-        if (aStart != null) {
-            if (aStart.getClocktime().compareTo(Clocktime.ZERO) < 0) {
-                throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_063));
-            } else {
-                temporalFragment.setStart(aStart.getClocktime());
-            }
-        }
-        if (aEnd != null) {
-            temporalFragment.setEnd(aEnd.getClocktime());
-        }
-
-        return temporalFragment;
     }
 
     @Override
@@ -358,6 +417,9 @@ public class MediaFragmentSelector implements FragmentSelector {
      */
     public static class StartTime {
 
+        /**
+         * The start time's clock time.
+         */
         private final Clocktime myClocktime;
 
         /**
@@ -386,6 +448,9 @@ public class MediaFragmentSelector implements FragmentSelector {
      */
     public static class EndTime {
 
+        /**
+         * The end time's clock time.
+         */
         private final Clocktime myClocktime;
 
         /**

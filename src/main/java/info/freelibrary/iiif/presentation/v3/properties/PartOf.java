@@ -2,30 +2,21 @@
 package info.freelibrary.iiif.presentation.v3.properties;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
-import info.freelibrary.iiif.presentation.v3.Constants;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 
 /**
  * A containing resource that includes the resource that has the <code>partOf</code> property. For example, the
- * <code>partOf</code> property on a Canvas can be used to reference an external Manifest in order to enable the
- * discovery of further relevant information. Similarly, a Manifest can reference a containing Collection using
+ * <code>partOf</code> property on a Canvas can be used to reference an external MANIFEST in order to enable the
+ * discovery of further relevant information. Similarly, a MANIFEST can reference a containing COLLECTION using
  * <code>partOf</code> to aid in navigation.
  */
-@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.FORMAT, Constants.LABEL, Constants.LANGUAGE,
-    Constants.PROFILE })
-public class PartOf extends AbstractLinkProperty<PartOf> implements Localized<PartOf> {
-
-    private List<String> myLanguages;
+public class PartOf extends AbstractLinkProperty<PartOf> {
 
     /**
      * Creates a partOf reference.
@@ -52,6 +43,7 @@ public class PartOf extends AbstractLinkProperty<PartOf> implements Localized<Pa
      */
     @SuppressWarnings("unused")
     private PartOf() {
+        super();
     }
 
     @Override
@@ -89,24 +81,20 @@ public class PartOf extends AbstractLinkProperty<PartOf> implements Localized<Pa
         return (PartOf) super.setLabel(aLabel);
     }
 
-    @Override
+    /**
+     * Sets the label of the PartOf.
+     *
+     * @param aLabel A PartOf's label
+     * @return The PartOf
+     */
     @JsonIgnore
     public PartOf setLabel(final String aLabel) {
-        return (PartOf) super.setLabel(aLabel);
-    }
-
-    @Override
-    public List<String> getLanguages() {
-        if (myLanguages == null) {
-            myLanguages = new ArrayList<>();
-        }
-
-        return myLanguages;
+        return (PartOf) super.setLabel(new Label(aLabel));
     }
 
     @Override
     public PartOf setLanguages(final String... aLangArray) {
-        return (PartOf) Localized.super.setLanguages(aLangArray);
+        return (PartOf) super.setLanguages(aLangArray);
     }
 
     @Override

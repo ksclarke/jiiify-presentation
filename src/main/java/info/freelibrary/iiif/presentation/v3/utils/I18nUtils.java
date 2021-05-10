@@ -15,39 +15,94 @@ import org.jsoup.parser.Parser;
 import org.jsoup.safety.Cleaner;
 import org.jsoup.safety.Whitelist;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
-import info.freelibrary.iiif.presentation.v3.properties.I18n;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+
+import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.iiif.presentation.v3.properties.I18n;
 
 /**
  * A utilities class for internationalizations.
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public final class I18nUtils {
 
+    /**
+     * Logger used by the I18nUtils class.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(I18nUtils.class, MessageCodes.BUNDLE);
 
+    /**
+     * A regex pattern that will match any tag.
+     */
     private static final Pattern ANY_TAG_PATTERN = Pattern.compile("<[a-zA-Z0-9\\-]+\\s*\\/?\\s*>", Pattern.DOTALL);
 
-    private static final Pattern FRAGMENT_PATTERN = Pattern.compile("^<[a-zA-Z0-9\\-]+.*>.*</[a-zA-Z0-9\\-]+>$",
-            Pattern.DOTALL);
+    /**
+     * A regex pattern that will match fragments.
+     */
+    private static final Pattern FRAGMENT_PATTERN =
+            Pattern.compile("^<[a-zA-Z0-9\\-]+.*>.*</[a-zA-Z0-9\\-]+>$", Pattern.DOTALL);
 
+    /**
+     * A regex pattern that will match CDATA sections.
+     */
     private static final String CDATA_PATTERN = "<\\!\\[CDATA\\[.*\\]\\]\\>";
 
+    /**
+     * The expected number of root nodes.
+     */
+    private static final int ROOT_NODE_COUNT = 1;
+
+    /**
+     * The tag used for link elements.
+     */
     private static final String LINK_TAG = "a";
 
+    /**
+     * The tag used for image elements.
+     */
     private static final String IMAGE_TAG = "img";
 
-    /* Tags from index position three on are tags that should have content in them */
+    /**
+     * Tags from index position three on are tags that should have content in them
+     */
     private static final String[] TAGS = { IMAGE_TAG, "br", LINK_TAG, "p", "b", "i", "small", "span", "sub", "sup" };
 
-    private static final String[] LINK_ATTRIBUTES = { "href" };
-
-    private static final String[] IMAGE_ATTRIBUTES = { "src", "alt" };
-
+    /**
+     * Supported link protocols.
+     */
     private static final String[] PROTOCOLS = { "http", "https", "mailto" };
 
+    /**
+     * Supported image attributes.
+     */
+    private static final String[] IMAGE_ATTRIBUTES = { "src", "alt" };
+
+    /**
+     * Supported link attributes.
+     */
+    private static final String[] LINK_ATTRIBUTES = { "href" };
+
+    /**
+     * A greater than symbol used for opening tag names.
+     */
+    private static final String GREATER_THAN = ">";
+
+    /**
+     * A less than symbol used for closing tag names.
+     */
+    private static final String LESS_THAN = "<";
+
+    /**
+     * A constant for the space character.
+     */
+    private static final String SPACE = " ";
+
+    /**
+     * A constructor for I18nUtils.
+     */
     private I18nUtils() {
+        // This is intentionally empty
     }
 
     /**
@@ -78,8 +133,9 @@ public final class I18nUtils {
      * @return A string without an HTML elements
      */
     public static String stripHTML(final String aString) {
-        return Parser.unescapeEntities(Jsoup.clean(encodeSingleBrackets(aString.replaceAll(CDATA_PATTERN,
-                Constants.EMPTY)), Whitelist.none()), false);
+        return Parser.unescapeEntities(
+                Jsoup.clean(encodeSingleBrackets(aString.replaceAll(CDATA_PATTERN, Constants.EMPTY)), Whitelist.none()),
+                false);
     }
 
     /**
@@ -154,50 +210,45 @@ public final class I18nUtils {
      */
     public static String cleanHTML(final String aString) {
         if (isHtmlFragment(aString)) {
-            final OutputSettings settings = new OutputSettings();
-            final Whitelist whitelist = Whitelist.none();
-            final String bodyFragment;
-            final Cleaner htmlCleaner;
-            final Document dirtyHTML;
-            final Document cleanHTML;
-            final Element body;
-
-            settings.charset(StandardCharsets.UTF_8).indentAmount(0).prettyPrint(false).outline(false);
-            settings.syntax(Syntax.xml); // Spec: "The content must be well-formed XML"
-            whitelist.addTags(TAGS);
-            whitelist.addAttributes(LINK_TAG, LINK_ATTRIBUTES);
-            whitelist.addAttributes(IMAGE_TAG, IMAGE_ATTRIBUTES);
-            whitelist.addProtocols(LINK_TAG, LINK_ATTRIBUTES[0], PROTOCOLS);
-
-            bodyFragment = encodeSingleBrackets(aString.replaceAll(CDATA_PATTERN, Constants.EMPTY));
-            dirtyHTML = Jsoup.parseBodyFragment(bodyFragment);
-            htmlCleaner = new Cleaner(whitelist);
-            cleanHTML = htmlCleaner.clean(dirtyHTML);
-            cleanHTML.outputSettings(settings);
+            final OutputSettings settings = new OutputSettings().charset(StandardCharsets.UTF_8).indentAmount(0)
+                    .prettyPrint(false).outline(false).syntax(Syntax.xml); // "The content must be well-formed XML"
+            final Whitelist whitelist = Whitelist.none().addTags(TAGS).addAttributes(LINK_TAG, LINK_ATTRIBUTES)
+                    .addAttributes(IMAGE_TAG, IMAGE_ATTRIBUTES).addProtocols(LINK_TAG, LINK_ATTRIBUTES[0], PROTOCOLS);
+            final String bodyFragment = encodeSingleBrackets(aString.replaceAll(CDATA_PATTERN, Constants.EMPTY));
+            final Document dirtyHTML = Jsoup.parseBodyFragment(bodyFragment);
+            final Cleaner htmlCleaner = new Cleaner(whitelist);
+            final Document cleanHTML = htmlCleaner.clean(dirtyHTML).outputSettings(settings);
 
             for (final Element element : cleanHTML.getAllElements()) {
                 // We start with third position tag because earlier ones are empty elements by definition
                 for (int index = 2; index < TAGS.length; index++) {
-                    if (TAGS[index].equals(element.tagName()) && element.children().isEmpty() && (!element.hasText() ||
-                            element.text().trim().equals(Constants.EMPTY))) {
+                    if (TAGS[index].equals(element.tagName()) && element.children().isEmpty() &&
+                            (!element.hasText() || element.text().trim().equals(Constants.EMPTY))) {
                         element.remove();
                     }
                 }
             }
 
             // JSoup adds an HTML tag and body wrapper, which we don't want/need for our HTML fragments.
-            body = cleanHTML.body();
-
-            // If we don't have a single root node beneath the body element, our string input was invalid.
-            if (body.childrenSize() != 1) {
-                final String htmlFragment = body.children().toString();
-                throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_032, htmlFragment));
-            }
-
-            return body.children().toString();
+            return checkForFragment(cleanHTML.body()).children().toString();
         } else {
             return stripHTML(aString);
         }
+    }
+
+    /**
+     * Check to confirm we have a single root node; if we don't, our string input is invalid.
+     *
+     * @param aBody A body element
+     * @return A valid body element
+     */
+    private static Element checkForFragment(final Element aBody) {
+        if (aBody.childrenSize() != ROOT_NODE_COUNT) {
+            final String htmlFragment = aBody.children().toString();
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_032, htmlFragment));
+        }
+
+        return aBody;
     }
 
     /**
@@ -208,8 +259,7 @@ public final class I18nUtils {
      * @return A clean array of internationalizations
      * @throws IllegalArgumentException If HTML is disallowed and one of the supplied I18ns contains markup
      */
-    public static I18n[] validateI18ns(final boolean aHtmlAllowed, final I18n... aI18nArray)
-            throws IllegalArgumentException {
+    public static I18n[] validateI18ns(final boolean aHtmlAllowed, final I18n... aI18nArray) {
         if (aHtmlAllowed) {
             return cleanHTML(aI18nArray);
         } else {
@@ -225,15 +275,17 @@ public final class I18nUtils {
      * @return An array of I18ns
      * @throws IllegalArgumentException If HTML is not allowed, but one of the strings contains markup
      */
-    public static I18n[] createI18ns(final boolean aHtmlAllowed, final String... aStringArray)
-            throws IllegalArgumentException {
+    public static I18n[] createI18ns(final boolean aHtmlAllowed, final String... aStringArray) {
         final List<I18n> i18ns = new ArrayList<>();
 
         for (final String string : aStringArray) {
             final I18n i18n;
 
             // If our internationalization isn't supposed to have HTML, strip any that's found there
-            if (!aHtmlAllowed) {
+            if (aHtmlAllowed) {
+                // Since our strings don't have language codes, we'll just use the default of "none"
+                i18n = new I18n(I18n.DEFAULT_LANG, cleanHTML(string), aHtmlAllowed);
+            } else {
                 if (hasHTML(string)) {
                     // We don't really need to see this warning unless there might be HTML in the string
                     LOGGER.warn(MessageCodes.JPA_033, string);
@@ -241,15 +293,12 @@ public final class I18nUtils {
 
                 // Since our strings don't have language codes, we'll just use the default of "none"
                 i18n = new I18n(I18n.DEFAULT_LANG, stripHTML(string), aHtmlAllowed);
-            } else {
-                // Since our strings don't have language codes, we'll just use the default of "none"
-                i18n = new I18n(I18n.DEFAULT_LANG, cleanHTML(string), aHtmlAllowed);
             }
 
             i18ns.add(i18n);
         }
 
-        return i18ns.toArray(new I18n[i18ns.size()]);
+        return i18ns.toArray(new I18n[0]);
     }
 
     /**
@@ -260,24 +309,21 @@ public final class I18nUtils {
      * @return A string with less than characters HTML encoded
      */
     private static String encodeSingleBrackets(final String aString) {
-        if (aString.indexOf('<') != -1) {
+        if (aString.contains(LESS_THAN)) {
             final StringBuilder builder = new StringBuilder(aString);
-            final String lt = "<";
-            final String gt = ">";
-            final String sp = " ";
 
             int start = 0;
 
             // Move through character sequence in string, checking character relationships
             do {
-                start = builder.indexOf(lt, start);
+                start = builder.indexOf(LESS_THAN, start);
 
-                final int nextGt = builder.indexOf(gt, start);
-                final int nextSpace = builder.indexOf(sp, start);
+                final int nextGt = builder.indexOf(GREATER_THAN, start);
+                final int nextSpace = builder.indexOf(SPACE, start);
 
                 // Check opening tag for possibilities other than an actual HTML element
-                if (hasSpace(start, nextSpace, nextGt) && hasNoAttribute(builder, start, nextGt) && isNotComment(
-                        builder, start) && isNotPI(builder, nextGt)) {
+                if (hasSpace(start, nextSpace, nextGt) && hasNoAttribute(builder, start, nextGt) &&
+                        isNotComment(builder, start) && isNotPI(builder, nextGt)) {
                     builder.replace(start, start + 1, "&lt;");
                 }
             } while (++start != 0); // i.e., while we're able to find a positive start index
@@ -288,7 +334,14 @@ public final class I18nUtils {
         }
     }
 
-    // Makes an attempt to determine if the space in the element was because of an attribute
+    /**
+     * Makes an attempt to determine if the SPACE in the element was because of an attribute.
+     *
+     * @param aBuilder A builder with our string value
+     * @param aStart A start index
+     * @param aGtIndex A greater than index
+     * @return True if the string has no attribute; else, false
+     */
     private static boolean hasNoAttribute(final StringBuilder aBuilder, final int aStart, final int aGtIndex) {
         for (int index = aGtIndex - 1; index >= aStart; index--) {
             switch (aBuilder.charAt(index)) {
@@ -305,12 +358,25 @@ public final class I18nUtils {
         return true;
     }
 
-    // A preliminary check to see if the element name might have a space in it
+    /**
+     * A preliminary check to see if the element name might have a SPACE in it.
+     *
+     * @param aStartIndex A start index
+     * @param aSpaceIndex A space index
+     * @param aGtIndex A greater than index
+     * @return True if the string has a space; else, false
+     */
     private static boolean hasSpace(final int aStartIndex, final int aSpaceIndex, final int aGtIndex) {
         return aSpaceIndex < aGtIndex && aStartIndex != -1 && aSpaceIndex != -1;
     }
 
-    // A properly formed XML comment starts with: <!--
+    /**
+     * A properly formed XML comment starts with: <code>&lt;!--</code>.
+     *
+     * @param aBuilder A builder that contains the string value
+     * @param aStartIndex A start index
+     * @return True if the string is not a comment; else, false
+     */
     private static boolean isNotComment(final StringBuilder aBuilder, final int aStartIndex) {
         if (aBuilder.length() < aStartIndex + 5) {
             return true;
@@ -319,7 +385,14 @@ public final class I18nUtils {
         return !"!--".equals(aBuilder.substring(aStartIndex + 1, aStartIndex + 4));
     }
 
-    // A properly formed PI will have a question mark before the closing bracket
+    /**
+     * Tests whether the supplied string is a processing instruction; a properly formed PI will have a question mark
+     * before the closing bracket.
+     *
+     * @param A builder with a string value
+     * @param A greater than index
+     * @return True if the supplied string is not a processing instruction; else, false
+     */
     private static boolean isNotPI(final StringBuilder aBuilder, final int aGtIndex) {
         return aBuilder.charAt(aGtIndex - 1) != '?';
     }

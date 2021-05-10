@@ -1,17 +1,24 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -24,6 +31,7 @@ import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentS
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.json.jackson.DatabindCodec;
 
 /**
  * A virtual container that represents a page or view and has content resources associated with it or with parts of it.
@@ -31,23 +39,61 @@ import io.vertx.core.json.JsonObject;
  * standards like PDF and HTML, or applications like Photoshop and Powerpoint, where the display starts from a blank
  * canvas and images, text and other resources are &quot;painted&quot; on to it.
  */
+@SuppressWarnings("PMD.GodClass")
+@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.LABEL, Constants.HEIGHT, Constants.WIDTH,
+    Constants.DURATION, Constants.THUMBNAIL, Constants.PLACEHOLDER_CANVAS, Constants.ACCOMPANYING_CANVAS,
+    Constants.METADATA, Constants.ITEMS, Constants.ANNOTATIONS })
 abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableResource<AbstractCanvas<T>> {
 
+    /**
+     * The abstract canvas' logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractCanvas.class, MessageCodes.BUNDLE);
 
+    /**
+     * A spatial constant.
+     */
     private static final String SPATIAL = "spatial";
 
+    /**
+     * A temporal constant.
+     */
     private static final String TEMPORAL = "temporal";
 
-    private int myWidth;
+    /**
+     * A zero (non-existent) duration.
+     */
+    private static final float ZERO_DURATION = 0.0f;
 
-    private int myHeight;
-
-    private float myDuration;
-
+    /**
+     * The painting annotations on the canvas.
+     */
     private List<AnnotationPage<PaintingAnnotation>> myPaintingPageList;
 
+    /**
+     * The supplementing annotations on the canvas.
+     */
     private List<AnnotationPage<SupplementingAnnotation>> mySupplementingPageList;
+
+    /**
+     * The canvas' other canvases (other than painting or supplementing).
+     */
+    private List<AnnotationPage<? extends Annotation<?>>> myOtherAnnotations;
+
+    /**
+     * The canvas' duration.
+     */
+    private float myDuration;
+
+    /**
+     * The canvas' width.
+     */
+    private int myWidth;
+
+    /**
+     * The canvas' height.
+     */
+    private int myHeight;
 
     /**
      * Creates a new canvas.
@@ -113,30 +159,60 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         super(ResourceTypes.CANVAS);
     }
 
+    /**
+     * Sets the canvas' behaviors.
+     *
+     * @param aBehaviorArray An array of behaviors
+     * @return The canvas
+     */
     @Override
     @JsonSetter(Constants.BEHAVIOR)
     protected AbstractCanvas<T> setBehaviors(final Behavior... aBehaviorArray) {
         return (AbstractCanvas<T>) super.setBehaviors(checkBehaviors(CanvasBehavior.class, true, aBehaviorArray));
     }
 
+    /**
+     * Sets the canvas' behaviors.
+     *
+     * @param aBehaviorList A list of behaviors
+     * @return The canvas
+     */
     @Override
     @JsonSetter(Constants.BEHAVIOR)
     protected AbstractCanvas<T> setBehaviors(final List<Behavior> aBehaviorList) {
         return (AbstractCanvas<T>) super.setBehaviors(checkBehaviors(CanvasBehavior.class, true, aBehaviorList));
     }
 
+    /**
+     * Adds behaviors to the canvas.
+     *
+     * @param aBehaviorArray An array of behaviors
+     * @return The canvas
+     */
     @Override
     protected AbstractCanvas<T> addBehaviors(final Behavior... aBehaviorArray) {
         return (AbstractCanvas<T>) super.addBehaviors(checkBehaviors(CanvasBehavior.class, false, aBehaviorArray));
     }
 
+    /**
+     * Adds behaviors to the canvas.
+     *
+     * @param aBehaviorList A list of behaviors
+     * @return The canvas
+     */
     @Override
     protected AbstractCanvas<T> addBehaviors(final List<Behavior> aBehaviorList) {
         return (AbstractCanvas<T>) super.addBehaviors(checkBehaviors(CanvasBehavior.class, false, aBehaviorList));
     }
 
+    /**
+     * Sets the canvas' painting pages.
+     *
+     * @param aPageArray An array of painting pages
+     * @return The canvas
+     */
     @JsonSetter(Constants.ITEMS)
-    @SuppressWarnings("unchecked") // Moved SafeVarargs to extending classes where method can be final
+    @SuppressWarnings(Constants.UNCHECKED) // Moved SafeVarargs to extending classes where method can be final
     protected AbstractCanvas<T> setPaintingPages(final AnnotationPage<PaintingAnnotation>... aPageArray) {
         if (myPaintingPageList != null) {
             myPaintingPageList.clear();
@@ -145,6 +221,12 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         return addPaintingPages(aPageArray);
     }
 
+    /**
+     * Sets the canvas' painting pages.
+     *
+     * @param aPageList A list of painting pages
+     * @return The canvas
+     */
     @JsonIgnore
     protected AbstractCanvas<T> setPaintingPages(final List<AnnotationPage<PaintingAnnotation>> aPageList) {
         if (myPaintingPageList != null) {
@@ -154,7 +236,13 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         return addPaintingPages(aPageList);
     }
 
-    @SuppressWarnings("unchecked") // Moved SafeVarargs to extending classes where method can be final
+    /**
+     * Adds the painting pages to the canvas.
+     *
+     * @param aPageArray An array of painting pages
+     * @return The canvas
+     */
+    @SuppressWarnings(Constants.UNCHECKED) // Moved SafeVarargs to extending classes where method can be final
     protected AbstractCanvas<T> addPaintingPages(final AnnotationPage<PaintingAnnotation>... aPageArray) {
         if (!Collections.addAll(getPaintingPages(), aPageArray)) {
             final String message = LOGGER.getMessage(MessageCodes.JPA_049, getListIDs(Arrays.asList(aPageArray)));
@@ -164,6 +252,12 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         return this;
     }
 
+    /**
+     * Adds the painting pages to the canvas.
+     *
+     * @param aPageList A list of painting pages
+     * @return The canvas
+     */
     protected AbstractCanvas<T> addPaintingPages(final List<AnnotationPage<PaintingAnnotation>> aPageList) {
         if (!getPaintingPages().addAll(aPageList)) {
             throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_049, getListIDs(aPageList)));
@@ -186,8 +280,45 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         return myPaintingPageList;
     }
 
-    @JsonSetter(Constants.ANNOTATIONS)
-    @SuppressWarnings("unchecked") // Moved SafeVarargs to extending classes where method can be final
+    /**
+     * Gets the canvas' annotation pages that aren't related to painting.
+     *
+     * @return The canvas' non-painting annotation pages
+     */
+    @JsonIgnore
+    public List<AnnotationPage<? extends Annotation<?>>> getOtherAnnotations() {
+        if (myOtherAnnotations == null) {
+            myOtherAnnotations = new ArrayList<>();
+        }
+
+        return myOtherAnnotations;
+    }
+
+    /**
+     * Sets the manifest's annotation pages.
+     *
+     * @param aAnnotationList A list of annotation pages
+     * @return This manifest
+     */
+    @JsonIgnore
+    public AbstractCanvas<T> setOtherAnnotations(final List<AnnotationPage<? extends Annotation<?>>> aAnnotationList) {
+        final List<AnnotationPage<? extends Annotation<?>>> annotations = getOtherAnnotations();
+
+        checkNotNull(aAnnotationList);
+        annotations.clear();
+        annotations.addAll(aAnnotationList);
+
+        return this;
+    }
+
+    /**
+     * Sets the canvas' supplementing pages.
+     *
+     * @param aPageArray An array of supplementing pages
+     * @return The canvas
+     */
+    @JsonIgnore
+    @SuppressWarnings(Constants.UNCHECKED) // Moved SafeVarargs to extending classes where method can be final
     protected AbstractCanvas<T> setSupplementingPages(final AnnotationPage<SupplementingAnnotation>... aPageArray) {
         if (mySupplementingPageList != null) {
             mySupplementingPageList.clear();
@@ -196,6 +327,12 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         return addSupplementingPages(aPageArray);
     }
 
+    /**
+     * Sets the canvas' supplementing pages.
+     *
+     * @param aPageList A list of supplementing pages
+     * @return The canvas
+     */
     @JsonIgnore
     protected AbstractCanvas<T> setSupplementingPages(final List<AnnotationPage<SupplementingAnnotation>> aPageList) {
         if (mySupplementingPageList != null) {
@@ -205,7 +342,13 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         return addSupplementingPages(aPageList);
     }
 
-    @SuppressWarnings("unchecked") // Moved SafeVarargs to extending classes where method can be final
+    /**
+     * Adds supplementing pages to the canvas.
+     *
+     * @param aPageArray An array of supplementing pages
+     * @return The canvas
+     */
+    @SuppressWarnings(Constants.UNCHECKED) // Moved SafeVarargs to extending classes where method can be final
     protected AbstractCanvas<T> addSupplementingPages(final AnnotationPage<SupplementingAnnotation>... aPageArray) {
         if (!Collections.addAll(getSupplementingPages(), aPageArray)) {
             final List<AnnotationPage<SupplementingAnnotation>> list = Arrays.asList(aPageArray);
@@ -215,6 +358,12 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         return this;
     }
 
+    /**
+     * Adds supplementing pages to the canvas.
+     *
+     * @param aPageList A list of supplementing pages
+     * @return The canvas
+     */
     protected AbstractCanvas<T> addSupplementingPages(final List<AnnotationPage<SupplementingAnnotation>> aPageList) {
         if (!getSupplementingPages().addAll(aPageList)) {
             throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_049, getListIDs(aPageList)));
@@ -228,7 +377,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      *
      * @return The canvas' non-painting annotation pages
      */
-    @JsonGetter(Constants.ANNOTATIONS)
+    @JsonIgnore
     public List<AnnotationPage<SupplementingAnnotation>> getSupplementingPages() {
         if (mySupplementingPageList == null) {
             mySupplementingPageList = new ArrayList<>();
@@ -259,6 +408,13 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         return myHeight;
     }
 
+    /**
+     * Sets the width and height of the canvas.
+     *
+     * @param aWidth A canvas width
+     * @param aHeight A canvas height
+     * @return The canvas
+     */
     @JsonIgnore
     protected AbstractCanvas<T> setWidthHeight(final int aWidth, final int aHeight) {
         if (aWidth > 0 && aHeight > 0) {
@@ -282,27 +438,39 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         return myDuration;
     }
 
+    /**
+     * Sets the canvas duration.
+     *
+     * @param aDuration A canvas duration
+     * @return The canvas
+     */
     @JsonSetter(Constants.DURATION)
     protected AbstractCanvas<T> setDuration(final Number aDuration) {
-        final float tempDuration = aDuration.floatValue();
-        if (tempDuration > 0 && Float.isFinite(tempDuration)) {
-            myDuration = tempDuration;
-            return this;
-        } else {
-            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_024, aDuration));
-        }
+        myDuration = convertToFinitePositiveFloat(aDuration);
+        return this;
     }
 
-    @SuppressWarnings("unchecked") // Moved SafeVarargs to extending classes where method can be final
+    /**
+     * Paints a canvas with content resources.
+     *
+     * @param <C> A type of canvas
+     * @param aCanvas A canvas
+     * @param aMinter An ID minter
+     * @param aChoice Whether the content resource are painted on the canvas as a choice
+     * @param aContentArray An array of content resources
+     * @return The canvas
+     * @throws ContentOutOfBoundsException If the painted content is out of bounds of the canvas
+     */
+    @SuppressWarnings(Constants.UNCHECKED) // Moved SafeVarargs to extending classes where method can be final
     protected final <C extends CanvasResource<C>> AbstractCanvas<T> paint(final CanvasResource<C> aCanvas,
-            final Minter aMinter, final ContentResource... aContentArray) throws ContentOutOfBoundsException {
+            final Minter aMinter, final boolean aChoice, final ContentResource... aContentArray) {
         final PaintingAnnotation anno = new PaintingAnnotation(aMinter.getAnnotationID(), aCanvas);
         final AnnotationPage<PaintingAnnotation> page;
         final int pageCount;
 
         for (final ContentResource content : aContentArray) {
             if (canFrame(content)) {
-                anno.addBody(content);
+                anno.addBody(content).setChoice(aChoice);
             }
         }
 
@@ -320,17 +488,30 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         return this;
     }
 
-    @SuppressWarnings("unchecked") // Moved SafeVarargs to extending classes where method can be final
+    /**
+     * Paints a canvas with content resources.
+     *
+     * @param <C> A type of canvas
+     * @param aCanvas A canvas
+     * @param aMinter An ID minter
+     * @param aCanvasRegion A canvas region
+     * @param aChoice Whether the content resource are painted on the canvas as a choice
+     * @param aContentArray An array of content resources
+     * @return The canvas
+     * @throws ContentOutOfBoundsException If the painted content is out of bounds of the canvas
+     * @throws SelectorOutOfBoundsException If the supplied selector is out of bounds of the canvas
+     */
+    @SuppressWarnings(Constants.UNCHECKED) // Moved SafeVarargs to extending classes where method can be final
     protected final <C extends CanvasResource<C>> AbstractCanvas<T> paint(final CanvasResource<C> aCanvas,
-            final Minter aMinter, final MediaFragmentSelector aCanvasRegion, final ContentResource... aContentArray)
-            throws ContentOutOfBoundsException, SelectorOutOfBoundsException {
+            final Minter aMinter, final MediaFragmentSelector aCanvasRegion, final boolean aChoice,
+            final ContentResource... aContentArray) {
         final PaintingAnnotation anno = new PaintingAnnotation(aMinter, aCanvas, aCanvasRegion);
         final AnnotationPage<PaintingAnnotation> page;
         final int pageCount;
 
         for (final ContentResource content : aContentArray) {
             if (canFrame(content, aCanvasRegion)) {
-                anno.addBody(content);
+                anno.addBody(content).setChoice(aChoice);
             }
         }
 
@@ -348,14 +529,24 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         return this;
     }
 
-    @SuppressWarnings("unchecked") // Moved SafeVarargs to extending classes where method can be final
+    /**
+     * Supplements a canvas with content resources.
+     *
+     * @param <C> A type of canvas resource
+     * @param aCanvas A canvas
+     * @param aMinter An ID minter
+     * @param aChoice Whether content resources on the canvas use a choice
+     * @param aContentArray An array of content resources
+     * @return This canvas
+     */
+    @SuppressWarnings(Constants.UNCHECKED) // Moved SafeVarargs to extending classes where method can be final
     protected final <C extends CanvasResource<C>> AbstractCanvas<T> supplement(final CanvasResource<C> aCanvas,
-            final Minter aMinter, final ContentResource... aContentArray) {
+            final Minter aMinter, final boolean aChoice, final ContentResource... aContentArray) {
         final SupplementingAnnotation anno = new SupplementingAnnotation(aMinter.getAnnotationID(), aCanvas);
         final int pageCount = getSupplementingPages().size();
         final AnnotationPage<SupplementingAnnotation> page;
 
-        anno.addBody(aContentArray);
+        anno.addBody(aContentArray).setChoice(aChoice);
 
         if (pageCount == 0) {
             page = new AnnotationPage<>(aMinter.getAnnotationPageID(aCanvas));
@@ -369,17 +560,29 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         return this;
     }
 
-    @SuppressWarnings("unchecked") // Moved SafeVarargs to extending classes where method can be final
+    /**
+     * Supplements a canvas with content resources.
+     *
+     * @param <C> A type of canvas resource
+     * @param aCanvas A canvas
+     * @param aMinter An ID minter
+     * @param aCanvasRegion A canvas region
+     * @param aChoice Whether content resources on the canvas use a choice
+     * @param aContentArray An array of content resources
+     * @return This canvas
+     * @throws SelectorOutOfBoundsException If the canvas region is out of bounds
+     */
+    @SuppressWarnings(Constants.UNCHECKED) // Moved SafeVarargs to extending classes where method can be final
     protected final <C extends CanvasResource<C>> AbstractCanvas<T> supplement(final CanvasResource<C> aCanvas,
-            final Minter aMinter, final MediaFragmentSelector aCanvasRegion, final ContentResource... aContentArray)
-            throws SelectorOutOfBoundsException {
+            final Minter aMinter, final MediaFragmentSelector aCanvasRegion, final boolean aChoice,
+            final ContentResource... aContentArray) {
         final SupplementingAnnotation anno =
                 new SupplementingAnnotation(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
         final int pageCount = getSupplementingPages().size();
         final AnnotationPage<SupplementingAnnotation> page;
 
         getCanvasFragment(aCanvasRegion); // Check that the canvas region is valid by absence of exceptions
-        anno.addBody(aContentArray);
+        anno.addBody(aContentArray).setChoice(aChoice);
 
         if (pageCount == 0) {
             page = new AnnotationPage<>(aMinter.getAnnotationPageID(aCanvas));
@@ -402,13 +605,13 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         final JsonObject json = JsonObject.mapFrom(this);
 
         // If zero width/height and/or duration, we're outputting a canvas reference so shouldn't include them
-        if (json.containsKey(Constants.WIDTH) && json.containsKey(Constants.HEIGHT)) {
-            if (json.getInteger(Constants.WIDTH) == 0 && json.getInteger(Constants.HEIGHT) == 0) {
-                json.remove(Constants.WIDTH);
-                json.remove(Constants.HEIGHT);
-            }
+        if (json.containsKey(Constants.WIDTH) && json.containsKey(Constants.HEIGHT) &&
+                json.getInteger(Constants.WIDTH) == 0 && json.getInteger(Constants.HEIGHT) == 0) {
+            json.remove(Constants.WIDTH);
+            json.remove(Constants.HEIGHT);
         }
-        if (json.containsKey(Constants.DURATION) && json.getFloat(Constants.DURATION) == 0.0f) {
+
+        if (json.containsKey(Constants.DURATION) && json.getFloat(Constants.DURATION) == ZERO_DURATION) {
             json.remove(Constants.DURATION);
         }
 
@@ -471,7 +674,8 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      * @return <code>true</code> if the content resource fits within the bounds of the canvas
      * @throws ContentOutOfBoundsException If the content resource won't fit
      */
-    boolean canFrame(final ContentResource aContent) throws ContentOutOfBoundsException {
+    @SuppressWarnings({ "PMD.CyclomaticComplexity" })
+    boolean canFrame(final ContentResource aContent) {
         if (aContent instanceof SpatialContentResource) {
             // The canvas must have a width and height, which must not be smaller than that of the content
             if (myWidth == 0 || myHeight == 0) {
@@ -486,7 +690,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         }
         if (aContent instanceof TemporalContentResource) {
             // The canvas must have a duration, which must not be shorter than that of the content
-            if (myDuration == 0.0f) {
+            if (myDuration == ZERO_DURATION) {
                 throw new ContentOutOfBoundsException(MessageCodes.JPA_059, aContent.getID(), TEMPORAL, getID());
             } else {
                 final TemporalContentResource<?> temporalPainting = (TemporalContentResource<?>) aContent;
@@ -509,8 +713,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      * @throws ContentOutOfBoundsException If the content resource won't fit
      * @throws SelectorOutOfBoundsException If the canvas fragment doesn't exist
      */
-    private boolean canFrame(final ContentResource aContent, final MediaFragmentSelector aCanvasRegion)
-            throws ContentOutOfBoundsException, SelectorOutOfBoundsException {
+    private boolean canFrame(final ContentResource aContent, final MediaFragmentSelector aCanvasRegion) {
         return getCanvasFragment(aCanvasRegion).canFrame(aContent);
     }
 
@@ -522,12 +725,13 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given {@link MediaFragmentSelector}
      *         doesn't exist
      */
-    private Canvas getCanvasFragment(final MediaFragmentSelector aCanvasRegion) throws SelectorOutOfBoundsException {
+    @SuppressWarnings({ "PMD.NPathComplexity", "PMD.CyclomaticComplexity" })
+    private Canvas getCanvasFragment(final MediaFragmentSelector aCanvasRegion) {
         final URI canvasID = URI.create(getID().toString() + Constants.FRAGMENT_DELIM + aCanvasRegion.toString());
         final Canvas canvasFragment = new Canvas(canvasID);
         final int width;
         final int height;
-        final float duration;
+        final double duration;
 
         if (aCanvasRegion.isSpatial()) {
             // Check for semantic errors according to <https://www.w3.org/TR/media-frags/#error-media>
@@ -554,7 +758,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
 
         if (aCanvasRegion.isTemporal()) {
             // Check for semantic errors
-            if (myDuration == 0.0f) {
+            if (myDuration == ZERO_DURATION) {
                 throw new SelectorOutOfBoundsException(MessageCodes.JPA_064, aCanvasRegion.toString(), TEMPORAL,
                         getID());
             } else {
@@ -592,5 +796,130 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         }
 
         return canvasFragment;
+    }
+
+    /**
+     * A method used by Jackson for serialization.
+     *
+     * @return A list of annotation pages
+     */
+    @JsonGetter(Constants.ANNOTATIONS)
+    private List<AnnotationPage<? extends Annotation<?>>> getAnnotations() {
+        final List<AnnotationPage<? extends Annotation<?>>> annotations = new ArrayList<>();
+
+        getSupplementingPages().forEach(page -> {
+            annotations.add(page);
+        });
+
+        getOtherAnnotations().forEach(page -> {
+            annotations.add(page);
+        });
+
+        return annotations;
+    }
+
+    /**
+     * A method used by Jackson for deserialization.
+     *
+     * @param aObject A object used by Jackson to deserialize
+     * @return This canvas
+     */
+    @SuppressWarnings(Constants.UNCHECKED)
+    @JsonSetter(Constants.ANNOTATIONS)
+    private AbstractCanvas<T> setAnnotations(final Object aObject) {
+        final List<AnnotationPage<SupplementingAnnotation>> supplementingPages = getSupplementingPages();
+        final List<AnnotationPage<? extends Annotation<?>>> otherAnnotations = getOtherAnnotations();
+        final List<AnnotationPage<? extends Annotation<?>>> annotationList = getDeserializedPageList(aObject);
+
+        supplementingPages.clear();
+        otherAnnotations.clear();
+
+        annotationList.forEach(page -> {
+            // Check all the annotations on the page to make sure they are all supplementing annotations
+            final List<? extends Annotation<?>> annotations = page.getAnnotations();
+
+            boolean supplementingAnnotations = true;
+
+            for (final Annotation<?> annotation : annotations) {
+                if (!(annotation instanceof SupplementingAnnotation)) {
+                    supplementingAnnotations = false;
+                }
+            }
+
+            // If all the annotations on a page are supplementing, we can put the page into supplementing pages list
+            if (supplementingAnnotations) {
+                // The unchecked warning suppression on the method is for this
+                supplementingPages.add((AnnotationPage<SupplementingAnnotation>) page);
+            } else {
+                otherAnnotations.add(page);
+            }
+        });
+
+        return this;
+    }
+
+    /**
+     * Gets a list of AnnotationPage(s) from a deserialized Jackson object (which should be a list).
+     *
+     * @param aObject An object Jackson has created while deserializing the incoming JSON
+     * @return A list of AnnotationPage(s)
+     */
+    @JsonIgnore
+    private List<AnnotationPage<? extends Annotation<?>>> getDeserializedPageList(final Object aObject) {
+        final List<AnnotationPage<? extends Annotation<?>>> pagesList = new ArrayList<>();
+
+        // Incoming object should be a list of AnnotationPage(s)
+        if (aObject instanceof List) {
+            final List<?> pageList = (List<?>) aObject;
+
+            // Get each AnnotationPage object from the list and try to deserialize it
+            for (final Object pageListObject : pageList) {
+                if (pageListObject instanceof Map) {
+                    pagesList.add(getDeserializedPage((Map<?, ?>) pageListObject));
+                } // Just ignore stuff we don't know about(?)
+            }
+        } // Just ignore stuff we don't know about(?)
+
+        return pagesList;
+    }
+
+    /**
+     * Gets a AnnotationPage from a deserialized Jackson map.
+     *
+     * @param aAnnotationPageMap A map representing an AnnotationPage
+     * @return An AnnotationPage
+     */
+    @JsonIgnore
+    private AnnotationPage<? extends Annotation<?>> getDeserializedPage(final Map<?, ?> aAnnotationPageMap) {
+        final List<?> items = (List<?>) aAnnotationPageMap.get(Constants.ITEMS);
+        final ObjectMapper mapper = DatabindCodec.mapper();
+        final TypeFactory typeFactory = mapper.getTypeFactory();
+        final JavaType javaType;
+
+        // If there are annotations, we can check whether they are supplementing or "other"
+        if (items != null) {
+            boolean supplementingAnnotations = true;
+
+            for (final Object item : items) {
+                final Map<?, ?> annotation = (Map<?, ?>) item;
+
+                if (annotation != null &&
+                        !SupplementingAnnotation.MOTIVATION.equals(annotation.get(Constants.MOTIVATION))) {
+                    supplementingAnnotations = false;
+                }
+            }
+
+            // Either supplementing annotation or mixed annotations (which may include supplementing annotations)
+            if (supplementingAnnotations) {
+                javaType = typeFactory.constructParametricType(AnnotationPage.class, SupplementingAnnotation.class);
+                return mapper.convertValue(aAnnotationPageMap, javaType);
+            } else {
+                javaType = typeFactory.constructParametricType(AnnotationPage.class, Annotation.class);
+                return mapper.convertValue(aAnnotationPageMap, javaType);
+            }
+        } else {
+            javaType = typeFactory.constructParametricType(AnnotationPage.class, Annotation.class);
+            return mapper.convertValue(aAnnotationPageMap, javaType);
+        }
     }
 }

@@ -19,13 +19,12 @@ import info.freelibrary.iiif.presentation.v3.id.Minter;
 import info.freelibrary.iiif.presentation.v3.id.MinterFactory;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.NavDate;
-import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector.EndTime;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector.StartTime;
-import info.freelibrary.iiif.presentation.v3.services.ImageService3;
+import info.freelibrary.iiif.presentation.v3.services.image.ImageService3;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 
 import io.vertx.core.json.JsonObject;
@@ -43,9 +42,9 @@ public class CanvasTest {
 
     private static final int THUMBNAIL_WH = 64;
 
-    private static final float CANVAS_DURATION = 3600;
+    private static final double CANVAS_DURATION = 3600;
 
-    private static final float DURATION = 300;
+    private static final double DURATION = 300;
 
     /** Identifiers */
 
@@ -189,16 +188,6 @@ public class CanvasTest {
      ***********************/
 
     /**
-     * Tests clearing the required statement.
-     */
-    @Test
-    public void testClearRequiredStatement() {
-        myCanvas.setRequiredStatement(new RequiredStatement("stmt-id", "stmt-label"));
-        assertTrue(myCanvas.getRequiredStatement() != null);
-        assertTrue(myCanvas.clearRequiredStatement().getRequiredStatement() == null);
-    }
-
-    /**
      * Tests setting and getting a navDate on the canvas.
      */
     @Test
@@ -229,7 +218,7 @@ public class CanvasTest {
      */
     @Test
     public final void testGetDuration() {
-        assertEquals(Float.compare(300.0f, myCanvas.setDuration(DURATION).getDuration()), 0);
+        assertEquals(300.0f, myCanvas.setDuration(DURATION).getDuration(), 0);
     }
 
     /**
@@ -1529,7 +1518,7 @@ public class CanvasTest {
         final ImageContent image2 = new ImageContent(IMAGE_2_ID).setWidthHeight(WIDTH, HEIGHT)
                 .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, image1, image2);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, true, image1, image2);
 
         expected = new JsonObject(StringUtils.read(CANVAS_IMAGE_CHOICE));
         found = new JsonObject(TestUtils.toJson(myCanvas));
@@ -1635,7 +1624,7 @@ public class CanvasTest {
         final String selector2 = StringUtils.format(URI_FRAGMENT_T_TEMPLATE, DURATION, DURATION + DURATION);
 
         myCanvas = new Canvas(SOUND_CANVAS_ID, LABEL).setDuration(CANVAS_DURATION)
-                .paintWith(myMinter, selector1, sound1, sound2).paintWith(myMinter, selector2, sound3);
+                .paintWith(myMinter, selector1, true, sound1, sound2).paintWith(myMinter, selector2, sound3);
 
         expected = new JsonObject(StringUtils.read(CANVAS_SOUND_CHOICE_MULTI));
         found = new JsonObject(TestUtils.toJson(myCanvas));
@@ -1665,7 +1654,7 @@ public class CanvasTest {
                 new MediaFragmentSelector(StringUtils.format(URI_FRAGMENT_T_TEMPLATE, DURATION, DURATION + DURATION));
 
         myCanvas = new Canvas(SOUND_CANVAS_ID, LABEL).setDuration(CANVAS_DURATION)
-                .paintWith(myMinter, selector1, sound1, sound2).paintWith(myMinter, selector2, sound3);
+                .paintWith(myMinter, selector1, true, sound1, sound2).paintWith(myMinter, selector2, sound3);
 
         expected = new JsonObject(StringUtils.read(CANVAS_SOUND_CHOICE_MULTI));
         found = new JsonObject(TestUtils.toJson(myCanvas));

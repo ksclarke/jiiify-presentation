@@ -11,9 +11,11 @@ import info.freelibrary.iiif.presentation.v3.Constants;
  */
 public class ContentResourceComparator implements Comparator<String> {
 
-    // This is the sort order we want
-    private static final String[] KEYS = new String[] { Constants.ID, Constants.TYPE, Constants.DEFAULT,
-        Constants.ITEMS, Constants.WIDTH, Constants.HEIGHT, Constants.FORMAT, Constants.LABEL, Constants.SERVICE };
+    /**
+     * Defines the desired content resource sort order.
+     */
+    private static final String[] KEYS = { Constants.ID, Constants.TYPE, Constants.DEFAULT, Constants.ITEMS,
+        Constants.FORMAT, Constants.HEIGHT, Constants.WIDTH, Constants.LABEL, Constants.SERVICE };
 
     @Override
     public int compare(final String aFirstKey, final String aSecondKey) {

@@ -1,0 +1,154 @@
+
+package info.freelibrary.iiif.presentation.v3.services.image;
+
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+
+/**
+ * Constants related to the IIIF Image API.
+ */
+public interface ImageAPI {
+
+    /**
+     * The image API's extra formats.
+     */
+    String EXTRA_FORMATS = "extraFormats";
+
+    /**
+     * The image API's extra qualities.
+     */
+    String EXTRA_QUALITIES = "extraQualities";
+
+    /**
+     * The image API's protocol.
+     */
+    String PROTOCOL = "protocol";
+
+    /**
+     * The image API's tiles.
+     */
+    String TILES = "tiles";
+
+    /**
+     * The image API's sizes.
+     */
+    String SIZES = "sizes";
+
+    /**
+     * The image API's scale factors.
+     */
+    String SCALE_FACTORS = "scaleFactors";
+
+    /**
+     * The default protocol for the image API.
+     */
+    String DEFAULT_PROTOCOL = "http://iiif.io/api/image";
+
+    /**
+     * An Image API format.
+     */
+    enum ImageFormat {
+
+        JPG("jpg"), PNG("png"), TIF("tif"), GIF("gif"), JP2("jp2"), PDF("pdf"), WEBP("webp");
+
+        /**
+         * The image format's logger.
+         */
+        private static final Logger LOGGER = LoggerFactory.getLogger(ImageFormat.class, MessageCodes.BUNDLE);
+
+        /**
+         * The string representation of the image format.
+         */
+        private final String myFormat;
+
+        /**
+         * Creates a new image format.
+         *
+         * @param aFormat The string representation of a format
+         */
+        ImageFormat(final String aFormat) {
+            myFormat = aFormat;
+        }
+
+        /**
+         * Gets the lower case string representation of this format.
+         *
+         * @return The lower case string representation of this format
+         */
+        public String string() {
+            return myFormat;
+        }
+
+        /**
+         * Creates an Image API extra format from a supplied string value.
+         *
+         * @param aFormat A format in string form
+         * @return An image service format
+         * @throws IllegalArgumentException If the format string doesn't correspond to a valid format
+         */
+        public static ImageFormat fromString(final String aFormat) {
+            for (final ImageFormat format : ImageFormat.values()) {
+                if (format.string().equalsIgnoreCase(aFormat)) {
+                    return format;
+                }
+            }
+
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_114, aFormat));
+        }
+    }
+
+    /**
+     * An Image API quality.
+     */
+    enum ImageQuality {
+
+        COLOR("color"), GRAY("gray"), BITONAL("bitonal"), DEFAULT("default");
+
+        /**
+         * The image quality's logger.
+         */
+        private static final Logger LOGGER = LoggerFactory.getLogger(ImageQuality.class, MessageCodes.BUNDLE);
+
+        /**
+         * The string form of the image quality.
+         */
+        private final String myQuality;
+
+        /**
+         * Creates a new image quality.
+         *
+         * @param aQuality The string representation of a quality
+         */
+        ImageQuality(final String aQuality) {
+            myQuality = aQuality;
+        }
+
+        /**
+         * Gets the lower case string representation of this quality.
+         *
+         * @return The lower case string representation of this quality
+         */
+        public String string() {
+            return myQuality;
+        }
+
+        /**
+         * Creates an Image API extra quality from a supplied string value.
+         *
+         * @param aQuality A quality in string form
+         * @return An image service quality
+         * @throws IllegalArgumentException If the quality string doesn't correspond to a valid quality
+         */
+        public static ImageQuality fromString(final String aQuality) {
+            for (final ImageQuality quality : ImageQuality.values()) {
+                if (quality.string().equalsIgnoreCase(aQuality)) {
+                    return quality;
+                }
+            }
+
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_115, aQuality));
+        }
+    }
+}

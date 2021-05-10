@@ -33,9 +33,15 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
         implements Resource<SupplementingAnnotation>, ContentAnnotation<SupplementingAnnotation> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SupplementingAnnotation.class, MessageCodes.BUNDLE);
+    /**
+     * The motivation for SupplementingAnnotation(s) is "supplementing"
+     */
+    static final String MOTIVATION = "supplementing";
 
-    private static final String MOTIVATION = "supplementing";
+    /**
+     * The logger that SupplementingAnnotation uses.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(SupplementingAnnotation.class, MessageCodes.BUNDLE);
 
     /**
      * Creates a supplementing annotation.
@@ -175,7 +181,8 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     @Override
     protected void setMotivation(final String aMotivation) {
         if (!MOTIVATION.equals(aMotivation)) {
-            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_038, MOTIVATION));
+            throw new IllegalArgumentException(
+                    LOGGER.getMessage(MessageCodes.JPA_038, SupplementingAnnotation.class.getSimpleName(), MOTIVATION));
         }
 
         myMotivation = MOTIVATION;
@@ -334,11 +341,6 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     @Override
     public SupplementingAnnotation setRequiredStatement(final RequiredStatement aStatement) {
         return (SupplementingAnnotation) super.setRequiredStatement(aStatement);
-    }
-
-    @Override
-    public SupplementingAnnotation clearRequiredStatement() {
-        return (SupplementingAnnotation) super.clearRequiredStatement();
     }
 
     @Override

@@ -16,6 +16,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.I18nRuntimeException;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
 
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
@@ -40,14 +42,32 @@ import io.vertx.core.json.JsonObject;
  * a hierarchical structure, potentially with its own descriptive information. They can also provide clients with a
  * means to locate all of the manifests known to the publishing institution.
  */
+@SuppressWarnings({ "PMD.ExcessivePublicCount", "PMD.ExcessiveImports" })
 public class Collection extends NavigableResource<Collection> implements Resource<Collection> {
 
+    /**
+     * The collection's accompanying canvas.
+     */
     private Optional<AccompanyingCanvas> myAccompanyingCanvas;
 
+    /**
+     * The collection's placeholder canvas.
+     */
     private Optional<PlaceholderCanvas> myPlaceholderCanvas;
 
+    /**
+     * The collection's viewing direction.
+     */
     private ViewingDirection myViewingDirection;
 
+    /**
+     * The collection's service definitions.
+     */
+    private List<Service> myServiceDefinitions;
+
+    /**
+     * The collection's lists.
+     */
     private List<Item> myItems;
 
     /**
@@ -223,16 +243,6 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     }
 
     /**
-     * Clears the viewing direction.
-     *
-     * @return The collection
-     */
-    public Collection clearViewingDirection() {
-        myViewingDirection = null;
-        return this;
-    }
-
-    /**
      * Gets the items associated with this collection.
      *
      * @return The items associated with this collection
@@ -288,6 +298,48 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     @Override
     public Collection setServices(final List<Service> aServiceList) {
         return (Collection) super.setServices(aServiceList);
+    }
+
+    /**
+     * Sets the services referenced by different parts of the collection document.
+     *
+     * @param aServicesArray An array of services
+     * @return The collection document
+     */
+    @JsonIgnore
+    public Collection setServiceDefinitions(final Service... aServicesArray) {
+        return setServiceDefinitions(Arrays.asList(aServicesArray));
+    }
+
+    /**
+     * Sets the services referenced by different parts of the collection document.
+     *
+     * @param aServicesList A list of services
+     * @return The collection document
+     */
+    @JsonSetter(Constants.SERVICES)
+    public Collection setServiceDefinitions(final List<Service> aServicesList) {
+        final List<Service> servicesList = getServiceDefinitions();
+
+        checkNotNull(aServicesList);
+        servicesList.clear();
+        servicesList.addAll(aServicesList);
+
+        return this;
+    }
+
+    /**
+     * Gets the services referenced by different parts of the collection document.
+     *
+     * @return A list of services referenced by different parts of the collection document
+     */
+    @JsonGetter(Constants.SERVICES)
+    public List<Service> getServiceDefinitions() {
+        if (myServiceDefinitions == null) {
+            myServiceDefinitions = new ArrayList<>();
+        }
+
+        return myServiceDefinitions;
     }
 
     @Override
@@ -360,16 +412,6 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         return (Collection) super.setRequiredStatement(aStatement);
     }
 
-    /**
-     * Clears the required statement.
-     *
-     * @return The collection
-     */
-    @Override
-    public Collection clearRequiredStatement() {
-        return (Collection) super.clearRequiredStatement();
-    }
-
     @Override
     public Collection setSummary(final String aSummary) {
         return (Collection) super.setSummary(aSummary);
@@ -401,9 +443,9 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     }
 
     /**
-     * Returns a JsonObject of the Collection manifest.
+     * Returns a JsonObject of the COLLECTION manifest.
      *
-     * @return A JsonObject of the Collection manifest
+     * @return A JsonObject of the COLLECTION manifest
      */
     @JsonIgnore
     public JsonObject toJSON() {
@@ -442,15 +484,20 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      * A wrapper for things embedded in or referenced from a collection (e&#46;g&#46; manifests and other collections).
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonPropertyOrder({ Constants.TYPE, Constants.ID, Constants.LABEL, Constants.THUMBNAIL })
+    @JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.LABEL, Constants.THUMBNAIL })
     public static class Item {
+
+        /**
+         * The logger used by <code>Collection.Item</code>.
+         */
+        private static final Logger LOGGER = LoggerFactory.getLogger(Item.class, MessageCodes.BUNDLE);
 
         /**
          * The type of collection item.
          */
         public enum Type {
 
-            Manifest(ResourceTypes.MANIFEST), Collection(ResourceTypes.COLLECTION);
+            MANIFEST(ResourceTypes.MANIFEST), COLLECTION(ResourceTypes.COLLECTION);
 
             /**
              * Serialization value for Item.Type.
@@ -470,14 +517,43 @@ public class Collection extends NavigableResource<Collection> implements Resourc
             public String toString() {
                 return myValue;
             }
+
+            /**
+             * Creates an Image API extra format from a supplied string value.
+             *
+             * @param aType A type in string form
+             * @return A type
+             * @throws IllegalArgumentException If the type string doesn't correspond to a valid type
+             */
+            public static Type fromString(final String aType) {
+                for (final Type type : Type.values()) {
+                    if (type.toString().equalsIgnoreCase(aType)) {
+                        return type;
+                    }
+                }
+
+                throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_118, aType));
+            }
         }
 
+        /**
+         * The collection item's ID.
+         */
         private URI myID;
 
+        /**
+         * The collection item's type.
+         */
         private Type myType;
 
+        /**
+         * The collection item's label.
+         */
         private Label myLabel;
 
+        /**
+         * The collection item's thumbnails.
+         */
         private List<Thumbnail> myThumbnails;
 
         /**
@@ -487,8 +563,8 @@ public class Collection extends NavigableResource<Collection> implements Resourc
          * @param aType A type of resource referenced from the collection
          */
         public Item(final Item.Type aType, final String aID) {
-            setType(aType);
-            setID(aID);
+            myType = checkNotNull(aType);
+            myID = URI.create(aID);
         }
 
         /**
@@ -498,8 +574,8 @@ public class Collection extends NavigableResource<Collection> implements Resourc
          * @param aType A type of resource referenced from the collection
          */
         public Item(final Item.Type aType, final URI aID) {
-            setType(aType);
-            setID(aID);
+            myType = checkNotNull(aType);
+            myID = aID;
         }
 
         /**
@@ -510,13 +586,13 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         public Item(final Manifest aManifest) {
             final List<Thumbnail> thumbnails = aManifest.getThumbnails();
 
-            if (thumbnails.size() > 0) {
-                setThumbnails(thumbnails.toArray(new Thumbnail[thumbnails.size()]));
+            if (!thumbnails.isEmpty()) {
+                setItemThumbnails(thumbnails.toArray(new Thumbnail[0]));
             }
 
-            setID(aManifest.getID());
-            setType(Item.Type.valueOf(ResourceTypes.MANIFEST));
-            setLabel(aManifest.getLabel());
+            myType = Item.Type.fromString(ResourceTypes.MANIFEST);
+            myLabel = checkNotNull(aManifest.getLabel());
+            myID = aManifest.getID();
         }
 
         /**
@@ -527,13 +603,13 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         public Item(final Collection aCollection) {
             final List<Thumbnail> thumbnails = aCollection.getThumbnails();
 
-            if (thumbnails.size() > 0) {
-                setThumbnails(thumbnails.toArray(new Thumbnail[thumbnails.size()]));
+            if (!thumbnails.isEmpty()) {
+                setItemThumbnails(thumbnails.toArray(new Thumbnail[0]));
             }
 
-            setID(aCollection.getID());
-            setType(Item.Type.valueOf(ResourceTypes.COLLECTION));
-            setLabel(aCollection.getLabel());
+            myType = Item.Type.fromString(ResourceTypes.COLLECTION);
+            myLabel = checkNotNull(aCollection.getLabel());
+            myID = aCollection.getID();
         }
 
         /**
@@ -544,9 +620,9 @@ public class Collection extends NavigableResource<Collection> implements Resourc
          * @param aLabel An item label in string form
          */
         public Item(final Item.Type aType, final String aID, final String aLabel) {
-            setID(aID);
-            setType(aType);
-            setLabel(aLabel);
+            myLabel = new Label(aLabel);
+            myType = checkNotNull(aType);
+            myID = URI.create(aID);
         }
 
         /**
@@ -557,9 +633,9 @@ public class Collection extends NavigableResource<Collection> implements Resourc
          * @param aLabel An item label
          */
         public Item(final Item.Type aType, final URI aID, final Label aLabel) {
-            setID(aID);
-            setType(aType);
-            setLabel(aLabel);
+            myLabel = checkNotNull(aLabel);
+            myType = checkNotNull(aType);
+            myID = aID;
         }
 
         /**
@@ -567,6 +643,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
          */
         @SuppressWarnings("unused")
         private Item() {
+            // This left intentionally empty
         }
 
         /**
@@ -608,7 +685,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
          *
          * @return The item type
          */
-        @JsonGetter(Constants.TYPE)
+        @JsonIgnore
         public Item.Type getType() {
             return myType;
         }
@@ -626,32 +703,24 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         }
 
         /**
-         * Gets a list of resource thumbnails, initializing the list if this hasn't been done already.
+         * Gets a list of item thumbnails, initializing the list if this hasn't been done already.
          *
-         * @return The resource's thumbnails
+         * @return The items's thumbnails
          */
         @JsonGetter(Constants.THUMBNAIL)
         public List<Thumbnail> getThumbnails() {
-            if (myThumbnails == null) {
-                myThumbnails = new ArrayList<>();
-            }
-
-            return myThumbnails;
+            return getItemThumbnails();
         }
 
         /**
-         * Sets the thumbnails for this resource.
+         * Sets the thumbnails for this item.
          *
-         * @param aThumbnailArray The thumbnails to set for this resource
+         * @param aThumbnailArray The thumbnails to set for this item
          * @return The resource
          */
         @JsonSetter(Constants.THUMBNAIL)
         public Item setThumbnails(final Thumbnail... aThumbnailArray) {
-            final List<Thumbnail> thumbnails = getThumbnails();
-
-            thumbnails.clear();
-            thumbnails.addAll(Arrays.asList(aThumbnailArray));
-            return this;
+            return setItemThumbnails(aThumbnailArray);
         }
 
         /**
@@ -695,9 +764,50 @@ public class Collection extends NavigableResource<Collection> implements Resourc
          */
         @JsonSetter(Constants.TYPE)
         private Item setType(final String aType) {
-            myType = Type.valueOf(aType);
+            myType = Type.fromString(aType);
             return this;
         }
+
+        /**
+         * Gets the item type as a string value.
+         *
+         * @return The item type as a string value
+         */
+        @JsonGetter(Constants.TYPE)
+        private String getTypeAsString() {
+            return myType.toString();
+        }
+
+        /**
+         * Gets a list of item thumbnails, initializing the list if this hasn't been done already.
+         *
+         * @return The items's thumbnails
+         */
+        @JsonIgnore
+        private List<Thumbnail> getItemThumbnails() {
+            if (myThumbnails == null) {
+                myThumbnails = new ArrayList<>();
+            }
+
+            return myThumbnails;
+        }
+
+        /**
+         * Sets the thumbnails for this item.
+         *
+         * @param aThumbnailArray The thumbnails to set for this item
+         * @return The resource
+         */
+        @JsonIgnore
+        private Item setItemThumbnails(final Thumbnail... aThumbnailArray) {
+            final List<Thumbnail> thumbnails = getItemThumbnails();
+
+            thumbnails.clear();
+            thumbnails.addAll(Arrays.asList(aThumbnailArray));
+
+            return this;
+        }
+
     }
 
 }

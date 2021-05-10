@@ -1,19 +1,19 @@
 {
-    "type": "Range",
-    "id": "MY_RANGE_ID",
-    "label": {
-        "none": [
-            "My Range Label"
-        ]
-    },
-    "items": [
-        {
-            "type": "SpecificResource",
-            "id": "MY_RESOURCE_ID",
-            "source": "MY_RESOURCE_SOURCE",
-            "selector": {
-                "type": "AudioContentSelector"
-            }
-        }
+  "id": "MY_RANGE_ID",
+  "type": "Range",
+  "label": {
+    "none": [
+      "My Range Label"
     ]
+  },
+  "items": [
+    {
+      "id": "MY_RESOURCE_ID",
+      "type": "SpecificResource",
+      "source": "MY_RESOURCE_SOURCE",
+      "selector": {
+        "type": "AudioContentSelector"
+      }
+    }
+  ]
 }

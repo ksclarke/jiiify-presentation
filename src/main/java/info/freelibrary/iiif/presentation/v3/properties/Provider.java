@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -17,10 +17,11 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.util.IllegalArgumentI18nException;
+
 import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.iiif.presentation.v3.ImageContent;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
-import info.freelibrary.util.IllegalArgumentI18nException;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
@@ -32,14 +33,29 @@ import io.vertx.core.json.JsonObject;
     Constants.SEE_ALSO })
 public class Provider {
 
+    /**
+     * The provider's ID.
+     */
     private URI myID;
 
+    /**
+     * The provider's label.
+     */
     private Label myLabel;
 
+    /**
+     * The provider's homepages.
+     */
     private List<Homepage> myHomepages;
 
+    /**
+     * The provider's logos.
+     */
     private List<ImageContent> myLogos;
 
+    /**
+     * The provider's seeAlso references.
+     */
     private List<SeeAlso> mySeeAlsoRefs;
 
     /**
@@ -83,6 +99,7 @@ public class Provider {
      */
     @SuppressWarnings("unused")
     private Provider() {
+        // This is intentionally empty
     }
 
     /**
@@ -200,6 +217,7 @@ public class Provider {
      * @return The provider's homepages
      */
     @JsonGetter(Constants.HOMEPAGE)
+    @JsonInclude(Include.NON_EMPTY)
     public List<Homepage> getHomepages() {
         if (myHomepages == null) {
             myHomepages = new ArrayList<>();
@@ -243,6 +261,7 @@ public class Provider {
      * @return The provider's logos
      */
     @JsonGetter(Constants.LOGO)
+    @JsonInclude(Include.NON_EMPTY)
     public List<ImageContent> getLogos() {
         if (myLogos == null) {
             myLogos = new ArrayList<>();
@@ -257,6 +276,7 @@ public class Provider {
      * @return The see also reference(s)
      */
     @JsonGetter(Constants.SEE_ALSO)
+    @JsonInclude(Include.NON_EMPTY)
     public List<SeeAlso> getSeeAlsoRefs() {
         if (mySeeAlsoRefs == null) {
             mySeeAlsoRefs = new ArrayList<>();

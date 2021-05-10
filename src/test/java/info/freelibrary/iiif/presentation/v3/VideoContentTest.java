@@ -2,7 +2,6 @@
 package info.freelibrary.iiif.presentation.v3;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,8 +13,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import info.freelibrary.util.StringUtils;
-
-import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 
 import io.vertx.core.json.JsonObject;
 
@@ -48,18 +45,6 @@ public class VideoContentTest {
     @Test
     public final void testVideoContentURI() {
         assertEquals(URI.create(myID), new VideoContent(URI.create(myID)).getID());
-    }
-
-    /**
-     * Tests clearing the required statement.
-     */
-    @Test
-    public void testClearRequiredStatement() {
-        final RequiredStatement reqStatement = new RequiredStatement("stmt-id", "stmt-label");
-        final VideoContent content = new VideoContent(myID).setRequiredStatement(reqStatement);
-
-        assertTrue(content.getRequiredStatement() != null);
-        assertTrue(content.clearRequiredStatement().getRequiredStatement() == null);
     }
 
     /**

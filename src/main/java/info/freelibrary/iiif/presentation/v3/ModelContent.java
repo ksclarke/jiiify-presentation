@@ -25,7 +25,7 @@ import info.freelibrary.iiif.presentation.v3.services.Service;
 /**
  * Model content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
  */
-@JsonPropertyOrder({ Constants.TYPE, Constants.ID, Constants.THUMBNAIL, Constants.FORMAT, Constants.LANGUAGE })
+@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.THUMBNAIL, Constants.FORMAT, Constants.LANGUAGE })
 public class ModelContent extends AbstractContentResource<ModelContent> implements Thumbnail, Resource<ModelContent> {
 
     /**
@@ -174,11 +174,6 @@ public class ModelContent extends AbstractContentResource<ModelContent> implemen
     @Override
     public ModelContent setRequiredStatement(final RequiredStatement aStatement) {
         return (ModelContent) super.setRequiredStatement(aStatement);
-    }
-
-    @Override
-    public ModelContent clearRequiredStatement() {
-        return (ModelContent) super.clearRequiredStatement();
     }
 
     @Override

@@ -11,18 +11,25 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.StringUtils;
+
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * A base class for label, summary, attribution and metadata's label and value fields.
  */
 class I18nProperty<T extends I18nProperty<T>> {
 
+    /**
+     * The logger used by I18nProperty.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(I18nProperty.class, MessageCodes.BUNDLE);
 
+    /**
+     * A list of internationalized values.
+     */
     protected final List<I18n> myI18ns;
 
     /**
@@ -33,7 +40,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      */
     I18nProperty(final I18n... aI18nArray) {
         myI18ns = new ArrayList<>();
-        addI18ns(aI18nArray);
+        addCheckedI18ns(aI18nArray);
     }
 
     /**
@@ -44,7 +51,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      */
     I18nProperty(final String... aStringArray) {
         myI18ns = new ArrayList<>();
-        addStrings(aStringArray);
+        addCheckedStrings(aStringArray);
     }
 
     /**
@@ -56,7 +63,7 @@ class I18nProperty<T extends I18nProperty<T>> {
     @JsonIgnore
     protected I18nProperty<T> setStrings(final String... aStringArray) {
         myI18ns.clear();
-        return addStrings(aStringArray);
+        return addCheckedStrings(aStringArray);
     }
 
     /**
@@ -67,7 +74,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      */
     protected I18nProperty<T> setI18ns(final I18n... aI18nArray) {
         myI18ns.clear();
-        return addI18ns(aI18nArray);
+        return addCheckedI18ns(aI18nArray);
     }
 
     /**
@@ -90,46 +97,6 @@ class I18nProperty<T extends I18nProperty<T>> {
         } else {
             return null;
         }
-    }
-
-    /**
-     * Adds a string value to the property.
-     *
-     * @param aStringArray An array of strings to add to the property
-     * @return The property
-     */
-    protected I18nProperty<T> addStrings(final String... aStringArray) {
-        Objects.requireNonNull(aStringArray, MessageCodes.JPA_001);
-
-        for (final String string : aStringArray) {
-            Objects.requireNonNull(string, MessageCodes.JPA_001);
-
-            if (!myI18ns.add(new I18n(I18n.DEFAULT_LANG, string))) {
-                throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_043, string));
-            }
-        }
-
-        return this;
-    }
-
-    /**
-     * Adds an internationalization to the property.
-     *
-     * @param aI18nArray A list of internationalizations
-     * @return The property
-     */
-    protected I18nProperty<T> addI18ns(final I18n... aI18nArray) {
-        Objects.requireNonNull(aI18nArray, MessageCodes.JPA_001);
-
-        for (final I18n i18n : aI18nArray) {
-            Objects.requireNonNull(i18n, MessageCodes.JPA_001);
-
-            if (!myI18ns.add(i18n)) {
-                throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_043, i18n.toString()));
-            }
-        }
-
-        return this;
     }
 
     /**
@@ -160,19 +127,39 @@ class I18nProperty<T extends I18nProperty<T>> {
         if (hasStrings()) {
             final Iterator<I18n> iterator = myI18ns.iterator();
             final StringBuilder builder = new StringBuilder();
-            final String eol = System.lineSeparator();
 
             while (iterator.hasNext()) {
                 final I18n i18n = iterator.next();
                 final String[] strings = i18n.getStrings().toArray(new String[i18n.size()]);
 
-                builder.append(i18n.getLang()).append('=').append(StringUtils.toString(strings, '|')).append(eol);
+                builder.append(i18n.getLang()).append('=');
+                builder.append(StringUtils.toString(strings, '|')).append(System.lineSeparator());
             }
 
             return builder.toString();
         } else {
             return null;
         }
+    }
+
+    /**
+     * Adds a string value to the property.
+     *
+     * @param aStringArray An array of strings to add to the property
+     * @return The property
+     */
+    protected I18nProperty<T> addStrings(final String... aStringArray) {
+        return addCheckedStrings(aStringArray);
+    }
+
+    /**
+     * Adds an internationalization to the property.
+     *
+     * @param aI18nArray A list of internationalizations
+     * @return The property
+     */
+    protected I18nProperty<T> addI18ns(final I18n... aI18nArray) {
+        return addCheckedI18ns(aI18nArray);
     }
 
     /**
@@ -198,4 +185,43 @@ class I18nProperty<T extends I18nProperty<T>> {
         }
     }
 
+    /**
+     * Adds strings to the I18nProperty after they've been checked and confirmed to not be null.
+     *
+     * @param aStringArray An array of strings
+     * @return The property
+     */
+    private I18nProperty<T> addCheckedStrings(final String... aStringArray) {
+        Objects.requireNonNull(aStringArray, MessageCodes.JPA_001);
+
+        for (final String string : aStringArray) {
+            Objects.requireNonNull(string, MessageCodes.JPA_001);
+
+            if (!myI18ns.add(new I18n(I18n.DEFAULT_LANG, string))) {
+                throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_043, string));
+            }
+        }
+
+        return this;
+    }
+
+    /**
+     * Adds internationalized values to the I18nProperty after they've been checked and confirmed to not be null.
+     *
+     * @param aI18nArray An array of internationalized values
+     * @return The property
+     */
+    private I18nProperty<T> addCheckedI18ns(final I18n... aI18nArray) {
+        Objects.requireNonNull(aI18nArray, MessageCodes.JPA_001);
+
+        for (final I18n i18n : aI18nArray) {
+            Objects.requireNonNull(i18n, MessageCodes.JPA_001);
+
+            if (!myI18ns.add(i18n)) {
+                throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_043, i18n.toString()));
+            }
+        }
+
+        return this;
+    }
 }

@@ -21,8 +21,14 @@ public enum CollectionBehavior implements Behavior {
     UNORDERED(BehaviorConstants.UNORDERED), MULTI_PART(BehaviorConstants.MULTI_PART),
     TOGETHER(BehaviorConstants.TOGETHER);
 
+    /**
+     * The CollectionBehavior logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(CollectionBehavior.class, MessageCodes.BUNDLE);
 
+    /**
+     * The value of CollectionBehavior.
+     */
     private final String myValue;
 
     CollectionBehavior(final String aBehavior) {
@@ -42,7 +48,7 @@ public enum CollectionBehavior implements Behavior {
      * @return A collection behavior
      * @throws IllegalArgumentException If the behavior string doesn't correspond to a collection behavior
      */
-    public static CollectionBehavior fromString(final String aBehavior) throws IllegalArgumentException {
+    public static CollectionBehavior fromString(final String aBehavior) {
         for (final CollectionBehavior behavior : values()) {
             if (behavior.toString().equalsIgnoreCase(aBehavior)) {
                 return behavior;

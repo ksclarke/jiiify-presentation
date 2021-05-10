@@ -37,8 +37,14 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<AnnotationPage<T>>
         implements Resource<AnnotationPage<T>> {
 
+    /**
+     * The logger used by the AnnotationPage.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationPage.class, MessageCodes.BUNDLE);
 
+    /**
+     * The AnnotationPage's annotations.
+     */
     private List<T> myAnnotations;
 
     /**
@@ -95,7 +101,7 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
      * @param aAnnotationArray An annotation array
      * @return The annotation page
      */
-    @JsonGetter(Constants.ITEMS)
+    @JsonSetter(Constants.ITEMS)
     @SafeVarargs
     public final AnnotationPage<T> setAnnotations(final T... aAnnotationArray) {
         if (myAnnotations != null) {
@@ -274,11 +280,6 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
     @Override
     public AnnotationPage<T> setRequiredStatement(final RequiredStatement aStatement) {
         return (AnnotationPage<T>) super.setRequiredStatement(aStatement);
-    }
-
-    @Override
-    public AnnotationPage<T> clearRequiredStatement() {
-        return (AnnotationPage<T>) super.clearRequiredStatement();
     }
 
     @Override

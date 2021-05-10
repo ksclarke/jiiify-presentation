@@ -50,7 +50,6 @@ abstract class AbstractI18nStdDeserializer<T> extends StdDeserializer<T> {
 
         while (iterator.hasNext()) {
             final Entry<String, JsonNode> entry = iterator.next();
-            final String langTag = entry.getKey();
             final JsonNode jsonNode = entry.getValue();
 
             if (jsonNode.isArray()) {
@@ -61,10 +60,10 @@ abstract class AbstractI18nStdDeserializer<T> extends StdDeserializer<T> {
                     langStrings.add(arrayNode.get(index).asText());
                 }
 
-                i18n.add(new I18n(langTag, langStrings));
+                i18n.add(new I18n(entry.getKey(), langStrings));
             }
         }
 
-        return i18n.toArray(new I18n[i18n.size()]);
+        return i18n.toArray(new I18n[0]);
     }
 }

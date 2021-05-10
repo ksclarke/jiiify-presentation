@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation.v3.services;
 
 import java.net.URI;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -12,16 +13,22 @@ import info.freelibrary.iiif.presentation.v3.Constants;
 /**
  * A physical dimensions service that provides information useful for rulers, etc.
  */
-public class PhysicalDimsService implements Service {
+public class PhysicalDimsService extends AbstractService implements Service {
 
-    /* The profile for this service */
+    /**
+     * The profile for this service.
+     */
     @JsonIgnore
     public static final URI PROFILE = URI.create("http://iiif.io/api/annex/services/physdim");
 
-    private URI myID;
-
+    /**
+     * The physical scale of the service.
+     */
     private double myPhysicalScale;
 
+    /**
+     * The physical scale units of the service.
+     */
     private String myPhysicalUnits;
 
     /**
@@ -30,6 +37,8 @@ public class PhysicalDimsService implements Service {
      * @param aID An ID for the item to get physical dimensions from
      */
     public PhysicalDimsService(final URI aID) {
+        super();
+
         myID = aID;
     }
 
@@ -41,9 +50,11 @@ public class PhysicalDimsService implements Service {
      * @param aUnits A physical dimensions unit
      */
     public PhysicalDimsService(final URI aID, final double aScale, final String aUnits) {
-        myID = aID;
+        super();
+
         myPhysicalScale = aScale;
         myPhysicalUnits = aUnits;
+        myID = aID;
     }
 
     /**
@@ -55,38 +66,16 @@ public class PhysicalDimsService implements Service {
         return PROFILE;
     }
 
-    /**
-     * Gets the ID of the item.
-     *
-     * @return The ID of the item
-     */
     @Override
-    @JsonGetter(Constants.ID)
-    public URI getID() {
-        return myID;
-    }
-
-    /**
-     * Sets the ID of the record from which GeoJSON info is desired.
-     *
-     * @param aID The ID of the record from which GeoJSON info is desired
-     * @return The physical dimensions service
-     */
     @JsonSetter(Constants.ID)
     public PhysicalDimsService setID(final URI aID) {
-        myID = aID;
-        return this;
+        return (PhysicalDimsService) super.setID(aID);
     }
 
-    /**
-     * Gets the service type.
-     *
-     * @return The service type
-     */
     @Override
-    @JsonGetter(Constants.TYPE)
-    public String getType() {
-        return getClass().getSimpleName();
+    @JsonSetter(Constants.ID)
+    public PhysicalDimsService setID(final String aID) {
+        return (PhysicalDimsService) super.setID(aID);
     }
 
     /**
@@ -145,6 +134,18 @@ public class PhysicalDimsService implements Service {
         myPhysicalScale = aPhysicalScale;
         myPhysicalUnits = aPhysicalUnits;
         return this;
+    }
+
+    @Override
+    @JsonSetter(Constants.SERVICE)
+    public GeoJSONService setServices(final List<Service> aServiceList) {
+        return (GeoJSONService) super.setServices(aServiceList);
+    }
+
+    @Override
+    @JsonIgnore
+    public GeoJSONService setServices(final Service... aServicesArray) {
+        return (GeoJSONService) super.setServices(aServicesArray);
     }
 
 }

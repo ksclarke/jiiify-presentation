@@ -17,10 +17,21 @@ public enum ResourceBehavior implements Behavior {
 
     HIDDEN(BehaviorConstants.HIDDEN);
 
+    /**
+     * The ResourceBehavior logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(ResourceBehavior.class, MessageCodes.BUNDLE);
 
+    /**
+     * The value of the resource behavior.
+     */
     private final String myValue;
 
+    /**
+     * Creates a resource behavior from the supplied string.
+     *
+     * @param aBehavior A resource behavior in string form
+     */
     ResourceBehavior(final String aBehavior) {
         myValue = aBehavior;
     }
@@ -38,7 +49,7 @@ public enum ResourceBehavior implements Behavior {
      * @return A resource behavior
      * @throws IllegalArgumentException If the behavior string doesn't correspond to a resource behavior
      */
-    public static ResourceBehavior fromString(final String aBehavior) throws IllegalArgumentException {
+    public static ResourceBehavior fromString(final String aBehavior) {
         for (final ResourceBehavior behavior : values()) {
             if (behavior.toString().equalsIgnoreCase(aBehavior)) {
                 return behavior;
