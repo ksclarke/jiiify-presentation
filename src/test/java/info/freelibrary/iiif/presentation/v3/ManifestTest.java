@@ -204,7 +204,7 @@ public class ManifestTest extends AbstractTest {
     }
 
     /**
-     * Tests {@link MANIFEST#getContext() getContext} method.
+     * Tests {@link Manifest#getContext() getContext} method.
      */
     @Test
     public void testGetPrimaryContext() {
@@ -212,7 +212,7 @@ public class ManifestTest extends AbstractTest {
     }
 
     /**
-     * Tests {@link MANIFEST#removeContext(URI) removeContext} method.
+     * Tests {@link Manifest#removeContext(URI) removeContext} method.
      */
     @Test
     public void testRemoveContext() {
