@@ -53,10 +53,17 @@ public class TextualBody implements ContentResource {
      * Creates a new textual body for an annotation.
      */
     public TextualBody() {
-        final SkolemIriFactory factory = SkolemIriFactory.getFactory();
+        // This is intentionally left empty
+    }
 
-        hasSerializableID = factory.createsSerializableIDs();
-        myID = factory.getSkolemIRI();
+    /**
+     * Creates a new textual body for an annotation, supplying an ID factory for ID creation.
+     *
+     * @param aFactory A SkolemIriFactory that can create IDs
+     */
+    public TextualBody(final SkolemIriFactory aFactory) {
+        hasSerializableID = aFactory.createsSerializableIDs();
+        myID = aFactory.getSkolemIRI();
     }
 
     /**

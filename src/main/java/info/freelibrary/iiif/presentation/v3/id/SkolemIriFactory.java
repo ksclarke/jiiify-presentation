@@ -125,7 +125,7 @@ public final class SkolemIriFactory {
      * @param aBoolFlag True if IDs should be serialized; else, false
      * @return This SkolemIriFactory
      */
-    public SkolemIriFactory useSerializableIDs(final boolean aBoolFlag) {
+    public SkolemIriFactory createSerializableIDs(final boolean aBoolFlag) {
         hasSerializableIDs = aBoolFlag;
         return this;
     }

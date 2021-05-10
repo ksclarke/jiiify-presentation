@@ -23,7 +23,6 @@ public class TextualBodyTest {
      */
     @Test
     public final void testTextualBody() {
-        SkolemIriFactory.getFactory().useSerializableIDs(false);
         assertEquals(null, new TextualBody().getID());
     }
 
@@ -32,8 +31,8 @@ public class TextualBodyTest {
      */
     @Test
     public final void testTextualBodyNotSerializingID() {
-        SkolemIriFactory.getFactory().useSerializableIDs(true);
-        assertNotEquals(null, new TextualBody().getID());
+        final SkolemIriFactory idFactory = SkolemIriFactory.getFactory().createSerializableIDs(true);
+        assertNotEquals(null, new TextualBody(idFactory).getID());
     }
 
     /**
@@ -59,7 +58,7 @@ public class TextualBodyTest {
      */
     @Test
     public final void testSerializedID() {
-        final TextualBody textualBody = new TextualBody().serializeID(true);
+        final TextualBody textualBody = new TextualBody(SkolemIriFactory.getFactory()).serializeID(true);
         assertNotEquals(null, textualBody.getID());
     }
 
@@ -68,7 +67,7 @@ public class TextualBodyTest {
      */
     @Test
     public final void testUnserializeID() {
-        final TextualBody textualBody = new TextualBody().serializeID(false);
+        final TextualBody textualBody = new TextualBody(SkolemIriFactory.getFactory()).serializeID(false);
         assertEquals(null, textualBody.getID());
     }
 
