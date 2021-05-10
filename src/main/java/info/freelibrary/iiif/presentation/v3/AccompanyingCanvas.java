@@ -28,7 +28,7 @@ import io.vertx.core.json.JsonObject;
 /**
  * A single Canvas that provides additional content for use while rendering the resource that has the accompanyingCanvas
  * property. Examples include an image to show while a duration-only Canvas is playing audio; or background audio to
- * play while a user is navigating an image-only MANIFEST.
+ * play while a user is navigating an image-only Manifest.
  */
 @SuppressWarnings({ "PMD.TooManyMethods", "PMD.ExcessivePublicCount" })
 public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>

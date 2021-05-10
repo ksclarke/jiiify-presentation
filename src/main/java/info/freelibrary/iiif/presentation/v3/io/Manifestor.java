@@ -36,10 +36,10 @@ public class Manifestor {
     }
 
     /**
-     * Reads a JSON manifest file into a MANIFEST object.
+     * Reads a JSON manifest file into a Manifest object.
      *
      * @param aJsonFile A JSON manifest file
-     * @return A MANIFEST object
+     * @return A Manifest object
      */
     public Manifest readManifest(final File aJsonFile) {
         return Manifest.fromJSON(myVertx.fileSystem().readFileBlocking(aJsonFile.getAbsolutePath()).toJsonObject());
@@ -59,7 +59,7 @@ public class Manifestor {
      * Reads a manifest JSON file using the supplied promise.
      *
      * @param aJsonFile A JSON manifest file
-     * @param aPromise A MANIFEST object
+     * @param aPromise A Manifest object
      */
     public void readManifest(final File aJsonFile, final Promise<Manifest> aPromise) {
         myVertx.fileSystem().readFile(aJsonFile.getAbsolutePath(), read -> {

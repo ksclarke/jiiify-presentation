@@ -287,8 +287,8 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     /**
-     * Gets an unmodifiable list of manifest contexts. To remove contexts, use {@link MANIFEST#removeContext(URI)
-     * removeContext} or {@link MANIFEST#clearContexts() clearContexts}.
+     * Gets an unmodifiable list of manifest contexts. To remove contexts, use {@link Manifest#removeContext(URI)
+     * removeContext} or {@link Manifest#clearContexts() clearContexts}.
      *
      * @return The manifest context
      */
@@ -342,7 +342,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     /**
      * Adds an array of new context URIs to the manifest.
      *
-     * @param aContextArray MANIFEST context URIs(s)
+     * @param aContextArray Manifest context URIs(s)
      * @return The manifest
      */
     public Manifest addContexts(final URI... aContextArray) {
@@ -363,7 +363,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     /**
      * Adds an array of new context URIs, in string form, to the manifest.
      *
-     * @param aContextArray MANIFEST context URI(s) in string form
+     * @param aContextArray Manifest context URI(s) in string form
      * @return The manifest
      */
     public Manifest addContexts(final String... aContextArray) {
@@ -733,9 +733,9 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     /**
-     * Returns a JsonObject of the MANIFEST.
+     * Returns a JsonObject of the Manifest.
      *
-     * @return A JsonObject of the MANIFEST
+     * @return A JsonObject of the Manifest
      */
     public JsonObject toJSON() {
         return JsonObject.mapFrom(this);
@@ -747,9 +747,9 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     /**
-     * Returns a MANIFEST from its JSON representation.
+     * Returns a Manifest from its JSON representation.
      *
-     * @param aJsonObject A MANIFEST in JSON form
+     * @param aJsonObject A Manifest in JSON form
      * @return The manifest
      */
     @JsonIgnore
@@ -758,7 +758,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     /**
-     * Returns a MANIFEST from its JSON representation.
+     * Returns a Manifest from its JSON representation.
      *
      * @param aJsonString A manifest in string form
      * @return The manifest
