@@ -12,8 +12,8 @@ import io.vertx.core.json.JsonObject;
 
 /**
  * A containing resource that includes the resource that has the <code>partOf</code> property. For example, the
- * <code>partOf</code> property on a Canvas can be used to reference an external Manifest in order to enable the
- * discovery of further relevant information. Similarly, a Manifest can reference a containing Collection using
+ * <code>partOf</code> property on a Canvas can be used to reference an external MANIFEST in order to enable the
+ * discovery of further relevant information. Similarly, a MANIFEST can reference a containing COLLECTION using
  * <code>partOf</code> to aid in navigation.
  */
 public class PartOf extends AbstractLinkProperty<PartOf> {
@@ -43,6 +43,7 @@ public class PartOf extends AbstractLinkProperty<PartOf> {
      */
     @SuppressWarnings("unused")
     private PartOf() {
+        super();
     }
 
     @Override

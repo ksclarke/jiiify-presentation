@@ -15,12 +15,20 @@ import info.freelibrary.iiif.presentation.v3.Constants;
  */
 public class PhysicalDimsService extends AbstractService implements Service {
 
-    /* The profile for this service */
+    /**
+     * The profile for this service.
+     */
     @JsonIgnore
     public static final URI PROFILE = URI.create("http://iiif.io/api/annex/services/physdim");
 
+    /**
+     * The physical scale of the service.
+     */
     private double myPhysicalScale;
 
+    /**
+     * The physical scale units of the service.
+     */
     private String myPhysicalUnits;
 
     /**
@@ -29,6 +37,8 @@ public class PhysicalDimsService extends AbstractService implements Service {
      * @param aID An ID for the item to get physical dimensions from
      */
     public PhysicalDimsService(final URI aID) {
+        super();
+
         myID = aID;
     }
 
@@ -40,9 +50,11 @@ public class PhysicalDimsService extends AbstractService implements Service {
      * @param aUnits A physical dimensions unit
      */
     public PhysicalDimsService(final URI aID, final double aScale, final String aUnits) {
-        myID = aID;
+        super();
+
         myPhysicalScale = aScale;
         myPhysicalUnits = aUnits;
+        myID = aID;
     }
 
     /**

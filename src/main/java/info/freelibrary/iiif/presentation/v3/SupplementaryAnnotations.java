@@ -11,12 +11,15 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 /**
- * A link from a Range to an Annotation Collection that includes the supplementing Annotations of content resources for
+ * A link from a Range to an Annotation COLLECTION that includes the supplementing Annotations of content resources for
  * the Range.
  */
 @JsonPropertyOrder({ Constants.ID, Constants.TYPE })
 public class SupplementaryAnnotations {
 
+    /**
+     * The supplementary annotation's ID.
+     */
     private URI myID;
 
     /**
@@ -42,6 +45,7 @@ public class SupplementaryAnnotations {
      */
     @SuppressWarnings("unused")
     private SupplementaryAnnotations() {
+        // This intentionally left empty
     }
 
     /**
@@ -95,8 +99,8 @@ public class SupplementaryAnnotations {
      * @return The supplementary annotations
      */
     @JsonSetter(Constants.TYPE)
+    @SuppressWarnings("PMD.UnusedFormalParameter") // This method is just used by Jackson's deserialization processes
     private SupplementaryAnnotations setType(final String aType) {
-        // The type is constant, so this method is just for Jackson
         return this;
     }
 }

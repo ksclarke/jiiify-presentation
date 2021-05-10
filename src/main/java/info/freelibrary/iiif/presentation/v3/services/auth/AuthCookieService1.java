@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3.services;
+package info.freelibrary.iiif.presentation.v3.services.auth;
 
 import java.net.URI;
 import java.util.List;
@@ -14,6 +14,7 @@ import info.freelibrary.util.LoggerFactory;
 
 import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageService3;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
@@ -22,6 +23,9 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public class AuthCookieService1 extends AbstractAuthService implements AuthService {
 
+    /**
+     * The label for this auth cookie service.
+     */
     private String myLabel;
 
     /**
@@ -137,11 +141,6 @@ public class AuthCookieService1 extends AbstractAuthService implements AuthServi
         return this;
     }
 
-    @Override
-    public AuthService setProfile(final AuthService.Profile aProfile) {
-        return super.setProfile(aProfile);
-    }
-
     /**
      * Sets the service profile.
      *
@@ -149,9 +148,9 @@ public class AuthCookieService1 extends AbstractAuthService implements AuthServi
      * @return The image service
      */
     @JsonSetter(Constants.PROFILE)
+    @SuppressWarnings("PMD.MissingOverride") // PMD thinks this is overriding something even though it's not
     private AuthService setProfile(final String aProfile) {
-        myProfile = Profile.fromString(aProfile);
-        return this;
+        return super.setProfile(Profile.fromString(aProfile));
     }
 
     /**
@@ -216,7 +215,7 @@ public class AuthCookieService1 extends AbstractAuthService implements AuthServi
          * @return An auth cookie service profile
          * @throws IllegalArgumentException If the profile string doesn't correspond to a valid profile
          */
-        public static AuthCookieService1.Profile fromString(final String aProfile) throws IllegalArgumentException {
+        public static AuthCookieService1.Profile fromString(final String aProfile) {
             for (final AuthCookieService1.Profile profile : AuthCookieService1.Profile.values()) {
                 if (profile.string().equals(aProfile)) {
                     return profile;

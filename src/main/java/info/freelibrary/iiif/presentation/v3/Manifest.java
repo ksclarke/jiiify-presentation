@@ -46,26 +46,62 @@ import io.vertx.core.json.JsonObject;
  * information about the object or the intellectual work that it conveys. Each manifest describes how to present a
  * single object such as a book, a photograph, or a statue.
  */
+@SuppressWarnings({ "PMD.ExcessivePublicCount", "PMD.ExcessiveImports" })
 public class Manifest extends NavigableResource<Manifest> implements Resource<Manifest> {
 
+    /**
+     * The manifest's logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(Manifest.class, MessageCodes.BUNDLE);
 
+    /**
+     * The default number of contexts.
+     */
+    private static final int DEFAULT_CONTEXT_COUNT = 1;
+
+    /**
+     * The manifest's contexts.
+     */
     private final List<URI> myContexts = Stream.of(Constants.CONTEXT_URI).collect(Collectors.toList());
 
+    /**
+     * The manifest's annotations.
+     */
     private List<AnnotationPage<? extends Annotation<?>>> myAnnotations;
 
+    /**
+     * The manifest's accompanying canvas.
+     */
     private AccompanyingCanvas myAccompanyingCanvas;
 
+    /**
+     * The manifest's placeholder canvas.
+     */
     private PlaceholderCanvas myPlaceholderCanvas;
 
+    /**
+     * The manifest's viewing direction.
+     */
     private ViewingDirection myViewingDirection;
 
+    /**
+     * The manifest's service definitions.
+     */
     private List<Service> myServiceDefinitions;
 
+    /**
+     * The manifest's canvases.
+     */
     private List<Canvas> myCanvases;
 
+    /**
+     * The manifest's ranges.
+     */
     private List<Range> myRanges;
 
+    /**
+     * The manifest's start.
+     */
     private Start myStart;
 
     /**
@@ -251,8 +287,8 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     /**
-     * Gets an unmodifiable list of manifest contexts. To remove contexts, use {@link Manifest#removeContext(URI)
-     * removeContext} or {@link Manifest#clearContexts() clearContexts}.
+     * Gets an unmodifiable list of manifest contexts. To remove contexts, use {@link MANIFEST#removeContext(URI)
+     * removeContext} or {@link MANIFEST#clearContexts() clearContexts}.
      *
      * @return The manifest context
      */
@@ -285,7 +321,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @return True if the context was removed; else, false
      * @throws UnsupportedOperationException If the required context is supplied to be removed
      */
-    public boolean removeContext(final URI aContextURI) throws UnsupportedOperationException {
+    public boolean removeContext(final URI aContextURI) {
         if (Constants.CONTEXT_URI.equals(aContextURI)) {
             throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_039, Constants.CONTEXT_URI));
         }
@@ -306,7 +342,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     /**
      * Adds an array of new context URIs to the manifest.
      *
-     * @param aContextArray Manifest context URIs(s)
+     * @param aContextArray MANIFEST context URIs(s)
      * @return The manifest
      */
     public Manifest addContexts(final URI... aContextArray) {
@@ -327,7 +363,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     /**
      * Adds an array of new context URIs, in string form, to the manifest.
      *
-     * @param aContextArray Manifest context URI(s) in string form
+     * @param aContextArray MANIFEST context URI(s) in string form
      * @return The manifest
      */
     public Manifest addContexts(final String... aContextArray) {
@@ -346,7 +382,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     /**
-     * Sets the viewing direction.
+     * Sets the viewing direction. The remove the existing viewing direction, set it to null.
      *
      * @param aViewingDirection A viewing direction
      * @return The manifest
@@ -365,16 +401,6 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     @JsonGetter(Constants.VIEWING_DIRECTION)
     public ViewingDirection getViewingDirection() {
         return myViewingDirection;
-    }
-
-    /**
-     * Clears the viewing direction.
-     *
-     * @return The manifest
-     */
-    public Manifest clearViewingDirection() {
-        myViewingDirection = null;
-        return this;
     }
 
     /**
@@ -633,11 +659,6 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     @Override
-    public Manifest clearRequiredStatement() {
-        return (Manifest) super.clearRequiredStatement();
-    }
-
-    @Override
     public Manifest setSummary(final String aSummary) {
         return (Manifest) super.setSummary(aSummary);
     }
@@ -690,8 +711,9 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @param aAnnotationPageList A list of annotation pages
      * @return This manifest
      */
+    @SafeVarargs
     @JsonIgnore
-    public Manifest setAnnotations(final AnnotationPage<? extends Annotation<?>>... aAnnotationPageList) {
+    public final Manifest setAnnotations(final AnnotationPage<? extends Annotation<?>>... aAnnotationPageList) {
         setAnnotations(List.of(aAnnotationPageList));
         return this;
     }
@@ -711,9 +733,9 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     /**
-     * Returns a JsonObject of the Manifest.
+     * Returns a JsonObject of the MANIFEST.
      *
-     * @return A JsonObject of the Manifest
+     * @return A JsonObject of the MANIFEST
      */
     public JsonObject toJSON() {
         return JsonObject.mapFrom(this);
@@ -725,9 +747,9 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     /**
-     * Returns a Manifest from its JSON representation.
+     * Returns a MANIFEST from its JSON representation.
      *
-     * @param aJsonObject A Manifest in JSON form
+     * @param aJsonObject A MANIFEST in JSON form
      * @return The manifest
      */
     @JsonIgnore
@@ -736,7 +758,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     /**
-     * Returns a Manifest from its JSON representation.
+     * Returns a MANIFEST from its JSON representation.
      *
      * @param aJsonString A manifest in string form
      * @return The manifest
@@ -752,43 +774,54 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @param aContext A manifest context in string form
      */
     @JsonSetter(Constants.CONTEXT)
-    private void setContexts(final Object aObject) {
+    private void deserializeContexts(final Object aObject) {
         if (aObject instanceof String) {
-            setContexts(List.of((String) aObject));
+            deserializeContexts(List.of((String) aObject));
         } else if (aObject instanceof List<?>) {
             final List<?> genericList = (List<?>) aObject;
-            final List<URI> contextList = new ArrayList<>();
-            final List<Integer> indices = new ArrayList<>();
 
-            if (genericList.size() > 0 && genericList.get(0).getClass().equals(String.class)) {
-                for (int index = 0; index < genericList.size(); index++) {
-                    final URI context = URI.create((String) genericList.get(index));
-
-                    if (Constants.CONTEXT_URI.equals(context)) {
-                        indices.add(index); // We may have more than one required context in supplied list
-
-                        if (indices.size() == 1) { // Only keep one if this is the case
-                            contextList.add(context);
-                        }
-                    } else {
-                        contextList.add(context);
-                    }
-                }
-
-                // Remove required context; we'll add it back at the end
-                if (indices.size() > 0) {
-                    contextList.remove((int) indices.get(0));
-                }
-
-                myContexts.clear();
-                myContexts.addAll(contextList);
-                myContexts.add(Constants.CONTEXT_URI); // Add required context at end
+            if (!genericList.isEmpty() && genericList.get(0).getClass().equals(String.class)) {
+                setContexts(genericList);
             } else {
                 throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_113));
             }
         } else {
             throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_113));
         }
+    }
+
+    /**
+     * Sets the manifest's contexts from a list that Jackson builds.
+     *
+     * @param aContextList A list of contexts
+     */
+    @JsonIgnore
+    private void setContexts(final List<?> aContextList) {
+        final List<Integer> indices = new ArrayList<>();
+        final List<URI> contextList = new ArrayList<>();
+
+        for (int index = 0; index < aContextList.size(); index++) {
+            final URI context = URI.create((String) aContextList.get(index));
+
+            if (Constants.CONTEXT_URI.equals(context)) {
+                indices.add(index); // We may have more than one required context in supplied list
+
+                if (indices.size() == DEFAULT_CONTEXT_COUNT) { // Only keep one if this is the case
+                    contextList.add(context);
+                }
+            } else {
+                contextList.add(context);
+            }
+        }
+
+        // Remove required context; we'll add it back at the end
+        if (!indices.isEmpty()) {
+            contextList.remove((int) indices.get(0));
+        }
+
+        myContexts.clear();
+        myContexts.addAll(contextList);
+        myContexts.add(Constants.CONTEXT_URI); // Add required context at end
     }
 
     /**
@@ -799,9 +832,9 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      */
     @JsonGetter(Constants.CONTEXT)
     private Object getJsonContext() {
-        if (myContexts.size() == 1) {
+        if (myContexts.size() == DEFAULT_CONTEXT_COUNT) {
             return myContexts.get(0);
-        } else if (myContexts.size() > 1) {
+        } else if (!myContexts.isEmpty()) {
             return myContexts;
         } else {
             return null;

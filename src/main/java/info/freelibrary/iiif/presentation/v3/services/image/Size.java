@@ -15,8 +15,14 @@ import info.freelibrary.iiif.presentation.v3.Constants;
 @JsonPropertyOrder({ Constants.HEIGHT, Constants.WIDTH })
 public class Size {
 
+    /**
+     * My size width.
+     */
     private int myWidth;
 
+    /**
+     * My size height.
+     */
     private int myHeight;
 
     /**
@@ -34,6 +40,7 @@ public class Size {
      * Creates a new Image API size.
      */
     public Size() {
+        // This is intentionally left empty
     }
 
     /**

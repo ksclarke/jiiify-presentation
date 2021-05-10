@@ -16,19 +16,34 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonInclude(Include.NON_NULL)
 public class PointSelector implements Selector {
 
+    /**
+     * The PointSelector's X coordinate property.
+     */
     protected static final String X_COORDINATE = "x";
 
+    /**
+     * The PointSelector's Y coordinate property.
+     */
     protected static final String Y_COORDINATE = "y";
 
+    /**
+     * The PointSelector's T coordinate property.
+     */
     protected static final String T_COORDINATE = "t";
 
-    /* An integer giving the x coordinate of the point, relative to the dimensions of the target resource. */
+    /**
+     * An integer giving the x coordinate of the point, relative to the dimensions of the target resource.
+     */
     private OptionalInt myX;
 
-    /* An integer giving the y coordinate of the point, relative to the dimensions of the target resource. */
+    /**
+     * An integer giving the y coordinate of the point, relative to the dimensions of the target resource.
+     */
     private OptionalInt myY;
 
-    /* A floating point giving the time of the point in seconds, relative to the duration of the target resource. */
+    /**
+     * A floating point giving the time of the point in seconds, relative to the duration of the target resource.
+     */
     private Optional<Float> myT;
 
     /**
@@ -87,12 +102,19 @@ public class PointSelector implements Selector {
     }
 
     /**
+     * A PointSelector constructor for use by the SelectorDeserializer.
+     */
+    PointSelector() {
+        // This is intentionally empty
+    }
+
+    /**
      * Sets the X coordinate for the selector.
      *
      * @param aX An X coordinate
      * @return This point selector
      */
-    public PointSelector setX(final int aX) {
+    public final PointSelector setX(final int aX) {
         myX = OptionalInt.of(aX);
         return this;
     }
@@ -112,7 +134,7 @@ public class PointSelector implements Selector {
      * @param aY An Y coordinate
      * @return This point selector
      */
-    public PointSelector setY(final int aY) {
+    public final PointSelector setY(final int aY) {
         myY = OptionalInt.of(aY);
         return this;
     }
@@ -133,7 +155,7 @@ public class PointSelector implements Selector {
      * @return This point selector
      */
     @JsonProperty(PointSelector.T_COORDINATE)
-    public PointSelector setSeconds(final Number aSecondsCount) {
+    public final PointSelector setSeconds(final Number aSecondsCount) {
         myT = Optional.of(aSecondsCount.floatValue());
         return this;
     }
@@ -145,8 +167,8 @@ public class PointSelector implements Selector {
      * @return This point selector
      */
     @JsonIgnore
-    public PointSelector setMinutes(final long aMinutesCount) {
-        myT = Optional.of(Float.valueOf(TimeUnit.MINUTES.toSeconds(aMinutesCount)));
+    public final PointSelector setMinutes(final long aMinutesCount) {
+        myT = Optional.of((float) TimeUnit.MINUTES.toSeconds(aMinutesCount));
         return this;
     }
 

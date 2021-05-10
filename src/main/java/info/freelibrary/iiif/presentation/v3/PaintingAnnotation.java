@@ -34,8 +34,14 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 public class PaintingAnnotation extends Annotation<PaintingAnnotation>
         implements Resource<PaintingAnnotation>, ContentAnnotation<PaintingAnnotation> {
 
+    /**
+     * The logger for painting annotations.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(PaintingAnnotation.class, MessageCodes.BUNDLE);
 
+    /**
+     * The painting annotation's motivation.
+     */
     private static final String MOTIVATION = "painting";
 
     /**
@@ -337,11 +343,6 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation>
     @Override
     public PaintingAnnotation setRequiredStatement(final RequiredStatement aStatement) {
         return (PaintingAnnotation) super.setRequiredStatement(aStatement);
-    }
-
-    @Override
-    public PaintingAnnotation clearRequiredStatement() {
-        return (PaintingAnnotation) super.clearRequiredStatement();
     }
 
     @Override

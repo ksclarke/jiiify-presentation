@@ -30,18 +30,31 @@ import java.util.UUID;
  */
 public final class SkolemIriFactory {
 
+    /**
+     * The start of a well-known URL.
+     */
     private static final String COMPONENT_START = "/.well-known/genid/";
 
+    /**
+     * The internal SkolemIRI factory.
+     */
     private static SkolemIriFactory myFactory;
 
+    /**
+     * The factory's well-known base.
+     */
     private String myWellKnownBase;
 
+    /**
+     * Whether the factory creates serializable IDs.
+     */
     private boolean hasSerializableIDs;
 
     /**
      * Creates a new Skolem IRI factory.
      */
     private SkolemIriFactory() {
+        // This is intentionally empty
     }
 
     /**
@@ -58,22 +71,19 @@ public final class SkolemIriFactory {
     }
 
     /**
-     * Resets the internal SkolemIriFactory to null. A new factory will be created the next time getFactory() is called.
-     */
-    public static void reset() {
-        myFactory = null;
-    }
-
-    /**
      * Sets the well-known Skolem IRI base used by the factory; this should be a host name with the HTTP or HTTPS
-     * protocol in front (e.g., "https://example.com/").
+     * protocol in front (e.g., "https://example.com/"). To remove a previously set well-known base, set a null.
      *
-     * @param aWellKnownBase A base for the well-known Skolem IRI
+     * @param aBase A base for the well-known Skolem IRI
      * @return This factory
      */
-    public SkolemIriFactory setWellKnownBase(final String aWellKnownBase) {
-        myWellKnownBase = aWellKnownBase.endsWith("/")
-                ? aWellKnownBase.substring(aWellKnownBase.length() - 1, aWellKnownBase.length()) : aWellKnownBase;
+    public SkolemIriFactory setWellKnownBase(final String aBase) {
+        if (aBase == null) {
+            myWellKnownBase = aBase;
+        } else {
+            myWellKnownBase = aBase.endsWith("/") ? aBase.substring(aBase.length() - 1, aBase.length()) : aBase;
+        }
+
         return this;
     }
 
@@ -84,16 +94,6 @@ public final class SkolemIriFactory {
      */
     public Optional<String> getWellKnownBase() {
         return Optional.ofNullable(myWellKnownBase);
-    }
-
-    /**
-     * Removes the well-known base.
-     *
-     * @return This SkolemIriFactory
-     */
-    public SkolemIriFactory removeWellKnownBase() {
-        myWellKnownBase = null;
-        return this;
     }
 
     /**
@@ -115,7 +115,7 @@ public final class SkolemIriFactory {
      *
      * @return True if IDs should be serialized; else, false
      */
-    public boolean hasSerializableIDs() {
+    public boolean createsSerializableIDs() {
         return hasSerializableIDs;
     }
 
@@ -125,7 +125,7 @@ public final class SkolemIriFactory {
      * @param aBoolFlag True if IDs should be serialized; else, false
      * @return This SkolemIriFactory
      */
-    public SkolemIriFactory hasSerializableIDs(final boolean aBoolFlag) {
+    public SkolemIriFactory useSerializableIDs(final boolean aBoolFlag) {
         hasSerializableIDs = aBoolFlag;
         return this;
     }

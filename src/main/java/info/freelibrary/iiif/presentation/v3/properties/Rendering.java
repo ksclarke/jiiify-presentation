@@ -47,6 +47,7 @@ public class Rendering extends AbstractLinkProperty<Rendering> {
      */
     @SuppressWarnings("unused")
     private Rendering() {
+        super();
     }
 
     @Override
@@ -99,11 +100,6 @@ public class Rendering extends AbstractLinkProperty<Rendering> {
     @JsonIgnore
     public Optional<MediaType> getFormatMediaType() {
         return super.getFormatMediaType();
-    }
-
-    @Override
-    public Optional<String> getFormat() {
-        return super.getFormat();
     }
 
     @Override

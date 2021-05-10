@@ -17,7 +17,11 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.google.common.net.MediaType;
 
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+
 import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 import io.vertx.core.json.JsonObject;
 
@@ -28,16 +32,44 @@ import io.vertx.core.json.JsonObject;
     Constants.LANGUAGE })
 abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implements Localized<T> {
 
+    /**
+     * The AbstractLinkProperty logger.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractLinkProperty.class, MessageCodes.BUNDLE);
+
+    /**
+     * The size of a single value array.
+     */
+    private static final int SINGLE_VALUE_ARRAY_SIZE = 1;
+
+    /**
+     * The link property ID.
+     */
     private URI myID;
 
+    /**
+     * The link property type.
+     */
     private String myType;
 
+    /**
+     * The link property format.
+     */
     private MediaType myFormat;
 
+    /**
+     * The link property profile.
+     */
     private URI myProfile;
 
+    /**
+     * The link property label.
+     */
     private Label myLabel;
 
+    /**
+     * The link property languages.
+     */
     private List<String> myLanguages;
 
     /**
@@ -89,6 +121,7 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      * Creates an abstract link property for the Jackson deserialization process.
      */
     protected AbstractLinkProperty() {
+        // This is intentionally empty
     }
 
     /**
@@ -167,10 +200,10 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      *
      * @param aFormat A resource's format
      * @return The resource whose format is being set
-     * @throws IllegalArgumentException If the supplied string isn't a media type
+     * @If the supplied string isn't a media type
      */
     @JsonSetter(Constants.FORMAT)
-    protected AbstractLinkProperty<T> setFormat(final String aFormat) throws IllegalArgumentException {
+    protected AbstractLinkProperty<T> setFormat(final String aFormat) {
         myFormat = MediaType.parse(aFormat);
         return this;
     }
@@ -294,7 +327,7 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
     protected Object getLanguageProperty() {
         final List<String> languages = getLanguages();
 
-        if (languages.size() == 1) {
+        if (languages.size() == SINGLE_VALUE_ARRAY_SIZE) {
             return languages.get(0);
         } else {
             return languages;
@@ -306,6 +339,7 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      *
      * @param aObject An object to be deserialized
      * @return This resource
+     * @throws IllegalArgumentException If the object supplied is unsupported
      */
     @JsonSetter(Constants.LANGUAGE)
     protected AbstractLinkProperty<T> setLanguageProperty(final Object aObject) {
@@ -313,14 +347,14 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
             return (AbstractLinkProperty<T>) setLanguages((String) aObject);
         } else if (aObject instanceof String[]) {
             return (AbstractLinkProperty<T>) setLanguages((String[]) aObject);
-        } else if (aObject instanceof ArrayList) {
-            final ArrayList<?> list = (ArrayList<?>) aObject;
+        } else if (aObject instanceof List) {
+            final List<?> list = (List<?>) aObject;
 
-            if (list.size() > 0 && list.get(0) instanceof String) {
-                return (AbstractLinkProperty<T>) setLanguages(list.toArray(new String[list.size()]));
-            } // FIXME
+            if (!list.isEmpty() && list.get(0) instanceof String) {
+                return (AbstractLinkProperty<T>) setLanguages(list.toArray(new String[0]));
+            }
         } else {
-            System.err.println(aObject.getClass().getSimpleName());
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_052, aObject.getClass().getName()));
         }
 
         return this;

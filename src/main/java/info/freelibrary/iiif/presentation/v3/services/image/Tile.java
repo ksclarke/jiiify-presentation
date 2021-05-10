@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3.services.image;
 
+import java.util.Arrays;
+
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -15,10 +17,19 @@ import info.freelibrary.iiif.presentation.v3.Constants;
 @JsonPropertyOrder({ Constants.HEIGHT, Constants.WIDTH, ImageAPI.SCALE_FACTORS })
 public class Tile {
 
+    /**
+     * My tile height.
+     */
     private int myHeight;
 
+    /**
+     * My tile width.
+     */
     private int myWidth;
 
+    /**
+     * My scale factors.
+     */
     private int[] myScaleFactors;
 
     /**
@@ -28,8 +39,8 @@ public class Tile {
      * @param aHeight A tile height
      * @param aScaleFactorsArray A tile's scale factors
      */
-    public Tile(final int aWidth, final int aHeight, final int[] aScaleFactorsArray) {
-        myScaleFactors = aScaleFactorsArray;
+    public Tile(final int aWidth, final int aHeight, final int... aScaleFactorsArray) {
+        myScaleFactors = Arrays.copyOf(aScaleFactorsArray, aScaleFactorsArray.length);
         myHeight = aHeight;
         myWidth = aWidth;
     }
@@ -38,6 +49,7 @@ public class Tile {
      * Creates a new Image API tile.
      */
     public Tile() {
+        // This constructor is intentionally empty
     }
 
     /**
@@ -94,7 +106,7 @@ public class Tile {
      */
     @JsonSetter(ImageAPI.SCALE_FACTORS)
     public Tile setScaleFactors(final int... aScaleFactorsArray) {
-        myScaleFactors = aScaleFactorsArray;
+        myScaleFactors = Arrays.copyOf(aScaleFactorsArray, aScaleFactorsArray.length);
         return this;
     }
 
@@ -106,6 +118,6 @@ public class Tile {
     @JsonGetter(ImageAPI.SCALE_FACTORS)
     @JsonInclude(Include.NON_EMPTY)
     public int[] getScaleFactors() {
-        return myScaleFactors;
+        return Arrays.copyOf(myScaleFactors, myScaleFactors.length);
     }
 }

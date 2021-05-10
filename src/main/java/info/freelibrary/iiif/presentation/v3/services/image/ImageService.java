@@ -136,7 +136,7 @@ public interface ImageService extends Service {
     /**
      * Interface for {@link ImageService} profiles.
      */
-    public interface Profile {
+    interface Profile {
 
         /**
          * Returns a string representation of the profile.

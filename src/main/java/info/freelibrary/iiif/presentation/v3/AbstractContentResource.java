@@ -28,10 +28,24 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 abstract class AbstractContentResource<T extends AbstractResource<AbstractContentResource<T>>>
         extends AbstractResource<AbstractContentResource<T>> implements Localized<T> {
 
+    /**
+     * The logger used by the AbstractContentResource.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractContentResource.class, MessageCodes.BUNDLE);
 
+    /**
+     * The number of languages for a single (non-array) value.
+     */
+    private static final int SINGLE_LANGUAGE_COUNT = 1;
+
+    /**
+     * The content resource's media type.
+     */
     private MediaType myFormat;
 
+    /**
+     * The content resource's languages.
+     */
     private List<String> myLanguages;
 
     /**
@@ -155,8 +169,7 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
                 myFormat = MediaType.parse(aURI);
             }
         } catch (final IllegalArgumentException details) {
-            LOGGER.warn(MessageCodes.JPA_013, aURI); // It's okay to not have one if we don't know it
-            myFormat = null;
+            LOGGER.debug(MessageCodes.JPA_013, aURI); // It's okay to not have one if we don't know it
         }
     }
 
@@ -170,7 +183,7 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
     private Object getLanguage() {
         final List<String> languages = getLanguages();
 
-        if (languages.size() == 1) {
+        if (languages.size() == SINGLE_LANGUAGE_COUNT) {
             return languages.get(0);
         } else {
             return languages;

@@ -16,15 +16,24 @@ import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.Selector;
 
 /**
- * A start represents a start canvas or Specific Resource with a canvas source. It may appear on a Manifest or a Range.
+ * A start represents a start canvas or Specific Resource with a canvas source. It may appear on a MANIFEST or a Range.
  */
 @JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.SOURCE, Constants.SELECTOR })
 public class Start {
 
+    /**
+     * The start ID.
+     */
     private URI myID;
 
+    /**
+     * The start source.
+     */
     private URI mySource;
 
+    /**
+     * The start selector.
+     */
     private Selector mySelector;
 
     /**
@@ -76,6 +85,7 @@ public class Start {
      */
     @SuppressWarnings("unused")
     private Start() {
+        // This is intentionally empty
     }
 
     /**
@@ -204,6 +214,7 @@ public class Start {
      * @return This start
      */
     @JsonSetter(Constants.TYPE)
+    @SuppressWarnings("PMD.UnusedFormalParameter")
     private Start setType(final String aType) {
         return this;
     }

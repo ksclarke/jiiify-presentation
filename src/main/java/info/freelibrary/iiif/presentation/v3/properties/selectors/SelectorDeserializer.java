@@ -23,6 +23,9 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 class SelectorDeserializer extends StdDeserializer<Selector> {
 
+    /**
+     * The SelectorDeserializer's logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(SelectorDeserializer.class, MessageCodes.BUNDLE);
 
     /**
@@ -59,29 +62,7 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
                 case "VisualContentSelector":
                     return new VisualContentSelector();
                 case "FragmentSelector":
-                    final String fragment = node.get(Constants.VALUE).asText();
-                    final JsonNode conformsToNode = node.get(Constants.CONFORMS_TO);
-
-                    // Fragment selectors SHOULD have a conformsTo but aren't required to have one
-                    if (conformsToNode != null) {
-                        final String conformsToString = conformsToNode.asText();
-                        final URI conformsTo;
-
-                        try {
-                            conformsTo = new URI(conformsToString);
-                        } catch (final URISyntaxException details) {
-                            throw new JsonMappingException(aParser, details.getMessage(), details);
-                        }
-
-                        if (Constants.MEDIA_FRAGMENT_SPECIFICATION_URI.equals(conformsTo)) {
-                            return new MediaFragmentSelector(fragment);
-                        } else {
-                            throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_061, conformsTo),
-                                    aParser.getCurrentLocation());
-                        }
-                    } else {
-                        return new MediaFragmentSelector(fragment);
-                    }
+                    return deserializeFragmentSelector(node, aParser);
                 case "ImageApiSelector":
                     final String size = getText(node, ImageApiSelector.SIZE, ImageApiSelector.DEFAULT_SIZE);
                     final String region = getText(node, ImageApiSelector.REGION, ImageApiSelector.DEFAULT_REGION);
@@ -91,24 +72,82 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
 
                     return new ImageApiSelector(region, size, rotation, quality, format);
                 case "PointSelector":
-                    final int pointX = getInt(node, PointSelector.X_COORDINATE, -1);
-                    final int pointY = getInt(node, PointSelector.Y_COORDINATE, -1);
-                    final float pointT = getFloat(node, PointSelector.T_COORDINATE, -1F);
-
-                    // We could play this looser and rely on the class, but let's be explicit w/r/t what we expect
-                    if (pointX == -1 && pointY == -1 && pointT != -1F) {
-                        return new PointSelector(pointT);
-                    } else if (pointX != -1 && pointY != -1 && pointT == -1F) {
-                        return new PointSelector(pointX, pointY);
-                    } else if (pointX != -1 && pointY != -1 && pointT != -1F) {
-                        return new PointSelector(pointX, pointY, pointT);
-                    } // else, return null (no break needed)
+                    return deserializePointSelector(node, aParser);
                 default:
-                    // Checkstyle wants us to have a default; it falls through to return null
+                    // Checkstyle wants us to have a default; this default falls through to the final `return null`
             }
         }
 
-        return null; // Return nothing (which will be ignored) versus throwing an exception?
+        return null; // Return nothing (which will be ignored)
+    }
+
+    /**
+     * Deserializes a PointSelector from the supplied JsonNode.
+     *
+     * @param aNode A JSON node
+     * @param aParser A JSON parser
+     * @return A media fragment selector
+     * @throws JsonMappingException If there is trouble deserializing the fragment selector
+     */
+    private PointSelector deserializePointSelector(final JsonNode aNode, final JsonParser aParser)
+            throws JsonMappingException {
+        final int pointX = getInt(aNode, PointSelector.X_COORDINATE, -1);
+        final int pointY = getInt(aNode, PointSelector.Y_COORDINATE, -1);
+        final float pointT = getFloat(aNode, PointSelector.T_COORDINATE, -1F);
+        final PointSelector pointSelector;
+
+        // We could play this looser but let's be explicit with what we expect
+        if (pointT == -1F && (pointX == -1 || pointY == -1)) {
+            throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_117),
+                    aParser.getCurrentLocation());
+        }
+
+        // If we have everything we're expecting, let's go ahead and build it
+        pointSelector = new PointSelector();
+
+        if (pointT != -1F) {
+            pointSelector.setSeconds(pointT);
+        }
+
+        if (pointX != -1 && pointY != -1) {
+            pointSelector.setX(pointX);
+            pointSelector.setY(pointY);
+        }
+
+        return pointSelector;
+    }
+
+    /**
+     * Deserializes a MediaFragmentSelector from the supplied JsonNode.
+     *
+     * @param aNode A JSON node
+     * @param aParser A JSON parser
+     * @return A media fragment selector
+     * @throws JsonMappingException If there is trouble deserializing the fragment selector
+     */
+    private MediaFragmentSelector deserializeFragmentSelector(final JsonNode aNode, final JsonParser aParser)
+            throws JsonMappingException {
+        final JsonNode conformsToNode = aNode.get(Constants.CONFORMS_TO);
+
+        // Fragment selectors SHOULD have a conformsTo but aren't required to have one
+        if (conformsToNode != null) {
+            final String conformsToString = conformsToNode.asText();
+
+            try {
+                final URI conformsTo = new URI(conformsToString);
+
+                if (Constants.MEDIA_FRAGMENT_SPECIFICATION_URI.equals(conformsTo)) {
+                    return new MediaFragmentSelector(aNode.get(Constants.VALUE).asText());
+                } else {
+                    throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_061, conformsTo),
+                            aParser.getCurrentLocation());
+                }
+            } catch (final URISyntaxException details) {
+                throw new JsonMappingException(aParser, details.getMessage(), details);
+            }
+        } else {
+            return new MediaFragmentSelector(aNode.get(Constants.VALUE).asText());
+        }
     }
 
     /**

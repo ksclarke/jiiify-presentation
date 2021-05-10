@@ -22,10 +22,19 @@ import io.vertx.core.json.JsonObject;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class SpecificResource {
 
+    /**
+     * The specific resource's selector.
+     */
     private Selector mySelector;
 
+    /**
+     * The specific resource's resource URI.
+     */
     private URI mySource;
 
+    /**
+     * The specific resources's ID.
+     */
     private URI myID;
 
     /**
@@ -78,6 +87,7 @@ public class SpecificResource {
      */
     @SuppressWarnings("unused")
     private SpecificResource() {
+        // This is intentionally left empty
     }
 
     /**
@@ -153,8 +163,8 @@ public class SpecificResource {
      * @return This specific resource
      */
     @JsonSetter(Constants.TYPE)
+    @SuppressWarnings("PMD.UnusedFormalParameter") // This method is just used by Jackson's deserialization processes
     private SpecificResource setType(final String aType) {
-        // This is just for Jackson; type is immutable
         return this;
     }
 

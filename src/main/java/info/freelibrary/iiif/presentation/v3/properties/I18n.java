@@ -17,10 +17,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.common.collect.ImmutableMap;
 
-import info.freelibrary.iiif.presentation.v3.utils.I18nUtils;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+
+import info.freelibrary.iiif.presentation.v3.utils.I18nUtils;
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 import io.vertx.core.json.JsonObject;
 
@@ -31,23 +32,36 @@ import io.vertx.core.json.JsonObject;
  */
 public class I18n implements Iterable<String> {
 
-    // The default language tag for the I18n class
+    /**
+     * The default language tag for the I18n class.
+     */
     public static final String DEFAULT_LANG = "none";
 
+    /**
+     * The logger used by I18n.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(I18n.class, MessageCodes.BUNDLE);
 
-    // The standard types of immutable lists in Java; it doesn't include third party libraries like Guava
-    private static final Set<String> IMMUTABLES = new HashSet<>(Arrays.asList("java.util.Arrays$ArrayList",
-            "java.util.Collections$SingletonList", "java.util.ImmutableCollections$List12",
-            "java.util.Collections$UnmodifiableRandomAccessList"));
+    /**
+     * The standard types of immutable lists in Java; it doesn't include third party libraries like Guava.
+     */
+    private static final Set<String> IMMUTABLES =
+            new HashSet<>(Arrays.asList("java.util.Arrays$ArrayList", "java.util.Collections$SingletonList",
+                    "java.util.ImmutableCollections$List12", "java.util.Collections$UnmodifiableRandomAccessList"));
 
-    // A list of strings
+    /**
+     * A list of strings to be internationalized.
+     */
     private final List<String> myStrings;
 
-    // Whether the string values are allowed to contain HTML markup
+    /**
+     * Whether the string values are allowed to contain HTML markup.
+     */
     private final boolean isAllowingHTML;
 
-    // A locale for the string value
+    /**
+     * A locale for the string value.
+     */
     private Locale myLocale;
 
     /**
@@ -57,7 +71,7 @@ public class I18n implements Iterable<String> {
      * @param aString A non-HTML string value
      * @throws IllegalArgumentException If the supplied language tag isn't valid
      */
-    public I18n(final String aLangTag, final String aString) throws IllegalArgumentException {
+    public I18n(final String aLangTag, final String aString) {
         this(aLangTag, aString, true);
     }
 
@@ -71,8 +85,7 @@ public class I18n implements Iterable<String> {
      * @throws IllegalArgumentException If the supplied language tag isn't valid or if HTML markup has been disallowed
      *         and that string contains it
      */
-    public I18n(final String aLangTag, final String aString, final boolean aHtmlValueAllowed)
-            throws IllegalArgumentException {
+    public I18n(final String aLangTag, final String aString, final boolean aHtmlValueAllowed) {
         this(Locale.forLanguageTag(aLangTag), aString, aHtmlValueAllowed);
     }
 
@@ -83,7 +96,7 @@ public class I18n implements Iterable<String> {
      * @param aString A non-HTML string
      * @throws IllegalArgumentException If the supplied locale has an invalid language tag
      */
-    public I18n(final Locale aLocale, final String aString) throws IllegalArgumentException {
+    public I18n(final Locale aLocale, final String aString) {
         this(aLocale, aString, true);
     }
 
@@ -97,8 +110,7 @@ public class I18n implements Iterable<String> {
      * @throws IllegalArgumentException If the locale has an invalid language tag or if the string contains disallowed
      *         HTML markup
      */
-    public I18n(final Locale aLocale, final String aString, final boolean aHtmlValueAllowed)
-            throws IllegalArgumentException {
+    public I18n(final Locale aLocale, final String aString, final boolean aHtmlValueAllowed) {
         this(aLocale, Arrays.asList(aString), aHtmlValueAllowed);
     }
 
@@ -108,10 +120,9 @@ public class I18n implements Iterable<String> {
      *
      * @param aLangTag A language tag
      * @param aStringList A list of non-HTML strings
-     * @throws IllegalArgumentException If the language tag isn't valid or if the list contains strings with HTML
-     *         markup
+     * @throws IllegalArgumentException If the language tag isn't valid or if the list contains strings with HTML markup
      */
-    public I18n(final String aLangTag, final List<String> aStringList) throws IllegalArgumentException {
+    public I18n(final String aLangTag, final List<String> aStringList) {
         this(Locale.forLanguageTag(aLangTag), aStringList, true);
     }
 
@@ -123,11 +134,9 @@ public class I18n implements Iterable<String> {
      * @param aLangTag A language tag
      * @param aStringList A list of non-HTML strings
      * @param aHtmlValueAllowed Whether HTML markup is allowed in the supplied list of strings
-     * @throws IllegalArgumentException If the language tag isn't valid or if the list contains strings with HTML
-     *         markup
+     * @throws IllegalArgumentException If the language tag isn't valid or if the list contains strings with HTML markup
      */
-    public I18n(final String aLangTag, final List<String> aStringList, final boolean aHtmlValueAllowed)
-            throws IllegalArgumentException {
+    public I18n(final String aLangTag, final List<String> aStringList, final boolean aHtmlValueAllowed) {
         this(Locale.forLanguageTag(aLangTag), aStringList, aHtmlValueAllowed);
     }
 
@@ -139,11 +148,10 @@ public class I18n implements Iterable<String> {
      * @param aLocale A locale
      * @param aStringList A list of strings
      * @param aHtmlValueAllowed Whether HTML markup is allowed in the list of strings
-     * @throws IllegalArgumentException If the supplied locale has an invalid language tag or if HTML markup is
-     *         included in the list of strings after being disallowed
+     * @throws IllegalArgumentException If the supplied locale has an invalid language tag or if HTML markup is included
+     *         in the list of strings after being disallowed
      */
-    public I18n(final Locale aLocale, final List<String> aStringList, final boolean aHtmlValueAllowed)
-            throws IllegalArgumentException {
+    public I18n(final Locale aLocale, final List<String> aStringList, final boolean aHtmlValueAllowed) {
         myLocale = checkLangTag(aLocale);
         isAllowingHTML = aHtmlValueAllowed;
 
@@ -184,7 +192,7 @@ public class I18n implements Iterable<String> {
      * @throws IllegalArgumentException If the supplied language tag isn't valid
      */
     @JsonIgnore
-    public I18n setLang(final String aLangTag) throws IllegalArgumentException {
+    public I18n setLang(final String aLangTag) {
         myLocale = checkLangTag(Locale.forLanguageTag(aLangTag));
         return this;
     }
@@ -197,7 +205,7 @@ public class I18n implements Iterable<String> {
      * @throws IllegalArgumentException If the language tag in the supplied locale isn't valid
      */
     @JsonIgnore
-    public I18n setLang(final Locale aLocale) throws IllegalArgumentException {
+    public I18n setLang(final Locale aLocale) {
         myLocale = checkLangTag(aLocale);
         return this;
     }
@@ -297,6 +305,7 @@ public class I18n implements Iterable<String> {
      * @return The internationalization represented as a map
      */
     @JsonValue
+    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is actually used by Jackson's deserialization process
     private Map<String, List<String>> toMap() {
         return ImmutableMap.of(myLocale.toLanguageTag(), myStrings);
     }
@@ -309,7 +318,7 @@ public class I18n implements Iterable<String> {
      * @return The valid locale
      * @throws IllegalArgumentException If the supplied locale is not a pre-defined locale
      */
-    private Locale checkLangTag(final Locale aLocale) throws IllegalArgumentException {
+    private Locale checkLangTag(final Locale aLocale) {
         if ("und".equals(aLocale.toLanguageTag())) {
             throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_020, aLocale.getDisplayName()));
         }

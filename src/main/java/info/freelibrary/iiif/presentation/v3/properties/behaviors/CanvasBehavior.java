@@ -18,10 +18,21 @@ public enum CanvasBehavior implements Behavior {
     AUTO_ADVANCE(BehaviorConstants.AUTO_ADVANCE), NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE),
     FACING_PAGES(BehaviorConstants.FACING_PAGES), NON_PAGED(BehaviorConstants.NON_PAGED);
 
+    /**
+     * The CanvasBehavior logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(CanvasBehavior.class, MessageCodes.BUNDLE);
 
+    /**
+     * The value of CanvasBehavior.
+     */
     private final String myValue;
 
+    /**
+     * Creates a new CanvasBehavior from the supplied behavior in string form.
+     *
+     * @param aBehavior A canvas behavior in string form
+     */
     CanvasBehavior(final String aBehavior) {
         myValue = aBehavior;
     }
@@ -39,7 +50,7 @@ public enum CanvasBehavior implements Behavior {
      * @return A canvas behavior
      * @throws IllegalArgumentException If the behavior string doesn't correspond to a canvas behavior
      */
-    public static CanvasBehavior fromString(final String aBehavior) throws IllegalArgumentException {
+    public static CanvasBehavior fromString(final String aBehavior) {
         for (final CanvasBehavior behavior : values()) {
             if (behavior.toString().equalsIgnoreCase(aBehavior)) {
                 return behavior;

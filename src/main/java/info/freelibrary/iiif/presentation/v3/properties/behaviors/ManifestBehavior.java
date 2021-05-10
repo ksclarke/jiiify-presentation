@@ -20,10 +20,21 @@ public enum ManifestBehavior implements Behavior {
     REPEAT(BehaviorConstants.REPEAT), NO_REPEAT(BehaviorConstants.NO_REPEAT), PAGED(BehaviorConstants.PAGED),
     UNORDERED(BehaviorConstants.UNORDERED);
 
+    /**
+     * The ManifestBehavior logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(ManifestBehavior.class, MessageCodes.BUNDLE);
 
+    /**
+     * The value of the ManifestBehavior.
+     */
     private final String myValue;
 
+    /**
+     * Creates a new ManifestBehavior from the supplied string form.
+     *
+     * @param aBehavior A manifest behavior in string form
+     */
     ManifestBehavior(final String aBehavior) {
         myValue = aBehavior;
     }
@@ -41,7 +52,7 @@ public enum ManifestBehavior implements Behavior {
      * @return A manifest behavior
      * @throws IllegalArgumentException If the behavior string doesn't correspond to a manifest behavior
      */
-    public static ManifestBehavior fromString(final String aBehavior) throws IllegalArgumentException {
+    public static ManifestBehavior fromString(final String aBehavior) {
         for (final ManifestBehavior behavior : values()) {
             if (behavior.toString().equalsIgnoreCase(aBehavior)) {
                 return behavior;

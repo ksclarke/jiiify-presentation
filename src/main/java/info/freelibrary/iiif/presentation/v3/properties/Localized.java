@@ -32,7 +32,7 @@ public interface Localized<T> {
      * @throws IllegalArgumentException If the language tag is invalid
      */
     @JsonIgnore
-    default Localized<T> setLanguages(final String... aLangArray) throws IllegalArgumentException {
+    default Localized<T> setLanguages(final String... aLangArray) {
         final List<String> languages = getLanguages();
 
         languages.clear();

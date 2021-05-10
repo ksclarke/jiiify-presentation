@@ -12,7 +12,6 @@ import org.junit.Test;
 import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.properties.Label;
-import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
@@ -108,23 +107,11 @@ public class PaintingAnnotationTest extends AbstractTest {
     @Test
     public void testPaintingAnnotationStringCanvasString() {
         final PaintingAnnotation anno =
-            new PaintingAnnotation(myAnnoID.toString(), myCanvas, myFragmentSelector.toString());
+                new PaintingAnnotation(myAnnoID.toString(), myCanvas, myFragmentSelector.toString());
 
         assertEquals(myAnnoID, anno.getID());
         assertTrue(anno.hasSpecificResourceTarget());
         assertTrue(anno.getSpecificResourceTarget().isPresent());
-    }
-
-    /**
-     * Tests clearing the required statement.
-     */
-    @Test
-    public void testClearRequiredStatement() {
-        final PaintingAnnotation anno = new PaintingAnnotation(myAnnoID, myCanvas);
-
-        anno.setRequiredStatement(new RequiredStatement("stmt-id", "stmt-label"));
-        assertTrue(anno.getRequiredStatement() != null);
-        assertTrue(anno.clearRequiredStatement().getRequiredStatement() == null);
     }
 
     /**
@@ -210,9 +197,9 @@ public class PaintingAnnotationTest extends AbstractTest {
     @Test
     public final void testSerialization() throws IOException {
         final SoundContent content = new SoundContent(mySoundContentID).setDuration(3600)
-            .setThumbnails(new SoundContent(myThumbnailID).setDuration(4.2d));
+                .setThumbnails(new SoundContent(myThumbnailID).setDuration(4.2d));
         final PaintingAnnotation annotation = new PaintingAnnotation(myAnnoID, myCanvas).setBody(content)
-            .setTarget(myCanvasID).setTimeMode(TimeMode.LOOP);
+                .setTarget(myCanvasID).setTimeMode(TimeMode.LOOP);
         final JsonObject expected = new JsonObject(StringUtils.read(ANNOTATION));
         final JsonObject found = new JsonObject(TestUtils.toJson(annotation));
 

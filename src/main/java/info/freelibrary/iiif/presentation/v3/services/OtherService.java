@@ -23,13 +23,22 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  * A generic service class for other service implementations.
  */
 @JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.PROFILE, Constants.FORMAT })
-public class GenericService extends AbstractService implements Service {
+public class OtherService extends AbstractService implements Service {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GenericService.class, MessageCodes.BUNDLE);
+    /**
+     * The logger for this service.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(OtherService.class, MessageCodes.BUNDLE);
 
+    /**
+     * This service's profile.
+     */
     @JsonProperty(Constants.PROFILE)
     protected URI myProfile;
 
+    /**
+     * This service's format.
+     */
     @JsonProperty(Constants.FORMAT)
     protected MediaType myFormat;
 
@@ -39,7 +48,9 @@ public class GenericService extends AbstractService implements Service {
      * @param aServiceID A service ID
      * @param aType A service type
      */
-    public GenericService(final URI aServiceID, final String aType) {
+    public OtherService(final URI aServiceID, final String aType) {
+        super();
+
         myID = aServiceID;
         myType = aType;
     }
@@ -50,7 +61,9 @@ public class GenericService extends AbstractService implements Service {
      * @param aServiceID A service ID in string form
      * @param aType A service type
      */
-    public GenericService(final String aServiceID, final String aType) {
+    public OtherService(final String aServiceID, final String aType) {
+        super();
+
         myID = URI.create(aServiceID);
         myType = aType;
     }
@@ -72,7 +85,7 @@ public class GenericService extends AbstractService implements Service {
      * @return This service
      */
     @JsonIgnore
-    public GenericService setProfile(final URI aProfile) {
+    public OtherService setProfile(final URI aProfile) {
         myProfile = aProfile;
         return this;
     }
@@ -84,21 +97,21 @@ public class GenericService extends AbstractService implements Service {
      * @return This service
      */
     @JsonIgnore
-    public GenericService setProfile(final String aProfile) {
+    public OtherService setProfile(final String aProfile) {
         myProfile = URI.create(aProfile);
         return this;
     }
 
     @Override
     @JsonIgnore
-    public GenericService setID(final URI aID) {
-        return (GenericService) super.setID(aID);
+    public OtherService setID(final URI aID) {
+        return (OtherService) super.setID(aID);
     }
 
     @Override
     @JsonIgnore
-    public GenericService setID(final String aID) {
-        return (GenericService) super.setID(aID);
+    public OtherService setID(final String aID) {
+        return (OtherService) super.setID(aID);
     }
 
     /**
@@ -108,7 +121,7 @@ public class GenericService extends AbstractService implements Service {
      * @return The Service
      */
     @JsonIgnore
-    public GenericService setFormat(final String aMediaType) {
+    public OtherService setFormat(final String aMediaType) {
         setMediaTypeFromExt(aMediaType);
         return this;
     }
@@ -120,7 +133,7 @@ public class GenericService extends AbstractService implements Service {
      * @return The service
      */
     @JsonIgnore
-    public GenericService setFormatMediaType(final MediaType aMediaType) {
+    public OtherService setFormatMediaType(final MediaType aMediaType) {
         myFormat = aMediaType;
         return this;
     }
@@ -160,6 +173,11 @@ public class GenericService extends AbstractService implements Service {
         }
     }
 
+    /**
+     * Converts the service into its JSON value.
+     *
+     * @return The JSON value of this service
+     */
     @JsonValue
     protected Object toJsonValue() {
         if (myID != null && myType != null) {

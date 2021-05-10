@@ -1,7 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,8 +21,6 @@ import info.freelibrary.util.StringUtils;
 import info.freelibrary.iiif.presentation.v3.Collection.Item;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.NavDate;
-import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
-import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CollectionBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
@@ -53,7 +52,7 @@ public class CollectionTest {
     }
 
     /**
-     * Tests the Collection.Item manifest constructor.
+     * Tests the COLLECTION.Item manifest constructor.
      */
     @Test
     public void testCollectionManifestManifestConstructor() {
@@ -61,29 +60,6 @@ public class CollectionTest {
 
         assertEquals(myID, manifest.getID());
         assertEquals(myLabel, manifest.getLabel());
-    }
-
-    /**
-     * Tests clearing the required statement.
-     */
-    @Test
-    public void testClearRequiredStatement() {
-        final RequiredStatement requiredStatement = new RequiredStatement("one", "two");
-        final Collection collection = new Collection(myID, myLabel).setRequiredStatement(requiredStatement);
-
-        assertTrue(collection.getRequiredStatement() != null);
-        assertTrue(collection.clearRequiredStatement().getRequiredStatement() == null);
-    }
-
-    /**
-     * Tests clearing the viewing direction.
-     */
-    @Test
-    public void testClearViewingDirection() {
-        final Collection collection = new Collection(myID, myLabel).setViewingDirection(ViewingDirection.LEFT_TO_RIGHT);
-
-        assertTrue(collection.getViewingDirection() != null);
-        assertTrue(collection.clearViewingDirection().getViewingDirection() == null);
     }
 
     /**
@@ -119,8 +95,8 @@ public class CollectionTest {
         final String manifestTwoID = "http://iiif.library.ucla.edu/1234asdf/manifest";
         final String thumbnailID = "http://brand.ucla.edu/images/logo-ucla.svg";
         final List<Collection.Item> items = new ArrayList<>();
-        final Collection.Item manifest1 = new Collection.Item(Item.Type.Manifest, manifestOneID);
-        final Collection.Item manifest2 = new Collection.Item(Item.Type.Manifest, manifestTwoID);
+        final Collection.Item manifest1 = new Collection.Item(Item.Type.MANIFEST, manifestOneID);
+        final Collection.Item manifest2 = new Collection.Item(Item.Type.MANIFEST, manifestTwoID);
         final JsonObject expected = new JsonObject(StringUtils.read(TEST_FILE1));
 
         manifest1.setLabel("A placeholder fake manifest: 1");

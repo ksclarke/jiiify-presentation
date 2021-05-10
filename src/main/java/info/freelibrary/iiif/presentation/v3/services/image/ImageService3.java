@@ -17,7 +17,9 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public class ImageService3 extends AbstractImageService implements ImageService {
 
-    /* The default profile level for the image info service */
+    /**
+     * The default profile level for the image info service
+     */
     private static final ImageService3.Profile DEFAULT_LEVEL = ImageService3.Profile.LEVEL_TWO;
 
     /**
@@ -71,11 +73,6 @@ public class ImageService3 extends AbstractImageService implements ImageService 
         return (ImageService3) super.setID(aID);
     }
 
-    @Override
-    public ImageService setProfile(final ImageService.Profile aProfile) {
-        return super.setProfile(aProfile);
-    }
-
     /**
      * Sets the service profile.
      *
@@ -83,9 +80,9 @@ public class ImageService3 extends AbstractImageService implements ImageService 
      * @return The image service
      */
     @JsonSetter(Constants.PROFILE)
+    @SuppressWarnings("PMD.MissingOverride") // PMD is wrong about this overriding anything
     private ImageService setProfile(final String aProfile) {
-        myProfile = Profile.fromString(aProfile);
-        return this;
+        return super.setProfile(Profile.fromString(aProfile));
     }
 
     /**
@@ -108,10 +105,21 @@ public class ImageService3 extends AbstractImageService implements ImageService 
          */
         LEVEL_TWO("level2");
 
+        /**
+         * A logger for the image service profile.
+         */
         private static final Logger LOGGER = LoggerFactory.getLogger(ImageService3.Profile.class, MessageCodes.BUNDLE);
 
+        /**
+         * My image service profile.
+         */
         private String myProfile;
 
+        /**
+         * Creates a new profile from the supplied profile string.
+         *
+         * @param aProfile A new image service profile
+         */
         Profile(final String aProfile) {
             myProfile = aProfile;
         }
@@ -133,7 +141,7 @@ public class ImageService3 extends AbstractImageService implements ImageService 
          * @return An image service profile
          * @throws IllegalArgumentException If the profile string doesn't correspond to a valid profile
          */
-        public static ImageService3.Profile fromString(final String aProfile) throws IllegalArgumentException {
+        public static ImageService3.Profile fromString(final String aProfile) {
             for (final ImageService3.Profile profile : ImageService3.Profile.values()) {
                 if (profile.string().equals(aProfile)) {
                     return profile;

@@ -17,10 +17,19 @@ import io.vertx.core.json.JsonObject;
 @JsonPropertyOrder({ Constants.ID, Constants.TYPE })
 public class OtherContent implements ContentResource {
 
+    /**
+     * The ID for other content.
+     */
     private URI myID;
 
+    /**
+     * The type for other content.
+     */
     private String myType;
 
+    /**
+     * The other content's JSON wrapped in a JsonObject.
+     */
     private JsonObject myJsonObject;
 
     /**
@@ -90,6 +99,7 @@ public class OtherContent implements ContentResource {
      * @return
      */
     @JsonValue
+    @SuppressWarnings("PMD.UnusedPrivateMethod") // It's used by Jackson's serialization processes
     private Map<String, Object> toObjectMap() {
         return myJsonObject.getMap();
     }

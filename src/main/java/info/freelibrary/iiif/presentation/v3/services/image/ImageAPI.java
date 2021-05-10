@@ -11,18 +11,39 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public interface ImageAPI {
 
+    /**
+     * The image API's extra formats.
+     */
     String EXTRA_FORMATS = "extraFormats";
 
+    /**
+     * The image API's extra qualities.
+     */
     String EXTRA_QUALITIES = "extraQualities";
 
+    /**
+     * The image API's protocol.
+     */
     String PROTOCOL = "protocol";
 
+    /**
+     * The image API's tiles.
+     */
     String TILES = "tiles";
 
+    /**
+     * The image API's sizes.
+     */
     String SIZES = "sizes";
 
+    /**
+     * The image API's scale factors.
+     */
     String SCALE_FACTORS = "scaleFactors";
 
+    /**
+     * The default protocol for the image API.
+     */
     String DEFAULT_PROTOCOL = "http://iiif.io/api/image";
 
     /**
@@ -32,8 +53,14 @@ public interface ImageAPI {
 
         JPG("jpg"), PNG("png"), TIF("tif"), GIF("gif"), JP2("jp2"), PDF("pdf"), WEBP("webp");
 
+        /**
+         * The image format's logger.
+         */
         private static final Logger LOGGER = LoggerFactory.getLogger(ImageFormat.class, MessageCodes.BUNDLE);
 
+        /**
+         * The string representation of the image format.
+         */
         private final String myFormat;
 
         /**
@@ -61,7 +88,7 @@ public interface ImageAPI {
          * @return An image service format
          * @throws IllegalArgumentException If the format string doesn't correspond to a valid format
          */
-        public static ImageFormat fromString(final String aFormat) throws IllegalArgumentException {
+        public static ImageFormat fromString(final String aFormat) {
             for (final ImageFormat format : ImageFormat.values()) {
                 if (format.string().equalsIgnoreCase(aFormat)) {
                     return format;
@@ -79,8 +106,14 @@ public interface ImageAPI {
 
         COLOR("color"), GRAY("gray"), BITONAL("bitonal"), DEFAULT("default");
 
+        /**
+         * The image quality's logger.
+         */
         private static final Logger LOGGER = LoggerFactory.getLogger(ImageQuality.class, MessageCodes.BUNDLE);
 
+        /**
+         * The string form of the image quality.
+         */
         private final String myQuality;
 
         /**
@@ -108,7 +141,7 @@ public interface ImageAPI {
          * @return An image service quality
          * @throws IllegalArgumentException If the quality string doesn't correspond to a valid quality
          */
-        public static ImageQuality fromString(final String aQuality) throws IllegalArgumentException {
+        public static ImageQuality fromString(final String aQuality) {
             for (final ImageQuality quality : ImageQuality.values()) {
                 if (quality.string().equalsIgnoreCase(aQuality)) {
                     return quality;

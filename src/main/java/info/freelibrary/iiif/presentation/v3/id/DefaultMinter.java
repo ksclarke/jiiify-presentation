@@ -35,26 +35,50 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 class DefaultMinter implements Minter {
 
+    /**
+     * The default minter's logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultMinter.class, MessageCodes.BUNDLE);
 
+    /**
+     * A template for supplying canvas IDs.
+     */
     private static final String CANVAS_ID_TEMPLATE = "{}/canvas-{}";
 
+    /**
+     * A template for supplying range IDs.
+     */
     private static final String RANGE_ID_TEMPLATE = "{}/range-{}";
 
+    /**
+     * A template for supplying annotation IDs.
+     */
     private static final String ANNO_ID_TEMPLATE = "{}/annotations/anno-{}";
 
+    /**
+     * A template for supplying page IDs.
+     */
     private static final String PAGE_ID_TEMPLATE = "{}/anno-page-{}";
 
-    // All the alpha-numeric characters we use in creating NOIDs; lower case L is not used because it looks like "1"
-    private static final Character[] CHARS =
-            new Character[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'm', 'n', 'o', 'p', 'q', 'r', 's',
-                't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
+    /**
+     * All the alpha-numeric characters we use in creating NOIDs; lower case L is not used because it looks like "1".
+     */
+    private static final Character[] CHARS = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'm', 'n', 'o',
+        'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
 
-    /* The maximum number of NOIDs, given the size of our character array. */
-    private static final int MAX_NOID_COUNT = 1500625;
+    /**
+     * The maximum number of NOIDs, given the size of our character array.
+     */
+    private static final int MAX_NOID_COUNT = 1_500_625;
 
+    /**
+     * The list of NOIDs.
+     */
     private static final List<String> NOIDS; // Static array is initialized just once
 
+    /**
+     * The static initialization of the NOID list.
+     */
     static {
         final Stopwatch stopwatch = new Stopwatch().start();
         final List<String> noids = new ArrayList<>();
@@ -77,12 +101,24 @@ class DefaultMinter implements Minter {
         }
     }
 
+    /**
+     * The existing IDs.
+     */
     private final Set<URI> myExistingIDs = new HashSet<>();
 
+    /**
+     * A NOID iterator.
+     */
     private final Iterator<String> myIterator;
 
+    /**
+     * A manifest ID.
+     */
     private final URI myManifestID;
 
+    /**
+     * The number of used NOIDs.
+     */
     private int myUsedNOIDs;
 
     /**
@@ -129,7 +165,7 @@ class DefaultMinter implements Minter {
             final URI id = URI.create(StringUtils.format(CANVAS_ID_TEMPLATE, myManifestID, myIterator.next()));
             return myExistingIDs.contains(id) ? getCanvasID() : increment(id);
         } catch (final NoSuchElementException details) {
-            throw new MintingException(MessageCodes.JPA_105, myManifestID, Canvas.class.getSimpleName());
+            throw new MintingException(details, MessageCodes.JPA_105, myManifestID, Canvas.class.getSimpleName());
         }
     }
 
@@ -144,7 +180,7 @@ class DefaultMinter implements Minter {
             final URI id = URI.create(StringUtils.format(ANNO_ID_TEMPLATE, myManifestID, myIterator.next()));
             return myExistingIDs.contains(id) ? getAnnotationID() : increment(id);
         } catch (final NoSuchElementException details) {
-            throw new MintingException(MessageCodes.JPA_105, myManifestID, Annotation.class.getSimpleName());
+            throw new MintingException(details, MessageCodes.JPA_105, myManifestID, Annotation.class.getSimpleName());
         }
     }
 
@@ -165,7 +201,8 @@ class DefaultMinter implements Minter {
 
             return myExistingIDs.contains(id) ? getAnnotationPageID(aCanvasResource) : increment(id);
         } catch (final NoSuchElementException details) {
-            throw new MintingException(MessageCodes.JPA_105, myManifestID, AnnotationPage.class.getSimpleName());
+            throw new MintingException(details, MessageCodes.JPA_105, myManifestID,
+                    AnnotationPage.class.getSimpleName());
         }
     }
 
@@ -180,7 +217,7 @@ class DefaultMinter implements Minter {
             final URI id = URI.create(StringUtils.format(RANGE_ID_TEMPLATE, myManifestID, myIterator.next()));
             return myExistingIDs.contains(id) ? getRangeID() : increment(id);
         } catch (final NoSuchElementException details) {
-            throw new MintingException(MessageCodes.JPA_105, myManifestID, Range.class.getSimpleName());
+            throw new MintingException(details, MessageCodes.JPA_105, myManifestID, Range.class.getSimpleName());
         }
     }
 
@@ -232,10 +269,7 @@ class DefaultMinter implements Minter {
      * @param aManifest A supplied manifest
      */
     private void findPreexistingIDs(final Manifest aManifest) {
-        final List<Canvas> canvases = aManifest.getCanvases();
-        final List<Range> ranges = aManifest.getRanges();
-
-        for (final Canvas canvas : canvases) {
+        for (final Canvas canvas : aManifest.getCanvases()) {
             if (!myExistingIDs.add(canvas.getID())) {
                 throw new MintingException(MessageCodes.JPA_100, canvas.getID());
             }
@@ -257,7 +291,7 @@ class DefaultMinter implements Minter {
             }
         }
 
-        ranges.forEach(range -> {
+        aManifest.getRanges().forEach(range -> {
             if (!myExistingIDs.add(range.getID())) {
                 LOGGER.warn(MessageCodes.JPA_100, range.getID());
             }
@@ -283,22 +317,34 @@ class DefaultMinter implements Minter {
      */
     private class NoidIterator implements Iterator<String> {
 
-        /* The high end of an integer range used for randomization. */
+        /**
+         * The high end of an integer range used for randomization.
+         */
         private static final int MAX_RANDOM_INT = 20;
 
-        /* Where the iterator started cycling through the array. */
+        /**
+         * Where the iterator started cycling through the array.
+         */
         private final int myStart;
 
-        /* The number of NOIDs to skip in each iteration. */
+        /**
+         * The number of NOIDs to skip in each iteration.
+         */
         private int mySkipCount;
 
-        /* The index position for the next available NOID. */
+        /**
+         * The index position for the next available NOID.
+         */
         private int myIndex;
 
-        /* The number of NOIDs this iterator has returned. */
+        /**
+         * The number of NOIDs this iterator has returned.
+         */
         private int myCount;
 
-        /* The number of times we've cycled through the array. */
+        /**
+         * The number of times we've cycled through the array.
+         */
         private int myIteration;
 
         /**
@@ -321,6 +367,7 @@ class DefaultMinter implements Minter {
         }
 
         @Override
+        @SuppressWarnings("PMD.AvoidDeeplyNestedIfStmts")
         public String next() {
             if (hasNext()) {
                 final String noid = NOIDS.get(myIndex);

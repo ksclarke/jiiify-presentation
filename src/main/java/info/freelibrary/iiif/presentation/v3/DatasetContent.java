@@ -178,11 +178,6 @@ public class DatasetContent extends AbstractContentResource<DatasetContent>
     }
 
     @Override
-    public DatasetContent clearRequiredStatement() {
-        return (DatasetContent) super.clearRequiredStatement();
-    }
-
-    @Override
     public DatasetContent setSummary(final String aSummary) {
         return (DatasetContent) super.setSummary(aSummary);
     }

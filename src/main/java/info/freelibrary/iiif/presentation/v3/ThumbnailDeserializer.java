@@ -10,9 +10,10 @@ import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 import io.vertx.core.json.Json;
 
@@ -21,6 +22,9 @@ import io.vertx.core.json.Json;
  */
 public class ThumbnailDeserializer extends StdDeserializer<Thumbnail> {
 
+    /**
+     * The logger used by ThumbnailDeserializer.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(ThumbnailDeserializer.class, MessageCodes.BUNDLE);
 
     /**
@@ -48,8 +52,8 @@ public class ThumbnailDeserializer extends StdDeserializer<Thumbnail> {
      * Deserializes a Thumbnail from its JSON structure.
      */
     @Override
-    public Thumbnail deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException,
-            JsonProcessingException {
+    public Thumbnail deserialize(final JsonParser aParser, final DeserializationContext aContext)
+            throws IOException, JsonProcessingException {
         final TreeNode treeNode = aParser.getCodec().readTree(aParser);
 
         switch (treeNode.get(Constants.TYPE).toString().replace("\"", "")) {

@@ -43,18 +43,37 @@ import io.vertx.core.json.JsonObject;
  * non-content-bearing pages, the table of contents or similar. Equally, physical features might be important such as
  * quires or gatherings, sections that have been added later and so forth.
  */
+@SuppressWarnings({ "PMD.ExcessivePublicCount", "PMD.ExcessiveImports" })
 public class Range extends NavigableResource<Range> implements Resource<Range> {
 
+    /**
+     * The range's items.
+     */
     private final List<Item> myItems = new ArrayList<>();
 
+    /**
+     * The range's accompanying canvas.
+     */
     private AccompanyingCanvas myAccompanyingCanvas;
 
+    /**
+     * The range's placeholder canvas.
+     */
     private PlaceholderCanvas myPlaceholderCanvas;
 
+    /**
+     * The range's start.
+     */
     private Start myStart;
 
+    /**
+     * The range's supplementary annotations.
+     */
     private SupplementaryAnnotations mySupplementaryAnnotations;
 
+    /**
+     * The range's viewing directions.
+     */
     private ViewingDirection myViewingDirection;
 
     /**
@@ -259,7 +278,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     /**
-     * Sets the viewing direction.
+     * Sets the viewing direction. To remove a viewing direction, set this value to null.
      *
      * @param aViewingDirection A viewing direction
      * @return The range
@@ -278,16 +297,6 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     @JsonGetter(Constants.VIEWING_DIRECTION)
     public ViewingDirection getViewingDirection() {
         return myViewingDirection;
-    }
-
-    /**
-     * Clears the viewing direction.
-     *
-     * @return The range
-     */
-    public Range clearViewingDirection() {
-        myViewingDirection = null;
-        return this;
     }
 
     /**
@@ -409,11 +418,6 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     @Override
-    public Range clearRequiredStatement() {
-        return (Range) super.clearRequiredStatement();
-    }
-
-    @Override
     public Range setSummary(final String aSummary) {
         return (Range) super.setSummary(aSummary);
     }
@@ -485,10 +489,19 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     @JsonDeserialize(using = RangeItemDeserializer.class)
     public static class Item {
 
+        /**
+         * An item's canvas.
+         */
         private Canvas myCanvas;
 
+        /**
+         * An item's range.
+         */
         private Range myRange;
 
+        /**
+         * A item's specific resource.
+         */
         private SpecificResource mySpecificResource;
 
         /**

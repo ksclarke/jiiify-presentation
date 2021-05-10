@@ -3,7 +3,6 @@ package info.freelibrary.iiif.presentation.v3.id;
 
 import static org.junit.Assert.*;
 
-import org.junit.After;
 import org.junit.Test;
 
 import info.freelibrary.util.Logger;
@@ -24,14 +23,6 @@ public class SkolemIriFactoryTest {
     private static final String SKOLEM_IRI_START = WELL_KNOWN_BASE + "/.well-known/genid/";
 
     /**
-     * Cleans up after the tests.
-     */
-    @After
-    public final void cleanUp() {
-        SkolemIriFactory.reset();
-    }
-
-    /**
      * Tests that <code>getFactory()</code> return the same factory.
      */
     @Test
@@ -40,20 +31,6 @@ public class SkolemIriFactoryTest {
         final SkolemIriFactory factory2 = SkolemIriFactory.getFactory();
 
         assertEquals(factory1, factory2);
-    }
-
-    /**
-     * Tests resetting the factory.
-     */
-    @Test
-    public final void testReset() {
-        final SkolemIriFactory factory1 = SkolemIriFactory.getFactory();
-        final SkolemIriFactory factory2;
-
-        SkolemIriFactory.reset();
-        factory2 = SkolemIriFactory.getFactory();
-
-        assertNotEquals(factory1, factory2);
     }
 
     /**
@@ -83,7 +60,7 @@ public class SkolemIriFactoryTest {
      */
     @Test
     public final void testGetSkolemIRI() {
-        final SkolemIriFactory factory = SkolemIriFactory.getFactory();
+        final SkolemIriFactory factory = SkolemIriFactory.getFactory().setWellKnownBase(null);
         final String skolemIRI = factory.getSkolemIRI().toString();
 
         LOGGER.debug(MessageCodes.JPA_112, skolemIRI);
@@ -97,7 +74,7 @@ public class SkolemIriFactoryTest {
     public final void testHasSerializableIDs() {
         final TextualBody textualBody;
 
-        SkolemIriFactory.getFactory().hasSerializableIDs(true);
+        SkolemIriFactory.getFactory().useSerializableIDs(true);
         textualBody = new TextualBody();
 
         assertNotEquals(null, textualBody.getID());
@@ -110,7 +87,7 @@ public class SkolemIriFactoryTest {
     public final void testHasNonSerializableIDsDefault() {
         final TextualBody textualBody;
 
-        SkolemIriFactory.getFactory();
+        SkolemIriFactory.getFactory().setWellKnownBase(null);
         textualBody = new TextualBody();
 
         assertEquals(null, textualBody.getID());
@@ -123,7 +100,7 @@ public class SkolemIriFactoryTest {
     public final void testHasNonSerializableIDs() {
         final TextualBody textualBody;
 
-        SkolemIriFactory.getFactory().hasSerializableIDs(false);
+        SkolemIriFactory.getFactory().useSerializableIDs(false);
         textualBody = new TextualBody();
 
         assertEquals(null, textualBody.getID());

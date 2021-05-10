@@ -52,6 +52,7 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
      */
     @SuppressWarnings("unused")
     private SeeAlso() {
+        super();
     }
 
     /**
@@ -92,7 +93,7 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
 
     @Override
     @JsonSetter(Constants.FORMAT)
-    public SeeAlso setFormat(final String aFormat) throws IllegalArgumentException {
+    public SeeAlso setFormat(final String aFormat) {
         return (SeeAlso) super.setFormat(aFormat);
     }
 
@@ -154,7 +155,7 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
 
     @Override
     @JsonIgnore
-    public SeeAlso setLanguages(final String... aLangArray) throws IllegalArgumentException {
+    public SeeAlso setLanguages(final String... aLangArray) {
         return (SeeAlso) super.setLanguages(aLangArray);
     }
 

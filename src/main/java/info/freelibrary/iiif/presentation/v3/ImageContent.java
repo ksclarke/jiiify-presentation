@@ -34,10 +34,16 @@ import io.vertx.core.json.JsonObject;
 @JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.LABEL, Constants.THUMBNAIL, Constants.FORMAT,
     Constants.HEIGHT, Constants.WIDTH, Constants.LANGUAGE, Constants.SERVICE })
 public class ImageContent extends AbstractContentResource<ImageContent>
-    implements Thumbnail, Resource<ImageContent>, SpatialContentResource<ImageContent> {
+        implements Thumbnail, Resource<ImageContent>, SpatialContentResource<ImageContent> {
 
+    /**
+     * The image content's width.
+     */
     private int myWidth;
 
+    /**
+     * The image content's height.
+     */
     private int myHeight;
 
     /**
@@ -188,11 +194,6 @@ public class ImageContent extends AbstractContentResource<ImageContent>
     @Override
     public ImageContent setRequiredStatement(final RequiredStatement aStatement) {
         return (ImageContent) super.setRequiredStatement(aStatement);
-    }
-
-    @Override
-    public ImageContent clearRequiredStatement() {
-        return (ImageContent) super.clearRequiredStatement();
     }
 
     @Override

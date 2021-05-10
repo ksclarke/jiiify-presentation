@@ -33,10 +33,17 @@ import io.vertx.core.json.JsonObject;
  * standards like PDF and HTML, or applications like Photoshop and Powerpoint, where the display starts from a blank
  * canvas and images, text and other resources are &quot;painted&quot; on to it.
  */
+@SuppressWarnings({ "PMD.TooManyMethods", "PMD.ExcessivePublicCount" })
 public class Canvas extends AbstractCanvas<Canvas> implements Resource<Canvas>, CanvasResource<Canvas> {
 
+    /**
+     * The canvas' accompanying canvas.
+     */
     private Optional<AccompanyingCanvas> myAccompanyingCanvas;
 
+    /**
+     * The canvas' placeholder canvas.
+     */
     private Optional<PlaceholderCanvas> myPlaceholderCanvas;
 
     /**
@@ -508,11 +515,6 @@ public class Canvas extends AbstractCanvas<Canvas> implements Resource<Canvas>, 
     @Override
     public Canvas setRequiredStatement(final RequiredStatement aStatement) {
         return (Canvas) super.setRequiredStatement(aStatement);
-    }
-
-    @Override
-    public Canvas clearRequiredStatement() {
-        return (Canvas) super.clearRequiredStatement();
     }
 
     @Override

@@ -18,10 +18,14 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public class ImageService2 extends AbstractImageService implements ImageService {
 
-    /* The context for this service */
+    /**
+     * The context for this service.
+     */
     public static final URI CONTEXT = URI.create("http://iiif.io/api/image/2/context.json");
 
-    /* The default profile level for the image info service */
+    /**
+     * The default profile level for the image info service.
+     */
     private static final ImageService2.Profile DEFAULT_LEVEL = ImageService2.Profile.LEVEL_TWO;
 
     /**
@@ -87,11 +91,6 @@ public class ImageService2 extends AbstractImageService implements ImageService 
         return getClass().getSimpleName();
     }
 
-    @Override
-    public ImageService setProfile(final ImageService.Profile aProfile) {
-        return super.setProfile(aProfile);
-    }
-
     /**
      * Sets the service profile.
      *
@@ -99,9 +98,9 @@ public class ImageService2 extends AbstractImageService implements ImageService 
      * @return The image service
      */
     @JsonSetter(Constants.PROFILE)
+    @SuppressWarnings("PMD.MissingOverride") // PMD is wrong about this overriding anything
     private ImageService setProfile(final String aProfile) {
-        myProfile = Profile.fromString(aProfile);
-        return this;
+        return super.setProfile(Profile.fromString(aProfile));
     }
 
     /**
@@ -124,8 +123,14 @@ public class ImageService2 extends AbstractImageService implements ImageService 
          */
         LEVEL_TWO("http://iiif.io/api/image/2/level2.json");
 
+        /**
+         * The image service profile's logger.
+         */
         private static final Logger LOGGER = LoggerFactory.getLogger(ImageService2.Profile.class, MessageCodes.BUNDLE);
 
+        /**
+         * The string form of the image service profile.
+         */
         private String myProfile;
 
         Profile(final String aProfile) {
@@ -149,7 +154,7 @@ public class ImageService2 extends AbstractImageService implements ImageService 
          * @return An image service profile
          * @throws IllegalArgumentException If the profile string doesn't correspond to a valid profile
          */
-        public static ImageService2.Profile fromString(final String aProfile) throws IllegalArgumentException {
+        public static ImageService2.Profile fromString(final String aProfile) {
             for (final ImageService2.Profile profile : ImageService2.Profile.values()) {
                 if (profile.string().equals(aProfile)) {
                     return profile;

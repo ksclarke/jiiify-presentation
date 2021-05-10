@@ -7,7 +7,6 @@ import static org.junit.Assert.assertNotEquals;
 import java.net.URI;
 import java.util.UUID;
 
-import org.junit.After;
 import org.junit.Test;
 
 import com.google.common.net.MediaType;
@@ -20,18 +19,11 @@ import info.freelibrary.iiif.presentation.v3.id.SkolemIriFactory;
 public class TextualBodyTest {
 
     /**
-     * Cleans up after the tests.
-     */
-    @After
-    public final void cleanUp() {
-        SkolemIriFactory.reset();
-    }
-
-    /**
      * Tests the default TextualBody constructor.
      */
     @Test
     public final void testTextualBody() {
+        SkolemIriFactory.getFactory().useSerializableIDs(false);
         assertEquals(null, new TextualBody().getID());
     }
 
@@ -40,7 +32,7 @@ public class TextualBodyTest {
      */
     @Test
     public final void testTextualBodyNotSerializingID() {
-        SkolemIriFactory.getFactory().hasSerializableIDs(true);
+        SkolemIriFactory.getFactory().useSerializableIDs(true);
         assertNotEquals(null, new TextualBody().getID());
     }
 

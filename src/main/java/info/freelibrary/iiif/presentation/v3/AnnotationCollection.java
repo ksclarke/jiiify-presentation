@@ -29,6 +29,9 @@ import info.freelibrary.iiif.presentation.v3.services.Service;
 public class AnnotationCollection extends AbstractResource<AnnotationCollection>
         implements Resource<AnnotationCollection> {
 
+    /**
+     * The AnnotationCollection's viewingDirection.
+     */
     private ViewingDirection myViewingDirection;
 
     /**
@@ -194,11 +197,6 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
     @Override
     public AnnotationCollection setRequiredStatement(final RequiredStatement aStatement) {
         return (AnnotationCollection) super.setRequiredStatement(aStatement);
-    }
-
-    @Override
-    public AnnotationCollection clearRequiredStatement() {
-        return (AnnotationCollection) super.clearRequiredStatement();
     }
 
     @Override

@@ -21,6 +21,7 @@ import info.freelibrary.iiif.presentation.v3.services.Service;
  *
  * @param <T> The class that implements {@code Resource}
  */
+@SuppressWarnings("PMD.ExcessivePublicCount")
 public interface Resource<T extends Resource<T>> {
 
     /**
@@ -129,13 +130,6 @@ public interface Resource<T extends Resource<T>> {
      * @return The resource
      */
     T setRequiredStatement(RequiredStatement aStatement);
-
-    /**
-     * Clears the required statement.
-     *
-     * @return The resource
-     */
-    T clearRequiredStatement();
 
     /**
      * Gets the rights.
@@ -291,7 +285,7 @@ public interface Resource<T extends Resource<T>> {
 
     /**
      * Sets the behaviors for this resource. Different types of resources allow different types of behaviors. For
-     * instance, on a <code>Manifest</code> resource the <code>setBehaviors(Behavior aBehavior)</code> method only
+     * instance, on a <code>MANIFEST</code> resource the <code>setBehaviors(Behavior aBehavior)</code> method only
      * allows a ManifestBehavior to be passed. If a CollectionBehavior, for instance, is passed, an
      * <code>IllegalArgumentException</code> will be thrown. Manifests, collections, canvases, and ranges have their own
      * behaviors. Other resources use the <code>ResourceBehavior</code> class.
@@ -304,7 +298,7 @@ public interface Resource<T extends Resource<T>> {
 
     /**
      * Sets the behaviors for this resource. Different types of resources allow different types of behaviors. For
-     * instance, on a <code>Manifest</code> resource the <code>setBehaviors(List&lt;Behavior&gt; aBehaviorList)</code>
+     * instance, on a <code>MANIFEST</code> resource the <code>setBehaviors(List&lt;Behavior&gt; aBehaviorList)</code>
      * method only allows a ManifestBehavior to be passed. If a CollectionBehavior, for instance, is passed, an
      * <code>IllegalArgumentException</code> will be thrown. Manifests, collections, canvases, and ranges have their own
      * behaviors. Other resources use the <code>ResourceBehavior</code> class.

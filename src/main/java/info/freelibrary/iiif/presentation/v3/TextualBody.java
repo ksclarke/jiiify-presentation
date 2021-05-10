@@ -24,14 +24,29 @@ import info.freelibrary.iiif.presentation.v3.id.SkolemIriFactory;
 @JsonPropertyOrder({ Constants.TYPE, Constants.LANGUAGE, Constants.VALUE })
 public class TextualBody implements ContentResource {
 
+    /**
+     * The TextualBody's ID.
+     */
     private URI myID;
 
+    /**
+     * The TextualBody's value.
+     */
     private String myValue;
 
+    /**
+     * The TextualBody's locale.
+     */
     private Locale myLocale;
 
+    /**
+     * The TextualBody's format.
+     */
     private MediaType myFormat;
 
+    /**
+     * The TextualBody uses serializable IDs.
+     */
     private boolean hasSerializableID;
 
     /**
@@ -40,7 +55,7 @@ public class TextualBody implements ContentResource {
     public TextualBody() {
         final SkolemIriFactory factory = SkolemIriFactory.getFactory();
 
-        hasSerializableID = factory.hasSerializableIDs();
+        hasSerializableID = factory.createsSerializableIDs();
         myID = factory.getSkolemIRI();
     }
 
@@ -169,7 +184,7 @@ public class TextualBody implements ContentResource {
      * @throws IllegalArgumentException If the supplied string isn't a media type
      */
     @JsonSetter(Constants.FORMAT)
-    public TextualBody setFormat(final String aFormat) throws IllegalArgumentException {
+    public TextualBody setFormat(final String aFormat) {
         myFormat = MediaType.parse(aFormat);
         return this;
     }
@@ -199,6 +214,7 @@ public class TextualBody implements ContentResource {
      * @return This TextualBody
      */
     @JsonSetter(Constants.TYPE)
+    @SuppressWarnings("PMD.UnusedFormalParameter") // This method is just used by Jackson's deserialization processes
     private TextualBody setType(final String aType) {
         return this;
     }

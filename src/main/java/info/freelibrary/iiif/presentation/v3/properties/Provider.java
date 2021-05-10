@@ -33,14 +33,29 @@ import io.vertx.core.json.JsonObject;
     Constants.SEE_ALSO })
 public class Provider {
 
+    /**
+     * The provider's ID.
+     */
     private URI myID;
 
+    /**
+     * The provider's label.
+     */
     private Label myLabel;
 
+    /**
+     * The provider's homepages.
+     */
     private List<Homepage> myHomepages;
 
+    /**
+     * The provider's logos.
+     */
     private List<ImageContent> myLogos;
 
+    /**
+     * The provider's seeAlso references.
+     */
     private List<SeeAlso> mySeeAlsoRefs;
 
     /**
@@ -84,6 +99,7 @@ public class Provider {
      */
     @SuppressWarnings("unused")
     private Provider() {
+        // This is intentionally empty
     }
 
     /**

@@ -21,16 +21,26 @@ import info.freelibrary.iiif.presentation.v3.Constants;
  */
 public abstract class AbstractService implements Service {
 
+    /**
+     * A list of services related to this service.
+     */
     protected List<Service> myServices;
 
+    /**
+     * This service's type.
+     */
     protected String myType;
 
+    /**
+     * This service's ID.
+     */
     protected URI myID;
 
     /**
      * An empty constructor for Jackson's deserialization process.
      */
     protected AbstractService() {
+        // This is intentionally left empty
     }
 
     @Override
@@ -55,7 +65,7 @@ public abstract class AbstractService implements Service {
     @Override
     @JsonSetter(Constants.SERVICE)
     public Service setServices(final List<Service> aServiceList) {
-        if (aServiceList.size() > 0) {
+        if (!aServiceList.isEmpty()) {
             final List<Service> services = getServices();
 
             checkNotNull(aServiceList);

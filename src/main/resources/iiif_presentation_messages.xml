@@ -54,7 +54,7 @@
   <entry key="JPA-049">Unable to add AnnotationPage to Canvas: [{}]</entry>
   <entry key="JPA-050">Unable to add annotation(s) to AnnotationPage: [{}]</entry>
   <entry key="JPA-051">Service doesn't contain the expected type: {}</entry>
-  <entry key="JPA-052"></entry>
+  <entry key="JPA-052">Unexpected object supplied to setLanguageProperty: {}</entry>
   <entry key="JPA-053">Type set on service image must be: {}</entry>
   <entry key="JPA-054">Supplied behavior ('{}') conflicts with an existing behavior: {}</entry>
   <entry key="JPA-055">Supplied behavior ('{}') conflicts with another supplied behavior: {}</entry>
@@ -87,5 +87,7 @@
   <entry key="JPA-114">Supplied value isn't a valid Image API format: {}</entry>
   <entry key="JPA-115">Supplied value isn't a valid Image API quality: {}</entry>
   <entry key="JPA-116">Unexpected Annotation body type: {}</entry>
+  <entry key="JPA-117">Won't try to build a PointSelector without a temporal or X and Y point</entry>
+  <entry key="JPA-118">The supplied value isn't a valid collection item type: {}</entry>
 
 </properties>

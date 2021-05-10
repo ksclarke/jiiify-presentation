@@ -344,11 +344,6 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     }
 
     @Override
-    public SupplementingAnnotation clearRequiredStatement() {
-        return (SupplementingAnnotation) super.clearRequiredStatement();
-    }
-
-    @Override
     public SupplementingAnnotation setSummary(final String aSummary) {
         return (SupplementingAnnotation) super.setSummary(aSummary);
     }

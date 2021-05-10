@@ -8,10 +8,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+
+import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * A metadata property with a label and value.
@@ -19,17 +20,20 @@ import info.freelibrary.util.LoggerFactory;
 @JsonPropertyOrder({ Constants.LABEL, Constants.VALUE })
 public class Metadata {
 
+    /**
+     * The logger used by the Metadata class.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(Metadata.class, MessageCodes.BUNDLE);
 
+    /**
+     * The metadata label.
+     */
     private Label myLabel;
 
-    private Value myValue;
-
     /**
-     * Constructor for Jackson deserialization.
+     * The metadata value.
      */
-    Metadata() {
-    }
+    private Value myValue;
 
     /**
      * Creates a metadata property from the supplied label and value.
@@ -38,8 +42,11 @@ public class Metadata {
      * @param aValue A value
      */
     public Metadata(final Label aLabel, final Value aValue) {
-        setLabel(aLabel);
-        setValue(aValue);
+        Objects.requireNonNull(aLabel, LOGGER.getMessage(MessageCodes.JPA_002));
+        Objects.requireNonNull(aValue, LOGGER.getMessage(MessageCodes.JPA_022));
+
+        myLabel = aLabel;
+        myValue = aValue;
     }
 
     /**
@@ -50,6 +57,13 @@ public class Metadata {
      */
     public Metadata(final String aLabel, final String aValue) {
         this(new Label(aLabel), new Value(aValue));
+    }
+
+    /**
+     * Constructor for Jackson deserialization.
+     */
+    Metadata() {
+        // This is intentionally empty
     }
 
     /**

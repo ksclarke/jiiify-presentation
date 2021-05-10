@@ -1,7 +1,9 @@
 
-package info.freelibrary.iiif.presentation.v3.services;
+package info.freelibrary.iiif.presentation.v3.services.auth;
 
 import java.net.URI;
+
+import info.freelibrary.iiif.presentation.v3.services.Service;
 
 /**
  * An interface for authentication services.
@@ -26,7 +28,7 @@ public interface AuthService extends Service {
     /**
      * Interface for {@link AuthService} profiles.
      */
-    public interface Profile {
+    interface Profile {
 
         /**
          * Returns a string representation of the profile.

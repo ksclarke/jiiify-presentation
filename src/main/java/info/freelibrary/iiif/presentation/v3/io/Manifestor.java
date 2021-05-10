@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3.utils;
+package info.freelibrary.iiif.presentation.v3.io;
 
 import java.io.File;
 
@@ -14,6 +14,9 @@ import io.vertx.core.Vertx;
  */
 public class Manifestor {
 
+    /**
+     * A Vert.x instance used by Manifestor.
+     */
     private final Vertx myVertx;
 
     /**
@@ -33,20 +36,20 @@ public class Manifestor {
     }
 
     /**
-     * Reads a JSON manifest file into a Manifest object.
+     * Reads a JSON manifest file into a MANIFEST object.
      *
      * @param aJsonFile A JSON manifest file
-     * @return A Manifest object
+     * @return A MANIFEST object
      */
     public Manifest readManifest(final File aJsonFile) {
         return Manifest.fromJSON(myVertx.fileSystem().readFileBlocking(aJsonFile.getAbsolutePath()).toJsonObject());
     }
 
     /**
-     * Reads a JSON collection manifest file into a Collection object.
+     * Reads a JSON collection manifest file into a COLLECTION object.
      *
      * @param aJsonFile A JSON collection manifest file
-     * @return A Collection object
+     * @return A COLLECTION object
      */
     public Collection readCollection(final File aJsonFile) {
         return Collection.fromJSON(myVertx.fileSystem().readFileBlocking(aJsonFile.getAbsolutePath()).toJsonObject());
@@ -56,7 +59,7 @@ public class Manifestor {
      * Reads a manifest JSON file using the supplied promise.
      *
      * @param aJsonFile A JSON manifest file
-     * @param aPromise A Manifest object
+     * @param aPromise A MANIFEST object
      */
     public void readManifest(final File aJsonFile, final Promise<Manifest> aPromise) {
         myVertx.fileSystem().readFile(aJsonFile.getAbsolutePath(), read -> {
@@ -72,7 +75,7 @@ public class Manifestor {
      * Reads a collection manifest JSON file using the supplied promise.
      *
      * @param aJsonFile A JSON collection manifest file
-     * @param aPromise A Collection object
+     * @param aPromise A COLLECTION object
      */
     public void readCollection(final File aJsonFile, final Promise<Collection> aPromise) {
         myVertx.fileSystem().readFile(aJsonFile.getAbsolutePath(), read -> {

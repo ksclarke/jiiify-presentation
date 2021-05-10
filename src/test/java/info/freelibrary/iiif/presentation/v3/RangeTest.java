@@ -20,7 +20,6 @@ import info.freelibrary.iiif.presentation.v3.id.Minter;
 import info.freelibrary.iiif.presentation.v3.id.MinterFactory;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.NavDate;
-import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.RangeBehavior;
@@ -96,30 +95,6 @@ public class RangeTest extends AbstractTest {
         final Range range = new Range(minter, LABEL);
 
         assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(range.getID().toString()).matches());
-    }
-
-    /**
-     * Tests clearing the required statement.
-     */
-    @Test
-    public void testClearRequiredStatement() {
-        final RequiredStatement requiredStatement = new RequiredStatement("one", "two");
-        final Range range = new Range(UUID.randomUUID().toString()).setRequiredStatement(requiredStatement);
-
-        assertTrue(range.getRequiredStatement() != null);
-        assertTrue(range.clearRequiredStatement().getRequiredStatement() == null);
-    }
-
-    /**
-     * Tests clearing the viewing direction.
-     */
-    @Test
-    public void testClearViewingDirection() {
-        final Range collection = new Range(UUID.randomUUID().toString());
-
-        collection.setViewingDirection(ViewingDirection.LEFT_TO_RIGHT);
-        assertTrue(collection.getViewingDirection() != null);
-        assertTrue(collection.clearViewingDirection().getViewingDirection() == null);
     }
 
     /**
@@ -301,7 +276,7 @@ public class RangeTest extends AbstractTest {
     @Test
     public final void testFixture0024() throws IOException {
         final String json =
-            StringUtils.read(new File("src/test/resources/fixtures/0024-book-4-toc.json"), StandardCharsets.UTF_8);
+                StringUtils.read(new File("src/test/resources/fixtures/0024-book-4-toc.json"), StandardCharsets.UTF_8);
         assertEquals(new JsonObject(json), Manifest.fromString(json).toJSON());
     }
 

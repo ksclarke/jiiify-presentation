@@ -2,7 +2,6 @@
 package info.freelibrary.iiif.presentation.v3;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.net.URI;
 
@@ -11,7 +10,6 @@ import org.junit.Test;
 import com.google.common.net.MediaType;
 
 import info.freelibrary.iiif.presentation.v3.properties.Label;
-import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageService3;
 
 /**
@@ -49,18 +47,6 @@ public class ImageContentTest {
     @Test
     public void testSetGetService() {
         assertEquals(SERVICE, new ImageContent(IMAGE_URI).setServices(SERVICE).getServices().get(0));
-    }
-
-    /**
-     * Tests clearing the required statement.
-     */
-    @Test
-    public void testClearRequiredStatement() {
-        final RequiredStatement reqStatement = new RequiredStatement("stmt-id", "stmt-label");
-        final ImageContent content = new ImageContent(IMAGE_URI).setRequiredStatement(reqStatement);
-
-        assertTrue(content.getRequiredStatement() != null);
-        assertTrue(content.clearRequiredStatement().getRequiredStatement() == null);
     }
 
     /**

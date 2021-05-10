@@ -36,6 +36,9 @@ import io.vertx.core.json.JsonObject;
 public class SoundContent extends AbstractContentResource<SoundContent>
         implements Thumbnail, Resource<SoundContent>, TemporalContentResource<SoundContent> {
 
+    /**
+     * The sound content's duration.
+     */
     private float myDuration;
 
     /**
@@ -186,11 +189,6 @@ public class SoundContent extends AbstractContentResource<SoundContent>
     @Override
     public SoundContent setRequiredStatement(final RequiredStatement aStatement) {
         return (SoundContent) super.setRequiredStatement(aStatement);
-    }
-
-    @Override
-    public SoundContent clearRequiredStatement() {
-        return (SoundContent) super.clearRequiredStatement();
     }
 
     @Override

@@ -36,10 +36,19 @@ import io.vertx.core.json.JsonObject;
 public class VideoContent extends AbstractContentResource<VideoContent> implements Thumbnail, Resource<VideoContent>,
         SpatialContentResource<VideoContent>, TemporalContentResource<VideoContent> {
 
+    /**
+     * The video content's duration.
+     */
     private float myDuration;
 
+    /**
+     * The video content's width.
+     */
     private int myWidth;
 
+    /**
+     * The video content's height.
+     */
     private int myHeight;
 
     /**
@@ -188,11 +197,6 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
     @Override
     public VideoContent setRequiredStatement(final RequiredStatement aStatement) {
         return (VideoContent) super.setRequiredStatement(aStatement);
-    }
-
-    @Override
-    public VideoContent clearRequiredStatement() {
-        return (VideoContent) super.clearRequiredStatement();
     }
 
     @Override

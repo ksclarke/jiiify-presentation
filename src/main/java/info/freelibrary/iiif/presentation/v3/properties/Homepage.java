@@ -138,7 +138,7 @@ public class Homepage extends AbstractLinkProperty<Homepage> {
 
     @Override
     @JsonIgnore
-    public Homepage setLanguages(final String... aLangArray) throws IllegalArgumentException {
+    public Homepage setLanguages(final String... aLangArray) {
         return (Homepage) super.setLanguages(aLangArray);
     }
 

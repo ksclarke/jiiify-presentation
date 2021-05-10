@@ -24,10 +24,9 @@ import com.opencsv.CSVReader;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.Metadata;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
-import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
-import info.freelibrary.iiif.presentation.v3.services.GenericService;
+import info.freelibrary.iiif.presentation.v3.services.OtherService;
 import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageService;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageService3;
@@ -146,7 +145,7 @@ public class ManifestTest extends AbstractTest {
         myManifest.setRights("http://creativecommons.org/licenses/by/4.0/");
         myManifest.setBehaviors(ManifestBehavior.PAGED);
 
-        final Service service = new GenericService("https://example.org/service/example", "example")
+        final Service service = new OtherService("https://example.org/service/example", "example")
                 .setProfile("https://example.org/docs/example-service.html");
         myManifest.setServices(service);
 
@@ -205,26 +204,7 @@ public class ManifestTest extends AbstractTest {
     }
 
     /**
-     * Tests clearing the required statement.
-     */
-    @Test
-    public void testClearRequiredStatement() {
-        assertTrue(myManifest.getRequiredStatement() != null);
-        assertTrue(myManifest.clearRequiredStatement().getRequiredStatement() == null);
-    }
-
-    /**
-     * Tests clearing the viewing direction.
-     */
-    @Test
-    public void testClearViewingDirection() {
-        myManifest.setViewingDirection(ViewingDirection.LEFT_TO_RIGHT);
-        assertTrue(myManifest.getViewingDirection() != null);
-        assertTrue(myManifest.clearViewingDirection().getViewingDirection() == null);
-    }
-
-    /**
-     * Tests {@link Manifest#getContext() getContext} method.
+     * Tests {@link MANIFEST#getContext() getContext} method.
      */
     @Test
     public void testGetPrimaryContext() {
@@ -232,7 +212,7 @@ public class ManifestTest extends AbstractTest {
     }
 
     /**
-     * Tests {@link Manifest#removeContext(URI) removeContext} method.
+     * Tests {@link MANIFEST#removeContext(URI) removeContext} method.
      */
     @Test
     public void testRemoveContext() {

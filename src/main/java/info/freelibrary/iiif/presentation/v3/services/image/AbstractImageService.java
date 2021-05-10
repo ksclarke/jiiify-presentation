@@ -24,16 +24,34 @@ import info.freelibrary.iiif.presentation.v3.services.AbstractService;
     Constants.WIDTH, ImageAPI.SCALE_FACTORS })
 abstract class AbstractImageService extends AbstractService implements ImageService {
 
+    /**
+     * The image service's profile.
+     */
     protected Profile myProfile;
 
+    /**
+     * The image service's protocol.
+     */
     protected String myProtocol;
 
+    /**
+     * The image service's formats.
+     */
     protected List<ImageAPI.ImageFormat> myFormats;
 
+    /**
+     * The image service's qualities
+     */
     protected List<ImageAPI.ImageQuality> myQualities;
 
+    /**
+     * The image service's tiles.
+     */
     protected List<Tile> myTiles;
 
+    /**
+     * The image service's sizes.
+     */
     protected List<Size> mySizes;
 
     /**
@@ -43,6 +61,8 @@ abstract class AbstractImageService extends AbstractService implements ImageServ
      * @param aID The ID of the service
      */
     AbstractImageService(final Profile aProfile, final URI aID) {
+        super();
+
         myProfile = aProfile;
         myID = aID;
     }
@@ -51,6 +71,7 @@ abstract class AbstractImageService extends AbstractService implements ImageServ
      * An empty constructor for Jackson's deserialization process.
      */
     protected AbstractImageService() {
+        super();
     }
 
     @Override

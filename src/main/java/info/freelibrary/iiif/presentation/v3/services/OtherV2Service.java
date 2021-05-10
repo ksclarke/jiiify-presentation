@@ -14,7 +14,7 @@ import info.freelibrary.iiif.presentation.v3.Constants;
  * A generic service class for older service implementations that use @id and @type.
  */
 @JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.PROFILE, Constants.FORMAT })
-public class OlderGenericService extends GenericService implements Service {
+public class OtherV2Service extends OtherService implements Service {
 
     /**
      * Creates a service for the supplied URI.
@@ -22,7 +22,7 @@ public class OlderGenericService extends GenericService implements Service {
      * @param aServiceID A service ID
      * @param aType A service type
      */
-    public OlderGenericService(final URI aServiceID, final String aType) {
+    public OtherV2Service(final URI aServiceID, final String aType) {
         super(aServiceID, aType);
     }
 
@@ -32,7 +32,7 @@ public class OlderGenericService extends GenericService implements Service {
      * @param aServiceID A service ID in string form
      * @param aType A service type
      */
-    public OlderGenericService(final String aServiceID, final String aType) {
+    public OtherV2Service(final String aServiceID, final String aType) {
         super(aServiceID, aType);
     }
 

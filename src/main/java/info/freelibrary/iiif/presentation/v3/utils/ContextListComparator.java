@@ -11,10 +11,10 @@ import info.freelibrary.iiif.presentation.v3.Constants;
  * Cf. https://iiif.io/api/presentation/3.0/#46-linked-data-context-and-extensions
  * </p>
  */
-public class ContextListComparator<URI> implements Comparator<URI> {
+public class ContextListComparator<U> implements Comparator<U> {
 
     @Override
-    public int compare(final URI aFirstURI, final URI aSecondURI) {
+    public int compare(final U aFirstURI, final U aSecondURI) {
         if (Constants.CONTEXT_URI.equals(aFirstURI) && Constants.CONTEXT_URI.equals(aSecondURI)) {
             return 0;
         } else if (Constants.CONTEXT_URI.equals(aFirstURI)) {

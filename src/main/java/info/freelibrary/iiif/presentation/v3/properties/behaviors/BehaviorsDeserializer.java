@@ -1,3 +1,4 @@
+
 package info.freelibrary.iiif.presentation.v3.properties.behaviors;
 
 import java.io.IOException;
@@ -12,16 +13,16 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
+import info.freelibrary.util.StringUtils;
+
 import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.iiif.presentation.v3.Resource;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
-import info.freelibrary.util.StringUtils;
 
 /**
- * A deserializer for classes that implement the Behavior interface.
- *
- * It operates on a list so that the elements can be compared to check for mutual exclusivity.
+ * A deserializer for classes that implement the Behavior interface. It operates on a list so that the elements can be
+ * compared to check for mutual exclusivity.
  */
 public class BehaviorsDeserializer extends StdDeserializer<List<Behavior>> {
 
@@ -47,6 +48,7 @@ public class BehaviorsDeserializer extends StdDeserializer<List<Behavior>> {
     }
 
     @Override
+    @SuppressWarnings("PMD.PreserveStackTrace")
     public List<Behavior> deserialize(final JsonParser aParser, final DeserializationContext aContext)
             throws IOException, JsonProcessingException {
         final JsonNode node = aParser.getCodec().readTree(aParser);
@@ -91,6 +93,7 @@ public class BehaviorsDeserializer extends StdDeserializer<List<Behavior>> {
             } else {
                 errorMsg = details.getMessage();
             }
+
             throw new JsonMappingException(aParser, errorMsg, aParser.getCurrentLocation());
         }
 

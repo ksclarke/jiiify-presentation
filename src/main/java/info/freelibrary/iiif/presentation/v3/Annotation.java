@@ -17,7 +17,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -46,21 +45,50 @@ import io.vertx.core.json.jackson.DatabindCodec;
     Constants.TARGET })
 public class Annotation<T extends Annotation<T>> extends AbstractResource<Annotation<T>> {
 
+    /**
+     * The Annotation logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(Annotation.class, MessageCodes.BUNDLE);
 
+    /**
+     * The size of a single content resource body.
+     */
+    private static final int SINGLE_CONTENT_RESOURCE_BODY = 1;
+
+    /**
+     * A constant for the rdf:nil value.
+     */
     private static final String RDF_NIL = "rdf:nil";
 
+    /**
+     * The content resources that comprise the annotation body.
+     */
     protected List<ContentResource> myBody;
 
+    /**
+     * A boolean flag indicating whether the body contains a choice.
+     */
     protected boolean myBodyContainsChoice;
 
+    /**
+     * The target URI of the annotation.
+     */
     protected URI myTargetURI;
 
+    /**
+     * The target specific resource.
+     */
     protected SpecificResource myTargetSpecificResource;
 
+    /**
+     * The annotation's motivation.
+     */
     @JsonProperty(Constants.MOTIVATION)
     protected String myMotivation;
 
+    /**
+     * The annotation's time mode.
+     */
     @JsonProperty(Constants.TIMEMODE)
     protected TimeMode myTimeMode;
 
@@ -238,6 +266,7 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      * @return The annotation
      */
     @JsonIgnore
+    @SuppressWarnings("PMD.NullAssignment")
     protected Annotation<T> setTarget(final URI aURI) {
         myTargetURI = checkNotNull(aURI);
         myTargetSpecificResource = null;
@@ -251,6 +280,7 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      * @return The annotation
      */
     @JsonSetter(Constants.TARGET)
+    @SuppressWarnings("PMD.NullAssignment")
     protected Annotation<T> setTarget(final String aURI) {
         myTargetURI = checkNotNull(URI.create(aURI));
         myTargetSpecificResource = null;
@@ -264,6 +294,7 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      * @return The annotation
      */
     @JsonSetter(Constants.TARGET)
+    @SuppressWarnings("PMD.NullAssignment")
     protected Annotation<T> setTarget(final SpecificResource aSpecificResource) {
         myTargetSpecificResource = checkNotNull(aSpecificResource);
         myTargetURI = null;
@@ -342,7 +373,7 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
             return null;
         }
 
-        if (myBody.size() > 1) {
+        if (myBody.size() > SINGLE_CONTENT_RESOURCE_BODY) {
             if (bodyContainsChoice()) {
                 final Map<String, Object> map = new TreeMap<>(new ContentResourceComparator());
                 final List<Object> itemList = new ArrayList<>();
@@ -391,35 +422,50 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
     @JsonSetter(Constants.BODY)
     private void readBody(final Object aBody) {
         if (aBody instanceof List) {
-            final List<?> list = (List<?>) aBody;
-
-            if (list.size() > 0 && list.get(0) instanceof Map) {
-                list.forEach(mapObject -> {
-                    deserializeContentMap((Map<?, ?>) mapObject);
-                });
-            }
+            deserializeListBody((List<?>) aBody);
         } else if (aBody instanceof Map) {
-            final Map<?, ?> map = (Map<?, ?>) aBody;
-            final String type = map.get(Constants.TYPE).toString();
-
-            if (ResourceTypes.CHOICE.equals(type)) {
-                final List<?> items = (List<?>) map.get(Constants.ITEMS);
-
-                setChoice(true);
-
-                if (items.size() > 0 && items.get(0) instanceof Map) {
-                    items.forEach(mapObject -> {
-                        deserializeContentMap((Map<?, ?>) mapObject);
-                    });
-                }
-            } else {
-                deserializeContentMap((Map<?, ?>) aBody);
-            }
+            deserializeMapBody((Map<?, ?>) aBody);
         } else if (aBody instanceof String && RDF_NIL.equals(aBody.toString())) {
             getBody().add(null);
         } else {
             throw new IllegalArgumentException(
                     LOGGER.getMessage(MessageCodes.JPA_116, aBody.getClass().getSimpleName()));
+        }
+    }
+
+    /**
+     * Deserializes the annotation's map body.
+     *
+     * @param aMapBody A body of an annotation that's a map
+     */
+    private void deserializeMapBody(final Map<?, ?> aMapBody) {
+        final String type = aMapBody.get(Constants.TYPE).toString();
+
+        if (ResourceTypes.CHOICE.equals(type)) {
+            final List<?> items = (List<?>) aMapBody.get(Constants.ITEMS);
+
+            setChoice(true);
+
+            if (!items.isEmpty() && items.get(0) instanceof Map) {
+                items.forEach(mapObject -> {
+                    deserializeContentMap((Map<?, ?>) mapObject);
+                });
+            }
+        } else {
+            deserializeContentMap(aMapBody);
+        }
+    }
+
+    /**
+     * Deserializes the annotation's list body.
+     *
+     * @param aListBody A body of an annotation that's a list
+     */
+    private void deserializeListBody(final List<?> aListBody) {
+        if (!aListBody.isEmpty() && aListBody.get(0) instanceof Map) {
+            aListBody.forEach(mapObject -> {
+                deserializeContentMap((Map<?, ?>) mapObject);
+            });
         }
     }
 
@@ -430,35 +476,35 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      */
     private void deserializeContentMap(final Map<?, ?> aMap) {
         final String type = (String) aMap.get(Constants.TYPE);
-        final ObjectMapper mapper = DatabindCodec.mapper();
 
         switch (type) {
             case ResourceTypes.SOUND:
-                getBody().add(mapper.convertValue(aMap, SoundContent.class));
+                getBody().add(DatabindCodec.mapper().convertValue(aMap, SoundContent.class));
                 break;
             case ResourceTypes.VIDEO:
-                getBody().add(mapper.convertValue(aMap, VideoContent.class));
+                getBody().add(DatabindCodec.mapper().convertValue(aMap, VideoContent.class));
                 break;
             case ResourceTypes.IMAGE:
-                getBody().add(mapper.convertValue(aMap, ImageContent.class));
+                getBody().add(DatabindCodec.mapper().convertValue(aMap, ImageContent.class));
                 break;
             case ResourceTypes.TEXT:
-                getBody().add(mapper.convertValue(aMap, TextContent.class));
+                getBody().add(DatabindCodec.mapper().convertValue(aMap, TextContent.class));
                 break;
             case ResourceTypes.DATASET:
-                getBody().add(mapper.convertValue(aMap, DatasetContent.class));
+                getBody().add(DatabindCodec.mapper().convertValue(aMap, DatasetContent.class));
                 break;
             case ResourceTypes.MODEL:
-                getBody().add(mapper.convertValue(aMap, ModelContent.class));
+                getBody().add(DatabindCodec.mapper().convertValue(aMap, ModelContent.class));
                 break;
             case ResourceTypes.CANVAS:
-                getBody().add(mapper.convertValue(aMap, CanvasContent.class));
+                getBody().add(DatabindCodec.mapper().convertValue(aMap, CanvasContent.class));
                 break;
             case ResourceTypes.TEXTUAL_BODY:
-                getBody().add(mapper.convertValue(aMap, TextualBody.class));
+                getBody().add(DatabindCodec.mapper().convertValue(aMap, TextualBody.class));
                 break;
             default:
                 getBody().add(new OtherContent(JsonObject.mapFrom(aMap)));
+                break;
         }
     }
 }

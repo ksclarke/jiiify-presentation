@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3.services;
+package info.freelibrary.iiif.presentation.v3.services.auth;
 
 import java.net.URI;
 
@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.iiif.presentation.v3.services.AbstractService;
 
 /**
  * An abstract class for authentication services.
@@ -16,6 +17,9 @@ import info.freelibrary.iiif.presentation.v3.Constants;
 @JsonPropertyOrder({ Constants.V2_ID, Constants.V2_TYPE, Constants.PROFILE })
 abstract class AbstractAuthService extends AbstractService implements AuthService {
 
+    /**
+     * The auth service's profile.
+     */
     protected Profile myProfile;
 
     /**
@@ -25,6 +29,8 @@ abstract class AbstractAuthService extends AbstractService implements AuthServic
      * @param aID The ID of the service
      */
     AbstractAuthService(final Profile aProfile, final URI aID) {
+        super();
+
         myProfile = aProfile;
         myID = aID;
     }
@@ -35,6 +41,8 @@ abstract class AbstractAuthService extends AbstractService implements AuthServic
      * @param aID An ID
      */
     AbstractAuthService(final URI aID) {
+        super();
+
         myID = aID;
     }
 
@@ -42,6 +50,7 @@ abstract class AbstractAuthService extends AbstractService implements AuthServic
      * An empty constructor for Jackson's deserialization process.
      */
     protected AbstractAuthService() {
+        super();
     }
 
     @Override

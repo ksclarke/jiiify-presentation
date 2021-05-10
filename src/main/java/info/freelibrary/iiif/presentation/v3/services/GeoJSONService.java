@@ -20,6 +20,8 @@ public class GeoJSONService extends AbstractService implements Service {
      * @param aID The ID of the item to retrieve GeoJSON about
      */
     public GeoJSONService(final URI aID) {
+        super();
+
         myID = aID;
     }
 
