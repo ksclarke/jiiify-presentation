@@ -23,6 +23,7 @@ import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.Metadata;
+import info.freelibrary.iiif.presentation.v3.properties.NavDate;
 import info.freelibrary.iiif.presentation.v3.properties.PartOf;
 import info.freelibrary.iiif.presentation.v3.properties.Provider;
 import info.freelibrary.iiif.presentation.v3.properties.Rendering;
@@ -495,7 +496,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      * A wrapper for things embedded in or referenced from a collection (e&#46;g&#46; manifests and other collections).
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.LABEL, Constants.THUMBNAIL })
+    @JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.LABEL, Constants.THUMBNAIL, Constants.NAV_DATE })
     public static class Item {
 
         /**
@@ -561,6 +562,11 @@ public class Collection extends NavigableResource<Collection> implements Resourc
          * The collection item's label.
          */
         private Label myLabel;
+
+        /**
+         * The collection item's navDate.
+         */
+        private NavDate myNavDate;
 
         /**
          * The collection item's thumbnails.
@@ -765,6 +771,28 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         @JsonIgnore
         public Item setLabel(final String aLabel) {
             myLabel = new Label(aLabel);
+            return this;
+        }
+
+        /**
+         * Gets a navigation date.
+         *
+         * @return The navigation date
+         */
+        @JsonGetter(Constants.NAV_DATE)
+        public NavDate getNavDate() {
+            return myNavDate;
+        }
+
+        /**
+         * Sets a navigation date.
+         *
+         * @param aNavDate The navigation date
+         * @return The navigable resource
+         */
+        @JsonSetter(Constants.NAV_DATE)
+        public Item setNavDate(final NavDate aNavDate) {
+            myNavDate = aNavDate;
             return this;
         }
 

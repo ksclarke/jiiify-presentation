@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import info.freelibrary.util.StringUtils;
 
+import info.freelibrary.iiif.presentation.v3.Collection;
 import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.iiif.presentation.v3.Manifest;
 
@@ -383,14 +384,15 @@ public class RoundTripTest {
     }
 
     /**
-     * Tests the 0068 title collection cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0068-newspaper/).
+     * Tests the 0068 title collection cookbook's collection doc (cf.
+     * https://iiif.io/api/cookbook/recipe/0068-newspaper/).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
     @Test
     public final void test0068NewspaperTitleCollection() throws IOException {
         final JsonObject expected = getManifest("0068-newspaper_title-collection");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final JsonObject found = Collection.fromJSON(expected).toJSON();
 
         compare(expected, found);
     }
@@ -487,14 +489,14 @@ public class RoundTripTest {
     }
 
     /**
-     * Tests the 0230 collection cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0230-navdate/).
+     * Tests the 0230 collection cookbook's collection doc (cf. https://iiif.io/api/cookbook/recipe/0230-navdate/).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
     @Test
     public final void test0230NavDateCollection() throws IOException {
         final JsonObject expected = getManifest("0230-navdate-collection");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final JsonObject found = Collection.fromJSON(expected).toJSON();
 
         compare(expected, found);
     }
