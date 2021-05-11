@@ -46,6 +46,11 @@ import io.vertx.core.json.JsonObject;
 public class Collection extends NavigableResource<Collection> implements Resource<Collection> {
 
     /**
+     * The logger used by the collection.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(Collection.class, MessageCodes.BUNDLE);
+
+    /**
      * The collection's accompanying canvas.
      */
     private Optional<AccompanyingCanvas> myAccompanyingCanvas;
@@ -466,6 +471,12 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      */
     @JsonIgnore
     public static Collection fromJSON(final JsonObject aJsonObject) {
+        final String type = aJsonObject.getString(Constants.TYPE);
+
+        if (!ResourceTypes.COLLECTION.equals(type)) {
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_119, ResourceTypes.COLLECTION, type));
+        }
+
         return Json.decodeValue(aJsonObject.toString(), Collection.class);
     }
 

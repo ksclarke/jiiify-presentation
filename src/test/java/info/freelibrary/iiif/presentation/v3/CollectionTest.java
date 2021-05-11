@@ -147,6 +147,17 @@ public class CollectionTest {
     }
 
     /**
+     * Test collection doc creation fromJSON() with a Manifest.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testFromJsonManifest() {
+        final String collectionPath = new File(TestUtils.TEST_DIR, "z1960050.json").getAbsolutePath();
+        final JsonObject json = new JsonObject(myVertx.fileSystem().readFileBlocking(collectionPath));
+
+        Collection.fromJSON(json);
+    }
+
+    /**
      * Tests reading a collection document from a JSON string.
      */
     @Test
