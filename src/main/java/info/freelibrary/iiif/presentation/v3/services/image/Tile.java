@@ -9,12 +9,12 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
  * A Image API tile.
  */
-@JsonPropertyOrder({ Constants.HEIGHT, Constants.WIDTH, ImageAPI.SCALE_FACTORS })
+@JsonPropertyOrder({ JsonKeys.HEIGHT, JsonKeys.WIDTH, ImageAPI.SCALE_FACTORS })
 public class Tile {
 
     /**
@@ -58,7 +58,7 @@ public class Tile {
      * @param aHeight A tile height
      * @return This tile
      */
-    @JsonSetter(Constants.HEIGHT)
+    @JsonSetter(JsonKeys.HEIGHT)
     public Tile setHeight(final int aHeight) {
         myHeight = aHeight;
         return this;
@@ -69,7 +69,7 @@ public class Tile {
      *
      * @return The tile height
      */
-    @JsonGetter(Constants.HEIGHT)
+    @JsonGetter(JsonKeys.HEIGHT)
     @JsonInclude(Include.NON_DEFAULT)
     public int getHeight() {
         return myHeight;
@@ -81,7 +81,7 @@ public class Tile {
      * @param aWidth A tile width
      * @return This tile
      */
-    @JsonSetter(Constants.WIDTH)
+    @JsonSetter(JsonKeys.WIDTH)
     public Tile setWidth(final int aWidth) {
         myWidth = aWidth;
         return this;
@@ -92,7 +92,7 @@ public class Tile {
      *
      * @return A tile width
      */
-    @JsonGetter(Constants.WIDTH)
+    @JsonGetter(JsonKeys.WIDTH)
     @JsonInclude(Include.NON_DEFAULT)
     public int getWidth() {
         return myWidth;

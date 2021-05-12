@@ -1,12 +1,13 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.selectors;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.v3.AbstractTest;
-import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
@@ -48,7 +49,7 @@ public class SelectorDeserializerTest extends AbstractTest {
         final MediaFragmentSelector selector =
                 (MediaFragmentSelector) Json.decodeValue(jsonObject.toString(), Selector.class);
 
-        assertEquals(Constants.FRAGMENT_SELECTOR, selector.getType());
+        assertEquals("FragmentSelector", selector.getType()); // Don't use class name here so we know if it changes
         assertEquals(rawMediaFragment, selector.toString());
     }
 
@@ -79,7 +80,7 @@ public class SelectorDeserializerTest extends AbstractTest {
     @Test
     public void testImageApiSelectorPartialJSON() {
         final JsonObject jsonObject = new JsonObject().put(ImageApiSelector.REGION, ImageApiSelector.DEFAULT_REGION)
-                .put(Constants.TYPE, ImageApiSelector.class.getSimpleName());
+                .put(JsonKeys.TYPE, ImageApiSelector.class.getSimpleName());
         final Selector selector = Json.decodeValue(jsonObject.toString(), Selector.class);
 
         assertEquals(ImageApiSelector.DEFAULT_REGION, ((ImageApiSelector) selector).getRegion());

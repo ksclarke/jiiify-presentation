@@ -17,8 +17,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import info.freelibrary.util.StringUtils;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.iiif.presentation.v3.Manifest;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 
 import io.vertx.core.json.JsonObject;
@@ -204,10 +204,11 @@ public class HomepageTest {
     /**
      * Checks that the file is deserialized to the representation specified by the homepage(s).
      *
+     * @param aExpected The file with the expected outcome of the test
      * @throws IOException If there is trouble reading or deserializing the homepage file
      */
     private void checkDeserialization(final File aExpected) throws IOException {
-        final String json = new JsonObject(StringUtils.read(aExpected)).getJsonArray(Constants.HOMEPAGE).toString();
+        final String json = new JsonObject(StringUtils.read(aExpected)).getJsonArray(JsonKeys.HOMEPAGE).toString();
         final TypeReference<List<Homepage>> typeRef = new TypeReference<>() {};
 
         final List<Homepage> expected = DatabindCodec.mapper().readValue(json, typeRef);
@@ -225,11 +226,12 @@ public class HomepageTest {
     /**
      * Checks that the homepage(s) is serialized to the representation specified by the file.
      *
+     * @param aExpected The file with the expected outcome of the test
      * @throws IOException If there is trouble reading the homepage file or serializing the constructed homepage(s)
      */
     private void checkSerialization(final File aExpected) throws IOException {
         final JsonObject expected = new JsonObject(StringUtils.read(aExpected));
-        final JsonObject found = new JsonObject(TestUtils.toJson(Constants.HOMEPAGE, myManifest.getHomepages(), true));
+        final JsonObject found = new JsonObject(TestUtils.toJson(JsonKeys.HOMEPAGE, myManifest.getHomepages(), true));
 
         assertEquals(expected, found);
     }
@@ -241,6 +243,6 @@ public class HomepageTest {
      * @throws IOException If there is trouble reading the test fixture file
      */
     private JsonObject getFullFixtureAsJSON() throws IOException {
-        return new JsonObject(StringUtils.read(HOMEPAGE_FULL_ONE)).getJsonArray(Constants.HOMEPAGE).getJsonObject(0);
+        return new JsonObject(StringUtils.read(HOMEPAGE_FULL_ONE)).getJsonArray(JsonKeys.HOMEPAGE).getJsonObject(0);
     }
 }

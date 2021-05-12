@@ -12,8 +12,8 @@ import org.junit.Test;
 
 import info.freelibrary.util.StringUtils;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.iiif.presentation.v3.Manifest;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
@@ -542,7 +542,7 @@ public class RoundTripTest {
             final String valueClassName = value.getClass().getSimpleName();
 
             // Duration is a property, not a JsonObject or JsonArray
-            if (entry.getKey().equals(Constants.DURATION)) {
+            if (entry.getKey().equals(JsonKeys.DURATION)) {
                 entry.setValue(Float.valueOf(((Double) value).toString()));
             }
 

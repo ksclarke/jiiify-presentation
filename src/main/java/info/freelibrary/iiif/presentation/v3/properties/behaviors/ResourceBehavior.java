@@ -1,12 +1,13 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.behaviors;
 
+import static info.freelibrary.util.Constants.MESSAGE_SLOT;
+
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
@@ -57,6 +58,6 @@ public enum ResourceBehavior implements Behavior {
         }
 
         // If BehaviorsDeserializer.deserialize is the caller, then the resource type will be filled in there
-        throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_010, aBehavior, Constants.MESSAGE_SLOT));
+        throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_010, aBehavior, MESSAGE_SLOT));
     }
 }

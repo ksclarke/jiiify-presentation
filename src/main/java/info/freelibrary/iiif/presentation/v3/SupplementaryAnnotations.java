@@ -1,20 +1,23 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.net.URI;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.util.warnings.Eclipse;
+import info.freelibrary.util.warnings.PMD;
+
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+
 /**
- * A link from a Range to an Annotation COLLECTION that includes the supplementing Annotations of content resources for
- * the Range.
+ * A link from a range to an {@link AnnotationCollection} that includes the supplementing annotations.
  */
-@JsonPropertyOrder({ Constants.ID, Constants.TYPE })
+@JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE })
 public class SupplementaryAnnotations {
 
     /**
@@ -23,7 +26,7 @@ public class SupplementaryAnnotations {
     private URI myID;
 
     /**
-     * Creates a link to an AnnotationCollection that contains supplementary annotations.
+     * Creates a link to an {@link AnnotationCollection} that contains supplementary annotations.
      *
      * @param aID An ID of an annotation collection
      */
@@ -32,18 +35,18 @@ public class SupplementaryAnnotations {
     }
 
     /**
-     * Creates a link to an AnnotationCollection that contains supplementary annotations.
+     * Creates a link to an {@link AnnotationCollection} that contains supplementary annotations.
      *
      * @param aID An ID of an annotation collection
      */
     public SupplementaryAnnotations(final URI aID) {
-        myID = checkNotNull(aID);
+        myID = Objects.requireNonNull(aID);
     }
 
     /**
      * A private constructor for Jackson's deserialization.
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings(Eclipse.UNUSED)
     private SupplementaryAnnotations() {
         // This intentionally left empty
     }
@@ -53,7 +56,7 @@ public class SupplementaryAnnotations {
      *
      * @return The ID of the linked annotation collection
      */
-    @JsonGetter(Constants.ID)
+    @JsonGetter(JsonKeys.ID)
     public URI getID() {
         return myID;
     }
@@ -64,7 +67,7 @@ public class SupplementaryAnnotations {
      * @param aID The ID of the linked annotation collection
      * @return The supplementary annotations
      */
-    @JsonSetter(Constants.ID)
+    @JsonSetter(JsonKeys.ID)
     public SupplementaryAnnotations setID(final String aID) {
         myID = URI.create(aID);
         return this;
@@ -78,7 +81,7 @@ public class SupplementaryAnnotations {
      */
     @JsonIgnore
     public SupplementaryAnnotations setID(final URI aID) {
-        myID = checkNotNull(aID);
+        myID = Objects.requireNonNull(aID);
         return this;
     }
 
@@ -87,7 +90,7 @@ public class SupplementaryAnnotations {
      *
      * @return The supplementary annotations type
      */
-    @JsonGetter(Constants.TYPE)
+    @JsonGetter(JsonKeys.TYPE)
     public String getType() {
         return ResourceTypes.ANNOTATION_COLLECTION;
     }
@@ -98,9 +101,10 @@ public class SupplementaryAnnotations {
      * @param aType A type
      * @return The supplementary annotations
      */
-    @JsonSetter(Constants.TYPE)
-    @SuppressWarnings("PMD.UnusedFormalParameter") // This method is just used by Jackson's deserialization processes
-    private SupplementaryAnnotations setType(final String aType) {
+    @JsonSetter(JsonKeys.TYPE)
+    @SuppressWarnings(PMD.UNUSED_FORMAL_PARAMETER) // This method is just used by Jackson's deserialization processes
+    private SupplementaryAnnotations setType(final String aType) { // NOPMD
         return this;
     }
+
 }

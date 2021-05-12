@@ -11,21 +11,21 @@ import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
  *
  * @param <T> A class that implements {@code ContentAnnotation}
  */
-public interface ContentAnnotation<T extends ContentAnnotation<T>> {
+interface ContentAnnotation<T extends ContentAnnotation<T>> {
 
     /**
      * Clears the content resources.
      *
      * @return This annotation
      */
-    T clearBody();
+    T clearBodies();
 
     /**
      * Gets the content resources associated with this annotation.
      *
      * @return The content resources associated with this annotation
      */
-    List<ContentResource> getBody();
+    List<AnnotationBody<?>> getBodies();
 
     /**
      * Sets the content resources.
@@ -33,7 +33,7 @@ public interface ContentAnnotation<T extends ContentAnnotation<T>> {
      * @param aContentArray An array of content resources
      * @return This annotation
      */
-    T setBody(ContentResource... aContentArray);
+    T setBodies(AnnotationBody<?>... aContentArray);
 
     /**
      * Sets the content resources.
@@ -41,7 +41,7 @@ public interface ContentAnnotation<T extends ContentAnnotation<T>> {
      * @param aContentList A list of content resources
      * @return This annotation
      */
-    T setBody(List<ContentResource> aContentList);
+    T setBodies(List<AnnotationBody<?>> aContentList);
 
     /**
      * Adds content resources to this annotation.
@@ -49,7 +49,7 @@ public interface ContentAnnotation<T extends ContentAnnotation<T>> {
      * @param aContentArray An array of content resources
      * @return This annotation
      */
-    T addBody(ContentResource... aContentArray);
+    T addBodies(AnnotationBody<?>... aContentArray);
 
     /**
      * Adds content resources to this annotation.
@@ -57,13 +57,14 @@ public interface ContentAnnotation<T extends ContentAnnotation<T>> {
      * @param aContentList A list of content resources
      * @return This annotation
      */
-    T addBody(List<ContentResource> aContentList);
+    T addBodies(List<AnnotationBody<?>> aContentList);
 
     /**
      * Gets the target of this annotation.
-     *
-     * <p>The return value is an instance of either {@link URI} or {@link SpecificResource}. Users should check the type
-     * with <code>instanceof</code> and then cast as appropriate.</p>
+     * <p>
+     * The return value is an instance of either {@link URI} or {@link SpecificResource}. Users should check the type
+     * with <code>instanceof</code> and then cast as appropriate.
+     * </p>
      *
      * @return The target
      */

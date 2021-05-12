@@ -1,12 +1,11 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
@@ -17,7 +16,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import info.freelibrary.util.I18nRuntimeException;
 
-import info.freelibrary.iiif.presentation.v3.id.Minter;
+import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -32,14 +31,15 @@ import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.RangeBehavior;
 import info.freelibrary.iiif.presentation.v3.services.Service;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 
 /**
- * An ordered list of canvases, and/or further ranges. Ranges allow canvases, or parts thereof, to be grouped together
- * in some way. This could be for textual reasons, such as to distinguish books, chapters, verses, sections,
+ * An ordered list of canvases and/or further ranges. Ranges allow canvases, or parts thereof, to be grouped together in
+ * some way. This could be for textual reasons, such as to distinguish books, chapters, verses, sections,
  * non-content-bearing pages, the table of contents or similar. Equally, physical features might be important such as
  * quires or gatherings, sections that have been added later and so forth.
  */
@@ -77,7 +77,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     private ViewingDirection myViewingDirection;
 
     /**
-     * Creates a new range.
+     * Creates a new range from the supplied ID.
      *
      * @param aID A range ID in string form
      */
@@ -86,7 +86,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     /**
-     * Creates a new range.
+     * Creates a new range from the supplied ID.
      *
      * @param aID A range ID
      */
@@ -95,7 +95,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     /**
-     * Creates a new range.
+     * Creates a new range from the supplied ID and label.
      *
      * @param aID A range ID in string form
      * @param aLabel A descriptive label, in string form, for the range
@@ -105,7 +105,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     /**
-     * Creates a new range.
+     * Creates a new range from the supplied ID and label.
      *
      * @param aID A range ID
      * @param aLabel A descriptive label for the range
@@ -124,7 +124,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     /**
-     * Creates a range, using the supplied minter to create the range' ID.
+     * Creates a range from the supplied label, using the supplied minter to create the range' ID.
      *
      * @param aMinter A minter that will create the range ID
      * @param aLabel A range label in string form
@@ -134,7 +134,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     /**
-     * Creates a range, using the supplied minter to create the range' ID.
+     * Creates a range from the supplied label, using the supplied minter to create the range' ID.
      *
      * @param aMinter A minter that will create the range ID
      * @param aLabel A range label
@@ -144,7 +144,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     /**
-     * Allows Jackson to create a new range during deserialization.
+     * A default constructor that allows Jackson to create a new range during deserialization.
      */
     private Range() {
         super(ResourceTypes.RANGE);
@@ -153,12 +153,12 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     /**
      * Sets the supplementary annotations for this range.
      *
-     * @param aAnnotationCollection An annotation collection that supplements the range
+     * @param aAnnotationsCollection An annotation collection that supplements the range
      * @return The range
      */
-    @JsonSetter(Constants.SUPPLEMENTARY)
-    public Range setSupplementaryAnnotations(final SupplementaryAnnotations aAnnotationCollection) {
-        mySupplementaryAnnotations = checkNotNull(aAnnotationCollection);
+    @JsonSetter(JsonKeys.SUPPLEMENTARY)
+    public Range setSupplementaryAnnotations(final SupplementaryAnnotations aAnnotationsCollection) {
+        mySupplementaryAnnotations = Objects.requireNonNull(aAnnotationsCollection);
         return this;
     }
 
@@ -167,13 +167,13 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
      *
      * @return The annotation collection linked to this range
      */
-    @JsonGetter(Constants.SUPPLEMENTARY)
+    @JsonGetter(JsonKeys.SUPPLEMENTARY)
     public Optional<SupplementaryAnnotations> getSupplementaryAnnotations() {
         return Optional.ofNullable(mySupplementaryAnnotations);
     }
 
     @Override
-    @JsonSetter(Constants.PROVIDER)
+    @JsonSetter(JsonKeys.PROVIDER)
     public Range setProviders(final Provider... aProviderArray) {
         return setProviders(Arrays.asList(aProviderArray));
     }
@@ -185,44 +185,44 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     /**
-     * Gets the placeholder canvas.
+     * Gets the range's placeholder canvas.
      *
      * @return A placeholder canvas
      */
-    @JsonGetter(Constants.PLACEHOLDER_CANVAS)
+    @JsonGetter(JsonKeys.PLACEHOLDER_CANVAS)
     public Optional<PlaceholderCanvas> getPlaceholderCanvas() {
         return Optional.ofNullable(myPlaceholderCanvas);
     }
 
     /**
-     * Sets the placeholder canvas
+     * Sets the range's placeholder canvas
      *
      * @param aCanvas A placeholder canvas
      * @return This range
      */
-    @JsonSetter(Constants.PLACEHOLDER_CANVAS)
+    @JsonSetter(JsonKeys.PLACEHOLDER_CANVAS)
     public Range setPlaceholderCanvas(final PlaceholderCanvas aCanvas) {
         myPlaceholderCanvas = aCanvas;
         return this;
     }
 
     /**
-     * Gets the accompanying canvas.
+     * Gets the range's accompanying canvas.
      *
      * @return The accompanying canvas
      */
-    @JsonGetter(Constants.ACCOMPANYING_CANVAS)
+    @JsonGetter(JsonKeys.ACCOMPANYING_CANVAS)
     public Optional<AccompanyingCanvas> getAccompanyingCanvas() {
         return Optional.ofNullable(myAccompanyingCanvas);
     }
 
     /**
-     * Sets the accompanying canvas.
+     * Sets the range's accompanying canvas.
      *
      * @param aCanvas An accompanying canvas
      * @return This range
      */
-    @JsonSetter(Constants.ACCOMPANYING_CANVAS)
+    @JsonSetter(JsonKeys.ACCOMPANYING_CANVAS)
     public Range setAccompanyingCanvas(final AccompanyingCanvas aCanvas) {
         myAccompanyingCanvas = aCanvas;
         return this;
@@ -234,13 +234,13 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     @Override
-    @JsonSetter(Constants.BEHAVIOR)
+    @JsonSetter(JsonKeys.BEHAVIOR)
     public Range setBehaviors(final Behavior... aBehaviorArray) {
         return (Range) super.setBehaviors(checkBehaviors(RangeBehavior.class, true, aBehaviorArray));
     }
 
     @Override
-    @JsonSetter(Constants.BEHAVIOR)
+    @JsonSetter(JsonKeys.BEHAVIOR)
     public Range setBehaviors(final List<Behavior> aBehaviorList) {
         return (Range) super.setBehaviors(checkBehaviors(RangeBehavior.class, true, aBehaviorList));
     }
@@ -256,45 +256,45 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     /**
-     * Sets the optional start.
+     * Sets the range's optional start.
      *
      * @param aStart A start
      * @return The range
      */
-    @JsonSetter(Constants.START)
+    @JsonSetter(JsonKeys.START)
     public Range setStart(final Start aStart) {
         myStart = aStart;
         return this;
     }
 
     /**
-     * Gets the optional start.
+     * Gets the range's optional start.
      *
      * @return The optional start
      */
-    @JsonGetter(Constants.START)
+    @JsonGetter(JsonKeys.START)
     public Optional<Start> getStart() {
         return Optional.ofNullable(myStart);
     }
 
     /**
-     * Sets the viewing direction. To remove a viewing direction, set this value to null.
+     * Sets the range's viewing direction. To remove a viewing direction, set this value to null.
      *
      * @param aViewingDirection A viewing direction
      * @return The range
      */
-    @JsonSetter(Constants.VIEWING_DIRECTION)
+    @JsonSetter(JsonKeys.VIEWING_DIRECTION)
     public Range setViewingDirection(final ViewingDirection aViewingDirection) {
         myViewingDirection = aViewingDirection;
         return this;
     }
 
     /**
-     * Gets the viewing direction.
+     * Gets the range's viewing direction.
      *
      * @return The viewing direction
      */
-    @JsonGetter(Constants.VIEWING_DIRECTION)
+    @JsonGetter(JsonKeys.VIEWING_DIRECTION)
     public ViewingDirection getViewingDirection() {
         return myViewingDirection;
     }
@@ -304,7 +304,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
      *
      * @return A list of range items
      */
-    @JsonGetter(Constants.ITEMS)
+    @JsonGetter(JsonKeys.ITEMS)
     public List<Item> getItems() {
         return myItems;
     }
@@ -315,7 +315,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
      * @param aItemList A list of items
      * @return This range
      */
-    @JsonSetter(Constants.ITEMS)
+    @JsonSetter(JsonKeys.ITEMS)
     public Range setItems(final List<Item> aItemList) {
         myItems.clear();
         myItems.addAll(aItemList);
@@ -383,12 +383,12 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     @Override
-    public Range setThumbnails(final Thumbnail... aThumbnailArray) {
+    public Range setThumbnails(final ContentResource<?>... aThumbnailArray) {
         return (Range) super.setThumbnails(aThumbnailArray);
     }
 
     @Override
-    public Range setThumbnails(final List<Thumbnail> aThumbnailList) {
+    public Range setThumbnails(final List<ContentResource<?>> aThumbnailList) {
         return (Range) super.setThumbnails(aThumbnailList);
     }
 
@@ -448,7 +448,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     /**
-     * Returns a JsonObject of the Range.
+     * Returns a JsonObject of the range.
      *
      * @return A JSON representation of the range
      */
@@ -462,7 +462,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     /**
-     * Returns a Range from its JSON representation.
+     * Returns a range from its JSON representation.
      *
      * @param aJsonObject A range in JSON form
      * @return The range
@@ -473,7 +473,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     /**
-     * Returns a Range from its JSON representation.
+     * Returns a range from its JSON representation.
      *
      * @param aJsonString A range in string form
      * @return The range
@@ -484,7 +484,8 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     /**
-     * A wrapper for the types of resources that can be put into a range's items: Canvas, Range, and SpecificResource.
+     * A wrapper for the types of resources that can be put into a range's items: {@link Canvas}, {@link Range}, and
+     * {@link SpecificResource}.
      */
     @JsonDeserialize(using = RangeItemDeserializer.class)
     public static class Item {
@@ -600,5 +601,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
                 throw new I18nRuntimeException(MessageCodes.BUNDLE, MessageCodes.JPA_040);
             }
         }
+
     }
+
 }

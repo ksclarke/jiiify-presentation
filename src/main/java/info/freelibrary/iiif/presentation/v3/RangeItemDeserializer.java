@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
@@ -54,7 +55,7 @@ class RangeItemDeserializer extends StdDeserializer<Range.Item> {
             throws IOException, JsonProcessingException {
         final TreeNode treeNode = aParser.getCodec().readTree(aParser);
 
-        switch (treeNode.get(Constants.TYPE).toString().replace("\"", "")) {
+        switch (treeNode.get(JsonKeys.TYPE).toString().replace("\"", "")) {
             case ResourceTypes.RANGE:
                 return new Range.Item(Range.fromString(treeNode.toString()));
             case ResourceTypes.CANVAS:

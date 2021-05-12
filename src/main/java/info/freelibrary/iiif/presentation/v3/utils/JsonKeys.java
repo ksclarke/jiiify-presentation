@@ -1,28 +1,10 @@
 
-package info.freelibrary.iiif.presentation.v3;
-
-import java.net.URI;
+package info.freelibrary.iiif.presentation.v3.utils;
 
 /**
- * Constants used in this software library.
+ * A constants class for keys used in the JSON serialization of IIIF Presentation manifests and collections.
  */
-@SuppressWarnings("PMD.ClassNamingConventions")
-public final class Constants {
-
-    /**
-     * The presentation API context.
-     */
-    public static final URI CONTEXT_URI = URI.create("http://iiif.io/api/presentation/3/context.json");
-
-    /**
-     * A constant for an empty string.
-     */
-    public static final String EMPTY = "";
-
-    /**
-     * A constant for an end of line character.
-     */
-    public static final String EOL = System.lineSeparator();
+public final class JsonKeys {
 
     /**
      * The name of the ID property.
@@ -225,19 +207,9 @@ public final class Constants {
     public static final String SELECTOR = "selector";
 
     /**
-     * The constants for the FragmentSelector.
-     */
-    public static final String FRAGMENT_SELECTOR = "FragmentSelector";
-
-    /**
      * The constants for the conformsTo property.
      */
     public static final String CONFORMS_TO = "conformsTo";
-
-    /**
-     * The constants for the Media Fragment specification URI.
-     */
-    public static final URI MEDIA_FRAGMENT_SPECIFICATION_URI = URI.create("http://www.w3.org/TR/media-frags/");
 
     /**
      * The constants for the resource property.
@@ -310,25 +282,10 @@ public final class Constants {
     public static final String ACCOMPANYING_CANVAS = "accompanyingCanvas";
 
     /**
-     * The constants for the unchecked property.
+     * Creates a new JSON keys constants class.
      */
-    public static final String UNCHECKED = "unchecked";
-
-    /**
-     * The constants for the fragment delimiter character.
-     */
-    public static final String FRAGMENT_DELIM = "#";
-
-    /**
-     * A message slot as defined by <code>info.freelibrary.util.StringUtils.format()</code>.
-     */
-    public static final String MESSAGE_SLOT = "{}";
-
-    /**
-     * Creates a new constants class.
-     */
-    private Constants() {
-        super();
+    private JsonKeys() {
+        // Constant keys from the JSON serialization
     }
 
 }

@@ -4,9 +4,12 @@ package info.freelibrary.iiif.presentation.v3;
 import java.net.URI;
 
 /**
- * A common interface shared by content resources.
+ * An interface that defines external web resources that can be referenced. Examples of content resources include:
+ * {@link DatasetContent} and {@link ImageContent}).
+ *
+ * @param <T> The type of content resource
  */
-public interface ContentResource {
+public interface ContentResource<T extends ContentResource<T>> {
 
     /**
      * Gets the content resource ID.
@@ -21,7 +24,7 @@ public interface ContentResource {
      * @param aID A content resource's ID in string form
      * @return The content resource
      */
-    ContentResource setID(String aID);
+    T setID(String aID);
 
     /**
      * Sets the content resource ID.
@@ -29,7 +32,7 @@ public interface ContentResource {
      * @param aID A content resource's ID
      * @return The content resource
      */
-    ContentResource setID(URI aID);
+    T setID(URI aID);
 
     /**
      * Gets the type of the content resource.
@@ -37,4 +40,5 @@ public interface ContentResource {
      * @return The type of content resource
      */
     String getType();
+
 }

@@ -1,5 +1,5 @@
 /**
- * Classes used for creating and manipulating a manifest/resource's structure.
+ * Classes used to create and manipulate manifests and collection documents.
  */
 
 package info.freelibrary.iiif.presentation.v3;

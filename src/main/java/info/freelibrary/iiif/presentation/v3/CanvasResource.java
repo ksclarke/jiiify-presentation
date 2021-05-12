@@ -4,22 +4,27 @@ package info.freelibrary.iiif.presentation.v3;
 import java.net.URI;
 import java.util.List;
 
-import info.freelibrary.iiif.presentation.v3.id.Minter;
+import info.freelibrary.util.warnings.JDK;
+import info.freelibrary.util.warnings.PMD;
+
+import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 
 /**
- * An interface that defines methods related to canvases.
+ * An interface for an individual page or view. It acts as a central point for assembling the different content
+ * resources that make up the display.
  *
  * @param <T> The class that implements {@code CanvasResource}
  */
-@SuppressWarnings("PMD.TooManyMethods")
-public interface CanvasResource<T extends CanvasResource<T>> {
+@SuppressWarnings(PMD.TOO_MANY_METHODS)
+public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T> { // NOPMD
 
     /**
      * Gets the ID.
      *
      * @return The ID
      */
+    @Override
     URI getID();
 
     /**
@@ -79,7 +84,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @throws ContentOutOfBoundsException If the content resource has dimensions which this canvas does not have, or
      *         which are not within the bounds of the dimensions of this canvas
      */
-    T paintWith(Minter aMinter, ContentResource... aContentArray);
+    T paintWith(Minter aMinter, ContentResource<?>... aContentArray);
 
     /**
      * Paints content resources onto the canvas using a {@link PaintingAnnotation}.
@@ -101,7 +106,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @throws ContentOutOfBoundsException If the content resource has dimensions which this canvas does not have, or
      *         which are not within the bounds of the dimensions of this canvas
      */
-    T paintWith(Minter aMinter, boolean aChoice, ContentResource... aContentArray);
+    T paintWith(Minter aMinter, boolean aChoice, ContentResource<?>... aContentArray);
 
     /**
      * Paints content resources onto the canvas using a {@link PaintingAnnotation}.
@@ -122,7 +127,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @throws ContentOutOfBoundsException If the content resource has dimensions which this canvas does not have, or
      *         which are not within the bounds of the dimensions of this canvas
      */
-    T paintWith(Minter aMinter, List<ContentResource> aContentList);
+    T paintWith(Minter aMinter, List<ContentResource<?>> aContentList);
 
     /**
      * Paints content resources onto the canvas using a {@link PaintingAnnotation}.
@@ -144,7 +149,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @throws ContentOutOfBoundsException If the content resource has dimensions which this canvas does not have, or
      *         which are not within the bounds of the dimensions of this canvas
      */
-    T paintWith(Minter aMinter, boolean aChoice, List<ContentResource> aContentList);
+    T paintWith(Minter aMinter, boolean aChoice, List<ContentResource<?>> aContentList);
 
     /**
      * Paints content resources onto the canvas using a {@link PaintingAnnotation}.
@@ -168,7 +173,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given {@link MediaFragmentSelector}
      *         does not exist
      */
-    T paintWith(Minter aMinter, MediaFragmentSelector aCanvasRegion, ContentResource... aContentArray);
+    T paintWith(Minter aMinter, MediaFragmentSelector aCanvasRegion, ContentResource<?>... aContentArray);
 
     /**
      * Paints content resources onto the canvas using a {@link PaintingAnnotation}.
@@ -193,7 +198,8 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given {@link MediaFragmentSelector}
      *         does not exist
      */
-    T paintWith(Minter aMinter, MediaFragmentSelector aCanvasRegion, boolean aChoice, ContentResource... aContentArray);
+    T paintWith(Minter aMinter, MediaFragmentSelector aCanvasRegion, boolean aChoice,
+            ContentResource<?>... aContentArray);
 
     /**
      * Paints content resources onto the canvas using a {@link PaintingAnnotation}.
@@ -216,7 +222,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      *         which are not within the bounds of the dimensions of this canvas
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given media fragment does not exist
      */
-    T paintWith(Minter aMinter, String aCanvasRegion, ContentResource... aContentArray);
+    T paintWith(Minter aMinter, String aCanvasRegion, ContentResource<?>... aContentArray);
 
     /**
      * Paints content resources onto the canvas using a {@link PaintingAnnotation}.
@@ -240,7 +246,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      *         which are not within the bounds of the dimensions of this canvas
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given media fragment does not exist
      */
-    T paintWith(Minter aMinter, String aCanvasRegion, boolean aChoice, ContentResource... aContentArray);
+    T paintWith(Minter aMinter, String aCanvasRegion, boolean aChoice, ContentResource<?>... aContentArray);
 
     /**
      * Paints content resources onto the canvas using a {@link PaintingAnnotation}.
@@ -264,7 +270,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given {@link MediaFragmentSelector}
      *         does not exist
      */
-    T paintWith(Minter aMinter, MediaFragmentSelector aCanvasRegion, List<ContentResource> aContentList);
+    T paintWith(Minter aMinter, MediaFragmentSelector aCanvasRegion, List<ContentResource<?>> aContentList);
 
     /**
      * Paints content resources onto the canvas using a {@link PaintingAnnotation}.
@@ -290,7 +296,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      *         does not exist
      */
     T paintWith(Minter aMinter, MediaFragmentSelector aCanvasRegion, boolean aChoice,
-            List<ContentResource> aContentList);
+            List<ContentResource<?>> aContentList);
 
     /**
      * Paints content resources onto the canvas using a {@link PaintingAnnotation}.
@@ -313,7 +319,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      *         which are not within the bounds of the dimensions of this canvas
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given media fragment does not exist
      */
-    T paintWith(Minter aMinter, String aCanvasRegion, List<ContentResource> aContentList);
+    T paintWith(Minter aMinter, String aCanvasRegion, List<ContentResource<?>> aContentList);
 
     /**
      * Paints content resources onto the canvas using a {@link PaintingAnnotation}.
@@ -337,7 +343,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      *         which are not within the bounds of the dimensions of this canvas
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given media fragment does not exist
      */
-    T paintWith(Minter aMinter, String aCanvasRegion, boolean aChoice, List<ContentResource> aContentList);
+    T paintWith(Minter aMinter, String aCanvasRegion, boolean aChoice, List<ContentResource<?>> aContentList);
 
     /**
      * Associates supplementing content resources with the canvas using a {@link SupplementingAnnotation}.
@@ -356,7 +362,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @param aContentArray An array of content resources
      * @return This canvas
      */
-    T supplementWith(Minter aMinter, ContentResource... aContentArray);
+    T supplementWith(Minter aMinter, ContentResource<?>... aContentArray);
 
     /**
      * Associates supplementing content resources with the canvas using a {@link SupplementingAnnotation}.
@@ -376,7 +382,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @param aContentArray An array of content resources
      * @return This canvas
      */
-    T supplementWith(Minter aMinter, boolean aChoice, ContentResource... aContentArray);
+    T supplementWith(Minter aMinter, boolean aChoice, ContentResource<?>... aContentArray);
 
     /**
      * Associates supplementing content resources with the canvas using a {@link SupplementingAnnotation}.
@@ -395,7 +401,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @param aContentList A list of content resources
      * @return This canvas
      */
-    T supplementWith(Minter aMinter, List<ContentResource> aContentList);
+    T supplementWith(Minter aMinter, List<ContentResource<?>> aContentList);
 
     /**
      * Associates supplementing content resources with the canvas using a {@link SupplementingAnnotation}.
@@ -415,7 +421,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @param aContentList A list of content resources
      * @return This canvas
      */
-    T supplementWith(Minter aMinter, boolean aChoice, List<ContentResource> aContentList);
+    T supplementWith(Minter aMinter, boolean aChoice, List<ContentResource<?>> aContentList);
 
     /**
      * Associates supplementing content resources with the canvas using a {@link SupplementingAnnotation}.
@@ -436,7 +442,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @return This canvas
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given media fragment does not exist
      */
-    T supplementWith(Minter aMinter, MediaFragmentSelector aCanvasRegion, ContentResource... aContentArray);
+    T supplementWith(Minter aMinter, MediaFragmentSelector aCanvasRegion, ContentResource<?>... aContentArray);
 
     /**
      * Associates supplementing content resources with the canvas using a {@link SupplementingAnnotation}.
@@ -459,7 +465,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given media fragment does not exist
      */
     T supplementWith(Minter aMinter, MediaFragmentSelector aCanvasRegion, boolean aChoice,
-            ContentResource... aContentArray);
+            ContentResource<?>... aContentArray);
 
     /**
      * Associates supplementing content resources with the canvas using a {@link SupplementingAnnotation}.
@@ -480,7 +486,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @return This canvas
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given media fragment does not exist
      */
-    T supplementWith(Minter aMinter, String aCanvasRegion, ContentResource... aContentArray);
+    T supplementWith(Minter aMinter, String aCanvasRegion, ContentResource<?>... aContentArray);
 
     /**
      * Associates supplementing content resources with the canvas using a {@link SupplementingAnnotation}.
@@ -502,7 +508,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @return This canvas
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given media fragment does not exist
      */
-    T supplementWith(Minter aMinter, String aCanvasRegion, boolean aChoice, ContentResource... aContentArray);
+    T supplementWith(Minter aMinter, String aCanvasRegion, boolean aChoice, ContentResource<?>... aContentArray);
 
     /**
      * Associates supplementing content resources with the canvas using a {@link SupplementingAnnotation}.
@@ -523,7 +529,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @return This canvas
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given media fragment does not exist
      */
-    T supplementWith(Minter aMinter, MediaFragmentSelector aCanvasRegion, List<ContentResource> aContentList);
+    T supplementWith(Minter aMinter, MediaFragmentSelector aCanvasRegion, List<ContentResource<?>> aContentList);
 
     /**
      * Associates supplementing content resources with the canvas using a {@link SupplementingAnnotation}.
@@ -546,7 +552,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given media fragment does not exist
      */
     T supplementWith(Minter aMinter, MediaFragmentSelector aCanvasRegion, boolean aChoice,
-            List<ContentResource> aContentList);
+            List<ContentResource<?>> aContentList);
 
     /**
      * Associates supplementing content resources with the canvas using a {@link SupplementingAnnotation}.
@@ -567,7 +573,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @return This canvas
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given media fragment does not exist
      */
-    T supplementWith(Minter aMinter, String aCanvasRegion, List<ContentResource> aContentList);
+    T supplementWith(Minter aMinter, String aCanvasRegion, List<ContentResource<?>> aContentList);
 
     /**
      * Associates supplementing content resources with the canvas using a {@link SupplementingAnnotation}.
@@ -589,7 +595,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @return This canvas
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given media fragment does not exist
      */
-    T supplementWith(Minter aMinter, String aCanvasRegion, boolean aChoice, List<ContentResource> aContentList);
+    T supplementWith(Minter aMinter, String aCanvasRegion, boolean aChoice, List<ContentResource<?>> aContentList);
 
     /**
      * Gets the canvas' annotation pages for non-painting annotations.
@@ -604,7 +610,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @param aPageArray An array of supplementing annotation pages
      * @return The canvas
      */
-    @SuppressWarnings(Constants.UNCHECKED)
+    @SuppressWarnings(JDK.UNCHECKED)
     T addSupplementingPages(AnnotationPage<SupplementingAnnotation>... aPageArray);
 
     /**
@@ -621,7 +627,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @param aPageArray An array of supplementing annotation pages
      * @return The canvas
      */
-    @SuppressWarnings(Constants.UNCHECKED)
+    @SuppressWarnings(JDK.UNCHECKED)
     T setSupplementingPages(AnnotationPage<SupplementingAnnotation>... aPageArray);
 
     /**
@@ -645,7 +651,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @param aPageArray An array of painting annotation pages
      * @return The canvas
      */
-    @SuppressWarnings(Constants.UNCHECKED)
+    @SuppressWarnings(JDK.UNCHECKED)
     T addPaintingPages(AnnotationPage<PaintingAnnotation>... aPageArray);
 
     /**
@@ -662,7 +668,7 @@ public interface CanvasResource<T extends CanvasResource<T>> {
      * @param aPageArray An array of annotation pages
      * @return The canvas
      */
-    @SuppressWarnings(Constants.UNCHECKED)
+    @SuppressWarnings(JDK.UNCHECKED)
     T setPaintingPages(AnnotationPage<PaintingAnnotation>... aPageArray);
 
     /**

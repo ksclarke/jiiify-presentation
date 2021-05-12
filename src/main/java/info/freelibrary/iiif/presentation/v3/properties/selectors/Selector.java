@@ -5,13 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
  * A selector that can select a particular portion of a resource.
  */
 
-@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.CONFORMS_TO, Constants.VALUE })
+@JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.CONFORMS_TO, JsonKeys.VALUE })
 @JsonDeserialize(using = SelectorDeserializer.class)
 public interface Selector {
 
@@ -20,7 +20,7 @@ public interface Selector {
      *
      * @return The selector type
      */
-    @JsonProperty(Constants.TYPE)
+    @JsonProperty(JsonKeys.TYPE)
     default String getType() {
         return getClass().getSimpleName();
     }
@@ -31,7 +31,7 @@ public interface Selector {
      * @param aType A selector type
      * @return The selector
      */
-    @JsonProperty(Constants.TYPE)
+    @JsonProperty(JsonKeys.TYPE)
     default Selector setType(final String aType) {
         return this;
     }

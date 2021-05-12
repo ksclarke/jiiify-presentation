@@ -11,6 +11,7 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -31,6 +32,7 @@ import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageService;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageService3;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageService3.Profile;
+import info.freelibrary.iiif.presentation.v3.utils.URIs;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 
 import io.vertx.core.Vertx;
@@ -58,11 +60,25 @@ public class ManifestTest extends AbstractTest {
 
     private static final String TEST_TITLE = "Georgian NF Fragment 68a";
 
-    private static final List<String[]> METADATA_PAIRS = Stream
-            .of(new String[] { "Title", TEST_TITLE }, new String[] { "Extent", "1 f" },
-                    new String[] { "Overtext Language", "Georgian" },
-                    new String[] { "Undertext Language(s)", "Christian Palestinian Aramaic" })
-            .collect(Collectors.toList());
+    private static final List<String[]> METADATA_PAIRS = Stream.of( //
+            new String[] { "Title", TEST_TITLE }, //
+            new String[] { "Extent", "1 f" }, //
+            new String[] { "Overtext Language", "Georgian" }, //
+            new String[] { "Undertext Language(s)", "Christian Palestinian Aramaic" }).collect(Collectors.toList());
+
+    private static final List<URI> CONTEXTS = Arrays.asList( //
+            URI.create(LOREM_IPSUM.getUrl()), //
+            URI.create(LOREM_IPSUM.getUrl()), //
+            URI.create(LOREM_IPSUM.getUrl()), //
+            URI.create(LOREM_IPSUM.getUrl()), //
+            URI.create(LOREM_IPSUM.getUrl()), //
+            URI.create(LOREM_IPSUM.getUrl()), //
+            URI.create(LOREM_IPSUM.getUrl()), //
+            URI.create(LOREM_IPSUM.getUrl()), //
+            URI.create(LOREM_IPSUM.getUrl()), //
+            URI.create(LOREM_IPSUM.getUrl()), //
+            URI.create(LOREM_IPSUM.getUrl()), //
+            URIs.CONTEXT_URI);
 
     private static final int HEIGHT = 8176;
 
@@ -101,8 +117,8 @@ public class ManifestTest extends AbstractTest {
 
         final String id1 = SERVER + MANIFEST_ID + "/canvas/canvas-1";
         final String label1 = "GeoNF-frg68a_001r_K-64-001";
-        final Thumbnail thumb1 = new ImageContent(SERVER + "ark:%2F21198%2Fz10v8vhm" + THUMBNAIL_PATH);
-        final Canvas canvas1 = new Canvas(id1, label1).setWidthHeight(WIDTH, HEIGHT).setThumbnails(thumb1);
+        final ImageContent thumbnail1 = new ImageContent(SERVER + "ark:%2F21198%2Fz10v8vhm" + THUMBNAIL_PATH);
+        final Canvas canvas1 = new Canvas(id1, label1).setWidthHeight(WIDTH, HEIGHT).setThumbnails(thumbnail1);
         final PaintingAnnotation content1 =
                 new PaintingAnnotation(SERVER + MANIFEST_ID + "/imageanno/imageanno-1", canvas1);
         final AnnotationPage<PaintingAnnotation> page1 =
@@ -118,13 +134,13 @@ public class ManifestTest extends AbstractTest {
             final ImageService service = new ImageService3(Profile.LEVEL_TWO, SERVER + values[1]);
             final ImageContent resource = new ImageContent(id).setServices(service);
 
-            content1.addBody(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(values[0])).setChoice(true);
+            content1.addBodies(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(values[0])).setChoice(true);
         }
 
         final String id2 = SERVER + MANIFEST_ID + "/canvas/canvas-2";
         final String label2 = "GeoNF-frg68a_001v_K-64-002";
-        final Thumbnail thumb2 = new ImageContent(SERVER + "ark:%2F21198%2Fz1gq7dfx" + THUMBNAIL_PATH);
-        final Canvas canvas2 = new Canvas(id2, label2).setWidthHeight(WIDTH, HEIGHT).setThumbnails(thumb2);
+        final ImageContent thumbnail2 = new ImageContent(SERVER + "ark:%2F21198%2Fz1gq7dfx" + THUMBNAIL_PATH);
+        final Canvas canvas2 = new Canvas(id2, label2).setWidthHeight(WIDTH, HEIGHT).setThumbnails(thumbnail2);
         final PaintingAnnotation content2 =
                 new PaintingAnnotation(SERVER + MANIFEST_ID + "/imageanno/imageanno-2", canvas2);
 
@@ -136,7 +152,7 @@ public class ManifestTest extends AbstractTest {
             final ImageService service = new ImageService3(Profile.LEVEL_TWO, SERVER + values[1]);
             final ImageContent resource = new ImageContent(id).setServices(service);
 
-            content2.addBody(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(values[0])).setChoice(true);
+            content2.addBodies(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(values[0])).setChoice(true);
         }
 
         final RequiredStatement reqStmt =
@@ -150,6 +166,32 @@ public class ManifestTest extends AbstractTest {
         myManifest.setServices(service);
 
         myVertx = Vertx.factory.vertx();
+    }
+
+    /**
+     * Tests the comparator's sort.
+     */
+    @Test
+    public final void testComparatorSort() {
+        final int lastIndex = CONTEXTS.size() - 1;
+        final List<URI> preSort = new ArrayList<>();
+
+        // Shuffle until our last list item isn't the required one
+        while (URIs.CONTEXT_URI.equals(CONTEXTS.get(lastIndex))) {
+            Collections.shuffle(CONTEXTS);
+        }
+
+        // Remember the state of our list before the sort, minus the required Context
+        assertTrue(preSort.addAll(CONTEXTS));
+        assertTrue(preSort.remove(URIs.CONTEXT_URI));
+
+        // Sort list items
+        Collections.sort(CONTEXTS, new Manifest(UUID.randomUUID().toString(), "").new ContextListComparator<>());
+
+        // Check that the last URI in the list is our required one and
+        // that list has same pre-sort order minus the required context
+        assertEquals(CONTEXTS.get(lastIndex), URIs.CONTEXT_URI);
+        assertEquals(preSort, CONTEXTS.subList(0, lastIndex));
     }
 
     /**
@@ -208,7 +250,7 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public void testGetPrimaryContext() {
-        assertEquals(Constants.CONTEXT_URI, myManifest.addContexts(URI.create(LOREM_IPSUM.getUrl())).getContext());
+        assertEquals(URIs.CONTEXT_URI, myManifest.addContexts(URI.create(LOREM_IPSUM.getUrl())).getContext());
     }
 
     /**
@@ -229,7 +271,7 @@ public class ManifestTest extends AbstractTest {
      */
     @Test(expected = UnsupportedOperationException.class)
     public void testRemovePrimaryContext() {
-        myManifest.removeContext(Constants.CONTEXT_URI);
+        myManifest.removeContext(URIs.CONTEXT_URI);
     }
 
     /**

@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
  * A physical dimensions service that provides information useful for rulers, etc.
@@ -67,13 +67,13 @@ public class PhysicalDimsService extends AbstractService implements Service {
     }
 
     @Override
-    @JsonSetter(Constants.ID)
+    @JsonSetter(JsonKeys.ID)
     public PhysicalDimsService setID(final URI aID) {
         return (PhysicalDimsService) super.setID(aID);
     }
 
     @Override
-    @JsonSetter(Constants.ID)
+    @JsonSetter(JsonKeys.ID)
     public PhysicalDimsService setID(final String aID) {
         return (PhysicalDimsService) super.setID(aID);
     }
@@ -83,7 +83,7 @@ public class PhysicalDimsService extends AbstractService implements Service {
      *
      * @return The physical scale
      */
-    @JsonGetter(Constants.PHYSICAL_SCALE)
+    @JsonGetter(JsonKeys.PHYSICAL_SCALE)
     public double getPhysicalScale() {
         return myPhysicalScale;
     }
@@ -94,7 +94,7 @@ public class PhysicalDimsService extends AbstractService implements Service {
      * @param aScale The physical scale
      * @return The physical dimensions service
      */
-    @JsonSetter(Constants.PHYSICAL_SCALE)
+    @JsonSetter(JsonKeys.PHYSICAL_SCALE)
     public PhysicalDimsService setPhysicalScale(final double aScale) {
         myPhysicalScale = aScale;
         return this;
@@ -105,7 +105,7 @@ public class PhysicalDimsService extends AbstractService implements Service {
      *
      * @return The physical units
      */
-    @JsonGetter(Constants.PHYSICAL_UNITS)
+    @JsonGetter(JsonKeys.PHYSICAL_UNITS)
     public String getPhysicalUnits() {
         return myPhysicalUnits;
     }
@@ -116,7 +116,7 @@ public class PhysicalDimsService extends AbstractService implements Service {
      * @param aPhysicalUnits The physical units
      * @return The physical dimensions service
      */
-    @JsonSetter(Constants.PHYSICAL_SCALE)
+    @JsonSetter(JsonKeys.PHYSICAL_SCALE)
     public PhysicalDimsService setPhysicalUnits(final String aPhysicalUnits) {
         myPhysicalUnits = aPhysicalUnits;
         return this;
@@ -137,7 +137,7 @@ public class PhysicalDimsService extends AbstractService implements Service {
     }
 
     @Override
-    @JsonSetter(Constants.SERVICE)
+    @JsonSetter(JsonKeys.SERVICE)
     public GeoJSONService setServices(final List<Service> aServiceList) {
         return (GeoJSONService) super.setServices(aServiceList);
     }

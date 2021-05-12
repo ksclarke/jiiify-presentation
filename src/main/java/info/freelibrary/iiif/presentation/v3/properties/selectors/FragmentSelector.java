@@ -5,7 +5,7 @@ import java.net.URI;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
  * A fragment selector interface. Particular types of fragment selectors can implement this.
@@ -14,7 +14,7 @@ public interface FragmentSelector extends Selector {
 
     @Override
     default String getType() {
-        return Constants.FRAGMENT_SELECTOR;
+        return FragmentSelector.class.getSimpleName();
     }
 
     /**
@@ -22,7 +22,7 @@ public interface FragmentSelector extends Selector {
      *
      * @return The standard's URI
      */
-    @JsonProperty(Constants.CONFORMS_TO)
+    @JsonProperty(JsonKeys.CONFORMS_TO)
     URI getConformsTo();
 
     /**
@@ -31,7 +31,7 @@ public interface FragmentSelector extends Selector {
      * @return The value
      */
     @Override
-    @JsonProperty(Constants.VALUE)
+    @JsonProperty(JsonKeys.VALUE)
     String toString();
 
 }

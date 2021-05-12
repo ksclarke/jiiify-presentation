@@ -15,8 +15,8 @@ import org.junit.Test;
 
 import info.freelibrary.util.StringUtils;
 
-import info.freelibrary.iiif.presentation.v3.id.Minter;
-import info.freelibrary.iiif.presentation.v3.id.MinterFactory;
+import info.freelibrary.iiif.presentation.v3.ids.Minter;
+import info.freelibrary.iiif.presentation.v3.ids.MinterFactory;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.NavDate;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
@@ -1226,7 +1226,7 @@ public class CanvasTest {
      */
     @Test
     public final void testSupplementTextOnSpatialCanvas() {
-        final ContentResource text = new TextContent(TEXT_ID);
+        final TextContent text = new TextContent(TEXT_ID);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).supplementWith(myMinter, text);
 
@@ -1241,7 +1241,7 @@ public class CanvasTest {
      * Tests supplementing a spatial fragment of a spatial canvas with text.
      */
     public final void testSupplementTextOnSpatialFragmentOfSpatialCanvas() {
-        final ContentResource text = new TextContent(TEXT_ID);
+        final TextContent text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).supplementWith(myMinter, selector, text);
@@ -1255,7 +1255,7 @@ public class CanvasTest {
      */
     @Test
     public final void testSupplementTextOnTemporalFragmentOfTemporalCanvas() {
-        final ContentResource text = new TextContent(TEXT_ID);
+        final TextContent text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION));
 
@@ -1270,7 +1270,7 @@ public class CanvasTest {
      */
     @Test
     public final void testSupplementTextOnSpatialFragmentOfSpatiotemporalCanvas() {
-        final ContentResource text = new TextContent(TEXT_ID);
+        final TextContent text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
@@ -1284,7 +1284,7 @@ public class CanvasTest {
      */
     @Test
     public final void testSupplementTextOnTemporalFragmentOfSpatiotemporalCanvas() {
-        final ContentResource text = new TextContent(TEXT_ID);
+        final TextContent text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION));
 
@@ -1299,7 +1299,7 @@ public class CanvasTest {
      */
     @Test
     public final void testSupplementTextOnSpatiotemporalFragmentOfSpatiotemporalCanvas() {
-        final ContentResource text = new TextContent(TEXT_ID);
+        final TextContent text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION), 0, 0, WIDTH, HEIGHT);
 
@@ -1318,7 +1318,7 @@ public class CanvasTest {
      */
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testSupplementTextOnUndefinedTemporalFragmentOfSpatialCanvas() {
-        final ContentResource text = new TextContent(TEXT_ID);
+        final ContentResource<TextContent> text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).supplementWith(myMinter, selector, text);
@@ -1329,7 +1329,7 @@ public class CanvasTest {
      */
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testSupplementImageOnUndefinedSpatiotemporalFragmentOfSpatialCanvas() {
-        final ContentResource text = new TextContent(TEXT_ID);
+        final ContentResource<TextContent> text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0, WIDTH, HEIGHT);
 
@@ -1341,7 +1341,7 @@ public class CanvasTest {
      */
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testSupplementTextOnUndefinedSpatialFragmentOfTemporalCanvas() {
-        final ContentResource text = new TextContent(TEXT_ID);
+        final ContentResource<TextContent> text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
 
         myCanvas.setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
@@ -1352,7 +1352,7 @@ public class CanvasTest {
      */
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testSupplementTextOnUndefinedSpatiotemporalFragmentOfTemporalCanvas() {
-        final ContentResource text = new TextContent(TEXT_ID);
+        final ContentResource<TextContent> text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0, WIDTH, HEIGHT);
 
@@ -1368,18 +1368,18 @@ public class CanvasTest {
      */
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testSupplementTextOnUndefinedSpatialFragmentOfSpatialCanvas() {
-        final ContentResource text = new TextContent(TEXT_ID);
+        final ContentResource<TextContent> text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT + 1);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).supplementWith(myMinter, selector, text);
     }
 
     /**
-     * Testssupplementing a non-existent temporal fragment of a temporal canvas with text.
+     * Tests supplementing a non-existent temporal fragment of a temporal canvas with text.
      */
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testSupplementTextOnUndefinedTemporalFragmentOfTemporalCanvas() {
-        final ContentResource text = new TextContent(TEXT_ID);
+        final ContentResource<TextContent> text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(CANVAS_DURATION), new EndTime(CANVAS_DURATION + DURATION));
 
@@ -1391,7 +1391,7 @@ public class CanvasTest {
      */
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testSupplementTextOnUndefinedSpatialFragmentOfSpatiotemporalCanvas() {
-        final ContentResource text = new TextContent(TEXT_ID);
+        final ContentResource<TextContent> text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT + 1);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
@@ -1402,7 +1402,7 @@ public class CanvasTest {
      */
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testSupplementTextOnUndefinedTemporalFragmentOfSpatiotemporalCanvas() {
-        final ContentResource text = new TextContent(TEXT_ID);
+        final ContentResource<TextContent> text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION + 1));
 
@@ -1414,7 +1414,7 @@ public class CanvasTest {
      */
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testSupplementTextOnUndefinedSpatiotemporalFragmentOfSpatiotemporalCanvas() {
-        final ContentResource text = new TextContent(TEXT_ID);
+        final ContentResource<TextContent> text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION + 1), 0, 0, WIDTH, HEIGHT + 1);
 
@@ -1438,10 +1438,11 @@ public class CanvasTest {
         final ImageContent imageContent = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT)
                 .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
         final PaintingAnnotation paintingAnno =
-                new PaintingAnnotation(IMAGE_ANNO_ID, myCanvas).setBody(imageContent).setTarget(myCanvas.getID());
+                new PaintingAnnotation(IMAGE_ANNO_ID, myCanvas).setBodies(imageContent).setTarget(myCanvas.getID());
+
         final TextContent textContent = new TextContent(TEXT_ID);
         final SupplementingAnnotation supplementingAnno =
-                new SupplementingAnnotation(TEXT_ANNO_ID, myCanvas).setBody(textContent).setTarget(myCanvas.getID());
+                new SupplementingAnnotation(TEXT_ANNO_ID, myCanvas).setBodies(textContent).setTarget(myCanvas.getID());
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT);
         myCanvas.setThumbnails(new ImageContent(IMAGE_THUMBNAIL_ID).setWidthHeight(THUMBNAIL_WH, THUMBNAIL_WH)
@@ -1469,7 +1470,7 @@ public class CanvasTest {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT)
                 .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
         final TextContent text = new TextContent(TEXT_ID);
-        final Thumbnail thumbnail = new ImageContent(IMAGE_THUMBNAIL_ID).setWidthHeight(THUMBNAIL_WH, THUMBNAIL_WH)
+        final ImageContent thumbnail = new ImageContent(IMAGE_THUMBNAIL_ID).setWidthHeight(THUMBNAIL_WH, THUMBNAIL_WH)
                 .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setThumbnails(thumbnail).paintWith(myMinter, image)
@@ -1738,26 +1739,32 @@ public class CanvasTest {
         assertEquals(TestUtils.stripIDs(expected), TestUtils.stripIDs(found));
     }
 
-    /*********
-     * Utils *
-     *********/
+    /*************
+     * Utilities *
+     *************/
 
     /**
      * Returns the ID of the content resource associated with myCanvas via a painting annotation.
+     *
+     * @return The ID of the content resource associated with myCanvas via a painting annotation.
      */
     private URI getPaintingContentResourceID() {
-        return myCanvas.getPaintingPages().get(0).getAnnotations().get(0).getBody().get(0).getID();
+        return myCanvas.getPaintingPages().get(0).getAnnotations().get(0).getBodies().get(0).getID();
     }
 
     /**
      * Returns the ID of the content resource associated with myCanvas via a supplementing annotation.
+     *
+     * @return The ID of the content resource associated with myCanvas via a supplementing annotation.
      */
     private URI getSupplementingContentResourceID() {
-        return myCanvas.getSupplementingPages().get(0).getAnnotations().get(0).getBody().get(0).getID();
+        return myCanvas.getSupplementingPages().get(0).getAnnotations().get(0).getBodies().get(0).getID();
     }
 
     /**
      * Returns the value of the media fragment of the selector that targets myCanvas via a painting annotation.
+     *
+     * @return The value of the media fragment of the selector that targets myCanvas via a painting annotation.
      */
     private String getPaintingMediaFragment() {
         return ((MediaFragmentSelector) myCanvas.getPaintingPages().get(0).getAnnotations().get(0)
@@ -1766,6 +1773,8 @@ public class CanvasTest {
 
     /**
      * Returns the value of the media fragment of the selector that targets myCanvas via a supplementing annotation.
+     *
+     * @return The value of the media fragment of the selector that targets myCanvas via a supplementing annotation.
      */
     private String getSupplementingMediaFragment() {
         return ((MediaFragmentSelector) myCanvas.getSupplementingPages().get(0).getAnnotations().get(0)

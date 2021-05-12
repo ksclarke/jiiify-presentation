@@ -17,9 +17,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import info.freelibrary.util.StringUtils;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 
 import io.vertx.core.json.JsonObject;
@@ -217,10 +217,11 @@ public class RenderingTest {
     /**
      * Checks that the file is deserialized to the representation specified by the rendering(s).
      *
+     * @param aExpected The file with the expected output of the test
      * @throws IOException If there is trouble reading or deserializing the rendering file
      */
     private void checkDeserialization(final File aExpected) throws IOException {
-        final String json = new JsonObject(StringUtils.read(aExpected)).getJsonArray(Constants.RENDERING).toString();
+        final String json = new JsonObject(StringUtils.read(aExpected)).getJsonArray(JsonKeys.RENDERING).toString();
         final TypeReference<List<Rendering>> typeRef = new TypeReference<>() {};
 
         final List<Rendering> expected = DatabindCodec.mapper().readValue(json, typeRef);
@@ -238,12 +239,12 @@ public class RenderingTest {
     /**
      * Checks that the rendering(s) is serialized to the representation specified by the file.
      *
+     * @param aExpected The file with the expected output of the test
      * @throws IOException If there is trouble reading the rendering file or serializing the constructed rendering(s)
      */
     private void checkSerialization(final File aExpected) throws IOException {
         final JsonObject expected = new JsonObject(StringUtils.read(aExpected));
-        final JsonObject found =
-                new JsonObject(TestUtils.toJson(Constants.RENDERING, myManifest.getRenderings(), true));
+        final JsonObject found = new JsonObject(TestUtils.toJson(JsonKeys.RENDERING, myManifest.getRenderings(), true));
 
         assertEquals(expected, found);
     }
@@ -255,6 +256,6 @@ public class RenderingTest {
      * @throws IOException If there is trouble reading the test fixture file
      */
     private JsonObject getFullFixtureAsJSON() throws IOException {
-        return new JsonObject(StringUtils.read(RENDERING_FULL_ONE)).getJsonArray(Constants.RENDERING).getJsonObject(0);
+        return new JsonObject(StringUtils.read(RENDERING_FULL_ONE)).getJsonArray(JsonKeys.RENDERING).getJsonObject(0);
     }
 }

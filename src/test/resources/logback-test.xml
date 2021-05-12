@@ -1,17 +1,13 @@
-<configuration>
+<configuration debug="false">
+  <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
   <timestamp key="byDay" datePattern="yyyy-MM-dd" />
 
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>${testLogLevel}</level>
+    </filter>
     <encoder>
-      <pattern>[%level] %logger{45} | %msg%n</pattern>
-    </encoder>
-  </appender>
-
-  <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-    <file>target/vertx-maven-${byDay}.log</file>
-    <append>false</append>
-    <encoder>
-      <pattern>[%level] %logger{45} | %msg%n</pattern>
+      <pattern>[%level] %logger{45}:%X{line} | %msg%n</pattern>
     </encoder>
   </appender>
 
@@ -25,7 +21,7 @@
     <appender-ref ref="STDOUT"/>
   </logger>
 
-  <root level="DEBUG">
+  <root level="${testLogLevel}">
     <appender-ref ref="STDOUT" />
   </root>
 

@@ -2,10 +2,10 @@
 package info.freelibrary.iiif.presentation.v3;
 
 /**
- * Types defined by the IIIF Presentation API and the Web Annotation Data Model, and those drawn from other
- * specifications. See https://iiif.io/api/presentation/3.0/#2-resource-type-overview for more information.
+ * Resource types defined by the <a href="https://iiif.io/api/presentation/3.0/">IIIF Presentation API</a>, the
+ * <a href="https://www.w3.org/TR/annotation-model/">Web Annotation Data Model</a>, and other specifications. See
+ * https://iiif.io/api/presentation/3.0/#2-resource-type-overview for more information.
  */
-@SuppressWarnings("PMD.ClassNamingConventions")
 public final class ResourceTypes {
 
     /**
@@ -129,7 +129,7 @@ public final class ResourceTypes {
     public static final String GEO_JSON_SERVICE = "GeoJSONService";
 
     /**
-     * Creates a new resource types constants object.
+     * Creates a new resource types constants object. Constant classes should have private constructors.
      */
     private ResourceTypes() {
         super();

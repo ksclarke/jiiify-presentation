@@ -21,16 +21,17 @@ import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.services.Service;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
- * Dataset content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
+ * Dataset content that can be associated with an annotation or set as a thumbnail.
  */
-@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.THUMBNAIL, Constants.FORMAT, Constants.LANGUAGE })
+@JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
 public class DatasetContent extends AbstractContentResource<DatasetContent>
-        implements Thumbnail, Resource<DatasetContent> {
+        implements AnnotationBody<DatasetContent>, ContentResource<DatasetContent> {
 
     /**
-     * Creates a dataset content resource.
+     * Creates a dataset content resource from the supplied ID.
      *
      * @param aID An dataset content resource ID in string form
      */
@@ -39,7 +40,7 @@ public class DatasetContent extends AbstractContentResource<DatasetContent>
     }
 
     /**
-     * Creates a dataset content resource.
+     * Creates a dataset content resource from the supplied ID.
      *
      * @param aID An dataset content resource ID
      */
@@ -48,14 +49,14 @@ public class DatasetContent extends AbstractContentResource<DatasetContent>
     }
 
     /**
-     * Creates a dataset content resource.
+     * Creates a dataset content resource. This is used by Jackson for its deserialization processes.
      */
     private DatasetContent() {
         super(ResourceTypes.DATASET);
     }
 
     @Override
-    @JsonSetter(Constants.PROVIDER)
+    @JsonSetter(JsonKeys.PROVIDER)
     public DatasetContent setProviders(final Provider... aProviderArray) {
         return setProviders(Arrays.asList(aProviderArray));
     }
@@ -72,7 +73,7 @@ public class DatasetContent extends AbstractContentResource<DatasetContent>
     }
 
     @Override
-    @JsonSetter(Constants.BEHAVIOR)
+    @JsonSetter(JsonKeys.BEHAVIOR)
     public DatasetContent setBehaviors(final Behavior... aBehaviorArray) {
         return (DatasetContent) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorArray));
     }
@@ -143,12 +144,12 @@ public class DatasetContent extends AbstractContentResource<DatasetContent>
     }
 
     @Override
-    public DatasetContent setThumbnails(final Thumbnail... aThumbnailArray) {
+    public DatasetContent setThumbnails(final ContentResource<?>... aThumbnailArray) {
         return (DatasetContent) super.setThumbnails(aThumbnailArray);
     }
 
     @Override
-    public DatasetContent setThumbnails(final List<Thumbnail> aThumbnailList) {
+    public DatasetContent setThumbnails(final List<ContentResource<?>> aThumbnailList) {
         return (DatasetContent) super.setThumbnails(aThumbnailList);
     }
 
@@ -206,4 +207,5 @@ public class DatasetContent extends AbstractContentResource<DatasetContent>
     public DatasetContent setLabel(final Label aLabel) {
         return (DatasetContent) super.setLabel(aLabel);
     }
+
 }

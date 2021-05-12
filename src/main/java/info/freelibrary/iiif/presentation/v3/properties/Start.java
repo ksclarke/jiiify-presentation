@@ -11,14 +11,17 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.util.warnings.Eclipse;
+import info.freelibrary.util.warnings.PMD;
+
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.Selector;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
  * A start represents a start canvas or Specific Resource with a canvas source. It may appear on a Manifest or a Range.
  */
-@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.SOURCE, Constants.SELECTOR })
+@JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.SOURCE, JsonKeys.SELECTOR })
 public class Start {
 
     /**
@@ -83,7 +86,7 @@ public class Start {
     /**
      * A private, empty constructor for Jackson to use when deserializing.
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings(Eclipse.UNUSED)
     private Start() {
         // This is intentionally empty
     }
@@ -94,7 +97,7 @@ public class Start {
      * @param aID A start ID in string form
      * @return This start
      */
-    @JsonSetter(Constants.ID)
+    @JsonSetter(JsonKeys.ID)
     public Start setID(final String aID) {
         myID = URI.create(aID);
         return this;
@@ -117,7 +120,7 @@ public class Start {
      *
      * @return This start's ID
      */
-    @JsonGetter(Constants.ID)
+    @JsonGetter(JsonKeys.ID)
     public URI getID() {
         return myID;
     }
@@ -127,7 +130,7 @@ public class Start {
      *
      * @return The start type
      */
-    @JsonGetter(Constants.TYPE)
+    @JsonGetter(JsonKeys.TYPE)
     public String getType() {
         return mySource == null ? ResourceTypes.CANVAS : ResourceTypes.SPECIFIC_RESOURCE;
     }
@@ -165,7 +168,7 @@ public class Start {
      *
      * @return The start source
      */
-    @JsonGetter(Constants.SOURCE)
+    @JsonGetter(JsonKeys.SOURCE)
     @JsonInclude(Include.NON_NULL)
     public Optional<URI> getSource() {
         return Optional.ofNullable(mySource);
@@ -176,19 +179,19 @@ public class Start {
      *
      * @return A selector
      */
-    @JsonGetter(Constants.SELECTOR)
+    @JsonGetter(JsonKeys.SELECTOR)
     @JsonInclude(Include.NON_NULL)
     public Optional<Selector> getSelector() {
         return Optional.ofNullable(mySelector);
     }
 
     /**
-     * Sets the start's selector. This is private because it's only used by Jackson's deserialization.
+     * Sets the start's source. This is private because it's only used by Jackson's deserialization.
      *
-     * @param aSelector A selector
+     * @param aSource A start source
      * @return This start
      */
-    @JsonSetter(Constants.SOURCE)
+    @JsonSetter(JsonKeys.SOURCE)
     private Start setSource(final String aSource) {
         mySource = URI.create(aSource);
         return this;
@@ -200,7 +203,7 @@ public class Start {
      * @param aSelector A selector
      * @return This start
      */
-    @JsonSetter(Constants.SELECTOR)
+    @JsonSetter(JsonKeys.SELECTOR)
     private Start setSelector(final Selector aSelector) {
         mySelector = aSelector;
         return this;
@@ -213,9 +216,9 @@ public class Start {
      * @param aType A start type
      * @return This start
      */
-    @JsonSetter(Constants.TYPE)
-    @SuppressWarnings("PMD.UnusedFormalParameter")
-    private Start setType(final String aType) {
+    @JsonSetter(JsonKeys.TYPE)
+    @SuppressWarnings(PMD.UNUSED_FORMAL_PARAMETER)
+    private Start setType(final String aType) { // NOPMD
         return this;
     }
 }

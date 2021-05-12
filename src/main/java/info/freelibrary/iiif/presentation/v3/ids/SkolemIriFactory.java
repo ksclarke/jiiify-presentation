@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3.id;
+package info.freelibrary.iiif.presentation.v3.ids;
 
 import java.net.URI;
 import java.util.Optional;

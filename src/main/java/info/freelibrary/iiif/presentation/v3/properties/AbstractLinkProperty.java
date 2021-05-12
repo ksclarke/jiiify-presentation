@@ -1,8 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +18,7 @@ import com.google.common.net.MediaType;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 import io.vertx.core.json.JsonObject;
@@ -28,8 +26,7 @@ import io.vertx.core.json.JsonObject;
 /**
  * A linking class that specific linking properties can extend.
  */
-@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.LABEL, Constants.FORMAT, Constants.PROFILE,
-    Constants.LANGUAGE })
+@JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.FORMAT, JsonKeys.PROFILE, JsonKeys.LANGUAGE })
 abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implements Localized<T> {
 
     /**
@@ -89,8 +86,8 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      * @param aType A resource type
      */
     protected AbstractLinkProperty(final URI aID, final String aType) {
-        myID = checkNotNull(aID);
-        myType = checkNotNull(aType);
+        myID = Objects.requireNonNull(aID);
+        myType = Objects.requireNonNull(aType);
     }
 
     /**
@@ -112,9 +109,9 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      * @param aLabel A label
      */
     protected AbstractLinkProperty(final URI aID, final String aType, final Label aLabel) {
-        myID = checkNotNull(aID);
-        myType = checkNotNull(aType);
-        myLabel = checkNotNull(aLabel);
+        myID = Objects.requireNonNull(aID);
+        myType = Objects.requireNonNull(aType);
+        myLabel = Objects.requireNonNull(aLabel);
     }
 
     /**
@@ -130,7 +127,7 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      * @param aType The type of link property
      */
     protected AbstractLinkProperty(final String aType) {
-        myType = checkNotNull(aType);
+        myType = Objects.requireNonNull(aType);
     }
 
     /**
@@ -139,8 +136,8 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      * @param aID An ID
      * @return The resource whose ID is being set
      */
-    protected AbstractLinkProperty<T> setID(final URI aURI) {
-        myID = checkNotNull(aURI);
+    protected AbstractLinkProperty<T> setID(final URI aID) {
+        myID = Objects.requireNonNull(aID);
         return this;
     }
 
@@ -149,7 +146,7 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      *
      * @return An ID
      */
-    @JsonGetter(Constants.ID)
+    @JsonGetter(JsonKeys.ID)
     public URI getID() {
         return myID;
     }
@@ -161,7 +158,7 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      * @return The resource whose type is being set
      */
     protected AbstractLinkProperty<T> setType(final String aType) {
-        myType = checkNotNull(aType);
+        myType = Objects.requireNonNull(aType);
         return this;
     }
 
@@ -189,7 +186,7 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      *
      * @return An optional string format
      */
-    @JsonGetter(Constants.FORMAT)
+    @JsonGetter(JsonKeys.FORMAT)
     @JsonInclude(Include.NON_EMPTY)
     protected Optional<String> getFormat() {
         return myFormat != null ? Optional.of(myFormat.toString()) : Optional.empty();
@@ -202,7 +199,7 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      * @return The resource whose format is being set
      * @If the supplied string isn't a media type
      */
-    @JsonSetter(Constants.FORMAT)
+    @JsonSetter(JsonKeys.FORMAT)
     protected AbstractLinkProperty<T> setFormat(final String aFormat) {
         myFormat = MediaType.parse(aFormat);
         return this;
@@ -215,8 +212,8 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      * @return The resource whose format is being set
      */
     @JsonIgnore
-    protected AbstractLinkProperty<T> setFormat(final MediaType aMediaType) {
-        myFormat = checkNotNull(aMediaType);
+    protected AbstractLinkProperty<T> setFormat(final MediaType aFormat) {
+        myFormat = Objects.requireNonNull(aFormat);
         return this;
     }
 
@@ -253,7 +250,7 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      */
     @JsonIgnore
     protected AbstractLinkProperty<T> setProfile(final URI aProfile) {
-        myProfile = checkNotNull(aProfile);
+        myProfile = Objects.requireNonNull(aProfile);
         return this;
     }
 
@@ -262,7 +259,7 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      *
      * @return A descriptive label
      */
-    @JsonGetter(Constants.LABEL)
+    @JsonGetter(JsonKeys.LABEL)
     @JsonInclude(Include.NON_EMPTY)
     protected Label getNullableLabel() {
         return myLabel;
@@ -274,9 +271,9 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      * @param aLabel A descriptive label
      * @return The resource whose label is being set
      */
-    @JsonSetter(Constants.LABEL)
+    @JsonSetter(JsonKeys.LABEL)
     protected AbstractLinkProperty<T> setLabel(final Label aLabel) {
-        myLabel = checkNotNull(aLabel);
+        myLabel = Objects.requireNonNull(aLabel);
         return this;
     }
 
@@ -322,7 +319,7 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      *
      * @return A form of language ready to be serialized
      */
-    @JsonGetter(Constants.LANGUAGE)
+    @JsonGetter(JsonKeys.LANGUAGE)
     @JsonInclude(Include.NON_EMPTY)
     protected Object getLanguageProperty() {
         final List<String> languages = getLanguages();
@@ -341,7 +338,7 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      * @return This resource
      * @throws IllegalArgumentException If the object supplied is unsupported
      */
-    @JsonSetter(Constants.LANGUAGE)
+    @JsonSetter(JsonKeys.LANGUAGE)
     protected AbstractLinkProperty<T> setLanguageProperty(final Object aObject) {
         if (aObject instanceof String) {
             return (AbstractLinkProperty<T>) setLanguages((String) aObject);

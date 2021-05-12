@@ -9,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.net.MediaType;
 
+import info.freelibrary.util.warnings.Eclipse;
+
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 
@@ -45,7 +47,7 @@ public class Rendering extends AbstractLinkProperty<Rendering> {
     /**
      * Constructs the rendering for Jackson's deserialization process.
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings(Eclipse.UNUSED)
     private Rendering() {
         super();
     }

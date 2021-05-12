@@ -60,18 +60,18 @@
   <properties>
     <revision>0.0.0-SNAPSHOT</revision>
 
-    <jackson.version>2.12.0</jackson.version>
-    <jackson.databind.version>2.12.0</jackson.databind.version>
+    <jackson.version>2.12.3</jackson.version>
+    <jackson.databind.version>2.12.3</jackson.databind.version>
     <guava.version>30.1-jre</guava.version>
-    <freelib.utils.version>2.1.0</freelib.utils.version>
+    <freelib.utils.version>2.4.0</freelib.utils.version>
     <jsoup.version>1.13.1</jsoup.version>
-    <vertx.version>3.9.4</vertx.version>
+    <vertx.version>3.9.7</vertx.version>
     <combinatorics.version>3.3.0</combinatorics.version>
     <media-fragments-uri.version>2.4</media-fragments-uri.version>
 
     <!-- Plugin related versions -->
     <maven.jar.plugin.version>3.2.0</maven.jar.plugin.version>
-    <freelib.maven.version>0.1.2</freelib.maven.version>
+    <freelib.maven.version>0.1.3</freelib.maven.version>
 
     <!-- Test related versions -->
     <opencsv.version>4.6</opencsv.version>
@@ -79,6 +79,9 @@
 
     <!-- A property used by the build process -->
     <tag.prefix>v3</tag.prefix>
+
+    <!-- The log level to use when testing -->
+    <testLogLevel>WARN</testLogLevel>
   </properties>
 
   <dependencies>
@@ -160,6 +163,21 @@
   </dependencies>
 
   <build>
+    <testResources>
+      <testResource>
+        <directory>src/test/resources</directory>
+        <filtering>true</filtering>
+      </testResource>
+
+      <!-- We can also override the default logging configuration with a file in our root project directory -->
+      <testResource>
+        <directory>${basedir}</directory>
+        <includes>
+          <include>logback-test.xml</include>
+        </includes>
+        <filtering>true</filtering>
+      </testResource>
+    </testResources>
     <plugins>
       <!-- Generate our MessageCodes class from the messages resource file -->
       <plugin>
@@ -180,6 +198,7 @@
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
+          <stylesheetfile>stylesheet.css</stylesheetfile>
           <links>
             <link>https://google.github.io/guava/releases/23.0/api/docs/</link>
             <link>https://vertx.io/docs/apidocs/</link>
@@ -241,7 +260,7 @@
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>6.8.1</version>
+    <version>6.9.2</version>
   </parent>
 
 </project>

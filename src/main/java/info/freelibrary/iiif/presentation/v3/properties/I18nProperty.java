@@ -35,7 +35,6 @@ class I18nProperty<T extends I18nProperty<T>> {
     /**
      * Creates a property from an array of internationalizations.
      *
-     * @param aName A name of the property
      * @param aI18nArray An array of internationalizations for the property
      */
     I18nProperty(final I18n... aI18nArray) {
@@ -46,7 +45,6 @@ class I18nProperty<T extends I18nProperty<T>> {
     /**
      * Creates a property from an array of string(s).
      *
-     * @param aName A name of the property
      * @param aStringArray An array of strings for the property
      */
     I18nProperty(final String... aStringArray) {

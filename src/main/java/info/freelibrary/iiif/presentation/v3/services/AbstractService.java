@@ -1,12 +1,11 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -14,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
  * An abstract service class that specific services can extend.
@@ -44,7 +43,7 @@ public abstract class AbstractService implements Service {
     }
 
     @Override
-    @JsonGetter(Constants.ID)
+    @JsonGetter(JsonKeys.ID)
     public URI getID() {
         return myID;
     }
@@ -57,18 +56,18 @@ public abstract class AbstractService implements Service {
     }
 
     @Override
-    @JsonSetter(Constants.ID)
+    @JsonSetter(JsonKeys.ID)
     public Service setID(final String aID) {
         return setID(URI.create(aID));
     }
 
     @Override
-    @JsonSetter(Constants.SERVICE)
+    @JsonSetter(JsonKeys.SERVICE)
     public Service setServices(final List<Service> aServiceList) {
         if (!aServiceList.isEmpty()) {
             final List<Service> services = getServices();
 
-            checkNotNull(aServiceList);
+            Objects.requireNonNull(aServiceList);
             services.clear();
             services.addAll(aServiceList);
         }
@@ -83,7 +82,7 @@ public abstract class AbstractService implements Service {
     }
 
     @Override
-    @JsonGetter(Constants.SERVICE)
+    @JsonGetter(JsonKeys.SERVICE)
     @JsonInclude(Include.NON_EMPTY)
     public List<Service> getServices() {
         if (myServices == null) {
@@ -94,7 +93,7 @@ public abstract class AbstractService implements Service {
     }
 
     @Override
-    @JsonGetter(Constants.TYPE)
+    @JsonGetter(JsonKeys.TYPE)
     public String getType() {
         return myType != null ? myType : getClass().getSimpleName();
     }
@@ -105,7 +104,7 @@ public abstract class AbstractService implements Service {
      * @param aType A service type
      * @return This service
      */
-    @JsonSetter(Constants.TYPE)
+    @JsonSetter(JsonKeys.TYPE)
     protected Service setType(final String aType) {
         myType = aType;
         return this;

@@ -11,13 +11,13 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * A metadata property with a label and value.
  */
-@JsonPropertyOrder({ Constants.LABEL, Constants.VALUE })
+@JsonPropertyOrder({ JsonKeys.LABEL, JsonKeys.VALUE })
 public class Metadata {
 
     /**
@@ -71,7 +71,7 @@ public class Metadata {
      *
      * @return The label for the metadata property
      */
-    @JsonGetter(Constants.LABEL)
+    @JsonGetter(JsonKeys.LABEL)
     public Label getLabel() {
         return myLabel;
     }
@@ -82,7 +82,7 @@ public class Metadata {
      * @param aLabel A label
      * @return This metadata property
      */
-    @JsonSetter(Constants.LABEL)
+    @JsonSetter(JsonKeys.LABEL)
     public Metadata setLabel(final Label aLabel) {
         Objects.requireNonNull(aLabel, LOGGER.getMessage(MessageCodes.JPA_002));
         myLabel = aLabel;
@@ -106,7 +106,7 @@ public class Metadata {
      *
      * @return The metadata property's value
      */
-    @JsonGetter(Constants.VALUE)
+    @JsonGetter(JsonKeys.VALUE)
     public Value getValue() {
         return myValue;
     }
@@ -117,7 +117,7 @@ public class Metadata {
      * @param aValue A value
      * @return This metadata property
      */
-    @JsonSetter(Constants.VALUE)
+    @JsonSetter(JsonKeys.VALUE)
     public Metadata setValue(final Value aValue) {
         Objects.requireNonNull(aValue, LOGGER.getMessage(MessageCodes.JPA_022));
         myValue = aValue;

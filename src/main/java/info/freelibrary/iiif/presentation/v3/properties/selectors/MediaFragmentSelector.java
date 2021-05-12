@@ -19,7 +19,7 @@ import com.github.tkurz.media.fragments.temporal.TemporalFragment;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.iiif.presentation.v3.utils.URIs;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
@@ -273,7 +273,7 @@ public class MediaFragmentSelector implements FragmentSelector {
 
     @Override
     public URI getConformsTo() {
-        return Constants.MEDIA_FRAGMENT_SPECIFICATION_URI;
+        return URIs.MEDIA_FRAGMENT_SPECIFICATION_URI;
     }
 
     /**

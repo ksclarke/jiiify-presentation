@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3.id;
+package info.freelibrary.iiif.presentation.v3.ids;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -19,6 +19,7 @@ import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.Stopwatch;
 import info.freelibrary.util.StringUtils;
+import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.AnnotationPage;
@@ -367,7 +368,7 @@ class DefaultMinter implements Minter {
         }
 
         @Override
-        @SuppressWarnings("PMD.AvoidDeeplyNestedIfStmts")
+        @SuppressWarnings(PMD.AVOID_DEEPLY_NESTED_IF_STMTS)
         public String next() {
             if (hasNext()) {
                 final String noid = NOIDS.get(myIndex);
@@ -381,7 +382,7 @@ class DefaultMinter implements Minter {
                         myIndex = ++myIteration + myStart;
 
                         // Loop around to get the remaining ones from the start of the array
-                        if (myIndex >= mySkipCount + myStart) {
+                        if (myIndex >= mySkipCount + myStart) { // NOPMD
                             mySkipCount = 1;
                             myIndex = 0;
                         }

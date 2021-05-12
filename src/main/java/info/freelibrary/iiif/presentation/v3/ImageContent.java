@@ -24,17 +24,18 @@ import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.services.Service;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 
 /**
- * Image content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
+ * Image content that can be associated with an annotation or set as a thumbnail.
  */
-@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.LABEL, Constants.THUMBNAIL, Constants.FORMAT,
-    Constants.HEIGHT, Constants.WIDTH, Constants.LANGUAGE, Constants.SERVICE })
+@JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.HEIGHT,
+    JsonKeys.WIDTH, JsonKeys.LANGUAGE, JsonKeys.SERVICE })
 public class ImageContent extends AbstractContentResource<ImageContent>
-        implements Thumbnail, Resource<ImageContent>, SpatialContentResource<ImageContent> {
+        implements AnnotationBody<ImageContent>, ContentResource<ImageContent>, SpatialContentResource<ImageContent> {
 
     /**
      * The image content's width.
@@ -74,7 +75,7 @@ public class ImageContent extends AbstractContentResource<ImageContent>
     }
 
     @Override
-    @JsonSetter(Constants.PROVIDER)
+    @JsonSetter(JsonKeys.PROVIDER)
     public ImageContent setProviders(final Provider... aProviderArray) {
         return setProviders(Arrays.asList(aProviderArray));
     }
@@ -91,7 +92,7 @@ public class ImageContent extends AbstractContentResource<ImageContent>
     }
 
     @Override
-    @JsonSetter(Constants.BEHAVIOR)
+    @JsonSetter(JsonKeys.BEHAVIOR)
     public ImageContent setBehaviors(final Behavior... aBehaviorArray) {
         return (ImageContent) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorArray));
     }
@@ -162,12 +163,12 @@ public class ImageContent extends AbstractContentResource<ImageContent>
     }
 
     @Override
-    public ImageContent setThumbnails(final Thumbnail... aThumbnailArray) {
+    public ImageContent setThumbnails(final ContentResource<?>... aThumbnailArray) {
         return (ImageContent) super.setThumbnails(aThumbnailArray);
     }
 
     @Override
-    public ImageContent setThumbnails(final List<Thumbnail> aThumbnailList) {
+    public ImageContent setThumbnails(final List<ContentResource<?>> aThumbnailList) {
         return (ImageContent) super.setThumbnails(aThumbnailList);
     }
 
@@ -248,7 +249,7 @@ public class ImageContent extends AbstractContentResource<ImageContent>
      * @return The image's width
      */
     @Override
-    @JsonGetter(Constants.WIDTH)
+    @JsonGetter(JsonKeys.WIDTH)
     @JsonInclude(Include.NON_DEFAULT)
     public int getWidth() {
         return myWidth;
@@ -260,7 +261,7 @@ public class ImageContent extends AbstractContentResource<ImageContent>
      * @return The image's height
      */
     @Override
-    @JsonGetter(Constants.HEIGHT)
+    @JsonGetter(JsonKeys.HEIGHT)
     @JsonInclude(Include.NON_DEFAULT)
     public int getHeight() {
         return myHeight;
@@ -292,7 +293,7 @@ public class ImageContent extends AbstractContentResource<ImageContent>
      * @param aWidth The image's width
      * @return The image
      */
-    @JsonSetter(Constants.WIDTH)
+    @JsonSetter(JsonKeys.WIDTH)
     private ImageContent setWidth(final int aWidth) {
         myWidth = aWidth;
         return this;
@@ -304,9 +305,10 @@ public class ImageContent extends AbstractContentResource<ImageContent>
      * @param aHeight The image's height
      * @return The image
      */
-    @JsonSetter(Constants.HEIGHT)
+    @JsonSetter(JsonKeys.HEIGHT)
     private ImageContent setHeight(final int aHeight) {
         myHeight = aHeight;
         return this;
     }
+
 }

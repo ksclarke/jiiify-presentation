@@ -4,7 +4,7 @@ package info.freelibrary.iiif.presentation.v3.properties;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
  * A human readable internationalized value.
@@ -51,7 +51,7 @@ public class Value extends I18nProperty<Value> {
     }
 
     @Override
-    @JsonGetter(Constants.VALUE)
+    @JsonGetter(JsonKeys.VALUE)
     protected Object toMap() {
         return super.toMap();
     }

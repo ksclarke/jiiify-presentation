@@ -46,10 +46,10 @@ public class Manifestor {
     }
 
     /**
-     * Reads a JSON collection manifest file into a COLLECTION object.
+     * Reads a JSON collection manifest file into a Collection object.
      *
      * @param aJsonFile A JSON collection manifest file
-     * @return A COLLECTION object
+     * @return A Collection object
      */
     public Collection readCollection(final File aJsonFile) {
         return Collection.fromJSON(myVertx.fileSystem().readFileBlocking(aJsonFile.getAbsolutePath()).toJsonObject());
@@ -75,7 +75,7 @@ public class Manifestor {
      * Reads a collection manifest JSON file using the supplied promise.
      *
      * @param aJsonFile A JSON collection manifest file
-     * @param aPromise A COLLECTION object
+     * @param aPromise A Collection object
      */
     public void readCollection(final File aJsonFile, final Promise<Collection> aPromise) {
         myVertx.fileSystem().readFile(aJsonFile.getAbsolutePath(), read -> {

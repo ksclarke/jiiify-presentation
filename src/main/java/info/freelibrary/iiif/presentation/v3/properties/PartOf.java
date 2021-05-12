@@ -7,13 +7,15 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import info.freelibrary.util.warnings.Eclipse;
+
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 
 /**
  * A containing resource that includes the resource that has the <code>partOf</code> property. For example, the
  * <code>partOf</code> property on a Canvas can be used to reference an external Manifest in order to enable the
- * discovery of further relevant information. Similarly, a Manifest can reference a containing COLLECTION using
+ * discovery of further relevant information. Similarly, a Manifest can reference a containing Collection using
  * <code>partOf</code> to aid in navigation.
  */
 public class PartOf extends AbstractLinkProperty<PartOf> {
@@ -41,7 +43,7 @@ public class PartOf extends AbstractLinkProperty<PartOf> {
     /**
      * Creates a new partOf for Jackson's deserialization.
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings(Eclipse.UNUSED)
     private PartOf() {
         super();
     }

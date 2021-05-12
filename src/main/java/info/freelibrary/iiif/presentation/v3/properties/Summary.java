@@ -4,12 +4,12 @@ package info.freelibrary.iiif.presentation.v3.properties;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
- * A short textual summary intended to be conveyed to the user when the metadata entries for the resource are not
- * being displayed. This could be used as a brief description for item level search results, for small-screen
- * environments, or as an alternative user interface when the metadata property is not currently being rendered.
+ * A short textual summary intended to be conveyed to the user when the metadata entries for the resource are not being
+ * displayed. This could be used as a brief description for item level search results, for small-screen environments, or
+ * as an alternative user interface when the metadata property is not currently being rendered.
  */
 @JsonDeserialize(using = SummaryDeserializer.class)
 public class Summary extends I18nProperty<Summary> {
@@ -53,7 +53,7 @@ public class Summary extends I18nProperty<Summary> {
     }
 
     @Override
-    @JsonGetter(Constants.SUMMARY)
+    @JsonGetter(JsonKeys.SUMMARY)
     protected Object toMap() {
         return super.toMap();
     }

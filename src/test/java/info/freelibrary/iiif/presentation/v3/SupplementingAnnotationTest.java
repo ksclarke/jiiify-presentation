@@ -197,7 +197,7 @@ public class SupplementingAnnotationTest extends AbstractTest {
     public final void testSerialization() throws IOException {
         final TextContent content = new TextContent(myTextContentID);
         final SupplementingAnnotation annotation =
-                new SupplementingAnnotation(myAnnoID, myCanvas).setBody(content).setTarget(myCanvasID);
+                new SupplementingAnnotation(myAnnoID, myCanvas).setBodies(content).setTarget(myCanvasID);
         final JsonObject expected = new JsonObject(StringUtils.read(ANNOTATION));
         final JsonObject found = new JsonObject(TestUtils.toJson(annotation));
 

@@ -1,13 +1,12 @@
 
-package info.freelibrary.iiif.presentation.v3;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+package info.freelibrary.iiif.presentation.v3; // NOPMD
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -21,6 +20,7 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
@@ -32,10 +32,10 @@ import info.freelibrary.iiif.presentation.v3.properties.Rendering;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
-import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorsDeserializer;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.DisjointChecker;
 import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.services.ServiceDeserializer;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 import io.vertx.core.json.jackson.DatabindCodec;
@@ -43,14 +43,13 @@ import io.vertx.core.json.jackson.DatabindCodec;
 /**
  * A resource that can be used as a base for more specific IIIF presentation resources.
  */
-@SuppressWarnings({ "PMD.ExcessiveImports", "PMD.AbstractClassWithoutAbstractMethod" })
+@SuppressWarnings({ PMD.EXCESSIVE_IMPORTS, PMD.ABSTRACT_CLASS_WITHOUT_ABSTRACT_METHOD, PMD.GOD_CLASS })
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-@JsonPropertyOrder({ Constants.CONTEXT, Constants.ID, Constants.TYPE, Constants.LABEL, Constants.PROVIDER,
-    Constants.PART_OF, Constants.BEHAVIOR, Constants.HOMEPAGE, Constants.THUMBNAIL, Constants.SUMMARY,
-    Constants.METADATA, Constants.START, Constants.RIGHTS, Constants.REQUIRED_STATEMENT, Constants.VIEWING_DIRECTION,
-    Constants.RENDERING, Constants.SEE_ALSO, Constants.ITEMS, Constants.SERVICE, Constants.STRUCTURES,
-    Constants.SERVICES, Constants.NAV_DATE, Constants.ANNOTATIONS })
-abstract class AbstractResource<T extends AbstractResource<T>> {
+@JsonPropertyOrder({ JsonKeys.CONTEXT, JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.PROVIDER, JsonKeys.PART_OF,
+    JsonKeys.BEHAVIOR, JsonKeys.HOMEPAGE, JsonKeys.THUMBNAIL, JsonKeys.SUMMARY, JsonKeys.METADATA, JsonKeys.START,
+    JsonKeys.RIGHTS, JsonKeys.REQUIRED_STATEMENT, JsonKeys.VIEWING_DIRECTION, JsonKeys.RENDERING, JsonKeys.SEE_ALSO,
+    JsonKeys.ITEMS, JsonKeys.SERVICE, JsonKeys.STRUCTURES, JsonKeys.SERVICES, JsonKeys.NAV_DATE, JsonKeys.ANNOTATIONS })
+abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
 
     /**
      * The logger used by abstract resources.
@@ -67,13 +66,13 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
     /**
      * The resource type.
      */
-    @JsonProperty(Constants.TYPE)
+    @JsonProperty(JsonKeys.TYPE)
     protected String myType;
 
     /**
      * The resource ID.
      */
-    @JsonProperty(Constants.ID)
+    @JsonProperty(JsonKeys.ID)
     private URI myID;
 
     /**
@@ -104,9 +103,9 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
     /**
      * The resource's thumbnails.
      */
-    @JsonProperty(Constants.THUMBNAIL)
-    @JsonDeserialize(contentUsing = ThumbnailDeserializer.class)
-    private List<Thumbnail> myThumbnails;
+    @JsonProperty(JsonKeys.THUMBNAIL)
+    @JsonDeserialize(contentUsing = ContentResourceDeserializer.class)
+    private List<ContentResource<?>> myThumbnails;
 
     /**
      * The resource's requiredStatement.
@@ -131,7 +130,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
     /**
      * The resource's behaviors.
      */
-    @JsonProperty(Constants.BEHAVIOR)
+    @JsonProperty(JsonKeys.BEHAVIOR)
     @JsonDeserialize(using = BehaviorsDeserializer.class)
     private List<Behavior> myBehaviors;
 
@@ -152,7 +151,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @param aType A resource type
      */
     protected AbstractResource(final String aType) {
-        myType = checkNotNull(aType);
+        myType = Objects.requireNonNull(aType);
     }
 
     /**
@@ -162,7 +161,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @param aID A URI ID in string form
      */
     protected AbstractResource(final String aType, final String aID) {
-        myType = checkNotNull(aType);
+        myType = Objects.requireNonNull(aType);
         myID = URI.create(aID);
     }
 
@@ -173,8 +172,8 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @param aID A URI ID
      */
     protected AbstractResource(final String aType, final URI aID) {
-        myType = checkNotNull(aType);
-        myID = checkNotNull(aID);
+        myType = Objects.requireNonNull(aType);
+        myID = Objects.requireNonNull(aID);
     }
 
     /**
@@ -185,7 +184,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @param aLabel A label in string form
      */
     protected AbstractResource(final String aType, final String aID, final String aLabel) {
-        myType = checkNotNull(aType);
+        myType = Objects.requireNonNull(aType);
         myID = URI.create(aID);
         myLabel = new Label(aLabel);
     }
@@ -198,9 +197,9 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @param aLabel A label for the resource
      */
     protected AbstractResource(final String aType, final URI aID, final Label aLabel) {
-        myType = checkNotNull(aType);
-        myID = checkNotNull(aID);
-        myLabel = checkNotNull(aLabel);
+        myType = Objects.requireNonNull(aType);
+        myID = Objects.requireNonNull(aID);
+        myLabel = Objects.requireNonNull(aLabel);
     }
 
     /**
@@ -215,7 +214,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @param aProvider A resource provider
      */
     protected AbstractResource(final String aType, final String aID, final String aLabel,
-            final List<Metadata> aMetadataList, final String aSummary, final Thumbnail aThumbnail,
+            final List<Metadata> aMetadataList, final String aSummary, final ContentResource<?> aThumbnail,
             final Provider aProvider) {
         this(aType, URI.create(aID), new Label(aLabel), aMetadataList, new Summary(aSummary), aThumbnail, aProvider);
     }
@@ -232,16 +231,16 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @param aProvider A resource provider
      */
     protected AbstractResource(final String aType, final URI aID, final Label aLabel,
-            final List<Metadata> aMetadataList, final Summary aSummary, final Thumbnail aThumbnail,
+            final List<Metadata> aMetadataList, final Summary aSummary, final ContentResource<?> aThumbnail,
             final Provider aProvider) {
-        myType = checkNotNull(aType);
-        myID = checkNotNull(aID);
-        myLabel = checkNotNull(aLabel);
-        myMetadata = checkNotNull(aMetadataList);
-        mySummary = checkNotNull(aSummary);
+        myType = Objects.requireNonNull(aType);
+        myID = Objects.requireNonNull(aID);
+        myLabel = Objects.requireNonNull(aLabel);
+        myMetadata = Objects.requireNonNull(aMetadataList);
+        mySummary = Objects.requireNonNull(aSummary);
 
-        setResourceThumbnails(Arrays.asList(checkNotNull(aThumbnail)));
-        setResourceProviders(Arrays.asList(checkNotNull(aProvider)));
+        setResourceThumbnails(Arrays.asList(Objects.requireNonNull(aThumbnail)));
+        setResourceProviders(Arrays.asList(Objects.requireNonNull(aProvider)));
     }
 
     /**
@@ -272,9 +271,9 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @param aLabel A label to assign to the resource
      * @return The resource
      */
-    @JsonSetter(Constants.LABEL)
+    @JsonSetter(JsonKeys.LABEL)
     protected AbstractResource<T> setLabel(final Label aLabel) {
-        checkNotNull(aLabel);
+        Objects.requireNonNull(aLabel);
         myLabel = aLabel;
         return this;
     }
@@ -284,7 +283,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      *
      * @return The metadata
      */
-    @JsonGetter(Constants.METADATA)
+    @JsonGetter(JsonKeys.METADATA)
     public List<Metadata> getMetadata() {
         if (myMetadata == null) {
             myMetadata = new ArrayList<>();
@@ -299,7 +298,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @param aMetadataArray The metadata to associate with the resource
      * @return The resource
      */
-    @JsonSetter(Constants.METADATA)
+    @JsonSetter(JsonKeys.METADATA)
     protected AbstractResource<T> setMetadata(final Metadata... aMetadataArray) {
         return setMetadata(Arrays.asList(aMetadataArray));
     }
@@ -314,7 +313,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
     protected AbstractResource<T> setMetadata(final List<Metadata> aMetadataList) {
         final List<Metadata> metadata = getMetadata();
 
-        checkNotNull(aMetadataList);
+        Objects.requireNonNull(aMetadataList);
         metadata.clear();
         metadata.addAll(aMetadataList);
 
@@ -350,7 +349,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @return The resource
      */
     protected AbstractResource<T> setSummary(final Summary aSummary) {
-        checkNotNull(aSummary);
+        Objects.requireNonNull(aSummary);
         mySummary = aSummary;
         return this;
     }
@@ -360,8 +359,8 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      *
      * @return The resource's thumbnails
      */
-    @JsonGetter(Constants.THUMBNAIL)
-    public List<Thumbnail> getThumbnails() {
+    @JsonGetter(JsonKeys.THUMBNAIL)
+    public List<ContentResource<?>> getThumbnails() {
         return getResourceThumbnails();
     }
 
@@ -371,8 +370,8 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @param aThumbnailArray A thumbnails array
      * @return The resource
      */
-    @JsonSetter(Constants.THUMBNAIL)
-    protected AbstractResource<T> setThumbnails(final Thumbnail... aThumbnailArray) {
+    @JsonSetter(JsonKeys.THUMBNAIL)
+    protected AbstractResource<T> setThumbnails(final ContentResource<?>... aThumbnailArray) {
         return setResourceThumbnails(Arrays.asList(aThumbnailArray));
     }
 
@@ -383,7 +382,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @return The resource
      */
     @JsonIgnore
-    protected AbstractResource<T> setThumbnails(final List<Thumbnail> aThumbnailList) {
+    protected AbstractResource<T> setThumbnails(final List<ContentResource<?>> aThumbnailList) {
         return setResourceThumbnails(aThumbnailList);
     }
 
@@ -392,7 +391,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      *
      * @return The required statement
      */
-    @JsonGetter(Constants.REQUIRED_STATEMENT)
+    @JsonGetter(JsonKeys.REQUIRED_STATEMENT)
     public RequiredStatement getRequiredStatement() {
         return myRequiredStatement;
     }
@@ -403,7 +402,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @param aStatement A required statement
      * @return The resource
      */
-    @JsonSetter(Constants.REQUIRED_STATEMENT)
+    @JsonSetter(JsonKeys.REQUIRED_STATEMENT)
     protected AbstractResource<T> setRequiredStatement(final RequiredStatement aStatement) {
         myRequiredStatement = aStatement;
         return this;
@@ -427,7 +426,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      */
     @JsonProperty
     protected AbstractResource<T> setRights(final URI aRights) {
-        checkNotNull(aRights);
+        Objects.requireNonNull(aRights);
         myRights = aRights;
         return this;
     }
@@ -449,7 +448,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @param aHomepageArray An array of homepages
      * @return The resource
      */
-    @JsonSetter(Constants.HOMEPAGE)
+    @JsonSetter(JsonKeys.HOMEPAGE)
     protected AbstractResource<T> setHomepages(final Homepage... aHomepageArray) {
         return setHomepages(Arrays.asList(aHomepageArray));
     }
@@ -464,7 +463,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
     protected AbstractResource<T> setHomepages(final List<Homepage> aHomepageList) {
         final List<Homepage> homepages = getHomepages();
 
-        checkNotNull(aHomepageList);
+        Objects.requireNonNull(aHomepageList);
         homepages.clear();
         homepages.addAll(aHomepageList);
 
@@ -476,7 +475,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      *
      * @return The resource's homepages
      */
-    @JsonGetter(Constants.HOMEPAGE)
+    @JsonGetter(JsonKeys.HOMEPAGE)
     public List<Homepage> getHomepages() {
         if (myHomepages == null) {
             myHomepages = new ArrayList<>();
@@ -491,7 +490,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @param aProviderArray An array of providers
      * @return The resource
      */
-    @JsonSetter(Constants.PROVIDER)
+    @JsonSetter(JsonKeys.PROVIDER)
     protected AbstractResource<T> setProviders(final Provider... aProviderArray) {
         return setProviders(Arrays.asList(aProviderArray));
     }
@@ -512,7 +511,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      *
      * @return The resource's providers
      */
-    @JsonGetter(Constants.PROVIDER)
+    @JsonGetter(JsonKeys.PROVIDER)
     public List<Provider> getProviders() {
         return getResourceProviders();
     }
@@ -523,7 +522,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @param aRenderingArray An array of renderings
      * @return The resource
      */
-    @JsonSetter(Constants.RENDERING)
+    @JsonSetter(JsonKeys.RENDERING)
     protected AbstractResource<T> setRenderings(final Rendering... aRenderingArray) {
         return setRenderings(Arrays.asList(aRenderingArray));
     }
@@ -538,7 +537,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
     protected AbstractResource<T> setRenderings(final List<Rendering> aRenderingList) {
         final List<Rendering> renderings = getRenderings();
 
-        checkNotNull(renderings);
+        Objects.requireNonNull(renderings);
         renderings.clear();
         renderings.addAll(aRenderingList);
 
@@ -550,7 +549,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      *
      * @return The resource's renderings
      */
-    @JsonGetter(Constants.RENDERING)
+    @JsonGetter(JsonKeys.RENDERING)
     public List<Rendering> getRenderings() {
         if (myRenderings == null) {
             myRenderings = new ArrayList<>();
@@ -564,7 +563,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      *
      * @return The ID
      */
-    @JsonGetter(Constants.ID)
+    @JsonGetter(JsonKeys.ID)
     public URI getID() {
         return myID;
     }
@@ -589,7 +588,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      */
     @JsonIgnore
     protected AbstractResource<T> setID(final URI aID) {
-        checkNotNull(aID);
+        Objects.requireNonNull(aID);
         myID = aID;
         return this;
     }
@@ -600,7 +599,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @param aPartOfArray An array of partOfs
      * @return The resource
      */
-    @JsonSetter(Constants.PART_OF)
+    @JsonSetter(JsonKeys.PART_OF)
     protected AbstractResource<T> setPartOfs(final PartOf... aPartOfArray) {
         return setPartOfs(Arrays.asList(aPartOfArray));
     }
@@ -615,7 +614,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
     protected AbstractResource<T> setPartOfs(final List<PartOf> aPartOfList) {
         final List<PartOf> partOfs = getPartOfs();
 
-        checkNotNull(aPartOfList);
+        Objects.requireNonNull(aPartOfList);
         partOfs.clear();
         partOfs.addAll(aPartOfList);
 
@@ -627,7 +626,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      *
      * @return The resource's partOfs
      */
-    @JsonGetter(Constants.PART_OF)
+    @JsonGetter(JsonKeys.PART_OF)
     public List<PartOf> getPartOfs() {
         if (myPartOfs == null) {
             myPartOfs = new ArrayList<>();
@@ -641,7 +640,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      *
      * @return The type
      */
-    @JsonGetter(Constants.TYPE)
+    @JsonGetter(JsonKeys.TYPE)
     public String getType() {
         return myType;
     }
@@ -656,7 +655,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
     protected AbstractResource<T> setBehaviors(final Behavior... aBehaviorArray) {
         final List<Behavior> behaviors = getBehaviorsList();
 
-        checkNotNull(aBehaviorArray);
+        Objects.requireNonNull(aBehaviorArray);
         behaviors.clear();
         behaviors.addAll(Arrays.asList(aBehaviorArray));
 
@@ -669,7 +668,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @param aBehaviorList A list of behaviors
      * @return The resource
      */
-    @JsonSetter(Constants.BEHAVIOR)
+    @JsonSetter(JsonKeys.BEHAVIOR)
     protected AbstractResource<T> setBehaviors(final List<Behavior> aBehaviorList) {
         // We implement this so it can be overridden, but it should never actually be called because all behavior
         // setting should go through checkBehaviors() first, which returns an array for setBehaviors(Behavior...)
@@ -681,7 +680,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      *
      * @return The resource's behaviors
      */
-    @JsonGetter(Constants.BEHAVIOR)
+    @JsonGetter(JsonKeys.BEHAVIOR)
     public List<Behavior> getBehaviors() {
         return Collections.unmodifiableList(getBehaviorsList());
     }
@@ -724,7 +723,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      *
      * @return The see also reference(s)
      */
-    @JsonGetter(Constants.SEE_ALSO)
+    @JsonGetter(JsonKeys.SEE_ALSO)
     public List<SeeAlso> getSeeAlsoRefs() {
         if (mySeeAlsoRefs == null) {
             mySeeAlsoRefs = new ArrayList<>();
@@ -751,7 +750,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @param aSeeAlsoList A list of seeAlso references
      * @return The resource
      */
-    @JsonSetter(Constants.SEE_ALSO)
+    @JsonSetter(JsonKeys.SEE_ALSO)
     protected AbstractResource<T> setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
         getSeeAlsoRefs().addAll(aSeeAlsoList);
         return this;
@@ -762,7 +761,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      *
      * @return The resource's services
      */
-    @JsonGetter(Constants.SERVICE)
+    @JsonGetter(JsonKeys.SERVICE)
     public List<Service> getServices() {
         if (myServices == null) {
             myServices = new ArrayList<>();
@@ -788,11 +787,11 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @param aServiceList A list of services
      * @return The resource
      */
-    @JsonSetter(Constants.SERVICE)
+    @JsonSetter(JsonKeys.SERVICE)
     protected AbstractResource<T> setServices(final List<Service> aServiceList) {
         final List<Service> services = getServices();
 
-        checkNotNull(aServiceList);
+        Objects.requireNonNull(aServiceList);
         services.clear();
         services.addAll(aServiceList);
 
@@ -805,6 +804,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @param aClass A class that implements Behavior
      * @param aCleanComparison If the comparison does not check pre-existing behaviors
      * @param aBehaviorList A list of behaviors
+     * @return The checked and valid behaviors
      */
     protected Behavior[] checkBehaviors(final Class<?> aClass, final boolean aCleanComparison,
             final List<Behavior> aBehaviorList) {
@@ -817,6 +817,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @param aClass A class that implements Behavior
      * @param aCleanComparison If the comparison does not check pre-existing behaviors
      * @param aBehaviorArray An array of behaviors
+     * @return The checked and valid behaviors
      */
     protected Behavior[] checkBehaviors(final Class<?> aClass, final boolean aCleanComparison,
             final Behavior... aBehaviorArray) {
@@ -864,7 +865,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @return The resource's thumbnails
      */
     @JsonIgnore
-    private List<Thumbnail> getResourceThumbnails() {
+    private List<ContentResource<?>> getResourceThumbnails() {
         if (myThumbnails == null) {
             myThumbnails = new ArrayList<>();
         }
@@ -879,10 +880,10 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * @return This resource
      */
     @JsonIgnore
-    private AbstractResource<T> setResourceThumbnails(final List<Thumbnail> aThumbnailList) {
-        final List<Thumbnail> thumbnails = getResourceThumbnails();
+    private AbstractResource<T> setResourceThumbnails(final List<ContentResource<?>> aThumbnailList) {
+        final List<ContentResource<?>> thumbnails = getResourceThumbnails();
 
-        checkNotNull(aThumbnailList);
+        Objects.requireNonNull(aThumbnailList);
         thumbnails.clear();
         thumbnails.addAll(aThumbnailList);
 
@@ -913,7 +914,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
     private AbstractResource<T> setResourceProviders(final List<Provider> aProviderList) {
         final List<Provider> providers = getResourceProviders();
 
-        checkNotNull(aProviderList);
+        Objects.requireNonNull(aProviderList);
         providers.clear();
         providers.addAll(aProviderList);
 

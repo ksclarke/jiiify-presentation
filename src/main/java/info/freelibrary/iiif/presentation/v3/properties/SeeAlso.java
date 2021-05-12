@@ -11,8 +11,10 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.google.common.net.MediaType;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.util.warnings.Eclipse;
+
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
@@ -50,7 +52,7 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
     /**
      * Constructs the see also reference for Jackson's deserialization process.
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings(Eclipse.UNUSED)
     private SeeAlso() {
         super();
     }
@@ -61,7 +63,7 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
      * @param aID An ID in string form
      * @return The resource whose ID is being set
      */
-    @JsonSetter(Constants.ID)
+    @JsonSetter(JsonKeys.ID)
     public SeeAlso setID(final String aID) {
         return (SeeAlso) super.setID(URI.create(aID));
     }
@@ -73,7 +75,7 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
     }
 
     @Override
-    @JsonSetter(Constants.TYPE)
+    @JsonSetter(JsonKeys.TYPE)
     public SeeAlso setType(final String aType) {
         return (SeeAlso) super.setType(aType);
     }
@@ -85,14 +87,14 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
     }
 
     @Override
-    @JsonGetter(Constants.FORMAT)
+    @JsonGetter(JsonKeys.FORMAT)
     @JsonInclude(Include.NON_EMPTY)
     public Optional<String> getFormat() {
         return super.getFormat();
     }
 
     @Override
-    @JsonSetter(Constants.FORMAT)
+    @JsonSetter(JsonKeys.FORMAT)
     public SeeAlso setFormat(final String aFormat) {
         return (SeeAlso) super.setFormat(aFormat);
     }
@@ -121,7 +123,7 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
      * @param aProfile A profile in string form
      * @return The resource whose profile is being set
      */
-    @JsonSetter(Constants.PROFILE)
+    @JsonSetter(JsonKeys.PROFILE)
     public SeeAlso setProfile(final String aProfile) {
         return (SeeAlso) super.setProfile(URI.create(aProfile));
     }
@@ -131,13 +133,13 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
      *
      * @return An optional descriptive label
      */
-    @JsonGetter(Constants.LABEL)
+    @JsonGetter(JsonKeys.LABEL)
     public Optional<Label> getLabel() {
         return Optional.ofNullable(super.getNullableLabel());
     }
 
     @Override
-    @JsonSetter(Constants.LABEL)
+    @JsonSetter(JsonKeys.LABEL)
     public SeeAlso setLabel(final Label aLabel) {
         return (SeeAlso) super.setLabel(aLabel);
     }
@@ -174,7 +176,7 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
      *
      * @return The SeeAlso's profile URI as a string
      */
-    @JsonGetter(Constants.PROFILE)
+    @JsonGetter(JsonKeys.PROFILE)
     @JsonInclude(Include.NON_NULL)
     private String getProfileAsString() {
         final Optional<URI> profile = super.getProfile();

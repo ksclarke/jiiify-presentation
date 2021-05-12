@@ -16,13 +16,13 @@ import info.freelibrary.util.FileUtils;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * A generic service class for other service implementations.
  */
-@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.PROFILE, Constants.FORMAT })
+@JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.PROFILE, JsonKeys.FORMAT })
 public class OtherService extends AbstractService implements Service {
 
     /**
@@ -33,13 +33,13 @@ public class OtherService extends AbstractService implements Service {
     /**
      * This service's profile.
      */
-    @JsonProperty(Constants.PROFILE)
+    @JsonProperty(JsonKeys.PROFILE)
     protected URI myProfile;
 
     /**
      * This service's format.
      */
-    @JsonProperty(Constants.FORMAT)
+    @JsonProperty(JsonKeys.FORMAT)
     protected MediaType myFormat;
 
     /**
@@ -184,23 +184,23 @@ public class OtherService extends AbstractService implements Service {
             final LinkedHashMap<String, Object> map = new LinkedHashMap<>();
 
             if (myID != null) {
-                map.put(Constants.ID, myID);
+                map.put(JsonKeys.ID, myID);
             }
 
             if (myType != null) {
-                map.put(Constants.TYPE, myType);
+                map.put(JsonKeys.TYPE, myType);
             }
 
             if (myProfile != null) {
-                map.put(Constants.PROFILE, myProfile);
+                map.put(JsonKeys.PROFILE, myProfile);
             }
 
             if (myFormat != null) {
-                map.put(Constants.FORMAT, getFormat());
+                map.put(JsonKeys.FORMAT, getFormat());
             }
 
             if (myServices != null && myServices.size() > 0) {
-                map.put(Constants.SERVICE, myServices);
+                map.put(JsonKeys.SERVICE, myServices);
             }
 
             return ImmutableMap.copyOf(map);

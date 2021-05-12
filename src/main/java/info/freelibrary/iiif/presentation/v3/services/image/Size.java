@@ -7,12 +7,12 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
  * An Image API size.
  */
-@JsonPropertyOrder({ Constants.HEIGHT, Constants.WIDTH })
+@JsonPropertyOrder({ JsonKeys.HEIGHT, JsonKeys.WIDTH })
 public class Size {
 
     /**
@@ -49,7 +49,7 @@ public class Size {
      * @param aWidth A size width
      * @return This size
      */
-    @JsonSetter(Constants.WIDTH)
+    @JsonSetter(JsonKeys.WIDTH)
     public Size setWidth(final int aWidth) {
         myWidth = aWidth;
         return this;
@@ -60,7 +60,7 @@ public class Size {
      *
      * @return The size width
      */
-    @JsonGetter(Constants.WIDTH)
+    @JsonGetter(JsonKeys.WIDTH)
     @JsonInclude(Include.NON_DEFAULT)
     public int getWidth() {
         return myWidth;
@@ -72,7 +72,7 @@ public class Size {
      * @param aHeight A size height
      * @return This size
      */
-    @JsonSetter(Constants.HEIGHT)
+    @JsonSetter(JsonKeys.HEIGHT)
     public Size setHeight(final int aHeight) {
         myHeight = aHeight;
         return this;
@@ -83,7 +83,7 @@ public class Size {
      *
      * @return The size height
      */
-    @JsonGetter(Constants.HEIGHT)
+    @JsonGetter(JsonKeys.HEIGHT)
     @JsonInclude(Include.NON_DEFAULT)
     public int getHeight() {
         return myHeight;

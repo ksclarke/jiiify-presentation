@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -9,9 +9,9 @@ import org.junit.Test;
 import com.thedeanda.lorem.LoremIpsum;
 
 import info.freelibrary.iiif.presentation.v3.AbstractTest;
-import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
@@ -41,7 +41,7 @@ public class LabelTest extends AbstractTest {
     @Before
     public void setUp() {
         myManifest = new Manifest(AAAA, "bbbb");
-        myJSON = new JsonObject().put(Constants.CONTEXT, "http://iiif.io/api/presentation/3/context.json");
+        myJSON = new JsonObject().put(JsonKeys.CONTEXT, "http://iiif.io/api/presentation/3/context.json");
         myLorem = LoremIpsum.getInstance();
     }
 
@@ -65,7 +65,7 @@ public class LabelTest extends AbstractTest {
 
         myManifest.setLabel(new Label(ASDF));
         labelJSON.put(NONE, new JsonArray().add(ASDF));
-        myJSON.put(Constants.TYPE, ResourceTypes.MANIFEST).put(Constants.ID, AAAA).put(Constants.LABEL, labelJSON);
+        myJSON.put(JsonKeys.TYPE, ResourceTypes.MANIFEST).put(JsonKeys.ID, AAAA).put(JsonKeys.LABEL, labelJSON);
 
         assertEquals(myJSON, JsonObject.mapFrom(myManifest));
     }
@@ -79,7 +79,7 @@ public class LabelTest extends AbstractTest {
 
         myManifest.setLabel(ASDF);
         labelJSON.put(NONE, new JsonArray().add(ASDF));
-        myJSON.put(Constants.LABEL, labelJSON).put(Constants.ID, AAAA).put(Constants.TYPE, ResourceTypes.MANIFEST);
+        myJSON.put(JsonKeys.LABEL, labelJSON).put(JsonKeys.ID, AAAA).put(JsonKeys.TYPE, ResourceTypes.MANIFEST);
 
         assertEquals(myJSON, JsonObject.mapFrom(myManifest));
     }
