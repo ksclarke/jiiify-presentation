@@ -2,6 +2,8 @@
 
 Jiiify Presentation is a [IIIF Presentation](http://iiif.io/api/presentation) library for Java. It does not contain a server. It's just for working with IIIF presentation manifests.
 
+*Warning:* The API for v3 is still in active development. There will definitely be breaking changes before the library reaches version 1.0.0. After it reaches 1.0.0 and becomes stable, the project will use semantic versioning to indicate the types of changes associated with new releases.
+
 ### Getting Started
 
 A very simple example of using jiiify-presentation follows:
