@@ -89,5 +89,6 @@
   <entry key="JPA-116">Unexpected Annotation body type: {}</entry>
   <entry key="JPA-117">Won't try to build a PointSelector without a temporal or X and Y point</entry>
   <entry key="JPA-118">The supplied value isn't a valid collection item type: {}</entry>
+  <entry key="JPA-119">The supplied JSON object does not look like it's a {}; its type is: {}</entry>
 
 </properties>

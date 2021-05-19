@@ -392,6 +392,17 @@ public class ManifestTest extends AbstractTest {
     }
 
     /**
+     * Test manifest creation fromJSON() with a Collection.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testFromJsonCollection() {
+        final String collectionPath = new File(TestUtils.TEST_DIR, "collection1.json").getAbsolutePath();
+        final JsonObject json = new JsonObject(myVertx.fileSystem().readFileBlocking(collectionPath));
+
+        Manifest.fromJSON(json);
+    }
+
+    /**
      * Tests manifest creation fromString().
      */
     @Test

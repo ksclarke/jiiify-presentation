@@ -755,6 +755,12 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      */
     @JsonIgnore
     public static Manifest fromJSON(final JsonObject aJsonObject) {
+        final String type = aJsonObject.getString(Constants.TYPE);
+
+        if (!ResourceTypes.MANIFEST.equals(type)) {
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_119, ResourceTypes.MANIFEST, type));
+        }
+
         return Json.decodeValue(aJsonObject.toString(), Manifest.class);
     }
 
