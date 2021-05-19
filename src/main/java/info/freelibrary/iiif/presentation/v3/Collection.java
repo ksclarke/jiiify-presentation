@@ -472,7 +472,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      */
     @JsonIgnore
     public static Collection fromJSON(final JsonObject aJsonObject) {
-        final String type = aJsonObject.getString(Constants.TYPE);
+        final String type = aJsonObject.getString(JsonKeys.TYPE);
 
         if (!ResourceTypes.COLLECTION.equals(type)) {
             throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_119, ResourceTypes.COLLECTION, type));
@@ -779,7 +779,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
          *
          * @return The navigation date
          */
-        @JsonGetter(Constants.NAV_DATE)
+        @JsonGetter(JsonKeys.NAV_DATE)
         public NavDate getNavDate() {
             return myNavDate;
         }
@@ -790,7 +790,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
          * @param aNavDate The navigation date
          * @return The navigable resource
          */
-        @JsonSetter(Constants.NAV_DATE)
+        @JsonSetter(JsonKeys.NAV_DATE)
         public Item setNavDate(final NavDate aNavDate) {
             myNavDate = aNavDate;
             return this;
