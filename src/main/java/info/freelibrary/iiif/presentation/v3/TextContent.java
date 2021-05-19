@@ -21,12 +21,14 @@ import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.services.Service;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
- * Text content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
+ * Text content that can be associated with an annotation or used as a thumbnail.
  */
-@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.THUMBNAIL, Constants.FORMAT, Constants.LANGUAGE })
-public class TextContent extends AbstractContentResource<TextContent> implements Thumbnail, Resource<TextContent> {
+@JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
+public class TextContent extends AbstractContentResource<TextContent>
+        implements AnnotationBody<TextContent>, ContentResource<TextContent>, Resource<TextContent> {
 
     /**
      * Creates a text content resource.
@@ -54,7 +56,7 @@ public class TextContent extends AbstractContentResource<TextContent> implements
     }
 
     @Override
-    @JsonSetter(Constants.PROVIDER)
+    @JsonSetter(JsonKeys.PROVIDER)
     public TextContent setProviders(final Provider... aProviderArray) {
         return setProviders(Arrays.asList(aProviderArray));
     }
@@ -71,7 +73,7 @@ public class TextContent extends AbstractContentResource<TextContent> implements
     }
 
     @Override
-    @JsonSetter(Constants.BEHAVIOR)
+    @JsonSetter(JsonKeys.BEHAVIOR)
     public TextContent setBehaviors(final Behavior... aBehaviorArray) {
         return (TextContent) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorArray));
     }
@@ -142,12 +144,12 @@ public class TextContent extends AbstractContentResource<TextContent> implements
     }
 
     @Override
-    public TextContent setThumbnails(final Thumbnail... aThumbnailArray) {
+    public TextContent setThumbnails(final ContentResource<?>... aThumbnailArray) {
         return (TextContent) super.setThumbnails(aThumbnailArray);
     }
 
     @Override
-    public TextContent setThumbnails(final List<Thumbnail> aThumbnailList) {
+    public TextContent setThumbnails(final List<ContentResource<?>> aThumbnailList) {
         return (TextContent) super.setThumbnails(aThumbnailList);
     }
 
@@ -205,4 +207,5 @@ public class TextContent extends AbstractContentResource<TextContent> implements
     public TextContent setLabel(final Label aLabel) {
         return (TextContent) super.setLabel(aLabel);
     }
+
 }

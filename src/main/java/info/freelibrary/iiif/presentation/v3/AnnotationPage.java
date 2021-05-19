@@ -1,13 +1,12 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -15,8 +14,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.PMD;
 
-import info.freelibrary.iiif.presentation.v3.id.Minter;
+import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -29,12 +29,14 @@ import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.services.Service;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
- * A page of annotations.
+ * A collection of {@link Annotation}(s) included in the items property from the Canvas.
  */
-public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<AnnotationPage<T>>
+@SuppressWarnings(PMD.GOD_CLASS)
+public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<AnnotationPage<T>> // NOPMD
         implements Resource<AnnotationPage<T>> {
 
     /**
@@ -84,7 +86,7 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
     }
 
     @Override
-    @JsonSetter(Constants.PROVIDER)
+    @JsonSetter(JsonKeys.PROVIDER)
     public AnnotationPage<T> setProviders(final Provider... aProviderArray) {
         return setProviders(Arrays.asList(aProviderArray));
     }
@@ -101,7 +103,7 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
      * @param aAnnotationArray An annotation array
      * @return The annotation page
      */
-    @JsonSetter(Constants.ITEMS)
+    @JsonSetter(JsonKeys.ITEMS)
     @SafeVarargs
     public final AnnotationPage<T> setAnnotations(final T... aAnnotationArray) {
         if (myAnnotations != null) {
@@ -134,7 +136,7 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
      */
     @SafeVarargs
     public final AnnotationPage<T> addAnnotations(final T... aAnnotationArray) {
-        if (!Collections.addAll(getAnnotations(), checkNotNull(aAnnotationArray))) {
+        if (!Collections.addAll(getAnnotations(), Objects.requireNonNull(aAnnotationArray))) {
             final String details = getListIDs(Arrays.asList(aAnnotationArray));
             throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_050, details));
         }
@@ -149,7 +151,7 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
      * @return The annotation page
      */
     public final AnnotationPage<T> addAnnotations(final List<T> aAnnotationList) {
-        if (!getAnnotations().addAll(checkNotNull(aAnnotationList))) {
+        if (!getAnnotations().addAll(Objects.requireNonNull(aAnnotationList))) {
             final String details = getListIDs(aAnnotationList);
             throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_050, details));
         }
@@ -162,7 +164,7 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
      *
      * @return The annotation page's annotations
      */
-    @JsonGetter(Constants.ITEMS)
+    @JsonGetter(JsonKeys.ITEMS)
     public List<T> getAnnotations() {
         if (myAnnotations == null) {
             myAnnotations = new ArrayList<>();
@@ -177,7 +179,7 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
     }
 
     @Override
-    @JsonSetter(Constants.BEHAVIOR)
+    @JsonSetter(JsonKeys.BEHAVIOR)
     public AnnotationPage<T> setBehaviors(final Behavior... aBehaviorArray) {
         return (AnnotationPage<T>) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorArray));
     }
@@ -248,12 +250,12 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
     }
 
     @Override
-    public AnnotationPage<T> setThumbnails(final Thumbnail... aThumbnailArray) {
+    public AnnotationPage<T> setThumbnails(final ContentResource<?>... aThumbnailArray) {
         return (AnnotationPage<T>) super.setThumbnails(aThumbnailArray);
     }
 
     @Override
-    public AnnotationPage<T> setThumbnails(final List<Thumbnail> aThumbnailList) {
+    public AnnotationPage<T> setThumbnails(final List<ContentResource<?>> aThumbnailList) {
         return (AnnotationPage<T>) super.setThumbnails(aThumbnailList);
     }
 

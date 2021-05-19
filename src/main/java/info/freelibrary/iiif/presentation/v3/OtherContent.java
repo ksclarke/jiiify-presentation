@@ -9,13 +9,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import info.freelibrary.util.warnings.PMD;
+
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+
 import io.vertx.core.json.JsonObject;
 
 /**
  * A content resource for other types of resources than those described by the IIIF specification.
  */
-@JsonPropertyOrder({ Constants.ID, Constants.TYPE })
-public class OtherContent implements ContentResource {
+@JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE })
+public class OtherContent implements AnnotationBody<OtherContent>, ContentResource<OtherContent> {
 
     /**
      * The ID for other content.
@@ -42,7 +46,7 @@ public class OtherContent implements ContentResource {
     }
 
     @Override
-    @JsonGetter(Constants.ID)
+    @JsonGetter(JsonKeys.ID)
     public URI getID() {
         return myID;
     }
@@ -56,7 +60,7 @@ public class OtherContent implements ContentResource {
 
     @Override
     @JsonIgnore
-    public ContentResource setID(final URI aID) {
+    public OtherContent setID(final URI aID) {
         myID = aID;
         return this;
     }
@@ -94,13 +98,13 @@ public class OtherContent implements ContentResource {
     }
 
     /**
-     * Gets the generic content as a Map for Jackson.
+     * Gets the generic content as an object map for Jackson.
      *
-     * @return
+     * @return An object map representing the other content
      */
     @JsonValue
-    @SuppressWarnings("PMD.UnusedPrivateMethod") // It's used by Jackson's serialization processes
-    private Map<String, Object> toObjectMap() {
+    @SuppressWarnings(PMD.UNUSED_PRIVATE_METHOD) // It's used by Jackson's serialization processes
+    private Map<String, Object> toObjectMap() { // NOPMD
         return myJsonObject.getMap();
     }
 
@@ -111,14 +115,15 @@ public class OtherContent implements ContentResource {
      * @return The supplied JsonObject
      */
     private JsonObject initializeObject(final JsonObject aJsonObject) {
-        if (aJsonObject.containsKey(Constants.ID)) {
-            myID = URI.create(aJsonObject.getString(Constants.ID));
+        if (aJsonObject.containsKey(JsonKeys.ID)) {
+            myID = URI.create(aJsonObject.getString(JsonKeys.ID));
         }
 
-        if (aJsonObject.containsKey(Constants.ID)) {
-            myType = aJsonObject.getString(Constants.TYPE);
+        if (aJsonObject.containsKey(JsonKeys.ID)) {
+            myType = aJsonObject.getString(JsonKeys.TYPE);
         }
 
         return aJsonObject;
     }
+
 }

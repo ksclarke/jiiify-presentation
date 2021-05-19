@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3.id;
+package info.freelibrary.iiif.presentation.v3.ids;
 
 import static org.junit.Assert.*;
 
@@ -80,7 +80,9 @@ public class SkolemIriFactoryTest {
      */
     @Test
     public final void testHasNonSerializableIDsDefault() {
-        assertEquals(null, new TextualBody(SkolemIriFactory.getFactory().setWellKnownBase(null)).getID());
+        assertEquals(null,
+                new TextualBody(SkolemIriFactory.getFactory().createSerializableIDs(false).setWellKnownBase(null))
+                        .getID());
     }
 
     /**

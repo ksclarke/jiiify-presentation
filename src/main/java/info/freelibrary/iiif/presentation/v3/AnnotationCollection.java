@@ -22,9 +22,10 @@ import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.services.Service;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
- * A collection of annotations.
+ * A grouping of {@link AnnotationPage}(s) that should be managed as a single whole.
  */
 public class AnnotationCollection extends AbstractResource<AnnotationCollection>
         implements Resource<AnnotationCollection> {
@@ -35,7 +36,7 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
     private ViewingDirection myViewingDirection;
 
     /**
-     * Creates a collection of annotations.
+     * Creates a collection of annotations from the supplied ID and label.
      *
      * @param aID A collection ID in string form
      * @param aLabel A descriptive label, in string form, for the collection
@@ -45,7 +46,7 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
     }
 
     /**
-     * Creates a collection of annotations.
+     * Creates a collection of annotations from the supplied ID and label.
      *
      * @param aID A collection ID
      * @param aLabel A descriptive label for the collection
@@ -55,7 +56,7 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
     }
 
     @Override
-    @JsonSetter(Constants.PROVIDER)
+    @JsonSetter(JsonKeys.PROVIDER)
     public AnnotationCollection setProviders(final Provider... aProviderArray) {
         return setProviders(Arrays.asList(aProviderArray));
     }
@@ -67,23 +68,23 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
     }
 
     /**
-     * Sets the viewing direction.
+     * Sets the viewing direction of the annotation collection.
      *
      * @param aViewingDirection A viewing direction
      * @return The annotation collection
      */
-    @JsonSetter(Constants.VIEWING_DIRECTION)
+    @JsonSetter(JsonKeys.VIEWING_DIRECTION)
     public AnnotationCollection setViewingDirection(final ViewingDirection aViewingDirection) {
         myViewingDirection = aViewingDirection;
         return this;
     }
 
     /**
-     * Gets the viewing direction.
+     * Gets the viewing direction of the annotation collection.
      *
      * @return The viewing direction
      */
-    @JsonGetter(Constants.VIEWING_DIRECTION)
+    @JsonGetter(JsonKeys.VIEWING_DIRECTION)
     public ViewingDirection getViewingDirection() {
         return myViewingDirection;
     }
@@ -94,7 +95,7 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
     }
 
     @Override
-    @JsonSetter(Constants.BEHAVIOR)
+    @JsonSetter(JsonKeys.BEHAVIOR)
     public AnnotationCollection setBehaviors(final Behavior... aBehaviorArray) {
         return (AnnotationCollection) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorArray));
     }
@@ -165,12 +166,12 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
     }
 
     @Override
-    public AnnotationCollection setThumbnails(final Thumbnail... aThumbnailArray) {
+    public AnnotationCollection setThumbnails(final ContentResource<?>... aThumbnailArray) {
         return (AnnotationCollection) super.setThumbnails(aThumbnailArray);
     }
 
     @Override
-    public AnnotationCollection setThumbnails(final List<Thumbnail> aThumbnailList) {
+    public AnnotationCollection setThumbnails(final List<ContentResource<?>> aThumbnailList) {
         return (AnnotationCollection) super.setThumbnails(aThumbnailList);
     }
 
@@ -228,4 +229,5 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
     public AnnotationCollection setLabel(final Label aLabel) {
         return (AnnotationCollection) super.setLabel(aLabel);
     }
+
 }

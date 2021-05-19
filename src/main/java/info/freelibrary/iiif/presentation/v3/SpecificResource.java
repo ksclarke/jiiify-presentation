@@ -9,16 +9,19 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.util.warnings.Eclipse;
+import info.freelibrary.util.warnings.PMD;
+
 import info.freelibrary.iiif.presentation.v3.properties.selectors.Selector;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 
 /**
- * A specific resource that can reference a particular region, time frame, or other aspect of another resource using a
- * selector.
+ * A specific resource that can reference a particular region, time frame, or other aspect of another resource.
  */
-@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.SOURCE, Constants.SELECTOR })
+@JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.SOURCE, JsonKeys.SELECTOR })
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class SpecificResource {
 
@@ -85,7 +88,7 @@ public class SpecificResource {
     /**
      * Allows Jackson to create a new SpecificResource while deserializing JSON.
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings(Eclipse.UNUSED)
     private SpecificResource() {
         // This is intentionally left empty
     }
@@ -95,7 +98,7 @@ public class SpecificResource {
      *
      * @return The ID
      */
-    @JsonGetter(Constants.ID)
+    @JsonGetter(JsonKeys.ID)
     public URI getID() {
         return myID;
     }
@@ -105,7 +108,7 @@ public class SpecificResource {
      *
      * @return The specific resource type
      */
-    @JsonGetter(Constants.TYPE)
+    @JsonGetter(JsonKeys.TYPE)
     public String getType() {
         return ResourceTypes.SPECIFIC_RESOURCE;
     }
@@ -115,7 +118,7 @@ public class SpecificResource {
      *
      * @return The specific resource selector
      */
-    @JsonGetter(Constants.SELECTOR)
+    @JsonGetter(JsonKeys.SELECTOR)
     public Selector getSelector() {
         return mySelector;
     }
@@ -125,7 +128,7 @@ public class SpecificResource {
      *
      * @return The specific resource's source
      */
-    @JsonGetter(Constants.SOURCE)
+    @JsonGetter(JsonKeys.SOURCE)
     public URI getSource() {
         return mySource;
     }
@@ -150,7 +153,7 @@ public class SpecificResource {
      * @param aID The ID in string form
      * @return This specific resource
      */
-    @JsonSetter(Constants.ID)
+    @JsonSetter(JsonKeys.ID)
     private SpecificResource setID(final String aID) {
         myID = URI.create(aID);
         return this;
@@ -162,9 +165,9 @@ public class SpecificResource {
      * @param aType The specific resource type
      * @return This specific resource
      */
-    @JsonSetter(Constants.TYPE)
-    @SuppressWarnings("PMD.UnusedFormalParameter") // This method is just used by Jackson's deserialization processes
-    private SpecificResource setType(final String aType) {
+    @JsonSetter(JsonKeys.TYPE)
+    @SuppressWarnings(PMD.UNUSED_FORMAL_PARAMETER) // This method is just used by Jackson's deserialization processes
+    private SpecificResource setType(final String aType) { // NOPMD
         return this;
     }
 
@@ -174,7 +177,7 @@ public class SpecificResource {
      * @param aSource A source in string form
      * @return This specific resource
      */
-    @JsonSetter(Constants.SOURCE)
+    @JsonSetter(JsonKeys.SOURCE)
     private SpecificResource setSource(final String aSource) {
         mySource = URI.create(aSource);
         return this;
@@ -186,7 +189,7 @@ public class SpecificResource {
      * @param aSelector A selector to use for the specific resource
      * @return This specific resource
      */
-    @JsonSetter(Constants.SELECTOR)
+    @JsonSetter(JsonKeys.SELECTOR)
     private SpecificResource setSelector(final Selector aSelector) {
         mySelector = aSelector;
         return this;
@@ -213,4 +216,5 @@ public class SpecificResource {
     public static SpecificResource fromString(final String aJsonString) {
         return fromJSON(new JsonObject(aJsonString));
     }
+
 }

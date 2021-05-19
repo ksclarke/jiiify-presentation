@@ -14,9 +14,10 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.google.common.net.MediaType;
 
 import info.freelibrary.util.IllegalArgumentI18nException;
+import info.freelibrary.util.warnings.Eclipse;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
@@ -27,7 +28,7 @@ import io.vertx.core.json.JsonObject;
  * management system or other cataloging system.
  */
 @JsonInclude(Include.NON_EMPTY)
-@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.LABEL, Constants.FORMAT, Constants.LANGUAGE })
+@JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
 public class Homepage extends AbstractLinkProperty<Homepage> {
 
     /**
@@ -53,13 +54,13 @@ public class Homepage extends AbstractLinkProperty<Homepage> {
     /**
      * Creates a homepage for Jackson's deserialization process.
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings(Eclipse.UNUSED)
     private Homepage() {
         super(ResourceTypes.TEXT);
     }
 
     @Override
-    @JsonSetter(Constants.ID)
+    @JsonSetter(JsonKeys.ID)
     public Homepage setID(final URI aID) {
         return (Homepage) super.setID(aID);
     }
@@ -76,7 +77,7 @@ public class Homepage extends AbstractLinkProperty<Homepage> {
     }
 
     @Override
-    @JsonSetter(Constants.TYPE)
+    @JsonSetter(JsonKeys.TYPE)
     protected Homepage setType(final String aType) {
         if (!ResourceTypes.TEXT.equals(aType)) {
             throw new IllegalArgumentI18nException(aType);
@@ -90,13 +91,13 @@ public class Homepage extends AbstractLinkProperty<Homepage> {
      *
      * @return The label
      */
-    @JsonGetter(Constants.LABEL)
+    @JsonGetter(JsonKeys.LABEL)
     public Label getLabel() {
         return super.getNullableLabel();
     }
 
     @Override
-    @JsonSetter(Constants.LABEL)
+    @JsonSetter(JsonKeys.LABEL)
     public Homepage setLabel(final Label aLabel) {
         return (Homepage) super.setLabel(aLabel);
     }
@@ -119,7 +120,7 @@ public class Homepage extends AbstractLinkProperty<Homepage> {
     }
 
     @Override
-    @JsonGetter(Constants.FORMAT)
+    @JsonGetter(JsonKeys.FORMAT)
     public Optional<String> getFormat() {
         return super.getFormat();
     }
@@ -131,7 +132,7 @@ public class Homepage extends AbstractLinkProperty<Homepage> {
     }
 
     @Override
-    @JsonSetter(Constants.FORMAT)
+    @JsonSetter(JsonKeys.FORMAT)
     public Homepage setFormat(final String aFormat) {
         return (Homepage) super.setFormat(aFormat);
     }

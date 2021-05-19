@@ -14,17 +14,19 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.google.common.net.MediaType;
 
+import info.freelibrary.util.Constants;
 import info.freelibrary.util.FileUtils;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
 import info.freelibrary.iiif.presentation.v3.properties.Localized;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * An abstract content resource class that specific content types can extend.
  */
-@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.FORMAT, Constants.LANGUAGE })
+@JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
 abstract class AbstractContentResource<T extends AbstractResource<AbstractContentResource<T>>>
         extends AbstractResource<AbstractContentResource<T>> implements Localized<T> {
 
@@ -99,7 +101,7 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
      * @param aMediaType A string representation of media type or file extension
      * @return The content resource
      */
-    @JsonSetter(Constants.FORMAT)
+    @JsonSetter(JsonKeys.FORMAT)
     protected AbstractContentResource<T> setFormat(final String aMediaType) {
         setMediaTypeFromExt(aMediaType);
         return this;
@@ -122,7 +124,7 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
      *
      * @return A string representation of the format
      */
-    @JsonGetter(Constants.FORMAT)
+    @JsonGetter(JsonKeys.FORMAT)
     public Optional<String> getFormat() {
         if (myFormat != null) {
             return Optional.of(myFormat.type() + "/" + myFormat.subtype()); // skip encoding
@@ -148,7 +150,7 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
      */
     @JsonIgnore
     protected final void setMediaTypeFromExt(final String aURI) {
-        final String fragment = Constants.FRAGMENT_DELIM + URI.create(aURI).getFragment();
+        final String fragment = Constants.HASH + URI.create(aURI).getFragment();
         final String mimeType;
         final String uri;
         final int index;
@@ -178,7 +180,7 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
      *
      * @return A form of language ready to be serialized
      */
-    @JsonGetter(Constants.LANGUAGE)
+    @JsonGetter(JsonKeys.LANGUAGE)
     @JsonInclude(Include.NON_EMPTY)
     private Object getLanguage() {
         final List<String> languages = getLanguages();
@@ -196,7 +198,7 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
      * @param aObject An object to be deserialized
      * @return This resource
      */
-    @JsonSetter(Constants.LANGUAGE)
+    @JsonSetter(JsonKeys.LANGUAGE)
     private AbstractContentResource<T> setLanguage(final Object aObject) {
         if (aObject instanceof String) {
             return (AbstractContentResource<T>) setLanguages((String) aObject);
@@ -206,4 +208,5 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
 
         return this;
     }
+
 }

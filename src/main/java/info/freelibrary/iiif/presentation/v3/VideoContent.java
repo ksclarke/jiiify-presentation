@@ -24,17 +24,18 @@ import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.services.Service;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 
 /**
- * Video content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
+ * Video content that can be associated with an annotation or used as a thumbnail.
  */
-@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.THUMBNAIL, Constants.HEIGHT, Constants.WIDTH,
-    Constants.DURATION, Constants.FORMAT, Constants.LANGUAGE })
-public class VideoContent extends AbstractContentResource<VideoContent> implements Thumbnail, Resource<VideoContent>,
-        SpatialContentResource<VideoContent>, TemporalContentResource<VideoContent> {
+@JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.HEIGHT, JsonKeys.WIDTH, JsonKeys.DURATION,
+    JsonKeys.FORMAT, JsonKeys.LANGUAGE })
+public class VideoContent extends AbstractContentResource<VideoContent> implements AnnotationBody<VideoContent>,
+        ContentResource<VideoContent>, SpatialContentResource<VideoContent>, TemporalContentResource<VideoContent> {
 
     /**
      * The video content's duration.
@@ -77,7 +78,7 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
     }
 
     @Override
-    @JsonSetter(Constants.PROVIDER)
+    @JsonSetter(JsonKeys.PROVIDER)
     public VideoContent setProviders(final Provider... aProviderArray) {
         return setProviders(Arrays.asList(aProviderArray));
     }
@@ -94,7 +95,7 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
     }
 
     @Override
-    @JsonSetter(Constants.BEHAVIOR)
+    @JsonSetter(JsonKeys.BEHAVIOR)
     public VideoContent setBehaviors(final Behavior... aBehaviorArray) {
         return (VideoContent) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorArray));
     }
@@ -165,12 +166,12 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
     }
 
     @Override
-    public VideoContent setThumbnails(final Thumbnail... aThumbnailArray) {
+    public VideoContent setThumbnails(final ContentResource<?>... aThumbnailArray) {
         return (VideoContent) super.setThumbnails(aThumbnailArray);
     }
 
     @Override
-    public VideoContent setThumbnails(final List<Thumbnail> aThumbnailList) {
+    public VideoContent setThumbnails(final List<ContentResource<?>> aThumbnailList) {
         return (VideoContent) super.setThumbnails(aThumbnailList);
     }
 
@@ -235,7 +236,7 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
      * @return The video's width
      */
     @Override
-    @JsonGetter(Constants.WIDTH)
+    @JsonGetter(JsonKeys.WIDTH)
     @JsonInclude(Include.NON_DEFAULT)
     public int getWidth() {
         return myWidth;
@@ -247,7 +248,7 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
      * @return The video's height
      */
     @Override
-    @JsonGetter(Constants.HEIGHT)
+    @JsonGetter(JsonKeys.HEIGHT)
     @JsonInclude(Include.NON_DEFAULT)
     public int getHeight() {
         return myHeight;
@@ -275,7 +276,7 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
      * @return The duration of the video content
      */
     @Override
-    @JsonGetter(Constants.DURATION)
+    @JsonGetter(JsonKeys.DURATION)
     @JsonInclude(Include.NON_DEFAULT)
     public float getDuration() {
         return myDuration;
@@ -288,7 +289,7 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
      * @return The video content
      */
     @Override
-    @JsonSetter(Constants.DURATION)
+    @JsonSetter(JsonKeys.DURATION)
     public VideoContent setDuration(final Number aDuration) {
         myDuration = convertToFinitePositiveFloat(aDuration);
         return this;
@@ -320,7 +321,7 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
      * @param aWidth The video's width
      * @return The video
      */
-    @JsonSetter(Constants.WIDTH)
+    @JsonSetter(JsonKeys.WIDTH)
     private VideoContent setWidth(final int aWidth) {
         myWidth = aWidth;
         return this;
@@ -332,9 +333,10 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
      * @param aHeight The video's height
      * @return The video
      */
-    @JsonSetter(Constants.HEIGHT)
+    @JsonSetter(JsonKeys.HEIGHT)
     private VideoContent setHeight(final int aHeight) {
         myHeight = aHeight;
         return this;
     }
+
 }

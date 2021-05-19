@@ -8,9 +8,11 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.Eclipse;
+import info.freelibrary.util.warnings.PMD;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
@@ -69,7 +71,7 @@ public class ImageService2 extends AbstractImageService implements ImageService 
     /**
      * Creates a new IIIF Image API 2 service for Jackson's processing.
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings(Eclipse.UNUSED)
     private ImageService2() {
         super();
     }
@@ -80,13 +82,13 @@ public class ImageService2 extends AbstractImageService implements ImageService 
     }
 
     @Override
-    @JsonGetter(Constants.V2_ID)
+    @JsonGetter(JsonKeys.V2_ID)
     public URI getID() {
         return myID;
     }
 
     @Override
-    @JsonGetter(Constants.V2_TYPE)
+    @JsonGetter(JsonKeys.V2_TYPE)
     public String getType() {
         return getClass().getSimpleName();
     }
@@ -97,9 +99,9 @@ public class ImageService2 extends AbstractImageService implements ImageService 
      * @param aProfile The profile in string form
      * @return The image service
      */
-    @JsonSetter(Constants.PROFILE)
-    @SuppressWarnings("PMD.MissingOverride") // PMD is wrong about this overriding anything
-    private ImageService setProfile(final String aProfile) {
+    @JsonSetter(JsonKeys.PROFILE)
+    @SuppressWarnings(PMD.MISSING_OVERRIDE) // PMD is wrong about this overriding anything
+    private ImageService setProfile(final String aProfile) { // NOPMD
         return super.setProfile(Profile.fromString(aProfile));
     }
 

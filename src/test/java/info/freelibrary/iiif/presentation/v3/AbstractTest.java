@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static info.freelibrary.util.Constants.HASH;
+
 import java.net.URI;
 import java.util.UUID;
 
@@ -15,8 +17,6 @@ import io.vertx.core.json.jackson.DatabindCodec;
  * An abstract test.
  */
 public abstract class AbstractTest {
-
-    protected static final String HASH = "#";
 
     protected static LoremIpsum LOREM_IPSUM;
 
@@ -50,6 +50,6 @@ public abstract class AbstractTest {
      * @return True if the supplied URI represents a specific resource with a MediaFragmentSelector
      */
     protected boolean isSpecificResourceURI(final URI aURI) {
-        return aURI.toString().contains(Constants.FRAGMENT_DELIM);
+        return aURI.toString().contains(HASH);
     }
 }

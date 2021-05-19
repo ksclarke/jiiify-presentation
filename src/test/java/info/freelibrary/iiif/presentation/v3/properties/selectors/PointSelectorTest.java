@@ -1,12 +1,12 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.selectors;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.v3.AbstractTest;
-import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 import io.vertx.core.json.JsonObject;
 
@@ -94,7 +94,7 @@ public class PointSelectorTest extends AbstractTest {
         final JsonObject found = JsonObject.mapFrom(new PointSelector(10F));
         final JsonObject expected = new JsonObject();
 
-        expected.put(PointSelector.T_COORDINATE, 10.0F).put(Constants.TYPE, PointSelector.class.getSimpleName());
+        expected.put(PointSelector.T_COORDINATE, 10.0F).put(JsonKeys.TYPE, PointSelector.class.getSimpleName());
 
         assertEquals(expected, found);
     }

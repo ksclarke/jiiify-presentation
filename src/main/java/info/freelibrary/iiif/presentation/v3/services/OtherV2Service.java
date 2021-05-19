@@ -8,12 +8,12 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.common.collect.ImmutableMap;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
  * A generic service class for older service implementations that use @id and @type.
  */
-@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.PROFILE, Constants.FORMAT })
+@JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.PROFILE, JsonKeys.FORMAT })
 public class OtherV2Service extends OtherService implements Service {
 
     /**
@@ -43,23 +43,23 @@ public class OtherV2Service extends OtherService implements Service {
             final LinkedHashMap<String, Object> map = new LinkedHashMap<>();
 
             if (myID != null) {
-                map.put(Constants.V2_ID, myID);
+                map.put(JsonKeys.V2_ID, myID);
             }
 
             if (myType != null) {
-                map.put(Constants.V2_TYPE, myType);
+                map.put(JsonKeys.V2_TYPE, myType);
             }
 
             if (myProfile != null) {
-                map.put(Constants.PROFILE, myProfile);
+                map.put(JsonKeys.PROFILE, myProfile);
             }
 
             if (myFormat != null) {
-                map.put(Constants.FORMAT, getFormat());
+                map.put(JsonKeys.FORMAT, getFormat());
             }
 
             if (myServices != null && myServices.size() > 0) {
-                map.put(Constants.SERVICE, myServices);
+                map.put(JsonKeys.SERVICE, myServices);
             }
 
             return ImmutableMap.copyOf(map);

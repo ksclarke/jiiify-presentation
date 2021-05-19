@@ -16,13 +16,14 @@ import org.junit.Test;
 import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.StringUtils;
 
-import info.freelibrary.iiif.presentation.v3.id.Minter;
-import info.freelibrary.iiif.presentation.v3.id.MinterFactory;
+import info.freelibrary.iiif.presentation.v3.ids.Minter;
+import info.freelibrary.iiif.presentation.v3.ids.MinterFactory;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.NavDate;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.RangeBehavior;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 import io.vertx.core.json.JsonObject;
 
@@ -203,8 +204,8 @@ public class RangeTest extends AbstractTest {
         range.setSupplementaryAnnotations(annos);
         json = range.toJSON();
 
-        assertNotNull(supplementary = json.getJsonObject(Constants.SUPPLEMENTARY));
-        assertEquals(ResourceTypes.ANNOTATION_COLLECTION, supplementary.getString(Constants.TYPE));
+        assertNotNull(supplementary = json.getJsonObject(JsonKeys.SUPPLEMENTARY));
+        assertEquals(ResourceTypes.ANNOTATION_COLLECTION, supplementary.getString(JsonKeys.TYPE));
     }
 
     /**

@@ -15,7 +15,8 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
+import info.freelibrary.iiif.presentation.v3.utils.URIs;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
@@ -53,7 +54,7 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
     public Selector deserialize(final JsonParser aParser, final DeserializationContext aContext)
             throws IOException, JsonProcessingException {
         final JsonNode node = aParser.getCodec().readTree(aParser);
-        final JsonNode typeNode = node.get(Constants.TYPE);
+        final JsonNode typeNode = node.get(JsonKeys.TYPE);
 
         if (typeNode != null) {
             switch (typeNode.asText()) {
@@ -127,7 +128,7 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
      */
     private MediaFragmentSelector deserializeFragmentSelector(final JsonNode aNode, final JsonParser aParser)
             throws JsonMappingException {
-        final JsonNode conformsToNode = aNode.get(Constants.CONFORMS_TO);
+        final JsonNode conformsToNode = aNode.get(JsonKeys.CONFORMS_TO);
 
         // Fragment selectors SHOULD have a conformsTo but aren't required to have one
         if (conformsToNode != null) {
@@ -136,8 +137,8 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
             try {
                 final URI conformsTo = new URI(conformsToString);
 
-                if (Constants.MEDIA_FRAGMENT_SPECIFICATION_URI.equals(conformsTo)) {
-                    return new MediaFragmentSelector(aNode.get(Constants.VALUE).asText());
+                if (URIs.MEDIA_FRAGMENT_SPECIFICATION_URI.equals(conformsTo)) {
+                    return new MediaFragmentSelector(aNode.get(JsonKeys.VALUE).asText());
                 } else {
                     throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_061, conformsTo),
                             aParser.getCurrentLocation());
@@ -146,7 +147,7 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
                 throw new JsonMappingException(aParser, details.getMessage(), details);
             }
         } else {
-            return new MediaFragmentSelector(aNode.get(Constants.VALUE).asText());
+            return new MediaFragmentSelector(aNode.get(JsonKeys.VALUE).asText());
         }
     }
 

@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3.utils;
 
+import static info.freelibrary.util.Constants.EMPTY;
+
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +19,14 @@ import org.jsoup.safety.Whitelist;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.PMD;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.iiif.presentation.v3.properties.I18n;
 
 /**
  * A utilities class for internationalizations.
  */
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings(PMD.TOO_MANY_METHODS)
 public final class I18nUtils {
 
     /**
@@ -134,8 +136,7 @@ public final class I18nUtils {
      */
     public static String stripHTML(final String aString) {
         return Parser.unescapeEntities(
-                Jsoup.clean(encodeSingleBrackets(aString.replaceAll(CDATA_PATTERN, Constants.EMPTY)), Whitelist.none()),
-                false);
+                Jsoup.clean(encodeSingleBrackets(aString.replaceAll(CDATA_PATTERN, EMPTY)), Whitelist.none()), false);
     }
 
     /**
@@ -214,7 +215,7 @@ public final class I18nUtils {
                     .prettyPrint(false).outline(false).syntax(Syntax.xml); // "The content must be well-formed XML"
             final Whitelist whitelist = Whitelist.none().addTags(TAGS).addAttributes(LINK_TAG, LINK_ATTRIBUTES)
                     .addAttributes(IMAGE_TAG, IMAGE_ATTRIBUTES).addProtocols(LINK_TAG, LINK_ATTRIBUTES[0], PROTOCOLS);
-            final String bodyFragment = encodeSingleBrackets(aString.replaceAll(CDATA_PATTERN, Constants.EMPTY));
+            final String bodyFragment = encodeSingleBrackets(aString.replaceAll(CDATA_PATTERN, EMPTY));
             final Document dirtyHTML = Jsoup.parseBodyFragment(bodyFragment);
             final Cleaner htmlCleaner = new Cleaner(whitelist);
             final Document cleanHTML = htmlCleaner.clean(dirtyHTML).outputSettings(settings);
@@ -223,7 +224,7 @@ public final class I18nUtils {
                 // We start with third position tag because earlier ones are empty elements by definition
                 for (int index = 2; index < TAGS.length; index++) {
                     if (TAGS[index].equals(element.tagName()) && element.children().isEmpty() &&
-                            (!element.hasText() || element.text().trim().equals(Constants.EMPTY))) {
+                            (!element.hasText() || element.text().trim().equals(EMPTY))) {
                         element.remove();
                     }
                 }
@@ -389,8 +390,8 @@ public final class I18nUtils {
      * Tests whether the supplied string is a processing instruction; a properly formed PI will have a question mark
      * before the closing bracket.
      *
-     * @param A builder with a string value
-     * @param A greater than index
+     * @param aBuilder A builder with a string value
+     * @param aGtIndex A greater than index
      * @return True if the supplied string is not a processing instruction; else, false
      */
     private static boolean isNotPI(final StringBuilder aBuilder, final int aGtIndex) {

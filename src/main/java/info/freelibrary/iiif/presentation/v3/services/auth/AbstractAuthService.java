@@ -8,13 +8,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.iiif.presentation.v3.services.AbstractService;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
  * An abstract class for authentication services.
  */
-@JsonPropertyOrder({ Constants.V2_ID, Constants.V2_TYPE, Constants.PROFILE })
+@JsonPropertyOrder({ JsonKeys.V2_ID, JsonKeys.V2_TYPE, JsonKeys.PROFILE })
 abstract class AbstractAuthService extends AbstractService implements AuthService {
 
     /**
@@ -54,7 +54,7 @@ abstract class AbstractAuthService extends AbstractService implements AuthServic
     }
 
     @Override
-    @JsonGetter(Constants.PROFILE)
+    @JsonGetter(JsonKeys.PROFILE)
     @JsonInclude(Include.NON_NULL)
     public String getProfile() {
         return myProfile != null ? myProfile.string() : null;

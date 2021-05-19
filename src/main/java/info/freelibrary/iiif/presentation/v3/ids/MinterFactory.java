@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3.id;
+package info.freelibrary.iiif.presentation.v3.ids;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
@@ -95,7 +95,7 @@ public final class MinterFactory {
     /**
      * Returns and remembers a minter created for use with the supplied manifest.
      *
-     * @param aManifestID The manifest associated with this minter
+     * @param aManifest The manifest associated with this minter
      * @return A new minter for manifest component IDs
      */
     private static Minter getNewMinter(final Manifest aManifest) {

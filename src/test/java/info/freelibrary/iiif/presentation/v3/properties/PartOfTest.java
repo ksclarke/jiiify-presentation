@@ -17,9 +17,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import info.freelibrary.util.StringUtils;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 
 import io.vertx.core.json.JsonObject;
@@ -202,11 +202,11 @@ public class PartOfTest {
     /**
      * Checks that the file is deserialized to the representation specified by the partOf(s)
      *
-     * @param An expected JSON value encapsulated in a test fixtures file
+     * @param aExpected An expected JSON value encapsulated in a test fixtures file
      * @throws IOException If there is trouble reading or deserializing the partOf file
      */
     private void checkDeserialization(final File aExpected) throws IOException {
-        final String json = new JsonObject(StringUtils.read(aExpected)).getJsonArray(Constants.PART_OF).toString();
+        final String json = new JsonObject(StringUtils.read(aExpected)).getJsonArray(JsonKeys.PART_OF).toString();
 
         final List<PartOf> expected = DatabindCodec.mapper().readValue(json, new TypeReference<List<PartOf>>() {});
         final List<PartOf> found = myManifest.getPartOfs();
@@ -223,11 +223,12 @@ public class PartOfTest {
     /**
      * Checks that the partOf(s) is serialized to the representation specified by the file
      *
+     * @param aExpected An expected JSON value encapsulated in a test fixtures file
      * @throws IOException If there is trouble reading the partOf file or serializing the constructed partOf(s)
      */
     private void checkSerialization(final File aExpected) throws IOException {
         final JsonObject expected = new JsonObject(StringUtils.read(aExpected));
-        final JsonObject found = new JsonObject(TestUtils.toJson(Constants.PART_OF, myManifest.getPartOfs(), true));
+        final JsonObject found = new JsonObject(TestUtils.toJson(JsonKeys.PART_OF, myManifest.getPartOfs(), true));
 
         assertEquals(expected, found);
     }
@@ -239,6 +240,6 @@ public class PartOfTest {
      * @throws IOException If there is trouble reading the test fixture file
      */
     private JsonObject getFullFixtureAsJSON() throws IOException {
-        return new JsonObject(StringUtils.read(PART_OF_FULL_ONE)).getJsonArray(Constants.PART_OF).getJsonObject(0);
+        return new JsonObject(StringUtils.read(PART_OF_FULL_ONE)).getJsonArray(JsonKeys.PART_OF).getJsonObject(0);
     }
 }

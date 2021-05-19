@@ -4,8 +4,6 @@ package info.freelibrary.iiif.presentation.v3.utils;
 import java.util.Comparator;
 import java.util.Objects;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
-
 /**
  * A comparator that returns the sort order of the {@code ImageAnnotation} properties.
  */
@@ -14,8 +12,8 @@ public class ContentResourceComparator implements Comparator<String> {
     /**
      * Defines the desired content resource sort order.
      */
-    private static final String[] KEYS = { Constants.ID, Constants.TYPE, Constants.DEFAULT, Constants.ITEMS,
-        Constants.FORMAT, Constants.HEIGHT, Constants.WIDTH, Constants.LABEL, Constants.SERVICE };
+    private static final String[] KEYS = { JsonKeys.ID, JsonKeys.TYPE, JsonKeys.DEFAULT, JsonKeys.ITEMS,
+        JsonKeys.FORMAT, JsonKeys.HEIGHT, JsonKeys.WIDTH, JsonKeys.LABEL, JsonKeys.SERVICE };
 
     @Override
     public int compare(final String aFirstKey, final String aSecondKey) {

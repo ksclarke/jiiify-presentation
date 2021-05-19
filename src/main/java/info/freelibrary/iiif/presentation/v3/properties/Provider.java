@@ -1,8 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,10 +16,11 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.IllegalArgumentI18nException;
+import info.freelibrary.util.warnings.Eclipse;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.iiif.presentation.v3.ImageContent;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
@@ -29,8 +28,7 @@ import io.vertx.core.json.JsonObject;
 /**
  * An organization or person that contributed to providing the content of the resource.
  */
-@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.LABEL, Constants.HOMEPAGE, Constants.LOGO,
-    Constants.SEE_ALSO })
+@JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.HOMEPAGE, JsonKeys.LOGO, JsonKeys.SEE_ALSO })
 public class Provider {
 
     /**
@@ -75,8 +73,8 @@ public class Provider {
      * @param aLabel A label
      */
     public Provider(final URI aID, final Label aLabel) {
-        myID = checkNotNull(aID);
-        myLabel = checkNotNull(aLabel);
+        myID = Objects.requireNonNull(aID);
+        myLabel = Objects.requireNonNull(aLabel);
     }
 
     /**
@@ -88,16 +86,16 @@ public class Provider {
      * @param aLogo A logo
      */
     public Provider(final URI aID, final Label aLabel, final Homepage aHomepage, final ImageContent aLogo) {
-        myID = checkNotNull(aID);
-        myLabel = checkNotNull(aLabel);
-        getLogos().add(checkNotNull(aLogo));
-        getHomepages().add(checkNotNull(aHomepage));
+        myID = Objects.requireNonNull(aID);
+        myLabel = Objects.requireNonNull(aLabel);
+        getLogos().add(Objects.requireNonNull(aLogo));
+        getHomepages().add(Objects.requireNonNull(aHomepage));
     }
 
     /**
      * Creates a new provider for Jackson's deserialization process.
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings(Eclipse.UNUSED)
     private Provider() {
         // This is intentionally empty
     }
@@ -109,7 +107,7 @@ public class Provider {
      * @return The provider
      */
     public Provider setID(final URI aID) {
-        myID = checkNotNull(aID);
+        myID = Objects.requireNonNull(aID);
         return this;
     }
 
@@ -118,7 +116,7 @@ public class Provider {
      *
      * @return An ID
      */
-    @JsonGetter(Constants.ID)
+    @JsonGetter(JsonKeys.ID)
     public URI getID() {
         return myID;
     }
@@ -129,7 +127,7 @@ public class Provider {
      * @param aType A provider type
      * @return The provider
      */
-    @JsonSetter(Constants.TYPE)
+    @JsonSetter(JsonKeys.TYPE)
     private Provider setType(final String aType) {
         if (!ResourceTypes.AGENT.equals(aType)) {
             throw new IllegalArgumentI18nException(aType);
@@ -143,7 +141,7 @@ public class Provider {
      *
      * @return The provider type
      */
-    @JsonGetter(Constants.TYPE)
+    @JsonGetter(JsonKeys.TYPE)
     public String getType() {
         return ResourceTypes.AGENT;
     }
@@ -153,7 +151,7 @@ public class Provider {
      *
      * @return A descriptive label
      */
-    @JsonGetter(Constants.LABEL)
+    @JsonGetter(JsonKeys.LABEL)
     @JsonInclude(Include.NON_EMPTY)
     public Label getLabel() {
         return myLabel;
@@ -165,9 +163,9 @@ public class Provider {
      * @param aLabel A descriptive label
      * @return The provider
      */
-    @JsonSetter(Constants.LABEL)
+    @JsonSetter(JsonKeys.LABEL)
     public Provider setLabel(final Label aLabel) {
-        myLabel = checkNotNull(aLabel);
+        myLabel = Objects.requireNonNull(aLabel);
         return this;
     }
 
@@ -189,7 +187,7 @@ public class Provider {
      * @param aHomepageArray An array of homepages
      * @return The provider
      */
-    @JsonSetter(Constants.HOMEPAGE)
+    @JsonSetter(JsonKeys.HOMEPAGE)
     public Provider setHomepages(final Homepage... aHomepageArray) {
         return setHomepages(Arrays.asList(aHomepageArray));
     }
@@ -204,7 +202,7 @@ public class Provider {
     public Provider setHomepages(final List<Homepage> aHomepageList) {
         final List<Homepage> homepages = getHomepages();
 
-        checkNotNull(aHomepageList);
+        Objects.requireNonNull(aHomepageList);
         homepages.clear();
         homepages.addAll(aHomepageList);
 
@@ -216,7 +214,7 @@ public class Provider {
      *
      * @return The provider's homepages
      */
-    @JsonGetter(Constants.HOMEPAGE)
+    @JsonGetter(JsonKeys.HOMEPAGE)
     @JsonInclude(Include.NON_EMPTY)
     public List<Homepage> getHomepages() {
         if (myHomepages == null) {
@@ -232,7 +230,7 @@ public class Provider {
      * @param aLogoArray An array of logos
      * @return The provider
      */
-    @JsonSetter(Constants.LOGO)
+    @JsonSetter(JsonKeys.LOGO)
     @SafeVarargs
     public final Provider setLogos(final ImageContent... aLogoArray) {
         return setLogos(Arrays.asList(aLogoArray));
@@ -248,7 +246,7 @@ public class Provider {
     public Provider setLogos(final List<ImageContent> aLogoList) {
         final List<ImageContent> logos = getLogos();
 
-        checkNotNull(aLogoList);
+        Objects.requireNonNull(aLogoList);
         logos.clear();
         logos.addAll(aLogoList);
 
@@ -260,7 +258,7 @@ public class Provider {
      *
      * @return The provider's logos
      */
-    @JsonGetter(Constants.LOGO)
+    @JsonGetter(JsonKeys.LOGO)
     @JsonInclude(Include.NON_EMPTY)
     public List<ImageContent> getLogos() {
         if (myLogos == null) {
@@ -275,7 +273,7 @@ public class Provider {
      *
      * @return The see also reference(s)
      */
-    @JsonGetter(Constants.SEE_ALSO)
+    @JsonGetter(JsonKeys.SEE_ALSO)
     @JsonInclude(Include.NON_EMPTY)
     public List<SeeAlso> getSeeAlsoRefs() {
         if (mySeeAlsoRefs == null) {
@@ -303,7 +301,7 @@ public class Provider {
      * @param aSeeAlsoList A list of see also references
      * @return The provider
      */
-    @JsonSetter(Constants.SEE_ALSO)
+    @JsonSetter(JsonKeys.SEE_ALSO)
     public Provider setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
         getSeeAlsoRefs().addAll(aSeeAlsoList);
         return this;

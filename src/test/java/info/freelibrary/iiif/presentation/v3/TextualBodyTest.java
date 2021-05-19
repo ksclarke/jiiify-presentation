@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import com.google.common.net.MediaType;
 
-import info.freelibrary.iiif.presentation.v3.id.SkolemIriFactory;
+import info.freelibrary.iiif.presentation.v3.ids.SkolemIriFactory;
 
 /**
  * Tests of TextualBody.

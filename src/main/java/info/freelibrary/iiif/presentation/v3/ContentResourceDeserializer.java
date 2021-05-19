@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 import io.vertx.core.json.Json;
@@ -20,22 +21,23 @@ import io.vertx.core.json.Json;
 /**
  * Deserializes a Thumbnail.
  */
-public class ThumbnailDeserializer extends StdDeserializer<Thumbnail> {
+class ContentResourceDeserializer extends StdDeserializer<ContentResource<?>> {
 
     /**
-     * The logger used by ThumbnailDeserializer.
+     * The logger used by ContentResourceDeserializer.
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(ThumbnailDeserializer.class, MessageCodes.BUNDLE);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(ContentResourceDeserializer.class, MessageCodes.BUNDLE);
 
     /**
-     * The <code>serialVersionUID</code> of ThumbnailDeserializer.
+     * The <code>serialVersionUID</code> of ContentResourceDeserializer.
      */
     private static final long serialVersionUID = 8526573955323691490L;
 
     /**
      * Creates a new Thumbnail deserializer.
      */
-    ThumbnailDeserializer() {
+    ContentResourceDeserializer() {
         this(null);
     }
 
@@ -44,7 +46,7 @@ public class ThumbnailDeserializer extends StdDeserializer<Thumbnail> {
      *
      * @param aClass A class
      */
-    ThumbnailDeserializer(final Class<?> aClass) {
+    ContentResourceDeserializer(final Class<?> aClass) {
         super(aClass);
     }
 
@@ -52,11 +54,11 @@ public class ThumbnailDeserializer extends StdDeserializer<Thumbnail> {
      * Deserializes a Thumbnail from its JSON structure.
      */
     @Override
-    public Thumbnail deserialize(final JsonParser aParser, final DeserializationContext aContext)
+    public ContentResource<?> deserialize(final JsonParser aParser, final DeserializationContext aContext)
             throws IOException, JsonProcessingException {
         final TreeNode treeNode = aParser.getCodec().readTree(aParser);
 
-        switch (treeNode.get(Constants.TYPE).toString().replace("\"", "")) {
+        switch (treeNode.get(JsonKeys.TYPE).toString().replace("\"", "")) {
             case ResourceTypes.DATASET:
                 return Json.decodeValue(treeNode.toString(), DatasetContent.class);
             case ResourceTypes.IMAGE:

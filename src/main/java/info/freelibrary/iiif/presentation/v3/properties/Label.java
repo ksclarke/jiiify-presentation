@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.iiif.presentation.v3.utils.I18nUtils;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
  * A human readable label, name or title for the resource. This property is intended to be displayed as a short, textual
@@ -96,7 +96,7 @@ public class Label extends I18nProperty<Label> {
     }
 
     @Override
-    @JsonGetter(Constants.LABEL)
+    @JsonGetter(JsonKeys.LABEL)
     protected Object toMap() {
         return super.toMap();
     }

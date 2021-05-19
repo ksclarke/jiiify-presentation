@@ -24,17 +24,18 @@ import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.services.Service;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 
 /**
- * Sound content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
+ * Sound content that can be associated with an annotation or used as a thumbnail.
  */
-@JsonPropertyOrder({ Constants.ID, Constants.TYPE, Constants.THUMBNAIL, Constants.FORMAT, Constants.DURATION,
-    Constants.LANGUAGE })
+@JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.DURATION,
+    JsonKeys.LANGUAGE })
 public class SoundContent extends AbstractContentResource<SoundContent>
-        implements Thumbnail, Resource<SoundContent>, TemporalContentResource<SoundContent> {
+        implements AnnotationBody<SoundContent>, ContentResource<SoundContent>, TemporalContentResource<SoundContent> {
 
     /**
      * The sound content's duration.
@@ -42,7 +43,7 @@ public class SoundContent extends AbstractContentResource<SoundContent>
     private float myDuration;
 
     /**
-     * Creates sound content with the supplied ID URI.
+     * Creates sound content with the supplied ID.
      *
      * @param aURI A sound content ID in string form
      */
@@ -52,7 +53,7 @@ public class SoundContent extends AbstractContentResource<SoundContent>
     }
 
     /**
-     * Creates sound content with the supplied ID URI.
+     * Creates sound content with the supplied ID.
      *
      * @param aURI A sound content ID
      */
@@ -69,7 +70,7 @@ public class SoundContent extends AbstractContentResource<SoundContent>
     }
 
     @Override
-    @JsonSetter(Constants.PROVIDER)
+    @JsonSetter(JsonKeys.PROVIDER)
     public SoundContent setProviders(final Provider... aProviderArray) {
         return setProviders(Arrays.asList(aProviderArray));
     }
@@ -86,7 +87,7 @@ public class SoundContent extends AbstractContentResource<SoundContent>
     }
 
     @Override
-    @JsonSetter(Constants.BEHAVIOR)
+    @JsonSetter(JsonKeys.BEHAVIOR)
     public SoundContent setBehaviors(final Behavior... aBehaviorArray) {
         return (SoundContent) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorArray));
     }
@@ -157,12 +158,12 @@ public class SoundContent extends AbstractContentResource<SoundContent>
     }
 
     @Override
-    public SoundContent setThumbnails(final Thumbnail... aThumbnailArray) {
+    public SoundContent setThumbnails(final ContentResource<?>... aThumbnailArray) {
         return (SoundContent) super.setThumbnails(aThumbnailArray);
     }
 
     @Override
-    public SoundContent setThumbnails(final List<Thumbnail> aThumbnailList) {
+    public SoundContent setThumbnails(final List<ContentResource<?>> aThumbnailList) {
         return (SoundContent) super.setThumbnails(aThumbnailList);
     }
 
@@ -227,7 +228,7 @@ public class SoundContent extends AbstractContentResource<SoundContent>
      * @return The duration of the sound content
      */
     @Override
-    @JsonGetter(Constants.DURATION)
+    @JsonGetter(JsonKeys.DURATION)
     @JsonInclude(Include.NON_DEFAULT)
     public float getDuration() {
         return myDuration;
@@ -240,7 +241,7 @@ public class SoundContent extends AbstractContentResource<SoundContent>
      * @return The sound content
      */
     @Override
-    @JsonSetter(Constants.DURATION)
+    @JsonSetter(JsonKeys.DURATION)
     public SoundContent setDuration(final Number aDuration) {
         myDuration = convertToFinitePositiveFloat(aDuration);
         return this;

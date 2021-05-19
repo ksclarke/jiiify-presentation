@@ -10,11 +10,18 @@
 
   <!-- For details about the Java rules, cf. https://pmd.github.io/pmd/pmd_rules_java -->
 
-  <rule ref="category/java/bestpractices.xml" />
+  <rule ref="category/java/bestpractices.xml">
+    <exclude name="GuardLogStatement" />
+  </rule>
   <rule ref="category/java/bestpractices.xml/UnusedPrivateMethod">
     <properties>
       <property name="ignoredAnnotations"
         value="com.fasterxml.jackson.annotation.JsonSetter|com.fasterxml.jackson.annotation.JsonGetter" />
+    </properties>
+  </rule>
+  <rule ref="category/java/bestpractices.xml/ForLoopVariableCount">
+    <properties>
+      <property name="maximumVariables" value="2" />
     </properties>
   </rule>
 
@@ -33,7 +40,7 @@
       <property name="interfacePattern" value="[A-Z][a-zA-Z0-9]*" />
       <property name="enumPattern" value="[A-Z][a-zA-Z0-9]*" />
       <property name="annotationPattern" value="[A-Z][a-zA-Z0-9]*" />
-      <property name="utilityClassPattern" value="[A-Z][a-zA-Z0-9]+(Utils?|Constants)" />
+      <property name="utilityClassPattern" value="[A-Z][a-zA-Z0-9]*" />
     </properties>
   </rule>
   <rule ref="category/java/codestyle.xml/LinguisticNaming">
@@ -67,6 +74,7 @@
 
   <rule ref="category/java/design.xml">
     <exclude name="LawOfDemeter" />
+    <exclude name="LoosePackageCoupling" />
   </rule>
   <rule ref="category/java/design.xml/TooManyMethods">
     <properties>

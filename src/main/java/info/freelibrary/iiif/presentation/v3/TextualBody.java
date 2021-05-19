@@ -1,10 +1,9 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.net.URI;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
@@ -15,14 +14,17 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.google.common.net.MediaType;
 
-import info.freelibrary.iiif.presentation.v3.id.SkolemIriFactory;
+import info.freelibrary.util.warnings.PMD;
+
+import info.freelibrary.iiif.presentation.v3.ids.SkolemIriFactory;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
  * Text that can be embedded in the body of an annotation. This is different from TextContent which is external text
  * which is referenced in an annotation's body.
  */
-@JsonPropertyOrder({ Constants.TYPE, Constants.LANGUAGE, Constants.VALUE })
-public class TextualBody implements ContentResource {
+@JsonPropertyOrder({ JsonKeys.TYPE, JsonKeys.LANGUAGE, JsonKeys.VALUE })
+public class TextualBody implements AnnotationBody<TextualBody>, EmbeddedResource<TextualBody> {
 
     /**
      * The TextualBody's ID.
@@ -72,7 +74,7 @@ public class TextualBody implements ContentResource {
      * @return A serializable ID
      */
     @Override
-    @JsonGetter(Constants.ID)
+    @JsonGetter(JsonKeys.ID)
     @JsonInclude(Include.NON_NULL)
     public URI getID() {
         return hasSerializableID ? myID : null;
@@ -85,7 +87,7 @@ public class TextualBody implements ContentResource {
      * @return This TextualBody
      */
     @Override
-    @JsonSetter(Constants.ID)
+    @JsonSetter(JsonKeys.ID)
     public TextualBody setID(final String aID) {
         hasSerializableID = true;
         myID = URI.create(aID);
@@ -107,7 +109,7 @@ public class TextualBody implements ContentResource {
     }
 
     /**
-     * Indicate whether the ID should be serialized.
+     * Indicates whether the ID should be serialized.
      *
      * @param aBoolFlag True if the ID should be serialized; else, false
      * @return This TextualBody
@@ -123,7 +125,7 @@ public class TextualBody implements ContentResource {
      * @param aValue A text value
      * @return This TextualBody
      */
-    @JsonSetter(Constants.VALUE)
+    @JsonSetter(JsonKeys.VALUE)
     public TextualBody setValue(final String aValue) {
         myValue = aValue;
         return this;
@@ -134,7 +136,7 @@ public class TextualBody implements ContentResource {
      *
      * @return The text value
      */
-    @JsonGetter(Constants.VALUE)
+    @JsonGetter(JsonKeys.VALUE)
     @JsonInclude(Include.NON_NULL)
     public String getValue() {
         return myValue;
@@ -146,7 +148,7 @@ public class TextualBody implements ContentResource {
      * @param aLangTag A ISO-639 language code
      * @return This TextualBody
      */
-    @JsonSetter(Constants.LANGUAGE)
+    @JsonSetter(JsonKeys.LANGUAGE)
     public TextualBody setLanguage(final String aLangTag) {
         myLocale = Locale.forLanguageTag(aLangTag);
         return this;
@@ -157,7 +159,7 @@ public class TextualBody implements ContentResource {
      *
      * @return This TextualBody
      */
-    @JsonGetter(Constants.LANGUAGE)
+    @JsonGetter(JsonKeys.LANGUAGE)
     public String getLanguage() {
         return myLocale.toLanguageTag();
     }
@@ -177,7 +179,7 @@ public class TextualBody implements ContentResource {
      *
      * @return An optional string version of the format
      */
-    @JsonGetter(Constants.FORMAT)
+    @JsonGetter(JsonKeys.FORMAT)
     @JsonInclude(Include.NON_EMPTY)
     public Optional<String> getFormat() {
         return myFormat != null ? Optional.of(myFormat.toString()) : Optional.empty();
@@ -190,7 +192,7 @@ public class TextualBody implements ContentResource {
      * @return This TextualBody
      * @throws IllegalArgumentException If the supplied string isn't a media type
      */
-    @JsonSetter(Constants.FORMAT)
+    @JsonSetter(JsonKeys.FORMAT)
     public TextualBody setFormat(final String aFormat) {
         myFormat = MediaType.parse(aFormat);
         return this;
@@ -204,12 +206,12 @@ public class TextualBody implements ContentResource {
      */
     @JsonIgnore
     public TextualBody setFormat(final MediaType aMediaType) {
-        myFormat = checkNotNull(aMediaType);
+        myFormat = Objects.requireNonNull(aMediaType);
         return this;
     }
 
     @Override
-    @JsonGetter(Constants.TYPE)
+    @JsonGetter(JsonKeys.TYPE)
     public String getType() {
         return ResourceTypes.TEXTUAL_BODY;
     }
@@ -220,9 +222,10 @@ public class TextualBody implements ContentResource {
      * @param aType A type for TextualBody
      * @return This TextualBody
      */
-    @JsonSetter(Constants.TYPE)
-    @SuppressWarnings("PMD.UnusedFormalParameter") // This method is just used by Jackson's deserialization processes
-    private TextualBody setType(final String aType) {
+    @JsonSetter(JsonKeys.TYPE)
+    @SuppressWarnings(PMD.UNUSED_FORMAL_PARAMETER) // This method is just used by Jackson's deserialization processes
+    private TextualBody setType(final String aType) { // NOPMD
         return this;
     }
+
 }

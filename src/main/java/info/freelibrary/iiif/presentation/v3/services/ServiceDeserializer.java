@@ -16,8 +16,8 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.PMD;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.services.auth.AuthCookieService1;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageAPI;
@@ -26,6 +26,7 @@ import info.freelibrary.iiif.presentation.v3.services.image.ImageService2;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageService3;
 import info.freelibrary.iiif.presentation.v3.services.image.Size;
 import info.freelibrary.iiif.presentation.v3.services.image.Tile;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 import io.vertx.core.json.Json;
@@ -33,8 +34,8 @@ import io.vertx.core.json.Json;
 /**
  * Deserializes services from JSON documents into {@link Service} implementations.
  */
-@SuppressWarnings("PMD.GodClass")
-public class ServiceDeserializer extends StdDeserializer<Service> {
+@SuppressWarnings(PMD.GOD_CLASS)
+public class ServiceDeserializer extends StdDeserializer<Service> { // NOPMD
 
     /**
      * The <code>serialVersionUID</code> for ServiceDeserializer.
@@ -74,6 +75,7 @@ public class ServiceDeserializer extends StdDeserializer<Service> {
     /**
      * Deserializes a services JSON node.
      *
+     * @param aParser A JSON parser
      * @param aNode A JSON node representing a service
      * @return A service
      */
@@ -86,15 +88,15 @@ public class ServiceDeserializer extends StdDeserializer<Service> {
         } else if (aNode.isObject()) {
             final URI id = getServiceID(aNode, aParser);
             final String type = getServiceType(aNode, aParser, id);
-            final List<Service> services = getRelatedServices(aParser, aNode.get(Constants.SERVICE));
+            final List<Service> services = getRelatedServices(aParser, aNode.get(JsonKeys.SERVICE));
 
             if (ResourceTypes.IMAGE_SERVICE_2.equals(type)) {
-                final String profile = aNode.get(Constants.PROFILE).textValue();
+                final String profile = aNode.get(JsonKeys.PROFILE).textValue();
                 final ImageService2.Profile level = ImageService2.Profile.fromString(profile);
 
                 service = deserializeImageService(aNode, new ImageService2(level, id)).setServices(services);
             } else if (ResourceTypes.IMAGE_SERVICE_3.equals(type)) {
-                final String profile = aNode.get(Constants.PROFILE).textValue();
+                final String profile = aNode.get(JsonKeys.PROFILE).textValue();
                 final ImageService3.Profile level = ImageService3.Profile.fromString(profile);
 
                 service = deserializeImageService(aNode, new ImageService3(level, id)).setServices(services);
@@ -120,15 +122,14 @@ public class ServiceDeserializer extends StdDeserializer<Service> {
      *
      * @param aNode A JSON node
      * @param aID A service ID
-     * @param aType A service type
      * @return The v1 auth cookie service
      */
     private Service deserializeV1AuthCookieService(final JsonNode aNode, final URI aID) {
-        final JsonNode profileNode = aNode.get(Constants.PROFILE);
+        final JsonNode profileNode = aNode.get(JsonKeys.PROFILE);
 
         if (profileNode != null) {
             final AuthCookieService1.Profile profile = AuthCookieService1.Profile.fromString(profileNode.textValue());
-            final JsonNode labelNode = aNode.get(Constants.LABEL);
+            final JsonNode labelNode = aNode.get(JsonKeys.LABEL);
 
             if (labelNode != null) {
                 return new AuthCookieService1(aID).setLabel(labelNode.textValue()).setProfile(profile);
@@ -145,12 +146,11 @@ public class ServiceDeserializer extends StdDeserializer<Service> {
      *
      * @param aNode A JSON node
      * @param aID A service ID
-     * @param aType A service type
      * @return The physical dims service
      */
     private Service deserializePhysicalDimsService(final JsonNode aNode, final URI aID) {
-        final JsonNode scale = aNode.get(Constants.PHYSICAL_SCALE);
-        final JsonNode units = aNode.get(Constants.PHYSICAL_UNITS);
+        final JsonNode scale = aNode.get(JsonKeys.PHYSICAL_SCALE);
+        final JsonNode units = aNode.get(JsonKeys.PHYSICAL_UNITS);
 
         if (scale == null || units == null) {
             return new PhysicalDimsService(aID);
@@ -168,12 +168,12 @@ public class ServiceDeserializer extends StdDeserializer<Service> {
      * @return The other service
      */
     private Service deserializeOtherService(final JsonNode aNode, final URI aID, final String aType) {
-        final JsonNode profile = aNode.get(Constants.PROFILE);
-        final JsonNode format = aNode.get(Constants.FORMAT);
+        final JsonNode profile = aNode.get(JsonKeys.PROFILE);
+        final JsonNode format = aNode.get(JsonKeys.FORMAT);
         final OtherService otherService;
 
         // We have a older service if the newer ID form isn't set
-        if (aNode.get(Constants.ID) == null) {
+        if (aNode.get(JsonKeys.ID) == null) {
             otherService = new OtherV2Service(aID, aType);
         } else {
             otherService = new OtherService(aID, aType);
@@ -195,17 +195,18 @@ public class ServiceDeserializer extends StdDeserializer<Service> {
      *
      * @param aNode A JSON node
      * @param aParser A JSON parser
+     * @param aID A service ID
      * @return The type associated with the service
      * @throws JsonParseException If the service was lacking a type
      */
     private String getServiceType(final JsonNode aNode, final JsonParser aParser, final URI aID)
             throws JsonParseException {
-        final JsonNode typeNode = aNode.get(Constants.TYPE);
+        final JsonNode typeNode = aNode.get(JsonKeys.TYPE);
 
         if (typeNode != null) {
             return typeNode.textValue();
         } else {
-            final JsonNode v2TypeNode = aNode.get(Constants.V2_TYPE);
+            final JsonNode v2TypeNode = aNode.get(JsonKeys.V2_TYPE);
 
             if (v2TypeNode != null) {
                 return v2TypeNode.textValue();
@@ -225,12 +226,12 @@ public class ServiceDeserializer extends StdDeserializer<Service> {
      * @throws JsonParseException If the service was lacking an ID
      */
     private URI getServiceID(final JsonNode aNode, final JsonParser aParser) throws JsonParseException {
-        final JsonNode idNode = aNode.get(Constants.ID);
+        final JsonNode idNode = aNode.get(JsonKeys.ID);
 
         if (idNode != null) {
             return URI.create(idNode.textValue());
         } else {
-            final JsonNode v2IdNode = aNode.get(Constants.V2_ID);
+            final JsonNode v2IdNode = aNode.get(JsonKeys.V2_ID);
 
             if (v2IdNode != null) {
                 return URI.create(v2IdNode.textValue());

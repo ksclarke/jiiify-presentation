@@ -11,11 +11,12 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.PMD;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageService3;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
@@ -107,13 +108,13 @@ public class AuthCookieService1 extends AbstractAuthService implements AuthServi
     }
 
     @Override
-    @JsonGetter(Constants.V2_ID)
+    @JsonGetter(JsonKeys.V2_ID)
     public URI getID() {
         return super.getID();
     }
 
     @Override
-    @JsonGetter(Constants.V2_TYPE)
+    @JsonGetter(JsonKeys.V2_TYPE)
     public String getType() {
         return super.getType();
     }
@@ -123,7 +124,7 @@ public class AuthCookieService1 extends AbstractAuthService implements AuthServi
      *
      * @return The label of the auth cookie service
      */
-    @JsonGetter(Constants.LABEL)
+    @JsonGetter(JsonKeys.LABEL)
     @JsonInclude(Include.NON_NULL)
     public String getLabel() {
         return myLabel;
@@ -135,7 +136,7 @@ public class AuthCookieService1 extends AbstractAuthService implements AuthServi
      * @param aLabel A label for the auth cookie service
      * @return This auth cookie service
      */
-    @JsonSetter(Constants.LABEL)
+    @JsonSetter(JsonKeys.LABEL)
     public AuthCookieService1 setLabel(final String aLabel) {
         myLabel = aLabel;
         return this;
@@ -147,9 +148,9 @@ public class AuthCookieService1 extends AbstractAuthService implements AuthServi
      * @param aProfile The profile in string form
      * @return The image service
      */
-    @JsonSetter(Constants.PROFILE)
-    @SuppressWarnings("PMD.MissingOverride") // PMD thinks this is overriding something even though it's not
-    private AuthService setProfile(final String aProfile) {
+    @JsonSetter(JsonKeys.PROFILE)
+    @SuppressWarnings(PMD.MISSING_OVERRIDE) // PMD thinks this is overriding something even though it's not
+    private AuthService setProfile(final String aProfile) { // NOPMD
         return super.setProfile(Profile.fromString(aProfile));
     }
 

@@ -11,9 +11,9 @@ import com.thedeanda.lorem.LoremIpsum;
 import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.AbstractTest;
-import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.AudioContentSelector;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 import io.vertx.core.json.JsonObject;
 
@@ -48,9 +48,8 @@ public class StartTest extends AbstractTest {
         final String idURL = myLorem.getUrl();
         final String sourceURL = myLorem.getUrl();
 
-        json.put(Constants.TYPE, ResourceTypes.SPECIFIC_RESOURCE).put(Constants.ID, idURL)
-                .put(Constants.SOURCE, sourceURL)
-                .put(Constants.SELECTOR, new JsonObject().put(Constants.TYPE, selector.getType()));
+        json.put(JsonKeys.TYPE, ResourceTypes.SPECIFIC_RESOURCE).put(JsonKeys.ID, idURL).put(JsonKeys.SOURCE, sourceURL)
+                .put(JsonKeys.SELECTOR, new JsonObject().put(JsonKeys.TYPE, selector.getType()));
 
         assertEquals(json, JsonObject.mapFrom(new Start(idURL, sourceURL, selector)));
     }

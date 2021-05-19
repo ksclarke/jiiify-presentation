@@ -1,14 +1,21 @@
 
-package info.freelibrary.iiif.presentation.v3;
+package info.freelibrary.iiif.presentation.v3; // NOPMD
 
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.iiif.presentation.v3.id.Minter;
+import info.freelibrary.util.warnings.Eclipse;
+import info.freelibrary.util.warnings.JDK;
+import info.freelibrary.util.warnings.PMD;
+
+import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -21,21 +28,22 @@ import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.services.Service;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 
 /**
- * A single Canvas that provides additional content for use while rendering the resource that has the accompanyingCanvas
- * property. Examples include an image to show while a duration-only Canvas is playing audio; or background audio to
- * play while a user is navigating an image-only Manifest.
+ * A single canvas that provides additional content for use while rendering the resource. Examples include: 1) an image
+ * to show while a duration-only canvas is playing audio, or 2) background audio to play while a user is navigating an
+ * image-only manifest.
  */
-@SuppressWarnings({ "PMD.TooManyMethods", "PMD.ExcessivePublicCount" })
-public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
-        implements Resource<AccompanyingCanvas>, CanvasResource<AccompanyingCanvas> {
+@SuppressWarnings({ PMD.TOO_MANY_METHODS, PMD.EXCESSIVE_PUBLIC_COUNT, PMD.CYCLOMATIC_COMPLEXITY })
+public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> // NOPMD
+        implements CanvasResource<AccompanyingCanvas> { // NOPMD
 
     /**
-     * Creates a new accompanying canvas.
+     * Creates a new accompanying canvas from the supplied ID.
      *
      * @param aID An accompanying canvas ID
      */
@@ -44,7 +52,7 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
     }
 
     /**
-     * Creates a new accompanying canvas.
+     * Creates a new accompanying canvas from the supplied ID in string form.
      *
      * @param aID An accompanying canvas ID
      */
@@ -53,7 +61,7 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
     }
 
     /**
-     * Creates a new accompanying canvas.
+     * Creates a new accompanying canvas from the supplied ID and label.
      *
      * @param aID An accompanying canvas ID
      * @param aLabel An accompanying canvas label
@@ -63,7 +71,7 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
     }
 
     /**
-     * Creates a new accompanying canvas.
+     * Creates a new accompanying canvas from the supplied ID and label.
      *
      * @param aID An accompanying canvas ID in string form
      * @param aLabel A accompanying canvas label in string form
@@ -73,7 +81,7 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
     }
 
     /**
-     * Creates a new accompanying canvas, using the supplied minter to create the canvas ID.
+     * Creates a new accompanying canvas using the supplied minter to create the canvas ID.
      *
      * @param aMinter A minter that should be used to get an ID for the canvas
      */
@@ -82,7 +90,7 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
     }
 
     /**
-     * Creates a new accompanying canvas, using the supplied minter to create the canvas' ID.
+     * Creates a new accompanying canvas using the supplied minter to create the canvas ID.
      *
      * @param aMinter A minter that will create the canvas ID
      * @param aLabel A accompanying canvas label in string form
@@ -92,7 +100,7 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
     }
 
     /**
-     * Creates a new accompanying canvas, using the supplied minter to create the canvas' ID.
+     * Creates a new accompanying canvas using the supplied minter to create the canvas ID.
      *
      * @param aMinter A minter that will create the canvas ID
      * @param aLabel A accompanying canvas label
@@ -102,15 +110,21 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
     }
 
     /**
-     * Creates a new accompanying canvas.
+     * Creates a new accompanying canvas. This is just used by Jackson's deserialization processes.
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings(Eclipse.UNUSED)
     private AccompanyingCanvas() {
         super();
     }
 
     @Override
-    @JsonSetter(Constants.PROVIDER)
+    @JsonGetter(JsonKeys.ID)
+    public URI getID() {
+        return super.getID();
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.PROVIDER)
     public AccompanyingCanvas setProviders(final Provider... aProviderArray) {
         return setProviders(Arrays.asList(aProviderArray));
     }
@@ -127,13 +141,13 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
     }
 
     @Override
-    @JsonSetter(Constants.BEHAVIOR)
+    @JsonSetter(JsonKeys.BEHAVIOR)
     public AccompanyingCanvas setBehaviors(final Behavior... aBehaviorArray) {
         return (AccompanyingCanvas) super.setBehaviors(aBehaviorArray);
     }
 
     @Override
-    @JsonSetter(Constants.BEHAVIOR)
+    @JsonSetter(JsonKeys.BEHAVIOR)
     public AccompanyingCanvas setBehaviors(final List<Behavior> aBehaviorList) {
         return (AccompanyingCanvas) super.setBehaviors(aBehaviorList);
     }
@@ -199,12 +213,12 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
     }
 
     @Override
-    public AccompanyingCanvas setThumbnails(final Thumbnail... aThumbnailArray) {
+    public AccompanyingCanvas setThumbnails(final ContentResource<?>... aThumbnailArray) {
         return (AccompanyingCanvas) super.setThumbnails(aThumbnailArray);
     }
 
     @Override
-    public AccompanyingCanvas setThumbnails(final List<Thumbnail> aThumbnailList) {
+    public AccompanyingCanvas setThumbnails(final List<ContentResource<?>> aThumbnailList) {
         return (AccompanyingCanvas) super.setThumbnails(aThumbnailList);
     }
 
@@ -277,46 +291,46 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
 
     @Override
     @SafeVarargs
-    public final AccompanyingCanvas paintWith(final Minter aMinter, final ContentResource... aContentArray) {
+    public final AccompanyingCanvas paintWith(final Minter aMinter, final ContentResource<?>... aContentArray) {
         return (AccompanyingCanvas) super.paint(this, aMinter, false, aContentArray);
     }
 
     @Override
     @SafeVarargs
     public final AccompanyingCanvas paintWith(final Minter aMinter, final boolean aChoice,
-            final ContentResource... aContentArray) {
+            final ContentResource<?>... aContentArray) {
         return (AccompanyingCanvas) super.paint(this, aMinter, aChoice, aContentArray);
     }
 
     @Override
-    public final AccompanyingCanvas paintWith(final Minter aMinter, final List<ContentResource> aContentList) {
-        return (AccompanyingCanvas) super.paint(this, aMinter, false, aContentList.toArray(new ContentResource[] {}));
+    public final AccompanyingCanvas paintWith(final Minter aMinter, final List<ContentResource<?>> aContentList) {
+        return (AccompanyingCanvas) super.paint(this, aMinter, false, aContentList.toArray(new ContentResource[0]));
     }
 
     @Override
     public final AccompanyingCanvas paintWith(final Minter aMinter, final boolean aChoice,
-            final List<ContentResource> aContentList) {
-        return (AccompanyingCanvas) super.paint(this, aMinter, aChoice, aContentList.toArray(new ContentResource[] {}));
+            final List<ContentResource<?>> aContentList) {
+        return (AccompanyingCanvas) super.paint(this, aMinter, aChoice, aContentList.toArray(new ContentResource[0]));
     }
 
     @Override
     @SafeVarargs
     public final AccompanyingCanvas paintWith(final Minter aMinter, final MediaFragmentSelector aCanvasRegion,
-            final ContentResource... aContentArray) {
+            final ContentResource<?>... aContentArray) {
         return (AccompanyingCanvas) super.paint(this, aMinter, aCanvasRegion, false, aContentArray);
     }
 
     @Override
     @SafeVarargs
     public final AccompanyingCanvas paintWith(final Minter aMinter, final MediaFragmentSelector aCanvasRegion,
-            final boolean aChoice, final ContentResource... aContentArray) {
+            final boolean aChoice, final ContentResource<?>... aContentArray) {
         return (AccompanyingCanvas) super.paint(this, aMinter, aCanvasRegion, aChoice, aContentArray);
     }
 
     @Override
     @SafeVarargs
     public final AccompanyingCanvas paintWith(final Minter aMinter, final String aCanvasRegion,
-            final ContentResource... aContentArray) {
+            final ContentResource<?>... aContentArray) {
         return (AccompanyingCanvas) super.paint(this, aMinter, new MediaFragmentSelector(aCanvasRegion), false,
                 aContentArray);
     }
@@ -324,83 +338,83 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
     @Override
     @SafeVarargs
     public final AccompanyingCanvas paintWith(final Minter aMinter, final String aCanvasRegion, final boolean aChoice,
-            final ContentResource... aContentArray) {
+            final ContentResource<?>... aContentArray) {
         return (AccompanyingCanvas) super.paint(this, aMinter, new MediaFragmentSelector(aCanvasRegion), aChoice,
                 aContentArray);
     }
 
     @Override
     public final AccompanyingCanvas paintWith(final Minter aMinter, final MediaFragmentSelector aCanvasRegion,
-            final List<ContentResource> aContentList) {
+            final List<ContentResource<?>> aContentList) {
         return (AccompanyingCanvas) super.paint(this, aMinter, aCanvasRegion, false,
                 aContentList.toArray(new ContentResource[] {}));
     }
 
     @Override
     public final AccompanyingCanvas paintWith(final Minter aMinter, final MediaFragmentSelector aCanvasRegion,
-            final boolean aChoice, final List<ContentResource> aContentList) {
+            final boolean aChoice, final List<ContentResource<?>> aContentList) {
         return (AccompanyingCanvas) super.paint(this, aMinter, aCanvasRegion, aChoice,
                 aContentList.toArray(new ContentResource[] {}));
     }
 
     @Override
     public final AccompanyingCanvas paintWith(final Minter aMinter, final String aCanvasRegion,
-            final List<ContentResource> aContentList) {
+            final List<ContentResource<?>> aContentList) {
         return (AccompanyingCanvas) super.paint(this, aMinter, new MediaFragmentSelector(aCanvasRegion), false,
                 aContentList.toArray(new ContentResource[] {}));
     }
 
     @Override
     public final AccompanyingCanvas paintWith(final Minter aMinter, final String aCanvasRegion, final boolean aChoice,
-            final List<ContentResource> aContentList) {
+            final List<ContentResource<?>> aContentList) {
         return (AccompanyingCanvas) super.paint(this, aMinter, new MediaFragmentSelector(aCanvasRegion), aChoice,
                 aContentList.toArray(new ContentResource[] {}));
     }
 
     @Override
     @SafeVarargs
-    public final AccompanyingCanvas supplementWith(final Minter aMinter, final ContentResource... aContentArray) {
+    public final AccompanyingCanvas supplementWith(final Minter aMinter, final ContentResource<?>... aContentArray) {
         return (AccompanyingCanvas) super.supplement(this, aMinter, false, aContentArray);
     }
 
     @Override
     @SafeVarargs
     public final AccompanyingCanvas supplementWith(final Minter aMinter, final boolean aChoice,
-            final ContentResource... aContentArray) {
+            final ContentResource<?>... aContentArray) {
         return (AccompanyingCanvas) super.supplement(this, aMinter, aChoice, aContentArray);
     }
 
     @Override
-    public final AccompanyingCanvas supplementWith(final Minter aMinter, final List<ContentResource> aContentList) {
+    public final AccompanyingCanvas supplementWith(final Minter aMinter, final List<ContentResource<?>> aContentList) {
         return (AccompanyingCanvas) super.supplement(this, aMinter, false,
-                aContentList.toArray(new ContentResource[] {}));
+                aContentList.toArray(new ContentResource[0]));
     }
 
     @Override
     public final AccompanyingCanvas supplementWith(final Minter aMinter, final boolean aChoice,
-            final List<ContentResource> aContentList) {
+            final List<ContentResource<?>> aContentList) {
         return (AccompanyingCanvas) super.supplement(this, aMinter, aChoice,
-                aContentList.toArray(new ContentResource[] {}));
+                aContentList.toArray(new ContentResource[0]));
     }
 
     @Override
     @SafeVarargs
     public final AccompanyingCanvas supplementWith(final Minter aMinter, final MediaFragmentSelector aCanvasRegion,
-            final ContentResource... aContentArray) {
+            final ContentResource<?>... aContentArray) {
         return (AccompanyingCanvas) super.supplement(this, aMinter, aCanvasRegion, false, aContentArray);
     }
 
     @Override
     @SafeVarargs
     public final AccompanyingCanvas supplementWith(final Minter aMinter, final MediaFragmentSelector aCanvasRegion,
-            final boolean aChoice, final ContentResource... aContentArray) {
+            final boolean aChoice, final ContentResource<?>... aContentArray) {
         return (AccompanyingCanvas) super.supplement(this, aMinter, aCanvasRegion, aChoice, aContentArray);
     }
 
     @Override
     @SafeVarargs
     public final AccompanyingCanvas supplementWith(final Minter aMinter, final String aCanvasRegion,
-            final ContentResource... aContentArray) {
+            final ContentResource<?>... aContentArray) {
         return (AccompanyingCanvas) super.supplement(this, aMinter, new MediaFragmentSelector(aCanvasRegion), false,
                 aContentArray);
     }
@@ -408,37 +422,37 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
     @Override
     @SafeVarargs
     public final AccompanyingCanvas supplementWith(final Minter aMinter, final String aCanvasRegion,
-            final boolean aChoice, final ContentResource... aContentArray) {
+            final boolean aChoice, final ContentResource<?>... aContentArray) {
         return (AccompanyingCanvas) super.supplement(this, aMinter, new MediaFragmentSelector(aCanvasRegion), aChoice,
                 aContentArray);
     }
 
     @Override
     public final AccompanyingCanvas supplementWith(final Minter aMinter, final MediaFragmentSelector aCanvasRegion,
-            final List<ContentResource> aContentList) {
+            final List<ContentResource<?>> aContentList) {
         return (AccompanyingCanvas) super.supplement(this, aMinter, aCanvasRegion, false,
-                aContentList.toArray(new ContentResource[] {}));
+                aContentList.toArray(new ContentResource[0]));
     }
 
     @Override
     public final AccompanyingCanvas supplementWith(final Minter aMinter, final MediaFragmentSelector aCanvasRegion,
-            final boolean aChoice, final List<ContentResource> aContentList) {
+            final boolean aChoice, final List<ContentResource<?>> aContentList) {
         return (AccompanyingCanvas) super.supplement(this, aMinter, aCanvasRegion, aChoice,
-                aContentList.toArray(new ContentResource[] {}));
+                aContentList.toArray(new ContentResource[0]));
     }
 
     @Override
     public final AccompanyingCanvas supplementWith(final Minter aMinter, final String aCanvasRegion,
-            final List<ContentResource> aContentList) {
+            final List<ContentResource<?>> aContentList) {
         return (AccompanyingCanvas) super.supplement(this, aMinter, new MediaFragmentSelector(aCanvasRegion), false,
-                aContentList.toArray(new ContentResource[] {}));
+                aContentList.toArray(new ContentResource[0]));
     }
 
     @Override
     public final AccompanyingCanvas supplementWith(final Minter aMinter, final String aCanvasRegion,
-            final boolean aChoice, final List<ContentResource> aContentList) {
+            final boolean aChoice, final List<ContentResource<?>> aContentList) {
         return (AccompanyingCanvas) super.supplement(this, aMinter, new MediaFragmentSelector(aCanvasRegion), aChoice,
-                aContentList.toArray(new ContentResource[] {}));
+                aContentList.toArray(new ContentResource[0]));
     }
 
     @Override
@@ -487,6 +501,58 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
         return (AccompanyingCanvas) super.setPaintingPages(aPageList);
     }
 
+    @Override
+    @JsonGetter(JsonKeys.ITEMS)
+    public List<AnnotationPage<PaintingAnnotation>> getPaintingPages() {
+        return super.getPaintingPages();
+    }
+
+    @Override
+    @JsonIgnore
+    public List<AnnotationPage<SupplementingAnnotation>> getSupplementingPages() {
+        return super.getSupplementingPages();
+    }
+
+    @Override
+    public final AccompanyingCanvas
+            setOtherAnnotations(final List<AnnotationPage<? extends Annotation<?>>> aAnnotationList) {
+        return (AccompanyingCanvas) super.setOtherAnnotations(aAnnotationList);
+    }
+
+    @SuppressWarnings(JDK.UNCHECKED)
+    @Override
+    public final AccompanyingCanvas
+            setOtherAnnotations(final AnnotationPage<? extends Annotation<?>>... aAnnotationArray) {
+        return (AccompanyingCanvas) super.setOtherAnnotations(aAnnotationArray);
+    }
+
+    @Override
+    @JsonIgnore
+    public List<AnnotationPage<? extends Annotation<?>>> getOtherAnnotations() {
+        return super.getOtherAnnotations();
+    }
+
+    @Override
+    @JsonGetter(JsonKeys.DURATION)
+    @JsonInclude(Include.NON_DEFAULT)
+    public float getDuration() {
+        return super.getDuration();
+    }
+
+    @Override
+    @JsonGetter(JsonKeys.HEIGHT)
+    @JsonInclude(Include.NON_DEFAULT)
+    public int getHeight() {
+        return super.getHeight();
+    }
+
+    @Override
+    @JsonGetter(JsonKeys.WIDTH)
+    @JsonInclude(Include.NON_DEFAULT)
+    public int getWidth() {
+        return super.getWidth();
+    }
+
     // end AbstractCanvas
 
     /**
@@ -508,4 +574,5 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
     public static AccompanyingCanvas fromString(final String aJsonString) {
         return fromJSON(new JsonObject(aJsonString));
     }
+
 }

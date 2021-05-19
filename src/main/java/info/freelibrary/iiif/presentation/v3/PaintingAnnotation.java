@@ -10,8 +10,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.Eclipse;
 
-import info.freelibrary.iiif.presentation.v3.id.Minter;
+import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -23,9 +24,9 @@ import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
-import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.services.Service;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
@@ -45,7 +46,7 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation>
     private static final String MOTIVATION = "painting";
 
     /**
-     * Creates a painting annotation.
+     * Creates a painting annotation from the supplied ID and canvas resource.
      *
      * @param <C> A type of canvas to target
      * @param aID An ID
@@ -57,7 +58,7 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation>
     }
 
     /**
-     * Creates a painting annotation.
+     * Creates a painting annotation from the supplied ID and canvas resource.
      *
      * @param <C> A type of canvas to target
      * @param aID An ID in string form
@@ -68,7 +69,7 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation>
     }
 
     /**
-     * Creates a painting annotation, using the supplied minter to create the ID.
+     * Creates a painting annotation from the supplied canvas resource, using the supplied minter to create the ID.
      *
      * @param <C> A type of canvas to target
      * @param aMinter A minter from which to get the painting annotation's ID
@@ -79,7 +80,7 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation>
     }
 
     /**
-     * Creates a painting annotation.
+     * Creates a painting annotation from the supplied ID and canvas resource.
      *
      * @param <C> A type of canvas to target
      * @param aID An ID
@@ -93,7 +94,7 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation>
     }
 
     /**
-     * Creates a painting annotation.
+     * Creates a painting annotation from the supplied ID and canvas resource.
      *
      * @param <C> A type of canvas to target
      * @param aID An ID in string form
@@ -106,7 +107,8 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation>
     }
 
     /**
-     * Creates a painting annotation, using the supplied minter to create the painting annotation's ID.
+     * Creates a painting annotation from the supplied canvas resource and media fragment selector, using the supplied
+     * minter to create the painting annotation's ID.
      *
      * @param <C> A type of canvas to target
      * @param aMinter A minter from which to get the painting annotation's ID
@@ -120,7 +122,7 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation>
     }
 
     /**
-     * Creates a painting annotation.
+     * Creates a painting annotation from the supplied ID, canvas resource, and canvas region.
      *
      * @param <C> A type of canvas to target
      * @param aID An ID
@@ -134,7 +136,7 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation>
     }
 
     /**
-     * Creates a painting annotation.
+     * Creates a painting annotation from the supplied ID, canvas resource, and canvas region.
      *
      * @param <C> A type of canvas to target
      * @param aID An ID in string form
@@ -147,7 +149,8 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation>
     }
 
     /**
-     * Creates a painting annotation, using the supplied minter to create the painting annotation's ID.
+     * Creates a painting annotation from the supplied canvas resource and canvas region, using the supplied minter to
+     * create the painting annotation's ID.
      *
      * @param <C> A type of canvas to target
      * @param aMinter A minter from which to get the painting annotation's ID
@@ -161,15 +164,15 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation>
     }
 
     /**
-     * Creates a painting annotation.
+     * Creates a painting annotation. This is used by Jackson't deserialization processes.
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings(Eclipse.UNUSED)
     private PaintingAnnotation() {
         super();
     }
 
     @Override
-    @JsonSetter(Constants.PROVIDER)
+    @JsonSetter(JsonKeys.PROVIDER)
     public PaintingAnnotation setProviders(final Provider... aProviderArray) {
         return setProviders(Arrays.asList(aProviderArray));
     }
@@ -191,28 +194,28 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation>
     }
 
     @Override
-    public PaintingAnnotation addBody(final ContentResource... aBody) {
-        return (PaintingAnnotation) super.addBody(aBody);
+    public PaintingAnnotation addBodies(final AnnotationBody<?>... aBody) {
+        return (PaintingAnnotation) super.addBodies(aBody);
     }
 
     @Override
-    public PaintingAnnotation addBody(final List<ContentResource> aBody) {
-        return addBody(aBody.toArray(new ContentResource[] {}));
+    public PaintingAnnotation addBodies(final List<AnnotationBody<?>> aBody) {
+        return addBodies(aBody.toArray(new AnnotationBody[0]));
     }
 
     @Override
-    public PaintingAnnotation clearBody() {
-        return (PaintingAnnotation) super.clearBody();
+    public PaintingAnnotation clearBodies() {
+        return (PaintingAnnotation) super.clearBodies();
     }
 
     @Override
-    public PaintingAnnotation setBody(final ContentResource... aBody) {
-        return (PaintingAnnotation) super.setBody(aBody);
+    public PaintingAnnotation setBodies(final AnnotationBody<?>... aBody) {
+        return (PaintingAnnotation) super.setBodies(aBody);
     }
 
     @Override
-    public PaintingAnnotation setBody(final List<ContentResource> aBody) {
-        return setBody(aBody.toArray(new ContentResource[] {}));
+    public PaintingAnnotation setBodies(final List<AnnotationBody<?>> aBody) {
+        return setBodies(aBody.toArray(new AnnotationBody[0]));
     }
 
     @Override
@@ -237,22 +240,22 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation>
 
     @Override
     public PaintingAnnotation setBehaviors(final Behavior... aBehaviorArray) {
-        return (PaintingAnnotation) super.setBehaviors(aBehaviorArray);
+        return (PaintingAnnotation) super.setBehaviors(aBehaviorArray); // Checked in super.setBehaviors(Behavior...)
     }
 
     @Override
     public PaintingAnnotation setBehaviors(final List<Behavior> aBehaviorList) {
-        return (PaintingAnnotation) super.setBehaviors(aBehaviorList);
+        return (PaintingAnnotation) super.setBehaviors(aBehaviorList); // Checked in super.setBehaviors(List<Behavior>)
     }
 
     @Override
     public PaintingAnnotation addBehaviors(final Behavior... aBehaviorArray) {
-        return (PaintingAnnotation) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorArray));
+        return (PaintingAnnotation) super.addBehaviors(aBehaviorArray); // Checked in super.addBehaviors(Behavior...)
     }
 
     @Override
     public PaintingAnnotation addBehaviors(final List<Behavior> aBehaviorList) {
-        return (PaintingAnnotation) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorList));
+        return (PaintingAnnotation) super.addBehaviors(aBehaviorList); // Checked in super.addBehaviors(List<Behavior>)
     }
 
     @Override
@@ -311,12 +314,12 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation>
     }
 
     @Override
-    public PaintingAnnotation setThumbnails(final Thumbnail... aThumbnailArray) {
+    public PaintingAnnotation setThumbnails(final ContentResource<?>... aThumbnailArray) {
         return (PaintingAnnotation) super.setThumbnails(aThumbnailArray);
     }
 
     @Override
-    public PaintingAnnotation setThumbnails(final List<Thumbnail> aThumbnailList) {
+    public PaintingAnnotation setThumbnails(final List<ContentResource<?>> aThumbnailList) {
         return (PaintingAnnotation) super.setThumbnails(aThumbnailList);
     }
 
@@ -374,4 +377,5 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation>
     public PaintingAnnotation setLabel(final Label aLabel) {
         return (PaintingAnnotation) super.setLabel(aLabel);
     }
+
 }

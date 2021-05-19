@@ -21,15 +21,16 @@ import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.services.Service;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
  * Canvas content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
  */
 public class CanvasContent extends AbstractContentResource<CanvasContent>
-        implements ContentResource, Resource<CanvasContent> {
+        implements AnnotationBody<CanvasContent>, EmbeddedResource<CanvasContent>, Resource<CanvasContent> {
 
     /**
-     * Creates a canvas content resource.
+     * Creates a canvas content resource from the supplied ID.
      *
      * @param aID A canvas content resource ID in string form
      */
@@ -39,7 +40,7 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
     }
 
     /**
-     * Creates a canvas content resource.
+     * Creates a canvas content resource from the supplied ID.
      *
      * @param aID A canvas content resource ID
      */
@@ -49,7 +50,7 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
     }
 
     /**
-     * Creates a canvas content resource for Jackson's deserialization.
+     * Creates a canvas content resource for Jackson's deserialization processes.
      */
     private CanvasContent() {
         super(ResourceTypes.CANVAS);
@@ -57,7 +58,7 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
     }
 
     @Override
-    @JsonSetter(Constants.PROVIDER)
+    @JsonSetter(JsonKeys.PROVIDER)
     public CanvasContent setProviders(final Provider... aProviderArray) {
         return setProviders(Arrays.asList(aProviderArray));
     }
@@ -74,7 +75,7 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
     }
 
     @Override
-    @JsonSetter(Constants.BEHAVIOR)
+    @JsonSetter(JsonKeys.BEHAVIOR)
     public CanvasContent setBehaviors(final Behavior... aBehaviorArray) {
         return (CanvasContent) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorArray));
     }
@@ -145,12 +146,12 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
     }
 
     @Override
-    public CanvasContent setThumbnails(final Thumbnail... aThumbnailArray) {
+    public CanvasContent setThumbnails(final ContentResource<?>... aThumbnailArray) {
         return (CanvasContent) super.setThumbnails(aThumbnailArray);
     }
 
     @Override
-    public CanvasContent setThumbnails(final List<Thumbnail> aThumbnailList) {
+    public CanvasContent setThumbnails(final List<ContentResource<?>> aThumbnailList) {
         return (CanvasContent) super.setThumbnails(aThumbnailList);
     }
 
@@ -208,4 +209,5 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
     public CanvasContent setLabel(final Label aLabel) {
         return (CanvasContent) super.setLabel(aLabel);
     }
+
 }

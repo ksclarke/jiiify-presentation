@@ -10,8 +10,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.Eclipse;
 
-import info.freelibrary.iiif.presentation.v3.id.Minter;
+import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -25,6 +26,7 @@ import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.services.Service;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
@@ -44,7 +46,7 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     private static final Logger LOGGER = LoggerFactory.getLogger(SupplementingAnnotation.class, MessageCodes.BUNDLE);
 
     /**
-     * Creates a supplementing annotation.
+     * Creates a supplementing annotation from the supplied ID and canvas resource.
      *
      * @param <C> A type of canvas
      * @param aID An ID
@@ -56,7 +58,7 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     }
 
     /**
-     * Creates a supplementing annotation.
+     * Creates a supplementing annotation from the supplied ID and canvas resource.
      *
      * @param <C> A type of canvas
      * @param aID An ID in string form
@@ -67,7 +69,7 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     }
 
     /**
-     * Creates a supplementing annotation, using the supplied minter to create the ID.
+     * Creates a supplementing annotation from the supplied canvas resource, using the supplied minter to create the ID.
      *
      * @param <C> A type of canvas
      * @param aMinter A minter that's used to create the annotation's ID
@@ -79,7 +81,7 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     }
 
     /**
-     * Creates a supplementing annotation.
+     * Creates a supplementing annotation from the supplied ID, canvas resource, and media fragment selector.
      *
      * @param <C> A type of canvas
      * @param aID An ID
@@ -93,7 +95,7 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     }
 
     /**
-     * Creates a supplementing annotation.
+     * Creates a supplementing annotation from the supplied ID, canvas resource, and media fragment selector.
      *
      * @param <C> A type of canvas
      * @param aID An ID in string form
@@ -106,7 +108,8 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     }
 
     /**
-     * Creates a supplementing annotation, using the supplied minter to create the ID.
+     * Creates a supplementing annotation from the supplied canvas resource and media fragment selector, using the
+     * supplied minter to create the ID.
      *
      * @param <C> A type of canvas
      * @param aMinter A minter used to create the annotation's ID
@@ -119,7 +122,7 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     }
 
     /**
-     * Creates a supplementing annotation.
+     * Creates a supplementing annotation from the supplied ID, canvas resource, and canvas region.
      *
      * @param <C> A type of canvas
      * @param aID An ID
@@ -133,7 +136,7 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     }
 
     /**
-     * Creates a supplementing annotation.
+     * Creates a supplementing annotation from the supplied ID, canvas resource, and canvas region.
      *
      * @param <C> A type of canvas
      * @param aID An ID in string form
@@ -146,7 +149,8 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     }
 
     /**
-     * Creates a supplementing annotation, using the supplied minter to create the ID.
+     * Creates a supplementing annotation from the supplied canvas resource and canvas region, using the supplied minter
+     * to create the ID.
      *
      * @param <C> A type of canvas
      * @param aMinter A minter used to create the supplementing annotation's ID
@@ -159,15 +163,15 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     }
 
     /**
-     * Creates a supplementing annotation.
+     * Creates a supplementing annotation. This is used by Jackson's deserialization processes.
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings(Eclipse.UNUSED)
     private SupplementingAnnotation() {
         super();
     }
 
     @Override
-    @JsonSetter(Constants.PROVIDER)
+    @JsonSetter(JsonKeys.PROVIDER)
     public SupplementingAnnotation setProviders(final Provider... aProviderArray) {
         return setProviders(Arrays.asList(aProviderArray));
     }
@@ -189,28 +193,28 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     }
 
     @Override
-    public SupplementingAnnotation addBody(final ContentResource... aBody) {
-        return (SupplementingAnnotation) super.addBody(aBody);
+    public SupplementingAnnotation addBodies(final AnnotationBody<?>... aBody) {
+        return (SupplementingAnnotation) super.addBodies(aBody);
     }
 
     @Override
-    public SupplementingAnnotation addBody(final List<ContentResource> aBody) {
-        return addBody(aBody.toArray(new ContentResource[] {}));
+    public SupplementingAnnotation addBodies(final List<AnnotationBody<?>> aBody) {
+        return addBodies(aBody.toArray(new AnnotationBody[0]));
     }
 
     @Override
-    public SupplementingAnnotation clearBody() {
-        return (SupplementingAnnotation) super.clearBody();
+    public SupplementingAnnotation clearBodies() {
+        return (SupplementingAnnotation) super.clearBodies();
     }
 
     @Override
-    public SupplementingAnnotation setBody(final ContentResource... aBody) {
-        return (SupplementingAnnotation) super.setBody(aBody);
+    public SupplementingAnnotation setBodies(final AnnotationBody<?>... aBody) {
+        return (SupplementingAnnotation) super.setBodies(aBody);
     }
 
     @Override
-    public SupplementingAnnotation setBody(final List<ContentResource> aBody) {
-        return setBody(aBody.toArray(new ContentResource[] {}));
+    public SupplementingAnnotation setBodies(final List<AnnotationBody<?>> aBody) {
+        return setBodies(aBody.toArray(new AnnotationBody[0]));
     }
 
     @Override
@@ -235,21 +239,25 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
 
     @Override
     public SupplementingAnnotation setBehaviors(final Behavior... aBehaviorArray) {
+        // Checked in super.setBehaviors(Behavior...)
         return (SupplementingAnnotation) super.setBehaviors(aBehaviorArray);
     }
 
     @Override
     public SupplementingAnnotation setBehaviors(final List<Behavior> aBehaviorList) {
+        // Checked in super.setBehaviors(List<Behavior>)
         return (SupplementingAnnotation) super.setBehaviors(aBehaviorList);
     }
 
     @Override
     public SupplementingAnnotation addBehaviors(final Behavior... aBehaviorArray) {
+        // Checked in super.addBehaviors(Behavior...)
         return (SupplementingAnnotation) super.addBehaviors(aBehaviorArray);
     }
 
     @Override
     public SupplementingAnnotation addBehaviors(final List<Behavior> aBehaviorList) {
+        // Checked in super.addBehaviors(List<Behavior>)
         return (SupplementingAnnotation) super.addBehaviors(aBehaviorList);
     }
 
@@ -309,12 +317,12 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     }
 
     @Override
-    public SupplementingAnnotation setThumbnails(final Thumbnail... aThumbnailArray) {
+    public SupplementingAnnotation setThumbnails(final ContentResource<?>... aThumbnailArray) {
         return (SupplementingAnnotation) super.setThumbnails(aThumbnailArray);
     }
 
     @Override
-    public SupplementingAnnotation setThumbnails(final List<Thumbnail> aThumbnailList) {
+    public SupplementingAnnotation setThumbnails(final List<ContentResource<?>> aThumbnailList) {
         return (SupplementingAnnotation) super.setThumbnails(aThumbnailList);
     }
 

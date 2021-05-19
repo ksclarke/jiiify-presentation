@@ -1,13 +1,14 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static info.freelibrary.util.Constants.HASH;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.TreeMap;
 
@@ -20,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
@@ -27,26 +29,28 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavi
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.Selector;
 import info.freelibrary.iiif.presentation.v3.utils.ContentResourceComparator;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.json.jackson.DatabindCodec;
 
 /**
- * Content resources and commentary are associated with a canvas via an annotation. This provides a single, coherent
- * method for aligning information, and provides a standards based framework for distinguishing parts of resources and
- * parts of canvases. As annotations can be added later, it promotes a distributed system in which publishers can align
- * their content with the descriptions created by others.
+ * A way to associate content resources and commentary with a canvas. This provides a single, coherent method for
+ * aligning information, and provides a standards based framework for distinguishing parts of resources and parts of
+ * canvases. As annotations can be added later, it promotes a distributed system in which publishers can align their
+ * content with the descriptions created by others.
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-@JsonPropertyOrder({ Constants.CONTEXT, Constants.ID, Constants.TYPE, Constants.MOTIVATION, Constants.LABEL,
-    Constants.SUMMARY, Constants.REQUIRED_STATEMENT, Constants.RIGHTS, Constants.PART_OF, Constants.HOMEPAGE,
-    Constants.THUMBNAIL, Constants.METADATA, Constants.ITEMS, Constants.SERVICE, Constants.TIMEMODE, Constants.BODY,
-    Constants.TARGET })
-public class Annotation<T extends Annotation<T>> extends AbstractResource<Annotation<T>> {
+@JsonPropertyOrder({ JsonKeys.CONTEXT, JsonKeys.ID, JsonKeys.TYPE, JsonKeys.MOTIVATION, JsonKeys.LABEL,
+    JsonKeys.SUMMARY, JsonKeys.REQUIRED_STATEMENT, JsonKeys.RIGHTS, JsonKeys.PART_OF, JsonKeys.HOMEPAGE,
+    JsonKeys.THUMBNAIL, JsonKeys.METADATA, JsonKeys.ITEMS, JsonKeys.SERVICE, JsonKeys.TIMEMODE, JsonKeys.BODY,
+    JsonKeys.TARGET })
+@SuppressWarnings(PMD.GOD_CLASS)
+public class Annotation<T extends Annotation<T>> extends AbstractResource<Annotation<T>> { // NOPMD
 
     /**
-     * The Annotation logger.
+     * The annotation's logger.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(Annotation.class, MessageCodes.BUNDLE);
 
@@ -61,14 +65,14 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
     private static final String RDF_NIL = "rdf:nil";
 
     /**
-     * The content resources that comprise the annotation body.
+     * The annotation's bodies.
      */
-    protected List<ContentResource> myBody;
+    protected List<AnnotationBody<?>> myBodies;
 
     /**
-     * A boolean flag indicating whether the body contains a choice.
+     * A boolean flag indicating whether the annotation bodies contain a choice.
      */
-    protected boolean myBodyContainsChoice;
+    protected boolean myBodiesContainChoice;
 
     /**
      * The target URI of the annotation.
@@ -83,20 +87,21 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
     /**
      * The annotation's motivation.
      */
-    @JsonProperty(Constants.MOTIVATION)
+    @JsonProperty(JsonKeys.MOTIVATION)
     protected String myMotivation;
 
     /**
      * The annotation's time mode.
      */
-    @JsonProperty(Constants.TIMEMODE)
+    @JsonProperty(JsonKeys.TIMEMODE)
     protected TimeMode myTimeMode;
 
     /**
-     * Creates a IIIF presentation annotation resource.
+     * Creates an annotation resource.
      *
-     * @param aID An ID
+     * @param aID An annotation ID
      * @param aCanvas A canvas to target
+     * @param <C> A type of canvas resource
      */
     protected <C extends CanvasResource<C>> Annotation(final URI aID, final CanvasResource<C> aCanvas) {
         super(ResourceTypes.ANNOTATION, aID);
@@ -104,11 +109,12 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
     }
 
     /**
-     * Creates a IIIF presentation annotation resource.
+     * Creates an annotation resource.
      *
-     * @param aID An ID
+     * @param aID An annotation ID
      * @param aCanvas A canvas to target
      * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to target
+     * @param <C> A type of canvas resource
      */
     protected <C extends CanvasResource<C>> Annotation(final URI aID, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
@@ -117,11 +123,12 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
     }
 
     /**
-     * Creates a IIIF presentation annotation resource.
+     * Creates an annotation resource.
      *
-     * @param aID An ID
+     * @param aID An annotation ID
      * @param aCanvas A canvas to target
      * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to target
+     * @param <C> A type of canvas resource
      */
     protected <C extends CanvasResource<C>> Annotation(final URI aID, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
@@ -129,104 +136,104 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
     }
 
     /**
-     * Creates an annotation.
+     * Creates an annotation resource.
      */
     protected Annotation() {
         super(ResourceTypes.ANNOTATION);
     }
 
     /**
-     * Gets the body (i.e., content resources) associated with this annotation.
+     * Gets the bodies associated with this annotation.
      *
-     * @return The content resources associated with this annotation
+     * @return The bodies associated with this annotation
      */
     @JsonIgnore
-    public List<ContentResource> getBody() {
-        if (myBody == null) {
-            myBody = new ArrayList<>();
+    public List<AnnotationBody<?>> getBodies() {
+        if (myBodies == null) {
+            myBodies = new ArrayList<>();
         }
 
-        return myBody;
+        return myBodies;
     }
 
     /**
-     * Removes the body (i.e. content resources) from this annotation.
+     * Removes the bodies from this annotation.
      *
      * @return The annotation
      */
-    protected Annotation<T> clearBody() {
-        myBodyContainsChoice = false;
-        getBody().clear();
+    protected Annotation<T> clearBodies() {
+        myBodiesContainChoice = false;
+        getBodies().clear();
         return this;
     }
 
     /**
-     * Sets the body (i.e., content resources) for this annotation.
+     * Sets an array of bodies for this annotation.
      *
-     * @param aContentResourceArray An array of content resources
+     * @param aBodyArray An array of annotation bodies
      * @return The annotation
      */
     @JsonIgnore
-    protected Annotation<T> setBody(final ContentResource... aContentResourceArray) {
-        return clearBody().addBody(aContentResourceArray);
+    protected Annotation<T> setBodies(final AnnotationBody<?>... aBodyArray) {
+        return clearBodies().addBodies(aBodyArray);
     }
 
     /**
-     * Sets the body (i.e. content resources) for this annotation.
+     * Sets a list of bodies for this annotation.
      *
-     * @param aContentResourceList A list of content resources
+     * @param aContentResourceList A list of annotation bodies
      * @return The annotation
      */
     @JsonIgnore
-    protected Annotation<T> setBody(final List<ContentResource> aContentResourceList) {
-        return setBody(aContentResourceList.toArray(new ContentResource[] {}));
+    protected Annotation<T> setBodies(final List<AnnotationBody<?>> aContentResourceList) {
+        return setBodies(aContentResourceList.toArray(new AnnotationBody[0]));
     }
 
     /**
-     * Adds content resources to the body of this annotation.
+     * Adds a list of bodies to this annotation.
      *
-     * @param aContentResourceArray An array of content resources
+     * @param aBodyArray An array of annotation bodies
      * @return The annotation
      */
-    protected Annotation<T> addBody(final ContentResource... aContentResourceArray) {
-        Collections.addAll(getBody(), checkNotNull(aContentResourceArray));
+    protected Annotation<T> addBodies(final AnnotationBody<?>... aBodyArray) {
+        Collections.addAll(getBodies(), Objects.requireNonNull(aBodyArray));
         return this;
     }
 
     /**
-     * Adds content resources to the body of this annotation.
+     * Adds a list of bodies to this annotation.
      *
-     * @param aContentResourceList A list of content resources
+     * @param aBodyList A list of bodies
      * @return The annotation
      */
-    protected Annotation<T> addBody(final List<ContentResource> aContentResourceList) {
-        return addBody(aContentResourceList.toArray(new ContentResource[] {}));
+    protected Annotation<T> addBodies(final List<AnnotationBody<?>> aBodyList) {
+        return addBodies(aBodyList.toArray(new AnnotationBody[0]));
     }
 
     /**
-     * Sets whether the body contains a choice between content resources or not.
+     * Sets whether there is a choice between bodies or just individual bodies on the annotation.
      *
-     * @param aBoolFlag A flag indicating whether the body contains a choice
+     * @param aBoolFlag A flag indicating whether the annotation contains a choice between bodies
      * @return This annotation
      */
     protected Annotation<T> setChoice(final boolean aBoolFlag) {
-        myBodyContainsChoice = aBoolFlag;
+        myBodiesContainChoice = aBoolFlag;
         return this;
     }
 
     /**
-     * Indicates whether the annotation's body contains a choice between content resources.
+     * Indicates whether there is a choice between bodies or just individual bodies on an annotation.
      *
-     * @return True if body contains a choice; else, false
+     * @return True if bodies contains a choice; else, false
      */
-    protected boolean bodyContainsChoice() {
-        return myBodyContainsChoice;
+    protected boolean bodyHasChoice() {
+        return myBodiesContainChoice;
     }
 
     /**
-     * Gets the URI of the target.
+     * Gets the URI of the annotation target.
      *
-     * @return The URI of the target
+     * @return The URI of the annotation target
      */
     @JsonIgnore
     public URI getTarget() {
@@ -236,12 +243,12 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
             final URI source = myTargetSpecificResource.getSource();
             final Selector selector = myTargetSpecificResource.getSelector();
 
-            return URI.create(source.toString() + Constants.FRAGMENT_DELIM + selector.toString());
+            return URI.create(source.toString() + HASH + selector.toString());
         }
     }
 
     /**
-     * Gets the target if it's a specific resource; otherwise, it returns an empty Optional.
+     * Gets the target if it's a specific resource; otherwise, it returns an empty {@link Optional}.
      *
      * @return The target if it's a specific resource
      */
@@ -262,42 +269,42 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
     /**
      * Sets the URI target of the annotation.
      *
-     * @param aURI A URI
+     * @param aURI A URI for the annotation's target
      * @return The annotation
      */
     @JsonIgnore
-    @SuppressWarnings("PMD.NullAssignment")
+    @SuppressWarnings(PMD.NULL_ASSIGNMENT)
     protected Annotation<T> setTarget(final URI aURI) {
-        myTargetURI = checkNotNull(aURI);
-        myTargetSpecificResource = null;
+        myTargetURI = Objects.requireNonNull(aURI);
+        myTargetSpecificResource = null; // NOPMD
         return this;
     }
 
     /**
      * Sets the URI target of the annotation in string form.
      *
-     * @param aURI A URI
+     * @param aURI A URI for the annotation's target
      * @return The annotation
      */
-    @JsonSetter(Constants.TARGET)
-    @SuppressWarnings("PMD.NullAssignment")
+    @JsonSetter(JsonKeys.TARGET)
+    @SuppressWarnings(PMD.NULL_ASSIGNMENT)
     protected Annotation<T> setTarget(final String aURI) {
-        myTargetURI = checkNotNull(URI.create(aURI));
-        myTargetSpecificResource = null;
+        myTargetURI = Objects.requireNonNull(URI.create(aURI));
+        myTargetSpecificResource = null; // NOPMD
         return this;
     }
 
     /**
-     * Sets the target of the annotation.
+     * Sets the specific resource target of the annotation.
      *
      * @param aSpecificResource A specific resource
      * @return The annotation
      */
-    @JsonSetter(Constants.TARGET)
-    @SuppressWarnings("PMD.NullAssignment")
+    @JsonSetter(JsonKeys.TARGET)
+    @SuppressWarnings(PMD.NULL_ASSIGNMENT)
     protected Annotation<T> setTarget(final SpecificResource aSpecificResource) {
-        myTargetSpecificResource = checkNotNull(aSpecificResource);
-        myTargetURI = null;
+        myTargetSpecificResource = Objects.requireNonNull(aSpecificResource);
+        myTargetURI = null; // NOPMD
         return this;
     }
 
@@ -306,7 +313,7 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      *
      * @return The motivation
      */
-    @JsonGetter(Constants.MOTIVATION)
+    @JsonGetter(JsonKeys.MOTIVATION)
     public String getMotivation() {
         return myMotivation;
     }
@@ -316,13 +323,13 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      *
      * @param aMotivation A motivation in string form
      */
-    @JsonSetter(Constants.MOTIVATION)
+    @JsonSetter(JsonKeys.MOTIVATION)
     protected void setMotivation(final String aMotivation) {
         myMotivation = aMotivation;
     }
 
     @Override
-    @JsonSetter(Constants.BEHAVIOR)
+    @JsonSetter(JsonKeys.BEHAVIOR)
     protected Annotation<T> setBehaviors(final Behavior... aBehaviorArray) {
         return (Annotation<T>) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorArray));
     }
@@ -343,7 +350,7 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
     }
 
     /**
-     * Gets the time mode.
+     * Gets the annotation's time mode.
      *
      * @return The time mode
      */
@@ -363,24 +370,25 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
     }
 
     /**
-     * Gets the resources map that's used to serialize the annotation to JSON.
+     * Gets the body object map that's used to serialize the annotation to JSON. This is used by Jackson's
+     * deserialization processes.
      *
-     * @return The content resources map
+     * @return The body's object map
      */
-    @JsonGetter(Constants.BODY)
+    @JsonGetter(JsonKeys.BODY)
     private Object toMap() {
-        if (getBody().isEmpty()) {
+        if (getBodies().isEmpty()) {
             return null;
         }
 
-        if (myBody.size() > SINGLE_CONTENT_RESOURCE_BODY) {
-            if (bodyContainsChoice()) {
+        if (myBodies.size() > SINGLE_CONTENT_RESOURCE_BODY) {
+            if (bodyHasChoice()) {
                 final Map<String, Object> map = new TreeMap<>(new ContentResourceComparator());
                 final List<Object> itemList = new ArrayList<>();
 
-                map.put(Constants.TYPE, ResourceTypes.CHOICE);
+                map.put(JsonKeys.TYPE, ResourceTypes.CHOICE);
 
-                for (final ContentResource resource : myBody) {
+                for (final ContentResource<?> resource : myBodies) {
                     if (resource == null) {
                         itemList.add(RDF_NIL);
                     } else {
@@ -388,24 +396,24 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
                     }
                 }
 
-                map.put(Constants.ITEMS, itemList);
+                map.put(JsonKeys.ITEMS, itemList);
 
                 return map;
             } else {
-                return myBody;
+                return myBodies;
             }
         } else {
-            return myBody.get(0);
+            return myBodies.get(0);
         }
     }
 
     /**
-     * Gets the target of the annotation. A target will either be a URI or a SpecificResource. This method is for
-     * Jackson's serialization process.
+     * Gets the target of the annotation. A target will either be a URI or a {@link SpecificResource}. This method is
+     * for Jackson's serialization processes.
      *
      * @return The target of the annotation.
      */
-    @JsonGetter(Constants.TARGET)
+    @JsonGetter(JsonKeys.TARGET)
     private Object getTargetObject() {
         if (myTargetSpecificResource != null) {
             return myTargetSpecificResource;
@@ -415,18 +423,18 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
     }
 
     /**
-     * Builds the annotation's content resources from the JSON-derived map.
+     * Builds the annotation's content resources from the JSON-derived object map.
      *
-     * @param aContentMap A content resources map
+     * @param aBody An object map of the annotation body
      */
-    @JsonSetter(Constants.BODY)
+    @JsonSetter(JsonKeys.BODY)
     private void readBody(final Object aBody) {
         if (aBody instanceof List) {
             deserializeListBody((List<?>) aBody);
         } else if (aBody instanceof Map) {
             deserializeMapBody((Map<?, ?>) aBody);
         } else if (aBody instanceof String && RDF_NIL.equals(aBody.toString())) {
-            getBody().add(null);
+            getBodies().add(null);
         } else {
             throw new IllegalArgumentException(
                     LOGGER.getMessage(MessageCodes.JPA_116, aBody.getClass().getSimpleName()));
@@ -439,10 +447,10 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      * @param aMapBody A body of an annotation that's a map
      */
     private void deserializeMapBody(final Map<?, ?> aMapBody) {
-        final String type = aMapBody.get(Constants.TYPE).toString();
+        final String type = aMapBody.get(JsonKeys.TYPE).toString();
 
         if (ResourceTypes.CHOICE.equals(type)) {
-            final List<?> items = (List<?>) aMapBody.get(Constants.ITEMS);
+            final List<?> items = (List<?>) aMapBody.get(JsonKeys.ITEMS);
 
             setChoice(true);
 
@@ -475,35 +483,35 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      * @param aMap A content resources map
      */
     private void deserializeContentMap(final Map<?, ?> aMap) {
-        final String type = (String) aMap.get(Constants.TYPE);
+        final String type = (String) aMap.get(JsonKeys.TYPE);
 
         switch (type) {
             case ResourceTypes.SOUND:
-                getBody().add(DatabindCodec.mapper().convertValue(aMap, SoundContent.class));
+                getBodies().add(DatabindCodec.mapper().convertValue(aMap, SoundContent.class));
                 break;
             case ResourceTypes.VIDEO:
-                getBody().add(DatabindCodec.mapper().convertValue(aMap, VideoContent.class));
+                getBodies().add(DatabindCodec.mapper().convertValue(aMap, VideoContent.class));
                 break;
             case ResourceTypes.IMAGE:
-                getBody().add(DatabindCodec.mapper().convertValue(aMap, ImageContent.class));
+                getBodies().add(DatabindCodec.mapper().convertValue(aMap, ImageContent.class));
                 break;
             case ResourceTypes.TEXT:
-                getBody().add(DatabindCodec.mapper().convertValue(aMap, TextContent.class));
+                getBodies().add(DatabindCodec.mapper().convertValue(aMap, TextContent.class));
                 break;
             case ResourceTypes.DATASET:
-                getBody().add(DatabindCodec.mapper().convertValue(aMap, DatasetContent.class));
+                getBodies().add(DatabindCodec.mapper().convertValue(aMap, DatasetContent.class));
                 break;
             case ResourceTypes.MODEL:
-                getBody().add(DatabindCodec.mapper().convertValue(aMap, ModelContent.class));
+                getBodies().add(DatabindCodec.mapper().convertValue(aMap, ModelContent.class));
                 break;
             case ResourceTypes.CANVAS:
-                getBody().add(DatabindCodec.mapper().convertValue(aMap, CanvasContent.class));
+                getBodies().add(DatabindCodec.mapper().convertValue(aMap, CanvasContent.class));
                 break;
             case ResourceTypes.TEXTUAL_BODY:
-                getBody().add(DatabindCodec.mapper().convertValue(aMap, TextualBody.class));
+                getBodies().add(DatabindCodec.mapper().convertValue(aMap, TextualBody.class));
                 break;
             default:
-                getBody().add(new OtherContent(JsonObject.mapFrom(aMap)));
+                getBodies().add(new OtherContent(JsonObject.mapFrom(aMap)));
                 break;
         }
     }

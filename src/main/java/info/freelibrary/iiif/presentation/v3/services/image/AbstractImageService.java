@@ -13,15 +13,15 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.iiif.presentation.v3.Constants;
 import info.freelibrary.iiif.presentation.v3.services.AbstractService;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
  * Abstract base class for image services.
  */
-@JsonPropertyOrder({ Constants.ID, Constants.V2_ID, Constants.TYPE, Constants.V2_TYPE, Constants.PROFILE,
-    ImageAPI.EXTRA_FORMATS, ImageAPI.EXTRA_QUALITIES, ImageAPI.PROTOCOL, ImageAPI.TILES, Constants.HEIGHT,
-    Constants.WIDTH, ImageAPI.SCALE_FACTORS })
+@JsonPropertyOrder({ JsonKeys.ID, JsonKeys.V2_ID, JsonKeys.TYPE, JsonKeys.V2_TYPE, JsonKeys.PROFILE,
+    ImageAPI.EXTRA_FORMATS, ImageAPI.EXTRA_QUALITIES, ImageAPI.PROTOCOL, ImageAPI.TILES, JsonKeys.HEIGHT,
+    JsonKeys.WIDTH, ImageAPI.SCALE_FACTORS })
 abstract class AbstractImageService extends AbstractService implements ImageService {
 
     /**
@@ -75,7 +75,7 @@ abstract class AbstractImageService extends AbstractService implements ImageServ
     }
 
     @Override
-    @JsonGetter(Constants.PROFILE)
+    @JsonGetter(JsonKeys.PROFILE)
     public String getProfile() {
         return myProfile.string();
     }

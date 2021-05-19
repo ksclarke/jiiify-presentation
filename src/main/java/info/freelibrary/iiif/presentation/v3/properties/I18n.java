@@ -19,6 +19,7 @@ import com.google.common.collect.ImmutableMap;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.utils.I18nUtils;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
@@ -305,8 +306,8 @@ public class I18n implements Iterable<String> {
      * @return The internationalization represented as a map
      */
     @JsonValue
-    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is actually used by Jackson's deserialization process
-    private Map<String, List<String>> toMap() {
+    @SuppressWarnings(PMD.UNUSED_PRIVATE_METHOD) // This is actually used by Jackson's deserialization process
+    private Map<String, List<String>> toMap() { // NOPMD
         return ImmutableMap.of(myLocale.toLanguageTag(), myStrings);
     }
 

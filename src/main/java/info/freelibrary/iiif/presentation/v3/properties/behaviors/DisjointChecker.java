@@ -49,7 +49,7 @@ public class DisjointChecker {
             new AbstractMap.SimpleEntry<>(FACING_PAGES, Set.of(PAGED, NON_PAGED)), //
             new AbstractMap.SimpleEntry<>(NON_PAGED, Set.of(PAGED, FACING_PAGES)), //
             //
-            // COLLECTION behaviors
+            // Collection behaviors
             //
             new AbstractMap.SimpleEntry<>(MULTI_PART, Set.of(TOGETHER)), //
             new AbstractMap.SimpleEntry<>(TOGETHER, Set.of(MULTI_PART)), //
