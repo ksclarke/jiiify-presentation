@@ -1,0 +1,97 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://example.com/1",
+  "type": "Manifest",
+  "label": {
+    "en": [
+      "My Manifest"
+    ]
+  },
+  "items": [
+    {
+      "id": "http://example.com/1/canvas-ad2i",
+      "type": "Canvas",
+      "label": {
+        "en": [
+          "My Canvas"
+        ]
+      },
+      "height": 9727,
+      "width": 6200,
+      "items": [
+        {
+          "id": "http://example.com/1/canvas-ad2i/anno-page-pdce",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://example.com/1/annotations/anno-v3v8",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fzz00254trx/full/full/0/default.jpg",
+                "type": "Image",
+                "label": {
+                  "en": [
+                    "My Image 1"
+                  ]
+                },
+                "format": "image/jpeg",
+                "height": 4842,
+                "width": 6200,
+                "service": [
+                  {
+                    "@id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fzz00254trx",
+                    "@type": "ImageService2",
+                    "profile": "http://iiif.io/api/image/2/level2.json"
+                  }
+                ]
+              },
+              "target": {
+                "type": "SpecificResource",
+                "source": "http://example.com/1/canvas-ad2i",
+                "selector": {
+                  "type": "FragmentSelector",
+                  "conformsTo": "http://www.w3.org/TR/media-frags/",
+                  "value": "xywh=0,0,6200,4842"
+                }
+              }
+            },
+            {
+              "id": "http://example.com/1/annotations/anno-6a74",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fzz00254tbq/full/full/0/default.jpg",
+                "type": "Image",
+                "label": {
+                  "en": [
+                    "My Image 2"
+                  ]
+                },
+                "format": "image/jpeg",
+                "height": 4885,
+                "width": 6200,
+                "service": [
+                  {
+                    "@id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fzz00254tbq",
+                    "@type": "ImageService2",
+                    "profile": "http://iiif.io/api/image/2/level2.json"
+                  }
+                ]
+              },
+              "target": {
+                "type": "SpecificResource",
+                "source": "http://example.com/1/canvas-ad2i",
+                "selector": {
+                  "type": "FragmentSelector",
+                  "conformsTo": "http://www.w3.org/TR/media-frags/",
+                  "value": "xywh=0,4842,6200,4885"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -359,7 +359,7 @@ class DefaultMinter implements Minter {
             mySkipCount = randomizer.nextInt(1, MAX_RANDOM_INT + 1);
             myIndex = myStart;
 
-            LOGGER.debug(MessageCodes.JPA_106, myManifestID, myStart, mySkipCount);
+            LOGGER.trace(MessageCodes.JPA_106, myManifestID, myStart, mySkipCount);
         }
 
         @Override
