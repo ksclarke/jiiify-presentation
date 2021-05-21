@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3.ruby;
+package info.freelibrary.iiif.presentation.v3.python;
 
 import static org.junit.Assert.assertEquals;
 
@@ -13,8 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.jruby.embed.PathType;
-import org.jruby.embed.ScriptingContainer;
+import org.python.util.PythonInterpreter;
 import org.junit.Test;
 
 import info.freelibrary.util.FileExtFileFilter;
@@ -29,12 +28,12 @@ import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
 /**
- * A test that runs the Ruby examples and makes sure that the outputs are expected. Since we're testing the examples
+ * A test that runs the Python examples and makes sure that the outputs are expected. Since we're testing the examples
  * themselves, rather than the actual library's code, all tests are run in a single JUnit test (and count as one test).
  */
-public class RubyExamplesIT {
+public class PythonExamplesIT {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RubyExamplesIT.class, MessageCodes.BUNDLE);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PythonExamplesIT.class, MessageCodes.BUNDLE);
 
     /**
      * A regex pattern for ID minter generated IDs.
@@ -42,27 +41,32 @@ public class RubyExamplesIT {
     private static final Pattern ID_PATTERN = Pattern.compile(".*/(anno-|canvas-|anno-page-|range-)[a-z0-9]{4}$");
 
     /**
-     * Tests the Ruby example files, one by one.
+     * Tests the Python example files, one by one.
      *
-     * @throws IOException If there is trouble reading the Ruby file or the expected output JSON file
+     * @throws IOException If there is trouble reading the Python file or the expected output JSON file
      */
     @Test
-    public final void testRubyFiles() throws IOException {
+    public final void testPythonFiles() throws IOException {
         final Iterator<JsonObject> resultsIterator = getResultsIterator();
-        final ScriptingContainer container = new ScriptingContainer();
+        final PythonInterpreter interpreter;
 
-        container.setArgv(new String[] { System.getProperty("jiiify.version", "0.0.0-SNAPSHOT") });
+        PythonInterpreter.initialize(System.getProperties(), null,
+                new String[] { System.getProperty("jiiify.version", "0.0.0-SNAPSHOT") });
 
-        for (final File rubyFile : FileUtils.listFiles(new File("src/test/ruby"), new FileExtFileFilter("rb"))) {
-            LOGGER.debug(MessageCodes.JPA_120, rubyFile);
+        interpreter = new PythonInterpreter();
+
+        for (final File pythonFile : FileUtils.listFiles(new File("src/test/python"), new FileExtFileFilter("py"))) {
+            LOGGER.debug(MessageCodes.JPA_120, pythonFile);
 
             try (StringWriter writer = new StringWriter()) {
-                container.setOutput(writer);
-                container.runScriptlet(PathType.ABSOLUTE, rubyFile.getAbsolutePath());
+                interpreter.setOut(writer);
+                interpreter.execfile(pythonFile.getAbsolutePath());
 
                 assertEquals(resultsIterator.next(), normalizeIDs(new JsonObject(writer.toString())));
             }
         }
+
+        interpreter.close();
     }
 
     /**
