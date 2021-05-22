@@ -4,7 +4,6 @@ package info.freelibrary.iiif.presentation.v3; // NOPMD
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -215,7 +214,8 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
             myPaintingPageList.clear();
         }
 
-        return addPaintingPages(aPageArray);
+        getPaintingPages().addAll(Arrays.asList(aPageArray));
+        return this;
     }
 
     /**
@@ -230,36 +230,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
             myPaintingPageList.clear();
         }
 
-        return addPaintingPages(aPageList);
-    }
-
-    /**
-     * Adds the painting pages to the canvas.
-     *
-     * @param aPageArray An array of painting pages
-     * @return The canvas
-     */
-    @SuppressWarnings(JDK.UNCHECKED) // Moved SafeVarargs to extending classes where method can be final
-    protected AbstractCanvas<T> addPaintingPages(final AnnotationPage<PaintingAnnotation>... aPageArray) {
-        if (!Collections.addAll(getPaintingPages(), aPageArray)) {
-            final String message = LOGGER.getMessage(MessageCodes.JPA_049, getListIDs(Arrays.asList(aPageArray)));
-            throw new UnsupportedOperationException(message);
-        }
-
-        return this;
-    }
-
-    /**
-     * Adds the painting pages to the canvas.
-     *
-     * @param aPageList A list of painting pages
-     * @return The canvas
-     */
-    protected AbstractCanvas<T> addPaintingPages(final List<AnnotationPage<PaintingAnnotation>> aPageList) {
-        if (!getPaintingPages().addAll(aPageList)) {
-            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_049, getListIDs(aPageList)));
-        }
-
+        getPaintingPages().addAll(aPageList);
         return this;
     }
 
@@ -333,7 +304,8 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
             mySupplementingPageList.clear();
         }
 
-        return addSupplementingPages(aPageArray);
+        getSupplementingPages().addAll(Arrays.asList(aPageArray));
+        return this;
     }
 
     /**
@@ -348,36 +320,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
             mySupplementingPageList.clear();
         }
 
-        return addSupplementingPages(aPageList);
-    }
-
-    /**
-     * Adds supplementing pages to the canvas.
-     *
-     * @param aPageArray An array of supplementing pages
-     * @return The canvas
-     */
-    @SuppressWarnings(JDK.UNCHECKED) // Moved SafeVarargs to extending classes where method can be final
-    protected AbstractCanvas<T> addSupplementingPages(final AnnotationPage<SupplementingAnnotation>... aPageArray) {
-        if (!Collections.addAll(getSupplementingPages(), aPageArray)) {
-            final List<AnnotationPage<SupplementingAnnotation>> list = Arrays.asList(aPageArray);
-            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_049, getListIDs(list)));
-        }
-
-        return this;
-    }
-
-    /**
-     * Adds supplementing pages to the canvas.
-     *
-     * @param aPageList A list of supplementing pages
-     * @return The canvas
-     */
-    protected AbstractCanvas<T> addSupplementingPages(final List<AnnotationPage<SupplementingAnnotation>> aPageList) {
-        if (!getSupplementingPages().addAll(aPageList)) {
-            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_049, getListIDs(aPageList)));
-        }
-
+        getSupplementingPages().addAll(aPageList);
         return this;
     }
 
@@ -470,16 +413,17 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      * @return The canvas
      * @throws ContentOutOfBoundsException If the painted content is out of bounds of the canvas
      */
-    @SuppressWarnings(JDK.UNCHECKED) // Moved SafeVarargs to extending classes where method can be final
     protected final <C extends CanvasResource<C>> AbstractCanvas<T> paint(final CanvasResource<C> aCanvas,
             final Minter aMinter, final boolean aChoice, final ContentResource<?>... aContentArray) {
         final PaintingAnnotation anno = new PaintingAnnotation(aMinter.getAnnotationID(), aCanvas);
         final AnnotationPage<PaintingAnnotation> page;
         final int pageCount;
 
+        anno.setChoice(aChoice);
+
         for (final ContentResource<?> content : aContentArray) {
             if (canFrame(content)) {
-                anno.addBodies((AnnotationBody<?>) content).setChoice(aChoice);
+                anno.getBodies().add((AnnotationBody<?>) content);
             }
         }
 
@@ -487,12 +431,12 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
 
         if (pageCount == 0) {
             page = new AnnotationPage<>(aMinter.getAnnotationPageID(aCanvas));
-            addPaintingPages(page);
+            getPaintingPages().add(page);
         } else {
             page = getPaintingPages().get(pageCount - 1);
         }
 
-        page.addAnnotations(anno);
+        page.getAnnotations().add(anno);
 
         return this;
     }
@@ -510,7 +454,6 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      * @throws ContentOutOfBoundsException If the painted content is out of bounds of the canvas
      * @throws SelectorOutOfBoundsException If the supplied selector is out of bounds of the canvas
      */
-    @SuppressWarnings(JDK.UNCHECKED) // Moved SafeVarargs to extending classes where method can be final
     protected final <C extends CanvasResource<C>> AbstractCanvas<T> paint(final CanvasResource<C> aCanvas,
             final Minter aMinter, final MediaFragmentSelector aCanvasRegion, final boolean aChoice,
             final ContentResource<?>... aContentArray) {
@@ -518,9 +461,11 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         final AnnotationPage<PaintingAnnotation> page;
         final int pageCount;
 
+        anno.setChoice(aChoice);
+
         for (final ContentResource<?> content : aContentArray) {
             if (canFrame(content, aCanvasRegion)) {
-                anno.addBodies((AnnotationBody<?>) content).setChoice(aChoice);
+                anno.getBodies().add((AnnotationBody<?>) content);
             }
         }
 
@@ -528,12 +473,12 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
 
         if (pageCount == 0) {
             page = new AnnotationPage<>(aMinter.getAnnotationPageID(aCanvas));
-            addPaintingPages(page);
+            getPaintingPages().add(page);
         } else {
             page = getPaintingPages().get(pageCount - 1);
         }
 
-        page.addAnnotations(anno);
+        page.getAnnotations().add(anno);
 
         return this;
     }
@@ -548,7 +493,6 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      * @param aContentArray An array of content resources
      * @return This canvas
      */
-    @SuppressWarnings(JDK.UNCHECKED) // Moved SafeVarargs to extending classes where method can be final
     protected final <C extends CanvasResource<C>> AbstractCanvas<T> supplement(final CanvasResource<C> aCanvas,
             final Minter aMinter, final boolean aChoice, final ContentResource<?>... aContentArray) {
         final SupplementingAnnotation anno = new SupplementingAnnotation(aMinter.getAnnotationID(), aCanvas);
@@ -560,16 +504,16 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
             bodies.add((AnnotationBody<?>) resource);
         }
 
-        anno.addBodies(bodies).setChoice(aChoice);
+        anno.setChoice(aChoice).getBodies().addAll(bodies);
 
         if (pageCount == 0) {
             page = new AnnotationPage<>(aMinter.getAnnotationPageID(aCanvas));
-            addSupplementingPages(page);
+            getSupplementingPages().add(page);
         } else {
             page = getSupplementingPages().get(pageCount - 1);
         }
 
-        page.addAnnotations(anno);
+        page.getAnnotations().add(anno);
 
         return this;
     }
@@ -586,7 +530,6 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      * @return This canvas
      * @throws SelectorOutOfBoundsException If the canvas region is out of bounds
      */
-    @SuppressWarnings(JDK.UNCHECKED) // Moved SafeVarargs to extending classes where method can be final
     protected final <C extends CanvasResource<C>> AbstractCanvas<T> supplement(final CanvasResource<C> aCanvas,
             final Minter aMinter, final MediaFragmentSelector aCanvasRegion, final boolean aChoice,
             final ContentResource<?>... aContentArray) {
@@ -601,16 +544,16 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         }
 
         getCanvasFragment(aCanvasRegion); // Check that the canvas region is valid by absence of exceptions
-        anno.addBodies(bodies).setChoice(aChoice);
+        anno.setChoice(aChoice).getBodies().addAll(bodies);
 
         if (pageCount == 0) {
             page = new AnnotationPage<>(aMinter.getAnnotationPageID(aCanvas));
-            addSupplementingPages(page);
+            getSupplementingPages().add(page);
         } else {
             page = getSupplementingPages().get(pageCount - 1);
         }
 
-        page.addAnnotations(anno);
+        page.getAnnotations().add(anno);
 
         return this;
     }
@@ -664,27 +607,6 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     private AbstractCanvas<T> setHeight(final int aHeight) {
         myHeight = aHeight;
         return this;
-    }
-
-    /**
-     * Get the IDs of the annotation pages in the supplied list and return them as a single string.
-     *
-     * @param aPageList A list of annotation pages
-     * @param <A> A subclass of annotation
-     * @return A string containing the IDs
-     */
-    private <A extends Annotation<A>> String getListIDs(final List<AnnotationPage<A>> aPageList) {
-        final StringBuilder builder = new StringBuilder();
-
-        for (final AnnotationPage<A> page : aPageList) {
-            builder.append(page.getID()).append('|');
-        }
-
-        if (builder.length() > 0) {
-            builder.deleteCharAt(builder.length() - 1);
-        }
-
-        return builder.toString();
     }
 
     /**

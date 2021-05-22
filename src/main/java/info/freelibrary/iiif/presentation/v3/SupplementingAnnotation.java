@@ -193,21 +193,6 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     }
 
     @Override
-    public SupplementingAnnotation addBodies(final AnnotationBody<?>... aBody) {
-        return (SupplementingAnnotation) super.addBodies(aBody);
-    }
-
-    @Override
-    public SupplementingAnnotation addBodies(final List<AnnotationBody<?>> aBody) {
-        return addBodies(aBody.toArray(new AnnotationBody[0]));
-    }
-
-    @Override
-    public SupplementingAnnotation clearBodies() {
-        return (SupplementingAnnotation) super.clearBodies();
-    }
-
-    @Override
     public SupplementingAnnotation setBodies(final AnnotationBody<?>... aBody) {
         return (SupplementingAnnotation) super.setBodies(aBody);
     }

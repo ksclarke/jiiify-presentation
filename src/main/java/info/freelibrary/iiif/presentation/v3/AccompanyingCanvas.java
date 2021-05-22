@@ -457,18 +457,6 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> // NO
 
     @Override
     @SafeVarargs
-    public final AccompanyingCanvas addSupplementingPages(final AnnotationPage<SupplementingAnnotation>... aPageArray) {
-        return (AccompanyingCanvas) super.addSupplementingPages(aPageArray);
-    }
-
-    @Override
-    public final AccompanyingCanvas
-            addSupplementingPages(final List<AnnotationPage<SupplementingAnnotation>> aPageList) {
-        return (AccompanyingCanvas) super.addSupplementingPages(aPageList);
-    }
-
-    @Override
-    @SafeVarargs
     public final AccompanyingCanvas setSupplementingPages(final AnnotationPage<SupplementingAnnotation>... aPageArray) {
         return (AccompanyingCanvas) super.setSupplementingPages(aPageArray);
     }
@@ -477,17 +465,6 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> // NO
     public final AccompanyingCanvas
             setSupplementingPages(final List<AnnotationPage<SupplementingAnnotation>> aPageList) {
         return (AccompanyingCanvas) super.setSupplementingPages(aPageList);
-    }
-
-    @Override
-    @SafeVarargs
-    public final AccompanyingCanvas addPaintingPages(final AnnotationPage<PaintingAnnotation>... aPageArray) {
-        return (AccompanyingCanvas) super.addPaintingPages(aPageArray);
-    }
-
-    @Override
-    public final AccompanyingCanvas addPaintingPages(final List<AnnotationPage<PaintingAnnotation>> aPageList) {
-        return (AccompanyingCanvas) super.addPaintingPages(aPageList);
     }
 
     @Override

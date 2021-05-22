@@ -194,21 +194,6 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation>
     }
 
     @Override
-    public PaintingAnnotation addBodies(final AnnotationBody<?>... aBody) {
-        return (PaintingAnnotation) super.addBodies(aBody);
-    }
-
-    @Override
-    public PaintingAnnotation addBodies(final List<AnnotationBody<?>> aBody) {
-        return addBodies(aBody.toArray(new AnnotationBody[0]));
-    }
-
-    @Override
-    public PaintingAnnotation clearBodies() {
-        return (PaintingAnnotation) super.clearBodies();
-    }
-
-    @Override
     public PaintingAnnotation setBodies(final AnnotationBody<?>... aBody) {
         return (PaintingAnnotation) super.setBodies(aBody);
     }

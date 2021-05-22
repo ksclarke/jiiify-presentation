@@ -14,13 +14,6 @@ import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 interface ContentAnnotation<T extends ContentAnnotation<T>> {
 
     /**
-     * Clears the content resources.
-     *
-     * @return This annotation
-     */
-    T clearBodies();
-
-    /**
      * Gets the content resources associated with this annotation.
      *
      * @return The content resources associated with this annotation
@@ -42,22 +35,6 @@ interface ContentAnnotation<T extends ContentAnnotation<T>> {
      * @return This annotation
      */
     T setBodies(List<AnnotationBody<?>> aContentList);
-
-    /**
-     * Adds content resources to this annotation.
-     *
-     * @param aContentArray An array of content resources
-     * @return This annotation
-     */
-    T addBodies(AnnotationBody<?>... aContentArray);
-
-    /**
-     * Adds content resources to this annotation.
-     *
-     * @param aContentList A list of content resources
-     * @return This annotation
-     */
-    T addBodies(List<AnnotationBody<?>> aContentList);
 
     /**
      * Gets the target of this annotation.
