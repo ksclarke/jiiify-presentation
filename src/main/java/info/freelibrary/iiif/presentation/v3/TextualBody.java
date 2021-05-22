@@ -169,20 +169,10 @@ public class TextualBody implements AnnotationBody<TextualBody>, EmbeddedResourc
      *
      * @return An optional media type form of format
      */
+    @Override
     @JsonIgnore
-    protected Optional<MediaType> getFormatMediaType() {
+    public Optional<MediaType> getFormat() {
         return Optional.ofNullable(myFormat);
-    }
-
-    /**
-     * Gets TextualBody's format as a string.
-     *
-     * @return An optional string version of the format
-     */
-    @JsonGetter(JsonKeys.FORMAT)
-    @JsonInclude(Include.NON_EMPTY)
-    public Optional<String> getFormat() {
-        return myFormat != null ? Optional.of(myFormat.toString()) : Optional.empty();
     }
 
     /**
@@ -192,6 +182,7 @@ public class TextualBody implements AnnotationBody<TextualBody>, EmbeddedResourc
      * @return This TextualBody
      * @throws IllegalArgumentException If the supplied string isn't a media type
      */
+    @Override
     @JsonSetter(JsonKeys.FORMAT)
     public TextualBody setFormat(final String aFormat) {
         myFormat = MediaType.parse(aFormat);
@@ -205,6 +196,7 @@ public class TextualBody implements AnnotationBody<TextualBody>, EmbeddedResourc
      * @return This TextualBody
      */
     @JsonIgnore
+    @Override
     public TextualBody setFormat(final MediaType aMediaType) {
         myFormat = Objects.requireNonNull(aMediaType);
         return this;
@@ -214,6 +206,17 @@ public class TextualBody implements AnnotationBody<TextualBody>, EmbeddedResourc
     @JsonGetter(JsonKeys.TYPE)
     public String getType() {
         return ResourceTypes.TEXTUAL_BODY;
+    }
+
+    /**
+     * Gets TextualBody's format as a string.
+     *
+     * @return An optional string version of the format
+     */
+    @JsonGetter(JsonKeys.FORMAT)
+    @JsonInclude(Include.NON_EMPTY)
+    private Optional<String> getFormatAsString() {
+        return myFormat != null ? Optional.of(myFormat.toString()) : Optional.empty();
     }
 
     /**

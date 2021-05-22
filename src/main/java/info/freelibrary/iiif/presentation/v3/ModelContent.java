@@ -8,6 +8,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.google.common.net.MediaType;
 
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
@@ -53,6 +54,18 @@ public class ModelContent extends AbstractContentResource<ModelContent>
      */
     private ModelContent() {
         super(ResourceTypes.MODEL);
+    }
+
+    @Override
+    @JsonIgnore
+    public ModelContent setFormat(final MediaType aMediaType) {
+        return (ModelContent) super.setFormat(aMediaType);
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.FORMAT)
+    public ModelContent setFormat(final String aMediaType) {
+        return (ModelContent) super.setFormat(aMediaType);
     }
 
     @Override

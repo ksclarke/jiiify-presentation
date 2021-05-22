@@ -3,11 +3,14 @@ package info.freelibrary.iiif.presentation.v3;
 
 import java.net.URI;
 import java.util.Map;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.google.common.net.MediaType;
 
 import info.freelibrary.util.warnings.PMD;
 
@@ -16,7 +19,8 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import io.vertx.core.json.JsonObject;
 
 /**
- * A content resource for other types of resources than those described by the IIIF specification.
+ * A content resource for other types of resources than those described by the IIIF specification. The format returned
+ * by this class is always JSON. Look in the JsonObject if the wrapped context has a format in its JSON representation.
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE })
 public class OtherContent implements AnnotationBody<OtherContent>, ContentResource<OtherContent> {
@@ -43,6 +47,24 @@ public class OtherContent implements AnnotationBody<OtherContent>, ContentResour
      */
     public OtherContent(final JsonObject aJsonObject) {
         myJsonObject = initializeObject(aJsonObject);
+    }
+
+    @Override
+    @JsonIgnore
+    public Optional<MediaType> getFormat() {
+        return Optional.of(MediaType.JSON_UTF_8);
+    }
+
+    @Override
+    @JsonIgnore
+    public OtherContent setFormat(final MediaType aMediaType) {
+        return this;
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.FORMAT)
+    public OtherContent setFormat(final String aMediaType) {
+        return this;
     }
 
     @Override
@@ -106,6 +128,16 @@ public class OtherContent implements AnnotationBody<OtherContent>, ContentResour
     @SuppressWarnings(PMD.UNUSED_PRIVATE_METHOD) // It's used by Jackson's serialization processes
     private Map<String, Object> toObjectMap() { // NOPMD
         return myJsonObject.getMap();
+    }
+
+    /**
+     * Gets the format as a string for Jackson's deserialization process.
+     *
+     * @return The format in string form
+     */
+    @JsonGetter(JsonKeys.FORMAT)
+    private Optional<String> getFormatAsString() {
+        return Optional.of(MediaType.JSON_UTF_8.type() + "/" + MediaType.JSON_UTF_8.subtype()); // skip encoding
     }
 
     /**
