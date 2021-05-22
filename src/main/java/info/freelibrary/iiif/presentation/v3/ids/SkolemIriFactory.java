@@ -10,8 +10,8 @@ import java.util.UUID;
  * blank nodes, if needed. It's used by the TextualBody class, but can also be used like:
  * <p>
  * <code>
- * final SkolemIriFactory iriFactory = SkolemIriFactory.getFactory().setWellKnownBase("https://freelibrary.info/");
- * final URI skolemIRI = iriFactory.getSkolemIRI();
+ * SkolemIriFactory iriFactory = SkolemIriFactory.getFactory().setWellKnownBase("https://freelibrary.info/");<br/>
+ * URI skolemIRI = iriFactory.getSkolemIRI();<br/>
  * </code>
  * </p>
  * <p>
@@ -19,12 +19,12 @@ import java.util.UUID;
  * </p>
  * <p>
  * <code>
- * final SkolemIriFactory iriFactory = SkolemIriFactory.getFactory();
- * final URI skolemIRI = iriFactory.getSkolemIRI();
+ * SkolemIriFactory iriFactory = SkolemIriFactory.getFactory();<br/>
+ * URI skolemIRI = iriFactory.getSkolemIRI();<br/>
  * </code>
  * </p>
  * <p>
- * What what makes an ID mappable back to a blank node, consult
+ * What what makes an ID mappable back to a blank node? Consult
  * <a href="https://www.w3.org/TR/rdf11-concepts/#section-skolemization">Replacing Blank Nodes with IRIs</a>.
  * </p>
  */

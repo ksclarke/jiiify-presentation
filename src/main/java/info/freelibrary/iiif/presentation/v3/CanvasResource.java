@@ -605,23 +605,6 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
     List<AnnotationPage<SupplementingAnnotation>> getSupplementingPages();
 
     /**
-     * Adds annotation pages for non-painting annotations to the canvas.
-     *
-     * @param aPageArray An array of supplementing annotation pages
-     * @return The canvas
-     */
-    @SuppressWarnings(JDK.UNCHECKED)
-    T addSupplementingPages(AnnotationPage<SupplementingAnnotation>... aPageArray);
-
-    /**
-     * Adds annotation pages for non-painting annotations to the canvas.
-     *
-     * @param aPageList A list of supplementing annotation pages
-     * @return The canvas
-     */
-    T addSupplementingPages(List<AnnotationPage<SupplementingAnnotation>> aPageList);
-
-    /**
      * Sets the canvas' annotation pages for non-painting annotations.
      *
      * @param aPageArray An array of supplementing annotation pages
@@ -646,23 +629,6 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
     List<AnnotationPage<PaintingAnnotation>> getPaintingPages();
 
     /**
-     * Adds an array of annotation pages for painting annotations to the canvas.
-     *
-     * @param aPageArray An array of painting annotation pages
-     * @return The canvas
-     */
-    @SuppressWarnings(JDK.UNCHECKED)
-    T addPaintingPages(AnnotationPage<PaintingAnnotation>... aPageArray);
-
-    /**
-     * Adds a list of annotation pages for painting annotations to the canvas.
-     *
-     * @param aPageList A list of annotation pages
-     * @return The canvas
-     */
-    T addPaintingPages(List<AnnotationPage<PaintingAnnotation>> aPageList);
-
-    /**
      * Sets the canvas' annotation pages for painting annotations.
      *
      * @param aPageArray An array of annotation pages
@@ -678,4 +644,29 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * @return The canvas
      */
     T setPaintingPages(List<AnnotationPage<PaintingAnnotation>> aPageList);
+
+    /**
+     * Gets the canvas' annotation pages that aren't related to painting.
+     *
+     * @return The canvas' non-painting annotation pages
+     */
+    List<AnnotationPage<? extends Annotation<?>>> getOtherAnnotations();
+
+    /**
+     * Sets the canvas annotation pages from a list.
+     *
+     * @param aAnnotationList A list of annotation pages
+     * @return The canvas
+     */
+    T setOtherAnnotations(List<AnnotationPage<? extends Annotation<?>>> aAnnotationList);
+
+    /**
+     * Sets the canvas' annotation pages from an array.
+     *
+     * @param aAnnotationArray An array of annotation pages
+     * @return The canvas
+     */
+    @SuppressWarnings(JDK.UNCHECKED)
+    T setOtherAnnotations(AnnotationPage<? extends Annotation<?>>... aAnnotationArray);
+
 }

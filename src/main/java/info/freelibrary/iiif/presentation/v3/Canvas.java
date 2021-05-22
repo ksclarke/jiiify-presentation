@@ -364,17 +364,6 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
 
     @Override
     @SafeVarargs
-    public final Canvas addSupplementingPages(final AnnotationPage<SupplementingAnnotation>... aPageArray) {
-        return (Canvas) super.addSupplementingPages(aPageArray);
-    }
-
-    @Override
-    public final Canvas addSupplementingPages(final List<AnnotationPage<SupplementingAnnotation>> aPageList) {
-        return (Canvas) super.addSupplementingPages(aPageList);
-    }
-
-    @Override
-    @SafeVarargs
     public final Canvas setSupplementingPages(final AnnotationPage<SupplementingAnnotation>... aPageArray) {
         return (Canvas) super.setSupplementingPages(aPageArray);
     }
@@ -386,17 +375,6 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
 
     @Override
     @SafeVarargs
-    public final Canvas addPaintingPages(final AnnotationPage<PaintingAnnotation>... aPageArray) {
-        return (Canvas) super.addPaintingPages(aPageArray);
-    }
-
-    @Override
-    public final Canvas addPaintingPages(final List<AnnotationPage<PaintingAnnotation>> aPageList) {
-        return (Canvas) super.addPaintingPages(aPageList);
-    }
-
-    @Override
-    @SafeVarargs
     public final Canvas setPaintingPages(final AnnotationPage<PaintingAnnotation>... aPageArray) {
         return (Canvas) super.setPaintingPages(aPageArray);
     }
@@ -404,6 +382,17 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     @Override
     public final Canvas setPaintingPages(final List<AnnotationPage<PaintingAnnotation>> aPageList) {
         return (Canvas) super.setPaintingPages(aPageList);
+    }
+
+    @Override
+    @SafeVarargs
+    public final Canvas setOtherAnnotations(final AnnotationPage<? extends Annotation<?>>... aPageArray) {
+        return (Canvas) super.setOtherAnnotations(aPageArray);
+    }
+
+    @Override
+    public final Canvas setOtherAnnotations(final List<AnnotationPage<? extends Annotation<?>>> aPageList) {
+        return (Canvas) super.setOtherAnnotations(aPageList);
     }
 
     // end AbstractCanvas

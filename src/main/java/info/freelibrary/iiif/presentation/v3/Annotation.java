@@ -5,7 +5,7 @@ import static info.freelibrary.util.Constants.HASH;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -157,17 +157,6 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
     }
 
     /**
-     * Removes the bodies from this annotation.
-     *
-     * @return The annotation
-     */
-    protected Annotation<T> clearBodies() {
-        myBodiesContainChoice = false;
-        getBodies().clear();
-        return this;
-    }
-
-    /**
      * Sets an array of bodies for this annotation.
      *
      * @param aBodyArray An array of annotation bodies
@@ -175,7 +164,12 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      */
     @JsonIgnore
     protected Annotation<T> setBodies(final AnnotationBody<?>... aBodyArray) {
-        return clearBodies().addBodies(aBodyArray);
+        final List<AnnotationBody<?>> bodies = getBodies();
+
+        bodies.clear();
+        bodies.addAll(Arrays.asList(aBodyArray));
+
+        return this;
     }
 
     /**
@@ -187,27 +181,6 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
     @JsonIgnore
     protected Annotation<T> setBodies(final List<AnnotationBody<?>> aContentResourceList) {
         return setBodies(aContentResourceList.toArray(new AnnotationBody[0]));
-    }
-
-    /**
-     * Adds a list of bodies to this annotation.
-     *
-     * @param aBodyArray An array of annotation bodies
-     * @return The annotation
-     */
-    protected Annotation<T> addBodies(final AnnotationBody<?>... aBodyArray) {
-        Collections.addAll(getBodies(), Objects.requireNonNull(aBodyArray));
-        return this;
-    }
-
-    /**
-     * Adds a list of bodies to this annotation.
-     *
-     * @param aBodyList A list of bodies
-     * @return The annotation
-     */
-    protected Annotation<T> addBodies(final List<AnnotationBody<?>> aBodyList) {
-        return addBodies(aBodyList.toArray(new AnnotationBody[0]));
     }
 
     /**

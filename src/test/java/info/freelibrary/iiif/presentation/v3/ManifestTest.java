@@ -32,8 +32,8 @@ import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageService;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageService3;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageService3.Profile;
-import info.freelibrary.iiif.presentation.v3.utils.URIs;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
+import info.freelibrary.iiif.presentation.v3.utils.URIs;
 
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
@@ -126,7 +126,7 @@ public class ManifestTest extends AbstractTest {
         final AnnotationPage<PaintingAnnotation> page2 =
                 new AnnotationPage<>(SERVER + MANIFEST_ID + "/pageanno/pageanno-2");
 
-        canvas1.addPaintingPages(page1.addAnnotations(content1));
+        canvas1.getPaintingPages().add(page1.addAnnotations(content1));
         myManifest.addCanvases(canvas1);
 
         for (final String[] values : firstCanvas) {
@@ -134,7 +134,7 @@ public class ManifestTest extends AbstractTest {
             final ImageService service = new ImageService3(Profile.LEVEL_TWO, SERVER + values[1]);
             final ImageContent resource = new ImageContent(id).setServices(service);
 
-            content1.addBodies(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(values[0])).setChoice(true);
+            content1.setChoice(true).getBodies().add(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(values[0]));
         }
 
         final String id2 = SERVER + MANIFEST_ID + "/canvas/canvas-2";
@@ -144,7 +144,7 @@ public class ManifestTest extends AbstractTest {
         final PaintingAnnotation content2 =
                 new PaintingAnnotation(SERVER + MANIFEST_ID + "/imageanno/imageanno-2", canvas2);
 
-        canvas2.addPaintingPages(page2.addAnnotations(content2));
+        canvas2.getPaintingPages().add(page2.addAnnotations(content2));
         myManifest.addCanvases(canvas2);
 
         for (final String[] values : secondCanvas) {
@@ -152,7 +152,7 @@ public class ManifestTest extends AbstractTest {
             final ImageService service = new ImageService3(Profile.LEVEL_TWO, SERVER + values[1]);
             final ImageContent resource = new ImageContent(id).setServices(service);
 
-            content2.addBodies(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(values[0])).setChoice(true);
+            content2.setChoice(true).getBodies().add(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(values[0]));
         }
 
         final RequiredStatement reqStmt =

@@ -17,12 +17,12 @@ public final class MinterFactory {
     /**
      * The minter name property.
      */
-    public static final String MINTER_NAME_PROPERTY = "fester.noid.minter";
+    public static final String MINTER_NAME_PROPERTY = "jp.noid.minter";
 
     /**
      * The environmental property for the minter name.
      */
-    public static final String ENV_MINTER_NAME = "FESTER_NOID_MINTER";
+    public static final String ENV_MINTER_NAME = "JP_NOID_MINTER";
 
     /**
      * The default minter class' name.

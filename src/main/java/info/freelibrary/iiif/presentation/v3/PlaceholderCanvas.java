@@ -284,6 +284,17 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas>
 
     @Override
     @SafeVarargs
+    public final PlaceholderCanvas setOtherAnnotations(final AnnotationPage<? extends Annotation<?>>... aPageArray) {
+        return (PlaceholderCanvas) super.setOtherAnnotations(aPageArray);
+    }
+
+    @Override
+    public final PlaceholderCanvas setOtherAnnotations(final List<AnnotationPage<? extends Annotation<?>>> aPageList) {
+        return (PlaceholderCanvas) super.setOtherAnnotations(aPageList);
+    }
+
+    @Override
+    @SafeVarargs
     public final PlaceholderCanvas paintWith(final Minter aMinter, final ContentResource<?>... aContentArray) {
         return (PlaceholderCanvas) super.paint(this, aMinter, false, aContentArray);
     }
@@ -450,18 +461,6 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas>
 
     @Override
     @SafeVarargs
-    public final PlaceholderCanvas addSupplementingPages(final AnnotationPage<SupplementingAnnotation>... aPageArray) {
-        return (PlaceholderCanvas) super.addSupplementingPages(aPageArray);
-    }
-
-    @Override
-    public final PlaceholderCanvas
-            addSupplementingPages(final List<AnnotationPage<SupplementingAnnotation>> aPageList) {
-        return (PlaceholderCanvas) super.addSupplementingPages(aPageList);
-    }
-
-    @Override
-    @SafeVarargs
     public final PlaceholderCanvas setSupplementingPages(final AnnotationPage<SupplementingAnnotation>... aPageArray) {
         return (PlaceholderCanvas) super.setSupplementingPages(aPageArray);
     }
@@ -470,17 +469,6 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas>
     public final PlaceholderCanvas
             setSupplementingPages(final List<AnnotationPage<SupplementingAnnotation>> aPageArray) {
         return (PlaceholderCanvas) super.setSupplementingPages(aPageArray);
-    }
-
-    @Override
-    @SafeVarargs
-    public final PlaceholderCanvas addPaintingPages(final AnnotationPage<PaintingAnnotation>... aPageArray) {
-        return (PlaceholderCanvas) super.addPaintingPages(aPageArray);
-    }
-
-    @Override
-    public final PlaceholderCanvas addPaintingPages(final List<AnnotationPage<PaintingAnnotation>> aPageArray) {
-        return (PlaceholderCanvas) super.addPaintingPages(aPageArray);
     }
 
     @Override
