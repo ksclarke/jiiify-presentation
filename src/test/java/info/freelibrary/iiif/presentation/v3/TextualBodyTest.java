@@ -90,20 +90,11 @@ public class TextualBodyTest {
     }
 
     /**
-     * Tests setting and getting the TextualBody's MediaType.
-     */
-    @Test
-    public final void testSetGetFormatMediaType() {
-        assertEquals(MediaType.HTML_UTF_8,
-                new TextualBody().setFormat(MediaType.HTML_UTF_8).getFormatMediaType().get());
-    }
-
-    /**
      * Tests setting and getting the TextualBody's MediaType in string form.
      */
     @Test
     public final void testGetFormat() {
-        assertEquals(MediaType.HTML_UTF_8.toString(),
+        assertEquals(MediaType.HTML_UTF_8,
                 new TextualBody().setFormat(MediaType.HTML_UTF_8.toString()).getFormat().get());
     }
 

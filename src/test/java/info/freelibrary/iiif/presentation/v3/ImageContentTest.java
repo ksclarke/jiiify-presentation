@@ -55,7 +55,7 @@ public class ImageContentTest {
     @Test
     public void testSetFormatString() {
         // This will have image/jpeg set as format by default
-        assertEquals(IMAGE_PNG, new ImageContent(IMAGE_URI).setFormat(IMAGE_PNG).getFormat().get());
+        assertEquals(MediaType.PNG, new ImageContent(IMAGE_URI).setFormat(IMAGE_PNG).getFormat().get());
     }
 
     /**
@@ -64,8 +64,8 @@ public class ImageContentTest {
     @Test
     public void testSetFormatMediaTypeMediaType() {
         // This will have image/jpeg set as format by default
-        assertEquals(IMAGE_PNG,
-                new ImageContent(IMAGE_URI).setFormatMediaType(MediaType.parse(IMAGE_PNG)).getFormat().get());
+        assertEquals(MediaType.PNG,
+                new ImageContent(IMAGE_URI).setFormat(MediaType.parse(IMAGE_PNG)).getFormat().get());
     }
 
     /**

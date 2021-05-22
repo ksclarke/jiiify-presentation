@@ -36,7 +36,7 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
      */
     public CanvasContent(final String aID) {
         super(ResourceTypes.CANVAS, aID);
-        super.setFormatMediaType(MediaType.JSON_UTF_8);
+        super.setFormatFromMediaType(MediaType.JSON_UTF_8);
     }
 
     /**
@@ -46,7 +46,7 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
      */
     public CanvasContent(final URI aID) {
         super(ResourceTypes.CANVAS, aID);
-        super.setFormatMediaType(MediaType.JSON_UTF_8);
+        super.setFormatFromMediaType(MediaType.JSON_UTF_8);
     }
 
     /**
@@ -54,7 +54,19 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
      */
     private CanvasContent() {
         super(ResourceTypes.CANVAS);
-        super.setFormatMediaType(MediaType.JSON_UTF_8);
+        super.setFormatFromMediaType(MediaType.JSON_UTF_8);
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.FORMAT)
+    public CanvasContent setFormat(final String aMediaType) {
+        return (CanvasContent) super.setFormat(aMediaType);
+    }
+
+    @Override
+    @JsonIgnore
+    public CanvasContent setFormat(final MediaType aMediaType) {
+        return (CanvasContent) super.setFormat(aMediaType);
     }
 
     @Override

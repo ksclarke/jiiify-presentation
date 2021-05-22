@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.google.common.net.MediaType;
 
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
@@ -72,6 +73,18 @@ public class ImageContent extends AbstractContentResource<ImageContent>
      */
     private ImageContent() {
         super(ResourceTypes.IMAGE);
+    }
+
+    @Override
+    @JsonIgnore
+    public ImageContent setFormat(final MediaType aMediaType) {
+        return (ImageContent) super.setFormat(aMediaType);
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.FORMAT)
+    public ImageContent setFormat(final String aMediaType) {
+        return (ImageContent) super.setFormat(aMediaType);
     }
 
     @Override

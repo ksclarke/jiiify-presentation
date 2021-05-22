@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.google.common.net.MediaType;
 
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
@@ -67,6 +68,18 @@ public class SoundContent extends AbstractContentResource<SoundContent>
      */
     private SoundContent() {
         super(ResourceTypes.SOUND);
+    }
+
+    @Override
+    @JsonIgnore
+    public SoundContent setFormat(final MediaType aMediaType) {
+        return (SoundContent) super.setFormat(aMediaType);
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.FORMAT)
+    public SoundContent setFormat(final String aMediaType) {
+        return (SoundContent) super.setFormat(aMediaType);
     }
 
     @Override

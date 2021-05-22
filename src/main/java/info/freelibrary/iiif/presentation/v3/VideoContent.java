@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.google.common.net.MediaType;
 
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
@@ -75,6 +76,18 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
      */
     private VideoContent() {
         super(ResourceTypes.VIDEO);
+    }
+
+    @Override
+    @JsonIgnore
+    public VideoContent setFormat(final MediaType aMediaType) {
+        return (VideoContent) super.setFormat(aMediaType);
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.FORMAT)
+    public VideoContent setFormat(final String aMediaType) {
+        return (VideoContent) super.setFormat(aMediaType);
     }
 
     @Override

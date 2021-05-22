@@ -8,6 +8,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.google.common.net.MediaType;
 
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
@@ -53,6 +54,18 @@ public class DatasetContent extends AbstractContentResource<DatasetContent>
      */
     private DatasetContent() {
         super(ResourceTypes.DATASET);
+    }
+
+    @Override
+    @JsonIgnore
+    public DatasetContent setFormat(final MediaType aMediaType) {
+        return (DatasetContent) super.setFormat(aMediaType);
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.FORMAT)
+    public DatasetContent setFormat(final String aMediaType) {
+        return (DatasetContent) super.setFormat(aMediaType);
     }
 
     @Override

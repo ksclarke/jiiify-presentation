@@ -114,9 +114,8 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
      * @return The content resource
      */
     @JsonIgnore
-    protected AbstractContentResource<T> setFormatMediaType(final MediaType aMediaType) {
-        myFormat = aMediaType;
-        return this;
+    protected AbstractContentResource<T> setFormat(final MediaType aMediaType) {
+        return setFormatFromMediaType(aMediaType);
     }
 
     /**
@@ -125,7 +124,7 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
      * @return A string representation of the format
      */
     @JsonGetter(JsonKeys.FORMAT)
-    public Optional<String> getFormat() {
+    private Optional<String> getFormatAsString() {
         if (myFormat != null) {
             return Optional.of(myFormat.type() + "/" + myFormat.subtype()); // skip encoding
         } else {
@@ -139,8 +138,20 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
      * @return The media type format of the content resource
      */
     @JsonIgnore
-    public Optional<MediaType> getFormatMediaType() {
+    public Optional<MediaType> getFormat() {
         return Optional.ofNullable(myFormat);
+    }
+
+    /**
+     * A non-public way to set format from a media type.
+     *
+     * @param aMediaType A media type
+     * @return This content resource
+     */
+    @JsonIgnore
+    protected final AbstractContentResource<T> setFormatFromMediaType(final MediaType aMediaType) {
+        myFormat = aMediaType;
+        return this;
     }
 
     /**
