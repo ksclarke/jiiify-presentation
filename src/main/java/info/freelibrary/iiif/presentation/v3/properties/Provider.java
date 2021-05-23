@@ -307,11 +307,21 @@ public class Provider {
         return this;
     }
 
+    /**
+     * Gets the hash code for the provider.
+     *
+     * @return The provider's hash code
+     */
     @Override
     public int hashCode() {
         return Objects.hash(myID, myLabel, myHomepages, myLogos, mySeeAlsoRefs);
     }
 
+    /**
+     * Tests whether the supplied object equals this provider.
+     *
+     * @return True if the objects are equal; else, false
+     */
     @Override
     public boolean equals(final Object aObject) {
         if (aObject instanceof Provider) {

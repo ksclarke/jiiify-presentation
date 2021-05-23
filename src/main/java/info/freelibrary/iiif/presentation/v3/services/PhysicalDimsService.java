@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**

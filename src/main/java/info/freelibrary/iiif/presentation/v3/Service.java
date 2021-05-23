@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3.services;
+package info.freelibrary.iiif.presentation.v3;
 
 import java.net.URI;
 import java.util.List;
@@ -7,7 +7,7 @@ import java.util.List;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
- * A service interface to be implemented by actual services (like GeoJSON and ImageService).
+ * A service interface to be implemented by actual services.
  */
 @JsonDeserialize(using = ServiceDeserializer.class)
 public interface Service {

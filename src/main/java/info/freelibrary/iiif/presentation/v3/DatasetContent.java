@@ -21,7 +21,6 @@ import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
-import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
@@ -29,7 +28,7 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
 public class DatasetContent extends AbstractContentResource<DatasetContent>
-        implements AnnotationBody<DatasetContent>, ContentResource<DatasetContent> {
+        implements AnnotationBody<DatasetContent>, ContentResource<DatasetContent>, Resource<DatasetContent> {
 
     /**
      * Creates a dataset content resource from the supplied ID.

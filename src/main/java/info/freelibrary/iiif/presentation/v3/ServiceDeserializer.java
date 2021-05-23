@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3.services;
+package info.freelibrary.iiif.presentation.v3;
 
 import java.io.IOException;
 import java.net.URI;
@@ -18,7 +18,10 @@ import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.PMD;
 
-import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.services.GeoJSONService;
+import info.freelibrary.iiif.presentation.v3.services.OtherService;
+import info.freelibrary.iiif.presentation.v3.services.OtherV2Service;
+import info.freelibrary.iiif.presentation.v3.services.PhysicalDimsService;
 import info.freelibrary.iiif.presentation.v3.services.auth.AuthCookieService1;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageAPI;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageService;
@@ -35,7 +38,7 @@ import io.vertx.core.json.Json;
  * Deserializes services from JSON documents into {@link Service} implementations.
  */
 @SuppressWarnings(PMD.GOD_CLASS)
-public class ServiceDeserializer extends StdDeserializer<Service> { // NOPMD
+class ServiceDeserializer extends StdDeserializer<Service> { // NOPMD
 
     /**
      * The <code>serialVersionUID</code> for ServiceDeserializer.

@@ -28,7 +28,6 @@ import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
-import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
@@ -68,7 +67,7 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
     }
 
     /**
-     * Creates a new AnnotationPage for a supplied {@link CanvasResource}.
+     * Creates a new annotation page for a supplied {@link CanvasResource}.
      *
      * @param <C> The type of CanvasResource
      * @param aMinter An ID minter
@@ -314,6 +313,11 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
         return (AnnotationPage<T>) super.setLabel(aLabel);
     }
 
+    /**
+     * Gets a string representation of the annotation page.
+     *
+     * @return A string representation of the annotation page
+     */
     @Override
     public String toString() {
         return String.join(":", getClass().getSimpleName(), getID().toString());

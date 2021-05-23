@@ -15,10 +15,50 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public enum RangeBehavior implements Behavior {
 
-    AUTO_ADVANCE(BehaviorConstants.AUTO_ADVANCE), NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE),
-    INDIVIDUALS(BehaviorConstants.INDIVIDUALS), NO_NAV(BehaviorConstants.NO_NAV),
-    CONTINUOUS(BehaviorConstants.CONTINUOUS), PAGED(BehaviorConstants.PAGED), UNORDERED(BehaviorConstants.UNORDERED),
-    THUMBNAIL_NAV(BehaviorConstants.THUMBNAIL_NAV), SEQUENCE(BehaviorConstants.SEQUENCE);
+    /**
+     * An auto-advance range behavior.
+     */
+    AUTO_ADVANCE(BehaviorConstants.AUTO_ADVANCE), //
+
+    /**
+     * A no-auto-advance range behavior.
+     */
+    NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE), //
+
+    /**
+     * An individual range behavior.
+     */
+    INDIVIDUALS(BehaviorConstants.INDIVIDUALS), //
+
+    /**
+     * A no-nav range behavior.
+     */
+    NO_NAV(BehaviorConstants.NO_NAV), //
+
+    /**
+     * A continuous range behavior.
+     */
+    CONTINUOUS(BehaviorConstants.CONTINUOUS), //
+
+    /**
+     * A paged range behavior.
+     */
+    PAGED(BehaviorConstants.PAGED), //
+
+    /**
+     * An unordered range behavior.
+     */
+    UNORDERED(BehaviorConstants.UNORDERED), //
+
+    /**
+     * A thumbnail-nav range behavior.
+     */
+    THUMBNAIL_NAV(BehaviorConstants.THUMBNAIL_NAV), //
+
+    /**
+     * A sequence range behavior.
+     */
+    SEQUENCE(BehaviorConstants.SEQUENCE);
 
     /**
      * The logger for the RangeBehavior.
@@ -39,6 +79,11 @@ public enum RangeBehavior implements Behavior {
         myValue = aBehavior;
     }
 
+    /**
+     * Gets a string representation of the range behavior.
+     *
+     * @return A string representation of the range behavior
+     */
     @Override
     @JsonValue
     public String toString() {

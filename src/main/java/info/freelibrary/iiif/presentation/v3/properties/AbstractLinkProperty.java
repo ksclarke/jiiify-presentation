@@ -177,7 +177,7 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      * @return An optional media type format
      */
     @JsonIgnore
-    protected Optional<MediaType> getFormatMediaType() {
+    public Optional<MediaType> getFormat() {
         return Optional.ofNullable(myFormat);
     }
 
@@ -188,7 +188,7 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      */
     @JsonGetter(JsonKeys.FORMAT)
     @JsonInclude(Include.NON_EMPTY)
-    protected Optional<String> getFormat() {
+    protected Optional<String> getFormatAsString() {
         return myFormat != null ? Optional.of(myFormat.toString()) : Optional.empty();
     }
 
@@ -238,7 +238,7 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      * @return An optional profile URI
      */
     @JsonIgnore
-    protected Optional<URI> getProfile() {
+    public Optional<URI> getProfile() {
         return Optional.ofNullable(myProfile);
     }
 
@@ -277,11 +277,21 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
         return this;
     }
 
+    /**
+     * Gets a hash code for this property.
+     *
+     * @return A hash code
+     */
     @Override
     public int hashCode() {
         return Objects.hash(myID, myType, myFormat, myProfile, myLabel);
     }
 
+    /**
+     * Tests whether the supplied object is equal to this one.
+     *
+     * @return True if the objects are equal; else, false
+     */
     @Override
     public boolean equals(final Object aObject) {
         if (aObject instanceof AbstractLinkProperty) {

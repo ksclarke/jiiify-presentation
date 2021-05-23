@@ -24,7 +24,6 @@ import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
-import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 import io.vertx.core.json.Json;
@@ -35,8 +34,8 @@ import io.vertx.core.json.JsonObject;
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.DURATION,
     JsonKeys.LANGUAGE })
-public class SoundContent extends AbstractContentResource<SoundContent>
-        implements AnnotationBody<SoundContent>, ContentResource<SoundContent>, TemporalContentResource<SoundContent> {
+public class SoundContent extends AbstractContentResource<SoundContent> implements AnnotationBody<SoundContent>,
+        ContentResource<SoundContent>, TemporalContentResource<SoundContent>, Resource<SoundContent> {
 
     /**
      * The sound content's duration.

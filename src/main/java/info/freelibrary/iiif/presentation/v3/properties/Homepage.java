@@ -59,6 +59,12 @@ public class Homepage extends AbstractLinkProperty<Homepage> {
         super(ResourceTypes.TEXT);
     }
 
+    /**
+     * Sets the homepage ID.
+     *
+     * @param aID An ID
+     * @return The homepage
+     */
     @Override
     @JsonSetter(JsonKeys.ID)
     public Homepage setID(final URI aID) {
@@ -96,6 +102,12 @@ public class Homepage extends AbstractLinkProperty<Homepage> {
         return super.getNullableLabel();
     }
 
+    /**
+     * Sets the descriptive label.
+     *
+     * @param aLabel A descriptive label
+     * @return The homepage
+     */
     @Override
     @JsonSetter(JsonKeys.LABEL)
     public Homepage setLabel(final Label aLabel) {
@@ -115,22 +127,29 @@ public class Homepage extends AbstractLinkProperty<Homepage> {
 
     @Override
     @JsonIgnore
-    public Optional<MediaType> getFormatMediaType() {
-        return super.getFormatMediaType();
-    }
-
-    @Override
-    @JsonGetter(JsonKeys.FORMAT)
-    public Optional<String> getFormat() {
+    public Optional<MediaType> getFormat() {
         return super.getFormat();
     }
 
+    /**
+     * Sets format.
+     *
+     * @param aMediaType A resource's format
+     * @return The resource whose format is being set
+     */
     @Override
     @JsonIgnore
     public Homepage setFormat(final MediaType aMediaType) {
         return (Homepage) super.setFormat(aMediaType);
     }
 
+    /**
+     * Sets format in string form.
+     *
+     * @param aFormat A resource's format
+     * @return The resource whose format is being set
+     * @If the supplied string isn't a media type
+     */
     @Override
     @JsonSetter(JsonKeys.FORMAT)
     public Homepage setFormat(final String aFormat) {
@@ -143,11 +162,19 @@ public class Homepage extends AbstractLinkProperty<Homepage> {
         return (Homepage) super.setLanguages(aLangArray);
     }
 
+    /**
+     * Returns a hashCode for the homepage.
+     */
     @Override
     public int hashCode() {
         return 31 * super.hashCode() + Objects.hash(getLanguages());
     }
 
+    /**
+     * Determines if a compared object is equal to this one.
+     *
+     * @return True if the objects are equal; else, false
+     */
     @Override
     public boolean equals(final Object aObject) {
         if (!super.equals(aObject)) {

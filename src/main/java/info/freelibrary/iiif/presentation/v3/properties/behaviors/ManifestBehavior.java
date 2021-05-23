@@ -15,9 +15,44 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public enum ManifestBehavior implements Behavior {
 
-    AUTO_ADVANCE(BehaviorConstants.AUTO_ADVANCE), NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE),
-    INDIVIDUALS(BehaviorConstants.INDIVIDUALS), CONTINUOUS(BehaviorConstants.CONTINUOUS),
-    REPEAT(BehaviorConstants.REPEAT), NO_REPEAT(BehaviorConstants.NO_REPEAT), PAGED(BehaviorConstants.PAGED),
+    /**
+     * An auto-advance manifest behavior.
+     */
+    AUTO_ADVANCE(BehaviorConstants.AUTO_ADVANCE), //
+
+    /**
+     * A no-auto-advance manifest behavior.
+     */
+    NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE), //
+
+    /**
+     * An individuals manifest behavior.
+     */
+    INDIVIDUALS(BehaviorConstants.INDIVIDUALS), //
+
+    /**
+     * A continuous manifest behavior.
+     */
+    CONTINUOUS(BehaviorConstants.CONTINUOUS), //
+
+    /**
+     * A repeat manifest behavior.
+     */
+    REPEAT(BehaviorConstants.REPEAT), //
+
+    /**
+     * A no-repeat manifest behavior.
+     */
+    NO_REPEAT(BehaviorConstants.NO_REPEAT), //
+
+    /**
+     * A paged manifest behavior.
+     */
+    PAGED(BehaviorConstants.PAGED), //
+
+    /**
+     * An unordered manifest behavior.
+     */
     UNORDERED(BehaviorConstants.UNORDERED);
 
     /**
@@ -39,6 +74,11 @@ public enum ManifestBehavior implements Behavior {
         myValue = aBehavior;
     }
 
+    /**
+     * Gets a string representation of the manifest behavior.
+     *
+     * @return A string representation of the manifest behavior
+     */
     @Override
     @JsonValue
     public String toString() {

@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.net.URI;
 import java.util.Optional;
@@ -92,7 +92,7 @@ public class SeeAlsoTest extends AbstractTest {
     @Test
     public void testSetGetFormat() {
         final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.DATASET);
-        assertEquals(JPEG_FORMAT, seeAlso.setFormat(MIME_TYPE).getFormat().get());
+        assertEquals(MediaType.JPEG, seeAlso.setFormat(MIME_TYPE).getFormat().get());
     }
 
     /**
@@ -101,7 +101,7 @@ public class SeeAlsoTest extends AbstractTest {
     @Test
     public void testSetGetFormatMediaType() {
         final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.DATASET);
-        assertEquals(JPEG_FORMAT, seeAlso.setFormat(MediaType.parse(JPEG_FORMAT)).getFormat().get());
+        assertEquals(MediaType.JPEG, seeAlso.setFormat(MediaType.parse(JPEG_FORMAT)).getFormat().get());
     }
 
     /**

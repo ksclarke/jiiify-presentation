@@ -4,7 +4,7 @@ package info.freelibrary.iiif.presentation.v3.services.image;
 import java.net.URI;
 import java.util.List;
 
-import info.freelibrary.iiif.presentation.v3.services.Service;
+import info.freelibrary.iiif.presentation.v3.Service;
 
 /**
  * Interface for image services.

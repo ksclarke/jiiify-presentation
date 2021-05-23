@@ -163,7 +163,7 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      * @return The annotation
      */
     @JsonIgnore
-    protected Annotation<T> setBodies(final AnnotationBody<?>... aBodyArray) {
+    public Annotation<T> setBodies(final AnnotationBody<?>... aBodyArray) {
         final List<AnnotationBody<?>> bodies = getBodies();
 
         bodies.clear();
@@ -179,7 +179,7 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      * @return The annotation
      */
     @JsonIgnore
-    protected Annotation<T> setBodies(final List<AnnotationBody<?>> aContentResourceList) {
+    public Annotation<T> setBodies(final List<AnnotationBody<?>> aContentResourceList) {
         return setBodies(aContentResourceList.toArray(new AnnotationBody[0]));
     }
 
@@ -189,7 +189,7 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      * @param aBoolFlag A flag indicating whether the annotation contains a choice between bodies
      * @return This annotation
      */
-    protected Annotation<T> setChoice(final boolean aBoolFlag) {
+    public Annotation<T> setChoice(final boolean aBoolFlag) {
         myBodiesContainChoice = aBoolFlag;
         return this;
     }
@@ -199,7 +199,7 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      *
      * @return True if bodies contains a choice; else, false
      */
-    protected boolean bodyHasChoice() {
+    public boolean bodyHasChoice() {
         return myBodiesContainChoice;
     }
 
@@ -247,7 +247,7 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      */
     @JsonIgnore
     @SuppressWarnings(PMD.NULL_ASSIGNMENT)
-    protected Annotation<T> setTarget(final URI aURI) {
+    public Annotation<T> setTarget(final URI aURI) {
         myTargetURI = Objects.requireNonNull(aURI);
         myTargetSpecificResource = null; // NOPMD
         return this;
@@ -261,7 +261,7 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      */
     @JsonSetter(JsonKeys.TARGET)
     @SuppressWarnings(PMD.NULL_ASSIGNMENT)
-    protected Annotation<T> setTarget(final String aURI) {
+    public Annotation<T> setTarget(final String aURI) {
         myTargetURI = Objects.requireNonNull(URI.create(aURI));
         myTargetSpecificResource = null; // NOPMD
         return this;
@@ -275,7 +275,7 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      */
     @JsonSetter(JsonKeys.TARGET)
     @SuppressWarnings(PMD.NULL_ASSIGNMENT)
-    protected Annotation<T> setTarget(final SpecificResource aSpecificResource) {
+    public Annotation<T> setTarget(final SpecificResource aSpecificResource) {
         myTargetSpecificResource = Objects.requireNonNull(aSpecificResource);
         myTargetURI = null; // NOPMD
         return this;
@@ -297,28 +297,28 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      * @param aMotivation A motivation in string form
      */
     @JsonSetter(JsonKeys.MOTIVATION)
-    protected void setMotivation(final String aMotivation) {
+    public void setMotivation(final String aMotivation) {
         myMotivation = aMotivation;
     }
 
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
-    protected Annotation<T> setBehaviors(final Behavior... aBehaviorArray) {
+    public Annotation<T> setBehaviors(final Behavior... aBehaviorArray) {
         return (Annotation<T>) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorArray));
     }
 
     @Override
-    protected Annotation<T> setBehaviors(final List<Behavior> aBehaviorList) {
+    public Annotation<T> setBehaviors(final List<Behavior> aBehaviorList) {
         return (Annotation<T>) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorList));
     }
 
     @Override
-    protected Annotation<T> addBehaviors(final Behavior... aBehaviorArray) {
+    public Annotation<T> addBehaviors(final Behavior... aBehaviorArray) {
         return (Annotation<T>) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorArray));
     }
 
     @Override
-    protected Annotation<T> addBehaviors(final List<Behavior> aBehaviorList) {
+    public Annotation<T> addBehaviors(final List<Behavior> aBehaviorList) {
         return (Annotation<T>) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorList));
     }
 
@@ -337,7 +337,7 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      * @param aTimeMode A time mode
      * @return The annotation
      */
-    protected Annotation<T> setTimeMode(final TimeMode aTimeMode) {
+    public Annotation<T> setTimeMode(final TimeMode aTimeMode) {
         myTimeMode = aTimeMode;
         return this;
     }

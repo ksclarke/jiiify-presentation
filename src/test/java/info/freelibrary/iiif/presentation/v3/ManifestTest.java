@@ -28,7 +28,6 @@ import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.services.OtherService;
-import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageService;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageService3;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageService3.Profile;

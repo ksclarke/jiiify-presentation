@@ -106,6 +106,11 @@ class I18nProperty<T extends I18nProperty<T>> {
         return !myI18ns.isEmpty();
     }
 
+    /**
+     * Tests if the supplied object equals this one.
+     *
+     * @return True if they are equal; else, false
+     */
     @Override
     public boolean equals(final Object aObject) {
         if (aObject != null && getClass().getName().equals(aObject.getClass().getName())) {
@@ -115,11 +120,21 @@ class I18nProperty<T extends I18nProperty<T>> {
         }
     }
 
+    /**
+     * Returns a hash code for this property.
+     *
+     * @return A hash code
+     */
     @Override
     public int hashCode() {
         return toMap().hashCode();
     }
 
+    /**
+     * Returns a string representation of this property.
+     *
+     * @return A string representation of this property
+     */
     @Override
     public String toString() {
         if (hasStrings()) {

@@ -9,7 +9,20 @@ import com.fasterxml.jackson.annotation.JsonValue;
  */
 public enum TimeMode {
 
-    TRIM("trim"), SCALE("scale"), LOOP("loop");
+    /**
+     * A trim time-mode.
+     */
+    TRIM("trim"), //
+
+    /**
+     * A scale time-mode.
+     */
+    SCALE("scale"), //
+
+    /**
+     * A loop time-mode.
+     */
+    LOOP("loop");
 
     /**
      * The TimeMode value in string form.
@@ -25,6 +38,11 @@ public enum TimeMode {
         myValue = aTimeMode;
     }
 
+    /**
+     * Gets a string representation of the time-mode.
+     *
+     * @return A string representation of the time-mode
+     */
     @Override
     @JsonValue
     public String toString() {

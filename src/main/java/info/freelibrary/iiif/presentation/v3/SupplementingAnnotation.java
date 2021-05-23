@@ -25,7 +25,6 @@ import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
-import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
@@ -183,7 +182,7 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     }
 
     @Override
-    protected void setMotivation(final String aMotivation) {
+    public void setMotivation(final String aMotivation) {
         if (!MOTIVATION.equals(aMotivation)) {
             throw new IllegalArgumentException(
                     LOGGER.getMessage(MessageCodes.JPA_038, SupplementingAnnotation.class.getSimpleName(), MOTIVATION));

@@ -15,10 +15,54 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public enum CollectionBehavior implements Behavior {
 
-    AUTO_ADVANCE(BehaviorConstants.AUTO_ADVANCE), NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE),
-    INDIVIDUALS(BehaviorConstants.INDIVIDUALS), CONTINUOUS(BehaviorConstants.CONTINUOUS),
-    REPEAT(BehaviorConstants.REPEAT), NO_REPEAT(BehaviorConstants.NO_REPEAT), PAGED(BehaviorConstants.PAGED),
-    UNORDERED(BehaviorConstants.UNORDERED), MULTI_PART(BehaviorConstants.MULTI_PART),
+    /**
+     * An auto-advance collection behavior.
+     */
+    AUTO_ADVANCE(BehaviorConstants.AUTO_ADVANCE), //
+
+    /**
+     * A no-auto-advance collection behavior.
+     */
+    NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE), //
+
+    /**
+     * A individuals collection behavior.
+     */
+    INDIVIDUALS(BehaviorConstants.INDIVIDUALS), //
+
+    /**
+     * A continuous collection behavior.
+     */
+    CONTINUOUS(BehaviorConstants.CONTINUOUS), //
+
+    /**
+     * A repeat collection behavior.
+     */
+    REPEAT(BehaviorConstants.REPEAT), //
+
+    /**
+     * A no-repeat collection behavior.
+     */
+    NO_REPEAT(BehaviorConstants.NO_REPEAT), //
+
+    /**
+     * A paged collection behavior.
+     */
+    PAGED(BehaviorConstants.PAGED), //
+
+    /**
+     * An unordered collection behavior.
+     */
+    UNORDERED(BehaviorConstants.UNORDERED), //
+
+    /**
+     * A multi-part collection behavior.
+     */
+    MULTI_PART(BehaviorConstants.MULTI_PART), //
+
+    /**
+     * A together collection behavior.
+     */
     TOGETHER(BehaviorConstants.TOGETHER);
 
     /**
@@ -35,6 +79,9 @@ public enum CollectionBehavior implements Behavior {
         myValue = aBehavior;
     }
 
+    /**
+     * Gets a string representation of a collection behavior.
+     */
     @Override
     @JsonValue
     public String toString() {

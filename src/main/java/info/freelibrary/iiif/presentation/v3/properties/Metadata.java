@@ -136,6 +136,11 @@ public class Metadata {
         return setValue(new Value(aValue));
     }
 
+    /**
+     * Gets a string representation of the metadata.
+     *
+     * @return A string representation of the metadata
+     */
     @Override
     public String toString() {
         return myLabel + ":" + myValue;

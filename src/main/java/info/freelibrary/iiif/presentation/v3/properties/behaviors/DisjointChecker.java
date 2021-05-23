@@ -132,6 +132,11 @@ public class DisjointChecker {
         }
     }
 
+    /**
+     * A string representation of the disjoint checker.
+     *
+     * @return A string representation of the disjoint checker
+     */
     @Override
     public String toString() {
         final List<String> keyList = new ArrayList<>(DISJOINTS.keySet());

@@ -30,7 +30,6 @@ import info.freelibrary.iiif.presentation.v3.properties.Start;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.RangeBehavior;
-import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
@@ -456,6 +455,11 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
         return JsonObject.mapFrom(this);
     }
 
+    /**
+     * Gets a string representation of a range.
+     *
+     * @return A string representation of a range
+     */
     @Override
     public String toString() {
         return toJSON().encode();

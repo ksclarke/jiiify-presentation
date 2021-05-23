@@ -68,49 +68,72 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
         return (SeeAlso) super.setID(URI.create(aID));
     }
 
+    /**
+     * Sets the ID.
+     *
+     * @param aID An ID
+     * @return The resource whose ID is being set
+     */
     @Override
     @JsonIgnore
     public SeeAlso setID(final URI aID) {
         return (SeeAlso) super.setID(aID);
     }
 
+    /**
+     * Sets the resource type.
+     *
+     * @param aType A resource type
+     * @return The resource whose type is being set
+     */
     @Override
     @JsonSetter(JsonKeys.TYPE)
     public SeeAlso setType(final String aType) {
         return (SeeAlso) super.setType(aType);
     }
 
+    /**
+     * Gets format as a media type.
+     *
+     * @return An optional media type format
+     */
     @Override
     @JsonIgnore
-    public Optional<MediaType> getFormatMediaType() {
-        return super.getFormatMediaType();
-    }
-
-    @Override
-    @JsonGetter(JsonKeys.FORMAT)
-    @JsonInclude(Include.NON_EMPTY)
-    public Optional<String> getFormat() {
+    public Optional<MediaType> getFormat() {
         return super.getFormat();
     }
 
+    /**
+     * Sets format in string form.
+     *
+     * @param aFormat A resource's format
+     * @return The resource whose format is being set
+     * @If the supplied string isn't a media type
+     */
     @Override
     @JsonSetter(JsonKeys.FORMAT)
     public SeeAlso setFormat(final String aFormat) {
         return (SeeAlso) super.setFormat(aFormat);
     }
 
+    /**
+     * Sets format.
+     *
+     * @param aMediaType A resource's format
+     * @return The resource whose format is being set
+     */
     @Override
     @JsonIgnore
     public SeeAlso setFormat(final MediaType aMediaType) {
         return (SeeAlso) super.setFormat(aMediaType);
     }
 
-    @Override
-    @JsonIgnore
-    public Optional<URI> getProfile() {
-        return super.getProfile();
-    }
-
+    /**
+     * Sets the profile.
+     *
+     * @param aProfile A profile
+     * @return The resource whose profile is being set
+     */
     @Override
     @JsonIgnore
     public SeeAlso setProfile(final URI aProfile) {
@@ -138,6 +161,12 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
         return Optional.ofNullable(super.getNullableLabel());
     }
 
+    /**
+     * Sets the descriptive label.
+     *
+     * @param aLabel A descriptive label
+     * @return The resource whose label is being set
+     */
     @Override
     @JsonSetter(JsonKeys.LABEL)
     public SeeAlso setLabel(final Label aLabel) {

@@ -3,7 +3,7 @@ package info.freelibrary.iiif.presentation.v3.services.auth;
 
 import java.net.URI;
 
-import info.freelibrary.iiif.presentation.v3.services.Service;
+import info.freelibrary.iiif.presentation.v3.Service;
 
 /**
  * An interface for authentication services.
