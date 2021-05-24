@@ -8,7 +8,7 @@ import info.freelibrary.iiif.presentation.v3.Service;
 /**
  * An interface for authentication services.
  */
-public interface AuthService extends Service {
+public interface AuthService<T extends AuthService<T>> extends Service<T> {
 
     /**
      * Gets the auth service profile as a string.
@@ -23,7 +23,7 @@ public interface AuthService extends Service {
      * @param aProfile The profile
      * @return The auth service
      */
-    AuthService setProfile(Profile aProfile);
+    T setProfile(Profile aProfile);
 
     /**
      * Interface for {@link AuthService} profiles.

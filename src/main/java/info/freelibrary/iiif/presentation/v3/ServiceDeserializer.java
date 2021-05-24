@@ -20,7 +20,8 @@ import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.services.GeoJSONService;
 import info.freelibrary.iiif.presentation.v3.services.OtherService;
-import info.freelibrary.iiif.presentation.v3.services.OtherV2Service;
+import info.freelibrary.iiif.presentation.v3.services.OtherService2;
+import info.freelibrary.iiif.presentation.v3.services.OtherService3;
 import info.freelibrary.iiif.presentation.v3.services.PhysicalDimsService;
 import info.freelibrary.iiif.presentation.v3.services.auth.AuthCookieService1;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageAPI;
@@ -38,7 +39,7 @@ import io.vertx.core.json.Json;
  * Deserializes services from JSON documents into {@link Service} implementations.
  */
 @SuppressWarnings(PMD.GOD_CLASS)
-class ServiceDeserializer extends StdDeserializer<Service> { // NOPMD
+class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
 
     /**
      * The <code>serialVersionUID</code> for ServiceDeserializer.
@@ -70,7 +71,7 @@ class ServiceDeserializer extends StdDeserializer<Service> { // NOPMD
      * Deserializes a service.
      */
     @Override
-    public Service deserialize(final JsonParser aParser, final DeserializationContext aContext)
+    public Service<?> deserialize(final JsonParser aParser, final DeserializationContext aContext)
             throws IOException, JsonProcessingException {
         return deserializeServiceNode(aParser, aParser.getCodec().readTree(aParser));
     }
@@ -82,16 +83,16 @@ class ServiceDeserializer extends StdDeserializer<Service> { // NOPMD
      * @param aNode A JSON node representing a service
      * @return A service
      */
-    private Service deserializeServiceNode(final JsonParser aParser, final JsonNode aNode)
+    private Service<?> deserializeServiceNode(final JsonParser aParser, final JsonNode aNode)
             throws JsonProcessingException {
-        final Service service;
+        final Service<?> service;
 
         if (aNode.isTextual()) {
-            service = new OtherService(aNode.textValue(), OtherService.class.getSimpleName());
+            service = new OtherService3(aNode.textValue(), OtherService.class.getSimpleName());
         } else if (aNode.isObject()) {
             final URI id = getServiceID(aNode, aParser);
             final String type = getServiceType(aNode, aParser, id);
-            final List<Service> services = getRelatedServices(aParser, aNode.get(JsonKeys.SERVICE));
+            final List<Service<?>> services = getRelatedServices(aParser, aNode.get(JsonKeys.SERVICE));
 
             if (ResourceTypes.IMAGE_SERVICE_2.equals(type)) {
                 final String profile = aNode.get(JsonKeys.PROFILE).textValue();
@@ -127,7 +128,7 @@ class ServiceDeserializer extends StdDeserializer<Service> { // NOPMD
      * @param aID A service ID
      * @return The v1 auth cookie service
      */
-    private Service deserializeV1AuthCookieService(final JsonNode aNode, final URI aID) {
+    private Service<?> deserializeV1AuthCookieService(final JsonNode aNode, final URI aID) {
         final JsonNode profileNode = aNode.get(JsonKeys.PROFILE);
 
         if (profileNode != null) {
@@ -151,7 +152,7 @@ class ServiceDeserializer extends StdDeserializer<Service> { // NOPMD
      * @param aID A service ID
      * @return The physical dims service
      */
-    private Service deserializePhysicalDimsService(final JsonNode aNode, final URI aID) {
+    private Service<?> deserializePhysicalDimsService(final JsonNode aNode, final URI aID) {
         final JsonNode scale = aNode.get(JsonKeys.PHYSICAL_SCALE);
         final JsonNode units = aNode.get(JsonKeys.PHYSICAL_UNITS);
 
@@ -170,26 +171,26 @@ class ServiceDeserializer extends StdDeserializer<Service> { // NOPMD
      * @param aType A service type
      * @return The other service
      */
-    private Service deserializeOtherService(final JsonNode aNode, final URI aID, final String aType) {
+    private Service<?> deserializeOtherService(final JsonNode aNode, final URI aID, final String aType) {
         final JsonNode profile = aNode.get(JsonKeys.PROFILE);
         final JsonNode format = aNode.get(JsonKeys.FORMAT);
-        final OtherService otherService;
+        final OtherService<?> otherService;
 
         // We have a older service if the newer ID form isn't set
         if (aNode.get(JsonKeys.ID) == null) {
-            otherService = new OtherV2Service(aID, aType);
+            otherService = new OtherService2(aID, aType);
         } else {
-            otherService = new OtherService(aID, aType);
+            otherService = new OtherService3(aID, aType);
         }
 
         if (profile != null && format != null) {
-            return otherService.setProfile(profile.textValue()).setFormat(format.textValue());
+            return ((OtherService<?>) otherService.setProfile(profile.textValue())).setFormat(format.textValue());
         } else if (profile != null) {
             return otherService.setProfile(profile.textValue());
         } else if (format != null) {
             return otherService.setFormat(format.textValue());
         } else {
-            return otherService;
+            return (Service<?>) otherService;
         }
     }
 
@@ -252,17 +253,16 @@ class ServiceDeserializer extends StdDeserializer<Service> { // NOPMD
      * @param aImageService An image service
      * @return The fleshed out service
      */
-    private Service deserializeImageService(final JsonNode aNode, final ImageService aImageService) {
-        final JsonNode protocolNode = aNode.get(ImageAPI.PROTOCOL);
+    @SuppressWarnings(PMD.UNUSED_PRIVATE_METHOD)
+    private Service<?> deserializeImageService(final JsonNode aNode, final ImageService<?> aImageService) { // NOPMD
+        if (aNode.get(ImageAPI.PROTOCOL) != null) {
+            aImageService.setProtocol(true);
+        }
 
         deserializeExtraQualities(aNode, aImageService);
         deserializeExtraFormats(aNode, aImageService);
         deserializeTiles(aNode, aImageService);
         deserializeSizes(aNode, aImageService);
-
-        if (protocolNode != null) {
-            aImageService.setProtocol(protocolNode.textValue());
-        }
 
         return aImageService;
     }
@@ -273,7 +273,7 @@ class ServiceDeserializer extends StdDeserializer<Service> { // NOPMD
      * @param aNode A JSON node
      * @param aImageService The image service that's being built
      */
-    private void deserializeSizes(final JsonNode aNode, final ImageService aImageService) {
+    private void deserializeSizes(final JsonNode aNode, final ImageService<?> aImageService) {
         final JsonNode sizesNode = aNode.get(ImageAPI.SIZES);
 
         if (sizesNode != null && sizesNode.isArray()) {
@@ -295,7 +295,7 @@ class ServiceDeserializer extends StdDeserializer<Service> { // NOPMD
      * @param aNode A JSON node
      * @param aImageService The image service that's being built
      */
-    private void deserializeTiles(final JsonNode aNode, final ImageService aImageService) {
+    private void deserializeTiles(final JsonNode aNode, final ImageService<?> aImageService) {
         final JsonNode tilesNode = aNode.get(ImageAPI.TILES);
 
         if (tilesNode != null && tilesNode.isArray()) {
@@ -317,7 +317,7 @@ class ServiceDeserializer extends StdDeserializer<Service> { // NOPMD
      * @param aNode A JSON node
      * @param aImageService The image service that's being built
      */
-    private void deserializeExtraQualities(final JsonNode aNode, final ImageService aImageService) {
+    private void deserializeExtraQualities(final JsonNode aNode, final ImageService<?> aImageService) {
         final JsonNode extraQualities = aNode.get(ImageAPI.EXTRA_QUALITIES);
 
         if (extraQualities != null && extraQualities.isArray()) {
@@ -339,7 +339,7 @@ class ServiceDeserializer extends StdDeserializer<Service> { // NOPMD
      * @param aNode A JSON node
      * @param aImageService The image service that's being built
      */
-    private void deserializeExtraFormats(final JsonNode aNode, final ImageService aImageService) {
+    private void deserializeExtraFormats(final JsonNode aNode, final ImageService<?> aImageService) {
         final JsonNode extraFormats = aNode.get(ImageAPI.EXTRA_FORMATS);
 
         if (extraFormats != null && extraFormats.isArray()) {
@@ -363,18 +363,18 @@ class ServiceDeserializer extends StdDeserializer<Service> { // NOPMD
      * @return A list of related services
      * @throws JsonProcessingException If there is trouble parsing the JSON
      */
-    private List<Service> getRelatedServices(final JsonParser aParser, final JsonNode aNode)
+    private List<Service<?>> getRelatedServices(final JsonParser aParser, final JsonNode aNode)
             throws JsonProcessingException {
-        final List<Service> services = new ArrayList<>();
+        final List<Service<?>> services = new ArrayList<>();
 
         if (aNode != null && aNode.isArray()) {
             final ArrayNode arrayNode = (ArrayNode) aNode;
 
             for (int index = 0; index < arrayNode.size(); index++) {
                 final JsonNode serviceNode = arrayNode.get(index);
-                final Service relatedService = deserializeServiceNode(aParser, serviceNode);
+                final Service<?> service = deserializeServiceNode(aParser, serviceNode);
 
-                services.add(relatedService);
+                services.add(service);
             }
         }
 

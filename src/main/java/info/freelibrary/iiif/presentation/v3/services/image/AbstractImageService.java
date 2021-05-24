@@ -13,6 +13,8 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.util.warnings.JDK;
+
 import info.freelibrary.iiif.presentation.v3.services.AbstractService;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
@@ -22,17 +24,13 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.V2_ID, JsonKeys.TYPE, JsonKeys.V2_TYPE, JsonKeys.PROFILE,
     ImageAPI.EXTRA_FORMATS, ImageAPI.EXTRA_QUALITIES, ImageAPI.PROTOCOL, ImageAPI.TILES, JsonKeys.HEIGHT,
     JsonKeys.WIDTH, ImageAPI.SCALE_FACTORS })
-abstract class AbstractImageService extends AbstractService implements ImageService {
+abstract class AbstractImageService<T extends AbstractImageService<T>> extends AbstractService<T>
+        implements ImageService<T> {
 
     /**
      * The image service's profile.
      */
     protected Profile myProfile;
-
-    /**
-     * The image service's protocol.
-     */
-    protected String myProtocol;
 
     /**
      * The image service's formats.
@@ -55,6 +53,18 @@ abstract class AbstractImageService extends AbstractService implements ImageServ
     protected List<Size> mySizes;
 
     /**
+     * Whether this service has a protocol set.
+     */
+    private boolean myProtocolIsSet;
+
+    /**
+     * An empty constructor for Jackson's deserialization process.
+     */
+    protected AbstractImageService() {
+        super();
+    }
+
+    /**
      * Creates a new image service.
      *
      * @param aProfile An image service profile
@@ -65,39 +75,6 @@ abstract class AbstractImageService extends AbstractService implements ImageServ
 
         myProfile = aProfile;
         myID = aID;
-    }
-
-    /**
-     * An empty constructor for Jackson's deserialization process.
-     */
-    protected AbstractImageService() {
-        super();
-    }
-
-    @Override
-    @JsonGetter(JsonKeys.PROFILE)
-    public String getProfile() {
-        return myProfile.string();
-    }
-
-    @Override
-    @JsonIgnore
-    public ImageService setProfile(final ImageService.Profile aProfile) {
-        myProfile = aProfile;
-        return this;
-    }
-
-    @Override
-    @JsonSetter(ImageAPI.EXTRA_FORMATS)
-    public ImageService setExtraFormats(final List<ImageAPI.ImageFormat> aFormatList) {
-        myFormats = aFormatList;
-        return this;
-    }
-
-    @Override
-    @JsonIgnore
-    public ImageService setExtraFormats(final ImageAPI.ImageFormat... aFormatArray) {
-        return setExtraFormats(Arrays.asList(aFormatArray));
     }
 
     @Override
@@ -126,19 +103,6 @@ abstract class AbstractImageService extends AbstractService implements ImageServ
     }
 
     @Override
-    @JsonSetter(ImageAPI.EXTRA_QUALITIES)
-    public ImageService setExtraQualities(final List<ImageAPI.ImageQuality> aQualityList) {
-        myQualities = aQualityList;
-        return this;
-    }
-
-    @Override
-    @JsonIgnore
-    public ImageService setExtraQualities(final ImageAPI.ImageQuality... aQualityArray) {
-        return setExtraQualities(Arrays.asList(aQualityArray));
-    }
-
-    @Override
     @JsonIgnore
     public List<ImageAPI.ImageFormat> getExtraQualities() {
         return myFormats;
@@ -164,34 +128,21 @@ abstract class AbstractImageService extends AbstractService implements ImageServ
     }
 
     @Override
-    public ImageService setTiles(final List<Tile> aTileList) {
-        myTiles = aTileList;
-        return this;
+    @JsonGetter(JsonKeys.PROFILE)
+    public String getProfile() {
+        return myProfile.string();
     }
 
+    /**
+     * Gets the image service's protocol.
+     *
+     * @return The image service's protocol
+     */
     @Override
-    public ImageService setTiles(final Tile... aTileArray) {
-        return setTiles(Arrays.asList(aTileArray));
-    }
-
-    @Override
-    @JsonGetter(ImageAPI.TILES)
-    @JsonInclude(Include.NON_EMPTY)
-    public List<Tile> getTiles() {
-        return myTiles;
-    }
-
-    @Override
-    @JsonSetter(ImageAPI.TILES)
-    public ImageService setSizes(final List<Size> aSizeList) {
-        mySizes = aSizeList;
-        return this;
-    }
-
-    @Override
-    @JsonIgnore
-    public ImageService setSizes(final Size... aSizeArray) {
-        return setSizes(Arrays.asList(aSizeArray));
+    @JsonGetter(ImageAPI.PROTOCOL)
+    @JsonInclude(Include.NON_NULL)
+    public URI getProtocol() {
+        return myProtocolIsSet ? URI.create("http://iiif.io/api/image") : null;
     }
 
     @Override
@@ -202,16 +153,88 @@ abstract class AbstractImageService extends AbstractService implements ImageServ
     }
 
     @Override
-    @JsonGetter(ImageAPI.PROTOCOL)
-    @JsonInclude(Include.NON_NULL)
-    public String getProtocol() {
-        return myProtocol;
+    @JsonGetter(ImageAPI.TILES)
+    @JsonInclude(Include.NON_EMPTY)
+    public List<Tile> getTiles() {
+        return myTiles;
     }
 
     @Override
-    @JsonSetter(ImageAPI.PROTOCOL)
-    public ImageService setProtocol(final String aProtocol) {
-        myProtocol = aProtocol;
-        return this;
+    @JsonIgnore
+    public T setExtraFormats(final ImageAPI.ImageFormat... aFormatArray) {
+        return setExtraFormats(Arrays.asList(aFormatArray));
     }
+
+    @Override
+    @SuppressWarnings(JDK.UNCHECKED)
+    @JsonSetter(ImageAPI.EXTRA_FORMATS)
+    public T setExtraFormats(final List<ImageAPI.ImageFormat> aFormatList) {
+        myFormats = aFormatList;
+        return (T) this;
+    }
+
+    @Override
+    @JsonIgnore
+    public T setExtraQualities(final ImageAPI.ImageQuality... aQualityArray) {
+        return setExtraQualities(Arrays.asList(aQualityArray));
+    }
+
+    @Override
+    @SuppressWarnings(JDK.UNCHECKED)
+    @JsonSetter(ImageAPI.EXTRA_QUALITIES)
+    public T setExtraQualities(final List<ImageAPI.ImageQuality> aQualityList) {
+        myQualities = aQualityList;
+        return (T) this;
+    }
+
+    @Override
+    @JsonIgnore
+    @SuppressWarnings(JDK.UNCHECKED)
+    public T setProfile(final T.Profile aProfile) {
+        myProfile = aProfile;
+        return (T) this;
+    }
+
+    /**
+     * Whether a protocol should be used.
+     *
+     * @param aProtocolFlag Whether the protocol should be used
+     * @return The image service
+     */
+    @Override
+    @JsonIgnore
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public T setProtocol(final boolean aProtocolFlag) {
+        myProtocolIsSet = aProtocolFlag;
+        return (T) this;
+    }
+
+    @Override
+    @JsonSetter(ImageAPI.SIZES)
+    @SuppressWarnings(JDK.UNCHECKED)
+    public T setSizes(final List<Size> aSizeList) {
+        mySizes = aSizeList;
+        return (T) this;
+    }
+
+    @Override
+    @JsonIgnore
+    public T setSizes(final Size... aSizeArray) {
+        return setSizes(Arrays.asList(aSizeArray));
+    }
+
+    @Override
+    @SuppressWarnings(JDK.UNCHECKED)
+    @JsonSetter(ImageAPI.TILES)
+    public T setTiles(final List<Tile> aTileList) {
+        myTiles = aTileList;
+        return (T) this;
+    }
+
+    @Override
+    @JsonIgnore
+    public T setTiles(final Tile... aTileArray) {
+        return setTiles(Arrays.asList(aTileArray));
+    }
+
 }

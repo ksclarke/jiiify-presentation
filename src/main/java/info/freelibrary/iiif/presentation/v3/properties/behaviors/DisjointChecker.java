@@ -1,9 +1,9 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.behaviors;
 
-// BEGIN GENERATED CODE
-import static info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorConstants.*;
-// END GENERATED CODE
+//BEGIN GENERATED CODE
+import static info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorConstants.*; // NOPMD
+//END GENERATED CODE
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -21,6 +21,7 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 /**
  * A disjoint behavior checker.
  */
+@SuppressWarnings("Checkstyle.AvoidStarImport")
 public class DisjointChecker {
 
     /**

@@ -27,8 +27,7 @@ import info.freelibrary.iiif.presentation.v3.properties.Metadata;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
-import info.freelibrary.iiif.presentation.v3.services.OtherService;
-import info.freelibrary.iiif.presentation.v3.services.image.ImageService;
+import info.freelibrary.iiif.presentation.v3.services.OtherService3;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageService3;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageService3.Profile;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
@@ -99,6 +98,7 @@ public class ManifestTest extends AbstractTest {
         final List<String[]> firstCanvas = reader1.readAll();
         final List<String[]> secondCanvas = reader2.readAll();
         final List<Metadata> metadata = new ArrayList<>();
+        final ImageService3 manifestThumbService;
 
         reader1.close();
         reader2.close();
@@ -107,8 +107,7 @@ public class ManifestTest extends AbstractTest {
             metadata.add(new Metadata(kvPair[0], kvPair[1]));
         }
 
-        final ImageService manifestThumbService =
-                new ImageService3(Profile.LEVEL_TWO, SERVER + ENCODED_MANIFEST_THUMBNAIL_ARK);
+        manifestThumbService = new ImageService3(Profile.LEVEL_TWO, SERVER + ENCODED_MANIFEST_THUMBNAIL_ARK);
 
         myManifest = new Manifest(MANIFEST_URI, TEST_TITLE);
         myManifest.setMetadata(metadata);
@@ -130,7 +129,7 @@ public class ManifestTest extends AbstractTest {
 
         for (final String[] values : firstCanvas) {
             final String id = SERVER + values[1] + THUMBNAIL_PATH;
-            final ImageService service = new ImageService3(Profile.LEVEL_TWO, SERVER + values[1]);
+            final ImageService3 service = new ImageService3(Profile.LEVEL_TWO, SERVER + values[1]);
             final ImageContent resource = new ImageContent(id).setServices(service);
 
             content1.setChoice(true).getBodies().add(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(values[0]));
@@ -140,29 +139,28 @@ public class ManifestTest extends AbstractTest {
         final String label2 = "GeoNF-frg68a_001v_K-64-002";
         final ImageContent thumbnail2 = new ImageContent(SERVER + "ark:%2F21198%2Fz1gq7dfx" + THUMBNAIL_PATH);
         final Canvas canvas2 = new Canvas(id2, label2).setWidthHeight(WIDTH, HEIGHT).setThumbnails(thumbnail2);
-        final PaintingAnnotation content2 =
-                new PaintingAnnotation(SERVER + MANIFEST_ID + "/imageanno/imageanno-2", canvas2);
+        final PaintingAnnotation content2;
+        final OtherService3 otherService;
+        final RequiredStatement reqStmt;
 
+        content2 = new PaintingAnnotation(SERVER + MANIFEST_ID + "/imageanno/imageanno-2", canvas2);
         canvas2.getPaintingPages().add(page2.addAnnotations(content2));
         myManifest.addCanvases(canvas2);
 
         for (final String[] values : secondCanvas) {
             final String id = SERVER + values[1] + THUMBNAIL_PATH;
-            final ImageService service = new ImageService3(Profile.LEVEL_TWO, SERVER + values[1]);
+            final ImageService3 service = new ImageService3(Profile.LEVEL_TWO, SERVER + values[1]);
             final ImageContent resource = new ImageContent(id).setServices(service);
 
             content2.setChoice(true).getBodies().add(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(values[0]));
         }
 
-        final RequiredStatement reqStmt =
-                new RequiredStatement("Attribution", "Provided courtesy of Example Institution");
-        myManifest.setRequiredStatement(reqStmt);
-        myManifest.setRights("http://creativecommons.org/licenses/by/4.0/");
-        myManifest.setBehaviors(ManifestBehavior.PAGED);
-
-        final Service service = new OtherService("https://example.org/service/example", "example")
+        reqStmt = new RequiredStatement("Attribution", "Provided courtesy of Example Institution");
+        otherService = new OtherService3("https://example.org/service/example", "example")
                 .setProfile("https://example.org/docs/example-service.html");
-        myManifest.setServices(service);
+
+        myManifest.setRights("http://creativecommons.org/licenses/by/4.0/").setBehaviors(ManifestBehavior.PAGED)
+                .setRequiredStatement(reqStmt).setServices(otherService);
 
         myVertx = Vertx.factory.vertx();
     }

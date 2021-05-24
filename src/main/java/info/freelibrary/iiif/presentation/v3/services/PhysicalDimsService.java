@@ -2,7 +2,6 @@
 package info.freelibrary.iiif.presentation.v3.services;
 
 import java.net.URI;
-import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -14,7 +13,7 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 /**
  * A physical dimensions service that provides information useful for rulers, etc.
  */
-public class PhysicalDimsService extends AbstractService implements Service {
+public class PhysicalDimsService extends AbstractService<PhysicalDimsService> implements Service<PhysicalDimsService> {
 
     /**
      * The profile for this service.
@@ -70,13 +69,13 @@ public class PhysicalDimsService extends AbstractService implements Service {
     @Override
     @JsonSetter(JsonKeys.ID)
     public PhysicalDimsService setID(final URI aID) {
-        return (PhysicalDimsService) super.setID(aID);
+        return super.setID(aID);
     }
 
     @Override
     @JsonSetter(JsonKeys.ID)
     public PhysicalDimsService setID(final String aID) {
-        return (PhysicalDimsService) super.setID(aID);
+        return super.setID(aID);
     }
 
     /**
@@ -135,18 +134,6 @@ public class PhysicalDimsService extends AbstractService implements Service {
         myPhysicalScale = aPhysicalScale;
         myPhysicalUnits = aPhysicalUnits;
         return this;
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.SERVICE)
-    public GeoJSONService setServices(final List<Service> aServiceList) {
-        return (GeoJSONService) super.setServices(aServiceList);
-    }
-
-    @Override
-    @JsonIgnore
-    public GeoJSONService setServices(final Service... aServicesArray) {
-        return (GeoJSONService) super.setServices(aServicesArray);
     }
 
 }
