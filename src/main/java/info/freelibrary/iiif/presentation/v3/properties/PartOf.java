@@ -48,6 +48,12 @@ public class PartOf extends AbstractLinkProperty<PartOf> {
         super();
     }
 
+    /**
+     * Sets the ID.
+     *
+     * @param aID An ID
+     * @return The partOf
+     */
     @Override
     public PartOf setID(final URI aID) {
         return (PartOf) super.setID(aID);
@@ -64,6 +70,12 @@ public class PartOf extends AbstractLinkProperty<PartOf> {
         return (PartOf) super.setID(URI.create(aID));
     }
 
+    /**
+     * Sets the partOf type.
+     *
+     * @param aType A type
+     * @return The partOf
+     */
     @Override
     public PartOf setType(final String aType) {
         return (PartOf) super.setType(aType);
@@ -78,6 +90,12 @@ public class PartOf extends AbstractLinkProperty<PartOf> {
         return Optional.ofNullable(super.getNullableLabel());
     }
 
+    /**
+     * Sets the descriptive label.
+     *
+     * @param aLabel A descriptive label
+     * @return The property whose label is being set
+     */
     @Override
     public PartOf setLabel(final Label aLabel) {
         return (PartOf) super.setLabel(aLabel);

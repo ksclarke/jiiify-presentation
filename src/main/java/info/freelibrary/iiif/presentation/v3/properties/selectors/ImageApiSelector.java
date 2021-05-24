@@ -252,6 +252,11 @@ public class ImageApiSelector implements Selector {
         return this;
     }
 
+    /**
+     * Gets a string representation of the Image API selector.
+     *
+     * @return A string representation of the Image API selector
+     */
     @Override
     public String toString() {
         return StringUtils.format("/{}/{}/{}/{}.{}", myRegion, mySize, myRotation, myQuality, myFormat);

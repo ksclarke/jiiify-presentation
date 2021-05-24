@@ -16,6 +16,9 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public enum ResourceBehavior implements Behavior {
 
+    /**
+     * A hidden resource behavior.
+     */
     HIDDEN(BehaviorConstants.HIDDEN);
 
     /**
@@ -37,6 +40,11 @@ public enum ResourceBehavior implements Behavior {
         myValue = aBehavior;
     }
 
+    /**
+     * Gets a string representation of the resource behavior.
+     *
+     * @return A string representation of the resource behavior
+     */
     @Override
     @JsonValue
     public String toString() {

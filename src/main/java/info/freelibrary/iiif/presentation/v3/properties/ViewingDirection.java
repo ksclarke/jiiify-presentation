@@ -14,7 +14,24 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public enum ViewingDirection {
 
-    LEFT_TO_RIGHT("left-to-right"), RIGHT_TO_LEFT("right-to-left"), TOP_TO_BOTTOM("top-to-bottom"),
+    /**
+     * A left-to-right viewing direction.
+     */
+    LEFT_TO_RIGHT("left-to-right"), //
+
+    /**
+     * A right-to-left viewing direction.
+     */
+    RIGHT_TO_LEFT("right-to-left"), //
+
+    /**
+     * A top-to-bottom viewing direction.
+     */
+    TOP_TO_BOTTOM("top-to-bottom"), //
+
+    /**
+     * A bottom-to-top viewing direction.
+     */
     BOTTOM_TO_TOP("bottom-to-top");
 
     /**
@@ -36,6 +53,9 @@ public enum ViewingDirection {
         myValue = aDirection;
     }
 
+    /**
+     * Gets the string representation of the viewing direction.
+     */
     @Override
     @JsonValue
     public String toString() {

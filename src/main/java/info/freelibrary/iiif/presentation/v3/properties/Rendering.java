@@ -52,6 +52,12 @@ public class Rendering extends AbstractLinkProperty<Rendering> {
         super();
     }
 
+    /**
+     * Sets the ID.
+     *
+     * @param aID An ID
+     * @return The resource whose ID is being set
+     */
     @Override
     public Rendering setID(final URI aID) {
         return (Rendering) super.setID(aID);
@@ -68,6 +74,12 @@ public class Rendering extends AbstractLinkProperty<Rendering> {
         return (Rendering) super.setID(URI.create(aID));
     }
 
+    /**
+     * Sets the rendering type.
+     *
+     * @param aType A type of rendering
+     * @return The rendering
+     */
     @Override
     public Rendering setType(final String aType) {
         return (Rendering) super.setType(aType);
@@ -82,6 +94,12 @@ public class Rendering extends AbstractLinkProperty<Rendering> {
         return super.getNullableLabel();
     }
 
+    /**
+     * Sets the descriptive label.
+     *
+     * @param aLabel A descriptive label
+     * @return The resource whose label is being set
+     */
     @Override
     public Rendering setLabel(final Label aLabel) {
         return (Rendering) super.setLabel(aLabel);
@@ -100,16 +118,29 @@ public class Rendering extends AbstractLinkProperty<Rendering> {
 
     @Override
     @JsonIgnore
-    public Optional<MediaType> getFormatMediaType() {
-        return super.getFormatMediaType();
+    public Optional<MediaType> getFormat() {
+        return super.getFormat();
     }
 
+    /**
+     * Sets format.
+     *
+     * @param aMediaType A resource's format
+     * @return The resource whose format is being set
+     */
     @Override
     @JsonIgnore
     public Rendering setFormat(final MediaType aMediaType) {
         return (Rendering) super.setFormat(aMediaType);
     }
 
+    /**
+     * Sets format in string form.
+     *
+     * @param aFormat A resource's format
+     * @return The resource whose format is being set
+     * @If the supplied string isn't a media type
+     */
     @Override
     public Rendering setFormat(final String aFormat) {
         return (Rendering) super.setFormat(aFormat);

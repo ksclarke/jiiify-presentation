@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3.services;
+package info.freelibrary.iiif.presentation.v3;
 
 import java.net.URI;
 import java.util.List;
@@ -7,10 +7,10 @@ import java.util.List;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
- * A service interface to be implemented by actual services (like GeoJSON and ImageService).
+ * A service interface to be implemented by actual services.
  */
 @JsonDeserialize(using = ServiceDeserializer.class)
-public interface Service {
+public interface Service<T extends Service<T>> {
 
     /**
      * Gets the service ID.
@@ -25,7 +25,7 @@ public interface Service {
      * @param aID The service ID
      * @return The service
      */
-    Service setID(URI aID);
+    T setID(URI aID);
 
     /**
      * Sets the service ID in string form.
@@ -33,7 +33,7 @@ public interface Service {
      * @param aID The service ID in string form
      * @return The service
      */
-    Service setID(String aID);
+    T setID(String aID);
 
     /**
      * Gets the service type.
@@ -48,7 +48,7 @@ public interface Service {
      * @param aServiceList A list of services
      * @return This service
      */
-    Service setServices(List<Service> aServiceList);
+    T setServices(List<Service<?>> aServiceList);
 
     /**
      * Sets other services that are related to this service.
@@ -56,13 +56,13 @@ public interface Service {
      * @param aServiceArray An array of services
      * @return This service
      */
-    Service setServices(Service... aServiceArray);
+    T setServices(Service<?>... aServiceArray);
 
     /**
      * Gets other services that are related to this service.
      *
      * @return A list of services
      */
-    List<Service> getServices();
+    List<Service<?>> getServices();
 
 }

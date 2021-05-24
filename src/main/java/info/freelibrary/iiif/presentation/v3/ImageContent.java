@@ -24,7 +24,6 @@ import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
-import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 import io.vertx.core.json.Json;
@@ -35,8 +34,8 @@ import io.vertx.core.json.JsonObject;
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.HEIGHT,
     JsonKeys.WIDTH, JsonKeys.LANGUAGE, JsonKeys.SERVICE })
-public class ImageContent extends AbstractContentResource<ImageContent>
-        implements AnnotationBody<ImageContent>, ContentResource<ImageContent>, SpatialContentResource<ImageContent> {
+public class ImageContent extends AbstractContentResource<ImageContent> implements AnnotationBody<ImageContent>,
+        ContentResource<ImageContent>, SpatialContentResource<ImageContent>, Resource<ImageContent> {
 
     /**
      * The image content's width.

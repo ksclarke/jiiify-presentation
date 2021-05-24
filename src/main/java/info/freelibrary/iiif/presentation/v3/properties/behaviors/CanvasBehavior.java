@@ -15,8 +15,25 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public enum CanvasBehavior implements Behavior {
 
-    AUTO_ADVANCE(BehaviorConstants.AUTO_ADVANCE), NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE),
-    FACING_PAGES(BehaviorConstants.FACING_PAGES), NON_PAGED(BehaviorConstants.NON_PAGED);
+    /**
+     * A auto-advance behavior on a canvas.
+     */
+    AUTO_ADVANCE(BehaviorConstants.AUTO_ADVANCE), //
+
+    /**
+     * A no-auto-advance behavior on a canvas.
+     */
+    NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE), //
+
+    /**
+     * A facing-pages behavior on a canvas.
+     */
+    FACING_PAGES(BehaviorConstants.FACING_PAGES), //
+
+    /**
+     * A non-paged behavior on a canvas.
+     */
+    NON_PAGED(BehaviorConstants.NON_PAGED);
 
     /**
      * The CanvasBehavior logger.
@@ -37,6 +54,11 @@ public enum CanvasBehavior implements Behavior {
         myValue = aBehavior;
     }
 
+    /**
+     * Gets a string representation of a canvas behavior.
+     *
+     * @return A string representation of a canvas behavior
+     */
     @Override
     @JsonValue
     public String toString() {

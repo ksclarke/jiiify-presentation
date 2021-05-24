@@ -32,21 +32,45 @@ public class Summary extends I18nProperty<Summary> {
         super(aStringArray);
     }
 
+    /**
+     * Sets the string value of the property, removing all other previous strings.
+     *
+     * @param aStringArray A string value
+     * @return True if the property's value was set
+     */
     @Override
     public Summary setStrings(final String... aStringArray) {
         return (Summary) super.setStrings(aStringArray);
     }
 
+    /**
+     * Sets the internationalization of the property, removing all other previous internationalizations.
+     *
+     * @param aI18nArray An array of I18n(s).
+     * @return True if the property's value was set
+     */
     @Override
     public Summary setI18ns(final I18n... aI18nArray) {
         return (Summary) super.setI18ns(aI18nArray);
     }
 
+    /**
+     * Adds a string value to the property.
+     *
+     * @param aStringArray An array of strings to add to the property
+     * @return The property
+     */
     @Override
     public Summary addStrings(final String... aStringArray) {
         return (Summary) super.addStrings(aStringArray);
     }
 
+    /**
+     * Adds an internationalization to the property.
+     *
+     * @param aI18nArray A list of internationalizations
+     * @return The property
+     */
     @Override
     public Summary addI18ns(final I18n... aI18nArray) {
         return (Summary) super.addI18ns(aI18nArray);

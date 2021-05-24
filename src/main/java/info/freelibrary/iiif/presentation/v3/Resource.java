@@ -16,7 +16,6 @@ import info.freelibrary.iiif.presentation.v3.properties.Rendering;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
-import info.freelibrary.iiif.presentation.v3.services.Service;
 
 /**
  * An interface that defines methods relevant to all resources.

@@ -295,6 +295,11 @@ public class I18n implements Iterable<String> {
         return JsonObject.mapFrom(this);
     }
 
+    /**
+     * Gets a string representation of the internationalization.
+     *
+     * @return The string representation of the internationalization
+     */
     @Override
     public String toString() {
         return toJSON().encodePrettily();

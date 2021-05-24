@@ -4,12 +4,12 @@ package info.freelibrary.iiif.presentation.v3.services.image;
 import java.net.URI;
 import java.util.List;
 
-import info.freelibrary.iiif.presentation.v3.services.Service;
+import info.freelibrary.iiif.presentation.v3.Service;
 
 /**
  * Interface for image services.
  */
-public interface ImageService extends Service {
+public interface ImageService<T extends ImageService<T>> extends Service<T> {
 
     /**
      * Gets the image service profile as a string.
@@ -24,7 +24,7 @@ public interface ImageService extends Service {
      * @param aProfile The profile
      * @return The image service
      */
-    ImageService setProfile(Profile aProfile);
+    T setProfile(Profile aProfile);
 
     /**
      * Sets the image service's extra formats.
@@ -32,7 +32,7 @@ public interface ImageService extends Service {
      * @param aFormatList A list of extra formats
      * @return This image service
      */
-    ImageService setExtraFormats(List<ImageAPI.ImageFormat> aFormatList);
+    T setExtraFormats(List<ImageAPI.ImageFormat> aFormatList);
 
     /**
      * Sets the image service's extra formats.
@@ -40,7 +40,7 @@ public interface ImageService extends Service {
      * @param aFormatArray A list of extra formats
      * @return This image service
      */
-    ImageService setExtraFormats(ImageAPI.ImageFormat... aFormatArray);
+    T setExtraFormats(ImageAPI.ImageFormat... aFormatArray);
 
     /**
      * Gets the image service's extra formats.
@@ -55,7 +55,7 @@ public interface ImageService extends Service {
      * @param aQualityList A list of extra qualities
      * @return This image service
      */
-    ImageService setExtraQualities(List<ImageAPI.ImageQuality> aQualityList);
+    T setExtraQualities(List<ImageAPI.ImageQuality> aQualityList);
 
     /**
      * Sets the image service's extra qualities.
@@ -63,7 +63,7 @@ public interface ImageService extends Service {
      * @param aQualityArray An array of extra qualities
      * @return This image service
      */
-    ImageService setExtraQualities(ImageAPI.ImageQuality... aQualityArray);
+    T setExtraQualities(ImageAPI.ImageQuality... aQualityArray);
 
     /**
      * Gets the image service's extra qualities.
@@ -73,12 +73,27 @@ public interface ImageService extends Service {
     List<ImageAPI.ImageFormat> getExtraQualities();
 
     /**
+     * Gets the protocol for an Image API service.
+     *
+     * @return The image service protocol
+     */
+    URI getProtocol();
+
+    /**
+     * Sets whether the protocol should be included in the output JSON.
+     *
+     * @param aProtocolFlag A protocol flag
+     * @return The image service
+     */
+    T setProtocol(boolean aProtocolFlag);
+
+    /**
      * Sets the service's tiles from a list of tiles.
      *
      * @param aTileList A list of tiles for the service
      * @return This image service
      */
-    ImageService setTiles(List<Tile> aTileList);
+    T setTiles(List<Tile> aTileList);
 
     /**
      * Sets the service's tiles from an array of tiles.
@@ -86,7 +101,7 @@ public interface ImageService extends Service {
      * @param aTileArray An array of tiles for the service
      * @return This image service
      */
-    ImageService setTiles(Tile... aTileArray);
+    T setTiles(Tile... aTileArray);
 
     /**
      * Gets the service's tiles.
@@ -101,7 +116,7 @@ public interface ImageService extends Service {
      * @param aSizeList A list of sizes for the service
      * @return This image service
      */
-    ImageService setSizes(List<Size> aSizeList);
+    T setSizes(List<Size> aSizeList);
 
     /**
      * Sets the service's sizes from an array of sizes.
@@ -109,7 +124,7 @@ public interface ImageService extends Service {
      * @param aSizeArray An array of sizes for the service
      * @return This image service
      */
-    ImageService setSizes(Size... aSizeArray);
+    T setSizes(Size... aSizeArray);
 
     /**
      * Gets the service's sizes.
@@ -117,21 +132,6 @@ public interface ImageService extends Service {
      * @return A list of sizes supported by the service
      */
     List<Size> getSizes();
-
-    /**
-     * Gets the image service's protocol.
-     *
-     * @return The image service's protocol
-     */
-    String getProtocol();
-
-    /**
-     * A no-op setter for the Jackson deserialization process.
-     *
-     * @param aProtocol An image service protocol
-     * @return The image service
-     */
-    ImageService setProtocol(String aProtocol);
 
     /**
      * Interface for {@link ImageService} profiles.

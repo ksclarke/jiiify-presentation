@@ -33,7 +33,6 @@ import info.freelibrary.iiif.presentation.v3.properties.Start;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
-import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.URIs;
@@ -742,6 +741,11 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
         return JsonObject.mapFrom(this);
     }
 
+    /**
+     * Returns a string/JSON representation of the manifest.
+     *
+     * @return A string representation of the manifest
+     */
     @Override
     public String toString() {
         return toJSON().encodePrettily();

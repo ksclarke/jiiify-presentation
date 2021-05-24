@@ -580,6 +580,11 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         return json;
     }
 
+    /**
+     * Converts the canvas to its string/JSON representation.
+     *
+     * @return A string representation of the canvas
+     */
     @Override
     public String toString() {
         return toJSON().encode();

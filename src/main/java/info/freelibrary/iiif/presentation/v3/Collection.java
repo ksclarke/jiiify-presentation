@@ -35,7 +35,6 @@ import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CollectionBehavior;
-import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.URIs;
@@ -458,6 +457,11 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         return JsonObject.mapFrom(this);
     }
 
+    /**
+     * Returns a string/JSON representation of the collection.
+     *
+     * @return A string representation of the collection
+     */
     @Override
     @JsonIgnore
     public String toString() {
@@ -509,7 +513,15 @@ public class Collection extends NavigableResource<Collection> implements Resourc
          */
         public enum Type {
 
-            MANIFEST(ResourceTypes.MANIFEST), COLLECTION(ResourceTypes.COLLECTION);
+            /**
+             * A manifest type of collection item
+             */
+            MANIFEST(ResourceTypes.MANIFEST), //
+
+            /**
+             * A collection type of collection item
+             */
+            COLLECTION(ResourceTypes.COLLECTION);
 
             /**
              * Serialization value for <code>Item.Type</code>.
@@ -525,6 +537,11 @@ public class Collection extends NavigableResource<Collection> implements Resourc
                 myValue = aValue;
             }
 
+            /**
+             * A string representation of the collection item.
+             *
+             * @return A string representation of the collection item
+             */
             @Override
             public String toString() {
                 return myValue;

@@ -24,7 +24,6 @@ import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
-import info.freelibrary.iiif.presentation.v3.services.Service;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 import io.vertx.core.json.Json;
@@ -35,8 +34,9 @@ import io.vertx.core.json.JsonObject;
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.HEIGHT, JsonKeys.WIDTH, JsonKeys.DURATION,
     JsonKeys.FORMAT, JsonKeys.LANGUAGE })
-public class VideoContent extends AbstractContentResource<VideoContent> implements AnnotationBody<VideoContent>,
-        ContentResource<VideoContent>, SpatialContentResource<VideoContent>, TemporalContentResource<VideoContent> {
+public class VideoContent extends AbstractContentResource<VideoContent>
+        implements AnnotationBody<VideoContent>, ContentResource<VideoContent>, SpatialContentResource<VideoContent>,
+        TemporalContentResource<VideoContent>, Resource<VideoContent> {
 
     /**
      * The video content's duration.
