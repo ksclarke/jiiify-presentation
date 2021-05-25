@@ -261,12 +261,12 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     }
 
     @Override
-    public SupplementingAnnotation setServices(final Service... aServiceArray) {
+    public SupplementingAnnotation setServices(final Service<?>... aServiceArray) {
         return (SupplementingAnnotation) super.setServices(aServiceArray);
     }
 
     @Override
-    public SupplementingAnnotation setServices(final List<Service> aServiceList) {
+    public SupplementingAnnotation setServices(final List<Service<?>> aServiceList) {
         return (SupplementingAnnotation) super.setServices(aServiceList);
     }
 

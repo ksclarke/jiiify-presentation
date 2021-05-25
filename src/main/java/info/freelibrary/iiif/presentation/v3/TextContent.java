@@ -116,12 +116,12 @@ public class TextContent extends AbstractContentResource<TextContent>
     }
 
     @Override
-    public TextContent setServices(final Service... aServiceArray) {
+    public TextContent setServices(final Service<?>... aServiceArray) {
         return (TextContent) super.setServices(aServiceArray);
     }
 
     @Override
-    public TextContent setServices(final List<Service> aServiceList) {
+    public TextContent setServices(final List<Service<?>> aServiceList) {
         return (TextContent) super.setServices(aServiceList);
     }
 

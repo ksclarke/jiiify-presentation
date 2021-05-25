@@ -130,12 +130,12 @@ public class SoundContent extends AbstractContentResource<SoundContent> implemen
     }
 
     @Override
-    public SoundContent setServices(final Service... aServiceArray) {
+    public SoundContent setServices(final Service<?>... aServiceArray) {
         return (SoundContent) super.setServices(aServiceArray);
     }
 
     @Override
-    public SoundContent setServices(final List<Service> aServiceList) {
+    public SoundContent setServices(final List<Service<?>> aServiceList) {
         return (SoundContent) super.setServices(aServiceList);
     }
 

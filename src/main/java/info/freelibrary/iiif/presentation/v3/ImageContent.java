@@ -135,12 +135,12 @@ public class ImageContent extends AbstractContentResource<ImageContent> implemen
     }
 
     @Override
-    public ImageContent setServices(final Service... aServiceArray) {
+    public ImageContent setServices(final Service<?>... aServiceArray) {
         return (ImageContent) super.setServices(aServiceArray);
     }
 
     @Override
-    public ImageContent setServices(final List<Service> aServiceList) {
+    public ImageContent setServices(final List<Service<?>> aServiceList) {
         return (ImageContent) super.setServices(aServiceList);
     }
 

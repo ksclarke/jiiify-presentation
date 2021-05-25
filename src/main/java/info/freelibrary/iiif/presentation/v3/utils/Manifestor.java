@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3.io;
+package info.freelibrary.iiif.presentation.v3.utils;
 
 import java.io.File;
 

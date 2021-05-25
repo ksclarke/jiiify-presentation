@@ -87,7 +87,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     /**
      * The manifest's service definitions.
      */
-    private List<Service> myServiceDefinitions;
+    private List<Service<?>> myServiceDefinitions;
 
     /**
      * The manifest's canvases.
@@ -542,12 +542,12 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     @Override
-    public Manifest setServices(final Service... aServiceArray) {
+    public Manifest setServices(final Service<?>... aServiceArray) {
         return (Manifest) super.setServices(aServiceArray);
     }
 
     @Override
-    public Manifest setServices(final List<Service> aServiceList) {
+    public Manifest setServices(final List<Service<?>> aServiceList) {
         return (Manifest) super.setServices(aServiceList);
     }
 
@@ -558,7 +558,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @return The manifest
      */
     @JsonIgnore
-    public Manifest setServiceDefinitions(final Service... aServicesArray) {
+    public Manifest setServiceDefinitions(final Service<?>... aServicesArray) {
         return setServiceDefinitions(Arrays.asList(aServicesArray));
     }
 
@@ -569,8 +569,8 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @return The manifest
      */
     @JsonSetter(JsonKeys.SERVICES)
-    public Manifest setServiceDefinitions(final List<Service> aServicesList) {
-        final List<Service> servicesList = getServiceDefinitions();
+    public Manifest setServiceDefinitions(final List<Service<?>> aServicesList) {
+        final List<Service<?>> servicesList = getServiceDefinitions();
 
         Objects.requireNonNull(aServicesList);
         servicesList.clear();
@@ -585,7 +585,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @return A list of services referenced by different parts of the manifest
      */
     @JsonGetter(JsonKeys.SERVICES)
-    public List<Service> getServiceDefinitions() {
+    public List<Service<?>> getServiceDefinitions() {
         if (myServiceDefinitions == null) {
             myServiceDefinitions = new ArrayList<>();
         }

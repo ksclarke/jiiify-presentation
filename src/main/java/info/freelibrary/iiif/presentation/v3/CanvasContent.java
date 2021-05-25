@@ -117,12 +117,12 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
     }
 
     @Override
-    public CanvasContent setServices(final Service... aServiceArray) {
+    public CanvasContent setServices(final Service<?>... aServiceArray) {
         return (CanvasContent) super.setServices(aServiceArray);
     }
 
     @Override
-    public CanvasContent setServices(final List<Service> aServiceList) {
+    public CanvasContent setServices(final List<Service<?>> aServiceList) {
         return (CanvasContent) super.setServices(aServiceList);
     }
 
