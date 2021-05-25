@@ -22,7 +22,8 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 /**
  * A version 1 authentication cookie service.
  */
-public class AuthCookieService1 extends AbstractAuthService implements AuthService {
+public class AuthCookieService1 extends AbstractAuthService<AuthCookieService1>
+        implements AuthService<AuthCookieService1> {
 
     /**
      * The label for this auth cookie service.
@@ -56,7 +57,7 @@ public class AuthCookieService1 extends AbstractAuthService implements AuthServi
      * @param aServiceArray An array of related services
      */
     public AuthCookieService1(final AuthCookieService1.Profile aProfile, final String aID, final String aLabel,
-            final Service... aServiceArray) {
+            final Service<?>... aServiceArray) {
         super(aProfile, URI.create(aID));
         setServices(aServiceArray);
         myLabel = aLabel;
@@ -71,7 +72,7 @@ public class AuthCookieService1 extends AbstractAuthService implements AuthServi
      * @param aServiceArray An array of related services
      */
     public AuthCookieService1(final AuthCookieService1.Profile aProfile, final URI aID, final String aLabel,
-            final Service... aServiceArray) {
+            final Service<?>... aServiceArray) {
         super(aProfile, aID);
         setServices(aServiceArray);
         myLabel = aLabel;
@@ -86,7 +87,7 @@ public class AuthCookieService1 extends AbstractAuthService implements AuthServi
      * @param aServiceArray A list of related services
      */
     public AuthCookieService1(final AuthCookieService1.Profile aProfile, final String aID, final String aLabel,
-            final List<Service> aServiceArray) {
+            final List<Service<?>> aServiceArray) {
         super(aProfile, URI.create(aID));
         setServices(aServiceArray);
         myLabel = aLabel;
@@ -101,7 +102,7 @@ public class AuthCookieService1 extends AbstractAuthService implements AuthServi
      * @param aServiceArray A list of related services
      */
     public AuthCookieService1(final AuthCookieService1.Profile aProfile, final URI aID, final String aLabel,
-            final List<Service> aServiceArray) {
+            final List<Service<?>> aServiceArray) {
         super(aProfile, aID);
         setServices(aServiceArray);
         myLabel = aLabel;
@@ -150,7 +151,7 @@ public class AuthCookieService1 extends AbstractAuthService implements AuthServi
      */
     @JsonSetter(JsonKeys.PROFILE)
     @SuppressWarnings(PMD.MISSING_OVERRIDE) // PMD thinks this is overriding something even though it's not
-    private AuthService setProfile(final String aProfile) { // NOPMD
+    private AuthCookieService1 setProfile(final String aProfile) { // NOPMD
         return super.setProfile(Profile.fromString(aProfile));
     }
 

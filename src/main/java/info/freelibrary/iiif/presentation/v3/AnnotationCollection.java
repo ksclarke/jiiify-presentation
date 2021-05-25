@@ -125,12 +125,12 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
     }
 
     @Override
-    public AnnotationCollection setServices(final Service... aServiceArray) {
+    public AnnotationCollection setServices(final Service<?>... aServiceArray) {
         return (AnnotationCollection) super.setServices(aServiceArray);
     }
 
     @Override
-    public AnnotationCollection setServices(final List<Service> aServiceList) {
+    public AnnotationCollection setServices(final List<Service<?>> aServiceList) {
         return (AnnotationCollection) super.setServices(aServiceList);
     }
 

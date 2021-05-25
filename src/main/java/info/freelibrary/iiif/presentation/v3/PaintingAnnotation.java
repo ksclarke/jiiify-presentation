@@ -258,12 +258,12 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation>
     }
 
     @Override
-    public PaintingAnnotation setServices(final Service... aServiceArray) {
+    public PaintingAnnotation setServices(final Service<?>... aServiceArray) {
         return (PaintingAnnotation) super.setServices(aServiceArray);
     }
 
     @Override
-    public PaintingAnnotation setServices(final List<Service> aServiceList) {
+    public PaintingAnnotation setServices(final List<Service<?>> aServiceList) {
         return (PaintingAnnotation) super.setServices(aServiceList);
     }
 

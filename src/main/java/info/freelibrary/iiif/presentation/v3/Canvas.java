@@ -434,12 +434,12 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     }
 
     @Override
-    public Canvas setServices(final Service... aServiceArray) {
+    public Canvas setServices(final Service<?>... aServiceArray) {
         return (Canvas) super.setServices(aServiceArray);
     }
 
     @Override
-    public Canvas setServices(final List<Service> aServiceList) {
+    public Canvas setServices(final List<Service<?>> aServiceList) {
         return (Canvas) super.setServices(aServiceList);
     }
 

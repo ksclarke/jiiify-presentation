@@ -7,8 +7,8 @@ import java.io.IOException;
 import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.v3.Manifest;
-import info.freelibrary.iiif.presentation.v3.io.Manifestor;
 import info.freelibrary.iiif.presentation.v3.properties.Metadata;
+import info.freelibrary.iiif.presentation.v3.utils.Manifestor;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 
 /**

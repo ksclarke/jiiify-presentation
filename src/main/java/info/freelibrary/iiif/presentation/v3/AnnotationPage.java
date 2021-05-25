@@ -209,12 +209,12 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
     }
 
     @Override
-    public AnnotationPage<T> setServices(final Service... aServiceArray) {
+    public AnnotationPage<T> setServices(final Service<?>... aServiceArray) {
         return (AnnotationPage<T>) super.setServices(aServiceArray);
     }
 
     @Override
-    public AnnotationPage<T> setServices(final List<Service> aServiceList) {
+    public AnnotationPage<T> setServices(final List<Service<?>> aServiceList) {
         return (AnnotationPage<T>) super.setServices(aServiceList);
     }
 

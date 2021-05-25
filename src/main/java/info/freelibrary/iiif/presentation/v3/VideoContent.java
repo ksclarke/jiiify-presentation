@@ -139,12 +139,12 @@ public class VideoContent extends AbstractContentResource<VideoContent>
     }
 
     @Override
-    public VideoContent setServices(final Service... aServiceArray) {
+    public VideoContent setServices(final Service<?>... aServiceArray) {
         return (VideoContent) super.setServices(aServiceArray);
     }
 
     @Override
-    public VideoContent setServices(final List<Service> aServiceList) {
+    public VideoContent setServices(final List<Service<?>> aServiceList) {
         return (VideoContent) super.setServices(aServiceList);
     }
 

@@ -15,7 +15,8 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  * An abstract class for authentication services.
  */
 @JsonPropertyOrder({ JsonKeys.V2_ID, JsonKeys.V2_TYPE, JsonKeys.PROFILE })
-abstract class AbstractAuthService extends AbstractService implements AuthService {
+abstract class AbstractAuthService<T extends AbstractAuthService<T>> extends AbstractService<T>
+        implements AuthService<T> {
 
     /**
      * The auth service's profile.
@@ -61,9 +62,10 @@ abstract class AbstractAuthService extends AbstractService implements AuthServic
     }
 
     @Override
-    public AuthService setProfile(final Profile aProfile) {
+    @SuppressWarnings("unchecked")
+    public T setProfile(final Profile aProfile) {
         myProfile = aProfile;
-        return this;
+        return (T) this;
     }
 
 }

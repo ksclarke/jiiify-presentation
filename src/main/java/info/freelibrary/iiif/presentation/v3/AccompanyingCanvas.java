@@ -172,12 +172,12 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> // NO
     }
 
     @Override
-    public AccompanyingCanvas setServices(final Service... aServiceArray) {
+    public AccompanyingCanvas setServices(final Service<?>... aServiceArray) {
         return (AccompanyingCanvas) super.setServices(aServiceArray);
     }
 
     @Override
-    public AccompanyingCanvas setServices(final List<Service> aServiceList) {
+    public AccompanyingCanvas setServices(final List<Service<?>> aServiceList) {
         return (AccompanyingCanvas) super.setServices(aServiceList);
     }
 

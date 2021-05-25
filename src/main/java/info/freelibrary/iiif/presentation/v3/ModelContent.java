@@ -116,12 +116,12 @@ public class ModelContent extends AbstractContentResource<ModelContent>
     }
 
     @Override
-    public ModelContent setServices(final Service... aServiceArray) {
+    public ModelContent setServices(final Service<?>... aServiceArray) {
         return (ModelContent) super.setServices(aServiceArray);
     }
 
     @Override
-    public ModelContent setServices(final List<Service> aServiceList) {
+    public ModelContent setServices(final List<Service<?>> aServiceList) {
         return (ModelContent) super.setServices(aServiceList);
     }
 

@@ -73,7 +73,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     /**
      * The collection's service definitions.
      */
-    private List<Service> myServiceDefinitions;
+    private List<Service<?>> myServiceDefinitions;
 
     /**
      * The collection's list of items.
@@ -301,12 +301,12 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     }
 
     @Override
-    public Collection setServices(final Service... aServiceArray) {
+    public Collection setServices(final Service<?>... aServiceArray) {
         return (Collection) super.setServices(aServiceArray);
     }
 
     @Override
-    public Collection setServices(final List<Service> aServiceList) {
+    public Collection setServices(final List<Service<?>> aServiceList) {
         return (Collection) super.setServices(aServiceList);
     }
 
@@ -317,7 +317,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      * @return The collection document
      */
     @JsonIgnore
-    public Collection setServiceDefinitions(final Service... aServicesArray) {
+    public Collection setServiceDefinitions(final Service<?>... aServicesArray) {
         return setServiceDefinitions(Arrays.asList(aServicesArray));
     }
 
@@ -328,8 +328,8 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      * @return The collection document
      */
     @JsonSetter(JsonKeys.SERVICES)
-    public Collection setServiceDefinitions(final List<Service> aServicesList) {
-        final List<Service> servicesList = getServiceDefinitions();
+    public Collection setServiceDefinitions(final List<Service<?>> aServicesList) {
+        final List<Service<?>> servicesList = getServiceDefinitions();
 
         Objects.requireNonNull(aServicesList);
         servicesList.clear();
@@ -344,7 +344,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      * @return A list of services referenced by different parts of the collection document
      */
     @JsonGetter(JsonKeys.SERVICES)
-    public List<Service> getServiceDefinitions() {
+    public List<Service<?>> getServiceDefinitions() {
         if (myServiceDefinitions == null) {
             myServiceDefinitions = new ArrayList<>();
         }

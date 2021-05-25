@@ -141,7 +141,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
      * The resource's services.
      */
     @JsonDeserialize(contentUsing = ServiceDeserializer.class)
-    private List<Service> myServices;
+    private List<Service<?>> myServices;
 
     /**
      * Creates a new resource from the supplied type.
@@ -760,7 +760,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
      * @return The resource's services
      */
     @JsonGetter(JsonKeys.SERVICE)
-    public List<Service> getServices() {
+    public List<Service<?>> getServices() {
         if (myServices == null) {
             myServices = new ArrayList<>();
         }
@@ -775,7 +775,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
      * @return The resource
      */
     @JsonIgnore
-    protected AbstractResource<T> setServices(final Service... aServiceArray) {
+    protected AbstractResource<T> setServices(final Service<?>... aServiceArray) {
         return setServices(Arrays.asList(aServiceArray));
     }
 
@@ -786,8 +786,8 @@ abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
      * @return The resource
      */
     @JsonSetter(JsonKeys.SERVICE)
-    protected AbstractResource<T> setServices(final List<Service> aServiceList) {
-        final List<Service> services = getServices();
+    protected AbstractResource<T> setServices(final List<Service<?>> aServiceList) {
+        final List<Service<?>> services = getServices();
 
         Objects.requireNonNull(aServiceList);
         services.clear();
