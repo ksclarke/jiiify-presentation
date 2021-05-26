@@ -13,8 +13,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.python.util.PythonInterpreter;
 import org.junit.Test;
+import org.python.util.PythonInterpreter;
 
 import info.freelibrary.util.FileExtFileFilter;
 import info.freelibrary.util.FileUtils;
@@ -56,7 +56,7 @@ public class PythonExamplesIT {
         interpreter = new PythonInterpreter();
 
         for (final File pythonFile : FileUtils.listFiles(new File("src/test/python"), new FileExtFileFilter("py"))) {
-            LOGGER.debug(MessageCodes.JPA_120, pythonFile);
+            LOGGER.debug(MessageCodes.JPA_049, pythonFile);
 
             try (StringWriter writer = new StringWriter()) {
                 interpreter.setOut(writer);
