@@ -216,7 +216,7 @@
           <stylesheetfile>stylesheet.css</stylesheetfile>
           <links>
             <link>https://google.github.io/guava/releases/23.0/api/docs/</link>
-            <link>https://javadoc.io/doc/info.freelibrary/freelib-utils/latest/apidocs</link>
+            <link>https://javadoc.io/doc/info.freelibrary/freelib-utils/${freelib.utils.version}/apidocs</link>
             <link>https://vertx.io/docs/apidocs/</link>
           </links>
         </configuration>
