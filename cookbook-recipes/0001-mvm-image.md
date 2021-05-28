@@ -27,11 +27,37 @@ System.out.println(manifest);
 {% endtab %}
 
 {% tab title="Ruby Code" %}
+```text
+manifestID = 'https://iiif.io/api/cookbook/recipe/0001-mvm-image/manifest'
+imageID = 'http://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png'
 
+manifest = Manifest.new(manifestID, Label.new('en', 'Image 1'))
+minter = MinterFactory.getMinter(manifest)
+canvas = Canvas.new(minter).setWidthHeight(1200, 1800)
+imageContent = ImageContent.new(imageID).setWidthHeight(1200, 1800)
+
+canvas.paintWith(minter, imageContent)
+manifest.setCanvases(canvas)
+
+puts manifest.toString()
+```
 {% endtab %}
 
 {% tab title="Python Code" %}
+```text
+manifestID = 'https://iiif.io/api/cookbook/recipe/0001-mvm-image/manifest'
+imageID = 'http://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png'
 
+manifest = Manifest(manifestID, Label('en', 'Image 1'))
+minter = MinterFactory.getMinter(manifest)
+canvas = Canvas(minter).setWidthHeight(1200, 1800)
+imageContent = ImageContent(imageID).setWidthHeight(1200, 1800)
+
+canvas.paintWith(minter, [imageContent])
+manifest.setCanvases([canvas])
+
+print(manifest)
+```
 {% endtab %}
 
 {% tab title="JSON Result" %}
@@ -96,11 +122,45 @@ System.out.println(manifest);
 {% endtab %}
 
 {% tab title="Ruby Code" %}
+```text
+manifestID = 'https://iiif.io/api/cookbook/recipe/0001-mvm-image/manifest'
+canvasID = 'https://iiif.io/api/cookbook/recipe/0001-mvm-image/canvas/p1'
+imageID = 'http://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png'
+annoID = 'https://iiif.io/api/cookbook/recipe/0001-mvm-image/annotation/p0001-image'
+annoPageID = 'https://iiif.io/api/cookbook/recipe/0001-mvm-image/page/p1/1'
 
+manifest = Manifest.new(manifestID, Label.new('en', 'Image 1'))
+canvas = Canvas.new(canvasID).setWidthHeight(1200, 1800)
+imageContent = ImageContent.new(imageID).setWidthHeight(1200, 1800)
+annoPage = AnnotationPage.new(annoPageID)
+anno = PaintingAnnotation.new(annoID, canvas)
+
+annoPage.addAnnotations(anno.setBodies(imageContent).setTarget(canvasID))
+manifest.setCanvases(canvas.setPaintingPages(annoPage))
+
+puts manifest.toString()
+```
 {% endtab %}
 
 {% tab title="Python Code" %}
+```text
+manifestID = 'https://iiif.io/api/cookbook/recipe/0001-mvm-image/manifest'
+canvasID = 'https://iiif.io/api/cookbook/recipe/0001-mvm-image/canvas/p1'
+imageID = 'http://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png'
+annoID = 'https://iiif.io/api/cookbook/recipe/0001-mvm-image/annotation/p0001-image'
+annoPageID = 'https://iiif.io/api/cookbook/recipe/0001-mvm-image/page/p1/1'
 
+manifest = Manifest(manifestID, Label('en', 'Image 1'))
+canvas = Canvas(canvasID).setWidthHeight(1200, 1800)
+imageContent = ImageContent(imageID).setWidthHeight(1200, 1800)
+annoPage = AnnotationPage(annoPageID)
+anno = PaintingAnnotation(annoID, canvas)
+
+annoPage.addAnnotations(anno.setBodies([imageContent]).setTarget(canvasID))
+manifest.setCanvases(canvas.setPaintingPages([annoPage]))
+
+print(manifest)
+```
 {% endtab %}
 
 {% tab title="JSON Result" %}
