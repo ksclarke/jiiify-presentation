@@ -5,7 +5,8 @@ class JiiifyPresentation0001_2:
         # We pass in the version of the uber package to use when running this test
         import sys; sys.path.append('../../../target/jiiify-presentation-v3-' + sys.argv[0] + '-uber.jar')
 
-        from info.freelibrary.iiif.presentation.v3 import Canvas, ImageContent, Manifest, AnnotationPage, PaintingAnnotation
+        from info.freelibrary.iiif.presentation.v3 import Canvas, ImageContent, Manifest, AnnotationPage, \
+          PaintingAnnotation
         from info.freelibrary.iiif.presentation.v3.ids import MinterFactory
         from info.freelibrary.iiif.presentation.v3.properties import Label
 
