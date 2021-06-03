@@ -1678,8 +1678,6 @@ public class CanvasTest {
         myCanvas = new Canvas(VIDEO_CANVAS_ID, LABEL).setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION)
                 .paintWith(myMinter, video);
 
-        System.out.println(myCanvas.toJSON().encodePrettily());
-
         expected = new JsonObject(StringUtils.read(CANVAS_VIDEO));
         found = new JsonObject(TestUtils.toJson(myCanvas));
 
