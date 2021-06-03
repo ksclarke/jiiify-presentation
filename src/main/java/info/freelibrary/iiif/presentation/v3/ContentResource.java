@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.google.common.net.MediaType;
 
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 

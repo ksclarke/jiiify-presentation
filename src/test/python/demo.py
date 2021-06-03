@@ -1,4 +1,4 @@
-# Our first Jython test, an example used in a jiiify-presentation demo
+
 class JiiifyPresentationDemo:
 
     def __init__(self):

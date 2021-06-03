@@ -21,7 +21,7 @@
     {
       "id": "https://ucla.edu/logo.jpg",
       "type": "Image",
-      "format": "image/jpg",
+      "format": "image/jpeg",
       "height": 100,
       "width": 100
     }

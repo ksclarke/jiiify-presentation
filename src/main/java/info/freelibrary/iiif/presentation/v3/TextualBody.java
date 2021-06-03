@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.google.common.net.MediaType;
 
 import info.freelibrary.util.warnings.PMD;
 
@@ -185,7 +184,7 @@ public class TextualBody implements AnnotationBody<TextualBody>, EmbeddedResourc
     @Override
     @JsonSetter(JsonKeys.FORMAT)
     public TextualBody setFormat(final String aFormat) {
-        myFormat = MediaType.parse(aFormat);
+        myFormat = MediaType.parse(aFormat).orElse(null);
         return this;
     }
 

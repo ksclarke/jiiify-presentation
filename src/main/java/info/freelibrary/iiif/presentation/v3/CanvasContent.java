@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.google.common.net.MediaType;
 
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
@@ -35,7 +34,7 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
      */
     public CanvasContent(final String aID) {
         super(ResourceTypes.CANVAS, aID);
-        super.setFormatFromMediaType(MediaType.JSON_UTF_8);
+        super.setFormatFromMediaType(MediaType.APPLICATION_JSON);
     }
 
     /**
@@ -45,7 +44,7 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
      */
     public CanvasContent(final URI aID) {
         super(ResourceTypes.CANVAS, aID);
-        super.setFormatFromMediaType(MediaType.JSON_UTF_8);
+        super.setFormatFromMediaType(MediaType.APPLICATION_JSON);
     }
 
     /**
@@ -53,7 +52,7 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
      */
     private CanvasContent() {
         super(ResourceTypes.CANVAS);
-        super.setFormatFromMediaType(MediaType.JSON_UTF_8);
+        super.setFormatFromMediaType(MediaType.APPLICATION_JSON);
     }
 
     @Override

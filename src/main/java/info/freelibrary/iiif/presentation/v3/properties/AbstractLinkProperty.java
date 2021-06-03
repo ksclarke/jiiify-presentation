@@ -13,11 +13,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.google.common.net.MediaType;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+import info.freelibrary.iiif.presentation.v3.MediaType;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
@@ -201,7 +201,7 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      */
     @JsonSetter(JsonKeys.FORMAT)
     protected AbstractLinkProperty<T> setFormat(final String aFormat) {
-        myFormat = MediaType.parse(aFormat);
+        myFormat = MediaType.fromString(aFormat).orElse(null);
         return this;
     }
 

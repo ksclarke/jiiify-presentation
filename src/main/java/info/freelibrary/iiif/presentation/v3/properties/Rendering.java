@@ -7,9 +7,10 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.google.common.net.MediaType;
 
 import info.freelibrary.util.warnings.Eclipse;
+
+import info.freelibrary.iiif.presentation.v3.MediaType;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;

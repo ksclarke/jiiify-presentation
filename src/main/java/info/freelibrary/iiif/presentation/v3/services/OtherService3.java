@@ -2,33 +2,21 @@
 package info.freelibrary.iiif.presentation.v3.services;
 
 import java.net.URI;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.net.MediaType;
 
-import info.freelibrary.util.FileUtils;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-
+import info.freelibrary.iiif.presentation.v3.MediaType;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * A generic service class for other service implementations.
  */
-@JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.PROFILE, JsonKeys.FORMAT })
 public class OtherService3 extends AbstractService<OtherService3> implements OtherService<OtherService3> {
-
-    /**
-     * The logger for this service.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(OtherService3.class, MessageCodes.BUNDLE);
 
     /**
      * This service's profile.
@@ -107,7 +95,7 @@ public class OtherService3 extends AbstractService<OtherService3> implements Oth
     @Override
     @JsonIgnore
     public OtherService3 setFormat(final String aMediaType) {
-        setMediaTypeFromExt(aMediaType);
+        myFormat = MediaType.fromString(aMediaType).orElse(null);
         return this;
     }
 
@@ -133,21 +121,6 @@ public class OtherService3 extends AbstractService<OtherService3> implements Oth
     @JsonIgnore
     public OtherService3 setID(final URI aID) {
         return super.setID(aID);
-    }
-
-    @JsonIgnore
-    private void setMediaTypeFromExt(final String aURI) {
-        final String mimeType = FileUtils.getMimeType(aURI);
-
-        try {
-            if (mimeType != null) {
-                myFormat = MediaType.parse(mimeType);
-            } else {
-                myFormat = MediaType.parse(aURI);
-            }
-        } catch (final IllegalArgumentException details) {
-            LOGGER.warn(MessageCodes.JPA_013, aURI);
-        }
     }
 
     /**
@@ -205,7 +178,7 @@ public class OtherService3 extends AbstractService<OtherService3> implements Oth
                 map.put(JsonKeys.SERVICE, myServices);
             }
 
-            return ImmutableMap.copyOf(map);
+            return Collections.unmodifiableMap(map);
         } else {
             return null;
         }
