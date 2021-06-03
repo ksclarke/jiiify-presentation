@@ -3,5 +3,8 @@
 src/
 target/
 
+# Ignore local logging configuration
+logback-test.xml
+
 # Ignore workflow artifacts
 .flattened-pom.xml
