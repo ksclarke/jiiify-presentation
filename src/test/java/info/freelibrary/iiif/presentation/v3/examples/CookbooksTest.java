@@ -22,7 +22,6 @@ import info.freelibrary.iiif.presentation.v3.AnnotationPage;
 import info.freelibrary.iiif.presentation.v3.Canvas;
 import info.freelibrary.iiif.presentation.v3.ImageContent;
 import info.freelibrary.iiif.presentation.v3.Manifest;
-import info.freelibrary.iiif.presentation.v3.MediaType;
 import info.freelibrary.iiif.presentation.v3.PaintingAnnotation;
 import info.freelibrary.iiif.presentation.v3.SoundContent;
 import info.freelibrary.iiif.presentation.v3.VideoContent;
@@ -147,9 +146,8 @@ public class CookbooksTest extends AbstractCookbookTest {
         final Manifest manifest = new Manifest(manifestID, new Label("en", "Simplest Audio Example 1"));
         final Minter minter = MinterFactory.getMinter(manifest);
         final Canvas canvas = new Canvas(minter).setDuration(1985.024);
-        final SoundContent soundContent = new SoundContent(soundID);
+        final SoundContent soundContent = new SoundContent(soundID).setDuration(1985.024);
 
-        soundContent.setDuration(1985.024).setFormat(MediaType.AUDIO_MP4);
         canvas.paintWith(minter, soundContent);
         manifest.setCanvases(canvas);
 
@@ -172,11 +170,10 @@ public class CookbooksTest extends AbstractCookbookTest {
 
         final Manifest manifest = new Manifest(manifestID, new Label("en", "Simplest Audio Example 1"));
         final Canvas canvas = new Canvas(canvasID).setDuration(1985.024);
-        final SoundContent soundContent = new SoundContent(soundID);
+        final SoundContent soundContent = new SoundContent(soundID).setDuration(1985.024);
         final AnnotationPage<PaintingAnnotation> annoPage = new AnnotationPage<>(annoPageID);
         final PaintingAnnotation anno = new PaintingAnnotation(annoID, canvas);
 
-        soundContent.setDuration(1985.024).setFormat(MediaType.AUDIO_MP4);
         annoPage.addAnnotations(anno.setBodies(soundContent).setTarget(canvasID));
         manifest.setCanvases(canvas.setPaintingPages(annoPage));
 
@@ -253,7 +250,6 @@ public class CookbooksTest extends AbstractCookbookTest {
         final Canvas canvas = new Canvas(minter).setWidthHeight(1920, 1080);
         final ImageContent imageContent = new ImageContent(imageID).setWidthHeight(640, 360);
 
-        imageContent.setFormat(MediaType.IMAGE_PNG);
         canvas.paintWith(minter, imageContent);
         manifest.setCanvases(canvas);
 
@@ -282,7 +278,6 @@ public class CookbooksTest extends AbstractCookbookTest {
         final AnnotationPage<PaintingAnnotation> annoPage = new AnnotationPage<>(annoPageID);
         final PaintingAnnotation anno = new PaintingAnnotation(annoID, canvas);
 
-        imageContent.setFormat(MediaType.IMAGE_PNG);
         annoPage.addAnnotations(anno.setBodies(imageContent).setTarget(canvasID));
         manifest.setCanvases(canvas.setPaintingPages(annoPage));
 
