@@ -7,8 +7,6 @@ import java.net.URI;
 
 import org.junit.Test;
 
-import com.google.common.net.MediaType;
-
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageService3;
 
@@ -55,7 +53,7 @@ public class ImageContentTest {
     @Test
     public void testSetFormatString() {
         // This will have image/jpeg set as format by default
-        assertEquals(MediaType.PNG, new ImageContent(IMAGE_URI).setFormat(IMAGE_PNG).getFormat().get());
+        assertEquals(MediaType.IMAGE_PNG, new ImageContent(IMAGE_URI).setFormat(IMAGE_PNG).getFormat().get());
     }
 
     /**
@@ -64,8 +62,8 @@ public class ImageContentTest {
     @Test
     public void testSetFormatMediaTypeMediaType() {
         // This will have image/jpeg set as format by default
-        assertEquals(MediaType.PNG,
-                new ImageContent(IMAGE_URI).setFormat(MediaType.parse(IMAGE_PNG)).getFormat().get());
+        assertEquals(MediaType.IMAGE_PNG,
+                new ImageContent(IMAGE_URI).setFormat(MediaType.fromString(IMAGE_PNG).get()).getFormat().get());
     }
 
     /**

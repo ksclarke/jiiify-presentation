@@ -135,6 +135,7 @@ public final class TestUtils {
             for (final Object object : (List<?>) aObject) {
                 sequenceWriter.write(object);
             }
+
             sequenceWriter.close();
         } else {
             mapper.writeValue(writer, aObject);

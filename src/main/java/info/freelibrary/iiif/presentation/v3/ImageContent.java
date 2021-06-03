@@ -11,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.google.common.net.MediaType;
 
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
@@ -38,6 +37,11 @@ public class ImageContent extends AbstractContentResource<ImageContent> implemen
         ContentResource<ImageContent>, SpatialContentResource<ImageContent>, Resource<ImageContent> {
 
     /**
+     * The class of media type this content represents.
+     */
+    private static final String MEDIA_TYPE_CLASS = "image";
+
+    /**
      * The image content's width.
      */
     private int myWidth;
@@ -54,7 +58,7 @@ public class ImageContent extends AbstractContentResource<ImageContent> implemen
      */
     public ImageContent(final String aURI) {
         super(ResourceTypes.IMAGE, aURI);
-        setMediaTypeFromExt(aURI);
+        setFormatFromMediaType(MediaType.parse(URI.create(aURI), MEDIA_TYPE_CLASS).orElse(null));
     }
 
     /**
@@ -64,7 +68,7 @@ public class ImageContent extends AbstractContentResource<ImageContent> implemen
      */
     public ImageContent(final URI aURI) {
         super(ResourceTypes.IMAGE, aURI);
-        setMediaTypeFromExt(aURI.toString());
+        setFormatFromMediaType(MediaType.parse(aURI, MEDIA_TYPE_CLASS).orElse(null));
     }
 
     /**

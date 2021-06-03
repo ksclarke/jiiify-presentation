@@ -9,9 +9,8 @@ import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.net.MediaType;
-
 import info.freelibrary.iiif.presentation.v3.AbstractTest;
+import info.freelibrary.iiif.presentation.v3.MediaType;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 
 /**
@@ -21,7 +20,7 @@ public class SeeAlsoTest extends AbstractTest {
 
     private static final String JPEG_FORMAT = "image/jpeg";
 
-    private static final MediaType MIME_TYPE = MediaType.parse(JPEG_FORMAT);
+    private static final MediaType MIME_TYPE = MediaType.fromString(JPEG_FORMAT).get();
 
     private String myID;
 
@@ -92,7 +91,7 @@ public class SeeAlsoTest extends AbstractTest {
     @Test
     public void testSetGetFormat() {
         final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.DATASET);
-        assertEquals(MediaType.JPEG, seeAlso.setFormat(MIME_TYPE).getFormat().get());
+        assertEquals(MediaType.IMAGE_JPEG, seeAlso.setFormat(MIME_TYPE).getFormat().get());
     }
 
     /**
@@ -101,7 +100,9 @@ public class SeeAlsoTest extends AbstractTest {
     @Test
     public void testSetGetFormatMediaType() {
         final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.DATASET);
-        assertEquals(MediaType.JPEG, seeAlso.setFormat(MediaType.parse(JPEG_FORMAT)).getFormat().get());
+        final MediaType mediaType = MediaType.fromString(JPEG_FORMAT).get();
+
+        assertEquals(MediaType.IMAGE_JPEG, seeAlso.setFormat(mediaType).getFormat().get());
     }
 
     /**

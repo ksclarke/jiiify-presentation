@@ -12,16 +12,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.google.common.net.MediaType;
-
-import info.freelibrary.util.Constants;
-import info.freelibrary.util.FileUtils;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
 
 import info.freelibrary.iiif.presentation.v3.properties.Localized;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * An abstract content resource class that specific content types can extend.
@@ -29,11 +22,6 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
 abstract class AbstractContentResource<T extends AbstractResource<AbstractContentResource<T>>>
         extends AbstractResource<AbstractContentResource<T>> implements Localized<T> {
-
-    /**
-     * The logger used by the AbstractContentResource.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractContentResource.class, MessageCodes.BUNDLE);
 
     /**
      * The number of languages for a single (non-array) value.
@@ -58,7 +46,7 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
      */
     protected AbstractContentResource(final String aType, final String aID) {
         super(aType, aID);
-        setMediaTypeFromExt(aID);
+        myFormat = MediaType.parse(aID).orElse(null);
     }
 
     /**
@@ -69,7 +57,7 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
      */
     protected AbstractContentResource(final String aType, final URI aID) {
         super(aType, aID);
-        setMediaTypeFromExt(aID.toString());
+        myFormat = MediaType.parse(aID).orElse(null);
     }
 
     /**
@@ -103,7 +91,7 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
      */
     @JsonSetter(JsonKeys.FORMAT)
     protected AbstractContentResource<T> setFormat(final String aMediaType) {
-        setMediaTypeFromExt(aMediaType);
+        myFormat = MediaType.fromString(aMediaType).orElse(null);
         return this;
     }
 
@@ -126,7 +114,7 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
     @JsonGetter(JsonKeys.FORMAT)
     private Optional<String> getFormatAsString() {
         if (myFormat != null) {
-            return Optional.of(myFormat.type() + "/" + myFormat.subtype()); // skip encoding
+            return Optional.of(myFormat.toString());
         } else {
             return Optional.empty();
         }
@@ -152,38 +140,6 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
     protected final AbstractContentResource<T> setFormatFromMediaType(final MediaType aMediaType) {
         myFormat = aMediaType;
         return this;
-    }
-
-    /**
-     * Sets the media type from the extension of the supplied URI.
-     *
-     * @param aURI A URI from which to glean a media type
-     */
-    @JsonIgnore
-    protected final void setMediaTypeFromExt(final String aURI) {
-        final String fragment = Constants.HASH + URI.create(aURI).getFragment();
-        final String mimeType;
-        final String uri;
-        final int index;
-
-        // If we have a fragment on our URI, remove it before checking media type
-        if ((index = aURI.indexOf(fragment)) != -1) {
-            uri = aURI.substring(0, index);
-        } else {
-            uri = aURI;
-        }
-
-        mimeType = FileUtils.getMimeType(uri);
-
-        try {
-            if (mimeType != null) {
-                myFormat = MediaType.parse(mimeType);
-            } else {
-                myFormat = MediaType.parse(aURI);
-            }
-        } catch (final IllegalArgumentException details) {
-            LOGGER.debug(MessageCodes.JPA_013, aURI); // It's okay to not have one if we don't know it
-        }
     }
 
     /**

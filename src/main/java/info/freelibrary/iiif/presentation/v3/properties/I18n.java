@@ -15,7 +15,6 @@ import java.util.function.Consumer;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.google.common.collect.ImmutableMap;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -313,7 +312,7 @@ public class I18n implements Iterable<String> {
     @JsonValue
     @SuppressWarnings(PMD.UNUSED_PRIVATE_METHOD) // This is actually used by Jackson's deserialization process
     private Map<String, List<String>> toMap() { // NOPMD
-        return ImmutableMap.of(myLocale.toLanguageTag(), myStrings);
+        return Map.of(myLocale.toLanguageTag(), myStrings);
     }
 
     /**

@@ -11,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.google.common.net.MediaType;
 
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
@@ -39,6 +38,11 @@ public class VideoContent extends AbstractContentResource<VideoContent>
         TemporalContentResource<VideoContent>, Resource<VideoContent> {
 
     /**
+     * The class of media type this content represents.
+     */
+    private static final String MEDIA_TYPE_CLASS = "video";
+
+    /**
      * The video content's duration.
      */
     private float myDuration;
@@ -56,19 +60,21 @@ public class VideoContent extends AbstractContentResource<VideoContent>
     /**
      * Creates a video content resource.
      *
-     * @param aID An video content resource ID in string form
+     * @param aURI An video content resource ID in string form
      */
-    public VideoContent(final String aID) {
-        super(ResourceTypes.VIDEO, aID);
+    public VideoContent(final String aURI) {
+        super(ResourceTypes.VIDEO, aURI);
+        setFormatFromMediaType(MediaType.parse(URI.create(aURI), MEDIA_TYPE_CLASS).orElse(null));
     }
 
     /**
      * Creates a video content resource.
      *
-     * @param aID An video content resource ID
+     * @param aURI An video content resource ID
      */
-    public VideoContent(final URI aID) {
-        super(ResourceTypes.VIDEO, aID);
+    public VideoContent(final URI aURI) {
+        super(ResourceTypes.VIDEO, aURI);
+        setFormatFromMediaType(MediaType.parse(aURI, MEDIA_TYPE_CLASS).orElse(null));
     }
 
     /**

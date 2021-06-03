@@ -14,11 +14,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.google.common.net.MediaType;
 
 import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.Manifest;
+import info.freelibrary.iiif.presentation.v3.MediaType;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
@@ -145,7 +145,7 @@ public class RenderingTest {
      */
     @Test
     public final void testSetFormat() {
-        assertEquals(MediaType.PDF,
+        assertEquals(MediaType.APPLICATION_PDF,
                 new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1).setFormat(TEST_FORMAT).getFormat().get());
     }
 

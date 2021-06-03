@@ -9,8 +9,6 @@ import java.util.UUID;
 
 import org.junit.Test;
 
-import com.google.common.net.MediaType;
-
 import info.freelibrary.iiif.presentation.v3.ids.SkolemIriFactory;
 
 /**
@@ -94,8 +92,8 @@ public class TextualBodyTest {
      */
     @Test
     public final void testGetFormat() {
-        assertEquals(MediaType.HTML_UTF_8,
-                new TextualBody().setFormat(MediaType.HTML_UTF_8.toString()).getFormat().get());
+        assertEquals(MediaType.TEXT_HTML,
+                new TextualBody().setFormat(MediaType.TEXT_HTML.toString()).getFormat().get());
     }
 
     /**

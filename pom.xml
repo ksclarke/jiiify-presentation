@@ -62,7 +62,6 @@
 
     <jackson.version>2.12.3</jackson.version>
     <jackson.databind.version>2.12.3</jackson.databind.version>
-    <guava.version>30.1-jre</guava.version>
     <freelib.utils.version>2.4.0</freelib.utils.version>
     <jsoup.version>1.13.1</jsoup.version>
     <vertx.version>3.9.7</vertx.version>
@@ -71,7 +70,7 @@
 
     <!-- Plugin related versions -->
     <maven.jar.plugin.version>3.2.0</maven.jar.plugin.version>
-    <freelib.maven.version>0.1.3</freelib.maven.version>
+    <freelib.maven.version>0.1.4</freelib.maven.version>
     <vertx.plugin.version>1.0.24</vertx.plugin.version>
 
     <!-- Test related versions -->
@@ -108,11 +107,6 @@
       <groupId>org.jsoup</groupId>
       <artifactId>jsoup</artifactId>
       <version>${jsoup.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>${guava.version}</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
@@ -198,14 +192,25 @@
       <plugin>
         <groupId>info.freelibrary</groupId>
         <artifactId>freelib-maven-plugins</artifactId>
+        <configuration>
+          <generatedSourcesDirectory>${project.basedir}/src/main/generated</generatedSourcesDirectory>
+        </configuration>
         <executions>
           <execution>
+            <id>generate-i18n-codes</id>
             <phase>process-resources</phase>
             <goals>
               <goal>generate-codes</goal>
             </goals>
+          </execution>
+          <execution>
+            <id>generate-media-types</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate-mediatype</goal>
+            </goals>
             <configuration>
-              <generatedSourcesDirectory>${project.basedir}/src/main/generated</generatedSourcesDirectory>
+              <mediaTypePackage>info.freelibrary.iiif.presentation.v3</mediaTypePackage>
             </configuration>
           </execution>
         </executions>

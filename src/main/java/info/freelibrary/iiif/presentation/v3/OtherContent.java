@@ -10,7 +10,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.google.common.net.MediaType;
 
 import info.freelibrary.util.warnings.PMD;
 
@@ -52,18 +51,20 @@ public class OtherContent implements AnnotationBody<OtherContent>, ContentResour
     @Override
     @JsonIgnore
     public Optional<MediaType> getFormat() {
-        return Optional.of(MediaType.JSON_UTF_8);
+        return Optional.of(MediaType.APPLICATION_JSON);
     }
 
     @Override
     @JsonIgnore
     public OtherContent setFormat(final MediaType aMediaType) {
+        // Our other content is always JSON because it's just a wrapper for JSON
         return this;
     }
 
     @Override
     @JsonSetter(JsonKeys.FORMAT)
     public OtherContent setFormat(final String aMediaType) {
+        // Our other content is always JSON because it's just a wrapper for JSON
         return this;
     }
 
@@ -137,7 +138,7 @@ public class OtherContent implements AnnotationBody<OtherContent>, ContentResour
      */
     @JsonGetter(JsonKeys.FORMAT)
     private Optional<String> getFormatAsString() {
-        return Optional.of(MediaType.JSON_UTF_8.type() + "/" + MediaType.JSON_UTF_8.subtype()); // skip encoding
+        return Optional.of(MediaType.APPLICATION_JSON.toString());
     }
 
     /**

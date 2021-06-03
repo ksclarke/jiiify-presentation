@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,11 +14,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.google.common.net.MediaType;
 
 import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.Manifest;
+import info.freelibrary.iiif.presentation.v3.MediaType;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 
@@ -136,7 +135,7 @@ public class HomepageTest {
     @Test
     public final void testSetFormat() {
         final MediaType format = new Homepage(TEST_URI_1, TEST_LABEL_1).setFormat(TEST_FORMAT).getFormat().get();
-        assertEquals(MediaType.HTML_UTF_8, format.withCharset(StandardCharsets.UTF_8));
+        assertEquals(MediaType.TEXT_HTML, format);
     }
 
     /**
