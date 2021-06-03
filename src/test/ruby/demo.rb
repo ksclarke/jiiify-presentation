@@ -1,4 +1,4 @@
-# Our first JRuby test, an example used in a jiiify-presentation demo
+
 module JiiifyPresentationDemo
   require 'jruby'
 
@@ -36,4 +36,3 @@ module JiiifyPresentationDemo
 
   puts manifest.toString()
 end
-

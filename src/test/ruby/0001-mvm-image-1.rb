@@ -1,4 +1,4 @@
-# A Ruby test of 0001-mvm-image
+
 module JiiifyPresentation0001_1
   require 'jruby'
 
