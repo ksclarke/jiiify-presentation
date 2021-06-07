@@ -32,5 +32,31 @@ JSON text goes here
 {% endtab %}
 {% endtabs %}
 
+{% tabs %}
+{% tab title="Java Code" %}
+```text
+
+```
+{% endtab %}
+
+{% tab title="Ruby Code" %}
+```text
+
+```
+{% endtab %}
+
+{% tab title="Python Code" %}
+```text
+
+```
+{% endtab %}
+
+{% tab title="JSON Result" %}
+```text
+
+```
+{% endtab %}
+{% endtabs %}
+
 Some wrap-up text goes here...
 
