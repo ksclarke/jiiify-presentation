@@ -6,6 +6,7 @@ import static info.freelibrary.util.Constants.HASH;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -28,7 +29,6 @@ import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.Selector;
-import info.freelibrary.iiif.presentation.v3.utils.ContentResourceComparator;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
@@ -486,6 +486,45 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
             default:
                 getBodies().add(new OtherContent(JsonObject.mapFrom(aMap)));
                 break;
+        }
+    }
+
+    /**
+     * A comparator that returns the sort order of the {@link Annotation} properties.
+     */
+    static class ContentResourceComparator implements Comparator<String> {
+
+        /**
+         * Defines the desired content resource sort order.
+         */
+        private static final String[] KEYS = { JsonKeys.ID, JsonKeys.TYPE, JsonKeys.DEFAULT, JsonKeys.ITEMS,
+            JsonKeys.FORMAT, JsonKeys.HEIGHT, JsonKeys.WIDTH, JsonKeys.LABEL, JsonKeys.SERVICE };
+
+        @Override
+        public int compare(final String aFirstKey, final String aSecondKey) {
+            final int firstKeyIndex = getIndex(KEYS, aFirstKey);
+            final int secondKeyIndex = getIndex(KEYS, aSecondKey);
+
+            return ((Integer) firstKeyIndex).compareTo(secondKeyIndex);
+        }
+
+        /**
+         * Gets a key index position.
+         *
+         * @param aKeyArray An array of keys
+         * @param aKey A particular key
+         * @return The index position of the particular key in the array or -1 if the key isn't found in the array
+         */
+        private int getIndex(final String[] aKeyArray, final String aKey) {
+            Objects.requireNonNull(aKey);
+
+            for (int index = 0; index < aKeyArray.length; index++) {
+                if (aKey.equals(aKeyArray[index])) {
+                    return index;
+                }
+            }
+
+            return -1;
         }
     }
 }
