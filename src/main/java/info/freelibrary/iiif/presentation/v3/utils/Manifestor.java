@@ -10,7 +10,7 @@ import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 
 /**
- * The manifestor reads and writes manifests and collection documents.
+ * The manifestor serializes and deserializes {@link Manifest}s and {@link Collection}s to and from files.
  */
 public class Manifestor {
 
@@ -36,9 +36,9 @@ public class Manifestor {
     }
 
     /**
-     * Reads a JSON manifest file into a Manifest object.
+     * Deserializes a {@link Manifest} from a file.
      *
-     * @param aJsonFile A JSON manifest file
+     * @param aJsonFile A JSON file representing a manifest
      * @return A Manifest object
      */
     public Manifest readManifest(final File aJsonFile) {
@@ -46,9 +46,9 @@ public class Manifestor {
     }
 
     /**
-     * Reads a JSON collection manifest file into a Collection object.
+     * Deserializes a {@link Collection} from a file.
      *
-     * @param aJsonFile A JSON collection manifest file
+     * @param aJsonFile A JSON file representing a collection
      * @return A Collection object
      */
     public Collection readCollection(final File aJsonFile) {
@@ -56,10 +56,10 @@ public class Manifestor {
     }
 
     /**
-     * Reads a manifest JSON file using the supplied promise.
+     * Deserializes a {@link Manifest} from a file asynchronously.
      *
-     * @param aJsonFile A JSON manifest file
-     * @param aPromise A Manifest object
+     * @param aJsonFile A JSON file representing a manifest
+     * @param aPromise A Promise that will complete if the operation succeeds
      */
     public void readManifest(final File aJsonFile, final Promise<Manifest> aPromise) {
         myVertx.fileSystem().readFile(aJsonFile.getAbsolutePath(), read -> {
@@ -72,10 +72,10 @@ public class Manifestor {
     }
 
     /**
-     * Reads a collection manifest JSON file using the supplied promise.
+     * Deserializes a {@link Collection} from a file asynchronously.
      *
-     * @param aJsonFile A JSON collection manifest file
-     * @param aPromise A Collection object
+     * @param aJsonFile A JSON file representing a collection
+     * @param aPromise A Promise that will complete if the operation succeeds
      */
     public void readCollection(final File aJsonFile, final Promise<Collection> aPromise) {
         myVertx.fileSystem().readFile(aJsonFile.getAbsolutePath(), read -> {
@@ -88,31 +88,31 @@ public class Manifestor {
     }
 
     /**
-     * Writes a manifest to a JSON file.
+     * Serializes a {@link Manifest} to a file.
      *
-     * @param aManifest A manifest to serialize
-     * @param aJsonFile A JSON manifest file
+     * @param aManifest A Manifest object to serialize
+     * @param aJsonFile The file to write to
      */
     public void write(final Manifest aManifest, final File aJsonFile) {
         myVertx.fileSystem().writeFileBlocking(aJsonFile.getAbsolutePath(), aManifest.toJSON().toBuffer());
     }
 
     /**
-     * Writes a collection manifest to a JSON file.
+     * Serializes a {@link Collection} to a file.
      *
-     * @param aCollection A collection to serialize
-     * @param aJsonFile A JSON collection manifest file
+     * @param aCollection A Collection object to serialize
+     * @param aJsonFile The file to write to
      */
     public void write(final Collection aCollection, final File aJsonFile) {
         myVertx.fileSystem().writeFileBlocking(aJsonFile.getAbsolutePath(), aCollection.toJSON().toBuffer());
     }
 
     /**
-     * Writes a manifest to a JSON file using the supplied promise.
+     * Serializes a {@link Manifest} to a file asynchronously.
      *
-     * @param aManifest A manifest to serialize
-     * @param aJsonFile A JSON manifest file
-     * @param aPromise A promise to use in writing
+     * @param aManifest A Manifest object to serialize
+     * @param aJsonFile The file to write to
+     * @param aPromise A Promise that will complete if the operation succeeds
      */
     public void write(final Manifest aManifest, final File aJsonFile, final Promise<Void> aPromise) {
         myVertx.fileSystem().writeFile(aJsonFile.getAbsolutePath(), aManifest.toJSON().toBuffer(), write -> {
@@ -125,11 +125,11 @@ public class Manifestor {
     }
 
     /**
-     * Writes a manifest to a collection manifest JSON file using the supplied promise.
+     * Serializes a {@link Collection} to a file asynchronously.
      *
-     * @param aCollection A collection to serialize
-     * @param aJsonFile A JSON collection manifest file
-     * @param aPromise A promise to use in writing
+     * @param aCollection A Collection object to serialize
+     * @param aJsonFile The file to write to
+     * @param aPromise A Promise that will complete if the operation succeeds
      */
     public void write(final Collection aCollection, final File aJsonFile, final Promise<Void> aPromise) {
         myVertx.fileSystem().writeFile(aJsonFile.getAbsolutePath(), aCollection.toJSON().toBuffer(), write -> {
