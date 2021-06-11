@@ -19,11 +19,13 @@ import com.github.tkurz.media.fragments.temporal.TemporalFragment;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+import info.freelibrary.iiif.presentation.v3.Canvas;
 import info.freelibrary.iiif.presentation.v3.utils.URIs;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
- * A media fragment selector selects a region of interest in a resource with spatial and/or temporal dimensions.
+ * A media fragment selector selects a region of interest in a resource with spatial and/or temporal dimensions
+ * (typically a {@link Canvas}).
  */
 public class MediaFragmentSelector implements FragmentSelector {
 
