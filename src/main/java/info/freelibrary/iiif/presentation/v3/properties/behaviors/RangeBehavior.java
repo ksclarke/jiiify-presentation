@@ -6,12 +6,13 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+import info.freelibrary.iiif.presentation.v3.Range;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
- * The behaviors available to ranges.
+ * The behaviors attributable to {@link Range}s.
  */
 public enum RangeBehavior implements Behavior {
 

@@ -8,11 +8,12 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+import info.freelibrary.iiif.presentation.v3.Resource;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
- * The behaviors available to resources.
+ * The behaviors attributable to {@link Resource}s.
  */
 public enum ResourceBehavior implements Behavior {
 
