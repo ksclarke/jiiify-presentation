@@ -10,14 +10,14 @@ import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
- * An external service that provides GeoJSON information.
+ * An external service that provides <a href="http://geojson.org/">GeoJSON</a> information.
  */
 public class GeoJSONService extends AbstractService<GeoJSONService> implements Service<GeoJSONService> {
 
     /**
-     * Creates a GeoJSON service.
+     * Creates a <a href="https://iiif.io/api/annex/services/#geojson">GeoJSON service</a>.
      *
-     * @param aID The ID of the item to retrieve GeoJSON about
+     * @param aID The ID of the item to retrieve GeoJSON information about
      */
     public GeoJSONService(final URI aID) {
         super();
