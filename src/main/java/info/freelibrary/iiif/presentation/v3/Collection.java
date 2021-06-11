@@ -4,7 +4,6 @@ package info.freelibrary.iiif.presentation.v3; // NOPMD
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -497,7 +496,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     }
 
     /**
-     * A wrapper for {@link Manifest}s and/or {@link Collections} embedded in, or referenced from, a collection.
+     * A wrapper for {@link Manifest}s and/or {@link Collection}s embedded in, or referenced from, a collection.
      */
     @JsonInclude(Include.NON_EMPTY)
     @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.THUMBNAIL, JsonKeys.NAV_DATE })

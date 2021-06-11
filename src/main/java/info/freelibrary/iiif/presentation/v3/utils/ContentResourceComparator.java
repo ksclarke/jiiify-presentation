@@ -5,7 +5,7 @@ import java.util.Comparator;
 import java.util.Objects;
 
 /**
- * A comparator that returns the sort order of the {@code ImageAnnotation} properties.
+ * A comparator that returns the sort order of the {@link Annotation} properties.
  */
 public class ContentResourceComparator implements Comparator<String> {
 
