@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3;
+package info.freelibrary.iiif.presentation.v3.utils;
 
 import static org.junit.Assert.*;
 
@@ -10,8 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import info.freelibrary.iiif.presentation.v3.utils.Manifestor;
-import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
+import info.freelibrary.iiif.presentation.v3.Manifest;
 
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
