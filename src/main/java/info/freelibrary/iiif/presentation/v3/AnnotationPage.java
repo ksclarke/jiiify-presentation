@@ -32,7 +32,7 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
- * A collection of {@link Annotation}(s) included in the items property from the Canvas.
+ * A collection of {@link Annotation}(s) included in the items property of the Canvas (and whose target is that Canvas).
  */
 @SuppressWarnings(PMD.GOD_CLASS)
 public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<AnnotationPage<T>> // NOPMD
