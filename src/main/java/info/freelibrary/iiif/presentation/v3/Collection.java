@@ -496,7 +496,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     }
 
     /**
-     * A wrapper for {@link Manifest}s and/or {@link Collection}s embedded in, or referenced from, a collection.
+     * A wrapper for {@link Manifest}s and/or {@link Collection}s embedded in, or referenced from, a {@link Collection}.
      */
     @JsonInclude(Include.NON_EMPTY)
     @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.THUMBNAIL, JsonKeys.NAV_DATE })

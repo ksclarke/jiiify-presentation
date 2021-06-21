@@ -18,8 +18,9 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import io.vertx.core.json.JsonObject;
 
 /**
- * A content resource for other types of resources than those described by the IIIF specification. The format returned
- * by this class is always JSON. Look in the JsonObject if the wrapped context has a format in its JSON representation.
+ * A content resource for other types of resources than those described by the
+ * <a href="http://iiif.io/api/presentation/3/">IIIF Presentation API</a> specification. The format returned by this
+ * class is always JSON. Look in the {@link JsonObject} if the wrapped context has a format in its JSON representation.
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE })
 public class OtherContent implements AnnotationBody<OtherContent>, ContentResource<OtherContent> {
