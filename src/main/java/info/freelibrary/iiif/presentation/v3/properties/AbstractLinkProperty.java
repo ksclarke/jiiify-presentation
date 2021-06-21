@@ -197,7 +197,6 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      *
      * @param aFormat A resource's format
      * @return The resource whose format is being set
-     * @If the supplied string isn't a media type
      */
     @JsonSetter(JsonKeys.FORMAT)
     protected AbstractLinkProperty<T> setFormat(final String aFormat) {

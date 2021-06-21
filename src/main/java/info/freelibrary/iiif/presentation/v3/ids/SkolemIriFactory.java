@@ -10,8 +10,8 @@ import java.util.UUID;
  * blank nodes, if needed. It's used by the TextualBody class, but can also be used like:
  * <p>
  * <code>
- * SkolemIriFactory iriFactory = SkolemIriFactory.getFactory().setWellKnownBase("https://freelibrary.info/");<br/>
- * URI skolemIRI = iriFactory.getSkolemIRI();<br/>
+ * SkolemIriFactory iriFactory = SkolemIriFactory.getFactory().setWellKnownBase("https://freelibrary.info/");<br>
+ * URI skolemIRI = iriFactory.getSkolemIRI();<br>
  * </code>
  * </p>
  * <p>
@@ -19,8 +19,8 @@ import java.util.UUID;
  * </p>
  * <p>
  * <code>
- * SkolemIriFactory iriFactory = SkolemIriFactory.getFactory();<br/>
- * URI skolemIRI = iriFactory.getSkolemIRI();<br/>
+ * SkolemIriFactory iriFactory = SkolemIriFactory.getFactory();<br>
+ * URI skolemIRI = iriFactory.getSkolemIRI();<br>
  * </code>
  * </p>
  * <p>
