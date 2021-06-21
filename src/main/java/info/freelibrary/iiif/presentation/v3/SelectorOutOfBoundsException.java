@@ -5,7 +5,7 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.I18nRuntimeException;
 
 /**
- * An exception thrown when a non-existent fragment of a resource is referenced.
+ * An exception thrown when attempting to paint a non-existent region of a {@link Canvas}.
  */
 public class SelectorOutOfBoundsException extends I18nRuntimeException {
 
