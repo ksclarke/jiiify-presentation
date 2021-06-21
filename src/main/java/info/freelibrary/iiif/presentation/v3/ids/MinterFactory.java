@@ -10,7 +10,7 @@ import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
- * A factory that returns a minter used in automatically creating IDs for a manifest.
+ * A factory that returns a minter used in automatically creating IDs for resources related to a manifest.
  */
 public final class MinterFactory {
 
