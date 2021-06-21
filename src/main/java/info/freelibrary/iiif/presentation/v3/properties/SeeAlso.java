@@ -108,7 +108,6 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
      *
      * @param aFormat A resource's format
      * @return The resource whose format is being set
-     * @If the supplied string isn't a media type
      */
     @Override
     @JsonSetter(JsonKeys.FORMAT)
