@@ -5,7 +5,8 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.I18nRuntimeException;
 
 /**
- * An exception thrown when a canvas is painted with a content resource that doesn't fit within the canvas bounds.
+ * An exception thrown when attempting to paint a {@link Canvas} (or a region of one) with a {@link ContentResource}
+ * that doesn't fit within the canvas (or region) bounds.
  */
 public class ContentOutOfBoundsException extends I18nRuntimeException {
 

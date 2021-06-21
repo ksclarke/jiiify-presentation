@@ -1,8 +1,11 @@
 
 package info.freelibrary.iiif.presentation.v3.utils;
 
+import info.freelibrary.iiif.presentation.v3.Collection;
+import info.freelibrary.iiif.presentation.v3.Manifest;
+
 /**
- * A constants class for keys used in the JSON serialization of IIIF Presentation manifests and collections.
+ * A constants class for keys used in the JSON serialization of {@link Manifest}s and {@link Collection}s.
  */
 public final class JsonKeys {
 

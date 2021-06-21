@@ -7,7 +7,7 @@ import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
- * Constants related to the IIIF Image API.
+ * Constants related to the <a href="https://iiif.io/api/image/">IIIF Image API</a>.
  */
 public interface ImageAPI {
 

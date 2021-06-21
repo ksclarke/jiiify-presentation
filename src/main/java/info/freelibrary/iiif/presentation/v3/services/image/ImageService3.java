@@ -21,7 +21,8 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
- * A service that will return information about a particular image via IIIF Image API 3.
+ * A service that will return information about a particular image via <a href="https://iiif.io/api/image/3/">IIIF Image
+ * API 3</a>.
  */
 public class ImageService3 extends AbstractImageService<ImageService3> implements ImageService<ImageService3> {
 

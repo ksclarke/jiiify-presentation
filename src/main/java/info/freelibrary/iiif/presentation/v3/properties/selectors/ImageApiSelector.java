@@ -8,7 +8,7 @@ import info.freelibrary.util.StringUtils;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
- * A selector for IIIF Image APIs.
+ * A selector for <a href="https://iiif.io/api/image/">IIIF Image API</a>s.
  */
 public class ImageApiSelector implements Selector {
 

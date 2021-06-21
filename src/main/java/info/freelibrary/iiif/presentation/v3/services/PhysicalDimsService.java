@@ -11,7 +11,8 @@ import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
- * A physical dimensions service that provides information useful for rulers, etc.
+ * A <a href="https://iiif.io/api/annex/services/#physical-dimensions">physical dimensions service</a> that provides
+ * information useful for rulers, etc.
  */
 public class PhysicalDimsService extends AbstractService<PhysicalDimsService> implements Service<PhysicalDimsService> {
 
