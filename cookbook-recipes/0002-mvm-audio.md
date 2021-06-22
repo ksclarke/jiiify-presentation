@@ -4,7 +4,9 @@ description: Simplest Manifest - Audio
 
 # 0002-mvm-audio
 
-Some introductory text goes here...
+Like with the 0001-mvm-image example, this audio example shows both ways of creating manifests: 1\) using the Minter with the paintWith syntax, and 2\) explicitly creating all the manifest components by hand. For this example, either route is acceptable. Which path is taken might just depend on the level of control one wants over the manifest's component IDs.
+
+In this example, the manifest and canvas are created first. The minter is then initialized with the newly created manifest. The audio resource is created, and then it is painted onto the canvas. The canvas gets added to the manifest before its JSON serialization is printed out.
 
 {% tabs %}
 {% tab title="Java Code" %}
@@ -92,6 +94,10 @@ print(manifest)
 ```
 {% endtab %}
 {% endtabs %}
+
+The same thing can be accomplished while using the IDs that are used in the Cookbook recipe. In this example, the minter isn't created; the IDs at the top of the block are used instead. The outer structure's elements are the same, but this time an AnnotationPage and PaintingAnnotation are created. The audio resource is added to the annotation and the annotation is added to the annotation page.
+
+The annotation page is then set on the canvas, and the canvas on the manifest. Lastly, like with the example above, the JSON serialization of the manifest is printed out.
 
 {% tabs %}
 {% tab title="Java Code" %}
@@ -200,5 +206,5 @@ print(manifest)
 {% endtab %}
 {% endtabs %}
 
-Some wrap-up text goes here...
+As we can see, this example is very similar to the first example. The only real difference is the type of content resource that's being annotated onto the canvas.
 

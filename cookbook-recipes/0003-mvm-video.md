@@ -1,10 +1,12 @@
 ---
-description: A human-friendly description goes here
+description: Simplest Manifest - Video
 ---
 
 # 0003-mvm-video
 
-Some introductory text goes here...
+The simple video example from the cookbook is very similar to the simple image and audio examples before it. Other than the difference in content resource \(this time it's a video\), you can also see different characteristics can be set, depending on the type of resource. In this case, we could set duration, width, and height. On the audio recording, we could set the duration. On the image, we could set width and height.
+
+Like the previous examples, the first example uses a minter and the paintWith method.
 
 {% tabs %}
 {% tab title="Java Code" %}
@@ -99,6 +101,8 @@ print(manifest)
 ```
 {% endtab %}
 {% endtabs %}
+
+The second example is also like the second parts of the previous two examples. The same structure as above is created, but this time the annotation and annotation page are created by hand. While also true in the first example, we can also see in this second example that the canvas' width and height are set to different values from the width and height of the video resource being painted onto the canvas.
 
 {% tabs %}
 {% tab title="Java Code" %}
@@ -213,5 +217,5 @@ print(manifest)
 {% endtab %}
 {% endtabs %}
 
-Some wrap-up text goes here...
+This is the end of the simple content resource recipes. The next set of examples show how to handle other aspects of manifest creation.
 
