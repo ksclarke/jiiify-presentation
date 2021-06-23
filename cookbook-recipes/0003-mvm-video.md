@@ -102,7 +102,7 @@ print(manifest)
 {% endtab %}
 {% endtabs %}
 
-The second example is also like the second parts of the previous two examples. The same structure as above is created, but this time the annotation and annotation page are created by hand. While also true in the first example, we can also see in this second example that the canvas' width and height are set to different values from the width and height of the video resource being painted onto the canvas.
+The second example is also like the second parts of the previous two examples. The same structure as above is created, but this time the annotation and annotation page are created by hand.
 
 {% tabs %}
 {% tab title="Java Code" %}
