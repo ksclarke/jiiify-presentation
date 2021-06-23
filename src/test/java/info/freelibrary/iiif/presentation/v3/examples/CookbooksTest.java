@@ -11,7 +11,6 @@ import java.nio.charset.StandardCharsets;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import info.freelibrary.util.Logger;
@@ -239,7 +238,6 @@ public class CookbooksTest extends AbstractCookbookTest {
      * Runs the 0004 cookbook example with a minter.
      */
     @Test
-    @Ignore
     public final void test0004WithMinter() throws IOException {
         final String manifestID = "https://iiif.io/api/cookbook/recipe/0004-canvas-size/manifest";
         final String imageID = "https://fixtures.iiif.io/video/indiana/donizetti-elixir/act1-thumbnail.png";
@@ -253,6 +251,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         canvas.paintWith(minter, imageContent);
         manifest.setCanvases(canvas);
 
+        // System.setOut(myOutStream);
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
@@ -263,7 +262,6 @@ public class CookbooksTest extends AbstractCookbookTest {
      * Runs the 0004 cookbook example without a minter.
      */
     @Test
-    @Ignore
     public final void test0004WithoutMinter() throws IOException {
         final String manifestID = "https://iiif.io/api/cookbook/recipe/0004-canvas-size/manifest";
         final String canvasID = "https://iiif.io/api/cookbook/recipe/0004-canvas-size/canvas/p1";
