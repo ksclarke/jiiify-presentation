@@ -161,8 +161,8 @@ imageContent = ImageContent(imageID).setWidthHeight(640, 360)
 annoPage = AnnotationPage(annoPageID)
 anno = PaintingAnnotation(annoID, canvas)
 
-annoPage.addAnnotations([anno.setBodies([imageContent]).setTarget(canvasID)])
-manifest.setCanvases([canvas.setPaintingPages([annoPage])])
+annoPage.addAnnotations(anno.setBodies([imageContent]).setTarget(canvasID))
+manifest.setCanvases(canvas.setPaintingPages([annoPage]))
 
 print(manifest)
 ```
