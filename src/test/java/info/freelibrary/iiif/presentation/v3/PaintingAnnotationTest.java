@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.toJson;
 import static org.junit.Assert.*;
 
 import java.io.File;
@@ -19,8 +21,6 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavi
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 
-import io.vertx.core.json.JsonObject;
-
 /**
  * Tests {@link PaintingAnnotation}.
  */
@@ -28,7 +28,7 @@ public class PaintingAnnotationTest extends AbstractTest {
 
     private static final File ANNOTATION = new File(TestUtils.TEST_DIR, "annotation-painting-full.json");
 
-    private final Label myCanvasLabel = new Label(LOREM_IPSUM.getWords(4));
+    private final Label myCanvasLabel = new Label(myLoremIpsum.getWords(4));
 
     private final URI myCanvasID = URI.create("cc16ed46-cfbc-458a-9a7b-16364a5af377");
 
@@ -200,9 +200,8 @@ public class PaintingAnnotationTest extends AbstractTest {
                 .setThumbnails(new SoundContent(myThumbnailID).setDuration(4.2d));
         final PaintingAnnotation annotation = new PaintingAnnotation(myAnnoID, myCanvas).setBodies(content)
                 .setTarget(myCanvasID).setTimeMode(TimeMode.LOOP);
-        final JsonObject expected = new JsonObject(StringUtils.read(ANNOTATION));
-        final JsonObject found = new JsonObject(TestUtils.toJson(annotation));
 
-        assertEquals(expected, found);
+        assertEquals(format(StringUtils.read(ANNOTATION)), format(toJson(annotation)));
     }
+
 }

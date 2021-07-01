@@ -29,7 +29,7 @@ public class SeeAlsoTest extends AbstractTest {
      */
     @Before
     public void setUp() {
-        myID = LOREM_IPSUM.getUrl();
+        myID = myLoremIpsum.getUrl();
     }
 
     /**
@@ -60,7 +60,7 @@ public class SeeAlsoTest extends AbstractTest {
     @Test
     public void testSetGetProfile() {
         final SeeAlso seeAlso = new SeeAlso(URI.create(myID), ResourceTypes.TEXT);
-        final String url = LOREM_IPSUM.getUrl();
+        final String url = myLoremIpsum.getUrl();
 
         assertEquals(URI.create(url), seeAlso.setProfile(url).getProfile().get());
     }
@@ -71,7 +71,7 @@ public class SeeAlsoTest extends AbstractTest {
     @Test
     public void testSetGetProfileURI() {
         final SeeAlso seeAlso = new SeeAlso(URI.create(myID), ResourceTypes.TEXT);
-        final URI uri = URI.create(LOREM_IPSUM.getUrl());
+        final URI uri = URI.create(myLoremIpsum.getUrl());
 
         assertEquals(uri, seeAlso.setProfile(uri).getProfile().get());
     }
@@ -119,7 +119,7 @@ public class SeeAlsoTest extends AbstractTest {
      */
     @Test
     public void testSetGetLabel() {
-        final String text = LOREM_IPSUM.getWords(4);
+        final String text = myLoremIpsum.getWords(4);
         final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.DATASET);
 
         assertEquals(Optional.of(new Label(text)), seeAlso.setLabel(text).getLabel());

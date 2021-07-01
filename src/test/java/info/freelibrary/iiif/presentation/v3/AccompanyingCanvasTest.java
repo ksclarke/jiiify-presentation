@@ -1,7 +1,9 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import static org.junit.Assert.*;
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,13 +15,12 @@ import java.util.regex.Pattern;
 import org.junit.Before;
 import org.junit.Test;
 
+import info.freelibrary.util.StringUtils;
+
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.ids.MinterFactory;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
-import info.freelibrary.util.StringUtils;
-
-import io.vertx.core.json.JsonObject;
 
 /**
  * Tests of {@link AccompanyingCanvas}.
@@ -126,19 +127,6 @@ public class AccompanyingCanvasTest {
     }
 
     /**
-     * Tests reading accompanying canvas from JSON object.
-     *
-     * @throws IOException If there is trouble reading the test fixture
-     */
-    @Test
-    public final void testCanvasFromJSON() throws IOException {
-        final JsonObject json = new JsonObject(getFixture(Canvas.class));
-        final Canvas canvas = Canvas.fromJSON(json);
-
-        assertEquals(json, canvas.toJSON());
-    }
-
-    /**
      * Tests reading accompanying canvas from string.
      *
      * @throws IOException If there is trouble reading the test fixture
@@ -146,22 +134,9 @@ public class AccompanyingCanvasTest {
     @Test
     public final void testCanvasFromString() throws IOException {
         final String json = getFixture(Canvas.class);
-        final Canvas canvas = Canvas.fromString(json);
+        final Canvas canvas = Canvas.from(json);
 
-        assertEquals(new JsonObject(json), canvas.toJSON());
-    }
-
-    /**
-     * Tests reading accompanying canvas from JSON object.
-     *
-     * @throws IOException If there is trouble reading the test fixture
-     */
-    @Test
-    public final void testCollectionFromJSON() throws IOException {
-        final JsonObject json = new JsonObject(getFixture(Collection.class));
-        final Collection collection = Collection.fromJSON(json);
-
-        assertEquals(json, collection.toJSON());
+        assertEquals(json, canvas.toString());
     }
 
     /**
@@ -172,22 +147,9 @@ public class AccompanyingCanvasTest {
     @Test
     public final void testCollectionFromString() throws IOException {
         final String json = getFixture(Collection.class);
-        final Collection collection = Collection.fromString(json);
+        final Collection collection = Collection.from(json);
 
-        assertEquals(new JsonObject(json), collection.toJSON());
-    }
-
-    /**
-     * Tests reading accompanying canvas from JSON object.
-     *
-     * @throws IOException If there is trouble reading the test fixture
-     */
-    @Test
-    public final void testManifestFromJSON() throws IOException {
-        final JsonObject json = new JsonObject(getFixture(Manifest.class));
-        final Manifest manifest = Manifest.fromJSON(json);
-
-        assertEquals(json, manifest.toJSON());
+        assertEquals(json, collection.toString());
     }
 
     /**
@@ -198,22 +160,9 @@ public class AccompanyingCanvasTest {
     @Test
     public final void testManifestFromString() throws IOException {
         final String json = getFixture(Manifest.class);
-        final Manifest manifest = Manifest.fromString(json);
+        final Manifest manifest = Manifest.from(json);
 
-        assertEquals(new JsonObject(json), manifest.toJSON());
-    }
-
-    /**
-     * Tests reading accompanying canvas from JSON object.
-     *
-     * @throws IOException If there is trouble reading the test fixture
-     */
-    @Test
-    public final void testRangeFromJSON() throws IOException {
-        final JsonObject json = new JsonObject(getFixture(Range.class));
-        final Range range = Range.fromJSON(json);
-
-        assertEquals(json, range.toJSON());
+        assertEquals(json, manifest.toString());
     }
 
     /**
@@ -224,9 +173,9 @@ public class AccompanyingCanvasTest {
     @Test
     public final void testRangeFromString() throws IOException {
         final String json = getFixture(Range.class);
-        final Range range = Range.fromString(json);
+        final Range range = Range.from(json);
 
-        assertEquals(new JsonObject(json), range.toJSON());
+        assertEquals(json, range.toString());
     }
 
     /**
@@ -238,7 +187,7 @@ public class AccompanyingCanvasTest {
      */
     private String getFixture(final Class<?> aClass) throws IOException {
         final String className = aClass.getSimpleName().toLowerCase(Locale.US);
-        return StringUtils.read(new File(TestUtils.TEST_DIR, StringUtils.format(FILE, className)));
+        return format(StringUtils.read(new File(TestUtils.TEST_DIR, StringUtils.format(FILE, className))));
     }
 
 }

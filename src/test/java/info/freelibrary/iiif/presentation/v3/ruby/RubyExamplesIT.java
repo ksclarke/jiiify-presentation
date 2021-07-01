@@ -23,8 +23,6 @@ import info.freelibrary.util.StringUtils;
 import info.freelibrary.iiif.presentation.v3.cookbooks.AbstractCookbookTest;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
-import io.vertx.core.json.JsonObject;
-
 /**
  * A test that runs the Ruby examples and makes sure that the outputs are expected. Since we're testing the examples
  * themselves, rather than the actual library's code, all tests are run in a single JUnit test (and count as one test).
@@ -51,7 +49,7 @@ public class RubyExamplesIT extends AbstractCookbookTest {
                 container.setWriter(outWriter);
                 container.runScriptlet(PathType.ABSOLUTE, rubyFile.getAbsolutePath());
 
-                assertEquals(getExpected(rubyFile), normalizeIDs(new JsonObject(outWriter.toString())));
+                assertEquals(getExpected(rubyFile), normalizeIDs(outWriter.toString()));
             }
         }
     }
@@ -78,7 +76,7 @@ public class RubyExamplesIT extends AbstractCookbookTest {
             throw new FileNotFoundException(expectedFile.getAbsolutePath());
         }
 
-        return normalizeIDs(new JsonObject(StringUtils.read(expectedFile, StandardCharsets.UTF_8)));
+        return normalizeIDs(StringUtils.read(expectedFile, StandardCharsets.UTF_8));
     }
 
 }

@@ -10,17 +10,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import info.freelibrary.util.warnings.PMD;
 
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-
-import io.vertx.core.json.JsonObject;
 
 /**
  * A content resource for other types of resources than those described by the
  * <a href="http://iiif.io/api/presentation/3/">IIIF Presentation API</a> specification. The format returned by this
- * class is always JSON. Look in the {@link JsonObject} if the wrapped context has a format in its JSON representation.
+ * class is always JSON. Look in the {@link JsonNode} if the wrapped context has a format in its JSON representation.
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE })
 public class OtherContent implements AnnotationBody<OtherContent>, ContentResource<OtherContent> {
@@ -36,17 +37,17 @@ public class OtherContent implements AnnotationBody<OtherContent>, ContentResour
     private String myType;
 
     /**
-     * The other content's JSON wrapped in a JsonObject.
+     * The other content's JSON wrapped in a JsonNode.
      */
-    private JsonObject myJsonObject;
+    private JsonNode myJsonNode;
 
     /**
      * Creates a generic content resource.
      *
-     * @param aJsonObject Unspecified JSON
+     * @param aJsonNode Unspecified JSON
      */
-    public OtherContent(final JsonObject aJsonObject) {
-        myJsonObject = initializeObject(aJsonObject);
+    public OtherContent(final JsonNode aJsonNode) {
+        myJsonNode = initializeObject(aJsonNode);
     }
 
     @Override
@@ -96,29 +97,29 @@ public class OtherContent implements AnnotationBody<OtherContent>, ContentResour
     }
 
     /**
-     * Updates the content of this resource with the supplied JSON content. Changes to the JsonObject after it's been
-     * used to update this resource are not persisted. Another call to <code>setJSON(JsonObject)</code> is required to
-     * persist any additional changes.
+     * Updates the content of this resource with the supplied JSON content. Changes to the JsonNode after it's been used
+     * to update this resource are not persisted. Another call to <code>setJSON(JsonNode)</code> is required to persist
+     * any additional changes.
      *
-     * @param aJsonObject A JSON object
+     * @param aJsonNode A JSON node
      * @return This content
      */
     @JsonIgnore
-    public OtherContent setJSON(final JsonObject aJsonObject) {
-        myJsonObject = initializeObject(aJsonObject.copy());
+    public OtherContent setJSON(final JsonNode aJsonNode) {
+        myJsonNode = initializeObject(aJsonNode.deepCopy());
         return this;
     }
 
     /**
-     * Gets a JSON representation of this resource. Changes to the returned JsonObject are not automatically propagated
-     * back to this resource. If the JsonObject is modified, you must use the <code>setJSON(JsonObject)</code> method to
+     * Gets a JSON representation of this resource. Changes to the returned JsonNode are not automatically propagated
+     * back to this resource. If the JsonNode is modified, you must use the <code>setJSON(JsonNode)</code> method to
      * persist those modifications.
      *
      * @return A JSON representation of this content resource
      */
     @JsonIgnore
-    public JsonObject getJSON() {
-        return myJsonObject.copy();
+    public JsonNode getJSON() {
+        return myJsonNode.deepCopy();
     }
 
     /**
@@ -129,7 +130,7 @@ public class OtherContent implements AnnotationBody<OtherContent>, ContentResour
     @JsonValue
     @SuppressWarnings(PMD.UNUSED_PRIVATE_METHOD) // It's used by Jackson's serialization processes
     private Map<String, Object> toObjectMap() { // NOPMD
-        return myJsonObject.getMap();
+        return JSON.convertValue(myJsonNode, new TypeReference<Map<String, Object>>() {});
     }
 
     /**
@@ -143,21 +144,24 @@ public class OtherContent implements AnnotationBody<OtherContent>, ContentResour
     }
 
     /**
-     * Initializes this object with content from the supplied JsonObject.
+     * Initializes this object with content from the supplied JsonNode.
      *
-     * @param aJsonObject JSON content
-     * @return The supplied JsonObject
+     * @param aJsonNode JSON content
+     * @return The supplied JsonNode
      */
-    private JsonObject initializeObject(final JsonObject aJsonObject) {
-        if (aJsonObject.containsKey(JsonKeys.ID)) {
-            myID = URI.create(aJsonObject.getString(JsonKeys.ID));
+    private JsonNode initializeObject(final JsonNode aJsonNode) {
+        final JsonNode idNode = aJsonNode.get(JsonKeys.ID);
+        final JsonNode typeNode = aJsonNode.get(JsonKeys.TYPE);
+
+        if (idNode != null && idNode.isTextual()) {
+            myID = URI.create(idNode.textValue());
         }
 
-        if (aJsonObject.containsKey(JsonKeys.ID)) {
-            myType = aJsonObject.getString(JsonKeys.TYPE);
+        if (typeNode != null && typeNode.isTextual()) {
+            myType = typeNode.textValue();
         }
 
-        return aJsonObject;
+        return aJsonNode;
     }
 
 }

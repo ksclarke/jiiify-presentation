@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static info.freelibrary.util.Constants.EMPTY;
+
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -13,10 +15,9 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-
-import io.vertx.core.json.Json;
 
 /**
  * Deserializes a Thumbnail.
@@ -58,19 +59,19 @@ class ContentResourceDeserializer extends StdDeserializer<ContentResource<?>> {
             throws IOException, JsonProcessingException {
         final TreeNode treeNode = aParser.getCodec().readTree(aParser);
 
-        switch (treeNode.get(JsonKeys.TYPE).toString().replace("\"", "")) {
+        switch (treeNode.get(JsonKeys.TYPE).toString().replace("\"", EMPTY)) {
             case ResourceTypes.DATASET:
-                return Json.decodeValue(treeNode.toString(), DatasetContent.class);
+                return JSON.getReader(DatasetContent.class).readValue(treeNode.toString());
             case ResourceTypes.IMAGE:
-                return Json.decodeValue(treeNode.toString(), ImageContent.class);
+                return JSON.getReader(ImageContent.class).readValue(treeNode.toString());
             case ResourceTypes.MODEL:
-                return Json.decodeValue(treeNode.toString(), ModelContent.class);
+                return JSON.getReader(ModelContent.class).readValue(treeNode.toString());
             case ResourceTypes.SOUND:
-                return Json.decodeValue(treeNode.toString(), SoundContent.class);
+                return JSON.getReader(SoundContent.class).readValue(treeNode.toString());
             case ResourceTypes.TEXT:
-                return Json.decodeValue(treeNode.toString(), TextContent.class);
+                return JSON.getReader(TextContent.class).readValue(treeNode.toString());
             case ResourceTypes.VIDEO:
-                return Json.decodeValue(treeNode.toString(), VideoContent.class);
+                return JSON.getReader(VideoContent.class).readValue(treeNode.toString());
             default:
                 throw new JsonParseException(aParser, LOGGER.getMessage(MessageCodes.JPA_056, treeNode.toString()));
         }

@@ -1,27 +1,26 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import com.thedeanda.lorem.LoremIpsum;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import info.freelibrary.iiif.presentation.v3.AbstractTest;
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-
-import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
 
 /**
  * Tests a label.
  */
 public class LabelTest extends AbstractTest {
-
-    private static final String ASDF = "asdf";
 
     private static final String AAAA = "aaaa";
 
@@ -31,9 +30,7 @@ public class LabelTest extends AbstractTest {
 
     private Manifest myManifest;
 
-    private JsonObject myJSON;
-
-    private LoremIpsum myLorem;
+    private ObjectNode myJSON;
 
     /**
      * Sets up the testing environment.
@@ -41,8 +38,7 @@ public class LabelTest extends AbstractTest {
     @Before
     public void setUp() {
         myManifest = new Manifest(AAAA, "bbbb");
-        myJSON = new JsonObject().put(JsonKeys.CONTEXT, "http://iiif.io/api/presentation/3/context.json");
-        myLorem = LoremIpsum.getInstance();
+        myJSON = JSON.createObjectNode().put(JsonKeys.CONTEXT, "http://iiif.io/api/presentation/3/context.json");
     }
 
     /**
@@ -50,7 +46,7 @@ public class LabelTest extends AbstractTest {
      */
     @Test
     public void testValueConstructor() {
-        final String labelText = myLorem.getWords(3, 6);
+        final String labelText = myLoremIpsum.getWords(3, 6);
         final Label label = new Label(new I18n(ENG, labelText));
 
         assertEquals(labelText, label.getString());
@@ -60,28 +56,29 @@ public class LabelTest extends AbstractTest {
      * Tests constructing a label.
      */
     @Test
-    public void testSingleLabelObj() {
-        final JsonObject labelJSON = new JsonObject();
+    public void testSingleLabelObj() throws JsonProcessingException {
+        final String labelText = myLoremIpsum.getWords(3, 6);
 
-        myManifest.setLabel(new Label(ASDF));
-        labelJSON.put(NONE, new JsonArray().add(ASDF));
-        myJSON.put(JsonKeys.TYPE, ResourceTypes.MANIFEST).put(JsonKeys.ID, AAAA).put(JsonKeys.LABEL, labelJSON);
+        myJSON.put(JsonKeys.ID, AAAA).put(JsonKeys.TYPE, ResourceTypes.MANIFEST).set(JsonKeys.LABEL,
+                JSON.createObjectNode().set(NONE, JSON.createArrayNode().add(labelText)));
 
-        assertEquals(myJSON, JsonObject.mapFrom(myManifest));
+        assertEquals(JSON.getWriter(JsonNode.class).writeValueAsString(myJSON),
+                format(JSON.getWriter(Manifest.class).writeValueAsString(myManifest.setLabel(new Label(labelText)))));
     }
 
     /**
      * Tests setting a single label.
      */
     @Test
-    public void testSingleLabel() {
-        final JsonObject labelJSON = new JsonObject();
+    public void testSingleLabel() throws JsonProcessingException {
+        final String labelText = myLoremIpsum.getWords(3, 6);
 
-        myManifest.setLabel(ASDF);
-        labelJSON.put(NONE, new JsonArray().add(ASDF));
-        myJSON.put(JsonKeys.LABEL, labelJSON).put(JsonKeys.ID, AAAA).put(JsonKeys.TYPE, ResourceTypes.MANIFEST);
+        myManifest.setLabel(labelText);
+        myJSON.put(JsonKeys.ID, AAAA).put(JsonKeys.TYPE, ResourceTypes.MANIFEST).set(JsonKeys.LABEL,
+                JSON.createObjectNode().set(NONE, JSON.createArrayNode().add(labelText)));
 
-        assertEquals(myJSON, JsonObject.mapFrom(myManifest));
+        assertEquals(format(JSON.getWriter(JsonNode.class).writeValueAsString(myJSON)),
+                format(JSON.getWriter(Manifest.class).writeValueAsString(myManifest)));
     }
 
 }

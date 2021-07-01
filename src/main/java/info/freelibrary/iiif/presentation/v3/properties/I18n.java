@@ -15,15 +15,16 @@ import java.util.function.Consumer;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.PMD;
 
+import info.freelibrary.iiif.presentation.v3.JsonParsingException;
 import info.freelibrary.iiif.presentation.v3.utils.I18nUtils;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-
-import io.vertx.core.json.JsonObject;
 
 /**
  * An internationalization. String values without a corresponding language tag should use "none" (which is represented
@@ -285,23 +286,13 @@ public class I18n implements Iterable<String> {
         return this;
     }
 
-    /**
-     * Returns a JSON representation of the internationalization.
-     *
-     * @return A JSON representation of the internationalization
-     */
-    public JsonObject toJSON() {
-        return JsonObject.mapFrom(this);
-    }
-
-    /**
-     * Gets a string representation of the internationalization.
-     *
-     * @return The string representation of the internationalization
-     */
     @Override
     public String toString() {
-        return toJSON().encodePrettily();
+        try {
+            return JSON.getWriter(getClass()).writeValueAsString(this);
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details);
+        }
     }
 
     /**

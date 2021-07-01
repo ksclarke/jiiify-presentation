@@ -6,33 +6,24 @@ import static info.freelibrary.util.Constants.HASH;
 import java.net.URI;
 import java.util.UUID;
 
-import org.junit.BeforeClass;
-
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.thedeanda.lorem.LoremIpsum;
 
-import io.vertx.core.json.jackson.DatabindCodec;
+import info.freelibrary.util.StringUtils;
 
 /**
  * An abstract test.
  */
 public abstract class AbstractTest {
 
-    protected static LoremIpsum LOREM_IPSUM;
+    /**
+     * A URL ID pattern.
+     */
+    private static final String URL_PATTERN = "https://iiif.example.com/{}";
 
     /**
-     * Sets up the testing environment.
-     *
-     * @throws Exception If the testing environment can't be set up.
+     * A tool to create randomized text.
      */
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-        // We need to register the jackson-databind-jdk8 module, among others
-        DatabindCodec.mapper().registerModule(new Jdk8Module().configureAbsentsAsNulls(true));
-
-        // Create an instance of our LoremIpsum generator for test data
-        LOREM_IPSUM = LoremIpsum.getInstance();
-    }
+    protected LoremIpsum myLoremIpsum = LoremIpsum.getInstance();
 
     /**
      * Gets an ID for testing purposes.
@@ -41,6 +32,15 @@ public abstract class AbstractTest {
      */
     protected String getID() {
         return UUID.randomUUID().toString();
+    }
+
+    /**
+     * Gets a URL representing an ID.
+     *
+     * @return An ID URL
+     */
+    protected String getURL() {
+        return StringUtils.format(URL_PATTERN, getID());
     }
 
     /**

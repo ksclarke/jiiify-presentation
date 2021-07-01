@@ -9,15 +9,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.Eclipse;
 
+import info.freelibrary.iiif.presentation.v3.JsonParsingException;
 import info.freelibrary.iiif.presentation.v3.MediaType;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-
-import io.vertx.core.json.Json;
-import io.vertx.core.json.JsonObject;
 
 /**
  * A link to a machine readable document that semantically describes the resource with the seeAlso property, such as an
@@ -189,16 +189,6 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
         return (SeeAlso) super.setLanguages(aLangArray);
     }
 
-    @Override
-    public JsonObject toJSON() {
-        return JsonObject.mapFrom(this);
-    }
-
-    @Override
-    public String toString() {
-        return toJSON().encodePrettily();
-    }
-
     /**
      * A private getter that Jackson uses in deserialization.
      *
@@ -214,21 +204,15 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
     /**
      * Returns a SeeAlso from its JSON representation.
      *
-     * @param aJsonObject A SeeAlso in JSON form
-     * @return This SeeAlso
-     */
-    public static SeeAlso fromJSON(final JsonObject aJsonObject) {
-        return Json.decodeValue(aJsonObject.toString(), SeeAlso.class);
-    }
-
-    /**
-     * Returns a SeeAlso from its JSON representation.
-     *
      * @param aJsonString A SeeAlso in string form
-     * @return This SeeAlso
+     * @return A SeeAlso
      */
-    public static SeeAlso fromString(final String aJsonString) {
-        return fromJSON(new JsonObject(aJsonString));
+    public static SeeAlso from(final String aJsonString) {
+        try {
+            return JSON.getReader(SeeAlso.class).readValue(aJsonString);
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details);
+        }
     }
 
 }

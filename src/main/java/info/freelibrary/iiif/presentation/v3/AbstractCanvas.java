@@ -4,9 +4,11 @@ package info.freelibrary.iiif.presentation.v3; // NOPMD
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -14,8 +16,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import info.freelibrary.util.Constants;
@@ -29,11 +33,9 @@ import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-
-import io.vertx.core.json.JsonObject;
-import io.vertx.core.json.jackson.DatabindCodec;
 
 /**
  * A virtual container that represents a page or view and has content resources associated with it or with parts of it.
@@ -51,6 +53,11 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      * The abstract canvas' logger.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractCanvas.class, MessageCodes.BUNDLE);
+
+    /**
+     * A Jackson serialization filter name for width and height.
+     */
+    private static final String WIDTH_HEIGHT_FILTER = "JPv3WidthHeightFilter";
 
     /**
      * A spatial constant.
@@ -559,35 +566,34 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     }
 
     /**
-     * Returns a JsonObject of the Canvas.
-     *
-     * @return The canvas as a JSON object
-     */
-    public JsonObject toJSON() {
-        final JsonObject json = JsonObject.mapFrom(this);
-
-        // If zero width/height and/or duration, we're outputting a canvas reference so shouldn't include them
-        if (json.containsKey(JsonKeys.WIDTH) && json.containsKey(JsonKeys.HEIGHT) &&
-                json.getInteger(JsonKeys.WIDTH) == 0 && json.getInteger(JsonKeys.HEIGHT) == 0) {
-            json.remove(JsonKeys.WIDTH);
-            json.remove(JsonKeys.HEIGHT);
-        }
-
-        if (json.containsKey(JsonKeys.DURATION) && json.getFloat(JsonKeys.DURATION) == ZERO_DURATION) {
-            json.remove(JsonKeys.DURATION);
-        }
-
-        return json;
-    }
-
-    /**
      * Converts the canvas to its string/JSON representation.
      *
      * @return A string representation of the canvas
      */
     @Override
     public String toString() {
-        return toJSON().encode();
+        final SimpleFilterProvider filterProvider = new SimpleFilterProvider();
+        final Set<String> filtered = new HashSet<>();
+
+        // Don't write duration if it's zero
+        if (myDuration == 0F) { // NOPMD
+            filtered.add(JsonKeys.DURATION);
+        }
+
+        // Don't write width and height if they're both zero
+        if (myHeight == 0 && myWidth == 0) {
+            filtered.add(JsonKeys.HEIGHT);
+            filtered.add(JsonKeys.WIDTH);
+        }
+
+        // These are the things we filter when we serialize to JSON
+        filterProvider.addFilter(WIDTH_HEIGHT_FILTER, SimpleBeanPropertyFilter.serializeAllExcept(filtered));
+
+        try {
+            return JSON.getWriter(filterProvider).writeValueAsString(this);
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details);
+        }
     }
 
     /**
@@ -841,8 +847,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     @JsonIgnore
     private AnnotationPage<? extends Annotation<?>> getDeserializedPage(final Map<?, ?> aAnnotationPageMap) {
         final List<?> items = (List<?>) aAnnotationPageMap.get(JsonKeys.ITEMS);
-        final ObjectMapper mapper = DatabindCodec.mapper();
-        final TypeFactory typeFactory = mapper.getTypeFactory();
+        final TypeFactory typeFactory = JSON.getTypeFactory();
         final JavaType javaType;
 
         // If there are annotations, we can check whether they are supplementing or "other"
@@ -861,14 +866,14 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
             // Either supplementing annotation or mixed annotations (which may include supplementing annotations)
             if (supplementingAnnotations) {
                 javaType = typeFactory.constructParametricType(AnnotationPage.class, SupplementingAnnotation.class);
-                return mapper.convertValue(aAnnotationPageMap, javaType);
+                return JSON.convertValue(aAnnotationPageMap, javaType);
             } else {
                 javaType = typeFactory.constructParametricType(AnnotationPage.class, Annotation.class);
-                return mapper.convertValue(aAnnotationPageMap, javaType);
+                return JSON.convertValue(aAnnotationPageMap, javaType);
             }
         } else {
             javaType = typeFactory.constructParametricType(AnnotationPage.class, Annotation.class);
-            return mapper.convertValue(aAnnotationPageMap, javaType);
+            return JSON.convertValue(aAnnotationPageMap, javaType);
         }
     }
 }

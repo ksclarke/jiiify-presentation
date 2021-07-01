@@ -1,31 +1,35 @@
 {
-  "type": "Canvas",
-  "label": { "none": [ "p. 1" ] },
   "id": "https://example.org/iiif/lp1/side1/track1/canvas-1",
+  "type": "Canvas",
+  "label": {
+    "none": [
+      "p. 1"
+    ]
+  },
   "duration": 3600,
   "items": [
     {
-      "type": "AnnotationPage",
       "id": "https://example.org/iiif/lp1/side1/track1/annotation/painting-page-1",
+      "type": "AnnotationPage",
       "items": [
         {
-          "type": "Annotation",
           "id": "https://example.org/iiif/lp1/side1/track1/annotation/painting-1",
+          "type": "Annotation",
           "motivation": "painting",
           "body": {
             "type": "Choice",
             "items": [
               {
-                "type": "Sound",
                 "id": "https://example.org/iiif/lp1/side1/track1.mp3",
-                "duration": 300,
-                "format": "audio/mpeg"
+                "type": "Sound",
+                "format": "audio/mpeg",
+                "duration": 300
               },
               {
-                "type": "Sound",
                 "id": "https://example.org/iiif/lp1/side1/track1-alternate-mix.mp3",
-                "duration": 300,
-                "format": "audio/mpeg"
+                "type": "Sound",
+                "format": "audio/mpeg",
+                "duration": 300
               }
             ]
           },
@@ -40,14 +44,14 @@
           }
         },
         {
-          "type": "Annotation",
           "id": "https://example.org/iiif/lp1/side1/track1/annotation/painting-2",
+          "type": "Annotation",
           "motivation": "painting",
           "body": {
-            "type": "Sound",
             "id": "https://example.org/iiif/lp1/side1/track2.mp3",
-            "duration": 300,
-            "format": "audio/mpeg"
+            "type": "Sound",
+            "format": "audio/mpeg",
+            "duration": 300
           },
           "target": {
             "type": "SpecificResource",

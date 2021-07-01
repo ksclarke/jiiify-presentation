@@ -1,25 +1,25 @@
 {
     "@context": "http://iiif.io/api/presentation/3/context.json",
-    "type": "Manifest",
     "id": "https://example.org/iiif/podcast1/manifest",
+    "type": "Manifest",
     "label": { "en": [ "Audio Example 1" ] },
     "items": [
       {
-        "type": "Canvas",
         "id": "https://example.org/iiif/podcast1/canvas/segment1",
+        "type": "Canvas",
         "duration": 3600,
         "items": [
           {
-            "type": "AnnotationPage",
             "id": "https://example.org/iiif/podcast1/annotation/segment1/page",
+            "type": "AnnotationPage",
             "items": [
               {
-                "type": "Annotation",
                 "id": "https://example.org/iiif/podcast1/annotation/segment1-audio",
+                "type": "Annotation",
                 "motivation": "painting",
                 "body": {
-                  "type": "Sound",
                   "id": "http://iiif.io/api/presentation/3/example/fixtures/resources/audio-sample.mp4",
+                  "type": "Sound",
                   "format": "audio/mp4",
                   "duration": 3600
                 },

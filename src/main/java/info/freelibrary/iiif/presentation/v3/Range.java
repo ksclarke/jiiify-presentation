@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import info.freelibrary.util.I18nRuntimeException;
@@ -30,11 +31,9 @@ import info.freelibrary.iiif.presentation.v3.properties.Start;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.RangeBehavior;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-
-import io.vertx.core.json.Json;
-import io.vertx.core.json.JsonObject;
 
 /**
  * An ordered list of canvases and/or further ranges. Ranges allow canvases, or parts thereof, to be grouped together in
@@ -42,7 +41,7 @@ import io.vertx.core.json.JsonObject;
  * non-content-bearing pages, the table of contents or similar. Equally, physical features might be important such as
  * quires or gatherings, sections that have been added later and so forth.
  */
-@SuppressWarnings({ "PMD.ExcessivePublicCount", "PMD.ExcessiveImports" })
+@SuppressWarnings({ "PMD.ExcessivePublicCount", "PMD.ExcessiveImports", "PMD.GodClass" })
 public class Range extends NavigableResource<Range> implements Resource<Range> {
 
     /**
@@ -447,33 +446,17 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     /**
-     * Returns a JsonObject of the range.
-     *
-     * @return A JSON representation of the range
-     */
-    public JsonObject toJSON() {
-        return JsonObject.mapFrom(this);
-    }
-
-    /**
      * Gets a string representation of a range.
      *
      * @return A string representation of a range
      */
     @Override
     public String toString() {
-        return toJSON().encode();
-    }
-
-    /**
-     * Returns a range from its JSON representation.
-     *
-     * @param aJsonObject A range in JSON form
-     * @return The range
-     */
-    @JsonIgnore
-    public static Range fromJSON(final JsonObject aJsonObject) {
-        return Json.decodeValue(aJsonObject.toString(), Range.class);
+        try {
+            return JSON.getWriter(Range.class).writeValueAsString(this);
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details);
+        }
     }
 
     /**
@@ -483,8 +466,12 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
      * @return The range
      */
     @JsonIgnore
-    public static Range fromString(final String aJsonString) {
-        return fromJSON(new JsonObject(aJsonString));
+    public static Range from(final String aJsonString) {
+        try {
+            return JSON.getReader(Range.class).readValue(aJsonString);
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details);
+        }
     }
 
     /**

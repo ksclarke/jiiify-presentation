@@ -14,6 +14,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.Logger;
@@ -34,12 +36,10 @@ import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CollectionBehavior;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.URIs;
-
-import io.vertx.core.json.Json;
-import io.vertx.core.json.JsonObject;
 
 /**
  * An ordered list of {@link Manifest}s and/or {@link Collection}s. Collections allow easy advertising and browsing of
@@ -447,52 +447,49 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     }
 
     /**
-     * Returns a JsonObject of the Collection manifest.
+     * Returns a JsonNode of the Collection manifest.
      *
-     * @return A JsonObject of the Collection manifest
-     */
-    @JsonIgnore
-    public JsonObject toJSON() {
-        return JsonObject.mapFrom(this);
-    }
-
-    /**
-     * Returns a string/JSON representation of the collection.
-     *
-     * @return A string representation of the collection
+     * @return A JsonNode of the Collection manifest
      */
     @Override
-    @JsonIgnore
     public String toString() {
-        return toJSON().encodePrettily();
-    }
-
-    /**
-     * Returns a collection manifest from its JSON representation.
-     *
-     * @param aJsonObject A collection manifest in JSON form
-     * @return The collection manifest
-     */
-    @JsonIgnore
-    public static Collection fromJSON(final JsonObject aJsonObject) {
-        final String type = aJsonObject.getString(JsonKeys.TYPE);
-
-        if (!ResourceTypes.COLLECTION.equals(type)) {
-            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_119, ResourceTypes.COLLECTION, type));
+        try {
+            return JSON.getWriter(Collection.class).writeValueAsString(this);
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details);
         }
-
-        return Json.decodeValue(aJsonObject.toString(), Collection.class);
     }
 
     /**
      * Returns a collection manifest from its JSON representation.
      *
-     * @param aJsonString A collection manifest in string form
+     * @param aJsonString A collection manifest in JSON form
      * @return The collection manifest
      */
     @JsonIgnore
-    public static Collection fromString(final String aJsonString) {
-        return Json.decodeValue(aJsonString, Collection.class);
+    @SuppressWarnings("PMD.PreserveStackTrace")
+    public static Collection from(final String aJsonString) {
+        try {
+            return JSON.getReader(Collection.class).readValue(aJsonString);
+        } catch (final JsonProcessingException details) {
+            try {
+                final JsonNode jsonNode = JSON.getReader(JsonNode.class).readValue(aJsonString);
+                final JsonNode typeNode = jsonNode.get(JsonKeys.TYPE);
+
+                if (typeNode != null && typeNode.isTextual()) {
+                    final String type = typeNode.textValue();
+
+                    if (!ResourceTypes.COLLECTION.equals(type)) {
+                        throw new IllegalArgumentException(
+                                LOGGER.getMessage(MessageCodes.JPA_119, ResourceTypes.COLLECTION, type), details);
+                    }
+                }
+            } catch (final JsonProcessingException ignored) {
+                // This is intentionally ignored; this first exception is the one we care about
+            }
+
+            throw new JsonParsingException(details);
+        }
     }
 
     /**

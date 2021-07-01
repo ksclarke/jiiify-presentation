@@ -6,8 +6,8 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.TestConstants;
 
 /**
@@ -26,7 +26,7 @@ public class TimeModeTest {
     @Test
     public final void testJsonSerialization() throws JsonProcessingException {
         assertEquals(TestConstants.QUOTE + VALUES[2] + TestConstants.QUOTE,
-                new ObjectMapper().writeValueAsString(TimeMode.LOOP));
+                JSON.getWriter().writeValueAsString(TimeMode.LOOP));
     }
 
     /**

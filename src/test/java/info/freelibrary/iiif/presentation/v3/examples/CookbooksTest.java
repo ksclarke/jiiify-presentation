@@ -30,8 +30,6 @@ import info.freelibrary.iiif.presentation.v3.ids.MinterFactory;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
-import io.vertx.core.json.JsonObject;
-
 /**
  * Java tests creating the examples found in the cookbook recipes.
  */
@@ -104,8 +102,8 @@ public class CookbooksTest extends AbstractCookbookTest {
 
         System.out.println(manifest);
 
-        // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0001-mvm-image"), normalizeIDs(manifest.toJSON()));
+        // Don't include this in the example; it's just a sanity check HERE
+        assertEquals(getExpected("0001-mvm-image"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -131,7 +129,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0001-mvm-image"), normalizeIDs(manifest.toJSON()));
+        assertEquals(getExpected("0001-mvm-image"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -153,7 +151,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0002-mvm-audio"), normalizeIDs(manifest.toJSON()));
+        assertEquals(getExpected("0002-mvm-audio"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -179,7 +177,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0002-mvm-audio"), normalizeIDs(manifest.toJSON()));
+        assertEquals(getExpected("0002-mvm-audio"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -203,7 +201,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0003-mvm-video"), normalizeIDs(manifest.toJSON()));
+        assertEquals(getExpected("0003-mvm-video"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -231,7 +229,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0003-mvm-video"), normalizeIDs(manifest.toJSON()));
+        assertEquals(getExpected("0003-mvm-video"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -255,7 +253,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0004-canvas-size"), normalizeIDs(manifest.toJSON()));
+        assertEquals(getExpected("0004-canvas-size"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -282,7 +280,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0004-canvas-size"), normalizeIDs(manifest.toJSON()));
+        assertEquals(getExpected("0004-canvas-size"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -295,7 +293,7 @@ public class CookbooksTest extends AbstractCookbookTest {
     @Override
     protected String getExpected(final String aName) throws IOException {
         final File expectedFile = new File(StringUtils.format(EXPECTED, aName));
-        return normalizeIDs(new JsonObject(StringUtils.read(expectedFile, StandardCharsets.UTF_8)));
+        return normalizeIDs(StringUtils.read(expectedFile, StandardCharsets.UTF_8));
     }
 
 }

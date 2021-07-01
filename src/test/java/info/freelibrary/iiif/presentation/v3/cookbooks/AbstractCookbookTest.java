@@ -3,16 +3,24 @@ package info.freelibrary.iiif.presentation.v3.cookbooks;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-
-import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
 
 /**
  * An abstract class that other tests running the cookbooks as test fixtures can extend.
  */
 public abstract class AbstractCookbookTest {
+
+    /**
+     * A placeholder ID that can be ignore during a comparison.
+     */
+    private static final String PLACEHOLDER_ID = "ZEROED_OUT_ID";
 
     /**
      * A method to retrieve a test fixture JSON document.
@@ -35,38 +43,56 @@ public abstract class AbstractCookbookTest {
     }
 
     /**
+     * A convenience method that converts durations from doubles to floats.
+     *
+     * @param aJsonString A JSON string to be updated
+     * @return The JsonString that was fed to this method
+     * @throws JsonProcessingException If the JSON cannot be parsed
+     */
+    protected String updateDuration(final String aJsonString) throws JsonProcessingException {
+        final ObjectNode jsonNode = (ObjectNode) JSON.getReader().readTree(aJsonString);
+        final List<JsonNode> list = jsonNode.findParents(JsonKeys.DURATION);
+
+        if (list != null) {
+            for (final JsonNode node : list) {
+                final String duration = String.valueOf(node.get(JsonKeys.DURATION).asDouble());
+                ((ObjectNode) node).put(JsonKeys.DURATION, Float.valueOf(duration));
+            }
+        }
+
+        return jsonNode.toPrettyString();
+    }
+
+    /**
      * Since the minter's randomly generated IDs will differ from the ones in the expected JSON file, we normalize IDs.
      *
-     * @param aJsonObject A JsonObject whose IDs should be normalized
-     * @return The JsonObject with its IDs normalized
+     * @param aJsonString A JSON string whose IDs should be normalized
+     * @return The JSON string with its IDs normalized
      */
-    protected String normalizeIDs(final JsonObject aJsonObject) {
-        aJsonObject.forEach(entry -> {
-            final Object valueObj = entry.getValue();
-            final String valueClassName = valueObj.getClass().getSimpleName();
-            final String key = entry.getKey();
-            final String value = valueObj.toString();
+    protected String normalizeIDs(final String aJsonString) throws IOException {
+        final ObjectNode jsonNode = (ObjectNode) JSON.getReader().readTree(aJsonString);
 
-            // We ignore IDs... they're tested in other places
-            if (JsonKeys.ID.equals(key) ||
-                    (JsonKeys.TARGET.equals(key) || JsonKeys.SOURCE.equals(key)) && value.startsWith("http")) {
-                entry.setValue("ZEROED_OUT_ID");
+        normalizeID(JsonKeys.ID, jsonNode.findParents(JsonKeys.ID));
+        normalizeID(JsonKeys.SOURCE, jsonNode.findParents(JsonKeys.SOURCE));
+        normalizeID(JsonKeys.TARGET, jsonNode.findParents(JsonKeys.TARGET));
+
+        return jsonNode.toPrettyString();
+    }
+
+    /**
+     * Normalize a particular ID value.
+     *
+     * @param aKey A JSON key for the ID value to normalize
+     * @param aNodeList A list of parent nodes for the supplied JSON key
+     */
+    private void normalizeID(final String aKey, final List<JsonNode> aNodeList) {
+        if (aNodeList != null) {
+            for (final JsonNode node : aNodeList) {
+                if (node.get(aKey).asText().startsWith("http")) {
+                    ((ObjectNode) node).put(aKey, PLACEHOLDER_ID);
+                }
             }
-
-            // We want to check inside JsonObject(s) and JsonArray(s) too
-            if (valueClassName.equals(JsonObject.class.getSimpleName())) {
-                normalizeIDs((JsonObject) valueObj);
-            } else if (valueClassName.equals(JsonArray.class.getSimpleName())) {
-                ((JsonArray) valueObj).forEach(object -> {
-                    if (object instanceof JsonObject) {
-                        normalizeIDs((JsonObject) object);
-                    }
-                });
-            }
-        });
-
-        // We're modifying the same object, this is just a convenience
-        return aJsonObject.encodePrettily();
+        }
     }
 
 }

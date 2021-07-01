@@ -1,14 +1,15 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.selectors;
 
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import info.freelibrary.iiif.presentation.v3.AbstractTest;
-import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
-import io.vertx.core.json.JsonObject;
+import info.freelibrary.iiif.presentation.v3.AbstractTest;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 
 /**
  * Tests related to the PointSelector.
@@ -90,12 +91,9 @@ public class PointSelectorTest extends AbstractTest {
      * Tests the JSON serialization is what we expect (e.g., nulls are ignored).
      */
     @Test
-    public final void testSerialization() {
-        final JsonObject found = JsonObject.mapFrom(new PointSelector(10F));
-        final JsonObject expected = new JsonObject();
-
-        expected.put(PointSelector.T_COORDINATE, 10.0F).put(JsonKeys.TYPE, PointSelector.class.getSimpleName());
-
-        assertEquals(expected, found);
+    public final void testSerialization() throws JsonProcessingException {
+        assertEquals(format("{ \"type\" : \"PointSelector\", \"t\" : 10.0 }"),
+                format(JSON.getWriter(PointSelector.class).writeValueAsString(new PointSelector(10F))));
     }
+
 }

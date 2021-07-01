@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
@@ -13,8 +14,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import info.freelibrary.util.StringUtils;
-
-import io.vertx.core.json.JsonObject;
 
 /**
  * Tests canvas content on an annotation.
@@ -56,12 +55,12 @@ public class CanvasContentTest {
     public final void testDeSerialization() throws IOException {
         final String json =
                 StringUtils.read(new File("src/test/resources/json/canvas-content.json"), StandardCharsets.UTF_8);
-        final Manifest manifest = Manifest.fromString(json);
+        final Manifest manifest = Manifest.from(json);
         final Canvas canvas = manifest.getCanvases().get(0);
 
         assertEquals(1, canvas.getSupplementingPages().get(0).getAnnotations().size());
         assertEquals(1, canvas.getPaintingPages().get(0).getAnnotations().size());
-        assertEquals(new JsonObject(json), manifest.toJSON());
+        assertEquals(format(json), format(manifest.toString()));
     }
 
 }

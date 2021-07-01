@@ -8,15 +8,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.Eclipse;
 import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.properties.selectors.Selector;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-
-import io.vertx.core.json.Json;
-import io.vertx.core.json.JsonObject;
 
 /**
  * A specific resource that can reference a particular region, time frame, or other aspect of another resource.
@@ -133,18 +132,13 @@ public class SpecificResource {
         return mySource;
     }
 
-    /**
-     * Returns a JsonObject of the SpecificResource.
-     *
-     * @return The specific resource as a JSON object
-     */
-    public JsonObject toJSON() {
-        return JsonObject.mapFrom(this);
-    }
-
     @Override
     public String toString() {
-        return toJSON().encode();
+        try {
+            return JSON.getWriter(SpecificResource.class).writeValueAsString(this);
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details);
+        }
     }
 
     /**
@@ -198,23 +192,16 @@ public class SpecificResource {
     /**
      * Returns a SpecificResource from its JSON representation.
      *
-     * @param aJsonObject A specific resource in JSON form
-     * @return The specific resource
-     */
-    @JsonIgnore
-    public static SpecificResource fromJSON(final JsonObject aJsonObject) {
-        return Json.decodeValue(aJsonObject.toString(), SpecificResource.class);
-    }
-
-    /**
-     * Returns a SpecificResource from its JSON representation.
-     *
      * @param aJsonString A specific resource in string form
      * @return The specific resource
      */
     @JsonIgnore
-    public static SpecificResource fromString(final String aJsonString) {
-        return fromJSON(new JsonObject(aJsonString));
+    public static SpecificResource from(final String aJsonString) {
+        try {
+            return JSON.getReader(SpecificResource.class).readValue(aJsonString);
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details);
+        }
     }
 
 }

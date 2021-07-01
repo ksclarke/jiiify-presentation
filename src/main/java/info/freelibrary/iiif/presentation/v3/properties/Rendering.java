@@ -7,13 +7,13 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.Eclipse;
 
+import info.freelibrary.iiif.presentation.v3.JsonParsingException;
 import info.freelibrary.iiif.presentation.v3.MediaType;
-
-import io.vertx.core.json.Json;
-import io.vertx.core.json.JsonObject;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 
 /**
  * A resource that is an alternative, non-IIIF representation of the resource that has the <code>rendering</code>
@@ -170,32 +170,17 @@ public class Rendering extends AbstractLinkProperty<Rendering> {
     }
 
     /**
-     * Returns a JsonObject of this resource.
-     *
-     * @return A JsonObject of this resource
-     */
-    @Override
-    public JsonObject toJSON() {
-        return JsonObject.mapFrom(this);
-    }
-
-    /**
-     * Returns a rendering from its JSON representation.
-     *
-     * @param aJsonObject A rendering in JSON form
-     * @return This rendering
-     */
-    public static Rendering fromJSON(final JsonObject aJsonObject) {
-        return Json.decodeValue(aJsonObject.toString(), Rendering.class);
-    }
-
-    /**
      * Returns a rendering from its JSON representation.
      *
      * @param aJsonString A rendering in string form
+     * @throws JsonParsingException If the supplied JSON string cannot be successfully parsed
      * @return This rendering
      */
-    public static Rendering fromString(final String aJsonString) {
-        return fromJSON(new JsonObject(aJsonString));
+    public static Rendering from(final String aJsonString) {
+        try {
+            return JSON.getReader(Rendering.class).readValue(aJsonString);
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details);
+        }
     }
 }

@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.Eclipse;
 import info.freelibrary.util.warnings.JDK;
@@ -27,10 +28,8 @@ import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-
-import io.vertx.core.json.Json;
-import io.vertx.core.json.JsonObject;
 
 /**
  * A single canvas that provides additional content for use while rendering the resource. Examples include: 1) an image
@@ -534,21 +533,16 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> // NO
     /**
      * Returns an AccompanyingCanvas from its JSON representation.
      *
-     * @param aJsonObject An accompanying canvas in JSON form
-     * @return The accompanying canvas
-     */
-    public static AccompanyingCanvas fromJSON(final JsonObject aJsonObject) {
-        return Json.decodeValue(aJsonObject.toString(), AccompanyingCanvas.class);
-    }
-
-    /**
-     * Returns an AccompanyingCanvas from its JSON representation.
-     *
      * @param aJsonString An accompanying canvas in string form
+     * @throws JsonParsingException If there is trouble reading an accompanying canvas from the supplied string
      * @return The accompanying canvas
      */
-    public static AccompanyingCanvas fromString(final String aJsonString) {
-        return fromJSON(new JsonObject(aJsonString));
+    public static AccompanyingCanvas from(final String aJsonString) {
+        try {
+            return JSON.getReader(AccompanyingCanvas.class).readValue(aJsonString);
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details);
+        }
     }
 
 }
