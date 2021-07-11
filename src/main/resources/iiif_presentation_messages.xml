@@ -91,5 +91,14 @@
   <entry key="JPA-118">The supplied value isn't a valid collection item type: {}</entry>
   <entry key="JPA-119">The supplied JSON object does not look like it's a {}; its type is: {}</entry>
   <entry key="JPA-120">Testing Ruby example file: {}</entry>
+  <entry key="JPA-121">Errors found while parsing JSON Pointer: {}</entry>
+  <entry key="JPA-122">JSON Pointer successfully created: {}</entry>
+  <entry key="JPA-123">Running {} test: {}</entry>
+  <entry key="JPA-124">JSON Pointer '{}' references an array not a single '{}' as expected</entry>
+  <entry key="JPA-125">JSON Pointer '{}' references a single '{}' not an array as expected</entry>
+  <entry key="JPA-126">Array requested by empty JSON Pointer and single '{}' resource</entry>
+  <entry key="JPA-127">Requested class '{}' does not match that referenced by the JSON Pointer: {}</entry>
+  <entry key="JPA-128">JSON Pointer evaluation encountered an error: {}</entry>
+  <entry key="JPA-129">Requested token index '{}' is outside the capacity of the token list: {}</entry>
 
 </properties>

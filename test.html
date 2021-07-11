@@ -1,0 +1,17 @@
+<html>
+    <head>
+        <title>Bytecoder Test</title>
+    </head>
+    <body>
+        <script type="text/javascript" src="bytecoder.js"></script>
+        <script type="text/javascript">
+
+            console.log("Init");
+            bytecoder.bootstrap();
+            bytecoder.initializeFileIO();
+
+            bytecoder.exports.main();
+            console.log("Done");
+        </script>
+    </body>
+</html>

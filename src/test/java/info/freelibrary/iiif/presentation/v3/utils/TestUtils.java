@@ -17,10 +17,6 @@ public final class TestUtils {
 
     public static final String TEST_DIR = "src/test/resources/json";
 
-    private static final String ID_PATTERN = "\\\"id\\\":\\\"[a-zA-Z0-9\\-\\.\\:\\/\\,]*\\\"";
-
-    private static final String EMPTY_ID = "\"id\":\"\"";
-
     private TestUtils() {
     }
 

@@ -66,7 +66,6 @@
     <jsoup.version>1.13.1</jsoup.version>
     <combinatorics.version>3.3.0</combinatorics.version>
     <media.fragments.uri.version>2.4</media.fragments.uri.version>
-    <netty.native.version>2.0.40.Final</netty.native.version>
 
     <!-- GraalVM related property values -->
     <graalvm.version>21.1.0</graalvm.version>
@@ -78,6 +77,8 @@
     <freelib.maven.version>0.2.1</freelib.maven.version>
     <vertx.plugin.version>1.0.24</vertx.plugin.version>
     <os.plugin.version>1.4.0.Final</os.plugin.version>
+    <clean.plugin.version>3.1.0</clean.plugin.version>
+    <antlr4.version>4.9.2</antlr4.version>
 
     <!-- Test related versions -->
     <opencsv.version>4.6</opencsv.version>
@@ -133,6 +134,12 @@
       <artifactId>combinatoricslib3</artifactId>
       <version>${combinatorics.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.antlr</groupId>
+      <artifactId>antlr4-runtime</artifactId>
+      <version>${antlr4.version}</version>
+    </dependency>
+
     <!-- Below dependencies are only used for testing -->
     <dependency>
       <groupId>ch.qos.logback</groupId>
@@ -187,6 +194,52 @@
       </testResource>
     </testResources>
     <plugins>
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>${clean.plugin.version}</version>
+        <executions>
+          <execution>
+            <id>default-clean</id>
+            <configuration>
+              <filesets>
+                <fileset>
+                  <directory>${project.basedir}/src/main/generated/</directory>
+                  <includes>
+                    <include>info/</include>
+                    <include>*.tokens</include>
+                  </includes>
+                </fileset>
+              </filesets>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <useIncrementalCompilation>false</useIncrementalCompilation>
+          <generatedSourcesDirectory>src/main/generated</generatedSourcesDirectory>
+          <generatedTestSourcesDirectory>src/test/generated</generatedTestSourcesDirectory>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.antlr</groupId>
+        <artifactId>antlr4-maven-plugin</artifactId>
+        <version>${antlr4.version}</version>
+        <configuration>
+          <outputDirectory>src/main/generated</outputDirectory>
+        </configuration>
+        <executions>
+          <execution>
+            <id>antlr</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>antlr4</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
       <!-- Generate our MessageCodes class from the messages resource file -->
       <plugin>
         <groupId>info.freelibrary</groupId>
@@ -222,10 +275,16 @@
             <link>https://javadoc.io/doc/info.freelibrary/freelib-utils/${freelib.utils.version}/apidocs</link>
             <!-- <link>https://vertx.io/docs/apidocs/</link> -->
           </links>
+          <excludePackageNames>info.freelibrary.iiif.presentation.v3.utils.antlr4,info.freelibrary.iiif.presentation.v3.graalvm</excludePackageNames>
         </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-pmd-plugin</artifactId>
+        <configuration>
+          <excludeRoots>
+            <excludeRoot>target/generated-sources</excludeRoot>
+          </excludeRoots>
+        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-checkstyle-plugin</artifactId>
@@ -310,6 +369,8 @@
                 <buildArg>-H:+PrintClassInitialization</buildArg>
                 <buildArg>-H:TraceClassInitialization=</buildArg>
               </buildArgs>
+              <!-- Ignore all this native build stuff for now -->
+              <skip>true</skip>
             </configuration>
           </plugin>
         </plugins>
