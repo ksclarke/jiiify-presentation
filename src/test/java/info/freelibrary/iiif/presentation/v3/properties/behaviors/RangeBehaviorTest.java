@@ -1,16 +1,14 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.behaviors;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.TestConstants;
-
-import io.vertx.core.json.DecodeException;
 
 /**
  * A test of RangeBehavior.
@@ -29,19 +27,8 @@ public class RangeBehaviorTest {
      */
     @Test
     public final void testJsonSerialization() throws JsonProcessingException {
-        assertEquals(TestConstants.QUOTE + BehaviorConstants.SEQUENCE + TestConstants.QUOTE, new ObjectMapper()
-                .writeValueAsString(RangeBehavior.SEQUENCE));
-    }
-
-    /**
-     * Tests the JSON deserialization of a manifest with a range with mutually exclusive behaviors.
-     *
-     * @throws DecodeException
-     */
-    @Test(expected = DecodeException.class)
-    public final void testJsonDeserializationDisjoint() {
-        // FIXME IIIF-962
-        throw new DecodeException();
+        assertEquals(TestConstants.QUOTE + BehaviorConstants.SEQUENCE + TestConstants.QUOTE,
+                JSON.getWriter().writeValueAsString(RangeBehavior.SEQUENCE));
     }
 
     /**

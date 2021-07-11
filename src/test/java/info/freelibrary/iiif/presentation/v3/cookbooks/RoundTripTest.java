@@ -1,12 +1,11 @@
 
 package info.freelibrary.iiif.presentation.v3.cookbooks;
 
-import static info.freelibrary.iiif.presentation.v3.utils.TestConstants.ORDERED;
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 import org.junit.Test;
 
@@ -14,18 +13,11 @@ import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.Collection;
 import info.freelibrary.iiif.presentation.v3.Manifest;
-import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-
-import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
 
 /**
  * Tests converting cookbook JSON files into manifests and back again.
  */
-public class RoundTripTest {
-
-    private static final boolean ORDER_SENSITIVE =
-            Boolean.parseBoolean(System.getProperty(ORDERED, Boolean.TRUE.toString()));
+public class RoundTripTest extends AbstractCookbookTest {
 
     /**
      * A pattern from which to pull manifest from the test resources directory.
@@ -39,10 +31,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0001MvmImage() throws IOException {
-        final JsonObject expected = getExpectedJSON("0001-mvm-image");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0001-mvm-image");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -52,10 +44,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0002MvmAudio() throws IOException {
-        final JsonObject expected = getExpectedJSON("0002-mvm-audio");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0002-mvm-audio");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -65,10 +57,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0003MvmVideo() throws IOException {
-        final JsonObject expected = getExpectedJSON("0003-mvm-video");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0003-mvm-video");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -78,10 +70,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0004CanvasSize() throws IOException {
-        final JsonObject expected = getExpectedJSON("0004-canvas-size");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0004-canvas-size");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -91,10 +83,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0005ImageService() throws IOException {
-        final JsonObject expected = getExpectedJSON("0005-image-service");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0005-image-service");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -104,10 +96,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0006TextLanguage() throws IOException {
-        final JsonObject expected = getExpectedJSON("0006-text-language");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0006-text-language");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -117,10 +109,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0007StringFormats() throws IOException {
-        final JsonObject expected = getExpectedJSON("0007-string-formats");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0007-string-formats");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -130,10 +122,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0008Rights() throws IOException {
-        final JsonObject expected = getExpectedJSON("0008-rights");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0008-rights");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -143,10 +135,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0009Book1() throws IOException {
-        final JsonObject expected = getExpectedJSON("0009-book-1");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0009-book-1");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -156,10 +148,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0010Book2ViewingDirectionRtl() throws IOException {
-        final JsonObject expected = getExpectedJSON("0010-book-2-viewing-direction-rtl");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0010-book-2-viewing-direction-rtl");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -169,10 +161,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0010Book2ViewingDirectionTtb() throws IOException {
-        final JsonObject expected = getExpectedJSON("0010-book-2-viewing-direction-ttb");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0010-book-2-viewing-direction-ttb");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -182,10 +174,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0011Book3BehaviorContinuous() throws IOException {
-        final JsonObject expected = getExpectedJSON("0011-book-3-behavior-continuous");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0011-book-3-behavior-continuous");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -195,10 +187,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0011Book3BehaviorIndividuals() throws IOException {
-        final JsonObject expected = getExpectedJSON("0011-book-3-behavior-individuals");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0011-book-3-behavior-individuals");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -208,10 +200,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0013PlaceholderCanvas() throws IOException {
-        final JsonObject expected = getExpectedJSON("0013-placeholderCanvas");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0013-placeholderCanvas");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -221,10 +213,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0014AccompanyingCanvas() throws IOException {
-        final JsonObject expected = getExpectedJSON("0014-accompanyingcanvas");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0014-accompanyingcanvas");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -234,10 +226,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0015Start() throws IOException {
-        final JsonObject expected = getExpectedJSON("0015-start");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0015-start");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -247,10 +239,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0024Book4Toc() throws IOException {
-        final JsonObject expected = getExpectedJSON("0024-book-4-toc");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0024-book-4-toc");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -260,10 +252,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0026TocOpera() throws IOException {
-        final JsonObject expected = getExpectedJSON("0026-toc-opera");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0026-toc-opera");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -273,10 +265,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0029MetadataAnywhere() throws IOException {
-        final JsonObject expected = getExpectedJSON("0029-metadata-anywhere");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0029-metadata-anywhere");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -286,10 +278,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0030MultiVolumeV1() throws IOException {
-        final JsonObject expected = getExpectedJSON("0030-multi-volume_v1");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0030-multi-volume_v1");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -299,10 +291,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0030MultiVolumeV2() throws IOException {
-        final JsonObject expected = getExpectedJSON("0030-multi-volume_v2");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0030-multi-volume_v2");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -312,10 +304,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0046Rendering() throws IOException {
-        final JsonObject expected = getExpectedJSON("0046-rendering");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0046-rendering");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -325,10 +317,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0053SeeAlso() throws IOException {
-        final JsonObject expected = getExpectedJSON("0053-seeAlso");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0053-seeAlso");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -338,10 +330,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0064OperaOneCanvas() throws IOException {
-        final JsonObject expected = getExpectedJSON("0064-opera-one-canvas");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0064-opera-one-canvas");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -351,10 +343,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0065OperaMultipleCanvases() throws IOException {
-        final JsonObject expected = getExpectedJSON("0065-opera-multiple-canvases");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0065-opera-multiple-canvases");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -364,10 +356,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0068NewspaperIssue1() throws IOException {
-        final JsonObject expected = getExpectedJSON("0068-newspaper_issue_1");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0068-newspaper_issue_1");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -377,10 +369,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0068NewspaperIssue2() throws IOException {
-        final JsonObject expected = getExpectedJSON("0068-newspaper_issue_2");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0068-newspaper_issue_2");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -391,10 +383,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0068NewspaperTitleCollection() throws IOException {
-        final JsonObject expected = getExpectedJSON("0068-newspaper_title-collection");
-        final JsonObject found = Collection.fromJSON(expected).toJSON();
+        final String expected = getExpected("0068-newspaper_title-collection");
+        final String found = Collection.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -404,10 +396,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0117AddImageThumbnail() throws IOException {
-        final JsonObject expected = getExpectedJSON("0117-add-image-thumbnail");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0117-add-image-thumbnail");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -417,10 +409,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0118Multivalue() throws IOException {
-        final JsonObject expected = getExpectedJSON("0118_multivalue");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0118_multivalue");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -430,10 +422,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0139GeolocateCanvasFragment() throws IOException {
-        final JsonObject expected = getExpectedJSON("0139-geolocate-canvas-fragment");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0139-geolocate-canvas-fragment");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -443,10 +435,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0202StartCanvas() throws IOException {
-        final JsonObject expected = getExpectedJSON("0202-start-canvas");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0202-start-canvas");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -456,10 +448,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0219UsingCaptionFile() throws IOException {
-        final JsonObject expected = getExpectedJSON("0219-using-caption-file");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0219-using-caption-file");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -469,10 +461,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0230NavDateMap2() throws IOException {
-        final JsonObject expected = getExpectedJSON("0230-navdate_map_2-manifest");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0230-navdate_map_2-manifest");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -482,10 +474,10 @@ public class RoundTripTest {
      */
     @Test
     public final void test0230NavDateMap1() throws IOException {
-        final JsonObject expected = getExpectedJSON("0230-navdate_map_1-manifest");
-        final JsonObject found = Manifest.fromJSON(expected).toJSON();
+        final String expected = getExpected("0230-navdate_map_1-manifest");
+        final String found = Manifest.from(expected).toString();
 
-        compare(expected, found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -495,72 +487,22 @@ public class RoundTripTest {
      */
     @Test
     public final void test0230NavDateCollection() throws IOException {
-        final JsonObject expected = getExpectedJSON("0230-navdate-collection");
-        final JsonObject found = Collection.fromJSON(expected).toJSON();
+        final String expected = getExpected("0230-navdate-collection");
+        final String found = Collection.from(expected).toString();
 
-        compare(expected, found);
-    }
-
-    /**
-     * Compares the expected and found manifests in an order insensitive (JSON string) or an order sensitive
-     * (JsonObject) manner, depending on which test property has been set.
-     *
-     * @param aExpectedManifest An expected manifest
-     * @param aFoundManifest A found manifest
-     */
-    private void compare(final JsonObject aExpectedManifest, final JsonObject aFoundManifest) {
-        if (ORDER_SENSITIVE) {
-            assertEquals(aExpectedManifest.encodePrettily(), aFoundManifest.encodePrettily());
-        } else {
-            assertEquals(aExpectedManifest, aFoundManifest);
-        }
+        assertEquals(format(expected), format(found));
     }
 
     /**
      * Gets a cookbook manifest as a string.
      *
      * @param aManifestName A manifest file name
-     * @return A manifest as a JsonObject
+     * @return A manifest as a JSON string
      * @throws IOException If there is trouble reading the manifest file
      */
-    private JsonObject getExpectedJSON(final String aManifestName) throws IOException {
-        final File manifestFile = new File(StringUtils.format(MANIFEST_PATTERN, aManifestName));
-        final JsonObject jsonObject = new JsonObject(StringUtils.read(manifestFile, StandardCharsets.UTF_8));
-
-        // We need to update duration from a double (Jackson's default number) to a float (our actual number)
-        return updateDuration(jsonObject);
+    @Override
+    protected String getExpected(final String aManifestName) throws IOException {
+        return updateDuration(StringUtils.read(new File(StringUtils.format(MANIFEST_PATTERN, aManifestName))));
     }
 
-    /**
-     * A workaround method that converts durations from doubles to floats. This will have to suffice until I learn how
-     * to do this natively in Jackson (if that's even possible).
-     *
-     * @param aJsonObject A JSON object to be updated
-     * @return The JsonObject that was fed to this method
-     */
-    private JsonObject updateDuration(final JsonObject aJsonObject) {
-        aJsonObject.forEach(entry -> {
-            final Object value = entry.getValue();
-            final String valueClassName = value.getClass().getSimpleName();
-
-            // Duration is a property, not a JsonObject or JsonArray
-            if (entry.getKey().equals(JsonKeys.DURATION)) {
-                entry.setValue(Float.valueOf(((Double) value).toString()));
-            }
-
-            // We want to check inside JsonObject(s) and JsonArray(s) though
-            if (valueClassName.equals(JsonObject.class.getSimpleName())) {
-                updateDuration((JsonObject) value);
-            } else if (valueClassName.equals(JsonArray.class.getSimpleName())) {
-                ((JsonArray) value).forEach(object -> {
-                    if (object instanceof JsonObject) {
-                        updateDuration((JsonObject) object);
-                    }
-                });
-            }
-        });
-
-        // We're modifying the same object, this is just an aesthetic convenience
-        return aJsonObject;
-    }
 }

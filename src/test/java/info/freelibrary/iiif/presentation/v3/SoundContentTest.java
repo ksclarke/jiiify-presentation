@@ -1,19 +1,17 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import info.freelibrary.util.StringUtils;
-
-import io.vertx.core.json.JsonObject;
 
 /**
  * Tests for {@link SoundContent}.
@@ -45,8 +43,7 @@ public class SoundContentTest extends AbstractTest {
      */
     @Test
     public final void testFixture0003() throws IOException {
-        final String json =
-                StringUtils.read(new File("src/test/resources/fixtures/0002-mvm-audio.json"), StandardCharsets.UTF_8);
-        assertEquals(new JsonObject(json), Manifest.fromString(json).toJSON());
+        final String json = format(StringUtils.read(new File("src/test/resources/fixtures/0002-mvm-audio.json")));
+        assertEquals(json, format(Manifest.from(json).toString()));
     }
 }

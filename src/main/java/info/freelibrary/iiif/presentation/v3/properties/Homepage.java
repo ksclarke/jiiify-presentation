@@ -11,16 +11,16 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.IllegalArgumentI18nException;
 import info.freelibrary.util.warnings.Eclipse;
 
+import info.freelibrary.iiif.presentation.v3.JsonParsingException;
 import info.freelibrary.iiif.presentation.v3.MediaType;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-
-import io.vertx.core.json.Json;
-import io.vertx.core.json.JsonObject;
 
 /**
  * A web page that is about the object represented by the resource that has the <code>homepage</code> property. The web
@@ -188,33 +188,33 @@ public class Homepage extends AbstractLinkProperty<Homepage> {
     }
 
     /**
-     * Returns a JsonObject of this resource.
+     * Returns a JSON string representation of this resource.
      *
-     * @return A JsonObject of this resource
+     * @return A JSON string representation of this resource
+     * @throws JsonParsingException If the object could not be serialized to a JSON string
      */
     @Override
-    public JsonObject toJSON() {
-        return JsonObject.mapFrom(this);
+    public String toString() {
+        try {
+            return JSON.getWriter(Homepage.class).writeValueAsString(this);
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details);
+        }
     }
 
     /**
      * Returns a homepage from its JSON representation.
      *
-     * @param aJsonObject A homepage in JSON form
-     * @return This homepage
+     * @param aJsonString A homepage in JSON form
+     * @throws JsonParsingException If the supplied JSON string cannot be successfully parsed
+     * @return A homepage
      */
-    public static Homepage fromJSON(final JsonObject aJsonObject) {
-        return Json.decodeValue(aJsonObject.toString(), Homepage.class);
-    }
-
-    /**
-     * Returns a homepage from its JSON representation.
-     *
-     * @param aJsonString A homepage in string form
-     * @return This homepage
-     */
-    public static Homepage fromString(final String aJsonString) {
-        return fromJSON(new JsonObject(aJsonString));
+    public static Homepage from(final String aJsonString) {
+        try {
+            return JSON.getReader(Homepage.class).readValue(aJsonString);
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details);
+        }
     }
 
 }

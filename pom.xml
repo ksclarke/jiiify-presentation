@@ -64,14 +64,20 @@
     <jackson.databind.version>2.12.3</jackson.databind.version>
     <freelib.utils.version>2.4.0</freelib.utils.version>
     <jsoup.version>1.13.1</jsoup.version>
-    <vertx.version>3.9.8</vertx.version>
     <combinatorics.version>3.3.0</combinatorics.version>
     <media.fragments.uri.version>2.4</media.fragments.uri.version>
+    <netty.native.version>2.0.40.Final</netty.native.version>
+
+    <!-- GraalVM related property values -->
+    <graalvm.version>21.1.0</graalvm.version>
+    <!-- Optional: location of installed native-image -->
+    <gu>/usr/lib/jvm/graalvm/lib/installer/bin/gu</gu>
 
     <!-- Plugin related versions -->
     <maven.jar.plugin.version>3.2.0</maven.jar.plugin.version>
     <freelib.maven.version>0.2.1</freelib.maven.version>
     <vertx.plugin.version>1.0.24</vertx.plugin.version>
+    <os.plugin.version>1.4.0.Final</os.plugin.version>
 
     <!-- Test related versions -->
     <opencsv.version>4.6</opencsv.version>
@@ -87,7 +93,6 @@
   </properties>
 
   <dependencies>
-    <!-- Project dependencies -->
     <dependency>
       <groupId>info.freelibrary</groupId>
       <artifactId>freelib-utils</artifactId>
@@ -104,9 +109,9 @@
       <version>${jackson.databind.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.jsoup</groupId>
-      <artifactId>jsoup</artifactId>
-      <version>${jsoup.version}</version>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>${jackson.databind.version}</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
@@ -114,9 +119,9 @@
       <version>${jackson.version}</version>
     </dependency>
     <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-core</artifactId>
-      <version>${vertx.version}</version>
+      <groupId>org.jsoup</groupId>
+      <artifactId>jsoup</artifactId>
+      <version>${jsoup.version}</version>
     </dependency>
     <dependency>
       <groupId>com.github.tkurz</groupId>
@@ -137,12 +142,6 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-unit</artifactId>
-      <version>${vertx.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -221,7 +220,7 @@
           <stylesheetfile>stylesheet.css</stylesheetfile>
           <links>
             <link>https://javadoc.io/doc/info.freelibrary/freelib-utils/${freelib.utils.version}/apidocs</link>
-            <link>https://vertx.io/docs/apidocs/</link>
+            <!-- <link>https://vertx.io/docs/apidocs/</link> -->
           </links>
         </configuration>
       </plugin>
@@ -240,10 +239,6 @@
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <systemPropertyVariables>
-            <vertx.port>${vertx.port}</vertx.port>
-            <vertx.logger-delegate-factory-class-name>io.vertx.core.logging.SLF4JLogDelegateFactory</vertx.logger-delegate-factory-class-name>
-          </systemPropertyVariables>
           <argLine>${jacoco.agent.arg}</argLine>
         </configuration>
       </plugin>
@@ -256,24 +251,6 @@
           </systemPropertyVariables>
           <argLine>${jacoco.agent.arg}</argLine>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <configuration>
-          <portNames>
-            <portName>vertx.port</portName>
-          </portNames>
-        </configuration>
-        <executions>
-          <execution>
-            <id>reserve-port</id>
-            <phase>initialize</phase>
-            <goals>
-              <goal>reserve-network-port</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <!-- Create an uber jar for use with JRuby, Jython, etc. -->
       <plugin>
@@ -295,6 +272,51 @@
     </plugins>
   </build>
 
+  <profiles>
+    <profile>
+      <id>native-build</id>
+      <activation>
+        <file>
+          <exists>${gu}</exists>
+        </file>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>org.graalvm.sdk</groupId>
+          <artifactId>graal-sdk</artifactId>
+          <version>${graalvm.version}</version>
+          <scope>provided</scope>
+        </dependency>
+      </dependencies>
+      <build>
+        <plugins>
+          <!-- This creates a native binary from the packaged jar and its dependencies -->
+          <plugin>
+            <groupId>org.graalvm.nativeimage</groupId>
+            <artifactId>native-image-maven-plugin</artifactId>
+            <version>${graalvm.version}</version>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>native-image</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <imageName>libjpv3</imageName>
+              <buildArgs>
+                <buildArg>--shared</buildArg>
+                <buildArg>-H:+ReportExceptionStackTraces</buildArg>
+                <buildArg>-H:+PrintClassInitialization</buildArg>
+                <buildArg>-H:TraceClassInitialization=</buildArg>
+              </buildArgs>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
   <!-- Enables pushing project documentation up to an S3 bucket -->
   <distributionManagement>
     <site>
@@ -311,4 +333,3 @@
   </parent>
 
 </project>
-

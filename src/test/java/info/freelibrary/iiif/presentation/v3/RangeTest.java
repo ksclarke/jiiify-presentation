@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static org.junit.Assert.*;
 
 import java.io.File;
@@ -13,6 +14,9 @@ import java.util.regex.Pattern;
 
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+
 import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.StringUtils;
 
@@ -23,9 +27,8 @@ import info.freelibrary.iiif.presentation.v3.properties.NavDate;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.RangeBehavior;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-
-import io.vertx.core.json.JsonObject;
 
 /**
  * Test of Range.
@@ -103,8 +106,8 @@ public class RangeTest extends AbstractTest {
      */
     @Test
     public void testToJSON() {
-        final JsonObject jsonObj = new JsonObject(RANGE_ITEM_JSON);
-        assertEquals(jsonObj, getRange().setItems(Arrays.asList(new Range.Item(getSubRange()))).toJSON());
+        assertEquals(format(RANGE_ITEM_JSON),
+                getRange().setItems(Arrays.asList(new Range.Item(getSubRange()))).toString());
     }
 
     /**
@@ -112,74 +115,40 @@ public class RangeTest extends AbstractTest {
      */
     @Test
     public void testToString() {
-        final String json = new JsonObject(RANGE_ITEM_JSON).encode();
-        assertEquals(json, getRange().setItems(Arrays.asList(new Range.Item(getSubRange()))).toString());
+        assertEquals(format(RANGE_ITEM_JSON),
+                getRange().setItems(Arrays.asList(new Range.Item(getSubRange()))).toString());
     }
 
     /**
-     * Tests the {@link Range#fromString(String) fromString} method.
+     * Tests the {@link Range#from(String) fromString} method.
      */
     @Test
     public void testFromStringRange() {
-        assertEquals(new JsonObject(RANGE_ITEM_JSON), Range.fromString(RANGE_ITEM_JSON).toJSON());
+        assertEquals(format(RANGE_ITEM_JSON), Range.from(RANGE_ITEM_JSON).toString());
     }
 
     /**
-     * Tests the {@link Range#fromJSON(JsonObject) fromJSON} method.
-     */
-    @Test
-    public void testFromJSONRange() {
-        assertEquals(new JsonObject(RANGE_ITEM_JSON), Range.fromJSON(new JsonObject(RANGE_ITEM_JSON)).toJSON());
-    }
-
-    /**
-     * Tests the {@link Range#fromString(String) fromString} method.
+     * Tests the {@link Range#from(String) fromString} method.
      */
     @Test
     public void testFromStringCanvasArray() {
-        assertEquals(new JsonObject(CANVAS_ITEMS_JSON), Range.fromString(CANVAS_ITEMS_JSON).toJSON());
+        assertEquals(format(CANVAS_ITEMS_JSON), Range.from(CANVAS_ITEMS_JSON).toString());
     }
 
     /**
-     * Tests the {@link Range#fromJSON(JsonObject) fromJSON} method.
-     */
-    @Test
-    public void testFromJSONCanvasArray() {
-        assertEquals(new JsonObject(CANVAS_ITEMS_JSON), Range.fromJSON(new JsonObject(CANVAS_ITEMS_JSON)).toJSON());
-    }
-
-    /**
-     * Tests the {@link Range#fromString(String) fromString} method.
+     * Tests the {@link Range#from(String) fromString} method.
      */
     @Test
     public void testFromStringCanvasRef() {
-        assertEquals(new JsonObject(CANVAS_ITEM_JSON), Range.fromString(CANVAS_ITEM_JSON).toJSON());
+        assertEquals(format(CANVAS_ITEM_JSON), Range.from(CANVAS_ITEM_JSON).toString());
     }
 
     /**
-     * Tests the {@link Range#fromJSON(JsonObject) fromJSON} method.
-     */
-    @Test
-    public void testFromJSONCanvasRef() {
-        assertEquals(new JsonObject(CANVAS_ITEM_JSON), Range.fromJSON(new JsonObject(CANVAS_ITEM_JSON)).toJSON());
-    }
-
-    /**
-     * Tests the {@link Range#fromString(String) fromString} method.
+     * Tests the {@link Range#from(String) fromString} method.
      */
     @Test
     public void testFromStringSpecificResource() {
-        final JsonObject jsonObj = new JsonObject(SPECIFIC_RESOURCE_ITEM_JSON);
-        assertEquals(jsonObj, Range.fromString(SPECIFIC_RESOURCE_ITEM_JSON).toJSON());
-    }
-
-    /**
-     * Tests the {@link Range#fromJSON(JsonObject) fromJSON} method.
-     */
-    @Test
-    public void testFromJsonSpecificResource() {
-        final JsonObject jsonObj = new JsonObject(SPECIFIC_RESOURCE_ITEM_JSON);
-        assertEquals(jsonObj, Range.fromJSON(jsonObj).toJSON());
+        assertEquals(format(SPECIFIC_RESOURCE_ITEM_JSON), Range.from(SPECIFIC_RESOURCE_ITEM_JSON).toString());
     }
 
     /**
@@ -187,25 +156,25 @@ public class RangeTest extends AbstractTest {
      */
     @Test
     public void testRangeStringString() {
-        final String id = LOREM_IPSUM.getUrl();
-        assertEquals(id, new Range(id, LOREM_IPSUM.getWords(4)).getID().toString());
+        final String id = getURL();
+        assertEquals(id, new Range(id, myLoremIpsum.getWords(4)).getID().toString());
     }
 
     /**
      * Tests setting and getting supplementary annotations.
      */
     @Test
-    public void testGetSetSupplementaryAnnotations() {
-        final Range range = new Range(LOREM_IPSUM.getUrl());
+    public void testGetSetSupplementaryAnnotations() throws JsonProcessingException {
+        final Range range = new Range(getURL());
         final SupplementaryAnnotations annos = new SupplementaryAnnotations(getID());
-        final JsonObject supplementary;
-        final JsonObject json;
+        final JsonNode supplementary;
+        final JsonNode json;
 
         range.setSupplementaryAnnotations(annos);
-        json = range.toJSON();
+        json = JSON.getReader(Range.class).readTree(range.toString());
 
-        assertNotNull(supplementary = json.getJsonObject(JsonKeys.SUPPLEMENTARY));
-        assertEquals(ResourceTypes.ANNOTATION_COLLECTION, supplementary.getString(JsonKeys.TYPE));
+        assertNotNull(supplementary = json.get(JsonKeys.SUPPLEMENTARY));
+        assertEquals(ResourceTypes.ANNOTATION_COLLECTION, supplementary.get(JsonKeys.TYPE).asText());
     }
 
     /**
@@ -213,8 +182,8 @@ public class RangeTest extends AbstractTest {
      */
     @Test
     public void testRangeURILabel() {
-        final String id = LOREM_IPSUM.getUrl();
-        assertEquals(URI.create(id), new Range(URI.create(id), new Label(LOREM_IPSUM.getWords(4))).getID());
+        final String id = getURL();
+        assertEquals(URI.create(id), new Range(URI.create(id), new Label(myLoremIpsum.getWords(4))).getID());
     }
 
     /**
@@ -276,9 +245,8 @@ public class RangeTest extends AbstractTest {
      */
     @Test
     public final void testFixture0024() throws IOException {
-        final String json =
-                StringUtils.read(new File("src/test/resources/fixtures/0024-book-4-toc.json"), StandardCharsets.UTF_8);
-        assertEquals(new JsonObject(json), Manifest.fromString(json).toJSON());
+        final String json = StringUtils.read(new File("src/test/resources/fixtures/0024-book-4-toc.json"));
+        assertEquals(format(json), Manifest.from(json).toString());
     }
 
     private Range getRange() {

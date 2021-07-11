@@ -24,7 +24,7 @@ public class AnnotationPageTest extends AbstractTest {
      */
     @Before
     public void setUp() {
-        myID = LOREM_IPSUM.getUrl();
+        myID = myLoremIpsum.getUrl();
     }
 
     /**

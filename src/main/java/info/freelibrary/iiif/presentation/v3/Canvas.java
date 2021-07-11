@@ -9,6 +9,7 @@ import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.Eclipse;
 
@@ -24,10 +25,8 @@ import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-
-import io.vertx.core.json.Json;
-import io.vertx.core.json.JsonObject;
 
 /**
  * A virtual container that represents a page or view. The canvas provides a frame of reference for the layout of the
@@ -541,21 +540,16 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     /**
      * Returns a Canvas from its JSON representation.
      *
-     * @param aJsonObject A canvas in JSON form
+     * @param aJsonString A canvas in JSON form
      * @return The canvas
+     * @throws JsonParsingException If the supplied JSON string cannot be successfully parsed
      */
-    public static Canvas fromJSON(final JsonObject aJsonObject) {
-        return Json.decodeValue(aJsonObject.toString(), Canvas.class);
-    }
-
-    /**
-     * Returns a Canvas from its JSON representation.
-     *
-     * @param aJsonString A canvas in string form
-     * @return The canvas
-     */
-    public static Canvas fromString(final String aJsonString) {
-        return fromJSON(new JsonObject(aJsonString));
+    public static Canvas from(final String aJsonString) {
+        try {
+            return JSON.getReader(Canvas.class).readValue(aJsonString);
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details);
+        }
     }
 
 }

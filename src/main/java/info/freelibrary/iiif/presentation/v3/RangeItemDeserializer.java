@@ -57,11 +57,11 @@ class RangeItemDeserializer extends StdDeserializer<Range.Item> {
 
         switch (treeNode.get(JsonKeys.TYPE).toString().replace("\"", "")) {
             case ResourceTypes.RANGE:
-                return new Range.Item(Range.fromString(treeNode.toString()));
+                return new Range.Item(Range.from(treeNode.toString()));
             case ResourceTypes.CANVAS:
-                return new Range.Item(Canvas.fromString(treeNode.toString()), true); // always embed whatever is there
+                return new Range.Item(Canvas.from(treeNode.toString()), true); // always embed whatever is there
             case ResourceTypes.SPECIFIC_RESOURCE:
-                return new Range.Item(SpecificResource.fromString(treeNode.toString()));
+                return new Range.Item(SpecificResource.from(treeNode.toString()));
             default:
                 throw new JsonParseException(aParser, LOGGER.getMessage(MessageCodes.JPA_041, treeNode.toString()));
         }

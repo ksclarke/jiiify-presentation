@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
@@ -23,10 +24,8 @@ import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-
-import io.vertx.core.json.Json;
-import io.vertx.core.json.JsonObject;
 
 /**
  * Video content that can be associated with an annotation or used as a thumbnail.
@@ -317,21 +316,15 @@ public class VideoContent extends AbstractContentResource<VideoContent>
     /**
      * Returns video content from its JSON representation.
      *
-     * @param aJsonObject A video content resource in JSON form
-     * @return The video content
-     */
-    public static VideoContent fromJSON(final JsonObject aJsonObject) {
-        return Json.decodeValue(aJsonObject.toString(), VideoContent.class);
-    }
-
-    /**
-     * Returns video content from its JSON representation.
-     *
      * @param aJsonString A video content resource in string form
      * @return The video content
      */
-    public static VideoContent fromString(final String aJsonString) {
-        return fromJSON(new JsonObject(aJsonString));
+    public static VideoContent from(final String aJsonString) {
+        try {
+            return JSON.getReader(VideoContent.class).readValue(aJsonString);
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details);
+        }
     }
 
     /**

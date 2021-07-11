@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.toJson;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -19,11 +21,9 @@ import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
-
-import io.vertx.core.json.JsonObject;
-import io.vertx.core.json.jackson.DatabindCodec;
 
 /**
  * A partOf test.
@@ -158,8 +158,8 @@ public class PartOfTest {
      */
     @Test
     public final void testHashCode() throws IOException {
-        final PartOf partOf1 = PartOf.fromJSON(getFullFixtureAsJSON());
-        final PartOf partOf2 = PartOf.fromJSON(getFullFixtureAsJSON());
+        final PartOf partOf1 = PartOf.from(getTestFixture());
+        final PartOf partOf2 = PartOf.from(getTestFixture());
 
         assertEquals(partOf1.hashCode(), partOf2.hashCode());
     }
@@ -171,8 +171,8 @@ public class PartOfTest {
      */
     @Test
     public final void testEquals() throws IOException {
-        final PartOf partOf1 = PartOf.fromJSON(getFullFixtureAsJSON());
-        final PartOf partOf2 = PartOf.fromJSON(getFullFixtureAsJSON());
+        final PartOf partOf1 = PartOf.from(getTestFixture());
+        final PartOf partOf2 = PartOf.from(getTestFixture());
 
         assertTrue(partOf1.equals(partOf2));
     }
@@ -184,19 +184,8 @@ public class PartOfTest {
      */
     @Test
     public final void testToFromString() throws IOException {
-        final JsonObject json = getFullFixtureAsJSON();
-        assertEquals(json.encodePrettily(), PartOf.fromString(json.toString()).toString());
-    }
-
-    /**
-     * Tests conversion to and from the partOf JSON representation.
-     *
-     * @throws IOException If there is trouble reading from the test fixtures file
-     */
-    @Test
-    public final void testToFromJsonObject() throws IOException {
-        final JsonObject json = getFullFixtureAsJSON();
-        assertEquals(json, PartOf.fromJSON(json).toJSON());
+        final String json = getTestFixture();
+        assertEquals(json, PartOf.from(json).toString());
     }
 
     /**
@@ -206,9 +195,9 @@ public class PartOfTest {
      * @throws IOException If there is trouble reading or deserializing the partOf file
      */
     private void checkDeserialization(final File aExpected) throws IOException {
-        final String json = new JsonObject(StringUtils.read(aExpected)).getJsonArray(JsonKeys.PART_OF).toString();
-
-        final List<PartOf> expected = DatabindCodec.mapper().readValue(json, new TypeReference<List<PartOf>>() {});
+        final String json =
+                JSON.getReader().readTree(StringUtils.read(aExpected)).get(JsonKeys.PART_OF).toPrettyString();
+        final List<PartOf> expected = JSON.getReader(new TypeReference<List<PartOf>>() {}).readValue(json);
         final List<PartOf> found = myManifest.getPartOfs();
 
         // Check that both lists have the same number of elements
@@ -227,19 +216,20 @@ public class PartOfTest {
      * @throws IOException If there is trouble reading the partOf file or serializing the constructed partOf(s)
      */
     private void checkSerialization(final File aExpected) throws IOException {
-        final JsonObject expected = new JsonObject(StringUtils.read(aExpected));
-        final JsonObject found = new JsonObject(TestUtils.toJson(JsonKeys.PART_OF, myManifest.getPartOfs(), true));
+        final String expected = format(StringUtils.read(aExpected));
+        final String found = format(toJson(JsonKeys.PART_OF, myManifest.getPartOfs(), true));
 
         assertEquals(expected, found);
     }
 
     /**
-     * Gets the full test fixture as a JsonObject.
+     * Gets the full test fixture as a JSON string.
      *
-     * @return A JsonObject containing the test fixture's contents
+     * @return A JSON string containing the test fixture's contents
      * @throws IOException If there is trouble reading the test fixture file
      */
-    private JsonObject getFullFixtureAsJSON() throws IOException {
-        return new JsonObject(StringUtils.read(PART_OF_FULL_ONE)).getJsonArray(JsonKeys.PART_OF).getJsonObject(0);
+    private String getTestFixture() throws IOException {
+        return JSON.getReader().readTree(StringUtils.read(PART_OF_FULL_ONE)).get(JsonKeys.PART_OF).get(0)
+                .toPrettyString();
     }
 }

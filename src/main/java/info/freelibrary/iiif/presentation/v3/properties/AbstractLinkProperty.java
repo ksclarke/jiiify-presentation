@@ -13,15 +13,16 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+import info.freelibrary.iiif.presentation.v3.JsonParsingException;
 import info.freelibrary.iiif.presentation.v3.MediaType;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-
-import io.vertx.core.json.JsonObject;
 
 /**
  * A linking class that specific linking properties can extend.
@@ -307,21 +308,18 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
     }
 
     /**
-     * Returns a string representation of this resource.
+     * Returns a JSON string representing this resource.
      *
-     * @return A string representation of this resource
+     * @return A JSON string representing this resource
      */
     @Override
     public String toString() {
-        return toJSON().encodePrettily();
+        try {
+            return JSON.getWriter(this.getClass()).writeValueAsString(this);
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details);
+        }
     }
-
-    /**
-     * Returns a JSON representation of this resource.
-     *
-     * @return A JSON representation of this resource
-     */
-    public abstract JsonObject toJSON();
 
     /**
      * Used by Jackson's serialization processes.

@@ -15,8 +15,8 @@
           "My Test Canvas #1"
         ]
       },
-      "width": 100,
-      "height": 100
+      "height": 100,
+      "width": 100
     },
     {
       "id": "MY_CANVAS_ID_2",
@@ -26,8 +26,8 @@
           "My Test Canvas #2"
         ]
       },
-      "width": 200,
-      "height": 200
+      "height": 200,
+      "width": 200
     }
   ]
 }

@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.toJson;
 import static org.junit.Assert.*;
 
 import java.io.File;
@@ -19,8 +21,6 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavi
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 
-import io.vertx.core.json.JsonObject;
-
 /**
  * Tests {@link SupplementingAnnotation}.
  */
@@ -28,7 +28,7 @@ public class SupplementingAnnotationTest extends AbstractTest {
 
     private static final File ANNOTATION = new File(TestUtils.TEST_DIR, "annotation-supplementing-full.json");
 
-    private final Label myCanvasLabel = new Label(LOREM_IPSUM.getWords(4));
+    private final Label myCanvasLabel = new Label(myLoremIpsum.getWords(4));
 
     private final URI myCanvasID = URI.create("cf6da69c-7d60-4dbe-965b-e40be626f2eb");
 
@@ -198,9 +198,7 @@ public class SupplementingAnnotationTest extends AbstractTest {
         final TextContent content = new TextContent(myTextContentID);
         final SupplementingAnnotation annotation =
                 new SupplementingAnnotation(myAnnoID, myCanvas).setBodies(content).setTarget(myCanvasID);
-        final JsonObject expected = new JsonObject(StringUtils.read(ANNOTATION));
-        final JsonObject found = new JsonObject(TestUtils.toJson(annotation));
 
-        assertEquals(expected, found);
+        assertEquals(format(StringUtils.read(ANNOTATION)), format(toJson(annotation)));
     }
 }

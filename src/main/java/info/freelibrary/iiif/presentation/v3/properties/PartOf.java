@@ -6,11 +6,12 @@ import java.util.Objects;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.Eclipse;
 
-import io.vertx.core.json.Json;
-import io.vertx.core.json.JsonObject;
+import info.freelibrary.iiif.presentation.v3.JsonParsingException;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 
 /**
  * A containing resource that includes the resource that has the <code>partOf</code> property. For example, the
@@ -136,32 +137,17 @@ public class PartOf extends AbstractLinkProperty<PartOf> {
     }
 
     /**
-     * Returns a JsonObject of this resource.
-     *
-     * @return A JsonObject of this resource
-     */
-    @Override
-    public JsonObject toJSON() {
-        return JsonObject.mapFrom(this);
-    }
-
-    /**
-     * Returns a PartOf from its JSON representation.
-     *
-     * @param aJsonObject A PartOf in JSON form
-     * @return This PartOf
-     */
-    public static PartOf fromJSON(final JsonObject aJsonObject) {
-        return Json.decodeValue(aJsonObject.toString(), PartOf.class);
-    }
-
-    /**
      * Returns a PartOf from its JSON representation.
      *
      * @param aJsonString A PartOf in string form
+     * @throws JsonParsingException If the supplied JSON string cannot be successfully parsed
      * @return This PartOf
      */
-    public static PartOf fromString(final String aJsonString) {
-        return fromJSON(new JsonObject(aJsonString));
+    public static PartOf from(final String aJsonString) {
+        try {
+            return JSON.getReader(PartOf.class).readValue(aJsonString);
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details);
+        }
     }
 }

@@ -1,7 +1,9 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import static org.junit.Assert.*;
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -13,10 +15,11 @@ import org.junit.Test;
 
 import com.thedeanda.lorem.LoremIpsum;
 
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.StringUtils;
+
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * Tests internationalizations.
@@ -221,13 +224,14 @@ public class I18nTest {
     }
 
     /**
-     * Tests toJSON() method.
+     * Tests toJSON() method. test0004WithMinter
      */
     @Test
-    public final void testToJSON() {
+    public final void testToString() {
+        final String expected = format("{\"none\":[\"one two\",\"three four\",\"five six\"]}");
         final List<String> strings = Arrays.asList("one two", "three four", "five six");
         final I18n i18n = new I18n(I18n.DEFAULT_LANG, strings);
 
-        assertEquals("{\"none\":[\"one two\",\"three four\",\"five six\"]}", i18n.toJSON().encode());
+        assertEquals(expected, i18n.toString());
     }
 }

@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.toJson;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -15,6 +17,7 @@ import org.junit.Test;
 
 import info.freelibrary.util.StringUtils;
 
+import info.freelibrary.iiif.presentation.v3.cookbooks.AbstractCookbookTest;
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.ids.MinterFactory;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -27,12 +30,10 @@ import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentS
 import info.freelibrary.iiif.presentation.v3.services.image.ImageService3;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 
-import io.vertx.core.json.JsonObject;
-
 /**
  * Tests for a presentation canvas.
  */
-public class CanvasTest {
+public class CanvasTest extends AbstractCookbookTest {
 
     private static final String LABEL = "p. 1";
 
@@ -90,30 +91,23 @@ public class CanvasTest {
 
     /** URI media fragment component templates */
 
-    private static final String URI_FRAGMENT_XYWH_TEMPLATE = "xywh={},{},{},{}";
+    private static final String URI_FRAG_XYWH_TEMPLATE = "xywh={},{},{},{}";
 
-    private static final String URI_FRAGMENT_T_TEMPLATE = "t={},{}";
+    private static final String URI_FRAG_T_TEMPLATE = "t={},{}";
 
-    private static final String URI_FRAGMENT_TXYWH_TEMPLATE = "t={},{}&xywh={},{},{},{}";
+    private static final String URI_FRAG_TXYWH_TEMPLATE = "t={},{}&xywh={},{},{},{}";
 
-    /** Test fixtures */
+    /** Fixture files used in more than one test **/
 
-    private static final File CANVAS_FULL = new File(TestUtils.TEST_DIR, "canvas-full.json");
+    private static final String FULL_CANVAS_FIXTURE = "canvas-full.json";
 
-    private static final File CANVAS_IMAGE = new File(TestUtils.TEST_DIR, "canvas-image.json");
+    private static final String MULTI_IMAGE_CANVAS_FIXTURE = "canvas-image-multi.json";
 
-    private static final File CANVAS_IMAGE_CHOICE = new File(TestUtils.TEST_DIR, "canvas-image-choice.json");
+    private static final String MULTI_SOUND_CHOICE_FIXTURE = "canvas-sound-choice-multi.json";
 
-    private static final File CANVAS_IMAGE_MULTI = new File(TestUtils.TEST_DIR, "canvas-image-multi.json");
+    private static final String MULTI_VIDEO_CANVAS_FIXTURE = "canvas-video-multi.json";
 
-    private static final File CANVAS_SOUND = new File(TestUtils.TEST_DIR, "canvas-sound.json");
-
-    private static final File CANVAS_SOUND_CHOICE_MULTI =
-            new File(TestUtils.TEST_DIR, "canvas-sound-choice-multi.json");
-
-    private static final File CANVAS_VIDEO = new File(TestUtils.TEST_DIR, "canvas-video.json");
-
-    private static final File CANVAS_VIDEO_MULTI = new File(TestUtils.TEST_DIR, "canvas-video-multi.json");
+    /** Test fields */
 
     private Canvas myCanvas;
 
@@ -1432,9 +1426,6 @@ public class CanvasTest {
      */
     @Test
     public final void testSerialization() throws IOException {
-        final JsonObject expected;
-        final JsonObject found;
-
         final ImageContent imageContent = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT)
                 .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
         final PaintingAnnotation paintingAnno =
@@ -1451,10 +1442,7 @@ public class CanvasTest {
         myCanvas.setSupplementingPages(
                 new AnnotationPage<SupplementingAnnotation>(TEXT_PAGE_ID).addAnnotations(supplementingAnno));
 
-        expected = new JsonObject(StringUtils.read(CANVAS_FULL));
-        found = new JsonObject(TestUtils.toJson(myCanvas));
-
-        assertEquals(expected, found);
+        assertEquals(getExpected(FULL_CANVAS_FIXTURE), format(toJson(myCanvas)));
     }
 
     /**
@@ -1464,9 +1452,6 @@ public class CanvasTest {
      */
     @Test
     public final void testSerialization2() throws IOException {
-        final JsonObject expected;
-        final JsonObject found;
-
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT)
                 .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
         final TextContent text = new TextContent(TEXT_ID);
@@ -1475,11 +1460,7 @@ public class CanvasTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setThumbnails(thumbnail).paintWith(myMinter, image)
                 .supplementWith(myMinter, text);
-
-        expected = new JsonObject(StringUtils.read(CANVAS_FULL));
-        found = new JsonObject(TestUtils.toJson(myCanvas));
-
-        assertEquals(TestUtils.stripIDs(expected), TestUtils.stripIDs(found));
+        assertEquals(normalizeIDs(getExpected(FULL_CANVAS_FIXTURE)), normalizeIDs(toJson(myCanvas)));
     }
 
     /**
@@ -1489,18 +1470,11 @@ public class CanvasTest {
      */
     @Test
     public final void testPaintImageSerialization() throws IOException {
-        final JsonObject expected;
-        final JsonObject found;
-
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT)
                 .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, image);
-
-        expected = new JsonObject(StringUtils.read(CANVAS_IMAGE));
-        found = new JsonObject(TestUtils.toJson(myCanvas));
-
-        assertEquals(TestUtils.stripIDs(expected), TestUtils.stripIDs(found));
+        assertEquals(normalizeIDs(getExpected("canvas-image.json")), normalizeIDs(toJson(myCanvas)));
     }
 
     /**
@@ -1511,20 +1485,13 @@ public class CanvasTest {
      */
     @Test
     public final void testPaintImageChoiceSerialization() throws IOException {
-        final JsonObject expected;
-        final JsonObject found;
-
         final ImageContent image1 = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT)
                 .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
         final ImageContent image2 = new ImageContent(IMAGE_2_ID).setWidthHeight(WIDTH, HEIGHT)
                 .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, true, image1, image2);
-
-        expected = new JsonObject(StringUtils.read(CANVAS_IMAGE_CHOICE));
-        found = new JsonObject(TestUtils.toJson(myCanvas));
-
-        assertEquals(TestUtils.stripIDs(expected), TestUtils.stripIDs(found));
+        assertEquals(normalizeIDs(getExpected("canvas-image-choice.json")), normalizeIDs(toJson(myCanvas)));
     }
 
     /**
@@ -1535,24 +1502,15 @@ public class CanvasTest {
      */
     @Test
     public final void testPaintImageMultiSerialization() throws IOException {
-        final JsonObject expected;
-        final JsonObject found;
-
         final ImageContent image1 = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT)
                 .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
         final ImageContent image2 = new ImageContent(IMAGE_2_ID).setWidthHeight(WIDTH, HEIGHT)
                 .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
 
-        final String selector1 = StringUtils.format(URI_FRAGMENT_XYWH_TEMPLATE, 0, 0, WIDTH, HEIGHT);
-        final String selector2 = StringUtils.format(URI_FRAGMENT_XYWH_TEMPLATE, 0, HEIGHT, WIDTH, HEIGHT);
-
-        myCanvas.setWidthHeight(WIDTH, HEIGHT * 2).paintWith(myMinter, selector1, image1).paintWith(myMinter, selector2,
-                image2);
-
-        expected = new JsonObject(StringUtils.read(CANVAS_IMAGE_MULTI));
-        found = new JsonObject(TestUtils.toJson(myCanvas));
-
-        assertEquals(TestUtils.stripIDs(expected), TestUtils.stripIDs(found));
+        myCanvas.setWidthHeight(WIDTH, HEIGHT * 2)
+                .paintWith(myMinter, StringUtils.format(URI_FRAG_XYWH_TEMPLATE, 0, 0, WIDTH, HEIGHT), image1)
+                .paintWith(myMinter, StringUtils.format(URI_FRAG_XYWH_TEMPLATE, 0, HEIGHT, WIDTH, HEIGHT), image2);
+        assertEquals(normalizeIDs(getExpected(MULTI_IMAGE_CANVAS_FIXTURE)), normalizeIDs(toJson(myCanvas)));
     }
 
     /**
@@ -1563,26 +1521,17 @@ public class CanvasTest {
      */
     @Test
     public final void testPaintImageMultiFragmentSelectorSerialization() throws IOException {
-        final JsonObject expected;
-        final JsonObject found;
-
         final ImageContent image1 = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT)
                 .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
         final ImageContent image2 = new ImageContent(IMAGE_2_ID).setWidthHeight(WIDTH, HEIGHT)
                 .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
 
-        final MediaFragmentSelector selector1 =
-                new MediaFragmentSelector(StringUtils.format(URI_FRAGMENT_XYWH_TEMPLATE, 0, 0, WIDTH, HEIGHT));
-        final MediaFragmentSelector selector2 =
-                new MediaFragmentSelector(StringUtils.format(URI_FRAGMENT_XYWH_TEMPLATE, 0, HEIGHT, WIDTH, HEIGHT));
-
-        myCanvas.setWidthHeight(WIDTH, HEIGHT * 2).paintWith(myMinter, selector1, image1).paintWith(myMinter, selector2,
-                image2);
-
-        expected = new JsonObject(StringUtils.read(CANVAS_IMAGE_MULTI));
-        found = new JsonObject(TestUtils.toJson(myCanvas));
-
-        assertEquals(TestUtils.stripIDs(expected), TestUtils.stripIDs(found));
+        myCanvas.setWidthHeight(WIDTH, HEIGHT * 2).paintWith(myMinter,
+                new MediaFragmentSelector(StringUtils.format(URI_FRAG_XYWH_TEMPLATE, 0, 0, WIDTH, HEIGHT)), image1)
+                .paintWith(myMinter,
+                        new MediaFragmentSelector(StringUtils.format(URI_FRAG_XYWH_TEMPLATE, 0, HEIGHT, WIDTH, HEIGHT)),
+                        image2);
+        assertEquals(normalizeIDs(getExpected(MULTI_IMAGE_CANVAS_FIXTURE)), normalizeIDs(toJson(myCanvas)));
     }
 
     /**
@@ -1592,17 +1541,10 @@ public class CanvasTest {
      */
     @Test
     public final void testPaintSoundSerialization() throws IOException {
-        final JsonObject expected;
-        final JsonObject found;
-
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
 
         myCanvas = new Canvas(SOUND_CANVAS_ID, LABEL).setDuration(CANVAS_DURATION).paintWith(myMinter, sound);
-
-        expected = new JsonObject(StringUtils.read(CANVAS_SOUND));
-        found = new JsonObject(TestUtils.toJson(myCanvas));
-
-        assertEquals(TestUtils.stripIDs(expected), TestUtils.stripIDs(found));
+        assertEquals(normalizeIDs(getExpected("canvas-sound.json")), normalizeIDs(TestUtils.toJson(myCanvas)));
     }
 
     /**
@@ -1614,23 +1556,14 @@ public class CanvasTest {
      */
     @Test
     public final void testPaintSoundChoiceMultiSerialization() throws IOException {
-        final JsonObject expected;
-        final JsonObject found;
-
         final SoundContent sound1 = new SoundContent(SOUND_1_ID).setDuration(DURATION);
         final SoundContent sound2 = new SoundContent(SOUND_2_ID).setDuration(DURATION);
         final SoundContent sound3 = new SoundContent(SOUND_3_ID).setDuration(DURATION);
 
-        final String selector1 = StringUtils.format(URI_FRAGMENT_T_TEMPLATE, 0, DURATION);
-        final String selector2 = StringUtils.format(URI_FRAGMENT_T_TEMPLATE, DURATION, DURATION + DURATION);
-
         myCanvas = new Canvas(SOUND_CANVAS_ID, LABEL).setDuration(CANVAS_DURATION)
-                .paintWith(myMinter, selector1, true, sound1, sound2).paintWith(myMinter, selector2, sound3);
-
-        expected = new JsonObject(StringUtils.read(CANVAS_SOUND_CHOICE_MULTI));
-        found = new JsonObject(TestUtils.toJson(myCanvas));
-
-        assertEquals(TestUtils.stripIDs(expected), TestUtils.stripIDs(found));
+                .paintWith(myMinter, StringUtils.format(URI_FRAG_T_TEMPLATE, 0, DURATION), true, sound1, sound2)
+                .paintWith(myMinter, StringUtils.format(URI_FRAG_T_TEMPLATE, DURATION, DURATION + DURATION), sound3);
+        assertEquals(normalizeIDs(getExpected(MULTI_SOUND_CHOICE_FIXTURE)), normalizeIDs(toJson(myCanvas)));
     }
 
     /**
@@ -1642,25 +1575,16 @@ public class CanvasTest {
      */
     @Test
     public final void testPaintSoundChoiceMultiFragmentSelectorSerialization() throws IOException {
-        final JsonObject expected;
-        final JsonObject found;
-
         final SoundContent sound1 = new SoundContent(SOUND_1_ID).setDuration(DURATION);
         final SoundContent sound2 = new SoundContent(SOUND_2_ID).setDuration(DURATION);
         final SoundContent sound3 = new SoundContent(SOUND_3_ID).setDuration(DURATION);
 
-        final MediaFragmentSelector selector1 =
-                new MediaFragmentSelector(StringUtils.format(URI_FRAGMENT_T_TEMPLATE, 0, DURATION));
-        final MediaFragmentSelector selector2 =
-                new MediaFragmentSelector(StringUtils.format(URI_FRAGMENT_T_TEMPLATE, DURATION, DURATION + DURATION));
-
         myCanvas = new Canvas(SOUND_CANVAS_ID, LABEL).setDuration(CANVAS_DURATION)
-                .paintWith(myMinter, selector1, true, sound1, sound2).paintWith(myMinter, selector2, sound3);
-
-        expected = new JsonObject(StringUtils.read(CANVAS_SOUND_CHOICE_MULTI));
-        found = new JsonObject(TestUtils.toJson(myCanvas));
-
-        assertEquals(TestUtils.stripIDs(expected), TestUtils.stripIDs(found));
+                .paintWith(myMinter, new MediaFragmentSelector(StringUtils.format(URI_FRAG_T_TEMPLATE, 0, DURATION)),
+                        true, sound1, sound2)
+                .paintWith(myMinter, new MediaFragmentSelector(
+                        StringUtils.format(URI_FRAG_T_TEMPLATE, DURATION, DURATION + DURATION)), sound3);
+        assertEquals(normalizeIDs(getExpected(MULTI_SOUND_CHOICE_FIXTURE)), normalizeIDs(toJson(myCanvas)));
     }
 
     /**
@@ -1670,18 +1594,11 @@ public class CanvasTest {
      */
     @Test
     public final void testPaintVideoSerialization() throws IOException {
-        final JsonObject expected;
-        final JsonObject found;
-
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
 
         myCanvas = new Canvas(VIDEO_CANVAS_ID, LABEL).setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION)
                 .paintWith(myMinter, video);
-
-        expected = new JsonObject(StringUtils.read(CANVAS_VIDEO));
-        found = new JsonObject(TestUtils.toJson(myCanvas));
-
-        assertEquals(TestUtils.stripIDs(expected), TestUtils.stripIDs(found));
+        assertEquals(normalizeIDs(getExpected("canvas-video.json")), normalizeIDs(toJson(myCanvas)));
     }
 
     /**
@@ -1692,23 +1609,16 @@ public class CanvasTest {
      */
     @Test
     public final void testPaintVideoMultiSerialization() throws IOException {
-        final JsonObject expected;
-        final JsonObject found;
-
         final VideoContent video1 = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
         final VideoContent video2 = new VideoContent(VIDEO_2_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
 
-        final String selector1 = StringUtils.format(URI_FRAGMENT_TXYWH_TEMPLATE, 0, DURATION, 0, 0, WIDTH, HEIGHT);
+        final String selector1 = StringUtils.format(URI_FRAG_TXYWH_TEMPLATE, 0, DURATION, 0, 0, WIDTH, HEIGHT);
         final String selector2 =
-                StringUtils.format(URI_FRAGMENT_TXYWH_TEMPLATE, DURATION, DURATION + DURATION, 0, 0, WIDTH, HEIGHT);
+                StringUtils.format(URI_FRAG_TXYWH_TEMPLATE, DURATION, DURATION + DURATION, 0, 0, WIDTH, HEIGHT);
 
         myCanvas = new Canvas(VIDEO_CANVAS_ID, LABEL).setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION)
                 .paintWith(myMinter, selector1, video1).paintWith(myMinter, selector2, video2);
-
-        expected = new JsonObject(StringUtils.read(CANVAS_VIDEO_MULTI));
-        found = new JsonObject(TestUtils.toJson(myCanvas));
-
-        assertEquals(TestUtils.stripIDs(expected), TestUtils.stripIDs(found));
+        assertEquals(normalizeIDs(getExpected(MULTI_VIDEO_CANVAS_FIXTURE)), normalizeIDs(toJson(myCanvas)));
     }
 
     /**
@@ -1719,29 +1629,30 @@ public class CanvasTest {
      */
     @Test
     public final void testPaintVideoMultiFragmentSelectorSerialization() throws IOException {
-        final JsonObject expected;
-        final JsonObject found;
-
         final VideoContent video1 = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
         final VideoContent video2 = new VideoContent(VIDEO_2_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
 
         final MediaFragmentSelector selector1 = new MediaFragmentSelector(
-                StringUtils.format(URI_FRAGMENT_TXYWH_TEMPLATE, 0, DURATION, 0, 0, WIDTH, HEIGHT));
+                StringUtils.format(URI_FRAG_TXYWH_TEMPLATE, 0, DURATION, 0, 0, WIDTH, HEIGHT));
         final MediaFragmentSelector selector2 = new MediaFragmentSelector(
-                StringUtils.format(URI_FRAGMENT_TXYWH_TEMPLATE, DURATION, DURATION + DURATION, 0, 0, WIDTH, HEIGHT));
+                StringUtils.format(URI_FRAG_TXYWH_TEMPLATE, DURATION, DURATION + DURATION, 0, 0, WIDTH, HEIGHT));
 
         myCanvas = new Canvas(VIDEO_CANVAS_ID, LABEL).setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION)
                 .paintWith(myMinter, selector1, video1).paintWith(myMinter, selector2, video2);
-
-        expected = new JsonObject(StringUtils.read(CANVAS_VIDEO_MULTI));
-        found = new JsonObject(TestUtils.toJson(myCanvas));
-
-        assertEquals(TestUtils.stripIDs(expected), TestUtils.stripIDs(found));
+        assertEquals(normalizeIDs(getExpected(MULTI_VIDEO_CANVAS_FIXTURE)), normalizeIDs(toJson(myCanvas)));
     }
 
     /*************
      * Utilities *
      *************/
+
+    /**
+     * Gets the expected JSON from a test fixture file.
+     */
+    @Override
+    protected String getExpected(final String aJsonFile) throws IOException {
+        return format(StringUtils.read(new File(TestUtils.TEST_DIR, aJsonFile)));
+    }
 
     /**
      * Returns the ID of the content resource associated with myCanvas via a painting annotation.

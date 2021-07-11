@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -8,7 +9,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,6 +22,8 @@ import org.junit.Test;
 
 import com.opencsv.CSVReader;
 
+import info.freelibrary.util.StringUtils;
+
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.Metadata;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
@@ -32,10 +34,6 @@ import info.freelibrary.iiif.presentation.v3.services.image.ImageService3;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageService3.Profile;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 import info.freelibrary.iiif.presentation.v3.utils.URIs;
-
-import io.vertx.core.Vertx;
-import io.vertx.core.buffer.Buffer;
-import io.vertx.core.json.JsonObject;
 
 /**
  * A manifest test.
@@ -64,27 +62,15 @@ public class ManifestTest extends AbstractTest {
             new String[] { "Overtext Language", "Georgian" }, //
             new String[] { "Undertext Language(s)", "Christian Palestinian Aramaic" }).collect(Collectors.toList());
 
-    private static final List<URI> CONTEXTS = Arrays.asList( //
-            URI.create(LOREM_IPSUM.getUrl()), //
-            URI.create(LOREM_IPSUM.getUrl()), //
-            URI.create(LOREM_IPSUM.getUrl()), //
-            URI.create(LOREM_IPSUM.getUrl()), //
-            URI.create(LOREM_IPSUM.getUrl()), //
-            URI.create(LOREM_IPSUM.getUrl()), //
-            URI.create(LOREM_IPSUM.getUrl()), //
-            URI.create(LOREM_IPSUM.getUrl()), //
-            URI.create(LOREM_IPSUM.getUrl()), //
-            URI.create(LOREM_IPSUM.getUrl()), //
-            URI.create(LOREM_IPSUM.getUrl()), //
-            URIs.CONTEXT_URI);
-
     private static final int HEIGHT = 8176;
 
     private static final int WIDTH = 6132;
 
-    private Manifest myManifest;
+    private final List<URI> myContexts = Arrays.asList(URI.create(getURL()), URI.create(getURL()), URI.create(getURL()),
+            URI.create(getURL()), URI.create(getURL()), URI.create(getURL()), URI.create(getURL()),
+            URI.create(getURL()), URI.create(getURL()), URI.create(getURL()), URI.create(getURL()), URIs.CONTEXT_URI);
 
-    private Vertx myVertx;
+    private Manifest myManifest;
 
     /**
      * Sets up the manifest testing environment.
@@ -161,8 +147,6 @@ public class ManifestTest extends AbstractTest {
 
         myManifest.setRights("http://creativecommons.org/licenses/by/4.0/").setBehaviors(ManifestBehavior.PAGED)
                 .setRequiredStatement(reqStmt).setServices(otherService);
-
-        myVertx = Vertx.factory.vertx();
     }
 
     /**
@@ -170,25 +154,25 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public final void testComparatorSort() {
-        final int lastIndex = CONTEXTS.size() - 1;
+        final int lastIndex = myContexts.size() - 1;
         final List<URI> preSort = new ArrayList<>();
 
         // Shuffle until our last list item isn't the required one
-        while (URIs.CONTEXT_URI.equals(CONTEXTS.get(lastIndex))) {
-            Collections.shuffle(CONTEXTS);
+        while (URIs.CONTEXT_URI.equals(myContexts.get(lastIndex))) {
+            Collections.shuffle(myContexts);
         }
 
         // Remember the state of our list before the sort, minus the required Context
-        assertTrue(preSort.addAll(CONTEXTS));
+        assertTrue(preSort.addAll(myContexts));
         assertTrue(preSort.remove(URIs.CONTEXT_URI));
 
         // Sort list items
-        Collections.sort(CONTEXTS, new Manifest(UUID.randomUUID().toString(), "").new ContextListComparator<>());
+        Collections.sort(myContexts, new Manifest(UUID.randomUUID().toString(), "").new ContextListComparator<>());
 
         // Check that the last URI in the list is our required one and
         // that list has same pre-sort order minus the required context
-        assertEquals(CONTEXTS.get(lastIndex), URIs.CONTEXT_URI);
-        assertEquals(preSort, CONTEXTS.subList(0, lastIndex));
+        assertEquals(myContexts.get(lastIndex), URIs.CONTEXT_URI);
+        assertEquals(preSort, myContexts.subList(0, lastIndex));
     }
 
     /**
@@ -227,7 +211,7 @@ public class ManifestTest extends AbstractTest {
     @Test
     public void testClearContexts() {
         assertEquals(1, myManifest.getContexts().size());
-        myManifest.addContexts(LOREM_IPSUM.getUrl(), LOREM_IPSUM.getUrl());
+        myManifest.addContexts(myLoremIpsum.getUrl(), myLoremIpsum.getUrl());
         assertEquals(3, myManifest.getContexts().size());
         assertEquals(1, myManifest.clearContexts().getContexts().size());
     }
@@ -238,7 +222,7 @@ public class ManifestTest extends AbstractTest {
     @Test
     public void testAddUriContexts() {
         assertEquals(1, myManifest.getContexts().size());
-        myManifest.addContexts(URI.create(LOREM_IPSUM.getUrl()), URI.create(LOREM_IPSUM.getUrl()));
+        myManifest.addContexts(URI.create(myLoremIpsum.getUrl()), URI.create(myLoremIpsum.getUrl()));
         assertEquals(3, myManifest.getContexts().size());
     }
 
@@ -247,7 +231,7 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public void testGetPrimaryContext() {
-        assertEquals(URIs.CONTEXT_URI, myManifest.addContexts(URI.create(LOREM_IPSUM.getUrl())).getContext());
+        assertEquals(URIs.CONTEXT_URI, myManifest.addContexts(URI.create(myLoremIpsum.getUrl())).getContext());
     }
 
     /**
@@ -255,9 +239,9 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public void testRemoveContext() {
-        final URI uri = URI.create(LOREM_IPSUM.getUrl());
+        final URI uri = URI.create(myLoremIpsum.getUrl());
 
-        myManifest.addContexts(uri, URI.create(LOREM_IPSUM.getUrl()));
+        myManifest.addContexts(uri, URI.create(myLoremIpsum.getUrl()));
         assertTrue(myManifest.getContexts().contains(uri));
         assertTrue(myManifest.removeContext(uri));
         assertEquals(2, myManifest.getContexts().size());
@@ -356,59 +340,28 @@ public class ManifestTest extends AbstractTest {
     }
 
     /**
-     * Tests manifest's toJSON().
-     */
-    @Test
-    public void testToJSON() {
-        final Buffer buffer = myVertx.fileSystem().readFileBlocking(SINAI_JSON);
-        final JsonObject expected = new JsonObject(buffer);
-
-        assertEquals(expected, myManifest.toJSON());
-    }
-
-    /**
      * Tests manifest's toString().
      */
     @Test
-    public void testToString() {
-        final JsonObject expected = new JsonObject(myVertx.fileSystem().readFileBlocking(SINAI_JSON));
-
-        // Wrap our on-disk JSON to normalize any spacing issues; we care about the contents, not spacing
-        assertEquals(expected.encodePrettily(), new JsonObject(myManifest.toString()).encodePrettily());
+    public void testToString() throws IOException {
+        assertEquals(format(StringUtils.read(new File(SINAI_JSON))), format(myManifest.toString()));
     }
 
     /**
      * Tests manifest creation fromJSON().
      */
     @Test
-    public void testFromJSON() {
-        final JsonObject json = new JsonObject(myVertx.fileSystem().readFileBlocking(SINAI_JSON));
-        final Manifest manifest = Manifest.fromJSON(json);
-
-        assertEquals(json, manifest.toJSON());
+    public void testFrom() throws IOException {
+        final String json = format(StringUtils.read(new File(SINAI_JSON)));
+        assertEquals(json, format(Manifest.from(json).toString()));
     }
 
     /**
-     * Test manifest creation fromJSON() with a Collection.
+     * Test manifest creation using from() with a Collection.
      */
-    @Test(expected = IllegalArgumentException.class)
-    public void testFromJsonCollection() {
-        final String collectionPath = new File(TestUtils.TEST_DIR, "collection1.json").getAbsolutePath();
-        final JsonObject json = new JsonObject(myVertx.fileSystem().readFileBlocking(collectionPath));
-
-        Manifest.fromJSON(json);
-    }
-
-    /**
-     * Tests manifest creation fromString().
-     */
-    @Test
-    public void testFromString() {
-        final String expected = myVertx.fileSystem().readFileBlocking(SINAI_JSON).toString(StandardCharsets.UTF_8);
-        final Manifest manifest = Manifest.fromString(expected);
-
-        // Wrap our on-disk JSON to normalize any spacing issues; we care about the contents, not spacing
-        assertEquals(new JsonObject(expected).encodePrettily(), manifest.toString());
+    @Test(expected = JsonParsingException.class)
+    public void testFromStringCollection() throws IOException {
+        Manifest.from(StringUtils.read(new File(TestUtils.TEST_DIR, "collection1.json")));
     }
 
     /**

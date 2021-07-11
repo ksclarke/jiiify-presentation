@@ -16,7 +16,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -36,8 +35,6 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.DisjointChecke
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
-import io.vertx.core.json.jackson.DatabindCodec;
-
 /**
  * A resource that can be used as a base for more specific IIIF presentation resources.
  */
@@ -53,13 +50,6 @@ abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
      * The logger used by abstract resources.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractResource.class, MessageCodes.BUNDLE);
-
-    /**
-     * We initialize this here so it loads for manifests and collections.
-     */
-    static {
-        DatabindCodec.mapper().registerModule(new Jdk8Module().configureAbsentsAsNulls(true));
-    }
 
     /**
      * The resource type.
@@ -803,6 +793,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
      * @param aCleanComparison If the comparison does not check pre-existing behaviors
      * @param aBehaviorList A list of behaviors
      * @return The checked and valid behaviors
+     * @throws IllegalArgumentException If the supplied behaviors are disjoint
      */
     protected Behavior[] checkBehaviors(final Class<?> aClass, final boolean aCleanComparison,
             final List<Behavior> aBehaviorList) {
@@ -816,6 +807,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
      * @param aCleanComparison If the comparison does not check pre-existing behaviors
      * @param aBehaviorArray An array of behaviors
      * @return The checked and valid behaviors
+     * @throws IllegalArgumentException If the supplied behaviors are disjoint
      */
     protected Behavior[] checkBehaviors(final Class<?> aClass, final boolean aCleanComparison,
             final Behavior... aBehaviorArray) {

@@ -1,20 +1,24 @@
 {
-  "type": "Canvas",
-  "label": { "none": [ "p. 1" ] },
   "id": "https://example.org/iiif/book1/page1/canvas-1",
-  "width": 480,
+  "type": "Canvas",
+  "label": {
+    "none": [
+      "p. 1"
+    ]
+  },
   "height": 360,
+  "width": 480,
   "thumbnail": [
     {
-      "type": "Image",
       "id": "https://example.org/iiif/book1/page1/full/64,64/0/default.jpg",
-      "width": 64,
-      "height": 64,
+      "type": "Image",
       "format": "image/jpeg",
+      "height": 64,
+      "width": 64,
       "service": [
         {
-          "type": "ImageService3",
           "id": "https://example.org/iiif/book1/page1",
+          "type": "ImageService3",
           "profile": "level0"
         }
       ]
@@ -22,23 +26,23 @@
   ],
   "items": [
     {
-      "type": "AnnotationPage",
       "id": "https://example.org/iiif/book1/page1/annotation/painting-page-1",
+      "type": "AnnotationPage",
       "items": [
         {
-          "type": "Annotation",
           "id": "https://example.org/iiif/book1/page1/annotation/painting-1",
+          "type": "Annotation",
           "motivation": "painting",
           "body": {
-            "type": "Image",
             "id": "https://example.org/iiif/book1/page1/full/max/0/default.jpg",
-            "width": 480,
-            "height": 360,
+            "type": "Image",
             "format": "image/jpeg",
+            "height": 360,
+            "width": 480,
             "service": [
               {
-                "type": "ImageService3",
                 "id": "https://example.org/iiif/book1/page1",
+                "type": "ImageService3",
                 "profile": "level0"
               }
             ]
@@ -50,16 +54,16 @@
   ],
   "annotations": [
     {
-      "type": "AnnotationPage",
       "id": "https://example.org/iiif/book1/page1/annotation/supplementing-page-1",
+      "type": "AnnotationPage",
       "items": [
         {
-          "type": "Annotation",
           "id": "https://example.org/iiif/book1/page1/annotation/supplementing-1",
+          "type": "Annotation",
           "motivation": "supplementing",
           "body": {
-            "type": "Text",
             "id": "https://example.org/iiif/book1/page1/ocr.xml",
+            "type": "Text",
             "format": "application/xml"
           },
           "target": "https://example.org/iiif/book1/page1/canvas-1"

@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.Eclipse;
 
@@ -22,10 +23,8 @@ import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-
-import io.vertx.core.json.Json;
-import io.vertx.core.json.JsonObject;
 
 /**
  * A single canvas that provides additional content for use before the main content of the resource is rendered. It may
@@ -486,21 +485,15 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas>
     /**
      * Returns a PlaceholderCanvas from its JSON representation.
      *
-     * @param aJsonObject A placeholder canvas in JSON form
-     * @return The placeholder canvas
-     */
-    public static PlaceholderCanvas fromJSON(final JsonObject aJsonObject) {
-        return Json.decodeValue(aJsonObject.toString(), PlaceholderCanvas.class);
-    }
-
-    /**
-     * Returns a PlaceholderCanvas from its JSON representation.
-     *
      * @param aJsonString A placeholder canvas in string form
      * @return The placeholder canvas
      */
     public static PlaceholderCanvas fromString(final String aJsonString) {
-        return fromJSON(new JsonObject(aJsonString));
+        try {
+            return JSON.getReader(PlaceholderCanvas.class).readValue(aJsonString);
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details);
+        }
     }
 
 }

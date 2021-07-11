@@ -93,7 +93,7 @@ public enum ManifestBehavior implements Behavior {
      * @return A manifest behavior
      * @throws IllegalArgumentException If the behavior string doesn't correspond to a manifest behavior
      */
-    public static ManifestBehavior fromString(final String aBehavior) {
+    public static ManifestBehavior from(final String aBehavior) {
         for (final ManifestBehavior behavior : values()) {
             if (behavior.toString().equalsIgnoreCase(aBehavior)) {
                 return behavior;

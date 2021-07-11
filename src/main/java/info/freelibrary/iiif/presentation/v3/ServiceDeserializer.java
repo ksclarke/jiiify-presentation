@@ -30,10 +30,9 @@ import info.freelibrary.iiif.presentation.v3.services.image.ImageService2;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageService3;
 import info.freelibrary.iiif.presentation.v3.services.image.Size;
 import info.freelibrary.iiif.presentation.v3.services.image.Tile;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-
-import io.vertx.core.json.Json;
 
 /**
  * Deserializes services from JSON documents into {@link Service} implementations.
@@ -272,6 +271,7 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
      *
      * @param aNode A JSON node
      * @param aImageService The image service that's being built
+     * @throws JsonParsingException If sizes cannot be deserialized
      */
     private void deserializeSizes(final JsonNode aNode, final ImageService<?> aImageService) {
         final JsonNode sizesNode = aNode.get(ImageAPI.SIZES);
@@ -279,12 +279,16 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
         if (sizesNode != null && sizesNode.isArray()) {
             final List<Size> sizes = new ArrayList<>();
 
-            for (final JsonNode size : sizesNode) {
-                sizes.add(Json.decodeValue(size.toPrettyString(), Size.class));
-            }
+            try {
+                for (final JsonNode size : sizesNode) {
+                    sizes.add(JSON.getReader(Size.class).readValue(size.toPrettyString()));
+                }
 
-            if (!sizes.isEmpty()) {
-                aImageService.setSizes(sizes);
+                if (!sizes.isEmpty()) {
+                    aImageService.setSizes(sizes);
+                }
+            } catch (final JsonProcessingException details) {
+                throw new JsonParsingException(details);
             }
         }
     }
@@ -301,12 +305,16 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
         if (tilesNode != null && tilesNode.isArray()) {
             final List<Tile> tiles = new ArrayList<>();
 
-            for (final JsonNode tile : tilesNode) {
-                tiles.add(Json.decodeValue(tile.toPrettyString(), Tile.class));
-            }
+            try {
+                for (final JsonNode tile : tilesNode) {
+                    tiles.add(JSON.getReader(Tile.class).readValue(tile.toPrettyString()));
+                }
 
-            if (!tiles.isEmpty()) {
-                aImageService.setTiles(tiles);
+                if (!tiles.isEmpty()) {
+                    aImageService.setTiles(tiles);
+                }
+            } catch (final JsonProcessingException details) {
+                throw new JsonParsingException(details);
             }
         }
     }

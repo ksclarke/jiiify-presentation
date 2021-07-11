@@ -40,7 +40,7 @@ public class SlidesIIIFConf2021 {
         page.addAnnotations(annotation.setBodies(audio));
         manifest.setCanvases(canvas.setPaintingPages(page));
 
-        System.out.println(manifest); // toString() or use toJSON() for JsonObject
+        System.out.println(manifest);
     }
 
     /**

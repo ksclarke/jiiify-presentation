@@ -14,16 +14,16 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.IllegalArgumentI18nException;
 import info.freelibrary.util.warnings.Eclipse;
 
 import info.freelibrary.iiif.presentation.v3.ImageContent;
+import info.freelibrary.iiif.presentation.v3.JsonParsingException;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-
-import io.vertx.core.json.Json;
-import io.vertx.core.json.JsonObject;
 
 /**
  * An organization or person that contributed to providing the content of the resource.
@@ -338,39 +338,31 @@ public class Provider {
     }
 
     /**
-     * Returns a JsonObject of this resource.
+     * Gets a JSON string representation of the provider.
      *
-     * @return A JsonObject of this resource
-     */
-    public JsonObject toJSON() {
-        return JsonObject.mapFrom(this);
-    }
-
-    /**
-     * Gets a string representation of the provider.
+     * @return A JSON string representation of this provider
      */
     @Override
     public String toString() {
-        return toJSON().encodePrettily();
+        try {
+            return JSON.getWriter(Provider.class).writeValueAsString(this);
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details);
+        }
     }
 
     /**
      * Returns a provider from its JSON representation.
      *
-     * @param aJsonObject A provider in JSON form
-     * @return This provider
+     * @param aJsonString A provider in its JSON form
+     * @return A provider
      */
-    public static Provider fromJSON(final JsonObject aJsonObject) {
-        return Json.decodeValue(aJsonObject.toString(), Provider.class);
+    public static Provider from(final String aJsonString) {
+        try {
+            return JSON.getReader(Provider.class).readValue(aJsonString);
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details);
+        }
     }
 
-    /**
-     * Returns a provider from its JSON representation.
-     *
-     * @param aJsonString A provider in string form
-     * @return This provider
-     */
-    public static Provider fromString(final String aJsonString) {
-        return fromJSON(new JsonObject(aJsonString));
-    }
 }

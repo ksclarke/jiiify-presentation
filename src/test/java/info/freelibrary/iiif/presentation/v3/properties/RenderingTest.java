@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.toJson;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -20,11 +22,9 @@ import info.freelibrary.util.StringUtils;
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.MediaType;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
-
-import io.vertx.core.json.JsonObject;
-import io.vertx.core.json.jackson.DatabindCodec;
 
 /**
  * A rendering test.
@@ -174,8 +174,8 @@ public class RenderingTest {
      */
     @Test
     public final void testHashCode() throws IOException {
-        final Rendering rendering1 = Rendering.fromJSON(getFullFixtureAsJSON());
-        final Rendering rendering2 = Rendering.fromJSON(getFullFixtureAsJSON());
+        final Rendering rendering1 = Rendering.from(getTestFixture());
+        final Rendering rendering2 = Rendering.from(getTestFixture());
 
         assertEquals(rendering1.hashCode(), rendering2.hashCode());
     }
@@ -187,8 +187,8 @@ public class RenderingTest {
      */
     @Test
     public final void testEquals() throws IOException {
-        final Rendering rendering1 = Rendering.fromJSON(getFullFixtureAsJSON());
-        final Rendering rendering2 = Rendering.fromJSON(getFullFixtureAsJSON());
+        final Rendering rendering1 = Rendering.from(getTestFixture());
+        final Rendering rendering2 = Rendering.from(getTestFixture());
 
         assertTrue(rendering1.equals(rendering2));
     }
@@ -200,19 +200,8 @@ public class RenderingTest {
      */
     @Test
     public final void testToFromString() throws IOException {
-        final JsonObject json = getFullFixtureAsJSON();
-        assertEquals(json.encodePrettily(), Rendering.fromString(json.toString()).toString());
-    }
-
-    /**
-     * Tests conversion to and from the rendering JSON representation.
-     *
-     * @throws IOException If there is trouble reading from the test fixtures file
-     */
-    @Test
-    public final void testToFromJsonObject() throws IOException {
-        final JsonObject json = getFullFixtureAsJSON();
-        assertEquals(json, Rendering.fromJSON(json).toJSON());
+        final String json = getTestFixture();
+        assertEquals(format(json), format(Rendering.from(json).toString()));
     }
 
     /**
@@ -222,10 +211,10 @@ public class RenderingTest {
      * @throws IOException If there is trouble reading or deserializing the rendering file
      */
     private void checkDeserialization(final File aExpected) throws IOException {
-        final String json = new JsonObject(StringUtils.read(aExpected)).getJsonArray(JsonKeys.RENDERING).toString();
+        final String json =
+                JSON.getReader().readTree(StringUtils.read(aExpected)).get(JsonKeys.RENDERING).toPrettyString();
         final TypeReference<List<Rendering>> typeRef = new TypeReference<>() {};
-
-        final List<Rendering> expected = DatabindCodec.mapper().readValue(json, typeRef);
+        final List<Homepage> expected = JSON.getReader(typeRef).readValue(json);
         final List<Rendering> found = myManifest.getRenderings();
 
         // Check that the lists contain the same number of elements
@@ -244,19 +233,20 @@ public class RenderingTest {
      * @throws IOException If there is trouble reading the rendering file or serializing the constructed rendering(s)
      */
     private void checkSerialization(final File aExpected) throws IOException {
-        final JsonObject expected = new JsonObject(StringUtils.read(aExpected));
-        final JsonObject found = new JsonObject(TestUtils.toJson(JsonKeys.RENDERING, myManifest.getRenderings(), true));
+        final String expected = format(StringUtils.read(aExpected));
+        final String found = format(toJson(JsonKeys.RENDERING, myManifest.getRenderings(), true));
 
         assertEquals(expected, found);
     }
 
     /**
-     * Gets the full test fixture as a JsonObject.
+     * Gets the full test fixture as a JSON string.
      *
-     * @return A JsonObject containing the test fixture's contents
+     * @return A JSON string containing the test fixture's contents
      * @throws IOException If there is trouble reading the test fixture file
      */
-    private JsonObject getFullFixtureAsJSON() throws IOException {
-        return new JsonObject(StringUtils.read(RENDERING_FULL_ONE)).getJsonArray(JsonKeys.RENDERING).getJsonObject(0);
+    private String getTestFixture() throws IOException {
+        return JSON.getReader().readTree(StringUtils.read(RENDERING_FULL_ONE)).get(JsonKeys.RENDERING).get(0)
+                .toPrettyString();
     }
 }

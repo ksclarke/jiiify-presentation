@@ -1,9 +1,9 @@
 {
   "@context" : "http://iiif.io/api/presentation/3/context.json",
-  "type" : "Collection",
   "id" : "6e8ee416-c864-4cbe-8af7-770ed674e9d9",
+  "type" : "Collection",
   "accompanyingCanvas" : {
-    "type" : "Canvas",
-    "id" : "49dc75e6-81a6-4e30-b820-9b6f43c3b8a5"
+    "id" : "49dc75e6-81a6-4e30-b820-9b6f43c3b8a5",
+    "type" : "Canvas"
   }
 }

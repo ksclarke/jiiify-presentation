@@ -1,13 +1,13 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.behaviors;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.TestConstants;
 
 /**
@@ -25,8 +25,8 @@ public class ResourceBehaviorTest {
      */
     @Test
     public final void testJsonSerialization() throws JsonProcessingException {
-        assertEquals(TestConstants.QUOTE + BehaviorConstants.HIDDEN + TestConstants.QUOTE, new ObjectMapper()
-                .writeValueAsString(ResourceBehavior.HIDDEN));
+        assertEquals(TestConstants.QUOTE + BehaviorConstants.HIDDEN + TestConstants.QUOTE,
+                JSON.getWriter().writeValueAsString(ResourceBehavior.HIDDEN));
     }
 
     /**

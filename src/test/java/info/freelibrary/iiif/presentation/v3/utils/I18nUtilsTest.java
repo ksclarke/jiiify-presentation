@@ -85,16 +85,16 @@ public class I18nUtilsTest {
      */
     @Test
     public final void testStrippingI18ns() {
-        final I18n[] cleanI18ns = new I18n[] { new I18n(I18n.DEFAULT_LANG, "something"), new I18n(I18n.DEFAULT_LANG,
-                "everything iseverything"), new I18n(I18n.DEFAULT_LANG, "") };
-        final I18n[] results = I18nUtils.stripHTML(new I18n[] { new I18n(I18n.DEFAULT_LANG, "<p>something</p>"),
-            new I18n(I18n.DEFAULT_LANG, "</p>everything is<br/>everything"), new I18n(I18n.DEFAULT_LANG,
-                    "<form></form>") });
+        final I18n[] cleanI18ns = new I18n[] { new I18n(I18n.DEFAULT_LANG, "something"),
+            new I18n(I18n.DEFAULT_LANG, "everything iseverything"), new I18n(I18n.DEFAULT_LANG, "") };
+        final I18n[] results = I18nUtils.stripHTML(new I18n(I18n.DEFAULT_LANG, "<p>something</p>"),
+                new I18n(I18n.DEFAULT_LANG, "</p>everything is<br/>everything"),
+                new I18n(I18n.DEFAULT_LANG, "<form></form>"));
 
         assertEquals(cleanI18ns.length, results.length);
 
         for (int index = 0; index < cleanI18ns.length; index++) {
-            assertEquals(cleanI18ns[index].toJSON(), results[index].toJSON());
+            assertEquals(cleanI18ns[index].toString(), results[index].toString());
         }
     }
 

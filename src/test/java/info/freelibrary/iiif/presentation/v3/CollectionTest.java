@@ -1,13 +1,13 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +25,6 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.CollectionBeha
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 
-import io.vertx.core.Vertx;
-import io.vertx.core.json.JsonObject;
-
 /**
  * Tests a collection.
  */
@@ -39,8 +36,6 @@ public class CollectionTest {
 
     private Label myLabel;
 
-    private Vertx myVertx;
-
     /**
      * Sets up the testing environment.
      */
@@ -48,7 +43,6 @@ public class CollectionTest {
     public void setUp() {
         myID = URI.create(UUID.randomUUID().toString());
         myLabel = new Label("label-" + UUID.randomUUID().toString());
-        myVertx = Vertx.factory.vertx();
     }
 
     /**
@@ -97,7 +91,7 @@ public class CollectionTest {
         final List<Collection.Item> items = new ArrayList<>();
         final Collection.Item manifest1 = new Collection.Item(Item.Type.MANIFEST, manifestOneID);
         final Collection.Item manifest2 = new Collection.Item(Item.Type.MANIFEST, manifestTwoID);
-        final JsonObject expected = new JsonObject(StringUtils.read(TEST_FILE1));
+        final String expected = format(StringUtils.read(TEST_FILE1));
 
         manifest1.setLabel("A placeholder fake manifest: 1");
         items.add(manifest1);
@@ -106,7 +100,7 @@ public class CollectionTest {
         collection.setItems(items);
         collection.setThumbnails(new ImageContent(thumbnailID));
 
-        assertEquals(expected, collection.toJSON());
+        assertEquals(expected, collection.toString());
     }
 
     /**
@@ -116,10 +110,10 @@ public class CollectionTest {
      */
     @Test
     public void testReadingCollection() throws IOException {
-        final JsonObject expected = new JsonObject(StringUtils.read(TEST_FILE1));
-        final Collection collection = Collection.fromJSON(expected);
+        final String expected = format(StringUtils.read(TEST_FILE1));
+        final Collection collection = Collection.from(expected);
 
-        assertEquals(expected, collection.toJSON());
+        assertEquals(expected, collection.toString());
     }
 
     /**
@@ -139,34 +133,28 @@ public class CollectionTest {
      * Tests reading a collection document from JSON.
      */
     @Test
-    public void testFromJSON() {
-        final JsonObject json = new JsonObject(myVertx.fileSystem().readFileBlocking(TEST_FILE1.getAbsolutePath()));
-        final Collection collection = Collection.fromJSON(json);
+    public void testFrom() throws IOException {
+        final String json = format(StringUtils.read(TEST_FILE1));
+        final Collection collection = Collection.from(json);
 
-        assertEquals(json, collection.toJSON());
+        assertEquals(json, collection.toString());
     }
 
     /**
      * Test collection doc creation fromJSON() with a Manifest.
      */
     @Test(expected = IllegalArgumentException.class)
-    public void testFromJsonManifest() {
-        final String collectionPath = new File(TestUtils.TEST_DIR, "z1960050.json").getAbsolutePath();
-        final JsonObject json = new JsonObject(myVertx.fileSystem().readFileBlocking(collectionPath));
-
-        Collection.fromJSON(json);
+    public void testFromManifest() throws IOException {
+        Collection.from(StringUtils.read(new File(TestUtils.TEST_DIR, "z1960050.json")));
     }
 
     /**
      * Tests reading a collection document from a JSON string.
      */
     @Test
-    public void testFromString() {
-        final String json =
-                myVertx.fileSystem().readFileBlocking(TEST_FILE1.getAbsolutePath()).toString(StandardCharsets.UTF_8);
-        final Collection collection = Collection.fromString(json);
-
-        assertEquals(new JsonObject(json), collection.toJSON());
+    public void testFromString() throws IOException {
+        final String json = format(StringUtils.read(TEST_FILE1));
+        assertEquals(json, Collection.from(json).toString());
     }
 
     /**
@@ -174,10 +162,8 @@ public class CollectionTest {
      */
     @Test
     public final void testSetBehaviors() {
-        final Collection collection = new Collection(myID, myLabel);
-
-        assertEquals(2, collection.setBehaviors(CollectionBehavior.AUTO_ADVANCE, CollectionBehavior.INDIVIDUALS)
-                .getBehaviors().size());
+        assertEquals(2, new Collection(myID, myLabel)
+                .setBehaviors(CollectionBehavior.AUTO_ADVANCE, CollectionBehavior.INDIVIDUALS).getBehaviors().size());
     }
 
     /**
@@ -185,9 +171,7 @@ public class CollectionTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testSetDisallowedBehaviors() {
-        final Collection collection = new Collection(myID, myLabel);
-
-        collection.setBehaviors(CollectionBehavior.AUTO_ADVANCE, ManifestBehavior.NO_AUTO_ADVANCE);
+        new Collection(myID, myLabel).setBehaviors(CollectionBehavior.AUTO_ADVANCE, ManifestBehavior.NO_AUTO_ADVANCE);
     }
 
     /**
@@ -195,9 +179,8 @@ public class CollectionTest {
      */
     @Test
     public final void testAddBehaviors() {
-        final Collection collection = new Collection(myID, myLabel);
-
-        assertEquals(1, collection.addBehaviors(CollectionBehavior.AUTO_ADVANCE).getBehaviors().size());
+        assertEquals(1,
+                new Collection(myID, myLabel).addBehaviors(CollectionBehavior.AUTO_ADVANCE).getBehaviors().size());
     }
 
     /**
@@ -205,8 +188,6 @@ public class CollectionTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testAddDisallowedBehaviors() {
-        final Collection collection = new Collection(myID, myLabel);
-
-        collection.addBehaviors(CollectionBehavior.CONTINUOUS, ManifestBehavior.AUTO_ADVANCE);
+        new Collection(myID, myLabel).addBehaviors(CollectionBehavior.CONTINUOUS, ManifestBehavior.AUTO_ADVANCE);
     }
 }

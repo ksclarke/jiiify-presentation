@@ -15,6 +15,7 @@ import java.util.stream.Stream;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -33,12 +34,10 @@ import info.freelibrary.iiif.presentation.v3.properties.Start;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.URIs;
-
-import io.vertx.core.json.Json;
-import io.vertx.core.json.JsonObject;
 
 /**
  * The overall description of the structure and properties of the digital representation of an object. It carries
@@ -733,50 +732,42 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     /**
-     * Returns a JsonObject of the manifest.
-     *
-     * @return A JsonObject of the manifest
-     */
-    public JsonObject toJSON() {
-        return JsonObject.mapFrom(this);
-    }
-
-    /**
      * Returns a string/JSON representation of the manifest.
      *
      * @return A string representation of the manifest
      */
     @Override
     public String toString() {
-        return toJSON().encodePrettily();
+        try {
+            return JSON.getWriter(Manifest.class).writeValueAsString(this);
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details);
+        }
     }
 
     /**
      * Returns a manifest from its JSON representation.
      *
-     * @param aJsonObject A manifest in JSON form
+     * @param aJsonString A manifest in JSON form
      * @return The manifest
+     * @throws JsonParsingException If there is trouble parsing the JSON manifest
      */
     @JsonIgnore
-    public static Manifest fromJSON(final JsonObject aJsonObject) {
-        final String type = aJsonObject.getString(JsonKeys.TYPE);
+    public static Manifest from(final String aJsonString) {
+        try {
+            final Manifest manifest = JSON.getReader(Manifest.class).readValue(aJsonString);
+            final String type = manifest.getType();
 
-        if (!ResourceTypes.MANIFEST.equals(type)) {
-            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_119, ResourceTypes.MANIFEST, type));
+            // No error is thrown if a Collection is passed in instead of a Manifest, so we check for that
+            if (!ResourceTypes.MANIFEST.equals(type)) {
+                throw new JsonParsingException(LOGGER.getMessage(MessageCodes.JPA_119, ResourceTypes.MANIFEST, type));
+            }
+
+            return manifest;
+        } catch (final JsonProcessingException details) {
+            // JsonProcessingException wraps other runtime exceptions, too (e.g., IllegalArgumentException(s))
+            throw new JsonParsingException(details);
         }
-
-        return Json.decodeValue(aJsonObject.toString(), Manifest.class);
-    }
-
-    /**
-     * Returns a Manifest from its JSON representation.
-     *
-     * @param aJsonString A manifest in string form
-     * @return The manifest
-     */
-    @JsonIgnore
-    public static Manifest fromString(final String aJsonString) {
-        return fromJSON(new JsonObject(aJsonString));
     }
 
     /**

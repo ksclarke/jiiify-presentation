@@ -29,11 +29,9 @@ import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.Selector;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-
-import io.vertx.core.json.JsonObject;
-import io.vertx.core.json.jackson.DatabindCodec;
 
 /**
  * A way to associate content resources and commentary with a canvas. This provides a single, coherent method for
@@ -460,31 +458,31 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
 
         switch (type) {
             case ResourceTypes.SOUND:
-                getBodies().add(DatabindCodec.mapper().convertValue(aMap, SoundContent.class));
+                getBodies().add(JSON.convertValue(aMap, SoundContent.class));
                 break;
             case ResourceTypes.VIDEO:
-                getBodies().add(DatabindCodec.mapper().convertValue(aMap, VideoContent.class));
+                getBodies().add(JSON.convertValue(aMap, VideoContent.class));
                 break;
             case ResourceTypes.IMAGE:
-                getBodies().add(DatabindCodec.mapper().convertValue(aMap, ImageContent.class));
+                getBodies().add(JSON.convertValue(aMap, ImageContent.class));
                 break;
             case ResourceTypes.TEXT:
-                getBodies().add(DatabindCodec.mapper().convertValue(aMap, TextContent.class));
+                getBodies().add(JSON.convertValue(aMap, TextContent.class));
                 break;
             case ResourceTypes.DATASET:
-                getBodies().add(DatabindCodec.mapper().convertValue(aMap, DatasetContent.class));
+                getBodies().add(JSON.convertValue(aMap, DatasetContent.class));
                 break;
             case ResourceTypes.MODEL:
-                getBodies().add(DatabindCodec.mapper().convertValue(aMap, ModelContent.class));
+                getBodies().add(JSON.convertValue(aMap, ModelContent.class));
                 break;
             case ResourceTypes.CANVAS:
-                getBodies().add(DatabindCodec.mapper().convertValue(aMap, CanvasContent.class));
+                getBodies().add(JSON.convertValue(aMap, CanvasContent.class));
                 break;
             case ResourceTypes.TEXTUAL_BODY:
-                getBodies().add(DatabindCodec.mapper().convertValue(aMap, TextualBody.class));
+                getBodies().add(JSON.convertValue(aMap, TextualBody.class));
                 break;
             default:
-                getBodies().add(new OtherContent(JsonObject.mapFrom(aMap)));
+                getBodies().add(new OtherContent(JSON.valueToTree(aMap)));
                 break;
         }
     }

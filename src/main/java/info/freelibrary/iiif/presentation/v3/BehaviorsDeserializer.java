@@ -74,7 +74,7 @@ class BehaviorsDeserializer extends StdDeserializer<List<Behavior>> {
                 behaviorClass = CollectionBehavior.class;
                 break;
             case ResourceTypes.MANIFEST:
-                stringToBehavior = ManifestBehavior::fromString;
+                stringToBehavior = ManifestBehavior::from;
                 behaviorClass = ManifestBehavior.class;
                 break;
             case ResourceTypes.RANGE:

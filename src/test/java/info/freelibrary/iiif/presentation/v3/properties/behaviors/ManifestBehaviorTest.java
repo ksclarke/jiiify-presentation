@@ -1,22 +1,22 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.behaviors;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
+import info.freelibrary.util.StringUtils;
+
+import info.freelibrary.iiif.presentation.v3.JsonParsingException;
 import info.freelibrary.iiif.presentation.v3.Manifest;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.TestConstants;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
-
-import io.vertx.core.Vertx;
-import io.vertx.core.json.DecodeException;
-import io.vertx.core.json.JsonObject;
 
 /**
  * A test of ManifestBehavior.
@@ -27,10 +27,8 @@ public class ManifestBehaviorTest {
         BehaviorConstants.INDIVIDUALS, BehaviorConstants.CONTINUOUS, BehaviorConstants.REPEAT,
         BehaviorConstants.NO_REPEAT, BehaviorConstants.PAGED, BehaviorConstants.UNORDERED };
 
-    private static final String TEST_MANIFEST = new File(TestUtils.TEST_DIR, "manifest-disjoint-manifest-behavior.json")
-            .getAbsolutePath();
-
-    private final Vertx myVertx = Vertx.factory.vertx();
+    private static final String TEST_MANIFEST =
+            new File(TestUtils.TEST_DIR, "manifest-disjoint-manifest-behavior.json").getAbsolutePath();
 
     /**
      * Tests the JSON serialization.
@@ -39,8 +37,8 @@ public class ManifestBehaviorTest {
      */
     @Test
     public final void testJsonSerialization() throws JsonProcessingException {
-        assertEquals(TestConstants.QUOTE + BehaviorConstants.REPEAT + TestConstants.QUOTE, new ObjectMapper()
-                .writeValueAsString(ManifestBehavior.REPEAT));
+        assertEquals(TestConstants.QUOTE + BehaviorConstants.REPEAT + TestConstants.QUOTE,
+                JSON.getWriter().writeValueAsString(ManifestBehavior.REPEAT));
     }
 
     /**
@@ -48,9 +46,9 @@ public class ManifestBehaviorTest {
      *
      * @throws DecodeException
      */
-    @Test(expected = DecodeException.class)
-    public final void testJsonDeserializationDisjoint() {
-        Manifest.fromJSON(new JsonObject(myVertx.fileSystem().readFileBlocking(TEST_MANIFEST)));
+    @Test(expected = JsonParsingException.class)
+    public final void testJsonDeserializationDisjoint() throws IOException {
+        Manifest.from(StringUtils.read(new File(TEST_MANIFEST)));
     }
 
     /**
@@ -66,7 +64,7 @@ public class ManifestBehaviorTest {
      */
     @Test
     public final void fromString() {
-        assertEquals(ManifestBehavior.REPEAT, ManifestBehavior.fromString(BehaviorConstants.REPEAT));
+        assertEquals(ManifestBehavior.REPEAT, ManifestBehavior.from(BehaviorConstants.REPEAT));
     }
 
     /**

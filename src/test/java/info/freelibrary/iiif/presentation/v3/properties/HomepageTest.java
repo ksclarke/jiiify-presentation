@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.toJson;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -19,11 +21,9 @@ import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.MediaType;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
-
-import io.vertx.core.json.JsonObject;
-import io.vertx.core.json.jackson.DatabindCodec;
 
 /**
  * A homepage test.
@@ -162,8 +162,8 @@ public class HomepageTest {
      */
     @Test
     public final void testHashCode() throws IOException {
-        final Homepage homepage1 = Homepage.fromJSON(getFullFixtureAsJSON());
-        final Homepage homepage2 = Homepage.fromJSON(getFullFixtureAsJSON());
+        final Homepage homepage1 = Homepage.from(getTestFixture());
+        final Homepage homepage2 = Homepage.from(getTestFixture());
 
         assertEquals(homepage1.hashCode(), homepage2.hashCode());
     }
@@ -175,8 +175,8 @@ public class HomepageTest {
      */
     @Test
     public final void testEquals() throws IOException {
-        final Homepage homepage1 = Homepage.fromJSON(getFullFixtureAsJSON());
-        final Homepage homepage2 = Homepage.fromJSON(getFullFixtureAsJSON());
+        final Homepage homepage1 = Homepage.from(getTestFixture());
+        final Homepage homepage2 = Homepage.from(getTestFixture());
 
         assertTrue(homepage1.equals(homepage2));
     }
@@ -188,19 +188,8 @@ public class HomepageTest {
      */
     @Test
     public final void testToFromString() throws IOException {
-        final JsonObject json = getFullFixtureAsJSON();
-        assertEquals(json.encodePrettily(), Homepage.fromString(json.toString()).toString());
-    }
-
-    /**
-     * Tests conversion to and from the homepage JSON representation.
-     *
-     * @throws IOException If there is trouble reading from the test fixtures file
-     */
-    @Test
-    public final void testToFromJsonObject() throws IOException {
-        final JsonObject json = getFullFixtureAsJSON();
-        assertEquals(json, Homepage.fromJSON(json).toJSON());
+        final String json = getTestFixture();
+        assertEquals(json, Homepage.from(json).toString());
     }
 
     /**
@@ -210,10 +199,10 @@ public class HomepageTest {
      * @throws IOException If there is trouble reading or deserializing the homepage file
      */
     private void checkDeserialization(final File aExpected) throws IOException {
-        final String json = new JsonObject(StringUtils.read(aExpected)).getJsonArray(JsonKeys.HOMEPAGE).toString();
+        final String json = JSON.getReader(Homepage.class).readTree(StringUtils.read(aExpected)).get(JsonKeys.HOMEPAGE)
+                .toPrettyString();
         final TypeReference<List<Homepage>> typeRef = new TypeReference<>() {};
-
-        final List<Homepage> expected = DatabindCodec.mapper().readValue(json, typeRef);
+        final List<Homepage> expected = JSON.getReader(typeRef).readValue(json);
         final List<Homepage> found = myManifest.getHomepages();
 
         // Check that our lists contain the same number of elements
@@ -232,19 +221,20 @@ public class HomepageTest {
      * @throws IOException If there is trouble reading the homepage file or serializing the constructed homepage(s)
      */
     private void checkSerialization(final File aExpected) throws IOException {
-        final JsonObject expected = new JsonObject(StringUtils.read(aExpected));
-        final JsonObject found = new JsonObject(TestUtils.toJson(JsonKeys.HOMEPAGE, myManifest.getHomepages(), true));
+        final String expected = format(StringUtils.read(aExpected));
+        final String found = format(toJson(JsonKeys.HOMEPAGE, myManifest.getHomepages(), true));
 
         assertEquals(expected, found);
     }
 
     /**
-     * Gets the full test fixture as a JsonObject.
+     * Gets the full test fixture as a JSON string.
      *
-     * @return A JsonObject containing the test fixture's contents
+     * @return A String containing the test fixture's contents
      * @throws IOException If there is trouble reading the test fixture file
      */
-    private JsonObject getFullFixtureAsJSON() throws IOException {
-        return new JsonObject(StringUtils.read(HOMEPAGE_FULL_ONE)).getJsonArray(JsonKeys.HOMEPAGE).getJsonObject(0);
+    private String getTestFixture() throws IOException {
+        return JSON.getReader(Homepage.class).readTree(StringUtils.read(HOMEPAGE_FULL_ONE)).get(JsonKeys.HOMEPAGE)
+                .get(0).toPrettyString();
     }
 }

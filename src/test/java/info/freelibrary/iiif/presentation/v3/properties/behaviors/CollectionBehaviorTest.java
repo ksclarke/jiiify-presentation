@@ -1,22 +1,23 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.behaviors;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
+import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.Collection;
+import info.freelibrary.iiif.presentation.v3.JsonParsingException;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.TestConstants;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
-
-import io.vertx.core.Vertx;
-import io.vertx.core.json.DecodeException;
-import io.vertx.core.json.JsonObject;
 
 /**
  * A test of CollectionBehavior.
@@ -29,10 +30,8 @@ public class CollectionBehaviorTest {
         BehaviorConstants.NO_REPEAT, BehaviorConstants.PAGED, BehaviorConstants.UNORDERED, BehaviorConstants.MULTI_PART,
         BehaviorConstants.TOGETHER };
 
-    private static final String TEST_MANIFEST = new File(TestUtils.TEST_DIR,
-            "collection-disjoint-collection-behavior.json").getAbsolutePath();
-
-    private final Vertx myVertx = Vertx.factory.vertx();
+    private static final String TEST_MANIFEST =
+            new File(TestUtils.TEST_DIR, "collection-disjoint-collection-behavior.json").getAbsolutePath();
 
     /**
      * Tests the JSON serialization.
@@ -41,18 +40,18 @@ public class CollectionBehaviorTest {
      */
     @Test
     public final void testJsonSerialization() throws JsonProcessingException {
-        assertEquals(TestConstants.QUOTE + BehaviorConstants.TOGETHER + TestConstants.QUOTE, new ObjectMapper()
-                .writeValueAsString(CollectionBehavior.TOGETHER));
+        assertEquals(TestConstants.QUOTE + BehaviorConstants.TOGETHER + TestConstants.QUOTE,
+                JSON.getWriter().writeValueAsString(CollectionBehavior.TOGETHER));
     }
 
     /**
      * Tests the JSON deserialization of a collection with mutually exclusive behaviors.
      *
-     * @throws DecodeException
+     * @throws JsonParsingException If the manifest cannot be parsed successfully
      */
-    @Test(expected = DecodeException.class)
-    public final void testJsonDeserializationDisjoint() {
-        Collection.fromJSON(new JsonObject(myVertx.fileSystem().readFileBlocking(TEST_MANIFEST)));
+    @Test(expected = JsonParsingException.class)
+    public final void testJsonDeserializationDisjoint() throws IOException {
+        Collection.from(StringUtils.read(new File(TEST_MANIFEST), StandardCharsets.UTF_8));
     }
 
     /**

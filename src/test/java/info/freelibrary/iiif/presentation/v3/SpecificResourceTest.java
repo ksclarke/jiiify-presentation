@@ -15,8 +15,7 @@ import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.properties.selectors.AudioContentSelector;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.Selector;
-
-import io.vertx.core.json.JsonObject;
+import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 
 /**
  * Tests a SpecificResource.
@@ -44,8 +43,8 @@ public class SpecificResourceTest extends AbstractTest {
      */
     @Before
     public void setUp() {
-        myID = LOREM_IPSUM.getUrl();
-        myOtherID = LOREM_IPSUM.getUrl();
+        myID = myLoremIpsum.getUrl();
+        myOtherID = myLoremIpsum.getUrl();
     }
 
     /**
@@ -116,39 +115,12 @@ public class SpecificResourceTest extends AbstractTest {
     }
 
     /**
-     * Tests {@link SpecificResource#toJSON() toJSON} method.
-     */
-    @Test
-    public final void testToJSON() {
-        final String json = StringUtils.format(JSON, myID, myOtherID);
-        assertEquals(new JsonObject(json), new SpecificResource(myID, myOtherID, SELECTOR).toJSON());
-    }
-
-    /**
-     * Tests {@link SpecificResource#toString() toString} method.
-     */
-    @Test
-    public final void testToString() {
-        final String json = StringUtils.format(JSON, myID, myOtherID);
-        assertEquals(new JsonObject(json).encode(), new SpecificResource(myID, myOtherID, SELECTOR).toString());
-    }
-
-    /**
-     * Tests {@link SpecificResource#fromJSON(JsonObject) fromJSON} method.
-     */
-    @Test
-    public final void testFromJSON() {
-        final String json = StringUtils.format(JSON, myID, myOtherID);
-        assertEquals(new JsonObject(json), SpecificResource.fromJSON(new JsonObject(json)).toJSON());
-    }
-
-    /**
-     * Tests {@link SpecificResource#fromString(String) fromString} method.
+     * Tests {@link SpecificResource#from(String) fromString} method.
      */
     @Test
     public final void testFromString() {
-        final String json = StringUtils.format(JSON, myID, myOtherID);
-        assertEquals(new JsonObject(json), SpecificResource.fromString(json).toJSON());
+        final String json = TestUtils.format(StringUtils.format(JSON, myID, myOtherID));
+        assertEquals(json, SpecificResource.from(json).toString());
     }
 
 }
