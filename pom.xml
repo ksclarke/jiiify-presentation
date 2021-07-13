@@ -71,7 +71,7 @@
     <!-- GraalVM related property values -->
     <graalvm.version>21.1.0</graalvm.version>
     <!-- Optional: location of installed native-image -->
-    <gu>/usr/lib/jvm/graalvm/lib/installer/bin/gu</gu>
+    <gu>${env.JAVA_HOME}/lib/installer/bin/gu</gu>
 
     <!-- Plugin related versions -->
     <maven.jar.plugin.version>3.2.0</maven.jar.plugin.version>
