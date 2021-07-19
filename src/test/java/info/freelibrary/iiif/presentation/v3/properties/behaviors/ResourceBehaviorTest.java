@@ -42,7 +42,7 @@ public class ResourceBehaviorTest {
      */
     @Test
     public final void fromString() {
-        assertEquals(ResourceBehavior.HIDDEN, ResourceBehavior.fromString(BehaviorConstants.HIDDEN));
+        assertEquals(ResourceBehavior.HIDDEN, ResourceBehavior.from(BehaviorConstants.HIDDEN));
     }
 
     /**

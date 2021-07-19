@@ -35,9 +35,9 @@ public class ImageService3Test {
      */
     @Test
     public void testGetProfile() {
-        assertEquals(LEVEL_0, new ImageService3(ImageService3.Profile.LEVEL_ZERO, ID).getProfile());
-        assertEquals(LEVEL_1, new ImageService3(ImageService3.Profile.LEVEL_ONE, ID).getProfile());
-        assertEquals(LEVEL_2, new ImageService3(ImageService3.Profile.LEVEL_TWO, ID).getProfile());
+        assertEquals(LEVEL_0, new ImageService3(ImageService3.Profile.LEVEL_ZERO, ID).getProfile().get());
+        assertEquals(LEVEL_1, new ImageService3(ImageService3.Profile.LEVEL_ONE, ID).getProfile().get());
+        assertEquals(LEVEL_2, new ImageService3(ImageService3.Profile.LEVEL_TWO, ID).getProfile().get());
     }
 
     /**

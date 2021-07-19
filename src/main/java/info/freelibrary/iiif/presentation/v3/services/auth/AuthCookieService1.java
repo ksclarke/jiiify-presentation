@@ -3,6 +3,7 @@ package info.freelibrary.iiif.presentation.v3.services.auth;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -11,10 +12,10 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.Service;
+import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageService3;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
@@ -24,11 +25,6 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public class AuthCookieService1 extends AbstractAuthService<AuthCookieService1>
         implements AuthService<AuthCookieService1> {
-
-    /**
-     * The label for this auth cookie service.
-     */
-    private String myLabel;
 
     /**
      * Creates a new auth cookie service.
@@ -60,7 +56,7 @@ public class AuthCookieService1 extends AbstractAuthService<AuthCookieService1>
             final Service<?>... aServiceArray) {
         super(aProfile, URI.create(aID));
         setServices(aServiceArray);
-        myLabel = aLabel;
+        myLabel = new Label(aLabel);
     }
 
     /**
@@ -75,7 +71,7 @@ public class AuthCookieService1 extends AbstractAuthService<AuthCookieService1>
             final Service<?>... aServiceArray) {
         super(aProfile, aID);
         setServices(aServiceArray);
-        myLabel = aLabel;
+        myLabel = new Label(aLabel);
     }
 
     /**
@@ -90,7 +86,7 @@ public class AuthCookieService1 extends AbstractAuthService<AuthCookieService1>
             final List<Service<?>> aServiceArray) {
         super(aProfile, URI.create(aID));
         setServices(aServiceArray);
-        myLabel = aLabel;
+        myLabel = new Label(aLabel);
     }
 
     /**
@@ -105,7 +101,7 @@ public class AuthCookieService1 extends AbstractAuthService<AuthCookieService1>
             final List<Service<?>> aServiceArray) {
         super(aProfile, aID);
         setServices(aServiceArray);
-        myLabel = aLabel;
+        myLabel = new Label(aLabel);
     }
 
     @Override
@@ -125,10 +121,11 @@ public class AuthCookieService1 extends AbstractAuthService<AuthCookieService1>
      *
      * @return The label of the auth cookie service
      */
+    @Override
     @JsonGetter(JsonKeys.LABEL)
     @JsonInclude(Include.NON_NULL)
-    public String getLabel() {
-        return myLabel;
+    public Optional<Label> getLabel() {
+        return Optional.ofNullable(myLabel);
     }
 
     /**
@@ -139,7 +136,7 @@ public class AuthCookieService1 extends AbstractAuthService<AuthCookieService1>
      */
     @JsonSetter(JsonKeys.LABEL)
     public AuthCookieService1 setLabel(final String aLabel) {
-        myLabel = aLabel;
+        myLabel = new Label(aLabel);
         return this;
     }
 
@@ -149,9 +146,9 @@ public class AuthCookieService1 extends AbstractAuthService<AuthCookieService1>
      * @param aProfile The profile in string form
      * @return The image service
      */
+    @Override
     @JsonSetter(JsonKeys.PROFILE)
-    @SuppressWarnings(PMD.MISSING_OVERRIDE) // PMD thinks this is overriding something even though it's not
-    private AuthCookieService1 setProfile(final String aProfile) { // NOPMD
+    public AuthCookieService1 setProfile(final String aProfile) {
         return super.setProfile(Profile.fromString(aProfile));
     }
 

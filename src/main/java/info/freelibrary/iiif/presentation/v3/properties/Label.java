@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -24,6 +26,16 @@ public class Label extends I18nProperty<Label> {
      */
     public Label(final I18n... aI18nArray) {
         super(I18nUtils.validateI18ns(false, aI18nArray));
+    }
+
+    /**
+     * Creates a label from the supplied internationalizations.
+     *
+     * @param aI18nList An list of internationalizations for the label
+     * @throws IllegalArgumentException If the supplied internationalizations have HTML markup
+     */
+    public Label(final List<I18n> aI18nList) {
+        super(I18nUtils.validateI18ns(false, aI18nList.toArray(new I18n[0])));
     }
 
     /**
@@ -64,13 +76,26 @@ public class Label extends I18nProperty<Label> {
      * Sets the internationalizations of the label, removing all other previous internationalizations.
      *
      * @param aI18nArray An array of internationalizations
-     * @return True if the property's internationalizations were set successfully
+     * @return This label
      * @throws IllegalArgumentException If the supplied internationalizations contain HTML markup
      */
     @Override
     public Label setI18ns(final I18n... aI18nArray) {
         myI18ns.clear();
         return addI18ns(I18nUtils.validateI18ns(false, aI18nArray));
+    }
+
+    /**
+     * Sets the internationalizations of the label, removing all other previous internationalizations.
+     *
+     * @param aI18nList A list of internationalizations
+     * @return This label
+     * @throws IllegalArgumentException If the supplied internationalizations contain HTML markup
+     */
+    @Override
+    public Label setI18ns(final List<I18n> aI18nList) {
+        myI18ns.clear();
+        return addI18ns(I18nUtils.validateI18ns(false, aI18nList.toArray(new I18n[0])));
     }
 
     /**

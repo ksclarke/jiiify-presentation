@@ -66,11 +66,11 @@ class BehaviorsDeserializer extends StdDeserializer<List<Behavior>> {
 
         switch (iiifResourceType) {
             case ResourceTypes.CANVAS:
-                stringToBehavior = CanvasBehavior::fromString;
+                stringToBehavior = CanvasBehavior::from;
                 behaviorClass = CanvasBehavior.class;
                 break;
             case ResourceTypes.COLLECTION:
-                stringToBehavior = CollectionBehavior::fromString;
+                stringToBehavior = CollectionBehavior::from;
                 behaviorClass = CollectionBehavior.class;
                 break;
             case ResourceTypes.MANIFEST:
@@ -78,11 +78,11 @@ class BehaviorsDeserializer extends StdDeserializer<List<Behavior>> {
                 behaviorClass = ManifestBehavior.class;
                 break;
             case ResourceTypes.RANGE:
-                stringToBehavior = RangeBehavior::fromString;
+                stringToBehavior = RangeBehavior::from;
                 behaviorClass = RangeBehavior.class;
                 break;
             default:
-                stringToBehavior = ResourceBehavior::fromString;
+                stringToBehavior = ResourceBehavior::from;
                 behaviorClass = ResourceBehavior.class;
                 break;
         }

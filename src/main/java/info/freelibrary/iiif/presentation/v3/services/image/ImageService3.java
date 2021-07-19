@@ -3,6 +3,7 @@ package info.freelibrary.iiif.presentation.v3.services.image;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,7 +14,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.Eclipse;
-import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.Service;
@@ -192,7 +192,7 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
 
     @Override
     @JsonGetter(JsonKeys.PROFILE)
-    public String getProfile() {
+    public Optional<String> getProfile() {
         return super.getProfile();
     }
 
@@ -258,9 +258,9 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
      * @param aProfile The profile in string form
      * @return The image service
      */
+    @Override
     @JsonSetter(JsonKeys.PROFILE)
-    @SuppressWarnings(PMD.MISSING_OVERRIDE) // PMD is wrong about this overriding anything
-    private ImageService3 setProfile(final String aProfile) { // NOPMD
+    public ImageService3 setProfile(final String aProfile) {
         return super.setProfile(Profile.fromString(aProfile));
     }
 

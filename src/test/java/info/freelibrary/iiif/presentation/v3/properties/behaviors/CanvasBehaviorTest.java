@@ -65,7 +65,7 @@ public class CanvasBehaviorTest {
      */
     @Test
     public final void fromString() {
-        assertEquals(CanvasBehavior.NON_PAGED, CanvasBehavior.fromString(BehaviorConstants.NON_PAGED));
+        assertEquals(CanvasBehavior.NON_PAGED, CanvasBehavior.from(BehaviorConstants.NON_PAGED));
     }
 
     /**

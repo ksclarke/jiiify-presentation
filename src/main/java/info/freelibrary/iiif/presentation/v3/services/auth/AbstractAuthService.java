@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation.v3.services.auth;
 
 import java.net.URI;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -43,7 +44,6 @@ abstract class AbstractAuthService<T extends AbstractAuthService<T>> extends Abs
      */
     AbstractAuthService(final URI aID) {
         super();
-
         myID = aID;
     }
 
@@ -57,8 +57,8 @@ abstract class AbstractAuthService<T extends AbstractAuthService<T>> extends Abs
     @Override
     @JsonGetter(JsonKeys.PROFILE)
     @JsonInclude(Include.NON_NULL)
-    public String getProfile() {
-        return myProfile != null ? myProfile.string() : null;
+    public Optional<String> getProfile() {
+        return myProfile == null ? Optional.empty() : Optional.of(myProfile.string());
     }
 
     @Override

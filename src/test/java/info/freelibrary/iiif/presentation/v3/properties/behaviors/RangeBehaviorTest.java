@@ -44,7 +44,7 @@ public class RangeBehaviorTest {
      */
     @Test
     public final void fromString() {
-        assertEquals(RangeBehavior.SEQUENCE, RangeBehavior.fromString(BehaviorConstants.SEQUENCE));
+        assertEquals(RangeBehavior.SEQUENCE, RangeBehavior.from(BehaviorConstants.SEQUENCE));
     }
 
     /**

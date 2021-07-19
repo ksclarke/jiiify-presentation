@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -16,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.util.warnings.JDK;
 
 import info.freelibrary.iiif.presentation.v3.Service;
+import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
@@ -37,6 +39,11 @@ public abstract class AbstractService<T extends AbstractService<T>> implements S
      * This service's ID.
      */
     protected URI myID;
+
+    /**
+     * This service's label.
+     */
+    protected Label myLabel;
 
     /**
      * An empty constructor for Jackson's deserialization process.
@@ -82,6 +89,21 @@ public abstract class AbstractService<T extends AbstractService<T>> implements S
     protected T setType(final String aType) {
         myType = aType;
         return (T) this;
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.LABEL)
+    @SuppressWarnings(JDK.UNCHECKED)
+    public T setLabel(final Label aLabel) {
+        myLabel = aLabel;
+        return (T) this;
+    }
+
+    @Override
+    @JsonGetter(JsonKeys.LABEL)
+    @JsonInclude(Include.NON_NULL)
+    public Optional<Label> getLabel() {
+        return Optional.ofNullable(myLabel);
     }
 
     @Override

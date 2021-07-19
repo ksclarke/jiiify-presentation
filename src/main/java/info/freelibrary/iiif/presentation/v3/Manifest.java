@@ -198,7 +198,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     /**
      * A private constructor used for Jackson's deserialization processes.
      */
-    private Manifest() {
+    Manifest() {
         super(ResourceTypes.MANIFEST);
     }
 

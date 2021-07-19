@@ -91,5 +91,6 @@
   <entry key="JPA-118">The supplied value isn't a valid collection item type: {}</entry>
   <entry key="JPA-119">The supplied JSON object does not look like it's a {}; its type is: {}</entry>
   <entry key="JPA-120">Testing Ruby example file: {}</entry>
+  <entry key="JPA-121">Parsing thumbnail structure from JSON</entry>
 
 </properties>

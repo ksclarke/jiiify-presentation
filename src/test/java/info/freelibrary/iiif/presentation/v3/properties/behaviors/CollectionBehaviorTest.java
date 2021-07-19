@@ -67,7 +67,7 @@ public class CollectionBehaviorTest {
      */
     @Test
     public final void fromString() {
-        assertEquals(CollectionBehavior.TOGETHER, CollectionBehavior.fromString(BehaviorConstants.TOGETHER));
+        assertEquals(CollectionBehavior.TOGETHER, CollectionBehavior.from(BehaviorConstants.TOGETHER));
     }
 
     /**

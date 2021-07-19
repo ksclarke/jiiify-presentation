@@ -2,12 +2,14 @@
 package info.freelibrary.iiif.presentation.v3.services;
 
 import java.net.URI;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.v3.Service;
+import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
@@ -20,7 +22,7 @@ public class PhysicalDimsService extends AbstractService<PhysicalDimsService> im
      * The profile for this service.
      */
     @JsonIgnore
-    public static final URI PROFILE = URI.create("http://iiif.io/api/annex/services/physdim");
+    public static final String PROFILE = "http://iiif.io/api/annex/services/physdim";
 
     /**
      * The physical scale of the service.
@@ -39,7 +41,6 @@ public class PhysicalDimsService extends AbstractService<PhysicalDimsService> im
      */
     public PhysicalDimsService(final URI aID) {
         super();
-
         myID = aID;
     }
 
@@ -58,13 +59,21 @@ public class PhysicalDimsService extends AbstractService<PhysicalDimsService> im
         myID = aID;
     }
 
-    /**
-     * Get service profile.
-     *
-     * @return The service profile
-     */
-    public URI getProfile() {
-        return PROFILE;
+    @Override
+    public Optional<String> getProfile() {
+        return Optional.of(PROFILE);
+    }
+
+    @Override
+    public PhysicalDimsService setProfile(final String aProfile) {
+        // This is intentionally left empty
+        return this;
+    }
+
+    @Override
+    public PhysicalDimsService setLabel(final Label aLabel) {
+        myLabel = aLabel;
+        return this;
     }
 
     @Override

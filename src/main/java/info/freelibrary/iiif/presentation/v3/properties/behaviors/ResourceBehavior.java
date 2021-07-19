@@ -59,7 +59,7 @@ public enum ResourceBehavior implements Behavior {
      * @return A resource behavior
      * @throws IllegalArgumentException If the behavior string doesn't correspond to a resource behavior
      */
-    public static ResourceBehavior fromString(final String aBehavior) {
+    public static ResourceBehavior from(final String aBehavior) {
         for (final ResourceBehavior behavior : values()) {
             if (behavior.toString().equalsIgnoreCase(aBehavior)) {
                 return behavior;

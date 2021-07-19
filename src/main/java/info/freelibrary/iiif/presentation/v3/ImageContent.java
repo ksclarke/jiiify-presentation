@@ -71,9 +71,9 @@ public class ImageContent extends AbstractContentResource<ImageContent> implemen
     }
 
     /**
-     * Constructs an image content resource for Jackson's deserialization process.
+     * Creates a new image content resource.
      */
-    private ImageContent() {
+    ImageContent() {
         super(ResourceTypes.IMAGE);
     }
 

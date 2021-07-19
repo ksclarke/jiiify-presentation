@@ -43,6 +43,16 @@ class I18nProperty<T extends I18nProperty<T>> {
     }
 
     /**
+     * Creates a property from a list of internationalizations.
+     *
+     * @param aI18nList A list of internationalizations for the property
+     */
+    I18nProperty(final List<I18n> aI18nList) {
+        myI18ns = new ArrayList<>();
+        addCheckedI18ns(aI18nList);
+    }
+
+    /**
      * Creates a property from an array of string(s).
      *
      * @param aStringArray An array of strings for the property
@@ -65,7 +75,7 @@ class I18nProperty<T extends I18nProperty<T>> {
     }
 
     /**
-     * Sets the internationalization of the property, removing all other previous internationalizations.
+     * Sets the internationalizations of the property, removing all other previous internationalizations.
      *
      * @param aI18nArray An array of I18n(s).
      * @return True if the property's value was set
@@ -73,6 +83,17 @@ class I18nProperty<T extends I18nProperty<T>> {
     protected I18nProperty<T> setI18ns(final I18n... aI18nArray) {
         myI18ns.clear();
         return addCheckedI18ns(aI18nArray);
+    }
+
+    /**
+     * Sets the internationalizations of the property, removing all other previous internationalizations.
+     *
+     * @param aI18nList A list of I18n(s).
+     * @return True if the property's value was set
+     */
+    protected I18nProperty<T> setI18ns(final List<I18n> aI18nList) {
+        myI18ns.clear();
+        return addCheckedI18ns(aI18nList);
     }
 
     /**
@@ -156,7 +177,7 @@ class I18nProperty<T extends I18nProperty<T>> {
     }
 
     /**
-     * Adds a string value to the property.
+     * Adds string values to the property.
      *
      * @param aStringArray An array of strings to add to the property
      * @return The property
@@ -166,13 +187,33 @@ class I18nProperty<T extends I18nProperty<T>> {
     }
 
     /**
-     * Adds an internationalization to the property.
+     * Adds string values to the property.
      *
-     * @param aI18nArray A list of internationalizations
+     * @param aStringList A list of strings to add to the property
+     * @return The property
+     */
+    protected I18nProperty<T> addStrings(final List<String> aStringList) {
+        return addCheckedStrings(aStringList);
+    }
+
+    /**
+     * Adds internationalizations to the property.
+     *
+     * @param aI18nArray An array of internationalizations
      * @return The property
      */
     protected I18nProperty<T> addI18ns(final I18n... aI18nArray) {
         return addCheckedI18ns(aI18nArray);
+    }
+
+    /**
+     * Adds internationalizations to the property.
+     *
+     * @param aI18nList A list of internationalizations
+     * @return The property
+     */
+    protected I18nProperty<T> addI18ns(final List<I18n> aI18nList) {
+        return addCheckedI18ns(aI18nList);
     }
 
     /**
@@ -219,6 +260,16 @@ class I18nProperty<T extends I18nProperty<T>> {
     }
 
     /**
+     * Adds strings to the I18nProperty after they've been checked and confirmed to not be null.
+     *
+     * @param aStringList A list of strings
+     * @return The property
+     */
+    private I18nProperty<T> addCheckedStrings(final List<String> aStringList) {
+        return addCheckedStrings(aStringList.toArray(new String[0]));
+    }
+
+    /**
      * Adds internationalized values to the I18nProperty after they've been checked and confirmed to not be null.
      *
      * @param aI18nArray An array of internationalized values
@@ -237,4 +288,15 @@ class I18nProperty<T extends I18nProperty<T>> {
 
         return this;
     }
+
+    /**
+     * Adds internationalized values to the I18nProperty after they've been checked and confirmed to not be null.
+     *
+     * @param aI18nList A list of internationalized values
+     * @return The property
+     */
+    private I18nProperty<T> addCheckedI18ns(final List<I18n> aI18nList) {
+        return addCheckedI18ns(aI18nList.toArray(new I18n[0]));
+    }
+
 }

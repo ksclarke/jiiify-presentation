@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
@@ -19,6 +21,15 @@ public class Value extends I18nProperty<Value> {
      */
     public Value(final I18n... aI18nArray) {
         super(aI18nArray);
+    }
+
+    /**
+     * Creates a value from the supplied internationalization(s).
+     *
+     * @param aI18nList A list of internationalizations for the value
+     */
+    public Value(final List<I18n> aI18nList) {
+        super(aI18nList);
     }
 
     /**

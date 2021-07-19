@@ -5,6 +5,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -129,8 +130,8 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
 
     @Override
     @JsonGetter(JsonKeys.PROFILE)
-    public String getProfile() {
-        return myProfile.string();
+    public Optional<String> getProfile() {
+        return Optional.of(myProfile.string());
     }
 
     /**

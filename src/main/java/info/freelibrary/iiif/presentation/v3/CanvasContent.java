@@ -48,9 +48,9 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
     }
 
     /**
-     * Creates a canvas content resource for Jackson's deserialization processes.
+     * Creates a new canvas content resource.
      */
-    private CanvasContent() {
+    CanvasContent() {
         super(ResourceTypes.CANVAS);
         super.setFormatFromMediaType(MediaType.APPLICATION_JSON);
     }

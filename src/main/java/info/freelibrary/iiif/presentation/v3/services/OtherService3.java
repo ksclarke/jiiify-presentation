@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import info.freelibrary.iiif.presentation.v3.MediaType;
+import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
@@ -22,7 +23,7 @@ public class OtherService3 extends AbstractService<OtherService3> implements Oth
      * This service's profile.
      */
     @JsonProperty(JsonKeys.PROFILE)
-    protected URI myProfile;
+    protected String myProfile;
 
     /**
      * This service's format.
@@ -81,9 +82,10 @@ public class OtherService3 extends AbstractService<OtherService3> implements Oth
      *
      * @return The profile URI for this service
      */
+    @Override
     @JsonIgnore
-    public URI getProfile() {
-        return myProfile;
+    public Optional<String> getProfile() {
+        return Optional.ofNullable(myProfile);
     }
 
     /**
@@ -132,19 +134,13 @@ public class OtherService3 extends AbstractService<OtherService3> implements Oth
     @Override
     @JsonIgnore
     public OtherService3 setProfile(final String aProfile) {
-        myProfile = URI.create(aProfile);
+        myProfile = aProfile;
         return this;
     }
 
-    /**
-     * Sets the profile URI for this service.
-     *
-     * @param aProfile A profile URI for this service
-     * @return This service
-     */
-    @JsonIgnore
-    public OtherService3 setProfile(final URI aProfile) {
-        myProfile = aProfile;
+    @Override
+    public OtherService3 setLabel(final Label aLabel) {
+        myLabel = aLabel;
         return this;
     }
 
@@ -183,4 +179,5 @@ public class OtherService3 extends AbstractService<OtherService3> implements Oth
             return null;
         }
     }
+
 }

@@ -98,7 +98,7 @@ public enum RangeBehavior implements Behavior {
      * @return A range behavior
      * @throws IllegalArgumentException If the behavior string doesn't correspond to a range behavior
      */
-    public static RangeBehavior fromString(final String aBehavior) {
+    public static RangeBehavior from(final String aBehavior) {
         for (final RangeBehavior behavior : values()) {
             if (behavior.toString().equalsIgnoreCase(aBehavior)) {
                 return behavior;

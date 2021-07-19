@@ -11,11 +11,12 @@ import info.freelibrary.iiif.presentation.v3.Service;
 public interface AuthService<T extends AuthService<T>> extends Service<T> {
 
     /**
-     * Gets the auth service profile as a string.
+     * Sets the auth service profile.
      *
-     * @return The profile in string form
+     * @param aProfile The profile
+     * @return The auth service
      */
-    String getProfile();
+    T setProfile(Profile aProfile);
 
     /**
      * Sets the auth service profile.
@@ -23,7 +24,8 @@ public interface AuthService<T extends AuthService<T>> extends Service<T> {
      * @param aProfile The profile
      * @return The auth service
      */
-    T setProfile(Profile aProfile);
+    @Override
+    T setProfile(String aProfile);
 
     /**
      * Interface for {@link AuthService} profiles.

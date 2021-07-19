@@ -66,9 +66,9 @@ public class SoundContent extends AbstractContentResource<SoundContent> implemen
     }
 
     /**
-     * Constructs a sound content resource for Jackson's deserialization process.
+     * Creates a new sound content resource.
      */
-    private SoundContent() {
+    SoundContent() {
         super(ResourceTypes.SOUND);
     }
 

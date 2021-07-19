@@ -48,9 +48,9 @@ public class ModelContent extends AbstractContentResource<ModelContent>
     }
 
     /**
-     * Creates a model content annotation. This is used by Jackson's deserialization processes.
+     * Creates a new model content annotation.
      */
-    private ModelContent() {
+    ModelContent() {
         super(ResourceTypes.MODEL);
     }
 

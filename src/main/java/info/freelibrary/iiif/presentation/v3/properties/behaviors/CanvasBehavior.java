@@ -73,7 +73,7 @@ public enum CanvasBehavior implements Behavior {
      * @return A canvas behavior
      * @throws IllegalArgumentException If the behavior string doesn't correspond to a canvas behavior
      */
-    public static CanvasBehavior fromString(final String aBehavior) {
+    public static CanvasBehavior from(final String aBehavior) {
         for (final CanvasBehavior behavior : values()) {
             if (behavior.toString().equalsIgnoreCase(aBehavior)) {
                 return behavior;

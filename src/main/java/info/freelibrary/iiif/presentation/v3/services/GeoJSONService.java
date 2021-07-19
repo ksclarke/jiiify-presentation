@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation.v3.services;
 
 import java.net.URI;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -36,4 +37,14 @@ public class GeoJSONService extends AbstractService<GeoJSONService> implements S
         return super.setID(aID);
     }
 
+    @Override
+    public GeoJSONService setProfile(final String aProfile) {
+        // This is intentionally left empty
+        return this;
+    }
+
+    @Override
+    public Optional<String> getProfile() {
+        return Optional.empty();
+    }
 }

@@ -48,9 +48,9 @@ public class TextContent extends AbstractContentResource<TextContent>
     }
 
     /**
-     * Creates a text content resource.
+     * Creates a new text content resource.
      */
-    private TextContent() {
+    TextContent() {
         super(ResourceTypes.TEXT);
     }
 

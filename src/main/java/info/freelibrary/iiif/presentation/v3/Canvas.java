@@ -11,8 +11,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import info.freelibrary.util.warnings.Eclipse;
-
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
@@ -125,10 +123,9 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     }
 
     /**
-     * Creates a blank new canvas. This is just used by Jackson's deserialization processes.
+     * Creates a new canvas.
      */
-    @SuppressWarnings(Eclipse.UNUSED)
-    private Canvas() {
+    Canvas() {
         super();
     }
 

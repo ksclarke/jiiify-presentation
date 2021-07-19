@@ -48,9 +48,9 @@ public class DatasetContent extends AbstractContentResource<DatasetContent>
     }
 
     /**
-     * Creates a dataset content resource. This is used by Jackson for its deserialization processes.
+     * Creates a new dataset content resource.
      */
-    private DatasetContent() {
+    DatasetContent() {
         super(ResourceTypes.DATASET);
     }
 

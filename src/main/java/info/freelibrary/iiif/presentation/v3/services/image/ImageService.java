@@ -3,6 +3,7 @@ package info.freelibrary.iiif.presentation.v3.services.image;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import info.freelibrary.iiif.presentation.v3.Service;
 
@@ -16,7 +17,8 @@ public interface ImageService<T extends ImageService<T>> extends Service<T> {
      *
      * @return The profile in string form
      */
-    String getProfile();
+    @Override
+    Optional<String> getProfile();
 
     /**
      * Sets the image service profile.
@@ -25,6 +27,15 @@ public interface ImageService<T extends ImageService<T>> extends Service<T> {
      * @return The image service
      */
     T setProfile(Profile aProfile);
+
+    /**
+     * Sets the image service profile from a string value.
+     *
+     * @param aProfile The profile in string form
+     * @return The image service
+     */
+    @Override
+    T setProfile(String aProfile);
 
     /**
      * Sets the image service's extra formats.

@@ -26,7 +26,7 @@ public class PhysicalDimsServiceTest {
         PhysicalDimsService service;
 
         assertEquals(ID, new PhysicalDimsService(ID).getID());
-        assertEquals(PhysicalDimsService.PROFILE, new PhysicalDimsService(ID).getProfile());
+        assertEquals(PhysicalDimsService.PROFILE.toString(), new PhysicalDimsService(ID).getProfile().get());
         assertEquals(SCALE, new PhysicalDimsService(ID).setPhysicalScale(SCALE).getPhysicalScale(), 0);
         assertEquals(UNITS, new PhysicalDimsService(ID).setPhysicalUnits(UNITS).getPhysicalUnits());
 

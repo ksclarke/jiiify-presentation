@@ -3,8 +3,11 @@ package info.freelibrary.iiif.presentation.v3;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import info.freelibrary.iiif.presentation.v3.properties.Label;
 
 /**
  * A service interface to be implemented by actual services.
@@ -41,6 +44,36 @@ public interface Service<T extends Service<T>> {
      * @return The type
      */
     String getType();
+
+    /**
+     * Sets the service's profile from a string.
+     *
+     * @param aProfile A service profile
+     * @return This service
+     */
+    T setProfile(String aProfile);
+
+    /**
+     * Gets the service's profile, if it has one.
+     *
+     * @return An optional service profile
+     */
+    Optional<String> getProfile();
+
+    /**
+     * Sets the service's label.
+     *
+     * @param aLabel A service label
+     * @return This service
+     */
+    T setLabel(Label aLabel);
+
+    /**
+     * Gets the service's label, if it has one.
+     *
+     * @return The label, if there is one
+     */
+    Optional<Label> getLabel();
 
     /**
      * Sets other services that are related to this service.

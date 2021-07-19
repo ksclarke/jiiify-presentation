@@ -77,9 +77,9 @@ public class VideoContent extends AbstractContentResource<VideoContent>
     }
 
     /**
-     * Creates a video content resource.
+     * Creates a new video content resource.
      */
-    private VideoContent() {
+    VideoContent() {
         super(ResourceTypes.VIDEO);
     }
 
