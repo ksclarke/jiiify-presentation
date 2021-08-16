@@ -849,7 +849,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * Cf. https://iiif.io/api/presentation/3.0/#46-linked-data-context-and-extensions
      * </p>
      */
-    class ContextListComparator<U> implements Comparator<U> {
+    static class ContextListComparator<U> implements Comparator<U> {
 
         @Override
         public int compare(final U aFirstURI, final U aSecondURI) {

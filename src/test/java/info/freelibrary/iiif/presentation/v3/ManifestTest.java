@@ -24,6 +24,7 @@ import com.opencsv.CSVReader;
 
 import info.freelibrary.util.StringUtils;
 
+import info.freelibrary.iiif.presentation.v3.Manifest.ContextListComparator;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.Metadata;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
@@ -167,7 +168,7 @@ public class ManifestTest extends AbstractTest {
         assertTrue(preSort.remove(URIs.CONTEXT_URI));
 
         // Sort list items
-        Collections.sort(myContexts, new Manifest(UUID.randomUUID().toString(), "").new ContextListComparator<>());
+        Collections.sort(myContexts, new ContextListComparator<>());
 
         // Check that the last URI in the list is our required one and
         // that list has same pre-sort order minus the required context

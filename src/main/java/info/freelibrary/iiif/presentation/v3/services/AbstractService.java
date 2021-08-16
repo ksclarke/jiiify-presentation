@@ -66,23 +66,7 @@ public abstract class AbstractService<T extends AbstractService<T>> implements S
     }
 
     @Override
-    @JsonGetter(JsonKeys.TYPE)
-    public String getType() {
-        return myType != null ? myType : getClass().getSimpleName();
-    }
-
-    /**
-     * Sets the service type (for extension by a particular service or Jackson's deserializer).
-     *
-     * @param aType A service type
-     * @return This service
-     */
-    @JsonSetter(JsonKeys.TYPE)
-    @SuppressWarnings(JDK.UNCHECKED)
-    protected T setType(final String aType) {
-        myType = aType;
-        return (T) this;
-    }
+    public abstract T setType(String aType);
 
     @Override
     @JsonSetter(JsonKeys.SERVICE)

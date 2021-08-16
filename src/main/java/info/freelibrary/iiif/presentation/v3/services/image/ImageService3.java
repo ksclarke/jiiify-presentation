@@ -13,7 +13,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.Eclipse;
-import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.Service;
@@ -25,74 +24,6 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  * API 3</a>.
  */
 public class ImageService3 extends AbstractImageService<ImageService3> implements ImageService<ImageService3> {
-
-    /**
-     * The profiles (API compliance levels) supported by an {@link ImageService3}.
-     */
-    public enum Profile implements ImageService.Profile {
-
-        /**
-         * http://iiif.io/api/image/3/level0.json
-         */
-        LEVEL_ZERO("level0"),
-
-        /**
-         * http://iiif.io/api/image/3/level1.json
-         */
-        LEVEL_ONE("level1"),
-
-        /**
-         * http://iiif.io/api/image/3/level2.json
-         */
-        LEVEL_TWO("level2");
-
-        /**
-         * A logger for the image service profile.
-         */
-        private static final Logger LOGGER = LoggerFactory.getLogger(ImageService3.Profile.class, MessageCodes.BUNDLE);
-
-        /**
-         * My image service profile.
-         */
-        private String myProfile;
-
-        /**
-         * Creates a new profile from the supplied profile string.
-         *
-         * @param aProfile A new image service profile
-         */
-        Profile(final String aProfile) {
-            myProfile = aProfile;
-        }
-
-        @Override
-        public String string() {
-            return myProfile;
-        }
-
-        @Override
-        public URI uri() {
-            return URI.create(myProfile);
-        }
-
-        /**
-         * Creates an image service profile from a string value.
-         *
-         * @param aProfile A profile in string form
-         * @return An image service profile
-         * @throws IllegalArgumentException If the profile string doesn't correspond to a valid profile
-         */
-        public static ImageService3.Profile fromString(final String aProfile) {
-            for (final ImageService3.Profile profile : ImageService3.Profile.values()) {
-                if (profile.string().equals(aProfile)) {
-                    return profile;
-                }
-            }
-
-            throw new IllegalArgumentException(
-                    LOGGER.getMessage(MessageCodes.JPA_109, aProfile, ResourceTypes.IMAGE_SERVICE_3));
-        }
-    }
 
     /**
      * The default profile level for the image info service
@@ -152,16 +83,17 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
     }
 
     @Override
+    @JsonSetter(JsonKeys.TYPE)
+    public ImageService3 setType(final String aType) {
+        // intentionally no-op; it's a constant for the class
+        return this;
+    }
+
+    @Override
     @JsonGetter(JsonKeys.SERVICE)
     @JsonInclude(Include.NON_EMPTY)
     public List<Service<?>> getServices() {
         return super.getServices();
-    }
-
-    @Override
-    @JsonGetter(JsonKeys.TYPE)
-    public String getType() {
-        return getClass().getSimpleName();
     }
 
     @Override
@@ -190,10 +122,23 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
         return super.getExtraQualitiesAsStrings();
     }
 
+    /**
+     * Sets the image service profile.
+     *
+     * @param aProfile An image service service profile
+     * @return The service
+     */
+    @JsonIgnore
+    public ImageService3 setProfile(final ImageService3.Profile aProfile) {
+        myProfile = aProfile;
+        return this;
+    }
+
     @Override
-    @JsonGetter(JsonKeys.PROFILE)
-    public String getProfile() {
-        return super.getProfile();
+    @JsonSetter(JsonKeys.PROFILE)
+    public ImageService3 setProfile(final String aProfile) {
+        myProfile = ImageService3.Profile.fromString(aProfile);
+        return this;
     }
 
     @Override
@@ -248,24 +193,6 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
 
     @Override
     @JsonIgnore
-    public ImageService3 setProfile(final ImageService.Profile aProfile) {
-        return super.setProfile(aProfile);
-    }
-
-    /**
-     * Sets the service profile.
-     *
-     * @param aProfile The profile in string form
-     * @return The image service
-     */
-    @JsonSetter(JsonKeys.PROFILE)
-    @SuppressWarnings(PMD.MISSING_OVERRIDE) // PMD is wrong about this overriding anything
-    private ImageService3 setProfile(final String aProfile) { // NOPMD
-        return super.setProfile(Profile.fromString(aProfile));
-    }
-
-    @Override
-    @JsonIgnore
     public ImageService3 setProtocol(final boolean aProtocolFlag) {
         return super.setProtocol(aProtocolFlag);
     }
@@ -304,6 +231,90 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
     @JsonIgnore
     public ImageService3 setTiles(final Tile... aTileArray) {
         return super.setTiles(aTileArray);
+    }
+
+    /**
+     * The profiles (API compliance levels) supported by an {@link ImageService3}.
+     */
+    public enum Profile implements ImageService.Profile {
+
+        /**
+         * http://iiif.io/api/image/3/level0.json
+         */
+        LEVEL_ZERO("level0"),
+
+        /**
+         * http://iiif.io/api/image/3/level1.json
+         */
+        LEVEL_ONE("level1"),
+
+        /**
+         * http://iiif.io/api/image/3/level2.json
+         */
+        LEVEL_TWO("level2");
+
+        /**
+         * A logger for the image service profile.
+         */
+        private static final Logger LOGGER = LoggerFactory.getLogger(ImageService3.Profile.class, MessageCodes.BUNDLE);
+
+        /**
+         * My image service profile.
+         */
+        private String myProfile;
+
+        /**
+         * Creates a new profile from the supplied profile string.
+         *
+         * @param aProfile A new image service profile
+         */
+        Profile(final String aProfile) {
+            myProfile = aProfile;
+        }
+
+        @Override
+        public String string() {
+            return myProfile;
+        }
+
+        @Override
+        public URI uri() {
+            return URI.create(myProfile);
+        }
+
+        /**
+         * Whether the supplied profile string is a valid ImageService3 profile.
+         *
+         * @param aProfile A profile
+         * @return True if the supplied profile string is a valid ImageService3 profile; else, false
+         */
+        public static boolean isValid(final String aProfile) {
+            for (final ImageService3.Profile profile : ImageService3.Profile.values()) {
+                if (profile.string().equals(aProfile)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /**
+         * Creates an image service profile from a string value.
+         *
+         * @param aProfile A profile in string form
+         * @return An image service profile
+         * @throws IllegalArgumentException If the profile string doesn't correspond to a valid profile
+         */
+        public static ImageService3.Profile fromString(final String aProfile) {
+            for (final ImageService3.Profile profile : ImageService3.Profile.values()) {
+                if (profile.string().equalsIgnoreCase(aProfile)) {
+                    return profile;
+                }
+            }
+
+            throw new IllegalArgumentException(
+                    LOGGER.getMessage(MessageCodes.JPA_109, aProfile, ResourceTypes.IMAGE_SERVICE_3));
+        }
     }
 
 }

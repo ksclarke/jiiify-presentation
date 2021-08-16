@@ -9,47 +9,54 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 /**
  * Constants related to the <a href="https://iiif.io/api/image/">IIIF Image API</a>.
  */
-public interface ImageAPI {
+public final class ImageAPI {
 
     /**
      * The image API's extra formats.
      */
-    String EXTRA_FORMATS = "extraFormats";
+    public static final String EXTRA_FORMATS = "extraFormats";
 
     /**
      * The image API's extra qualities.
      */
-    String EXTRA_QUALITIES = "extraQualities";
+    public static final String EXTRA_QUALITIES = "extraQualities";
 
     /**
      * The image API's protocol.
      */
-    String PROTOCOL = "protocol";
+    public static final String PROTOCOL = "protocol";
 
     /**
      * The image API's tiles.
      */
-    String TILES = "tiles";
+    public static final String TILES = "tiles";
 
     /**
      * The image API's sizes.
      */
-    String SIZES = "sizes";
+    public static final String SIZES = "sizes";
 
     /**
      * The image API's scale factors.
      */
-    String SCALE_FACTORS = "scaleFactors";
+    public static final String SCALE_FACTORS = "scaleFactors";
 
     /**
      * The default protocol for the image API.
      */
-    String DEFAULT_PROTOCOL = "http://iiif.io/api/image";
+    public static final String DEFAULT_PROTOCOL = "http://iiif.io/api/image";
+
+    /**
+     * Creates a new ImageAPI constants class.
+     */
+    private ImageAPI() {
+        // This is intentionally left empty.
+    }
 
     /**
      * An Image API format.
      */
-    enum ImageFormat {
+    public enum ImageFormat {
 
         JPG("jpg"), PNG("png"), TIF("tif"), GIF("gif"), JP2("jp2"), PDF("pdf"), WEBP("webp");
 
@@ -102,7 +109,7 @@ public interface ImageAPI {
     /**
      * An Image API quality.
      */
-    enum ImageQuality {
+    public enum ImageQuality {
 
         COLOR("color"), GRAY("gray"), BITONAL("bitonal"), DEFAULT("default");
 

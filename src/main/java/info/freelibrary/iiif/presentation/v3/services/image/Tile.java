@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
- * A Image API tile.
+ * An Image API tile.
  */
 @JsonPropertyOrder({ JsonKeys.HEIGHT, JsonKeys.WIDTH, ImageAPI.SCALE_FACTORS })
 public class Tile {
