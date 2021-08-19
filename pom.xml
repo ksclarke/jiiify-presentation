@@ -63,7 +63,7 @@
     <jackson.version>2.12.3</jackson.version>
     <jackson.databind.version>2.12.3</jackson.databind.version>
     <freelib.utils.version>2.4.0</freelib.utils.version>
-    <jsoup.version>1.13.1</jsoup.version>
+    <jsoup.version>1.14.2</jsoup.version>
     <combinatorics.version>3.3.0</combinatorics.version>
     <media.fragments.uri.version>2.4</media.fragments.uri.version>
     <netty.native.version>2.0.40.Final</netty.native.version>
