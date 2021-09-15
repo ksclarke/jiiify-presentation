@@ -26,11 +26,6 @@ public class GeoJsonService extends AbstractService<GeoJsonService> implements S
     public static final String CONTEXT = "http://geojson.org/geojson-ld/geojson-context.jsonld";
 
     /**
-     * The GeoJson service type.
-     */
-    private String myType;
-
-    /**
      * Creates a <a href="https://iiif.io/api/annex/services/#geojson">GeoJSON service</a>.
      *
      * @param aID The ID of the item to retrieve GeoJSON information about
@@ -57,12 +52,6 @@ public class GeoJsonService extends AbstractService<GeoJsonService> implements S
     public GeoJsonService setType(final String aType) {
         myType = aType;
         return this;
-    }
-
-    @Override
-    @JsonGetter(JsonKeys.TYPE)
-    public String getType() {
-        return myType;
     }
 
     /**

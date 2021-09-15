@@ -94,12 +94,6 @@ public class OtherService2 extends AbstractOtherService<OtherService2> implement
         return this;
     }
 
-    @Override
-    @JsonIgnore
-    public String getType() {
-        return myType;
-    }
-
     /**
      * Sets the format from a file extension or media type.
      *

@@ -41,7 +41,7 @@ public interface Service<T extends Service<T>> {
     T setID(String aID);
 
     /**
-     * Gets the service type.
+     * Gets the service type. The simple class name is used for the type if type is not set by an implementing class.
      *
      * @return The service type
      */

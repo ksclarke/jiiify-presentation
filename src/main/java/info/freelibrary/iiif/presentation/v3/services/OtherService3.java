@@ -82,12 +82,6 @@ public class OtherService3 extends AbstractOtherService<OtherService3> implement
         return this;
     }
 
-    @Override
-    @JsonIgnore
-    public String getType() {
-        return myType;
-    }
-
     /**
      * Gets the format of the image.
      *
