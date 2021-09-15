@@ -125,6 +125,21 @@ public class AuthCookieService1 extends AbstractAuthService<AuthCookieService1>
      * Creates a new auth cookie service from the supplied profile, ID, label and services.
      *
      * @param aProfile A service profile
+     * @param aID A service ID in string form
+     * @param aLabel A service label
+     * @param aServicesArray An array of services
+     */
+    public AuthCookieService1(final AuthCookieService1.Profile aProfile, final String aID, final String aLabel,
+            final Service<?>... aServicesArray) {
+        super(aProfile, URI.create(aID));
+        myLabel = aLabel;
+        setServices(aServicesArray);
+    }
+
+    /**
+     * Creates a new auth cookie service from the supplied profile, ID, label and services.
+     *
+     * @param aProfile A service profile
      * @param aID A service ID
      * @param aLabel A service label
      * @param aServicesArray An array of services
