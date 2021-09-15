@@ -70,7 +70,6 @@ public abstract class AbstractService<T extends AbstractService<T>> implements S
     public abstract T setType(String aType);
 
     @Override
-    @JsonIgnore
     public String getType() {
         // Overrides the default method defined in the Service interface
         return StringUtils.trimToNull(myType) == null ? getClass().getSimpleName() : myType;

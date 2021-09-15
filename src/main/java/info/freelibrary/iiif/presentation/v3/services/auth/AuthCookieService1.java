@@ -14,6 +14,7 @@ import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
@@ -118,6 +119,21 @@ public class AuthCookieService1 extends AbstractAuthService<AuthCookieService1>
     public AuthCookieService1(final AuthCookieService1.Profile aProfile, final URI aID, final String aLabel) {
         super(aProfile, aID);
         myLabel = aLabel;
+    }
+
+    /**
+     * Creates a new auth cookie service from the supplied profile, ID, label and services.
+     *
+     * @param aProfile A service profile
+     * @param aID A service ID
+     * @param aLabel A service label
+     * @param aServicesArray An array of services
+     */
+    public AuthCookieService1(final AuthCookieService1.Profile aProfile, final URI aID, final String aLabel,
+            final Service<?>... aServicesArray) {
+        super(aProfile, aID);
+        myLabel = aLabel;
+        setServices(aServicesArray);
     }
 
     @Override
