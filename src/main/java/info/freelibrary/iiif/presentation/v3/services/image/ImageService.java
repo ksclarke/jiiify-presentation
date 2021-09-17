@@ -12,21 +12,6 @@ import info.freelibrary.iiif.presentation.v3.Service;
 public interface ImageService<T extends ImageService<T>> extends Service<T> {
 
     /**
-     * Gets the image service profile as a string.
-     *
-     * @return The profile in string form
-     */
-    String getProfile();
-
-    /**
-     * Sets the image service profile.
-     *
-     * @param aProfile The profile
-     * @return The image service
-     */
-    T setProfile(Profile aProfile);
-
-    /**
      * Sets the image service's extra formats.
      *
      * @param aFormatList A list of extra formats
@@ -136,20 +121,12 @@ public interface ImageService<T extends ImageService<T>> extends Service<T> {
     /**
      * Interface for {@link ImageService} profiles.
      */
-    interface Profile {
+    interface Profile extends Service.Profile {
 
-        /**
-         * Returns a string representation of the profile.
-         *
-         * @return A string representation of the profile
-         */
+        @Override
         String string();
 
-        /**
-         * Returns a URI representation of the profile.
-         *
-         * @return A URI representation of the profile
-         */
+        @Override
         URI uri();
 
     }

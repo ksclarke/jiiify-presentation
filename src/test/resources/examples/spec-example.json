@@ -326,6 +326,7 @@
   ],
   "services": [
     {
+      "@context" : "http://iiif.io/api/auth/1/context.json",
       "@id": "https://example.org/iiif/auth/login",
       "@type": "AuthCookieService1",
       "profile": "http://iiif.io/api/auth/1/login",

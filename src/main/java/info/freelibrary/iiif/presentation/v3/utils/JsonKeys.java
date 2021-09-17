@@ -285,6 +285,35 @@ public final class JsonKeys {
     public static final String ACCOMPANYING_CANVAS = "accompanyingCanvas";
 
     /**
+     * The property for the text to be shown to the user on the button or element that triggers opening of the access
+     * cookie service.
+     */
+    public static final String CONFIRM_LABEL = "confirmLabel";
+
+    /**
+     * A short text that, if present, must be shown to the user as a header for the access cookie service description,
+     * or alone if no description is given.
+     */
+    public static final String HEADER = "header";
+
+    /**
+     * Text that, if present, must be shown to the user before opening the access cookie service.
+     */
+    public static final String DESCRIPTION = "description";
+
+    /**
+     * A short text that, if present, may be shown to the user as a header after failing to receive an access cookie
+     * service token, or using the token results in an error.
+     */
+    public static final String FAILURE_HEADER = "failureHeader";
+
+    /**
+     * Text that, if present, may be shown to the user after failing to receive an access cookie service token, or using
+     * the token results in an error.
+     */
+    public static final String FAILURE_DESCRIPTION = "failureDescription";
+
+    /**
      * Creates a new JSON keys constants class.
      */
     private JsonKeys() {

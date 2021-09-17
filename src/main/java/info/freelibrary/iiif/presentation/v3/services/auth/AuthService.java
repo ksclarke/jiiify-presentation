@@ -3,19 +3,15 @@ package info.freelibrary.iiif.presentation.v3.services.auth;
 
 import java.net.URI;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+
 import info.freelibrary.iiif.presentation.v3.Service;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
  * An interface for authentication services.
  */
 public interface AuthService<T extends AuthService<T>> extends Service<T> {
-
-    /**
-     * Gets the auth service profile as a string.
-     *
-     * @return The profile in string form
-     */
-    String getProfile();
 
     /**
      * Sets the auth service profile.
@@ -26,22 +22,25 @@ public interface AuthService<T extends AuthService<T>> extends Service<T> {
     T setProfile(Profile aProfile);
 
     /**
+     * Gets the service type.
+     *
+     * @return The service type
+     */
+    @Override
+    @JsonGetter(JsonKeys.V2_TYPE)
+    default String getType() {
+        return getClass().getSimpleName();
+    }
+
+    /**
      * Interface for {@link AuthService} profiles.
      */
-    interface Profile {
+    interface Profile extends Service.Profile {
 
-        /**
-         * Returns a string representation of the profile.
-         *
-         * @return A string representation of the profile
-         */
+        @Override
         String string();
 
-        /**
-         * Returns a URI representation of the profile.
-         *
-         * @return A URI representation of the profile
-         */
+        @Override
         URI uri();
 
     }

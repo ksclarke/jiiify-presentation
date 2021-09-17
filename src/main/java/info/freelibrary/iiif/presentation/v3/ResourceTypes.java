@@ -124,11 +124,6 @@ public final class ResourceTypes {
     public static final String PHYSICAL_DIMS_SERVICE = "PhysicalDimsService";
 
     /**
-     * The GeoJSON service resource type.
-     */
-    public static final String GEO_JSON_SERVICE = "GeoJSONService";
-
-    /**
      * Creates a new resource types constants object. Constant classes should have private constructors.
      */
     private ResourceTypes() {

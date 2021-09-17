@@ -2,12 +2,12 @@
 package info.freelibrary.iiif.presentation.v3.services.auth;
 
 import java.net.URI;
-import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -15,7 +15,6 @@ import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.Service;
-import info.freelibrary.iiif.presentation.v3.services.image.ImageService3;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
@@ -26,9 +25,39 @@ public class AuthCookieService1 extends AbstractAuthService<AuthCookieService1>
         implements AuthService<AuthCookieService1> {
 
     /**
+     * The auth service 1 context (it's not required on the AuthTokenService1).
+     */
+    public static final String CONTEXT = "http://iiif.io/api/auth/1/context.json";
+
+    /**
      * The label for this auth cookie service.
      */
     private String myLabel;
+
+    /**
+     * The label used for confirming the cookie service.
+     */
+    private String myConfirmLabel;
+
+    /**
+     * The header for the service's description.
+     */
+    private String myHeader;
+
+    /**
+     * The service's description.
+     */
+    private String myDescription;
+
+    /**
+     * The failure header for the service's failure description.
+     */
+    private String myFailureHeader;
+
+    /**
+     * The service's failure description.
+     */
+    private String myFailureDescription;
 
     /**
      * Creates a new auth cookie service.
@@ -49,17 +78,34 @@ public class AuthCookieService1 extends AbstractAuthService<AuthCookieService1>
     }
 
     /**
+     * Creates a new auth cookie service with the supplied service profile.
+     *
+     * @param aProfile A service profile
+     * @param aID A service ID in string form
+     */
+    public AuthCookieService1(final AuthCookieService1.Profile aProfile, final String aID) {
+        super(aProfile, URI.create(aID));
+    }
+
+    /**
+     * Creates a new auth cookie service with the supplied service profile.
+     *
+     * @param aProfile A service profile
+     * @param aID A service ID in string form
+     */
+    public AuthCookieService1(final AuthCookieService1.Profile aProfile, final URI aID) {
+        super(aProfile, aID);
+    }
+
+    /**
      * Creates a new auth cookie service.
      *
      * @param aProfile A service profile
      * @param aID A service ID in string form
      * @param aLabel A service label
-     * @param aServiceArray An array of related services
      */
-    public AuthCookieService1(final AuthCookieService1.Profile aProfile, final String aID, final String aLabel,
-            final Service<?>... aServiceArray) {
+    public AuthCookieService1(final AuthCookieService1.Profile aProfile, final String aID, final String aLabel) {
         super(aProfile, URI.create(aID));
-        setServices(aServiceArray);
         myLabel = aLabel;
     }
 
@@ -69,55 +115,46 @@ public class AuthCookieService1 extends AbstractAuthService<AuthCookieService1>
      * @param aProfile A service profile
      * @param aID A service ID
      * @param aLabel A service label
-     * @param aServiceArray An array of related services
      */
-    public AuthCookieService1(final AuthCookieService1.Profile aProfile, final URI aID, final String aLabel,
-            final Service<?>... aServiceArray) {
+    public AuthCookieService1(final AuthCookieService1.Profile aProfile, final URI aID, final String aLabel) {
         super(aProfile, aID);
-        setServices(aServiceArray);
         myLabel = aLabel;
     }
 
     /**
-     * Creates a new auth cookie service.
+     * Creates a new auth cookie service from the supplied profile, ID, label and services.
      *
      * @param aProfile A service profile
      * @param aID A service ID in string form
      * @param aLabel A service label
-     * @param aServiceArray A list of related services
+     * @param aServicesArray An array of services
      */
     public AuthCookieService1(final AuthCookieService1.Profile aProfile, final String aID, final String aLabel,
-            final List<Service<?>> aServiceArray) {
+            final Service<?>... aServicesArray) {
         super(aProfile, URI.create(aID));
-        setServices(aServiceArray);
         myLabel = aLabel;
+        setServices(aServicesArray);
     }
 
     /**
-     * Creates a new auth cookie service.
+     * Creates a new auth cookie service from the supplied profile, ID, label and services.
      *
      * @param aProfile A service profile
      * @param aID A service ID
      * @param aLabel A service label
-     * @param aServiceArray A list of related services
+     * @param aServicesArray An array of services
      */
     public AuthCookieService1(final AuthCookieService1.Profile aProfile, final URI aID, final String aLabel,
-            final List<Service<?>> aServiceArray) {
+            final Service<?>... aServicesArray) {
         super(aProfile, aID);
-        setServices(aServiceArray);
         myLabel = aLabel;
+        setServices(aServicesArray);
     }
 
     @Override
     @JsonGetter(JsonKeys.V2_ID)
     public URI getID() {
         return super.getID();
-    }
-
-    @Override
-    @JsonGetter(JsonKeys.V2_TYPE)
-    public String getType() {
-        return super.getType();
     }
 
     /**
@@ -144,19 +181,151 @@ public class AuthCookieService1 extends AbstractAuthService<AuthCookieService1>
     }
 
     /**
-     * Sets the service profile.
+     * Gets the auth cookie service confirmation label.
      *
-     * @param aProfile The profile in string form
-     * @return The image service
+     * @param aLabel A confirmation label
+     * @return The auth cookie service
      */
-    @JsonSetter(JsonKeys.PROFILE)
-    @SuppressWarnings(PMD.MISSING_OVERRIDE) // PMD thinks this is overriding something even though it's not
-    private AuthCookieService1 setProfile(final String aProfile) { // NOPMD
-        return super.setProfile(Profile.fromString(aProfile));
+    @JsonSetter(JsonKeys.CONFIRM_LABEL)
+    public AuthCookieService1 setConfirmLabel(final String aLabel) {
+        myConfirmLabel = aLabel;
+        return this;
     }
 
     /**
-     * The profiles (API compliance levels) supported by an {@link ImageService3}.
+     * Gets the auth cookie service confirmation label.
+     *
+     * @return The auth cookie service confirmation label
+     */
+    @JsonGetter(JsonKeys.CONFIRM_LABEL)
+    @JsonInclude(Include.NON_NULL)
+    public String getConfirmLabel() {
+        return myConfirmLabel;
+    }
+
+    /**
+     * Sets the description header for the auth cookie service.
+     *
+     * @param aHeader An auth cookie service description header
+     * @return The auth cookie service
+     */
+    @JsonSetter(JsonKeys.HEADER)
+    public AuthCookieService1 setHeader(final String aHeader) {
+        myHeader = aHeader;
+        return this;
+    }
+
+    /**
+     * Gets the description header for the auth cookie service.
+     *
+     * @return The description header for the auth cookie service
+     */
+    @JsonGetter(JsonKeys.HEADER)
+    @JsonInclude(Include.NON_NULL)
+    public String getHeader() {
+        return myHeader;
+    }
+
+    /**
+     * Sets the description for the auth cookie service.
+     *
+     * @param aDescription An auth cookie service description
+     * @return The auth cookie service
+     */
+    @JsonSetter(JsonKeys.DESCRIPTION)
+    public AuthCookieService1 setDescription(final String aDescription) {
+        myDescription = aDescription;
+        return this;
+    }
+
+    /**
+     * Gets the description for the auth cookie service.
+     *
+     * @return The description for the auth cookie service
+     */
+    @JsonGetter(JsonKeys.DESCRIPTION)
+    @JsonInclude(Include.NON_NULL)
+    public String getDescription() {
+        return myDescription;
+    }
+
+    /**
+     * Sets the failure description header for the auth cookie service.
+     *
+     * @param aFailureHeader An auth cookie service failure description header
+     * @return The auth cookie service
+     */
+    @JsonSetter(JsonKeys.FAILURE_HEADER)
+    public AuthCookieService1 setFailureHeader(final String aFailureHeader) {
+        myFailureHeader = aFailureHeader;
+        return this;
+    }
+
+    /**
+     * Gets the failure description header for the auth cookie service.
+     *
+     * @return The failure description header for the auth cookie service
+     */
+    @JsonGetter(JsonKeys.FAILURE_HEADER)
+    @JsonInclude(Include.NON_NULL)
+    public String getFailureHeader() {
+        return myFailureHeader;
+    }
+
+    /**
+     * Sets the failure description for the auth cookie service.
+     *
+     * @param aFailureDescription An auth cookie service failure description
+     * @return The auth cookie service
+     */
+    @JsonSetter(JsonKeys.FAILURE_DESCRIPTION)
+    public AuthCookieService1 setFailureDescription(final String aFailureDescription) {
+        myFailureDescription = aFailureDescription;
+        return this;
+    }
+
+    /**
+     * Gets the failure description for the auth cookie service.
+     *
+     * @return The failure description for the auth cookie service
+     */
+    @JsonGetter(JsonKeys.FAILURE_DESCRIPTION)
+    @JsonInclude(Include.NON_NULL)
+    public String getFailureDescription() {
+        return myFailureDescription;
+    }
+
+    /**
+     * Gets the authorization service's context.
+     *
+     * @return The authorization service's context
+     */
+    @JsonGetter(JsonKeys.CONTEXT)
+    public String getContext() {
+        return CONTEXT;
+    }
+
+    /**
+     * Sets the authorization service's context.
+     *
+     * @param aContext A authorization service context
+     * @return The authorization service
+     */
+    @JsonSetter(JsonKeys.CONTEXT)
+    @SuppressWarnings(PMD.UNUSED_FORMAL_PARAMETER)
+    private AuthCookieService1 setContext(final String aContext) { // NOPMD
+        // This is intentionally left blank; context is a constant value
+        return this;
+    }
+
+    @Override
+    public AuthCookieService1 setProfile(final String aProfile) {
+        myProfile = Profile.fromString(aProfile);
+        return this;
+    }
+
+    /**
+     * The profiles supported by an {@link AuthCookieService1}.
      */
     public enum Profile implements AuthService.Profile {
 
@@ -201,6 +370,7 @@ public class AuthCookieService1 extends AbstractAuthService<AuthCookieService1>
         }
 
         @Override
+        @JsonValue
         public String string() {
             return myProfile;
         }
@@ -208,6 +378,22 @@ public class AuthCookieService1 extends AbstractAuthService<AuthCookieService1>
         @Override
         public URI uri() {
             return URI.create(myProfile);
+        }
+
+        /**
+         * Whether the supplied profile string is a valid AuthCookieService1 profile.
+         *
+         * @param aProfile A profile
+         * @return True if the supplied profile string is a valid AuthCookieService1 profile; else, false
+         */
+        public static boolean isValid(final String aProfile) {
+            for (final AuthCookieService1.Profile profile : AuthCookieService1.Profile.values()) {
+                if (profile.string().equals(aProfile)) {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /**

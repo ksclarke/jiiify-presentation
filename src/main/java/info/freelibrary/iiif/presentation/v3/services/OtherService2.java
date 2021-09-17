@@ -7,28 +7,16 @@ import java.util.LinkedHashMap;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import info.freelibrary.iiif.presentation.v3.MediaType;
+import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
  * A generic service class for older service implementations that use @id and @type.
  */
-public class OtherService2 extends AbstractService<OtherService2> implements OtherService<OtherService2> {
-
-    /**
-     * This service's profile.
-     */
-    @JsonProperty(JsonKeys.PROFILE)
-    protected URI myProfile;
-
-    /**
-     * This service's format.
-     */
-    @JsonProperty(JsonKeys.FORMAT)
-    protected MediaType myFormat;
+public class OtherService2 extends AbstractOtherService<OtherService2> implements OtherService<OtherService2> {
 
     /**
      * Creates a service for the supplied URI.
@@ -57,13 +45,15 @@ public class OtherService2 extends AbstractService<OtherService2> implements Oth
     }
 
     /**
-     * Gets the profile URI for this service.
+     * Sets the profile URI for this service.
      *
-     * @return The profile URI for this service
+     * @param aProfile A profile URI for this service
+     * @return This service
      */
     @JsonIgnore
-    public URI getProfile() {
-        return myProfile;
+    public OtherService2 setProfile(final OtherService2.Profile aProfile) {
+        super.setProfile(aProfile);
+        return this;
     }
 
     /**
@@ -72,23 +62,17 @@ public class OtherService2 extends AbstractService<OtherService2> implements Oth
      * @param aProfile A profile URI for this service
      * @return This service
      */
-    @JsonIgnore
-    public OtherService2 setProfile(final URI aProfile) {
-        myProfile = aProfile;
-        return this;
-    }
-
-    /**
-     * Sets the profile URI for this service.
-     *
-     * @param aProfile A profile URI, in string form, for this service
-     * @return This service
-     */
     @Override
     @JsonIgnore
     public OtherService2 setProfile(final String aProfile) {
-        myProfile = URI.create(aProfile);
+        super.setProfile(Profile.fromString(aProfile));
         return this;
+    }
+
+    @Override
+    @JsonIgnore
+    public Optional<Service.Profile> getProfile() {
+        return Optional.ofNullable(myProfile);
     }
 
     @Override
@@ -101,6 +85,13 @@ public class OtherService2 extends AbstractService<OtherService2> implements Oth
     @JsonIgnore
     public OtherService2 setID(final String aID) {
         return super.setID(aID);
+    }
+
+    @Override
+    @JsonIgnore
+    public OtherService2 setType(final String aType) {
+        myType = aType;
+        return this;
     }
 
     /**
@@ -122,6 +113,7 @@ public class OtherService2 extends AbstractService<OtherService2> implements Oth
      * @param aMediaType A media type
      * @return The service
      */
+    @Override
     @JsonIgnore
     public OtherService2 setFormat(final MediaType aMediaType) {
         myFormat = aMediaType;
@@ -145,7 +137,7 @@ public class OtherService2 extends AbstractService<OtherService2> implements Oth
      */
     @JsonValue
     protected Object toJsonValue() {
-        if (myID != null && myType != null) {
+        if (myID != null) {
             final LinkedHashMap<String, Object> map = new LinkedHashMap<>();
 
             if (myID != null) {
@@ -171,6 +163,46 @@ public class OtherService2 extends AbstractService<OtherService2> implements Oth
             return Collections.unmodifiableMap(map);
         } else {
             return null;
+        }
+    }
+
+    /**
+     * An other service (v2) profile.
+     */
+    public static class Profile implements OtherService.Profile {
+
+        /**
+         * The string representation of the OtherService profile.
+         */
+        private final String myProfile;
+
+        /**
+         * Creates a profile from the supplied string.
+         *
+         * @param aProfile
+         */
+        public Profile(final String aProfile) {
+            myProfile = aProfile;
+        }
+
+        @Override
+        public String string() {
+            return myProfile;
+        }
+
+        @Override
+        public URI uri() {
+            return URI.create(myProfile);
+        }
+
+        /**
+         * Creates a profile from the supplied string.
+         *
+         * @param aProfile A string form of a service profile
+         * @return The OtherService profile for the supplied string value
+         */
+        public static Profile fromString(final String aProfile) {
+            return new Profile(aProfile);
         }
     }
 }

@@ -5,6 +5,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -15,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.warnings.JDK;
 
+import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.services.AbstractService;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
@@ -30,7 +32,7 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
     /**
      * The image service's profile.
      */
-    protected Profile myProfile;
+    protected ImageService.Profile myProfile;
 
     /**
      * The image service's formats.
@@ -70,11 +72,18 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
      * @param aProfile An image service profile
      * @param aID The ID of the service
      */
-    AbstractImageService(final Profile aProfile, final URI aID) {
+    AbstractImageService(final ImageService.Profile aProfile, final URI aID) {
         super();
 
         myProfile = aProfile;
         myID = aID;
+    }
+
+    @Override
+    @JsonGetter(JsonKeys.PROFILE)
+    @JsonInclude(Include.NON_ABSENT)
+    public Optional<Service.Profile> getProfile() {
+        return Optional.ofNullable(myProfile);
     }
 
     @Override
@@ -125,12 +134,6 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
         }
 
         return qualities;
-    }
-
-    @Override
-    @JsonGetter(JsonKeys.PROFILE)
-    public String getProfile() {
-        return myProfile.string();
     }
 
     /**
@@ -184,14 +187,6 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
     @JsonSetter(ImageAPI.EXTRA_QUALITIES)
     public T setExtraQualities(final List<ImageAPI.ImageQuality> aQualityList) {
         myQualities = aQualityList;
-        return (T) this;
-    }
-
-    @Override
-    @JsonIgnore
-    @SuppressWarnings(JDK.UNCHECKED)
-    public T setProfile(final T.Profile aProfile) {
-        myProfile = aProfile;
         return (T) this;
     }
 

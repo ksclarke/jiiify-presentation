@@ -2,13 +2,21 @@
 package info.freelibrary.iiif.presentation.v3.services;
 
 import java.net.URI;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+
+import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * A <a href="https://iiif.io/api/annex/services/#physical-dimensions">physical dimensions service</a> that provides
@@ -17,10 +25,9 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 public class PhysicalDimsService extends AbstractService<PhysicalDimsService> implements Service<PhysicalDimsService> {
 
     /**
-     * The profile for this service.
+     * The physical dims service's profile.
      */
-    @JsonIgnore
-    public static final URI PROFILE = URI.create("http://iiif.io/api/annex/services/physdim");
+    private final PhysicalDimsService.Profile myProfile = PhysicalDimsService.Profile.DIMS_SERVICE;
 
     /**
      * The physical scale of the service.
@@ -39,7 +46,6 @@ public class PhysicalDimsService extends AbstractService<PhysicalDimsService> im
      */
     public PhysicalDimsService(final URI aID) {
         super();
-
         myID = aID;
     }
 
@@ -58,13 +64,23 @@ public class PhysicalDimsService extends AbstractService<PhysicalDimsService> im
         myID = aID;
     }
 
-    /**
-     * Get service profile.
-     *
-     * @return The service profile
-     */
-    public URI getProfile() {
-        return PROFILE;
+    @Override
+    @JsonGetter(JsonKeys.PROFILE)
+    @JsonInclude(Include.NON_ABSENT)
+    public Optional<Service.Profile> getProfile() {
+        return Optional.of(myProfile);
+    }
+
+    @Override
+    public PhysicalDimsService setProfile(final String aProfile) {
+        return this; // intentionally a no-op, value is a constant
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.TYPE)
+    public PhysicalDimsService setType(final String aType) {
+        // intentionally no-op; it's a constant for the class
+        return this;
     }
 
     @Override
@@ -137,4 +153,78 @@ public class PhysicalDimsService extends AbstractService<PhysicalDimsService> im
         return this;
     }
 
+    /**
+     * The profile for a physical dims service.
+     */
+    public enum Profile implements Service.Profile {
+
+        /**
+         * The dimensions service profile.
+         */
+        DIMS_SERVICE("http://iiif.io/api/annex/services/physdim");
+
+        /**
+         * The profile logger.
+         */
+        private static final Logger LOGGER =
+                LoggerFactory.getLogger(PhysicalDimsService.Profile.class, MessageCodes.BUNDLE);
+
+        /**
+         * The active profile in string form.
+         */
+        private String myProfile;
+
+        /**
+         * Creates a new dims service profile from the supplied string.
+         *
+         * @param aProfile A dims service profile string
+         */
+        Profile(final String aProfile) {
+            myProfile = aProfile;
+        }
+
+        @Override
+        public String string() {
+            return myProfile;
+        }
+
+        @Override
+        public URI uri() {
+            return URI.create(myProfile);
+        }
+
+        /**
+         * Whether the supplied profile string is a valid PhysicalDimsService profile.
+         *
+         * @param aProfile A profile
+         * @return True if the supplied profile string is a valid PhysicalDimsService profile; else, false
+         */
+        public static boolean isValid(final String aProfile) {
+            for (final PhysicalDimsService.Profile profile : PhysicalDimsService.Profile.values()) {
+                if (profile.string().equals(aProfile)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /**
+         * Creates a physical dims service profile from a string value.
+         *
+         * @param aProfile A profile in string form
+         * @return A physical dims service profile
+         * @throws IllegalArgumentException If the profile string doesn't correspond to a valid profile
+         */
+        public static PhysicalDimsService.Profile fromString(final String aProfile) {
+            for (final PhysicalDimsService.Profile profile : PhysicalDimsService.Profile.values()) {
+                if (profile.string().equals(aProfile)) {
+                    return profile;
+                }
+            }
+
+            throw new IllegalArgumentException(
+                    LOGGER.getMessage(MessageCodes.JPA_109, aProfile, ResourceTypes.PHYSICAL_DIMS_SERVICE));
+        }
+    }
 }

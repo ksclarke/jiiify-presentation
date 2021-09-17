@@ -4,30 +4,41 @@ package info.freelibrary.iiif.presentation.v3.services;
 import static org.junit.Assert.assertEquals;
 
 import java.net.URI;
+import java.util.UUID;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.v3.services.image.ImageService3;
+import info.freelibrary.iiif.presentation.v3.services.image.ImageService3.Profile;
 
 /**
  * A ImageService3 test.
  */
 public class ImageService3Test {
 
-    private static final URI ID = URI.create("asdf");
+    private static final Profile LEVEL_0 = Profile.fromString("level0");
 
-    private static final String LEVEL_0 = "level0";
+    private static final Profile LEVEL_1 = Profile.fromString("level1");
 
-    private static final String LEVEL_1 = "level1";
+    private static final Profile LEVEL_2 = Profile.fromString("level2");
 
-    private static final String LEVEL_2 = "level2";
+    private URI myID;
+
+    /**
+     * Sets up the testing environment.
+     */
+    @Before
+    public void setUp() {
+        myID = URI.create(UUID.randomUUID().toString());
+    }
 
     /**
      * Tests getting the image service's ID.
      */
     @Test
     public void testGetID() {
-        assertEquals(ID, new ImageService3(ID).getID());
+        assertEquals(myID, new ImageService3(myID).getID());
     }
 
     /**
@@ -35,9 +46,9 @@ public class ImageService3Test {
      */
     @Test
     public void testGetProfile() {
-        assertEquals(LEVEL_0, new ImageService3(ImageService3.Profile.LEVEL_ZERO, ID).getProfile());
-        assertEquals(LEVEL_1, new ImageService3(ImageService3.Profile.LEVEL_ONE, ID).getProfile());
-        assertEquals(LEVEL_2, new ImageService3(ImageService3.Profile.LEVEL_TWO, ID).getProfile());
+        assertEquals(LEVEL_0, new ImageService3(Profile.LEVEL_ZERO, myID).getProfile().get());
+        assertEquals(LEVEL_1, new ImageService3(Profile.LEVEL_ONE, myID).getProfile().get());
+        assertEquals(LEVEL_2, new ImageService3(Profile.LEVEL_TWO, myID).getProfile().get());
     }
 
     /**
@@ -45,8 +56,8 @@ public class ImageService3Test {
      */
     @Test
     public void testLevelZero() {
-        assertEquals(LEVEL_0, ImageService3.Profile.LEVEL_ZERO.string());
-        assertEquals(ImageService3.Profile.LEVEL_ZERO, ImageService3.Profile.valueOf("LEVEL_ZERO"));
+        assertEquals(LEVEL_0.string(), Profile.LEVEL_ZERO.string());
+        assertEquals(Profile.LEVEL_ZERO, Profile.valueOf("LEVEL_ZERO"));
     }
 
     /**
@@ -54,8 +65,8 @@ public class ImageService3Test {
      */
     @Test
     public void testLevelOne() {
-        assertEquals(LEVEL_1, ImageService3.Profile.LEVEL_ONE.string());
-        assertEquals(ImageService3.Profile.LEVEL_ONE, ImageService3.Profile.valueOf("LEVEL_ONE"));
+        assertEquals(LEVEL_1.string(), Profile.LEVEL_ONE.string());
+        assertEquals(Profile.LEVEL_ONE, Profile.valueOf("LEVEL_ONE"));
     }
 
     /**
@@ -63,8 +74,8 @@ public class ImageService3Test {
      */
     @Test
     public void testLevelTwo() {
-        assertEquals(LEVEL_2, ImageService3.Profile.LEVEL_TWO.string());
-        assertEquals(ImageService3.Profile.LEVEL_TWO, ImageService3.Profile.valueOf("LEVEL_TWO"));
+        assertEquals(LEVEL_2.string(), Profile.LEVEL_TWO.string());
+        assertEquals(Profile.LEVEL_TWO, Profile.valueOf("LEVEL_TWO"));
     }
 
     /**
@@ -72,8 +83,8 @@ public class ImageService3Test {
      */
     @Test
     public void testProfileFromString() {
-        assertEquals(LEVEL_0, ImageService3.Profile.fromString(LEVEL_0).string());
-        assertEquals(LEVEL_1, ImageService3.Profile.fromString(LEVEL_1).string());
-        assertEquals(LEVEL_2, ImageService3.Profile.fromString(LEVEL_2).string());
+        assertEquals(LEVEL_0, Profile.fromString(LEVEL_0.string()));
+        assertEquals(LEVEL_1, Profile.fromString(LEVEL_1.string()));
+        assertEquals(LEVEL_2, Profile.fromString(LEVEL_2.string()));
     }
 }

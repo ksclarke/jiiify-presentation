@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.util.StringUtils;
 import info.freelibrary.util.warnings.JDK;
 
 import info.freelibrary.iiif.presentation.v3.Service;
@@ -66,22 +67,12 @@ public abstract class AbstractService<T extends AbstractService<T>> implements S
     }
 
     @Override
-    @JsonGetter(JsonKeys.TYPE)
-    public String getType() {
-        return myType != null ? myType : getClass().getSimpleName();
-    }
+    public abstract T setType(String aType);
 
-    /**
-     * Sets the service type (for extension by a particular service or Jackson's deserializer).
-     *
-     * @param aType A service type
-     * @return This service
-     */
-    @JsonSetter(JsonKeys.TYPE)
-    @SuppressWarnings(JDK.UNCHECKED)
-    protected T setType(final String aType) {
-        myType = aType;
-        return (T) this;
+    @Override
+    public String getType() {
+        // Overrides the default method defined in the Service interface
+        return StringUtils.trimToNull(myType) == null ? getClass().getSimpleName() : myType;
     }
 
     @Override
