@@ -1,3 +1,4 @@
+
 package info.freelibrary.iiif.presentation.v3.properties.selectors;
 
 import static org.junit.Assert.assertEquals;

@@ -119,7 +119,6 @@ public class MediaFragmentSelectorTest {
      */
     @Test
     public final void testConformsTo() {
-        assertEquals(URIs.MEDIA_FRAGMENT_SPECIFICATION_URI,
-                new MediaFragmentSelector(XYWH_FRAGMENT).getConformsTo());
+        assertEquals(URIs.MEDIA_FRAGMENT_SPECIFICATION_URI, new MediaFragmentSelector(XYWH_FRAGMENT).getConformsTo());
     }
 }

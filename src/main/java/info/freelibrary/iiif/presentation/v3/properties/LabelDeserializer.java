@@ -37,8 +37,8 @@ class LabelDeserializer extends AbstractI18nStdDeserializer<Label> {
      * Deserializes a Label from its JSON structure.
      */
     @Override
-    public Label deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException,
-            JsonProcessingException {
+    public Label deserialize(final JsonParser aParser, final DeserializationContext aContext)
+            throws IOException, JsonProcessingException {
         return new Label(getI18nStrings(aParser.getCodec().readTree(aParser)));
     }
 }
