@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Clarke"
+  given-names: "Kevin S."
+  orcid: "https://orcid.org/0000-0002-9222-8074"
+- family-names: "Matney"
+  given-names: "Mark A."
+  name-suffix: "Jr."
+title: "Jiiify Presentation"
+version: 0.10.0
+date-released: 2021-09-17
+url: "https://github.com/ksclarke/jiiify-presentation"
