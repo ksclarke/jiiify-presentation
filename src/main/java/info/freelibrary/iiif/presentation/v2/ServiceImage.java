@@ -32,18 +32,39 @@ import info.freelibrary.util.LoggerFactory;
 @JsonInclude(Include.NON_DEFAULT)
 public class ServiceImage {
 
+    /**
+     * The service image logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(ServiceImage.class, MessageCodes.BUNDLE);
 
+    /**
+     * The service image's type.
+     */
     private static final String TYPE = "dctypes:Image";
 
+    /**
+     * The service image's format.
+     */
     private Optional<MediaType> myFormat;
 
+    /**
+     * The service image's width.
+     */
     private int myWidth;
 
+    /**
+     * The service image's height.
+     */
     private int myHeight;
 
+    /**
+     * The service image's ID.
+     */
     private URI myID;
 
+    /**
+     * The service image's image info service.
+     */
     private Optional<ImageInfoService> myService;
 
     /**
@@ -296,6 +317,11 @@ public class ServiceImage {
         return this;
     }
 
+    /**
+     * Sets the media type from the file extension.
+     *
+     * @param aURI A file extension
+     */
     @JsonIgnore
     protected final void setMediaTypeFromExt(final String aURI) {
         final String fragment = '#' + URI.create(aURI).getFragment();

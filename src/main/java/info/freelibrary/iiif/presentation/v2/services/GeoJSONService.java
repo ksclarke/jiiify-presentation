@@ -14,10 +14,15 @@ import info.freelibrary.iiif.presentation.v2.utils.Constants;
  */
 public class GeoJSONService implements Service<GeoJSONService> {
 
-    /* The context for this service */
+    /**
+     * The context for this service.
+     */
     @JsonIgnore
     public static final URI CONTEXT = URI.create("http://geojson.org/geojson-ld/geojson-context.jsonld");
 
+    /**
+     * The service's ID.
+     */
     private URI myID;
 
     /**

@@ -37,12 +37,12 @@ public class ImageInfoServiceTest {
      */
     @Test
     public void testGetProfile() {
-        assertEquals(APIComplianceLevelTest.IMAGE_INFO_LEVEL_0, new ImageInfoService(APIComplianceLevel.ZERO, ID)
-                .getProfile());
-        assertEquals(APIComplianceLevelTest.IMAGE_INFO_LEVEL_1, new ImageInfoService(APIComplianceLevel.ONE, ID)
-                .getProfile());
-        assertEquals(APIComplianceLevelTest.IMAGE_INFO_LEVEL_2, new ImageInfoService(APIComplianceLevel.TWO, ID)
-                .getProfile());
+        assertEquals(APIComplianceLevelTest.IMAGE_INFO_LEVEL_0,
+                new ImageInfoService(APIComplianceLevel.ZERO, ID).getProfile());
+        assertEquals(APIComplianceLevelTest.IMAGE_INFO_LEVEL_1,
+                new ImageInfoService(APIComplianceLevel.ONE, ID).getProfile());
+        assertEquals(APIComplianceLevelTest.IMAGE_INFO_LEVEL_2,
+                new ImageInfoService(APIComplianceLevel.TWO, ID).getProfile());
     }
 
 }

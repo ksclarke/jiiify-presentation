@@ -19,15 +19,21 @@ import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
 /**
- * A link to a machine readable document that semantically describes the resource with the seeAlso property, such as
- * an XML or RDF description. This document could be used for search and discovery or inferencing purposes, or just to
+ * A link to a machine readable document that semantically describes the resource with the seeAlso property, such as an
+ * XML or RDF description. This document could be used for search and discovery or inferencing purposes, or just to
  * provide a longer description of the resource. The profile and format properties of the document should be given to
  * help the client to make appropriate use of the document.
  */
 public class SeeAlso {
 
+    /**
+     * The see also logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(SeeAlso.class, MessageCodes.BUNDLE);
 
+    /**
+     * The see also values.
+     */
     private final List<Value> myValues;
 
     /**
@@ -141,9 +147,8 @@ public class SeeAlso {
     public URI getID() {
         if (myValues.isEmpty()) {
             return null;
-        } else {
-            return myValues.get(0).getID();
         }
+        return myValues.get(0).getID();
     }
 
     /**
@@ -155,9 +160,8 @@ public class SeeAlso {
     public Optional<URI> getProfile() {
         if (myValues.isEmpty()) {
             return Optional.empty();
-        } else {
-            return myValues.get(0).getProfile();
         }
+        return myValues.get(0).getProfile();
     }
 
     /**
@@ -169,9 +173,8 @@ public class SeeAlso {
     public Optional<String> getFormat() {
         if (myValues.isEmpty()) {
             return Optional.empty();
-        } else {
-            return myValues.get(0).getFormat();
         }
+        return myValues.get(0).getFormat();
     }
 
     /**
@@ -183,9 +186,8 @@ public class SeeAlso {
     public Optional<MediaType> getFormatMediaType() {
         if (myValues.isEmpty()) {
             return Optional.empty();
-        } else {
-            return myValues.get(0).getFormatMediaType();
         }
+        return myValues.get(0).getFormatMediaType();
     }
 
     /**
@@ -244,38 +246,40 @@ public class SeeAlso {
         return myValues;
     }
 
+    /**
+     * Gets the JSON representation of the see also.
+     *
+     * @return The JSON representation of the see also
+     */
     @JsonValue
+    @SuppressWarnings({ "PMD.CyclomaticComplexity", "PMD.UnusedPrivateMethod" })
     private Object getJsonValue() {
-        if (myValues.size() == 1) {
+        if (myValues.size() == Constants.SINGLE_INSTANCE) {
             final Value value = myValues.get(0);
             final String id = value.getID().toString();
 
             if (value.getFormat().isPresent() || value.getProfile().isPresent()) {
                 return value;
-            } else {
-                return id;
             }
-        } else {
-            final List<Object> list = new ArrayList<>();
-
-            for (final Value value : myValues) {
-                final String id = value.getID().toString();
-                final String format = value.getFormatAsString();
-                final String profile = value.getProfileAsString();
-
-                if ((id != null) && (format != null) && (profile != null)) {
-                    list.add(ImmutableMap.of(Constants.ID, id, Constants.FORMAT, format, Constants.PROFILE, profile));
-                } else if ((id != null) && (format != null)) {
-                    list.add(ImmutableMap.of(Constants.ID, id, Constants.FORMAT, format));
-                } else if ((id != null) && (profile != null)) {
-                    list.add(ImmutableMap.of(Constants.ID, id, Constants.FORMAT, format));
-                } else if (id != null) {
-                    list.add(id);
-                }
-            }
-
-            return list;
+            return id;
         }
+        final List<Object> list = new ArrayList<>();
+
+        for (final Value value : myValues) {
+            final String id = value.getID().toString();
+            final String format = value.getFormatAsString();
+            final String profile = value.getProfileAsString();
+
+            if (id != null && format != null && profile != null) {
+                list.add(ImmutableMap.of(Constants.ID, id, Constants.FORMAT, format, Constants.PROFILE, profile));
+            } else if (id != null && (format != null || profile != null)) {
+                list.add(ImmutableMap.of(Constants.ID, id, Constants.FORMAT, format));
+            } else if (id != null) {
+                list.add(id);
+            }
+        }
+
+        return list;
     }
 
     /**
@@ -283,10 +287,19 @@ public class SeeAlso {
      */
     public final class Value {
 
+        /**
+         * The see also's value ID.
+         */
         private final URI myID;
 
+        /**
+         * The see also's value format.
+         */
         private final Optional<MediaType> myFormat;
 
+        /**
+         * The see also's profile.
+         */
         private final Optional<URI> myProfile;
 
         /**
@@ -304,6 +317,7 @@ public class SeeAlso {
          * Creates a new see also value from the supplied ID.
          *
          * @param aID An ID
+         * @param aMediaType A media type
          */
         private Value(final URI aID, final Optional<MediaType> aMediaType) {
             myID = aID;
@@ -364,11 +378,21 @@ public class SeeAlso {
             return myProfile;
         }
 
+        /**
+         * Gets the profile as a string.
+         *
+         * @return The profile in string form
+         */
         @JsonGetter(Constants.PROFILE)
         private String getProfileAsString() {
             return myProfile.isPresent() ? myProfile.get().toString() : null;
         }
 
+        /**
+         * Gets the format as a string.
+         *
+         * @return The format in string form
+         */
         @JsonGetter(Constants.FORMAT)
         private String getFormatAsString() {
             return myFormat.isPresent() ? myFormat.get().toString() : null;

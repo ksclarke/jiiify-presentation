@@ -13,12 +13,11 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-
 import info.freelibrary.iiif.presentation.v2.utils.Constants;
 import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v2.utils.MetadataDeserializer;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
 
 /**
  * A list of short descriptive entries, given as pairs of human readable label and value to be displayed to the user.
@@ -55,8 +54,14 @@ import info.freelibrary.iiif.presentation.v2.utils.MetadataDeserializer;
 @JsonDeserialize(using = MetadataDeserializer.class)
 public class Metadata {
 
+    /**
+     * The metadata's logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(Metadata.class, MessageCodes.BUNDLE);
 
+    /**
+     * The metadata's entries.
+     */
     private List<Metadata.Entry> myEntries;
 
     /**
@@ -232,8 +237,14 @@ public class Metadata {
     @JsonPropertyOrder({ "label", "value" })
     public class Entry {
 
+        /**
+         * The metadata entry's label.
+         */
         private final String myLabel;
 
+        /**
+         * The metadata entry's values.
+         */
         private final List<Value> myValues;
 
         /**
@@ -376,29 +387,30 @@ public class Metadata {
          * @return The metadata entry's values
          */
         @JsonGetter(Constants.VALUE)
+        @SuppressWarnings({ "PMD.CyclomaticComplexity", "PMD.UnusedPrivateMethod" })
         private Object getJsonValue() {
-            if (hasValues()) {
-                if ((myValues.size() == 1) && !myValues.get(0).getLang().isPresent()) {
-                    return myValues.get(0).getValue();
-                } else {
-                    final List<Object> list = new ArrayList<>();
-                    final Iterator<Value> iterator = myValues.iterator();
-
-                    while (iterator.hasNext()) {
-                        final Value entry = iterator.next();
-
-                        if (entry.getLang().isPresent()) {
-                            list.add(entry);
-                        } else {
-                            list.add(entry.getValue());
-                        }
-                    }
-
-                    return list;
-                }
-            } else {
+            if (!hasValues()) {
                 return null;
             }
+
+            if (myValues.size() == Constants.SINGLE_INSTANCE && !myValues.get(0).getLang().isPresent()) {
+                return myValues.get(0).getValue();
+            }
+
+            final List<Object> list = new ArrayList<>();
+            final Iterator<Value> iterator = myValues.iterator();
+
+            while (iterator.hasNext()) {
+                final Value entry = iterator.next();
+
+                if (entry.getLang().isPresent()) {
+                    list.add(entry);
+                } else {
+                    list.add(entry.getValue());
+                }
+            }
+
+            return list;
         }
     }
 }

@@ -30,12 +30,24 @@ import info.freelibrary.iiif.presentation.v2.utils.Constants;
  */
 public class Range extends Resource<Range> {
 
+    /**
+     * The range's type.
+     */
     private static final String TYPE = "sc:Range";
 
+    /**
+     * The range's required argument count.
+     */
     private static final int REQ_ARG_COUNT = 3;
 
+    /**
+     * The range's viewing direction.
+     */
     private ViewingDirection myViewingDirection;
 
+    /**
+     * The range's start canvas.
+     */
     private Optional<URI> myStartCanvas;
 
     /**
@@ -86,7 +98,7 @@ public class Range extends Resource<Range> {
      * @return The range
      */
     public Range clearViewingDirection() {
-        myViewingDirection = null;
+        myViewingDirection = null; // NOPMD - null assignment, code smell
         return this;
     }
 

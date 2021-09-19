@@ -7,14 +7,19 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import info.freelibrary.iiif.presentation.v2.utils.Constants;
+
 /**
  * The type of the resource (e.g., <code>sc:Manifest</code>, <code>sc:Sequence</code>, and <code>sc:Canvas</code>,
  * etc.). For the resource types defined by this specification, the value of @type will be described in the sections
- * below. For content resources, the type may be drawn from other vocabularies. Recommendations for basic types such
- * as image, text or audio are also given in the sections below.
+ * below. For content resources, the type may be drawn from other vocabularies. Recommendations for basic types such as
+ * image, text or audio are also given in the sections below.
  */
 public class Type {
 
+    /**
+     * A list of types.
+     */
     private List<String> myTypes;
 
     /**
@@ -28,7 +33,9 @@ public class Type {
     }
 
     /**
-     * Creates an empty type.
+     * Creates a type from the supplied value.
+     *
+     * @param aType A string form of a type
      */
     @SuppressWarnings("unused")
     private Type(final String aType) {
@@ -85,11 +92,12 @@ public class Type {
      * @return The value of the type
      */
     @JsonValue
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
     private Object getValue() {
-        if (myTypes.size() == 1) {
+        if (myTypes.size() == Constants.SINGLE_INSTANCE) {
             return myTypes.get(0);
-        } else {
-            return myTypes;
         }
+
+        return myTypes;
     }
 }

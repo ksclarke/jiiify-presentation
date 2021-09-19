@@ -23,7 +23,7 @@ public class Thumbnail extends ServiceProperty<Thumbnail> {
      * @param aID A thumbnail ID
      */
     public Thumbnail(final String... aID) {
-        addImage(aID);
+        super(aID);
     }
 
     /**
@@ -32,7 +32,7 @@ public class Thumbnail extends ServiceProperty<Thumbnail> {
      * @param aID A thumbnail ID
      */
     public Thumbnail(final URI... aID) {
-        addImage(aID);
+        super(aID);
     }
 
     /**
@@ -43,7 +43,7 @@ public class Thumbnail extends ServiceProperty<Thumbnail> {
      * @param aHeight An image height
      */
     public Thumbnail(final String aURI, final int aWidth, final int aHeight) {
-        addImage(aURI, aWidth, aHeight);
+        super(aURI, aWidth, aHeight);
     }
 
     /**
@@ -54,7 +54,7 @@ public class Thumbnail extends ServiceProperty<Thumbnail> {
      * @param aHeight An image height
      */
     public Thumbnail(final URI aID, final int aWidth, final int aHeight) {
-        addImage(aID, aWidth, aHeight);
+        super(aID, aWidth, aHeight);
     }
 
     /**
@@ -64,7 +64,7 @@ public class Thumbnail extends ServiceProperty<Thumbnail> {
      * @param aService A service for the thumbnail image
      */
     public Thumbnail(final String aID, final ImageInfoService aService) {
-        addImage(URI.create(aID), aService);
+        super(aID, aService);
     }
 
     /**
@@ -74,7 +74,7 @@ public class Thumbnail extends ServiceProperty<Thumbnail> {
      * @param aService A service for the thumbnail image
      */
     public Thumbnail(final URI aID, final ImageInfoService aService) {
-        addImage(aID, aService);
+        super(aID, aService);
     }
 
     @Override

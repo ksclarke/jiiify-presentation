@@ -23,7 +23,7 @@ public class Logo extends ServiceProperty<Logo> {
      * @param aID A logo ID
      */
     public Logo(final String... aID) {
-        addImage(aID);
+        super(aID);
     }
 
     /**
@@ -32,7 +32,7 @@ public class Logo extends ServiceProperty<Logo> {
      * @param aID A logo ID
      */
     public Logo(final URI... aID) {
-        addImage(aID);
+        super(aID);
     }
 
     /**
@@ -43,7 +43,7 @@ public class Logo extends ServiceProperty<Logo> {
      * @param aHeight An image height
      */
     public Logo(final String aURI, final int aWidth, final int aHeight) {
-        addImage(aURI, aWidth, aHeight);
+        super(aURI, aWidth, aHeight);
     }
 
     /**
@@ -54,7 +54,7 @@ public class Logo extends ServiceProperty<Logo> {
      * @param aHeight An image height
      */
     public Logo(final URI aID, final int aWidth, final int aHeight) {
-        addImage(aID, aWidth, aHeight);
+        super(aID, aWidth, aHeight);
     }
 
     /**
@@ -64,7 +64,7 @@ public class Logo extends ServiceProperty<Logo> {
      * @param aService A service for the logo image
      */
     public Logo(final String aID, final ImageInfoService aService) {
-        addImage(URI.create(aID), aService);
+        super(URI.create(aID), aService);
     }
 
     /**
@@ -75,7 +75,7 @@ public class Logo extends ServiceProperty<Logo> {
      * @param aService A service for the logo image
      */
     public Logo(final URI aID, final ImageInfoService aService) {
-        addImage(aID, aService);
+        super(aID, aService);
     }
 
     @Override

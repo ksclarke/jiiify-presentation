@@ -8,18 +8,46 @@ import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
 /**
- * The direction that a sequence of canvases should be displayed to the user. Possible values are specified in the
- * table below.
+ * The direction that a sequence of canvases should be displayed to the user. Possible values are specified in the table
+ * below.
  */
 public enum ViewingDirection {
 
-    LEFT_TO_RIGHT("left-to-right"), RIGHT_TO_LEFT("right-to-left"), TOP_TO_BOTTOM("top-to-bottom"), BOTTOM_TO_TOP(
-            "bottom-to-top");
+    /**
+     * The "left-to-right" viewing direction.
+     */
+    LEFT_TO_RIGHT("left-to-right"),
 
+    /**
+     * The "right-to-left" viewing direction.
+     */
+    RIGHT_TO_LEFT("right-to-left"),
+
+    /**
+     * The "top-to-bottom" viewing direction.
+     */
+    TOP_TO_BOTTOM("top-to-bottom"),
+
+    /**
+     * The "bottom-to-top" viewing direction.
+     */
+    BOTTOM_TO_TOP("bottom-to-top");
+
+    /**
+     * The viewing direction's logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(ViewingDirection.class, MessageCodes.BUNDLE);
 
+    /**
+     * The viewing direction's value.
+     */
     private final String myValue;
 
+    /**
+     * Creates a new viewing direction.
+     *
+     * @param aDirection A strong form of a viewing direction
+     */
     ViewingDirection(final String aDirection) {
         myValue = aDirection;
     }
@@ -31,8 +59,8 @@ public enum ViewingDirection {
     }
 
     /**
-     * Create a ViewingDirection from a supplied string; it may be empty if the supplied string doesn't correspond to
-     * a valid ViewingDirection value.
+     * Create a ViewingDirection from a supplied string; it may be empty if the supplied string doesn't correspond to a
+     * valid ViewingDirection value.
      *
      * @param aValue A ViewingDirection value
      * @return The ViewingDirection for the supplied value

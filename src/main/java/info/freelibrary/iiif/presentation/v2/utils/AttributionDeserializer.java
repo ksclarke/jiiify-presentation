@@ -22,6 +22,9 @@ import info.freelibrary.util.LoggerFactory;
  */
 public class AttributionDeserializer extends StdDeserializer<Attribution> {
 
+    /**
+     * The deserializer's logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(AttributionDeserializer.class, MessageCodes.BUNDLE);
 
     /**
@@ -46,11 +49,11 @@ public class AttributionDeserializer extends StdDeserializer<Attribution> {
     }
 
     /**
-     *
+     * Deserializes the JSON representation of an attribution.
      */
     @Override
-    public Attribution deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException,
-            JsonProcessingException {
+    public Attribution deserialize(final JsonParser aParser, final DeserializationContext aContext)
+            throws IOException, JsonProcessingException {
         final JsonNode node = aParser.getCodec().readTree(aParser);
         final Attribution attribution;
 

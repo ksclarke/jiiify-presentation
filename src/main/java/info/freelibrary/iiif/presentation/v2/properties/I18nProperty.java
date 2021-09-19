@@ -2,46 +2,57 @@
 package info.freelibrary.iiif.presentation.v2.properties;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import info.freelibrary.iiif.presentation.v2.utils.Constants;
+import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
-
-import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
 
 /**
  * A property value that can be used in the label, description, attribution and the label and value fields.
  */
 class I18nProperty<T extends I18nProperty<T>> {
 
+    /**
+     * The I18n property's logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(I18nProperty.class, MessageCodes.BUNDLE);
 
+    /**
+     * The I18n property's list of values.
+     */
     private final List<Value> myValues;
 
     /**
      * Creates a property from a list of I18n Value(s).
      *
-     * @param aName A name of the property
-     * @param aValue A value for the property
+     * @param aValue An array of values for the property
      */
     I18nProperty(final Value... aValue) {
         myValues = new ArrayList<>();
-        addValue(aValue);
+        Collections.addAll(myValues, aValue);
     }
 
     /**
      * Creates a property from a list of String(s).
      *
-     * @param aName A name of the property
-     * @param aValue A value for the property
+     * @param aValue An array of values for the property
      */
     I18nProperty(final String... aValue) {
+        final List<Value> values = new ArrayList<>();
+
+        for (final String value : aValue) {
+            values.add(new Value(value));
+        }
+
         myValues = new ArrayList<>();
-        addValue(aValue);
+        Collections.addAll(myValues, values.toArray(new Value[0]));
     }
 
     /**
@@ -72,9 +83,8 @@ class I18nProperty<T extends I18nProperty<T>> {
     public String getString() {
         if (hasValues()) {
             return myValues.get(0).getValue();
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**
@@ -131,9 +141,8 @@ class I18nProperty<T extends I18nProperty<T>> {
     public boolean equals(final Object aObject) {
         if (aObject != null && getClass().getName().equals(aObject.getClass().getName())) {
             return getJsonValue().equals(((I18nProperty<T>) aObject).getJsonValue());
-        } else {
-            return false;
         }
+        return false;
     }
 
     @Override
@@ -149,31 +158,28 @@ class I18nProperty<T extends I18nProperty<T>> {
      */
     @JsonValue
     protected Object getJsonValue() {
-        if (hasValues()) {
-            if (myValues.size() == 1) {
-                if (myValues.get(0).getLang().isPresent()) {
-                    return myValues.get(0);
-                } else {
-                    return myValues.get(0).getValue();
-                }
-            } else {
-                final List<Object> list = new ArrayList<>();
-                final Iterator<Value> iterator = myValues.iterator();
-
-                while (iterator.hasNext()) {
-                    final Value entry = iterator.next();
-
-                    if (entry.getLang().isPresent()) {
-                        list.add(entry);
-                    } else {
-                        list.add(entry.getValue());
-                    }
-                }
-
-                return list;
-            }
-        } else {
+        if (!hasValues()) {
             return null;
         }
+        if (myValues.size() == Constants.SINGLE_INSTANCE) {
+            if (myValues.get(0).getLang().isPresent()) {
+                return myValues.get(0);
+            }
+            return myValues.get(0).getValue();
+        }
+        final List<Object> list = new ArrayList<>();
+        final Iterator<Value> iterator = myValues.iterator();
+
+        while (iterator.hasNext()) {
+            final Value entry = iterator.next();
+
+            if (entry.getLang().isPresent()) {
+                list.add(entry);
+            } else {
+                list.add(entry.getValue());
+            }
+        }
+
+        return list;
     }
 }

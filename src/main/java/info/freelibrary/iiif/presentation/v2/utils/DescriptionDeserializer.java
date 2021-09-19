@@ -22,6 +22,9 @@ import info.freelibrary.util.LoggerFactory;
  */
 public class DescriptionDeserializer extends StdDeserializer<Description> {
 
+    /**
+     * The deserializer's logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(DescriptionDeserializer.class, MessageCodes.BUNDLE);
 
     /**
@@ -46,11 +49,11 @@ public class DescriptionDeserializer extends StdDeserializer<Description> {
     }
 
     /**
-     *
+     * Deserializes the JSON representation of a description.
      */
     @Override
-    public Description deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException,
-            JsonProcessingException {
+    public Description deserialize(final JsonParser aParser, final DeserializationContext aContext)
+            throws IOException, JsonProcessingException {
         final JsonNode node = aParser.getCodec().readTree(aParser);
         final Description description;
 
@@ -79,8 +82,9 @@ public class DescriptionDeserializer extends StdDeserializer<Description> {
 
             description = new Description(new Value(value, lang));
         } else {
-            throw new JsonParseException(aParser, LOGGER.getMessage(MessageCodes.JPA_016, node.getClass().getName() +
-                    ": " + node.toPrettyString()), aParser.getCurrentLocation());
+            throw new JsonParseException(aParser,
+                    LOGGER.getMessage(MessageCodes.JPA_016, node.getClass().getName() + ": " + node.toPrettyString()),
+                    aParser.getCurrentLocation());
         }
 
         return description;

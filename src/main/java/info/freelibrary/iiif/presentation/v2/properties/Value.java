@@ -18,8 +18,14 @@ import info.freelibrary.iiif.presentation.v2.utils.Constants;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Value {
 
+    /**
+     * The value's value.
+     */
     private String myValue;
 
+    /**
+     * The value's language.
+     */
     private Optional<String> myLang;
 
     /**
@@ -88,7 +94,7 @@ public class Value {
 
     @Override
     public boolean equals(final Object aObject) {
-        if (aObject != null && aObject instanceof Value) {
+        if (aObject instanceof Value) {
             final Value value = (Value) aObject;
             final Optional<String> langOpt = value.getLang();
             final String otherLang = langOpt != null && langOpt.isPresent() ? langOpt.get() : "";
@@ -97,9 +103,8 @@ public class Value {
             final String thisValue = myValue != null ? myValue : "";
 
             return thisValue.equals(otherValue) && thisLang.equals(otherLang);
-        } else {
-            return false;
         }
+        return false;
     }
 
     @Override
@@ -107,9 +112,7 @@ public class Value {
         int hash = 17;
 
         hash = hash * 23 + (myValue == null ? 1 : myValue.hashCode());
-        hash = hash * 23 + (myLang == null || myLang.isEmpty() ? 1 : myLang.get().hashCode());
-
-        return hash;
+        return hash * 23 + (myLang == null || myLang.isEmpty() ? 1 : myLang.get().hashCode());
     }
 
 }

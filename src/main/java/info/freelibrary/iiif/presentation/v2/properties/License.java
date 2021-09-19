@@ -10,6 +10,8 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import info.freelibrary.iiif.presentation.v2.utils.Constants;
+
 /**
  * A link to an external resource that describes the license or rights statement under which the resource may be used.
  * The rationale for this being a URI and not a human readable label is that typically there is one license for many
@@ -18,8 +20,14 @@ import com.fasterxml.jackson.annotation.JsonValue;
  */
 public class License {
 
+    /**
+     * The list padding for license.
+     */
     private static final int LIST_PADDING = 2;
 
+    /**
+     * The URLs associated with the license.
+     */
     private final List<URL> myURLs;
 
     /**
@@ -48,6 +56,8 @@ public class License {
 
     /**
      * Creates a new license property.
+     *
+     * @param aURL A license's URL
      */
     @SuppressWarnings("unused")
     private License(final String aURL) throws MalformedURLException {
@@ -69,7 +79,8 @@ public class License {
 
         // Check the string values before we start adding them
         for (final String value : aValue) {
-            urls[index++] = new URL(value);
+            urls[index] = new URL(value);
+            index++;
         }
 
         Collections.addAll(myURLs, urls);
@@ -162,9 +173,8 @@ public class License {
     public URL getURL() {
         if (myURLs.isEmpty()) {
             return null;
-        } else {
-            return myURLs.get(0);
         }
+        return myURLs.get(0);
     }
 
     /**
@@ -183,17 +193,19 @@ public class License {
      * @return The value of the license property
      */
     @JsonValue
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
     private Object getValue() {
         final List<URL> urls = getURLs();
-        final int size = urls.size();
 
-        if (size == 1) {
-            return urls.get(0);
-        } else if (size > 1) {
+        if (!urls.isEmpty()) {
+            if (urls.size() == Constants.SINGLE_INSTANCE) {
+                return urls.get(0);
+            }
+
             return urls;
-        } else {
-            return null;
         }
+
+        return null;
     }
 
 }

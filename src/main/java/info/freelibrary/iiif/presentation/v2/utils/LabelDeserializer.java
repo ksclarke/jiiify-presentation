@@ -22,6 +22,9 @@ import info.freelibrary.util.LoggerFactory;
  */
 public class LabelDeserializer extends StdDeserializer<Label> {
 
+    /**
+     * The label deserializer's logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(LabelDeserializer.class, MessageCodes.BUNDLE);
 
     /**
@@ -46,11 +49,11 @@ public class LabelDeserializer extends StdDeserializer<Label> {
     }
 
     /**
-     *
+     * Deserializes the label from its JSON representation.
      */
     @Override
-    public Label deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException,
-            JsonProcessingException {
+    public Label deserialize(final JsonParser aParser, final DeserializationContext aContext)
+            throws IOException, JsonProcessingException {
         final JsonNode node = aParser.getCodec().readTree(aParser);
         final Label label;
 

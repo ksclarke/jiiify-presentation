@@ -47,8 +47,9 @@ public class MetadataDeserializer extends StdDeserializer<Metadata> {
      *
      */
     @Override
-    public Metadata deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException,
-            JsonProcessingException {
+    @SuppressWarnings("PMD.CyclomaticComplexity")
+    public Metadata deserialize(final JsonParser aParser, final DeserializationContext aContext)
+            throws IOException, JsonProcessingException {
         final JsonNode node = aParser.getCodec().readTree(aParser);
         final Metadata metadata = new Metadata();
 
@@ -77,9 +78,9 @@ public class MetadataDeserializer extends StdDeserializer<Metadata> {
                         }
                     }
 
-                    if (i18nValues.size() > 0) {
+                    if (!i18nValues.isEmpty()) {
                         metadata.add(label, i18nValues.toArray(new Value[] {}));
-                    } else if (values.size() > 0) {
+                    } else if (!values.isEmpty()) {
                         metadata.add(label, values.toArray(new String[] {}));
                     }
                 } else if (valueNode instanceof TextNode) {
