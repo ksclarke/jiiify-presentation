@@ -237,6 +237,13 @@
         <artifactId>maven-dependency-plugin</artifactId>
       </plugin>
       <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>net.revelc.code.formatter</groupId>
+        <artifactId>formatter-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <argLine>${jacoco.agent.arg}</argLine>
@@ -317,19 +324,11 @@
     </profile>
   </profiles>
 
-  <!-- Enables pushing project documentation up to an S3 bucket -->
-  <distributionManagement>
-    <site>
-      <id>s3.site</id>
-      <url>s3://projects.freelibrary.info/jiiify-presentation-v3</url>
-    </site>
-  </distributionManagement>
-
   <!-- Pulls in standard FreeLibrary Project configuration options -->
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>6.10.0</version>
+    <version>7.0.1</version>
   </parent>
 
 </project>

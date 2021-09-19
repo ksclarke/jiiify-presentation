@@ -158,8 +158,8 @@ public class I18nPropertyTest {
      */
     @Test
     public void testAddI18ns() {
-        assertEquals(3, new I18nProperty<Value>(ONE).addI18ns(new I18n(ENG, TWO), new I18n(FRE, THREE)).getI18ns()
-                .size());
+        assertEquals(3,
+                new I18nProperty<Value>(ONE).addI18ns(new I18n(ENG, TWO), new I18n(FRE, THREE)).getI18ns().size());
     }
 
     /**

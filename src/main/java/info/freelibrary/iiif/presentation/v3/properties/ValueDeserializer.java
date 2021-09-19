@@ -37,8 +37,8 @@ class ValueDeserializer extends AbstractI18nStdDeserializer<Value> {
      * Deserializes a value from its JSON structure.
      */
     @Override
-    public Value deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException,
-            JsonProcessingException {
+    public Value deserialize(final JsonParser aParser, final DeserializationContext aContext)
+            throws IOException, JsonProcessingException {
         return new Value(getI18nStrings(aParser.getCodec().readTree(aParser)));
     }
 }
