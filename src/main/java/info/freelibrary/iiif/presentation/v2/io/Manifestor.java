@@ -5,7 +5,6 @@ import java.io.File;
 
 import info.freelibrary.iiif.presentation.v2.Collection;
 import info.freelibrary.iiif.presentation.v2.Manifest;
-
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 
@@ -14,6 +13,9 @@ import io.vertx.core.Vertx;
  */
 public class Manifestor {
 
+    /**
+     * The manifestor's Vert.x instance.
+     */
     private final Vertx myVertx;
 
     /**

@@ -13,9 +13,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-
 import info.freelibrary.iiif.presentation.v2.properties.Attribution;
 import info.freelibrary.iiif.presentation.v2.properties.Description;
 import info.freelibrary.iiif.presentation.v2.properties.Label;
@@ -30,6 +27,8 @@ import info.freelibrary.iiif.presentation.v2.properties.ViewingHint.Option;
 import info.freelibrary.iiif.presentation.v2.services.Service;
 import info.freelibrary.iiif.presentation.v2.utils.Constants;
 import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
 
 /**
  * A resource that can be used as a base for more specific IIIF presentation resources.
@@ -40,35 +39,77 @@ import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
     Constants.SEQUENCES, Constants.SERVICE })
 class Resource<T extends Resource<T>> {
 
+    /**
+     * The resource's logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(Resource.class, MessageCodes.BUNDLE);
 
+    /**
+     * The resource's type.
+     */
     @JsonProperty(Constants.TYPE)
     protected final Type myType;
 
+    /**
+     * The resource's ID.
+     */
     @JsonProperty(Constants.ID)
     private URI myID;
 
+    /**
+     * The resource's label.
+     */
     private Label myLabel;
 
+    /**
+     * The resource's within.
+     */
     private URI myWithin;
 
+    /**
+     * The resource's metadata.
+     */
     @JsonProperty(Constants.METADATA)
     private Metadata myMetadata;
 
+    /**
+     * The resource's description.
+     */
     private Description myDescription;
 
+    /**
+     * The resource's thumbnail.
+     */
     private Thumbnail myThumbnail;
 
+    /**
+     * The resource's attribution.
+     */
     private Attribution myAttribution;
 
+    /**
+     * The resource's license.
+     */
     private License myLicense;
 
+    /**
+     * The resource's license.
+     */
     private Logo myLogo;
 
+    /**
+     * The resource's viewing hint.
+     */
     private ViewingHint myViewingHint;
 
+    /**
+     * The resource's see also.
+     */
     private SeeAlso mySeeAlso;
 
+    /**
+     * The resource's service.
+     */
     private Service<?> myService;
 
     /**
@@ -147,6 +188,25 @@ class Resource<T extends Resource<T>> {
                 aNumber);
         myType = new Type(aType);
 
+        myID = aID;
+        myLabel = aLabel;
+    }
+
+    /**
+     * Creates a new resource from a supplied ID and label.
+     *
+     * @param aID A URI ID (preferably and HTTP based one)
+     * @param aType A type of resource
+     * @param aLabel A label for the resource
+     * @param aThumbnail A thumbnail
+     * @param aNumber The number of required arguments
+     */
+    protected Resource(final String aType, final URI aID, final Label aLabel, final Thumbnail aThumbnail,
+            final int aNumber) {
+        checkArgs(new Object[] { aType, aID, aLabel }, new String[] { Constants.TYPE, Constants.ID, Constants.LABEL },
+                aNumber);
+        myType = new Type(aType);
+        myThumbnail = aThumbnail;
         myID = aID;
         myLabel = aLabel;
     }
@@ -381,7 +441,7 @@ class Resource<T extends Resource<T>> {
      * @return The resource
      */
     protected Resource<T> clearAttribution() {
-        myAttribution = null;
+        myAttribution = null; // NOPMD - null assignment, code smell
         return this;
     }
 
@@ -561,7 +621,7 @@ class Resource<T extends Resource<T>> {
      * @return The resource
      */
     protected Resource<T> clearViewingHint() {
-        myViewingHint = null;
+        myViewingHint = null; // NOPMD - null assignment, code smell
         return this;
     }
 
@@ -646,14 +706,15 @@ class Resource<T extends Resource<T>> {
     /**
      * This lets us define required parameters at the subclass level with a minimal amount of code.
      *
-     * @param aArgArray An array of arguments passed to the constructor
-     * @param aNameArray An array of names corresponding to the arguments passed to the constructor
+     * @param aArgs An array of arguments passed to the constructor
+     * @param aNames An array of names corresponding to the arguments passed to the constructor
      * @param aNumber The number of required arguments
      */
     private void checkArgs(final Object[] aArgs, final String[] aNames, final int aNumber) {
         if (aArgs.length < aNumber) {
             throw new IndexOutOfBoundsException(String.valueOf(aNumber));
-        } else if (aArgs.length != aNames.length) {
+        }
+        if (aArgs.length != aNames.length) {
             throw new IllegalArgumentException("Number of arguments is not equal to the number of names");
         }
 

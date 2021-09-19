@@ -24,8 +24,14 @@ import info.freelibrary.iiif.presentation.v2.services.Service;
  */
 public class Annotation extends Resource<Annotation> {
 
+    /**
+     * The annotation type.
+     */
     private static final String TYPE = "sc:Annotation";
 
+    /**
+     * The required argument count for annotations.
+     */
     private static final int REQ_ARG_COUNT = 1;
 
     /**

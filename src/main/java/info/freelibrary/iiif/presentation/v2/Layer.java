@@ -28,10 +28,19 @@ import info.freelibrary.iiif.presentation.v2.utils.Constants;
  */
 public class Layer extends Resource<Layer> {
 
+    /**
+     * The layer's type.
+     */
     private static final String TYPE = "sc:Layer";
 
+    /**
+     * The layer's required argument type.
+     */
     private static final int REQ_ARG_COUNT = 3;
 
+    /**
+     * The layer's viewing direction.
+     */
     private ViewingDirection myViewingDirection;
 
     /**
@@ -60,7 +69,7 @@ public class Layer extends Resource<Layer> {
      * @return The layer
      */
     public Layer clearViewingDirection() {
-        myViewingDirection = null;
+        myViewingDirection = null; // NOPMD - assigning null, code smell
         return this;
     }
 

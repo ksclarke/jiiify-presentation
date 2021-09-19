@@ -13,8 +13,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.util.IllegalArgumentI18nException;
-
 import info.freelibrary.iiif.presentation.v2.properties.Attribution;
 import info.freelibrary.iiif.presentation.v2.properties.Description;
 import info.freelibrary.iiif.presentation.v2.properties.Label;
@@ -29,6 +27,7 @@ import info.freelibrary.iiif.presentation.v2.properties.ViewingHint.Option;
 import info.freelibrary.iiif.presentation.v2.services.Service;
 import info.freelibrary.iiif.presentation.v2.utils.Constants;
 import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
+import info.freelibrary.util.IllegalArgumentI18nException;
 
 /**
  * A virtual container that represents a page or view and has content resources associated with it or with parts of it.
@@ -40,16 +39,34 @@ import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
     Constants.THUMBNAIL, Constants.IMAGE_CONTENT, Constants.OTHER_CONTENT })
 public class Canvas extends Resource<Canvas> {
 
+    /**
+     * The canvas type.
+     */
     private static final String TYPE = "sc:Canvas";
 
+    /**
+     * The number of required arguments for a canvas.
+     */
     private static final int REQ_ARG_COUNT = 3;
 
+    /**
+     * The canvas' width.
+     */
     private int myWidth;
 
+    /**
+     * The canvas' height.
+     */
     private int myHeight;
 
+    /**
+     * The canvas' image content.
+     */
     private List<ImageContent> myImageContent;
 
+    /**
+     * Other content on the canvas.
+     */
     private List<OtherContent> myOtherContent;
 
     /**
@@ -62,6 +79,7 @@ public class Canvas extends Resource<Canvas> {
      */
     public Canvas(final String aID, final String aLabel, final int aWidth, final int aHeight) {
         super(TYPE, aID, aLabel, REQ_ARG_COUNT);
+
         setWidthHeight(aWidth, aHeight);
     }
 
@@ -75,6 +93,7 @@ public class Canvas extends Resource<Canvas> {
      */
     public Canvas(final URI aID, final Label aLabel, final int aWidth, final int aHeight) {
         super(TYPE, aID, aLabel, REQ_ARG_COUNT);
+
         setWidthHeight(aWidth, aHeight);
     }
 
@@ -89,9 +108,8 @@ public class Canvas extends Resource<Canvas> {
      */
     public Canvas(final String aID, final String aLabel, final int aWidth, final int aHeight,
             final Thumbnail aThumbnail) {
-        super(TYPE, aID, aLabel, REQ_ARG_COUNT);
+        super(TYPE, URI.create(aID), new Label(aLabel), aThumbnail, REQ_ARG_COUNT);
         setWidthHeight(aWidth, aHeight);
-        setThumbnail(aThumbnail);
     }
 
     /**
@@ -104,9 +122,8 @@ public class Canvas extends Resource<Canvas> {
      * @param aThumbnail A canvas thumbnail
      */
     public Canvas(final URI aID, final Label aLabel, final int aWidth, final int aHeight, final Thumbnail aThumbnail) {
-        super(TYPE, aID, aLabel, REQ_ARG_COUNT);
+        super(TYPE, aID, aLabel, aThumbnail, REQ_ARG_COUNT);
         setWidthHeight(aWidth, aHeight);
-        setThumbnail(aThumbnail);
     }
 
     /**
@@ -405,11 +422,10 @@ public class Canvas extends Resource<Canvas> {
      */
     @JsonIgnore
     private void setWidthHeight(final int aWidth, final int aHeight) {
-        if (aWidth >= 0 && aHeight >= 0) {
-            myWidth = aWidth;
-            myHeight = aHeight;
-        } else {
+        if (aWidth < 0 || aHeight < 0) {
             throw new IllegalArgumentI18nException(MessageCodes.BUNDLE, MessageCodes.JPA_011, aWidth, aHeight);
         }
+        myWidth = aWidth;
+        myHeight = aHeight;
     }
 }

@@ -22,6 +22,9 @@ import info.freelibrary.iiif.presentation.v2.utils.Constants;
 @JsonInclude(Include.NON_EMPTY)
 public class ImageResource extends ServiceImage {
 
+    /**
+     * The image resource label.
+     */
     private String myLabel;
 
     /**

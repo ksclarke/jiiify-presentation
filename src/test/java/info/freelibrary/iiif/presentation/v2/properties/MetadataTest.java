@@ -54,8 +54,8 @@ public class MetadataTest extends AbstractTest {
     public void testSinglePairJson() {
         myManifest.setMetadata(new Metadata(AAAA, BBBB));
 
-        myJSON.put(Constants.METADATA, new JsonArray().add(new JsonObject().put(Constants.LABEL, AAAA).put(
-                Constants.VALUE, BBBB)));
+        myJSON.put(Constants.METADATA,
+                new JsonArray().add(new JsonObject().put(Constants.LABEL, AAAA).put(Constants.VALUE, BBBB)));
 
         assertEquals(JsonObject.mapFrom(myManifest), myJSON);
     }
@@ -67,8 +67,8 @@ public class MetadataTest extends AbstractTest {
     public void testDoubleValueJson() {
         myManifest.setMetadata(new Metadata(AAAA, BBBB, CCCC));
 
-        myJSON.put(Constants.METADATA, new JsonArray().add(new JsonObject().put(Constants.LABEL, AAAA).put(
-                Constants.VALUE, new JsonArray().add(BBBB).add(CCCC))));
+        myJSON.put(Constants.METADATA, new JsonArray().add(
+                new JsonObject().put(Constants.LABEL, AAAA).put(Constants.VALUE, new JsonArray().add(BBBB).add(CCCC))));
 
         assertEquals(JsonObject.mapFrom(myManifest), myJSON);
     }
@@ -80,8 +80,9 @@ public class MetadataTest extends AbstractTest {
     public void testDoublePairJson() {
         myManifest.setMetadata(new Metadata(AAAA, BBBB).add(CCCC, DDDD));
 
-        myJSON.put(Constants.METADATA, new JsonArray().add(new JsonObject().put(Constants.LABEL, AAAA).put(
-                Constants.VALUE, BBBB)).add(new JsonObject().put(Constants.LABEL, CCCC).put(Constants.VALUE, DDDD)));
+        myJSON.put(Constants.METADATA,
+                new JsonArray().add(new JsonObject().put(Constants.LABEL, AAAA).put(Constants.VALUE, BBBB))
+                        .add(new JsonObject().put(Constants.LABEL, CCCC).put(Constants.VALUE, DDDD)));
 
         assertEquals(JsonObject.mapFrom(myManifest), myJSON);
     }
@@ -93,9 +94,10 @@ public class MetadataTest extends AbstractTest {
     public void testDoublePairDoubleValueJson() {
         myManifest.setMetadata(new Metadata(AAAA, BBBB).add(CCCC, DDDD, EEEE));
 
-        myJSON.put(Constants.METADATA, new JsonArray().add(new JsonObject().put(Constants.LABEL, AAAA).put(
-                Constants.VALUE, BBBB)).add(new JsonObject().put(Constants.LABEL, CCCC).put(Constants.VALUE,
-                        new JsonArray().add(DDDD).add(EEEE))));
+        myJSON.put(Constants.METADATA,
+                new JsonArray().add(new JsonObject().put(Constants.LABEL, AAAA).put(Constants.VALUE, BBBB))
+                        .add(new JsonObject().put(Constants.LABEL, CCCC).put(Constants.VALUE,
+                                new JsonArray().add(DDDD).add(EEEE))));
 
         assertEquals(JsonObject.mapFrom(myManifest), myJSON);
     }
@@ -108,8 +110,8 @@ public class MetadataTest extends AbstractTest {
         myManifest.setMetadata(new Metadata(AAAA, new Value(BBBB, ENG)));
 
         myJSON.put(Constants.METADATA, new JsonArray().add(new JsonObject().put(Constants.LABEL, AAAA).put(
-                Constants.VALUE, new JsonArray().add(new JsonObject().put(Constants.I18N_VALUE, BBBB).put(
-                        Constants.I18N_LANG, ENG)))));
+                Constants.VALUE,
+                new JsonArray().add(new JsonObject().put(Constants.I18N_VALUE, BBBB).put(Constants.I18N_LANG, ENG)))));
 
         assertEquals(JsonObject.mapFrom(myManifest), myJSON);
     }
@@ -121,10 +123,11 @@ public class MetadataTest extends AbstractTest {
     public void testDoublePairLangValueJson() {
         myManifest.setMetadata(new Metadata(AAAA, new Value(BBBB, ENG), new Value(CCCC, FRE)));
 
-        myJSON.put(Constants.METADATA, new JsonArray().add(new JsonObject().put(Constants.LABEL, AAAA).put(
-                Constants.VALUE, new JsonArray().add(new JsonObject().put(Constants.I18N_VALUE, BBBB).put(
-                        Constants.I18N_LANG, ENG)).add(new JsonObject().put(Constants.I18N_VALUE, CCCC).put(
-                                Constants.I18N_LANG, FRE)))));
+        myJSON.put(Constants.METADATA,
+                new JsonArray().add(new JsonObject().put(Constants.LABEL, AAAA).put(Constants.VALUE,
+                        new JsonArray()
+                                .add(new JsonObject().put(Constants.I18N_VALUE, BBBB).put(Constants.I18N_LANG, ENG))
+                                .add(new JsonObject().put(Constants.I18N_VALUE, CCCC).put(Constants.I18N_LANG, FRE)))));
 
         assertEquals(JsonObject.mapFrom(myManifest), myJSON);
     }

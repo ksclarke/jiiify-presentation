@@ -12,16 +12,90 @@ import com.google.common.net.MediaType;
 
 import info.freelibrary.iiif.presentation.v2.ServiceImage;
 import info.freelibrary.iiif.presentation.v2.services.ImageInfoService;
+import info.freelibrary.iiif.presentation.v2.utils.Constants;
 
 /**
  * A property that relies on a service.
  */
+@SuppressWarnings("PMD.GodClass")
 class ServiceProperty<T extends ServiceProperty<T>> {
 
+    /**
+     * A list of images for a service property.
+     */
     private List<ServiceImage> myImages;
 
+    /**
+     * Creates a new service property.
+     */
     protected ServiceProperty() {
-        super();
+        // This is intentionally empty
+    }
+
+    /**
+     * Creates a new service property.
+     *
+     * @param aID An ID array
+     */
+    protected ServiceProperty(final String... aID) {
+        final List<URI> ids = new ArrayList<>();
+
+        for (final String id : aID) {
+            ids.add(URI.create(id));
+        }
+
+        addImagePrivately(ids.toArray(new URI[0]));
+    }
+
+    /**
+     * Creates a new service property.
+     *
+     * @param aID An ID array
+     */
+    protected ServiceProperty(final URI... aID) {
+        addImagePrivately(aID);
+    }
+
+    /**
+     * Creates a service property.
+     *
+     * @param aURI A URI image ID
+     * @param aWidth An image width
+     * @param aHeight An image height
+     */
+    protected ServiceProperty(final String aURI, final int aWidth, final int aHeight) {
+        addImagePrivately(URI.create(aURI), aWidth, aHeight);
+    }
+
+    /**
+     * Creates a service property.
+     *
+     * @param aID A URI image ID
+     * @param aWidth An image width
+     * @param aHeight An image height
+     */
+    protected ServiceProperty(final URI aID, final int aWidth, final int aHeight) {
+        addImagePrivately(aID, aWidth, aHeight);
+    }
+
+    /**
+     * Creates a service property.
+     *
+     * @param aID An ID for the service property
+     * @param aService An image info service for the service property
+     */
+    protected ServiceProperty(final String aID, final ImageInfoService aService) {
+        addImagePrivately(URI.create(aID), aService);
+    }
+
+    /**
+     * Creates a service property.
+     *
+     * @param aID An ID for the service property
+     * @param aService An image info service for the service property
+     */
+    protected ServiceProperty(final URI aID, final ImageInfoService aService) {
+        addImagePrivately(aID, aService);
     }
 
     /**
@@ -31,13 +105,13 @@ class ServiceProperty<T extends ServiceProperty<T>> {
      * @return The property
      */
     protected ServiceProperty<T> addImage(final String... aID) {
+        final List<URI> ids = new ArrayList<>();
+
         for (final String id : aID) {
-            if (!getImages().add(new ServiceImage(id))) {
-                throw new UnsupportedOperationException();
-            }
+            ids.add(URI.create(id));
         }
 
-        return this;
+        return addImagePrivately(ids.toArray(new URI[0]));
     }
 
     /**
@@ -47,8 +121,18 @@ class ServiceProperty<T extends ServiceProperty<T>> {
      * @return The property
      */
     protected ServiceProperty<T> addImage(final URI... aID) {
+        return addImagePrivately(aID);
+    }
+
+    /**
+     * Adds image to the property.
+     *
+     * @param aID The URI ID for the image
+     * @return The property
+     */
+    private ServiceProperty<T> addImagePrivately(final URI... aID) {
         for (final URI id : aID) {
-            if (!getImages().add(new ServiceImage(id))) {
+            if (!getImagesPrivately().add(new ServiceImage(id))) {
                 throw new UnsupportedOperationException();
             }
         }
@@ -65,11 +149,7 @@ class ServiceProperty<T extends ServiceProperty<T>> {
      * @return The property
      */
     protected ServiceProperty<T> addImage(final String aID, final int aWidth, final int aHeight) {
-        if (!getImages().add(new ServiceImage(aID, aWidth, aHeight))) {
-            throw new UnsupportedOperationException();
-        }
-
-        return this;
+        return addImagePrivately(URI.create(aID), aWidth, aHeight);
     }
 
     /**
@@ -81,7 +161,19 @@ class ServiceProperty<T extends ServiceProperty<T>> {
      * @return The property
      */
     protected ServiceProperty<T> addImage(final URI aURI, final int aWidth, final int aHeight) {
-        if (!getImages().add(new ServiceImage(aURI, aWidth, aHeight))) {
+        return addImagePrivately(aURI, aWidth, aHeight);
+    }
+
+    /**
+     * Adds image to the property.
+     *
+     * @param aURI The ID for the image
+     * @param aWidth A image width
+     * @param aHeight A image height
+     * @return The property
+     */
+    private ServiceProperty<T> addImagePrivately(final URI aURI, final int aWidth, final int aHeight) {
+        if (!getImagesPrivately().add(new ServiceImage(aURI, aWidth, aHeight))) {
             throw new UnsupportedOperationException();
         }
 
@@ -96,11 +188,7 @@ class ServiceProperty<T extends ServiceProperty<T>> {
      * @return The property
      */
     protected ServiceProperty<T> addImage(final String aID, final ImageInfoService aService) {
-        if (!getImages().add(new ServiceImage(aID, aService))) {
-            throw new UnsupportedOperationException();
-        }
-
-        return this;
+        return addImagePrivately(URI.create(aID), aService);
     }
 
     /**
@@ -111,7 +199,18 @@ class ServiceProperty<T extends ServiceProperty<T>> {
      * @return The property
      */
     protected ServiceProperty<T> addImage(final URI aID, final ImageInfoService aService) {
-        if (!getImages().add(new ServiceImage(aID, aService))) {
+        return addImagePrivately(aID, aService);
+    }
+
+    /**
+     * Adds image to the property.
+     *
+     * @param aID The ID for the image
+     * @param aService A service for the image
+     * @return The property
+     */
+    private ServiceProperty<T> addImagePrivately(final URI aID, final ImageInfoService aService) {
+        if (!getImagesPrivately().add(new ServiceImage(aID, aService))) {
             throw new UnsupportedOperationException();
         }
 
@@ -124,6 +223,15 @@ class ServiceProperty<T extends ServiceProperty<T>> {
      * @return A list of images
      */
     public List<ServiceImage> getImages() {
+        return getImagesPrivately();
+    }
+
+    /**
+     * Returns a list of images.
+     *
+     * @return A list of images
+     */
+    private List<ServiceImage> getImagesPrivately() {
         if (myImages == null) {
             myImages = new ArrayList<>();
         }
@@ -201,7 +309,17 @@ class ServiceProperty<T extends ServiceProperty<T>> {
      * @return The property
      */
     protected ServiceProperty<T> addImage(final ServiceImage... aImage) {
-        if (!Collections.addAll(getImages(), aImage)) {
+        return addImagePrivately(aImage);
+    }
+
+    /**
+     * Adds image(s) to the property.
+     *
+     * @param aImage A list of images
+     * @return The property
+     */
+    private ServiceProperty<T> addImagePrivately(final ServiceImage... aImage) {
+        if (!Collections.addAll(getImagesPrivately(), aImage)) {
             throw new UnsupportedOperationException();
         }
 
@@ -218,34 +336,42 @@ class ServiceProperty<T extends ServiceProperty<T>> {
     protected Object getValue() {
         final List<ServiceImage> list = getImages();
 
-        if (list.size() == 1) {
+        if (list.size() == Constants.SINGLE_INSTANCE) {
             final ServiceImage serviceImage = list.get(0);
             final Optional<ImageInfoService> service = serviceImage.getService();
 
             if (service.isPresent() || hasWidthHeight(serviceImage)) {
                 return serviceImage;
-            } else {
-                // Not going to output format and type if no width, height, or service
-                return serviceImage.getID();
-            }
-        } else if (list.size() > 1) {
-            final List<Object> objects = new ArrayList<>();
-
-            for (final ServiceImage serviceImage : list) {
-                if (serviceImage.getService().isPresent() || hasWidthHeight(serviceImage)) {
-                    objects.add(serviceImage);
-                } else {
-                    objects.add(serviceImage.getID());
-                }
             }
 
-            return objects;
-        } else {
+            // Not going to output format and type if no width, height, or service
+            return serviceImage.getID();
+        }
+
+        if (list.size() <= Constants.SINGLE_INSTANCE) {
             return null;
         }
+
+        final List<Object> objects = new ArrayList<>();
+
+        for (final ServiceImage serviceImage : list) {
+            if (serviceImage.getService().isPresent() || hasWidthHeight(serviceImage)) {
+                objects.add(serviceImage);
+            } else {
+                objects.add(serviceImage.getID());
+            }
+        }
+
+        return objects;
     }
 
+    /**
+     * Determines whether a service image has a width and height.
+     *
+     * @param aImage A service image to check
+     * @return True if the supplied service image has a width and height; else, false
+     */
     private boolean hasWidthHeight(final ServiceImage aImage) {
-        return (aImage.getHeight() != 0) || (aImage.getWidth() != 0);
+        return aImage.getHeight() != 0 || aImage.getWidth() != 0;
     }
 }

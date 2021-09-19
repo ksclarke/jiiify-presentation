@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v2;
+package info.freelibrary.iiif.presentation.v2; // NOPMD - excessive imports
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -14,11 +14,6 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
-
-import info.freelibrary.util.I18nRuntimeException;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v2.properties.Attribution;
 import info.freelibrary.iiif.presentation.v2.properties.Description;
@@ -36,24 +31,47 @@ import info.freelibrary.iiif.presentation.v2.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.v2.services.Service;
 import info.freelibrary.iiif.presentation.v2.utils.Constants;
 import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
+import info.freelibrary.util.I18nRuntimeException;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.StringUtils;
 
 /**
  * An image resource that is associated with a {@link Canvas}.
  */
 @JsonPropertyOrder({ Constants.TYPE, Constants.LABEL, Constants.ID, Constants.MOTIVATION, Constants.ON,
     Constants.RESOURCE, Constants.OA_CHOICE, Constants.ITEM })
+@SuppressWarnings("PMD.GodClass")
 public class ImageContent extends Content<ImageContent> {
 
+    /**
+     * The image content logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageContent.class, MessageCodes.BUNDLE);
 
+    /**
+     * The image content's type.
+     */
     private static final String TYPE = "oa:Annotation";
 
+    /**
+     * The image content's motivation.
+     */
     private static final String MOTIVATION = "sc:painting";
 
+    /**
+     * The "rdf:nil" constant.
+     */
     private static final String RDF_NIL = "rdf:nil";
 
+    /**
+     * The image content's image resources.
+     */
     private final List<ImageResource> myResources = new ArrayList<>();
 
+    /**
+     * The image content's default resource.
+     */
     private Optional<ImageResource> myDefaultResource;
 
     /**
@@ -291,6 +309,7 @@ public class ImageContent extends Content<ImageContent> {
      * @return The resources map
      */
     @JsonGetter(Constants.RESOURCE)
+    @SuppressWarnings("PMD.CyclomaticComplexity")
     private Map<String, Object> getResourcesMap() {
         final Map<String, Object> map = new TreeMap<>();
 
@@ -315,7 +334,7 @@ public class ImageContent extends Content<ImageContent> {
                 }
 
                 map.put(Constants.ITEM, itemList);
-            } else if (myResources.size() == 1) {
+            } else if (myResources.size() == Constants.SINGLE_INSTANCE) {
                 final ImageResource resource = myResources.get(0);
                 final Optional<ImageInfoService> service = resource.getService();
                 final int height = resource.getHeight();
@@ -356,6 +375,7 @@ public class ImageContent extends Content<ImageContent> {
      * @param aResourceMap A JSON representation of the resources map
      */
     @JsonSetter(Constants.RESOURCE)
+    @SuppressWarnings("PMD.CyclomaticComplexity")
     private void setResourcesMap(final Map<String, Object> aResourceMap) {
         LOGGER.trace(aResourceMap.toString());
 
@@ -367,7 +387,7 @@ public class ImageContent extends Content<ImageContent> {
                 myDefaultResource = Optional.of(buildImageResource(defaultItem));
             }
 
-            if (items != null && items instanceof List) {
+            if (items instanceof List) {
                 for (final Object object : items) {
                     if (object instanceof String && RDF_NIL.equals(object.toString())) {
                         myResources.add(null);
@@ -383,65 +403,103 @@ public class ImageContent extends Content<ImageContent> {
         }
     }
 
+    /**
+     * Builds an image resource from a map.
+     *
+     * @param aImageResourceMap A map containing image content metadata
+     * @return The image resource
+     */
+    @SuppressWarnings({ "PMD.CyclomaticComplexity", "PMD.NPathComplexity" })
     private ImageResource buildImageResource(final Object aImageResourceMap) {
-        if (aImageResourceMap instanceof Map) {
-            final Map<?, ?> map = (Map<?, ?>) aImageResourceMap;
-            final ImageResource resource = new ImageResource(URI.create((String) map.get(Constants.ID)));
-            final String label = (String) map.get(Constants.LABEL);
-            final Map<?, ?> service = (Map<?, ?>) map.get(Constants.SERVICE);
-            final Object widthObj = map.get(Constants.WIDTH);
-            final Object heightObj = map.get(Constants.HEIGHT);
-            final int width;
-            final int height;
-
-            if (widthObj == null) {
-                width = 0;
-            } else {
-                width = Integer.parseInt(widthObj.toString());
-            }
-
-            if (heightObj == null) {
-                height = 0;
-            } else {
-                height = Integer.parseInt(heightObj.toString());
-            }
-
-            if (StringUtils.trimToNull(label) != null) {
-                resource.setLabel(label);
-            }
-
-            if (width != 0) {
-                try {
-                    resource.setWidth(width);
-                } catch (final NumberFormatException details) {
-                    LOGGER.error(details, details.getMessage());
-                    resource.setWidth(0);
-                }
-            }
-
-            if (height != 0) {
-                try {
-                    resource.setHeight(height);
-                } catch (final NumberFormatException details) {
-                    LOGGER.error(details, details.getMessage());
-                    resource.setHeight(0);
-                }
-            }
-
-            if (service != null) {
-                final String profile = StringUtils.trimToNull((String) service.get(Constants.PROFILE));
-                final String id = StringUtils.trimToNull((String) service.get(Constants.ID));
-
-                if (profile != null && id != null) {
-                    resource.setService(new ImageInfoService(APIComplianceLevel.fromProfile(profile), id));
-                } else if (id != null) {
-                    resource.setService(new ImageInfoService(id));
-                }
-            }
-
-            return resource;
-        } else {
+        if (!(aImageResourceMap instanceof Map)) {
             return null;
         }
+
+        /**
+         * A image resource map.
+         */
+        final Map<?, ?> map = (Map<?, ?>) aImageResourceMap;
+
+        /**
+         * A new image resource.
+         */
+        final ImageResource resource = new ImageResource(URI.create((String) map.get(Constants.ID)));
+
+        /**
+         * The image resource label.
+         */
+        final String label = (String) map.get(Constants.LABEL);
+
+        /**
+         * The image resource service map.
+         */
+        final Map<?, ?> service = (Map<?, ?>) map.get(Constants.SERVICE);
+
+        /**
+         * The image resource map's width object.
+         */
+        final Object widthObj = map.get(Constants.WIDTH);
+
+        /**
+         * The image resource map's height object.
+         */
+        final Object heightObj = map.get(Constants.HEIGHT);
+
+        /**
+         * The image resource's width.
+         */
+        final int width;
+
+        /**
+         * The image resource's height.
+         */
+        final int height;
+
+        if (widthObj == null) {
+            width = 0;
+        } else {
+            width = Integer.parseInt(widthObj.toString());
+        }
+
+        if (heightObj == null) {
+            height = 0;
+        } else {
+            height = Integer.parseInt(heightObj.toString());
+        }
+
+        if (StringUtils.trimToNull(label) != null) {
+            resource.setLabel(label);
+        }
+
+        if (width != 0) {
+            try {
+                resource.setWidth(width);
+            } catch (final NumberFormatException details) {
+                LOGGER.error(details, details.getMessage());
+                resource.setWidth(0);
+            }
+        }
+
+        if (height != 0) {
+            try {
+                resource.setHeight(height);
+            } catch (final NumberFormatException details) {
+                LOGGER.error(details, details.getMessage());
+                resource.setHeight(0);
+            }
+        }
+
+        if (service != null) {
+            final String profile = StringUtils.trimToNull((String) service.get(Constants.PROFILE));
+            final String id = StringUtils.trimToNull((String) service.get(Constants.ID));
+
+            if (profile != null && id != null) {
+                resource.setService(new ImageInfoService(APIComplianceLevel.fromProfile(profile), id));
+            } else if (id != null) {
+                resource.setService(new ImageInfoService(id));
+            }
+        }
+
+        return resource;
     }
 }

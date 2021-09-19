@@ -1,7 +1,9 @@
 
 package info.freelibrary.iiif.presentation.v2;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,12 +17,10 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 
-import info.freelibrary.util.StringUtils;
-
 import info.freelibrary.iiif.presentation.v2.properties.Label;
 import info.freelibrary.iiif.presentation.v2.properties.NavDate;
 import info.freelibrary.iiif.presentation.v2.properties.ViewingHint;
-
+import info.freelibrary.util.StringUtils;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 
@@ -52,7 +52,8 @@ public class CollectionTest {
      */
     @Test
     public void testCollectionManifestManifestConstructor() {
-        final Collection.Manifest manifest = new Collection.Manifest(new Manifest(myID, myLabel));
+        final Collection.Manifest manifest =
+                new Collection.Manifest(new info.freelibrary.iiif.presentation.v2.Collection.Manifest(myID, myLabel));
 
         assertEquals(URI.create(myID), manifest.getID());
         assertEquals(new Label(myLabel), manifest.getLabel());

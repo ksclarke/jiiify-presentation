@@ -20,13 +20,13 @@ import info.freelibrary.util.StringUtils;
  */
 public class ThumbnailTest {
 
-    public static final URI THUMBNAIL_ID_1 = URI.create(
-            "http://example.org/images/book1-page1/full/80,100/0/default.jpg");
+    public static final URI THUMBNAIL_ID_1 =
+            URI.create("http://example.org/images/book1-page1/full/80,100/0/default.jpg");
 
     public static final URI PAGE_ID_1 = URI.create("http://example.org/images/book1-page1");
 
-    public static final URI THUMBNAIL_ID_2 = URI.create(
-            "http://example.org/images/book1-page2/full/80,100/0/default.jpg");
+    public static final URI THUMBNAIL_ID_2 =
+            URI.create("http://example.org/images/book1-page2/full/80,100/0/default.jpg");
 
     public static final URI PAGE_ID_2 = URI.create("http://example.org/images/book1-page2");
 

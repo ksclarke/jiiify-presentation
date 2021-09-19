@@ -14,18 +14,31 @@ import info.freelibrary.iiif.presentation.v2.utils.Constants;
  */
 public class PhysicalDimsService implements Service<PhysicalDimsService> {
 
-    /* The context for this service */
+    /**
+     * The context for this service.
+     */
     @JsonIgnore
     public static final URI CONTEXT = URI.create("http://iiif.io/api/annex/services/physdim/1/context.json");
 
-    /* The profile for this service */
+    /**
+     * The profile for this service.
+     */
     @JsonIgnore
     public static final URI PROFILE = URI.create("http://iiif.io/api/annex/services/physdim");
 
+    /**
+     * The service's ID.
+     */
     private URI myID;
 
+    /**
+     * The service's physical scale.
+     */
     private double myPhysicalScale;
 
+    /**
+     * The service's physical units.
+     */
     private String myPhysicalUnits;
 
     /**

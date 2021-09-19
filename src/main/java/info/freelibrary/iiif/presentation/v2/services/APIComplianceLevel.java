@@ -15,12 +15,29 @@ import info.freelibrary.util.LoggerFactory;
  */
 public enum APIComplianceLevel {
 
-    // Compliance levels
-    ZERO("http://iiif.io/api/image/2/level0.json"), ONE("http://iiif.io/api/image/2/level1.json"), TWO(
-            "http://iiif.io/api/image/2/level2.json");
+    /**
+     * A level zero compliance level.
+     */
+    ZERO("http://iiif.io/api/image/2/level0.json"),
 
+    /**
+     * A level one compliance level.
+     */
+    ONE("http://iiif.io/api/image/2/level1.json"),
+
+    /**
+     * A level two compliance level.
+     */
+    TWO("http://iiif.io/api/image/2/level2.json");
+
+    /**
+     * The logger for the API compliance level.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(APIComplianceLevel.class, MessageCodes.BUNDLE);
 
+    /**
+     * The API compliance level's URL.
+     */
     private String myURL;
 
     /**

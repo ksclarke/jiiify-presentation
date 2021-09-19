@@ -43,15 +43,12 @@
   <properties>
     <revision>0.0.0-SNAPSHOT</revision>
 
-    <jackson.version>2.12.0</jackson.version>
-    <jackson.databind.version>2.12.0</jackson.databind.version>
-    <guava.version>30.1-jre</guava.version>
-    <freelib.utils.version>2.1.0</freelib.utils.version>
-    <vertx.version>3.9.4</vertx.version>
-
-    <!-- Plugin related versions -->
-    <maven.jar.plugin.version>3.2.0</maven.jar.plugin.version>
-    <freelib.maven.version>0.1.2</freelib.maven.version>
+    <!-- Project dependencies -->
+    <jackson.version>2.12.5</jackson.version>
+    <jackson.databind.version>2.12.5</jackson.databind.version>
+    <guava.version>30.1.1-jre</guava.version>
+    <freelib.utils.version>2.4.0</freelib.utils.version>
+    <vertx.version>3.9.9</vertx.version>
 
     <!-- Test related versions -->
     <opencsv.version>4.6</opencsv.version>
@@ -123,7 +120,6 @@
       <plugin>
         <groupId>info.freelibrary</groupId>
         <artifactId>freelib-maven-plugins</artifactId>
-        <version>${freelib.maven.version}</version>
         <executions>
           <execution>
             <phase>process-resources</phase>
@@ -191,19 +187,11 @@
     </plugins>
   </build>
 
-  <!-- Enables pushing project documentation up to an S3 bucket -->
-  <distributionManagement>
-    <site>
-      <id>s3.site</id>
-      <url>s3://projects.freelibrary.info/jiiify-presentation-v2</url>
-    </site>
-  </distributionManagement>
-
   <!-- Pulls in standard FreeLibrary Project configuration options -->
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>6.7.2</version>
+    <version>7.0.1</version>
   </parent>
 
 </project>

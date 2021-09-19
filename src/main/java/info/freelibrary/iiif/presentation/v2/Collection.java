@@ -10,8 +10,6 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.util.I18nRuntimeException;
-
 import info.freelibrary.iiif.presentation.v2.properties.Attribution;
 import info.freelibrary.iiif.presentation.v2.properties.Description;
 import info.freelibrary.iiif.presentation.v2.properties.Label;
@@ -26,7 +24,7 @@ import info.freelibrary.iiif.presentation.v2.properties.ViewingHint;
 import info.freelibrary.iiif.presentation.v2.properties.ViewingHint.Option;
 import info.freelibrary.iiif.presentation.v2.services.Service;
 import info.freelibrary.iiif.presentation.v2.utils.Constants;
-
+import info.freelibrary.util.I18nRuntimeException;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.json.jackson.DatabindCodec;
@@ -42,14 +40,29 @@ public class Collection extends Resource<Collection> {
         DatabindCodec.mapper().findAndRegisterModules();
     }
 
+    /**
+     * The collection context.
+     */
     private static final URI CONTEXT = URI.create("http://iiif.io/api/presentation/2/context.json");
 
+    /**
+     * The collection type.
+     */
     private static final String TYPE = "sc:Collection";
 
+    /**
+     * The required argument count for a collection.
+     */
     private static final int REQ_ARG_COUNT = 3;
 
+    /**
+     * The collection navDate.
+     */
     private NavDate myNavDate;
 
+    /**
+     * The collection's manifests.
+     */
     private List<Manifest> myManifests;
 
     /**
@@ -345,16 +358,26 @@ public class Collection extends Resource<Collection> {
      */
     public static class Manifest {
 
+        /**
+         * The manifest type.
+         */
         private static final String TYPE = "sc:Manifest";
 
+        /**
+         * The manifest ID.
+         */
         private URI myID;
 
+        /**
+         * The manifest label.
+         */
         private Label myLabel;
 
         /**
          * Create a new collection manifest.
          */
         public Manifest() {
+            // This is intentionally empty.
         }
 
         /**
@@ -362,9 +385,9 @@ public class Collection extends Resource<Collection> {
          *
          * @param aManifest A full manifest
          */
-        public Manifest(final info.freelibrary.iiif.presentation.v2.Manifest aManifest) {
-            setID(aManifest.getID());
-            setLabel(aManifest.getLabel());
+        public Manifest(final Manifest aManifest) {
+            myID = aManifest.getID();
+            myLabel = aManifest.getLabel();
         }
 
         /**
@@ -374,8 +397,8 @@ public class Collection extends Resource<Collection> {
          * @param aLabel A manifest label
          */
         public Manifest(final String aID, final String aLabel) {
-            setID(aID);
-            setLabel(aLabel);
+            myID = URI.create(aID);
+            myLabel = new Label(aLabel);
         }
 
         /**
@@ -470,10 +493,13 @@ public class Collection extends Resource<Collection> {
         /**
          * Gives Jackson a way to "set" this, though it's a static string in this class.
          *
+         * @param aType A manifest type
          * @return The collection manifest type
          */
         @JsonSetter(Constants.TYPE)
+        @SuppressWarnings("PMD.UnusedFormalParameter")
         private Manifest setType(final Type aType) {
+            // No need to set type; it's a constant
             return this;
         }
     }

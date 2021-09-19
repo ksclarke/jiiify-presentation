@@ -22,5 +22,6 @@
   <entry key="JPA-016">Unexpected JSON node: {}</entry>
   <entry key="JPA-017">Illegal viewing direction argument: {}</entry>
   <entry key="JPA-018">Failed to catch illegal viewing direction argument</entry>
+  <entry key="JPA-019">Service's JSON representation is missing the required ID</entry>
 
 </properties>

@@ -22,6 +22,9 @@ import info.freelibrary.iiif.presentation.v2.services.Service;
  */
 public class OtherContent extends Content<OtherContent> {
 
+    /**
+     * The logger for other content.
+     */
     private static final String TYPE = "sc:AnnotationList";
 
     /**

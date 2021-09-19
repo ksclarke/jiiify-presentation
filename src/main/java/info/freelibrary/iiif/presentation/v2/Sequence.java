@@ -35,14 +35,29 @@ import info.freelibrary.iiif.presentation.v2.utils.Constants;
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.LABEL, Constants.ID, Constants.TYPE })
 public class Sequence extends Resource<Sequence> {
 
+    /**
+     * The sequence's type.
+     */
     private static final String TYPE = "sc:Sequence";
 
+    /**
+     * The sequence's required argument count.
+     */
     private static final int REQ_ARG_COUNT = 1;
 
+    /**
+     * The sequence's viewing direction.
+     */
     private ViewingDirection myViewingDirection;
 
+    /**
+     * The sequence's canvas list.
+     */
     private final List<Canvas> myCanvases;
 
+    /**
+     * The sequence's start canvas.
+     */
     private Optional<URI> myStartCanvas;
 
     /**
@@ -59,9 +74,8 @@ public class Sequence extends Resource<Sequence> {
      * @param aID An ID
      */
     public Sequence(final String aID) {
-        super(TYPE, REQ_ARG_COUNT);
+        super(TYPE, URI.create(aID), REQ_ARG_COUNT);
         myCanvases = new ArrayList<>();
-        setID(aID);
     }
 
     /**
@@ -70,9 +84,8 @@ public class Sequence extends Resource<Sequence> {
      * @param aID An ID
      */
     public Sequence(final URI aID) {
-        super(TYPE, REQ_ARG_COUNT);
+        super(TYPE, aID, REQ_ARG_COUNT);
         myCanvases = new ArrayList<>();
-        setID(aID);
     }
 
     /**
@@ -103,7 +116,7 @@ public class Sequence extends Resource<Sequence> {
      * @return The sequence
      */
     public Sequence clearViewingDirection() {
-        myViewingDirection = null;
+        myViewingDirection = null; // NOPMD - null assignment, code smell
         return this;
     }
 

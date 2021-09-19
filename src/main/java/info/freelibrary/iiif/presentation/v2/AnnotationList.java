@@ -21,8 +21,14 @@ import info.freelibrary.iiif.presentation.v2.services.Service;
  */
 public class AnnotationList extends Resource<AnnotationList> {
 
+    /**
+     * The annotation list type.
+     */
     private static final String TYPE = "sc:AnnotationList";
 
+    /**
+     * The required argument count for annotation lists.
+     */
     private static final int REQ_ARG_COUNT = 2;
 
     /**

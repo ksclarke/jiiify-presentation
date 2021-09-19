@@ -22,6 +22,9 @@ import info.freelibrary.util.LoggerFactory;
  */
 public class ViewingHint {
 
+    /**
+     * The viewing hint's logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(ViewingHint.class, MessageCodes.BUNDLE);
 
     /**
@@ -30,11 +33,51 @@ public class ViewingHint {
      */
     public enum Option {
 
-        INDIVIDUALS("individuals"), PAGED("paged"), CONTINUOUS("continuous"), MULTIPART("multi-part"), NONPAGED(
-                "non-paged"), TOP("top"), FACINGPAGES("facing-pages");
+        /**
+         * The "individuals" viewing hint.
+         */
+        INDIVIDUALS("individuals"),
 
+        /**
+         * The "paged" viewing hint.
+         */
+        PAGED("paged"),
+
+        /**
+         * The "continuous" viewing hint.
+         */
+        CONTINUOUS("continuous"),
+
+        /**
+         * The "multi-part" viewing hint.
+         */
+        MULTIPART("multi-part"),
+
+        /**
+         * The "non-paged" viewing hint.
+         */
+        NONPAGED("non-paged"),
+
+        /**
+         * The "top" viewing hint.
+         */
+        TOP("top"),
+
+        /**
+         * The "facing-pages" viewing hint.
+         */
+        FACINGPAGES("facing-pages");
+
+        /**
+         * The viewing hint value.
+         */
         private final String myValue;
 
+        /**
+         * Creates a new viewing hint option.
+         *
+         * @param aHint A string representation of a viewing hint
+         */
         Option(final String aHint) {
             myValue = aHint;
         }
@@ -46,6 +89,9 @@ public class ViewingHint {
 
     }
 
+    /**
+     * Viewing hint values.
+     */
     private final List<Value> myValues = new ArrayList<>();
 
     /**
@@ -200,7 +246,8 @@ public class ViewingHint {
 
         // Make sure the supplied values are valid before adding
         for (final String value : aValue) {
-            array[index++] = new Value(value);
+            array[index] = new Value(value);
+            index++;
         }
 
         if (!Collections.addAll(myValues, array)) {
@@ -221,13 +268,15 @@ public class ViewingHint {
      */
     @JsonGetter(Constants.VIEWING_HINT)
     private Object getValueJson() {
-        if (myValues.size() == 1) {
+        if (myValues.size() == Constants.SINGLE_INSTANCE) {
             return myValues.get(0).getString();
-        } else if (myValues.size() > 1) {
-            return myValues;
-        } else {
-            return null;
         }
+
+        if (!myValues.isEmpty()) {
+            return myValues;
+        }
+
+        return null;
     }
 
     /**
@@ -235,8 +284,14 @@ public class ViewingHint {
      */
     public class Value {
 
+        /**
+         * A viewing hint URI.
+         */
         private URI myURI;
 
+        /**
+         * A viewing hint option.
+         */
         private Option myOption;
 
         /**
@@ -296,7 +351,7 @@ public class ViewingHint {
         public String getString() {
             final String result;
 
-            if ((myURI == null) && (myOption == null)) {
+            if (myURI == null && myOption == null) {
                 result = null;
             } else if (myOption == null) {
                 result = myURI.toString();

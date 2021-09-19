@@ -14,13 +14,24 @@ import info.freelibrary.iiif.presentation.v2.utils.Constants;
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.ID, Constants.PROFILE })
 public class ImageInfoService implements Service<ImageInfoService> {
 
-    /* The context for this service */
+    /**
+     * The context for this service.
+     */
     public static final URI CONTEXT = URI.create("http://iiif.io/api/image/2/context.json");
 
+    /**
+     * The default API compliance level.
+     */
     private static final APIComplianceLevel DEFAULT_LEVEL = APIComplianceLevel.ZERO;
 
+    /**
+     * The service's actual API compliance level.
+     */
     private APIComplianceLevel myLevel;
 
+    /**
+     * The service's ID.
+     */
     private URI myID;
 
     /**

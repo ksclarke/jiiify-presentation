@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v2;
+package info.freelibrary.iiif.presentation.v2; // NOPMD - excessive imports
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -17,10 +17,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.util.I18nRuntimeException;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-
 import info.freelibrary.iiif.presentation.v2.properties.Attribution;
 import info.freelibrary.iiif.presentation.v2.properties.Description;
 import info.freelibrary.iiif.presentation.v2.properties.Label;
@@ -37,7 +33,9 @@ import info.freelibrary.iiif.presentation.v2.properties.ViewingHint.Option;
 import info.freelibrary.iiif.presentation.v2.services.Service;
 import info.freelibrary.iiif.presentation.v2.utils.Constants;
 import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
-
+import info.freelibrary.util.I18nRuntimeException;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.json.jackson.DatabindCodec;
@@ -52,26 +50,51 @@ import io.vertx.core.json.jackson.DatabindCodec;
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.ID, Constants.TYPE, Constants.LABEL, Constants.VIEWING_HINT,
     Constants.VIEWING_DIRECTION, Constants.DESCRIPTION, Constants.ATTRIBUTION, Constants.LICENSE, Constants.WITHIN,
     Constants.LOGO, Constants.THUMBNAIL, Constants.METADATA, Constants.SEQUENCES, Constants.SERVICE })
+@SuppressWarnings("PMD.GodClass")
 public class Manifest extends Resource<Manifest> {
 
+    /**
+     * The manifest's logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(Manifest.class, MessageCodes.BUNDLE);
 
     static {
         DatabindCodec.mapper().findAndRegisterModules();
     }
 
+    /**
+     * The manifest's type.
+     */
     private static final String TYPE = "sc:Manifest";
 
+    /**
+     * The manifest's context
+     */
     private static final URI CONTEXT = URI.create("http://iiif.io/api/presentation/2/context.json");
 
+    /**
+     * The manifest's required argument count.
+     */
     private static final int REQ_ARG_COUNT = 3;
 
+    /**
+     * The manifest's contexts.
+     */
     private final List<URI> myContexts = Stream.of(CONTEXT).collect(Collectors.toList());
 
+    /**
+     * The manifest's sequences.
+     */
     private final List<Sequence> mySequences = new ArrayList<>();
 
+    /**
+     * The manifest's navDate.
+     */
     private NavDate myNavDate;
 
+    /**
+     * The manifest's viewing direction.
+     */
     private ViewingDirection myViewingDirection;
 
     /**
@@ -140,9 +163,8 @@ public class Manifest extends Resource<Manifest> {
     public List<URI> getContexts() {
         if (myContexts.isEmpty()) {
             return null;
-        } else {
-            return myContexts;
         }
+        return myContexts;
     }
 
     /**
@@ -212,7 +234,7 @@ public class Manifest extends Resource<Manifest> {
      * @return The manifest
      */
     public Manifest clearViewingDirection() {
-        myViewingDirection = null;
+        myViewingDirection = null; // NOPMD - null assignment, code smell
         return this;
     }
 
@@ -462,12 +484,12 @@ public class Manifest extends Resource<Manifest> {
      */
     @JsonGetter(Constants.CONTEXT)
     private Object getContextJson() {
-        if (myContexts.size() == 1) {
+        if (myContexts.size() == Constants.SINGLE_INSTANCE) {
             return myContexts.get(0);
-        } else if (myContexts.size() > 1) {
-            return myContexts;
-        } else {
-            return null;
         }
+        if (myContexts.size() > Constants.SINGLE_INSTANCE) {
+            return myContexts;
+        }
+        return null;
     }
 }

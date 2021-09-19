@@ -26,14 +26,29 @@ import info.freelibrary.util.LoggerFactory;
 @JsonPropertyOrder({ Constants.CONTEXT, Constants.ID, Constants.PROFILE })
 public class GenericService implements Service<GenericService> {
 
+    /**
+     * The generic service's logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(GenericService.class, MessageCodes.BUNDLE);
 
+    /**
+     * The service ID.
+     */
     private URI myID;
 
+    /**
+     * The service's context.
+     */
     private URI myContext;
 
+    /**
+     * The service's profile.
+     */
     private URI myProfile;
 
+    /**
+     * The service's format.
+     */
     private Optional<MediaType> myFormat;
 
     /**
@@ -203,34 +218,40 @@ public class GenericService implements Service<GenericService> {
         }
     }
 
+    /**
+     * Returns the service as a JSON value.
+     *
+     * @return The service as a JSON value
+     */
     @JsonValue
+    @SuppressWarnings({ "PMD.CyclomaticComplexity", "PMD.UnusedPrivateMethod" })
     private Object getJsonValue() {
-        if (myID != null) {
-            if (myProfile == null && myContext == null && myFormat == null) {
-                return myID;
-            } else {
-                final Map<String, Object> map = new HashMap<>();
-
-                if (myProfile != null) {
-                    map.put(Constants.PROFILE, myProfile);
-                }
-
-                if (myFormat.isPresent()) {
-                    map.put(Constants.FORMAT, getFormat());
-                }
-
-                if (myContext != null) {
-                    map.put(Constants.CONTEXT, myContext);
-                }
-
-                if (myID != null) {
-                    map.put(Constants.ID, myID);
-                }
-
-                return ImmutableMap.copyOf(map);
-            }
-        } else {
-            throw new NullPointerException();
+        if (myID == null) {
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_019));
         }
+
+        if (myProfile == null && myContext == null && myFormat == null) {
+            return myID;
+        }
+
+        final Map<String, Object> map = new HashMap<>();
+
+        if (myProfile != null) {
+            map.put(Constants.PROFILE, myProfile);
+        }
+
+        if (myFormat.isPresent()) {
+            map.put(Constants.FORMAT, getFormat());
+        }
+
+        if (myContext != null) {
+            map.put(Constants.CONTEXT, myContext);
+        }
+
+        if (myID != null) {
+            map.put(Constants.ID, myID);
+        }
+
+        return ImmutableMap.copyOf(map);
     }
 }

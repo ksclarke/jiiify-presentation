@@ -10,15 +10,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * A date that the client can use for navigation purposes when presenting the resource to the user in a time-based
- * user interface, such as a calendar or timeline. The value must be an xsd:dateTime literal in UTC, expressed in the
- * form “YYYY-MM-DDThh:mm:ssZ”. If the exact time is not known, then “00:00:00” should be used. Similarly, the month
- * or day should be 01 if not known. There must be at most one navDate associated with any given resource. More
- * descriptive date ranges, intended for display directly to the user, should be included in the metadata property for
- * human consumption.
+ * A date that the client can use for navigation purposes when presenting the resource to the user in a time-based user
+ * interface, such as a calendar or timeline. The value must be an xsd:dateTime literal in UTC, expressed in the form
+ * “YYYY-MM-DDThh:mm:ssZ”. If the exact time is not known, then “00:00:00” should be used. Similarly, the month or day
+ * should be 01 if not known. There must be at most one navDate associated with any given resource. More descriptive
+ * date ranges, intended for display directly to the user, should be included in the metadata property for human
+ * consumption.
  */
 public class NavDate {
 
+    /**
+     * The navDate's zoned date and time.
+     */
     private final String myZonedDateTime;
 
     /**
