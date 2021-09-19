@@ -35,7 +35,9 @@
       <name>Kevin S. Clarke</name>
       <email>ksclarke@ksclarke.io</email>
       <roles>
-        <role>lead developer</role>
+        <role>architect</role>
+        <role>developer</role>
+        <role>reviewer</role>
       </roles>
       <timezone>America/New_York</timezone>
     </developer>
@@ -45,6 +47,10 @@
       <email>mmatney@library.ucla.edu</email>
       <organization>UCLA Library</organization>
       <organizationUrl>http://github.com/uclalibrary</organizationUrl>
+      <roles>
+        <role>developer</role>
+        <role>reviewer</role>
+      </roles>
       <timezone>America/Los_Angeles</timezone>
     </developer>
     <developer>
@@ -53,6 +59,9 @@
       <email>drickard1967@library.ucla.edu</email>
       <organization>UCLA Library</organization>
       <organizationUrl>http://github.com/uclalibrary</organizationUrl>
+      <roles>
+        <role>reviewer</role>
+      </roles>
       <timezone>America/Los_Angeles</timezone>
     </developer>
   </developers>
