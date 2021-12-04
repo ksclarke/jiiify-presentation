@@ -72,7 +72,7 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
      * @param aLabel A canvas label
      */
     public Canvas(final String aID, final Label aLabel) {
-        super(URI.create(aID), aLabel);
+        super(aID, aLabel);
     }
 
     /**

@@ -105,6 +105,17 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
     /**
      * Creates an abstract link property.
      *
+     * @param aID An ID in string form
+     * @param aType A resource type
+     * @param aLabel A label
+     */
+    protected AbstractLinkProperty(final String aID, final String aType, final Label aLabel) {
+        this(URI.create(aID), aType, aLabel);
+    }
+
+    /**
+     * Creates an abstract link property.
+     *
      * @param aID An ID
      * @param aType A resource type
      * @param aLabel A label
@@ -302,9 +313,8 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
                     && Objects.equals(myFormat, otherLink.myFormat) //
                     && Objects.equals(myProfile, otherLink.myProfile) //
                     && Objects.equals(myLabel, otherLink.myLabel);
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
@@ -333,9 +343,8 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
 
         if (languages.size() == SINGLE_VALUE_ARRAY_SIZE) {
             return languages.get(0);
-        } else {
-            return languages;
         }
+        return languages;
     }
 
     /**
@@ -349,7 +358,8 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
     protected AbstractLinkProperty<T> setLanguageProperty(final Object aObject) {
         if (aObject instanceof String) {
             return (AbstractLinkProperty<T>) setLanguages((String) aObject);
-        } else if (aObject instanceof String[]) {
+        }
+        if (aObject instanceof String[]) {
             return (AbstractLinkProperty<T>) setLanguages((String[]) aObject);
         } else if (aObject instanceof List) {
             final List<?> list = (List<?>) aObject;

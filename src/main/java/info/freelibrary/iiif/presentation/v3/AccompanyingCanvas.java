@@ -79,6 +79,16 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> // NO
     }
 
     /**
+     * Creates a new accompanying canvas from the supplied ID and label.
+     *
+     * @param aID An accompanying canvas ID in string form
+     * @param aLabel A accompanying canvas label in string form
+     */
+    public AccompanyingCanvas(final String aID, final Label aLabel) {
+        super(aID, aLabel);
+    }
+
+    /**
      * Creates a new accompanying canvas using the supplied minter to create the canvas ID.
      *
      * @param aMinter A minter that should be used to get an ID for the canvas

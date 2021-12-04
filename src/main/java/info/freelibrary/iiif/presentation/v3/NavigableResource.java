@@ -70,6 +70,17 @@ class NavigableResource<T extends NavigableResource<T>> extends AbstractResource
      *
      * @param aType A resource type in string form
      * @param aID An ID in string form
+     * @param aLabel A descriptive label
+     */
+    protected NavigableResource(final String aType, final String aID, final Label aLabel) {
+        super(aType, aID, aLabel);
+    }
+
+    /**
+     * Creates a navigable resource.
+     *
+     * @param aType A resource type in string form
+     * @param aID An ID in string form
      * @param aLabel A descriptive label in string form
      * @param aMetadataList A list of metadata properties
      * @param aSummary A summary in string form

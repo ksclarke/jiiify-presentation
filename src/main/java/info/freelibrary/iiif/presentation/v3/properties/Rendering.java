@@ -39,6 +39,17 @@ public class Rendering extends AbstractLinkProperty<Rendering> {
      *
      * @param aID A rendering ID in string form
      * @param aType A rendering type
+     * @param aLabel A rendering label
+     */
+    public Rendering(final String aID, final String aType, final Label aLabel) {
+        super(aID, aType, aLabel);
+    }
+
+    /**
+     * Creates a IIIF presentation rendering.
+     *
+     * @param aID A rendering ID in string form
+     * @param aType A rendering type
      * @param aLabel A rendering label in string form
      */
     public Rendering(final String aID, final String aType, final String aLabel) {
@@ -158,11 +169,7 @@ public class Rendering extends AbstractLinkProperty<Rendering> {
 
     @Override
     public boolean equals(final Object aObject) {
-        if (!super.equals(aObject)) {
-            return false;
-        }
-
-        if (getClass() != aObject.getClass()) {
+        if (!super.equals(aObject) || getClass() != aObject.getClass()) {
             return false;
         }
 

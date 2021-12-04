@@ -105,6 +105,16 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     /**
      * Creates a new range from the supplied ID and label.
      *
+     * @param aID A range ID in string form
+     * @param aLabel A descriptive label for the range
+     */
+    public Range(final String aID, final Label aLabel) {
+        super(ResourceTypes.RANGE, aID, aLabel);
+    }
+
+    /**
+     * Creates a new range from the supplied ID and label.
+     *
      * @param aID A range ID
      * @param aLabel A descriptive label for the range
      */
@@ -548,7 +558,8 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
         public URI getID() {
             if (mySpecificResource != null) {
                 return mySpecificResource.getID();
-            } else if (myCanvas != null) {
+            }
+            if (myCanvas != null) {
                 return myCanvas.getID();
             } else if (myRange != null) {
                 return myRange.getID();
@@ -566,7 +577,8 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
         public String getType() {
             if (mySpecificResource != null) {
                 return mySpecificResource.getType();
-            } else if (myCanvas != null) {
+            }
+            if (myCanvas != null) {
                 return myCanvas.getType();
             } else if (myRange != null) {
                 return myRange.getType();
@@ -584,7 +596,8 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
         public Object getResource() {
             if (mySpecificResource != null) {
                 return mySpecificResource;
-            } else if (myCanvas != null) {
+            }
+            if (myCanvas != null) {
                 return myCanvas;
             } else if (myRange != null) {
                 return myRange;
