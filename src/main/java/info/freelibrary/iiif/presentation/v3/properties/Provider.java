@@ -72,9 +72,35 @@ public class Provider {
      * @param aID An ID
      * @param aLabel A label
      */
+    public Provider(final String aID, final Label aLabel) {
+        myID = URI.create(Objects.requireNonNull(aID));
+        myLabel = Objects.requireNonNull(aLabel);
+    }
+
+    /**
+     * Creates a new resource provider from the supplied ID and label.
+     *
+     * @param aID An ID
+     * @param aLabel A label
+     */
     public Provider(final URI aID, final Label aLabel) {
         myID = Objects.requireNonNull(aID);
         myLabel = Objects.requireNonNull(aLabel);
+    }
+
+    /**
+     * Creates a new resource provider from the supplied ID and label.
+     *
+     * @param aID An ID
+     * @param aLabel A label
+     * @param aHomepage A homepage
+     * @param aLogo A logo
+     */
+    public Provider(final String aID, final Label aLabel, final Homepage aHomepage, final ImageContent aLogo) {
+        myID = URI.create(Objects.requireNonNull(aID));
+        myLabel = Objects.requireNonNull(aLabel);
+        getLogos().add(Objects.requireNonNull(aLogo));
+        getHomepages().add(Objects.requireNonNull(aHomepage));
     }
 
     /**
@@ -332,9 +358,9 @@ public class Provider {
                     && Objects.equals(myHomepages, otherProvider.myHomepages) //
                     && Objects.equals(myLogos, otherProvider.myLogos) //
                     && Objects.equals(mySeeAlsoRefs, otherProvider.mySeeAlsoRefs);
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**

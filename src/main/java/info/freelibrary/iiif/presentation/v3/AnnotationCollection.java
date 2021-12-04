@@ -47,6 +47,16 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
     /**
      * Creates a collection of annotations from the supplied ID and label.
      *
+     * @param aID A collection ID in string form
+     * @param aLabel A descriptive label for the collection
+     */
+    public AnnotationCollection(final String aID, final Label aLabel) {
+        super(ResourceTypes.ANNOTATION_COLLECTION, aID, aLabel);
+    }
+
+    /**
+     * Creates a collection of annotations from the supplied ID and label.
+     *
      * @param aID A collection ID
      * @param aLabel A descriptive label for the collection
      */

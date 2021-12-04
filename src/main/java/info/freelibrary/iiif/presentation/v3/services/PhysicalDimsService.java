@@ -52,6 +52,31 @@ public class PhysicalDimsService extends AbstractService<PhysicalDimsService> im
     /**
      * Creates a physical dimensions service.
      *
+     * @param aID An ID, in string form, for the item to get physical dimensions from
+     */
+    public PhysicalDimsService(final String aID) {
+        super();
+        myID = URI.create(aID);
+    }
+
+    /**
+     * Creates a physical dimensions service.
+     *
+     * @param aID An ID, in string form, for the item to get physical dimensions from
+     * @param aScale A physical dimensions scale
+     * @param aUnits A physical dimensions unit
+     */
+    public PhysicalDimsService(final String aID, final double aScale, final String aUnits) {
+        super();
+
+        myPhysicalScale = aScale;
+        myPhysicalUnits = aUnits;
+        myID = URI.create(aID);
+    }
+
+    /**
+     * Creates a physical dimensions service.
+     *
      * @param aID An ID for the item to get physical dimensions from
      * @param aScale A physical dimensions scale
      * @param aUnits A physical dimensions unit

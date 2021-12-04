@@ -181,6 +181,19 @@ abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
      * Creates a new resource from a supplied ID and label.
      *
      * @param aType A type of resource
+     * @param aID An ID in string form
+     * @param aLabel A label for the resource
+     */
+    protected AbstractResource(final String aType, final String aID, final Label aLabel) {
+        myType = Objects.requireNonNull(aType);
+        myID = URI.create(Objects.requireNonNull(aID));
+        myLabel = Objects.requireNonNull(aLabel);
+    }
+
+    /**
+     * Creates a new resource from a supplied ID and label.
+     *
+     * @param aType A type of resource
      * @param aID A URI ID
      * @param aLabel A label for the resource
      */
@@ -831,9 +844,9 @@ abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
 
         if (floatValue > 0 && Double.isFinite(floatValue)) {
             return floatValue;
-        } else {
-            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_024, floatValue));
         }
+
+        throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_024, floatValue));
     }
 
     /**

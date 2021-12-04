@@ -78,6 +78,16 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas>
     }
 
     /**
+     * Creates a new placeholder canvas from the supplied ID and label.
+     *
+     * @param aID A placeholder canvas ID in string form
+     * @param aLabel A placeholder canvas label
+     */
+    public PlaceholderCanvas(final String aID, final Label aLabel) {
+        super(aID, aLabel);
+    }
+
+    /**
      * Creates a new placeholder canvas, using the supplied minter to create the canvas ID.
      *
      * @param aMinter A minter that should be used to get an ID for the canvas

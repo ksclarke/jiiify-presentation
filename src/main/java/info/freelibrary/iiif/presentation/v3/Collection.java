@@ -92,6 +92,16 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     /**
      * Creates a new collection from the supplied ID and label.
      *
+     * @param aID A collection ID in string form
+     * @param aLabel A collection label
+     */
+    public Collection(final String aID, final Label aLabel) {
+        super(ResourceTypes.COLLECTION, aID, aLabel);
+    }
+
+    /**
+     * Creates a new collection from the supplied ID and label.
+     *
      * @param aID A collection ID
      * @param aLabel A collection label
      */
@@ -651,6 +661,19 @@ public class Collection extends NavigableResource<Collection> implements Resourc
          */
         public Item(final Item.Type aType, final String aID, final String aLabel) {
             myLabel = new Label(aLabel);
+            myType = Objects.requireNonNull(aType);
+            myID = URI.create(aID);
+        }
+
+        /**
+         * Create a new item from the supplied ID and label.
+         *
+         * @param aID An item ID in string form
+         * @param aType A type of resource referenced from the collection
+         * @param aLabel An item label
+         */
+        public Item(final Item.Type aType, final String aID, final Label aLabel) {
+            myLabel = Objects.requireNonNull(aLabel);
             myType = Objects.requireNonNull(aType);
             myID = URI.create(aID);
         }

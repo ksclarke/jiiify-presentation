@@ -105,6 +105,16 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     /**
      * Creates a new range from the supplied ID and label.
      *
+     * @param aID A range ID in string form
+     * @param aLabel A descriptive label for the range
+     */
+    public Range(final String aID, final Label aLabel) {
+        super(ResourceTypes.RANGE, aID, aLabel);
+    }
+
+    /**
+     * Creates a new range from the supplied ID and label.
+     *
      * @param aID A range ID
      * @param aLabel A descriptive label for the range
      */
@@ -548,13 +558,17 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
         public URI getID() {
             if (mySpecificResource != null) {
                 return mySpecificResource.getID();
-            } else if (myCanvas != null) {
-                return myCanvas.getID();
-            } else if (myRange != null) {
-                return myRange.getID();
-            } else {
-                throw new I18nRuntimeException(MessageCodes.BUNDLE, MessageCodes.JPA_040);
             }
+
+            if (myCanvas != null) {
+                return myCanvas.getID();
+            }
+
+            if (myRange != null) {
+                return myRange.getID();
+            }
+
+            throw new I18nRuntimeException(MessageCodes.BUNDLE, MessageCodes.JPA_040);
         }
 
         /**
@@ -566,13 +580,17 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
         public String getType() {
             if (mySpecificResource != null) {
                 return mySpecificResource.getType();
-            } else if (myCanvas != null) {
-                return myCanvas.getType();
-            } else if (myRange != null) {
-                return myRange.getType();
-            } else {
-                throw new I18nRuntimeException(MessageCodes.BUNDLE, MessageCodes.JPA_040);
             }
+
+            if (myCanvas != null) {
+                return myCanvas.getType();
+            }
+
+            if (myRange != null) {
+                return myRange.getType();
+            }
+
+            throw new I18nRuntimeException(MessageCodes.BUNDLE, MessageCodes.JPA_040);
         }
 
         /**
@@ -584,15 +602,17 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
         public Object getResource() {
             if (mySpecificResource != null) {
                 return mySpecificResource;
-            } else if (myCanvas != null) {
-                return myCanvas;
-            } else if (myRange != null) {
-                return myRange;
-            } else {
-                throw new I18nRuntimeException(MessageCodes.BUNDLE, MessageCodes.JPA_040);
             }
+
+            if (myCanvas != null) {
+                return myCanvas;
+            }
+
+            if (myRange != null) {
+                return myRange;
+            }
+
+            throw new I18nRuntimeException(MessageCodes.BUNDLE, MessageCodes.JPA_040);
         }
-
     }
-
 }

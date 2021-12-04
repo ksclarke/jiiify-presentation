@@ -45,6 +45,16 @@ public class Homepage extends AbstractLinkProperty<Homepage> {
      * Creates a IIIF presentation homepage.
      *
      * @param aID A homepage ID in string form
+     * @param aLabel A homepage label
+     */
+    public Homepage(final String aID, final Label aLabel) {
+        super(URI.create(aID), ResourceTypes.TEXT, aLabel);
+    }
+
+    /**
+     * Creates a IIIF presentation homepage.
+     *
+     * @param aID A homepage ID in string form
      * @param aLabel A homepage label in string form
      */
     public Homepage(final String aID, final String aLabel) {
@@ -176,11 +186,7 @@ public class Homepage extends AbstractLinkProperty<Homepage> {
      */
     @Override
     public boolean equals(final Object aObject) {
-        if (!super.equals(aObject)) {
-            return false;
-        }
-
-        if (getClass() != aObject.getClass()) {
+        if (!super.equals(aObject) || getClass() != aObject.getClass()) {
             return false;
         }
 

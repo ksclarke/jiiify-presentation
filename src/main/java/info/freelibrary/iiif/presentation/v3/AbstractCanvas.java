@@ -117,6 +117,16 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     /**
      * Creates a new canvas.
      *
+     * @param aID A canvas ID in string form
+     * @param aLabel A canvas label
+     */
+    protected AbstractCanvas(final String aID, final Label aLabel) {
+        super(ResourceTypes.CANVAS, aID, aLabel);
+    }
+
+    /**
+     * Creates a new canvas.
+     *
      * @param aID A canvas ID
      * @param aLabel A canvas label
      */
@@ -376,14 +386,14 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      */
     @JsonIgnore
     protected AbstractCanvas<T> setWidthHeight(final int aWidth, final int aHeight) {
-        if (aWidth > 0 && aHeight > 0) {
-            myWidth = aWidth;
-            myHeight = aHeight;
-
-            return this;
-        } else {
+        if (aWidth <= 0 || aHeight <= 0) {
             throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_011, aWidth, aHeight));
         }
+
+        myWidth = aWidth;
+        myHeight = aHeight;
+
+        return this;
     }
 
     /**
@@ -630,28 +640,32 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     @SuppressWarnings({ "PMD.CyclomaticComplexity" })
     boolean canFrame(final ContentResource<?> aContent) {
         if (aContent instanceof SpatialContentResource) {
+            final SpatialContentResource<?> spatialPainting;
+
             // The canvas must have a width and height, which must not be smaller than that of the content
             if (myWidth == 0 || myHeight == 0) {
                 throw new ContentOutOfBoundsException(MessageCodes.JPA_059, aContent.getID(), SPATIAL, getID());
-            } else {
-                final SpatialContentResource<?> spatialPainting = (SpatialContentResource<?>) aContent;
+            }
 
-                if (getWidth() < spatialPainting.getWidth() || getHeight() < spatialPainting.getHeight()) {
-                    throw new ContentOutOfBoundsException(MessageCodes.JPA_060, aContent.getID(), SPATIAL, getID());
-                }
+            spatialPainting = (SpatialContentResource<?>) aContent;
+
+            if (getWidth() < spatialPainting.getWidth() || getHeight() < spatialPainting.getHeight()) {
+                throw new ContentOutOfBoundsException(MessageCodes.JPA_060, aContent.getID(), SPATIAL, getID());
             }
         }
 
         if (aContent instanceof TemporalContentResource) {
+            final TemporalContentResource<?> temporalPainting;
+
             // The canvas must have a duration, which must not be shorter than that of the content
             if (myDuration == ZERO_DURATION) {
                 throw new ContentOutOfBoundsException(MessageCodes.JPA_059, aContent.getID(), TEMPORAL, getID());
-            } else {
-                final TemporalContentResource<?> temporalPainting = (TemporalContentResource<?>) aContent;
+            }
 
-                if (getDuration() < temporalPainting.getDuration()) {
-                    throw new ContentOutOfBoundsException(MessageCodes.JPA_060, aContent.getID(), TEMPORAL, getID());
-                }
+            temporalPainting = (TemporalContentResource<?>) aContent;
+
+            if (getDuration() < temporalPainting.getDuration()) {
+                throw new ContentOutOfBoundsException(MessageCodes.JPA_060, aContent.getID(), TEMPORAL, getID());
             }
         }
 
@@ -684,27 +698,26 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     private Canvas getCanvasFragment(final MediaFragmentSelector aCanvasRegion) { // NOPMD
         final URI canvasID = URI.create(getID().toString() + Constants.HASH + aCanvasRegion.toString());
         final Canvas canvasFragment = new Canvas(canvasID);
-        final int width;
-        final int height;
         final double duration;
+        final int height;
+        final int width;
 
         if (aCanvasRegion.isSpatial()) {
             // Check for semantic errors according to <https://www.w3.org/TR/media-frags/#error-media>
             if (myWidth == 0 && myHeight == 0) {
                 throw new SelectorOutOfBoundsException(MessageCodes.JPA_064, aCanvasRegion.toString(), SPATIAL,
                         getID());
-            } else {
-                // The bounding box of the selector must be entirely within the bounds of the canvas
-                if (getWidth() < aCanvasRegion.getX() + aCanvasRegion.getWidth() ||
-                        getHeight() < aCanvasRegion.getY() + aCanvasRegion.getHeight()) {
-                    throw new SelectorOutOfBoundsException(MessageCodes.JPA_065, aCanvasRegion.toString(), SPATIAL,
-                            getID());
-                } else {
-                    // Use the selector's spatial dimensions
-                    width = aCanvasRegion.getWidth();
-                    height = aCanvasRegion.getHeight();
-                }
             }
+
+            if (getWidth() < aCanvasRegion.getX() + aCanvasRegion.getWidth() ||
+                    getHeight() < aCanvasRegion.getY() + aCanvasRegion.getHeight()) {
+                throw new SelectorOutOfBoundsException(MessageCodes.JPA_065, aCanvasRegion.toString(), SPATIAL,
+                        getID());
+            }
+
+            // Use the selector's spatial dimensions
+            width = aCanvasRegion.getWidth();
+            height = aCanvasRegion.getHeight();
         } else {
             // Use the canvas' spatial dimensions
             width = getWidth();
@@ -716,26 +729,26 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
             if (myDuration == ZERO_DURATION) {
                 throw new SelectorOutOfBoundsException(MessageCodes.JPA_064, aCanvasRegion.toString(), TEMPORAL,
                         getID());
-            } else {
-                // Cannot start at or beyond the duration of the canvas
-                if (getDuration() <= aCanvasRegion.getStart()) {
+            }
+
+            // Cannot start at or beyond the duration of the canvas
+            if (getDuration() <= aCanvasRegion.getStart()) {
+                throw new SelectorOutOfBoundsException(MessageCodes.JPA_065, aCanvasRegion.toString(), TEMPORAL,
+                        getID());
+            }
+
+            // If an end is specified, cannot end past the duration of the canvas
+            if (aCanvasRegion.hasEnd()) {
+                if (getDuration() < aCanvasRegion.getEnd()) {
                     throw new SelectorOutOfBoundsException(MessageCodes.JPA_065, aCanvasRegion.toString(), TEMPORAL,
                             getID());
                 }
 
-                // If an end is specified, cannot end past the duration of the canvas
-                if (aCanvasRegion.hasEnd()) {
-                    if (getDuration() < aCanvasRegion.getEnd()) {
-                        throw new SelectorOutOfBoundsException(MessageCodes.JPA_065, aCanvasRegion.toString(), TEMPORAL,
-                                getID());
-                    } else {
-                        // Use the selector's temporal dimension
-                        duration = aCanvasRegion.getDuration();
-                    }
-                } else {
-                    // Use the interval from the start of the selector to the end of the canvas as the duration
-                    duration = getDuration() - aCanvasRegion.getStart();
-                }
+                // Use the selector's temporal dimension
+                duration = aCanvasRegion.getDuration();
+            } else {
+                // Use the interval from the start of the selector to the end of the canvas as the duration
+                duration = getDuration() - aCanvasRegion.getStart();
             }
         } else {
             // Use the canvas' temporal dimensions
@@ -851,29 +864,28 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         final JavaType javaType;
 
         // If there are annotations, we can check whether they are supplementing or "other"
-        if (items != null) {
-            boolean supplementingAnnotations = true;
+        if (items == null) {
+            return JSON.convertValue(aAnnotationPageMap,
+                    typeFactory.constructParametricType(AnnotationPage.class, Annotation.class));
+        }
 
-            for (final Object item : items) {
-                final Map<?, ?> annotation = (Map<?, ?>) item;
+        boolean supplementingAnnotations = true;
 
-                if (annotation != null &&
-                        !SupplementingAnnotation.MOTIVATION.equals(annotation.get(JsonKeys.MOTIVATION))) {
-                    supplementingAnnotations = false;
-                }
+        for (final Object item : items) {
+            final Map<?, ?> annotation = (Map<?, ?>) item;
+
+            if (annotation != null && !SupplementingAnnotation.MOTIVATION.equals(annotation.get(JsonKeys.MOTIVATION))) {
+                supplementingAnnotations = false;
             }
+        }
 
-            // Either supplementing annotation or mixed annotations (which may include supplementing annotations)
-            if (supplementingAnnotations) {
-                javaType = typeFactory.constructParametricType(AnnotationPage.class, SupplementingAnnotation.class);
-                return JSON.convertValue(aAnnotationPageMap, javaType);
-            } else {
-                javaType = typeFactory.constructParametricType(AnnotationPage.class, Annotation.class);
-                return JSON.convertValue(aAnnotationPageMap, javaType);
-            }
+        // Either supplementing annotation or mixed annotations (which may include supplementing annotations)
+        if (supplementingAnnotations) {
+            javaType = typeFactory.constructParametricType(AnnotationPage.class, SupplementingAnnotation.class);
         } else {
             javaType = typeFactory.constructParametricType(AnnotationPage.class, Annotation.class);
-            return JSON.convertValue(aAnnotationPageMap, javaType);
         }
+
+        return JSON.convertValue(aAnnotationPageMap, javaType);
     }
 }
