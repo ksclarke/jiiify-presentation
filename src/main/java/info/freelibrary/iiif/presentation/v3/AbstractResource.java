@@ -845,6 +845,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
         if (floatValue > 0 && Double.isFinite(floatValue)) {
             return floatValue;
         }
+
         throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_024, floatValue));
     }
 

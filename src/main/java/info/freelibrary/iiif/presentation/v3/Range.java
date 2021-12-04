@@ -559,13 +559,16 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
             if (mySpecificResource != null) {
                 return mySpecificResource.getID();
             }
+
             if (myCanvas != null) {
                 return myCanvas.getID();
-            } else if (myRange != null) {
-                return myRange.getID();
-            } else {
-                throw new I18nRuntimeException(MessageCodes.BUNDLE, MessageCodes.JPA_040);
             }
+
+            if (myRange != null) {
+                return myRange.getID();
+            }
+
+            throw new I18nRuntimeException(MessageCodes.BUNDLE, MessageCodes.JPA_040);
         }
 
         /**
@@ -578,13 +581,16 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
             if (mySpecificResource != null) {
                 return mySpecificResource.getType();
             }
+
             if (myCanvas != null) {
                 return myCanvas.getType();
-            } else if (myRange != null) {
-                return myRange.getType();
-            } else {
-                throw new I18nRuntimeException(MessageCodes.BUNDLE, MessageCodes.JPA_040);
             }
+
+            if (myRange != null) {
+                return myRange.getType();
+            }
+
+            throw new I18nRuntimeException(MessageCodes.BUNDLE, MessageCodes.JPA_040);
         }
 
         /**
@@ -597,15 +603,16 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
             if (mySpecificResource != null) {
                 return mySpecificResource;
             }
+
             if (myCanvas != null) {
                 return myCanvas;
-            } else if (myRange != null) {
-                return myRange;
-            } else {
-                throw new I18nRuntimeException(MessageCodes.BUNDLE, MessageCodes.JPA_040);
             }
+
+            if (myRange != null) {
+                return myRange;
+            }
+
+            throw new I18nRuntimeException(MessageCodes.BUNDLE, MessageCodes.JPA_040);
         }
-
     }
-
 }

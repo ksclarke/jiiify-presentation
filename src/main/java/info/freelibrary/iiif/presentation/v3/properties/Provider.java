@@ -359,6 +359,7 @@ public class Provider {
                     && Objects.equals(myLogos, otherProvider.myLogos) //
                     && Objects.equals(mySeeAlsoRefs, otherProvider.mySeeAlsoRefs);
         }
+
         return false;
     }
 
