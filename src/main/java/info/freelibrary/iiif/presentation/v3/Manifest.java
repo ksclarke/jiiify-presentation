@@ -196,9 +196,9 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     /**
-     * A private constructor used for Jackson's deserialization processes.
+     * Creates a new manifest for deserialization purposes.
      */
-    private Manifest() {
+    protected Manifest() {
         super(ResourceTypes.MANIFEST);
     }
 
@@ -295,9 +295,8 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     public List<URI> getContexts() {
         if (myContexts.isEmpty()) {
             return null;
-        } else {
-            return Collections.unmodifiableList(myContexts);
         }
+        return Collections.unmodifiableList(myContexts);
     }
 
     /**
@@ -782,11 +781,10 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
         } else if (aObject instanceof List<?>) {
             final List<?> genericList = (List<?>) aObject;
 
-            if (!genericList.isEmpty() && genericList.get(0).getClass().equals(String.class)) {
-                setContexts(genericList);
-            } else {
+            if (genericList.isEmpty() || !genericList.get(0).getClass().equals(String.class)) {
                 throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_113));
             }
+            setContexts(genericList);
         } else {
             throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_113));
         }
@@ -836,11 +834,11 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     private Object getJsonContext() {
         if (myContexts.size() == DEFAULT_CONTEXT_COUNT) {
             return myContexts.get(0);
-        } else if (!myContexts.isEmpty()) {
-            return myContexts;
-        } else {
-            return null;
         }
+        if (!myContexts.isEmpty()) {
+            return myContexts;
+        }
+        return null;
     }
 
     /**
@@ -855,13 +853,14 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
         public int compare(final U aFirstURI, final U aSecondURI) {
             if (URIs.CONTEXT_URI.equals(aFirstURI) && URIs.CONTEXT_URI.equals(aSecondURI)) {
                 return 0;
-            } else if (URIs.CONTEXT_URI.equals(aFirstURI)) {
-                return 1;
-            } else if (URIs.CONTEXT_URI.equals(aSecondURI)) {
-                return -1;
-            } else {
-                return 0; // We leave all non-required contexts where they are
             }
+            if (URIs.CONTEXT_URI.equals(aFirstURI)) {
+                return 1;
+            }
+            if (URIs.CONTEXT_URI.equals(aSecondURI)) {
+                return -1;
+            }
+            return 0; // We leave all non-required contexts where they are
         }
 
     }

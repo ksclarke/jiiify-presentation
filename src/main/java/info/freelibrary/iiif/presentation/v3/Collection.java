@@ -140,9 +140,9 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     }
 
     /**
-     * Creates a new collection. This is used by Jackson's deserialization processes.
+     * Creates a new collection for deserialization purposes.
      */
-    private Collection() {
+    protected Collection() {
         super(ResourceTypes.COLLECTION);
     }
 

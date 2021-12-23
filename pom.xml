@@ -78,7 +78,8 @@
     <netty.native.version>2.0.40.Final</netty.native.version>
 
     <!-- GraalVM related property values -->
-    <graalvm.version>21.1.0</graalvm.version>
+    <graalvm.version>21.3.0</graalvm.version>
+    <graal.plugin.version>0.9.8</graal.plugin.version>
     <!-- Optional: location of installed native-image -->
     <gu>${env.JAVA_HOME}/lib/installer/bin/gu</gu>
 
@@ -106,6 +107,11 @@
       <groupId>info.freelibrary</groupId>
       <artifactId>freelib-utils</artifactId>
       <version>${freelib.utils.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>info.freelibrary</groupId>
+      <artifactId>magicfree-json</artifactId>
+      <version>0.10.0</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
@@ -308,13 +314,13 @@
         <plugins>
           <!-- This creates a native binary from the packaged jar and its dependencies -->
           <plugin>
-            <groupId>org.graalvm.nativeimage</groupId>
-            <artifactId>native-image-maven-plugin</artifactId>
-            <version>${graalvm.version}</version>
+            <groupId>org.graalvm.buildtools</groupId>
+            <artifactId>native-maven-plugin</artifactId>
+            <version>${graal.plugin.version}</version>
             <executions>
               <execution>
                 <goals>
-                  <goal>native-image</goal>
+                  <goal>build</goal>
                 </goals>
               </execution>
             </executions>

@@ -124,6 +124,11 @@ public final class ResourceTypes {
     public static final String PHYSICAL_DIMS_SERVICE = "PhysicalDimsService";
 
     /**
+     * A resource type for resources whose types are not yet known.
+     */
+    public static final String UNKNOWN = "Unknown";
+
+    /**
      * Creates a new resource types constants object. Constant classes should have private constructors.
      */
     private ResourceTypes() {

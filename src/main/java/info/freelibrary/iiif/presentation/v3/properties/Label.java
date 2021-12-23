@@ -37,13 +37,20 @@ public class Label extends I18nProperty<Label> {
     }
 
     /**
-     * Create a label from a language tag and a string value. // FIXME: test this compared to above and create others
+     * Creates a label from a language tag and a string value.
      *
      * @param aLangTag A language tag
      * @param aValue A string value
      */
     public Label(final String aLangTag, final String aValue) {
         this(new I18n(aLangTag, aValue));
+    }
+
+    /**
+     * Creates a label for the deserialization process.
+     */
+    protected Label() {
+        // This is intentionally left empty
     }
 
     /**
