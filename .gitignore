@@ -14,3 +14,6 @@ src/main/tools/eclipse
 
 # Ignore work products of the POM flattening process
 .flattened-pom.xml
+
+# Local configuration of test logging
+logback-test.xml
