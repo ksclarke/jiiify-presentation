@@ -70,7 +70,7 @@
     <revision>0.0.0-SNAPSHOT</revision>
 
     <jackson.version>2.12.3</jackson.version>
-    <jackson.databind.version>2.12.3</jackson.databind.version>
+    <jackson.databind.version>2.12.6</jackson.databind.version>
     <freelib.utils.version>2.4.0</freelib.utils.version>
     <jsoup.version>1.14.2</jsoup.version>
     <combinatorics.version>3.3.0</combinatorics.version>
