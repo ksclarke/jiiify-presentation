@@ -86,11 +86,6 @@ public class ResourceHandler implements JsonHandler<Resource<?>, List<?>, Resour
     }
 
     @Override
-    public void setObjectConsumer(final Consumer<Resource<?>> aConsumer) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public void setJsonParser(final JsonParser aParser) {
         if (myParser != null) {
             throw new IllegalStateException("parser is already set");

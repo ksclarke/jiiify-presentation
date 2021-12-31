@@ -142,8 +142,17 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     /**
      * Creates a new collection for deserialization purposes.
      */
-    protected Collection() {
+    private Collection() {
         super(ResourceTypes.COLLECTION);
+    }
+
+    /**
+     * Creates an empty collection.
+     *
+     * @return An empty collection
+     */
+    public static final Collection empty() {
+        return new Collection();
     }
 
     /**

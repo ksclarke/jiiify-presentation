@@ -4,16 +4,18 @@ package info.freelibrary.iiif.presentation.v3.utils;
 import java.io.File;
 import java.io.IOException;
 
+import org.junit.Test;
+
 import info.freelibrary.iiif.presentation.v3.utils.json.Jpv3JsonHandler;
 import info.freelibrary.iiif.presentation.v3.utils.json.LabelHandler;
 import info.freelibrary.iiif.presentation.v3.utils.json.ResourceHandler;
 
 import info.freelibrary.json.JsonParser;
 
-public class Test {
+public class ParseTest {
 
-    @org.junit.Test
-    public final void test() throws IOException {
+    @Test
+    public final void testParsing() throws IOException {
         final Jpv3JsonHandler handler1 = new Jpv3JsonHandler();
         final ResourceHandler handler2 = new ResourceHandler();
         final LabelHandler handler3 = new LabelHandler();

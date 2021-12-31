@@ -10,18 +10,17 @@ import java.util.function.Consumer;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.StringUtils;
 
-import info.freelibrary.iiif.presentation.v3.Resource;
+import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 import info.freelibrary.json.JsonHandler;
 import info.freelibrary.json.JsonParser;
 
 /**
- *
+ * A handler that parses resource labels.
  */
-public class LabelHandler implements JsonHandler<Resource<?>, List<?>, Resource<?>> {
+public class LabelHandler implements JsonHandler<Label, List<?>, Label> {
 
     /**
      * The logger used by the label handler.
@@ -34,35 +33,36 @@ public class LabelHandler implements JsonHandler<Resource<?>, List<?>, Resource<
     private JsonParser myParser;
 
     /**
-     * The label handler's resource.
+     * The label we're building.
      */
-    private Resource<?> myResource;
+    private Label myLabel;
 
-    @Override
-    public Consumer<Resource<?>> getObjectConsumer() {
-        return resource -> {
-            String name = resource.getClass().getSimpleName();
-
-            myResource = resource;
-
-            // If we don't have a concrete class, we're using an anonymous subclass of UnknownResource
-            name = StringUtils.trimToNull(name) == null ? UnknownResource.class.getSimpleName() : name;
-            LOGGER.debug("Setting the label handler's resource: {}", name);
-        };
-    }
+    /**
+     * The level of the label.
+     */
+    private int myLevel;
 
     @Override
     public void setJsonParser(final JsonParser aParser) {
         if (myParser != null) {
-            throw new IllegalStateException("parser is already set");
+            throw new IllegalStateException(LOGGER.getMessage(MessageCodes.JPA_121));
         }
 
         myParser = aParser;
     }
 
     @Override
-    public void startPropertyValue(final Resource<?> aResource, final String aName) {
-        LOGGER.debug("HERE");
+    public Consumer<Label> getObjectConsumer() {
+        return label -> {
+            myLabel = label;
+            myLevel = myParser.getLocation().getNestingLevel();
+        };
+    }
+
+    @Override
+    public void endPropertyName(final Label aLabel, final String aName) {
+        LOGGER.debug("name: {}", aName);
+        LOGGER.debug("=> " + myParser.getLocation().getNestingLevel());
     }
 
     @Override
@@ -71,8 +71,19 @@ public class LabelHandler implements JsonHandler<Resource<?>, List<?>, Resource<
     }
 
     @Override
-    public Resource<?> startJsonObject() {
-        return myResource;
+    public void endArray(final List<?> aList) {
+        LOGGER.debug("end list size: {}", aList.size());
     }
 
+    @Override
+    public Label startJsonObject() {
+        return myLabel;
+    }
+
+    @Override
+    public void endJsonObject(final Label aLabel) {
+        if (myParser.getLocation().getNestingLevel() == myLevel) {
+
+        }
+    }
 }

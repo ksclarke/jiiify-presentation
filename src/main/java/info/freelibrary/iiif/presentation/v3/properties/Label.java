@@ -49,8 +49,17 @@ public class Label extends I18nProperty<Label> {
     /**
      * Creates a label for the deserialization process.
      */
-    protected Label() {
+    private Label() {
         // This is intentionally left empty
+    }
+
+    /**
+     * Creates an empty label.
+     *
+     * @return An empty label
+     */
+    public static final Label empty() {
+        return new Label();
     }
 
     /**

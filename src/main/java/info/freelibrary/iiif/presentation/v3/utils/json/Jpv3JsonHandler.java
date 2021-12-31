@@ -11,6 +11,7 @@ import info.freelibrary.iiif.presentation.v3.Collection;
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.Resource;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
@@ -52,8 +53,12 @@ public class Jpv3JsonHandler extends DefaultHandler<Resource<?>> {
 
         if (JsonKeys.LABEL.equals(aName) && isDocLevel()) {
             LOGGER.debug("Updating parser's handler to: {}", LabelHandler.class.getSimpleName());
-            myConsumer = (Consumer<Resource<?>>) myParser.changeHandler(LabelHandler.class);
-            myConsumer.accept(getResource());
+
+            final Consumer<Label> consumer = (Consumer<Label>) myParser.changeHandler(LabelHandler.class);
+            final Label label = Label.empty();
+
+            consumer.accept(label);
+            myResource.setLabel(label);
         }
     }
 
@@ -67,10 +72,10 @@ public class Jpv3JsonHandler extends DefaultHandler<Resource<?>> {
 
             switch (type) {
                 case ResourceTypes.MANIFEST:
-                    myResource = createResource(new Manifest() {});
+                    myResource = populateResource(Manifest.empty());
                     break;
                 case ResourceTypes.COLLECTION:
-                    myResource = createResource(new Collection() {});
+                    myResource = populateResource(Collection.empty());
                     break;
                 default:
                     throw new ParseException(myParser.getLocation(), "Unexpected document type: {}", type);
@@ -88,12 +93,12 @@ public class Jpv3JsonHandler extends DefaultHandler<Resource<?>> {
     }
 
     /**
-     * Creates a resource with a known type.
+     * Populates a supplied resource with any missing basic metadata properties.
      *
      * @param aResource An empty, but strongly typed, resource
      * @return A populated, fully typed resource
      */
-    private Resource<?> createResource(final Resource<?> aResource) {
+    private Resource<?> populateResource(final Resource<?> aResource) {
         if (myResource.getID() != null) {
             aResource.setID(myResource.getID());
         }
@@ -111,7 +116,7 @@ public class Jpv3JsonHandler extends DefaultHandler<Resource<?>> {
     @SuppressWarnings(JDK.UNCHECKED)
     private void checkCompletion() {
         if (basicMetadataFound()) {
-            LOGGER.debug("Updating parser's handler to:", ResourceHandler.class.getSimpleName());
+            LOGGER.debug("Updating parser's handler to: {}", ResourceHandler.class.getSimpleName());
             myConsumer = (Consumer<Resource<?>>) myParser.changeHandler(ResourceHandler.class);
 
             switch (myResource.getType()) {
