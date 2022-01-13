@@ -198,17 +198,8 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     /**
      * Creates a new manifest for deserialization purposes.
      */
-    private Manifest() {
+    private Manifest() { // FIXME: DELETE
         super(ResourceTypes.MANIFEST);
-    }
-
-    /**
-     * Creates an empty manifest.
-     *
-     * @return An empty manifest
-     */
-    public static final Manifest empty() {
-        return new Manifest();
     }
 
     @Override

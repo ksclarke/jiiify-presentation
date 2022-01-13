@@ -8,6 +8,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import info.freelibrary.iiif.presentation.v3.utils.I18nUtils;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
+import info.freelibrary.json.JsonArray;
+import info.freelibrary.json.JsonObject;
+
 /**
  * A human readable label, name or title for the resource. This property is intended to be displayed as a short, textual
  * surrogate for the resource if a human needs to make a distinction between it and similar resources, for example
@@ -111,9 +114,40 @@ public class Label extends I18nProperty<Label> {
         return (Label) super.addI18ns(I18nUtils.validateI18ns(false, aI18nArray));
     }
 
+    /**
+     * Returns a JSON string representation of the Label.
+     *
+     * @return A JSON string representation of the Label
+     */
+    @Override
+    public String toString() {
+        return toJson().toString();
+    }
+
+    /**
+     * Returns a JSON representation of the Label.
+     *
+     * @return A JSON representation of the Label
+     */
+    public JsonObject toJson() {
+        final JsonObject json = new JsonObject();
+
+        getI18ns().forEach(i18n -> {
+            final JsonArray array = new JsonArray();
+
+            i18n.forEach(value -> {
+                array.add(value);
+            });
+
+            json.add(i18n.getLang(), array);
+        });
+
+        return json;
+    }
+
     @Override
     @JsonGetter(JsonKeys.LABEL)
-    protected Object toMap() {
+    protected Object toMap() { // FIXME: DELETE
         return super.toMap();
     }
 
