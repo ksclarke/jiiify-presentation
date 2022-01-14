@@ -1,6 +1,7 @@
 
-package info.freelibrary.iiif.presentation.v3;
+package info.freelibrary.iiif.presentation.v3; // NOPMD - ExcessiveImports
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +12,8 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -28,8 +31,10 @@ import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.iiif.presentation.v3.utils.URIs;
 
 /**
  * A collection of {@link Annotation}(s) included in the items property of the Canvas (and whose target is that Canvas).
@@ -47,6 +52,11 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
      * The AnnotationPage's annotations.
      */
     private List<T> myAnnotations;
+
+    /**
+     * Whether the annotation page is intended to be used outside of a manifest (i.e. whether it needs its own context).
+     */
+    private boolean isExternal;
 
     /**
      * Creates a new annotation page.
@@ -82,6 +92,27 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
      */
     private AnnotationPage() {
         super(ResourceTypes.ANNOTATION_PAGE);
+    }
+
+    /**
+     * Sets the page as external to a manifest; this ensures it is serialized with its own context.
+     *
+     * @return This annotation page
+     */
+    @JsonIgnore
+    public AnnotationPage<T> setExternalContext() {
+        isExternal = true;
+        return this;
+    }
+
+    /**
+     * Removes the external context from an annotation page so that it can be used inside a manifest.
+     *
+     * @return This annotation page
+     */
+    public AnnotationPage<T> removeExternalContext() {
+        isExternal = false;
+        return this;
     }
 
     @Override
@@ -317,10 +348,56 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
      * Gets a string representation of the annotation page.
      *
      * @return A string representation of the annotation page
+     * @throws JsonParsingException If the annotation page cannot be serialized to valid JSON
      */
     @Override
     public String toString() {
-        return String.join(":", getClass().getSimpleName(), getID().toString());
+        try {
+            return JSON.getWriter(AnnotationPage.class).writeValueAsString(this);
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details);
+        }
+    }
+
+    /**
+     * Returns an annotation from its JSON representation.
+     *
+     * @param <T> The type of annotation contained in this page
+     * @param aJsonString An annotation in JSON form
+     * @return The Annotation
+     * @throws JsonParsingException If there is trouble parsing the annotation page from the supplied JSON string
+     */
+    public static <T extends Annotation<T>> AnnotationPage<T> from(final String aJsonString) {
+        try {
+            return JSON.getReader(new TypeReference<AnnotationPage<T>>() {}).readValue(aJsonString);
+        } catch (final IOException details) {
+            throw new JsonParsingException(details);
+        }
+    }
+
+    /**
+     * Gets the context when the annotation page is intended to be used outside of a manifest.
+     *
+     * @return The context URI
+     */
+    @JsonGetter(JsonKeys.CONTEXT)
+    private URI getExternalContext() {
+        return isExternal ? URIs.CONTEXT_URI : null;
+    }
+
+    /**
+     * Allows Jackson to set the external context flag.
+     *
+     * @param aContextURI A annotation page context URI
+     * @return This annotation page
+     */
+    @JsonSetter(JsonKeys.CONTEXT)
+    private AnnotationPage<T> setExternalContext(final String aContextURI) {
+        if (URIs.CONTEXT_URI.toString().equalsIgnoreCase(aContextURI)) {
+            setExternalContext();
+        }
+
+        return this;
     }
 
     /**
