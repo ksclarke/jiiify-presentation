@@ -69,13 +69,12 @@
   <properties>
     <revision>0.0.0-SNAPSHOT</revision>
 
-    <jackson.version>2.12.3</jackson.version>
+    <jackson.version>2.12.6</jackson.version>
     <jackson.databind.version>2.12.6</jackson.databind.version>
-    <freelib.utils.version>2.4.0</freelib.utils.version>
-    <jsoup.version>1.14.2</jsoup.version>
+    <freelib.utils.version>3.0.1</freelib.utils.version>
+    <jsoup.version>1.14.3</jsoup.version>
     <combinatorics.version>3.3.0</combinatorics.version>
     <media.fragments.uri.version>2.4</media.fragments.uri.version>
-    <netty.native.version>2.0.40.Final</netty.native.version>
 
     <!-- GraalVM related property values -->
     <graalvm.version>21.1.0</graalvm.version>
@@ -84,9 +83,8 @@
 
     <!-- Plugin related versions -->
     <maven.jar.plugin.version>3.2.0</maven.jar.plugin.version>
-    <freelib.maven.version>0.2.1</freelib.maven.version>
+    <freelib.maven.version>0.3.0</freelib.maven.version>
     <vertx.plugin.version>1.0.24</vertx.plugin.version>
-    <os.plugin.version>1.4.0.Final</os.plugin.version>
 
     <!-- Test related versions -->
     <opencsv.version>4.6</opencsv.version>
