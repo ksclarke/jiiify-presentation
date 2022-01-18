@@ -48,7 +48,7 @@ public class LabelHandler extends AbstractHandler<Label, List<String>> {
      * Creates a new label handler.
      */
     public LabelHandler() {
-        setResult(Label.empty());
+        setObject(Label.empty());
     }
 
     @Override
@@ -79,7 +79,7 @@ public class LabelHandler extends AbstractHandler<Label, List<String>> {
 
     @Override
     public void endArray(final List<String> aList) {
-        getResult(Label.class).addI18ns(new I18n(myI18nLang, aList));
+        getObject().addI18ns(new I18n(myI18nLang, aList));
     }
 
     @Override
@@ -96,6 +96,6 @@ public class LabelHandler extends AbstractHandler<Label, List<String>> {
             throw new ParseException(location, "Unexpected JSON object in Label");
         }
 
-        return getResult(Label.class);
+        return getObject();
     }
 }

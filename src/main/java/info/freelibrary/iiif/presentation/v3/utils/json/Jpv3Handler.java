@@ -6,7 +6,6 @@ import java.net.URI;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
-import info.freelibrary.iiif.presentation.v3.Resource;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
@@ -53,6 +52,9 @@ public class Jpv3Handler extends DefaultHandler {
      */
     private Label myLabel;
 
+    /**
+     * A JSON parser.
+     */
     private JsonParser myParser;
 
     @Override
@@ -103,17 +105,14 @@ public class Jpv3Handler extends DefaultHandler {
     }
 
     /**
-     * Gets the handler's result. It overrides the default so it can return the result of the ResourceHandler too.
+     * Gets the result of the JSON parsing. This will be a type of Resource (e.g., Manifest, Collection, etc.) The
+     * passed in class will cast from a Resource to the supplied class to return a more strongly-typed resource object.
      *
      * @param aClass The class of the handler's result
+     * @throws ClassCastException If the supplied class cannot cast the JSON parsing result
      */
-    @Override
-    public <T> T getResult() {
-        if (aClass == Resource.class) {
-            return myHandler.getResult(aClass);
-        }
-
-        return super.getResult(aClass);
+    public <T> T getResult(final Class<T> aClass) {
+        return aClass.cast(myHandler.getObject());
     }
 
     /**

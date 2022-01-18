@@ -19,11 +19,6 @@ public class AnnotationBodyHandler extends AbstractHandler<Object, List<?>> {
     }
 
     @Override
-    public <T> T getResult(final Class<T> aResult) {
-        return null;
-    }
-
-    @Override
     public List<?> startArray() {
         return new ArrayList<>();
     }
