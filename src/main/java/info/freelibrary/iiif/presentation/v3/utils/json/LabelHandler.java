@@ -14,7 +14,7 @@ import info.freelibrary.iiif.presentation.v3.properties.I18n;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
-import info.freelibrary.json.JsonHandler;
+import info.freelibrary.json.AbstractHandler;
 import info.freelibrary.json.JsonParser;
 import info.freelibrary.json.Location;
 import info.freelibrary.json.ParseException;
@@ -22,22 +22,12 @@ import info.freelibrary.json.ParseException;
 /**
  * A handler that parses resource labels.
  */
-public class LabelHandler implements JsonHandler<Label, List<String>> {
+public class LabelHandler extends AbstractHandler<Label, List<String>> {
 
     /**
      * The logger used by the label handler.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(LabelHandler.class, MessageCodes.BUNDLE);
-
-    /**
-     * The Label handler's parser.
-     */
-    private JsonParser myParser;
-
-    /**
-     * The label we're building.
-     */
-    private final Label myLabel;
 
     /**
      * An I18n language tag.
@@ -58,26 +48,12 @@ public class LabelHandler implements JsonHandler<Label, List<String>> {
      * Creates a new label handler.
      */
     public LabelHandler() {
-        myLabel = Label.empty();
-    }
-
-    /**
-     * Returns the label created by the handler.
-     *
-     * @return The label created by the handler
-     */
-    @Override
-    public <T> T getResult(final Class<T> aClass) {
-        return aClass.cast(myLabel);
+        setResult(Label.empty());
     }
 
     @Override
     public void setJsonParser(final JsonParser aParser) {
-        if (myParser != null) {
-            throw new IllegalStateException(LOGGER.getMessage(MessageCodes.JPA_121));
-        }
-
-        myParser = aParser;
+        super.setJsonParser(aParser);
         myLevel = myParser.getLocation().getNestingLevel();
     }
 
@@ -103,7 +79,7 @@ public class LabelHandler implements JsonHandler<Label, List<String>> {
 
     @Override
     public void endArray(final List<String> aList) {
-        myLabel.addI18ns(new I18n(myI18nLang, aList)); // Add parsed I18n value to label
+        getResult(Label.class).addI18ns(new I18n(myI18nLang, aList));
     }
 
     @Override
@@ -120,6 +96,6 @@ public class LabelHandler implements JsonHandler<Label, List<String>> {
             throw new ParseException(location, "Unexpected JSON object in Label");
         }
 
-        return myLabel;
+        return getResult(Label.class);
     }
 }

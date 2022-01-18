@@ -11,33 +11,17 @@ import info.freelibrary.iiif.presentation.v3.Canvas;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
-import info.freelibrary.json.JsonHandler;
-import info.freelibrary.json.JsonParser;
+import info.freelibrary.json.AbstractHandler;
 
 /**
  * A handler for canvas parsing events.
  */
-public class CanvasHandler implements JsonHandler<Canvas, List<Canvas>> {
+public class CanvasHandler extends AbstractHandler<Canvas, List<Canvas>> {
 
     /**
      * The canvas handler's logger.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(CanvasHandler.class, MessageCodes.BUNDLE);
-
-    /**
-     * A list of canvases.
-     */
-    private final List<Canvas> myCanvases;
-
-    /**
-     * The JSON parser that's parsing the canvas information.
-     */
-    private JsonParser myParser;
-
-    /**
-     * The name of the current property.
-     */
-    private String myPropertyName;
 
     /**
      * The value of the current property.
@@ -48,21 +32,7 @@ public class CanvasHandler implements JsonHandler<Canvas, List<Canvas>> {
      * Creates a new canvas handler.
      */
     public CanvasHandler() {
-        myCanvases = new ArrayList<>();
-    }
-
-    @Override
-    public <T> T getResult(final Class<T> aClass) {
-        return aClass.cast(myCanvases);
-    }
-
-    @Override
-    public void setJsonParser(final JsonParser aParser) {
-        if (myParser != null) {
-            throw new IllegalStateException(LOGGER.getMessage(MessageCodes.JPA_121));
-        }
-
-        myParser = aParser;
+        setIterable(new ArrayList<Canvas>());
     }
 
     @Override
@@ -100,7 +70,7 @@ public class CanvasHandler implements JsonHandler<Canvas, List<Canvas>> {
 
     @Override
     public List<Canvas> startArray() {
-        return myCanvases;
+        return getIterable();
     }
 
     @Override
@@ -110,7 +80,10 @@ public class CanvasHandler implements JsonHandler<Canvas, List<Canvas>> {
 
     @Override
     public void endJsonObject(final Canvas aCanvas) {
-        myCanvases.add(aCanvas);
+        LOGGER.debug("{} - add canvas: {}", myParser.getLocation(), aCanvas);
+        final List<Canvas> list = castList(getIterable(), Canvas.class);
+        list.add(aCanvas);
+        setIterable(list);
     }
 
     @Override

@@ -13,6 +13,7 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 import info.freelibrary.json.DefaultHandler;
 import info.freelibrary.json.JsonObject;
+import info.freelibrary.json.JsonParser;
 import info.freelibrary.json.ParseException;
 
 /**
@@ -52,6 +53,17 @@ public class Jpv3Handler extends DefaultHandler {
      */
     private Label myLabel;
 
+    private JsonParser myParser;
+
+    @Override
+    public void setJsonParser(final JsonParser aParser) {
+        if (myParser != null) {
+            throw new IllegalStateException(LOGGER.getMessage("parser is already set"));
+        }
+
+        myParser = aParser;
+    }
+
     @Override
     public void endPropertyName(final JsonObject aObject, final String aName) {
         super.endPropertyName(aObject, aName);
@@ -60,7 +72,7 @@ public class Jpv3Handler extends DefaultHandler {
             final LabelHandler handler = new LabelHandler();
 
             myParser.addHandler(handler);
-            myLabel = handler.getResult(Label.class);
+            myLabel = handler.getObject();
         }
     }
 
@@ -91,13 +103,17 @@ public class Jpv3Handler extends DefaultHandler {
     }
 
     /**
-     * Gets the handler's result.
+     * Gets the handler's result. It overrides the default so it can return the result of the ResourceHandler too.
      *
      * @param aClass The class of the handler's result
      */
     @Override
-    public <T> T getResult(final Class<T> aClass) {
-        return aClass.cast(myHandler.getResult(Resource.class));
+    public <T> T getResult() {
+        if (aClass == Resource.class) {
+            return myHandler.getResult(aClass);
+        }
+
+        return super.getResult(aClass);
     }
 
     /**
