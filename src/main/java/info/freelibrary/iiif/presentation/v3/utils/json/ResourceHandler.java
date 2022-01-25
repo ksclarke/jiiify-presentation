@@ -2,7 +2,6 @@
 package info.freelibrary.iiif.presentation.v3.utils.json;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 import info.freelibrary.util.Logger;
@@ -62,17 +61,12 @@ public class ResourceHandler extends AbstractHandler<Resource<?>, List<Resource<
     }
 
     @Override
-    public List<Resource<?>> startArray() {
-        return new ArrayList<>();
-    }
-
-    @Override
     public void endPropertyName(final Resource<?> aResource, final String aName) {
-        if (myParser.getLocation().getNestingLevel() == 1) {
-            if (aName.equals(JsonKeys.ITEMS)) {
+        if (myParser.getLocation().getNestingLevel() == myNestingLevel) {
+            if (JsonKeys.ITEMS.equals(aName)) {
                 myCanvasHandler = new CanvasHandler();
                 myParser.addHandler(myCanvasHandler);
-            } else if (aName.equals(JsonKeys.STRUCTURES)) {
+            } else if (JsonKeys.STRUCTURES.equals(aName)) {
                 // do something
             }
         }
@@ -80,10 +74,8 @@ public class ResourceHandler extends AbstractHandler<Resource<?>, List<Resource<
 
     @Override
     public void endPropertyValue(final Resource<?> aResource, final String aName) {
-        if (myParser.getLocation().getNestingLevel() == 1) {
-            if (aName.equals(JsonKeys.ITEMS)) {
-                ((Manifest) getObject()).setCanvases(myCanvasHandler.getIterable());
-            }
+        if (JsonKeys.ITEMS.equals(aName) && myParser.getLocation().getNestingLevel() == myNestingLevel) {
+            castObject(Manifest.class).setCanvases(myCanvasHandler.getIterable());
         }
     }
 }

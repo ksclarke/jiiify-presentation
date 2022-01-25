@@ -35,14 +35,14 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation>
         implements Resource<PaintingAnnotation>, ContentAnnotation<PaintingAnnotation> {
 
     /**
+     * The painting annotation's motivation.
+     */
+    public static final String MOTIVATION = "painting";
+
+    /**
      * The logger for painting annotations.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(PaintingAnnotation.class, MessageCodes.BUNDLE);
-
-    /**
-     * The painting annotation's motivation.
-     */
-    private static final String MOTIVATION = "painting";
 
     /**
      * Creates a painting annotation from the supplied ID and canvas resource.

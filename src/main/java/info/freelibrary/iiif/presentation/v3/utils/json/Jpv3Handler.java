@@ -33,6 +33,11 @@ public class Jpv3Handler extends DefaultHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(Jpv3Handler.class, MessageCodes.BUNDLE);
 
     /**
+     * The root (i.e., lowest) nesting level.
+     */
+    private static final int ROOT_NESTING_LEVEL = 1;
+
+    /**
      * The underlying resource handler.
      */
     private ResourceHandler myHandler;
@@ -57,6 +62,7 @@ public class Jpv3Handler extends DefaultHandler {
      */
     private JsonParser myParser;
 
+
     @Override
     public void setJsonParser(final JsonParser aParser) {
         if (myParser != null) {
@@ -70,7 +76,7 @@ public class Jpv3Handler extends DefaultHandler {
     public void endPropertyName(final JsonObject aObject, final String aName) {
         super.endPropertyName(aObject, aName);
 
-        if (JsonKeys.LABEL.equals(aName) && myParser.getLocation().getNestingLevel() == 1) {
+        if (JsonKeys.LABEL.equals(aName) && myParser.getLocation().getNestingLevel() == ROOT_NESTING_LEVEL) {
             final LabelHandler handler = new LabelHandler();
 
             myParser.addHandler(handler);
@@ -84,12 +90,12 @@ public class Jpv3Handler extends DefaultHandler {
             super.endPropertyValue(aObject, aName);
         }
 
-        if (myParser.getLocation().getNestingLevel() == 1) {
+        if (myParser.getLocation().getNestingLevel() == ROOT_NESTING_LEVEL) {
             if (JsonKeys.TYPE.equals(aName)) {
                 myType = aObject.getString(aName).orElseThrow(
                         () -> new ParseException(myParser.getLocation(), "Presentation document type is missing"));
 
-                LOGGER.debug("Found top level resource by type: {}", myType);
+                LOGGER.debug("Found top level resource type: {}", myType);
                 checkRequiredMetadata();
             } else if (JsonKeys.ID.equals(aName)) {
                 myID = URI.create(aObject.getString(aName).orElseThrow(
@@ -98,7 +104,7 @@ public class Jpv3Handler extends DefaultHandler {
                 LOGGER.debug("Found resource ID: {}", myID);
                 checkRequiredMetadata();
             } else if (JsonKeys.LABEL.equals(aName)) {
-                LOGGER.debug("Found resource Label: {}", myLabel);
+                LOGGER.debug("Found resource label: {}", myLabel);
                 checkRequiredMetadata();
             }
         }

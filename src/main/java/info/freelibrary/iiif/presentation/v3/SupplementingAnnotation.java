@@ -37,7 +37,7 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     /**
      * The motivation for SupplementingAnnotation(s) is "supplementing"
      */
-    static final String MOTIVATION = "supplementing";
+    public static final String MOTIVATION = "supplementing";
 
     /**
      * The logger that SupplementingAnnotation uses.

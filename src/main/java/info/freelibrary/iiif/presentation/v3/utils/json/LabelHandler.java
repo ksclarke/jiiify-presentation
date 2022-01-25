@@ -84,7 +84,10 @@ public class LabelHandler extends AbstractHandler<Label, List<String>> {
 
     @Override
     public void endJsonObject(final Label aLabel) {
-        LOGGER.debug("Finished parsing: {}", aLabel.getClass().getSimpleName());
+        if (LOGGER.isTraceEnabled()) {
+            LOGGER.trace("Finished parsing: {}", getName(aLabel));
+        }
+
         myParser.removeHandler();
     }
 

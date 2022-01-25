@@ -111,6 +111,18 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
      *
      * @param aID An annotation ID
      * @param aCanvas A canvas to target
+     * @param <C> A type of canvas resource
+     */
+    protected <C extends CanvasResource<C>> Annotation(final String aID, final CanvasResource<C> aCanvas) {
+        super(ResourceTypes.ANNOTATION, aID);
+        myTargetURI = aCanvas.getID();
+    }
+
+    /**
+     * Creates an annotation resource.
+     *
+     * @param aID An annotation ID
+     * @param aCanvas A canvas to target
      * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to target
      * @param <C> A type of canvas resource
      */
@@ -210,12 +222,11 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
     public URI getTarget() {
         if (myTargetURI != null) {
             return myTargetURI;
-        } else {
-            final URI source = myTargetSpecificResource.getSource();
-            final Selector selector = myTargetSpecificResource.getSelector();
-
-            return URI.create(source.toString() + HASH + selector.toString());
         }
+        final URI source = myTargetSpecificResource.getSource();
+        final Selector selector = myTargetSpecificResource.getSelector();
+
+        return URI.create(source.toString() + HASH + selector.toString());
     }
 
     /**
@@ -352,29 +363,28 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
             return null;
         }
 
-        if (myBodies.size() > SINGLE_CONTENT_RESOURCE_BODY) {
-            if (bodyHasChoice()) {
-                final Map<String, Object> map = new TreeMap<>(new ContentResourceComparator());
-                final List<Object> itemList = new ArrayList<>();
-
-                map.put(JsonKeys.TYPE, ResourceTypes.CHOICE);
-
-                for (final ContentResource<?> resource : myBodies) {
-                    if (resource == null) {
-                        itemList.add(RDF_NIL);
-                    } else {
-                        itemList.add(resource);
-                    }
-                }
-
-                map.put(JsonKeys.ITEMS, itemList);
-
-                return map;
-            } else {
-                return myBodies;
-            }
-        } else {
+        if (myBodies.size() <= SINGLE_CONTENT_RESOURCE_BODY) {
             return myBodies.get(0);
+        }
+        if (bodyHasChoice()) {
+            final Map<String, Object> map = new TreeMap<>(new ContentResourceComparator());
+            final List<Object> itemList = new ArrayList<>();
+
+            map.put(JsonKeys.TYPE, ResourceTypes.CHOICE);
+
+            for (final ContentResource<?> resource : myBodies) {
+                if (resource == null) {
+                    itemList.add(RDF_NIL);
+                } else {
+                    itemList.add(resource);
+                }
+            }
+
+            map.put(JsonKeys.ITEMS, itemList);
+
+            return map;
+        } else {
+            return myBodies;
         }
     }
 
@@ -388,9 +398,8 @@ public class Annotation<T extends Annotation<T>> extends AbstractResource<Annota
     private Object getTargetObject() {
         if (myTargetSpecificResource != null) {
             return myTargetSpecificResource;
-        } else {
-            return myTargetURI;
         }
+        return myTargetURI;
     }
 
     /**

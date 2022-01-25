@@ -29,6 +29,16 @@ public class CanvasHandler extends AbstractHandler<Canvas, List<Canvas>> {
     private String myPropertyValue;
 
     /**
+     * The canvas' width.
+     */
+    private int myWidth;
+
+    /**
+     * The canvas' height.
+     */
+    private int myHeight;
+
+    /**
      * Creates a new canvas handler.
      */
     public CanvasHandler() {
@@ -46,14 +56,9 @@ public class CanvasHandler extends AbstractHandler<Canvas, List<Canvas>> {
     }
 
     @Override
-    public void startPropertyName(final Canvas aCanvas) {
-        myPropertyValue = null;
-    }
-
-    @Override
     public void endPropertyName(final Canvas aCanvas, final String aName) {
         if (JsonKeys.ITEMS.equals(aName)) {
-            final AnnotationPageHandler handler = new AnnotationPageHandler();
+            final AnnotationPageHandler handler = new AnnotationPageHandler(aCanvas);
 
             myParser.addHandler(handler);
         }
@@ -65,6 +70,12 @@ public class CanvasHandler extends AbstractHandler<Canvas, List<Canvas>> {
             aCanvas.setID(myPropertyValue);
         } else if (JsonKeys.DURATION.equals(aName)) {
             aCanvas.setDuration(Float.valueOf(myPropertyValue));
+        } else if (JsonKeys.HEIGHT.equals(aName)) {
+            myHeight = Integer.valueOf(myPropertyValue);
+            setWidthHeightIfFound(aCanvas);
+        } else if (JsonKeys.WIDTH.equals(aName)) {
+            myWidth = Integer.valueOf(myPropertyValue);
+            setWidthHeightIfFound(aCanvas);
         }
     }
 
@@ -80,14 +91,17 @@ public class CanvasHandler extends AbstractHandler<Canvas, List<Canvas>> {
 
     @Override
     public void endJsonObject(final Canvas aCanvas) {
-        LOGGER.debug("{} - add canvas: {}", myParser.getLocation(), aCanvas);
-        final List<Canvas> list = castList(getIterable(), Canvas.class);
-        list.add(aCanvas);
-        setIterable(list);
+        getIterable().add(aCanvas);
     }
 
     @Override
     public void endArray(final List<Canvas> aList) {
         myParser.removeHandler();
+    }
+
+    private void setWidthHeightIfFound(final Canvas aCanvas) {
+        if (myWidth != 0 && myHeight != 0) {
+            aCanvas.setWidthHeight(myWidth, myHeight);
+        }
     }
 }
