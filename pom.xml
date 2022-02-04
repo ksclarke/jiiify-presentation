@@ -71,6 +71,7 @@
     <jackson.version>2.13.2</jackson.version>
     <jackson.databind.version>2.13.2.1</jackson.databind.version>
     <freelib.utils.version>3.0.1</freelib.utils.version>
+    <magicfree.json.version>0.10.0</magicfree.json.version>
     <jsoup.version>1.14.3</jsoup.version>
     <combinatorics.version>3.3.0</combinatorics.version>
     <media.fragments.uri.version>2.4</media.fragments.uri.version>
@@ -140,6 +141,12 @@
       <version>${combinatorics.version}</version>
     </dependency>
     <!-- Below dependencies are only used for testing -->
+    <dependency>
+      <groupId>info.freelibrary</groupId>
+      <artifactId>magicfree-json</artifactId>
+      <version>${magicfree.json.version}</version>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>

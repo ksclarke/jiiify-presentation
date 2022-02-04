@@ -103,7 +103,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check HERE
-        assertEquals(getExpected("0001-mvm-image"), normalizeIDs(manifest.toString()));
+        assertEquals(getExpected("0001-mvm-image/manifest"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -129,7 +129,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0001-mvm-image"), normalizeIDs(manifest.toString()));
+        assertEquals(getExpected("0001-mvm-image/manifest"), normalizeIDs(manifest.toString()));
     }
 
     /**

@@ -31,7 +31,7 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0001MvmImage() throws IOException {
-        final String expected = getExpected("0001-mvm-image");
+        final String expected = getExpected("0001-mvm-image/manifest");
         final String found = Manifest.from(expected).toString();
 
         assertEquals(format(expected), format(found));

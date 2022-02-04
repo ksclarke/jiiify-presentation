@@ -63,6 +63,7 @@ public class RubyExamplesIT extends AbstractCookbookTest {
      */
     @Override
     protected String getExpected(final String aFileName) throws IOException {
+        System.out.println("=> " + aFileName);
         final String fileName = FileUtils.stripExt(aFileName).replaceAll("-[12]$", EMPTY) + ".json";
 
         File expectedFile = new File("src/test/resources/examples/" + fileName);

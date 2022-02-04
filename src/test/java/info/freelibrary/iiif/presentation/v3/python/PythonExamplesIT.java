@@ -67,6 +67,8 @@ public class PythonExamplesIT extends AbstractCookbookTest {
     protected String getExpected(final String aFileName) throws IOException {
         final String fileName = FileUtils.stripExt(aFileName).replaceAll("-[12]$", EMPTY) + ".json";
 
+        System.out.println("=> " + aFileName + " " + fileName);
+
         File expectedFile = new File("src/test/resources/examples/" + fileName);
 
         // If it's not an example test fixture, check to see if it's a cookbook fixture
