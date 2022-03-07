@@ -151,7 +151,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0002-mvm-audio"), normalizeIDs(manifest.toString()));
+        assertEquals(getExpected("0002-mvm-audio/manifest"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -177,7 +177,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0002-mvm-audio"), normalizeIDs(manifest.toString()));
+        assertEquals(getExpected("0002-mvm-audio/manifest"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -201,7 +201,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0003-mvm-video"), normalizeIDs(manifest.toString()));
+        assertEquals(getExpected("0003-mvm-video/manifest"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -229,7 +229,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0003-mvm-video"), normalizeIDs(manifest.toString()));
+        assertEquals(getExpected("0003-mvm-video/manifest"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -253,7 +253,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0004-canvas-size"), normalizeIDs(manifest.toString()));
+        assertEquals(getExpected("0004-canvas-size/manifest"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -280,7 +280,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0004-canvas-size"), normalizeIDs(manifest.toString()));
+        assertEquals(getExpected("0004-canvas-size/manifest"), normalizeIDs(manifest.toString()));
     }
 
     /**

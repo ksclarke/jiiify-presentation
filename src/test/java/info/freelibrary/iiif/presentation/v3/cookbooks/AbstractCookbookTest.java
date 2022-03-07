@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import info.freelibrary.iiif.presentation.v3.utils.CookbookUtils;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
@@ -16,6 +17,11 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  * An abstract class that other tests running the cookbooks as test fixtures can extend.
  */
 public abstract class AbstractCookbookTest {
+
+    static {
+        // Check status of cookbooks and emit warnings if we're out of sync
+        CookbookUtils.checkCookbooks();
+    }
 
     /**
      * A placeholder ID that can be ignore during a comparison.

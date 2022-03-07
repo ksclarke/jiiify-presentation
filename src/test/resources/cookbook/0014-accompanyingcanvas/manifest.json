@@ -2,6 +2,11 @@
   "@context": "http://iiif.io/api/presentation/3/context.json",
   "id": "https://iiif.io/api/cookbook/recipe/0014-accompanyingcanvas/manifest.json",
   "type": "Manifest",
+  "label": {
+    "en": [
+      "Partial audio recording of Gustav Mahler's _Symphony No. 3_"
+    ]
+  },
   "items": [
     {
       "id": "https://iiif.io/api/cookbook/recipe/0014-accompanyingcanvas/canvas/p1",

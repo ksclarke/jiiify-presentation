@@ -17,6 +17,9 @@
   <logger name="info.freelibrary.util" level="ERROR" additivity="false">
     <appender-ref ref="STDOUT" />
   </logger>
+  <logger name="info.freelibrary.json" level="ERROR" additivity="false">
+    <appender-ref ref="STDOUT" />
+  </logger>
   <logger name="io.vertx" level="OFF" additivity="false">
     <appender-ref ref="STDOUT"/>
   </logger>

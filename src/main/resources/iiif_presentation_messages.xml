@@ -97,5 +97,7 @@
   <entry key="JPA-124">{} missing the required label</entry>
   <entry key="JPA-125">{} is not a valid type for {}</entry>
   <entry key="JPA-126">{} is not a valid context for {}</entry>
+  <entry key="JPA-127">Cookbook test fixture needs updating:{}  {}{}  {}{}  {}{}  {}</entry>
+  <entry key="JPA-128">New cookbook test fixture to download:{}  {}</entry>
 
 </properties>

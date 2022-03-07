@@ -113,14 +113,4 @@ abstract class AbstractAuthService<T extends AbstractAuthService<T>> extends Abs
         throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_121, getClass()));
     }
 
-    /**
-     * Sets the service profile from a string.
-     *
-     * @param aProfile A service profile
-     * @return This service
-     */
-    // public AbstractAuthService<T> setProfile(final AuthService.Profile aProfile) {
-    // // Profile should be set at the subclass level; this method should be overridden
-    // throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_121, getClass()));
-    // }
 }

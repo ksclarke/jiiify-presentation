@@ -5,23 +5,28 @@ import static info.freelibrary.util.Constants.SLASH;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
-import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
-import org.junit.Test;
+import org.junit.Assert;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+import info.freelibrary.json.InvalidPointerException;
 import info.freelibrary.json.Json;
 import info.freelibrary.json.JsonObject;
+import info.freelibrary.json.JsonOptions;
+import info.freelibrary.json.JsonPointer;
 import info.freelibrary.json.JsonReader;
 
+/**
+ * Utilities related to the cookbook recipes.
+ */
 public class CookbookUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CookbookUtils.class, MessageCodes.BUNDLE);
@@ -36,54 +41,66 @@ public class CookbookUtils {
 
     private static final String RECIPE_RE = "^(?!https?:\\/\\/).*\\.json";
 
+    private static final String EOL = System.lineSeparator();
+
     private static final String HREF = "href";
 
     private static final String LINK = "a";
 
-    @Test
-    public void checkCookbooks() throws MalformedURLException, IOException {
+    public static void checkCookbooks() {
         try {
+            final Set<JsonPointer> collapsibleArrays = Set.of(new JsonPointer("/@context"));
+            final JsonOptions options = new JsonOptions().ignoreOrder(true).setCollapsibleArrays(collapsibleArrays);
             final Elements links = Jsoup.connect(COOKBOOK).get().select(LINK);
 
             links.stream().map(link -> link.attr(HREF)).filter(url -> url.matches(RECIPE_PAGE_RE)).forEach(url -> {
-                compareLocalFiles(getJsonURLs(url));
+                compareLocalFiles(getJsonURLs(url), options);
             });
-        } catch (final HttpStatusException details) {
-            LOGGER.error(details.getMessage(), details);
+        } catch (final IOException | InvalidPointerException details) {
+            throw new CookbookRecipeException(details);
         }
     }
 
-    //
-    // TODO: magicfree-json
-    // * Option to collapse arrays with single items, by property name
-    // * Option to compare values with regex similarity, by property name
-    // * Option to ignore order, totally (done) or by property name (not done)
-    //
-    private void compareLocalFiles(final List<String> aLinkList) {
+    public static void assertEquals(final String aJson1, final String aJson2) {
+        try {
+            final JsonPointer bodyPointer = new JsonPointer("/items/0/items/0/items/0/body");
+            final Set<JsonPointer> collapsibleArrays = Set.of(new JsonPointer("/@context"), bodyPointer);
+            final JsonOptions options = new JsonOptions().ignoreOrder(true).setCollapsibleArrays(collapsibleArrays);
+            final JsonObject json1 = (JsonObject) Json.parse(aJson1);
+            final JsonObject json2 = (JsonObject) Json.parse(aJson2);
+
+            // Do the comparison in a smart way, but produce output that's more useful
+            if (!json1.equals(json2, options)) {
+                Assert.assertEquals(aJson1, aJson2);
+            }
+        } catch (final InvalidPointerException details) {
+            throw new CookbookRecipeException(details);
+        }
+    }
+
+    private static void compareLocalFiles(final List<String> aLinkList, final JsonOptions aConfig) {
         aLinkList.forEach(url -> {
             final int index = url.indexOf(COOKBOOK_RECIPE) + COOKBOOK_RECIPE.length();
             final File file = new File(RECIPE_TEST_DIR, url.substring(index));
 
             try {
                 if (file.exists()) {
-                    final JsonObject json = (JsonObject) Json.parse(new JsonReader(new URL(url)));
+                    final JsonObject fileJson = (JsonObject) Json.parse(new JsonReader(file));
+                    final JsonObject urlJson = (JsonObject) Json.parse(new JsonReader(new URL(url)));
 
-                    if (!json.equalsIgnoreOrder(Json.parse(new JsonReader(file)))) {
-                        System.out.println("Needs updating: " + file + " " + url);
-                        System.out.println(json);
-                        System.out.println(Json.parse(new JsonReader(file)));
-                        System.out.println();
+                    if (!urlJson.equals(fileJson, aConfig)) {
+                        LOGGER.warn(MessageCodes.JPA_127, EOL, file, EOL, fileJson, EOL, url, EOL, urlJson);
                     }
                 } else {
-                    // System.out.println("Does not exist: " + file);
+                    LOGGER.warn(MessageCodes.JPA_128, EOL, url);
                 }
             } catch (final IOException details) {
-
+                throw new CookbookRecipeException(details);
             }
         });
     }
 
-    private List<String> getJsonURLs(final String aHref) {
+    private static List<String> getJsonURLs(final String aHref) {
         final String baseURL = !aHref.endsWith(SLASH) ? aHref + SLASH : aHref;
         final List<String> list = new ArrayList<>();
 
@@ -93,10 +110,8 @@ public class CookbookUtils {
             links.stream().map(link -> link.attr(HREF)).filter(url -> url.matches(RECIPE_RE)).forEach(path -> {
                 list.add(baseURL + path);
             });
-
-            return list;
         } catch (final IOException details) {
-            LOGGER.error(details.getMessage(), details);
+            throw new CookbookRecipeException(details);
         }
 
         return list;
