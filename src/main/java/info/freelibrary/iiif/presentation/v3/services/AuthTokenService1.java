@@ -1,9 +1,10 @@
 
-package info.freelibrary.iiif.presentation.v3.services.auth;
+package info.freelibrary.iiif.presentation.v3.services;
 
 import java.net.URI;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -15,7 +16,13 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 /**
  * A version 1 authorization token service.
  */
+@JsonPropertyOrder({ JsonKeys.CONTEXT, JsonKeys.V2_ID, JsonKeys.V2_TYPE, JsonKeys.PROFILE })
 public class AuthTokenService1 extends AbstractAuthService<AuthTokenService1> {
+
+    /**
+     * A logger for AuthTokenService1.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthTokenService1.class, MessageCodes.BUNDLE);
 
     /**
      * Creates a new auth token service.
@@ -42,8 +49,18 @@ public class AuthTokenService1 extends AbstractAuthService<AuthTokenService1> {
     }
 
     @Override
+    @JsonGetter(JsonKeys.V2_TYPE)
+    public String getType() {
+        return AuthTokenService1.class.getSimpleName();
+    }
+
+    @Override
     public AuthTokenService1 setProfile(final String aProfile) {
-        myProfile = Profile.fromString(aProfile);
+        if (!AuthTokenService1.Profile.TOKEN_SERVICE.string().equals(aProfile)) {
+            final String message = LOGGER.getMessage(MessageCodes.JPA_122, aProfile, getClass().getSimpleName());
+            throw new IllegalArgumentException(message);
+        }
+
         return this;
     }
 

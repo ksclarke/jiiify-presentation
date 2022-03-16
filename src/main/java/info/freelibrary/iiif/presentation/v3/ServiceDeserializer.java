@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
@@ -14,21 +15,25 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
-import info.freelibrary.util.Constants;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.PMD;
 
+import info.freelibrary.iiif.presentation.v3.services.AuthCookieService1;
+import info.freelibrary.iiif.presentation.v3.services.AuthTokenService1;
+import info.freelibrary.iiif.presentation.v3.services.ClickthroughCookieService1;
+import info.freelibrary.iiif.presentation.v3.services.ExternalCookieService1;
 import info.freelibrary.iiif.presentation.v3.services.GeoJsonService;
+import info.freelibrary.iiif.presentation.v3.services.ImageService;
+import info.freelibrary.iiif.presentation.v3.services.ImageService2;
+import info.freelibrary.iiif.presentation.v3.services.ImageService3;
+import info.freelibrary.iiif.presentation.v3.services.KioskCookieService1;
+import info.freelibrary.iiif.presentation.v3.services.LoginCookieService1;
 import info.freelibrary.iiif.presentation.v3.services.OtherService;
 import info.freelibrary.iiif.presentation.v3.services.OtherService2;
 import info.freelibrary.iiif.presentation.v3.services.OtherService3;
 import info.freelibrary.iiif.presentation.v3.services.PhysicalDimsService;
-import info.freelibrary.iiif.presentation.v3.services.auth.AuthCookieService1;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageAPI;
-import info.freelibrary.iiif.presentation.v3.services.image.ImageService;
-import info.freelibrary.iiif.presentation.v3.services.image.ImageService2;
-import info.freelibrary.iiif.presentation.v3.services.image.ImageService3;
 import info.freelibrary.iiif.presentation.v3.services.image.Size;
 import info.freelibrary.iiif.presentation.v3.services.image.Tile;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
@@ -91,12 +96,12 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
         if (aNode.isTextual()) {
             service = new OtherService3(aNode.textValue(), null);
         } else if (aNode.isObject()) {
-            final URI id = getServiceID(aNode, aParser);
             final List<Service<?>> services = getRelatedServices(aParser, aNode.get(JsonKeys.SERVICE));
             final JsonNode profileNode = aNode.get(JsonKeys.PROFILE);
+            final URI id = getServiceID(aNode, aParser);
 
             if (profileNode != null) {
-                final String profile = profileNode.asText(Constants.EMPTY);
+                final String profile = profileNode.asText();
 
                 if (ImageService2.Profile.isValid(profile)) {
                     final ImageService2 imageService = new ImageService2(ImageService2.Profile.fromString(profile), id);
@@ -105,20 +110,22 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
                     final ImageService3 imageService = new ImageService3(ImageService3.Profile.fromString(profile), id);
                     service = deserializeImageService(aNode, imageService).setServices(services);
                 } else if (AuthCookieService1.Profile.isValid(profile)) {
-                    service = deserializeV1AuthCookieService(aNode, id).setServices(services);
+                    service = deserializeV1AuthCookieService(aParser, aNode, id).setServices(services);
+                } else if (AuthTokenService1.Profile.isValid(profile)) {
+                    service = new AuthTokenService1(id);
                 } else if (PhysicalDimsService.Profile.isValid(profile)) {
                     service = deserializePhysicalDimsService(aNode, id).setServices(services);
                 } else {
-                    final JsonNode contextNode = aNode.get(JsonKeys.CONTEXT);
-
-                    if (contextNode != null && GeoJsonService.CONTEXT.equals(contextNode.asText())) {
-                        service = deserializeGeoJsonService(aNode, id).setServices(services);
-                    } else {
-                        service = deserializeOtherService(aNode, id).setServices(services);
-                    }
+                    service = deserializeOtherService(aNode, id).setServices(services);
                 }
             } else {
-                service = deserializeOtherService(aNode, id).setServices(services);
+                final JsonNode contextNode = aNode.get(JsonKeys.CONTEXT);
+
+                if (contextNode != null && GeoJsonService.CONTEXT.equals(contextNode.asText())) {
+                    service = deserializeGeoJsonService(aNode, id).setServices(services);
+                } else {
+                    service = deserializeOtherService(aNode, id).setServices(services);
+                }
             }
         } else {
             throw new JsonParseException(aParser, LOGGER.getMessage(MessageCodes.JPA_016, aNode.getClass().getName()),
@@ -149,53 +156,51 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
     /**
      * Builds a v1 auth cookie service from the JSON in the supplied JSON node.
      *
+     * @param aParser A JSON parser
      * @param aNode A JSON node
      * @param aID A service ID
      * @return The v1 auth cookie service
      */
-    private Service<?> deserializeV1AuthCookieService(final JsonNode aNode, final URI aID) {
+    private Service<?> deserializeV1AuthCookieService(final JsonParser aParser, final JsonNode aNode, final URI aID)
+            throws JsonParseException {
+        final String profile = aNode.get(JsonKeys.PROFILE).asText(); // To get here, presence has been confirmed
         final JsonNode failureDescription = aNode.get(JsonKeys.FAILURE_DESCRIPTION);
         final JsonNode failureHeader = aNode.get(JsonKeys.FAILURE_HEADER);
-        final JsonNode confirmLabel = aNode.get(JsonKeys.CONFIRM_LABEL);
-        final JsonNode description = aNode.get(JsonKeys.DESCRIPTION);
-        final JsonNode profileNode = aNode.get(JsonKeys.PROFILE);
-        final JsonNode header = aNode.get(JsonKeys.HEADER);
-        final AuthCookieService1 service;
+        final AuthCookieService1 cookieService;
 
-        if (profileNode != null) {
-            final AuthCookieService1.Profile profile = AuthCookieService1.Profile.fromString(profileNode.textValue());
+        if (AuthCookieService1.Profile.LOGIN.string().equals(profile) ||
+                AuthCookieService1.Profile.CLICKTHROUGH.string().equals(profile)) {
             final JsonNode labelNode = aNode.get(JsonKeys.LABEL);
+            final UserMediatedServiceWrapper wrapper;
 
-            if (labelNode != null) {
-                service = new AuthCookieService1(aID).setLabel(labelNode.textValue()).setProfile(profile);
-            } else {
-                service = new AuthCookieService1(aID).setProfile(profile);
+            // User mediated cookie services must have a label
+            if (labelNode == null) {
+                throw new JsonParseException(aParser, LOGGER.getMessage(MessageCodes.JPA_124, profile),
+                        aParser.getCurrentLocation());
             }
+
+            if (AuthCookieService1.Profile.LOGIN.string().equals(profile)) {
+                wrapper = new UserMediatedServiceWrapper(new LoginCookieService1(aID, labelNode.textValue()));
+            } else {
+                wrapper = new UserMediatedServiceWrapper(new ClickthroughCookieService1(aID, labelNode.textValue()));
+            }
+
+            wrapper.setConfirmLabel(aNode.get(JsonKeys.CONFIRM_LABEL)).setHeader(aNode.get(JsonKeys.HEADER));
+            cookieService = wrapper.setDescription(aNode.get(JsonKeys.DESCRIPTION)).getService();
+        } else if (AuthCookieService1.Profile.EXTERNAL.string().equals(profile)) {
+            cookieService = new ExternalCookieService1();
+        } else if (KioskCookieService1.Profile.KIOSK.string().equals(profile)) {
+            cookieService = new KioskCookieService1(aID);
         } else {
-            service = new AuthCookieService1(aID);
+            throw new JsonParseException(aParser,
+                    LOGGER.getMessage(MessageCodes.JPA_123, AuthCookieService1.class.getSimpleName()),
+                    aParser.getCurrentLocation());
         }
 
-        if (confirmLabel != null) {
-            service.setConfirmLabel(confirmLabel.asText(null));
-        }
+        getValue(failureHeader).ifPresent(value -> cookieService.setFailureHeader(value));
+        getValue(failureDescription).ifPresent(value -> cookieService.setFailureDescription(profile));
 
-        if (header != null) {
-            service.setHeader(header.asText(null));
-        }
-
-        if (description != null) {
-            service.setDescription(description.asText(null));
-        }
-
-        if (failureHeader != null) {
-            service.setFailureHeader(failureHeader.asText(null));
-        }
-
-        if (failureDescription != null) {
-            service.setFailureDescription(failureDescription.asText(null));
-        }
-
-        return service;
+        return cookieService;
     }
 
     /**
@@ -211,9 +216,9 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
 
         if (scale == null || units == null) {
             return new PhysicalDimsService(aID);
-        } else {
-            return new PhysicalDimsService(aID).setPhysicalDims(scale.asDouble(), units.textValue());
         }
+
+        return new PhysicalDimsService(aID).setPhysicalDims(scale.asDouble(), units.textValue());
     }
 
     /**
@@ -224,37 +229,22 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
      * @return The other service
      */
     private Service<?> deserializeOtherService(final JsonNode aNode, final URI aID) {
-        final JsonNode profile = aNode.get(JsonKeys.PROFILE);
-        final JsonNode format = aNode.get(JsonKeys.FORMAT);
+        final JsonNode v2Type = aNode.get(JsonKeys.V2_TYPE);
+        final JsonNode v3Type = aNode.get(JsonKeys.TYPE);
         final OtherService<?> otherService;
 
-        if (aNode.get(JsonKeys.ID) != null) {
-            final JsonNode type = aNode.get(JsonKeys.TYPE);
-
-            if (type != null) {
-                otherService = new OtherService3(aID, type.asText(Constants.EMPTY));
-            } else {
-                otherService = new OtherService3(aID, null);
-            }
+        if (v3Type != null) {
+            otherService = new OtherService3(aID, v3Type.asText());
+        } else if (v2Type != null) {
+            otherService = new OtherService2(aID, v2Type.asText());
         } else {
-            final JsonNode type = aNode.get(JsonKeys.V2_TYPE);
-
-            if (type != null) {
-                otherService = new OtherService2(aID, type.asText(Constants.EMPTY));
-            } else {
-                otherService = new OtherService2(aID, null);
-            }
+            otherService = new OtherService2().setID(aID);
         }
 
-        if (profile != null && format != null) {
-            return ((OtherService<?>) otherService.setProfile(profile.textValue())).setFormat(format.textValue());
-        } else if (profile != null) {
-            return otherService.setProfile(profile.textValue());
-        } else if (format != null) {
-            return otherService.setFormat(format.textValue());
-        } else {
-            return (Service<?>) otherService;
-        }
+        getValue(aNode.get(JsonKeys.PROFILE)).ifPresent(value -> otherService.setProfile(value));
+        getValue(aNode.get(JsonKeys.FORMAT)).ifPresent(value -> otherService.setFormat(value));
+
+        return (Service<?>) otherService;
     }
 
     /**
@@ -267,19 +257,20 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
      */
     private URI getServiceID(final JsonNode aNode, final JsonParser aParser) throws JsonParseException {
         final JsonNode idNode = aNode.get(JsonKeys.ID);
+        final JsonNode v2IdNode;
 
         if (idNode != null) {
             return URI.create(idNode.textValue());
-        } else {
-            final JsonNode v2IdNode = aNode.get(JsonKeys.V2_ID);
-
-            if (v2IdNode != null) {
-                return URI.create(v2IdNode.textValue());
-            } else {
-                throw new JsonParseException(aParser, LOGGER.getMessage(MessageCodes.JPA_111),
-                        aParser.getCurrentLocation());
-            }
         }
+
+        v2IdNode = aNode.get(JsonKeys.V2_ID);
+
+        if (v2IdNode != null) {
+            return URI.create(v2IdNode.textValue());
+        }
+
+        // Assumption: All "other" services are going to have an ID; could return optional here if ever disproven
+        throw new JsonParseException(aParser, LOGGER.getMessage(MessageCodes.JPA_111), aParser.getCurrentLocation());
     }
 
     /**
@@ -424,5 +415,123 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
         }
 
         return services;
+    }
+
+    /**
+     * Gets the value from the supplied node, if it exists.
+     *
+     * @param aNode A JSON node
+     * @return An optional value
+     */
+    private Optional<String> getValue(final JsonNode aNode) {
+        if (aNode != null) {
+            return Optional.ofNullable(aNode.asText(null));
+        }
+
+        return Optional.empty();
+    }
+
+    /**
+     * A temporary workaround that saves us from having to make the abstract user mediated cookie service class public.
+     * <p>
+     * "We can solve any problem by introducing an extra level of indirection." --David J. Wheeler
+     * </p>
+     */
+    private final class UserMediatedServiceWrapper {
+
+        /**
+         * An access cookie service using the login pattern
+         */
+        private LoginCookieService1 myLoginService;
+
+        /**
+         * An access cookie service using the click-through pattern
+         */
+        private ClickthroughCookieService1 myClickthroughService;
+
+        /**
+         * Creates a user mediated service from an access cookie service using the login pattern.
+         *
+         * @param aLoginService A login service to wrap
+         */
+        private UserMediatedServiceWrapper(final LoginCookieService1 aLoginService) {
+            myLoginService = aLoginService;
+        }
+
+        /**
+         * Creates a user mediated service from an access cookie service using the clickthrough pattern.
+         *
+         * @param aClickthroughService A click-through service to wrap
+         */
+        private UserMediatedServiceWrapper(final ClickthroughCookieService1 aClickthroughService) {
+            myClickthroughService = aClickthroughService;
+        }
+
+        /**
+         * Sets the confirm label on the wrapped service.
+         *
+         * @param aNode A JSON node containing the confirm label
+         * @return This service
+         */
+        private UserMediatedServiceWrapper setConfirmLabel(final JsonNode aNode) {
+            getValue(aNode).ifPresent(value -> {
+                if (myClickthroughService != null) {
+                    myClickthroughService.setConfirmLabel(value);
+                } else if (myLoginService != null) {
+                    myLoginService.setConfirmLabel(value);
+                }
+            });
+
+            return this;
+        }
+
+        /**
+         * Sets the header on the wrapped service.
+         *
+         * @param aNode A JSON node containing the header
+         * @return This service
+         */
+        private UserMediatedServiceWrapper setHeader(final JsonNode aNode) {
+            getValue(aNode).ifPresent(value -> {
+                if (myClickthroughService != null) {
+                    myClickthroughService.setHeader(value);
+                } else if (myLoginService != null) {
+                    myLoginService.setHeader(value);
+                }
+            });
+
+            return this;
+        }
+
+        /**
+         * Sets the description on the wrapped service.
+         *
+         * @param aNode A JSON node containing the description
+         * @return This service
+         */
+        private UserMediatedServiceWrapper setDescription(final JsonNode aNode) {
+            getValue(aNode).ifPresent(value -> {
+                if (myClickthroughService != null) {
+                    myClickthroughService.setDescription(value);
+                } else if (myLoginService != null) {
+                    myLoginService.setDescription(value);
+                }
+            });
+
+            return this;
+        }
+
+        /**
+         * Gets the wrapped service.
+         *
+         * @return An underlying service
+         */
+        private AuthCookieService1 getService() {
+            if (myClickthroughService != null) {
+                return myClickthroughService;
+            }
+
+            return myLoginService;
+        }
     }
 }

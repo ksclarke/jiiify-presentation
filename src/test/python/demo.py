@@ -8,7 +8,7 @@ class JiiifyPresentationDemo:
         from info.freelibrary.iiif.presentation.v3 import Canvas, ImageContent, Manifest
         from info.freelibrary.iiif.presentation.v3.ids import MinterFactory
         from info.freelibrary.iiif.presentation.v3.properties import Label
-        from info.freelibrary.iiif.presentation.v3.services.image import ImageService2
+        from info.freelibrary.iiif.presentation.v3.services import ImageService2
 
         manifest = Manifest('http://example.com/1', Label('en', 'My Manifest'))
         minter = MinterFactory.getMinter(manifest)

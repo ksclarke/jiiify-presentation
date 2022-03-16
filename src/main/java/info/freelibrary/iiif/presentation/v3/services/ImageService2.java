@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3.services.image;
+package info.freelibrary.iiif.presentation.v3.services;
 
 import java.net.URI;
 import java.util.List;
@@ -16,77 +16,96 @@ import info.freelibrary.util.warnings.Eclipse;
 
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.Service;
+import info.freelibrary.iiif.presentation.v3.services.image.ImageAPI;
+import info.freelibrary.iiif.presentation.v3.services.image.Size;
+import info.freelibrary.iiif.presentation.v3.services.image.Tile;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
- * A service that will return information about a particular image via <a href="https://iiif.io/api/image/3/">IIIF Image
- * API 3</a>.
+ * A service that will return information about a particular image via <a href="https://iiif.io/api/image/2/">IIIF Image
+ * API 2</a>.
  */
-public class ImageService3 extends AbstractImageService<ImageService3> implements ImageService<ImageService3> {
+public class ImageService2 extends AbstractImageService<ImageService2> implements ImageService<ImageService2> {
 
     /**
-     * The default profile level for the image info service
+     * The context for this service.
      */
-    private static final ImageService3.Profile DEFAULT_LEVEL = ImageService3.Profile.LEVEL_TWO;
+    public static final URI CONTEXT = URI.create("http://iiif.io/api/image/2/context.json");
 
     /**
-     * Creates a new IIIF Image API 3 service for Jackson's processing.
+     * The default profile level for the image info service.
+     */
+    private static final ImageService2.Profile DEFAULT_LEVEL = ImageService2.Profile.LEVEL_TWO;
+
+    /**
+     * Creates a new IIIF Image API 2 service for Jackson's processing.
      */
     @SuppressWarnings(Eclipse.UNUSED)
-    private ImageService3() {
+    private ImageService2() {
         super();
     }
 
     /**
-     * Creates a new IIIF Image API 3 service.
+     * Creates a new IIIF Image API 2 service.
      *
      * @param aProfile A profile for the service
      * @param aID The ID in string form
      */
-    public ImageService3(final Profile aProfile, final String aID) {
+    public ImageService2(final Profile aProfile, final String aID) {
         super(aProfile, URI.create(aID));
     }
 
     /**
-     * Creates a new IIIF Image API 3 service.
+     * Creates a new IIIF Image API 2 service.
      *
      * @param aProfile A profile for the service
      * @param aID The ID
      */
-    public ImageService3(final Profile aProfile, final URI aID) {
+    public ImageService2(final Profile aProfile, final URI aID) {
         super(aProfile, aID);
     }
 
     /**
-     * Creates a new IIIF Image API 3 service.
+     * Creates a new IIIF Image API 2 service.
      *
      * @param aID The ID in string form
      */
-    public ImageService3(final String aID) {
+    public ImageService2(final String aID) {
         super(DEFAULT_LEVEL, URI.create(aID));
     }
 
     /**
-     * Creates a new IIIF Image API 3 service.
+     * Creates a new IIIF Image API 2 service.
      *
      * @param aID The ID
      */
-    public ImageService3(final URI aID) {
+    public ImageService2(final URI aID) {
         super(DEFAULT_LEVEL, aID);
     }
 
     @Override
-    @JsonGetter(JsonKeys.ID)
+    @JsonGetter(JsonKeys.V2_ID)
     public URI getID() {
-        return myID;
+        return super.getID();
     }
 
     @Override
-    @JsonSetter(JsonKeys.TYPE)
-    public ImageService3 setType(final String aType) {
+    @JsonSetter(JsonKeys.V2_TYPE)
+    public ImageService2 setType(final String aType) {
         // intentionally no-op; it's a constant for the class
         return this;
+    }
+
+    /**
+     * Gets the service type.
+     *
+     * @return The service type
+     */
+    @Override
+    @JsonGetter(JsonKeys.V2_TYPE)
+    public String getType() {
+        return getClass().getSimpleName();
     }
 
     @Override
@@ -129,15 +148,15 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
      * @return The service
      */
     @JsonIgnore
-    public ImageService3 setProfile(final ImageService3.Profile aProfile) {
+    public ImageService2 setProfile(final ImageService2.Profile aProfile) {
         myProfile = aProfile;
         return this;
     }
 
     @Override
     @JsonSetter(JsonKeys.PROFILE)
-    public ImageService3 setProfile(final String aProfile) {
-        myProfile = ImageService3.Profile.fromString(aProfile);
+    public ImageService2 setProfile(final String aProfile) {
+        myProfile = ImageService2.Profile.fromString(aProfile);
         return this;
     }
 
@@ -157,116 +176,116 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
 
     @Override
     @JsonIgnore
-    public ImageService3 setExtraFormats(final ImageAPI.ImageFormat... aFormatArray) {
+    public ImageService2 setExtraFormats(final ImageAPI.ImageFormat... aFormatArray) {
         return super.setExtraFormats(aFormatArray);
     }
 
     @Override
     @JsonSetter(ImageAPI.EXTRA_FORMATS)
-    public ImageService3 setExtraFormats(final List<ImageAPI.ImageFormat> aFormatList) {
+    public ImageService2 setExtraFormats(final List<ImageAPI.ImageFormat> aFormatList) {
         return super.setExtraFormats(aFormatList);
     }
 
     @Override
     @JsonIgnore
-    public ImageService3 setExtraQualities(final ImageAPI.ImageQuality... aQualityArray) {
+    public ImageService2 setExtraQualities(final ImageAPI.ImageQuality... aQualityArray) {
         return super.setExtraQualities(aQualityArray);
     }
 
     @Override
     @JsonSetter(ImageAPI.EXTRA_QUALITIES)
-    public ImageService3 setExtraQualities(final List<ImageAPI.ImageQuality> aQualityList) {
+    public ImageService2 setExtraQualities(final List<ImageAPI.ImageQuality> aQualityList) {
         return super.setExtraQualities(aQualityList);
     }
 
     @Override
-    @JsonSetter(JsonKeys.ID)
-    public ImageService3 setID(final String aID) {
+    @JsonSetter(JsonKeys.V2_ID)
+    public ImageService2 setID(final String aID) {
         return super.setID(aID);
     }
 
     @Override
     @JsonIgnore
-    public ImageService3 setID(final URI aID) {
+    public ImageService2 setID(final URI aID) {
         return super.setID(aID);
     }
 
     @Override
     @JsonIgnore
-    public ImageService3 setProtocol(final boolean aProtocolFlag) {
+    public ImageService2 setProtocol(final boolean aProtocolFlag) {
         return super.setProtocol(aProtocolFlag);
     }
 
     @Override
     @JsonSetter(JsonKeys.SERVICE)
-    public ImageService3 setServices(final List<Service<?>> aServiceList) {
+    public ImageService2 setServices(final List<Service<?>> aServiceList) {
         return super.setServices(aServiceList);
     }
 
     @Override
     @JsonIgnore
-    public ImageService3 setServices(final Service<?>... aServiceArray) {
+    public ImageService2 setServices(final Service<?>... aServiceArray) {
         return super.setServices(aServiceArray);
     }
 
     @Override
     @JsonSetter(ImageAPI.SIZES)
-    public ImageService3 setSizes(final List<Size> aSizeList) {
+    public ImageService2 setSizes(final List<Size> aSizeList) {
         return super.setSizes(aSizeList);
     }
 
     @Override
     @JsonIgnore
-    public ImageService3 setSizes(final Size... aSizeArray) {
+    public ImageService2 setSizes(final Size... aSizeArray) {
         return super.setSizes(aSizeArray);
     }
 
     @Override
     @JsonSetter(ImageAPI.TILES)
-    public ImageService3 setTiles(final List<Tile> aTileList) {
+    public ImageService2 setTiles(final List<Tile> aTileList) {
         return super.setTiles(aTileList);
     }
 
     @Override
     @JsonIgnore
-    public ImageService3 setTiles(final Tile... aTileArray) {
+    public ImageService2 setTiles(final Tile... aTileArray) {
         return super.setTiles(aTileArray);
     }
 
     /**
-     * The profiles (API compliance levels) supported by an {@link ImageService3}.
+     * The profiles (API compliance levels) supported by an {@link ImageService2}.
      */
     public enum Profile implements ImageService.Profile {
 
         /**
-         * http://iiif.io/api/image/3/level0.json
+         * http://iiif.io/api/image/2/level0.json
          */
-        LEVEL_ZERO("level0"),
+        LEVEL_ZERO("http://iiif.io/api/image/2/level0.json"),
 
         /**
-         * http://iiif.io/api/image/3/level1.json
+         * http://iiif.io/api/image/2/level1.json
          */
-        LEVEL_ONE("level1"),
+        LEVEL_ONE("http://iiif.io/api/image/2/level1.json"),
 
         /**
-         * http://iiif.io/api/image/3/level2.json
+         * http://iiif.io/api/image/2/level2.json
          */
-        LEVEL_TWO("level2");
+        LEVEL_TWO("http://iiif.io/api/image/2/level2.json");
 
         /**
-         * A logger for the image service profile.
+         * The image service profile's logger.
          */
-        private static final Logger LOGGER = LoggerFactory.getLogger(ImageService3.Profile.class, MessageCodes.BUNDLE);
+        private static final Logger LOGGER = LoggerFactory.getLogger(ImageService2.Profile.class, MessageCodes.BUNDLE);
 
         /**
-         * My image service profile.
+         * The string form of the image service profile.
          */
         private String myProfile;
 
         /**
-         * Creates a new profile from the supplied profile string.
+         * Creates a new image service profile.
          *
-         * @param aProfile A new image service profile
+         * @param aProfile An image service profile
          */
         Profile(final String aProfile) {
             myProfile = aProfile;
@@ -283,13 +302,13 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
         }
 
         /**
-         * Whether the supplied profile string is a valid ImageService3 profile.
+         * Whether the supplied profile string is a valid ImageService2 profile.
          *
          * @param aProfile A profile
-         * @return True if the supplied profile string is a valid ImageService3 profile; else, false
+         * @return True if the supplied profile string is a valid ImageService2 profile; else, false
          */
         public static boolean isValid(final String aProfile) {
-            for (final ImageService3.Profile profile : ImageService3.Profile.values()) {
+            for (final ImageService2.Profile profile : ImageService2.Profile.values()) {
                 if (profile.string().equals(aProfile)) {
                     return true;
                 }
@@ -305,15 +324,15 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
          * @return An image service profile
          * @throws IllegalArgumentException If the profile string doesn't correspond to a valid profile
          */
-        public static ImageService3.Profile fromString(final String aProfile) {
-            for (final ImageService3.Profile profile : ImageService3.Profile.values()) {
+        public static ImageService2.Profile fromString(final String aProfile) {
+            for (final ImageService2.Profile profile : ImageService2.Profile.values()) {
                 if (profile.string().equalsIgnoreCase(aProfile)) {
                     return profile;
                 }
             }
 
             throw new IllegalArgumentException(
-                    LOGGER.getMessage(MessageCodes.JPA_109, aProfile, ResourceTypes.IMAGE_SERVICE_3));
+                    LOGGER.getMessage(MessageCodes.JPA_109, aProfile, ResourceTypes.IMAGE_SERVICE_2));
         }
     }
 

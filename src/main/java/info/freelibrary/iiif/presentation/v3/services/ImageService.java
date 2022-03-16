@@ -1,10 +1,13 @@
 
-package info.freelibrary.iiif.presentation.v3.services.image;
+package info.freelibrary.iiif.presentation.v3.services;
 
 import java.net.URI;
 import java.util.List;
 
 import info.freelibrary.iiif.presentation.v3.Service;
+import info.freelibrary.iiif.presentation.v3.services.image.ImageAPI;
+import info.freelibrary.iiif.presentation.v3.services.image.Size;
+import info.freelibrary.iiif.presentation.v3.services.image.Tile;
 
 /**
  * Interface for image services.

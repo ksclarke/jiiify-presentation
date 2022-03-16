@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3.services.auth;
+package info.freelibrary.iiif.presentation.v3.services;
 
 import static org.junit.Assert.assertEquals;
 
@@ -48,7 +48,7 @@ public class AuthTokenService1Test {
         final AuthTokenService1 service = new AuthTokenService1(myID.toString());
 
         assertEquals(myID, service.getID());
-        assertEquals(service.myProfile, service.getProfile().get());
+        assertEquals(AuthTokenService1.Profile.TOKEN_SERVICE, service.getProfile().get());
         assertEquals(expected(), found(service));
     }
 
@@ -60,7 +60,7 @@ public class AuthTokenService1Test {
         final AuthTokenService1 service = new AuthTokenService1(myID);
 
         assertEquals(myID, service.getID());
-        assertEquals(service.myProfile, service.getProfile().get());
+        assertEquals(AuthTokenService1.Profile.TOKEN_SERVICE, service.getProfile().get());
         assertEquals(expected(), found(service));
     }
 

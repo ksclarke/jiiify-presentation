@@ -22,28 +22,57 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 /**
  * An abstract service class that specific services can extend.
  */
-public abstract class AbstractService<T extends AbstractService<T>> implements Service<T> {
-
-    /**
-     * A list of services related to this service.
-     */
-    protected List<Service<?>> myServices;
+abstract class AbstractService<T extends Service<T>> implements Service<T> {
 
     /**
      * This service's type.
      */
-    protected String myType;
+    private String myType;
 
     /**
      * This service's ID.
      */
-    protected URI myID;
+    private URI myID;
+
+    /**
+     * A list of services related to this service.
+     */
+    private List<Service<?>> myServices;
 
     /**
      * An empty constructor for Jackson's deserialization process.
      */
     protected AbstractService() {
         // This is intentionally left empty
+    }
+
+    /**
+     * Creates a new service from the supplied ID.
+     *
+     * @param aID A service ID
+     */
+    protected AbstractService(final String aID) {
+        myID = URI.create(Objects.requireNonNull(aID));
+    }
+
+    /**
+     * Creates a new service from the supplied ID.
+     *
+     * @param aID A service ID
+     */
+    protected AbstractService(final URI aID) {
+        myID = Objects.requireNonNull(aID);
+    }
+
+    /**
+     * Creates a new service from the supplied ID.
+     *
+     * @param aID A service ID
+     * @param aServicesArray An array of services
+     */
+    protected AbstractService(final URI aID, final Service<?>... aServicesArray) {
+        myID = Objects.requireNonNull(aID);
+        myServices = Arrays.asList(aServicesArray);
     }
 
     @Override
@@ -67,11 +96,15 @@ public abstract class AbstractService<T extends AbstractService<T>> implements S
     }
 
     @Override
-    public abstract T setType(String aType);
+    @SuppressWarnings(JDK.UNCHECKED)
+    public T setType(final String aType) {
+        myType = aType;
+        return (T) this;
+    }
 
     @Override
+    @JsonGetter(JsonKeys.TYPE)
     public String getType() {
-        // Overrides the default method defined in the Service interface
         return StringUtils.trimToNull(myType) == null ? getClass().getSimpleName() : myType;
     }
 

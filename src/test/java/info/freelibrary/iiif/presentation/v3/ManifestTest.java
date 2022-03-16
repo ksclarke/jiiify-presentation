@@ -30,9 +30,9 @@ import info.freelibrary.iiif.presentation.v3.properties.Metadata;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
+import info.freelibrary.iiif.presentation.v3.services.ImageService3;
 import info.freelibrary.iiif.presentation.v3.services.OtherService3;
-import info.freelibrary.iiif.presentation.v3.services.image.ImageService3;
-import info.freelibrary.iiif.presentation.v3.services.image.ImageService3.Profile;
+import info.freelibrary.iiif.presentation.v3.services.ImageService3.Profile;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 import info.freelibrary.iiif.presentation.v3.utils.URIs;
 

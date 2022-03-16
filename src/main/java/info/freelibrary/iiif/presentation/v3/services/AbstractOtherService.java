@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
+import java.net.URI;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
@@ -33,6 +34,31 @@ abstract class AbstractOtherService<T extends AbstractOtherService<T>> extends A
      */
     @JsonProperty(JsonKeys.PROFILE)
     protected OtherService.Profile myProfile;
+
+    /**
+     * Creates a new unknown service.
+     */
+    protected AbstractOtherService() {
+        super();
+    }
+
+    /**
+     * Creates a service from the supplied ID.
+     *
+     * @param aID A service ID
+     */
+    protected AbstractOtherService(final String aID) {
+        super(aID);
+    }
+
+    /**
+     * Creates a service from the supplied ID.
+     *
+     * @param aID A service ID
+     */
+    protected AbstractOtherService(final URI aID) {
+        super(aID);
+    }
 
     @Override
     @JsonGetter(JsonKeys.PROFILE)

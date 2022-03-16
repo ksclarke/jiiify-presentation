@@ -8,7 +8,7 @@ import java.net.URI;
 import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.v3.properties.Label;
-import info.freelibrary.iiif.presentation.v3.services.image.ImageService3;
+import info.freelibrary.iiif.presentation.v3.services.ImageService3;
 
 /**
  * Image content test.

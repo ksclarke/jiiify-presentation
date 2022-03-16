@@ -4,6 +4,7 @@ package info.freelibrary.iiif.presentation.v3.services;
 import java.net.URI;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -16,32 +17,35 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 /**
  * A generic service class for other service implementations.
  */
-public class OtherService3 extends AbstractOtherService<OtherService3> implements OtherService<OtherService3> {
+public final class OtherService3 extends AbstractOtherService<OtherService3> implements OtherService<OtherService3> {
+
+    /**
+     * Creates a new service.
+     */
+    public OtherService3() {
+        super();
+    }
 
     /**
      * Creates a service for the supplied ID.
      *
-     * @param aServiceID A service ID in string form
+     * @param aID A service ID in string form
      * @param aType A service type
      */
-    public OtherService3(final String aServiceID, final String aType) {
-        super();
-
-        myID = URI.create(aServiceID);
-        myType = aType;
+    public OtherService3(final String aID, final String aType) {
+        super(aID);
+        setType(aType);
     }
 
     /**
      * Creates a service for the supplied URI.
      *
-     * @param aServiceID A service ID
+     * @param aID A service ID
      * @param aType A service type
      */
-    public OtherService3(final URI aServiceID, final String aType) {
-        super();
-
-        myID = aServiceID;
-        myType = aType;
+    public OtherService3(final URI aID, final String aType) {
+        super(aID);
+        setType(aType);
     }
 
     /**
@@ -78,8 +82,7 @@ public class OtherService3 extends AbstractOtherService<OtherService3> implement
     @Override
     @JsonIgnore
     public OtherService3 setType(final String aType) {
-        myType = aType;
-        return this;
+        return super.setType(aType);
     }
 
     /**
@@ -146,33 +149,37 @@ public class OtherService3 extends AbstractOtherService<OtherService3> implement
      */
     @JsonValue
     protected Object toJsonValue() {
-        if (myID != null) {
-            final LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+        final LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+        final URI id = getID();
+        final List<Service<?>> services;
+        final String type;
 
-            if (myID != null) {
-                map.put(JsonKeys.ID, myID);
-            }
-
-            if (myType != null) {
-                map.put(JsonKeys.TYPE, myType);
-            }
-
-            if (myProfile != null) {
-                map.put(JsonKeys.PROFILE, myProfile);
-            }
-
-            if (myFormat != null) {
-                map.put(JsonKeys.FORMAT, getFormat());
-            }
-
-            if (myServices != null && myServices.size() > 0) {
-                map.put(JsonKeys.SERVICE, myServices);
-            }
-
-            return Collections.unmodifiableMap(map);
-        } else {
+        if (id == null) {
             return null;
         }
+
+        map.put(JsonKeys.ID, id);
+        type = getType();
+
+        if (type != OtherService3.class.getSimpleName()) {
+            map.put(JsonKeys.TYPE, type);
+        }
+
+        if (myProfile != null) {
+            map.put(JsonKeys.PROFILE, myProfile);
+        }
+
+        if (myFormat != null) {
+            map.put(JsonKeys.FORMAT, getFormat());
+        }
+
+        services = getServices();
+
+        if (services != null && !services.isEmpty()) {
+            map.put(JsonKeys.SERVICE, services);
+        }
+
+        return Collections.unmodifiableMap(map);
     }
 
     /**

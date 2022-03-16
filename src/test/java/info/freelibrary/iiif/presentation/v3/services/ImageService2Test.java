@@ -9,20 +9,31 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 
-import info.freelibrary.iiif.presentation.v3.services.image.ImageService2;
-import info.freelibrary.iiif.presentation.v3.services.image.ImageService2.Profile;
+import info.freelibrary.iiif.presentation.v3.services.ImageService2.Profile;
 
 /**
  * A ImageService2 test.
  */
 public class ImageService2Test {
 
+    /**
+     * Expected LEVEL_0 profile.
+     */
     private static final Profile LEVEL_0 = Profile.fromString("http://iiif.io/api/image/2/level0.json");
 
+    /**
+     * Expected LEVEL_1 profile.
+     */
     private static final Profile LEVEL_1 = Profile.fromString("http://iiif.io/api/image/2/level1.json");
 
+    /**
+     * Expected LEVEL_2 profile.
+     */
     private static final Profile LEVEL_2 = Profile.fromString("http://iiif.io/api/image/2/level2.json");
 
+    /**
+     * The ImageService2 ID.
+     */
     private URI myID;
 
     /**

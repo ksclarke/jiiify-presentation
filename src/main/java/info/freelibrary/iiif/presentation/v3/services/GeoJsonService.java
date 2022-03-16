@@ -31,8 +31,7 @@ public class GeoJsonService extends AbstractService<GeoJsonService> implements S
      * @param aID The ID of the item to retrieve GeoJSON information about
      */
     public GeoJsonService(final URI aID) {
-        super();
-        myID = aID;
+        super(aID);
     }
 
     @Override
@@ -50,8 +49,7 @@ public class GeoJsonService extends AbstractService<GeoJsonService> implements S
     @Override
     @JsonSetter(JsonKeys.TYPE)
     public GeoJsonService setType(final String aType) {
-        myType = aType;
-        return this;
+        return super.setType(aType);
     }
 
     /**
@@ -86,6 +84,7 @@ public class GeoJsonService extends AbstractService<GeoJsonService> implements S
 
     @Override
     public GeoJsonService setProfile(final String aProfile) {
-        return this; // intentionally a no-op, value is a constant
+        return this; // Intentionally a no-op, value is a constant
     }
+
 }

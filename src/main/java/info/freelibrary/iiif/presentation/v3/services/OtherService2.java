@@ -4,6 +4,7 @@ package info.freelibrary.iiif.presentation.v3.services;
 import java.net.URI;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -16,7 +17,14 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 /**
  * A generic service class for older service implementations that use @id and @type.
  */
-public class OtherService2 extends AbstractOtherService<OtherService2> implements OtherService<OtherService2> {
+public final class OtherService2 extends AbstractOtherService<OtherService2> implements OtherService<OtherService2> {
+
+    /**
+     * Creates a new service.
+     */
+    public OtherService2() {
+        super();
+    }
 
     /**
      * Creates a service for the supplied URI.
@@ -25,10 +33,8 @@ public class OtherService2 extends AbstractOtherService<OtherService2> implement
      * @param aType A service type
      */
     public OtherService2(final URI aServiceID, final String aType) {
-        super();
-
-        myID = aServiceID;
-        myType = aType;
+        super(aServiceID);
+        setType(aType);
     }
 
     /**
@@ -38,10 +44,8 @@ public class OtherService2 extends AbstractOtherService<OtherService2> implement
      * @param aType A service type
      */
     public OtherService2(final String aServiceID, final String aType) {
-        super();
-
-        myID = URI.create(aServiceID);
-        myType = aType;
+        super(aServiceID);
+        setType(aType);
     }
 
     /**
@@ -90,8 +94,7 @@ public class OtherService2 extends AbstractOtherService<OtherService2> implement
     @Override
     @JsonIgnore
     public OtherService2 setType(final String aType) {
-        myType = aType;
-        return this;
+        return super.setType(aType);
     }
 
     /**
@@ -137,33 +140,37 @@ public class OtherService2 extends AbstractOtherService<OtherService2> implement
      */
     @JsonValue
     protected Object toJsonValue() {
-        if (myID != null) {
-            final LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+        final LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+        final URI id = getID();
+        final List<Service<?>> services;
+        final String type;
 
-            if (myID != null) {
-                map.put(JsonKeys.V2_ID, myID);
-            }
-
-            if (myType != null) {
-                map.put(JsonKeys.V2_TYPE, myType);
-            }
-
-            if (myProfile != null) {
-                map.put(JsonKeys.PROFILE, myProfile);
-            }
-
-            if (myFormat != null) {
-                map.put(JsonKeys.FORMAT, getFormat());
-            }
-
-            if (myServices != null && myServices.size() > 0) {
-                map.put(JsonKeys.SERVICE, myServices);
-            }
-
-            return Collections.unmodifiableMap(map);
-        } else {
+        if (id == null) {
             return null;
         }
+
+        map.put(JsonKeys.V2_ID, id);
+        type = getType();
+
+        if (type != null) {
+            map.put(JsonKeys.V2_TYPE, type);
+        }
+
+        if (myProfile != null) {
+            map.put(JsonKeys.PROFILE, myProfile);
+        }
+
+        if (myFormat != null) {
+            map.put(JsonKeys.FORMAT, getFormat());
+        }
+
+        services = getServices();
+
+        if (services != null && !services.isEmpty()) {
+            map.put(JsonKeys.SERVICE, services);
+        }
+
+        return Collections.unmodifiableMap(map);
     }
 
     /**

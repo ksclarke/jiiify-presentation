@@ -9,8 +9,7 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 
-import info.freelibrary.iiif.presentation.v3.services.image.ImageService3;
-import info.freelibrary.iiif.presentation.v3.services.image.ImageService3.Profile;
+import info.freelibrary.iiif.presentation.v3.services.ImageService3.Profile;
 
 /**
  * A ImageService3 test.

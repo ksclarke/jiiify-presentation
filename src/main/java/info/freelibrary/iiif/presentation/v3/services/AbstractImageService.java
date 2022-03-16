@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3.services.image;
+package info.freelibrary.iiif.presentation.v3.services;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -17,7 +17,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.util.warnings.JDK;
 
 import info.freelibrary.iiif.presentation.v3.Service;
-import info.freelibrary.iiif.presentation.v3.services.AbstractService;
+import info.freelibrary.iiif.presentation.v3.services.image.ImageAPI;
+import info.freelibrary.iiif.presentation.v3.services.image.Size;
+import info.freelibrary.iiif.presentation.v3.services.image.Tile;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
@@ -73,10 +75,19 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
      * @param aID The ID of the service
      */
     AbstractImageService(final ImageService.Profile aProfile, final URI aID) {
-        super();
-
+        super(aID);
         myProfile = aProfile;
-        myID = aID;
+    }
+
+    /**
+     * Creates a new image service.
+     *
+     * @param aProfile An image service profile
+     * @param aID The ID of the service in string form
+     */
+    AbstractImageService(final ImageService.Profile aProfile, final String aID) {
+        super(aID);
+        myProfile = aProfile;
     }
 
     @Override
