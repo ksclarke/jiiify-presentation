@@ -14,8 +14,7 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 /**
  * A user mediated type of access service.
  */
-public class UserMediatedCookieService1<T extends UserMediatedCookieService1<T>>
-        extends AuthCookieService1<UserMediatedCookieService1<T>> {
+class UserMediatedCookieService1<T extends UserMediatedCookieService1<T>> extends AuthCookieService1<T> {
 
     /**
      * The label for this service.
@@ -96,7 +95,7 @@ public class UserMediatedCookieService1<T extends UserMediatedCookieService1<T>>
      */
     @JsonGetter(JsonKeys.LABEL)
     @JsonInclude(Include.NON_NULL)
-    public String getLabel() {
+    protected String getLabel() {
         return myLabel;
     }
 
@@ -107,7 +106,7 @@ public class UserMediatedCookieService1<T extends UserMediatedCookieService1<T>>
      */
     @JsonGetter(JsonKeys.CONFIRM_LABEL)
     @JsonInclude(Include.NON_NULL)
-    public String getConfirmLabel() {
+    protected String getConfirmLabel() {
         return myConfirmLabel;
     }
 
@@ -118,7 +117,7 @@ public class UserMediatedCookieService1<T extends UserMediatedCookieService1<T>>
      */
     @JsonGetter(JsonKeys.HEADER)
     @JsonInclude(Include.NON_NULL)
-    public String getHeader() {
+    protected String getHeader() {
         return myHeader;
     }
 
@@ -129,7 +128,7 @@ public class UserMediatedCookieService1<T extends UserMediatedCookieService1<T>>
      */
     @JsonGetter(JsonKeys.DESCRIPTION)
     @JsonInclude(Include.NON_NULL)
-    public String getDescription() {
+    protected String getDescription() {
         return myDescription;
     }
 
@@ -140,7 +139,7 @@ public class UserMediatedCookieService1<T extends UserMediatedCookieService1<T>>
      * @return This service
      */
     @JsonSetter(JsonKeys.LABEL)
-    public UserMediatedCookieService1<T> setLabel(final String aLabel) {
+    protected UserMediatedCookieService1<T> setLabel(final String aLabel) {
         myLabel = aLabel;
         return this;
     }
@@ -152,7 +151,7 @@ public class UserMediatedCookieService1<T extends UserMediatedCookieService1<T>>
      * @return This service
      */
     @JsonSetter(JsonKeys.CONFIRM_LABEL)
-    public UserMediatedCookieService1<T> setConfirmLabel(final String aLabel) {
+    protected UserMediatedCookieService1<T> setConfirmLabel(final String aLabel) {
         myConfirmLabel = aLabel;
         return this;
     }
@@ -164,7 +163,7 @@ public class UserMediatedCookieService1<T extends UserMediatedCookieService1<T>>
      * @return This service
      */
     @JsonSetter(JsonKeys.HEADER)
-    public UserMediatedCookieService1<T> setHeader(final String aHeader) {
+    protected UserMediatedCookieService1<T> setHeader(final String aHeader) {
         myHeader = aHeader;
         return this;
     }
@@ -176,18 +175,9 @@ public class UserMediatedCookieService1<T extends UserMediatedCookieService1<T>>
      * @return This service
      */
     @JsonSetter(JsonKeys.DESCRIPTION)
-    public UserMediatedCookieService1<T> setDescription(final String aDescription) {
+    protected UserMediatedCookieService1<T> setDescription(final String aDescription) {
         myDescription = aDescription;
         return this;
     }
 
-    @Override
-    public UserMediatedCookieService1<T> setProfile(final String aProfile) {
-        return (UserMediatedCookieService1<T>) super.setProfile(aProfile);
-    }
-
-    @Override
-    public UserMediatedCookieService1<T> setProfile(final AuthService.Profile aProfile) {
-        return (UserMediatedCookieService1<T>) super.setProfile(aProfile);
-    }
 }

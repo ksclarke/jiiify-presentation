@@ -227,8 +227,8 @@
           <stylesheetfile>stylesheet.css</stylesheetfile>
           <links>
             <link>https://javadoc.io/doc/info.freelibrary/freelib-utils/${freelib.utils.version}/apidocs</link>
-            <!-- <link>https://vertx.io/docs/apidocs/</link> -->
           </links>
+          <quiet>true</quiet>
         </configuration>
       </plugin>
       <plugin>

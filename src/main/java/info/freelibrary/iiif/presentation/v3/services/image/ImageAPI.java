@@ -58,7 +58,40 @@ public final class ImageAPI {
      */
     public enum ImageFormat {
 
-        JPG("jpg"), PNG("png"), TIF("tif"), GIF("gif"), JP2("jp2"), PDF("pdf"), WEBP("webp");
+        /**
+         * JPEG image format.
+         */
+        JPG("jpg"),
+
+        /**
+         * PNG image format.
+         */
+        PNG("png"),
+
+        /**
+         * TIFF image format.
+         */
+        TIF("tif"),
+
+        /**
+         * GIF image format.
+         */
+        GIF("gif"),
+
+        /**
+         * JPEG-2000 image format.
+         */
+        JP2("jp2"),
+
+        /**
+         * PDF format.
+         */
+        PDF("pdf"),
+
+        /**
+         * WEBP image format.
+         */
+        WEBP("webp");
 
         /**
          * The image format's logger.
@@ -111,7 +144,25 @@ public final class ImageAPI {
      */
     public enum ImageQuality {
 
-        COLOR("color"), GRAY("gray"), BITONAL("bitonal"), DEFAULT("default");
+        /**
+         * Color image quality.
+         */
+        COLOR("color"),
+
+        /**
+         * Grey image quality.
+         */
+        GRAY("gray"),
+
+        /**
+         * Bitonal image quality.
+         */
+        BITONAL("bitonal"),
+
+        /**
+         * Default image quality.
+         */
+        DEFAULT("default");
 
         /**
          * The image quality's logger.

@@ -74,7 +74,7 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
      * @param aProfile An image service profile
      * @param aID The ID of the service
      */
-    AbstractImageService(final ImageService.Profile aProfile, final URI aID) {
+    protected AbstractImageService(final ImageService.Profile aProfile, final URI aID) {
         super(aID);
         myProfile = aProfile;
     }
@@ -85,7 +85,7 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
      * @param aProfile An image service profile
      * @param aID The ID of the service in string form
      */
-    AbstractImageService(final ImageService.Profile aProfile, final String aID) {
+    protected AbstractImageService(final ImageService.Profile aProfile, final String aID) {
         super(aID);
         myProfile = aProfile;
     }
@@ -147,11 +147,6 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
         return qualities;
     }
 
-    /**
-     * Gets the image service's protocol.
-     *
-     * @return The image service's protocol
-     */
     @Override
     @JsonGetter(ImageAPI.PROTOCOL)
     @JsonInclude(Include.NON_NULL)
@@ -201,12 +196,6 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
         return (T) this;
     }
 
-    /**
-     * Whether a protocol should be used.
-     *
-     * @param aProtocolFlag Whether the protocol should be used
-     * @return The image service
-     */
     @Override
     @JsonIgnore
     @SuppressWarnings({ JDK.UNCHECKED })

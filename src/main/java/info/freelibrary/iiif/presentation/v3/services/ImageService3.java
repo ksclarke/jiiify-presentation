@@ -3,6 +3,7 @@ package info.freelibrary.iiif.presentation.v3.services;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,17 +30,14 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 public class ImageService3 extends AbstractImageService<ImageService3> implements ImageService<ImageService3> {
 
     /**
+     * The ImageService3 logger.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImageService3.class, MessageCodes.BUNDLE);
+
+    /**
      * The default profile level for the image info service
      */
     private static final ImageService3.Profile DEFAULT_LEVEL = ImageService3.Profile.LEVEL_TWO;
-
-    /**
-     * Creates a new IIIF Image API 3 service for Jackson's processing.
-     */
-    @SuppressWarnings(Eclipse.UNUSED)
-    private ImageService3() {
-        super();
-    }
 
     /**
      * Creates a new IIIF Image API 3 service.
@@ -79,6 +77,14 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
         super(DEFAULT_LEVEL, aID);
     }
 
+    /**
+     * Creates a new IIIF Image API 3 service for Jackson's processing.
+     */
+    @SuppressWarnings(Eclipse.UNUSED)
+    private ImageService3() {
+        super();
+    }
+
     @Override
     @JsonGetter(JsonKeys.ID)
     public URI getID() {
@@ -88,8 +94,14 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
     @Override
     @JsonSetter(JsonKeys.TYPE)
     public ImageService3 setType(final String aType) {
-        // intentionally no-op; it's a constant for the class
+        // Intentionally no-op; it's a constant for the class
         return this;
+    }
+
+    @Override
+    @JsonGetter(JsonKeys.TYPE)
+    public String getType() {
+        return getClass().getSimpleName();
     }
 
     @Override
@@ -142,6 +154,12 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
     public ImageService3 setProfile(final String aProfile) {
         myProfile = ImageService3.Profile.fromString(aProfile);
         return this;
+    }
+
+    @Override
+    @JsonGetter(JsonKeys.PROFILE)
+    public Optional<Service.Profile> getProfile() {
+        return super.getProfile();
     }
 
     @Override
@@ -201,6 +219,13 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
     }
 
     @Override
+    @JsonGetter(ImageAPI.PROTOCOL)
+    @JsonInclude(Include.NON_NULL)
+    public URI getProtocol() {
+        return super.getProtocol();
+    }
+
+    @Override
     @JsonSetter(JsonKeys.SERVICE)
     public ImageService3 setServices(final List<Service<?>> aServiceList) {
         return super.setServices(aServiceList);
@@ -255,11 +280,6 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
          * http://iiif.io/api/image/3/level2.json
          */
         LEVEL_TWO("level2");
-
-        /**
-         * A logger for the image service profile.
-         */
-        private static final Logger LOGGER = LoggerFactory.getLogger(ImageService3.Profile.class, MessageCodes.BUNDLE);
 
         /**
          * My image service profile.

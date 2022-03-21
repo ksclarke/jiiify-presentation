@@ -91,4 +91,43 @@ abstract class AbstractOtherService<T extends AbstractOtherService<T>> extends A
         return (T) this;
     }
 
+    /**
+     * An other service profile.
+     */
+    public static class Profile implements OtherService.Profile {
+
+        /**
+         * The string representation of the OtherService profile.
+         */
+        private final String myProfile;
+
+        /**
+         * Creates a profile from the supplied string.
+         *
+         * @param aProfile A profile string
+         */
+        Profile(final String aProfile) {
+            myProfile = aProfile;
+        }
+
+        @Override
+        public String string() {
+            return myProfile;
+        }
+
+        @Override
+        public URI uri() {
+            return URI.create(myProfile);
+        }
+
+        /**
+         * Creates a profile from the supplied string.
+         *
+         * @param aProfile A string form of a service profile
+         * @return The OtherService profile for the supplied string value
+         */
+        public static Profile fromString(final String aProfile) {
+            return new Profile(aProfile);
+        }
+    }
 }

@@ -166,7 +166,7 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
         final String profile = aNode.get(JsonKeys.PROFILE).asText(); // To get here, presence has been confirmed
         final JsonNode failureDescription = aNode.get(JsonKeys.FAILURE_DESCRIPTION);
         final JsonNode failureHeader = aNode.get(JsonKeys.FAILURE_HEADER);
-        final AuthCookieService1 cookieService;
+        final AuthCookieService1<?> cookieService;
 
         if (AuthCookieService1.Profile.LOGIN.string().equals(profile) ||
                 AuthCookieService1.Profile.CLICKTHROUGH.string().equals(profile)) {
@@ -189,7 +189,7 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
             cookieService = wrapper.setDescription(aNode.get(JsonKeys.DESCRIPTION)).getService();
         } else if (AuthCookieService1.Profile.EXTERNAL.string().equals(profile)) {
             cookieService = new ExternalCookieService1();
-        } else if (KioskCookieService1.Profile.KIOSK.string().equals(profile)) {
+        } else if (AuthCookieService1.Profile.KIOSK.string().equals(profile)) {
             cookieService = new KioskCookieService1(aID);
         } else {
             throw new JsonParseException(aParser,
@@ -244,7 +244,7 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
         getValue(aNode.get(JsonKeys.PROFILE)).ifPresent(value -> otherService.setProfile(value));
         getValue(aNode.get(JsonKeys.FORMAT)).ifPresent(value -> otherService.setFormat(value));
 
-        return (Service<?>) otherService;
+        return otherService;
     }
 
     /**
@@ -526,7 +526,7 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
          *
          * @return An underlying service
          */
-        private AuthCookieService1 getService() {
+        private AuthCookieService1<?> getService() {
             if (myClickthroughService != null) {
                 return myClickthroughService;
             }

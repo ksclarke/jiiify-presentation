@@ -19,7 +19,7 @@ public interface AuthService<T extends AuthService<T>> extends Service<T> {
     T setProfile(Profile aProfile);
 
     /**
-     * Interface for {@link AuthService} profiles.
+     * The interface for {@link AuthService} profiles.
      */
     interface Profile extends Service.Profile {
 

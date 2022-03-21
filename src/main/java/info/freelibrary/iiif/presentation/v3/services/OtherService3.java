@@ -54,8 +54,9 @@ public final class OtherService3 extends AbstractOtherService<OtherService3> imp
      * @param aProfile A profile URI for this service
      * @return This service
      */
+    @Override
     @JsonIgnore
-    public OtherService3 setProfile(final OtherService3.Profile aProfile) {
+    public OtherService3 setProfile(final OtherService.Profile aProfile) {
         super.setProfile(aProfile);
         return this;
     }
@@ -69,7 +70,7 @@ public final class OtherService3 extends AbstractOtherService<OtherService3> imp
     @Override
     @JsonIgnore
     public OtherService3 setProfile(final String aProfile) {
-        super.setProfile(Profile.fromString(aProfile));
+        super.setProfile(AbstractOtherService.Profile.fromString(aProfile));
         return this;
     }
 
@@ -142,6 +143,44 @@ public final class OtherService3 extends AbstractOtherService<OtherService3> imp
         return super.setID(aID);
     }
 
+    @Override
+    @JsonIgnore
+    public URI getID() {
+        return super.getID();
+    }
+
+    /**
+     * Gets the services related to this other service.
+     *
+     * @return A list of services
+     */
+    @Override
+    public List<Service<?>> getServices() {
+        return super.getServices();
+    }
+
+    /**
+     * Sets the services related to this other service.
+     *
+     * @param aServiceList A list of related services
+     * @return This service
+     */
+    @Override
+    public OtherService3 setServices(final List<Service<?>> aServiceList) {
+        return super.setServices(aServiceList);
+    }
+
+    /**
+     * Sets the services related to this other service.
+     *
+     * @param aServicesArray An array of related services
+     * @return This service
+     */
+    @Override
+    public OtherService3 setServices(final Service<?>... aServicesArray) {
+        return super.setServices(aServicesArray);
+    }
+
     /**
      * Converts the service into its JSON value.
      *
@@ -180,45 +219,5 @@ public final class OtherService3 extends AbstractOtherService<OtherService3> imp
         }
 
         return Collections.unmodifiableMap(map);
-    }
-
-    /**
-     * An other service (v3) profile.
-     */
-    public static final class Profile implements OtherService.Profile {
-
-        /**
-         * The profile string.
-         */
-        private final String myProfile;
-
-        /**
-         * Creates a profile from the supplied string.
-         *
-         * @param aProfile A string version of the profile
-         */
-        private Profile(final String aProfile) {
-            myProfile = aProfile;
-        }
-
-        @Override
-        public String string() {
-            return myProfile;
-        }
-
-        @Override
-        public URI uri() {
-            return URI.create(myProfile);
-        }
-
-        /**
-         * Creates a profile from the supplied string.
-         *
-         * @param aProfile A string form of a service profile
-         * @return The OtherService profile for the supplied string value
-         */
-        public static Profile fromString(final String aProfile) {
-            return new Profile(aProfile);
-        }
     }
 }

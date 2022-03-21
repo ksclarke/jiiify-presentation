@@ -3,6 +3,7 @@ package info.freelibrary.iiif.presentation.v3.services;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -31,20 +32,17 @@ public class ImageService2 extends AbstractImageService<ImageService2> implement
     /**
      * The context for this service.
      */
-    public static final URI CONTEXT = URI.create("http://iiif.io/api/image/2/context.json");
+    static final URI CONTEXT = URI.create("http://iiif.io/api/image/2/context.json");
+
+    /**
+     * The ImageService2 logger.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImageService2.class, MessageCodes.BUNDLE);
 
     /**
      * The default profile level for the image info service.
      */
     private static final ImageService2.Profile DEFAULT_LEVEL = ImageService2.Profile.LEVEL_TWO;
-
-    /**
-     * Creates a new IIIF Image API 2 service for Jackson's processing.
-     */
-    @SuppressWarnings(Eclipse.UNUSED)
-    private ImageService2() {
-        super();
-    }
 
     /**
      * Creates a new IIIF Image API 2 service.
@@ -84,6 +82,14 @@ public class ImageService2 extends AbstractImageService<ImageService2> implement
         super(DEFAULT_LEVEL, aID);
     }
 
+    /**
+     * Creates a new IIIF Image API 2 service for Jackson's processing.
+     */
+    @SuppressWarnings(Eclipse.UNUSED)
+    private ImageService2() {
+        super();
+    }
+
     @Override
     @JsonGetter(JsonKeys.V2_ID)
     public URI getID() {
@@ -93,15 +99,10 @@ public class ImageService2 extends AbstractImageService<ImageService2> implement
     @Override
     @JsonSetter(JsonKeys.V2_TYPE)
     public ImageService2 setType(final String aType) {
-        // intentionally no-op; it's a constant for the class
+        // Intentionally no-op; it's a constant for the class
         return this;
     }
 
-    /**
-     * Gets the service type.
-     *
-     * @return The service type
-     */
     @Override
     @JsonGetter(JsonKeys.V2_TYPE)
     public String getType() {
@@ -161,6 +162,12 @@ public class ImageService2 extends AbstractImageService<ImageService2> implement
     }
 
     @Override
+    @JsonGetter(JsonKeys.PROFILE)
+    public Optional<Service.Profile> getProfile() {
+        return super.getProfile();
+    }
+
+    @Override
     @JsonGetter(ImageAPI.SIZES)
     @JsonInclude(Include.NON_EMPTY)
     public List<Size> getSizes() {
@@ -214,6 +221,13 @@ public class ImageService2 extends AbstractImageService<ImageService2> implement
     @JsonIgnore
     public ImageService2 setProtocol(final boolean aProtocolFlag) {
         return super.setProtocol(aProtocolFlag);
+    }
+
+    @Override
+    @JsonGetter(ImageAPI.PROTOCOL)
+    @JsonInclude(Include.NON_NULL)
+    public URI getProtocol() {
+        return super.getProtocol();
     }
 
     @Override
@@ -271,11 +285,6 @@ public class ImageService2 extends AbstractImageService<ImageService2> implement
          * http://iiif.io/api/image/2/level2.json
          */
         LEVEL_TWO("http://iiif.io/api/image/2/level2.json");
-
-        /**
-         * The image service profile's logger.
-         */
-        private static final Logger LOGGER = LoggerFactory.getLogger(ImageService2.Profile.class, MessageCodes.BUNDLE);
 
         /**
          * The string form of the image service profile.

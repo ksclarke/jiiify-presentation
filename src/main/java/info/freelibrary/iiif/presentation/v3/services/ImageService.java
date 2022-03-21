@@ -122,7 +122,7 @@ public interface ImageService<T extends ImageService<T>> extends Service<T> {
     List<Size> getSizes();
 
     /**
-     * Interface for {@link ImageService} profiles.
+     * The interface for {@link ImageService} profiles.
      */
     interface Profile extends Service.Profile {
 
