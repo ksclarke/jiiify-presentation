@@ -13,8 +13,8 @@
 
   <licenses>
     <license>
-      <name>The 3-Clause BSD License</name>
-      <url>https://opensource.org/licenses/BSD-3-Clause</url>
+      <name>Mozilla Public License 2.0 (MPL-2.0)</name>
+      <url>https://opensource.org/licenses/MPL-2.0</url>
     </license>
   </licenses>
 
@@ -83,7 +83,7 @@
 
     <!-- Plugin related versions -->
     <maven.jar.plugin.version>3.2.0</maven.jar.plugin.version>
-    <freelib.maven.version>0.3.0</freelib.maven.version>
+    <freelib.maven.version>0.3.1</freelib.maven.version>
     <vertx.plugin.version>1.0.24</vertx.plugin.version>
 
     <!-- Test related versions -->
