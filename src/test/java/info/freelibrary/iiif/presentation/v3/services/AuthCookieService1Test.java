@@ -11,7 +11,6 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import info.freelibrary.iiif.presentation.v3.services.AuthCookieService1.Profile;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
@@ -49,7 +48,7 @@ public class AuthCookieService1Test {
         final LoginCookieService1 service = new LoginCookieService1(myID, UUID.randomUUID().toString());
         final String context = JSON.valueToTree(service).get(JsonKeys.CONTEXT).asText();
 
-        assertEquals(AuthCookieService1.CONTEXT, context);
+        assertEquals(AbstractCookieService.AUTH_COOKIE_SERVICE_1_CONTEXT, context);
     }
 
     /**
@@ -75,7 +74,7 @@ public class AuthCookieService1Test {
      */
     @Test
     public final void testProfile() throws JsonProcessingException {
-        assertEquals(Profile.KIOSK, new KioskCookieService1(myID).getProfile().get());
+        assertEquals(AuthCookieService1.Profile.KIOSK, new KioskCookieService1(myID).getProfile().get());
     }
 
     /**

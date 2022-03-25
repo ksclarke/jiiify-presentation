@@ -144,7 +144,8 @@ public class VideoContent extends AbstractContentResource<VideoContent>
     }
 
     @Override
-    public VideoContent setServices(final Service<?>... aServiceArray) {
+    @SafeVarargs
+    public final VideoContent setServices(final Service<?>... aServiceArray) {
         return (VideoContent) super.setServices(aServiceArray);
     }
 

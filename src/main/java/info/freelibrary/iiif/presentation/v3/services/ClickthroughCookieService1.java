@@ -7,11 +7,14 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+import info.freelibrary.iiif.presentation.v3.JsonParsingException;
 import info.freelibrary.iiif.presentation.v3.Service;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
@@ -19,7 +22,8 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  * An access cookie service that uses the click-through pattern. With this pattern, the user will be required to click a
  * button within the client using content provided in the service description.
  */
-public class ClickthroughCookieService1 extends UserMediatedCookieService1<ClickthroughCookieService1> {
+public class ClickthroughCookieService1 extends UserMediatedCookieService1<ClickthroughCookieService1>
+        implements AuthCookieService1<ClickthroughCookieService1> {
 
     /**
      * The logger for ClickthroughCookieService1.
@@ -53,6 +57,7 @@ public class ClickthroughCookieService1 extends UserMediatedCookieService1<Click
      * @param aLabel A label of the service
      * @param aServicesArray A varargs for services related to this access cookie service
      */
+    @SafeVarargs
     public ClickthroughCookieService1(final String aID, final String aLabel, final Service<?>... aServicesArray) {
         super(AuthCookieService1.Profile.CLICKTHROUGH, aID, aLabel, aServicesArray);
     }
@@ -64,6 +69,7 @@ public class ClickthroughCookieService1 extends UserMediatedCookieService1<Click
      * @param aLabel A label of the service
      * @param aServicesArray A varargs for services related to this access cookie service
      */
+    @SafeVarargs
     public ClickthroughCookieService1(final URI aID, final String aLabel, final Service<?>... aServicesArray) {
         super(AuthCookieService1.Profile.CLICKTHROUGH, aID, aLabel, aServicesArray);
     }
@@ -109,16 +115,6 @@ public class ClickthroughCookieService1 extends UserMediatedCookieService1<Click
     @Override
     public ClickthroughCookieService1 setType(final String aType) {
         return (ClickthroughCookieService1) super.setType(aType);
-    }
-
-    /**
-     * Gets the click-through cookie service type.
-     *
-     * @return A service type
-     */
-    @Override
-    public String getType() {
-        return super.getType();
     }
 
     /**
@@ -227,7 +223,8 @@ public class ClickthroughCookieService1 extends UserMediatedCookieService1<Click
      * @return This service
      */
     @Override
-    public ClickthroughCookieService1 setServices(final Service<?>... aServiceArray) {
+    @SafeVarargs
+    public final ClickthroughCookieService1 setServices(final Service<?>... aServiceArray) {
         return (ClickthroughCookieService1) super.setServices(aServiceArray);
     }
 
@@ -331,5 +328,19 @@ public class ClickthroughCookieService1 extends UserMediatedCookieService1<Click
     @JsonGetter(JsonKeys.DESCRIPTION)
     public String getDescription() {
         return super.getDescription();
+    }
+
+    /**
+     * Outputs a string representation of the click-through cookie service. The content of the string is marked up in
+     * JSON.
+     */
+    @Override
+    public String toString() {
+        try {
+            return JSON.getWriter(ClickthroughCookieService1.class).writeValueAsString(this);
+        } catch (final JsonProcessingException details) {
+            // RuntimeException: this shouldn't fail
+            throw new JsonParsingException(details);
+        }
     }
 }

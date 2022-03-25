@@ -14,7 +14,7 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 /**
  * A user mediated type of access service.
  */
-class UserMediatedCookieService1<T extends UserMediatedCookieService1<T>> extends AuthCookieService1<T> {
+class UserMediatedCookieService1<T extends UserMediatedCookieService1<T>> extends AbstractCookieService<T> {
 
     /**
      * The label for this service.
@@ -43,7 +43,8 @@ class UserMediatedCookieService1<T extends UserMediatedCookieService1<T>> extend
      * @param aID A service ID in string form
      * @param aLabel A service label
      */
-    protected UserMediatedCookieService1(final Profile aProfile, final String aID, final String aLabel) {
+    protected UserMediatedCookieService1(final AuthCookieService1.Profile aProfile, final String aID,
+            final String aLabel) {
         super(aProfile, aID);
         myLabel = aLabel;
     }
@@ -55,7 +56,8 @@ class UserMediatedCookieService1<T extends UserMediatedCookieService1<T>> extend
      * @param aID A service ID
      * @param aLabel A service label
      */
-    protected UserMediatedCookieService1(final Profile aProfile, final URI aID, final String aLabel) {
+    protected UserMediatedCookieService1(final AuthCookieService1.Profile aProfile, final URI aID,
+            final String aLabel) {
         super(aProfile, aID);
         myLabel = aLabel;
     }
@@ -68,8 +70,8 @@ class UserMediatedCookieService1<T extends UserMediatedCookieService1<T>> extend
      * @param aLabel A service label
      * @param aServicesArray An array of services
      */
-    protected UserMediatedCookieService1(final Profile aProfile, final String aID, final String aLabel,
-            final Service<?>... aServicesArray) {
+    protected UserMediatedCookieService1(final AuthCookieService1.Profile aProfile, final String aID,
+            final String aLabel, final Service<?>... aServicesArray) {
         super(aProfile, aID, aServicesArray);
         myLabel = aLabel;
     }
@@ -82,7 +84,7 @@ class UserMediatedCookieService1<T extends UserMediatedCookieService1<T>> extend
      * @param aLabel A service label
      * @param aServicesArray An array of services
      */
-    protected UserMediatedCookieService1(final Profile aProfile, final URI aID, final String aLabel,
+    protected UserMediatedCookieService1(final AuthCookieService1.Profile aProfile, final URI aID, final String aLabel,
             final Service<?>... aServicesArray) {
         super(aProfile, aID, aServicesArray);
         myLabel = aLabel;

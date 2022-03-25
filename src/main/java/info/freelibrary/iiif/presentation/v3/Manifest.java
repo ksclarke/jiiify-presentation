@@ -37,7 +37,6 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavi
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-import info.freelibrary.iiif.presentation.v3.utils.URIs;
 
 /**
  * The overall description of the structure and properties of the digital representation of an object. It carries
@@ -61,7 +60,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     /**
      * The manifest's contexts.
      */
-    private final List<URI> myContexts = Stream.of(URIs.CONTEXT_URI).collect(Collectors.toList());
+    private final List<URI> myContexts = Stream.of(PRESENTATION_CONTEXT_URI).collect(Collectors.toList());
 
     /**
      * The manifest's annotations.
@@ -295,9 +294,8 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     public List<URI> getContexts() {
         if (myContexts.isEmpty()) {
             return null;
-        } else {
-            return Collections.unmodifiableList(myContexts);
         }
+        return Collections.unmodifiableList(myContexts);
     }
 
     /**
@@ -307,7 +305,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      */
     public Manifest clearContexts() {
         myContexts.clear();
-        myContexts.add(URIs.CONTEXT_URI);
+        myContexts.add(PRESENTATION_CONTEXT_URI);
 
         return this;
     }
@@ -321,8 +319,8 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @throws UnsupportedOperationException If the required context is supplied to be removed
      */
     public boolean removeContext(final URI aContextURI) {
-        if (URIs.CONTEXT_URI.equals(aContextURI)) {
-            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_039, URIs.CONTEXT_URI));
+        if (PRESENTATION_CONTEXT_URI.equals(aContextURI)) {
+            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_039, PRESENTATION_CONTEXT_URI));
         }
 
         return myContexts.remove(aContextURI);
@@ -335,7 +333,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      */
     @JsonIgnore
     public URI getContext() {
-        return URIs.CONTEXT_URI;
+        return PRESENTATION_CONTEXT_URI;
     }
 
     /**
@@ -350,7 +348,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
         for (final URI uri : aContextArray) {
             Objects.requireNonNull(uri, MessageCodes.JPA_007);
 
-            if (!URIs.CONTEXT_URI.equals(uri)) {
+            if (!PRESENTATION_CONTEXT_URI.equals(uri)) {
                 myContexts.add(uri);
             }
         }
@@ -371,7 +369,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
         for (final String uri : aContextArray) {
             Objects.requireNonNull(uri, MessageCodes.JPA_007);
 
-            if (!URIs.CONTEXT_URI.toString().equals(uri)) {
+            if (!PRESENTATION_CONTEXT_URI.toString().equals(uri)) {
                 myContexts.add(URI.create(uri));
             }
         }
@@ -541,7 +539,8 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     @Override
-    public Manifest setServices(final Service<?>... aServiceArray) {
+    @SafeVarargs
+    public final Manifest setServices(final Service<?>... aServiceArray) {
         return (Manifest) super.setServices(aServiceArray);
     }
 
@@ -557,7 +556,8 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @return The manifest
      */
     @JsonIgnore
-    public Manifest setServiceDefinitions(final Service<?>... aServicesArray) {
+    @SafeVarargs
+    public final Manifest setServiceDefinitions(final Service<?>... aServicesArray) {
         return setServiceDefinitions(Arrays.asList(aServicesArray));
     }
 
@@ -782,11 +782,10 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
         } else if (aObject instanceof List<?>) {
             final List<?> genericList = (List<?>) aObject;
 
-            if (!genericList.isEmpty() && genericList.get(0).getClass().equals(String.class)) {
-                setContexts(genericList);
-            } else {
+            if (genericList.isEmpty() || !genericList.get(0).getClass().equals(String.class)) {
                 throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_113));
             }
+            setContexts(genericList);
         } else {
             throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_113));
         }
@@ -805,7 +804,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
         for (int index = 0; index < aContextList.size(); index++) {
             final URI context = URI.create((String) aContextList.get(index));
 
-            if (URIs.CONTEXT_URI.equals(context)) {
+            if (PRESENTATION_CONTEXT_URI.equals(context)) {
                 indices.add(index); // We may have more than one required context in supplied list
 
                 if (indices.size() == DEFAULT_CONTEXT_COUNT) { // Only keep one if this is the case
@@ -823,7 +822,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
 
         myContexts.clear();
         myContexts.addAll(contextList);
-        myContexts.add(URIs.CONTEXT_URI); // Add required context at end
+        myContexts.add(PRESENTATION_CONTEXT_URI); // Add required context at end
     }
 
     /**
@@ -836,11 +835,11 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     private Object getJsonContext() {
         if (myContexts.size() == DEFAULT_CONTEXT_COUNT) {
             return myContexts.get(0);
-        } else if (!myContexts.isEmpty()) {
-            return myContexts;
-        } else {
-            return null;
         }
+        if (!myContexts.isEmpty()) {
+            return myContexts;
+        }
+        return null;
     }
 
     /**
@@ -853,15 +852,19 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
 
         @Override
         public int compare(final U aFirstURI, final U aSecondURI) {
-            if (URIs.CONTEXT_URI.equals(aFirstURI) && URIs.CONTEXT_URI.equals(aSecondURI)) {
+            if (PRESENTATION_CONTEXT_URI.equals(aFirstURI) && PRESENTATION_CONTEXT_URI.equals(aSecondURI)) {
                 return 0;
-            } else if (URIs.CONTEXT_URI.equals(aFirstURI)) {
-                return 1;
-            } else if (URIs.CONTEXT_URI.equals(aSecondURI)) {
-                return -1;
-            } else {
-                return 0; // We leave all non-required contexts where they are
             }
+
+            if (PRESENTATION_CONTEXT_URI.equals(aFirstURI)) {
+                return 1;
+            }
+
+            if (PRESENTATION_CONTEXT_URI.equals(aSecondURI)) {
+                return -1;
+            }
+
+            return 0; // We leave all non-required contexts where they are
         }
 
     }

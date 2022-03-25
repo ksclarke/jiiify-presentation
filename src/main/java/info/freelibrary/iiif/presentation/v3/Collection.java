@@ -39,7 +39,6 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.CollectionBeha
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-import info.freelibrary.iiif.presentation.v3.utils.URIs;
 
 /**
  * An ordered list of {@link Manifest}s and/or {@link Collection}s. Collections allow easy advertising and browsing of
@@ -224,7 +223,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      */
     @JsonGetter(JsonKeys.CONTEXT)
     public URI getContext() {
-        return URIs.CONTEXT_URI;
+        return PRESENTATION_CONTEXT_URI;
     }
 
     /**
@@ -234,7 +233,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      */
     @JsonSetter(JsonKeys.CONTEXT)
     private void setContext(final String aContext) {
-        if (!URIs.CONTEXT_URI.equals(URI.create(aContext))) {
+        if (!PRESENTATION_CONTEXT_URI.equals(URI.create(aContext))) {
             throw new I18nRuntimeException(MessageCodes.JPA_037, aContext);
         }
     }
@@ -310,7 +309,8 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     }
 
     @Override
-    public Collection setServices(final Service<?>... aServiceArray) {
+    @SafeVarargs
+    public final Collection setServices(final Service<?>... aServiceArray) {
         return (Collection) super.setServices(aServiceArray);
     }
 
@@ -326,7 +326,8 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      * @return The collection document
      */
     @JsonIgnore
-    public Collection setServiceDefinitions(final Service<?>... aServicesArray) {
+    @SafeVarargs
+    public final Collection setServiceDefinitions(final Service<?>... aServicesArray) {
         return setServiceDefinitions(Arrays.asList(aServicesArray));
     }
 

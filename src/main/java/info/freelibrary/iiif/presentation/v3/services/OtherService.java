@@ -7,9 +7,9 @@ import info.freelibrary.iiif.presentation.v3.MediaType;
 import info.freelibrary.iiif.presentation.v3.Service;
 
 /**
- * A service for which there isn't yet a Jiiify Presentation implementation.
+ * An interface for other service implementations.
  *
- * @param <T> A type of service
+ * @param <T> A type of other service
  */
 public interface OtherService<T extends OtherService<T>> extends Service<T> {
 
@@ -56,7 +56,7 @@ public interface OtherService<T extends OtherService<T>> extends Service<T> {
     T setFormat(MediaType aMediaType);
 
     /**
-     * A profile for other services.
+     * An interface for {@link OtherService} profiles.
      */
     interface Profile extends Service.Profile {
 

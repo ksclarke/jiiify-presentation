@@ -47,14 +47,20 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
 
     /**
-     * The <code>serialVersionUID</code> for ServiceDeserializer.
-     */
-    private static final long serialVersionUID = 1840979246965623150L;
-
-    /**
      * The logger for the service deserializer.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(ServiceDeserializer.class, MessageCodes.BUNDLE);
+
+    /**
+     * Context for the GeoJsonService service. Repeating this here is a temporary workaround to avoid making the context
+     * field in the service itself public.
+     */
+    private static final String GEOJSON_CONTEXT = "http://geojson.org/geojson-ld/geojson-context.jsonld";
+
+    /**
+     * The <code>serialVersionUID</code> for ServiceDeserializer.
+     */
+    private static final long serialVersionUID = 1840979246965623150L;
 
     /**
      * Creates a new metadata deserializer.
@@ -88,8 +94,8 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
      * @param aNode A JSON node representing a service
      * @return A service
      */
-    @SuppressWarnings(PMD.CYCLOMATIC_COMPLEXITY)
-    private Service<?> deserializeServiceNode(final JsonParser aParser, final JsonNode aNode) // NOPMD
+    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY, "PMD.CyclomaticComplexity" })
+    private Service<?> deserializeServiceNode(final JsonParser aParser, final JsonNode aNode)
             throws JsonProcessingException {
         final Service<?> service;
 
@@ -121,7 +127,7 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
             } else {
                 final JsonNode contextNode = aNode.get(JsonKeys.CONTEXT);
 
-                if (contextNode != null && GeoJsonService.CONTEXT.equals(contextNode.asText())) {
+                if (contextNode != null && GEOJSON_CONTEXT.equals(contextNode.asText())) {
                     service = deserializeGeoJsonService(aNode, id).setServices(services);
                 } else {
                     service = deserializeOtherService(aNode, id).setServices(services);
@@ -192,8 +198,7 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
         } else if (AuthCookieService1.Profile.KIOSK.string().equals(profile)) {
             cookieService = new KioskCookieService1(aID);
         } else {
-            throw new JsonParseException(aParser,
-                    LOGGER.getMessage(MessageCodes.JPA_123, AuthCookieService1.class.getSimpleName()),
+            throw new JsonParseException(aParser, LOGGER.getMessage(MessageCodes.JPA_123, "AbstractCookieService"),
                     aParser.getCurrentLocation());
         }
 
@@ -522,9 +527,9 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
         }
 
         /**
-         * Gets the wrapped service.
+         * Gets the wrapped auth service.
          *
-         * @return An underlying service
+         * @return An underlying auth service
          */
         private AuthCookieService1<?> getService() {
             if (myClickthroughService != null) {

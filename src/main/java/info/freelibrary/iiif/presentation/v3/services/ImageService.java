@@ -10,7 +10,9 @@ import info.freelibrary.iiif.presentation.v3.services.image.Size;
 import info.freelibrary.iiif.presentation.v3.services.image.Tile;
 
 /**
- * Interface for image services.
+ * An interface for image service implementations.
+ *
+ * @param <T> A type of image service
  */
 public interface ImageService<T extends ImageService<T>> extends Service<T> {
 
@@ -120,6 +122,14 @@ public interface ImageService<T extends ImageService<T>> extends Service<T> {
      * @return A list of sizes supported by the service
      */
     List<Size> getSizes();
+
+    /**
+     * Sets the image service profile.
+     *
+     * @param aProfile A image service profile
+     * @return This image service
+     */
+    T setProfile(ImageService.Profile aProfile);
 
     /**
      * The interface for {@link ImageService} profiles.

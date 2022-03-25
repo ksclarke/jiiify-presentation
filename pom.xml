@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>jiiify-presentation-v3</artifactId>
@@ -70,7 +69,7 @@
     <revision>0.0.0-SNAPSHOT</revision>
 
     <jackson.version>2.13.2</jackson.version>
-    <jackson.databind.version>2.13.2</jackson.databind.version>
+    <jackson.databind.version>2.13.2.1</jackson.databind.version>
     <freelib.utils.version>3.0.1</freelib.utils.version>
     <jsoup.version>1.14.3</jsoup.version>
     <combinatorics.version>3.3.0</combinatorics.version>
@@ -112,12 +111,12 @@
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>${jackson.databind.version}</version>
+      <artifactId>jackson-annotations</artifactId>
+      <version>${jackson.version}</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-annotations</artifactId>
+      <artifactId>jackson-databind</artifactId>
       <version>${jackson.databind.version}</version>
     </dependency>
     <dependency>

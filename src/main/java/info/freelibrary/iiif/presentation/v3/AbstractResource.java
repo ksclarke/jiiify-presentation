@@ -47,6 +47,11 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
 
     /**
+     * The IIIF Presentation context URI.
+     */
+    static final URI PRESENTATION_CONTEXT_URI = URI.create("http://iiif.io/api/presentation/3/context.json");
+
+    /**
      * The logger used by abstract resources.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractResource.class, MessageCodes.BUNDLE);

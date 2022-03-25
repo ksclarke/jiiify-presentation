@@ -1,0 +1,10 @@
+{
+  "@context" : "http://iiif.io/api/auth/1/context.json",
+  "@type" : "AuthCookieService1",
+  "profile" : "http://iiif.io/api/auth/1/external",
+  "service" : [ {
+    "@id" : "{}",
+    "@type" : "AuthTokenService1",
+    "profile" : "http://iiif.io/api/auth/1/token"
+  } ]
+}

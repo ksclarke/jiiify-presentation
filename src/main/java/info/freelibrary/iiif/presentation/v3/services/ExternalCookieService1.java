@@ -5,17 +5,22 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+import info.freelibrary.iiif.presentation.v3.JsonParsingException;
 import info.freelibrary.iiif.presentation.v3.Service;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * An access cookie service that uses the external pattern. With this pattern the user is expected to have already
  * acquired the appropriate cookie, and the access cookie service will not be used at all.
  */
-public class ExternalCookieService1 extends AuthCookieService1<ExternalCookieService1> {
+public class ExternalCookieService1 extends AbstractCookieService<ExternalCookieService1>
+        implements AuthCookieService1<ExternalCookieService1> {
 
     /**
      * The logger for ExternalCookieService1.
@@ -26,7 +31,7 @@ public class ExternalCookieService1 extends AuthCookieService1<ExternalCookieSer
      * Creates an access cookie service that uses the external pattern.
      */
     public ExternalCookieService1() {
-        super(Profile.EXTERNAL, (URI) null);
+        super(AuthCookieService1.Profile.EXTERNAL);
     }
 
     /**
@@ -34,8 +39,9 @@ public class ExternalCookieService1 extends AuthCookieService1<ExternalCookieSer
      *
      * @param aServicesArray An array of related services
      */
+    @SafeVarargs
     public ExternalCookieService1(final Service<?>... aServicesArray) {
-        super(Profile.EXTERNAL, (URI) null, aServicesArray);
+        super(AuthCookieService1.Profile.EXTERNAL, aServicesArray);
     }
 
     /**
@@ -79,16 +85,6 @@ public class ExternalCookieService1 extends AuthCookieService1<ExternalCookieSer
     @Override
     public ExternalCookieService1 setType(final String aType) {
         return (ExternalCookieService1) super.setType(aType);
-    }
-
-    /**
-     * Gets the external cookie service type.
-     *
-     * @return A service type
-     */
-    @Override
-    public String getType() {
-        return super.getType();
     }
 
     /**
@@ -197,7 +193,8 @@ public class ExternalCookieService1 extends AuthCookieService1<ExternalCookieSer
      * @return This service
      */
     @Override
-    public ExternalCookieService1 setServices(final Service<?>... aServiceArray) {
+    @SafeVarargs
+    public final ExternalCookieService1 setServices(final Service<?>... aServiceArray) {
         return (ExternalCookieService1) super.setServices(aServiceArray);
     }
 
@@ -209,5 +206,18 @@ public class ExternalCookieService1 extends AuthCookieService1<ExternalCookieSer
     @Override
     public List<Service<?>> getServices() {
         return super.getServices();
+    }
+
+    /**
+     * Outputs a string representation of the external cookie service. The content of the string is marked up in JSON.
+     */
+    @Override
+    public String toString() {
+        try {
+            return JSON.getWriter(ExternalCookieService1.class).writeValueAsString(this);
+        } catch (final JsonProcessingException details) {
+            // RuntimeException: this shouldn't fail
+            throw new JsonParsingException(details);
+        }
     }
 }

@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.warnings.JDK;
+import info.freelibrary.util.warnings.Eclipse;
 
 import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
@@ -21,7 +21,7 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 /**
  * An abstract class for authentication services.
  */
-abstract class AbstractAuthService<T extends AuthService<T>> extends AbstractService<T> implements AuthService<T> {
+abstract class AbstractAuthService<T extends AbstractAuthService<T>> extends AbstractService<AbstractAuthService<T>> {
 
     /**
      * The logger for AbstractAuthService.
@@ -57,44 +57,70 @@ abstract class AbstractAuthService<T extends AuthService<T>> extends AbstractSer
     }
 
     /**
-     * Creates a new auth service from the supplied ID.
+     * Creates a new auth service.
      *
-     * @param aID An ID
+     * @param aProfile An auth service profile
      */
-    AbstractAuthService(final URI aID) {
-        super(aID);
+    AbstractAuthService(final AuthService.Profile aProfile) {
+        super();
+        myProfile = Objects.requireNonNull(aProfile);
+    }
+
+    /**
+     * Creates a new auth service from the supplied profile and services.
+     *
+     * @param aProfile An auth service profile
+     * @param aServicesArray An array of related services
+     */
+    AbstractAuthService(final AuthService.Profile aProfile, final Service<?>... aServicesArray) {
+        super(aServicesArray);
+        myProfile = Objects.requireNonNull(aProfile);
     }
 
     /**
      * An empty constructor for Jackson's deserialization process.
      */
-    protected AbstractAuthService() {
+    @SuppressWarnings(Eclipse.UNUSED)
+    private AbstractAuthService() {
         super();
     }
 
     @Override
-    @SuppressWarnings(JDK.UNCHECKED)
     @JsonSetter(JsonKeys.V2_TYPE)
-    public T setType(final String aType) {
-        return (T) this; // intentionally no-op; it's a constant for the class
+    public AbstractAuthService<T> setType(final String aType) {
+        return this; // intentionally no-op; it's a constant for the class
     }
 
-    @Override
+    /**
+     * Gets the service profile.
+     *
+     * @return The service profile, if one exists
+     */
     @JsonGetter(JsonKeys.PROFILE)
     @JsonInclude(Include.NON_ABSENT)
     public Optional<Service.Profile> getProfile() {
         return Optional.ofNullable(myProfile);
     }
 
-    @Override
-    public T setProfile(final AuthService.Profile aProfile) {
+    /**
+     * Sets the service profile from a string.
+     *
+     * @param aProfile A service profile
+     * @return This service
+     */
+    public AbstractAuthService<T> setProfile(final String aProfile) {
         // Profile should be set at the subclass level; this method should be overridden
         throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_121, getClass()));
     }
 
-    @Override
-    public T setProfile(final String aProfile) {
-        // Profile should be set at the subclass level; this method should be overridden
-        throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_121, getClass()));
-    }
+    /**
+     * Sets the service profile from a string.
+     *
+     * @param aProfile A service profile
+     * @return This service
+     */
+    // public AbstractAuthService<T> setProfile(final AuthService.Profile aProfile) {
+    // // Profile should be set at the subclass level; this method should be overridden
+    // throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_121, getClass()));
+    // }
 }

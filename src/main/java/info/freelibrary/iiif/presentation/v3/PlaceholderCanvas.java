@@ -174,7 +174,8 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas>
     }
 
     @Override
-    public PlaceholderCanvas setServices(final Service<?>... aServiceArray) {
+    @SafeVarargs
+    public final PlaceholderCanvas setServices(final Service<?>... aServiceArray) {
         return (PlaceholderCanvas) super.setServices(aServiceArray);
     }
 

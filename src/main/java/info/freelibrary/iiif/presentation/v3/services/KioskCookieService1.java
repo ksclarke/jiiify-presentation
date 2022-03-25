@@ -5,17 +5,22 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+import info.freelibrary.iiif.presentation.v3.JsonParsingException;
 import info.freelibrary.iiif.presentation.v3.Service;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * An access cookie service that uses the kiosk pattern. Using this service, the user will not be required to interact
  * with an authentication system, the client is expected to use the access cookie service automatically.
  */
-public class KioskCookieService1 extends AuthCookieService1<KioskCookieService1> {
+public class KioskCookieService1 extends AbstractCookieService<KioskCookieService1>
+        implements AuthCookieService1<KioskCookieService1> {
 
     /**
      * The logger for KioskCookieService1.
@@ -28,7 +33,7 @@ public class KioskCookieService1 extends AuthCookieService1<KioskCookieService1>
      * @param aID An ID of the service
      */
     public KioskCookieService1(final String aID) {
-        super(Profile.KIOSK, aID);
+        super(AuthCookieService1.Profile.KIOSK, aID);
     }
 
     /**
@@ -37,7 +42,7 @@ public class KioskCookieService1 extends AuthCookieService1<KioskCookieService1>
      * @param aID An ID of the service
      */
     public KioskCookieService1(final URI aID) {
-        super(Profile.KIOSK, aID);
+        super(AuthCookieService1.Profile.KIOSK, aID);
     }
 
     /**
@@ -46,8 +51,9 @@ public class KioskCookieService1 extends AuthCookieService1<KioskCookieService1>
      * @param aID An ID of the service
      * @param aServicesArray A varargs of related services
      */
+    @SafeVarargs
     public KioskCookieService1(final String aID, final Service<?>... aServicesArray) {
-        super(Profile.KIOSK, aID, aServicesArray);
+        super(AuthCookieService1.Profile.KIOSK, aID, aServicesArray);
     }
 
     /**
@@ -56,8 +62,9 @@ public class KioskCookieService1 extends AuthCookieService1<KioskCookieService1>
      * @param aID An ID of the service
      * @param aServicesArray A varargs of related services
      */
+    @SafeVarargs
     public KioskCookieService1(final URI aID, final Service<?>... aServicesArray) {
-        super(Profile.KIOSK, aID, aServicesArray);
+        super(AuthCookieService1.Profile.KIOSK, aID, aServicesArray);
     }
 
     /**
@@ -101,16 +108,6 @@ public class KioskCookieService1 extends AuthCookieService1<KioskCookieService1>
     @Override
     public KioskCookieService1 setType(final String aType) {
         return (KioskCookieService1) super.setType(aType);
-    }
-
-    /**
-     * Gets the kiosk cookie service type.
-     *
-     * @return A service type
-     */
-    @Override
-    public String getType() {
-        return super.getType();
     }
 
     /**
@@ -218,7 +215,8 @@ public class KioskCookieService1 extends AuthCookieService1<KioskCookieService1>
      * @return This service
      */
     @Override
-    public KioskCookieService1 setServices(final Service<?>... aServiceArray) {
+    @SafeVarargs
+    public final KioskCookieService1 setServices(final Service<?>... aServiceArray) {
         return (KioskCookieService1) super.setServices(aServiceArray);
     }
 
@@ -230,5 +228,18 @@ public class KioskCookieService1 extends AuthCookieService1<KioskCookieService1>
     @Override
     public List<Service<?>> getServices() {
         return super.getServices();
+    }
+
+    /**
+     * Outputs a string representation of the kiosk cookie service. The content of the string is marked up in JSON.
+     */
+    @Override
+    public String toString() {
+        try {
+            return JSON.getWriter(KioskCookieService1.class).writeValueAsString(this);
+        } catch (final JsonProcessingException details) {
+            // RuntimeException: this shouldn't fail
+            throw new JsonParsingException(details);
+        }
     }
 }

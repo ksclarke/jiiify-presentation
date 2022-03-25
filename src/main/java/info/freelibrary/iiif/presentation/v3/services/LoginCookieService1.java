@@ -7,11 +7,14 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+import info.freelibrary.iiif.presentation.v3.JsonParsingException;
 import info.freelibrary.iiif.presentation.v3.Service;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
@@ -19,7 +22,8 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  * An access cookie service that uses the login pattern. Using this service, the user will be required to log in using a
  * separate window with a UI provided by an external authentication system.
  */
-public class LoginCookieService1 extends UserMediatedCookieService1<LoginCookieService1> {
+public class LoginCookieService1 extends UserMediatedCookieService1<LoginCookieService1>
+        implements AuthCookieService1<LoginCookieService1> {
 
     /**
      * The LoginCookieService1 logger.
@@ -53,6 +57,7 @@ public class LoginCookieService1 extends UserMediatedCookieService1<LoginCookieS
      * @param aLabel A label of the service
      * @param aServicesArray A varargs of secondary services
      */
+    @SafeVarargs
     public LoginCookieService1(final String aID, final String aLabel, final Service<?>... aServicesArray) {
         super(AuthCookieService1.Profile.LOGIN, aID, aLabel, aServicesArray);
     }
@@ -64,6 +69,7 @@ public class LoginCookieService1 extends UserMediatedCookieService1<LoginCookieS
      * @param aLabel A label of the service
      * @param aServicesArray A varargs of secondary services
      */
+    @SafeVarargs
     public LoginCookieService1(final URI aID, final String aLabel, final Service<?>... aServicesArray) {
         super(AuthCookieService1.Profile.LOGIN, aID, aLabel, aServicesArray);
     }
@@ -109,16 +115,6 @@ public class LoginCookieService1 extends UserMediatedCookieService1<LoginCookieS
     @Override
     public LoginCookieService1 setType(final String aType) {
         return (LoginCookieService1) super.setType(aType);
-    }
-
-    /**
-     * Gets the login cookie service type.
-     *
-     * @return A service type
-     */
-    @Override
-    public String getType() {
-        return super.getType();
     }
 
     /**
@@ -226,7 +222,8 @@ public class LoginCookieService1 extends UserMediatedCookieService1<LoginCookieS
      * @return This service
      */
     @Override
-    public LoginCookieService1 setServices(final Service<?>... aServiceArray) {
+    @SafeVarargs
+    public final LoginCookieService1 setServices(final Service<?>... aServiceArray) {
         return (LoginCookieService1) super.setServices(aServiceArray);
     }
 
@@ -330,5 +327,18 @@ public class LoginCookieService1 extends UserMediatedCookieService1<LoginCookieS
     @JsonGetter(JsonKeys.DESCRIPTION)
     public String getDescription() {
         return super.getDescription();
+    }
+
+    /**
+     * Outputs a string representation of the login cookie service. The content of the string is marked up in JSON.
+     */
+    @Override
+    public String toString() {
+        try {
+            return JSON.getWriter(LoginCookieService1.class).writeValueAsString(this);
+        } catch (final JsonProcessingException details) {
+            // RuntimeException: this shouldn't fail
+            throw new JsonParsingException(details);
+        }
     }
 }

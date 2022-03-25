@@ -9,7 +9,6 @@ import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector.EndTime;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector.StartTime;
-import info.freelibrary.iiif.presentation.v3.utils.URIs;
 
 /**
  * Tests of the media fragment selector.
@@ -119,6 +118,7 @@ public class MediaFragmentSelectorTest {
      */
     @Test
     public final void testConformsTo() {
-        assertEquals(URIs.MEDIA_FRAGMENT_SPECIFICATION_URI, new MediaFragmentSelector(XYWH_FRAGMENT).getConformsTo());
+        assertEquals(MediaFragmentSelector.MEDIA_FRAGMENT_SPECIFICATION_URI,
+                new MediaFragmentSelector(XYWH_FRAGMENT).getConformsTo());
     }
 }

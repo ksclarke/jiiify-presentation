@@ -14,8 +14,6 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.util.warnings.JDK;
-
 import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageAPI;
 import info.freelibrary.iiif.presentation.v3.services.image.Size;
@@ -28,8 +26,7 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.V2_ID, JsonKeys.TYPE, JsonKeys.V2_TYPE, JsonKeys.PROFILE,
     ImageAPI.EXTRA_FORMATS, ImageAPI.EXTRA_QUALITIES, ImageAPI.PROTOCOL, ImageAPI.TILES, JsonKeys.HEIGHT,
     JsonKeys.WIDTH, ImageAPI.SCALE_FACTORS })
-abstract class AbstractImageService<T extends AbstractImageService<T>> extends AbstractService<T>
-        implements ImageService<T> {
+abstract class AbstractImageService<T extends AbstractImageService<T>> extends AbstractService<T> {
 
     /**
      * The image service's profile.
@@ -90,14 +87,22 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
         myProfile = aProfile;
     }
 
-    @Override
+    /**
+     * Gets the service profile.
+     *
+     * @return The service profile
+     */
     @JsonGetter(JsonKeys.PROFILE)
     @JsonInclude(Include.NON_ABSENT)
     public Optional<Service.Profile> getProfile() {
         return Optional.ofNullable(myProfile);
     }
 
-    @Override
+    /**
+     * Gets extra image formats.
+     *
+     * @return The service's extra image formats
+     */
     @JsonIgnore
     public List<ImageAPI.ImageFormat> getExtraFormats() {
         return myFormats;
@@ -122,7 +127,11 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
         return formats;
     }
 
-    @Override
+    /**
+     * Gets extra image qualities.
+     *
+     * @return The service's extra image qualities
+     */
     @JsonIgnore
     public List<ImageAPI.ImageFormat> getExtraQualities() {
         return myFormats;
@@ -147,88 +156,140 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
         return qualities;
     }
 
-    @Override
+    /**
+     * Gets the image service protocol.
+     *
+     * @return The service
+     */
     @JsonGetter(ImageAPI.PROTOCOL)
     @JsonInclude(Include.NON_NULL)
     public URI getProtocol() {
         return myProtocolIsSet ? URI.create("http://iiif.io/api/image") : null;
     }
 
-    @Override
+    /**
+     * Gets the image service's sizes.
+     *
+     * @return The image service sizes
+     */
     @JsonGetter(ImageAPI.SIZES)
     @JsonInclude(Include.NON_EMPTY)
     public List<Size> getSizes() {
         return mySizes;
     }
 
-    @Override
+    /**
+     * Gets the image service's tiles.
+     *
+     * @return The image service tiles
+     */
     @JsonGetter(ImageAPI.TILES)
     @JsonInclude(Include.NON_EMPTY)
     public List<Tile> getTiles() {
         return myTiles;
     }
 
-    @Override
+    /**
+     * Sets the image service's extra formats.
+     *
+     * @param aFormatArray An array of extra formats
+     * @return This service
+     */
     @JsonIgnore
-    public T setExtraFormats(final ImageAPI.ImageFormat... aFormatArray) {
+    public AbstractImageService<T> setExtraFormats(final ImageAPI.ImageFormat... aFormatArray) {
         return setExtraFormats(Arrays.asList(aFormatArray));
     }
 
-    @Override
-    @SuppressWarnings(JDK.UNCHECKED)
+    /**
+     * Sets the image service's extra formats.
+     *
+     * @param aFormatList A list of extra formats
+     * @return This service
+     */
     @JsonSetter(ImageAPI.EXTRA_FORMATS)
-    public T setExtraFormats(final List<ImageAPI.ImageFormat> aFormatList) {
+    public AbstractImageService<T> setExtraFormats(final List<ImageAPI.ImageFormat> aFormatList) {
         myFormats = aFormatList;
-        return (T) this;
+        return this;
     }
 
-    @Override
+    /**
+     * Sets the image service's extra qualities.
+     *
+     * @param aQualityArray An array of extra qualities
+     * @return This service
+     */
     @JsonIgnore
-    public T setExtraQualities(final ImageAPI.ImageQuality... aQualityArray) {
+    public AbstractImageService<T> setExtraQualities(final ImageAPI.ImageQuality... aQualityArray) {
         return setExtraQualities(Arrays.asList(aQualityArray));
     }
 
-    @Override
-    @SuppressWarnings(JDK.UNCHECKED)
+    /**
+     * Sets the image service's extra qualities.
+     *
+     * @param aQualityList A list of extra qualities
+     * @return This service
+     */
     @JsonSetter(ImageAPI.EXTRA_QUALITIES)
-    public T setExtraQualities(final List<ImageAPI.ImageQuality> aQualityList) {
+    public AbstractImageService<T> setExtraQualities(final List<ImageAPI.ImageQuality> aQualityList) {
         myQualities = aQualityList;
-        return (T) this;
+        return this;
     }
 
-    @Override
+    /**
+     * Sets whether the protocol should be included in the output JSON.
+     *
+     * @param aProtocolFlag A protocol flag
+     * @return The image service
+     */
     @JsonIgnore
-    @SuppressWarnings({ JDK.UNCHECKED })
-    public T setProtocol(final boolean aProtocolFlag) {
+    public AbstractImageService<T> setProtocol(final boolean aProtocolFlag) {
         myProtocolIsSet = aProtocolFlag;
-        return (T) this;
+        return this;
     }
 
-    @Override
+    /**
+     * Sets the image service's sizes.
+     *
+     * @param aSizeList A list of sizes
+     * @return This service
+     */
     @JsonSetter(ImageAPI.SIZES)
-    @SuppressWarnings(JDK.UNCHECKED)
-    public T setSizes(final List<Size> aSizeList) {
+    public AbstractImageService<T> setSizes(final List<Size> aSizeList) {
         mySizes = aSizeList;
-        return (T) this;
+        return this;
     }
 
-    @Override
+    /**
+     * Sets the service's sizes from an array of sizes.
+     *
+     * @param aSizeArray A list of sizes for the service
+     * @return This image service
+     */
     @JsonIgnore
-    public T setSizes(final Size... aSizeArray) {
+    public AbstractImageService<T> setSizes(final Size... aSizeArray) {
         return setSizes(Arrays.asList(aSizeArray));
     }
 
-    @Override
-    @SuppressWarnings(JDK.UNCHECKED)
+    /**
+     * Sets the service's tiles from a list of tiles.
+     *
+     * @param aTileList A list of tiles for the service
+     * @return This image service
+     */
     @JsonSetter(ImageAPI.TILES)
-    public T setTiles(final List<Tile> aTileList) {
+    public AbstractImageService<T> setTiles(final List<Tile> aTileList) {
         myTiles = aTileList;
-        return (T) this;
+        return this;
     }
 
-    @Override
+    /**
+     * Sets the service's tiles from an array of tiles.
+     *
+     * @param aTileArray An array of tiles for the service
+     * @return This image service
+     */
     @JsonIgnore
-    public T setTiles(final Tile... aTileArray) {
+    public AbstractImageService<T> setTiles(final Tile... aTileArray) {
         return setTiles(Arrays.asList(aTileArray));
     }
 

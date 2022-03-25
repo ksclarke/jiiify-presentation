@@ -6,7 +6,9 @@ import java.net.URI;
 import info.freelibrary.iiif.presentation.v3.Service;
 
 /**
- * An interface for authentication services.
+ * An interface for auth service implementations.
+ *
+ * @param <T> A type of auth service
  */
 public interface AuthService<T extends AuthService<T>> extends Service<T> {
 
@@ -19,7 +21,7 @@ public interface AuthService<T extends AuthService<T>> extends Service<T> {
     T setProfile(Profile aProfile);
 
     /**
-     * The interface for {@link AuthService} profiles.
+     * An interface for {@link AuthService} profiles.
      */
     interface Profile extends Service.Profile {
 

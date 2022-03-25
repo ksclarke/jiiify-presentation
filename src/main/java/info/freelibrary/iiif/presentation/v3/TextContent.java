@@ -115,7 +115,8 @@ public class TextContent extends AbstractContentResource<TextContent>
     }
 
     @Override
-    public TextContent setServices(final Service<?>... aServiceArray) {
+    @SafeVarargs
+    public final TextContent setServices(final Service<?>... aServiceArray) {
         return (TextContent) super.setServices(aServiceArray);
     }
 

@@ -1,0 +1,17 @@
+{
+  "@context" : "http://iiif.io/api/auth/1/context.json",
+  "@id" : "{}",
+  "@type" : "AuthCookieService1",
+  "profile" : "http://iiif.io/api/auth/1/login",
+  "label" : "{}",
+  "header" : "Header",
+  "description" : "Description",
+  "confirmLabel" : "Confirm Label",
+  "failureHeader" : "Failure Header",
+  "failureDescription" : "Failure description",
+  "service" : [ {
+    "@id" : "{}",
+    "@type" : "AuthTokenService1",
+    "profile" : "http://iiif.io/api/auth/1/token"
+  } ]
+}

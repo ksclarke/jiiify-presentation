@@ -351,7 +351,8 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     @Override
-    public Range setServices(final Service<?>... aServiceArray) {
+    @SafeVarargs
+    public final Range setServices(final Service<?>... aServiceArray) {
         return (Range) super.setServices(aServiceArray);
     }
 

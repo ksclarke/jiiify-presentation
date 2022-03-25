@@ -5,6 +5,7 @@ import java.net.URI;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -77,13 +78,13 @@ public final class OtherService3 extends AbstractOtherService<OtherService3> imp
     @Override
     @JsonIgnore
     public Optional<Service.Profile> getProfile() {
-        return Optional.ofNullable(myProfile);
+        return super.getProfile();
     }
 
     @Override
     @JsonIgnore
     public OtherService3 setType(final String aType) {
-        return super.setType(aType);
+        return (OtherService3) super.setType(aType);
     }
 
     /**
@@ -91,9 +92,11 @@ public final class OtherService3 extends AbstractOtherService<OtherService3> imp
      *
      * @return A string representation of the format
      */
+    @Override
     @JsonIgnore
     public String getFormat() {
-        return myFormat != null ? myFormat.toString() : null;
+        final Optional<MediaType> mediaType = super.getFormatMediaType();
+        return mediaType.isPresent() ? mediaType.get().toString() : null;
     }
 
     /**
@@ -101,9 +104,10 @@ public final class OtherService3 extends AbstractOtherService<OtherService3> imp
      *
      * @return The media type format of the image
      */
+    @Override
     @JsonIgnore
     public Optional<MediaType> getFormatMediaType() {
-        return Optional.ofNullable(myFormat);
+        return super.getFormatMediaType();
     }
 
     /**
@@ -115,8 +119,7 @@ public final class OtherService3 extends AbstractOtherService<OtherService3> imp
     @Override
     @JsonIgnore
     public OtherService3 setFormat(final String aMediaType) {
-        myFormat = MediaType.fromString(aMediaType).orElse(null);
-        return this;
+        return (OtherService3) super.setFormat(MediaType.fromString(aMediaType).orElse(null));
     }
 
     /**
@@ -125,22 +128,22 @@ public final class OtherService3 extends AbstractOtherService<OtherService3> imp
      * @param aMediaType A media type
      * @return The service
      */
+    @Override
     @JsonIgnore
-    public OtherService3 setFormatMediaType(final MediaType aMediaType) {
-        myFormat = aMediaType;
-        return this;
+    public OtherService3 setFormat(final MediaType aMediaType) {
+        return (OtherService3) super.setFormat(aMediaType);
     }
 
     @Override
     @JsonIgnore
     public OtherService3 setID(final String aID) {
-        return super.setID(aID);
+        return (OtherService3) super.setID(aID);
     }
 
     @Override
     @JsonIgnore
     public OtherService3 setID(final URI aID) {
-        return super.setID(aID);
+        return (OtherService3) super.setID(aID);
     }
 
     @Override
@@ -167,7 +170,7 @@ public final class OtherService3 extends AbstractOtherService<OtherService3> imp
      */
     @Override
     public OtherService3 setServices(final List<Service<?>> aServiceList) {
-        return super.setServices(aServiceList);
+        return (OtherService3) super.setServices(aServiceList);
     }
 
     /**
@@ -178,7 +181,7 @@ public final class OtherService3 extends AbstractOtherService<OtherService3> imp
      */
     @Override
     public OtherService3 setServices(final Service<?>... aServicesArray) {
-        return super.setServices(aServicesArray);
+        return (OtherService3) super.setServices(aServicesArray);
     }
 
     /**
@@ -186,14 +189,16 @@ public final class OtherService3 extends AbstractOtherService<OtherService3> imp
      *
      * @return The JSON value of this service
      */
+    @Override
     @JsonValue
-    protected Object toJsonValue() {
+    protected Map<String, Object> toJsonValue() {
         final LinkedHashMap<String, Object> map = new LinkedHashMap<>();
-        final URI id = getID();
         final List<Service<?>> services;
         final String type;
+        final URI id;
 
-        if (id == null) {
+        // IDs are required for other services (?)
+        if ((id = getID()) == null) {
             return null;
         }
 
@@ -204,11 +209,11 @@ public final class OtherService3 extends AbstractOtherService<OtherService3> imp
             map.put(JsonKeys.TYPE, type);
         }
 
-        if (myProfile != null) {
-            map.put(JsonKeys.PROFILE, myProfile);
+        if (getProfile().isPresent()) {
+            map.put(JsonKeys.PROFILE, getProfile().get());
         }
 
-        if (myFormat != null) {
+        if (getFormat() != null) {
             map.put(JsonKeys.FORMAT, getFormat());
         }
 

@@ -5,9 +5,12 @@ import java.net.URI;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import info.freelibrary.iiif.presentation.v3.MediaType;
@@ -65,19 +68,19 @@ public final class OtherService2 extends AbstractOtherService<OtherService2> imp
     @Override
     @JsonIgnore
     public Optional<Service.Profile> getProfile() {
-        return Optional.ofNullable(myProfile);
+        return super.getProfile();
     }
 
     @Override
     @JsonIgnore
     public OtherService2 setID(final URI aID) {
-        return super.setID(aID);
+        return (OtherService2) super.setID(aID);
     }
 
     @Override
     @JsonIgnore
     public OtherService2 setID(final String aID) {
-        return super.setID(aID);
+        return (OtherService2) super.setID(aID);
     }
 
     @Override
@@ -89,7 +92,7 @@ public final class OtherService2 extends AbstractOtherService<OtherService2> imp
     @Override
     @JsonIgnore
     public OtherService2 setType(final String aType) {
-        return super.setType(aType);
+        return (OtherService2) super.setType(aType);
     }
 
     @Override
@@ -99,27 +102,37 @@ public final class OtherService2 extends AbstractOtherService<OtherService2> imp
     }
 
     @Override
-    @JsonIgnore
+    @JsonSetter(JsonKeys.FORMAT)
     public OtherService2 setFormat(final String aMediaType) {
-        myFormat = MediaType.fromString(aMediaType).orElse(null);
-        return this;
+        return (OtherService2) super.setFormat(MediaType.fromString(aMediaType).orElse(null));
     }
 
     @Override
     @JsonIgnore
     public OtherService2 setFormat(final MediaType aMediaType) {
-        myFormat = aMediaType;
-        return this;
+        return (OtherService2) super.setFormat(aMediaType);
     }
 
     /**
-     * Gets the media type format of the image.
+     * Gets the media type format of the service.
      *
-     * @return The media type format of the image
+     * @return The media type format of the service
      */
+    @Override
     @JsonIgnore
-    public Optional<MediaType> getFormat() {
-        return Optional.ofNullable(myFormat);
+    public Optional<MediaType> getFormatMediaType() {
+        return super.getFormatMediaType();
+    }
+
+    /**
+     * Gets the format of the service.
+     *
+     * @return The service format
+     */
+    @Override
+    @JsonGetter(JsonKeys.FORMAT)
+    public String getFormat() {
+        return super.getFormat();
     }
 
     @Override
@@ -131,13 +144,13 @@ public final class OtherService2 extends AbstractOtherService<OtherService2> imp
     @Override
     @JsonIgnore
     public OtherService2 setServices(final List<Service<?>> aServiceList) {
-        return super.setServices(aServiceList);
+        return (OtherService2) super.setServices(aServiceList);
     }
 
     @Override
     @JsonIgnore
     public OtherService2 setServices(final Service<?>... aServicesArray) {
-        return super.setServices(aServicesArray);
+        return (OtherService2) super.setServices(aServicesArray);
     }
 
     /**
@@ -145,14 +158,16 @@ public final class OtherService2 extends AbstractOtherService<OtherService2> imp
      *
      * @return An object for Jackson to use in its serialization process.
      */
+    @Override
     @JsonValue
-    protected Object toJsonValue() {
+    protected Map<String, Object> toJsonValue() {
         final LinkedHashMap<String, Object> map = new LinkedHashMap<>();
-        final URI id = getID();
         final List<Service<?>> services;
         final String type;
+        final URI id;
 
-        if (id == null) {
+        // IDs are required for other services (?)
+        if ((id = getID()) == null) {
             return null;
         }
 
@@ -163,11 +178,11 @@ public final class OtherService2 extends AbstractOtherService<OtherService2> imp
             map.put(JsonKeys.V2_TYPE, type);
         }
 
-        if (myProfile != null) {
-            map.put(JsonKeys.PROFILE, myProfile);
+        if (getProfile().isPresent()) {
+            map.put(JsonKeys.PROFILE, getProfile().get());
         }
 
-        if (myFormat != null) {
+        if (getFormat() != null) {
             map.put(JsonKeys.FORMAT, getFormat());
         }
 

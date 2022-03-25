@@ -15,7 +15,6 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
-import info.freelibrary.iiif.presentation.v3.utils.URIs;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
@@ -131,23 +130,21 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
         final JsonNode conformsToNode = aNode.get(JsonKeys.CONFORMS_TO);
 
         // Fragment selectors SHOULD have a conformsTo but aren't required to have one
-        if (conformsToNode != null) {
-            final String conformsToString = conformsToNode.asText();
-
-            try {
-                final URI conformsTo = new URI(conformsToString);
-
-                if (URIs.MEDIA_FRAGMENT_SPECIFICATION_URI.equals(conformsTo)) {
-                    return new MediaFragmentSelector(aNode.get(JsonKeys.VALUE).asText());
-                } else {
-                    throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_061, conformsTo),
-                            aParser.getCurrentLocation());
-                }
-            } catch (final URISyntaxException details) {
-                throw new JsonMappingException(aParser, details.getMessage(), details);
-            }
-        } else {
+        if (conformsToNode == null) {
             return new MediaFragmentSelector(aNode.get(JsonKeys.VALUE).asText());
+        }
+
+        try {
+            final URI conformsTo = new URI(conformsToNode.asText());
+
+            if (MediaFragmentSelector.MEDIA_FRAGMENT_SPECIFICATION_URI.equals(conformsTo)) {
+                return new MediaFragmentSelector(aNode.get(JsonKeys.VALUE).asText());
+            }
+
+            throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_061, conformsTo),
+                    aParser.getCurrentLocation());
+        } catch (final URISyntaxException details) {
+            throw new JsonMappingException(aParser, details.getMessage(), details);
         }
     }
 
@@ -164,9 +161,9 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
 
         if (node == null) {
             return aDefaultValue;
-        } else {
-            return node.asInt(aDefaultValue);
         }
+
+        return node.asInt(aDefaultValue);
     }
 
     /**
@@ -182,9 +179,9 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
 
         if (node == null) {
             return aDefaultValue.floatValue();
-        } else {
-            return node.floatValue();
         }
+
+        return node.floatValue();
     }
 
     /**
@@ -200,8 +197,8 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
 
         if (node == null) {
             return aDefaultValue;
-        } else {
-            return node.asText(aDefaultValue);
         }
+
+        return node.asText(aDefaultValue);
     }
 }
