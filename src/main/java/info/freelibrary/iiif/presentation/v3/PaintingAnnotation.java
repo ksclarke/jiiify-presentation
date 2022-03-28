@@ -258,7 +258,8 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation>
     }
 
     @Override
-    public PaintingAnnotation setServices(final Service<?>... aServiceArray) {
+    @SafeVarargs
+    public final PaintingAnnotation setServices(final Service<?>... aServiceArray) {
         return (PaintingAnnotation) super.setServices(aServiceArray);
     }
 

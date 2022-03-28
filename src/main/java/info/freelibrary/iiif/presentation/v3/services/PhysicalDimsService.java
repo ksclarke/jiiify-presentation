@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation.v3.services;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
@@ -9,12 +10,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+import info.freelibrary.iiif.presentation.v3.JsonParsingException;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.Service;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
@@ -45,8 +49,7 @@ public class PhysicalDimsService extends AbstractService<PhysicalDimsService> im
      * @param aID An ID for the item to get physical dimensions from
      */
     public PhysicalDimsService(final URI aID) {
-        super();
-        myID = aID;
+        super(aID);
     }
 
     /**
@@ -55,8 +58,7 @@ public class PhysicalDimsService extends AbstractService<PhysicalDimsService> im
      * @param aID An ID, in string form, for the item to get physical dimensions from
      */
     public PhysicalDimsService(final String aID) {
-        super();
-        myID = URI.create(aID);
+        super(aID);
     }
 
     /**
@@ -67,11 +69,10 @@ public class PhysicalDimsService extends AbstractService<PhysicalDimsService> im
      * @param aUnits A physical dimensions unit
      */
     public PhysicalDimsService(final String aID, final double aScale, final String aUnits) {
-        super();
+        super(aID);
 
         myPhysicalScale = aScale;
         myPhysicalUnits = aUnits;
-        myID = URI.create(aID);
     }
 
     /**
@@ -82,11 +83,10 @@ public class PhysicalDimsService extends AbstractService<PhysicalDimsService> im
      * @param aUnits A physical dimensions unit
      */
     public PhysicalDimsService(final URI aID, final double aScale, final String aUnits) {
-        super();
+        super(aID);
 
         myPhysicalScale = aScale;
         myPhysicalUnits = aUnits;
-        myID = aID;
     }
 
     @Override
@@ -98,26 +98,39 @@ public class PhysicalDimsService extends AbstractService<PhysicalDimsService> im
 
     @Override
     public PhysicalDimsService setProfile(final String aProfile) {
-        return this; // intentionally a no-op, value is a constant
+        return this; // Intentionally a no-op, value is a constant
     }
 
     @Override
     @JsonSetter(JsonKeys.TYPE)
     public PhysicalDimsService setType(final String aType) {
-        // intentionally no-op; it's a constant for the class
+        // Intentionally no-op; it's a constant for the class
         return this;
+    }
+
+    @Override
+    @JsonGetter(JsonKeys.TYPE)
+    @JsonInclude(Include.NON_EMPTY)
+    public String getType() {
+        return super.getType();
     }
 
     @Override
     @JsonSetter(JsonKeys.ID)
     public PhysicalDimsService setID(final URI aID) {
-        return super.setID(aID);
+        return (PhysicalDimsService) super.setID(aID);
     }
 
     @Override
     @JsonSetter(JsonKeys.ID)
     public PhysicalDimsService setID(final String aID) {
-        return super.setID(aID);
+        return (PhysicalDimsService) super.setID(aID);
+    }
+
+    @Override
+    @JsonGetter(JsonKeys.ID)
+    public URI getID() {
+        return super.getID();
     }
 
     /**
@@ -176,6 +189,54 @@ public class PhysicalDimsService extends AbstractService<PhysicalDimsService> im
         myPhysicalScale = aPhysicalScale;
         myPhysicalUnits = aPhysicalUnits;
         return this;
+    }
+
+    /**
+     * Sets services related to this PhysicalDims service.
+     *
+     * @param aServiceList A list of related services
+     * @return This service
+     */
+    @Override
+    public PhysicalDimsService setServices(final List<Service<?>> aServiceList) {
+        return (PhysicalDimsService) super.setServices(aServiceList);
+    }
+
+    /**
+     * Sets services related to this PhysicalDims service.
+     *
+     * @param aServiceArray A varargs of related services
+     * @return This service
+     */
+    @Override
+    @SafeVarargs
+    public final PhysicalDimsService setServices(final Service<?>... aServiceArray) {
+        return (PhysicalDimsService) super.setServices(aServiceArray);
+    }
+
+    /**
+     * Gets the services related to this PhysicalDims service.
+     *
+     * @return A list of related services
+     */
+    @Override
+    public List<Service<?>> getServices() {
+        return super.getServices();
+    }
+
+    /**
+     * Gets a string representation of the PhysicalDims service.
+     *
+     * @return A string representation of the PhysicalDims service
+     */
+    @Override
+    public String toString() {
+        try {
+            return JSON.getWriter(PhysicalDimsService.class).writeValueAsString(this);
+        } catch (final JsonProcessingException details) {
+            // RuntimeException: this shouldn't fail
+            throw new JsonParsingException(details);
+        }
     }
 
     /**

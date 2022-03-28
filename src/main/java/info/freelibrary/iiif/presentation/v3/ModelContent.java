@@ -115,7 +115,8 @@ public class ModelContent extends AbstractContentResource<ModelContent>
     }
 
     @Override
-    public ModelContent setServices(final Service<?>... aServiceArray) {
+    @SafeVarargs
+    public final ModelContent setServices(final Service<?>... aServiceArray) {
         return (ModelContent) super.setServices(aServiceArray);
     }
 

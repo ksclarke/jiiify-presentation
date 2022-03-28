@@ -20,7 +20,6 @@ import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
 import info.freelibrary.iiif.presentation.v3.Canvas;
-import info.freelibrary.iiif.presentation.v3.utils.URIs;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
@@ -28,6 +27,11 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  * (typically a {@link Canvas}).
  */
 public class MediaFragmentSelector implements FragmentSelector {
+
+    /**
+     * The URI of the <a href="http://www.w3.org/TR/media-frags/">Media Fragments URI specification</a>.
+     */
+    static final URI MEDIA_FRAGMENT_SPECIFICATION_URI = URI.create("http://www.w3.org/TR/media-frags/");
 
     /**
      * The logger for the MediaFragmentSelector.
@@ -229,19 +233,17 @@ public class MediaFragmentSelector implements FragmentSelector {
             temporalFragment.setEnd(aEnd.getClocktime());
 
             return temporalFragment;
-        } else if (aStart != null) {
+        }
+        if (aStart != null) {
             checkStartTime(aStart);
 
             temporalFragment = new NPTFragment();
             temporalFragment.setStart(aStart.getClocktime());
-
-            return temporalFragment;
         } else {
             temporalFragment = new NPTFragment();
             temporalFragment.setEnd(aEnd.getClocktime());
-
-            return temporalFragment;
         }
+        return temporalFragment;
     }
 
     /**
@@ -275,7 +277,7 @@ public class MediaFragmentSelector implements FragmentSelector {
 
     @Override
     public URI getConformsTo() {
-        return URIs.MEDIA_FRAGMENT_SPECIFICATION_URI;
+        return MEDIA_FRAGMENT_SPECIFICATION_URI;
     }
 
     /**

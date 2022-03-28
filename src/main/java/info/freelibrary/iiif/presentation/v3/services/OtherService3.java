@@ -4,6 +4,8 @@ package info.freelibrary.iiif.presentation.v3.services;
 import java.net.URI;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -16,32 +18,35 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 /**
  * A generic service class for other service implementations.
  */
-public class OtherService3 extends AbstractOtherService<OtherService3> implements OtherService<OtherService3> {
+public final class OtherService3 extends AbstractOtherService<OtherService3> implements OtherService<OtherService3> {
+
+    /**
+     * Creates a new service.
+     */
+    public OtherService3() {
+        super();
+    }
 
     /**
      * Creates a service for the supplied ID.
      *
-     * @param aServiceID A service ID in string form
+     * @param aID A service ID in string form
      * @param aType A service type
      */
-    public OtherService3(final String aServiceID, final String aType) {
-        super();
-
-        myID = URI.create(aServiceID);
-        myType = aType;
+    public OtherService3(final String aID, final String aType) {
+        super(aID);
+        setType(aType);
     }
 
     /**
      * Creates a service for the supplied URI.
      *
-     * @param aServiceID A service ID
+     * @param aID A service ID
      * @param aType A service type
      */
-    public OtherService3(final URI aServiceID, final String aType) {
-        super();
-
-        myID = aServiceID;
-        myType = aType;
+    public OtherService3(final URI aID, final String aType) {
+        super(aID);
+        setType(aType);
     }
 
     /**
@@ -50,8 +55,9 @@ public class OtherService3 extends AbstractOtherService<OtherService3> implement
      * @param aProfile A profile URI for this service
      * @return This service
      */
+    @Override
     @JsonIgnore
-    public OtherService3 setProfile(final OtherService3.Profile aProfile) {
+    public OtherService3 setProfile(final OtherService.Profile aProfile) {
         super.setProfile(aProfile);
         return this;
     }
@@ -65,21 +71,20 @@ public class OtherService3 extends AbstractOtherService<OtherService3> implement
     @Override
     @JsonIgnore
     public OtherService3 setProfile(final String aProfile) {
-        super.setProfile(Profile.fromString(aProfile));
+        super.setProfile(AbstractOtherService.Profile.fromString(aProfile));
         return this;
     }
 
     @Override
     @JsonIgnore
     public Optional<Service.Profile> getProfile() {
-        return Optional.ofNullable(myProfile);
+        return super.getProfile();
     }
 
     @Override
     @JsonIgnore
     public OtherService3 setType(final String aType) {
-        myType = aType;
-        return this;
+        return (OtherService3) super.setType(aType);
     }
 
     /**
@@ -87,9 +92,11 @@ public class OtherService3 extends AbstractOtherService<OtherService3> implement
      *
      * @return A string representation of the format
      */
+    @Override
     @JsonIgnore
     public String getFormat() {
-        return myFormat != null ? myFormat.toString() : null;
+        final Optional<MediaType> mediaType = super.getFormatMediaType();
+        return mediaType.isPresent() ? mediaType.get().toString() : null;
     }
 
     /**
@@ -97,9 +104,10 @@ public class OtherService3 extends AbstractOtherService<OtherService3> implement
      *
      * @return The media type format of the image
      */
+    @Override
     @JsonIgnore
     public Optional<MediaType> getFormatMediaType() {
-        return Optional.ofNullable(myFormat);
+        return super.getFormatMediaType();
     }
 
     /**
@@ -111,8 +119,7 @@ public class OtherService3 extends AbstractOtherService<OtherService3> implement
     @Override
     @JsonIgnore
     public OtherService3 setFormat(final String aMediaType) {
-        myFormat = MediaType.fromString(aMediaType).orElse(null);
-        return this;
+        return (OtherService3) super.setFormat(MediaType.fromString(aMediaType).orElse(null));
     }
 
     /**
@@ -121,22 +128,60 @@ public class OtherService3 extends AbstractOtherService<OtherService3> implement
      * @param aMediaType A media type
      * @return The service
      */
+    @Override
     @JsonIgnore
-    public OtherService3 setFormatMediaType(final MediaType aMediaType) {
-        myFormat = aMediaType;
-        return this;
+    public OtherService3 setFormat(final MediaType aMediaType) {
+        return (OtherService3) super.setFormat(aMediaType);
     }
 
     @Override
     @JsonIgnore
     public OtherService3 setID(final String aID) {
-        return super.setID(aID);
+        return (OtherService3) super.setID(aID);
     }
 
     @Override
     @JsonIgnore
     public OtherService3 setID(final URI aID) {
-        return super.setID(aID);
+        return (OtherService3) super.setID(aID);
+    }
+
+    @Override
+    @JsonIgnore
+    public URI getID() {
+        return super.getID();
+    }
+
+    /**
+     * Gets the services related to this other service.
+     *
+     * @return A list of services
+     */
+    @Override
+    public List<Service<?>> getServices() {
+        return super.getServices();
+    }
+
+    /**
+     * Sets the services related to this other service.
+     *
+     * @param aServiceList A list of related services
+     * @return This service
+     */
+    @Override
+    public OtherService3 setServices(final List<Service<?>> aServiceList) {
+        return (OtherService3) super.setServices(aServiceList);
+    }
+
+    /**
+     * Sets the services related to this other service.
+     *
+     * @param aServicesArray An array of related services
+     * @return This service
+     */
+    @Override
+    public OtherService3 setServices(final Service<?>... aServicesArray) {
+        return (OtherService3) super.setServices(aServicesArray);
     }
 
     /**
@@ -144,74 +189,40 @@ public class OtherService3 extends AbstractOtherService<OtherService3> implement
      *
      * @return The JSON value of this service
      */
+    @Override
     @JsonValue
-    protected Object toJsonValue() {
-        if (myID != null) {
-            final LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+    protected Map<String, Object> toJsonValue() {
+        final LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+        final List<Service<?>> services;
+        final String type;
+        final URI id;
 
-            if (myID != null) {
-                map.put(JsonKeys.ID, myID);
-            }
-
-            if (myType != null) {
-                map.put(JsonKeys.TYPE, myType);
-            }
-
-            if (myProfile != null) {
-                map.put(JsonKeys.PROFILE, myProfile);
-            }
-
-            if (myFormat != null) {
-                map.put(JsonKeys.FORMAT, getFormat());
-            }
-
-            if (myServices != null && myServices.size() > 0) {
-                map.put(JsonKeys.SERVICE, myServices);
-            }
-
-            return Collections.unmodifiableMap(map);
-        } else {
+        // IDs are required for other services (?)
+        if ((id = getID()) == null) {
             return null;
         }
-    }
 
-    /**
-     * An other service (v3) profile.
-     */
-    public static final class Profile implements OtherService.Profile {
+        map.put(JsonKeys.ID, id);
+        type = getType();
 
-        /**
-         * The profile string.
-         */
-        private final String myProfile;
-
-        /**
-         * Creates a profile from the supplied string.
-         *
-         * @param aProfile A string version of the profile
-         */
-        private Profile(final String aProfile) {
-            myProfile = aProfile;
+        if (!OtherService3.class.getSimpleName().equals(type)) {
+            map.put(JsonKeys.TYPE, type);
         }
 
-        @Override
-        public String string() {
-            return myProfile;
+        if (getProfile().isPresent()) {
+            map.put(JsonKeys.PROFILE, getProfile().get());
         }
 
-        @Override
-        public URI uri() {
-            return URI.create(myProfile);
+        if (getFormat() != null) {
+            map.put(JsonKeys.FORMAT, getFormat());
         }
 
-        /**
-         * Creates a profile from the supplied string.
-         *
-         * @param aProfile A string form of a service profile
-         * @return The OtherService profile for the supplied string value
-         */
-        public static Profile fromString(final String aProfile) {
-            return new Profile(aProfile);
+        services = getServices();
+
+        if (services != null && !services.isEmpty()) {
+            map.put(JsonKeys.SERVICE, services);
         }
+
+        return Collections.unmodifiableMap(map);
     }
 }

@@ -181,7 +181,8 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> // NO
     }
 
     @Override
-    public AccompanyingCanvas setServices(final Service<?>... aServiceArray) {
+    @SafeVarargs
+    public final AccompanyingCanvas setServices(final Service<?>... aServiceArray) {
         return (AccompanyingCanvas) super.setServices(aServiceArray);
     }
 

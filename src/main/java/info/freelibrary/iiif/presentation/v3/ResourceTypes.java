@@ -106,7 +106,7 @@ public final class ResourceTypes {
     /**
      * The v1 auth cookie service resource type.
      */
-    public static final String AUTH_COOKIE_SERVICE_1 = "AuthCookieService1";
+    public static final String AUTH_COOKIE_SERVICE_1 = "AbstractCookieService";
 
     /**
      * The v1 auth token service resource type.

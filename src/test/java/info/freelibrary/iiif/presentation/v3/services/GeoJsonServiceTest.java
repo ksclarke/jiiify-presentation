@@ -14,6 +14,9 @@ import org.junit.Test;
  */
 public class GeoJsonServiceTest {
 
+    /**
+     * The GeoJSON service ID.
+     */
     private URI myID;
 
     /**

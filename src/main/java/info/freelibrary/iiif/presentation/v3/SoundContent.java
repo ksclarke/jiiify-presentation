@@ -133,7 +133,8 @@ public class SoundContent extends AbstractContentResource<SoundContent> implemen
     }
 
     @Override
-    public SoundContent setServices(final Service<?>... aServiceArray) {
+    @SafeVarargs
+    public final SoundContent setServices(final Service<?>... aServiceArray) {
         return (SoundContent) super.setServices(aServiceArray);
     }
 

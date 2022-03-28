@@ -115,7 +115,8 @@ public class DatasetContent extends AbstractContentResource<DatasetContent>
     }
 
     @Override
-    public DatasetContent setServices(final Service<?>... aServiceArray) {
+    @SafeVarargs
+    public final DatasetContent setServices(final Service<?>... aServiceArray) {
         return (DatasetContent) super.setServices(aServiceArray);
     }
 

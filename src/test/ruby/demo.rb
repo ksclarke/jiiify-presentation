@@ -8,7 +8,7 @@ module JiiifyPresentationDemo
   include_package 'info.freelibrary.iiif.presentation.v3'
   include_package 'info.freelibrary.iiif.presentation.v3.ids'
   include_package 'info.freelibrary.iiif.presentation.v3.properties'
-  include_package 'info.freelibrary.iiif.presentation.v3.services.image'
+  include_package 'info.freelibrary.iiif.presentation.v3.services'
 
   manifest = Manifest.new('http://example.com/1', Label.new('en', 'My Manifest'))
   minter = MinterFactory.getMinter(manifest)

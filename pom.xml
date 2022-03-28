@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>jiiify-presentation-v3</artifactId>
@@ -13,8 +12,8 @@
 
   <licenses>
     <license>
-      <name>The 3-Clause BSD License</name>
-      <url>https://opensource.org/licenses/BSD-3-Clause</url>
+      <name>Mozilla Public License 2.0 (MPL-2.0)</name>
+      <url>https://opensource.org/licenses/MPL-2.0</url>
     </license>
   </licenses>
 
@@ -69,8 +68,8 @@
   <properties>
     <revision>0.0.0-SNAPSHOT</revision>
 
-    <jackson.version>2.12.6</jackson.version>
-    <jackson.databind.version>2.12.6</jackson.databind.version>
+    <jackson.version>2.13.2</jackson.version>
+    <jackson.databind.version>2.13.2.1</jackson.databind.version>
     <freelib.utils.version>3.0.1</freelib.utils.version>
     <jsoup.version>1.14.3</jsoup.version>
     <combinatorics.version>3.3.0</combinatorics.version>
@@ -83,13 +82,13 @@
 
     <!-- Plugin related versions -->
     <maven.jar.plugin.version>3.2.0</maven.jar.plugin.version>
-    <freelib.maven.version>0.3.0</freelib.maven.version>
+    <freelib.maven.version>0.3.1</freelib.maven.version>
     <vertx.plugin.version>1.0.24</vertx.plugin.version>
 
     <!-- Test related versions -->
     <opencsv.version>4.6</opencsv.version>
     <lorem.version>2.1</lorem.version>
-    <jruby.version>9.2.17.0</jruby.version>
+    <jruby.version>9.3.3.0</jruby.version>
     <jython.version>2.7.2</jython.version>
 
     <!-- A property used by the build process -->
@@ -112,12 +111,12 @@
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>${jackson.databind.version}</version>
+      <artifactId>jackson-annotations</artifactId>
+      <version>${jackson.version}</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-annotations</artifactId>
+      <artifactId>jackson-databind</artifactId>
       <version>${jackson.databind.version}</version>
     </dependency>
     <dependency>
@@ -227,8 +226,8 @@
           <stylesheetfile>stylesheet.css</stylesheetfile>
           <links>
             <link>https://javadoc.io/doc/info.freelibrary/freelib-utils/${freelib.utils.version}/apidocs</link>
-            <!-- <link>https://vertx.io/docs/apidocs/</link> -->
           </links>
+          <quiet>true</quiet>
         </configuration>
       </plugin>
       <plugin>
@@ -335,7 +334,7 @@
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>7.1.3</version>
+    <version>7.2.1</version>
   </parent>
 
 </project>

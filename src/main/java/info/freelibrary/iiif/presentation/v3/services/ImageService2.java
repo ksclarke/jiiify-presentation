@@ -1,21 +1,28 @@
 
-package info.freelibrary.iiif.presentation.v3.services.image;
+package info.freelibrary.iiif.presentation.v3.services;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.Eclipse;
 
+import info.freelibrary.iiif.presentation.v3.JsonParsingException;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.Service;
+import info.freelibrary.iiif.presentation.v3.services.image.ImageAPI;
+import info.freelibrary.iiif.presentation.v3.services.image.Size;
+import info.freelibrary.iiif.presentation.v3.services.image.Tile;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
@@ -26,22 +33,14 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 public class ImageService2 extends AbstractImageService<ImageService2> implements ImageService<ImageService2> {
 
     /**
-     * The context for this service.
+     * The ImageService2 logger.
      */
-    public static final URI CONTEXT = URI.create("http://iiif.io/api/image/2/context.json");
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImageService2.class, MessageCodes.BUNDLE);
 
     /**
      * The default profile level for the image info service.
      */
     private static final ImageService2.Profile DEFAULT_LEVEL = ImageService2.Profile.LEVEL_TWO;
-
-    /**
-     * Creates a new IIIF Image API 2 service for Jackson's processing.
-     */
-    @SuppressWarnings(Eclipse.UNUSED)
-    private ImageService2() {
-        super();
-    }
 
     /**
      * Creates a new IIIF Image API 2 service.
@@ -81,24 +80,27 @@ public class ImageService2 extends AbstractImageService<ImageService2> implement
         super(DEFAULT_LEVEL, aID);
     }
 
+    /**
+     * Creates a new IIIF Image API 2 service for Jackson's processing.
+     */
+    @SuppressWarnings(Eclipse.UNUSED)
+    private ImageService2() {
+        super();
+    }
+
     @Override
     @JsonGetter(JsonKeys.V2_ID)
     public URI getID() {
-        return myID;
+        return super.getID();
     }
 
     @Override
     @JsonSetter(JsonKeys.V2_TYPE)
     public ImageService2 setType(final String aType) {
-        // intentionally no-op; it's a constant for the class
+        // Intentionally no-op; it's a constant for the class
         return this;
     }
 
-    /**
-     * Gets the service type.
-     *
-     * @return The service type
-     */
     @Override
     @JsonGetter(JsonKeys.V2_TYPE)
     public String getType() {
@@ -144,8 +146,14 @@ public class ImageService2 extends AbstractImageService<ImageService2> implement
      * @param aProfile An image service service profile
      * @return The service
      */
+    @Override
     @JsonIgnore
-    public ImageService2 setProfile(final ImageService2.Profile aProfile) {
+    public ImageService2 setProfile(final ImageService.Profile aProfile) {
+        if (!ImageService2.Profile.isValid(aProfile.string())) {
+            throw new IllegalArgumentException(
+                    LOGGER.getMessage(MessageCodes.JPA_122, aProfile.string(), getClass().getSimpleName()));
+        }
+
         myProfile = aProfile;
         return this;
     }
@@ -155,6 +163,12 @@ public class ImageService2 extends AbstractImageService<ImageService2> implement
     public ImageService2 setProfile(final String aProfile) {
         myProfile = ImageService2.Profile.fromString(aProfile);
         return this;
+    }
+
+    @Override
+    @JsonGetter(JsonKeys.PROFILE)
+    public Optional<Service.Profile> getProfile() {
+        return super.getProfile();
     }
 
     @Override
@@ -174,79 +188,96 @@ public class ImageService2 extends AbstractImageService<ImageService2> implement
     @Override
     @JsonIgnore
     public ImageService2 setExtraFormats(final ImageAPI.ImageFormat... aFormatArray) {
-        return super.setExtraFormats(aFormatArray);
+        return (ImageService2) super.setExtraFormats(aFormatArray);
     }
 
     @Override
     @JsonSetter(ImageAPI.EXTRA_FORMATS)
     public ImageService2 setExtraFormats(final List<ImageAPI.ImageFormat> aFormatList) {
-        return super.setExtraFormats(aFormatList);
+        return (ImageService2) super.setExtraFormats(aFormatList);
     }
 
     @Override
     @JsonIgnore
     public ImageService2 setExtraQualities(final ImageAPI.ImageQuality... aQualityArray) {
-        return super.setExtraQualities(aQualityArray);
+        return (ImageService2) super.setExtraQualities(aQualityArray);
     }
 
     @Override
     @JsonSetter(ImageAPI.EXTRA_QUALITIES)
     public ImageService2 setExtraQualities(final List<ImageAPI.ImageQuality> aQualityList) {
-        return super.setExtraQualities(aQualityList);
+        return (ImageService2) super.setExtraQualities(aQualityList);
     }
 
     @Override
     @JsonSetter(JsonKeys.V2_ID)
     public ImageService2 setID(final String aID) {
-        return super.setID(aID);
+        return (ImageService2) super.setID(aID);
     }
 
     @Override
     @JsonIgnore
     public ImageService2 setID(final URI aID) {
-        return super.setID(aID);
+        return (ImageService2) super.setID(aID);
     }
 
     @Override
     @JsonIgnore
     public ImageService2 setProtocol(final boolean aProtocolFlag) {
-        return super.setProtocol(aProtocolFlag);
+        return (ImageService2) super.setProtocol(aProtocolFlag);
+    }
+
+    @Override
+    @JsonGetter(ImageAPI.PROTOCOL)
+    @JsonInclude(Include.NON_NULL)
+    public URI getProtocol() {
+        return super.getProtocol();
     }
 
     @Override
     @JsonSetter(JsonKeys.SERVICE)
     public ImageService2 setServices(final List<Service<?>> aServiceList) {
-        return super.setServices(aServiceList);
+        return (ImageService2) super.setServices(aServiceList);
     }
 
     @Override
     @JsonIgnore
     public ImageService2 setServices(final Service<?>... aServiceArray) {
-        return super.setServices(aServiceArray);
+        return (ImageService2) super.setServices(aServiceArray);
     }
 
     @Override
     @JsonSetter(ImageAPI.SIZES)
     public ImageService2 setSizes(final List<Size> aSizeList) {
-        return super.setSizes(aSizeList);
+        return (ImageService2) super.setSizes(aSizeList);
     }
 
     @Override
     @JsonIgnore
     public ImageService2 setSizes(final Size... aSizeArray) {
-        return super.setSizes(aSizeArray);
+        return (ImageService2) super.setSizes(aSizeArray);
     }
 
     @Override
     @JsonSetter(ImageAPI.TILES)
     public ImageService2 setTiles(final List<Tile> aTileList) {
-        return super.setTiles(aTileList);
+        return (ImageService2) super.setTiles(aTileList);
     }
 
     @Override
     @JsonIgnore
     public ImageService2 setTiles(final Tile... aTileArray) {
-        return super.setTiles(aTileArray);
+        return (ImageService2) super.setTiles(aTileArray);
+    }
+
+    @Override
+    public String toString() {
+        try {
+            return JSON.getWriter(ImageService2.class).writeValueAsString(this);
+        } catch (final JsonProcessingException details) {
+            // RuntimeException: this shouldn't fail
+            throw new JsonParsingException(details);
+        }
     }
 
     /**
@@ -268,11 +299,6 @@ public class ImageService2 extends AbstractImageService<ImageService2> implement
          * http://iiif.io/api/image/2/level2.json
          */
         LEVEL_TWO("http://iiif.io/api/image/2/level2.json");
-
-        /**
-         * The image service profile's logger.
-         */
-        private static final Logger LOGGER = LoggerFactory.getLogger(ImageService2.Profile.class, MessageCodes.BUNDLE);
 
         /**
          * The string form of the image service profile.

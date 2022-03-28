@@ -15,7 +15,7 @@ import org.jsoup.nodes.Document.OutputSettings.Syntax;
 import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
 import org.jsoup.safety.Cleaner;
-import org.jsoup.safety.Whitelist;
+import org.jsoup.safety.Safelist;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -136,7 +136,7 @@ public final class I18nUtils {
      */
     public static String stripHTML(final String aString) {
         return Parser.unescapeEntities(
-                Jsoup.clean(encodeSingleBrackets(aString.replaceAll(CDATA_PATTERN, EMPTY)), Whitelist.none()), false);
+                Jsoup.clean(encodeSingleBrackets(aString.replaceAll(CDATA_PATTERN, EMPTY)), Safelist.none()), false);
     }
 
     /**
@@ -210,31 +210,31 @@ public final class I18nUtils {
      * @throws IllegalArgumentException If the supplied HTML fragment doesn't have a single HTML root element.
      */
     public static String cleanHTML(final String aString) {
-        if (isHtmlFragment(aString)) {
-            final OutputSettings settings = new OutputSettings().charset(StandardCharsets.UTF_8).indentAmount(0)
-                    .prettyPrint(false).outline(false).syntax(Syntax.xml); // "The content must be well-formed XML"
-            final Whitelist whitelist = Whitelist.none().addTags(TAGS).addAttributes(LINK_TAG, LINK_ATTRIBUTES)
-                    .addAttributes(IMAGE_TAG, IMAGE_ATTRIBUTES).addProtocols(LINK_TAG, LINK_ATTRIBUTES[0], PROTOCOLS);
-            final String bodyFragment = encodeSingleBrackets(aString.replaceAll(CDATA_PATTERN, EMPTY));
-            final Document dirtyHTML = Jsoup.parseBodyFragment(bodyFragment);
-            final Cleaner htmlCleaner = new Cleaner(whitelist);
-            final Document cleanHTML = htmlCleaner.clean(dirtyHTML).outputSettings(settings);
-
-            for (final Element element : cleanHTML.getAllElements()) {
-                // We start with third position tag because earlier ones are empty elements by definition
-                for (int index = 2; index < TAGS.length; index++) {
-                    if (TAGS[index].equals(element.tagName()) && element.children().isEmpty() &&
-                            (!element.hasText() || element.text().trim().equals(EMPTY))) {
-                        element.remove();
-                    }
-                }
-            }
-
-            // JSoup adds an HTML tag and body wrapper, which we don't want/need for our HTML fragments.
-            return checkForFragment(cleanHTML.body()).children().toString();
-        } else {
+        if (!isHtmlFragment(aString)) {
             return stripHTML(aString);
         }
+
+        final OutputSettings settings = new OutputSettings().charset(StandardCharsets.UTF_8).indentAmount(0)
+                .prettyPrint(false).outline(false).syntax(Syntax.xml); // "The content must be well-formed XML"
+        final Safelist safelist = Safelist.none().addTags(TAGS).addAttributes(LINK_TAG, LINK_ATTRIBUTES)
+                .addAttributes(IMAGE_TAG, IMAGE_ATTRIBUTES).addProtocols(LINK_TAG, LINK_ATTRIBUTES[0], PROTOCOLS);
+        final String bodyFragment = encodeSingleBrackets(aString.replaceAll(CDATA_PATTERN, EMPTY));
+        final Document dirtyHTML = Jsoup.parseBodyFragment(bodyFragment);
+        final Cleaner htmlCleaner = new Cleaner(safelist);
+        final Document cleanHTML = htmlCleaner.clean(dirtyHTML).outputSettings(settings);
+
+        for (final Element element : cleanHTML.getAllElements()) {
+            // We start with third position tag because earlier ones are empty elements by definition
+            for (int index = 2; index < TAGS.length; index++) {
+                if (TAGS[index].equals(element.tagName()) && element.children().isEmpty() &&
+                        (!element.hasText() || element.text().trim().equals(EMPTY))) {
+                    element.remove();
+                }
+            }
+        }
+
+        // JSoup adds an HTML tag and body wrapper, which we don't want/need for our HTML fragments.
+        return checkForFragment(cleanHTML.body()).children().toString();
     }
 
     /**
@@ -263,9 +263,9 @@ public final class I18nUtils {
     public static I18n[] validateI18ns(final boolean aHtmlAllowed, final I18n... aI18nArray) {
         if (aHtmlAllowed) {
             return cleanHTML(aI18nArray);
-        } else {
-            return stripHTML(aI18nArray);
         }
+
+        return stripHTML(aI18nArray);
     }
 
     /**
@@ -310,29 +310,29 @@ public final class I18nUtils {
      * @return A string with less than characters HTML encoded
      */
     private static String encodeSingleBrackets(final String aString) {
-        if (aString.contains(LESS_THAN)) {
-            final StringBuilder builder = new StringBuilder(aString);
-
-            int start = 0;
-
-            // Move through character sequence in string, checking character relationships
-            do {
-                start = builder.indexOf(LESS_THAN, start);
-
-                final int nextGt = builder.indexOf(GREATER_THAN, start);
-                final int nextSpace = builder.indexOf(SPACE, start);
-
-                // Check opening tag for possibilities other than an actual HTML element
-                if (hasSpace(start, nextSpace, nextGt) && hasNoAttribute(builder, start, nextGt) &&
-                        isNotComment(builder, start) && isNotPI(builder, nextGt)) {
-                    builder.replace(start, start + 1, "&lt;");
-                }
-            } while (++start != 0); // i.e., while we're able to find a positive start index
-
-            return builder.toString();
-        } else {
+        if (!aString.contains(LESS_THAN)) {
             return aString;
         }
+
+        final StringBuilder builder = new StringBuilder(aString);
+
+        int start = 0;
+
+        // Move through character sequence in string, checking character relationships
+        do {
+            start = builder.indexOf(LESS_THAN, start);
+
+            final int nextGt = builder.indexOf(GREATER_THAN, start);
+            final int nextSpace = builder.indexOf(SPACE, start);
+
+            // Check opening tag for possibilities other than an actual HTML element
+            if (hasSpace(start, nextSpace, nextGt) && hasNoAttribute(builder, start, nextGt) &&
+                    isNotComment(builder, start) && isNotPI(builder, nextGt)) {
+                builder.replace(start, start + 1, "&lt;");
+            }
+        } while (++start != 0); // i.e., while we're able to find a positive start index
+
+        return builder.toString();
     }
 
     /**

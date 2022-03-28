@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3.services.auth;
+package info.freelibrary.iiif.presentation.v3.services;
 
 import static org.junit.Assert.assertEquals;
 
@@ -48,7 +48,7 @@ public class AuthTokenService1Test {
         final AuthTokenService1 service = new AuthTokenService1(myID.toString());
 
         assertEquals(myID, service.getID());
-        assertEquals(service.myProfile, service.getProfile().get());
+        assertEquals(AuthTokenService1.Profile.TOKEN_SERVICE, service.getProfile().get());
         assertEquals(expected(), found(service));
     }
 
@@ -60,8 +60,46 @@ public class AuthTokenService1Test {
         final AuthTokenService1 service = new AuthTokenService1(myID);
 
         assertEquals(myID, service.getID());
-        assertEquals(service.myProfile, service.getProfile().get());
+        assertEquals(AuthTokenService1.Profile.TOKEN_SERVICE, service.getProfile().get());
         assertEquals(expected(), found(service));
+    }
+
+    /**
+     * Tests {@link AuthTokenService1#setProfile(String) setProfile}.
+     */
+    @Test
+    public final void testSetProfileString() {
+        final AuthTokenService1 service = new AuthTokenService1(myID);
+
+        service.setProfile(AuthTokenService1.Profile.TOKEN_SERVICE.string());
+        assertEquals(AuthTokenService1.Profile.TOKEN_SERVICE, service.getProfile().get());
+    }
+
+    /**
+     * Tests {@link AuthTokenService1#setProfile(String) setProfile} with invalid input.F
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public final void testSetProfileStringInvalid() {
+        new AuthTokenService1(myID).setProfile(AuthCookieService1.Profile.EXTERNAL.string());
+    }
+
+    /**
+     * Tests {@link AuthTokenService1#setProfile(AuthService.Profile) setProfile}.
+     */
+    @Test
+    public final void testSetProfileProfile() {
+        final AuthTokenService1 service = new AuthTokenService1(myID);
+
+        service.setProfile(AuthTokenService1.Profile.TOKEN_SERVICE.string());
+        assertEquals(AuthTokenService1.Profile.TOKEN_SERVICE, service.getProfile().get());
+    }
+
+    /**
+     * Tests {@link AuthTokenService1#setProfile(AuthService.Profile) setProfile} with invalid input.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public final void testSetProfileProfileInvalid() {
+        new AuthTokenService1(myID).setProfile(AuthCookieService1.Profile.EXTERNAL);
     }
 
     /**

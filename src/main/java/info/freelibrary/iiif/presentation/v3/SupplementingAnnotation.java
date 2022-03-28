@@ -261,7 +261,8 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     }
 
     @Override
-    public SupplementingAnnotation setServices(final Service<?>... aServiceArray) {
+    @SafeVarargs
+    public final SupplementingAnnotation setServices(final Service<?>... aServiceArray) {
         return (SupplementingAnnotation) super.setServices(aServiceArray);
     }
 

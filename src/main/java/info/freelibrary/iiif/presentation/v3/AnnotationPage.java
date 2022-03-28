@@ -34,7 +34,6 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavi
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-import info.freelibrary.iiif.presentation.v3.utils.URIs;
 
 /**
  * A collection of {@link Annotation}(s) included in the items property of the Canvas (and whose target is that Canvas).
@@ -382,7 +381,7 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
      */
     @JsonGetter(JsonKeys.CONTEXT)
     private URI getExternalContext() {
-        return isExternal ? URIs.CONTEXT_URI : null;
+        return isExternal ? PRESENTATION_CONTEXT_URI : null;
     }
 
     /**
@@ -393,7 +392,7 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
      */
     @JsonSetter(JsonKeys.CONTEXT)
     private AnnotationPage<T> setExternalContext(final String aContextURI) {
-        if (URIs.CONTEXT_URI.toString().equalsIgnoreCase(aContextURI)) {
+        if (PRESENTATION_CONTEXT_URI.toString().equalsIgnoreCase(aContextURI)) {
             setExternalContext();
         }
 

@@ -30,11 +30,10 @@ import info.freelibrary.iiif.presentation.v3.properties.Metadata;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
+import info.freelibrary.iiif.presentation.v3.services.ImageService3;
+import info.freelibrary.iiif.presentation.v3.services.ImageService3.Profile;
 import info.freelibrary.iiif.presentation.v3.services.OtherService3;
-import info.freelibrary.iiif.presentation.v3.services.image.ImageService3;
-import info.freelibrary.iiif.presentation.v3.services.image.ImageService3.Profile;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
-import info.freelibrary.iiif.presentation.v3.utils.URIs;
 
 /**
  * A manifest test.
@@ -69,7 +68,8 @@ public class ManifestTest extends AbstractTest {
 
     private final List<URI> myContexts = Arrays.asList(URI.create(getURL()), URI.create(getURL()), URI.create(getURL()),
             URI.create(getURL()), URI.create(getURL()), URI.create(getURL()), URI.create(getURL()),
-            URI.create(getURL()), URI.create(getURL()), URI.create(getURL()), URI.create(getURL()), URIs.CONTEXT_URI);
+            URI.create(getURL()), URI.create(getURL()), URI.create(getURL()), URI.create(getURL()),
+            AbstractResource.PRESENTATION_CONTEXT_URI);
 
     private Manifest myManifest;
 
@@ -159,20 +159,20 @@ public class ManifestTest extends AbstractTest {
         final List<URI> preSort = new ArrayList<>();
 
         // Shuffle until our last list item isn't the required one
-        while (URIs.CONTEXT_URI.equals(myContexts.get(lastIndex))) {
+        while (AbstractResource.PRESENTATION_CONTEXT_URI.equals(myContexts.get(lastIndex))) {
             Collections.shuffle(myContexts);
         }
 
         // Remember the state of our list before the sort, minus the required Context
         assertTrue(preSort.addAll(myContexts));
-        assertTrue(preSort.remove(URIs.CONTEXT_URI));
+        assertTrue(preSort.remove(AbstractResource.PRESENTATION_CONTEXT_URI));
 
         // Sort list items
         Collections.sort(myContexts, new ContextListComparator<>());
 
         // Check that the last URI in the list is our required one and
         // that list has same pre-sort order minus the required context
-        assertEquals(myContexts.get(lastIndex), URIs.CONTEXT_URI);
+        assertEquals(myContexts.get(lastIndex), AbstractResource.PRESENTATION_CONTEXT_URI);
         assertEquals(preSort, myContexts.subList(0, lastIndex));
     }
 
@@ -232,7 +232,8 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public void testGetPrimaryContext() {
-        assertEquals(URIs.CONTEXT_URI, myManifest.addContexts(URI.create(myLoremIpsum.getUrl())).getContext());
+        assertEquals(AbstractResource.PRESENTATION_CONTEXT_URI,
+                myManifest.addContexts(URI.create(myLoremIpsum.getUrl())).getContext());
     }
 
     /**
@@ -253,7 +254,7 @@ public class ManifestTest extends AbstractTest {
      */
     @Test(expected = UnsupportedOperationException.class)
     public void testRemovePrimaryContext() {
-        myManifest.removeContext(URIs.CONTEXT_URI);
+        myManifest.removeContext(AbstractResource.PRESENTATION_CONTEXT_URI);
     }
 
     /**

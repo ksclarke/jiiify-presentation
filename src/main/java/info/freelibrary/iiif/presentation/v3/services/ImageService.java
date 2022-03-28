@@ -1,13 +1,18 @@
 
-package info.freelibrary.iiif.presentation.v3.services.image;
+package info.freelibrary.iiif.presentation.v3.services;
 
 import java.net.URI;
 import java.util.List;
 
 import info.freelibrary.iiif.presentation.v3.Service;
+import info.freelibrary.iiif.presentation.v3.services.image.ImageAPI;
+import info.freelibrary.iiif.presentation.v3.services.image.Size;
+import info.freelibrary.iiif.presentation.v3.services.image.Tile;
 
 /**
- * Interface for image services.
+ * An interface for image service implementations.
+ *
+ * @param <T> A type of image service
  */
 public interface ImageService<T extends ImageService<T>> extends Service<T> {
 
@@ -119,7 +124,15 @@ public interface ImageService<T extends ImageService<T>> extends Service<T> {
     List<Size> getSizes();
 
     /**
-     * Interface for {@link ImageService} profiles.
+     * Sets the image service profile.
+     *
+     * @param aProfile A image service profile
+     * @return This image service
+     */
+    T setProfile(ImageService.Profile aProfile);
+
+    /**
+     * The interface for {@link ImageService} profiles.
      */
     interface Profile extends Service.Profile {
 

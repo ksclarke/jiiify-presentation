@@ -1,21 +1,39 @@
 
-package info.freelibrary.iiif.presentation.v3.services.auth;
+package info.freelibrary.iiif.presentation.v3.services;
 
 import java.net.URI;
+import java.util.List;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+import info.freelibrary.iiif.presentation.v3.JsonParsingException;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.Service;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * A version 1 authorization token service.
  */
-public class AuthTokenService1 extends AbstractAuthService<AuthTokenService1> {
+@JsonPropertyOrder({ JsonKeys.CONTEXT, JsonKeys.V2_ID, JsonKeys.V2_TYPE, JsonKeys.PROFILE })
+public class AuthTokenService1 extends AbstractAuthService<AuthTokenService1>
+        implements AuthService<AuthTokenService1> {
+
+    /**
+     * A logger for AuthTokenService1.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthTokenService1.class, MessageCodes.BUNDLE);
 
     /**
      * Creates a new auth token service.
@@ -42,9 +60,84 @@ public class AuthTokenService1 extends AbstractAuthService<AuthTokenService1> {
     }
 
     @Override
-    public AuthTokenService1 setProfile(final String aProfile) {
-        myProfile = Profile.fromString(aProfile);
+    @JsonSetter(JsonKeys.V2_ID)
+    public AuthTokenService1 setID(final String aID) {
+        return (AuthTokenService1) super.setID(aID);
+    }
+
+    @Override
+    @JsonIgnore
+    public AuthTokenService1 setID(final URI aID) {
+        return (AuthTokenService1) super.setID(aID);
+    }
+
+    @Override
+    @JsonGetter(JsonKeys.V2_TYPE)
+    public String getType() {
+        return AuthTokenService1.class.getSimpleName();
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.V2_TYPE)
+    public AuthTokenService1 setType(final String aType) {
+        return (AuthTokenService1) super.setType(aType);
+    }
+
+    @Override
+    public AuthTokenService1 setProfile(final AuthService.Profile aProfile) {
+        if (!AuthTokenService1.Profile.TOKEN_SERVICE.equals(aProfile)) {
+            final String message = LOGGER.getMessage(MessageCodes.JPA_122, aProfile, getClass().getSimpleName());
+            throw new IllegalArgumentException(message);
+        }
+
         return this;
+    }
+
+    @Override
+    public AuthTokenService1 setProfile(final String aProfile) {
+        if (!AuthTokenService1.Profile.TOKEN_SERVICE.string().equals(aProfile)) {
+            final String message = LOGGER.getMessage(MessageCodes.JPA_122, aProfile, getClass().getSimpleName());
+            throw new IllegalArgumentException(message);
+        }
+
+        return this;
+    }
+
+    @Override
+    public Optional<Service.Profile> getProfile() {
+        return super.getProfile();
+    }
+
+    @Override
+    @JsonIgnore
+    public AuthTokenService1 setServices(final Service<?>... aServicesArray) {
+        return (AuthTokenService1) super.setServices(aServicesArray);
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.SERVICE)
+    public AuthTokenService1 setServices(final List<Service<?>> aServiceList) {
+        return (AuthTokenService1) super.setServices(aServiceList);
+    }
+
+    @Override
+    @JsonGetter(JsonKeys.SERVICE)
+    @JsonInclude(Include.NON_EMPTY)
+    public List<Service<?>> getServices() {
+        return super.getServices();
+    }
+
+    /**
+     * Outputs a string representation of the service. The string content is marked up in JSON.
+     */
+    @Override
+    public String toString() {
+        try {
+            return JSON.getWriter(AuthTokenService1.class).writeValueAsString(this);
+        } catch (final JsonProcessingException details) {
+            // RuntimeException: this shouldn't fail
+            throw new JsonParsingException(details);
+        }
     }
 
     /**

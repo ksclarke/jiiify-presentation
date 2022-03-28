@@ -13,31 +13,29 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.util.StringUtils;
-import info.freelibrary.util.warnings.JDK;
-
 import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
  * An abstract service class that specific services can extend.
  */
-public abstract class AbstractService<T extends AbstractService<T>> implements Service<T> {
+@SuppressWarnings("PMD.AbstractClassWithoutAbstractMethod")
+abstract class AbstractService<T extends AbstractService<T>> {
 
     /**
-     * A list of services related to this service.
+     * The service's type.
      */
-    protected List<Service<?>> myServices;
-
-    /**
-     * This service's type.
-     */
-    protected String myType;
+    private String myType;
 
     /**
      * This service's ID.
      */
-    protected URI myID;
+    private URI myID;
+
+    /**
+     * A list of services related to this service.
+     */
+    private List<Service<?>> myServices;
 
     /**
      * An empty constructor for Jackson's deserialization process.
@@ -46,39 +44,109 @@ public abstract class AbstractService<T extends AbstractService<T>> implements S
         // This is intentionally left empty
     }
 
-    @Override
+    /**
+     * Creates a new service from the supplied services.
+     *
+     * @param aServicesArray An array of related services
+     */
+    protected AbstractService(final Service<?>... aServicesArray) {
+        myServices = Arrays.asList(aServicesArray);
+    }
+
+    /**
+     * Creates a new service from the supplied ID.
+     *
+     * @param aID A service ID
+     */
+    protected AbstractService(final String aID) {
+        myID = URI.create(Objects.requireNonNull(aID));
+    }
+
+    /**
+     * Creates a new service from the supplied ID.
+     *
+     * @param aID A service ID
+     */
+    protected AbstractService(final URI aID) {
+        myID = Objects.requireNonNull(aID);
+    }
+
+    /**
+     * Creates a new service from the supplied ID.
+     *
+     * @param aID A service ID
+     * @param aServicesArray An array of services
+     */
+    protected AbstractService(final URI aID, final Service<?>... aServicesArray) {
+        myID = Objects.requireNonNull(aID);
+        myServices = Arrays.asList(aServicesArray);
+    }
+
+    /**
+     * Gets the service ID.
+     *
+     * @return The service ID
+     */
     @JsonGetter(JsonKeys.ID)
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     public URI getID() {
         return myID;
     }
 
-    @Override
+    /**
+     * Sets the service ID.
+     *
+     * @param aID A service ID
+     * @return This service
+     */
     @JsonIgnore
-    @SuppressWarnings(JDK.UNCHECKED)
-    public T setID(final URI aID) {
+    public AbstractService<T> setID(final URI aID) {
         myID = aID;
-        return (T) this;
+        return this;
     }
 
-    @Override
+    /**
+     * Sets the service ID from a string.
+     *
+     * @param aID A service ID in string form
+     * @return This service
+     */
     @JsonSetter(JsonKeys.ID)
-    public T setID(final String aID) {
+    public AbstractService<T> setID(final String aID) {
         return setID(URI.create(aID));
     }
 
-    @Override
-    public abstract T setType(String aType);
+    /**
+     * Sets the service type.
+     *
+     * @param aType A service type
+     * @return This service
+     */
 
-    @Override
-    public String getType() {
-        // Overrides the default method defined in the Service interface
-        return StringUtils.trimToNull(myType) == null ? getClass().getSimpleName() : myType;
+    public AbstractService<T> setType(final String aType) {
+        myType = aType;
+        return this;
     }
 
-    @Override
+    /**
+     * Gets the service type.
+     *
+     * @return The service type
+     */
+    @JsonGetter(JsonKeys.TYPE)
+    @JsonInclude(Include.NON_EMPTY)
+    public String getType() {
+        return myType;
+    }
+
+    /**
+     * Sets services related to this service.
+     *
+     * @param aServiceList A list of services
+     * @return This service
+     */
     @JsonSetter(JsonKeys.SERVICE)
-    @SuppressWarnings(JDK.UNCHECKED)
-    public T setServices(final List<Service<?>> aServiceList) {
+    public AbstractService<T> setServices(final List<Service<?>> aServiceList) {
         if (!aServiceList.isEmpty()) {
             final List<Service<?>> services = getServices();
 
@@ -88,16 +156,25 @@ public abstract class AbstractService<T extends AbstractService<T>> implements S
             services.addAll(aServiceList);
         }
 
-        return (T) this;
+        return this;
     }
 
-    @Override
+    /**
+     * Sets services related to this service.
+     *
+     * @param aServiceArray An array of services
+     * @return This service
+     */
     @JsonIgnore
-    public T setServices(final Service<?>... aServiceArray) {
+    public AbstractService<T> setServices(final Service<?>... aServiceArray) {
         return setServices(Arrays.asList(aServiceArray));
     }
 
-    @Override
+    /**
+     * Gets the services related to this service.
+     *
+     * @return A list of services related to this service
+     */
     @JsonGetter(JsonKeys.SERVICE)
     @JsonInclude(Include.NON_EMPTY)
     public List<Service<?>> getServices() {

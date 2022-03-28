@@ -5,14 +5,13 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-
 /**
- * A service interface to be implemented by actual services.
+ * An interface for service implementations.
+ *
+ * @param <T> A type of service
  */
 @JsonDeserialize(using = ServiceDeserializer.class)
 public interface Service<T extends Service<T>> {
@@ -41,14 +40,11 @@ public interface Service<T extends Service<T>> {
     T setID(String aID);
 
     /**
-     * Gets the service type. The simple class name is used for the type if type is not set by an implementing class.
+     * Gets the service type.
      *
      * @return The service type
      */
-    @JsonGetter(JsonKeys.TYPE)
-    default String getType() {
-        return getClass().getSimpleName();
-    }
+    String getType();
 
     /**
      * Sets the service type.
@@ -97,7 +93,7 @@ public interface Service<T extends Service<T>> {
     List<Service<?>> getServices();
 
     /**
-     * An interface for the service profile.
+     * An interface for {@link Service} profiles.
      */
     interface Profile {
 
