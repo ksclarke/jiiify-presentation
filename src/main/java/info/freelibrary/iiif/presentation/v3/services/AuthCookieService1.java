@@ -49,7 +49,7 @@ public interface AuthCookieService1<T extends AuthCookieService1<T>> extends Aut
     String getFailureDescription();
 
     /**
-     * The {@AuthCookieService1} profile.
+     * The {@link AuthCookieService1} profile.
      */
     enum Profile implements AuthService.Profile {
 
