@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
@@ -182,6 +183,7 @@ abstract class AbstractCookieService<T extends AbstractCookieService<T>> extends
      * @return This service
      */
     @JsonSetter(JsonKeys.CONTEXT)
+    @SuppressWarnings(PMD.UNUSED_FORMAL_PARAMETER)
     private AbstractCookieService<T> setContext(final String aContext) {
         if (!AUTH_COOKIE_SERVICE_1_CONTEXT.equals(aContext)) {
             final String message = LOGGER.getMessage(MessageCodes.JPA_126, aContext, getClass().getSimpleName());

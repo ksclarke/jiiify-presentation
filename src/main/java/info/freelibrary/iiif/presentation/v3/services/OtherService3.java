@@ -205,7 +205,7 @@ public final class OtherService3 extends AbstractOtherService<OtherService3> imp
         map.put(JsonKeys.ID, id);
         type = getType();
 
-        if (type != OtherService3.class.getSimpleName()) {
+        if (!OtherService3.class.getSimpleName().equals(type)) {
             map.put(JsonKeys.TYPE, type);
         }
 
