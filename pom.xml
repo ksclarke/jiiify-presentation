@@ -48,7 +48,7 @@
     <jackson.databind.version>2.12.6</jackson.databind.version>
     <guava.version>30.1.1-jre</guava.version>
     <freelib.utils.version>2.4.0</freelib.utils.version>
-    <vertx.version>3.9.9</vertx.version>
+    <vertx.version>4.0.0</vertx.version>
 
     <!-- Test related versions -->
     <opencsv.version>4.6</opencsv.version>
