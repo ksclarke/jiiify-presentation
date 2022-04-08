@@ -44,11 +44,11 @@
     <revision>0.0.0-SNAPSHOT</revision>
 
     <!-- Project dependencies -->
-    <jackson.version>2.12.5</jackson.version>
-    <jackson.databind.version>2.12.6</jackson.databind.version>
-    <guava.version>30.1.1-jre</guava.version>
-    <freelib.utils.version>2.4.0</freelib.utils.version>
-    <vertx.version>3.9.9</vertx.version>
+    <jackson.version>2.12.6</jackson.version>
+    <jackson.databind.version>2.12.6.1</jackson.databind.version>
+    <guava.version>31.1-jre</guava.version>
+    <freelib.utils.version>3.0.1</freelib.utils.version>
+    <vertx.version>3.9.11</vertx.version>
 
     <!-- Test related versions -->
     <opencsv.version>4.6</opencsv.version>
@@ -126,9 +126,6 @@
             <goals>
               <goal>generate-codes</goal>
             </goals>
-            <configuration>
-              <generatedSourcesDirectory>${project.basedir}/src/main/generated</generatedSourcesDirectory>
-            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -191,7 +188,7 @@
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>7.0.1</version>
+    <version>7.2.2</version>
   </parent>
 
 </project>

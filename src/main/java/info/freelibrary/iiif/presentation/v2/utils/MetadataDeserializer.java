@@ -47,7 +47,7 @@ public class MetadataDeserializer extends StdDeserializer<Metadata> {
      *
      */
     @Override
-    @SuppressWarnings("PMD.CyclomaticComplexity")
+    @SuppressWarnings({ "PMD.CyclomaticComplexity", "PMD.CognitiveComplexity" })
     public Metadata deserialize(final JsonParser aParser, final DeserializationContext aContext)
             throws IOException, JsonProcessingException {
         final JsonNode node = aParser.getCodec().readTree(aParser);

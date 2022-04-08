@@ -11,14 +11,15 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+
 import info.freelibrary.iiif.presentation.v2.services.APIComplianceLevel;
 import info.freelibrary.iiif.presentation.v2.services.GenericService;
 import info.freelibrary.iiif.presentation.v2.services.GeoJSONService;
 import info.freelibrary.iiif.presentation.v2.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.v2.services.PhysicalDimsService;
 import info.freelibrary.iiif.presentation.v2.services.Service;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
 
 /**
  * Deserializes services from JSON documents into {@link Service} implementations.
@@ -55,7 +56,7 @@ public class ServiceDeserializer extends StdDeserializer<Service<?>> {
      * Deserializes a JSON representation of a service.
      */
     @Override
-    @SuppressWarnings("PMD.CyclomaticComplexity")
+    @SuppressWarnings({ "PMD.CyclomaticComplexity", "PMD.CognitiveComplexity" })
     public Service<?> deserialize(final JsonParser aParser, final DeserializationContext aContext)
             throws IOException, JsonProcessingException {
         final JsonNode node = aParser.getCodec().readTree(aParser);

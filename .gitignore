@@ -17,3 +17,8 @@ src/main/tools/eclipse
 
 # Local configuration of test logging
 logback-test.xml
+
+# Build artifacts from v3's build
+node_modules/
+package-lock.json
+package.json

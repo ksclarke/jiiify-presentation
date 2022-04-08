@@ -17,6 +17,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.util.I18nRuntimeException;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+
 import info.freelibrary.iiif.presentation.v2.properties.Attribution;
 import info.freelibrary.iiif.presentation.v2.properties.Description;
 import info.freelibrary.iiif.presentation.v2.properties.Label;
@@ -33,9 +37,7 @@ import info.freelibrary.iiif.presentation.v2.properties.ViewingHint.Option;
 import info.freelibrary.iiif.presentation.v2.services.Service;
 import info.freelibrary.iiif.presentation.v2.utils.Constants;
 import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
-import info.freelibrary.util.I18nRuntimeException;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
+
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.json.jackson.DatabindCodec;
@@ -162,8 +164,9 @@ public class Manifest extends Resource<Manifest> {
     @JsonIgnore
     public List<URI> getContexts() {
         if (myContexts.isEmpty()) {
-            return null;
+            return new ArrayList<>();
         }
+
         return myContexts;
     }
 
