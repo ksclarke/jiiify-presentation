@@ -15,6 +15,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.util.I18nRuntimeException;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.StringUtils;
+
 import info.freelibrary.iiif.presentation.v2.properties.Attribution;
 import info.freelibrary.iiif.presentation.v2.properties.Description;
 import info.freelibrary.iiif.presentation.v2.properties.Label;
@@ -31,10 +36,6 @@ import info.freelibrary.iiif.presentation.v2.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.v2.services.Service;
 import info.freelibrary.iiif.presentation.v2.utils.Constants;
 import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
-import info.freelibrary.util.I18nRuntimeException;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.StringUtils;
 
 /**
  * An image resource that is associated with a {@link Canvas}.
@@ -309,7 +310,7 @@ public class ImageContent extends Content<ImageContent> {
      * @return The resources map
      */
     @JsonGetter(Constants.RESOURCE)
-    @SuppressWarnings("PMD.CyclomaticComplexity")
+    @SuppressWarnings({ "PMD.CyclomaticComplexity", "PMD.CognitiveComplexity" })
     private Map<String, Object> getResourcesMap() {
         final Map<String, Object> map = new TreeMap<>();
 
@@ -375,7 +376,7 @@ public class ImageContent extends Content<ImageContent> {
      * @param aResourceMap A JSON representation of the resources map
      */
     @JsonSetter(Constants.RESOURCE)
-    @SuppressWarnings("PMD.CyclomaticComplexity")
+    @SuppressWarnings({ "PMD.CyclomaticComplexity", "PMD.CognitiveComplexity" })
     private void setResourcesMap(final Map<String, Object> aResourceMap) {
         LOGGER.trace(aResourceMap.toString());
 
@@ -409,7 +410,7 @@ public class ImageContent extends Content<ImageContent> {
      * @param aImageResourceMap A map containing image content metadata
      * @return The image resource
      */
-    @SuppressWarnings({ "PMD.CyclomaticComplexity", "PMD.NPathComplexity" })
+    @SuppressWarnings({ "PMD.CyclomaticComplexity", "PMD.NPathComplexity", "PMD.CognitiveComplexity" })
     private ImageResource buildImageResource(final Object aImageResourceMap) {
         if (!(aImageResourceMap instanceof Map)) {
             return null;
