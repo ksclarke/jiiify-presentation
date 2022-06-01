@@ -23,7 +23,6 @@ import info.freelibrary.iiif.presentation.v2.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v2.properties.ViewingHint;
 import info.freelibrary.iiif.presentation.v2.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.v2.utils.Constants;
-
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.JsonObject;
@@ -51,11 +50,9 @@ public class ManifestTest extends AbstractTest {
 
     private static final String TEST_TITLE = "Georgian NF Fragment 68a";
 
-    private static final List<String[]> METADATA_PAIRS = Stream
-            .of(new String[] { "Title", TEST_TITLE }, new String[] { "Extent", "1 f" },
-                    new String[] { "Overtext Language", "Georgian" },
-                    new String[] { "Undertext Language(s)", "Christian Palestinian Aramaic" })
-            .collect(Collectors.toList());
+    private static final List<String[]> METADATA_PAIRS = Stream.of(new String[] { "Title", TEST_TITLE },
+        new String[] { "Extent", "1 f" }, new String[] { "Overtext Language", "Georgian" },
+        new String[] { "Undertext Language(s)", "Christian Palestinian Aramaic" }).collect(Collectors.toList());
 
     private static final int HEIGHT = 8176;
 
@@ -135,7 +132,7 @@ public class ManifestTest extends AbstractTest {
         }
 
         sequence.addCanvas(canvas1, canvas2);
-        myVertx = Vertx.factory.vertx();
+        myVertx = Vertx.vertx();
     }
 
     /**

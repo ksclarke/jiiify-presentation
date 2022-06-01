@@ -44,7 +44,7 @@ public class CollectionTest {
     public void setUp() {
         myID = UUID.randomUUID().toString();
         myLabel = "label-" + UUID.randomUUID().toString();
-        myVertx = Vertx.factory.vertx();
+        myVertx = Vertx.vertx();
     }
 
     /**
@@ -53,7 +53,7 @@ public class CollectionTest {
     @Test
     public void testCollectionManifestManifestConstructor() {
         final Collection.Manifest manifest =
-                new Collection.Manifest(new info.freelibrary.iiif.presentation.v2.Collection.Manifest(myID, myLabel));
+            new Collection.Manifest(new info.freelibrary.iiif.presentation.v2.Collection.Manifest(myID, myLabel));
 
         assertEquals(URI.create(myID), manifest.getID());
         assertEquals(new Label(myLabel), manifest.getLabel());
@@ -151,7 +151,7 @@ public class CollectionTest {
     @Test
     public void testFromString() {
         final String json =
-                myVertx.fileSystem().readFileBlocking(TEST_FILE1.getAbsolutePath()).toString(StandardCharsets.UTF_8);
+            myVertx.fileSystem().readFileBlocking(TEST_FILE1.getAbsolutePath()).toString(StandardCharsets.UTF_8);
         final Collection collection = Collection.fromString(json);
 
         assertEquals(new JsonObject(json), collection.toJSON());
