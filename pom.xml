@@ -68,10 +68,10 @@
   <properties>
     <revision>0.0.0-SNAPSHOT</revision>
 
-    <jackson.version>2.13.2</jackson.version>
-    <jackson.databind.version>2.13.2.1</jackson.databind.version>
+    <jackson.version>2.13.3</jackson.version>
+    <jackson.databind.version>2.13.3</jackson.databind.version>
     <freelib.utils.version>3.0.1</freelib.utils.version>
-    <jsoup.version>1.14.3</jsoup.version>
+    <jsoup.version>1.15.1</jsoup.version>
     <combinatorics.version>3.3.0</combinatorics.version>
     <media.fragments.uri.version>2.4</media.fragments.uri.version>
 
