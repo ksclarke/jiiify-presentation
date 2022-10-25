@@ -269,6 +269,7 @@ class DefaultMinter implements Minter {
      *
      * @param aManifest A supplied manifest
      */
+    @SuppressWarnings({ "PMD.CognitiveComplexity", PMD.COGNITIVE_COMPLEXITY })
     private void findPreexistingIDs(final Manifest aManifest) {
         for (final Canvas canvas : aManifest.getCanvases()) {
             if (!myExistingIDs.add(canvas.getID())) {
@@ -370,29 +371,31 @@ class DefaultMinter implements Minter {
         @Override
         @SuppressWarnings(PMD.AVOID_DEEPLY_NESTED_IF_STMTS)
         public String next() {
-            if (hasNext()) {
-                final String noid = NOIDS.get(myIndex);
+            final String noid;
 
-                // Check to see if we've retrieved all the possible NOIDs and increment if not
-                if (++myCount < MAX_NOID_COUNT) {
-                    myIndex += mySkipCount;
-
-                    // When at the end of an iteration cycle, reset the index to a new start
-                    if (myIndex >= MAX_NOID_COUNT) {
-                        myIndex = ++myIteration + myStart;
-
-                        // Loop around to get the remaining ones from the start of the array
-                        if (myIndex >= mySkipCount + myStart) { // NOPMD
-                            mySkipCount = 1;
-                            myIndex = 0;
-                        }
-                    }
-                }
-
-                return noid;
-            } else {
+            if (!hasNext()) {
                 throw new IndexOutOfBoundsException(myIndex);
             }
+
+            noid = NOIDS.get(myIndex);
+
+            // Check to see if we've retrieved all the possible NOIDs and increment if not
+            if (++myCount < MAX_NOID_COUNT) {
+                myIndex += mySkipCount;
+
+                // When at the end of an iteration cycle, reset the index to a new start
+                if (myIndex >= MAX_NOID_COUNT) {
+                    myIndex = ++myIteration + myStart;
+
+                    // Loop around to get the remaining ones from the start of the array
+                    if (myIndex >= mySkipCount + myStart) { // NOPMD
+                        mySkipCount = 1;
+                        myIndex = 0;
+                    }
+                }
+            }
+
+            return noid;
         }
 
     }

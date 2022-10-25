@@ -191,6 +191,7 @@ public final class OtherService3 extends AbstractOtherService<OtherService3> imp
      */
     @Override
     @JsonValue
+    @SuppressWarnings("PMD.ReturnEmptyCollectionRatherThanNull") // This is for Jackson
     protected Map<String, Object> toJsonValue() {
         final LinkedHashMap<String, Object> map = new LinkedHashMap<>();
         final List<Service<?>> services;

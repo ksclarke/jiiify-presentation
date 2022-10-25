@@ -293,8 +293,9 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     @JsonIgnore
     public List<URI> getContexts() {
         if (myContexts.isEmpty()) {
-            return null;
+            return Collections.emptyList();
         }
+
         return Collections.unmodifiableList(myContexts);
     }
 

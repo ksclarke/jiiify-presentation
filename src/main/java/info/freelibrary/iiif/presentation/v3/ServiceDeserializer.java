@@ -94,7 +94,8 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
      * @param aNode A JSON node representing a service
      * @return A service
      */
-    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY, "PMD.CyclomaticComplexity" })
+    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY, "PMD.CyclomaticComplexity", "PMD.CognitiveComplexity",
+        PMD.COGNITIVE_COMPLEXITY })
     private Service<?> deserializeServiceNode(final JsonParser aParser, final JsonNode aNode)
             throws JsonProcessingException {
         final Service<?> service;
