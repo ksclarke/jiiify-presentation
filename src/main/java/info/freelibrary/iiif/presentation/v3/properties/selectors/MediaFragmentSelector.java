@@ -376,7 +376,7 @@ public class MediaFragmentSelector implements FragmentSelector {
      * @return True if this selector has a temporal end; else, false
      */
     public boolean hasEnd() {
-        return myMediaFragment.getTemporalFragment().getEnd() != Clocktime.INFINIT;
+        return !Clocktime.INFINIT.equals(myMediaFragment.getTemporalFragment().getEnd());
     }
 
     /**
