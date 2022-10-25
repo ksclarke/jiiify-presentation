@@ -44,11 +44,11 @@
     <revision>0.0.0-SNAPSHOT</revision>
 
     <!-- Project dependencies -->
-    <jackson.version>2.13.3</jackson.version>
-    <jackson.databind.version>2.13.3</jackson.databind.version>
+    <jackson.version>2.13.4</jackson.version>
+    <jackson.databind.version>2.13.4.2</jackson.databind.version>
     <guava.version>31.1-jre</guava.version>
-    <freelib.utils.version>3.0.1</freelib.utils.version>
-    <vertx.version>4.3.1</vertx.version>
+    <freelib.utils.version>3.2.4</freelib.utils.version>
+    <vertx.version>4.3.4</vertx.version>
 
     <!-- Test related versions -->
     <opencsv.version>4.6</opencsv.version>
@@ -184,11 +184,39 @@
     </plugins>
   </build>
 
+  <profiles>
+    <profile>
+      <id>snyk-check</id>
+      <activation>
+        <property>
+          <name>env.SNYK_TOKEN</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>io.snyk</groupId>
+            <artifactId>snyk-maven-plugin</artifactId>
+            <!-- Configurations have to be overridden in the executions' configuration elements -->
+            <executions>
+              <execution>
+                <id>snyk-test</id>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
   <!-- Pulls in standard FreeLibrary Project configuration options -->
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>7.2.2</version>
+    <version>7.4.2</version>
   </parent>
 
 </project>
