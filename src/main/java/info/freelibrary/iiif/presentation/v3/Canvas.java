@@ -8,6 +8,8 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -150,6 +152,7 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
      * @return A placeholder canvas
      */
     @JsonGetter(JsonKeys.PLACEHOLDER_CANVAS)
+    @JsonInclude(Include.NON_ABSENT)
     public Optional<PlaceholderCanvas> getPlaceholderCanvas() {
         return myPlaceholderCanvas;
     }
@@ -172,6 +175,7 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
      * @return The accompanying canvas
      */
     @JsonGetter(JsonKeys.ACCOMPANYING_CANVAS)
+    @JsonInclude(Include.NON_ABSENT)
     public Optional<AccompanyingCanvas> getAccompanyingCanvas() {
         return myAccompanyingCanvas;
     }

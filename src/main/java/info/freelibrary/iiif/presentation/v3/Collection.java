@@ -151,6 +151,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      * @return A placeholder canvas
      */
     @JsonGetter(JsonKeys.PLACEHOLDER_CANVAS)
+    @JsonInclude(Include.NON_ABSENT)
     public Optional<PlaceholderCanvas> getPlaceholderCanvas() {
         return myPlaceholderCanvas;
     }
@@ -173,6 +174,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      * @return The accompanying canvas
      */
     @JsonGetter(JsonKeys.ACCOMPANYING_CANVAS)
+    @JsonInclude(Include.NON_ABSENT)
     public Optional<AccompanyingCanvas> getAccompanyingCanvas() {
         return myAccompanyingCanvas;
     }

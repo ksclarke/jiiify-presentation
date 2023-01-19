@@ -124,6 +124,7 @@ public class PointSelector implements Selector {
      *
      * @return The X coordinate
      */
+    @JsonInclude(Include.NON_ABSENT)
     public OptionalInt getX() {
         return myX;
     }
@@ -144,6 +145,7 @@ public class PointSelector implements Selector {
      *
      * @return The Y coordinate
      */
+    @JsonInclude(Include.NON_ABSENT)
     public OptionalInt getY() {
         return myY;
     }
@@ -178,6 +180,7 @@ public class PointSelector implements Selector {
      * @return The number of seconds since the start of the resource
      */
     @JsonProperty(PointSelector.T_COORDINATE)
+    @JsonInclude(Include.NON_ABSENT)
     public Optional<Float> getSeconds() {
         return myT;
     }

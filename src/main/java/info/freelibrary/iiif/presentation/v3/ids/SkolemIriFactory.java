@@ -105,9 +105,8 @@ public final class SkolemIriFactory {
     public URI getSkolemIRI() {
         if (myWellKnownBase == null) {
             return URI.create(UUID.randomUUID().toString());
-        } else {
-            return URI.create(myWellKnownBase + COMPONENT_START + UUID.randomUUID().toString());
         }
+        return URI.create(myWellKnownBase + COMPONENT_START + UUID.randomUUID().toString());
     }
 
     /**

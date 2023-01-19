@@ -10,6 +10,8 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -176,6 +178,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
      * @return The annotation collection linked to this range
      */
     @JsonGetter(JsonKeys.SUPPLEMENTARY)
+    @JsonInclude(Include.NON_ABSENT)
     public Optional<SupplementaryAnnotations> getSupplementaryAnnotations() {
         return Optional.ofNullable(mySupplementaryAnnotations);
     }
@@ -198,6 +201,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
      * @return A placeholder canvas
      */
     @JsonGetter(JsonKeys.PLACEHOLDER_CANVAS)
+    @JsonInclude(Include.NON_ABSENT)
     public Optional<PlaceholderCanvas> getPlaceholderCanvas() {
         return Optional.ofNullable(myPlaceholderCanvas);
     }
@@ -220,6 +224,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
      * @return The accompanying canvas
      */
     @JsonGetter(JsonKeys.ACCOMPANYING_CANVAS)
+    @JsonInclude(Include.NON_ABSENT)
     public Optional<AccompanyingCanvas> getAccompanyingCanvas() {
         return Optional.ofNullable(myAccompanyingCanvas);
     }
@@ -281,6 +286,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
      * @return The optional start
      */
     @JsonGetter(JsonKeys.START)
+    @JsonInclude(Include.NON_ABSENT)
     public Optional<Start> getStart() {
         return Optional.ofNullable(myStart);
     }

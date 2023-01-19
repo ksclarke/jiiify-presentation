@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -159,6 +161,7 @@ public class ClickthroughCookieService1 extends UserMediatedCookieService1<Click
      * @return The service profile
      */
     @Override
+    @JsonInclude(Include.NON_ABSENT)
     public Optional<Service.Profile> getProfile() {
         return super.getProfile();
     }

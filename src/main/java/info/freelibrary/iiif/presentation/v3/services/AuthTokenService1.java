@@ -104,6 +104,7 @@ public class AuthTokenService1 extends AbstractAuthService<AuthTokenService1>
     }
 
     @Override
+    @JsonInclude(Include.NON_ABSENT)
     public Optional<Service.Profile> getProfile() {
         return super.getProfile();
     }

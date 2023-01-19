@@ -5,6 +5,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.Logger;
@@ -151,6 +153,7 @@ public class KioskCookieService1 extends AbstractCookieService<KioskCookieServic
      * @return The service profile
      */
     @Override
+    @JsonInclude(Include.NON_ABSENT)
     public Optional<Service.Profile> getProfile() {
         return super.getProfile();
     }
