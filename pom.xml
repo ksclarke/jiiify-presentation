@@ -33,35 +33,7 @@
       <id>ksclarke</id>
       <name>Kevin S. Clarke</name>
       <email>ksclarke@ksclarke.io</email>
-      <roles>
-        <role>architect</role>
-        <role>developer</role>
-        <role>reviewer</role>
-      </roles>
       <timezone>America/New_York</timezone>
-    </developer>
-    <developer>
-      <id>markmatney</id>
-      <name>Mark A. Matney, Jr.</name>
-      <email>mmatney@library.ucla.edu</email>
-      <organization>UCLA Library</organization>
-      <organizationUrl>http://github.com/uclalibrary</organizationUrl>
-      <roles>
-        <role>developer</role>
-        <role>reviewer</role>
-      </roles>
-      <timezone>America/Los_Angeles</timezone>
-    </developer>
-    <developer>
-      <id>DRickard</id>
-      <name>David Rickard</name>
-      <email>drickard1967@library.ucla.edu</email>
-      <organization>UCLA Library</organization>
-      <organizationUrl>http://github.com/uclalibrary</organizationUrl>
-      <roles>
-        <role>reviewer</role>
-      </roles>
-      <timezone>America/Los_Angeles</timezone>
     </developer>
   </developers>
 
@@ -70,20 +42,14 @@
 
     <jackson.version>2.13.4</jackson.version>
     <jackson.databind.version>2.13.4.2</jackson.databind.version>
-    <freelib.utils.version>3.2.4</freelib.utils.version>
+    <freelib.utils.version>3.3.0</freelib.utils.version>
     <jsoup.version>1.15.3</jsoup.version>
     <combinatorics.version>3.3.0</combinatorics.version>
     <media.fragments.uri.version>2.4</media.fragments.uri.version>
 
-    <!-- GraalVM related property values -->
-    <graalvm.version>21.3.2</graalvm.version>
-    <!-- Optional: location of installed native-image -->
-    <gu>${env.JAVA_HOME}/lib/installer/bin/gu</gu>
-
     <!-- Plugin related versions -->
-    <maven.jar.plugin.version>3.2.0</maven.jar.plugin.version>
-    <freelib.maven.version>0.3.1</freelib.maven.version>
-    <vertx.plugin.version>1.0.24</vertx.plugin.version>
+    <freelib.maven.version>0.4.5</freelib.maven.version>
+    <vertx.plugin.version>1.0.28</vertx.plugin.version>
 
     <!-- Test related versions -->
     <opencsv.version>4.6</opencsv.version>
@@ -311,55 +277,13 @@
         </plugins>
       </build>
     </profile>
-    <profile>
-      <id>native-build</id>
-      <activation>
-        <file>
-          <exists>${gu}</exists>
-        </file>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>org.graalvm.sdk</groupId>
-          <artifactId>graal-sdk</artifactId>
-          <version>${graalvm.version}</version>
-          <scope>provided</scope>
-        </dependency>
-      </dependencies>
-      <build>
-        <plugins>
-          <!-- This creates a native binary from the packaged jar and its dependencies -->
-          <plugin>
-            <groupId>org.graalvm.nativeimage</groupId>
-            <artifactId>native-image-maven-plugin</artifactId>
-            <version>${graalvm.version}</version>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>native-image</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              <imageName>libjpv3</imageName>
-              <buildArgs>
-                <buildArg>--shared</buildArg>
-                <buildArg>-H:+ReportExceptionStackTraces</buildArg>
-                <buildArg>-H:+PrintClassInitialization</buildArg>
-                <buildArg>-H:TraceClassInitialization=</buildArg>
-              </buildArgs>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-   </profile>
   </profiles>
 
   <!-- Pulls in standard FreeLibrary Project configuration options -->
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>7.4.2</version>
+    <version>8.0.0</version>
   </parent>
 
 </project>

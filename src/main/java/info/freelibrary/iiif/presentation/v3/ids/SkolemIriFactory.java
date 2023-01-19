@@ -106,6 +106,7 @@ public final class SkolemIriFactory {
         if (myWellKnownBase == null) {
             return URI.create(UUID.randomUUID().toString());
         }
+
         return URI.create(myWellKnownBase + COMPONENT_START + UUID.randomUUID().toString());
     }
 
