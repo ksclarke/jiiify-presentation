@@ -167,6 +167,7 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
 
     @Override
     @JsonGetter(JsonKeys.PROFILE)
+    @JsonInclude(Include.NON_ABSENT)
     public Optional<Service.Profile> getProfile() {
         return super.getProfile();
     }

@@ -169,7 +169,7 @@ public class Start {
      * @return The start source
      */
     @JsonGetter(JsonKeys.SOURCE)
-    @JsonInclude(Include.NON_NULL)
+    @JsonInclude(Include.NON_ABSENT)
     public Optional<URI> getSource() {
         return Optional.ofNullable(mySource);
     }
@@ -180,7 +180,7 @@ public class Start {
      * @return A selector
      */
     @JsonGetter(JsonKeys.SELECTOR)
-    @JsonInclude(Include.NON_NULL)
+    @JsonInclude(Include.NON_ABSENT)
     public Optional<Selector> getSelector() {
         return Optional.ofNullable(mySelector);
     }

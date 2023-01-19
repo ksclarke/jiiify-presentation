@@ -6,6 +6,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.Eclipse;
@@ -87,6 +89,7 @@ public class PartOf extends AbstractLinkProperty<PartOf> {
      *
      * @return An optional descriptive label
      */
+    @JsonInclude(Include.NON_ABSENT)
     public Optional<Label> getLabel() {
         return Optional.ofNullable(super.getNullableLabel());
     }
@@ -125,11 +128,7 @@ public class PartOf extends AbstractLinkProperty<PartOf> {
 
     @Override
     public boolean equals(final Object aObject) {
-        if (!super.equals(aObject)) {
-            return false;
-        }
-
-        if (getClass() != aObject.getClass()) {
+        if (!super.equals(aObject) || getClass() != aObject.getClass()) {
             return false;
         }
 

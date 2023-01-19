@@ -32,9 +32,8 @@ public final class JSON {
      */
     private static final ObjectMapper MAPPER = new ObjectMapper().configure(SerializationFeature.INDENT_OUTPUT, true)
             .configure(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT, true)
-            .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true)
-            .registerModules(new Jdk8Module().configureAbsentsAsNulls(true),
-                    new SimpleModule().addSerializer(float.class, new JSON().new FloatSerializer()));
+            .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true).registerModules(
+                    new Jdk8Module(), new SimpleModule().addSerializer(float.class, new JSON().new FloatSerializer()));
 
     /**
      * Creates a new (de)serialization configuration.

@@ -156,6 +156,7 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
      * @return An optional descriptive label
      */
     @JsonGetter(JsonKeys.LABEL)
+    @JsonInclude(Include.NON_ABSENT)
     public Optional<Label> getLabel() {
         return Optional.ofNullable(super.getNullableLabel());
     }
