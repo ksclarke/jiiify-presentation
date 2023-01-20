@@ -24,11 +24,11 @@ or
   <dependency>
     <groupId>info.freelibrary</groupId>
     <artifactId>jiiify-presentation-v3</artifactId>
-    <version>0.12.2</version>
+    <version>0.12.3</version>
   </dependency>
 ```
 
-If you're looking for a v3 uber-jar that you can use with a Ruby or Python script, you can [download that](https://repo1.maven.org/maven2/info/freelibrary/jiiify-presentation-v3/0.12.2/jiiify-presentation-v3-0.12.2-uber.jar) directly from the Central Maven repository.
+If you're looking for a v3 uber-jar that you can use with a Ruby or Python script, you can [download that](https://repo1.maven.org/maven2/info/freelibrary/jiiify-presentation-v3/0.12.2/jiiify-presentation-v3-0.12.3-uber.jar) directly from the Central Maven repository.
 
 _Note: You might want to replace the version number above with the most recent from [Maven Central](https://search.maven.org/search?q=%22jiiify-presentation%22). I'll try to keep this README up to date, but it never hurts to go to the source._
 
