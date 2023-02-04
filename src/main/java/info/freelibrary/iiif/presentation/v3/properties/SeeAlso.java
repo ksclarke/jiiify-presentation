@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import java.net.URI;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
@@ -13,11 +12,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.Eclipse;
 
-import info.freelibrary.iiif.presentation.v3.JsonParsingException;
-import info.freelibrary.iiif.presentation.v3.MediaType;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * A link to a machine readable document that semantically describes the resource with the seeAlso property, such as an
@@ -25,27 +23,17 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  * provide a longer description of the resource. The profile and format properties of the document should be given to
  * help the client to make appropriate use of the document.
  */
+@JsonInclude(Include.NON_EMPTY)
 public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
 
     /**
      * Creates a new see also value from the supplied string ID and string type. Constant values for type can be found
      * in {@link ResourceTypes}.
      *
-     * @param aID An ID in string form
-     * @param aType A type
-     */
-    public SeeAlso(final String aID, final String aType) {
-        super(aID, aType);
-    }
-
-    /**
-     * Creates a new see also value from the supplied ID and string type. Constant values for type can be found in
-     * {@link ResourceTypes}.
-     *
      * @param aID An ID
      * @param aType A type
      */
-    public SeeAlso(final URI aID, final String aType) {
+    public SeeAlso(final String aID, final String aType) {
         super(aID, aType);
     }
 
@@ -58,25 +46,14 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
     }
 
     /**
-     * Sets the ID in string form.
-     *
-     * @param aID An ID in string form
-     * @return The resource whose ID is being set
-     */
-    @JsonSetter(JsonKeys.ID)
-    public SeeAlso setID(final String aID) {
-        return (SeeAlso) super.setID(URI.create(aID));
-    }
-
-    /**
      * Sets the ID.
      *
      * @param aID An ID
      * @return The resource whose ID is being set
      */
     @Override
-    @JsonIgnore
-    public SeeAlso setID(final URI aID) {
+    @JsonSetter(JsonKeys.ID)
+    public SeeAlso setID(final String aID) {
         return (SeeAlso) super.setID(aID);
     }
 
@@ -98,21 +75,8 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
      * @return An optional media type format
      */
     @Override
-    @JsonIgnore
     public Optional<MediaType> getFormat() {
         return super.getFormat();
-    }
-
-    /**
-     * Sets format in string form.
-     *
-     * @param aFormat A resource's format
-     * @return The resource whose format is being set
-     */
-    @Override
-    @JsonSetter(JsonKeys.FORMAT)
-    public SeeAlso setFormat(final String aFormat) {
-        return (SeeAlso) super.setFormat(aFormat);
     }
 
     /**
@@ -122,21 +86,8 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
      * @return The resource whose format is being set
      */
     @Override
-    @JsonIgnore
     public SeeAlso setFormat(final MediaType aMediaType) {
         return (SeeAlso) super.setFormat(aMediaType);
-    }
-
-    /**
-     * Sets the profile.
-     *
-     * @param aProfile A profile
-     * @return The resource whose profile is being set
-     */
-    @Override
-    @JsonIgnore
-    public SeeAlso setProfile(final URI aProfile) {
-        return (SeeAlso) super.setProfile(aProfile);
     }
 
     /**
@@ -145,9 +96,10 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
      * @param aProfile A profile in string form
      * @return The resource whose profile is being set
      */
+    @Override
     @JsonSetter(JsonKeys.PROFILE)
     public SeeAlso setProfile(final String aProfile) {
-        return (SeeAlso) super.setProfile(URI.create(aProfile));
+        return (SeeAlso) super.setProfile(aProfile);
     }
 
     /**
@@ -198,7 +150,7 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
     @JsonGetter(JsonKeys.PROFILE)
     @JsonInclude(Include.NON_NULL)
     private String getProfileAsString() {
-        final Optional<URI> profile = super.getProfile();
+        final Optional<String> profile = super.getProfile();
         return profile.isEmpty() ? null : profile.get().toString();
     }
 
@@ -207,6 +159,7 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
      *
      * @param aJsonString A SeeAlso in string form
      * @return A SeeAlso
+     * @throws JsonParsingException If the supplied JSON couldn't be parsed into a SeeAlso object
      */
     public static SeeAlso from(final String aJsonString) {
         try {

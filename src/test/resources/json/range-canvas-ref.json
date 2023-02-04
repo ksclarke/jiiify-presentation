@@ -1,5 +1,5 @@
 {
-  "id": "MY_RANGE_ID",
+  "id": "https://example.org/range-1",
   "type": "Range",
   "label": {
     "none": [
@@ -8,11 +8,11 @@
   },
   "items": [
     {
-      "id": "MY_CANVAS_ID_1",
+      "id": "https://example.org/canvas-1",
       "type": "Canvas"
     },
     {
-      "id": "MY_CANVAS_ID_2",
+      "id": "https://example.org/canvas-2",
       "type": "Canvas"
     }
   ]

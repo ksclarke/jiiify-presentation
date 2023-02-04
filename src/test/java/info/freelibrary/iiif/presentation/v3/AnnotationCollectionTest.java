@@ -3,13 +3,11 @@ package info.freelibrary.iiif.presentation.v3;
 
 import static org.junit.Assert.assertEquals;
 
-import java.net.URI;
-
 import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
-import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
+import info.freelibrary.iiif.presentation.v3.properties.behaviors.InvalidBehaviorException;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 
@@ -18,8 +16,10 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavi
  */
 public class AnnotationCollectionTest {
 
-    private static final URI ID = URI.create("http://example.org/id");
+    /** A test ID. */
+    private static final String ID = "https://example.org/id";
 
+    /** A test label. */
     private static final String LABEL = "My great label";
 
     /**
@@ -27,7 +27,7 @@ public class AnnotationCollectionTest {
      */
     @Test
     public void testConstructorStringIdStringLabel() {
-        assertEquals(ID.toString(), new AnnotationCollection(ID.toString(), LABEL).getID().toString());
+        assertEquals(ID, new AnnotationCollection(ID, LABEL).getID());
     }
 
     /**
@@ -44,7 +44,7 @@ public class AnnotationCollectionTest {
     @Test
     public void testGetSetViewingDirection() {
         final AnnotationCollection annotationCollection =
-                new AnnotationCollection(ID.toString(), LABEL).setViewingDirection(ViewingDirection.LEFT_TO_RIGHT);
+                new AnnotationCollection(ID, LABEL).setViewingDirection(ViewingDirection.LEFT_TO_RIGHT);
         assertEquals(ViewingDirection.LEFT_TO_RIGHT, annotationCollection.getViewingDirection());
     }
 
@@ -53,7 +53,7 @@ public class AnnotationCollectionTest {
      */
     @Test
     public final void testSetBehaviors() {
-        final AnnotationCollection annotationCollection = new AnnotationCollection(ID.toString(), LABEL);
+        final AnnotationCollection annotationCollection = new AnnotationCollection(ID, LABEL);
 
         assertEquals(1, annotationCollection.setBehaviors(ResourceBehavior.HIDDEN).getBehaviors().size());
     }
@@ -61,31 +61,11 @@ public class AnnotationCollectionTest {
     /**
      * Test setting disallowed {@link AnnotationCollection} behaviors.
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = InvalidBehaviorException.class)
     public final void testSetDisallowedBehaviors() {
-        final AnnotationCollection annotationCollection = new AnnotationCollection(ID.toString(), LABEL);
+        final AnnotationCollection annotationCollection = new AnnotationCollection(ID, LABEL);
 
         annotationCollection.setBehaviors(ManifestBehavior.AUTO_ADVANCE);
-    }
-
-    /**
-     * Test adding {@link AnnotationCollection} behaviors.
-     */
-    @Test
-    public final void testAddBehaviors() {
-        final AnnotationCollection annotationCollection = new AnnotationCollection(ID.toString(), LABEL);
-
-        assertEquals(1, annotationCollection.addBehaviors(ResourceBehavior.HIDDEN).getBehaviors().size());
-    }
-
-    /**
-     * Test adding disallowed {@link AnnotationCollection} behaviors.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public final void testAddDisallowedBehaviors() {
-        final AnnotationCollection annotationCollection = new AnnotationCollection(ID.toString(), LABEL);
-
-        annotationCollection.addBehaviors(ManifestBehavior.CONTINUOUS, CanvasBehavior.AUTO_ADVANCE);
     }
 
 }

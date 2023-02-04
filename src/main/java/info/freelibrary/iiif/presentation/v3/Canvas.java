@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +13,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.Eclipse;
+import info.freelibrary.util.warnings.PMD;
 
+import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
@@ -29,34 +30,23 @@ import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
- * A virtual container that represents a page or view. The canvas provides a frame of reference for the layout of the
- * content. The concept of a canvas is borrowed from standards like PDF and HTML, or applications like Photoshop and
+ * An individual page or view and acts as a central point for assembling the different content resources that make up
+ * the display. The concept of a canvas is borrowed from standards like PDF and HTML, or applications like Photoshop and
  * Powerpoint, where the display starts from a blank canvas and images, text and other resources are &quot;painted&quot;
  * on to it.
  */
-@SuppressWarnings({ "PMD.TooManyMethods", "PMD.ExcessivePublicCount" })
+@SuppressWarnings({ PMD.TOO_MANY_METHODS, "PMD.TooManyMethods", PMD.EXCESSIVE_PUBLIC_COUNT,
+    "PMD.ExcessivePublicCount" })
 public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Canvas> {
 
-    /**
-     * The canvas' accompanying canvas.
-     */
+    /** The canvas' accompanying canvas. */
     private Optional<AccompanyingCanvas> myAccompanyingCanvas;
 
-    /**
-     * The canvas' placeholder canvas.
-     */
+    /** The canvas' placeholder canvas. */
     private Optional<PlaceholderCanvas> myPlaceholderCanvas;
-
-    /**
-     * Creates a new canvas from the supplied ID.
-     *
-     * @param aID A canvas ID
-     */
-    public Canvas(final URI aID) {
-        super(aID);
-    }
 
     /**
      * Creates a new canvas from the supplied ID.
@@ -74,16 +64,6 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
      * @param aLabel A canvas label
      */
     public Canvas(final String aID, final Label aLabel) {
-        super(aID, aLabel);
-    }
-
-    /**
-     * Creates a new canvas from the supplied ID and label.
-     *
-     * @param aID A canvas ID
-     * @param aLabel A canvas label
-     */
-    public Canvas(final URI aID, final Label aLabel) {
         super(aID, aLabel);
     }
 
@@ -191,8 +171,6 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
         myAccompanyingCanvas = Optional.ofNullable(aCanvas);
         return this;
     }
-
-    // begin AbstractCanvas
 
     @Override
     public Canvas setDuration(final Number aDuration) {
@@ -388,24 +366,17 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
 
     @Override
     @SafeVarargs
-    public final Canvas setOtherAnnotations(final AnnotationPage<? extends Annotation<?>>... aPageArray) {
+    public final Canvas setOtherAnnotations(final AnnotationPage<WebAnnotation>... aPageArray) {
         return (Canvas) super.setOtherAnnotations(aPageArray);
     }
 
     @Override
-    public final Canvas setOtherAnnotations(final List<AnnotationPage<? extends Annotation<?>>> aPageList) {
+    public final Canvas setOtherAnnotations(final List<AnnotationPage<WebAnnotation>> aPageList) {
         return (Canvas) super.setOtherAnnotations(aPageList);
     }
 
-    // end AbstractCanvas
-
     @Override
-    public Canvas clearBehaviors() {
-        return (Canvas) super.clearBehaviors();
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.BEHAVIOR)
+    @JsonIgnore
     public Canvas setBehaviors(final Behavior... aBehaviorArray) {
         return (Canvas) super.setBehaviors(aBehaviorArray);
     }
@@ -414,16 +385,6 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     @JsonSetter(JsonKeys.BEHAVIOR)
     public Canvas setBehaviors(final List<Behavior> aBehaviorList) {
         return (Canvas) super.setBehaviors(aBehaviorList);
-    }
-
-    @Override
-    public Canvas addBehaviors(final Behavior... aBehaviorArray) {
-        return (Canvas) super.addBehaviors(aBehaviorArray);
-    }
-
-    @Override
-    public Canvas addBehaviors(final List<Behavior> aBehaviorList) {
-        return (Canvas) super.addBehaviors(aBehaviorList);
     }
 
     @Override
@@ -492,17 +453,7 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     }
 
     @Override
-    public Canvas setID(final URI aID) {
-        return (Canvas) super.setID(aID);
-    }
-
-    @Override
     public Canvas setRights(final String aRights) {
-        return (Canvas) super.setRights(aRights);
-    }
-
-    @Override
-    public Canvas setRights(final URI aRights) {
         return (Canvas) super.setRights(aRights);
     }
 

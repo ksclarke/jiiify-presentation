@@ -1,116 +1,62 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
-import java.net.URI;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.annotation.JsonValue;
 
-import info.freelibrary.iiif.presentation.v3.MediaType;
 import info.freelibrary.iiif.presentation.v3.Service;
+import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
  * A generic service class for older service implementations that use @id and @type.
  */
+@JsonInclude(Include.NON_EMPTY)
 public final class OtherService2 extends AbstractOtherService<OtherService2> implements OtherService<OtherService2> {
 
     /**
-     * Creates a new service.
+     * Creates a new unspecified service from the supplied ID.
+     *
+     * @param aID A service ID
      */
-    public OtherService2() {
-        super();
+    public OtherService2(final String aID) {
+        super(aID, null);
     }
 
     /**
-     * Creates a service from the supplied ID.
+     * Creates a new unspecified service from the supplied ID and profile.
+     *
+     * @param aID A service ID
+     * @param aProfile An other service profile
+     */
+    public OtherService2(final String aID, final OtherService.Profile aProfile) {
+        super(aID, null, aProfile);
+    }
+
+    /**
+     * Creates a new unspecified service from the supplied ID and type.
      *
      * @param aID A service ID
      * @param aType A service type
      */
-    public OtherService2(final URI aID, final String aType) {
-        super(aID);
-        setType(aType);
+    public OtherService2(final String aID, final String aType) {
+        super(aID, aType);
     }
 
     /**
-     * Creates a service from the supplied ID.
+     * Creates a new unspecified service from the supplied ID, type, and profile.
      *
-     * @param aID A service ID in string form
+     * @param aID A service ID
      * @param aType A service type
+     * @param aProfile A service profile
      */
-    public OtherService2(final String aID, final String aType) {
-        super(aID);
-        setType(aType);
-    }
-
-    @Override
-    @JsonIgnore
-    public OtherService2 setProfile(final OtherService.Profile aProfile) {
-        super.setProfile(aProfile);
-        return this;
-    }
-
-    @Override
-    @JsonIgnore
-    public OtherService2 setProfile(final String aProfile) {
-        super.setProfile(AbstractOtherService.Profile.fromString(aProfile));
-        return this;
-    }
-
-    @Override
-    @JsonIgnore
-    public Optional<Service.Profile> getProfile() {
-        return super.getProfile();
-    }
-
-    @Override
-    @JsonIgnore
-    public OtherService2 setID(final URI aID) {
-        return (OtherService2) super.setID(aID);
-    }
-
-    @Override
-    @JsonIgnore
-    public OtherService2 setID(final String aID) {
-        return (OtherService2) super.setID(aID);
-    }
-
-    @Override
-    @JsonIgnore
-    public URI getID() {
-        return super.getID();
-    }
-
-    @Override
-    @JsonIgnore
-    public OtherService2 setType(final String aType) {
-        return (OtherService2) super.setType(aType);
-    }
-
-    @Override
-    @JsonIgnore
-    public String getType() {
-        return super.getType();
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.FORMAT)
-    public OtherService2 setFormat(final String aMediaType) {
-        return (OtherService2) super.setFormat(MediaType.fromString(aMediaType).orElse(null));
-    }
-
-    @Override
-    @JsonIgnore
-    public OtherService2 setFormat(final MediaType aMediaType) {
-        return (OtherService2) super.setFormat(aMediaType);
+    public OtherService2(final String aID, final String aType, final OtherService.Profile aProfile) {
+        super(aID, aType, aProfile);
     }
 
     /**
@@ -119,80 +65,56 @@ public final class OtherService2 extends AbstractOtherService<OtherService2> imp
      * @return The media type format of the service
      */
     @Override
-    @JsonIgnore
-    public Optional<MediaType> getFormatMediaType() {
-        return super.getFormatMediaType();
-    }
-
-    /**
-     * Gets the format of the service.
-     *
-     * @return The service format
-     */
-    @Override
-    @JsonGetter(JsonKeys.FORMAT)
-    public String getFormat() {
+    public Optional<MediaType> getFormat() {
         return super.getFormat();
     }
 
     @Override
-    @JsonIgnore
+    @JsonGetter(JsonKeys.V2_ID)
+    public String getID() {
+        return super.getID();
+    }
+
+    @Override
+    public Optional<Service.Profile> getProfile() {
+        return super.getProfile();
+    }
+
+    @Override
     public List<Service<?>> getServices() {
         return super.getServices();
     }
 
     @Override
-    @JsonIgnore
+    @JsonGetter(JsonKeys.V2_TYPE)
+    public String getType() {
+        return super.getType();
+    }
+
+    @Override
+    public OtherService2 setFormat(final MediaType aMediaType) {
+        return (OtherService2) super.setFormat(aMediaType);
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.V2_ID)
+    public OtherService2 setID(final String aID) {
+        return (OtherService2) super.setID(aID);
+    }
+
+    @Override
     public OtherService2 setServices(final List<Service<?>> aServiceList) {
         return (OtherService2) super.setServices(aServiceList);
     }
 
     @Override
-    @JsonIgnore
-    public OtherService2 setServices(final Service<?>... aServicesArray) {
-        return (OtherService2) super.setServices(aServicesArray);
+    public OtherService2 setServices(final Service<?>... aServiceArray) {
+        return (OtherService2) super.setServices(aServiceArray);
     }
 
-    /**
-     * Converts the other service (v2) to an object that JSON can use in serialization.
-     *
-     * @return An object for Jackson to use in its serialization process.
-     */
     @Override
-    @JsonValue
-    @SuppressWarnings("PMD.ReturnEmptyCollectionRatherThanNull") // This is for Jackson
-    protected Map<String, Object> toJsonValue() {
-        final LinkedHashMap<String, Object> map = new LinkedHashMap<>();
-        final List<Service<?>> services;
-        final String type;
-        final URI id;
-
-        // IDs are required for other services (?)
-        if ((id = getID()) == null) {
-            return null;
-        }
-
-        map.put(JsonKeys.V2_ID, id);
-        type = getType();
-
-        if (type != null) {
-            map.put(JsonKeys.V2_TYPE, type);
-        }
-
-        if (getProfile().isPresent()) {
-            map.put(JsonKeys.PROFILE, getProfile().get());
-        }
-
-        if (getFormat() != null) {
-            map.put(JsonKeys.FORMAT, getFormat());
-        }
-
-        services = getServices();
-
-        if (services != null && !services.isEmpty()) {
-            map.put(JsonKeys.SERVICE, services);
-        }
-
-        return Collections.unmodifiableMap(map);
+    @JsonSetter(JsonKeys.V2_TYPE)
+    public OtherService2 setType(final String aType) {
+        return (OtherService2) super.setType(aType);
     }
 }

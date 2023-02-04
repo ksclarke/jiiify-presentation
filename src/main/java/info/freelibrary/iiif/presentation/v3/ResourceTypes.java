@@ -8,120 +8,77 @@ package info.freelibrary.iiif.presentation.v3;
  */
 public final class ResourceTypes {
 
-    /**
-     * The collection resource type.
-     */
+    /** The collection resource type. */
     public static final String COLLECTION = "Collection";
 
-    /**
-     * The manifest resource type.
-     */
+    /** The manifest resource type. */
     public static final String MANIFEST = "Manifest";
 
-    /**
-     * The canvas resource type.
-     */
+    /** The canvas resource type. */
     public static final String CANVAS = "Canvas";
 
-    /**
-     * The range resource type.
-     */
+    /** The range resource type. */
     public static final String RANGE = "Range";
 
-    /**
-     * The annotation page resource type.
-     */
+    /** The annotation page resource type. */
     public static final String ANNOTATION_PAGE = "AnnotationPage";
 
-    /**
-     * The annotation resource type.
-     */
+    /** The annotation resource type. */
     public static final String ANNOTATION = "Annotation";
 
-    /**
-     * The annotation collection resource type.
-     */
+    /** The annotation collection resource type. */
     public static final String ANNOTATION_COLLECTION = "AnnotationCollection";
 
-    /**
-     * The dataset resource type.
-     */
+    /** The dataset resource type. */
     public static final String DATASET = "Dataset";
 
-    /**
-     * The image resource type.
-     */
+    /** The image resource type. */
     public static final String IMAGE = "Image";
 
-    /**
-     * The model resource type.
-     */
+    /** The model resource type. */
     public static final String MODEL = "Model";
 
-    /**
-     * The choice resource type.
-     */
+    /** The choice resource type. */
     public static final String CHOICE = "Choice";
 
-    /**
-     * The sound resource type.
-     */
+    /** The sound resource type. */
     public static final String SOUND = "Sound";
 
-    /**
-     * The specific resource resource type.
-     */
+    /** The specific resource resource type. */
     public static final String SPECIFIC_RESOURCE = "SpecificResource";
 
-    /**
-     * The text resource type.
-     */
+    /** The text resource type. */
     public static final String TEXT = "Text";
 
-    /**
-     * The TextualBody resource type.
-     */
+    /** The TextualBody resource type. */
     public static final String TEXTUAL_BODY = "TextualBody";
 
-    /**
-     * The video resource type.
-     */
+    /** The video resource type. */
     public static final String VIDEO = "Video";
 
-    /**
-     * The agent resource type.
-     */
+    /** The agent resource type. */
     public static final String AGENT = "Agent";
 
-    /**
-     * The v2 image service resource type.
-     */
+    /** The v2 image service resource type. */
     public static final String IMAGE_SERVICE_2 = "ImageService2";
 
-    /**
-     * The v3 image service resource type.
-     */
+    /** The v3 image service resource type. */
     public static final String IMAGE_SERVICE_3 = "ImageService3";
 
-    /**
-     * The v1 auth cookie service resource type.
-     */
-    public static final String AUTH_COOKIE_SERVICE_1 = "AbstractCookieService";
+    /** The v1 auth cookie service resource type. */
+    public static final String AUTH_COOKIE_SERVICE_1 = "AuthCookieService1";
 
-    /**
-     * The v1 auth token service resource type.
-     */
+    /** The v1 auth token service resource type. */
     public static final String AUTH_TOKEN_SERVICE_1 = "AuthTokenService1";
 
-    /**
-     * The v1 auth logout service resource type.
-     */
+    /** The v1 auth logout service resource type. */
     public static final String AUTH_LOGOUT_SERVICE_1 = "AuthLogoutService1";
 
-    /**
-     * The physical dims service resource type.
-     */
+    /** The physical dims service resource type. */
     public static final String PHYSICAL_DIMS_SERVICE = "PhysicalDimsService";
+
+    /** A resource type for the rdf:nil value. */
+    public static final String RDF_NIL = "rdf:nil";
 
     /**
      * Creates a new resource types constants object. Constant classes should have private constructors.

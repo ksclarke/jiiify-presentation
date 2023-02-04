@@ -19,37 +19,37 @@ public enum ManifestBehavior implements Behavior {
     /**
      * An auto-advance manifest behavior.
      */
-    AUTO_ADVANCE(BehaviorConstants.AUTO_ADVANCE), //
+    AUTO_ADVANCE(BehaviorConstants.AUTO_ADVANCE),
 
     /**
      * A no-auto-advance manifest behavior.
      */
-    NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE), //
+    NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE),
 
     /**
      * An individuals manifest behavior.
      */
-    INDIVIDUALS(BehaviorConstants.INDIVIDUALS), //
+    INDIVIDUALS(BehaviorConstants.INDIVIDUALS),
 
     /**
      * A continuous manifest behavior.
      */
-    CONTINUOUS(BehaviorConstants.CONTINUOUS), //
+    CONTINUOUS(BehaviorConstants.CONTINUOUS),
 
     /**
      * A repeat manifest behavior.
      */
-    REPEAT(BehaviorConstants.REPEAT), //
+    REPEAT(BehaviorConstants.REPEAT),
 
     /**
      * A no-repeat manifest behavior.
      */
-    NO_REPEAT(BehaviorConstants.NO_REPEAT), //
+    NO_REPEAT(BehaviorConstants.NO_REPEAT),
 
     /**
      * A paged manifest behavior.
      */
-    PAGED(BehaviorConstants.PAGED), //
+    PAGED(BehaviorConstants.PAGED),
 
     /**
      * An unordered manifest behavior.
@@ -57,17 +57,17 @@ public enum ManifestBehavior implements Behavior {
     UNORDERED(BehaviorConstants.UNORDERED);
 
     /**
-     * The ManifestBehavior logger.
+     * The manifest behavior logger.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(ManifestBehavior.class, MessageCodes.BUNDLE);
 
     /**
-     * The value of the ManifestBehavior.
+     * The value of the manifest behavior.
      */
     private final String myValue;
 
     /**
-     * Creates a new ManifestBehavior from the supplied string form.
+     * Creates a new manifest behavior from the supplied string.
      *
      * @param aBehavior A manifest behavior in string form
      */
@@ -89,7 +89,7 @@ public enum ManifestBehavior implements Behavior {
     /**
      * Maps a behavior string to an enum constant of this type.
      *
-     * @param aBehavior A behavior string
+     * @param aBehavior A behavior in string form
      * @return A manifest behavior
      * @throws IllegalArgumentException If the behavior string doesn't correspond to a manifest behavior
      */

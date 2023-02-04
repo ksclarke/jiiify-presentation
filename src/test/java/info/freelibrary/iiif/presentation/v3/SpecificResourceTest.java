@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -22,8 +21,10 @@ import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
  */
 public class SpecificResourceTest extends AbstractTest {
 
+    /** The audio content selector. */
     private static final Selector SELECTOR = new AudioContentSelector();
 
+    /** A JSON test fixture. */
     private static final String JSON;
 
     static {
@@ -34,8 +35,10 @@ public class SpecificResourceTest extends AbstractTest {
         }
     }
 
+    /** The test ID. */
     private String myID;
 
+    /** The test other ID. */
     private String myOtherID;
 
     /**
@@ -43,8 +46,20 @@ public class SpecificResourceTest extends AbstractTest {
      */
     @Before
     public void setUp() {
+        final String http = "http";
+        final String https = "https";
+
         myID = myLoremIpsum.getUrl();
         myOtherID = myLoremIpsum.getUrl();
+
+        // Temporary fixes until the tests are rewritten to use JEasy.
+        if (!myID.startsWith(https)) {
+            myID = myID.replace(http, https);
+        }
+
+        if (!myOtherID.startsWith(https)) {
+            myOtherID = myOtherID.replace(http, https);
+        }
     }
 
     /**
@@ -56,28 +71,11 @@ public class SpecificResourceTest extends AbstractTest {
     }
 
     /**
-     * Tests URI constructor.
-     */
-    @Test
-    public final void testSpecificResourceIdUriSourceUriSelector() {
-        new SpecificResource(URI.create(myID), URI.create(myOtherID), SELECTOR);
-    }
-
-    /**
      * Tests {@link SpecificResource#setID(String) setID} method.
      */
     @Test
     public final void testSetIDString() {
-        assertEquals(URI.create(myID), new SpecificResource(myID, myOtherID, SELECTOR).getID());
-    }
-
-    /**
-     * Tests {@link SpecificResource#setID(URI) setID} method.
-     */
-    @Test
-    public final void testSetIDURI() {
-        final URI uri = URI.create(myID);
-        assertEquals(uri, new SpecificResource(uri, URI.create(myOtherID), SELECTOR).getID());
+        assertEquals(myID, new SpecificResource(myID, myOtherID, SELECTOR).getID());
     }
 
     /**
@@ -94,24 +92,6 @@ public class SpecificResourceTest extends AbstractTest {
     @Test
     public final void testSetSelector() {
         assertEquals(SELECTOR, new SpecificResource(myID, myOtherID, SELECTOR).getSelector());
-    }
-
-    /**
-     * Tests {@link SpecificResource#setSource(String) setSource} method.
-     */
-    @Test
-    public final void testSetSourceString() {
-        final URI source = URI.create(myOtherID);
-        assertEquals(source, new SpecificResource(myID, myOtherID, SELECTOR).getSource());
-    }
-
-    /**
-     * Tests {@link SpecificResource#setSource(URI) setSource} method.
-     */
-    @Test
-    public final void testSetSourceURI() {
-        final URI source = URI.create(myOtherID);
-        assertEquals(source, new SpecificResource(URI.create(myID), source, SELECTOR).getSource());
     }
 
     /**

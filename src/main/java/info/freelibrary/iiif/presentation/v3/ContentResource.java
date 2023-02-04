@@ -1,13 +1,9 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
 import java.util.Optional;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSetter;
-
-import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 
 /**
  * An interface that defines external web resources that can be referenced. Examples of content resources include:
@@ -22,7 +18,7 @@ public interface ContentResource<T extends ContentResource<T>> {
      *
      * @return The content resource's ID
      */
-    URI getID();
+    String getID();
 
     /**
      * Sets the content resource ID from its string form.
@@ -31,14 +27,6 @@ public interface ContentResource<T extends ContentResource<T>> {
      * @return The content resource
      */
     T setID(String aID);
-
-    /**
-     * Sets the content resource ID.
-     *
-     * @param aID A content resource's ID
-     * @return The content resource
-     */
-    T setID(URI aID);
 
     /**
      * Gets the type of the content resource.
@@ -52,7 +40,6 @@ public interface ContentResource<T extends ContentResource<T>> {
      *
      * @return The media type format of the content resource
      */
-    @JsonIgnore
     Optional<MediaType> getFormat();
 
     /**
@@ -61,16 +48,6 @@ public interface ContentResource<T extends ContentResource<T>> {
      * @param aMediaType A media type
      * @return The content resource
      */
-    @JsonIgnore
     T setFormat(MediaType aMediaType);
-
-    /**
-     * Sets the format of the resource from a file extension or media type.
-     *
-     * @param aMediaType A string representation of media type or file extension
-     * @return The content resource
-     */
-    @JsonSetter(JsonKeys.FORMAT)
-    T setFormat(String aMediaType);
 
 }

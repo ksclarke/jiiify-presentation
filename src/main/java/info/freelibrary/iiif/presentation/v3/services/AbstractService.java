@@ -1,85 +1,87 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.iiif.presentation.v3.Service;
+import info.freelibrary.iiif.presentation.v3.ids.UriUtils;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * An abstract service class that specific services can extend.
  */
 @SuppressWarnings("PMD.AbstractClassWithoutAbstractMethod")
+@JsonInclude(Include.NON_EMPTY)
 abstract class AbstractService<T extends AbstractService<T>> {
 
-    /**
-     * The service's type.
-     */
+    /** This service's ID. */
+    private String myID;
+
+    /** The service's profile. */
+    private Service.Profile myProfile;
+
+    /** A list of services related to this service. */
+    private List<Service<?>> myServices;
+
+    /** The service's type. */
     private String myType;
 
     /**
-     * This service's ID.
-     */
-    private URI myID;
-
-    /**
-     * A list of services related to this service.
-     */
-    private List<Service<?>> myServices;
-
-    /**
-     * An empty constructor for Jackson's deserialization process.
+     * Creates a new service during Jackson's deserialization process.
      */
     protected AbstractService() {
         // This is intentionally left empty
     }
 
     /**
-     * Creates a new service from the supplied services.
+     * Creates a new service from the supplied ID and type.
      *
-     * @param aServicesArray An array of related services
+     * @param aID A service ID
+     * @param aType A service type
      */
-    protected AbstractService(final Service<?>... aServicesArray) {
-        myServices = Arrays.asList(aServicesArray);
+    protected AbstractService(final String aID, final String aType) {
+        // In theory, both should be required (according to the spec), but there are exceptions in practice:
+        // e.g., ExternalCookieService1 (has an optional ID) and GeoJsonService (has an optional type).
+        myType = aType;
+        myID = aID;
+
     }
 
     /**
-     * Creates a new service from the supplied ID.
+     * Creates a new service from the supplied profile, ID, and type.
      *
      * @param aID A service ID
+     * @param aType A service type
+     * @param aProfile A service profile
      */
-    protected AbstractService(final String aID) {
-        myID = URI.create(Objects.requireNonNull(aID));
+    protected AbstractService(final String aID, final String aType, final Service.Profile aProfile) {
+        this(aID, aType);
+        myProfile = Objects.requireNonNull(aProfile);
     }
 
     /**
-     * Creates a new service from the supplied ID.
-     *
-     * @param aID A service ID
+     * Outputs a JSON string representation of the service.
      */
-    protected AbstractService(final URI aID) {
-        myID = Objects.requireNonNull(aID);
-    }
-
-    /**
-     * Creates a new service from the supplied ID.
-     *
-     * @param aID A service ID
-     * @param aServicesArray An array of services
-     */
-    protected AbstractService(final URI aID, final Service<?>... aServicesArray) {
-        myID = Objects.requireNonNull(aID);
-        myServices = Arrays.asList(aServicesArray);
+    @Override
+    public String toString() {
+        try {
+            return JSON.getWriter(getClass()).writeValueAsString(this);
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details); // RuntimeException because this shouldn't fail
+        }
     }
 
     /**
@@ -87,45 +89,33 @@ abstract class AbstractService<T extends AbstractService<T>> {
      *
      * @return The service ID
      */
-    @JsonGetter(JsonKeys.ID)
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    public URI getID() {
+    @JsonSetter(JsonKeys.ID)
+    protected String getID() {
         return myID;
     }
 
     /**
-     * Sets the service ID.
+     * Gets the service profile.
      *
-     * @param aID A service ID
-     * @return This service
+     * @return The service profile, if one exists
      */
-    @JsonIgnore
-    public AbstractService<T> setID(final URI aID) {
-        myID = aID;
-        return this;
+    @JsonGetter(JsonKeys.PROFILE)
+    protected Optional<Service.Profile> getProfile() {
+        return Optional.ofNullable(myProfile);
     }
 
     /**
-     * Sets the service ID from a string.
+     * Gets the services related to this service.
      *
-     * @param aID A service ID in string form
-     * @return This service
+     * @return A list of services related to this service
      */
-    @JsonSetter(JsonKeys.ID)
-    public AbstractService<T> setID(final String aID) {
-        return setID(URI.create(aID));
-    }
+    @JsonGetter(JsonKeys.SERVICE)
+    protected List<Service<?>> getServices() {
+        if (myServices == null) {
+            myServices = new ArrayList<>();
+        }
 
-    /**
-     * Sets the service type.
-     *
-     * @param aType A service type
-     * @return This service
-     */
-
-    public AbstractService<T> setType(final String aType) {
-        myType = aType;
-        return this;
+        return myServices;
     }
 
     /**
@@ -134,9 +124,20 @@ abstract class AbstractService<T extends AbstractService<T>> {
      * @return The service type
      */
     @JsonGetter(JsonKeys.TYPE)
-    @JsonInclude(Include.NON_EMPTY)
-    public String getType() {
+    protected String getType() {
         return myType;
+    }
+
+    /**
+     * Sets the service ID.
+     *
+     * @param aID A service ID
+     * @return This serviceaID
+     */
+    @JsonSetter(JsonKeys.ID)
+    protected AbstractService<T> setID(final String aID) {
+        myID = UriUtils.checkID(aID, false);
+        return this;
     }
 
     /**
@@ -146,7 +147,7 @@ abstract class AbstractService<T extends AbstractService<T>> {
      * @return This service
      */
     @JsonSetter(JsonKeys.SERVICE)
-    public AbstractService<T> setServices(final List<Service<?>> aServiceList) {
+    protected AbstractService<T> setServices(final List<Service<?>> aServiceList) {
         if (!aServiceList.isEmpty()) {
             final List<Service<?>> services = getServices();
 
@@ -166,23 +167,19 @@ abstract class AbstractService<T extends AbstractService<T>> {
      * @return This service
      */
     @JsonIgnore
-    public AbstractService<T> setServices(final Service<?>... aServiceArray) {
+    protected AbstractService<T> setServices(final Service<?>... aServiceArray) {
         return setServices(Arrays.asList(aServiceArray));
     }
 
     /**
-     * Gets the services related to this service.
+     * Sets the service type.
      *
-     * @return A list of services related to this service
+     * @param aType A service type
+     * @return This service
      */
-    @JsonGetter(JsonKeys.SERVICE)
-    @JsonInclude(Include.NON_EMPTY)
-    public List<Service<?>> getServices() {
-        if (myServices == null) {
-            myServices = new ArrayList<>();
-        }
-
-        return myServices;
+    @JsonSetter(JsonKeys.TYPE)
+    protected AbstractService<T> setType(final String aType) {
+        myType = aType;
+        return this;
     }
-
 }

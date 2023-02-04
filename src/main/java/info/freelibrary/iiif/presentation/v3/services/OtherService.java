@@ -2,9 +2,11 @@
 package info.freelibrary.iiif.presentation.v3.services;
 
 import java.net.URI;
+import java.util.Objects;
+import java.util.Optional;
 
-import info.freelibrary.iiif.presentation.v3.MediaType;
 import info.freelibrary.iiif.presentation.v3.Service;
+import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 
 /**
  * An interface for other service implementations.
@@ -14,38 +16,11 @@ import info.freelibrary.iiif.presentation.v3.Service;
 public interface OtherService<T extends OtherService<T>> extends Service<T> {
 
     /**
-     * Sets the profile of this other service.
+     * Gets the optional format of this service.
      *
-     * @param aProfile The other service's profile
-     * @return The service
+     * @return An optional format if set; else, an empty optional
      */
-    T setProfile(Profile aProfile);
-
-    /**
-     * Sets the profile of this other service.
-     *
-     * @param aProfile The other service's profile in string form.
-     * @return The service
-     */
-    @Override
-    T setProfile(String aProfile);
-
-    /**
-     * Sets the service type.
-     *
-     * @param aType A service type
-     * @return The service
-     */
-    @Override
-    T setType(String aType);
-
-    /**
-     * Sets the format of this service from its string form.
-     *
-     * @param aFormat The service's format in string form
-     * @return The service
-     */
-    T setFormat(String aFormat);
+    Optional<MediaType> getFormat();
 
     /**
      * Sets the media type of this service.
@@ -56,15 +31,36 @@ public interface OtherService<T extends OtherService<T>> extends Service<T> {
     T setFormat(MediaType aMediaType);
 
     /**
-     * An interface for {@link OtherService} profiles.
+     * A new profile for user defined or other unspecified services.
      */
-    interface Profile extends Service.Profile {
+    class Profile implements Service.Profile {
+
+        /** The value of the profile. */
+        private final String myValue;
+
+        /**
+         * Creates a new profile for other unspecified services.
+         *
+         * @param aValue A profile value
+         */
+        public Profile(final String aValue) {
+            Objects.requireNonNull(aValue);
+            myValue = aValue;
+        }
 
         @Override
-        String string();
+        public String toString() {
+            return myValue;
+        }
 
         @Override
-        URI uri();
+        public String label() {
+            return myValue;
+        }
 
+        @Override
+        public URI uri() {
+            return URI.create(myValue);
+        }
     }
 }

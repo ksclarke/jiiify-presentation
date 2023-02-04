@@ -26,16 +26,22 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public class I18nTest {
 
+    /** Logger for the tests. */
     private static final Logger LOGGER = LoggerFactory.getLogger(I18nTest.class, MessageCodes.BUNDLE);
 
+    /** Sample I18n value. */
     private static final String AR_LATN = "ar-Latn";
 
+    /** Undefined value constant. */
     private static final String UNDEFINED = "und";
 
+    /** Sample test data. */
     private LoremIpsum myLorem;
 
+    /** Sample HTML data. */
     private String myTestHTML;
 
+    /** Sample test string. */
     private String myTestString;
 
     /**
@@ -85,7 +91,7 @@ public class I18nTest {
     }
 
     /**
-     * Test that checks that angle brackets alone don't get recognized as HTML
+     * Test that checks that angle brackets alone don't get recognized as HTML.
      */
     @Test
     public final void testHtmlLikeString() {

@@ -1,5 +1,5 @@
 /**
- * Classes for utilities that support the other packages in this software library.
+ * Utilities and classes of constants that are used by classes in other packages.
  */
 
 package info.freelibrary.iiif.presentation.v3.utils;

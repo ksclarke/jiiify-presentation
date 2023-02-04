@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3; // NOPMD
 
-import java.net.URI;
 import java.util.List;
 
 import info.freelibrary.util.warnings.PMD;
@@ -26,27 +25,32 @@ import info.freelibrary.iiif.presentation.v3.properties.Summary;
 public interface Resource<T extends Resource<T>> {
 
     /**
+     * Gets the resource's behaviors in an unmodifiable list.
+     *
+     * @return The resource's behaviors
+     */
+    List<Behavior> getBehaviors();
+
+    /**
+     * Gets a list of resource homepages.
+     *
+     * @return The resource's homepages
+     */
+    List<Homepage> getHomepages();
+
+    /**
+     * Gets the resource ID.
+     *
+     * @return The resource's ID
+     */
+    String getID();
+
+    /**
      * Gets the resource label.
      *
      * @return The resource's label
      */
     Label getLabel();
-
-    /**
-     * Sets the resource label from the supplied string.
-     *
-     * @param aLabel The string form of the label to set
-     * @return The resource
-     */
-    T setLabel(String aLabel);
-
-    /**
-     * Sets the resource label.
-     *
-     * @param aLabel The resource's label
-     * @return The resource
-     */
-    T setLabel(Label aLabel);
 
     /**
      * Gets the resource metadata.
@@ -56,20 +60,53 @@ public interface Resource<T extends Resource<T>> {
     List<Metadata> getMetadata();
 
     /**
-     * Sets the resource metadata.
+     * Gets a list of resource partOfs.
      *
-     * @param aMetadataArray An array of metadata properties
-     * @return The resource
+     * @return The resource's partOfs
      */
-    T setMetadata(Metadata... aMetadataArray);
+    List<PartOf> getPartOfs();
 
     /**
-     * Sets the resource metadata.
+     * Gets a list of resource providers.
      *
-     * @param aMetadataList A list of metadata properties
-     * @return The resource
+     * @return The resource's providers
      */
-    T setMetadata(List<Metadata> aMetadataList);
+    List<Provider> getProviders();
+
+    /**
+     * Gets a list of resource renderings.
+     *
+     * @return The resource's renderings
+     */
+    List<Rendering> getRenderings();
+
+    /**
+     * Gets the resource's required statement.
+     *
+     * @return The required statement of the resource
+     */
+    RequiredStatement getRequiredStatement();
+
+    /**
+     * Gets the resource's rights ID.
+     *
+     * @return The rights ID
+     */
+    String getRights();
+
+    /**
+     * Gets see also reference(s).
+     *
+     * @return The see also reference(s)
+     */
+    List<SeeAlso> getSeeAlsoRefs();
+
+    /**
+     * Gets a list of resource services.
+     *
+     * @return The resource's services
+     */
+    List<Service<?>> getServices();
 
     /**
      * Gets the resource summary.
@@ -77,22 +114,6 @@ public interface Resource<T extends Resource<T>> {
      * @return The resource's summary
      */
     Summary getSummary();
-
-    /**
-     * Sets the resource summary.
-     *
-     * @param aSummary A summary in string form
-     * @return The resource
-     */
-    T setSummary(String aSummary);
-
-    /**
-     * Sets the resource summary.
-     *
-     * @param aSummary A resource's summary
-     * @return The resource
-     */
-    T setSummary(Summary aSummary);
 
     /**
      * Gets a list of resource thumbnails. A thumbnail can be any type of content resource, not just
@@ -103,189 +124,11 @@ public interface Resource<T extends Resource<T>> {
     List<ContentResource<?>> getThumbnails();
 
     /**
-     * Sets the thumbnails for this resource. A thumbnail can be any type of content resource, not just
-     * {@link ImageContent}.
-     *
-     * @param aThumbnailArray The thumbnails to set for this resource
-     * @return The resource
-     */
-    T setThumbnails(ContentResource<?>... aThumbnailArray);
-
-    /**
-     * Sets the thumbnails for this resource. A thumbnail can be any type of content resource, not just
-     * {@link ImageContent}.
-     *
-     * @param aThumbnailList The thumbnails to set for this resource
-     * @return The resource
-     */
-    T setThumbnails(List<ContentResource<?>> aThumbnailList);
-
-    /**
-     * Gets the resource's required statement.
-     *
-     * @return The required statement of the resource
-     */
-    RequiredStatement getRequiredStatement();
-
-    /**
-     * Sets the resource's required statement.
-     *
-     * @param aStatement A required statement
-     * @return The resource
-     */
-    T setRequiredStatement(RequiredStatement aStatement);
-
-    /**
-     * Gets the resource's rights URI.
-     *
-     * @return The rights URI
-     */
-    URI getRights();
-
-    /**
-     * Sets the resource's rights URI.
-     *
-     * @param aRights A rights URI
-     * @return The resource
-     */
-    T setRights(URI aRights);
-
-    /**
-     * Sets the resource's rights URI from the supplied string.
-     *
-     * @param aRights A resource's rights URI in string form
-     * @return The resource
-     */
-    T setRights(String aRights);
-
-    /**
-     * Gets a list of resource homepages.
-     *
-     * @return The resource's homepages
-     */
-    List<Homepage> getHomepages();
-
-    /**
-     * Sets the homepages for this resource.
-     *
-     * @param aHomepageArray The homepages to set for this resource
-     * @return The resource
-     */
-    T setHomepages(Homepage... aHomepageArray);
-
-    /**
-     * Sets the homepages for this resource.
-     *
-     * @param aHomepageList The homepages to set for this resource
-     * @return The resource
-     */
-    T setHomepages(List<Homepage> aHomepageList);
-
-    /**
-     * Gets a list of resource providers.
-     *
-     * @return The resource's providers
-     */
-    List<Provider> getProviders();
-
-    /**
-     * Sets the providers for this resource.
-     *
-     * @param aProviderArray The providers to set for this resource
-     * @return The resource
-     */
-    T setProviders(Provider... aProviderArray);
-
-    /**
-     * Sets the providers for this resource.
-     *
-     * @param aProviderList The providers to set for this resource
-     * @return The resource
-     */
-    T setProviders(List<Provider> aProviderList);
-
-    /**
-     * Gets a list of resource renderings.
-     *
-     * @return The resource's renderings
-     */
-    List<Rendering> getRenderings();
-
-    /**
-     * Sets the renderings for this resource.
-     *
-     * @param aRenderingArray The renderings to set for this resource
-     * @return The resource
-     */
-    T setRenderings(Rendering... aRenderingArray);
-
-    /**
-     * Sets the renderings for this resource.
-     *
-     * @param aRenderingList The renderings to set for this resource
-     * @return The resource
-     */
-    T setRenderings(List<Rendering> aRenderingList);
-
-    /**
-     * Gets the resource ID.
-     *
-     * @return The resource's ID
-     */
-    URI getID();
-
-    /**
-     * Sets the resource ID from the supplied string.
-     *
-     * @param aID A resource ID in string form
-     * @return The resource
-     */
-    T setID(String aID);
-
-    /**
-     * Sets the resource ID.
-     *
-     * @param aID A resource ID
-     * @return The resource
-     */
-    T setID(URI aID);
-
-    /**
-     * Gets a list of resource partOfs.
-     *
-     * @return The resource's partOfs
-     */
-    List<PartOf> getPartOfs();
-
-    /**
-     * Sets the partOfs for this resource.
-     *
-     * @param aPartOfArray The partOfs to set for this resource
-     * @return The resource
-     */
-    T setPartOfs(PartOf... aPartOfArray);
-
-    /**
-     * Sets the partOfs for this resource.
-     *
-     * @param aPartOfList The partOfs to set for this resource
-     * @return The resource
-     */
-    T setPartOfs(List<PartOf> aPartOfList);
-
-    /**
      * Gets the resource type.
      *
      * @return The resource's type
      */
     String getType();
-
-    /**
-     * Gets the resource's behaviors in an unmodifiable list.
-     *
-     * @return The resource's behaviors
-     */
-    List<Behavior> getBehaviors();
 
     /**
      * Sets the behaviors for this resource. Different types of resources allow different types of behaviors. For
@@ -314,42 +157,124 @@ public interface Resource<T extends Resource<T>> {
     T setBehaviors(List<Behavior> aBehaviorList);
 
     /**
-     * Adds behaviors to the resource.
+     * Sets the homepages for this resource.
      *
-     * @param aBehaviorArray An array of behaviors to add to the resource
+     * @param aHomepageArray The homepages to set for this resource
      * @return The resource
      */
-    T addBehaviors(Behavior... aBehaviorArray);
+    T setHomepages(Homepage... aHomepageArray);
 
     /**
-     * Adds behaviors to the resource.
+     * Sets the homepages for this resource.
      *
-     * @param aBehaviorList A list of behaviors to add to the resource
+     * @param aHomepageList The homepages to set for this resource
      * @return The resource
      */
-    T addBehaviors(List<Behavior> aBehaviorList);
+    T setHomepages(List<Homepage> aHomepageList);
 
     /**
-     * Removes the behaviors associated with this resource.
+     * Sets the resource ID from the supplied string.
      *
+     * @param aID A resource ID in string form
      * @return The resource
      */
-    T clearBehaviors();
+    T setID(String aID);
 
     /**
-     * Gets see also reference(s).
+     * Sets the resource label.
      *
-     * @return The see also reference(s)
-     */
-    List<SeeAlso> getSeeAlsoRefs();
-
-    /**
-     * Sets see also reference(s).
-     *
-     * @param aSeeAlsoArray See also reference(s)
+     * @param aLabel The resource's label
      * @return The resource
      */
-    T setSeeAlsoRefs(SeeAlso... aSeeAlsoArray);
+    T setLabel(Label aLabel);
+
+    /**
+     * Sets the resource label from the supplied string.
+     *
+     * @param aLabel The string form of the label to set
+     * @return The resource
+     */
+    T setLabel(String aLabel);
+
+    /**
+     * Sets the resource metadata.
+     *
+     * @param aMetadataList A list of metadata properties
+     * @return The resource
+     */
+    T setMetadata(List<Metadata> aMetadataList);
+
+    /**
+     * Sets the resource metadata.
+     *
+     * @param aMetadataArray An array of metadata properties
+     * @return The resource
+     */
+    T setMetadata(Metadata... aMetadataArray);
+
+    /**
+     * Sets the partOfs for this resource.
+     *
+     * @param aPartOfList The partOfs to set for this resource
+     * @return The resource
+     */
+    T setPartOfs(List<PartOf> aPartOfList);
+
+    /**
+     * Sets the partOfs for this resource.
+     *
+     * @param aPartOfArray The partOfs to set for this resource
+     * @return The resource
+     */
+    T setPartOfs(PartOf... aPartOfArray);
+
+    /**
+     * Sets the providers for this resource.
+     *
+     * @param aProviderList The providers to set for this resource
+     * @return The resource
+     */
+    T setProviders(List<Provider> aProviderList);
+
+    /**
+     * Sets the providers for this resource.
+     *
+     * @param aProviderArray The providers to set for this resource
+     * @return The resource
+     */
+    T setProviders(Provider... aProviderArray);
+
+    /**
+     * Sets the renderings for this resource.
+     *
+     * @param aRenderingList The renderings to set for this resource
+     * @return The resource
+     */
+    T setRenderings(List<Rendering> aRenderingList);
+
+    /**
+     * Sets the renderings for this resource.
+     *
+     * @param aRenderingArray The renderings to set for this resource
+     * @return The resource
+     */
+    T setRenderings(Rendering... aRenderingArray);
+
+    /**
+     * Sets the resource's required statement.
+     *
+     * @param aStatement A required statement
+     * @return The resource
+     */
+    T setRequiredStatement(RequiredStatement aStatement);
+
+    /**
+     * Sets the resource's rights ID from the supplied string.
+     *
+     * @param aRights A resource's rights ID in string form
+     * @return The resource
+     */
+    T setRights(String aRights);
 
     /**
      * Sets see also reference(s).
@@ -360,11 +285,20 @@ public interface Resource<T extends Resource<T>> {
     T setSeeAlsoRefs(List<SeeAlso> aSeeAlsoList);
 
     /**
-     * Gets a list of resource services.
+     * Sets see also reference(s).
      *
-     * @return The resource's services
+     * @param aSeeAlsoArray See also reference(s)
+     * @return The resource
      */
-    List<Service<?>> getServices();
+    T setSeeAlsoRefs(SeeAlso... aSeeAlsoArray);
+
+    /**
+     * Sets the services for this resource.
+     *
+     * @param aServiceList The services to set for this resource
+     * @return The resource
+     */
+    T setServices(List<Service<?>> aServiceList);
 
     /**
      * Sets the services for this resource.
@@ -375,11 +309,37 @@ public interface Resource<T extends Resource<T>> {
     T setServices(Service<?>... aServiceArray);
 
     /**
-     * Sets the services for this resource.
+     * Sets the resource summary.
      *
-     * @param aServiceList The services to set for this resource
+     * @param aSummary A summary in string form
      * @return The resource
      */
-    T setServices(List<Service<?>> aServiceList);
+    T setSummary(String aSummary);
+
+    /**
+     * Sets the resource summary.
+     *
+     * @param aSummary A resource's summary
+     * @return The resource
+     */
+    T setSummary(Summary aSummary);
+
+    /**
+     * Sets the thumbnails for this resource. A thumbnail can be any type of content resource, not just
+     * {@link ImageContent}.
+     *
+     * @param aThumbnailArray The thumbnails to set for this resource
+     * @return The resource
+     */
+    T setThumbnails(ContentResource<?>... aThumbnailArray);
+
+    /**
+     * Sets the thumbnails for this resource. A thumbnail can be any type of content resource, not just
+     * {@link ImageContent}.
+     *
+     * @param aThumbnailList The thumbnails to set for this resource
+     * @return The resource
+     */
+    T setThumbnails(List<ContentResource<?>> aThumbnailList);
 
 }

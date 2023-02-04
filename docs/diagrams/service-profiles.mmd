@@ -1,0 +1,106 @@
+---
+title: The Service Profiles
+---
+
+classDiagram
+direction TD
+
+`Service.Profile` <|-- `AuthTokenService1.Profile` : implements
+`Service.Profile` <|-- `AuthCookieService1.Profile` : implements
+`Service.Profile` <|-- `ImageService2.Profile` : implements
+`Service.Profile` <|-- `ImageService3.Profile` : implements
+`Service.Profile` <|-- `PhysicalDimsService.Profile` : implements
+`Service.Profile` <|-- `OtherService.Profile` : implements
+
+class `Service.Profile` {
+    <<Interface>>
+
+    +label() String
+    +toString() String
+    +uri() URI
+}
+
+class `AuthCookieService1.Profile` {
+    <<Enumeration>>
+
+    LOGIN
+    CLICKTHROUGH
+    KIOSK
+    EXTERNAL
+
+    -myLabel : String
+
+    +label() String
+    +toString() String
+    +uri() URI
+
+    +from(String aLabel)$ Optional~AuthCookieService1.Profile~
+}
+
+class `AuthTokenService1.Profile` {
+    <<Enumeration>>
+
+    TOKEN_SERVICE
+
+    -myLabel : String
+
+    +label() String
+    +toString() String
+    +uri() URI
+
+    +from(String aLabel)$ Optional~AuthTokenService1.Profile~
+}
+
+class `ImageService2.Profile` {
+    <<Enumeration>>
+
+    LEVEL_ZERO
+    LEVEL_ONE
+    LEVEL_TWO
+
+    -myLabel : String
+
+    +label() String
+    +toString() String
+    +uri() URI
+
+    +from(String aLabel)$ Optional~ImageService2.Profile~
+}
+
+class `ImageService3.Profile` {
+    <<Enumeration>>
+
+    LEVEL_ZERO
+    LEVEL_ONE
+    LEVEL_TWO
+
+    -myLabel : String
+
+    +label() String
+    +toString() String
+    +uri() URI
+    +from(String aLabel)$ Optional~ImageService3.Profile~
+}
+
+class `OtherService.Profile` {
+    -myValue : String
+
+    +label() String
+    +toString() String
+    +uri() URI
+}
+
+class `PhysicalDimsService.Profile` {
+    <<Enumeration>>
+
+    DIMS_SERVICE
+
+    -myLabel : String
+
+    +label() String
+    +toString() String
+    +uri() URI
+
+    +from(String aValue)$ Optional~PhysicalDimsService.Profile~
+}
+

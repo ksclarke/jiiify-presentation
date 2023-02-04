@@ -16,63 +16,41 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public enum RangeBehavior implements Behavior {
 
-    /**
-     * An auto-advance range behavior.
-     */
-    AUTO_ADVANCE(BehaviorConstants.AUTO_ADVANCE), //
+    /** An auto-advance range behavior. */
+    AUTO_ADVANCE(BehaviorConstants.AUTO_ADVANCE),
 
-    /**
-     * A no-auto-advance range behavior.
-     */
-    NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE), //
+    /** A no-auto-advance range behavior. */
+    NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE),
 
-    /**
-     * An individual range behavior.
-     */
-    INDIVIDUALS(BehaviorConstants.INDIVIDUALS), //
+    /** An individual range behavior. */
+    INDIVIDUALS(BehaviorConstants.INDIVIDUALS),
 
-    /**
-     * A no-nav range behavior.
-     */
-    NO_NAV(BehaviorConstants.NO_NAV), //
+    /** A no-nav range behavior. */
+    NO_NAV(BehaviorConstants.NO_NAV),
 
-    /**
-     * A continuous range behavior.
-     */
-    CONTINUOUS(BehaviorConstants.CONTINUOUS), //
+    /** A continuous range behavior. */
+    CONTINUOUS(BehaviorConstants.CONTINUOUS),
 
-    /**
-     * A paged range behavior.
-     */
-    PAGED(BehaviorConstants.PAGED), //
+    /** A paged range behavior. */
+    PAGED(BehaviorConstants.PAGED),
 
-    /**
-     * An unordered range behavior.
-     */
-    UNORDERED(BehaviorConstants.UNORDERED), //
+    /** An unordered range behavior. */
+    UNORDERED(BehaviorConstants.UNORDERED),
 
-    /**
-     * A thumbnail-nav range behavior.
-     */
-    THUMBNAIL_NAV(BehaviorConstants.THUMBNAIL_NAV), //
+    /** A thumbnail-nav range behavior. */
+    THUMBNAIL_NAV(BehaviorConstants.THUMBNAIL_NAV),
 
-    /**
-     * A sequence range behavior.
-     */
+    /** A sequence range behavior. */
     SEQUENCE(BehaviorConstants.SEQUENCE);
 
-    /**
-     * The logger for the RangeBehavior.
-     */
+    /** The logger for the range behavior. */
     private static final Logger LOGGER = LoggerFactory.getLogger(RangeBehavior.class, MessageCodes.BUNDLE);
 
-    /**
-     * The string form of the RangeBehavior.
-     */
+    /** The string form of the range behavior. */
     private final String myValue;
 
     /**
-     * Creates a new RangeBehavior from the supplied string.
+     * Creates a new range behavior from the supplied string.
      *
      * @param aBehavior A range behavior in string form
      */

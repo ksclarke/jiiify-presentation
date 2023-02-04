@@ -14,22 +14,23 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.Collection;
-import info.freelibrary.iiif.presentation.v3.JsonParsingException;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.TestConstants;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * A test of CollectionBehavior.
  */
 public class CollectionBehaviorTest {
 
-    /* The expected values */
+    /** The expected behavior values. */
     private static final String[] VALUES = { BehaviorConstants.AUTO_ADVANCE, BehaviorConstants.NO_AUTO_ADVANCE,
         BehaviorConstants.INDIVIDUALS, BehaviorConstants.CONTINUOUS, BehaviorConstants.REPEAT,
         BehaviorConstants.NO_REPEAT, BehaviorConstants.PAGED, BehaviorConstants.UNORDERED, BehaviorConstants.MULTI_PART,
         BehaviorConstants.TOGETHER };
 
+    /** A test fixture. */
     private static final String TEST_MANIFEST =
             new File(TestUtils.TEST_DIR, "collection-disjoint-collection-behavior.json").getAbsolutePath();
 

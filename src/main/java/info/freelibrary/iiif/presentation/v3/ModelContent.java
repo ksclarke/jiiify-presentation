@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
+import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.properties.Metadata;
 import info.freelibrary.iiif.presentation.v3.properties.PartOf;
 import info.freelibrary.iiif.presentation.v3.properties.Provider;
@@ -19,6 +19,7 @@ import info.freelibrary.iiif.presentation.v3.properties.Rendering;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
+import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
@@ -27,7 +28,7 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
 public class ModelContent extends AbstractContentResource<ModelContent>
-        implements AnnotationBody<ModelContent>, ContentResource<ModelContent>, Resource<ModelContent> {
+        implements ContentResource<ModelContent>, Resource<ModelContent> {
 
     /**
      * Creates a model content resource from the supplied ID.
@@ -35,34 +36,19 @@ public class ModelContent extends AbstractContentResource<ModelContent>
      * @param aID An model content resource ID in string form
      */
     public ModelContent(final String aID) {
-        super(ResourceTypes.MODEL, aID);
-    }
-
-    /**
-     * Creates a model content resource from the supplied ID.
-     *
-     * @param aID An model content ID
-     */
-    public ModelContent(final URI aID) {
-        super(ResourceTypes.MODEL, aID);
+        super(ResourceTypes.MODEL, aID, ResourceBehavior.class);
     }
 
     /**
      * Creates a model content annotation. This is used by Jackson's deserialization processes.
      */
     private ModelContent() {
-        super(ResourceTypes.MODEL);
-    }
-
-    @Override
-    @JsonIgnore
-    public ModelContent setFormat(final MediaType aMediaType) {
-        return (ModelContent) super.setFormat(aMediaType);
+        super(ResourceTypes.MODEL, ResourceBehavior.class);
     }
 
     @Override
     @JsonSetter(JsonKeys.FORMAT)
-    public ModelContent setFormat(final String aMediaType) {
+    public ModelContent setFormat(final MediaType aMediaType) {
         return (ModelContent) super.setFormat(aMediaType);
     }
 
@@ -79,29 +65,19 @@ public class ModelContent extends AbstractContentResource<ModelContent>
     }
 
     @Override
-    public ModelContent clearBehaviors() {
-        return (ModelContent) super.clearBehaviors();
+    @JsonIgnore
+    public ModelContent setBehaviors(final Behavior... aBehaviorArray) {
+        return setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorArray));
     }
 
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
-    public ModelContent setBehaviors(final Behavior... aBehaviorArray) {
-        return (ModelContent) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorArray));
-    }
-
-    @Override
     public ModelContent setBehaviors(final List<Behavior> aBehaviorList) {
-        return (ModelContent) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorList));
-    }
+        if (aBehaviorList instanceof BehaviorList) {
+            ((BehaviorList) aBehaviorList).checkType(ResourceBehavior.class, this.getClass());
+        }
 
-    @Override
-    public ModelContent addBehaviors(final Behavior... aBehaviorArray) {
-        return (ModelContent) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorArray));
-    }
-
-    @Override
-    public ModelContent addBehaviors(final List<Behavior> aBehaviorList) {
-        return (ModelContent) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorList));
+        return (ModelContent) super.setBehaviors(aBehaviorList);
     }
 
     @Override
@@ -171,17 +147,7 @@ public class ModelContent extends AbstractContentResource<ModelContent>
     }
 
     @Override
-    public ModelContent setID(final URI aID) {
-        return (ModelContent) super.setID(aID);
-    }
-
-    @Override
     public ModelContent setRights(final String aRights) {
-        return (ModelContent) super.setRights(aRights);
-    }
-
-    @Override
-    public ModelContent setRights(final URI aRights) {
         return (ModelContent) super.setRights(aRights);
     }
 

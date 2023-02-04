@@ -20,10 +20,13 @@ import info.freelibrary.iiif.presentation.v3.Manifest;
  */
 public class ManifestorTest {
 
+    /** A test fixture. */
     private static final File MANIFEST = new File(TestUtils.TEST_DIR, "z1960050.json");
 
+    /** A location to use as a temporary directory. */
     private static final File TMP_DIR = new File(System.getProperty("java.io.tmpdir"));
 
+    /** A constant for the JSON extension. */
     private static final String JSON_EXT = ".json";
 
     /**
@@ -50,6 +53,7 @@ public class ManifestorTest {
      * Tests the manifest's contents.
      *
      * @param aManifest A manifest to test
+     * @throws IOException If there is trouble reading the manifest fixture
      */
     private void testManifest(final Manifest aManifest) throws IOException {
         assertEquals(format(StringUtils.read(MANIFEST, StandardCharsets.UTF_8)), format(aManifest.toString()));

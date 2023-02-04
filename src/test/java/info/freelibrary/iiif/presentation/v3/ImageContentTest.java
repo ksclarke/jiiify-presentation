@@ -3,11 +3,10 @@ package info.freelibrary.iiif.presentation.v3;
 
 import static org.junit.Assert.assertEquals;
 
-import java.net.URI;
-
 import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.v3.properties.Label;
+import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.services.ImageService3;
 
 /**
@@ -15,12 +14,16 @@ import info.freelibrary.iiif.presentation.v3.services.ImageService3;
  */
 public class ImageContentTest {
 
-    private static final URI IMAGE_URI = URI.create("http://example.org/image/001.jpg");
+    /** A sample image ID. */
+    private static final String IMAGE_URI = "https://example.org/image/001.jpg";
 
-    private static final URI SERVICE_URI = URI.create("http://example.org/service");
+    /** A sample service URI. */
+    private static final String SERVICE_URI = "https://example.org/service";
 
+    /** A test image service. */
     private static final ImageService3 SERVICE = new ImageService3(SERVICE_URI);
 
+    /** A sample image format. */
     private static final String IMAGE_PNG = "image/png";
 
     /**
@@ -28,14 +31,6 @@ public class ImageContentTest {
      */
     @Test
     public void testImageContentString() {
-        assertEquals(IMAGE_URI, new ImageContent(IMAGE_URI.toString()).getID());
-    }
-
-    /**
-     * Tests image content constructor.
-     */
-    @Test
-    public void testImageContentURI() {
         assertEquals(IMAGE_URI, new ImageContent(IMAGE_URI).getID());
     }
 
@@ -48,19 +43,10 @@ public class ImageContentTest {
     }
 
     /**
-     * Tests setting format on an image content resource.
-     */
-    @Test
-    public void testSetFormatString() {
-        // This will have image/jpeg set as format by default
-        assertEquals(MediaType.IMAGE_PNG, new ImageContent(IMAGE_URI).setFormat(IMAGE_PNG).getFormat().get());
-    }
-
-    /**
      * Tests setting media type.
      */
     @Test
-    public void testSetFormatMediaTypeMediaType() {
+    public void testSetFormat() {
         // This will have image/jpeg set as format by default
         assertEquals(MediaType.IMAGE_PNG,
                 new ImageContent(IMAGE_URI).setFormat(MediaType.fromString(IMAGE_PNG).get()).getFormat().get());

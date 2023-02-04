@@ -8,16 +8,21 @@ import java.util.List;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SequenceWriter;
 
-import info.freelibrary.iiif.presentation.v3.JsonParsingException;
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * Utilities for running tests.
  */
 public final class TestUtils {
 
+    /** The directory path of test fixtures. */
     public static final String TEST_DIR = "src/test/resources/json";
 
+    /**
+     * Creates a new private test utilities class.
+     */
     private TestUtils() {
+        // This is intentionally left empty.
     }
 
     /**
@@ -125,6 +130,7 @@ public final class TestUtils {
      *
      * @param aJsonString A JSON string
      * @return A formatted JSON string
+     * @throws JsonParsingException if the format cannot be parsed from supplied JSON string
      */
     public static String format(final String aJsonString) {
         try {

@@ -6,6 +6,7 @@ module JiiifyPresentation0002_2
   require_relative '../../../target/jiiify-presentation-v3-' + ARGV[0] + '-uber.jar'
 
   include_package 'info.freelibrary.iiif.presentation.v3'
+  include_package 'info.freelibrary.iiif.presentation.v3.annotations'
   include_package 'info.freelibrary.iiif.presentation.v3.ids'
   include_package 'info.freelibrary.iiif.presentation.v3.properties'
   include_package 'com.google.common.net'
@@ -22,7 +23,8 @@ module JiiifyPresentation0002_2
   annoPage = AnnotationPage.new(annoPageID)
   anno = PaintingAnnotation.new(annoID, canvas)
 
-  annoPage.addAnnotations(anno.setBodies(soundContent).setTarget(canvasID))
+  target = Target.new(canvasID)
+  annoPage.addAnnotations(anno.setBody(soundContent).setTarget(target))
   manifest.setCanvases(canvas.setPaintingPages(annoPage))
 
   puts manifest.toString()

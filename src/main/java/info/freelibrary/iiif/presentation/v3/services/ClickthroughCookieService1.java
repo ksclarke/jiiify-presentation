@@ -1,36 +1,17 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.core.JsonProcessingException;
-
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-
-import info.freelibrary.iiif.presentation.v3.JsonParsingException;
 import info.freelibrary.iiif.presentation.v3.Service;
-import info.freelibrary.iiif.presentation.v3.utils.JSON;
-import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * An access cookie service that uses the click-through pattern. With this pattern, the user will be required to click a
  * button within the client using content provided in the service description.
  */
-public class ClickthroughCookieService1 extends UserMediatedCookieService1<ClickthroughCookieService1>
-        implements AuthCookieService1<ClickthroughCookieService1> {
-
-    /**
-     * The logger for ClickthroughCookieService1.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(ClickthroughCookieService1.class, MessageCodes.BUNDLE);
+public class ClickthroughCookieService1 extends AbstractUserMediatedService<ClickthroughCookieService1>
+        implements UserMediatedCookieService<ClickthroughCookieService1> {
 
     /**
      * Creates a new access cookie service using the click-through pattern.
@@ -39,142 +20,37 @@ public class ClickthroughCookieService1 extends UserMediatedCookieService1<Click
      * @param aLabel A label of the service
      */
     public ClickthroughCookieService1(final String aID, final String aLabel) {
-        super(AuthCookieService1.Profile.CLICKTHROUGH, aID, aLabel);
+        super(AuthCookieService.Profile.CLICKTHROUGH, aID, aLabel);
     }
 
     /**
-     * Creates a new access cookie service using the click-through pattern.
+     * Gets the click-through cookie service confirmation label.
      *
-     * @param aID An ID of the service
-     * @param aLabel A label of the service
-     */
-    public ClickthroughCookieService1(final URI aID, final String aLabel) {
-        super(AuthCookieService1.Profile.CLICKTHROUGH, aID, aLabel);
-    }
-
-    /**
-     * Creates a new access cookie service using the click-through pattern.
-     *
-     * @param aID An ID of the service
-     * @param aLabel A label of the service
-     * @param aServicesArray A varargs for services related to this access cookie service
-     */
-    @SafeVarargs
-    public ClickthroughCookieService1(final String aID, final String aLabel, final Service<?>... aServicesArray) {
-        super(AuthCookieService1.Profile.CLICKTHROUGH, aID, aLabel, aServicesArray);
-    }
-
-    /**
-     * Creates a new access cookie service using the click-through pattern.
-     *
-     * @param aID An ID of the service
-     * @param aLabel A label of the service
-     * @param aServicesArray A varargs for services related to this access cookie service
-     */
-    @SafeVarargs
-    public ClickthroughCookieService1(final URI aID, final String aLabel, final Service<?>... aServicesArray) {
-        super(AuthCookieService1.Profile.CLICKTHROUGH, aID, aLabel, aServicesArray);
-    }
-
-    /**
-     * Sets the click-through cookie service ID from a URI.
-     *
-     * @param aID A service ID
-     * @return This service
+     * @return The confirmation label
      */
     @Override
-    public ClickthroughCookieService1 setID(final URI aID) {
-        return (ClickthroughCookieService1) super.setID(aID);
+    public String getConfirmLabel() {
+        return super.getConfirmLabel();
     }
 
     /**
-     * Sets the click-through cookie service ID from a string.
+     * Gets the click-through cookie service description.
      *
-     * @param aID A service ID
-     * @return This service
+     * @return The service description
      */
     @Override
-    public ClickthroughCookieService1 setID(final String aID) {
-        return (ClickthroughCookieService1) super.setID(aID);
+    public String getDescription() {
+        return super.getDescription();
     }
 
     /**
-     * Gets the click-through cookie service ID.
-     */
-    @Override
-    public URI getID() {
-        return super.getID();
-    }
-
-    /**
-     * Can be used to set click-through cookie service type; if an incorrect type is set it will return an
-     * IllegalArgumentException.
+     * Gets the click-through cookie service failure description.
      *
-     * @param aType A type of service
-     * @return This service
-     * @throws IllegalArgumentException If an incorrect type for the service class is set
+     * @return The failure description
      */
     @Override
-    public ClickthroughCookieService1 setType(final String aType) {
-        return (ClickthroughCookieService1) super.setType(aType);
-    }
-
-    /**
-     * Sets the click-through cookie service profile; if an incorrect profile is set, this will return an
-     * IllegalArgumentException.
-     *
-     * @param aProfile A service profile
-     * @return This service
-     * @throws IllegalArgumentException if an incorrect profile for the service class is set
-     */
-    @Override
-    public ClickthroughCookieService1 setProfile(final String aProfile) {
-        if (!AuthCookieService1.Profile.CLICKTHROUGH.string().equals(aProfile)) {
-            final String message = LOGGER.getMessage(MessageCodes.JPA_122, aProfile, getClass().getSimpleName());
-            throw new IllegalArgumentException(message);
-        }
-
-        return this;
-    }
-
-    /**
-     * Sets the click-through cookie service profile; if an incorrect profile is set it will return an
-     * IllegalArgumentException.
-     *
-     * @param aProfile A service profile
-     * @return This service
-     * @throws IllegalArgumentException if an incorrect profile for the service class is set
-     */
-    @Override
-    public ClickthroughCookieService1 setProfile(final AuthService.Profile aProfile) {
-        if (!AuthCookieService1.Profile.CLICKTHROUGH.equals(aProfile)) {
-            final String message = LOGGER.getMessage(MessageCodes.JPA_122, aProfile, getClass().getSimpleName());
-            throw new IllegalArgumentException(message);
-        }
-
-        return this;
-    }
-
-    /**
-     * Gets the click-through cookie service profile.
-     *
-     * @return The service profile
-     */
-    @Override
-    @JsonInclude(Include.NON_ABSENT)
-    public Optional<Service.Profile> getProfile() {
-        return super.getProfile();
-    }
-
-    /**
-     * Sets the click-through cookie service failure header.
-     *
-     * @param aFailureHeader A failure header
-     * @return This service
-     */
-    @Override
-    public ClickthroughCookieService1 setFailureHeader(final String aFailureHeader) {
-        return (ClickthroughCookieService1) super.setFailureHeader(aFailureHeader);
+    public String getFailureDescription() {
+        return super.getFailureDescription();
     }
 
     /**
@@ -185,6 +61,81 @@ public class ClickthroughCookieService1 extends UserMediatedCookieService1<Click
     @Override
     public String getFailureHeader() {
         return super.getFailureHeader();
+    }
+
+    /**
+     * Gets the header for the click-through cookie service.
+     *
+     * @return The service header
+     */
+    @Override
+    public String getHeader() {
+        return super.getHeader();
+    }
+
+    /**
+     * Gets the click-through cookie service ID.
+     */
+    @Override
+    public String getID() {
+        return super.getID();
+    }
+
+    /**
+     * Gets the click-through cookie service label.
+     *
+     * @return The service label
+     */
+    @Override
+    public String getLabel() {
+        return super.getLabel();
+    }
+
+    /**
+     * Gets the click-through cookie service profile.
+     *
+     * @return The service profile
+     */
+    @Override
+    public Optional<Service.Profile> getProfile() {
+        return super.getProfile();
+    }
+
+    /**
+     * Gets the services related to this click-through cookie service.
+     *
+     * @return A list of related services
+     */
+    @Override
+    public List<Service<?>> getServices() {
+        return super.getServices();
+    }
+
+    @Override
+    public String getType() {
+        return super.getType();
+    }
+
+    /**
+     * Gets the click-through cookie service confirmation label.
+     *
+     * @param aLabel A confirmation label
+     * @return This service
+     */
+    @Override
+    public ClickthroughCookieService1 setConfirmLabel(final String aLabel) {
+        return (ClickthroughCookieService1) super.setConfirmLabel(aLabel);
+    }
+
+    /**
+     * Sets the description for the click-through cookie service.
+     *
+     * @param aDescription A service description
+     * @return This service
+     */
+    @Override
+    public ClickthroughCookieService1 setDescription(final String aDescription) {
+        return (ClickthroughCookieService1) super.setDescription(aDescription);
     }
 
     /**
@@ -199,13 +150,47 @@ public class ClickthroughCookieService1 extends UserMediatedCookieService1<Click
     }
 
     /**
-     * Gets the click-through cookie service failure description.
+     * Sets the click-through cookie service failure header.
      *
-     * @return The failure description
+     * @param aFailureHeader A failure header
+     * @return This service
      */
     @Override
-    public String getFailureDescription() {
-        return super.getFailureDescription();
+    public ClickthroughCookieService1 setFailureHeader(final String aFailureHeader) {
+        return (ClickthroughCookieService1) super.setFailureHeader(aFailureHeader);
+    }
+
+    /**
+     * Sets the header for the click-through cookie service.
+     *
+     * @param aHeader A service header
+     * @return This service
+     */
+    @Override
+    public ClickthroughCookieService1 setHeader(final String aHeader) {
+        return (ClickthroughCookieService1) super.setHeader(aHeader);
+    }
+
+    /**
+     * Sets the click-through cookie service ID from a string.
+     *
+     * @param aID A service ID
+     * @return This service
+     */
+    @Override
+    public ClickthroughCookieService1 setID(final String aID) {
+        return (ClickthroughCookieService1) super.setID(aID);
+    }
+
+    /**
+     * Sets the click-through cookie service label.
+     *
+     * @param aLabel A service label
+     * @return This service
+     */
+    @Override
+    public ClickthroughCookieService1 setLabel(final String aLabel) {
+        return (ClickthroughCookieService1) super.setLabel(aLabel);
     }
 
     /**
@@ -232,118 +217,16 @@ public class ClickthroughCookieService1 extends UserMediatedCookieService1<Click
     }
 
     /**
-     * Gets the services related to this click-through cookie service.
+     * Can be used to set click-through cookie service type; if an incorrect type is set it will return an
+     * IllegalArgumentException.
      *
-     * @return A list of related services
-     */
-    @Override
-    public List<Service<?>> getServices() {
-        return super.getServices();
-    }
-
-    /**
-     * Sets the click-through cookie service label.
-     *
-     * @param aLabel A service label
+     * @param aType A type of service
      * @return This service
+     * @throws IllegalArgumentException If an incorrect type for the service class is set
      */
     @Override
-    @JsonSetter(JsonKeys.LABEL)
-    public ClickthroughCookieService1 setLabel(final String aLabel) {
-        return (ClickthroughCookieService1) super.setLabel(aLabel);
+    public ClickthroughCookieService1 setType(final String aType) {
+        return (ClickthroughCookieService1) super.setType(aType);
     }
 
-    /**
-     * Gets the click-through cookie service label.
-     *
-     * @return The service label
-     */
-    @Override
-    @JsonGetter(JsonKeys.LABEL)
-    public String getLabel() {
-        return super.getLabel();
-    }
-
-    /**
-     * Gets the click-through cookie service confirmation label.
-     *
-     * @param aLabel A confirmation label
-     * @return This service
-     */
-    @Override
-    @JsonSetter(JsonKeys.CONFIRM_LABEL)
-    public ClickthroughCookieService1 setConfirmLabel(final String aLabel) {
-        return (ClickthroughCookieService1) super.setConfirmLabel(aLabel);
-    }
-
-    /**
-     * Gets the click-through cookie service confirmation label.
-     *
-     * @return The confirmation label
-     */
-    @Override
-    @JsonGetter(JsonKeys.CONFIRM_LABEL)
-    public String getConfirmLabel() {
-        return super.getConfirmLabel();
-    }
-
-    /**
-     * Sets the header for the click-through cookie service.
-     *
-     * @param aHeader A service header
-     * @return This service
-     */
-    @Override
-    @JsonSetter(JsonKeys.HEADER)
-    public ClickthroughCookieService1 setHeader(final String aHeader) {
-        return (ClickthroughCookieService1) super.setHeader(aHeader);
-    }
-
-    /**
-     * Gets the header for the click-through cookie service.
-     *
-     * @return The service header
-     */
-    @Override
-    @JsonGetter(JsonKeys.HEADER)
-    public String getHeader() {
-        return super.getHeader();
-    }
-
-    /**
-     * Sets the description for the click-through cookie service.
-     *
-     * @param aDescription A service description
-     * @return This service
-     */
-    @Override
-    @JsonSetter(JsonKeys.DESCRIPTION)
-    public ClickthroughCookieService1 setDescription(final String aDescription) {
-        return (ClickthroughCookieService1) super.setDescription(aDescription);
-    }
-
-    /**
-     * Gets the click-through cookie service description.
-     *
-     * @return The service description
-     */
-    @Override
-    @JsonGetter(JsonKeys.DESCRIPTION)
-    public String getDescription() {
-        return super.getDescription();
-    }
-
-    /**
-     * Outputs a string representation of the click-through cookie service. The content of the string is marked up in
-     * JSON.
-     */
-    @Override
-    public String toString() {
-        try {
-            return JSON.getWriter(ClickthroughCookieService1.class).writeValueAsString(this);
-        } catch (final JsonProcessingException details) {
-            // RuntimeException: this shouldn't fail
-            throw new JsonParsingException(details);
-        }
-    }
 }

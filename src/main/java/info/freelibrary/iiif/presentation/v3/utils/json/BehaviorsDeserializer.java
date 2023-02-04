@@ -1,10 +1,9 @@
 
-package info.freelibrary.iiif.presentation.v3;
+package info.freelibrary.iiif.presentation.v3.utils.json;
 
 import static info.freelibrary.util.Constants.MESSAGE_SLOT;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -18,10 +17,12 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import info.freelibrary.util.StringUtils;
 import info.freelibrary.util.warnings.PMD;
 
+import info.freelibrary.iiif.presentation.v3.Resource;
+import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
+import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CollectionBehavior;
-import info.freelibrary.iiif.presentation.v3.properties.behaviors.DisjointChecker;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.RangeBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
@@ -30,7 +31,7 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavi
  * A deserializer for classes that implement the Behavior interface. It operates on a list so that the elements can be
  * compared to check for mutual exclusivity.
  */
-class BehaviorsDeserializer extends StdDeserializer<List<Behavior>> {
+public class BehaviorsDeserializer extends StdDeserializer<List<Behavior>> {
 
     /**
      * The <code>serialVersionUID</code> for BehaviorDeserializer.
@@ -47,7 +48,7 @@ class BehaviorsDeserializer extends StdDeserializer<List<Behavior>> {
     /**
      * Creates a new behaviors deserializer.
      *
-     * @param aClass
+     * @param aClass A class to be deserialized
      */
     BehaviorsDeserializer(final Class<?> aClass) {
         super(aClass);
@@ -61,29 +62,28 @@ class BehaviorsDeserializer extends StdDeserializer<List<Behavior>> {
         final String iiifResourceType = ((Resource<?>) aParser.getParsingContext().getCurrentValue()).getType();
 
         final Function<String, Behavior> stringToBehavior;
-        final Class<? extends Behavior> behaviorClass;
-        final List<Behavior> behaviors = new ArrayList<>();
+        final List<Behavior> behaviors;
 
         switch (iiifResourceType) {
             case ResourceTypes.CANVAS:
                 stringToBehavior = CanvasBehavior::fromString;
-                behaviorClass = CanvasBehavior.class;
+                behaviors = new BehaviorList(CanvasBehavior.class);
                 break;
             case ResourceTypes.COLLECTION:
                 stringToBehavior = CollectionBehavior::fromString;
-                behaviorClass = CollectionBehavior.class;
+                behaviors = new BehaviorList(CollectionBehavior.class);
                 break;
             case ResourceTypes.MANIFEST:
                 stringToBehavior = ManifestBehavior::from;
-                behaviorClass = ManifestBehavior.class;
+                behaviors = new BehaviorList(ManifestBehavior.class);
                 break;
             case ResourceTypes.RANGE:
                 stringToBehavior = RangeBehavior::fromString;
-                behaviorClass = RangeBehavior.class;
+                behaviors = new BehaviorList(RangeBehavior.class);
                 break;
             default:
                 stringToBehavior = ResourceBehavior::fromString;
-                behaviorClass = ResourceBehavior.class;
+                behaviors = new BehaviorList(ResourceBehavior.class);
                 break;
         }
 
@@ -91,20 +91,17 @@ class BehaviorsDeserializer extends StdDeserializer<List<Behavior>> {
         try {
             node.forEach(stringNode -> behaviors.add(stringToBehavior.apply(stringNode.textValue())));
         } catch (final IllegalArgumentException details) {
-            final String errorMsg;
+            final String errorMessage;
 
             // Check if we need to fill in the resource type
             if (details.getMessage().contains(MESSAGE_SLOT)) {
-                errorMsg = StringUtils.format(details.getMessage(), iiifResourceType);
+                errorMessage = StringUtils.format(details.getMessage(), iiifResourceType);
             } else {
-                errorMsg = details.getMessage();
+                errorMessage = details.getMessage();
             }
 
-            throw new JsonMappingException(aParser, errorMsg, aParser.getCurrentLocation()); // NOPMD
+            throw new JsonMappingException(aParser, errorMessage, aParser.getCurrentLocation()); // NOPMD
         }
-
-        // Make sure they're not mutually exclusive
-        new DisjointChecker(behaviors).check(behaviorClass);
 
         return behaviors;
     }

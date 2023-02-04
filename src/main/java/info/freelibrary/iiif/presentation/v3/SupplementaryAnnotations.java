@@ -1,17 +1,14 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
-import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.warnings.Eclipse;
 import info.freelibrary.util.warnings.PMD;
 
+import info.freelibrary.iiif.presentation.v3.ids.UriUtils;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
@@ -23,7 +20,7 @@ public class SupplementaryAnnotations {
     /**
      * The supplementary annotation's ID.
      */
-    private URI myID;
+    private String myID;
 
     /**
      * Creates a link to an {@link AnnotationCollection} that contains supplementary annotations.
@@ -31,16 +28,7 @@ public class SupplementaryAnnotations {
      * @param aID An ID of an annotation collection
      */
     public SupplementaryAnnotations(final String aID) {
-        myID = URI.create(aID);
-    }
-
-    /**
-     * Creates a link to an {@link AnnotationCollection} that contains supplementary annotations.
-     *
-     * @param aID An ID of an annotation collection
-     */
-    public SupplementaryAnnotations(final URI aID) {
-        myID = Objects.requireNonNull(aID);
+        myID = UriUtils.checkID(aID, true);
     }
 
     /**
@@ -57,7 +45,7 @@ public class SupplementaryAnnotations {
      * @return The ID of the linked annotation collection
      */
     @JsonGetter(JsonKeys.ID)
-    public URI getID() {
+    public String getID() {
         return myID;
     }
 
@@ -69,19 +57,7 @@ public class SupplementaryAnnotations {
      */
     @JsonSetter(JsonKeys.ID)
     public SupplementaryAnnotations setID(final String aID) {
-        myID = URI.create(aID);
-        return this;
-    }
-
-    /**
-     * Sets the ID of the linked annotation collection.
-     *
-     * @param aID The ID of the linked annotation collection
-     * @return The supplementary annotations
-     */
-    @JsonIgnore
-    public SupplementaryAnnotations setID(final URI aID) {
-        myID = Objects.requireNonNull(aID);
+        myID = UriUtils.checkID(aID, true);
         return this;
     }
 

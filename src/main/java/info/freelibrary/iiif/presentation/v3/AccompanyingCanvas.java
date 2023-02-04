@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3; // NOPMD
 
-import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,6 +15,7 @@ import info.freelibrary.util.warnings.Eclipse;
 import info.freelibrary.util.warnings.JDK;
 import info.freelibrary.util.warnings.PMD;
 
+import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
@@ -30,24 +30,17 @@ import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * A single canvas that provides additional content for use while rendering the resource. Examples include: 1) an image
  * to show while a duration-only canvas is playing audio, or 2) background audio to play while a user is navigating an
  * image-only manifest.
  */
-@SuppressWarnings({ PMD.TOO_MANY_METHODS, PMD.EXCESSIVE_PUBLIC_COUNT, PMD.CYCLOMATIC_COMPLEXITY })
-public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> // NOPMD
-        implements CanvasResource<AccompanyingCanvas> { // NOPMD
-
-    /**
-     * Creates a new accompanying canvas from the supplied ID.
-     *
-     * @param aID An accompanying canvas ID
-     */
-    public AccompanyingCanvas(final URI aID) {
-        super(aID);
-    }
+@SuppressWarnings({ PMD.TOO_MANY_METHODS, "PMD.TooManyMethods", PMD.EXCESSIVE_PUBLIC_COUNT, "PMD.ExcessivePublicCount",
+    PMD.CYCLOMATIC_COMPLEXITY, "PMD.CyclomaticComplexity" })
+public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
+        implements CanvasResource<AccompanyingCanvas> {
 
     /**
      * Creates a new accompanying canvas from the supplied ID in string form.
@@ -56,16 +49,6 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> // NO
      */
     public AccompanyingCanvas(final String aID) {
         super(aID);
-    }
-
-    /**
-     * Creates a new accompanying canvas from the supplied ID and label.
-     *
-     * @param aID An accompanying canvas ID
-     * @param aLabel An accompanying canvas label
-     */
-    public AccompanyingCanvas(final URI aID, final Label aLabel) {
-        super(aID, aLabel);
     }
 
     /**
@@ -127,7 +110,7 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> // NO
 
     @Override
     @JsonGetter(JsonKeys.ID)
-    public URI getID() {
+    public String getID() {
         return super.getID();
     }
 
@@ -144,30 +127,15 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> // NO
     }
 
     @Override
-    public AccompanyingCanvas clearBehaviors() {
-        return (AccompanyingCanvas) super.clearBehaviors();
-    }
-
-    @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
     public AccompanyingCanvas setBehaviors(final Behavior... aBehaviorArray) {
-        return (AccompanyingCanvas) super.setBehaviors(aBehaviorArray);
+        return setBehaviors(aBehaviorArray);
     }
 
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
     public AccompanyingCanvas setBehaviors(final List<Behavior> aBehaviorList) {
         return (AccompanyingCanvas) super.setBehaviors(aBehaviorList);
-    }
-
-    @Override
-    public AccompanyingCanvas addBehaviors(final Behavior... aBehaviorArray) {
-        return (AccompanyingCanvas) super.addBehaviors(aBehaviorArray);
-    }
-
-    @Override
-    public AccompanyingCanvas addBehaviors(final List<Behavior> aBehaviorList) {
-        return (AccompanyingCanvas) super.addBehaviors(aBehaviorList);
     }
 
     @Override
@@ -237,17 +205,7 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> // NO
     }
 
     @Override
-    public AccompanyingCanvas setID(final URI aID) {
-        return (AccompanyingCanvas) super.setID(aID);
-    }
-
-    @Override
     public AccompanyingCanvas setRights(final String aRights) {
-        return (AccompanyingCanvas) super.setRights(aRights);
-    }
-
-    @Override
-    public AccompanyingCanvas setRights(final URI aRights) {
         return (AccompanyingCanvas) super.setRights(aRights);
     }
 
@@ -500,21 +458,19 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas> // NO
     }
 
     @Override
-    public final AccompanyingCanvas
-            setOtherAnnotations(final List<AnnotationPage<? extends Annotation<?>>> aAnnotationList) {
+    public final AccompanyingCanvas setOtherAnnotations(final List<AnnotationPage<WebAnnotation>> aAnnotationList) {
         return (AccompanyingCanvas) super.setOtherAnnotations(aAnnotationList);
     }
 
     @SuppressWarnings(JDK.UNCHECKED)
     @Override
-    public final AccompanyingCanvas
-            setOtherAnnotations(final AnnotationPage<? extends Annotation<?>>... aAnnotationArray) {
+    public final AccompanyingCanvas setOtherAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
         return (AccompanyingCanvas) super.setOtherAnnotations(aAnnotationArray);
     }
 
     @Override
     @JsonIgnore
-    public List<AnnotationPage<? extends Annotation<?>>> getOtherAnnotations() {
+    public List<AnnotationPage<WebAnnotation>> getOtherAnnotations() {
         return super.getOtherAnnotations();
     }
 

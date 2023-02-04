@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
+import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.properties.Metadata;
 import info.freelibrary.iiif.presentation.v3.properties.PartOf;
 import info.freelibrary.iiif.presentation.v3.properties.Provider;
@@ -19,6 +19,7 @@ import info.freelibrary.iiif.presentation.v3.properties.Rendering;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
+import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
@@ -27,7 +28,7 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
 public class DatasetContent extends AbstractContentResource<DatasetContent>
-        implements AnnotationBody<DatasetContent>, ContentResource<DatasetContent>, Resource<DatasetContent> {
+        implements ContentResource<DatasetContent>, Resource<DatasetContent> {
 
     /**
      * Creates a dataset content resource from the supplied ID.
@@ -35,34 +36,18 @@ public class DatasetContent extends AbstractContentResource<DatasetContent>
      * @param aID An dataset content resource ID in string form
      */
     public DatasetContent(final String aID) {
-        super(ResourceTypes.DATASET, aID);
-    }
-
-    /**
-     * Creates a dataset content resource from the supplied ID.
-     *
-     * @param aID An dataset content resource ID
-     */
-    public DatasetContent(final URI aID) {
-        super(ResourceTypes.DATASET, aID);
+        super(ResourceTypes.DATASET, aID, ResourceBehavior.class);
     }
 
     /**
      * Creates a dataset content resource. This is used by Jackson for its deserialization processes.
      */
     private DatasetContent() {
-        super(ResourceTypes.DATASET);
+        super(ResourceTypes.DATASET, ResourceBehavior.class);
     }
 
     @Override
-    @JsonIgnore
     public DatasetContent setFormat(final MediaType aMediaType) {
-        return (DatasetContent) super.setFormat(aMediaType);
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.FORMAT)
-    public DatasetContent setFormat(final String aMediaType) {
         return (DatasetContent) super.setFormat(aMediaType);
     }
 
@@ -79,29 +64,19 @@ public class DatasetContent extends AbstractContentResource<DatasetContent>
     }
 
     @Override
-    public DatasetContent clearBehaviors() {
-        return (DatasetContent) super.clearBehaviors();
+    @JsonIgnore
+    public DatasetContent setBehaviors(final Behavior... aBehaviorArray) {
+        return setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorArray));
     }
 
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
-    public DatasetContent setBehaviors(final Behavior... aBehaviorArray) {
-        return (DatasetContent) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorArray));
-    }
-
-    @Override
     public DatasetContent setBehaviors(final List<Behavior> aBehaviorList) {
-        return (DatasetContent) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorList));
-    }
+        if (aBehaviorList instanceof BehaviorList) {
+            ((BehaviorList) aBehaviorList).checkType(ResourceBehavior.class, this.getClass());
+        }
 
-    @Override
-    public DatasetContent addBehaviors(final Behavior... aBehaviorArray) {
-        return (DatasetContent) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorArray));
-    }
-
-    @Override
-    public DatasetContent addBehaviors(final List<Behavior> aBehaviorList) {
-        return (DatasetContent) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorList));
+        return (DatasetContent) super.setBehaviors(aBehaviorList);
     }
 
     @Override
@@ -171,17 +146,7 @@ public class DatasetContent extends AbstractContentResource<DatasetContent>
     }
 
     @Override
-    public DatasetContent setID(final URI aID) {
-        return (DatasetContent) super.setID(aID);
-    }
-
-    @Override
     public DatasetContent setRights(final String aRights) {
-        return (DatasetContent) super.setRights(aRights);
-    }
-
-    @Override
-    public DatasetContent setRights(final URI aRights) {
         return (DatasetContent) super.setRights(aRights);
     }
 

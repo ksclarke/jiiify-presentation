@@ -8,7 +8,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,22 +29,31 @@ import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
  */
 public class PartOfTest {
 
-    private static final URI TEST_URI_1 = URI.create("https://example.org/iiif/1");
+    /** A test URI. */
+    private static final String TEST_URI_1 = "https://example.org/iiif/1";
 
-    private static final URI TEST_URI_2 = URI.create("https://example.org/iiif/2");
+    /** A test URI. */
+    private static final String TEST_URI_2 = "https://example.org/iiif/2";
 
+    /** A test label. */
     private static final Label TEST_LABEL = new Label("PartOf for Example Object");
 
+    /** A test language code. */
     private static final String ISO_639_2_NAHUATL = "nah";
 
+    /** A test language code. */
     private static final String ISO_639_2_VIETNAMESE = "vie";
 
+    /** A test fixture. */
     private static final File PART_OF_SIMPLE_ONE = new File(TestUtils.TEST_DIR, "partof-simple-one.json");
 
+    /** A test fixture. */
     private static final File PART_OF_SIMPLE_TWO = new File(TestUtils.TEST_DIR, "partof-simple-two.json");
 
+    /** A test fixture. */
     private static final File PART_OF_FULL_ONE = new File(TestUtils.TEST_DIR, "partof-full-one.json");
 
+    /** A test manifest. */
     private Manifest myManifest;
 
     /**
@@ -189,7 +197,7 @@ public class PartOfTest {
     }
 
     /**
-     * Checks that the file is deserialized to the representation specified by the partOf(s)
+     * Checks that the file is deserialized to the representation specified by the partOf(s).
      *
      * @param aExpected An expected JSON value encapsulated in a test fixtures file
      * @throws IOException If there is trouble reading or deserializing the partOf file
@@ -210,7 +218,7 @@ public class PartOfTest {
     }
 
     /**
-     * Checks that the partOf(s) is serialized to the representation specified by the file
+     * Checks that the partOf(s) is serialized to the representation specified by the file.
      *
      * @param aExpected An expected JSON value encapsulated in a test fixtures file
      * @throws IOException If there is trouble reading the partOf file or serializing the constructed partOf(s)

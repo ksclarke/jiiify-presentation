@@ -13,26 +13,27 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.StringUtils;
 
-import info.freelibrary.iiif.presentation.v3.JsonParsingException;
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.TestConstants;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * A test of the CanvasBehavior.
  */
 public class CanvasBehaviorTest {
 
-    /* Expected values */
+    /** Expected values. */
     private static final String[] VALUES = { BehaviorConstants.AUTO_ADVANCE, BehaviorConstants.NO_AUTO_ADVANCE,
         BehaviorConstants.FACING_PAGES, BehaviorConstants.NON_PAGED };
 
+    /** A test manifest. */
     private static final String TEST_MANIFEST =
             new File(TestUtils.TEST_DIR, "manifest-disjoint-canvas-behavior.json").getAbsolutePath();
 
     /**
-     * Tests the behavior's JSON serialization
+     * Tests the behavior's JSON serialization.
      *
      * @throws JsonProcessingException If there is trouble serializing the behavior
      */

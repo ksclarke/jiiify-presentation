@@ -4,7 +4,6 @@ package info.freelibrary.iiif.presentation.v3.services;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.UUID;
 
 import org.junit.Before;
@@ -14,30 +13,30 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.StringUtils;
 
-import info.freelibrary.iiif.presentation.v3.JsonParsingException;
 import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * Tests the authorization token service class.
  */
 public class AuthTokenService1Test {
 
+    /** A JSON fixture pattern for testing. */
     private static final String JSON_PATTERN = "{\"@id\":\"{}\",{},\"profile\":\"http://iiif.io/api/auth/1/token\"}";
 
+    /** A service type template. */
     private static final String SERVICE_TYPE = "\"@type\":\"" + AuthTokenService1.class.getSimpleName() + "\"";
 
-    /**
-     * An ID to use in testing.
-     */
-    private URI myID;
+    /** An ID to use in testing. */
+    private String myID;
 
     /**
      * Sets up the test environment.
      */
     @Before
     public final void setup() {
-        myID = URI.create(UUID.randomUUID().toString());
+        myID = UUID.randomUUID().toString();
     }
 
     /**
@@ -45,7 +44,7 @@ public class AuthTokenService1Test {
      */
     @Test
     public final void testStringConstructor() throws JsonParsingException, JsonProcessingException, IOException {
-        final AuthTokenService1 service = new AuthTokenService1(myID.toString());
+        final AuthTokenService1 service = new AuthTokenService1(myID);
 
         assertEquals(myID, service.getID());
         assertEquals(AuthTokenService1.Profile.TOKEN_SERVICE, service.getProfile().get());
@@ -62,44 +61,6 @@ public class AuthTokenService1Test {
         assertEquals(myID, service.getID());
         assertEquals(AuthTokenService1.Profile.TOKEN_SERVICE, service.getProfile().get());
         assertEquals(expected(), found(service));
-    }
-
-    /**
-     * Tests {@link AuthTokenService1#setProfile(String) setProfile}.
-     */
-    @Test
-    public final void testSetProfileString() {
-        final AuthTokenService1 service = new AuthTokenService1(myID);
-
-        service.setProfile(AuthTokenService1.Profile.TOKEN_SERVICE.string());
-        assertEquals(AuthTokenService1.Profile.TOKEN_SERVICE, service.getProfile().get());
-    }
-
-    /**
-     * Tests {@link AuthTokenService1#setProfile(String) setProfile} with invalid input.F
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public final void testSetProfileStringInvalid() {
-        new AuthTokenService1(myID).setProfile(AuthCookieService1.Profile.EXTERNAL.string());
-    }
-
-    /**
-     * Tests {@link AuthTokenService1#setProfile(AuthService.Profile) setProfile}.
-     */
-    @Test
-    public final void testSetProfileProfile() {
-        final AuthTokenService1 service = new AuthTokenService1(myID);
-
-        service.setProfile(AuthTokenService1.Profile.TOKEN_SERVICE.string());
-        assertEquals(AuthTokenService1.Profile.TOKEN_SERVICE, service.getProfile().get());
-    }
-
-    /**
-     * Tests {@link AuthTokenService1#setProfile(AuthService.Profile) setProfile} with invalid input.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public final void testSetProfileProfileInvalid() {
-        new AuthTokenService1(myID).setProfile(AuthCookieService1.Profile.EXTERNAL);
     }
 
     /**

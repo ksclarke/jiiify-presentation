@@ -22,14 +22,19 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  */
 public class LabelTest extends AbstractTest {
 
-    private static final String AAAA = "aaaa";
+    /** A test ID. */
+    private static final String AAAA = "https://aaaa";
 
+    /** A test language code. */
     private static final String ENG = "eng";
 
+    /** A test value. */
     private static final String NONE = "none";
 
+    /** The test manifest. */
     private Manifest myManifest;
 
+    /** JSON input test fixture. */
     private ObjectNode myJSON;
 
     /**

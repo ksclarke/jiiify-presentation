@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,10 +31,12 @@ import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Start;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
+import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.RangeBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * An ordered list of canvases and/or further ranges. Ranges allow canvases, or parts thereof, to be grouped together in
@@ -46,72 +47,41 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 @SuppressWarnings({ "PMD.ExcessivePublicCount", "PMD.ExcessiveImports", "PMD.GodClass" })
 public class Range extends NavigableResource<Range> implements Resource<Range> {
 
-    /**
-     * The range's items.
-     */
+    /** The range's items. */
     private final List<Item> myItems = new ArrayList<>();
 
-    /**
-     * The range's accompanying canvas.
-     */
+    /** The range's accompanying canvas. */
     private AccompanyingCanvas myAccompanyingCanvas;
 
-    /**
-     * The range's placeholder canvas.
-     */
+    /** The range's placeholder canvas. */
     private PlaceholderCanvas myPlaceholderCanvas;
 
-    /**
-     * The range's start.
-     */
+    /** The range's start. */
     private Start myStart;
 
-    /**
-     * The range's supplementary annotations.
-     */
+    /** The range's supplementary annotations. */
     private SupplementaryAnnotations mySupplementaryAnnotations;
 
-    /**
-     * The range's viewing directions.
-     */
+    /** The range's viewing directions. */
     private ViewingDirection myViewingDirection;
 
     /**
      * Creates a new range from the supplied ID.
      *
-     * @param aID A range ID in string form
-     */
-    public Range(final String aID) {
-        super(ResourceTypes.RANGE, URI.create(aID));
-    }
-
-    /**
-     * Creates a new range from the supplied ID.
-     *
      * @param aID A range ID
      */
-    public Range(final URI aID) {
-        super(ResourceTypes.RANGE, aID);
+    public Range(final String aID) {
+        super(ResourceTypes.RANGE, aID, RangeBehavior.class);
     }
 
     /**
      * Creates a new range from the supplied ID and label.
      *
-     * @param aID A range ID in string form
+     * @param aID A range ID
      * @param aLabel A descriptive label, in string form, for the range
      */
     public Range(final String aID, final String aLabel) {
-        super(ResourceTypes.RANGE, aID, aLabel);
-    }
-
-    /**
-     * Creates a new range from the supplied ID and label.
-     *
-     * @param aID A range ID in string form
-     * @param aLabel A descriptive label for the range
-     */
-    public Range(final String aID, final Label aLabel) {
-        super(ResourceTypes.RANGE, aID, aLabel);
+        super(ResourceTypes.RANGE, aID, new Label(aLabel), RangeBehavior.class);
     }
 
     /**
@@ -120,8 +90,8 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
      * @param aID A range ID
      * @param aLabel A descriptive label for the range
      */
-    public Range(final URI aID, final Label aLabel) {
-        super(ResourceTypes.RANGE, aID, aLabel);
+    public Range(final String aID, final Label aLabel) {
+        super(ResourceTypes.RANGE, aID, aLabel, RangeBehavior.class);
     }
 
     /**
@@ -130,7 +100,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
      * @param aMinter A minter that should be used to get an ID for the range
      */
     public Range(final Minter aMinter) {
-        super(ResourceTypes.RANGE, aMinter.getRangeID());
+        super(ResourceTypes.RANGE, aMinter.getRangeID(), RangeBehavior.class);
     }
 
     /**
@@ -140,7 +110,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
      * @param aLabel A range label in string form
      */
     public Range(final Minter aMinter, final String aLabel) {
-        super(ResourceTypes.RANGE, aMinter.getRangeID(), new Label(aLabel));
+        super(ResourceTypes.RANGE, aMinter.getRangeID(), new Label(aLabel), RangeBehavior.class);
     }
 
     /**
@@ -150,14 +120,14 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
      * @param aLabel A range label
      */
     public Range(final Minter aMinter, final Label aLabel) {
-        super(ResourceTypes.RANGE, aMinter.getRangeID(), aLabel);
+        super(ResourceTypes.RANGE, aMinter.getRangeID(), aLabel, RangeBehavior.class);
     }
 
     /**
      * A default constructor that allows Jackson to create a new range during deserialization.
      */
     private Range() {
-        super(ResourceTypes.RANGE);
+        super(ResourceTypes.RANGE, RangeBehavior.class);
     }
 
     /**
@@ -207,7 +177,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     /**
-     * Sets the range's placeholder canvas
+     * Sets the range's placeholder canvas.
      *
      * @param aCanvas A placeholder canvas
      * @return This range
@@ -242,30 +212,19 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     @Override
-    public Range clearBehaviors() {
-        return (Range) super.clearBehaviors();
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.BEHAVIOR)
+    @JsonIgnore
     public Range setBehaviors(final Behavior... aBehaviorArray) {
-        return (Range) super.setBehaviors(checkBehaviors(RangeBehavior.class, true, aBehaviorArray));
+        return setBehaviors(new BehaviorList(RangeBehavior.class, aBehaviorArray));
     }
 
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
     public Range setBehaviors(final List<Behavior> aBehaviorList) {
-        return (Range) super.setBehaviors(checkBehaviors(RangeBehavior.class, true, aBehaviorList));
-    }
+        if (aBehaviorList instanceof BehaviorList) {
+            ((BehaviorList) aBehaviorList).checkType(RangeBehavior.class, this.getClass());
+        }
 
-    @Override
-    public Range addBehaviors(final Behavior... aBehaviorArray) {
-        return (Range) super.addBehaviors(checkBehaviors(RangeBehavior.class, false, aBehaviorArray));
-    }
-
-    @Override
-    public Range addBehaviors(final List<Behavior> aBehaviorList) {
-        return (Range) super.addBehaviors(checkBehaviors(RangeBehavior.class, false, aBehaviorList));
+        return (Range) super.setBehaviors(aBehaviorList);
     }
 
     /**
@@ -413,17 +372,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     @Override
-    public Range setID(final URI aID) {
-        return (Range) super.setID(aID);
-    }
-
-    @Override
     public Range setRights(final String aRights) {
-        return (Range) super.setRights(aRights);
-    }
-
-    @Override
-    public Range setRights(final URI aRights) {
         return (Range) super.setRights(aRights);
     }
 
@@ -481,6 +430,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
      *
      * @param aJsonString A range in string form
      * @return The range
+     * @throws JsonParsingException If the JSON string cannot be deserialized
      */
     @JsonIgnore
     public static Range from(final String aJsonString) {
@@ -560,11 +510,12 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
          * Gets the ID from the resource wrapped by this item.
          *
          * @return A resource ID
+         * @throws I18nRuntimeException If the range item does not have a canvas, range, or specific resource
          */
         @JsonIgnore
-        public URI getID() {
+        public String getID() {
             if (mySpecificResource != null) {
-                return mySpecificResource.getID();
+                return mySpecificResource.getID().toString();
             }
 
             if (myCanvas != null) {
@@ -582,6 +533,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
          * Gets the type of the resource wrapped by this item.
          *
          * @return The resource type
+         * @throws I18nRuntimeException If the range does not contain a range, canvas, or specific resource.
          */
         @JsonIgnore
         public String getType() {
@@ -604,6 +556,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
          * Gets the resource wrapped by this item.
          *
          * @return The item's resource
+         * @throws I18nRuntimeException If the range does not contain a range, canvas, or specific resource.
          */
         @JsonValue
         public Object getResource() {

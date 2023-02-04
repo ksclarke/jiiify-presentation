@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3; // NOPMD
 
+import static info.freelibrary.util.Constants.SINGLE_INSTANCE;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,6 +25,7 @@ import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.PMD;
 
+import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -35,10 +38,12 @@ import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Start;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
+import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * The overall description of the structure and properties of the digital representation of an object. It carries
@@ -49,59 +54,34 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 @SuppressWarnings({ PMD.EXCESSIVE_PUBLIC_COUNT, PMD.EXCESSIVE_IMPORTS })
 public class Manifest extends NavigableResource<Manifest> implements Resource<Manifest> { // NOPMD
 
-    /**
-     * The manifest's logger.
-     */
+    /** The manifest's logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(Manifest.class, MessageCodes.BUNDLE);
 
-    /**
-     * The default number of contexts.
-     */
-    private static final int DEFAULT_CONTEXT_COUNT = 1;
-
-    /**
-     * The manifest's contexts.
-     */
+    /** The manifest's contexts. */
     private final List<URI> myContexts = Stream.of(PRESENTATION_CONTEXT_URI).collect(Collectors.toList());
 
-    /**
-     * The manifest's annotations.
-     */
-    private List<AnnotationPage<? extends Annotation<?>>> myAnnotations;
+    /** The manifest's annotations. */
+    private List<AnnotationPage<? extends WebAnnotation>> myAnnotations;
 
-    /**
-     * The manifest's accompanying canvas.
-     */
+    /** The manifest's accompanying canvas. */
     private AccompanyingCanvas myAccompanyingCanvas;
 
-    /**
-     * The manifest's placeholder canvas.
-     */
+    /** The manifest's placeholder canvas. */
     private PlaceholderCanvas myPlaceholderCanvas;
 
-    /**
-     * The manifest's viewing direction.
-     */
+    /** The manifest's viewing direction. */
     private ViewingDirection myViewingDirection;
 
-    /**
-     * The manifest's service definitions.
-     */
+    /** The manifest's service definitions. */
     private List<Service<?>> myServiceDefinitions;
 
-    /**
-     * The manifest's canvases.
-     */
+    /** The manifest's canvases. */
     private List<Canvas> myCanvases;
 
-    /**
-     * The manifest's ranges.
-     */
+    /** The manifest's ranges. */
     private List<Range> myRanges;
 
-    /**
-     * The manifest's start.
-     */
+    /** The manifest's start. */
     private Start myStart;
 
     /**
@@ -109,98 +89,28 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      *
      * @param aID A manifest ID in string form
      * @param aLabel A manifest label in string form
-     * @throws IllegalArgumentException If the supplied ID is not a valid URI
+     * @throws IllegalArgumentException If the supplied ID doesn't conform to IIIF's ID rules
      */
     public Manifest(final String aID, final String aLabel) {
-        super(ResourceTypes.MANIFEST, aID, aLabel);
+        super(ResourceTypes.MANIFEST, aID, new Label(aLabel), ManifestBehavior.class);
     }
 
     /**
      * Creates a new manifest from the supplied ID and label.
      *
-     * @param aID A manifest ID in string form
+     * @param aID A manifest ID
      * @param aLabel A manifest label
-     * @throws IllegalArgumentException If the supplied ID is not a valid URI
+     * @throws IllegalArgumentException If the supplied ID doesn't conform to IIIF's ID rules
      */
     public Manifest(final String aID, final Label aLabel) {
-        super(ResourceTypes.MANIFEST, URI.create(aID), aLabel);
-    }
-
-    /**
-     * Creates a new manifest from the supplied ID and label.
-     *
-     * @param aID A manifest ID
-     * @param aLabel A manifest label
-     */
-    public Manifest(final URI aID, final Label aLabel) {
-        super(ResourceTypes.MANIFEST, aID, aLabel);
-    }
-
-    /**
-     * Creates a new manifest from the supplied ID, label, metadata, summary, thumbnail, and provider.
-     *
-     * @param aID A manifest ID in string form
-     * @param aLabel A descriptive label in string form
-     * @param aMetadataList A list of metadata properties
-     * @param aSummary A summary in string form
-     * @param aThumbnail A thumbnail
-     * @param aProvider A resource provider
-     */
-    public Manifest(final String aID, final String aLabel, final List<Metadata> aMetadataList, final String aSummary,
-            final ContentResource<?> aThumbnail, final Provider aProvider) {
-        super(ResourceTypes.MANIFEST, aID, aLabel, aMetadataList, aSummary, aThumbnail, aProvider);
-    }
-
-    /**
-     * Creates a new manifest from the supplied ID, label, metadata, summary, thumbnail, and provider.
-     *
-     * @param aID A manifest ID in string form
-     * @param aLabel A descriptive label
-     * @param aMetadataList A list of metadata properties
-     * @param aSummary A summary in string form
-     * @param aThumbnail A thumbnail
-     * @param aProvider A resource provider
-     */
-    public Manifest(final String aID, final Label aLabel, final List<Metadata> aMetadataList, final String aSummary,
-            final ContentResource<?> aThumbnail, final Provider aProvider) {
-        this(URI.create(aID), aLabel, aMetadataList, new Summary(aSummary), aThumbnail, aProvider);
-    }
-
-    /**
-     * Creates a new manifest from the supplied ID, label, metadata, summary, thumbnail, and provider.
-     *
-     * @param aID A manifest ID
-     * @param aLabel A descriptive label
-     * @param aMetadataList A list of metadata properties
-     * @param aSummary A summary
-     * @param aThumbnail A thumbnail
-     * @param aProvider A resource provider
-     */
-    public Manifest(final URI aID, final Label aLabel, final List<Metadata> aMetadataList, final Summary aSummary,
-            final ContentResource<?> aThumbnail, final Provider aProvider) {
-        super(ResourceTypes.MANIFEST, aID, aLabel, aMetadataList, aSummary, aThumbnail, aProvider);
-    }
-
-    /**
-     * Creates a new manifest from the supplied ID, label, metadata, summary, thumbnail, and provider.
-     *
-     * @param aID A manifest ID in string form
-     * @param aLabel A descriptive label
-     * @param aMetadataList A list of metadata properties
-     * @param aSummary A summary
-     * @param aThumbnail A thumbnail
-     * @param aProvider A resource provider
-     */
-    public Manifest(final String aID, final Label aLabel, final List<Metadata> aMetadataList, final Summary aSummary,
-            final ContentResource<?> aThumbnail, final Provider aProvider) {
-        super(ResourceTypes.MANIFEST, URI.create(aID), aLabel, aMetadataList, aSummary, aThumbnail, aProvider);
+        super(ResourceTypes.MANIFEST, aID, aLabel, ManifestBehavior.class);
     }
 
     /**
      * A private constructor used for Jackson's deserialization processes.
      */
     private Manifest() {
-        super(ResourceTypes.MANIFEST);
+        super(ResourceTypes.MANIFEST, ManifestBehavior.class);
     }
 
     @Override
@@ -262,30 +172,19 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     @Override
-    public Manifest clearBehaviors() {
-        return (Manifest) super.clearBehaviors();
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.BEHAVIOR)
+    @JsonIgnore
     public Manifest setBehaviors(final Behavior... aBehaviorArray) {
-        return (Manifest) super.setBehaviors(checkBehaviors(ManifestBehavior.class, true, aBehaviorArray));
+        return setBehaviors(new BehaviorList(ManifestBehavior.class, aBehaviorArray));
     }
 
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
     public Manifest setBehaviors(final List<Behavior> aBehaviorList) {
-        return (Manifest) super.setBehaviors(checkBehaviors(ManifestBehavior.class, true, aBehaviorList));
-    }
+        if (aBehaviorList instanceof BehaviorList) {
+            ((BehaviorList) aBehaviorList).checkType(ManifestBehavior.class, this.getClass());
+        }
 
-    @Override
-    public Manifest addBehaviors(final Behavior... aBehaviorArray) {
-        return (Manifest) super.addBehaviors(checkBehaviors(ManifestBehavior.class, false, aBehaviorArray));
-    }
-
-    @Override
-    public Manifest addBehaviors(final List<Behavior> aBehaviorList) {
-        return (Manifest) super.addBehaviors(checkBehaviors(ManifestBehavior.class, false, aBehaviorList));
+        return (Manifest) super.setBehaviors(aBehaviorList);
     }
 
     /**
@@ -558,28 +457,28 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     /**
      * Sets the services referenced by different parts of the manifest.
      *
-     * @param aServicesArray An array of services
+     * @param aServiceArray An array of services
      * @return The manifest
      */
     @JsonIgnore
     @SafeVarargs
-    public final Manifest setServiceDefinitions(final Service<?>... aServicesArray) {
-        return setServiceDefinitions(Arrays.asList(aServicesArray));
+    public final Manifest setServiceDefinitions(final Service<?>... aServiceArray) {
+        return setServiceDefinitions(Arrays.asList(aServiceArray));
     }
 
     /**
      * Sets the services referenced by different parts of the manifest.
      *
-     * @param aServicesList A list of services
+     * @param aServiceList A list of services
      * @return The manifest
      */
     @JsonSetter(JsonKeys.SERVICES)
-    public Manifest setServiceDefinitions(final List<Service<?>> aServicesList) {
-        final List<Service<?>> servicesList = getServiceDefinitions();
+    public Manifest setServiceDefinitions(final List<Service<?>> aServiceList) {
+        final List<Service<?>> serviceList = getServiceDefinitions();
 
-        Objects.requireNonNull(aServicesList);
-        servicesList.clear();
-        servicesList.addAll(aServicesList);
+        Objects.requireNonNull(aServiceList);
+        serviceList.clear();
+        serviceList.addAll(aServiceList);
 
         return this;
     }
@@ -644,17 +543,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     @Override
-    public Manifest setID(final URI aID) {
-        return (Manifest) super.setID(aID);
-    }
-
-    @Override
     public Manifest setRights(final String aRights) {
-        return (Manifest) super.setRights(aRights);
-    }
-
-    @Override
-    public Manifest setRights(final URI aRights) {
         return (Manifest) super.setRights(aRights);
     }
 
@@ -700,8 +589,8 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @return This manifest
      */
     @JsonSetter(JsonKeys.ANNOTATIONS)
-    public Manifest setAnnotations(final List<AnnotationPage<? extends Annotation<?>>> aPageList) {
-        final List<AnnotationPage<? extends Annotation<?>>> annotations = getAnnotations();
+    public Manifest setAnnotations(final List<AnnotationPage<? extends WebAnnotation>> aPageList) {
+        final List<AnnotationPage<? extends WebAnnotation>> annotations = getAnnotations();
 
         Objects.requireNonNull(aPageList);
         annotations.clear();
@@ -718,7 +607,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      */
     @SafeVarargs
     @JsonIgnore
-    public final Manifest setAnnotations(final AnnotationPage<? extends Annotation<?>>... aPageList) {
+    public final Manifest setAnnotations(final AnnotationPage<? extends WebAnnotation>... aPageList) {
         setAnnotations(List.of(aPageList));
         return this;
     }
@@ -729,7 +618,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @return This manifest's annotation pages
      */
     @JsonGetter(JsonKeys.ANNOTATIONS)
-    public List<AnnotationPage<? extends Annotation<?>>> getAnnotations() {
+    public List<AnnotationPage<? extends WebAnnotation>> getAnnotations() {
         if (myAnnotations == null) {
             myAnnotations = new ArrayList<>();
         }
@@ -791,6 +680,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
             if (genericList.isEmpty() || !genericList.get(0).getClass().equals(String.class)) {
                 throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_113));
             }
+
             setContexts(genericList);
         } else {
             throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_113));
@@ -813,7 +703,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
             if (PRESENTATION_CONTEXT_URI.equals(context)) {
                 indices.add(index); // We may have more than one required context in supplied list
 
-                if (indices.size() == DEFAULT_CONTEXT_COUNT) { // Only keep one if this is the case
+                if (indices.size() == SINGLE_INSTANCE) { // Only keep one if this is the case
                     contextList.add(context);
                 }
             } else {
@@ -839,12 +729,14 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      */
     @JsonGetter(JsonKeys.CONTEXT)
     private Object getJsonContext() {
-        if (myContexts.size() == DEFAULT_CONTEXT_COUNT) {
+        if (myContexts.size() == SINGLE_INSTANCE) {
             return myContexts.get(0);
         }
+
         if (!myContexts.isEmpty()) {
             return myContexts;
         }
+
         return null;
     }
 

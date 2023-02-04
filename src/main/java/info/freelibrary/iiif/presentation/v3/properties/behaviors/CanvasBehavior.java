@@ -16,38 +16,26 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public enum CanvasBehavior implements Behavior {
 
-    /**
-     * A auto-advance behavior on a canvas.
-     */
-    AUTO_ADVANCE(BehaviorConstants.AUTO_ADVANCE), //
+    /** A auto-advance behavior on a canvas. */
+    AUTO_ADVANCE(BehaviorConstants.AUTO_ADVANCE),
 
-    /**
-     * A no-auto-advance behavior on a canvas.
-     */
-    NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE), //
+    /** A no-auto-advance behavior on a canvas. */
+    NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE),
 
-    /**
-     * A facing-pages behavior on a canvas.
-     */
-    FACING_PAGES(BehaviorConstants.FACING_PAGES), //
+    /** A facing-pages behavior on a canvas. */
+    FACING_PAGES(BehaviorConstants.FACING_PAGES),
 
-    /**
-     * A non-paged behavior on a canvas.
-     */
+    /** A non-paged behavior on a canvas. */
     NON_PAGED(BehaviorConstants.NON_PAGED);
 
-    /**
-     * The CanvasBehavior logger.
-     */
+    /** The canvas behavior logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(CanvasBehavior.class, MessageCodes.BUNDLE);
 
-    /**
-     * The value of CanvasBehavior.
-     */
+    /** The value of canvas behavior. */
     private final String myValue;
 
     /**
-     * Creates a new CanvasBehavior from the supplied behavior in string form.
+     * Creates a new canvas behavior from the supplied string.
      *
      * @param aBehavior A canvas behavior in string form
      */

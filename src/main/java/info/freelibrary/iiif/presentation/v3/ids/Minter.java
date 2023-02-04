@@ -1,8 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3.ids;
 
-import java.net.URI;
-
 import info.freelibrary.iiif.presentation.v3.CanvasResource;
 
 /**
@@ -15,21 +13,21 @@ public interface Minter {
      *
      * @return The manifest ID associated with this minter
      */
-    URI getManifestID();
+    String getManifestID();
 
     /**
      * Gets a new canvas ID.
      *
      * @return A new canvas ID
      */
-    URI getCanvasID();
+    String getCanvasID();
 
     /**
      * Gets a new annotation ID.
      *
      * @return A new annotation ID
      */
-    URI getAnnotationID();
+    String getAnnotationID();
 
     /**
      * Gets a new annotation page ID from the supplied canvas.
@@ -38,14 +36,14 @@ public interface Minter {
      * @param aCanvasResource A canvas resource
      * @return A new annotation page ID
      */
-    <C extends CanvasResource<C>> URI getAnnotationPageID(CanvasResource<C> aCanvasResource);
+    <C extends CanvasResource<C>> String getAnnotationPageID(CanvasResource<C> aCanvasResource);
 
     /**
      * Gets a new range ID.
      *
      * @return A new range ID
      */
-    URI getRangeID();
+    String getRangeID();
 
     /**
      * Whether the minter has another ID available.

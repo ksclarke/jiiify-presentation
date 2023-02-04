@@ -15,14 +15,19 @@ import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentS
  */
 public class MediaFragmentSelectorTest {
 
+    /** A sample X value. */
     private static final int X = 0;
 
+    /** A sample Y value. */
     private static final int Y = 1;
 
+    /** A sample width value. */
     private static final int WIDTH = 750;
 
+    /** A sample height value. */
     private static final int HEIGHT = 300;
 
+    /** A sample XYWH template. */
     private static final String XYWH_FRAGMENT = StringUtils.format("xywh={},{},{},{}", X, Y, WIDTH, HEIGHT);
 
     /**

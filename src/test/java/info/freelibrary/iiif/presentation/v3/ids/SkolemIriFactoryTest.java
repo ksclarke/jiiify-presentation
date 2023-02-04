@@ -1,7 +1,10 @@
 
 package info.freelibrary.iiif.presentation.v3.ids;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -16,10 +19,13 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public class SkolemIriFactoryTest {
 
+    /** The test's logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(SkolemIriFactoryTest.class, MessageCodes.BUNDLE);
 
+    /** A well-known base for testing. */
     private static final String WELL_KNOWN_BASE = "https://freelibrary.info";
 
+    /** A Skolem IRI start for testing. */
     private static final String SKOLEM_IRI_START = WELL_KNOWN_BASE + "/.well-known/genid/";
 
     /**

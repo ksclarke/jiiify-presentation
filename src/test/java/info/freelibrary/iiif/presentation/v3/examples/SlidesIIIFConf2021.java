@@ -37,7 +37,7 @@ public class SlidesIIIFConf2021 {
         final AnnotationPage<PaintingAnnotation> page = new AnnotationPage<>(minter, canvas);
         final PaintingAnnotation annotation = new PaintingAnnotation(minter, canvas);
 
-        page.addAnnotations(annotation.setBodies(audio));
+        page.addAnnotations(annotation.setBody(audio));
         manifest.setCanvases(canvas.setPaintingPages(page));
 
         System.out.println(manifest);

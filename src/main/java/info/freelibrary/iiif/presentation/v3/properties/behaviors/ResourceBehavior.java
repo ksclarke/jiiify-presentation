@@ -17,19 +17,13 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public enum ResourceBehavior implements Behavior {
 
-    /**
-     * A hidden resource behavior.
-     */
+    /** A hidden resource behavior. */
     HIDDEN(BehaviorConstants.HIDDEN);
 
-    /**
-     * The ResourceBehavior logger.
-     */
+    /** The ResourceBehavior logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(ResourceBehavior.class, MessageCodes.BUNDLE);
 
-    /**
-     * The value of the resource behavior.
-     */
+    /** The value of the resource behavior. */
     private final String myValue;
 
     /**

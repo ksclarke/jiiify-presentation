@@ -1,0 +1,8 @@
+{
+  "id" : "{}",
+  "type" : "TextualBody",
+  "value" : "This is a description.",
+  "language" : "en",
+  "format" : "text/plain",
+  "purpose" : "describing"
+}

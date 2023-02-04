@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3.ids;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -36,29 +35,19 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 class DefaultMinter implements Minter {
 
-    /**
-     * The default minter's logger.
-     */
+    /** The default minter's logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultMinter.class, MessageCodes.BUNDLE);
 
-    /**
-     * A template for supplying canvas IDs.
-     */
+    /** A template for supplying canvas IDs. */
     private static final String CANVAS_ID_TEMPLATE = "{}/canvas-{}";
 
-    /**
-     * A template for supplying range IDs.
-     */
+    /** A template for supplying range IDs. */
     private static final String RANGE_ID_TEMPLATE = "{}/range-{}";
 
-    /**
-     * A template for supplying annotation IDs.
-     */
+    /** A template for supplying annotation IDs. */
     private static final String ANNO_ID_TEMPLATE = "{}/annotations/anno-{}";
 
-    /**
-     * A template for supplying page IDs.
-     */
+    /** A template for supplying page IDs. */
     private static final String PAGE_ID_TEMPLATE = "{}/anno-page-{}";
 
     /**
@@ -67,19 +56,13 @@ class DefaultMinter implements Minter {
     private static final Character[] CHARS = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'm', 'n', 'o',
         'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
 
-    /**
-     * The maximum number of NOIDs, given the size of our character array.
-     */
+    /** The maximum number of NOIDs, given the size of our character array. */
     private static final int MAX_NOID_COUNT = 1_500_625;
 
-    /**
-     * The list of NOIDs.
-     */
+    /** The list of NOIDs. */
     private static final List<String> NOIDS; // Static array is initialized just once
 
-    /**
-     * The static initialization of the NOID list.
-     */
+    // The static initialization of the NOID list.
     static {
         final Stopwatch stopwatch = new Stopwatch().start();
         final List<String> noids = new ArrayList<>();
@@ -105,7 +88,7 @@ class DefaultMinter implements Minter {
     /**
      * The existing IDs.
      */
-    private final Set<URI> myExistingIDs = new HashSet<>();
+    private final Set<String> myExistingIDs = new HashSet<>();
 
     /**
      * A NOID iterator.
@@ -115,7 +98,7 @@ class DefaultMinter implements Minter {
     /**
      * A manifest ID.
      */
-    private final URI myManifestID;
+    private final String myManifestID;
 
     /**
      * The number of used NOIDs.
@@ -140,7 +123,7 @@ class DefaultMinter implements Minter {
      *
      * @param aManifestID A manifest ID
      */
-    DefaultMinter(final URI aManifestID) {
+    DefaultMinter(final String aManifestID) {
         myManifestID = aManifestID;
         myIterator = new NoidIterator();
     }
@@ -151,7 +134,7 @@ class DefaultMinter implements Minter {
      * @return The manifest ID associated with this minter
      */
     @Override
-    public URI getManifestID() {
+    public String getManifestID() {
         return myManifestID;
     }
 
@@ -161,9 +144,9 @@ class DefaultMinter implements Minter {
      * @return An ID to use on a canvas
      */
     @Override
-    public URI getCanvasID() {
+    public String getCanvasID() {
         try {
-            final URI id = URI.create(StringUtils.format(CANVAS_ID_TEMPLATE, myManifestID, myIterator.next()));
+            final String id = StringUtils.format(CANVAS_ID_TEMPLATE, myManifestID, myIterator.next());
             return myExistingIDs.contains(id) ? getCanvasID() : increment(id);
         } catch (final NoSuchElementException details) {
             throw new MintingException(details, MessageCodes.JPA_105, myManifestID, Canvas.class.getSimpleName());
@@ -176,9 +159,9 @@ class DefaultMinter implements Minter {
      * @return An ID to use on an annotation
      */
     @Override
-    public URI getAnnotationID() {
+    public String getAnnotationID() {
         try {
-            final URI id = URI.create(StringUtils.format(ANNO_ID_TEMPLATE, myManifestID, myIterator.next()));
+            final String id = StringUtils.format(ANNO_ID_TEMPLATE, myManifestID, myIterator.next());
             return myExistingIDs.contains(id) ? getAnnotationID() : increment(id);
         } catch (final NoSuchElementException details) {
             throw new MintingException(details, MessageCodes.JPA_105, myManifestID, Annotation.class.getSimpleName());
@@ -195,10 +178,10 @@ class DefaultMinter implements Minter {
      * @return An ID to use on the supplied annotation page
      */
     @Override
-    public <C extends CanvasResource<C>> URI getAnnotationPageID(final CanvasResource<C> aCanvasResource) {
+    public <C extends CanvasResource<C>> String getAnnotationPageID(final CanvasResource<C> aCanvasResource) {
         try {
-            final URI canvasID = aCanvasResource.getID();
-            final URI id = URI.create(StringUtils.format(PAGE_ID_TEMPLATE, canvasID, myIterator.next()));
+            final String canvasID = aCanvasResource.getID();
+            final String id = StringUtils.format(PAGE_ID_TEMPLATE, canvasID, myIterator.next());
 
             return myExistingIDs.contains(id) ? getAnnotationPageID(aCanvasResource) : increment(id);
         } catch (final NoSuchElementException details) {
@@ -213,9 +196,9 @@ class DefaultMinter implements Minter {
      * @return An ID to use on a range
      */
     @Override
-    public URI getRangeID() {
+    public String getRangeID() {
         try {
-            final URI id = URI.create(StringUtils.format(RANGE_ID_TEMPLATE, myManifestID, myIterator.next()));
+            final String id = StringUtils.format(RANGE_ID_TEMPLATE, myManifestID, myIterator.next());
             return myExistingIDs.contains(id) ? getRangeID() : increment(id);
         } catch (final NoSuchElementException details) {
             throw new MintingException(details, MessageCodes.JPA_105, myManifestID, Range.class.getSimpleName());
@@ -258,7 +241,7 @@ class DefaultMinter implements Minter {
      * @param aID An ID to be used
      * @return The ID to be used
      */
-    private URI increment(final URI aID) {
+    private String increment(final String aID) {
         myUsedNOIDs += 1;
         return aID;
     }
@@ -268,6 +251,7 @@ class DefaultMinter implements Minter {
      * might create.
      *
      * @param aManifest A supplied manifest
+     * @throws MintingException If a pre-existing ID is attempted to be added
      */
     @SuppressWarnings({ "PMD.CognitiveComplexity", PMD.COGNITIVE_COMPLEXITY })
     private void findPreexistingIDs(final Manifest aManifest) {

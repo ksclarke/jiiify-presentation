@@ -233,6 +233,19 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
+     * Tests the 0021 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0021-tagging/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0021TaggingAnnotation() throws IOException {
+        final String expected = getExpected("0021-tagging");
+        final String found = Manifest.from(expected).toString();
+
+        assertEquals(format(expected), format(found));
+    }
+
+    /**
      * Tests the 0024 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0024-book-4-toc/).
      *
      * @throws IOException If there is trouble reading the manifest file
@@ -489,6 +502,19 @@ public class RoundTripTest extends AbstractCookbookTest {
     public final void test0230NavDateCollection() throws IOException {
         final String expected = getExpected("0230-navdate-collection");
         final String found = Collection.from(expected).toString();
+
+        assertEquals(format(expected), format(found));
+    }
+
+    /**
+     * Tests the 0266 full canvas annotation (cf. https://iiif.io/api/cookbook/recipe/0266-full-canvas-annotation/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0266FullCanvasAnnotation() throws IOException {
+        final String expected = getExpected("0266-full-canvas-annotation");
+        final String found = Manifest.from(expected).toString();
 
         assertEquals(format(expected), format(found));
     }

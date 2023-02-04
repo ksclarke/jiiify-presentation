@@ -699,7 +699,7 @@
     {
       "id": "https://example.org/service/example",
       "type": "example",
-      "profile": "https://example.org/docs/example-service.html"
+      "profile": "http://example.org/docs/example-service.html"
     }
   ]
 }

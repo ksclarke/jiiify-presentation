@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,6 +15,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
+import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.properties.Metadata;
 import info.freelibrary.iiif.presentation.v3.properties.PartOf;
 import info.freelibrary.iiif.presentation.v3.properties.Provider;
@@ -23,37 +23,30 @@ import info.freelibrary.iiif.presentation.v3.properties.Rendering;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
+import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * Video content that can be associated with an annotation or used as a thumbnail.
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.HEIGHT, JsonKeys.WIDTH, JsonKeys.DURATION,
     JsonKeys.FORMAT, JsonKeys.LANGUAGE })
-public class VideoContent extends AbstractContentResource<VideoContent>
-        implements AnnotationBody<VideoContent>, ContentResource<VideoContent>, SpatialContentResource<VideoContent>,
-        TemporalContentResource<VideoContent>, Resource<VideoContent> {
+public class VideoContent extends AbstractContentResource<VideoContent> implements ContentResource<VideoContent>,
+        SpatialContentResource<VideoContent>, TemporalContentResource<VideoContent>, Resource<VideoContent> {
 
-    /**
-     * The class of media type this content represents.
-     */
+    /** The class of media type this content represents. */
     private static final String MEDIA_TYPE_CLASS = "video";
 
-    /**
-     * The video content's duration.
-     */
+    /** The video content's duration. */
     private float myDuration;
 
-    /**
-     * The video content's width.
-     */
+    /** The video content's width. */
     private int myWidth;
 
-    /**
-     * The video content's height.
-     */
+    /** The video content's height. */
     private int myHeight;
 
     /**
@@ -62,36 +55,19 @@ public class VideoContent extends AbstractContentResource<VideoContent>
      * @param aURI An video content resource ID in string form
      */
     public VideoContent(final String aURI) {
-        super(ResourceTypes.VIDEO, aURI);
-        setFormatFromMediaType(MediaType.parse(URI.create(aURI), MEDIA_TYPE_CLASS).orElse(null));
-    }
-
-    /**
-     * Creates a video content resource.
-     *
-     * @param aURI An video content resource ID
-     */
-    public VideoContent(final URI aURI) {
-        super(ResourceTypes.VIDEO, aURI);
-        setFormatFromMediaType(MediaType.parse(aURI, MEDIA_TYPE_CLASS).orElse(null));
+        super(ResourceTypes.VIDEO, aURI, ResourceBehavior.class);
+        setFormat(MediaType.parse(aURI, MEDIA_TYPE_CLASS).orElse(null));
     }
 
     /**
      * Creates a video content resource.
      */
     private VideoContent() {
-        super(ResourceTypes.VIDEO);
+        super(ResourceTypes.VIDEO, ResourceBehavior.class);
     }
 
     @Override
-    @JsonIgnore
-    public VideoContent setFormat(final MediaType aMediaType) {
-        return (VideoContent) super.setFormat(aMediaType);
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.FORMAT)
-    public VideoContent setFormat(final String aMediaType) {
+    public final VideoContent setFormat(final MediaType aMediaType) {
         return (VideoContent) super.setFormat(aMediaType);
     }
 
@@ -108,29 +84,19 @@ public class VideoContent extends AbstractContentResource<VideoContent>
     }
 
     @Override
-    public VideoContent clearBehaviors() {
-        return (VideoContent) super.clearBehaviors();
+    @JsonIgnore
+    public VideoContent setBehaviors(final Behavior... aBehaviorArray) {
+        return setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorArray));
     }
 
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
-    public VideoContent setBehaviors(final Behavior... aBehaviorArray) {
-        return (VideoContent) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorArray));
-    }
-
-    @Override
     public VideoContent setBehaviors(final List<Behavior> aBehaviorList) {
-        return (VideoContent) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorList));
-    }
+        if (aBehaviorList instanceof BehaviorList) {
+            ((BehaviorList) aBehaviorList).checkType(ResourceBehavior.class, this.getClass());
+        }
 
-    @Override
-    public VideoContent addBehaviors(final Behavior... aBehaviorArray) {
-        return (VideoContent) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorArray));
-    }
-
-    @Override
-    public VideoContent addBehaviors(final List<Behavior> aBehaviorList) {
-        return (VideoContent) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorList));
+        return (VideoContent) super.setBehaviors(aBehaviorList);
     }
 
     @Override
@@ -200,17 +166,7 @@ public class VideoContent extends AbstractContentResource<VideoContent>
     }
 
     @Override
-    public VideoContent setID(final URI aID) {
-        return (VideoContent) super.setID(aID);
-    }
-
-    @Override
     public VideoContent setRights(final String aRights) {
-        return (VideoContent) super.setRights(aRights);
-    }
-
-    @Override
-    public VideoContent setRights(final URI aRights) {
         return (VideoContent) super.setRights(aRights);
     }
 
@@ -319,6 +275,7 @@ public class VideoContent extends AbstractContentResource<VideoContent>
      *
      * @param aJsonString A video content resource in string form
      * @return The video content
+     * @throws JsonParsingException If the supplied JSON string cannot be parsed into a video content resource
      */
     public static VideoContent from(final String aJsonString) {
         try {

@@ -37,10 +37,10 @@ public class Tile {
      *
      * @param aWidth A tile width
      * @param aHeight A tile height
-     * @param aScaleFactorsArray A tile's scale factors
+     * @param aScaleFactorArray A tile's scale factors
      */
-    public Tile(final int aWidth, final int aHeight, final int... aScaleFactorsArray) {
-        myScaleFactors = Arrays.copyOf(aScaleFactorsArray, aScaleFactorsArray.length);
+    public Tile(final int aWidth, final int aHeight, final int... aScaleFactorArray) {
+        myScaleFactors = Arrays.copyOf(aScaleFactorArray, aScaleFactorArray.length);
         myHeight = aHeight;
         myWidth = aWidth;
     }
@@ -101,12 +101,12 @@ public class Tile {
     /**
      * Sets the tile's scale factors.
      *
-     * @param aScaleFactorsArray A tile's scale factors
+     * @param aScaleFactorArray A tile's scale factors
      * @return This tile
      */
     @JsonSetter(ImageAPI.SCALE_FACTORS)
-    public Tile setScaleFactors(final int... aScaleFactorsArray) {
-        myScaleFactors = Arrays.copyOf(aScaleFactorsArray, aScaleFactorsArray.length);
+    public Tile setScaleFactors(final int... aScaleFactorArray) {
+        myScaleFactors = Arrays.copyOf(aScaleFactorArray, aScaleFactorArray.length);
         return this;
     }
 

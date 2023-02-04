@@ -23,6 +23,7 @@ import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.Eclipse;
 import info.freelibrary.util.warnings.PMD;
 
+import info.freelibrary.iiif.presentation.v3.ids.UriUtils;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -35,10 +36,12 @@ import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
+import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CollectionBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * An ordered list of {@link Manifest}s and/or {@link Collection}s. Collections allow easy advertising and browsing of
@@ -48,34 +51,22 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 @SuppressWarnings({ PMD.EXCESSIVE_PUBLIC_COUNT, PMD.EXCESSIVE_IMPORTS, PMD.GOD_CLASS })
 public class Collection extends NavigableResource<Collection> implements Resource<Collection> { // NOPMD
 
-    /**
-     * The logger used by the collection.
-     */
+    /** The logger used by the collection. */
     private static final Logger LOGGER = LoggerFactory.getLogger(Collection.class, MessageCodes.BUNDLE);
 
-    /**
-     * The collection's accompanying canvas.
-     */
+    /** The collection's accompanying canvas. */
     private Optional<AccompanyingCanvas> myAccompanyingCanvas;
 
-    /**
-     * The collection's placeholder canvas.
-     */
+    /** The collection's placeholder canvas. */
     private Optional<PlaceholderCanvas> myPlaceholderCanvas;
 
-    /**
-     * The collection's viewing direction.
-     */
+    /** The collection's viewing direction. */
     private ViewingDirection myViewingDirection;
 
-    /**
-     * The collection's service definitions.
-     */
+    /** The collection's service definitions. */
     private List<Service<?>> myServiceDefinitions;
 
-    /**
-     * The collection's list of items.
-     */
+    /** The collection's list of items. */
     private List<Item> myItems;
 
     /**
@@ -85,7 +76,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      * @param aLabel A collection label in string form
      */
     public Collection(final String aID, final String aLabel) {
-        super(ResourceTypes.COLLECTION, aID, aLabel);
+        super(ResourceTypes.COLLECTION, aID, new Label(aLabel), CollectionBehavior.class);
     }
 
     /**
@@ -95,54 +86,14 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      * @param aLabel A collection label
      */
     public Collection(final String aID, final Label aLabel) {
-        super(ResourceTypes.COLLECTION, aID, aLabel);
-    }
-
-    /**
-     * Creates a new collection from the supplied ID and label.
-     *
-     * @param aID A collection ID
-     * @param aLabel A collection label
-     */
-    public Collection(final URI aID, final Label aLabel) {
-        super(ResourceTypes.COLLECTION, aID, aLabel);
-    }
-
-    /**
-     * Creates a new collection from the supplied ID, label, metadata, summary, thumbnail, and provider.
-     *
-     * @param aID A collection ID in string form
-     * @param aLabel A descriptive label in string form
-     * @param aMetadataList A list of metadata properties
-     * @param aSummary A summary in string form
-     * @param aThumbnail A thumbnail
-     * @param aProvider A resource provider
-     */
-    public Collection(final String aID, final String aLabel, final List<Metadata> aMetadataList, final String aSummary,
-            final ContentResource<?> aThumbnail, final Provider aProvider) {
-        super(ResourceTypes.COLLECTION, aID, aLabel, aMetadataList, aSummary, aThumbnail, aProvider);
-    }
-
-    /**
-     * Creates a new collection.
-     *
-     * @param aID A collection ID
-     * @param aLabel A descriptive label
-     * @param aMetadataList A list of metadata properties
-     * @param aSummary A summary
-     * @param aThumbnail A thumbnail
-     * @param aProvider A resource provider
-     */
-    public Collection(final URI aID, final Label aLabel, final List<Metadata> aMetadataList, final Summary aSummary,
-            final ContentResource<?> aThumbnail, final Provider aProvider) {
-        super(ResourceTypes.COLLECTION, aID, aLabel, aMetadataList, aSummary, aThumbnail, aProvider);
+        super(ResourceTypes.COLLECTION, aID, aLabel, CollectionBehavior.class);
     }
 
     /**
      * Creates a new collection. This is used by Jackson's deserialization processes.
      */
     private Collection() {
-        super(ResourceTypes.COLLECTION);
+        super(ResourceTypes.COLLECTION, CollectionBehavior.class);
     }
 
     /**
@@ -192,30 +143,19 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     }
 
     @Override
-    public Collection clearBehaviors() {
-        return (Collection) super.clearBehaviors();
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.BEHAVIOR)
+    @JsonIgnore
     public Collection setBehaviors(final Behavior... aBehaviorArray) {
-        return (Collection) super.setBehaviors(checkBehaviors(CollectionBehavior.class, true, aBehaviorArray));
+        return setBehaviors(new BehaviorList(CollectionBehavior.class, aBehaviorArray));
     }
 
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
     public Collection setBehaviors(final List<Behavior> aBehaviorList) {
-        return (Collection) super.setBehaviors(checkBehaviors(CollectionBehavior.class, true, aBehaviorList));
-    }
+        if (aBehaviorList instanceof BehaviorList) {
+            ((BehaviorList) aBehaviorList).checkType(CollectionBehavior.class, this.getClass());
+        }
 
-    @Override
-    public Collection addBehaviors(final Behavior... aBehaviorArray) {
-        return (Collection) super.addBehaviors(checkBehaviors(CollectionBehavior.class, false, aBehaviorArray));
-    }
-
-    @Override
-    public Collection addBehaviors(final List<Behavior> aBehaviorList) {
-        return (Collection) super.addBehaviors(checkBehaviors(CollectionBehavior.class, false, aBehaviorList));
+        return (Collection) super.setBehaviors(aBehaviorList);
     }
 
     /**
@@ -324,28 +264,28 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     /**
      * Sets the services referenced by different parts of the collection document.
      *
-     * @param aServicesArray An array of services
+     * @param aServiceArray An array of services
      * @return The collection document
      */
     @JsonIgnore
     @SafeVarargs
-    public final Collection setServiceDefinitions(final Service<?>... aServicesArray) {
-        return setServiceDefinitions(Arrays.asList(aServicesArray));
+    public final Collection setServiceDefinitions(final Service<?>... aServiceArray) {
+        return setServiceDefinitions(Arrays.asList(aServiceArray));
     }
 
     /**
      * Sets the services referenced by different parts of the collection document.
      *
-     * @param aServicesList A list of services
+     * @param aServiceList A list of services
      * @return The collection document
      */
     @JsonSetter(JsonKeys.SERVICES)
-    public Collection setServiceDefinitions(final List<Service<?>> aServicesList) {
-        final List<Service<?>> servicesList = getServiceDefinitions();
+    public Collection setServiceDefinitions(final List<Service<?>> aServiceList) {
+        final List<Service<?>> serviceList = getServiceDefinitions();
 
-        Objects.requireNonNull(aServicesList);
-        servicesList.clear();
-        servicesList.addAll(aServicesList);
+        Objects.requireNonNull(aServiceList);
+        serviceList.clear();
+        serviceList.addAll(aServiceList);
 
         return this;
     }
@@ -410,17 +350,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     }
 
     @Override
-    public Collection setID(final URI aID) {
-        return (Collection) super.setID(aID);
-    }
-
-    @Override
     public Collection setRights(final String aRights) {
-        return (Collection) super.setRights(aRights);
-    }
-
-    @Override
-    public Collection setRights(final URI aRights) {
         return (Collection) super.setRights(aRights);
     }
 
@@ -478,6 +408,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      *
      * @param aJsonString A collection manifest in JSON form
      * @return The collection manifest
+     * @throws JsonParsingException If there is trouble parsing the JSON
      */
     @JsonIgnore
     @SuppressWarnings("PMD.PreserveStackTrace")
@@ -523,12 +454,12 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         public enum Type {
 
             /**
-             * A manifest type of collection item
+             * A manifest type of collection item.
              */
-            MANIFEST(ResourceTypes.MANIFEST), //
+            MANIFEST(ResourceTypes.MANIFEST),
 
             /**
-             * A collection type of collection item
+             * A collection type of collection item.
              */
             COLLECTION(ResourceTypes.COLLECTION);
 
@@ -577,7 +508,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         /**
          * The collection item's ID.
          */
-        private URI myID;
+        private String myID;
 
         /**
          * The collection item's type.
@@ -607,18 +538,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
          */
         public Item(final Item.Type aType, final String aID) {
             myType = Objects.requireNonNull(aType);
-            myID = URI.create(aID);
-        }
-
-        /**
-         * Create a new collection item from a type and URI ID.
-         *
-         * @param aID An ID
-         * @param aType A type of resource referenced from the collection
-         */
-        public Item(final Item.Type aType, final URI aID) {
-            myType = Objects.requireNonNull(aType);
-            myID = aID;
+            myID = UriUtils.checkID(aID, true);
         }
 
         /**
@@ -635,7 +555,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
 
             myType = Item.Type.fromString(ResourceTypes.MANIFEST);
             myLabel = Objects.requireNonNull(aManifest.getLabel());
-            myID = aManifest.getID();
+            myID = aManifest.getID(); // ID rules should have been checked by manifest's constructor / setter
         }
 
         /**
@@ -663,9 +583,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
          * @param aLabel An item label in string form
          */
         public Item(final Item.Type aType, final String aID, final String aLabel) {
-            myLabel = new Label(aLabel);
-            myType = Objects.requireNonNull(aType);
-            myID = URI.create(aID);
+            this(aType, aID, new Label(aLabel));
         }
 
         /**
@@ -678,20 +596,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         public Item(final Item.Type aType, final String aID, final Label aLabel) {
             myLabel = Objects.requireNonNull(aLabel);
             myType = Objects.requireNonNull(aType);
-            myID = URI.create(aID);
-        }
-
-        /**
-         * Create a new item from the supplied ID and label.
-         *
-         * @param aID An item ID
-         * @param aType A type of resource referenced from the collection
-         * @param aLabel An item label
-         */
-        public Item(final Item.Type aType, final URI aID, final Label aLabel) {
-            myLabel = Objects.requireNonNull(aLabel);
-            myType = Objects.requireNonNull(aType);
-            myID = aID;
+            myID = UriUtils.checkID(aID, true);
         }
 
         /**
@@ -708,7 +613,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
          * @return The item ID
          */
         @JsonGetter(JsonKeys.ID)
-        public URI getID() {
+        public String getID() {
             return myID;
         }
 
@@ -718,21 +623,9 @@ public class Collection extends NavigableResource<Collection> implements Resourc
          * @param aID An item ID
          * @return This item
          */
-        @JsonIgnore
-        public Item setID(final URI aID) {
-            myID = Objects.requireNonNull(aID);
-            return this;
-        }
-
-        /**
-         * Sets the item ID.
-         *
-         * @param aID An item ID in string form
-         * @return This item
-         */
         @JsonSetter(JsonKeys.ID)
         public Item setID(final String aID) {
-            myID = URI.create(aID);
+            myID = UriUtils.checkID(aID, true);
             return this;
         }
 

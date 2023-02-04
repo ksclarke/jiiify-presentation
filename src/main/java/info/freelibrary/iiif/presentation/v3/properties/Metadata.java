@@ -20,19 +20,13 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 @JsonPropertyOrder({ JsonKeys.LABEL, JsonKeys.VALUE })
 public class Metadata {
 
-    /**
-     * The logger used by the Metadata class.
-     */
+    /** The metadata logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(Metadata.class, MessageCodes.BUNDLE);
 
-    /**
-     * The metadata label.
-     */
+    /** The metadata label. */
     private Label myLabel;
 
-    /**
-     * The metadata value.
-     */
+    /** The metadata value. */
     private Value myValue;
 
     /**

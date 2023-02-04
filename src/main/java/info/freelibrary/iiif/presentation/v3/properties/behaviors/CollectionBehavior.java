@@ -19,47 +19,47 @@ public enum CollectionBehavior implements Behavior {
     /**
      * An auto-advance collection behavior.
      */
-    AUTO_ADVANCE(BehaviorConstants.AUTO_ADVANCE), //
+    AUTO_ADVANCE(BehaviorConstants.AUTO_ADVANCE),
 
     /**
      * A no-auto-advance collection behavior.
      */
-    NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE), //
+    NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE),
 
     /**
      * A individuals collection behavior.
      */
-    INDIVIDUALS(BehaviorConstants.INDIVIDUALS), //
+    INDIVIDUALS(BehaviorConstants.INDIVIDUALS),
 
     /**
      * A continuous collection behavior.
      */
-    CONTINUOUS(BehaviorConstants.CONTINUOUS), //
+    CONTINUOUS(BehaviorConstants.CONTINUOUS),
 
     /**
      * A repeat collection behavior.
      */
-    REPEAT(BehaviorConstants.REPEAT), //
+    REPEAT(BehaviorConstants.REPEAT),
 
     /**
      * A no-repeat collection behavior.
      */
-    NO_REPEAT(BehaviorConstants.NO_REPEAT), //
+    NO_REPEAT(BehaviorConstants.NO_REPEAT),
 
     /**
      * A paged collection behavior.
      */
-    PAGED(BehaviorConstants.PAGED), //
+    PAGED(BehaviorConstants.PAGED),
 
     /**
      * An unordered collection behavior.
      */
-    UNORDERED(BehaviorConstants.UNORDERED), //
+    UNORDERED(BehaviorConstants.UNORDERED),
 
     /**
      * A multi-part collection behavior.
      */
-    MULTI_PART(BehaviorConstants.MULTI_PART), //
+    MULTI_PART(BehaviorConstants.MULTI_PART),
 
     /**
      * A together collection behavior.
@@ -76,6 +76,11 @@ public enum CollectionBehavior implements Behavior {
      */
     private final String myValue;
 
+    /**
+     * Creates a new <code>CollectionBehavior</code> from the supplied string value.
+     *
+     * @param aBehavior A string representation of the desired collection behavior
+     */
     CollectionBehavior(final String aBehavior) {
         myValue = aBehavior;
     }

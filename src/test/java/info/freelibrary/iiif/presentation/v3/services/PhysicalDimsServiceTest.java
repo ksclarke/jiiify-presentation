@@ -3,7 +3,6 @@ package info.freelibrary.iiif.presentation.v3.services;
 
 import static org.junit.Assert.assertEquals;
 
-import java.net.URI;
 import java.util.UUID;
 
 import org.junit.Before;
@@ -16,18 +15,21 @@ import info.freelibrary.iiif.presentation.v3.services.PhysicalDimsService.Profil
  */
 public class PhysicalDimsServiceTest {
 
+    /** A test scale value. */
     private static final double SCALE = 4.123;
 
+    /** A test unit value. */
     private static final String UNITS = "in";
 
-    private URI myID;
+    /** A test ID. */
+    private String myID;
 
     /**
      * Sets up the testing environment.
      */
     @Before
     public void setUp() {
-        myID = URI.create(UUID.randomUUID().toString());
+        myID = UUID.randomUUID().toString();
     }
 
     /**
@@ -43,7 +45,7 @@ public class PhysicalDimsServiceTest {
         assertEquals(UNITS, new PhysicalDimsService(myID).setPhysicalUnits(UNITS).getPhysicalUnits());
 
         service = new PhysicalDimsService(myID);
-        service.setPhysicalDims(SCALE, UNITS);
+        service.setDims(SCALE, UNITS);
         assertEquals(SCALE, service.getPhysicalScale(), 0);
         assertEquals(UNITS, service.getPhysicalUnits());
 

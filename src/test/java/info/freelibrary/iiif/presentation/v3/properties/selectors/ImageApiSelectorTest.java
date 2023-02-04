@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.selectors;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
@@ -10,16 +10,22 @@ import org.junit.Test;
  */
 public class ImageApiSelectorTest {
 
+    /** A test path. */
     private static final String PATH = "/pct:0,0,10,10/pct:90/90/gray.png";
 
+    /** A constant for full. */
     private static final String FULL = "full";
 
+    /** A constant for max. */
     private static final String MAX = "max";
 
+    /** A constant for zero. */
     private static final String ZERO = "0";
 
+    /** A constant for default. */
     private static final String DEFAULT = "default";
 
+    /** A constant for jpg. */
     private static final String JPG = "jpg";
 
     /**

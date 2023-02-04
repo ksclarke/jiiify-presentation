@@ -17,7 +17,7 @@ import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 public class ReadmeTest {
 
     /**
-     * Example from from the README.md
+     * Example from from the README.md.
      *
      * @throws IOException If there is trouble reading or writing a file.
      */

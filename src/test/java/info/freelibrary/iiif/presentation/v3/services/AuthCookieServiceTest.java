@@ -3,7 +3,6 @@ package info.freelibrary.iiif.presentation.v3.services;
 
 import static org.junit.Assert.assertEquals;
 
-import java.net.URI;
 import java.util.UUID;
 
 import org.junit.Before;
@@ -17,12 +16,12 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 /**
  * Tests of the authorization cookie service.
  */
-public class AuthCookieService1Test {
+public class AuthCookieServiceTest {
 
     /**
      * A test ID.
      */
-    private URI myID;
+    private String myID;
 
     /**
      * A test label.
@@ -34,7 +33,7 @@ public class AuthCookieService1Test {
      */
     @Before
     public void setup() {
-        myID = URI.create(UUID.randomUUID().toString());
+        myID = UUID.randomUUID().toString();
         myLabel = UUID.randomUUID().toString();
     }
 
@@ -48,7 +47,7 @@ public class AuthCookieService1Test {
         final LoginCookieService1 service = new LoginCookieService1(myID, UUID.randomUUID().toString());
         final String context = JSON.valueToTree(service).get(JsonKeys.CONTEXT).asText();
 
-        assertEquals(AbstractCookieService.AUTH_COOKIE_SERVICE_1_CONTEXT, context);
+        assertEquals(AbstractCookieService.CONTEXT, context);
     }
 
     /**
@@ -59,12 +58,12 @@ public class AuthCookieService1Test {
     @Test
     public final void testID() throws JsonProcessingException {
         final LoginCookieService1 service = new LoginCookieService1(myID, UUID.randomUUID().toString());
-        final String newID = new StringBuilder(myID.toString()).reverse().toString();
+        final String newID = new StringBuilder(myID).reverse().toString();
 
-        assertEquals(myID.toString(), JSON.valueToTree(service).get(JsonKeys.V2_ID).asText());
+        assertEquals(myID, JSON.valueToTree(service).get(JsonKeys.V2_ID).asText());
         service.setID(newID);
         assertEquals(newID, JSON.valueToTree(service).get(JsonKeys.V2_ID).asText());
-        assertEquals(URI.create(newID), service.getID());
+        assertEquals(newID, service.getID());
     }
 
     /**
@@ -74,7 +73,7 @@ public class AuthCookieService1Test {
      */
     @Test
     public final void testProfile() throws JsonProcessingException {
-        assertEquals(AuthCookieService1.Profile.KIOSK, new KioskCookieService1(myID).getProfile().get());
+        assertEquals(AuthCookieService.Profile.KIOSK, new KioskCookieService1(myID).getProfile().get());
     }
 
     /**

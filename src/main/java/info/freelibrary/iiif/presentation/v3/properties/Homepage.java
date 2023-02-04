@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import java.net.URI;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -16,11 +15,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import info.freelibrary.util.IllegalArgumentI18nException;
 import info.freelibrary.util.warnings.Eclipse;
 
-import info.freelibrary.iiif.presentation.v3.JsonParsingException;
-import info.freelibrary.iiif.presentation.v3.MediaType;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * A web page that is about the object represented by the resource that has the <code>homepage</code> property. The web
@@ -37,28 +35,18 @@ public class Homepage extends AbstractLinkProperty<Homepage> {
      * @param aID A homepage ID
      * @param aLabel A homepage label
      */
-    public Homepage(final URI aID, final Label aLabel) {
+    public Homepage(final String aID, final Label aLabel) {
         super(aID, ResourceTypes.TEXT, aLabel);
     }
 
     /**
      * Creates a IIIF presentation homepage.
      *
-     * @param aID A homepage ID in string form
-     * @param aLabel A homepage label
-     */
-    public Homepage(final String aID, final Label aLabel) {
-        super(URI.create(aID), ResourceTypes.TEXT, aLabel);
-    }
-
-    /**
-     * Creates a IIIF presentation homepage.
-     *
-     * @param aID A homepage ID in string form
+     * @param aID A homepage ID
      * @param aLabel A homepage label in string form
      */
     public Homepage(final String aID, final String aLabel) {
-        super(URI.create(aID), ResourceTypes.TEXT, new Label(aLabel));
+        this(aID, new Label(aLabel));
     }
 
     /**
@@ -70,26 +58,15 @@ public class Homepage extends AbstractLinkProperty<Homepage> {
     }
 
     /**
-     * Sets the homepage ID.
+     * Sets the ID.
      *
-     * @param aID An ID
+     * @param aID The ID of the homepage
      * @return The homepage
      */
     @Override
     @JsonSetter(JsonKeys.ID)
-    public Homepage setID(final URI aID) {
-        return (Homepage) super.setID(aID);
-    }
-
-    /**
-     * Sets the ID from the supplied string.
-     *
-     * @param aID The ID of the homepage in string form
-     * @return The homepage
-     */
-    @JsonIgnore
     public Homepage setID(final String aID) {
-        return (Homepage) super.setID(URI.create(aID));
+        return (Homepage) super.setID(aID);
     }
 
     @Override
@@ -125,7 +102,7 @@ public class Homepage extends AbstractLinkProperty<Homepage> {
     }
 
     /**
-     * Sets the label for the homepage
+     * Sets the label for the homepage.
      *
      * @param aLabel A homepage's label
      * @return The homepage
@@ -136,7 +113,6 @@ public class Homepage extends AbstractLinkProperty<Homepage> {
     }
 
     @Override
-    @JsonIgnore
     public Optional<MediaType> getFormat() {
         return super.getFormat();
     }
@@ -148,21 +124,8 @@ public class Homepage extends AbstractLinkProperty<Homepage> {
      * @return The resource whose format is being set
      */
     @Override
-    @JsonIgnore
     public Homepage setFormat(final MediaType aMediaType) {
         return (Homepage) super.setFormat(aMediaType);
-    }
-
-    /**
-     * Sets format in string form.
-     *
-     * @param aFormat A resource's format
-     * @return The resource whose format is being set
-     */
-    @Override
-    @JsonSetter(JsonKeys.FORMAT)
-    public Homepage setFormat(final String aFormat) {
-        return (Homepage) super.setFormat(aFormat);
     }
 
     @Override
@@ -191,21 +154,6 @@ public class Homepage extends AbstractLinkProperty<Homepage> {
         }
 
         return getLanguages().equals(((Homepage) aObject).getLanguages());
-    }
-
-    /**
-     * Returns a JSON string representation of this resource.
-     *
-     * @return A JSON string representation of this resource
-     * @throws JsonParsingException If the object could not be serialized to a JSON string
-     */
-    @Override
-    public String toString() {
-        try {
-            return JSON.getWriter(Homepage.class).writeValueAsString(this);
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details);
-        }
     }
 
     /**

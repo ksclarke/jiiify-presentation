@@ -78,7 +78,7 @@ public class ImageApiSelector implements Selector {
     private static final String SLASH = "/";
 
     /**
-     * The Image API selector's region;
+     * The Image API selector's region.
      */
     private String myRegion = DEFAULT_REGION;
 

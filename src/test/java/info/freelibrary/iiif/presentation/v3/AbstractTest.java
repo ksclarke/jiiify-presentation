@@ -3,7 +3,6 @@ package info.freelibrary.iiif.presentation.v3;
 
 import static info.freelibrary.util.Constants.HASH;
 
-import java.net.URI;
 import java.util.UUID;
 
 import com.thedeanda.lorem.LoremIpsum;
@@ -49,7 +48,7 @@ public abstract class AbstractTest {
      * @param aURI A URI
      * @return True if the supplied URI represents a specific resource with a MediaFragmentSelector
      */
-    protected boolean isSpecificResourceURI(final URI aURI) {
-        return aURI.toString().contains(HASH);
+    protected boolean isSpecificResourceURI(final String aURI) {
+        return aURI.contains(HASH);
     }
 }

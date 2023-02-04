@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,6 +10,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.Eclipse;
 
+import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
@@ -25,6 +25,7 @@ import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * A single canvas that provides additional content for use before the main content of the resource is rendered. It may
@@ -44,27 +45,8 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas>
      *
      * @param aID A placeholder canvas ID
      */
-    public PlaceholderCanvas(final URI aID) {
-        super(aID);
-    }
-
-    /**
-     * Creates a new placeholder canvas from the supplied ID.
-     *
-     * @param aID A placeholder canvas ID
-     */
     public PlaceholderCanvas(final String aID) {
         super(aID);
-    }
-
-    /**
-     * Creates a new placeholder canvas from the supplied ID and label.
-     *
-     * @param aID A placeholder canvas ID
-     * @param aLabel A placeholder canvas label
-     */
-    public PlaceholderCanvas(final URI aID, final Label aLabel) {
-        super(aID, aLabel);
     }
 
     /**
@@ -137,12 +119,7 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas>
     }
 
     @Override
-    public PlaceholderCanvas clearBehaviors() {
-        return (PlaceholderCanvas) super.clearBehaviors();
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.BEHAVIOR)
+    @JsonIgnore
     public PlaceholderCanvas setBehaviors(final Behavior... aBehaviorArray) {
         return (PlaceholderCanvas) super.setBehaviors(aBehaviorArray); // Checked in AbstractCanvas
     }
@@ -151,16 +128,6 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas>
     @JsonSetter(JsonKeys.BEHAVIOR)
     public PlaceholderCanvas setBehaviors(final List<Behavior> aBehaviorList) {
         return (PlaceholderCanvas) super.setBehaviors(aBehaviorList); // Checked in AbstractCanvas
-    }
-
-    @Override
-    public PlaceholderCanvas addBehaviors(final Behavior... aBehaviorArray) {
-        return (PlaceholderCanvas) super.addBehaviors(aBehaviorArray); // Checked in AbstractCanvas
-    }
-
-    @Override
-    public PlaceholderCanvas addBehaviors(final List<Behavior> aBehaviorList) {
-        return (PlaceholderCanvas) super.addBehaviors(aBehaviorList); // Checked in AbstractCanvas
     }
 
     @Override
@@ -230,17 +197,7 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas>
     }
 
     @Override
-    public PlaceholderCanvas setID(final URI aID) {
-        return (PlaceholderCanvas) super.setID(aID);
-    }
-
-    @Override
     public PlaceholderCanvas setRights(final String aRights) {
-        return (PlaceholderCanvas) super.setRights(aRights);
-    }
-
-    @Override
-    public PlaceholderCanvas setRights(final URI aRights) {
         return (PlaceholderCanvas) super.setRights(aRights);
     }
 
@@ -293,12 +250,12 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas>
 
     @Override
     @SafeVarargs
-    public final PlaceholderCanvas setOtherAnnotations(final AnnotationPage<? extends Annotation<?>>... aPageArray) {
+    public final PlaceholderCanvas setOtherAnnotations(final AnnotationPage<WebAnnotation>... aPageArray) {
         return (PlaceholderCanvas) super.setOtherAnnotations(aPageArray);
     }
 
     @Override
-    public final PlaceholderCanvas setOtherAnnotations(final List<AnnotationPage<? extends Annotation<?>>> aPageList) {
+    public final PlaceholderCanvas setOtherAnnotations(final List<AnnotationPage<WebAnnotation>> aPageList) {
         return (PlaceholderCanvas) super.setOtherAnnotations(aPageList);
     }
 
@@ -498,6 +455,7 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas>
      *
      * @param aJsonString A placeholder canvas in string form
      * @return The placeholder canvas
+     * @throws JsonParsingException If the supplied JSON string cannot be parsed into a placeholder canvas
      */
     public static PlaceholderCanvas fromString(final String aJsonString) {
         try {

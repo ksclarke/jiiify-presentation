@@ -1,0 +1,12 @@
+{
+  "id" : "https://iiif.io/api/cookbook/recipe/0021-tagging/annotation/p0002-tag",
+  "type" : "Annotation",
+  "motivation" : "tagging",
+  "body" : {
+    "type" : "TextualBody",
+    "value" : "Gänseliesel-Brunnen",
+    "language" : "de",
+    "format" : "text/plain"
+  },
+  "target" : "https://iiif.io/api/cookbook/recipe/0021-tagging/canvas/p1"
+}

@@ -1,33 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
   <artifactId>jiiify-presentation-v3</artifactId>
   <packaging>jar</packaging>
   <version>${revision}</version>
   <name>jiiify-presentation</name>
   <description>A Java Library for version 3 of the IIIF Presentation API</description>
   <url>http://projects.freelibrary.info/jiiify-presentation-v3</url>
-
   <licenses>
     <license>
       <name>Mozilla Public License 2.0 (MPL-2.0)</name>
       <url>https://opensource.org/licenses/MPL-2.0</url>
     </license>
   </licenses>
-
   <scm>
     <connection>scm:git:git@github.com:ksclarke/jiiify-presentation.git</connection>
     <developerConnection>scm:git:git@github.com:ksclarke/jiiify-presentation.git</developerConnection>
     <url>git@github.com:ksclarke/jiiify-presentation.git</url>
   </scm>
-
   <issueManagement>
     <system>GitHub</system>
     <url>https://github.com/ksclarke/jiiify-presentation/issues</url>
   </issueManagement>
-
   <developers>
     <developer>
       <id>ksclarke</id>
@@ -36,34 +30,28 @@
       <timezone>America/New_York</timezone>
     </developer>
   </developers>
-
   <properties>
     <revision>0.0.0-SNAPSHOT</revision>
-
     <jackson.version>2.13.4</jackson.version>
     <jackson.databind.version>2.13.4.2</jackson.databind.version>
-    <freelib.utils.version>3.3.0</freelib.utils.version>
+    <throwing.function.version>1.5.1</throwing.function.version>
+    <freelib.utils.version>4.0.1</freelib.utils.version>
     <jsoup.version>1.15.3</jsoup.version>
     <combinatorics.version>3.3.0</combinatorics.version>
     <media.fragments.uri.version>2.4</media.fragments.uri.version>
-
     <!-- Plugin related versions -->
     <freelib.maven.version>0.4.7</freelib.maven.version>
     <vertx.plugin.version>1.0.28</vertx.plugin.version>
-
     <!-- Test related versions -->
     <opencsv.version>4.6</opencsv.version>
     <lorem.version>2.1</lorem.version>
     <jruby.version>9.3.3.0</jruby.version>
     <jython.version>2.7.2</jython.version>
-
     <!-- A property used by the build process -->
     <tag.prefix>v3</tag.prefix>
-
     <!-- The log level to use when testing -->
     <testLogLevel>WARN</testLogLevel>
   </properties>
-
   <dependencies>
     <dependency>
       <groupId>info.freelibrary</groupId>
@@ -89,6 +77,11 @@
       <groupId>com.fasterxml.jackson.datatype</groupId>
       <artifactId>jackson-datatype-jdk8</artifactId>
       <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.pivovarit</groupId>
+      <artifactId>throwing-function</artifactId>
+      <version>${throwing.function.version}</version>
     </dependency>
     <dependency>
       <groupId>org.jsoup</groupId>
@@ -141,14 +134,12 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-
   <build>
     <testResources>
       <testResource>
         <directory>src/test/resources</directory>
         <filtering>true</filtering>
       </testResource>
-
       <!-- We can also override the default logging configuration with a file in our root project directory -->
       <testResource>
         <directory>${basedir}</directory>
@@ -181,7 +172,7 @@
               <goal>generate-mediatype</goal>
             </goals>
             <configuration>
-              <mediaTypePackage>info.freelibrary.iiif.presentation.v3</mediaTypePackage>
+              <mediaTypePackage>info.freelibrary.iiif.presentation.v3.properties</mediaTypePackage>
             </configuration>
           </execution>
         </executions>
@@ -189,11 +180,9 @@
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
-          <stylesheetfile>stylesheet.css</stylesheetfile>
           <links>
             <link>https://javadoc.io/doc/info.freelibrary/freelib-utils/${freelib.utils.version}/apidocs</link>
           </links>
-          <quiet>true</quiet>
         </configuration>
       </plugin>
       <plugin>
@@ -228,7 +217,7 @@
           <systemPropertyVariables>
             <jiiify.version>${project.version}</jiiify.version>
           </systemPropertyVariables>
-          <argLine>${jacoco.agent.arg}</argLine>
+          <argLine>--add-opens java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED</argLine>
         </configuration>
       </plugin>
       <!-- Create an uber jar for use with JRuby, Jython, etc. -->
@@ -250,7 +239,6 @@
       </plugin>
     </plugins>
   </build>
-
   <profiles>
     <profile>
       <id>snyk-check</id>
@@ -278,12 +266,10 @@
       </build>
     </profile>
   </profiles>
-
   <!-- Pulls in standard FreeLibrary Project configuration options -->
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>8.0.0</version>
+    <version>8.0.2</version>
   </parent>
-
 </project>

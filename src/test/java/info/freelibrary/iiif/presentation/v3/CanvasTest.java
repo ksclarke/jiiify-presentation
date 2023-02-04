@@ -8,7 +8,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -17,16 +16,19 @@ import org.junit.Test;
 
 import info.freelibrary.util.StringUtils;
 
+import info.freelibrary.iiif.presentation.v3.annotations.Target;
 import info.freelibrary.iiif.presentation.v3.cookbooks.AbstractCookbookTest;
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.ids.MinterFactory;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.NavDate;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
+import info.freelibrary.iiif.presentation.v3.properties.behaviors.InvalidBehaviorException;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector.EndTime;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector.StartTime;
+import info.freelibrary.iiif.presentation.v3.properties.selectors.SelectorOutOfBoundsException;
 import info.freelibrary.iiif.presentation.v3.services.ImageService3;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 
@@ -35,82 +37,106 @@ import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
  */
 public class CanvasTest extends AbstractCookbookTest {
 
+    /** A test label. */
     private static final String LABEL = "p. 1";
 
+    /** A test width. */
     private static final int WIDTH = 480;
 
+    /** A test height. */
     private static final int HEIGHT = 360;
 
+    /** A test thumbnail width and height. */
     private static final int THUMBNAIL_WH = 64;
 
+    /** A test canvas duration. */
     private static final double CANVAS_DURATION = 3600;
 
+    /** A test duration. */
     private static final double DURATION = 300;
 
-    /** Identifiers */
-
+    /** A test pattern for identifiers. */
     private static final String NOID_PATTERN = "/canvas-[a-z0-9]{4}";
 
-    // Image, Sound, and Video are painting; Text is supplementing
-
+    /** A test canvas ID. */
     private static final String IMAGE_CANVAS_ID = "https://example.org/iiif/book1/page1/canvas-1";
 
+    /** A test page ID. */
     private static final String IMAGE_PAGE_ID = "https://example.org/iiif/book1/page1/annotation/painting-page-1";
 
+    /** A test annotation ID. */
     private static final String IMAGE_ANNO_ID = "https://example.org/iiif/book1/page1/annotation/painting-1";
 
+    /** A test image ID. */
     private static final String IMAGE_1_ID = "https://example.org/iiif/book1/page1/full/max/0/default.jpg";
 
+    /** A test image ID. */
     private static final String IMAGE_2_ID = "https://example.org/iiif/book1/page1/full/max/0/bitonal.jpg";
 
+    /** A test image thumbnail ID. */
     private static final String IMAGE_THUMBNAIL_ID = "https://example.org/iiif/book1/page1/full/64,64/0/default.jpg";
 
+    /** A test image info service ID. */
     private static final String IMAGE_INFO_SERVICE_ID = "https://example.org/iiif/book1/page1";
 
+    /** A test sound canvas ID. */
     private static final String SOUND_CANVAS_ID = "https://example.org/iiif/lp1/side1/track1/canvas-1";
 
-    // Annotation and annotation page IDs for sound and video are inferred by Canvas.paintWith()
-
+    /** A test sound resource ID. */
     private static final String SOUND_1_ID = "https://example.org/iiif/lp1/side1/track1.mp3";
 
+    /** A test sound resource ID. */
     private static final String SOUND_2_ID = "https://example.org/iiif/lp1/side1/track1-alternate-mix.mp3";
 
+    /** A test sound resource ID. */
     private static final String SOUND_3_ID = "https://example.org/iiif/lp1/side1/track2.mp3";
 
+    /** A test video canvas ID. */
     private static final String VIDEO_CANVAS_ID = "https://example.org/iiif/reel1/segment1/canvas-1";
 
+    /** A test video ID. */
     private static final String VIDEO_1_ID = "https://example.org/iiif/reel1/segment1.mp4";
 
+    /** A test video ID. */
     private static final String VIDEO_2_ID = "https://example.org/iiif/reel1/segment2.mp4";
 
+    /** A test page ID. */
     private static final String TEXT_PAGE_ID = "https://example.org/iiif/book1/page1/annotation/supplementing-page-1";
 
+    /** A test text annotation ID. */
     private static final String TEXT_ANNO_ID = "https://example.org/iiif/book1/page1/annotation/supplementing-1";
 
+    /** A test text ID. */
     private static final String TEXT_ID = "https://example.org/iiif/book1/page1/ocr.xml";
 
-    /** URI media fragment component templates */
-
+    /** A URI fragment dims template. */
     private static final String URI_FRAG_XYWH_TEMPLATE = "xywh={},{},{},{}";
 
+    /** A URI fragment time template. */
     private static final String URI_FRAG_T_TEMPLATE = "t={},{}";
 
+    /** A URI fragment dims and time template. */
     private static final String URI_FRAG_TXYWH_TEMPLATE = "t={},{}&xywh={},{},{},{}";
 
-    /** Fixture files used in more than one test **/
-
+    /** A test fixture for a full canvas. */
     private static final String FULL_CANVAS_FIXTURE = "canvas-full.json";
 
+    /** A test fixture for a multi-image canvas. */
     private static final String MULTI_IMAGE_CANVAS_FIXTURE = "canvas-image-multi.json";
 
+    /** A test fixture for a multi-sound choice. */
     private static final String MULTI_SOUND_CHOICE_FIXTURE = "canvas-sound-choice-multi.json";
 
+    /** A test fixture for a multi-video choice. */
     private static final String MULTI_VIDEO_CANVAS_FIXTURE = "canvas-video-multi.json";
 
-    /** Test fields */
+    /** A HTTPS protocol constant. */
+    private static final String HTTPS = "https://";
 
+    /** A test canvas. */
     private Canvas myCanvas;
 
+    /** A test ID minter. */
     private Minter myMinter;
 
     /**
@@ -118,17 +144,13 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Before
     public void setUp() {
-        final String id = UUID.randomUUID().toString();
+        final String id = HTTPS + UUID.randomUUID().toString();
         final int index = id.indexOf('-');
 
         // Each minter will take a different path through the NOIDs available in the internal list
-        myMinter = MinterFactory.getMinter(URI.create("https://example.org/iiif/" + id.substring(0, index)));
+        myMinter = MinterFactory.getMinter("https://example.org/iiif/" + id.substring(0, index));
         myCanvas = new Canvas(IMAGE_CANVAS_ID, LABEL);
     }
-
-    /****************
-     * Constructors *
-     ****************/
 
     /**
      * Tests the manifest constructor.
@@ -136,7 +158,7 @@ public class CanvasTest extends AbstractCookbookTest {
     @Test
     public void testConstructorStringLabel() {
         myCanvas = new Canvas(IMAGE_CANVAS_ID, new Label(LABEL));
-        assertEquals(URI.create(IMAGE_CANVAS_ID), myCanvas.getID());
+        assertEquals(IMAGE_CANVAS_ID, myCanvas.getID());
         assertEquals(LABEL, myCanvas.getLabel().getString());
     }
 
@@ -145,11 +167,11 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test
     public final void testCanvasMinter() {
-        final URI id = URI.create(UUID.randomUUID().toString());
+        final String id = HTTPS + UUID.randomUUID().toString();
         final Minter minter = MinterFactory.getMinter(id);
         final Canvas canvas = new Canvas(minter);
 
-        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID().toString()).matches());
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID()).matches());
     }
 
     /**
@@ -157,12 +179,12 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test
     public final void testCanvasMinterLabel() {
-        final URI id = URI.create(UUID.randomUUID().toString());
+        final String id = HTTPS + UUID.randomUUID().toString();
         final Minter minter = MinterFactory.getMinter(id);
         final Label label = new Label(LABEL);
         final Canvas canvas = new Canvas(minter, label);
 
-        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID().toString()).matches());
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID()).matches());
     }
 
     /**
@@ -170,16 +192,12 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test
     public final void testCanvasMinterLabelAsString() {
-        final URI id = URI.create(UUID.randomUUID().toString());
+        final String id = HTTPS + UUID.randomUUID().toString();
         final Minter minter = MinterFactory.getMinter(id);
         final Canvas canvas = new Canvas(minter, LABEL);
 
-        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID().toString()).matches());
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID()).matches());
     }
-
-    /***********************
-     * Getters and setters *
-     ***********************/
 
     /**
      * Tests setting and getting a navDate on the canvas.
@@ -260,30 +278,10 @@ public class CanvasTest extends AbstractCookbookTest {
     /**
      * Tests setting disallowed canvas behaviors.
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = InvalidBehaviorException.class)
     public final void testSetDisallowedBehaviors() {
         myCanvas.setBehaviors(CanvasBehavior.FACING_PAGES, ManifestBehavior.AUTO_ADVANCE);
     }
-
-    /**
-     * Tests adding canvas behaviors.
-     */
-    @Test
-    public final void testAddBehaviors() {
-        assertEquals(1, myCanvas.addBehaviors(CanvasBehavior.FACING_PAGES).getBehaviors().size());
-    }
-
-    /**
-     * Tests adding disallowed canvas behaviors.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public final void testAddDisallowedBehaviors() {
-        myCanvas.addBehaviors(CanvasBehavior.FACING_PAGES, ManifestBehavior.AUTO_ADVANCE);
-    }
-
-    /********************************************
-     * Painting content resources onto canvases *
-     ********************************************/
 
     /**
      * Tests painting an image onto a canvas with spatial dimensions.
@@ -330,7 +328,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, sound);
 
-        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID());
     }
 
     /**
@@ -342,12 +340,8 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, video);
 
-        assertEquals(VIDEO_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(VIDEO_1_ID, getPaintingContentResourceID());
     }
-
-    /****************************************************************
-     * Painting content resources of unspecified size onto canvases *
-     ****************************************************************/
 
     /**
      * Tests painting an image of unspecified size onto a canvas with spatial dimensions.
@@ -358,7 +352,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, image);
 
-        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID());
     }
 
     /**
@@ -370,7 +364,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, image);
 
-        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID());
     }
 
     /**
@@ -382,7 +376,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, sound);
 
-        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID());
     }
 
     /**
@@ -394,7 +388,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, sound);
 
-        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID());
     }
 
     /**
@@ -406,21 +400,15 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, video);
 
-        assertEquals(VIDEO_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(VIDEO_1_ID, getPaintingContentResourceID());
     }
-
-    /***********************************************************************
-     * Content resource has dimensions which canvas to be painted does not *
-     ***********************************************************************/
 
     /**
      * Tests painting an image onto a canvas with temporal dimensions.
      */
     @Test(expected = ContentOutOfBoundsException.class)
     public final void testPaintImageOnTemoporalCanvas() {
-        final ImageContent image = new ImageContent(IMAGE_1_ID);
-
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, image);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, new ImageContent(IMAGE_1_ID));
     }
 
     /**
@@ -428,9 +416,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test(expected = ContentOutOfBoundsException.class)
     public final void testPaintSoundOnSpatialCanvas() {
-        final SoundContent sound = new SoundContent(SOUND_1_ID);
-
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, sound);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, new SoundContent(SOUND_1_ID));
     }
 
     /**
@@ -438,9 +424,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test(expected = ContentOutOfBoundsException.class)
     public final void testPaintVideoOnSpatialCanvas() {
-        final VideoContent video = new VideoContent(VIDEO_1_ID);
-
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, new VideoContent(VIDEO_1_ID));
     }
 
     /**
@@ -448,14 +432,8 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test(expected = ContentOutOfBoundsException.class)
     public final void testPaintVideoOnTemoporalCanvas() {
-        final VideoContent video = new VideoContent(VIDEO_1_ID);
-
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, video);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, new VideoContent(VIDEO_1_ID));
     }
-
-    /********************************************************
-     * Content resource is too big for canvas to be painted *
-     ********************************************************/
 
     /**
      * Tests painting an image outside the bounds of a canvas with spatial dimensions.
@@ -496,10 +474,6 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION - 1).paintWith(myMinter, video);
     }
-
-    /****************************************************
-     * Painting content resources onto canvas fragments *
-     ****************************************************/
 
     /**
      * Tests painting an image onto a spatial fragment of a canvas with spatial dimensions.
@@ -660,10 +634,6 @@ public class CanvasTest extends AbstractCookbookTest {
         assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
-    /************************************************************************
-     * Painting content resources of unspecified size onto canvas fragments *
-     ************************************************************************/
-
     /**
      * Tests painting an image of unspecified size onto a spatial fragment of a canvas with spatial dimensions.
      */
@@ -714,10 +684,6 @@ public class CanvasTest extends AbstractCookbookTest {
         assertEquals(VIDEO_1_ID, getPaintingContentResourceID().toString());
         assertEquals(selector.toString(), getPaintingMediaFragment());
     }
-
-    /**********************************************************************
-     * Canvas fragment to be painted has dimensions which canvas does not *
-     **********************************************************************/
 
     /**
      * Tests painting an image onto a non-existent temporal fragment of a canvas with spatial dimensions.
@@ -857,10 +823,6 @@ public class CanvasTest extends AbstractCookbookTest {
         myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
     }
 
-    /*********************************************************
-     * Canvas does not contain canvas fragment to be painted *
-     *********************************************************/
-
     /**
      * Tests painting an image onto a non-existent spatial fragment of a canvas with spatial dimensions.
      */
@@ -997,10 +959,6 @@ public class CanvasTest extends AbstractCookbookTest {
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
     }
 
-    /********************************************************************************
-     * Content resource has dimensions which canvas fragment to be painted does not *
-     ********************************************************************************/
-
     /**
      * Tests painting an image onto a temporal fragment of a canvas with temporal dimensions.
      */
@@ -1044,10 +1002,6 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
     }
-
-    /*****************************************************************
-     * Content resource is too big for canvas fragment to be painted *
-     *****************************************************************/
 
     /**
      * Tests painting an image outside the bounds of a spatial fragment of a canvas with spatial dimensions.
@@ -1177,10 +1131,6 @@ public class CanvasTest extends AbstractCookbookTest {
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
     }
 
-    /**********************************
-     * Invalid media fragment strings *
-     **********************************/
-
     /**
      * Tests painting an image onto a canvas fragment specified with an invalid URI media fragment component.
      */
@@ -1211,10 +1161,6 @@ public class CanvasTest extends AbstractCookbookTest {
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, "xywh=&t=", video);
     }
 
-    /*************************************************
-     * Supplementing canvases with content resources *
-     *************************************************/
-
     /**
      * Tests supplementing a spatial canvas with text.
      */
@@ -1226,10 +1172,6 @@ public class CanvasTest extends AbstractCookbookTest {
 
         assertEquals(text.getID(), getSupplementingContentResourceID());
     }
-
-    /*********************************************************
-     * Supplementing canvas fragments with content resources *
-     *********************************************************/
 
     /**
      * Tests supplementing a spatial fragment of a spatial canvas with text.
@@ -1303,10 +1245,6 @@ public class CanvasTest extends AbstractCookbookTest {
         assertEquals(selector.toString(), getSupplementingMediaFragment());
     }
 
-    /***************************************************************************
-     * Canvas fragment to be supplemented has dimensions which canvas does not *
-     ***************************************************************************/
-
     /**
      * Tests supplementing a non-existent temporal fragment of a spatial canvas with text.
      */
@@ -1352,10 +1290,6 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
     }
-
-    /**************************************************************
-     * Canvas to be supplemented does not contain canvas fragment *
-     **************************************************************/
 
     /**
      * Tests supplementing a non-existent spatial fragment of a spatial canvas with text.
@@ -1415,10 +1349,6 @@ public class CanvasTest extends AbstractCookbookTest {
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
     }
 
-    /*****************
-     * Serialization *
-     *****************/
-
     /**
      * Tests serializing and deserializing a canvas.
      *
@@ -1426,21 +1356,21 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test
     public final void testSerialization() throws IOException {
+        final Target target = new Target(myCanvas.getID());
         final ImageContent imageContent = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT)
                 .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
-        final PaintingAnnotation paintingAnno =
-                new PaintingAnnotation(IMAGE_ANNO_ID, myCanvas).setBodies(imageContent).setTarget(myCanvas.getID());
+        final PaintingAnnotation pAnno =
+                new PaintingAnnotation(IMAGE_ANNO_ID, myCanvas).setBody(imageContent).setTarget(target);
 
         final TextContent textContent = new TextContent(TEXT_ID);
-        final SupplementingAnnotation supplementingAnno =
-                new SupplementingAnnotation(TEXT_ANNO_ID, myCanvas).setBodies(textContent).setTarget(myCanvas.getID());
+        final SupplementingAnnotation sAnno =
+                new SupplementingAnnotation(TEXT_ANNO_ID, myCanvas).setBody(textContent).setTarget(target);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT);
         myCanvas.setThumbnails(new ImageContent(IMAGE_THUMBNAIL_ID).setWidthHeight(THUMBNAIL_WH, THUMBNAIL_WH)
                 .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID)));
-        myCanvas.setPaintingPages(new AnnotationPage<PaintingAnnotation>(IMAGE_PAGE_ID).addAnnotations(paintingAnno));
-        myCanvas.setSupplementingPages(
-                new AnnotationPage<SupplementingAnnotation>(TEXT_PAGE_ID).addAnnotations(supplementingAnno));
+        myCanvas.setPaintingPages(new AnnotationPage<PaintingAnnotation>(IMAGE_PAGE_ID).addAnnotations(pAnno));
+        myCanvas.setSupplementingPages(new AnnotationPage<SupplementingAnnotation>(TEXT_PAGE_ID).addAnnotations(sAnno));
 
         assertEquals(getExpected(FULL_CANVAS_FIXTURE), format(toJson(myCanvas)));
     }
@@ -1642,10 +1572,6 @@ public class CanvasTest extends AbstractCookbookTest {
         assertEquals(normalizeIDs(getExpected(MULTI_VIDEO_CANVAS_FIXTURE)), normalizeIDs(toJson(myCanvas)));
     }
 
-    /*************
-     * Utilities *
-     *************/
-
     /**
      * Gets the expected JSON from a test fixture file.
      */
@@ -1659,8 +1585,8 @@ public class CanvasTest extends AbstractCookbookTest {
      *
      * @return The ID of the content resource associated with myCanvas via a painting annotation.
      */
-    private URI getPaintingContentResourceID() {
-        return myCanvas.getPaintingPages().get(0).getAnnotations().get(0).getBodies().get(0).getID();
+    private String getPaintingContentResourceID() {
+        return myCanvas.getPaintingPages().get(0).getAnnotations().get(0).getBody().get(0).getID();
     }
 
     /**
@@ -1668,8 +1594,8 @@ public class CanvasTest extends AbstractCookbookTest {
      *
      * @return The ID of the content resource associated with myCanvas via a supplementing annotation.
      */
-    private URI getSupplementingContentResourceID() {
-        return myCanvas.getSupplementingPages().get(0).getAnnotations().get(0).getBodies().get(0).getID();
+    private String getSupplementingContentResourceID() {
+        return myCanvas.getSupplementingPages().get(0).getAnnotations().get(0).getBody().get(0).getID();
     }
 
     /**
@@ -1678,8 +1604,8 @@ public class CanvasTest extends AbstractCookbookTest {
      * @return The value of the media fragment of the selector that targets myCanvas via a painting annotation.
      */
     private String getPaintingMediaFragment() {
-        return ((MediaFragmentSelector) myCanvas.getPaintingPages().get(0).getAnnotations().get(0)
-                .getSpecificResourceTarget().get().getSelector()).toString();
+        return ((MediaFragmentSelector) myCanvas.getPaintingPages().get(0).getAnnotations().get(0).getTarget()
+                .getSpecificResource().get().getSelector()).toString();
     }
 
     /**
@@ -1688,8 +1614,8 @@ public class CanvasTest extends AbstractCookbookTest {
      * @return The value of the media fragment of the selector that targets myCanvas via a supplementing annotation.
      */
     private String getSupplementingMediaFragment() {
-        return ((MediaFragmentSelector) myCanvas.getSupplementingPages().get(0).getAnnotations().get(0)
-                .getSpecificResourceTarget().get().getSelector()).toString();
+        return ((MediaFragmentSelector) myCanvas.getSupplementingPages().get(0).getAnnotations().get(0).getTarget()
+                .getSpecificResource().get().getSelector()).toString();
     }
 
 }

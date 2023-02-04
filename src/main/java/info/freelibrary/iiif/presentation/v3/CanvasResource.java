@@ -1,14 +1,15 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
 import java.util.List;
 
 import info.freelibrary.util.warnings.JDK;
 import info.freelibrary.util.warnings.PMD;
 
+import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
+import info.freelibrary.iiif.presentation.v3.properties.selectors.SelectorOutOfBoundsException;
 
 /**
  * An interface for an individual page or view. It acts as a central point for assembling the different content
@@ -25,7 +26,7 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * @return The ID
      */
     @Override
-    URI getID();
+    String getID();
 
     /**
      * Gets the duration of the canvas.
@@ -98,7 +99,7 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
      * <p>
      * Calling this method with <code>aChoice = false</code> and multiple {@link ContentResource}s associates those
-     * resources with the canvas using a single annotation with multiple bodies.
+     * resources with the canvas using a single annotation with multiple resources.
      * <p>
      * If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -146,7 +147,7 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
      * <p>
      * Calling this method with <code>aChoice = false</code> and a list containing more than one {@link ContentResource}
-     * associates those resources with the canvas using a single annotation with multiple bodies.
+     * associates those resources with the canvas using a single annotation with multiple resources.
      * <p>
      * If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -197,7 +198,7 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
      * <p>
      * Calling this method with <code>aChoice = false</code> and multiple {@link ContentResource}s associates those
-     * resources with the canvas region using a single annotation with multiple bodies.
+     * resources with the canvas region using a single annotation with multiple resources.
      * <p>
      * If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -251,7 +252,7 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
      * <p>
      * Calling this method with <code>aChoice = false</code> and multiple {@link ContentResource}s associates those
-     * resources with the canvas region using a single annotation with multiple bodies.
+     * resources with the canvas region using a single annotation with multiple resources.
      * <p>
      * If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -304,7 +305,7 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
      * <p>
      * Calling this method with <code>aChoice = false</code> and a list containing more than one {@link ContentResource}
-     * associates those resources with the canvas region using a single annotation with multiple bodies.
+     * associates those resources with the canvas region using a single annotation with multiple resources.
      * <p>
      * If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -358,7 +359,7 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
      * <p>
      * Calling this method with <code>aChoice = false</code> and a list containing more than one {@link ContentResource}
-     * associates those resources with the canvas region using a single annotation with multiple bodies.
+     * associates those resources with the canvas region using a single annotation with multiple resources.
      * <p>
      * If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -406,7 +407,7 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
      * <p>
      * Calling this method with <code>aChoice = false</code> and multiple {@link ContentResource}s associates those
-     * resources with the canvas using a single annotation with multiple bodies.
+     * resources with the canvas using a single annotation with multiple resources.
      * <p>
      * If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -450,7 +451,7 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
      * <p>
      * Calling this method with <code>aChoice = false</code> and a list containing more than one {@link ContentResource}
-     * associates those resources with the canvas using a single annotation with multiple bodies.
+     * associates those resources with the canvas using a single annotation with multiple resources.
      * <p>
      * If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -496,7 +497,7 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
      * <p>
      * Calling this method with <code>aChoice = false</code> and multiple {@link ContentResource}s associates those
-     * resources with the canvas region using a single annotation with multiple bodies.
+     * resources with the canvas region using a single annotation with multiple resources.
      * <p>
      * If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -545,7 +546,7 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
      * <p>
      * Calling this method with <code>aChoice = false</code> and multiple {@link ContentResource}s associates those
-     * resources with the canvas region using a single annotation with multiple bodies.
+     * resources with the canvas region using a single annotation with multiple resources.
      * <p>
      * If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -593,7 +594,7 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
      * <p>
      * Calling this method with <code>aChoice = false</code> and a list containing more than one {@link ContentResource}
-     * associates those resources with the canvas region using a single annotation with multiple bodies.
+     * associates those resources with the canvas region using a single annotation with multiple resources.
      * <p>
      * If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -642,7 +643,7 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
      * <p>
      * Calling this method with <code>aChoice = false</code> and a list containing more than one {@link ContentResource}
-     * associates those resources with the canvas region using a single annotation with multiple bodies.
+     * associates those resources with the canvas region using a single annotation with multiple resources.
      * <p>
      * If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -710,7 +711,7 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      *
      * @return The canvas' non-painting annotation pages
      */
-    List<AnnotationPage<? extends Annotation<?>>> getOtherAnnotations();
+    List<AnnotationPage<WebAnnotation>> getOtherAnnotations();
 
     /**
      * Sets the canvas annotation pages from a list.
@@ -718,7 +719,7 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * @param aAnnotationList A list of annotation pages
      * @return The canvas
      */
-    T setOtherAnnotations(List<AnnotationPage<? extends Annotation<?>>> aAnnotationList);
+    T setOtherAnnotations(List<AnnotationPage<WebAnnotation>> aAnnotationList);
 
     /**
      * Sets the canvas' annotation pages from an array.
@@ -727,6 +728,6 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * @return The canvas
      */
     @SuppressWarnings(JDK.UNCHECKED)
-    T setOtherAnnotations(AnnotationPage<? extends Annotation<?>>... aAnnotationArray);
+    T setOtherAnnotations(AnnotationPage<WebAnnotation>... aAnnotationArray);
 
 }

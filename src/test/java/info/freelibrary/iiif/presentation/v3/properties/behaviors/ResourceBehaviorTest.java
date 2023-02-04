@@ -15,7 +15,7 @@ import info.freelibrary.iiif.presentation.v3.utils.TestConstants;
  */
 public class ResourceBehaviorTest {
 
-    /* The expected values. */
+    /** The expected values. */
     private static final String[] VALUES = { BehaviorConstants.HIDDEN };
 
     /**

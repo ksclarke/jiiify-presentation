@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,18 +19,17 @@ import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
+import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
- * A grouping of {@link AnnotationPage}(s) that should be managed as a single whole.
+ * A grouping of {@link AnnotationPage}(s) that should be managed as a collection.
  */
 public class AnnotationCollection extends AbstractResource<AnnotationCollection>
         implements Resource<AnnotationCollection> {
 
-    /**
-     * The AnnotationCollection's viewingDirection.
-     */
+    /** The collection's viewingDirection. */
     private ViewingDirection myViewingDirection;
 
     /**
@@ -41,7 +39,7 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
      * @param aLabel A descriptive label, in string form, for the collection
      */
     public AnnotationCollection(final String aID, final String aLabel) {
-        super(ResourceTypes.ANNOTATION_COLLECTION, aID, aLabel);
+        super(ResourceTypes.ANNOTATION_COLLECTION, aID, new Label(aLabel), ResourceBehavior.class);
     }
 
     /**
@@ -51,27 +49,17 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
      * @param aLabel A descriptive label for the collection
      */
     public AnnotationCollection(final String aID, final Label aLabel) {
-        super(ResourceTypes.ANNOTATION_COLLECTION, aID, aLabel);
-    }
-
-    /**
-     * Creates a collection of annotations from the supplied ID and label.
-     *
-     * @param aID A collection ID
-     * @param aLabel A descriptive label for the collection
-     */
-    public AnnotationCollection(final URI aID, final Label aLabel) {
-        super(ResourceTypes.ANNOTATION_COLLECTION, aID, aLabel);
+        super(ResourceTypes.ANNOTATION_COLLECTION, aID, aLabel, ResourceBehavior.class);
     }
 
     @Override
-    @JsonSetter(JsonKeys.PROVIDER)
+    @JsonIgnore
     public AnnotationCollection setProviders(final Provider... aProviderArray) {
         return setProviders(Arrays.asList(aProviderArray));
     }
 
     @Override
-    @JsonIgnore
+    @JsonSetter(JsonKeys.PROVIDER)
     public AnnotationCollection setProviders(final List<Provider> aProviderList) {
         return (AnnotationCollection) super.setProviders(aProviderList);
     }
@@ -99,29 +87,19 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
     }
 
     @Override
-    public AnnotationCollection clearBehaviors() {
-        return (AnnotationCollection) super.clearBehaviors();
+    @JsonIgnore
+    public AnnotationCollection setBehaviors(final Behavior... aBehaviorArray) {
+        return setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorArray));
     }
 
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
-    public AnnotationCollection setBehaviors(final Behavior... aBehaviorArray) {
-        return (AnnotationCollection) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorArray));
-    }
-
-    @Override
     public AnnotationCollection setBehaviors(final List<Behavior> aBehaviorList) {
-        return (AnnotationCollection) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorList));
-    }
+        if (aBehaviorList instanceof BehaviorList) {
+            ((BehaviorList) aBehaviorList).checkType(ResourceBehavior.class, this.getClass());
+        }
 
-    @Override
-    public AnnotationCollection addBehaviors(final Behavior... aBehaviorArray) {
-        return (AnnotationCollection) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorArray));
-    }
-
-    @Override
-    public AnnotationCollection addBehaviors(final List<Behavior> aBehaviorList) {
-        return (AnnotationCollection) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorList));
+        return (AnnotationCollection) super.setBehaviors(aBehaviorList);
     }
 
     @Override
@@ -190,17 +168,7 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
     }
 
     @Override
-    public AnnotationCollection setID(final URI aID) {
-        return (AnnotationCollection) super.setID(aID);
-    }
-
-    @Override
     public AnnotationCollection setRights(final String aRights) {
-        return (AnnotationCollection) super.setRights(aRights);
-    }
-
-    @Override
-    public AnnotationCollection setRights(final URI aRights) {
         return (AnnotationCollection) super.setRights(aRights);
     }
 

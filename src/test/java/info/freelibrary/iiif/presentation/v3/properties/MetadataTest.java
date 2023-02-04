@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,12 +11,16 @@ import org.junit.Test;
  */
 public class MetadataTest {
 
+    /** A test label. */
     private static final String LABEL = "A test label";
 
+    /** A test value. */
     private static final String VALUE = "A test value";
 
+    /** The test label. */
     private Label myLabel;
 
+    /** The test value. */
     private Value myValue;
 
     /**
