@@ -25,6 +25,7 @@ import com.opencsv.CSVReader;
 import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.Manifest.ContextListComparator;
+import info.freelibrary.iiif.presentation.v3.annotations.PaintingAnnotation;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.Metadata;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
@@ -55,6 +56,8 @@ public class ManifestTest extends AbstractTest {
     private static final String MANIFEST_THUMBNAIL_URI = SERVER + ENCODED_MANIFEST_THUMBNAIL_ARK + THUMBNAIL_PATH;
 
     private static final String TEST_TITLE = "Georgian NF Fragment 68a";
+
+    private static final String HTTPS = "https://";
 
     private static final List<String[]> METADATA_PAIRS = Stream.of( //
             new String[] { "Title", TEST_TITLE }, //
@@ -144,7 +147,7 @@ public class ManifestTest extends AbstractTest {
 
         reqStmt = new RequiredStatement("Attribution", "Provided courtesy of Example Institution");
         otherService = new OtherService3("https://example.org/service/example", "example")
-                .setProfile("https://example.org/docs/example-service.html");
+                .setProfile("http://example.org/docs/example-service.html");
 
         myManifest.setRights("http://creativecommons.org/licenses/by/4.0/").setBehaviors(ManifestBehavior.PAGED)
                 .setRequiredStatement(reqStmt).setServices(otherService);
@@ -182,7 +185,7 @@ public class ManifestTest extends AbstractTest {
     @Test
     public void testConstructorStringLabel() {
         myManifest = new Manifest(MANIFEST_URI, new Label(TEST_TITLE));
-        assertEquals(URI.create(MANIFEST_URI), myManifest.getID());
+        assertEquals(MANIFEST_URI, myManifest.getID());
         assertEquals(TEST_TITLE, myManifest.getLabel().getString());
     }
 
@@ -192,7 +195,7 @@ public class ManifestTest extends AbstractTest {
     @Test
     public void testConstructorStringString() {
         myManifest = new Manifest(MANIFEST_URI, TEST_TITLE);
-        assertEquals(URI.create(MANIFEST_URI), myManifest.getID());
+        assertEquals(MANIFEST_URI, myManifest.getID());
         assertEquals(TEST_TITLE, myManifest.getLabel().getString());
     }
 
@@ -201,8 +204,8 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public void testConstructorUriLabel() {
-        myManifest = new Manifest(URI.create(MANIFEST_URI), new Label(TEST_TITLE));
-        assertEquals(URI.create(MANIFEST_URI), myManifest.getID());
+        myManifest = new Manifest(MANIFEST_URI, new Label(TEST_TITLE));
+        assertEquals(MANIFEST_URI, myManifest.getID());
         assertEquals(TEST_TITLE, myManifest.getLabel().getString());
     }
 
@@ -241,9 +244,9 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public void testRemoveContext() {
-        final URI uri = URI.create(myLoremIpsum.getUrl());
+        final URI uri = URI.create("https://asdf.example.com");
 
-        myManifest.addContexts(uri, URI.create(myLoremIpsum.getUrl()));
+        myManifest.addContexts(uri, URI.create("https://fdsa.example.com"));
         assertTrue(myManifest.getContexts().contains(uri));
         assertTrue(myManifest.removeContext(uri));
         assertEquals(2, myManifest.getContexts().size());
@@ -262,8 +265,8 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public void testSetGetCanvases() {
-        final String cID1 = UUID.randomUUID().toString();
-        final String cID2 = UUID.randomUUID().toString();
+        final String cID1 = HTTPS + UUID.randomUUID().toString();
+        final String cID2 = HTTPS + UUID.randomUUID().toString();
         final Canvas canvas1 = new Canvas(cID1);
         final Canvas canvas2 = new Canvas(cID2);
         final List<Canvas> canvases;
@@ -272,8 +275,8 @@ public class ManifestTest extends AbstractTest {
         canvases = myManifest.getCanvases();
 
         assertEquals(2, canvases.size());
-        assertEquals(cID1, canvases.get(0).getID().toString());
-        assertEquals(cID2, canvases.get(1).getID().toString());
+        assertEquals(cID1, canvases.get(0).getID());
+        assertEquals(cID2, canvases.get(1).getID());
     }
 
     /**
@@ -281,8 +284,8 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public void testSetGetCanvasesList() {
-        final String cID1 = UUID.randomUUID().toString();
-        final String cID2 = UUID.randomUUID().toString();
+        final String cID1 = HTTPS + UUID.randomUUID().toString();
+        final String cID2 = HTTPS + UUID.randomUUID().toString();
         final Canvas canvas1 = new Canvas(cID1);
         final Canvas canvas2 = new Canvas(cID2);
         final List<Canvas> canvases;
@@ -291,8 +294,8 @@ public class ManifestTest extends AbstractTest {
         canvases = myManifest.getCanvases();
 
         assertEquals(2, canvases.size());
-        assertEquals(cID1, canvases.get(0).getID().toString());
-        assertEquals(cID2, canvases.get(1).getID().toString());
+        assertEquals(cID1, canvases.get(0).getID());
+        assertEquals(cID2, canvases.get(1).getID());
     }
 
     /**
@@ -300,8 +303,8 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public void testSetGetRanges() {
-        final String rID1 = UUID.randomUUID().toString();
-        final String rID2 = UUID.randomUUID().toString();
+        final String rID1 = HTTPS + UUID.randomUUID().toString();
+        final String rID2 = HTTPS + UUID.randomUUID().toString();
         final Range range1 = new Range(rID1);
         final Range range2 = new Range(rID2);
         final List<Range> ranges;
@@ -310,8 +313,8 @@ public class ManifestTest extends AbstractTest {
         ranges = myManifest.getRanges();
 
         assertEquals(2, ranges.size());
-        assertEquals(rID1, ranges.get(0).getID().toString());
-        assertEquals(rID2, ranges.get(1).getID().toString());
+        assertEquals(rID1, ranges.get(0).getID());
+        assertEquals(rID2, ranges.get(1).getID());
     }
 
     /**
@@ -319,8 +322,8 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public void testSetGetRangesList() {
-        final String rID1 = UUID.randomUUID().toString();
-        final String rID2 = UUID.randomUUID().toString();
+        final String rID1 = HTTPS + UUID.randomUUID().toString();
+        final String rID2 = HTTPS + UUID.randomUUID().toString();
         final Range range1 = new Range(rID1);
         final Range range2 = new Range(rID2);
         final List<Range> ranges;
@@ -329,8 +332,8 @@ public class ManifestTest extends AbstractTest {
         ranges = myManifest.getRanges();
 
         assertEquals(2, ranges.size());
-        assertEquals(rID1, ranges.get(0).getID().toString());
-        assertEquals(rID2, ranges.get(1).getID().toString());
+        assertEquals(rID1, ranges.get(0).getID());
+        assertEquals(rID2, ranges.get(1).getID());
     }
 
     /**

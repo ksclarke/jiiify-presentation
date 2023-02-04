@@ -1,9 +1,11 @@
 
-package info.freelibrary.iiif.presentation.v3;
+package info.freelibrary.iiif.presentation.v3.annotations;
 
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.toJson;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +15,9 @@ import org.junit.Test;
 
 import info.freelibrary.util.StringUtils;
 
+import info.freelibrary.iiif.presentation.v3.AbstractTest;
+import info.freelibrary.iiif.presentation.v3.Canvas;
+import info.freelibrary.iiif.presentation.v3.SoundContent;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
@@ -30,15 +35,15 @@ public class PaintingAnnotationTest extends AbstractTest {
 
     private final Label myCanvasLabel = new Label(myLoremIpsum.getWords(4));
 
-    private final URI myCanvasID = URI.create("cc16ed46-cfbc-458a-9a7b-16364a5af377");
+    private final String myCanvasID = "https://cc16ed46-cfbc-458a-9a7b-16364a5af377";
 
     private final Canvas myCanvas = new Canvas(myCanvasID, myCanvasLabel);
 
-    private final URI myAnnoID = URI.create("a8bb567c-fa5a-4a35-9b21-e1f9c6ba4648");
+    private final String myAnnoID = "https://a8bb567c-fa5a-4a35-9b21-e1f9c6ba4648";
 
-    private final URI mySoundContentID = URI.create("bc7c572d-6bf5-48c9-8329-51a961f1019d" + ".mp3");
+    private final String mySoundContentID = "https://bc7c572d-6bf5-48c9-8329-51a961f1019d" + ".mp3";
 
-    private final URI myThumbnailID = URI.create("2df373a0-0701-4d04-b4dd-efd5c1a611ec" + ".ogg");
+    private final String myThumbnailID = "https://2df373a0-0701-4d04-b4dd-efd5c1a611ec" + ".ogg";
 
     private final MediaFragmentSelector myFragmentSelector = new MediaFragmentSelector("xywh=0,0,1,1");
 
@@ -50,19 +55,7 @@ public class PaintingAnnotationTest extends AbstractTest {
         final PaintingAnnotation anno = new PaintingAnnotation(myAnnoID, myCanvas);
 
         assertEquals(myAnnoID, anno.getID());
-        assertFalse(isSpecificResourceURI(anno.getTarget()));
-    }
-
-    /**
-     * Tests constructing a painting annotation.
-     */
-    @Test
-    public void testPaintingAnnotationStringCanvas() {
-        final PaintingAnnotation anno = new PaintingAnnotation(myAnnoID.toString(), myCanvas);
-
-        assertEquals(myAnnoID, anno.getID());
-        assertFalse(anno.hasSpecificResourceTarget());
-        assertFalse(isSpecificResourceURI(anno.getTarget()));
+        assertFalse(isSpecificResourceURI(anno.getTargetURI()));
     }
 
     /**
@@ -73,7 +66,6 @@ public class PaintingAnnotationTest extends AbstractTest {
         final PaintingAnnotation anno = new PaintingAnnotation(myAnnoID, myCanvas, myFragmentSelector);
 
         assertEquals(myAnnoID, anno.getID());
-        assertTrue(anno.hasSpecificResourceTarget());
         assertTrue(anno.getSpecificResourceTarget().isPresent());
     }
 
@@ -85,7 +77,6 @@ public class PaintingAnnotationTest extends AbstractTest {
         final PaintingAnnotation anno = new PaintingAnnotation(myAnnoID, myCanvas, myFragmentSelector.toString());
 
         assertEquals(myAnnoID, anno.getID());
-        assertTrue(anno.hasSpecificResourceTarget());
         assertTrue(anno.getSpecificResourceTarget().isPresent());
     }
 
@@ -97,7 +88,6 @@ public class PaintingAnnotationTest extends AbstractTest {
         final PaintingAnnotation anno = new PaintingAnnotation(myAnnoID.toString(), myCanvas, myFragmentSelector);
 
         assertEquals(myAnnoID, anno.getID());
-        assertTrue(anno.hasSpecificResourceTarget());
         assertTrue(anno.getSpecificResourceTarget().isPresent());
     }
 
@@ -106,11 +96,9 @@ public class PaintingAnnotationTest extends AbstractTest {
      */
     @Test
     public void testPaintingAnnotationStringCanvasString() {
-        final PaintingAnnotation anno =
-                new PaintingAnnotation(myAnnoID.toString(), myCanvas, myFragmentSelector.toString());
+        final PaintingAnnotation anno = new PaintingAnnotation(myAnnoID, myCanvas, myFragmentSelector.toString());
 
         assertEquals(myAnnoID, anno.getID());
-        assertTrue(anno.hasSpecificResourceTarget());
         assertTrue(anno.getSpecificResourceTarget().isPresent());
     }
 
@@ -125,18 +113,18 @@ public class PaintingAnnotationTest extends AbstractTest {
         final URI target1;
         final SpecificResource target2;
 
-        assertFalse(isSpecificResourceURI(anno1.getTarget()));
-        assertTrue(isSpecificResourceURI(anno2.getTarget()));
+        assertFalse(isSpecificResourceURI(anno1.getTargetURI()));
+        assertTrue(isSpecificResourceURI(anno2.getTargetURI()));
 
-        target1 = anno1.getTarget();
+        target1 = anno1.getTargetURI();
         target2 = anno2.getSpecificResourceTarget().get();
 
         // Swap the targets
         anno1.setTarget(target2);
         anno2.setTarget(target1);
 
-        assertTrue(isSpecificResourceURI(anno1.getTarget()));
-        assertFalse(isSpecificResourceURI(anno2.getTarget()));
+        assertTrue(isSpecificResourceURI(anno1.getTargetURI()));
+        assertFalse(isSpecificResourceURI(anno2.getTargetURI()));
     }
 
     /**

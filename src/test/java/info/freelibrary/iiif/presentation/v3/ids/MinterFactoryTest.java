@@ -14,14 +14,14 @@ import org.junit.Test;
  */
 public class MinterFactoryTest {
 
-    private URI myManifestID;
+    private String myManifestID;
 
     /**
      * Sets up the testing environment.
      */
     @Before
     public final void setUp() {
-        myManifestID = URI.create(UUID.randomUUID().toString());
+        myManifestID = UUID.randomUUID().toString();
     }
 
     /**

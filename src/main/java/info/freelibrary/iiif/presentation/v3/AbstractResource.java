@@ -21,6 +21,7 @@ import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.PMD;
 
+import info.freelibrary.iiif.presentation.v3.ids.InvalidIdentifierException;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -49,12 +50,15 @@ abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
     /**
      * The IIIF Presentation context URI.
      */
-    static final URI PRESENTATION_CONTEXT_URI = URI.create("http://iiif.io/api/presentation/3/context.json");
+    protected static final URI PRESENTATION_CONTEXT_URI = URI.create("http://iiif.io/api/presentation/3/context.json");
 
     /**
      * The logger used by abstract resources.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractResource.class, MessageCodes.BUNDLE);
+
+    /** ID URI scheme. */
+    private static final String HTTPS = "https";
 
     /**
      * The resource type.
@@ -155,18 +159,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
      */
     protected AbstractResource(final String aType, final String aID) {
         myType = Objects.requireNonNull(aType);
-        myID = URI.create(aID);
-    }
-
-    /**
-     * Creates a new resource from the supplied ID and type.
-     *
-     * @param aType A resource type
-     * @param aID A URI ID
-     */
-    protected AbstractResource(final String aType, final URI aID) {
-        myType = Objects.requireNonNull(aType);
-        myID = Objects.requireNonNull(aID);
+        myID = checkID(aID);
     }
 
     /**
@@ -178,7 +171,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
      */
     protected AbstractResource(final String aType, final String aID, final String aLabel) {
         myType = Objects.requireNonNull(aType);
-        myID = URI.create(aID);
+        myID = checkID(aID);
         myLabel = new Label(aLabel);
     }
 
@@ -191,20 +184,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
      */
     protected AbstractResource(final String aType, final String aID, final Label aLabel) {
         myType = Objects.requireNonNull(aType);
-        myID = URI.create(Objects.requireNonNull(aID));
-        myLabel = Objects.requireNonNull(aLabel);
-    }
-
-    /**
-     * Creates a new resource from a supplied ID and label.
-     *
-     * @param aType A type of resource
-     * @param aID A URI ID
-     * @param aLabel A label for the resource
-     */
-    protected AbstractResource(final String aType, final URI aID, final Label aLabel) {
-        myType = Objects.requireNonNull(aType);
-        myID = Objects.requireNonNull(aID);
+        myID = checkID(aID);
         myLabel = Objects.requireNonNull(aLabel);
     }
 
@@ -222,25 +202,25 @@ abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
     protected AbstractResource(final String aType, final String aID, final String aLabel,
             final List<Metadata> aMetadataList, final String aSummary, final ContentResource<?> aThumbnail,
             final Provider aProvider) {
-        this(aType, URI.create(aID), new Label(aLabel), aMetadataList, new Summary(aSummary), aThumbnail, aProvider);
+        this(aType, aID, new Label(aLabel), aMetadataList, new Summary(aSummary), aThumbnail, aProvider);
     }
 
     /**
      * Creates a new resource from properties.
      *
      * @param aType A resource type
-     * @param aID A URI ID
+     * @param aID An ID
      * @param aLabel A label
      * @param aMetadataList A list of metadata properties
      * @param aSummary A summary property
      * @param aThumbnail A thumbnail
      * @param aProvider A resource provider
      */
-    protected AbstractResource(final String aType, final URI aID, final Label aLabel,
+    protected AbstractResource(final String aType, final String aID, final Label aLabel,
             final List<Metadata> aMetadataList, final Summary aSummary, final ContentResource<?> aThumbnail,
             final Provider aProvider) {
         myType = Objects.requireNonNull(aType);
-        myID = Objects.requireNonNull(aID);
+        myID = checkID(aID);
         myLabel = Objects.requireNonNull(aLabel);
         myMetadata = Objects.requireNonNull(aMetadataList);
         mySummary = Objects.requireNonNull(aSummary);
@@ -304,7 +284,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
      * @param aMetadataArray The metadata to associate with the resource
      * @return The resource
      */
-    @JsonSetter(JsonKeys.METADATA)
+    @JsonIgnore
     protected AbstractResource<T> setMetadata(final Metadata... aMetadataArray) {
         return setMetadata(Arrays.asList(aMetadataArray));
     }
@@ -315,7 +295,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
      * @param aMetadataList A list of metadata
      * @return The resource
      */
-    @JsonIgnore
+    @JsonSetter(JsonKeys.METADATA)
     protected AbstractResource<T> setMetadata(final List<Metadata> aMetadataList) {
         final List<Metadata> metadata = getMetadata();
 
@@ -420,8 +400,8 @@ abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
      * @return The rights
      */
     @JsonProperty
-    public URI getRights() {
-        return myRights;
+    public String getRights() {
+        return myRights == null ? null : myRights.toString();
     }
 
     /**
@@ -431,21 +411,9 @@ abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
      * @return The resource
      */
     @JsonProperty
-    protected AbstractResource<T> setRights(final URI aRights) {
-        Objects.requireNonNull(aRights);
-        myRights = aRights;
-        return this;
-    }
-
-    /**
-     * Sets the resource's rights URI.
-     *
-     * @param aRights A rights URI
-     * @return The resource
-     */
-    @JsonIgnore
     protected AbstractResource<T> setRights(final String aRights) {
-        return setRights(URI.create(aRights));
+        myRights = URI.create(aRights);
+        return this;
     }
 
     /**
@@ -496,7 +464,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
      * @param aProviderArray An array of providers
      * @return The resource
      */
-    @JsonSetter(JsonKeys.PROVIDER)
+    @JsonIgnore
     protected AbstractResource<T> setProviders(final Provider... aProviderArray) {
         return setProviders(Arrays.asList(aProviderArray));
     }
@@ -507,7 +475,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
      * @param aProviderList A list of providers
      * @return The resource
      */
-    @JsonIgnore
+    @JsonSetter(JsonKeys.PROVIDER)
     protected AbstractResource<T> setProviders(final List<Provider> aProviderList) {
         return setResourceProviders(aProviderList);
     }
@@ -528,7 +496,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
      * @param aRenderingArray An array of renderings
      * @return The resource
      */
-    @JsonSetter(JsonKeys.RENDERING)
+    @JsonIgnore
     protected AbstractResource<T> setRenderings(final Rendering... aRenderingArray) {
         return setRenderings(Arrays.asList(aRenderingArray));
     }
@@ -539,7 +507,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
      * @param aRenderingList A list of renderings
      * @return The resource
      */
-    @JsonIgnore
+    @JsonSetter(JsonKeys.RENDERING)
     protected AbstractResource<T> setRenderings(final List<Rendering> aRenderingList) {
         final List<Rendering> renderings = getRenderings();
 
@@ -570,8 +538,8 @@ abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
      * @return The ID
      */
     @JsonGetter(JsonKeys.ID)
-    public URI getID() {
-        return myID;
+    public String getID() {
+        return myID.toString();
     }
 
     /**
@@ -582,20 +550,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
      */
     @JsonIgnore
     protected AbstractResource<T> setID(final String aID) {
-        myID = URI.create(aID);
-        return this;
-    }
-
-    /**
-     * Sets the resource ID.
-     *
-     * @param aID An ID
-     * @return The resource
-     */
-    @JsonIgnore
-    protected AbstractResource<T> setID(final URI aID) {
-        Objects.requireNonNull(aID);
-        myID = aID;
+        checkID(aID);
         return this;
     }
 
@@ -605,7 +560,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
      * @param aPartOfArray An array of partOfs
      * @return The resource
      */
-    @JsonSetter(JsonKeys.PART_OF)
+    @JsonIgnore
     protected AbstractResource<T> setPartOfs(final PartOf... aPartOfArray) {
         return setPartOfs(Arrays.asList(aPartOfArray));
     }
@@ -616,7 +571,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
      * @param aPartOfList A list of partOfs
      * @return The resource
      */
-    @JsonIgnore
+    @JsonSetter(JsonKeys.PART_OF)
     protected AbstractResource<T> setPartOfs(final List<PartOf> aPartOfList) {
         final List<PartOf> partOfs = getPartOfs();
 
@@ -852,6 +807,37 @@ abstract class AbstractResource<T extends AbstractResource<T>> { // NOPMD
         }
 
         throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_024, floatValue));
+    }
+
+    /**
+     * Checks that a resource ID conforms to the rules in the specification. Cf.
+     * https://iiif.io/api/presentation/3.0/#id
+     *
+     * @param aID A string ID to check
+     * @return A conforming URI
+     * @throws InvalidIdentifierException If the supplied ID doesn't conform to the spec's rules
+     */
+    @SuppressWarnings({ "PMD.AvoidCatchingGenericException", PMD.AVOID_CATCHING_GENERIC_EXCEPTION,
+        "PMD.AvoidCatchingNPE" })
+    private URI checkID(final String aID) {
+        final URI id;
+
+        try {
+            id = URI.create(aID);
+
+            // Spec says internal resources must start with HTTPS scheme
+            if (!HTTPS.equals(id.getScheme())) {
+                throw new InvalidIdentifierException(MessageCodes.JPA_127, aID);
+            }
+
+            // if (ResourceTypes.CANVAS.equals(myType) && id.getRawFragment() != null) {
+            // throw new InvalidIdentifierException(MessageCodes.JPA_128, aID);
+            // }
+        } catch (final NullPointerException | IllegalArgumentException details) {
+            throw new InvalidIdentifierException(details);
+        }
+
+        return id;
     }
 
     /**

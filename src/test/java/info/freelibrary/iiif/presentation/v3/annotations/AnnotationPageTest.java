@@ -1,12 +1,11 @@
 
-package info.freelibrary.iiif.presentation.v3;
+package info.freelibrary.iiif.presentation.v3.annotations;
 
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URI;
 import java.util.UUID;
 
 import org.junit.Before;
@@ -17,6 +16,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import info.freelibrary.util.StringUtils;
 
+import info.freelibrary.iiif.presentation.v3.AbstractTest;
+import info.freelibrary.iiif.presentation.v3.Annotation;
+import info.freelibrary.iiif.presentation.v3.AnnotationPage;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
@@ -27,7 +29,7 @@ import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 /**
  * An annotation page for testing.
  */
-public class AnnotationPageTest<T extends Annotation<T>> extends AbstractTest {
+public class AnnotationPageTest extends AbstractTest {
 
     /**
      * An annotation page serialization.
@@ -44,7 +46,7 @@ public class AnnotationPageTest<T extends Annotation<T>> extends AbstractTest {
      */
     @Before
     public void setUp() {
-        myID = UUID.randomUUID().toString();
+        myID = "https://" + UUID.randomUUID().toString();
     }
 
     /**
@@ -57,7 +59,7 @@ public class AnnotationPageTest<T extends Annotation<T>> extends AbstractTest {
     public void testAnnotationPageToString() throws IOException {
         final ObjectReader reader = JSON.getReader();
         final ObjectNode node = (ObjectNode) reader.readTree(new FileReader(ANNOTATION_PAGE));
-        final AnnotationPage<T> page;
+        final AnnotationPage<?> page;
 
         node.remove(JsonKeys.CONTEXT); // Confirm this isn't added if it isn't present
         page = AnnotationPage.from(node.toString());
@@ -68,10 +70,11 @@ public class AnnotationPageTest<T extends Annotation<T>> extends AbstractTest {
     /**
      * Tests the deserialization and serialization of a stand-alone annotation page.
      *
+     * @param <T> A class that implements the {@code Annotation} interface.
      * @throws IOException If the test fixtures cannot be read
      */
     @Test
-    public void testExternalAnnotationPageToString() throws IOException {
+    public <T extends Annotation<T>> void testExternalAnnotationPageToString() throws IOException {
         final String json = StringUtils.read(ANNOTATION_PAGE);
         final AnnotationPage<T> page = AnnotationPage.from(json);
         final ObjectReader reader = JSON.getReader();
@@ -84,15 +87,7 @@ public class AnnotationPageTest<T extends Annotation<T>> extends AbstractTest {
      */
     @Test
     public void testAnnotationPageStringId() {
-        assertEquals(myID, new AnnotationPage<PaintingAnnotation>(myID).getID().toString());
-    }
-
-    /**
-     * Tests constructing an annotation page.
-     */
-    @Test
-    public void testAnnotationPageUriId() {
-        assertEquals(URI.create(myID), new AnnotationPage<PaintingAnnotation>(URI.create(myID)).getID());
+        assertEquals(myID, new AnnotationPage<PaintingAnnotation>(myID).getID());
     }
 
     /**

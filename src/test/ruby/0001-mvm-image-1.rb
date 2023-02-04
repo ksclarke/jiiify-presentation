@@ -10,7 +10,7 @@ module JiiifyPresentation0001_1
   include_package 'info.freelibrary.iiif.presentation.v3.properties'
 
   manifestID = 'https://iiif.io/api/cookbook/recipe/0001-mvm-image/manifest'
-  imageID = 'http://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png'
+  imageID = 'https://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png'
 
   manifest = Manifest.new(manifestID, Label.new('en', 'Image 1'))
   minter = MinterFactory.getMinter(manifest)

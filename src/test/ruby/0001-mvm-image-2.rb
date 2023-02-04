@@ -6,12 +6,13 @@ module JiiifyPresentation0001_2
   require_relative '../../../target/jiiify-presentation-v3-' + ARGV[0] + '-uber.jar'
 
   include_package 'info.freelibrary.iiif.presentation.v3'
+  include_package 'info.freelibrary.iiif.presentation.v3.annotations'
   include_package 'info.freelibrary.iiif.presentation.v3.ids'
   include_package 'info.freelibrary.iiif.presentation.v3.properties'
 
   manifestID = 'https://iiif.io/api/cookbook/recipe/0001-mvm-image/manifest'
   canvasID = 'https://iiif.io/api/cookbook/recipe/0001-mvm-image/canvas/p1'
-  imageID = 'http://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png'
+  imageID = 'https://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png'
   annoID = 'https://iiif.io/api/cookbook/recipe/0001-mvm-image/annotation/p0001-image'
   annoPageID = 'https://iiif.io/api/cookbook/recipe/0001-mvm-image/page/p1/1'
 

@@ -33,6 +33,8 @@ public class PlaceholderCanvasTest extends AbstractTest {
 
     private static final String LABEL = "My label for '{}'";
 
+    private static final String HTTPS = "https://";
+
     private String myID;
 
     /**
@@ -40,52 +42,27 @@ public class PlaceholderCanvasTest extends AbstractTest {
      */
     @Before
     public final void setUp() {
-        myID = UUID.randomUUID().toString();
+        myID = HTTPS + UUID.randomUUID().toString();
     }
 
     /**
      * Tests {@link PlaceholderCanvas#PlaceholderCanvas(URI) PlaceholderCanvas}.
      */
     @Test
-    public final void testPlaceholderCanvasURI() {
-        final URI id = URI.create(myID);
-        final PlaceholderCanvas canvas = new PlaceholderCanvas(id);
-
-        assertEquals(id, canvas.getID());
+    public final void testPlaceholderCanvasID() {
+        assertEquals(myID, new PlaceholderCanvas(myID).getID());
     }
 
     /**
-     * Tests {@link PlaceholderCanvas#PlaceholderCanvas(String) PlaceholderCanvas}.
-     */
-    @Test
-    public final void testPlaceholderCanvasString() {
-        final PlaceholderCanvas canvas = new PlaceholderCanvas(myID);
-        assertEquals(URI.create(myID), canvas.getID());
-    }
-
-    /**
-     * Tests {@link PlaceholderCanvas#PlaceholderCanvas(URI, Label) PlaceholderCanvas}.
+     * Tests {@link PlaceholderCanvas#PlaceholderCanvas(String, Label) PlaceholderCanvas}.
      */
     @Test
     public final void testPlaceholderCanvasURILabel() {
-        final URI id = URI.create(myID);
         final Label label = new Label(StringUtils.format(LABEL, myID));
-        final PlaceholderCanvas canvas = new PlaceholderCanvas(id, label);
-
-        assertEquals(id, canvas.getID());
-        assertEquals(label, canvas.getLabel());
-    }
-
-    /**
-     * Tests {@link PlaceholderCanvas#PlaceholderCanvas(String, String) PlaceholderCanvas}.
-     */
-    @Test
-    public final void testPlaceholderCanvasStringString() {
-        final String label = StringUtils.format(LABEL, myID);
         final PlaceholderCanvas canvas = new PlaceholderCanvas(myID, label);
 
-        assertEquals(URI.create(myID), canvas.getID());
-        assertEquals(new Label(label), canvas.getLabel());
+        assertEquals(myID, canvas.getID());
+        assertEquals(label, canvas.getLabel());
     }
 
     /**
@@ -93,11 +70,11 @@ public class PlaceholderCanvasTest extends AbstractTest {
      */
     @Test
     public final void testPlaceholderCanvasMinter() {
-        final URI id = URI.create(UUID.randomUUID().toString());
+        final String id = HTTPS + UUID.randomUUID().toString();
         final Minter minter = MinterFactory.getMinter(id);
         final PlaceholderCanvas canvas = new PlaceholderCanvas(minter);
 
-        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID().toString()).matches());
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID()).matches());
     }
 
     /**
@@ -105,12 +82,12 @@ public class PlaceholderCanvasTest extends AbstractTest {
      */
     @Test
     public final void testPlaceholderCanvasMinterLabel() {
-        final URI id = URI.create(UUID.randomUUID().toString());
+        final String id = HTTPS + UUID.randomUUID().toString();
         final Minter minter = MinterFactory.getMinter(id);
         final Label label = new Label(StringUtils.format(LABEL, id));
         final PlaceholderCanvas canvas = new PlaceholderCanvas(minter, label);
 
-        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID().toString()).matches());
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID()).matches());
     }
 
     /**
@@ -118,12 +95,12 @@ public class PlaceholderCanvasTest extends AbstractTest {
      */
     @Test
     public final void testPlaceholderCanvasMinterLabelAsString() {
-        final URI id = URI.create(UUID.randomUUID().toString());
+        final String id = HTTPS + UUID.randomUUID().toString();
         final Minter minter = MinterFactory.getMinter(id);
         final String label = StringUtils.format(LABEL, id);
         final PlaceholderCanvas canvas = new PlaceholderCanvas(minter, label);
 
-        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID().toString()).matches());
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID()).matches());
     }
 
     /**

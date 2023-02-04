@@ -2,7 +2,6 @@
 package info.freelibrary.iiif.presentation.v3.ids;
 
 import java.lang.reflect.InvocationTargetException;
-import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +31,7 @@ public final class MinterFactory {
     /**
      * A map of minters.
      */
-    private static final Map<URI, Minter> MINTERS = new HashMap<>();
+    private static final Map<String, Minter> MINTERS = new HashMap<>();
 
     /**
      * We keep an internal modifiable environmental map so we can modify it during testing.
@@ -70,7 +69,7 @@ public final class MinterFactory {
      * @param aManifestID The ID of a manifest associated with the minter
      * @return The minter associated with the supplied manifest ID
      */
-    public static Minter getMinter(final URI aManifestID) {
+    public static Minter getMinter(final String aManifestID) {
         return MINTERS.getOrDefault(aManifestID, getNewMinter(aManifestID));
     }
 
@@ -116,10 +115,10 @@ public final class MinterFactory {
      * @param aManifestID The ID of the manifest associated with this minter
      * @return A new minter for manifest component IDs
      */
-    private static Minter getNewMinter(final URI aManifestID) {
+    private static Minter getNewMinter(final String aManifestID) {
         try {
             final Class<?> clath = Class.forName(getMinterName());
-            final Class<?>[] args = { URI.class };
+            final Class<?>[] args = { String.class };
 
             return MINTERS.put(aManifestID, (Minter) clath.getDeclaredConstructor(args).newInstance(aManifestID));
         } catch (IllegalAccessException | ClassNotFoundException | InstantiationException | NoSuchMethodException |

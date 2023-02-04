@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
@@ -54,24 +53,14 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
         super(ResourceTypes.ANNOTATION_COLLECTION, aID, aLabel);
     }
 
-    /**
-     * Creates a collection of annotations from the supplied ID and label.
-     *
-     * @param aID A collection ID
-     * @param aLabel A descriptive label for the collection
-     */
-    public AnnotationCollection(final URI aID, final Label aLabel) {
-        super(ResourceTypes.ANNOTATION_COLLECTION, aID, aLabel);
-    }
-
     @Override
-    @JsonSetter(JsonKeys.PROVIDER)
+    @JsonIgnore
     public AnnotationCollection setProviders(final Provider... aProviderArray) {
         return setProviders(Arrays.asList(aProviderArray));
     }
 
     @Override
-    @JsonIgnore
+    @JsonSetter(JsonKeys.PROVIDER)
     public AnnotationCollection setProviders(final List<Provider> aProviderList) {
         return (AnnotationCollection) super.setProviders(aProviderList);
     }
@@ -190,17 +179,7 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
     }
 
     @Override
-    public AnnotationCollection setID(final URI aID) {
-        return (AnnotationCollection) super.setID(aID);
-    }
-
-    @Override
     public AnnotationCollection setRights(final String aRights) {
-        return (AnnotationCollection) super.setRights(aRights);
-    }
-
-    @Override
-    public AnnotationCollection setRights(final URI aRights) {
         return (AnnotationCollection) super.setRights(aRights);
     }
 

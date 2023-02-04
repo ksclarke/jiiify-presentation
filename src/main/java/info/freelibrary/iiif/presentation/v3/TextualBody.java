@@ -12,17 +12,22 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
+import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.warnings.PMD;
 
+import info.freelibrary.iiif.presentation.v3.annotations.Relationship;
 import info.freelibrary.iiif.presentation.v3.ids.SkolemIriFactory;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
  * Text that can be embedded in the body of an annotation. This is different from TextContent which is external text
  * which is referenced in an annotation's body.
  */
-@JsonPropertyOrder({ JsonKeys.TYPE, JsonKeys.LANGUAGE, JsonKeys.VALUE })
+@JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.VALUE, JsonKeys.LANGUAGE, JsonKeys.FORMAT })
+@JsonInclude(Include.NON_EMPTY)
 public class TextualBody implements AnnotationBody<TextualBody>, EmbeddedResource<TextualBody> {
 
     /**
@@ -51,6 +56,11 @@ public class TextualBody implements AnnotationBody<TextualBody>, EmbeddedResourc
     private boolean hasSerializableID;
 
     /**
+     * The purpose of the textual body.
+     */
+    private Relationship myPurpose;
+
+    /**
      * Creates a new textual body for an annotation.
      */
     public TextualBody() {
@@ -74,23 +84,8 @@ public class TextualBody implements AnnotationBody<TextualBody>, EmbeddedResourc
      */
     @Override
     @JsonGetter(JsonKeys.ID)
-    @JsonInclude(Include.NON_NULL)
-    public URI getID() {
-        return hasSerializableID ? myID : null;
-    }
-
-    /**
-     * Sets an ID that should be serialized into JSON.
-     *
-     * @param aID A serializable ID in string form
-     * @return This TextualBody
-     */
-    @Override
-    @JsonSetter(JsonKeys.ID)
-    public TextualBody setID(final String aID) {
-        hasSerializableID = true;
-        myID = URI.create(aID);
-        return this;
+    public String getID() {
+        return hasSerializableID ? myID.toString() : null;
     }
 
     /**
@@ -100,10 +95,10 @@ public class TextualBody implements AnnotationBody<TextualBody>, EmbeddedResourc
      * @return This TextualBody
      */
     @Override
-    @JsonIgnore
-    public TextualBody setID(final URI aID) {
+    @JsonSetter(JsonKeys.ID)
+    public TextualBody setID(final String aID) {
         hasSerializableID = true;
-        myID = aID;
+        myID = URI.create(aID);
         return this;
     }
 
@@ -136,9 +131,30 @@ public class TextualBody implements AnnotationBody<TextualBody>, EmbeddedResourc
      * @return The text value
      */
     @JsonGetter(JsonKeys.VALUE)
-    @JsonInclude(Include.NON_NULL)
     public String getValue() {
         return myValue;
+    }
+
+    /**
+     * Gets the purpose of the textual body.
+     *
+     * @return The purpose of the textual body
+     */
+    @JsonGetter(JsonKeys.PURPOSE)
+    public Relationship getPurpose() {
+        return myPurpose;
+    }
+
+    /**
+     * Sets the purpose of the textual body.
+     *
+     * @param aPurpose The purpose of the textual body
+     * @return This textual body
+     */
+    @JsonSetter(JsonKeys.PURPOSE)
+    public TextualBody setPurpose(final Relationship aPurpose) {
+        myPurpose = aPurpose;
+        return this;
     }
 
     /**
@@ -160,7 +176,7 @@ public class TextualBody implements AnnotationBody<TextualBody>, EmbeddedResourc
      */
     @JsonGetter(JsonKeys.LANGUAGE)
     public String getLanguage() {
-        return myLocale.toLanguageTag();
+        return myLocale == null ? null : myLocale.toLanguageTag();
     }
 
     /**
@@ -213,7 +229,6 @@ public class TextualBody implements AnnotationBody<TextualBody>, EmbeddedResourc
      * @return An optional string version of the format
      */
     @JsonGetter(JsonKeys.FORMAT)
-    @JsonInclude(Include.NON_EMPTY)
     private Optional<String> getFormatAsString() {
         return myFormat != null ? Optional.of(myFormat.toString()) : Optional.empty();
     }
@@ -230,4 +245,18 @@ public class TextualBody implements AnnotationBody<TextualBody>, EmbeddedResourc
         return this;
     }
 
+    /**
+     * Gets a JSON string representation of the textual body.
+     *
+     * @return A JSON string representation of the textual body
+     * @throws RuntimeException If there is trouble serializing the textual body as JSON
+     */
+    @Override
+    public String toString() {
+        try {
+            return JSON.getWriter(TextualBody.class).writeValueAsString(this);
+        } catch (final JsonProcessingException details) {
+            throw new I18nRuntimeException(details);
+        }
+    }
 }

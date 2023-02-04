@@ -68,16 +68,6 @@ public class VideoContent extends AbstractContentResource<VideoContent>
 
     /**
      * Creates a video content resource.
-     *
-     * @param aURI An video content resource ID
-     */
-    public VideoContent(final URI aURI) {
-        super(ResourceTypes.VIDEO, aURI);
-        setFormatFromMediaType(MediaType.parse(aURI, MEDIA_TYPE_CLASS).orElse(null));
-    }
-
-    /**
-     * Creates a video content resource.
      */
     private VideoContent() {
         super(ResourceTypes.VIDEO);
@@ -200,17 +190,7 @@ public class VideoContent extends AbstractContentResource<VideoContent>
     }
 
     @Override
-    public VideoContent setID(final URI aID) {
-        return (VideoContent) super.setID(aID);
-    }
-
-    @Override
     public VideoContent setRights(final String aRights) {
-        return (VideoContent) super.setRights(aRights);
-    }
-
-    @Override
-    public VideoContent setRights(final URI aRights) {
         return (VideoContent) super.setRights(aRights);
     }
 

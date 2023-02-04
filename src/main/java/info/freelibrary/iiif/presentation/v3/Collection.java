@@ -99,16 +99,6 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     }
 
     /**
-     * Creates a new collection from the supplied ID and label.
-     *
-     * @param aID A collection ID
-     * @param aLabel A collection label
-     */
-    public Collection(final URI aID, final Label aLabel) {
-        super(ResourceTypes.COLLECTION, aID, aLabel);
-    }
-
-    /**
      * Creates a new collection from the supplied ID, label, metadata, summary, thumbnail, and provider.
      *
      * @param aID A collection ID in string form
@@ -133,7 +123,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      * @param aThumbnail A thumbnail
      * @param aProvider A resource provider
      */
-    public Collection(final URI aID, final Label aLabel, final List<Metadata> aMetadataList, final Summary aSummary,
+    public Collection(final String aID, final Label aLabel, final List<Metadata> aMetadataList, final Summary aSummary,
             final ContentResource<?> aThumbnail, final Provider aProvider) {
         super(ResourceTypes.COLLECTION, aID, aLabel, aMetadataList, aSummary, aThumbnail, aProvider);
     }
@@ -410,17 +400,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     }
 
     @Override
-    public Collection setID(final URI aID) {
-        return (Collection) super.setID(aID);
-    }
-
-    @Override
     public Collection setRights(final String aRights) {
-        return (Collection) super.setRights(aRights);
-    }
-
-    @Override
-    public Collection setRights(final URI aRights) {
         return (Collection) super.setRights(aRights);
     }
 
@@ -611,17 +591,6 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         }
 
         /**
-         * Create a new collection item from a type and URI ID.
-         *
-         * @param aID An ID
-         * @param aType A type of resource referenced from the collection
-         */
-        public Item(final Item.Type aType, final URI aID) {
-            myType = Objects.requireNonNull(aType);
-            myID = aID;
-        }
-
-        /**
          * Create a brief collection manifest from a full work manifest.
          *
          * @param aManifest A full manifest
@@ -635,7 +604,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
 
             myType = Item.Type.fromString(ResourceTypes.MANIFEST);
             myLabel = Objects.requireNonNull(aManifest.getLabel());
-            myID = aManifest.getID();
+            myID = URI.create(aManifest.getID());
         }
 
         /**
@@ -652,7 +621,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
 
             myType = Item.Type.fromString(ResourceTypes.COLLECTION);
             myLabel = Objects.requireNonNull(aCollection.getLabel());
-            myID = aCollection.getID();
+            myID = URI.create(aCollection.getID());
         }
 
         /**
@@ -708,8 +677,8 @@ public class Collection extends NavigableResource<Collection> implements Resourc
          * @return The item ID
          */
         @JsonGetter(JsonKeys.ID)
-        public URI getID() {
-            return myID;
+        public String getID() {
+            return myID.toString();
         }
 
         /**

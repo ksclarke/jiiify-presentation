@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3;
+package info.freelibrary.iiif.presentation.v3.annotations; // NOPMD -- ExcessiveImports
 
 import java.net.URI;
 import java.util.Arrays;
@@ -12,6 +12,14 @@ import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.Eclipse;
 
+import info.freelibrary.iiif.presentation.v3.Annotation;
+import info.freelibrary.iiif.presentation.v3.AnnotationBody;
+import info.freelibrary.iiif.presentation.v3.AnnotationResource;
+import info.freelibrary.iiif.presentation.v3.Canvas;
+import info.freelibrary.iiif.presentation.v3.CanvasResource;
+import info.freelibrary.iiif.presentation.v3.ContentResource;
+import info.freelibrary.iiif.presentation.v3.Resource;
+import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
@@ -31,18 +39,13 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 /**
  * An annotation used for painting content resources onto a {@link Canvas}.
  */
-public class PaintingAnnotation extends Annotation<PaintingAnnotation>
-        implements Resource<PaintingAnnotation>, ContentAnnotation<PaintingAnnotation> {
+public class PaintingAnnotation extends AnnotationResource<PaintingAnnotation>
+        implements Resource<PaintingAnnotation>, Annotation<PaintingAnnotation> {
 
     /**
      * The logger for painting annotations.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(PaintingAnnotation.class, MessageCodes.BUNDLE);
-
-    /**
-     * The painting annotation's motivation.
-     */
-    private static final String MOTIVATION = "painting";
 
     /**
      * Creates a painting annotation from the supplied ID and canvas resource.
@@ -51,20 +54,9 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation>
      * @param aID An ID
      * @param aCanvas A canvas to target
      */
-    public <C extends CanvasResource<C>> PaintingAnnotation(final URI aID, final CanvasResource<C> aCanvas) {
-        super(aID, aCanvas);
-        myMotivation = MOTIVATION;
-    }
-
-    /**
-     * Creates a painting annotation from the supplied ID and canvas resource.
-     *
-     * @param <C> A type of canvas to target
-     * @param aID An ID in string form
-     * @param aCanvas A canvas to target
-     */
     public <C extends CanvasResource<C>> PaintingAnnotation(final String aID, final CanvasResource<C> aCanvas) {
-        this(URI.create(aID), aCanvas);
+        super(aID, aCanvas);
+        setMotivation(Relationship.PAINTING.toString());
     }
 
     /**
@@ -86,23 +78,10 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation>
      * @param aCanvas A canvas to target
      * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to target
      */
-    public <C extends CanvasResource<C>> PaintingAnnotation(final URI aID, final CanvasResource<C> aCanvas,
-            final MediaFragmentSelector aCanvasRegion) {
-        super(aID, aCanvas, aCanvasRegion);
-        myMotivation = MOTIVATION;
-    }
-
-    /**
-     * Creates a painting annotation from the supplied ID and canvas resource.
-     *
-     * @param <C> A type of canvas to target
-     * @param aID An ID in string form
-     * @param aCanvas A canvas to target
-     * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to target
-     */
     public <C extends CanvasResource<C>> PaintingAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
-        this(URI.create(aID), aCanvas, aCanvasRegion);
+        super(aID, aCanvas, aCanvasRegion);
+        setMotivation(Relationship.PAINTING.toString());
     }
 
     /**
@@ -117,7 +96,7 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation>
     public <C extends CanvasResource<C>> PaintingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
         super(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
-        myMotivation = MOTIVATION;
+        setMotivation(Relationship.PAINTING.toString());
     }
 
     /**
@@ -128,23 +107,10 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation>
      * @param aCanvas A canvas to target
      * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to target
      */
-    public <C extends CanvasResource<C>> PaintingAnnotation(final URI aID, final CanvasResource<C> aCanvas,
-            final String aCanvasRegion) {
-        super(aID, aCanvas, aCanvasRegion);
-        myMotivation = MOTIVATION;
-    }
-
-    /**
-     * Creates a painting annotation from the supplied ID, canvas resource, and canvas region.
-     *
-     * @param <C> A type of canvas to target
-     * @param aID An ID in string form
-     * @param aCanvas A canvas to target
-     * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to target
-     */
     public <C extends CanvasResource<C>> PaintingAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
-        this(URI.create(aID), aCanvas, aCanvasRegion);
+        super(aID, aCanvas, aCanvasRegion);
+        setMotivation(Relationship.PAINTING.toString());
     }
 
     /**
@@ -159,11 +125,11 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation>
     public <C extends CanvasResource<C>> PaintingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
         super(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
-        myMotivation = MOTIVATION;
+        setMotivation(Relationship.PAINTING.toString());
     }
 
     /**
-     * Creates a painting annotation. This is used by Jackson't deserialization processes.
+     * Creates a painting annotation. This is used by Jackson's deserialization processes.
      */
     @SuppressWarnings(Eclipse.UNUSED)
     private PaintingAnnotation() {
@@ -183,13 +149,13 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation>
     }
 
     @Override
-    public void setMotivation(final String aMotivation) {
-        if (!MOTIVATION.equals(aMotivation)) {
+    public final void setMotivation(final String aMotivation) {
+        if (!Relationship.PAINTING.toString().equalsIgnoreCase(aMotivation)) {
             throw new IllegalArgumentException(
-                    LOGGER.getMessage(MessageCodes.JPA_038, SupplementingAnnotation.class.getSimpleName(), MOTIVATION));
+                    LOGGER.getMessage(MessageCodes.JPA_038, PaintingAnnotation.class.getSimpleName(), aMotivation));
         }
 
-        myMotivation = MOTIVATION;
+        super.setMotivation(Relationship.PAINTING.toString());
     }
 
     @Override
@@ -314,17 +280,7 @@ public class PaintingAnnotation extends Annotation<PaintingAnnotation>
     }
 
     @Override
-    public PaintingAnnotation setID(final URI aID) {
-        return (PaintingAnnotation) super.setID(aID);
-    }
-
-    @Override
     public PaintingAnnotation setRights(final String aRights) {
-        return (PaintingAnnotation) super.setRights(aRights);
-    }
-
-    @Override
-    public PaintingAnnotation setRights(final URI aRights) {
         return (PaintingAnnotation) super.setRights(aRights);
     }
 

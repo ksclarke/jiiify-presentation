@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -45,17 +44,6 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
      * @param aID The resource ID in string form
      */
     protected AbstractContentResource(final String aType, final String aID) {
-        super(aType, aID);
-        myFormat = MediaType.parse(aID).orElse(null);
-    }
-
-    /**
-     * Creates a content resource.
-     *
-     * @param aType The type of resource
-     * @param aID The resource ID
-     */
-    protected AbstractContentResource(final String aType, final URI aID) {
         super(aType, aID);
         myFormat = MediaType.parse(aID).orElse(null);
     }
@@ -115,9 +103,8 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
     private Optional<String> getFormatAsString() {
         if (myFormat != null) {
             return Optional.of(myFormat.toString());
-        } else {
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 
     /**
@@ -154,9 +141,8 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
 
         if (languages.size() == SINGLE_LANGUAGE_COUNT) {
             return languages.get(0);
-        } else {
-            return languages;
         }
+        return languages;
     }
 
     /**
@@ -169,7 +155,8 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
     private AbstractContentResource<T> setLanguage(final Object aObject) {
         if (aObject instanceof String) {
             return (AbstractContentResource<T>) setLanguages((String) aObject);
-        } else if (aObject instanceof String[]) {
+        }
+        if (aObject instanceof String[]) {
             return (AbstractContentResource<T>) setLanguages((String[]) aObject);
         }
 

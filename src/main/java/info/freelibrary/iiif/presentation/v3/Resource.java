@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3; // NOPMD
 
-import java.net.URI;
 import java.util.List;
 
 import info.freelibrary.util.warnings.PMD;
@@ -136,24 +135,16 @@ public interface Resource<T extends Resource<T>> {
     T setRequiredStatement(RequiredStatement aStatement);
 
     /**
-     * Gets the resource's rights URI.
+     * Gets the resource's rights ID.
      *
-     * @return The rights URI
+     * @return The rights ID
      */
-    URI getRights();
+    String getRights();
 
     /**
-     * Sets the resource's rights URI.
+     * Sets the resource's rights ID from the supplied string.
      *
-     * @param aRights A rights URI
-     * @return The resource
-     */
-    T setRights(URI aRights);
-
-    /**
-     * Sets the resource's rights URI from the supplied string.
-     *
-     * @param aRights A resource's rights URI in string form
+     * @param aRights A resource's rights ID in string form
      * @return The resource
      */
     T setRights(String aRights);
@@ -232,7 +223,7 @@ public interface Resource<T extends Resource<T>> {
      *
      * @return The resource's ID
      */
-    URI getID();
+    String getID();
 
     /**
      * Sets the resource ID from the supplied string.
@@ -241,14 +232,6 @@ public interface Resource<T extends Resource<T>> {
      * @return The resource
      */
     T setID(String aID);
-
-    /**
-     * Sets the resource ID.
-     *
-     * @param aID A resource ID
-     * @return The resource
-     */
-    T setID(URI aID);
 
     /**
      * Gets a list of resource partOfs.

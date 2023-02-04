@@ -5,8 +5,8 @@ class JiiifyPresentation0002_2:
     # We pass in the version of the uber package to use when running this test
     import sys; sys.path.append('../../../target/jiiify-presentation-v3-' + sys.argv[0] + '-uber.jar')
 
-    from info.freelibrary.iiif.presentation.v3 import Canvas, SoundContent, Manifest, \
-           AnnotationPage, PaintingAnnotation
+    from info.freelibrary.iiif.presentation.v3 import Canvas, SoundContent, Manifest, AnnotationPage
+    from info.freelibrary.iiif.presentation.v3.annotations import PaintingAnnotation
     from info.freelibrary.iiif.presentation.v3.properties import Label
 
     manifestID = 'https://iiif.io/api/cookbook/recipe/0002-mvm-audio/manifest'

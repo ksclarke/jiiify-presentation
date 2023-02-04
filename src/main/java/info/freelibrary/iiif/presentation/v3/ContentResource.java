@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -22,7 +21,7 @@ public interface ContentResource<T extends ContentResource<T>> {
      *
      * @return The content resource's ID
      */
-    URI getID();
+    String getID();
 
     /**
      * Sets the content resource ID from its string form.
@@ -31,14 +30,6 @@ public interface ContentResource<T extends ContentResource<T>> {
      * @return The content resource
      */
     T setID(String aID);
-
-    /**
-     * Sets the content resource ID.
-     *
-     * @param aID A content resource's ID
-     * @return The content resource
-     */
-    T setID(URI aID);
 
     /**
      * Gets the type of the content resource.

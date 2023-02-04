@@ -1,9 +1,11 @@
 
-package info.freelibrary.iiif.presentation.v3;
+package info.freelibrary.iiif.presentation.v3.annotations;
 
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.toJson;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +15,9 @@ import org.junit.Test;
 
 import info.freelibrary.util.StringUtils;
 
+import info.freelibrary.iiif.presentation.v3.AbstractTest;
+import info.freelibrary.iiif.presentation.v3.Canvas;
+import info.freelibrary.iiif.presentation.v3.TextContent;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
@@ -30,13 +35,13 @@ public class SupplementingAnnotationTest extends AbstractTest {
 
     private final Label myCanvasLabel = new Label(myLoremIpsum.getWords(4));
 
-    private final URI myCanvasID = URI.create("cf6da69c-7d60-4dbe-965b-e40be626f2eb");
+    private final String myCanvasID = "https://cf6da69c-7d60-4dbe-965b-e40be626f2eb";
 
     private final Canvas myCanvas = new Canvas(myCanvasID, myCanvasLabel);
 
-    private final URI myAnnoID = URI.create("1408c0a9-7402-4a44-8091-fa11d32172f9");
+    private final String myAnnoID = "https://1408c0a9-7402-4a44-8091-fa11d32172f9";
 
-    private final URI myTextContentID = URI.create("e03f1662-2a33-48a4-82ba-3a726cee15c9" + ".html");
+    private final String myTextContentID = "https://e03f1662-2a33-48a4-82ba-3a726cee15c9" + ".html";
 
     private final MediaFragmentSelector myFragmentSelector = new MediaFragmentSelector("xywh=0,0,1,1");
 
@@ -48,18 +53,7 @@ public class SupplementingAnnotationTest extends AbstractTest {
         final SupplementingAnnotation anno = new SupplementingAnnotation(myAnnoID, myCanvas);
 
         assertEquals(myAnnoID, anno.getID());
-        assertTrue(anno.getTarget() instanceof URI);
-    }
-
-    /**
-     * Tests constructing a supplementing annotation.
-     */
-    @Test
-    public void testSupplementingAnnotationStringCanvas() {
-        final SupplementingAnnotation anno = new SupplementingAnnotation(myAnnoID.toString(), myCanvas);
-
-        assertEquals(myAnnoID, anno.getID());
-        assertTrue(anno.getTarget() instanceof URI);
+        assertTrue(anno.getTargetURI() instanceof URI);
     }
 
     /**
@@ -70,7 +64,6 @@ public class SupplementingAnnotationTest extends AbstractTest {
         final SupplementingAnnotation anno = new SupplementingAnnotation(myAnnoID, myCanvas, myFragmentSelector);
 
         assertEquals(myAnnoID, anno.getID());
-        assertTrue(anno.hasSpecificResourceTarget());
         assertTrue(anno.getSpecificResourceTarget().isPresent());
     }
 
@@ -83,7 +76,6 @@ public class SupplementingAnnotationTest extends AbstractTest {
                 new SupplementingAnnotation(myAnnoID, myCanvas, myFragmentSelector.toString());
 
         assertEquals(myAnnoID, anno.getID());
-        assertTrue(anno.hasSpecificResourceTarget());
         assertTrue(anno.getSpecificResourceTarget().isPresent());
     }
 
@@ -96,7 +88,6 @@ public class SupplementingAnnotationTest extends AbstractTest {
                 new SupplementingAnnotation(myAnnoID.toString(), myCanvas, myFragmentSelector);
 
         assertEquals(myAnnoID, anno.getID());
-        assertTrue(anno.hasSpecificResourceTarget());
         assertTrue(anno.getSpecificResourceTarget().isPresent());
     }
 
@@ -109,7 +100,6 @@ public class SupplementingAnnotationTest extends AbstractTest {
                 new SupplementingAnnotation(myAnnoID.toString(), myCanvas, myFragmentSelector.toString());
 
         assertEquals(myAnnoID, anno.getID());
-        assertTrue(anno.hasSpecificResourceTarget());
         assertTrue(anno.getSpecificResourceTarget().isPresent());
     }
 
@@ -124,18 +114,18 @@ public class SupplementingAnnotationTest extends AbstractTest {
         final URI target1;
         final SpecificResource target2;
 
-        assertFalse(isSpecificResourceURI(anno1.getTarget()));
-        assertTrue(isSpecificResourceURI(anno2.getTarget()));
+        assertFalse(isSpecificResourceURI(anno1.getTargetURI()));
+        assertTrue(isSpecificResourceURI(anno2.getTargetURI()));
 
-        target1 = anno1.getTarget();
+        target1 = anno1.getTargetURI();
         target2 = anno2.getSpecificResourceTarget().get();
 
         // Swap the targets
         anno1.setTarget(target2);
         anno2.setTarget(target1);
 
-        assertTrue(isSpecificResourceURI(anno1.getTarget()));
-        assertFalse(isSpecificResourceURI(anno2.getTarget()));
+        assertTrue(isSpecificResourceURI(anno1.getTargetURI()));
+        assertFalse(isSpecificResourceURI(anno2.getTargetURI()));
     }
 
     /**

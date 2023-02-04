@@ -72,21 +72,14 @@ public class OtherContent implements AnnotationBody<OtherContent>, ContentResour
 
     @Override
     @JsonGetter(JsonKeys.ID)
-    public URI getID() {
-        return myID;
+    public String getID() {
+        return myID.toString();
     }
 
     @Override
     @JsonIgnore
     public OtherContent setID(final String aID) {
         myID = URI.create(aID);
-        return this;
-    }
-
-    @Override
-    @JsonIgnore
-    public OtherContent setID(final URI aID) {
-        myID = aID;
         return this;
     }
 

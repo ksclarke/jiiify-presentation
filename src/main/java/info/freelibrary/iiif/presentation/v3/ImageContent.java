@@ -61,16 +61,6 @@ public class ImageContent extends AbstractContentResource<ImageContent> implemen
     }
 
     /**
-     * Creates image content with the supplied ID.
-     *
-     * @param aURI An image content ID
-     */
-    public ImageContent(final URI aURI) {
-        super(ResourceTypes.IMAGE, aURI);
-        setFormatFromMediaType(MediaType.parse(aURI, MEDIA_TYPE_CLASS).orElse(null));
-    }
-
-    /**
      * Constructs an image content resource for Jackson's deserialization process.
      */
     private ImageContent() {
@@ -194,17 +184,7 @@ public class ImageContent extends AbstractContentResource<ImageContent> implemen
     }
 
     @Override
-    public ImageContent setID(final URI aID) {
-        return (ImageContent) super.setID(aID);
-    }
-
-    @Override
     public ImageContent setRights(final String aRights) {
-        return (ImageContent) super.setRights(aRights);
-    }
-
-    @Override
-    public ImageContent setRights(final URI aRights) {
         return (ImageContent) super.setRights(aRights);
     }
 

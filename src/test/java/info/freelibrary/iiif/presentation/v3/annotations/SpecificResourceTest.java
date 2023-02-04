@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3;
+package info.freelibrary.iiif.presentation.v3.annotations;
 
 import static org.junit.Assert.assertEquals;
 
@@ -13,6 +13,8 @@ import org.junit.Test;
 import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.StringUtils;
 
+import info.freelibrary.iiif.presentation.v3.AbstractTest;
+import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.AudioContentSelector;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.Selector;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;

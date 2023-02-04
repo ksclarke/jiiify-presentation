@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
@@ -35,15 +34,6 @@ public class DatasetContent extends AbstractContentResource<DatasetContent>
      * @param aID An dataset content resource ID in string form
      */
     public DatasetContent(final String aID) {
-        super(ResourceTypes.DATASET, aID);
-    }
-
-    /**
-     * Creates a dataset content resource from the supplied ID.
-     *
-     * @param aID An dataset content resource ID
-     */
-    public DatasetContent(final URI aID) {
         super(ResourceTypes.DATASET, aID);
     }
 
@@ -171,17 +161,7 @@ public class DatasetContent extends AbstractContentResource<DatasetContent>
     }
 
     @Override
-    public DatasetContent setID(final URI aID) {
-        return (DatasetContent) super.setID(aID);
-    }
-
-    @Override
     public DatasetContent setRights(final String aRights) {
-        return (DatasetContent) super.setRights(aRights);
-    }
-
-    @Override
-    public DatasetContent setRights(final URI aRights) {
         return (DatasetContent) super.setRights(aRights);
     }
 

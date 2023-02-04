@@ -48,21 +48,11 @@ public class SoundContent extends AbstractContentResource<SoundContent> implemen
     /**
      * Creates sound content with the supplied ID.
      *
-     * @param aURI A sound content ID in string form
+     * @param aID A sound content ID
      */
-    public SoundContent(final String aURI) {
-        super(ResourceTypes.SOUND, aURI);
-        setFormatFromMediaType(MediaType.parse(URI.create(aURI), MEDIA_TYPE_CLASS).orElse(null));
-    }
-
-    /**
-     * Creates sound content with the supplied ID.
-     *
-     * @param aURI A sound content ID
-     */
-    public SoundContent(final URI aURI) {
-        super(ResourceTypes.SOUND, aURI);
-        setFormatFromMediaType(MediaType.parse(aURI, MEDIA_TYPE_CLASS).orElse(null));
+    public SoundContent(final String aID) {
+        super(ResourceTypes.SOUND, aID);
+        setFormatFromMediaType(MediaType.parse(URI.create(aID), MEDIA_TYPE_CLASS).orElse(null));
     }
 
     /**
@@ -189,17 +179,7 @@ public class SoundContent extends AbstractContentResource<SoundContent> implemen
     }
 
     @Override
-    public SoundContent setID(final URI aID) {
-        return (SoundContent) super.setID(aID);
-    }
-
-    @Override
     public SoundContent setRights(final String aRights) {
-        return (SoundContent) super.setRights(aRights);
-    }
-
-    @Override
-    public SoundContent setRights(final URI aRights) {
         return (SoundContent) super.setRights(aRights);
     }
 

@@ -46,7 +46,7 @@ public class ProviderTest extends AbstractTest {
         myID = URI.create(UUID.randomUUID().toString());
         myLabel = new Label(myLoremIpsum.getTitle(5));
         myHomepage = new Homepage(myLoremIpsum.getUrl(), myLoremIpsum.getTitle(5));
-        myLogo = new ImageContent(StringUtils.format("http://library.ucla.edu/images/{}/image.jpg", myID));
+        myLogo = new ImageContent("https://library.ucla.edu/images/asdf/image.jpg");
         mySeeAlso = new SeeAlso(myLoremIpsum.getUrl(), ResourceTypes.TEXT);
     }
 

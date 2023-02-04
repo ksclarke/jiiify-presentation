@@ -352,8 +352,8 @@
           "motivation": "commenting",
           "body": {
             "type": "TextualBody",
-            "language": "en",
-            "value": "I love this manifest!"
+            "value": "I love this manifest!",
+            "language": "en"
           },
           "target": "https://example.org/iiif/book1/manifest"
         }

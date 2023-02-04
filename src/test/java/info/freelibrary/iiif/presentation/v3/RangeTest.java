@@ -2,11 +2,12 @@
 package info.freelibrary.iiif.presentation.v3;
 
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.UUID;
@@ -20,6 +21,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.StringUtils;
 
+import info.freelibrary.iiif.presentation.v3.annotations.SupplementaryAnnotations;
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.ids.MinterFactory;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -34,6 +36,8 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  * Test of Range.
  */
 public class RangeTest extends AbstractTest {
+
+    private static final String HTTPS = "https://";
 
     private static final String NOID_PATTERN = "/range-[a-z0-9]{4}";
 
@@ -69,11 +73,11 @@ public class RangeTest extends AbstractTest {
      */
     @Test
     public final void testRangeMinter() {
-        final URI id = URI.create(UUID.randomUUID().toString());
+        final String id = HTTPS + UUID.randomUUID().toString();
         final Minter minter = MinterFactory.getMinter(id);
         final Range range = new Range(minter);
 
-        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(range.getID().toString()).matches());
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(range.getID()).matches());
     }
 
     /**
@@ -81,12 +85,12 @@ public class RangeTest extends AbstractTest {
      */
     @Test
     public final void testRangeMinterLabel() {
-        final URI id = URI.create(UUID.randomUUID().toString());
+        final String id = HTTPS + UUID.randomUUID().toString();
         final Minter minter = MinterFactory.getMinter(id);
         final Label label = new Label(LABEL);
         final Range range = new Range(minter, label);
 
-        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(range.getID().toString()).matches());
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(range.getID()).matches());
     }
 
     /**
@@ -94,7 +98,7 @@ public class RangeTest extends AbstractTest {
      */
     @Test
     public final void testRangeMinterLabelAsString() {
-        final URI id = URI.create(UUID.randomUUID().toString());
+        final String id = HTTPS + UUID.randomUUID().toString();
         final Minter minter = MinterFactory.getMinter(id);
         final Range range = new Range(minter, LABEL);
 
@@ -183,7 +187,7 @@ public class RangeTest extends AbstractTest {
     @Test
     public void testRangeURILabel() {
         final String id = getURL();
-        assertEquals(URI.create(id), new Range(URI.create(id), new Label(myLoremIpsum.getWords(4))).getID());
+        assertEquals(id, new Range(id, new Label(myLoremIpsum.getWords(4))).getID());
     }
 
     /**
@@ -209,7 +213,7 @@ public class RangeTest extends AbstractTest {
      */
     @Test
     public final void testSetBehaviors() {
-        final RangeBehavior[] behaviors = new RangeBehavior[] { RangeBehavior.AUTO_ADVANCE, RangeBehavior.INDIVIDUALS };
+        final RangeBehavior[] behaviors = { RangeBehavior.AUTO_ADVANCE, RangeBehavior.INDIVIDUALS };
 
         assertEquals(2, getRange().setBehaviors(behaviors).getBehaviors().size());
     }
@@ -250,10 +254,10 @@ public class RangeTest extends AbstractTest {
     }
 
     private Range getRange() {
-        return new Range(URI.create("MY_RANGE_ID"), new Label("My range label"));
+        return new Range("https://MY_RANGE_ID", new Label("My range label"));
     }
 
     private Range getSubRange() {
-        return new Range("MY_SUBRANGE_ID", "My subrange label");
+        return new Range("https://MY_SUBRANGE_ID", "My subrange label");
     }
 }

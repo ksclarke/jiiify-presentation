@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3;
+package info.freelibrary.iiif.presentation.v3.annotations;
 
 import java.net.URI;
 import java.util.Objects;
@@ -12,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.util.warnings.Eclipse;
 import info.freelibrary.util.warnings.PMD;
 
+import info.freelibrary.iiif.presentation.v3.AnnotationCollection;
+import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**

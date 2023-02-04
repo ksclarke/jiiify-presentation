@@ -33,6 +33,8 @@ public class AccompanyingCanvasTest {
 
     private static final String LABEL = "My label for '{}'";
 
+    private static final String HTTPS = "https://";
+
     private String myID;
 
     /**
@@ -40,7 +42,7 @@ public class AccompanyingCanvasTest {
      */
     @Before
     public final void setUp() {
-        myID = UUID.randomUUID().toString();
+        myID = HTTPS + UUID.randomUUID().toString();
     }
 
     /**
@@ -48,10 +50,7 @@ public class AccompanyingCanvasTest {
      */
     @Test
     public final void testAccompanyingCanvasURI() {
-        final URI id = URI.create(myID);
-        final AccompanyingCanvas canvas = new AccompanyingCanvas(id);
-
-        assertEquals(id, canvas.getID());
+        assertEquals(myID, new AccompanyingCanvas(myID).getID());
     }
 
     /**
@@ -59,7 +58,7 @@ public class AccompanyingCanvasTest {
      */
     @Test
     public final void testAccompanyingCanvasMinter() {
-        final URI id = URI.create(UUID.randomUUID().toString());
+        final String id = HTTPS + UUID.randomUUID().toString();
         final Minter minter = MinterFactory.getMinter(id);
         final AccompanyingCanvas canvas = new AccompanyingCanvas(minter);
 
@@ -71,7 +70,7 @@ public class AccompanyingCanvasTest {
      */
     @Test
     public final void testAccompanyingCanvasMinterLabel() {
-        final URI id = URI.create(UUID.randomUUID().toString());
+        final String id = HTTPS + UUID.randomUUID().toString();
         final Minter minter = MinterFactory.getMinter(id);
         final Label label = new Label(StringUtils.format(LABEL, id));
         final AccompanyingCanvas canvas = new AccompanyingCanvas(minter, label);
@@ -84,7 +83,7 @@ public class AccompanyingCanvasTest {
      */
     @Test
     public final void testAccompanyingCanvasMinterLabelAsString() {
-        final URI id = URI.create(UUID.randomUUID().toString());
+        final String id = HTTPS + UUID.randomUUID().toString();
         final Minter minter = MinterFactory.getMinter(id);
         final String label = StringUtils.format(LABEL, id);
         final AccompanyingCanvas canvas = new AccompanyingCanvas(minter, label);
@@ -97,8 +96,7 @@ public class AccompanyingCanvasTest {
      */
     @Test
     public final void testAccompanyingCanvasString() {
-        final AccompanyingCanvas canvas = new AccompanyingCanvas(myID);
-        assertEquals(URI.create(myID), canvas.getID());
+        assertEquals(myID, new AccompanyingCanvas(myID).getID());
     }
 
     /**
@@ -106,11 +104,10 @@ public class AccompanyingCanvasTest {
      */
     @Test
     public final void testAccompanyingCanvasURILabel() {
-        final URI id = URI.create(myID);
         final Label label = new Label(StringUtils.format(LABEL, myID));
-        final AccompanyingCanvas canvas = new AccompanyingCanvas(id, label);
+        final AccompanyingCanvas canvas = new AccompanyingCanvas(myID, label);
 
-        assertEquals(id, canvas.getID());
+        assertEquals(myID, canvas.getID());
         assertEquals(label, canvas.getLabel());
     }
 
@@ -122,7 +119,7 @@ public class AccompanyingCanvasTest {
         final String label = StringUtils.format(LABEL, myID);
         final AccompanyingCanvas canvas = new AccompanyingCanvas(myID, label);
 
-        assertEquals(URI.create(myID), canvas.getID());
+        assertEquals(myID, canvas.getID());
         assertEquals(new Label(label), canvas.getLabel());
     }
 

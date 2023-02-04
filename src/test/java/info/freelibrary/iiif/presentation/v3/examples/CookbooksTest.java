@@ -21,9 +21,9 @@ import info.freelibrary.iiif.presentation.v3.AnnotationPage;
 import info.freelibrary.iiif.presentation.v3.Canvas;
 import info.freelibrary.iiif.presentation.v3.ImageContent;
 import info.freelibrary.iiif.presentation.v3.Manifest;
-import info.freelibrary.iiif.presentation.v3.PaintingAnnotation;
 import info.freelibrary.iiif.presentation.v3.SoundContent;
 import info.freelibrary.iiif.presentation.v3.VideoContent;
+import info.freelibrary.iiif.presentation.v3.annotations.PaintingAnnotation;
 import info.freelibrary.iiif.presentation.v3.cookbooks.AbstractCookbookTest;
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.ids.MinterFactory;
@@ -90,7 +90,7 @@ public class CookbooksTest extends AbstractCookbookTest {
     @Test
     public final void test0001WithMinter() throws IOException {
         final String manifestID = "https://iiif.io/api/cookbook/recipe/0001-mvm-image/manifest";
-        final String imageID = "http://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png";
+        final String imageID = "https://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png";
 
         final Manifest manifest = new Manifest(manifestID, new Label("en", "Image 1"));
         final Minter minter = MinterFactory.getMinter(manifest);
@@ -113,7 +113,7 @@ public class CookbooksTest extends AbstractCookbookTest {
     public final void test0001WithoutMinter() throws IOException {
         final String manifestID = "https://iiif.io/api/cookbook/recipe/0001-mvm-image/manifest";
         final String canvasID = "https://iiif.io/api/cookbook/recipe/0001-mvm-image/canvas/p1";
-        final String imageID = "http://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png";
+        final String imageID = "https://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png";
         final String annoID = "https://iiif.io/api/cookbook/recipe/0001-mvm-image/annotation/p0001-image";
         final String annoPageID = "https://iiif.io/api/cookbook/recipe/0001-mvm-image/page/p1/1";
 

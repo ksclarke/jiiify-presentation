@@ -3,8 +3,6 @@ package info.freelibrary.iiif.presentation.v3;
 
 import static org.junit.Assert.assertEquals;
 
-import java.net.URI;
-
 import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -15,9 +13,9 @@ import info.freelibrary.iiif.presentation.v3.services.ImageService3;
  */
 public class ImageContentTest {
 
-    private static final URI IMAGE_URI = URI.create("http://example.org/image/001.jpg");
+    private static final String IMAGE_URI = "https://example.org/image/001.jpg";
 
-    private static final URI SERVICE_URI = URI.create("http://example.org/service");
+    private static final String SERVICE_URI = "https://example.org/service";
 
     private static final ImageService3 SERVICE = new ImageService3(SERVICE_URI);
 
@@ -28,14 +26,6 @@ public class ImageContentTest {
      */
     @Test
     public void testImageContentString() {
-        assertEquals(IMAGE_URI, new ImageContent(IMAGE_URI.toString()).getID());
-    }
-
-    /**
-     * Tests image content constructor.
-     */
-    @Test
-    public void testImageContentURI() {
         assertEquals(IMAGE_URI, new ImageContent(IMAGE_URI).getID());
     }
 

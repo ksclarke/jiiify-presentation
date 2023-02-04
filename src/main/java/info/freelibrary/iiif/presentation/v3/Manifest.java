@@ -23,6 +23,7 @@ import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.PMD;
 
+import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -67,7 +68,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     /**
      * The manifest's annotations.
      */
-    private List<AnnotationPage<? extends Annotation<?>>> myAnnotations;
+    private List<AnnotationPage<? extends WebAnnotation<?>>> myAnnotations;
 
     /**
      * The manifest's accompanying canvas.
@@ -109,7 +110,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      *
      * @param aID A manifest ID in string form
      * @param aLabel A manifest label in string form
-     * @throws IllegalArgumentException If the supplied ID is not a valid URI
+     * @throws IllegalArgumentException If the supplied ID doesn't conform to IIIF's ID rules
      */
     public Manifest(final String aID, final String aLabel) {
         super(ResourceTypes.MANIFEST, aID, aLabel);
@@ -118,21 +119,11 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     /**
      * Creates a new manifest from the supplied ID and label.
      *
-     * @param aID A manifest ID in string form
-     * @param aLabel A manifest label
-     * @throws IllegalArgumentException If the supplied ID is not a valid URI
-     */
-    public Manifest(final String aID, final Label aLabel) {
-        super(ResourceTypes.MANIFEST, URI.create(aID), aLabel);
-    }
-
-    /**
-     * Creates a new manifest from the supplied ID and label.
-     *
      * @param aID A manifest ID
      * @param aLabel A manifest label
+     * @throws IllegalArgumentException If the supplied ID doesn't conform to IIIF's ID rules
      */
-    public Manifest(final URI aID, final Label aLabel) {
+    public Manifest(final String aID, final Label aLabel) {
         super(ResourceTypes.MANIFEST, aID, aLabel);
     }
 
@@ -154,37 +145,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     /**
      * Creates a new manifest from the supplied ID, label, metadata, summary, thumbnail, and provider.
      *
-     * @param aID A manifest ID in string form
-     * @param aLabel A descriptive label
-     * @param aMetadataList A list of metadata properties
-     * @param aSummary A summary in string form
-     * @param aThumbnail A thumbnail
-     * @param aProvider A resource provider
-     */
-    public Manifest(final String aID, final Label aLabel, final List<Metadata> aMetadataList, final String aSummary,
-            final ContentResource<?> aThumbnail, final Provider aProvider) {
-        this(URI.create(aID), aLabel, aMetadataList, new Summary(aSummary), aThumbnail, aProvider);
-    }
-
-    /**
-     * Creates a new manifest from the supplied ID, label, metadata, summary, thumbnail, and provider.
-     *
      * @param aID A manifest ID
-     * @param aLabel A descriptive label
-     * @param aMetadataList A list of metadata properties
-     * @param aSummary A summary
-     * @param aThumbnail A thumbnail
-     * @param aProvider A resource provider
-     */
-    public Manifest(final URI aID, final Label aLabel, final List<Metadata> aMetadataList, final Summary aSummary,
-            final ContentResource<?> aThumbnail, final Provider aProvider) {
-        super(ResourceTypes.MANIFEST, aID, aLabel, aMetadataList, aSummary, aThumbnail, aProvider);
-    }
-
-    /**
-     * Creates a new manifest from the supplied ID, label, metadata, summary, thumbnail, and provider.
-     *
-     * @param aID A manifest ID in string form
      * @param aLabel A descriptive label
      * @param aMetadataList A list of metadata properties
      * @param aSummary A summary
@@ -193,7 +154,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      */
     public Manifest(final String aID, final Label aLabel, final List<Metadata> aMetadataList, final Summary aSummary,
             final ContentResource<?> aThumbnail, final Provider aProvider) {
-        super(ResourceTypes.MANIFEST, URI.create(aID), aLabel, aMetadataList, aSummary, aThumbnail, aProvider);
+        super(ResourceTypes.MANIFEST, aID, aLabel, aMetadataList, aSummary, aThumbnail, aProvider);
     }
 
     /**
@@ -644,17 +605,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     @Override
-    public Manifest setID(final URI aID) {
-        return (Manifest) super.setID(aID);
-    }
-
-    @Override
     public Manifest setRights(final String aRights) {
-        return (Manifest) super.setRights(aRights);
-    }
-
-    @Override
-    public Manifest setRights(final URI aRights) {
         return (Manifest) super.setRights(aRights);
     }
 
@@ -700,8 +651,8 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @return This manifest
      */
     @JsonSetter(JsonKeys.ANNOTATIONS)
-    public Manifest setAnnotations(final List<AnnotationPage<? extends Annotation<?>>> aPageList) {
-        final List<AnnotationPage<? extends Annotation<?>>> annotations = getAnnotations();
+    public Manifest setAnnotations(final List<AnnotationPage<? extends WebAnnotation<?>>> aPageList) {
+        final List<AnnotationPage<? extends WebAnnotation<?>>> annotations = getAnnotations();
 
         Objects.requireNonNull(aPageList);
         annotations.clear();
@@ -718,7 +669,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      */
     @SafeVarargs
     @JsonIgnore
-    public final Manifest setAnnotations(final AnnotationPage<? extends Annotation<?>>... aPageList) {
+    public final Manifest setAnnotations(final AnnotationPage<? extends WebAnnotation<?>>... aPageList) {
         setAnnotations(List.of(aPageList));
         return this;
     }
@@ -729,7 +680,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @return This manifest's annotation pages
      */
     @JsonGetter(JsonKeys.ANNOTATIONS)
-    public List<AnnotationPage<? extends Annotation<?>>> getAnnotations() {
+    public List<AnnotationPage<? extends WebAnnotation<?>>> getAnnotations() {
         if (myAnnotations == null) {
             myAnnotations = new ArrayList<>();
         }

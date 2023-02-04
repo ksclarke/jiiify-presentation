@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
@@ -35,15 +34,6 @@ public class ModelContent extends AbstractContentResource<ModelContent>
      * @param aID An model content resource ID in string form
      */
     public ModelContent(final String aID) {
-        super(ResourceTypes.MODEL, aID);
-    }
-
-    /**
-     * Creates a model content resource from the supplied ID.
-     *
-     * @param aID An model content ID
-     */
-    public ModelContent(final URI aID) {
         super(ResourceTypes.MODEL, aID);
     }
 
@@ -171,17 +161,7 @@ public class ModelContent extends AbstractContentResource<ModelContent>
     }
 
     @Override
-    public ModelContent setID(final URI aID) {
-        return (ModelContent) super.setID(aID);
-    }
-
-    @Override
     public ModelContent setRights(final String aRights) {
-        return (ModelContent) super.setRights(aRights);
-    }
-
-    @Override
-    public ModelContent setRights(final URI aRights) {
         return (ModelContent) super.setRights(aRights);
     }
 

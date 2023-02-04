@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3.ids;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -26,9 +25,9 @@ import info.freelibrary.iiif.presentation.v3.AnnotationPage;
 import info.freelibrary.iiif.presentation.v3.Canvas;
 import info.freelibrary.iiif.presentation.v3.CanvasResource;
 import info.freelibrary.iiif.presentation.v3.Manifest;
-import info.freelibrary.iiif.presentation.v3.PaintingAnnotation;
 import info.freelibrary.iiif.presentation.v3.Range;
-import info.freelibrary.iiif.presentation.v3.SupplementingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotations.PaintingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotations.SupplementingAnnotation;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
@@ -105,7 +104,7 @@ class DefaultMinter implements Minter {
     /**
      * The existing IDs.
      */
-    private final Set<URI> myExistingIDs = new HashSet<>();
+    private final Set<String> myExistingIDs = new HashSet<>();
 
     /**
      * A NOID iterator.
@@ -115,7 +114,7 @@ class DefaultMinter implements Minter {
     /**
      * A manifest ID.
      */
-    private final URI myManifestID;
+    private final String myManifestID;
 
     /**
      * The number of used NOIDs.
@@ -140,7 +139,7 @@ class DefaultMinter implements Minter {
      *
      * @param aManifestID A manifest ID
      */
-    DefaultMinter(final URI aManifestID) {
+    DefaultMinter(final String aManifestID) {
         myManifestID = aManifestID;
         myIterator = new NoidIterator();
     }
@@ -151,7 +150,7 @@ class DefaultMinter implements Minter {
      * @return The manifest ID associated with this minter
      */
     @Override
-    public URI getManifestID() {
+    public String getManifestID() {
         return myManifestID;
     }
 
@@ -161,9 +160,9 @@ class DefaultMinter implements Minter {
      * @return An ID to use on a canvas
      */
     @Override
-    public URI getCanvasID() {
+    public String getCanvasID() {
         try {
-            final URI id = URI.create(StringUtils.format(CANVAS_ID_TEMPLATE, myManifestID, myIterator.next()));
+            final String id = StringUtils.format(CANVAS_ID_TEMPLATE, myManifestID, myIterator.next());
             return myExistingIDs.contains(id) ? getCanvasID() : increment(id);
         } catch (final NoSuchElementException details) {
             throw new MintingException(details, MessageCodes.JPA_105, myManifestID, Canvas.class.getSimpleName());
@@ -176,9 +175,9 @@ class DefaultMinter implements Minter {
      * @return An ID to use on an annotation
      */
     @Override
-    public URI getAnnotationID() {
+    public String getAnnotationID() {
         try {
-            final URI id = URI.create(StringUtils.format(ANNO_ID_TEMPLATE, myManifestID, myIterator.next()));
+            final String id = StringUtils.format(ANNO_ID_TEMPLATE, myManifestID, myIterator.next());
             return myExistingIDs.contains(id) ? getAnnotationID() : increment(id);
         } catch (final NoSuchElementException details) {
             throw new MintingException(details, MessageCodes.JPA_105, myManifestID, Annotation.class.getSimpleName());
@@ -195,10 +194,10 @@ class DefaultMinter implements Minter {
      * @return An ID to use on the supplied annotation page
      */
     @Override
-    public <C extends CanvasResource<C>> URI getAnnotationPageID(final CanvasResource<C> aCanvasResource) {
+    public <C extends CanvasResource<C>> String getAnnotationPageID(final CanvasResource<C> aCanvasResource) {
         try {
-            final URI canvasID = aCanvasResource.getID();
-            final URI id = URI.create(StringUtils.format(PAGE_ID_TEMPLATE, canvasID, myIterator.next()));
+            final String canvasID = aCanvasResource.getID();
+            final String id = StringUtils.format(PAGE_ID_TEMPLATE, canvasID, myIterator.next());
 
             return myExistingIDs.contains(id) ? getAnnotationPageID(aCanvasResource) : increment(id);
         } catch (final NoSuchElementException details) {
@@ -213,9 +212,9 @@ class DefaultMinter implements Minter {
      * @return An ID to use on a range
      */
     @Override
-    public URI getRangeID() {
+    public String getRangeID() {
         try {
-            final URI id = URI.create(StringUtils.format(RANGE_ID_TEMPLATE, myManifestID, myIterator.next()));
+            final String id = StringUtils.format(RANGE_ID_TEMPLATE, myManifestID, myIterator.next());
             return myExistingIDs.contains(id) ? getRangeID() : increment(id);
         } catch (final NoSuchElementException details) {
             throw new MintingException(details, MessageCodes.JPA_105, myManifestID, Range.class.getSimpleName());
@@ -258,7 +257,7 @@ class DefaultMinter implements Minter {
      * @param aID An ID to be used
      * @return The ID to be used
      */
-    private URI increment(final URI aID) {
+    private String increment(final String aID) {
         myUsedNOIDs += 1;
         return aID;
     }

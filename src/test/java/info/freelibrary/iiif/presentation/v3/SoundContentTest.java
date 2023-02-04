@@ -25,7 +25,7 @@ public class SoundContentTest extends AbstractTest {
      */
     @Before
     public final void setUp() {
-        myID = UUID.randomUUID().toString() + ".mp3";
+        myID = "https://" + UUID.randomUUID().toString() + ".mp3";
     }
 
     /**

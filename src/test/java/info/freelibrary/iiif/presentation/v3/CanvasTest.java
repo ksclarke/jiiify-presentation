@@ -8,7 +8,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -17,6 +16,8 @@ import org.junit.Test;
 
 import info.freelibrary.util.StringUtils;
 
+import info.freelibrary.iiif.presentation.v3.annotations.PaintingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotations.SupplementingAnnotation;
 import info.freelibrary.iiif.presentation.v3.cookbooks.AbstractCookbookTest;
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.ids.MinterFactory;
@@ -107,6 +108,8 @@ public class CanvasTest extends AbstractCookbookTest {
 
     private static final String MULTI_VIDEO_CANVAS_FIXTURE = "canvas-video-multi.json";
 
+    private static final String HTTPS = "https://";
+
     /** Test fields */
 
     private Canvas myCanvas;
@@ -118,11 +121,11 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Before
     public void setUp() {
-        final String id = UUID.randomUUID().toString();
+        final String id = HTTPS + UUID.randomUUID().toString();
         final int index = id.indexOf('-');
 
         // Each minter will take a different path through the NOIDs available in the internal list
-        myMinter = MinterFactory.getMinter(URI.create("https://example.org/iiif/" + id.substring(0, index)));
+        myMinter = MinterFactory.getMinter("https://example.org/iiif/" + id.substring(0, index));
         myCanvas = new Canvas(IMAGE_CANVAS_ID, LABEL);
     }
 
@@ -136,7 +139,7 @@ public class CanvasTest extends AbstractCookbookTest {
     @Test
     public void testConstructorStringLabel() {
         myCanvas = new Canvas(IMAGE_CANVAS_ID, new Label(LABEL));
-        assertEquals(URI.create(IMAGE_CANVAS_ID), myCanvas.getID());
+        assertEquals(IMAGE_CANVAS_ID, myCanvas.getID());
         assertEquals(LABEL, myCanvas.getLabel().getString());
     }
 
@@ -145,11 +148,11 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test
     public final void testCanvasMinter() {
-        final URI id = URI.create(UUID.randomUUID().toString());
+        final String id = HTTPS + UUID.randomUUID().toString();
         final Minter minter = MinterFactory.getMinter(id);
         final Canvas canvas = new Canvas(minter);
 
-        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID().toString()).matches());
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID()).matches());
     }
 
     /**
@@ -157,12 +160,12 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test
     public final void testCanvasMinterLabel() {
-        final URI id = URI.create(UUID.randomUUID().toString());
+        final String id = HTTPS + UUID.randomUUID().toString();
         final Minter minter = MinterFactory.getMinter(id);
         final Label label = new Label(LABEL);
         final Canvas canvas = new Canvas(minter, label);
 
-        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID().toString()).matches());
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID()).matches());
     }
 
     /**
@@ -170,11 +173,11 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test
     public final void testCanvasMinterLabelAsString() {
-        final URI id = URI.create(UUID.randomUUID().toString());
+        final String id = HTTPS + UUID.randomUUID().toString();
         final Minter minter = MinterFactory.getMinter(id);
         final Canvas canvas = new Canvas(minter, LABEL);
 
-        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID().toString()).matches());
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID()).matches());
     }
 
     /***********************
@@ -330,7 +333,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, sound);
 
-        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID());
     }
 
     /**
@@ -342,7 +345,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, video);
 
-        assertEquals(VIDEO_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(VIDEO_1_ID, getPaintingContentResourceID());
     }
 
     /****************************************************************
@@ -358,7 +361,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, image);
 
-        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID());
     }
 
     /**
@@ -370,7 +373,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, image);
 
-        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID());
     }
 
     /**
@@ -382,7 +385,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, sound);
 
-        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID());
     }
 
     /**
@@ -394,7 +397,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, sound);
 
-        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID());
     }
 
     /**
@@ -406,7 +409,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, video);
 
-        assertEquals(VIDEO_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(VIDEO_1_ID, getPaintingContentResourceID());
     }
 
     /***********************************************************************
@@ -418,9 +421,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test(expected = ContentOutOfBoundsException.class)
     public final void testPaintImageOnTemoporalCanvas() {
-        final ImageContent image = new ImageContent(IMAGE_1_ID);
-
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, image);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, new ImageContent(IMAGE_1_ID));
     }
 
     /**
@@ -428,9 +429,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test(expected = ContentOutOfBoundsException.class)
     public final void testPaintSoundOnSpatialCanvas() {
-        final SoundContent sound = new SoundContent(SOUND_1_ID);
-
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, sound);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, new SoundContent(SOUND_1_ID));
     }
 
     /**
@@ -438,9 +437,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test(expected = ContentOutOfBoundsException.class)
     public final void testPaintVideoOnSpatialCanvas() {
-        final VideoContent video = new VideoContent(VIDEO_1_ID);
-
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, new VideoContent(VIDEO_1_ID));
     }
 
     /**
@@ -448,9 +445,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test(expected = ContentOutOfBoundsException.class)
     public final void testPaintVideoOnTemoporalCanvas() {
-        final VideoContent video = new VideoContent(VIDEO_1_ID);
-
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, video);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, new VideoContent(VIDEO_1_ID));
     }
 
     /********************************************************
@@ -1642,10 +1637,6 @@ public class CanvasTest extends AbstractCookbookTest {
         assertEquals(normalizeIDs(getExpected(MULTI_VIDEO_CANVAS_FIXTURE)), normalizeIDs(toJson(myCanvas)));
     }
 
-    /*************
-     * Utilities *
-     *************/
-
     /**
      * Gets the expected JSON from a test fixture file.
      */
@@ -1659,7 +1650,7 @@ public class CanvasTest extends AbstractCookbookTest {
      *
      * @return The ID of the content resource associated with myCanvas via a painting annotation.
      */
-    private URI getPaintingContentResourceID() {
+    private String getPaintingContentResourceID() {
         return myCanvas.getPaintingPages().get(0).getAnnotations().get(0).getBodies().get(0).getID();
     }
 
@@ -1668,7 +1659,7 @@ public class CanvasTest extends AbstractCookbookTest {
      *
      * @return The ID of the content resource associated with myCanvas via a supplementing annotation.
      */
-    private URI getSupplementingContentResourceID() {
+    private String getSupplementingContentResourceID() {
         return myCanvas.getSupplementingPages().get(0).getAnnotations().get(0).getBodies().get(0).getID();
     }
 

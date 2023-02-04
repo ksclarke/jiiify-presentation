@@ -1,9 +1,10 @@
 
 package info.freelibrary.iiif.presentation.v3.ids;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -35,7 +36,7 @@ public class DefaultMinterTest {
 
     private Minter myMinter;
 
-    private URI myManifestID;
+    private String myManifestID;
 
     /**
      * Sets up the testing environment.
@@ -45,7 +46,7 @@ public class DefaultMinterTest {
         final String id = UUID.randomUUID().toString();
         final int index = id.indexOf('-');
 
-        myManifestID = URI.create("https://example.org/iiif/" + id.substring(0, index));
+        myManifestID = "https://example.org/iiif/" + id.substring(0, index);
         myMinter = MinterFactory.getMinter(myManifestID);
     }
 
@@ -83,8 +84,8 @@ public class DefaultMinterTest {
      */
     @Test
     public final void testGetCanvasID() {
-        final String pattern = myManifestID.toString() + "/canvas-" + NOID_PATTERN;
-        final String id = myMinter.getCanvasID().toString();
+        final String pattern = myManifestID + "/canvas-" + NOID_PATTERN;
+        final String id = myMinter.getCanvasID();
 
         assertTrue(Pattern.compile(pattern).matcher(id).matches());
     }
@@ -94,8 +95,8 @@ public class DefaultMinterTest {
      */
     @Test
     public final void testGetAnnotationID() {
-        final String pattern = myManifestID.toString() + "/annotations/anno-" + NOID_PATTERN;
-        final String id = myMinter.getAnnotationID().toString();
+        final String pattern = myManifestID + "/annotations/anno-" + NOID_PATTERN;
+        final String id = myMinter.getAnnotationID();
 
         assertTrue(Pattern.compile(pattern).matcher(id).matches());
     }
@@ -106,8 +107,8 @@ public class DefaultMinterTest {
     @Test
     public final void testGetAnnotationPageID() {
         final Canvas canvas = new Canvas(myManifestID + "/canvas-x1x0");
-        final String pattern = myManifestID.toString() + "/canvas-x1x0/anno-page-" + NOID_PATTERN;
-        final String id = myMinter.getAnnotationPageID(canvas).toString();
+        final String pattern = myManifestID + "/canvas-x1x0/anno-page-" + NOID_PATTERN;
+        final String id = myMinter.getAnnotationPageID(canvas);
 
         assertTrue(Pattern.compile(pattern).matcher(id).matches());
     }
@@ -117,8 +118,8 @@ public class DefaultMinterTest {
      */
     @Test
     public final void testGetRangeID() {
-        final String pattern = myManifestID.toString() + "/range-" + NOID_PATTERN;
-        final String id = myMinter.getRangeID().toString();
+        final String pattern = myManifestID + "/range-" + NOID_PATTERN;
+        final String id = myMinter.getRangeID();
 
         assertTrue(Pattern.compile(pattern).matcher(id).matches());
     }
@@ -129,10 +130,10 @@ public class DefaultMinterTest {
     @Test
     public final void testIteratorHasNext() {
         final Stopwatch stopwatch = new Stopwatch().start();
-        final Set<URI> ids = new HashSet<>();
+        final Set<String> ids = new HashSet<>();
 
         while (myMinter.hasNext()) {
-            final URI id = myMinter.getCanvasID();
+            final String id = myMinter.getCanvasID();
 
             if (!ids.add(id)) {
                 fail(LOGGER.getMessage(MessageCodes.JPA_108, id, ids.size()));

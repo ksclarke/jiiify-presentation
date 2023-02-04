@@ -1,12 +1,13 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
 import java.util.List;
 
 import info.freelibrary.util.warnings.JDK;
 import info.freelibrary.util.warnings.PMD;
 
+import info.freelibrary.iiif.presentation.v3.annotations.PaintingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotations.SupplementingAnnotation;
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 
@@ -25,7 +26,7 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * @return The ID
      */
     @Override
-    URI getID();
+    String getID();
 
     /**
      * Gets the duration of the canvas.
@@ -710,7 +711,7 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      *
      * @return The canvas' non-painting annotation pages
      */
-    List<AnnotationPage<? extends Annotation<?>>> getOtherAnnotations();
+    List<AnnotationPage<? extends AnnotationResource<?>>> getOtherAnnotations();
 
     /**
      * Sets the canvas annotation pages from a list.
@@ -718,7 +719,7 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * @param aAnnotationList A list of annotation pages
      * @return The canvas
      */
-    T setOtherAnnotations(List<AnnotationPage<? extends Annotation<?>>> aAnnotationList);
+    T setOtherAnnotations(List<AnnotationPage<? extends AnnotationResource<?>>> aAnnotationList);
 
     /**
      * Sets the canvas' annotation pages from an array.
@@ -727,6 +728,6 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * @return The canvas
      */
     @SuppressWarnings(JDK.UNCHECKED)
-    T setOtherAnnotations(AnnotationPage<? extends Annotation<?>>... aAnnotationArray);
+    T setOtherAnnotations(AnnotationPage<? extends AnnotationResource<?>>... aAnnotationArray);
 
 }

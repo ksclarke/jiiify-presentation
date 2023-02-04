@@ -20,6 +20,11 @@ public final class JsonKeys {
     public static final String V2_ID = "@id";
 
     /**
+     * The name of the purpose relationship.
+     */
+    public static final String PURPOSE = "purpose";
+
+    /**
      * A constant for the thumbnail property.
      */
     public static final String THUMBNAIL = "thumbnail";

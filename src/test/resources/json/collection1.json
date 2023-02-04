@@ -1,19 +1,19 @@
 {
   "@context" : "http://iiif.io/api/presentation/3/context.json",
-  "id" : "ID-a",
+  "id" : "https://ID-a",
   "type" : "Collection",
   "label" : { "none": ["label-a"]},
   "thumbnail": [ {
-    "id": "http://brand.ucla.edu/images/logo-ucla.svg",
+    "id": "https://brand.ucla.edu/images/logo-ucla.svg",
     "type": "Image",
     "format": "image/svg+xml"
   } ],
   "items" : [ {
-    "id" : "http://iiif.library.ucla.edu/asdf1234/manifest",
+    "id" : "https://iiif.library.ucla.edu/asdf1234/manifest",
     "type" : "Manifest",
     "label" : { "none" : ["A placeholder fake manifest: 1"]}
   }, {
-    "id" : "http://iiif.library.ucla.edu/1234asdf/manifest",
+    "id" : "https://iiif.library.ucla.edu/1234asdf/manifest",
     "type" : "Manifest",
     "label" : { "none" : ["A placeholder fake manifest: 2"]}
   } ]

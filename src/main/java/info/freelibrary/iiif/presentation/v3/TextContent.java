@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
@@ -35,15 +34,6 @@ public class TextContent extends AbstractContentResource<TextContent>
      * @param aID An text content resource ID in string form
      */
     public TextContent(final String aID) {
-        super(ResourceTypes.TEXT, aID);
-    }
-
-    /**
-     * Creates a text content resource.
-     *
-     * @param aID An text content resource ID
-     */
-    public TextContent(final URI aID) {
         super(ResourceTypes.TEXT, aID);
     }
 
@@ -171,17 +161,7 @@ public class TextContent extends AbstractContentResource<TextContent>
     }
 
     @Override
-    public TextContent setID(final URI aID) {
-        return (TextContent) super.setID(aID);
-    }
-
-    @Override
     public TextContent setRights(final String aRights) {
-        return (TextContent) super.setRights(aRights);
-    }
-
-    @Override
-    public TextContent setRights(final URI aRights) {
         return (TextContent) super.setRights(aRights);
     }
 

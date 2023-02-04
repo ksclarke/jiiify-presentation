@@ -1,13 +1,14 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.iiif.presentation.v3.annotations.PaintingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotations.SupplementingAnnotation;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -33,16 +34,6 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
      * @param aID A canvas content resource ID in string form
      */
     public CanvasContent(final String aID) {
-        super(ResourceTypes.CANVAS, aID);
-        super.setFormatFromMediaType(MediaType.APPLICATION_JSON);
-    }
-
-    /**
-     * Creates a canvas content resource from the supplied ID.
-     *
-     * @param aID A canvas content resource ID
-     */
-    public CanvasContent(final URI aID) {
         super(ResourceTypes.CANVAS, aID);
         super.setFormatFromMediaType(MediaType.APPLICATION_JSON);
     }
@@ -172,17 +163,7 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
     }
 
     @Override
-    public CanvasContent setID(final URI aID) {
-        return (CanvasContent) super.setID(aID);
-    }
-
-    @Override
     public CanvasContent setRights(final String aRights) {
-        return (CanvasContent) super.setRights(aRights);
-    }
-
-    @Override
-    public CanvasContent setRights(final URI aRights) {
         return (CanvasContent) super.setRights(aRights);
     }
 

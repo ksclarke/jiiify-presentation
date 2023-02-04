@@ -228,7 +228,7 @@
           <systemPropertyVariables>
             <jiiify.version>${project.version}</jiiify.version>
           </systemPropertyVariables>
-          <argLine>${jacoco.agent.arg}</argLine>
+          <argLine>--add-opens java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED</argLine>
         </configuration>
       </plugin>
       <!-- Create an uber jar for use with JRuby, Jython, etc. -->

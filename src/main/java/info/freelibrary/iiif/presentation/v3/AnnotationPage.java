@@ -36,7 +36,8 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
- * A collection of {@link Annotation}(s) included in the items property of the Canvas (and whose target is that Canvas).
+ * A collection of {@link Annotation}(s). An AnnotationPage may included in the items property of the Canvas (and whose
+ * target is that Canvas) or on a Manifest (and whose target is that Manifest).
  */
 @SuppressWarnings(PMD.GOD_CLASS)
 public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<AnnotationPage<T>> // NOPMD
@@ -63,15 +64,6 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
      * @param aID An annotation page ID in string form
      */
     public AnnotationPage(final String aID) {
-        super(ResourceTypes.ANNOTATION_PAGE, aID);
-    }
-
-    /**
-     * Creates a new annotation page.
-     *
-     * @param aID An annotation page ID
-     */
-    public AnnotationPage(final URI aID) {
         super(ResourceTypes.ANNOTATION_PAGE, aID);
     }
 
@@ -115,13 +107,13 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
     }
 
     @Override
-    @JsonSetter(JsonKeys.PROVIDER)
+    @JsonIgnore
     public AnnotationPage<T> setProviders(final Provider... aProviderArray) {
         return setProviders(Arrays.asList(aProviderArray));
     }
 
     @Override
-    @JsonIgnore
+    @JsonSetter(JsonKeys.PROVIDER)
     public AnnotationPage<T> setProviders(final List<Provider> aProviderList) {
         return (AnnotationPage<T>) super.setProviders(aProviderList);
     }
@@ -132,7 +124,7 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
      * @param aAnnotationArray An annotation array
      * @return The annotation page
      */
-    @JsonSetter(JsonKeys.ITEMS)
+    @JsonIgnore
     @SafeVarargs
     public final AnnotationPage<T> setAnnotations(final T... aAnnotationArray) {
         if (myAnnotations != null) {
@@ -148,7 +140,7 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
      * @param aAnnotationList A list of annotations
      * @return The annotation page
      */
-    @JsonIgnore
+    @JsonSetter(JsonKeys.ITEMS)
     public final AnnotationPage<T> setAnnotations(final List<T> aAnnotationList) {
         if (myAnnotations != null) {
             myAnnotations.clear();
@@ -294,17 +286,7 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
     }
 
     @Override
-    public AnnotationPage<T> setID(final URI aID) {
-        return (AnnotationPage<T>) super.setID(aID);
-    }
-
-    @Override
     public AnnotationPage<T> setRights(final String aRights) {
-        return (AnnotationPage<T>) super.setRights(aRights);
-    }
-
-    @Override
-    public AnnotationPage<T> setRights(final URI aRights) {
         return (AnnotationPage<T>) super.setRights(aRights);
     }
 

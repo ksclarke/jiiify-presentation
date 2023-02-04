@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,6 +18,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import info.freelibrary.util.I18nRuntimeException;
 
+import info.freelibrary.iiif.presentation.v3.annotations.SpecificResource;
+import info.freelibrary.iiif.presentation.v3.annotations.SupplementaryAnnotations;
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
@@ -79,25 +80,16 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     /**
      * Creates a new range from the supplied ID.
      *
-     * @param aID A range ID in string form
-     */
-    public Range(final String aID) {
-        super(ResourceTypes.RANGE, URI.create(aID));
-    }
-
-    /**
-     * Creates a new range from the supplied ID.
-     *
      * @param aID A range ID
      */
-    public Range(final URI aID) {
+    public Range(final String aID) {
         super(ResourceTypes.RANGE, aID);
     }
 
     /**
      * Creates a new range from the supplied ID and label.
      *
-     * @param aID A range ID in string form
+     * @param aID A range ID
      * @param aLabel A descriptive label, in string form, for the range
      */
     public Range(final String aID, final String aLabel) {
@@ -107,20 +99,10 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     /**
      * Creates a new range from the supplied ID and label.
      *
-     * @param aID A range ID in string form
-     * @param aLabel A descriptive label for the range
-     */
-    public Range(final String aID, final Label aLabel) {
-        super(ResourceTypes.RANGE, aID, aLabel);
-    }
-
-    /**
-     * Creates a new range from the supplied ID and label.
-     *
      * @param aID A range ID
      * @param aLabel A descriptive label for the range
      */
-    public Range(final URI aID, final Label aLabel) {
+    public Range(final String aID, final Label aLabel) {
         super(ResourceTypes.RANGE, aID, aLabel);
     }
 
@@ -413,17 +395,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     @Override
-    public Range setID(final URI aID) {
-        return (Range) super.setID(aID);
-    }
-
-    @Override
     public Range setRights(final String aRights) {
-        return (Range) super.setRights(aRights);
-    }
-
-    @Override
-    public Range setRights(final URI aRights) {
         return (Range) super.setRights(aRights);
     }
 
@@ -562,9 +534,9 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
          * @return A resource ID
          */
         @JsonIgnore
-        public URI getID() {
+        public String getID() {
             if (mySpecificResource != null) {
-                return mySpecificResource.getID();
+                return mySpecificResource.getID().toString();
             }
 
             if (myCanvas != null) {

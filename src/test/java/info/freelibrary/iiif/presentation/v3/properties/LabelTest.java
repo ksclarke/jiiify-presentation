@@ -22,7 +22,7 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  */
 public class LabelTest extends AbstractTest {
 
-    private static final String AAAA = "aaaa";
+    private static final String AAAA = "https://aaaa";
 
     private static final String ENG = "eng";
 

@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
@@ -36,10 +35,10 @@ class NavigableResource<T extends NavigableResource<T>> extends AbstractResource
     /**
      * Creates a navigable resource.
      *
-     * @param aType A resource type in string form
-     * @param aID An ID in string form
+     * @param aType A resource type
+     * @param aID An ID
      */
-    protected NavigableResource(final String aType, final URI aID) {
+    protected NavigableResource(final String aType, final String aID) {
         super(aType, aID);
     }
 
@@ -57,19 +56,8 @@ class NavigableResource<T extends NavigableResource<T>> extends AbstractResource
     /**
      * Creates a navigable resource.
      *
-     * @param aType A resource type in string form
+     * @param aType A resource type
      * @param aID An ID
-     * @param aLabel A descriptive label
-     */
-    protected NavigableResource(final String aType, final URI aID, final Label aLabel) {
-        super(aType, aID, aLabel);
-    }
-
-    /**
-     * Creates a navigable resource.
-     *
-     * @param aType A resource type in string form
-     * @param aID An ID in string form
      * @param aLabel A descriptive label
      */
     protected NavigableResource(final String aType, final String aID, final Label aLabel) {
@@ -97,14 +85,14 @@ class NavigableResource<T extends NavigableResource<T>> extends AbstractResource
      * Creates a navigable resource.
      *
      * @param aType A resource type in string form
-     * @param aID An ID
-     * @param aLabel A descriptive label
+     * @param aID An ID in string form
+     * @param aLabel A descriptive label in string form
      * @param aMetadataList A list of metadata properties
      * @param aSummary A summary
      * @param aThumbnail A thumbnail
      * @param aProvider A resource provider
      */
-    protected NavigableResource(final String aType, final URI aID, final Label aLabel,
+    protected NavigableResource(final String aType, final String aID, final Label aLabel,
             final List<Metadata> aMetadataList, final Summary aSummary, final ContentResource<?> aThumbnail,
             final Provider aProvider) {
         super(aType, aID, aLabel, aMetadataList, aSummary, aThumbnail, aProvider);

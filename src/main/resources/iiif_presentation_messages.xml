@@ -97,5 +97,7 @@
   <entry key="JPA-124">{} missing the required label</entry>
   <entry key="JPA-125">{} is not a valid type for {}</entry>
   <entry key="JPA-126">{} is not a valid context for {}</entry>
+  <entry key="JPA-127">ID URI '{}' does not start with 'https://'</entry>
+  <entry key="JPA-128">Canvas IDs are not allowed to have URI fragments: {}</entry>
 
 </properties>

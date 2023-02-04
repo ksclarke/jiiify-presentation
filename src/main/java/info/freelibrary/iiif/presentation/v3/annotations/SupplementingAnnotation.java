@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3;
+package info.freelibrary.iiif.presentation.v3.annotations; // NOPMD -- ExcessiveImports
 
 import java.net.URI;
 import java.util.Arrays;
@@ -12,6 +12,14 @@ import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.Eclipse;
 
+import info.freelibrary.iiif.presentation.v3.Annotation;
+import info.freelibrary.iiif.presentation.v3.AnnotationBody;
+import info.freelibrary.iiif.presentation.v3.AnnotationResource;
+import info.freelibrary.iiif.presentation.v3.Canvas;
+import info.freelibrary.iiif.presentation.v3.CanvasResource;
+import info.freelibrary.iiif.presentation.v3.ContentResource;
+import info.freelibrary.iiif.presentation.v3.Resource;
+import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
@@ -31,13 +39,8 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 /**
  * An annotation used for associating supplementary content resources with a {@link Canvas}.
  */
-public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
-        implements Resource<SupplementingAnnotation>, ContentAnnotation<SupplementingAnnotation> {
-
-    /**
-     * The motivation for SupplementingAnnotation(s) is "supplementing"
-     */
-    static final String MOTIVATION = "supplementing";
+public class SupplementingAnnotation extends AnnotationResource<SupplementingAnnotation>
+        implements Resource<SupplementingAnnotation>, Annotation<SupplementingAnnotation> {
 
     /**
      * The logger that SupplementingAnnotation uses.
@@ -51,20 +54,9 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
      * @param aID An ID
      * @param aCanvas A canvas to target
      */
-    public <C extends CanvasResource<C>> SupplementingAnnotation(final URI aID, final CanvasResource<C> aCanvas) {
-        super(aID, aCanvas);
-        myMotivation = MOTIVATION;
-    }
-
-    /**
-     * Creates a supplementing annotation from the supplied ID and canvas resource.
-     *
-     * @param <C> A type of canvas
-     * @param aID An ID in string form
-     * @param aCanvas A canvas to target
-     */
     public <C extends CanvasResource<C>> SupplementingAnnotation(final String aID, final CanvasResource<C> aCanvas) {
-        this(URI.create(aID), aCanvas);
+        super(aID, aCanvas);
+        setMotivation(Relationship.SUPPLEMENTING.toString());
     }
 
     /**
@@ -87,23 +79,10 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
      * @param aCanvas A canvas to target
      * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to target
      */
-    public <C extends CanvasResource<C>> SupplementingAnnotation(final URI aID, final CanvasResource<C> aCanvas,
-            final MediaFragmentSelector aCanvasRegion) {
-        super(aID, aCanvas, aCanvasRegion);
-        myMotivation = MOTIVATION;
-    }
-
-    /**
-     * Creates a supplementing annotation from the supplied ID, canvas resource, and media fragment selector.
-     *
-     * @param <C> A type of canvas
-     * @param aID An ID in string form
-     * @param aCanvas A canvas to target
-     * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to target
-     */
     public <C extends CanvasResource<C>> SupplementingAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
-        this(URI.create(aID), aCanvas, aCanvasRegion);
+        super(aID, aCanvas, aCanvasRegion);
+        setMotivation(Relationship.SUPPLEMENTING.toString());
     }
 
     /**
@@ -128,23 +107,10 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
      * @param aCanvas A canvas to target
      * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to target
      */
-    public <C extends CanvasResource<C>> SupplementingAnnotation(final URI aID, final CanvasResource<C> aCanvas,
-            final String aCanvasRegion) {
-        super(aID, aCanvas, aCanvasRegion);
-        myMotivation = MOTIVATION;
-    }
-
-    /**
-     * Creates a supplementing annotation from the supplied ID, canvas resource, and canvas region.
-     *
-     * @param <C> A type of canvas
-     * @param aID An ID in string form
-     * @param aCanvas A canvas to target
-     * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to target
-     */
     public <C extends CanvasResource<C>> SupplementingAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
-        this(URI.create(aID), aCanvas, aCanvasRegion);
+        super(aID, aCanvas, aCanvasRegion);
+        setMotivation(Relationship.SUPPLEMENTING.toString());
     }
 
     /**
@@ -182,13 +148,13 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     }
 
     @Override
-    public void setMotivation(final String aMotivation) {
-        if (!MOTIVATION.equals(aMotivation)) {
-            throw new IllegalArgumentException(
-                    LOGGER.getMessage(MessageCodes.JPA_038, SupplementingAnnotation.class.getSimpleName(), MOTIVATION));
+    public final void setMotivation(final String aMotivation) {
+        if (!Relationship.SUPPLEMENTING.toString().equalsIgnoreCase(aMotivation)) {
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_038,
+                    SupplementingAnnotation.class.getSimpleName(), aMotivation));
         }
 
-        myMotivation = MOTIVATION;
+        super.setMotivation(Relationship.SUPPLEMENTING.toString());
     }
 
     @Override
@@ -317,17 +283,7 @@ public class SupplementingAnnotation extends Annotation<SupplementingAnnotation>
     }
 
     @Override
-    public SupplementingAnnotation setID(final URI aID) {
-        return (SupplementingAnnotation) super.setID(aID);
-    }
-
-    @Override
     public SupplementingAnnotation setRights(final String aRights) {
-        return (SupplementingAnnotation) super.setRights(aRights);
-    }
-
-    @Override
-    public SupplementingAnnotation setRights(final URI aRights) {
         return (SupplementingAnnotation) super.setRights(aRights);
     }
 

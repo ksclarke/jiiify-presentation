@@ -4,11 +4,15 @@ package info.freelibrary.iiif.presentation.v3;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import java.net.URI;
+import java.io.File;
+import java.io.IOException;
 import java.util.UUID;
 
 import org.junit.Test;
 
+import info.freelibrary.util.StringUtils;
+
+import info.freelibrary.iiif.presentation.v3.annotations.Relationship;
 import info.freelibrary.iiif.presentation.v3.ids.SkolemIriFactory;
 
 /**
@@ -47,7 +51,7 @@ public class TextualBodyTest {
      */
     @Test
     public final void testSetIDURI() {
-        final URI id = URI.create(UUID.randomUUID().toString());
+        final String id = UUID.randomUUID().toString();
         assertEquals(id, new TextualBody().setID(id).getID());
     }
 
@@ -83,7 +87,7 @@ public class TextualBodyTest {
      */
     @Test
     public final void testSetGetLanguage() {
-        final String language = "en";
+        final String language = "fr";
         assertEquals(language, new TextualBody().setLanguage(language).getLanguage());
     }
 
@@ -104,4 +108,17 @@ public class TextualBodyTest {
         assertEquals(ResourceTypes.TEXTUAL_BODY, new TextualBody().getType());
     }
 
+    /**
+     * Tests the {@code TextualBody#toString()}.
+     */
+    @Test
+    public final void testToString() throws IOException {
+        final String id = UUID.randomUUID().toString();
+        final File json = new File("src/test/resources/json/textual-body.json");
+        final TextualBody body = new TextualBody().setID(id).setFormat(MediaType.TEXT_PLAIN);
+        final String expected = StringUtils.format(StringUtils.read(json), id);
+
+        body.setLanguage("en").setPurpose(Relationship.DESCRIBING).setValue("This is a description.");
+        assertEquals(expected, body.toString());
+    }
 }

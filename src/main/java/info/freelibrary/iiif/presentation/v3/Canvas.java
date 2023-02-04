@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +14,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.Eclipse;
 
+import info.freelibrary.iiif.presentation.v3.annotations.PaintingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotations.SupplementingAnnotation;
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
@@ -52,15 +53,6 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     /**
      * Creates a new canvas from the supplied ID.
      *
-     * @param aID A canvas ID
-     */
-    public Canvas(final URI aID) {
-        super(aID);
-    }
-
-    /**
-     * Creates a new canvas from the supplied ID.
-     *
      * @param aID A canvas ID in string form
      */
     public Canvas(final String aID) {
@@ -74,16 +66,6 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
      * @param aLabel A canvas label
      */
     public Canvas(final String aID, final Label aLabel) {
-        super(aID, aLabel);
-    }
-
-    /**
-     * Creates a new canvas from the supplied ID and label.
-     *
-     * @param aID A canvas ID
-     * @param aLabel A canvas label
-     */
-    public Canvas(final URI aID, final Label aLabel) {
         super(aID, aLabel);
     }
 
@@ -388,12 +370,12 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
 
     @Override
     @SafeVarargs
-    public final Canvas setOtherAnnotations(final AnnotationPage<? extends Annotation<?>>... aPageArray) {
+    public final Canvas setOtherAnnotations(final AnnotationPage<? extends AnnotationResource<?>>... aPageArray) {
         return (Canvas) super.setOtherAnnotations(aPageArray);
     }
 
     @Override
-    public final Canvas setOtherAnnotations(final List<AnnotationPage<? extends Annotation<?>>> aPageList) {
+    public final Canvas setOtherAnnotations(final List<AnnotationPage<? extends AnnotationResource<?>>> aPageList) {
         return (Canvas) super.setOtherAnnotations(aPageList);
     }
 
@@ -492,17 +474,7 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     }
 
     @Override
-    public Canvas setID(final URI aID) {
-        return (Canvas) super.setID(aID);
-    }
-
-    @Override
     public Canvas setRights(final String aRights) {
-        return (Canvas) super.setRights(aRights);
-    }
-
-    @Override
-    public Canvas setRights(final URI aRights) {
         return (Canvas) super.setRights(aRights);
     }
 

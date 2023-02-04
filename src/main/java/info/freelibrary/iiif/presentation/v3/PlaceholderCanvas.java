@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,6 +10,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.Eclipse;
 
+import info.freelibrary.iiif.presentation.v3.annotations.PaintingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotations.SupplementingAnnotation;
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
@@ -44,27 +45,8 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas>
      *
      * @param aID A placeholder canvas ID
      */
-    public PlaceholderCanvas(final URI aID) {
-        super(aID);
-    }
-
-    /**
-     * Creates a new placeholder canvas from the supplied ID.
-     *
-     * @param aID A placeholder canvas ID
-     */
     public PlaceholderCanvas(final String aID) {
         super(aID);
-    }
-
-    /**
-     * Creates a new placeholder canvas from the supplied ID and label.
-     *
-     * @param aID A placeholder canvas ID
-     * @param aLabel A placeholder canvas label
-     */
-    public PlaceholderCanvas(final URI aID, final Label aLabel) {
-        super(aID, aLabel);
     }
 
     /**
@@ -230,17 +212,7 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas>
     }
 
     @Override
-    public PlaceholderCanvas setID(final URI aID) {
-        return (PlaceholderCanvas) super.setID(aID);
-    }
-
-    @Override
     public PlaceholderCanvas setRights(final String aRights) {
-        return (PlaceholderCanvas) super.setRights(aRights);
-    }
-
-    @Override
-    public PlaceholderCanvas setRights(final URI aRights) {
         return (PlaceholderCanvas) super.setRights(aRights);
     }
 
@@ -293,12 +265,14 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas>
 
     @Override
     @SafeVarargs
-    public final PlaceholderCanvas setOtherAnnotations(final AnnotationPage<? extends Annotation<?>>... aPageArray) {
+    public final PlaceholderCanvas
+            setOtherAnnotations(final AnnotationPage<? extends AnnotationResource<?>>... aPageArray) {
         return (PlaceholderCanvas) super.setOtherAnnotations(aPageArray);
     }
 
     @Override
-    public final PlaceholderCanvas setOtherAnnotations(final List<AnnotationPage<? extends Annotation<?>>> aPageList) {
+    public final PlaceholderCanvas
+            setOtherAnnotations(final List<AnnotationPage<? extends AnnotationResource<?>>> aPageList) {
         return (PlaceholderCanvas) super.setOtherAnnotations(aPageList);
     }
 
