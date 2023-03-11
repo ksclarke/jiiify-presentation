@@ -48,7 +48,7 @@
     <media.fragments.uri.version>2.4</media.fragments.uri.version>
 
     <!-- Plugin related versions -->
-    <freelib.maven.version>0.4.5</freelib.maven.version>
+    <freelib.maven.version>0.4.7</freelib.maven.version>
     <vertx.plugin.version>1.0.28</vertx.plugin.version>
 
     <!-- Test related versions -->
