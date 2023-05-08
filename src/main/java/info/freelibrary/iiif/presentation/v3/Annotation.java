@@ -28,7 +28,7 @@ import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
- * An interface that defines methods related to the Web Annotation Data Model as it's used by the IIIF standard.
+ * An interface that defines methods related to the Web Annotation Data Model as it's used by IIIF.
  *
  * @param <T> A class that implements {@code Annotation}
  */

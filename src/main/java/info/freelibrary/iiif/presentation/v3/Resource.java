@@ -17,7 +17,8 @@ import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 
 /**
- * An interface that defines methods relevant to all resources.
+ * An interface that defines methods relevant to all <a href="http://iiif.io/api/presentation/3/">IIIF Presentation</a>
+ * resources.
  *
  * @param <T> The class that implements {@code Resource}
  */

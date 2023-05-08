@@ -12,13 +12,12 @@ import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentS
 import info.freelibrary.iiif.presentation.v3.properties.selectors.SelectorOutOfBoundsException;
 
 /**
- * An interface for an individual page or view. It acts as a central point for assembling the different content
- * resources that make up the display.
+ * An interface for canvas-like resources that assemble different content resources into a single view.
  *
  * @param <T> The class that implements {@code CanvasResource}
  */
-@SuppressWarnings(PMD.TOO_MANY_METHODS)
-public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T> { // NOPMD
+@SuppressWarnings({ PMD.TOO_MANY_METHODS, "PMD.TooManyMethods" })
+public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T> {
 
     /**
      * Gets the ID.

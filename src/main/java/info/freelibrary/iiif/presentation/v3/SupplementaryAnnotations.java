@@ -12,7 +12,7 @@ import info.freelibrary.iiif.presentation.v3.ids.UriUtils;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
- * A link from a range to an {@link AnnotationCollection} that includes the supplementing annotations.
+ * A link from a range to an {@link AnnotationCollection} that contains or references supplementing annotations.
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE })
 public class SupplementaryAnnotations {

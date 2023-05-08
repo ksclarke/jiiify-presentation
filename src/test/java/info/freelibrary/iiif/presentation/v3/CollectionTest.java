@@ -8,7 +8,7 @@ import static org.junit.Assert.assertNotNull;
 import java.io.File;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -91,19 +91,14 @@ public class CollectionTest {
         final String manifestOneID = "https://iiif.library.ucla.edu/asdf1234/manifest";
         final String manifestTwoID = "https://iiif.library.ucla.edu/1234asdf/manifest";
         final String thumbnailID = "https://brand.ucla.edu/images/logo-ucla.svg";
-        final List<Collection.Item> items = new ArrayList<>();
-        final Collection.Item manifest1 = new Collection.Item(Item.Type.MANIFEST, manifestOneID);
-        final Collection.Item manifest2 = new Collection.Item(Item.Type.MANIFEST, manifestTwoID);
-        final String expected = format(StringUtils.read(TEST_FILE1));
+        final Manifest manifest1 = new Manifest(manifestOneID, "A placeholder fake manifest: 1");
+        final Manifest manifest2 = new Manifest(manifestTwoID, "A placeholder fake manifest: 2");
+        final List<Collection.Item> items = Arrays.asList(new Item(manifest1), new Item(manifest2));
 
-        manifest1.setLabel("A placeholder fake manifest: 1");
-        items.add(manifest1);
-        manifest2.setLabel("A placeholder fake manifest: 2");
-        items.add(manifest2);
         collection.setItems(items);
         collection.setThumbnails(new ImageContent(thumbnailID));
 
-        assertEquals(expected, collection.toString());
+        assertEquals(format(StringUtils.read(TEST_FILE1)), collection.toString());
     }
 
     /**

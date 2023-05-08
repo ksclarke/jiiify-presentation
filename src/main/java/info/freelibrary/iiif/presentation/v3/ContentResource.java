@@ -6,8 +6,8 @@ import java.util.Optional;
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 
 /**
- * An interface that defines external web resources that can be referenced. Examples of content resources include:
- * {@link DatasetContent} and {@link ImageContent}).
+ * An interface that defines web resources that can be referenced by or embedded in an {@link Annotation}. Examples of
+ * content resources include: {@link DatasetContent} and {@link ImageContent}).
  *
  * @param <T> The type of content resource
  */

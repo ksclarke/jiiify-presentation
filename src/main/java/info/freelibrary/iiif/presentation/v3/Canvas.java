@@ -33,10 +33,9 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
- * An individual page or view and acts as a central point for assembling the different content resources that make up
- * the display. The concept of a canvas is borrowed from standards like PDF and HTML, or applications like Photoshop and
- * Powerpoint, where the display starts from a blank canvas and images, text and other resources are &quot;painted&quot;
- * on to it.
+ * A view that acts as a central point for assembling the different content resources into a single display. The concept
+ * of a canvas is borrowed from standards like PDF and HTML, or applications like Photoshop and Powerpoint, where the
+ * display starts from a blank canvas and images, text and other resources are &quot;painted&quot; on to it.
  */
 @SuppressWarnings({ PMD.TOO_MANY_METHODS, "PMD.TooManyMethods", PMD.EXCESSIVE_PUBLIC_COUNT,
     "PMD.ExcessivePublicCount" })

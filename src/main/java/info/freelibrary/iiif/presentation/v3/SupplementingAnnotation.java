@@ -34,7 +34,7 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
- * An annotation used for associating supplementary content resources with a {@link Canvas}.
+ * An annotation used for associating supplementary content resources with a canvas resource.
  */
 @SuppressWarnings({ PMD.GOD_CLASS, "PMD.GodClass" })
 public class SupplementingAnnotation extends AbstractCanvasAnnotation<SupplementingAnnotation>

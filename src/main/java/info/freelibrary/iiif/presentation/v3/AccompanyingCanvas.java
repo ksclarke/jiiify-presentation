@@ -33,9 +33,9 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
- * A single canvas that provides additional content for use while rendering the resource. Examples include: 1) an image
- * to show while a duration-only canvas is playing audio, or 2) background audio to play while a user is navigating an
- * image-only manifest.
+ * A single canvas that provides additional content that can be used while rendering the resource. Examples include: 1)
+ * an image to show while a duration-only canvas is playing audio, or 2) background audio to play while a user is
+ * navigating an image-only manifest.
  */
 @SuppressWarnings({ PMD.TOO_MANY_METHODS, "PMD.TooManyMethods", PMD.EXCESSIVE_PUBLIC_COUNT, "PMD.ExcessivePublicCount",
     PMD.CYCLOMATIC_COMPLEXITY, "PMD.CyclomaticComplexity" })

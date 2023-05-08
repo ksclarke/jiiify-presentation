@@ -39,10 +39,10 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
- * An ordered list of canvases and/or further ranges. Ranges allow canvases, or parts thereof, to be grouped together in
- * some way. This could be for textual reasons, such as to distinguish books, chapters, verses, sections,
- * non-content-bearing pages, the table of contents or similar. Equally, physical features might be important such as
- * quires or gatherings, sections that have been added later and so forth.
+ * An ordered list of canvas displays; these canvases may be nested in other ranges. Ranges allow canvases, or parts
+ * thereof, to be grouped together in some way. This could be for textual reasons, such as to distinguish books,
+ * chapters, verses, sections, non-content-bearing pages, the table of contents or similar. Equally, physical features
+ * might be important such as quires or gatherings, sections that have been added later and so forth.
  */
 @SuppressWarnings({ "PMD.ExcessivePublicCount", "PMD.ExcessiveImports", "PMD.GodClass" })
 public class Range extends NavigableResource<Range> implements Resource<Range> {
