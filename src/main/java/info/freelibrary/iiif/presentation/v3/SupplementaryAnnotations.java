@@ -50,7 +50,7 @@ public class SupplementaryAnnotations {
     }
 
     /**
-     * Sets the ID, in string form, of the linked annotation collection.
+     * Sets the ID of the linked annotation collection.
      *
      * @param aID The ID of the linked annotation collection
      * @return The supplementary annotations

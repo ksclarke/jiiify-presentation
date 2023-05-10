@@ -102,7 +102,7 @@ public class PlaceholderCanvasTest extends AbstractTest {
     public final void testPlaceholderCanvasMinterLabelAsString() {
         final String id = HTTPS + UUID.randomUUID().toString();
         final Minter minter = MinterFactory.getMinter(id);
-        final String label = StringUtils.format(LABEL, id);
+        final Label label = new Label(StringUtils.format(LABEL, id));
         final PlaceholderCanvas canvas = new PlaceholderCanvas(minter, label);
 
         assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID()).matches());

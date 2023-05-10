@@ -34,7 +34,7 @@ public enum ViewingDirection {
     /**
      * Creates a new viewing direction from the supplied string.
      *
-     * @param aDirection A viewing direction in string form
+     * @param aDirection A viewing direction
      */
     ViewingDirection(final String aDirection) {
         myValue = aDirection;

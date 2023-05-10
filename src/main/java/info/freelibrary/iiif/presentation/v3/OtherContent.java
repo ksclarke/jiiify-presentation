@@ -130,7 +130,7 @@ public class OtherContent implements ContentResource<OtherContent> {
     /**
      * Gets the format as a string for Jackson's deserialization process.
      *
-     * @return The format in string form
+     * @return The format
      */
     @JsonGetter(JsonKeys.FORMAT)
     private Optional<String> getFormatAsString() {

@@ -78,16 +78,6 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
      * Creates a new range from the supplied ID and label.
      *
      * @param aID A range ID
-     * @param aLabel A descriptive label, in string form, for the range
-     */
-    public Range(final String aID, final String aLabel) {
-        super(ResourceTypes.RANGE, aID, new Label(aLabel), RangeBehavior.class);
-    }
-
-    /**
-     * Creates a new range from the supplied ID and label.
-     *
-     * @param aID A range ID
      * @param aLabel A descriptive label for the range
      */
     public Range(final String aID, final Label aLabel) {
@@ -101,16 +91,6 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
      */
     public Range(final Minter aMinter) {
         super(ResourceTypes.RANGE, aMinter.getRangeID(), RangeBehavior.class);
-    }
-
-    /**
-     * Creates a range from the supplied label, using the supplied minter to create the range' ID.
-     *
-     * @param aMinter A minter that will create the range ID
-     * @param aLabel A range label in string form
-     */
-    public Range(final Minter aMinter, final String aLabel) {
-        super(ResourceTypes.RANGE, aMinter.getRangeID(), new Label(aLabel), RangeBehavior.class);
     }
 
     /**
@@ -402,11 +382,6 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     @Override
-    public Range setLabel(final String aLabel) {
-        return (Range) super.setLabel(aLabel);
-    }
-
-    @Override
     public Range setLabel(final Label aLabel) {
         return (Range) super.setLabel(aLabel);
     }
@@ -428,7 +403,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     /**
      * Returns a range from its JSON representation.
      *
-     * @param aJsonString A range in string form
+     * @param aJsonString A JSON serialization of a range
      * @return The range
      * @throws JsonParsingException If the JSON string cannot be deserialized
      */

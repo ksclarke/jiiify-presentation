@@ -90,7 +90,7 @@ public class AccompanyingCanvasTest {
     public final void testAccompanyingCanvasMinterLabelAsString() {
         final String id = HTTPS + UUID.randomUUID().toString();
         final Minter minter = MinterFactory.getMinter(id);
-        final String label = StringUtils.format(LABEL, id);
+        final Label label = new Label(StringUtils.format(LABEL, id));
         final AccompanyingCanvas canvas = new AccompanyingCanvas(minter, label);
 
         assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID().toString()).matches());
@@ -121,11 +121,11 @@ public class AccompanyingCanvasTest {
      */
     @Test
     public final void testAccompanyingCanvasStringString() {
-        final String label = StringUtils.format(LABEL, myID);
+        final Label label = new Label(StringUtils.format(LABEL, myID));
         final AccompanyingCanvas canvas = new AccompanyingCanvas(myID, label);
 
         assertEquals(myID, canvas.getID());
-        assertEquals(new Label(label), canvas.getLabel());
+        assertEquals(label, canvas.getLabel());
     }
 
     /**

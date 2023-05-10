@@ -123,7 +123,7 @@ public class SeeAlsoTest extends AbstractTest {
         final String text = myLoremIpsum.getWords(4);
         final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.DATASET);
 
-        assertEquals(Optional.of(new Label(text)), seeAlso.setLabel(text).getLabel());
+        assertEquals(Optional.of(new Label(text)), seeAlso.setLabel(new Label(text)).getLabel());
     }
 
     /**

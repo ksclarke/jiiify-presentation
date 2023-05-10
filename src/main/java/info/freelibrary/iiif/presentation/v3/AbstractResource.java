@@ -128,7 +128,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * Creates a new resource from the supplied ID and type.
      *
      * @param aType A resource type
-     * @param aID A URI ID in string form
+     * @param aID An ID
      * @param aBehaviorClass A behavior class for this resource
      */
     protected AbstractResource(final String aType, final String aID, final Class<? extends Behavior> aBehaviorClass) {
@@ -141,7 +141,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      * Creates a new resource from a supplied ID and label.
      *
      * @param aType A type of resource
-     * @param aID An ID in string form
+     * @param aID An ID
      * @param aLabel A label for the resource
      * @param aBehaviorClass A behavior class for this resource
      */
@@ -424,18 +424,6 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
     protected AbstractResource<T> setLabel(final Label aLabel) {
         Objects.requireNonNull(aLabel);
         myLabel = aLabel;
-        return this;
-    }
-
-    /**
-     * Sets the resource label from its string form.
-     *
-     * @param aLabel A label to assign to the resource
-     * @return The resource
-     */
-    @JsonIgnore
-    protected AbstractResource<T> setLabel(final String aLabel) {
-        myLabel = new Label(aLabel);
         return this;
     }
 

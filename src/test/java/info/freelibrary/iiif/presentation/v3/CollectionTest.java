@@ -87,12 +87,12 @@ public class CollectionTest {
      */
     @Test
     public void testWritingCollection() throws IOException {
-        final Collection collection = new Collection("https://ID-a", "label-a");
+        final Collection collection = new Collection("https://ID-a", new Label("label-a"));
         final String manifestOneID = "https://iiif.library.ucla.edu/asdf1234/manifest";
         final String manifestTwoID = "https://iiif.library.ucla.edu/1234asdf/manifest";
         final String thumbnailID = "https://brand.ucla.edu/images/logo-ucla.svg";
-        final Manifest manifest1 = new Manifest(manifestOneID, "A placeholder fake manifest: 1");
-        final Manifest manifest2 = new Manifest(manifestTwoID, "A placeholder fake manifest: 2");
+        final Manifest manifest1 = new Manifest(manifestOneID, new Label("A placeholder fake manifest: 1"));
+        final Manifest manifest2 = new Manifest(manifestTwoID, new Label("A placeholder fake manifest: 2"));
         final List<Collection.Item> items = Arrays.asList(new Item(manifest1), new Item(manifest2));
 
         collection.setItems(items);

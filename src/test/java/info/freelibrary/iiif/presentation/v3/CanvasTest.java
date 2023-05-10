@@ -38,7 +38,7 @@ import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 public class CanvasTest extends AbstractCookbookTest {
 
     /** A test label. */
-    private static final String LABEL = "p. 1";
+    private static final Label LABEL = new Label("p. 1");
 
     /** A test width. */
     private static final int WIDTH = 480;
@@ -157,9 +157,9 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test
     public void testConstructorStringLabel() {
-        myCanvas = new Canvas(IMAGE_CANVAS_ID, new Label(LABEL));
+        myCanvas = new Canvas(IMAGE_CANVAS_ID, LABEL);
         assertEquals(IMAGE_CANVAS_ID, myCanvas.getID());
-        assertEquals(LABEL, myCanvas.getLabel().getString());
+        assertEquals(LABEL, myCanvas.getLabel());
     }
 
     /**
@@ -181,8 +181,7 @@ public class CanvasTest extends AbstractCookbookTest {
     public final void testCanvasMinterLabel() {
         final String id = HTTPS + UUID.randomUUID().toString();
         final Minter minter = MinterFactory.getMinter(id);
-        final Label label = new Label(LABEL);
-        final Canvas canvas = new Canvas(minter, label);
+        final Canvas canvas = new Canvas(minter, LABEL);
 
         assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID()).matches());
     }

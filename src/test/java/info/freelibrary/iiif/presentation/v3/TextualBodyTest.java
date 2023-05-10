@@ -39,21 +39,12 @@ public class TextualBodyTest {
     }
 
     /**
-     * Tests setting and getting IDs in string form.
+     * Tests setting and getting IDs.
      */
     @Test
     public final void testGetSetID() {
         final String id = UUID.randomUUID().toString();
         assertEquals(id, new TextualBody().setID(id).getID().toString());
-    }
-
-    /**
-     * Tests setting and getting IDs in URI form.
-     */
-    @Test
-    public final void testSetIDURI() {
-        final String id = UUID.randomUUID().toString();
-        assertEquals(id, new TextualBody().setID(id).getID());
     }
 
     /**
@@ -93,7 +84,7 @@ public class TextualBodyTest {
     }
 
     /**
-     * Tests setting and getting the TextualBody's MediaType in string form.
+     * Tests setting and getting the TextualBody's MediaType.
      */
     @Test
     public final void testGetFormat() {

@@ -77,17 +77,6 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      *
      * @param aID An ID
      * @param aType A resource type
-     * @param aLabel A label in string form
-     */
-    protected AbstractLinkProperty(final String aID, final String aType, final String aLabel) {
-        this(aID, aType, new Label(aLabel));
-    }
-
-    /**
-     * Creates an abstract link property.
-     *
-     * @param aID An ID
-     * @param aType A resource type
      * @param aLabel A label
      */
     protected AbstractLinkProperty(final String aID, final String aType, final Label aLabel) {

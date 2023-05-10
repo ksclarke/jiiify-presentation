@@ -11,14 +11,6 @@ import info.freelibrary.util.warnings.Eclipse;
 public class RequiredStatement extends Metadata {
 
     /**
-     * Constructor for Jackson deserialization.
-     */
-    @SuppressWarnings(Eclipse.UNUSED)
-    private RequiredStatement() {
-        super();
-    }
-
-    /**
      * Creates a required statement from the supplied label and value.
      *
      * @param aLabel A label
@@ -29,13 +21,21 @@ public class RequiredStatement extends Metadata {
     }
 
     /**
-     * Creates a required statement from the supplied label and value strings.
+     * Creates a required statement from the supplied label and value.
      *
-     * @param aLabel A label in string form
-     * @param aValue A value in string form
+     * @param aLabel A label
+     * @param aValue A value
      */
     public RequiredStatement(final String aLabel, final String aValue) {
         super(new Label(aLabel), new Value(aValue));
+    }
+
+    /**
+     * Constructor for Jackson deserialization.
+     */
+    @SuppressWarnings(Eclipse.UNUSED)
+    private RequiredStatement() {
+        super();
     }
 
     /**
@@ -50,17 +50,6 @@ public class RequiredStatement extends Metadata {
     }
 
     /**
-     * Sets the label for the required statement.
-     *
-     * @param aLabel A label in string form
-     * @return This required statement
-     */
-    @Override
-    public RequiredStatement setLabel(final String aLabel) {
-        return (RequiredStatement) super.setLabel(aLabel);
-    }
-
-    /**
      * Sets the required statement's value.
      *
      * @param aValue A value
@@ -68,17 +57,6 @@ public class RequiredStatement extends Metadata {
      */
     @Override
     public RequiredStatement setValue(final Value aValue) {
-        return (RequiredStatement) super.setValue(aValue);
-    }
-
-    /**
-     * Sets the required statement's value.
-     *
-     * @param aValue A value in string form
-     * @return This required statement
-     */
-    @Override
-    public RequiredStatement setValue(final String aValue) {
         return (RequiredStatement) super.setValue(aValue);
     }
 }

@@ -69,7 +69,7 @@ public enum ManifestBehavior implements Behavior {
     /**
      * Creates a new manifest behavior from the supplied string.
      *
-     * @param aBehavior A manifest behavior in string form
+     * @param aBehavior A manifest behavior
      */
     ManifestBehavior(final String aBehavior) {
         myValue = aBehavior;
@@ -89,7 +89,7 @@ public enum ManifestBehavior implements Behavior {
     /**
      * Maps a behavior string to an enum constant of this type.
      *
-     * @param aBehavior A behavior in string form
+     * @param aBehavior A behavior
      * @return A manifest behavior
      * @throws IllegalArgumentException If the behavior string doesn't correspond to a manifest behavior
      */

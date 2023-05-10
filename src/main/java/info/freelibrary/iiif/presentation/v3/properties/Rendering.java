@@ -4,7 +4,6 @@ package info.freelibrary.iiif.presentation.v3.properties;
 import java.util.Objects;
 import java.util.Optional;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -33,17 +32,6 @@ public class Rendering extends AbstractLinkProperty<Rendering> {
      */
     public Rendering(final String aID, final String aType, final Label aLabel) {
         super(aID, aType, aLabel);
-    }
-
-    /**
-     * Creates a IIIF presentation rendering.
-     *
-     * @param aID A rendering ID
-     * @param aType A rendering type
-     * @param aLabel A rendering label in string form
-     */
-    public Rendering(final String aID, final String aType, final String aLabel) {
-        this(aID, aType, new Label(aLabel));
     }
 
     /**
@@ -97,17 +85,6 @@ public class Rendering extends AbstractLinkProperty<Rendering> {
         return (Rendering) super.setLabel(aLabel);
     }
 
-    /**
-     * Sets the label of the rendering.
-     *
-     * @param aLabel A rendering's label
-     * @return The rendering
-     */
-    @JsonIgnore
-    public Rendering setLabel(final String aLabel) {
-        return (Rendering) super.setLabel(new Label(aLabel));
-    }
-
     @Override
     public Optional<MediaType> getFormat() {
         return super.getFormat();
@@ -146,7 +123,7 @@ public class Rendering extends AbstractLinkProperty<Rendering> {
     /**
      * Returns a rendering from its JSON representation.
      *
-     * @param aJsonString A rendering in string form
+     * @param aJsonString A JSON serialization of a rendering
      * @throws JsonParsingException If the supplied JSON string cannot be successfully parsed
      * @return This rendering
      */

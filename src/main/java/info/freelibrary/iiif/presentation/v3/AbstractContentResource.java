@@ -43,7 +43,7 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
      * Creates a content resource.
      *
      * @param aType The type of resource
-     * @param aID The resource ID in string form
+     * @param aID The resource ID
      * @param aBehaviorClass A class of behavior for this resource
      */
     protected AbstractContentResource(final String aType, final String aID,

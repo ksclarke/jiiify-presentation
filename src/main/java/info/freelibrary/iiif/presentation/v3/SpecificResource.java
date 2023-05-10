@@ -43,7 +43,7 @@ public class SpecificResource {
     /**
      * Creates a new specific resource from the supplied source and selector.
      *
-     * @param aSource A source in string form
+     * @param aSource A source
      * @param aSelector A selector
      */
     public SpecificResource(final String aSource, final Selector aSelector) {
@@ -54,8 +54,8 @@ public class SpecificResource {
     /**
      * Creates a new specific resource from the supplied ID, source, and selector.
      *
-     * @param aID An ID in string form
-     * @param aSource A source in string form
+     * @param aID An ID
+     * @param aSource A source
      * @param aSelector A selector
      */
     public SpecificResource(final String aID, final String aSource, final Selector aSelector) {
@@ -123,9 +123,9 @@ public class SpecificResource {
     }
 
     /**
-     * Sets the ID in string form.
+     * Sets the ID.
      *
-     * @param aID The ID in string form
+     * @param aID The ID
      * @return This specific resource
      */
     @JsonSetter(JsonKeys.ID)
@@ -149,7 +149,7 @@ public class SpecificResource {
     /**
      * Sets the specific resource's source.
      *
-     * @param aSource A source in string form
+     * @param aSource A source
      * @return This specific resource
      */
     @JsonSetter(JsonKeys.SOURCE)
@@ -173,7 +173,7 @@ public class SpecificResource {
     /**
      * Returns a SpecificResource from its JSON representation.
      *
-     * @param aJsonString A specific resource in string form
+     * @param aJsonString A JSON serialization of a specific resource
      * @return The specific resource
      * @throws JsonParsingException If the specific resource cannot be deserialized from the supplied JSON
      */

@@ -50,7 +50,7 @@ public class ImageContent extends AbstractContentResource<ImageContent>
     /**
      * Creates image content with the supplied ID.
      *
-     * @param aURI An image content ID in string form
+     * @param aURI An image content ID
      */
     public ImageContent(final String aURI) {
         super(ResourceTypes.IMAGE, aURI, ResourceBehavior.class);
@@ -136,11 +136,6 @@ public class ImageContent extends AbstractContentResource<ImageContent>
 
     @Override
     public ImageContent setLabel(final Label aLabel) {
-        return (ImageContent) super.setLabel(aLabel);
-    }
-
-    @Override
-    public ImageContent setLabel(final String aLabel) {
         return (ImageContent) super.setLabel(aLabel);
     }
 
@@ -280,7 +275,7 @@ public class ImageContent extends AbstractContentResource<ImageContent>
     /**
      * Returns image content from its JSON representation.
      *
-     * @param aJsonString A image content resource in string form
+     * @param aJsonString A JSON serialization of an image content resource
      * @return The image content
      * @throws JsonParsingException If the image content cannot be deserialized from the supplied JSON
      */

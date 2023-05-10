@@ -29,7 +29,7 @@ public enum ResourceBehavior implements Behavior {
     /**
      * Creates a resource behavior from the supplied string.
      *
-     * @param aBehavior A resource behavior in string form
+     * @param aBehavior A resource behavior
      */
     ResourceBehavior(final String aBehavior) {
         myValue = aBehavior;

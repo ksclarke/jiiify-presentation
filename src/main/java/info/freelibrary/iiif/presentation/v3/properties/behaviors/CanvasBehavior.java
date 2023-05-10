@@ -37,7 +37,7 @@ public enum CanvasBehavior implements Behavior {
     /**
      * Creates a new canvas behavior from the supplied string.
      *
-     * @param aBehavior A canvas behavior in string form
+     * @param aBehavior A canvas behavior
      */
     CanvasBehavior(final String aBehavior) {
         myValue = aBehavior;

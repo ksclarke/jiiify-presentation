@@ -91,7 +91,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     /**
      * Creates a new canvas.
      *
-     * @param aID A canvas ID in string form
+     * @param aID A canvas ID
      */
     protected AbstractCanvas(final String aID) {
         super(ResourceTypes.CANVAS, aID, CanvasBehavior.class);
@@ -100,17 +100,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     /**
      * Creates a new canvas.
      *
-     * @param aID A canvas ID in string form
-     * @param aLabel A canvas label in string form
-     */
-    protected AbstractCanvas(final String aID, final String aLabel) {
-        super(ResourceTypes.CANVAS, aID, new Label(aLabel), CanvasBehavior.class);
-    }
-
-    /**
-     * Creates a new canvas.
-     *
-     * @param aID A canvas ID in string form
+     * @param aID A canvas ID
      * @param aLabel A canvas label
      */
     protected AbstractCanvas(final String aID, final Label aLabel) {

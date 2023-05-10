@@ -91,9 +91,9 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
     }
 
     /**
-     * Sets the profile in string form.
+     * Sets the profile.
      *
-     * @param aProfile A profile in string form
+     * @param aProfile A profile
      * @return The resource whose profile is being set
      */
     @Override
@@ -125,17 +125,6 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
         return (SeeAlso) super.setLabel(aLabel);
     }
 
-    /**
-     * Sets the label of the SeeAlso.
-     *
-     * @param aLabel A SeeAlso's label
-     * @return The SeeAlso
-     */
-    @JsonIgnore
-    public SeeAlso setLabel(final String aLabel) {
-        return (SeeAlso) super.setLabel(new Label(aLabel));
-    }
-
     @Override
     @JsonIgnore
     public SeeAlso setLanguages(final String... aLangArray) {
@@ -157,7 +146,7 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
     /**
      * Returns a SeeAlso from its JSON representation.
      *
-     * @param aJsonString A SeeAlso in string form
+     * @param aJsonString A JSON serialization of a SeeAlso
      * @return A SeeAlso
      * @throws JsonParsingException If the supplied JSON couldn't be parsed into a SeeAlso object
      */

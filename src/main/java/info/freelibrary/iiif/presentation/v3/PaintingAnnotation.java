@@ -384,11 +384,6 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
     }
 
     @Override
-    public PaintingAnnotation setLabel(final String aLabel) {
-        return (PaintingAnnotation) super.setLabel(aLabel);
-    }
-
-    @Override
     public PaintingAnnotation setMetadata(final List<Metadata> aMetadataList) {
         return (PaintingAnnotation) super.setMetadata(aMetadataList);
     }

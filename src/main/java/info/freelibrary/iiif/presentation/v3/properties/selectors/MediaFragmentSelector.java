@@ -286,7 +286,7 @@ public class MediaFragmentSelector implements FragmentSelector {
     /**
      * Gets the value of the media fragment selector, with the spatial part ordered before the temporal part.
      *
-     * @return The value in string form
+     * @return The serialization of the selector
      */
     @Override
     public String toString() {

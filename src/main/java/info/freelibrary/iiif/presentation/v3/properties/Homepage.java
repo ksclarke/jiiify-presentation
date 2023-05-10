@@ -40,16 +40,6 @@ public class Homepage extends AbstractLinkProperty<Homepage> {
     }
 
     /**
-     * Creates a IIIF presentation homepage.
-     *
-     * @param aID A homepage ID
-     * @param aLabel A homepage label in string form
-     */
-    public Homepage(final String aID, final String aLabel) {
-        this(aID, new Label(aLabel));
-    }
-
-    /**
      * Creates a homepage for Jackson's deserialization process.
      */
     @SuppressWarnings(Eclipse.UNUSED)
@@ -99,17 +89,6 @@ public class Homepage extends AbstractLinkProperty<Homepage> {
     @JsonSetter(JsonKeys.LABEL)
     public Homepage setLabel(final Label aLabel) {
         return (Homepage) super.setLabel(aLabel);
-    }
-
-    /**
-     * Sets the label for the homepage.
-     *
-     * @param aLabel A homepage's label
-     * @return The homepage
-     */
-    @JsonIgnore
-    public Homepage setLabel(final String aLabel) {
-        return (Homepage) super.setLabel(new Label(aLabel));
     }
 
     @Override

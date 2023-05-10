@@ -67,7 +67,7 @@ public class RenderingTest {
      */
     @Before
     public final void setUp() {
-        myManifest = new Manifest("https://example.org/iiif/book1/manifest", "Book 1");
+        myManifest = new Manifest("https://example.org/iiif/book1/manifest", new Label("Book 1"));
     }
 
     /**
@@ -82,15 +82,6 @@ public class RenderingTest {
 
         checkDeserialization(RENDERING_SIMPLE_ONE);
         checkSerialization(RENDERING_SIMPLE_ONE);
-    }
-
-    /**
-     * Tests a rendering constructor.
-     */
-    @Test
-    public final void testRenderingStringStringString() {
-        assertEquals(TEST_URI_1,
-                new Rendering(TEST_URI_1.toString(), ResourceTypes.TEXT, TEST_LABEL_1.getString()).getID());
     }
 
     /**

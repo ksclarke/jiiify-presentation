@@ -30,7 +30,7 @@ public class VideoContentTest {
     }
 
     /**
-     * Tests constructing new video content with an ID in string form.
+     * Tests constructing new video content with an ID.
      */
     @Test
     public final void testVideoContentString() {

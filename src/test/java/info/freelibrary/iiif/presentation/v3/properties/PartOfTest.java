@@ -61,7 +61,7 @@ public class PartOfTest {
      */
     @Before
     public final void setUp() {
-        myManifest = new Manifest("https://example.org/iiif/book1/manifest", "Book 1");
+        myManifest = new Manifest("https://example.org/iiif/book1/manifest", new Label("Book 1"));
     }
 
     /**

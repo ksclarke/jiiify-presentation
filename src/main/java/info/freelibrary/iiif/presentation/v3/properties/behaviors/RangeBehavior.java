@@ -52,7 +52,7 @@ public enum RangeBehavior implements Behavior {
     /**
      * Creates a new range behavior from the supplied string.
      *
-     * @param aBehavior A range behavior in string form
+     * @param aBehavior A range behavior
      */
     RangeBehavior(final String aBehavior) {
         myValue = aBehavior;

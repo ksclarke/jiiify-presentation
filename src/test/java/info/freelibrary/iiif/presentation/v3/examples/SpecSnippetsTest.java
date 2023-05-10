@@ -42,7 +42,7 @@ public class SpecSnippetsTest extends AbstractCookbookTest {
      * Gets a cookbook manifest as a string.
      *
      * @param aManifestName A manifest file name
-     * @return A manifest in string form
+     * @return A JSON serialization of a manifest
      * @throws IOException If there is trouble reading the manifest file
      */
     @Override

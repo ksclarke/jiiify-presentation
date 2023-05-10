@@ -70,9 +70,9 @@ public class Start {
     }
 
     /**
-     * Sets the start ID in string form.
+     * Sets the start ID.
      *
-     * @param aID A start ID in string form
+     * @param aID A start ID
      * @return This start
      */
     @JsonSetter(JsonKeys.ID)

@@ -190,11 +190,6 @@ public class SoundContent extends AbstractContentResource<SoundContent>
     }
 
     @Override
-    public SoundContent setLabel(final String aLabel) {
-        return (SoundContent) super.setLabel(aLabel);
-    }
-
-    @Override
     public SoundContent setLabel(final Label aLabel) {
         return (SoundContent) super.setLabel(aLabel);
     }
@@ -227,7 +222,7 @@ public class SoundContent extends AbstractContentResource<SoundContent>
     /**
      * Returns sound content from its JSON representation.
      *
-     * @param aJsonString A sound content resource in string form
+     * @param aJsonString A JSON serialization of sound content
      * @return The sound content
      * @throws JsonParsingException If there is trouble parsing the JSON
      */

@@ -66,7 +66,7 @@ public class HomepageTest {
      */
     @Before
     public final void setUp() {
-        myManifest = new Manifest("https://example.org/iiif/book1/manifest", "Book 1");
+        myManifest = new Manifest("https://example.org/iiif/book1/manifest", new Label("Book 1"));
     }
 
     /**
@@ -81,16 +81,6 @@ public class HomepageTest {
 
         checkDeserialization(HOMEPAGE_SIMPLE_ONE);
         checkSerialization(HOMEPAGE_SIMPLE_ONE);
-    }
-
-    /**
-     * Tests a homepage constructor and homepage (de)serialization.
-     *
-     * @throws IOException If there is trouble reading the homepage
-     */
-    @Test
-    public final void testHomepageStringStringString() throws IOException {
-        myManifest.setHomepages(new Homepage(TEST_URI_1.toString(), TEST_LABEL_1.getString()));
     }
 
     /**

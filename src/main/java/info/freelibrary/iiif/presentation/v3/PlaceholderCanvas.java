@@ -52,17 +52,7 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas>
     /**
      * Creates a new placeholder canvas from the supplied ID and label.
      *
-     * @param aID A placeholder canvas ID in string form
-     * @param aLabel A placeholder canvas label in string form
-     */
-    public PlaceholderCanvas(final String aID, final String aLabel) {
-        super(aID, aLabel);
-    }
-
-    /**
-     * Creates a new placeholder canvas from the supplied ID and label.
-     *
-     * @param aID A placeholder canvas ID in string form
+     * @param aID A placeholder canvas ID
      * @param aLabel A placeholder canvas label
      */
     public PlaceholderCanvas(final String aID, final Label aLabel) {
@@ -76,16 +66,6 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas>
      */
     public PlaceholderCanvas(final Minter aMinter) {
         super(aMinter.getCanvasID());
-    }
-
-    /**
-     * Creates a new placeholder canvas from the supplied label, using the supplied minter to create the canvas' ID.
-     *
-     * @param aMinter A minter that will create the canvas ID
-     * @param aLabel A placeholder canvas label in string form
-     */
-    public PlaceholderCanvas(final Minter aMinter, final String aLabel) {
-        super(aMinter.getCanvasID(), new Label(aLabel));
     }
 
     /**
@@ -224,11 +204,6 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas>
     @Override
     public PlaceholderCanvas setMetadata(final List<Metadata> aMetadataList) {
         return (PlaceholderCanvas) super.setMetadata(aMetadataList);
-    }
-
-    @Override
-    public PlaceholderCanvas setLabel(final String aLabel) {
-        return (PlaceholderCanvas) super.setLabel(aLabel);
     }
 
     @Override
@@ -453,7 +428,7 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas>
     /**
      * Returns a PlaceholderCanvas from its JSON representation.
      *
-     * @param aJsonString A placeholder canvas in string form
+     * @param aJsonString A JSON serialization of a placeholder canvas
      * @return The placeholder canvas
      * @throws JsonParsingException If the supplied JSON string cannot be parsed into a placeholder canvas
      */

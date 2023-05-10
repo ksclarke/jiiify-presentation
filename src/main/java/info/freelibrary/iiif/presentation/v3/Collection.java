@@ -73,21 +73,11 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     /**
      * Creates a new collection from the supplied ID and label.
      *
-     * @param aID A collection ID in string form
+     * @param aID A collection ID
      * @param aLabel A collection label
      */
     public Collection(final String aID, final Label aLabel) {
         super(ResourceTypes.COLLECTION, aID, aLabel, CollectionBehavior.class);
-    }
-
-    /**
-     * Creates a new collection from the supplied ID and label.
-     *
-     * @param aID A collection ID in string form
-     * @param aLabel A collection label in string form
-     */
-    public Collection(final String aID, final String aLabel) {
-        super(ResourceTypes.COLLECTION, aID, new Label(aLabel), CollectionBehavior.class);
     }
 
     /**
@@ -224,11 +214,6 @@ public class Collection extends NavigableResource<Collection> implements Resourc
 
     @Override
     public Collection setLabel(final Label aLabel) {
-        return (Collection) super.setLabel(aLabel);
-    }
-
-    @Override
-    public Collection setLabel(final String aLabel) {
         return (Collection) super.setLabel(aLabel);
     }
 
@@ -395,7 +380,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     /**
      * Method used internally to set context from JSON.
      *
-     * @param aContext A manifest context in string form
+     * @param aContext A manifest context
      */
     @JsonSetter(JsonKeys.CONTEXT)
     private void setContext(final String aContext) {
@@ -669,8 +654,8 @@ public class Collection extends NavigableResource<Collection> implements Resourc
             /**
              * Creates a collection item type from a supplied string value.
              *
-             * @param aType A type in string form
-             * @return A type
+             * @param aType A JSON serialization of a collection type
+             * @return A collection type
              * @throws IllegalArgumentException If the type string doesn't correspond to a valid type
              */
             public static Type fromString(final String aType) {

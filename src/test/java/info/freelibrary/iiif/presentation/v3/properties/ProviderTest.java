@@ -51,7 +51,7 @@ public class ProviderTest extends AbstractTest {
     public final void setUp() {
         myID = UUID.randomUUID().toString();
         myLabel = new Label(myLoremIpsum.getTitle(5));
-        myHomepage = new Homepage(myLoremIpsum.getUrl(), myLoremIpsum.getTitle(5));
+        myHomepage = new Homepage(myLoremIpsum.getUrl(), new Label(myLoremIpsum.getTitle(5)));
         myLogo = new ImageContent("https://library.ucla.edu/images/asdf/image.jpg");
         mySeeAlso = new SeeAlso(myLoremIpsum.getUrl(), ResourceTypes.TEXT);
     }
@@ -86,15 +86,6 @@ public class ProviderTest extends AbstractTest {
     public final void testSetGetLabelLabel() {
         final Label label = new Label(myLoremIpsum.getTitle(5));
         assertEquals(myLabel, new Provider(myID, label).setLabel(myLabel).getLabel());
-    }
-
-    /**
-     * Test method for {@link Provider#setLabel(String)}.
-     */
-    @Test
-    public final void testSetGetLabelString() {
-        final Label label = new Label(myLoremIpsum.getTitle(5));
-        assertEquals(myLabel, new Provider(myID, label).setLabel(myLabel.getString()).getLabel());
     }
 
     /**

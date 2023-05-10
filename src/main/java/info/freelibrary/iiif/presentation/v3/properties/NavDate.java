@@ -53,7 +53,7 @@ public class NavDate {
     }
 
     /**
-     * Returns the navigation date in string form.
+     * Returns a string representation of the navigation date.
      *
      * @return A string representation of the navigation date
      */

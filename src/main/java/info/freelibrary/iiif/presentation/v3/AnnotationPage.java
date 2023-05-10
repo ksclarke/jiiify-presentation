@@ -73,7 +73,7 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
     /**
      * Creates a new annotation page.
      *
-     * @param aID An annotation page ID in string form
+     * @param aID An annotation page ID
      */
     public AnnotationPage(final String aID) {
         super(ResourceTypes.ANNOTATION_PAGE, aID, ResourceBehavior.class);
@@ -231,11 +231,6 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
 
     @Override
     public AnnotationPage<T> setLabel(final Label aLabel) {
-        return (AnnotationPage<T>) super.setLabel(aLabel);
-    }
-
-    @Override
-    public AnnotationPage<T> setLabel(final String aLabel) {
         return (AnnotationPage<T>) super.setLabel(aLabel);
     }
 

@@ -46,8 +46,8 @@ public class Metadata {
     /**
      * Creates a metadata property from the supplied label and value.
      *
-     * @param aLabel A label in string form
-     * @param aValue A value in string form
+     * @param aLabel A label
+     * @param aValue A value
      */
     public Metadata(final String aLabel, final String aValue) {
         this(new Label(aLabel), new Value(aValue));
@@ -87,7 +87,7 @@ public class Metadata {
     /**
      * Sets the label for the metadata property.
      *
-     * @param aLabel A label in string form
+     * @param aLabel A label
      * @return This metadata property
      */
     @JsonIgnore
@@ -122,7 +122,7 @@ public class Metadata {
     /**
      * Sets the metadata property's value.
      *
-     * @param aValue A value in string form
+     * @param aValue A value
      * @return This metadata property
      */
     @JsonIgnore

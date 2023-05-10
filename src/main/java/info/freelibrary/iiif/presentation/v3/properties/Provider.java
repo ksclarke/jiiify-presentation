@@ -51,16 +51,6 @@ public class Provider {
      * Creates a new resource provider from the supplied ID and label.
      *
      * @param aID An ID
-     * @param aLabel A label in string form
-     */
-    public Provider(final String aID, final String aLabel) {
-        this(aID, new Label(aLabel));
-    }
-
-    /**
-     * Creates a new resource provider from the supplied ID and label.
-     *
-     * @param aID An ID
      * @param aLabel A label
      */
     public Provider(final String aID, final Label aLabel) {
@@ -157,18 +147,6 @@ public class Provider {
     @JsonSetter(JsonKeys.LABEL)
     public Provider setLabel(final Label aLabel) {
         myLabel = Objects.requireNonNull(aLabel);
-        return this;
-    }
-
-    /**
-     * Sets the descriptive label in string form.
-     *
-     * @param aLabel A descriptive label in string form
-     * @return The provider
-     */
-    @JsonIgnore
-    public Provider setLabel(final String aLabel) {
-        myLabel = new Label(aLabel);
         return this;
     }
 

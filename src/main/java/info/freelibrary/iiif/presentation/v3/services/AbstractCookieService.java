@@ -53,7 +53,7 @@ abstract class AbstractCookieService<T extends AbstractCookieService<T>> extends
      * Creates a new cookie service from the supplied service profile.
      *
      * @param aProfile A service profile
-     * @param aID A service ID in string form
+     * @param aID A service ID
      */
     protected AbstractCookieService(final AuthCookieService.Profile aProfile, final String aID) {
         super(aID, TYPE, aProfile);

@@ -33,7 +33,7 @@ public class DatasetContent extends AbstractContentResource<DatasetContent>
     /**
      * Creates a dataset content resource from the supplied ID.
      *
-     * @param aID An dataset content resource ID in string form
+     * @param aID A dataset content ID
      */
     public DatasetContent(final String aID) {
         super(ResourceTypes.DATASET, aID, ResourceBehavior.class);
@@ -173,11 +173,6 @@ public class DatasetContent extends AbstractContentResource<DatasetContent>
     @Override
     public DatasetContent setMetadata(final List<Metadata> aMetadataList) {
         return (DatasetContent) super.setMetadata(aMetadataList);
-    }
-
-    @Override
-    public DatasetContent setLabel(final String aLabel) {
-        return (DatasetContent) super.setLabel(aLabel);
     }
 
     @Override

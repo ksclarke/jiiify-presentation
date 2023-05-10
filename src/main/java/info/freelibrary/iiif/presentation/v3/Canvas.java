@@ -50,7 +50,7 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     /**
      * Creates a new canvas from the supplied ID.
      *
-     * @param aID A canvas ID in string form
+     * @param aID A canvas ID
      */
     public Canvas(final String aID) {
         super(aID);
@@ -59,20 +59,10 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     /**
      * Creates a new canvas from the supplied ID and label.
      *
-     * @param aID A canvas ID in string form
+     * @param aID A canvas ID
      * @param aLabel A canvas label
      */
     public Canvas(final String aID, final Label aLabel) {
-        super(aID, aLabel);
-    }
-
-    /**
-     * Creates a new canvas from the supplied ID and label.
-     *
-     * @param aID A canvas ID in string form
-     * @param aLabel A canvas label in string form
-     */
-    public Canvas(final String aID, final String aLabel) {
         super(aID, aLabel);
     }
 
@@ -83,16 +73,6 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
      */
     public Canvas(final Minter aMinter) {
         super(aMinter.getCanvasID());
-    }
-
-    /**
-     * Creates a new canvas, using the supplied minter to create the canvas' ID.
-     *
-     * @param aMinter A minter that will create the canvas ID
-     * @param aLabel A canvas label in string form
-     */
-    public Canvas(final Minter aMinter, final String aLabel) {
-        super(aMinter.getCanvasID(), new Label(aLabel));
     }
 
     /**
@@ -479,11 +459,6 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     @Override
     public Canvas setMetadata(final List<Metadata> aMetadataList) {
         return (Canvas) super.setMetadata(aMetadataList);
-    }
-
-    @Override
-    public Canvas setLabel(final String aLabel) {
-        return (Canvas) super.setLabel(aLabel);
     }
 
     @Override

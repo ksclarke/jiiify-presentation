@@ -20,7 +20,7 @@ public class AnnotationCollectionTest {
     private static final String ID = "https://example.org/id";
 
     /** A test label. */
-    private static final String LABEL = "My great label";
+    private static final Label LABEL = new Label("My great label");
 
     /**
      * Tests an {@link AnnotationCollection} constructor.
@@ -35,7 +35,7 @@ public class AnnotationCollectionTest {
      */
     @Test
     public void testConstructorUriIdLabel() {
-        assertEquals(ID, new AnnotationCollection(ID, new Label(LABEL)).getID());
+        assertEquals(ID, new AnnotationCollection(ID, LABEL).getID());
     }
 
     /**

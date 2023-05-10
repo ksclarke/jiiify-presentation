@@ -47,9 +47,9 @@ public interface Service<T extends Service<T>> {
     String getType();
 
     /**
-     * Sets the service ID in string form.
+     * Sets the service ID.
      *
-     * @param aID The service ID in string form
+     * @param aID The service ID
      * @return The service
      */
     T setID(String aID);

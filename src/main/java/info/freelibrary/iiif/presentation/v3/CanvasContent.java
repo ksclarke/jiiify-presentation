@@ -31,7 +31,7 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
     /**
      * Creates a canvas content resource from the supplied ID.
      *
-     * @param aID A canvas content resource ID in string form
+     * @param aID A canvas content resource ID
      */
     public CanvasContent(final String aID) {
         super(ResourceTypes.CANVAS, aID, ResourceBehavior.class);
@@ -173,11 +173,6 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
     @Override
     public CanvasContent setMetadata(final List<Metadata> aMetadataList) {
         return (CanvasContent) super.setMetadata(aMetadataList);
-    }
-
-    @Override
-    public CanvasContent setLabel(final String aLabel) {
-        return (CanvasContent) super.setLabel(aLabel);
     }
 
     @Override

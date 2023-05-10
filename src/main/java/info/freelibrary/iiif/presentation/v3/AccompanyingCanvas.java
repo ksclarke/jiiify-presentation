@@ -43,7 +43,7 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
         implements CanvasResource<AccompanyingCanvas> {
 
     /**
-     * Creates a new accompanying canvas from the supplied ID in string form.
+     * Creates a new accompanying canvas from the supplied ID.
      *
      * @param aID An accompanying canvas ID
      */
@@ -54,18 +54,8 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
     /**
      * Creates a new accompanying canvas from the supplied ID and label.
      *
-     * @param aID An accompanying canvas ID in string form
-     * @param aLabel A accompanying canvas label in string form
-     */
-    public AccompanyingCanvas(final String aID, final String aLabel) {
-        super(aID, aLabel);
-    }
-
-    /**
-     * Creates a new accompanying canvas from the supplied ID and label.
-     *
-     * @param aID An accompanying canvas ID in string form
-     * @param aLabel A accompanying canvas label in string form
+     * @param aID An accompanying canvas ID
+     * @param aLabel A accompanying canvas label
      */
     public AccompanyingCanvas(final String aID, final Label aLabel) {
         super(aID, aLabel);
@@ -78,16 +68,6 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
      */
     public AccompanyingCanvas(final Minter aMinter) {
         super(aMinter.getCanvasID());
-    }
-
-    /**
-     * Creates a new accompanying canvas using the supplied minter to create the canvas ID.
-     *
-     * @param aMinter A minter that will create the canvas ID
-     * @param aLabel A accompanying canvas label in string form
-     */
-    public AccompanyingCanvas(final Minter aMinter, final String aLabel) {
-        super(aMinter.getCanvasID(), new Label(aLabel));
     }
 
     /**
@@ -232,11 +212,6 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
     @Override
     public AccompanyingCanvas setMetadata(final List<Metadata> aMetadataList) {
         return (AccompanyingCanvas) super.setMetadata(aMetadataList);
-    }
-
-    @Override
-    public AccompanyingCanvas setLabel(final String aLabel) {
-        return (AccompanyingCanvas) super.setLabel(aLabel);
     }
 
     @Override
@@ -500,7 +475,7 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
     /**
      * Returns an AccompanyingCanvas from its JSON representation.
      *
-     * @param aJsonString An accompanying canvas in string form
+     * @param aJsonString A JSON serialization of an accompanying canvas
      * @throws JsonParsingException If there is trouble reading an accompanying canvas from the supplied string
      * @return The accompanying canvas
      */

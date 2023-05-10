@@ -246,17 +246,6 @@ public class AssessingAnnotation extends WebAnnotation implements Annotation<Web
     }
 
     /**
-     * Sets the annotation label from its string form.
-     *
-     * @param aLabel A label to assign to the annotation
-     * @return This annotation
-     */
-    @Override
-    public AssessingAnnotation setLabel(final String aLabel) {
-        return (AssessingAnnotation) super.setLabel(aLabel);
-    }
-
-    /**
      * Sets the annotation label.
      *
      * @param aLabel A label to assign to the annotation

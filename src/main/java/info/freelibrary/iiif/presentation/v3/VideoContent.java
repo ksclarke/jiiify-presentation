@@ -52,7 +52,7 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
     /**
      * Creates a video content resource.
      *
-     * @param aURI An video content resource ID in string form
+     * @param aURI An video content resource ID
      */
     public VideoContent(final String aURI) {
         super(ResourceTypes.VIDEO, aURI, ResourceBehavior.class);
@@ -196,11 +196,6 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
     }
 
     @Override
-    public VideoContent setLabel(final String aLabel) {
-        return (VideoContent) super.setLabel(aLabel);
-    }
-
-    @Override
     public VideoContent setLabel(final Label aLabel) {
         return (VideoContent) super.setLabel(aLabel);
     }
@@ -273,7 +268,7 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
     /**
      * Returns video content from its JSON representation.
      *
-     * @param aJsonString A video content resource in string form
+     * @param aJsonString A JSON serialization of video content
      * @return The video content
      * @throws JsonParsingException If the supplied JSON string cannot be parsed into a video content resource
      */

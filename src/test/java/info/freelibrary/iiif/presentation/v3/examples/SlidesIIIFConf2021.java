@@ -67,7 +67,7 @@ public class SlidesIIIFConf2021 {
      */
     @Test
     public final void testMediaTypeSniffing() {
-        final Manifest manifest = new Manifest(UUID.randomUUID().toString(), "Media Sniffing");
+        final Manifest manifest = new Manifest(UUID.randomUUID().toString(), new Label("Media Sniffing"));
         final Minter minter = MinterFactory.getMinter(manifest);
         // Ignore above here
 

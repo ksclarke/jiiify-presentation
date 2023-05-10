@@ -260,17 +260,6 @@ public class WebAnnotation implements Annotation<WebAnnotation> {
     }
 
     /**
-     * Sets the annotation label from its string form.
-     *
-     * @param aLabel A label to assign to the annotation
-     * @return This annotation
-     */
-    public WebAnnotation setLabel(final String aLabel) {
-        myLabel = new Label(aLabel);
-        return this;
-    }
-
-    /**
      * Sets the annotation label.
      *
      * @param aLabel A label to assign to the annotation

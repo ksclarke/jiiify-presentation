@@ -21,9 +21,9 @@ public interface ContentResource<T extends ContentResource<T>> {
     String getID();
 
     /**
-     * Sets the content resource ID from its string form.
+     * Sets the content resource ID.
      *
-     * @param aID A content resource's ID in string form
+     * @param aID A content resource's ID
      * @return The content resource
      */
     T setID(String aID);

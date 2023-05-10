@@ -42,21 +42,11 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
     /**
      * Creates a collection of annotations from the supplied ID and label.
      *
-     * @param aID A collection ID in string form
+     * @param aID A collection ID
      * @param aLabel A descriptive label for the collection
      */
     public AnnotationCollection(final String aID, final Label aLabel) {
         super(ResourceTypes.ANNOTATION_COLLECTION, aID, aLabel, ResourceBehavior.class);
-    }
-
-    /**
-     * Creates a collection of annotations from the supplied ID and label.
-     *
-     * @param aID A collection ID in string form
-     * @param aLabel A descriptive label, in string form, for the collection
-     */
-    public AnnotationCollection(final String aID, final String aLabel) {
-        super(ResourceTypes.ANNOTATION_COLLECTION, aID, new Label(aLabel), ResourceBehavior.class);
     }
 
     /**
@@ -131,11 +121,6 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
 
     @Override
     public AnnotationCollection setLabel(final Label aLabel) {
-        return (AnnotationCollection) super.setLabel(aLabel);
-    }
-
-    @Override
-    public AnnotationCollection setLabel(final String aLabel) {
         return (AnnotationCollection) super.setLabel(aLabel);
     }
 

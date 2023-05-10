@@ -4,7 +4,6 @@ package info.freelibrary.iiif.presentation.v3.properties;
 import java.util.Objects;
 import java.util.Optional;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -91,17 +90,6 @@ public class PartOf extends AbstractLinkProperty<PartOf> {
         return (PartOf) super.setLabel(aLabel);
     }
 
-    /**
-     * Sets the label of the PartOf.
-     *
-     * @param aLabel A PartOf's label
-     * @return The PartOf
-     */
-    @JsonIgnore
-    public PartOf setLabel(final String aLabel) {
-        return (PartOf) super.setLabel(new Label(aLabel));
-    }
-
     @Override
     public PartOf setLanguages(final String... aLangArray) {
         return (PartOf) super.setLanguages(aLangArray);
@@ -124,7 +112,7 @@ public class PartOf extends AbstractLinkProperty<PartOf> {
     /**
      * Returns a PartOf from its JSON representation.
      *
-     * @param aJsonString A PartOf in string form
+     * @param aJsonString A JSON serialization of a PartOf
      * @throws JsonParsingException If the supplied JSON string cannot be successfully parsed
      * @return This PartOf
      */

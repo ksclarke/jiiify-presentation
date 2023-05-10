@@ -176,7 +176,7 @@ public interface Resource<T extends Resource<T>> {
     /**
      * Sets the resource ID from the supplied string.
      *
-     * @param aID A resource ID in string form
+     * @param aID A resource ID
      * @return The resource
      */
     T setID(String aID);
@@ -188,14 +188,6 @@ public interface Resource<T extends Resource<T>> {
      * @return The resource
      */
     T setLabel(Label aLabel);
-
-    /**
-     * Sets the resource label from the supplied string.
-     *
-     * @param aLabel The string form of the label to set
-     * @return The resource
-     */
-    T setLabel(String aLabel);
 
     /**
      * Sets the resource metadata.
@@ -272,7 +264,7 @@ public interface Resource<T extends Resource<T>> {
     /**
      * Sets the resource's rights ID from the supplied string.
      *
-     * @param aRights A resource's rights ID in string form
+     * @param aRights A resource's rights ID
      * @return The resource
      */
     T setRights(String aRights);
@@ -312,7 +304,7 @@ public interface Resource<T extends Resource<T>> {
     /**
      * Sets the resource summary.
      *
-     * @param aSummary A summary in string form
+     * @param aSummary A summary
      * @return The resource
      */
     T setSummary(String aSummary);

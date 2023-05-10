@@ -114,12 +114,12 @@ public class ManifestTest extends AbstractTest {
 
         manifestThumbService = new ImageService3(Profile.LEVEL_TWO, SERVER + ENCODED_MANIFEST_THUMBNAIL_ARK);
 
-        myManifest = new Manifest(MANIFEST_URI, TEST_TITLE);
+        myManifest = new Manifest(MANIFEST_URI, new Label(TEST_TITLE));
         myManifest.setMetadata(metadata);
         myManifest.setThumbnails(new ImageContent(MANIFEST_THUMBNAIL_URI).setServices(manifestThumbService));
 
         final String id1 = SERVER + MANIFEST_ID + "/canvas/canvas-1";
-        final String label1 = "GeoNF-frg68a_001r_K-64-001";
+        final Label label1 = new Label("GeoNF-frg68a_001r_K-64-001");
         final ImageContent thumbnail1 = new ImageContent(SERVER + "ark:%2F21198%2Fz10v8vhm" + THUMBNAIL_PATH);
         final Canvas canvas1 = new Canvas(id1, label1).setWidthHeight(WIDTH, HEIGHT).setThumbnails(thumbnail1);
         final PaintingAnnotation content1 =
@@ -137,11 +137,12 @@ public class ManifestTest extends AbstractTest {
             final ImageService3 service = new ImageService3(Profile.LEVEL_TWO, SERVER + values[1]);
             final ImageContent resource = new ImageContent(id).setServices(service);
 
-            content1.setChoice(true).getBody().add(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(values[0]));
+            content1.setChoice(true).getBody()
+                    .add(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(new Label(values[0])));
         }
 
         final String id2 = SERVER + MANIFEST_ID + "/canvas/canvas-2";
-        final String label2 = "GeoNF-frg68a_001v_K-64-002";
+        final Label label2 = new Label("GeoNF-frg68a_001v_K-64-002");
         final ImageContent thumbnail2 = new ImageContent(SERVER + "ark:%2F21198%2Fz1gq7dfx" + THUMBNAIL_PATH);
         final Canvas canvas2 = new Canvas(id2, label2).setWidthHeight(WIDTH, HEIGHT).setThumbnails(thumbnail2);
         final PaintingAnnotation content2;
@@ -157,7 +158,8 @@ public class ManifestTest extends AbstractTest {
             final ImageService3 service = new ImageService3(Profile.LEVEL_TWO, SERVER + values[1]);
             final ImageContent resource = new ImageContent(id).setServices(service);
 
-            content2.setChoice(true).getBody().add(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(values[0]));
+            content2.setChoice(true).getBody()
+                    .add(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(new Label(values[0])));
         }
 
         reqStmt = new RequiredStatement("Attribution", "Provided courtesy of Example Institution");
@@ -208,16 +210,6 @@ public class ManifestTest extends AbstractTest {
      * Tests the manifest constructor.
      */
     @Test
-    public void testConstructorStringString() {
-        myManifest = new Manifest(MANIFEST_URI, TEST_TITLE);
-        assertEquals(MANIFEST_URI, myManifest.getID());
-        assertEquals(TEST_TITLE, myManifest.getLabel().getString());
-    }
-
-    /**
-     * Tests the manifest constructor.
-     */
-    @Test
     public void testConstructorUriLabel() {
         myManifest = new Manifest(MANIFEST_URI, new Label(TEST_TITLE));
         assertEquals(MANIFEST_URI, myManifest.getID());
@@ -230,7 +222,7 @@ public class ManifestTest extends AbstractTest {
     @Test
     public void testClearContexts() {
         assertEquals(1, myManifest.getContexts().size());
-        myManifest.addContexts(myLoremIpsum.getUrl(), myLoremIpsum.getUrl());
+        myManifest.addContexts(URI.create(myLoremIpsum.getUrl()), URI.create(myLoremIpsum.getUrl()));
         assertEquals(3, myManifest.getContexts().size());
         assertEquals(1, myManifest.clearContexts().getContexts().size());
     }

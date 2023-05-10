@@ -22,7 +22,7 @@ class NavigableResource<T extends NavigableResource<T>> extends AbstractResource
     /**
      * Creates a navigable resource.
      *
-     * @param aType A resource type in string form
+     * @param aType A resource type
      * @param aBehaviorClass A behavior class for this resource
      */
     protected NavigableResource(final String aType, final Class<? extends Behavior> aBehaviorClass) {

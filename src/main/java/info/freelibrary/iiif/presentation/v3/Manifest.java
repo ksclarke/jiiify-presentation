@@ -87,17 +87,6 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     /**
      * Creates a new manifest from the supplied ID and label.
      *
-     * @param aID A manifest ID in string form
-     * @param aLabel A manifest label in string form
-     * @throws IllegalArgumentException If the supplied ID doesn't conform to IIIF's ID rules
-     */
-    public Manifest(final String aID, final String aLabel) {
-        super(ResourceTypes.MANIFEST, aID, new Label(aLabel), ManifestBehavior.class);
-    }
-
-    /**
-     * Creates a new manifest from the supplied ID and label.
-     *
      * @param aID A manifest ID
      * @param aLabel A manifest label
      * @throws IllegalArgumentException If the supplied ID doesn't conform to IIIF's ID rules
@@ -254,27 +243,6 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
 
             if (!PRESENTATION_CONTEXT_URI.equals(uri)) {
                 myContexts.add(uri);
-            }
-        }
-
-        Collections.sort(myContexts, new ContextListComparator<>());
-        return this;
-    }
-
-    /**
-     * Adds an array of new context URIs, in string form, to the manifest.
-     *
-     * @param aContextArray Manifest context URI(s) in string form
-     * @return The manifest
-     */
-    public Manifest addContexts(final String... aContextArray) {
-        Objects.requireNonNull(aContextArray, MessageCodes.JPA_007);
-
-        for (final String uri : aContextArray) {
-            Objects.requireNonNull(uri, MessageCodes.JPA_007);
-
-            if (!PRESENTATION_CONTEXT_URI.toString().equals(uri)) {
-                myContexts.add(URI.create(uri));
             }
         }
 
@@ -570,11 +538,6 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     @Override
     public Manifest setMetadata(final List<Metadata> aMetadataList) {
         return (Manifest) super.setMetadata(aMetadataList);
-    }
-
-    @Override
-    public Manifest setLabel(final String aLabel) {
-        return (Manifest) super.setLabel(aLabel);
     }
 
     @Override

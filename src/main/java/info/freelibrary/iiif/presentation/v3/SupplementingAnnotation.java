@@ -383,11 +383,6 @@ public class SupplementingAnnotation extends AbstractCanvasAnnotation<Supplement
     }
 
     @Override
-    public SupplementingAnnotation setLabel(final String aLabel) {
-        return (SupplementingAnnotation) super.setLabel(aLabel);
-    }
-
-    @Override
     public SupplementingAnnotation setMetadata(final List<Metadata> aMetadataList) {
         return (SupplementingAnnotation) super.setMetadata(aMetadataList);
     }

@@ -33,7 +33,7 @@ public class ModelContent extends AbstractContentResource<ModelContent>
     /**
      * Creates a model content resource from the supplied ID.
      *
-     * @param aID An model content resource ID in string form
+     * @param aID An model content ID
      */
     public ModelContent(final String aID) {
         super(ResourceTypes.MODEL, aID, ResourceBehavior.class);
@@ -174,11 +174,6 @@ public class ModelContent extends AbstractContentResource<ModelContent>
     @Override
     public ModelContent setMetadata(final List<Metadata> aMetadataList) {
         return (ModelContent) super.setMetadata(aMetadataList);
-    }
-
-    @Override
-    public ModelContent setLabel(final String aLabel) {
-        return (ModelContent) super.setLabel(aLabel);
     }
 
     @Override

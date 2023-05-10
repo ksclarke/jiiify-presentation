@@ -100,18 +100,6 @@ public class RangeTest extends AbstractTest {
     }
 
     /**
-     * Tests {@link Range#Range(Minter, String) Range}.
-     */
-    @Test
-    public final void testRangeMinterLabelAsString() {
-        final String id = HTTPS + UUID.randomUUID().toString();
-        final Minter minter = MinterFactory.getMinter(id);
-        final Range range = new Range(minter, LABEL);
-
-        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(range.getID().toString()).matches());
-    }
-
-    /**
      * Tests the {@link Range#toJSON() toJSON} method.
      */
     @Test
@@ -167,7 +155,7 @@ public class RangeTest extends AbstractTest {
     @Test
     public void testRangeStringString() {
         final String id = getURL();
-        assertEquals(id, new Range(id, myLoremIpsum.getWords(4)).getID().toString());
+        assertEquals(id, new Range(id, new Label(myLoremIpsum.getWords(4))).getID().toString());
     }
 
     /**
@@ -258,6 +246,6 @@ public class RangeTest extends AbstractTest {
      * @return A test sub-range
      */
     private Range getSubRange() {
-        return new Range("https://example.org/range-2", "My subrange label");
+        return new Range("https://example.org/range-2", new Label("My subrange label"));
     }
 }

@@ -34,7 +34,7 @@ public class TextContent extends AbstractContentResource<TextContent>
     /**
      * Creates a text content resource.
      *
-     * @param aID An text content resource ID in string form
+     * @param aID An text content resource ID
      */
     public TextContent(final String aID) {
         super(ResourceTypes.TEXT, aID, ResourceBehavior.class);
@@ -91,11 +91,6 @@ public class TextContent extends AbstractContentResource<TextContent>
 
     @Override
     public TextContent setLabel(final Label aLabel) {
-        return (TextContent) super.setLabel(aLabel);
-    }
-
-    @Override
-    public TextContent setLabel(final String aLabel) {
         return (TextContent) super.setLabel(aLabel);
     }
 

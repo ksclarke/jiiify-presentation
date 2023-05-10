@@ -251,7 +251,7 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
         /**
          * Creates an image service profile from a string value.
          *
-         * @param aProfile A profile in string form
+         * @param aProfile A profile label
          * @return An image service profile
          */
         public static Optional<ImageService3.Profile> from(final String aProfile) {
