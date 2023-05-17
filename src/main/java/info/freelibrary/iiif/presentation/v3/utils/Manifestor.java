@@ -42,7 +42,7 @@ public class Manifestor {
      * @throws JsonParsingException If the manifest isn't valid
      */
     public Manifest readManifest(final File aJsonFile, final Charset aCharset) throws IOException {
-        return Manifest.from(StringUtils.read(aJsonFile, aCharset));
+        return Manifest.fromJSON(StringUtils.read(aJsonFile, aCharset));
     }
 
     /**
@@ -67,7 +67,7 @@ public class Manifestor {
      * @throws JsonParsingException If the collection isn't valid
      */
     public Collection readCollection(final File aJsonFile, final Charset aCharset) throws IOException {
-        return Collection.from(StringUtils.read(aJsonFile, aCharset));
+        return Collection.fromJSON(StringUtils.read(aJsonFile, aCharset));
     }
 
     /**

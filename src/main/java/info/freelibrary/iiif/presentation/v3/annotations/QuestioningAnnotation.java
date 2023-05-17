@@ -37,7 +37,7 @@ public class QuestioningAnnotation extends WebAnnotation implements Annotation<W
      */
     public QuestioningAnnotation(final Minter aMinter) {
         this(aMinter.getAnnotationID(), new Target(aMinter.getManifestID()));
-        setMotivation(Motivation.from(Purpose.QUESTIONING));
+        setMotivation(Motivation.fromLabel(Purpose.QUESTIONING));
     }
 
     /**
@@ -63,7 +63,7 @@ public class QuestioningAnnotation extends WebAnnotation implements Annotation<W
     public <C extends CanvasResource<C>> QuestioningAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
         super(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.QUESTIONING));
+        setMotivation(Motivation.fromLabel(Purpose.QUESTIONING));
     }
 
     /**
@@ -78,7 +78,7 @@ public class QuestioningAnnotation extends WebAnnotation implements Annotation<W
     public <C extends CanvasResource<C>> QuestioningAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
         super(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.QUESTIONING));
+        setMotivation(Motivation.fromLabel(Purpose.QUESTIONING));
     }
 
     /**
@@ -90,7 +90,7 @@ public class QuestioningAnnotation extends WebAnnotation implements Annotation<W
      */
     public <C extends CanvasResource<C>> QuestioningAnnotation(final String aID, final CanvasResource<C> aCanvas) {
         super(aID, aCanvas);
-        setMotivation(Motivation.from(Purpose.QUESTIONING));
+        setMotivation(Motivation.fromLabel(Purpose.QUESTIONING));
     }
 
     /**
@@ -104,7 +104,7 @@ public class QuestioningAnnotation extends WebAnnotation implements Annotation<W
     public <C extends CanvasResource<C>> QuestioningAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
         super(aID, aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.QUESTIONING));
+        setMotivation(Motivation.fromLabel(Purpose.QUESTIONING));
     }
 
     /**
@@ -118,7 +118,7 @@ public class QuestioningAnnotation extends WebAnnotation implements Annotation<W
     public <C extends CanvasResource<C>> QuestioningAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
         super(aID, aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.QUESTIONING));
+        setMotivation(Motivation.fromLabel(Purpose.QUESTIONING));
     }
 
     /**
@@ -129,7 +129,7 @@ public class QuestioningAnnotation extends WebAnnotation implements Annotation<W
      */
     public QuestioningAnnotation(final String aID, final Manifest aManifest) {
         super(aID, aManifest);
-        setMotivation(Motivation.from(Purpose.QUESTIONING));
+        setMotivation(Motivation.fromLabel(Purpose.QUESTIONING));
     }
 
     /**
@@ -140,7 +140,7 @@ public class QuestioningAnnotation extends WebAnnotation implements Annotation<W
      */
     public QuestioningAnnotation(final String aID, final Target aTarget) {
         super(aID, aTarget);
-        setMotivation(Motivation.from(Purpose.QUESTIONING));
+        setMotivation(Motivation.fromLabel(Purpose.QUESTIONING));
     }
 
     /**
@@ -241,7 +241,7 @@ public class QuestioningAnnotation extends WebAnnotation implements Annotation<W
                     LOGGER.getMessage(MessageCodes.JPA_038, QuestioningAnnotation.class.getSimpleName(), aMotivation));
         }
 
-        return (QuestioningAnnotation) super.setMotivation(Motivation.from(Purpose.QUESTIONING));
+        return (QuestioningAnnotation) super.setMotivation(Motivation.fromLabel(Purpose.QUESTIONING));
     }
 
     @Override

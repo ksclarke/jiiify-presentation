@@ -1,10 +1,10 @@
 
 package info.freelibrary.iiif.presentation.v3.utils.json;
 
-import static info.freelibrary.util.Constants.MESSAGE_SLOT;
-
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 import com.fasterxml.jackson.core.JsonParser;
@@ -14,7 +14,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
-import info.freelibrary.util.StringUtils;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.Resource;
@@ -26,22 +27,24 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.CollectionBeha
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.RangeBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * A deserializer for classes that implement the Behavior interface. It operates on a list so that the elements can be
  * compared to check for mutual exclusivity.
  */
-public class BehaviorsDeserializer extends StdDeserializer<List<Behavior>> {
+public class BehaviorDeserializer extends StdDeserializer<List<Behavior>> {
 
-    /**
-     * The <code>serialVersionUID</code> for BehaviorDeserializer.
-     */
+    /** The <code>serialVersionUID</code> for BehaviorDeserializer. */
     private static final long serialVersionUID = -5899455864378427817L;
+
+    /** The deserializer's logger. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(BehaviorDeserializer.class, MessageCodes.BUNDLE);
 
     /**
      * Creates a new behaviors deserializer.
      */
-    BehaviorsDeserializer() {
+    BehaviorDeserializer() {
         this(null);
     }
 
@@ -50,7 +53,7 @@ public class BehaviorsDeserializer extends StdDeserializer<List<Behavior>> {
      *
      * @param aClass A class to be deserialized
      */
-    BehaviorsDeserializer(final Class<?> aClass) {
+    BehaviorDeserializer(final Class<?> aClass) {
         super(aClass);
     }
 
@@ -58,52 +61,54 @@ public class BehaviorsDeserializer extends StdDeserializer<List<Behavior>> {
     @SuppressWarnings(PMD.PRESERVE_STACK_TRACE)
     public List<Behavior> deserialize(final JsonParser aParser, final DeserializationContext aContext)
             throws IOException, JsonProcessingException {
-        final JsonNode node = aParser.getCodec().readTree(aParser);
-        final String iiifResourceType = ((Resource<?>) aParser.getParsingContext().getCurrentValue()).getType();
+        final JsonNode currentNode = aParser.getCodec().readTree(aParser);
+        final Object currentContext = aParser.getParsingContext().getCurrentValue();
+        final List<JsonMappingException> errors = new ArrayList<>();
 
-        final Function<String, Behavior> stringToBehavior;
-        final List<Behavior> behaviors;
+        final Function<String, Optional<? extends Behavior>> getBehavior;
+        final BehaviorList behaviors;
 
-        switch (iiifResourceType) {
+        switch (((Resource<?>) currentContext).getType()) {
             case ResourceTypes.CANVAS:
-                stringToBehavior = CanvasBehavior::fromString;
+                getBehavior = CanvasBehavior::fromLabel;
                 behaviors = new BehaviorList(CanvasBehavior.class);
                 break;
             case ResourceTypes.COLLECTION:
-                stringToBehavior = CollectionBehavior::fromString;
+                getBehavior = CollectionBehavior::fromLabel;
                 behaviors = new BehaviorList(CollectionBehavior.class);
                 break;
             case ResourceTypes.MANIFEST:
-                stringToBehavior = ManifestBehavior::from;
+                getBehavior = ManifestBehavior::fromLabel;
                 behaviors = new BehaviorList(ManifestBehavior.class);
                 break;
             case ResourceTypes.RANGE:
-                stringToBehavior = RangeBehavior::fromString;
+                getBehavior = RangeBehavior::fromLabel;
                 behaviors = new BehaviorList(RangeBehavior.class);
                 break;
             default:
-                stringToBehavior = ResourceBehavior::fromString;
+                getBehavior = ResourceBehavior::fromLabel;
                 behaviors = new BehaviorList(ResourceBehavior.class);
                 break;
         }
 
-        // Build a list of Behaviors
-        try {
-            node.forEach(stringNode -> behaviors.add(stringToBehavior.apply(stringNode.textValue())));
-        } catch (final IllegalArgumentException details) {
-            final String errorMessage;
+        currentNode.forEach(childNode -> {
+            final String label = childNode.textValue();
+            final Optional<? extends Behavior> behavior = getBehavior.apply(label);
 
-            // Check if we need to fill in the resource type
-            if (details.getMessage().contains(MESSAGE_SLOT)) {
-                errorMessage = StringUtils.format(details.getMessage(), iiifResourceType);
+            if (behavior.isEmpty()) {
+                errors.add(new JsonMappingException(aParser,
+                        LOGGER.getMessage(MessageCodes.JPA_010, label, behaviors.getBehaviorType()),
+                        aParser.getCurrentLocation()));
             } else {
-                errorMessage = details.getMessage();
+                behaviors.add(behavior.get());
             }
+        });
 
-            throw new JsonMappingException(aParser, errorMessage, aParser.getCurrentLocation()); // NOPMD
+        if (!errors.isEmpty()) {
+            errors.forEach(error -> LOGGER.error(error, error.getMessage()));
+            throw errors.get(0);
         }
 
         return behaviors;
     }
-
 }

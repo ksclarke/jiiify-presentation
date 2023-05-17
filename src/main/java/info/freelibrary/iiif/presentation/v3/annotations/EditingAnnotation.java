@@ -37,7 +37,7 @@ public class EditingAnnotation extends WebAnnotation implements Annotation<WebAn
      */
     public EditingAnnotation(final Minter aMinter) {
         this(aMinter.getAnnotationID(), new Target(aMinter.getManifestID()));
-        setMotivation(Motivation.from(Purpose.EDITING));
+        setMotivation(Motivation.fromLabel(Purpose.EDITING));
     }
 
     /**
@@ -63,7 +63,7 @@ public class EditingAnnotation extends WebAnnotation implements Annotation<WebAn
     public <C extends CanvasResource<C>> EditingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
         super(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.EDITING));
+        setMotivation(Motivation.fromLabel(Purpose.EDITING));
     }
 
     /**
@@ -78,7 +78,7 @@ public class EditingAnnotation extends WebAnnotation implements Annotation<WebAn
     public <C extends CanvasResource<C>> EditingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
         super(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.EDITING));
+        setMotivation(Motivation.fromLabel(Purpose.EDITING));
     }
 
     /**
@@ -90,7 +90,7 @@ public class EditingAnnotation extends WebAnnotation implements Annotation<WebAn
      */
     public <C extends CanvasResource<C>> EditingAnnotation(final String aID, final CanvasResource<C> aCanvas) {
         super(aID, aCanvas);
-        setMotivation(Motivation.from(Purpose.EDITING));
+        setMotivation(Motivation.fromLabel(Purpose.EDITING));
     }
 
     /**
@@ -104,7 +104,7 @@ public class EditingAnnotation extends WebAnnotation implements Annotation<WebAn
     public <C extends CanvasResource<C>> EditingAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
         super(aID, aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.EDITING));
+        setMotivation(Motivation.fromLabel(Purpose.EDITING));
     }
 
     /**
@@ -118,7 +118,7 @@ public class EditingAnnotation extends WebAnnotation implements Annotation<WebAn
     public <C extends CanvasResource<C>> EditingAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
         super(aID, aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.EDITING));
+        setMotivation(Motivation.fromLabel(Purpose.EDITING));
     }
 
     /**
@@ -129,7 +129,7 @@ public class EditingAnnotation extends WebAnnotation implements Annotation<WebAn
      */
     public EditingAnnotation(final String aID, final Manifest aManifest) {
         super(aID, aManifest);
-        setMotivation(Motivation.from(Purpose.EDITING));
+        setMotivation(Motivation.fromLabel(Purpose.EDITING));
     }
 
     /**
@@ -140,7 +140,7 @@ public class EditingAnnotation extends WebAnnotation implements Annotation<WebAn
      */
     public EditingAnnotation(final String aID, final Target aTarget) {
         super(aID, aTarget);
-        setMotivation(Motivation.from(Purpose.EDITING));
+        setMotivation(Motivation.fromLabel(Purpose.EDITING));
     }
 
     /**
@@ -241,7 +241,7 @@ public class EditingAnnotation extends WebAnnotation implements Annotation<WebAn
                     LOGGER.getMessage(MessageCodes.JPA_038, EditingAnnotation.class.getSimpleName(), aMotivation));
         }
 
-        return (EditingAnnotation) super.setMotivation(Motivation.from(Purpose.EDITING));
+        return (EditingAnnotation) super.setMotivation(Motivation.fromLabel(Purpose.EDITING));
     }
 
     @Override

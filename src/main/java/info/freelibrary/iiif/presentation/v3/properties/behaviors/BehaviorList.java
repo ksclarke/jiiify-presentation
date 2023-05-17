@@ -83,7 +83,7 @@ public class BehaviorList extends ArrayList<Behavior> implements List<Behavior> 
      * @param aBehaviorClass A type of behavior
      */
     public BehaviorList(final Class<? extends Behavior> aBehaviorClass) {
-        myBehaviorClass = aBehaviorClass;
+        myBehaviorClass = Objects.requireNonNull(aBehaviorClass);
     }
 
     /**
@@ -95,7 +95,8 @@ public class BehaviorList extends ArrayList<Behavior> implements List<Behavior> 
      */
     @SuppressWarnings({ "PMD.ConstructorCallsOverridableMethod" })
     public BehaviorList(final Class<? extends Behavior> aBehaviorClass, final Behavior... aBehaviorArray) {
-        myBehaviorClass = Objects.requireNonNull(aBehaviorClass);
+        this(aBehaviorClass);
+
         addBehaviors(Arrays.asList(Objects.requireNonNull(aBehaviorArray)));
     }
 
@@ -150,6 +151,15 @@ public class BehaviorList extends ArrayList<Behavior> implements List<Behavior> 
         if (!myBehaviorClass.equals(aBehaviorType)) {
             throw new InvalidBehaviorException(MessageCodes.JPA_010, myBehaviorClass, aResourceType);
         }
+    }
+
+    /**
+     * Gets the list's behavior type.
+     *
+     * @return The list's behavior type
+     */
+    public Class<? extends Behavior> getBehaviorType() {
+        return myBehaviorClass;
     }
 
     /**

@@ -324,7 +324,7 @@ public class Provider {
      * @return A provider
      * @throws JsonParsingException If the supplied JSON cannot be parsed into a Provider object
      */
-    public static Provider from(final String aJsonString) {
+    static Provider fromJSON(final String aJsonString) {
         try {
             return JSON.getReader(Provider.class).readValue(aJsonString);
         } catch (final JsonProcessingException details) {

@@ -47,7 +47,7 @@ public class CanvasContentTest {
     public final void testDeSerialization() throws IOException {
         final String json =
                 StringUtils.read(new File("src/test/resources/json/canvas-content.json"), StandardCharsets.UTF_8);
-        final Manifest manifest = Manifest.from(json);
+        final Manifest manifest = Manifest.fromJSON(json);
         final Canvas canvas = manifest.getCanvases().get(0);
 
         assertEquals(1, canvas.getSupplementingPages().get(0).getAnnotations().size());

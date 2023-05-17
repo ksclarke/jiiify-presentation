@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import info.freelibrary.iiif.presentation.v3.utils.Labeled;
 
 /**
- * A relationship that serves as an annotation's motivation or the purpose of an annotation's textual body.
+ * A relationship that serves as an annotation's motivation or the purpose of an annotation's body.
  */
 public enum Purpose implements Labeled {
 
@@ -86,7 +86,7 @@ public enum Purpose implements Labeled {
      * @param aLabel A label
      * @return An empty optional or one containing the purpose corresponding to the supplied label
      */
-    public static Optional<Purpose> forLabel(final String aLabel) {
+    public static Optional<Purpose> fromLabel(final String aLabel) {
         for (final Purpose purpose : values()) {
             if (purpose.myLabel.equalsIgnoreCase(aLabel)) {
                 return Optional.of(purpose);

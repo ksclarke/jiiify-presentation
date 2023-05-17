@@ -521,11 +521,6 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     @Override
-    public Manifest setSummary(final String aSummary) {
-        return (Manifest) super.setSummary(aSummary);
-    }
-
-    @Override
     public Manifest setSummary(final Summary aSummary) {
         return (Manifest) super.setSummary(aSummary);
     }
@@ -610,8 +605,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @return The manifest
      * @throws JsonParsingException If there is trouble parsing the JSON manifest
      */
-    @JsonIgnore
-    public static Manifest from(final String aJsonString) {
+    public static Manifest fromJSON(final String aJsonString) {
         try {
             final Manifest manifest = JSON.getReader(Manifest.class).readValue(aJsonString);
             final String type = manifest.getType();

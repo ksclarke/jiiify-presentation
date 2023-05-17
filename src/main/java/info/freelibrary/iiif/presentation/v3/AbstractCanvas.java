@@ -28,6 +28,7 @@ import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.JDK;
 import info.freelibrary.util.warnings.PMD;
 
+import info.freelibrary.iiif.presentation.v3.annotations.Purpose;
 import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
@@ -816,7 +817,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         for (final Object item : items) {
             final Map<?, ?> annotation = (Map<?, ?>) item;
 
-            if (annotation != null && !"supplementing".equals(annotation.get(JsonKeys.MOTIVATION))) {
+            if (annotation != null && !Purpose.SUPPLEMENTING.label().equals(annotation.get(JsonKeys.MOTIVATION))) {
                 supplementingAnnotations = false;
             }
         }

@@ -166,8 +166,8 @@ public class PartOfTest {
      */
     @Test
     public final void testHashCode() throws IOException {
-        final PartOf partOf1 = PartOf.from(getTestFixture());
-        final PartOf partOf2 = PartOf.from(getTestFixture());
+        final PartOf partOf1 = PartOf.fromJSON(getTestFixture());
+        final PartOf partOf2 = PartOf.fromJSON(getTestFixture());
 
         assertEquals(partOf1.hashCode(), partOf2.hashCode());
     }
@@ -179,8 +179,8 @@ public class PartOfTest {
      */
     @Test
     public final void testEquals() throws IOException {
-        final PartOf partOf1 = PartOf.from(getTestFixture());
-        final PartOf partOf2 = PartOf.from(getTestFixture());
+        final PartOf partOf1 = PartOf.fromJSON(getTestFixture());
+        final PartOf partOf2 = PartOf.fromJSON(getTestFixture());
 
         assertTrue(partOf1.equals(partOf2));
     }
@@ -193,7 +193,7 @@ public class PartOfTest {
     @Test
     public final void testToFromString() throws IOException {
         final String json = getTestFixture();
-        assertEquals(json, PartOf.from(json).toString());
+        assertEquals(json, PartOf.fromJSON(json).toString());
     }
 
     /**

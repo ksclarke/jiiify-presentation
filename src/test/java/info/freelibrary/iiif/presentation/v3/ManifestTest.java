@@ -363,17 +363,17 @@ public class ManifestTest extends AbstractTest {
      * Tests manifest creation fromJSON().
      */
     @Test
-    public void testFrom() throws IOException {
+    public void testFromJSON() throws IOException {
         final String json = format(StringUtils.read(new File(SINAI_JSON)));
-        assertEquals(json, format(Manifest.from(json).toString()));
+        assertEquals(json, format(Manifest.fromJSON(json).toString()));
     }
 
     /**
-     * Test manifest creation using from() with a Collection.
+     * Test manifest creation using fromJSON() with a Collection.
      */
     @Test(expected = JsonParsingException.class)
     public void testFromStringCollection() throws IOException {
-        Manifest.from(StringUtils.read(new File(TestUtils.TEST_DIR, "collection1.json")));
+        Manifest.fromJSON(StringUtils.read(new File(TestUtils.TEST_DIR, "collection1.json")));
     }
 
     /**

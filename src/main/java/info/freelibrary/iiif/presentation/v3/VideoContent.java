@@ -176,11 +176,6 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
     }
 
     @Override
-    public VideoContent setSummary(final String aSummary) {
-        return (VideoContent) super.setSummary(aSummary);
-    }
-
-    @Override
     public VideoContent setSummary(final Summary aSummary) {
         return (VideoContent) super.setSummary(aSummary);
     }
@@ -198,6 +193,11 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
     @Override
     public VideoContent setLabel(final Label aLabel) {
         return (VideoContent) super.setLabel(aLabel);
+    }
+
+    @Override
+    public VideoContent setLanguages(final String... aLangArray) {
+        return (VideoContent) super.setLanguages(aLangArray);
     }
 
     /**
@@ -272,7 +272,7 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
      * @return The video content
      * @throws JsonParsingException If the supplied JSON string cannot be parsed into a video content resource
      */
-    public static VideoContent from(final String aJsonString) {
+    static VideoContent fromJSON(final String aJsonString) {
         try {
             return JSON.getReader(VideoContent.class).readValue(aJsonString);
         } catch (final JsonProcessingException details) {

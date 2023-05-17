@@ -254,7 +254,7 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
          * @param aProfile A profile label
          * @return An image service profile
          */
-        public static Optional<ImageService3.Profile> from(final String aProfile) {
+        public static Optional<ImageService3.Profile> fromLabel(final String aProfile) {
             for (final ImageService3.Profile profile : ImageService3.Profile.values()) {
                 if (profile.label().equalsIgnoreCase(aProfile)) {
                     return Optional.of(profile);

@@ -205,7 +205,7 @@ public class PhysicalDimsService extends AbstractService<PhysicalDimsService> im
          * @param aLabel A profile's label
          * @return A physical dims service profile
          */
-        public static Optional<PhysicalDimsService.Profile> from(final String aLabel) {
+        public static Optional<PhysicalDimsService.Profile> fromLabel(final String aLabel) {
             for (final PhysicalDimsService.Profile profile : PhysicalDimsService.Profile.values()) {
                 if (profile.toString().equals(aLabel)) {
                     return Optional.of(profile);

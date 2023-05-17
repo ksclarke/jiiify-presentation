@@ -48,7 +48,7 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
     JsonKeys.THUMBNAIL, JsonKeys.METADATA, JsonKeys.ITEMS, JsonKeys.SERVICE, JsonKeys.TIMEMODE, JsonKeys.BODY,
     JsonKeys.TARGET })
 @SuppressWarnings({ PMD.GOD_CLASS, "PMD.GodClass" })
-abstract class AbstractCanvasAnnotation<T extends AbstractCanvasAnnotation<T>> extends AbstractResource<T> {
+abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> extends AbstractResource<A> {
 
     /** The annotation's logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractCanvasAnnotation.class, MessageCodes.BUNDLE);
@@ -178,7 +178,7 @@ abstract class AbstractCanvasAnnotation<T extends AbstractCanvasAnnotation<T>> e
      * @return This annotation
      */
     @JsonIgnore
-    public AbstractCanvasAnnotation<T> setBehaviors(final Behavior... aBehaviorArray) {
+    public AbstractCanvasAnnotation<A> setBehaviors(final Behavior... aBehaviorArray) {
         return setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorArray));
     }
 
@@ -190,12 +190,12 @@ abstract class AbstractCanvasAnnotation<T extends AbstractCanvasAnnotation<T>> e
      */
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
-    public AbstractCanvasAnnotation<T> setBehaviors(final List<Behavior> aBehaviorList) {
+    public AbstractCanvasAnnotation<A> setBehaviors(final List<Behavior> aBehaviorList) {
         if (aBehaviorList instanceof BehaviorList) {
             ((BehaviorList) aBehaviorList).checkType(ResourceBehavior.class, this.getClass());
         }
 
-        return (AbstractCanvasAnnotation<T>) super.setBehaviors(aBehaviorList);
+        return (AbstractCanvasAnnotation<A>) super.setBehaviors(aBehaviorList);
     }
 
     /**
@@ -206,13 +206,13 @@ abstract class AbstractCanvasAnnotation<T extends AbstractCanvasAnnotation<T>> e
      */
     @JsonIgnore
     @SuppressWarnings(JDK.UNCHECKED)
-    protected T setBody(final ContentResource<?>... aResourceArray) {
+    protected A setBody(final ContentResource<?>... aResourceArray) {
         final List<ContentResource<?>> resources = getBody();
 
         resources.clear();
         resources.addAll(Arrays.asList(aResourceArray));
 
-        return (T) this;
+        return (A) this;
     }
 
     /**
@@ -222,7 +222,7 @@ abstract class AbstractCanvasAnnotation<T extends AbstractCanvasAnnotation<T>> e
      * @return This annotation
      */
     @JsonIgnore
-    protected T setBody(final List<ContentResource<?>> aResourceList) {
+    protected A setBody(final List<ContentResource<?>> aResourceList) {
         return setBody(aResourceList.toArray(new ContentResource[0]));
     }
 
@@ -233,9 +233,9 @@ abstract class AbstractCanvasAnnotation<T extends AbstractCanvasAnnotation<T>> e
      * @return This annotation
      */
     @SuppressWarnings(JDK.UNCHECKED)
-    protected T setChoice(final boolean aChoice) {
+    protected A setChoice(final boolean aChoice) {
         myBodyHasChoice = aChoice;
-        return (T) this;
+        return (A) this;
     }
 
     /**
@@ -245,9 +245,9 @@ abstract class AbstractCanvasAnnotation<T extends AbstractCanvasAnnotation<T>> e
      */
     @SuppressWarnings(JDK.UNCHECKED)
     @JsonSetter(JsonKeys.MOTIVATION)
-    protected T setMotivation(final Motivation aMotivation) {
+    protected A setMotivation(final Motivation aMotivation) {
         myMotivation = aMotivation;
-        return (T) this;
+        return (A) this;
     }
 
     /**
@@ -257,9 +257,9 @@ abstract class AbstractCanvasAnnotation<T extends AbstractCanvasAnnotation<T>> e
      * @return The annotation
      */
     @SuppressWarnings(JDK.UNCHECKED)
-    protected T setTarget(final Target aTarget) {
+    protected A setTarget(final Target aTarget) {
         myTarget = aTarget;
-        return (T) this;
+        return (A) this;
     }
 
     /**
@@ -269,9 +269,9 @@ abstract class AbstractCanvasAnnotation<T extends AbstractCanvasAnnotation<T>> e
      * @return The annotation
      */
     @SuppressWarnings(JDK.UNCHECKED)
-    protected T setTimeMode(final TimeMode aTimeMode) {
+    protected A setTimeMode(final TimeMode aTimeMode) {
         myTimeMode = aTimeMode;
-        return (T) this;
+        return (A) this;
     }
 
     /**

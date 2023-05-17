@@ -142,7 +142,7 @@ public class Homepage extends AbstractLinkProperty<Homepage> {
      * @throws JsonParsingException If the supplied JSON string cannot be successfully parsed
      * @return A homepage
      */
-    public static Homepage from(final String aJsonString) {
+    static Homepage fromJSON(final String aJsonString) {
         try {
             return JSON.getReader(Homepage.class).readValue(aJsonString);
         } catch (final JsonProcessingException details) {

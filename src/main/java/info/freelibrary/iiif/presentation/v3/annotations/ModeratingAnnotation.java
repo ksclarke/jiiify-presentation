@@ -37,7 +37,7 @@ public class ModeratingAnnotation extends WebAnnotation implements Annotation<We
      */
     public ModeratingAnnotation(final Minter aMinter) {
         this(aMinter.getAnnotationID(), new Target(aMinter.getManifestID()));
-        setMotivation(Motivation.from(Purpose.MODERATING));
+        setMotivation(Motivation.fromLabel(Purpose.MODERATING));
     }
 
     /**
@@ -63,7 +63,7 @@ public class ModeratingAnnotation extends WebAnnotation implements Annotation<We
     public <C extends CanvasResource<C>> ModeratingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
         super(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.MODERATING));
+        setMotivation(Motivation.fromLabel(Purpose.MODERATING));
     }
 
     /**
@@ -78,7 +78,7 @@ public class ModeratingAnnotation extends WebAnnotation implements Annotation<We
     public <C extends CanvasResource<C>> ModeratingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
         super(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.MODERATING));
+        setMotivation(Motivation.fromLabel(Purpose.MODERATING));
     }
 
     /**
@@ -90,7 +90,7 @@ public class ModeratingAnnotation extends WebAnnotation implements Annotation<We
      */
     public <C extends CanvasResource<C>> ModeratingAnnotation(final String aID, final CanvasResource<C> aCanvas) {
         super(aID, aCanvas);
-        setMotivation(Motivation.from(Purpose.MODERATING));
+        setMotivation(Motivation.fromLabel(Purpose.MODERATING));
     }
 
     /**
@@ -104,7 +104,7 @@ public class ModeratingAnnotation extends WebAnnotation implements Annotation<We
     public <C extends CanvasResource<C>> ModeratingAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
         super(aID, aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.MODERATING));
+        setMotivation(Motivation.fromLabel(Purpose.MODERATING));
     }
 
     /**
@@ -118,7 +118,7 @@ public class ModeratingAnnotation extends WebAnnotation implements Annotation<We
     public <C extends CanvasResource<C>> ModeratingAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
         super(aID, aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.MODERATING));
+        setMotivation(Motivation.fromLabel(Purpose.MODERATING));
     }
 
     /**
@@ -129,7 +129,7 @@ public class ModeratingAnnotation extends WebAnnotation implements Annotation<We
      */
     public ModeratingAnnotation(final String aID, final Manifest aManifest) {
         super(aID, aManifest);
-        setMotivation(Motivation.from(Purpose.MODERATING));
+        setMotivation(Motivation.fromLabel(Purpose.MODERATING));
     }
 
     /**
@@ -140,7 +140,7 @@ public class ModeratingAnnotation extends WebAnnotation implements Annotation<We
      */
     public ModeratingAnnotation(final String aID, final Target aTarget) {
         super(aID, aTarget);
-        setMotivation(Motivation.from(Purpose.MODERATING));
+        setMotivation(Motivation.fromLabel(Purpose.MODERATING));
     }
 
     /**
@@ -241,7 +241,7 @@ public class ModeratingAnnotation extends WebAnnotation implements Annotation<We
                     LOGGER.getMessage(MessageCodes.JPA_038, ModeratingAnnotation.class.getSimpleName(), aMotivation));
         }
 
-        return (ModeratingAnnotation) super.setMotivation(Motivation.from(Purpose.MODERATING));
+        return (ModeratingAnnotation) super.setMotivation(Motivation.fromLabel(Purpose.MODERATING));
     }
 
     @Override

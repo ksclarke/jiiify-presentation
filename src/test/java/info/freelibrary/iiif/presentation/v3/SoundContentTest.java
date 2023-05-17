@@ -45,6 +45,6 @@ public class SoundContentTest extends AbstractTest {
     @Test
     public final void testFixture0003() throws IOException {
         final String json = format(StringUtils.read(new File("src/test/resources/fixtures/0002-mvm-audio.json")));
-        assertEquals(json, format(Manifest.from(json).toString()));
+        assertEquals(json, format(Manifest.fromJSON(json).toString()));
     }
 }

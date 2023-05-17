@@ -37,7 +37,7 @@ public class BookmarkingAnnotation extends WebAnnotation implements Annotation<W
      */
     public BookmarkingAnnotation(final Minter aMinter) {
         this(aMinter.getAnnotationID(), new Target(aMinter.getManifestID()));
-        setMotivation(Motivation.from(Purpose.BOOKMARKING));
+        setMotivation(Motivation.fromLabel(Purpose.BOOKMARKING));
     }
 
     /**
@@ -63,7 +63,7 @@ public class BookmarkingAnnotation extends WebAnnotation implements Annotation<W
     public <C extends CanvasResource<C>> BookmarkingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
         super(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.BOOKMARKING));
+        setMotivation(Motivation.fromLabel(Purpose.BOOKMARKING));
     }
 
     /**
@@ -78,7 +78,7 @@ public class BookmarkingAnnotation extends WebAnnotation implements Annotation<W
     public <C extends CanvasResource<C>> BookmarkingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
         super(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.BOOKMARKING));
+        setMotivation(Motivation.fromLabel(Purpose.BOOKMARKING));
     }
 
     /**
@@ -90,7 +90,7 @@ public class BookmarkingAnnotation extends WebAnnotation implements Annotation<W
      */
     public <C extends CanvasResource<C>> BookmarkingAnnotation(final String aID, final CanvasResource<C> aCanvas) {
         super(aID, aCanvas);
-        setMotivation(Motivation.from(Purpose.BOOKMARKING));
+        setMotivation(Motivation.fromLabel(Purpose.BOOKMARKING));
     }
 
     /**
@@ -104,7 +104,7 @@ public class BookmarkingAnnotation extends WebAnnotation implements Annotation<W
     public <C extends CanvasResource<C>> BookmarkingAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
         super(aID, aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.BOOKMARKING));
+        setMotivation(Motivation.fromLabel(Purpose.BOOKMARKING));
     }
 
     /**
@@ -118,7 +118,7 @@ public class BookmarkingAnnotation extends WebAnnotation implements Annotation<W
     public <C extends CanvasResource<C>> BookmarkingAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
         super(aID, aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.BOOKMARKING));
+        setMotivation(Motivation.fromLabel(Purpose.BOOKMARKING));
     }
 
     /**
@@ -129,7 +129,7 @@ public class BookmarkingAnnotation extends WebAnnotation implements Annotation<W
      */
     public BookmarkingAnnotation(final String aID, final Manifest aManifest) {
         super(aID, aManifest);
-        setMotivation(Motivation.from(Purpose.BOOKMARKING));
+        setMotivation(Motivation.fromLabel(Purpose.BOOKMARKING));
     }
 
     /**
@@ -140,7 +140,7 @@ public class BookmarkingAnnotation extends WebAnnotation implements Annotation<W
      */
     public BookmarkingAnnotation(final String aID, final Target aTarget) {
         super(aID, aTarget);
-        setMotivation(Motivation.from(Purpose.BOOKMARKING));
+        setMotivation(Motivation.fromLabel(Purpose.BOOKMARKING));
     }
 
     /**
@@ -241,7 +241,7 @@ public class BookmarkingAnnotation extends WebAnnotation implements Annotation<W
                     LOGGER.getMessage(MessageCodes.JPA_038, BookmarkingAnnotation.class.getSimpleName(), aMotivation));
         }
 
-        return (BookmarkingAnnotation) super.setMotivation(Motivation.from(Purpose.BOOKMARKING));
+        return (BookmarkingAnnotation) super.setMotivation(Motivation.fromLabel(Purpose.BOOKMARKING));
     }
 
     @Override

@@ -30,7 +30,7 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 /**
  * An interface that defines methods related to the Web Annotation Data Model as it's used by IIIF.
  *
- * @param <T> A class that implements {@code Annotation}
+ * @param <A> A class that implements {@code Annotation}
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = JsonKeys.MOTIVATION,
         visible = true)
@@ -51,7 +51,7 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
     @Type(value = SupplementingAnnotation.class, name = "supplementing"),
     @Type(value = TaggingAnnotation.class, name = "tagging") //
 })
-public interface Annotation<T extends Annotation<T>> {
+public interface Annotation<A extends Annotation<A>> {
 
     /**
      * Indicates whether there is a choice between annotation resources or just individual resources on an annotation.
@@ -102,7 +102,7 @@ public interface Annotation<T extends Annotation<T>> {
      * @return This annotation
      */
     @JsonIgnore
-    T setBody(ContentResource<?>... aResourceArray);
+    A setBody(ContentResource<?>... aResourceArray);
 
     /**
      * Sets the annotation body's resources.
@@ -110,7 +110,7 @@ public interface Annotation<T extends Annotation<T>> {
      * @param aResourceList A list of resources
      * @return This annotation
      */
-    T setBody(List<ContentResource<?>> aResourceList);
+    A setBody(List<ContentResource<?>> aResourceList);
 
     /**
      * Sets whether the annotation body contains a choice.
@@ -118,7 +118,7 @@ public interface Annotation<T extends Annotation<T>> {
      * @param aChoice A boolean indicating whether the annotation's body contains a choice
      * @return This annotation
      */
-    T setChoice(boolean aChoice);
+    A setChoice(boolean aChoice);
 
     /**
      * Sets the annotation ID.
@@ -126,7 +126,7 @@ public interface Annotation<T extends Annotation<T>> {
      * @param aID An ID
      * @return The annotation
      */
-    T setID(String aID);
+    A setID(String aID);
 
     /**
      * Sets the annotation's motivation.
@@ -134,7 +134,7 @@ public interface Annotation<T extends Annotation<T>> {
      * @param aMotivation A motivation
      * @return The annotation
      */
-    T setMotivation(Motivation aMotivation);
+    A setMotivation(Motivation aMotivation);
 
     /**
      * Sets the target of this annotation.
@@ -142,7 +142,7 @@ public interface Annotation<T extends Annotation<T>> {
      * @param aTarget An annotation target
      * @return This annotation
      */
-    T setTarget(Target aTarget);
+    A setTarget(Target aTarget);
 
     /**
      * Sets the time mode.
@@ -150,5 +150,5 @@ public interface Annotation<T extends Annotation<T>> {
      * @param aTimeMode A time mode
      * @return This annotation
      */
-    T setTimeMode(TimeMode aTimeMode);
+    A setTimeMode(TimeMode aTimeMode);
 }

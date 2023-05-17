@@ -112,21 +112,21 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
             if (profileNode != null) {
                 final String profileLabel = profileNode.asText();
 
-                if (ImageService3.Profile.from(profileLabel).isPresent()) {
-                    final ImageService3.Profile profile = ImageService3.Profile.from(profileLabel).get();
+                if (ImageService3.Profile.fromLabel(profileLabel).isPresent()) {
+                    final ImageService3.Profile profile = ImageService3.Profile.fromLabel(profileLabel).get();
                     final ImageService<?> imageService = new ImageService3(profile, id);
 
                     service = deserializeImageService(aNode, imageService).setServices(services);
-                } else if (ImageService2.Profile.from(profileLabel).isPresent()) {
-                    final ImageService2.Profile profile = ImageService2.Profile.from(profileLabel).get();
+                } else if (ImageService2.Profile.fromLabel(profileLabel).isPresent()) {
+                    final ImageService2.Profile profile = ImageService2.Profile.fromLabel(profileLabel).get();
                     final ImageService<?> imageService = new ImageService2(profile, id);
 
                     service = deserializeImageService(aNode, imageService).setServices(services);
-                } else if (AuthCookieService.Profile.from(profileLabel).isPresent()) {
+                } else if (AuthCookieService.Profile.fromLabel(profileLabel).isPresent()) {
                     service = deserializeV1AuthCookieService(aParser, aNode, id).setServices(services);
-                } else if (AuthTokenService1.Profile.from(profileLabel).isPresent()) {
+                } else if (AuthTokenService1.Profile.fromLabel(profileLabel).isPresent()) {
                     service = new AuthTokenService1(id);
-                } else if (PhysicalDimsService.Profile.from(profileLabel).isPresent()) {
+                } else if (PhysicalDimsService.Profile.fromLabel(profileLabel).isPresent()) {
                     service = deserializePhysicalDimsService(aNode, id).setServices(services);
                 } else {
                     service = deserializeOtherService(aNode, id).setServices(services);
@@ -390,7 +390,7 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
             final List<Quality> qualities = new ArrayList<>();
 
             for (final JsonNode quality : extraQualities) {
-                Quality.from(quality.textValue()).ifPresent(qualities::add);
+                Quality.fromLabel(quality.textValue()).ifPresent(qualities::add);
             }
 
             if (!qualities.isEmpty()) {
@@ -412,7 +412,7 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
             final List<Format> formats = new ArrayList<>();
 
             for (final JsonNode formatNode : extraFormats) {
-                Format.from(formatNode.textValue()).ifPresent(formats::add);
+                Format.fromLabel(formatNode.textValue()).ifPresent(formats::add);
             }
 
             if (!formats.isEmpty()) {

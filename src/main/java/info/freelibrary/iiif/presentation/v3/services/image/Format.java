@@ -73,7 +73,7 @@ public enum Format implements Labeled {
      * @param aLabel A format label
      * @return An optional image service format or an empty optional
      */
-    public static Optional<Format> from(final String aLabel) {
+    public static Optional<Format> fromLabel(final String aLabel) {
         for (final Format format : Format.values()) {
             if (format.label().equalsIgnoreCase(aLabel)) {
                 return Optional.of(format);

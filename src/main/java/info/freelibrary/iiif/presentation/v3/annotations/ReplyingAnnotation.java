@@ -37,7 +37,7 @@ public class ReplyingAnnotation extends WebAnnotation implements Annotation<WebA
      */
     public ReplyingAnnotation(final Minter aMinter) {
         this(aMinter.getAnnotationID(), new Target(aMinter.getManifestID()));
-        setMotivation(Motivation.from(Purpose.REPLYING));
+        setMotivation(Motivation.fromLabel(Purpose.REPLYING));
     }
 
     /**
@@ -63,7 +63,7 @@ public class ReplyingAnnotation extends WebAnnotation implements Annotation<WebA
     public <C extends CanvasResource<C>> ReplyingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
         super(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.REPLYING));
+        setMotivation(Motivation.fromLabel(Purpose.REPLYING));
     }
 
     /**
@@ -78,7 +78,7 @@ public class ReplyingAnnotation extends WebAnnotation implements Annotation<WebA
     public <C extends CanvasResource<C>> ReplyingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
         super(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.REPLYING));
+        setMotivation(Motivation.fromLabel(Purpose.REPLYING));
     }
 
     /**
@@ -90,7 +90,7 @@ public class ReplyingAnnotation extends WebAnnotation implements Annotation<WebA
      */
     public <C extends CanvasResource<C>> ReplyingAnnotation(final String aID, final CanvasResource<C> aCanvas) {
         super(aID, aCanvas);
-        setMotivation(Motivation.from(Purpose.REPLYING));
+        setMotivation(Motivation.fromLabel(Purpose.REPLYING));
     }
 
     /**
@@ -104,7 +104,7 @@ public class ReplyingAnnotation extends WebAnnotation implements Annotation<WebA
     public <C extends CanvasResource<C>> ReplyingAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
         super(aID, aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.REPLYING));
+        setMotivation(Motivation.fromLabel(Purpose.REPLYING));
     }
 
     /**
@@ -118,7 +118,7 @@ public class ReplyingAnnotation extends WebAnnotation implements Annotation<WebA
     public <C extends CanvasResource<C>> ReplyingAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
         super(aID, aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.REPLYING));
+        setMotivation(Motivation.fromLabel(Purpose.REPLYING));
     }
 
     /**
@@ -129,7 +129,7 @@ public class ReplyingAnnotation extends WebAnnotation implements Annotation<WebA
      */
     public ReplyingAnnotation(final String aID, final Manifest aManifest) {
         super(aID, aManifest);
-        setMotivation(Motivation.from(Purpose.REPLYING));
+        setMotivation(Motivation.fromLabel(Purpose.REPLYING));
     }
 
     /**
@@ -140,7 +140,7 @@ public class ReplyingAnnotation extends WebAnnotation implements Annotation<WebA
      */
     public ReplyingAnnotation(final String aID, final Target aTarget) {
         super(aID, aTarget);
-        setMotivation(Motivation.from(Purpose.REPLYING));
+        setMotivation(Motivation.fromLabel(Purpose.REPLYING));
     }
 
     /**
@@ -241,7 +241,7 @@ public class ReplyingAnnotation extends WebAnnotation implements Annotation<WebA
                     LOGGER.getMessage(MessageCodes.JPA_038, ReplyingAnnotation.class.getSimpleName(), aMotivation));
         }
 
-        return (ReplyingAnnotation) super.setMotivation(Motivation.from(Purpose.REPLYING));
+        return (ReplyingAnnotation) super.setMotivation(Motivation.fromLabel(Purpose.REPLYING));
     }
 
     @Override

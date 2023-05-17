@@ -37,7 +37,7 @@ public class HighlightingAnnotation extends WebAnnotation implements Annotation<
      */
     public HighlightingAnnotation(final Minter aMinter) {
         this(aMinter.getAnnotationID(), new Target(aMinter.getManifestID()));
-        setMotivation(Motivation.from(Purpose.HIGHLIGHTING));
+        setMotivation(Motivation.fromLabel(Purpose.HIGHLIGHTING));
     }
 
     /**
@@ -63,7 +63,7 @@ public class HighlightingAnnotation extends WebAnnotation implements Annotation<
     public <C extends CanvasResource<C>> HighlightingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
         super(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.HIGHLIGHTING));
+        setMotivation(Motivation.fromLabel(Purpose.HIGHLIGHTING));
     }
 
     /**
@@ -78,7 +78,7 @@ public class HighlightingAnnotation extends WebAnnotation implements Annotation<
     public <C extends CanvasResource<C>> HighlightingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
         super(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.HIGHLIGHTING));
+        setMotivation(Motivation.fromLabel(Purpose.HIGHLIGHTING));
     }
 
     /**
@@ -90,7 +90,7 @@ public class HighlightingAnnotation extends WebAnnotation implements Annotation<
      */
     public <C extends CanvasResource<C>> HighlightingAnnotation(final String aID, final CanvasResource<C> aCanvas) {
         super(aID, aCanvas);
-        setMotivation(Motivation.from(Purpose.HIGHLIGHTING));
+        setMotivation(Motivation.fromLabel(Purpose.HIGHLIGHTING));
     }
 
     /**
@@ -104,7 +104,7 @@ public class HighlightingAnnotation extends WebAnnotation implements Annotation<
     public <C extends CanvasResource<C>> HighlightingAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
         super(aID, aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.HIGHLIGHTING));
+        setMotivation(Motivation.fromLabel(Purpose.HIGHLIGHTING));
     }
 
     /**
@@ -118,7 +118,7 @@ public class HighlightingAnnotation extends WebAnnotation implements Annotation<
     public <C extends CanvasResource<C>> HighlightingAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
         super(aID, aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.HIGHLIGHTING));
+        setMotivation(Motivation.fromLabel(Purpose.HIGHLIGHTING));
     }
 
     /**
@@ -129,7 +129,7 @@ public class HighlightingAnnotation extends WebAnnotation implements Annotation<
      */
     public HighlightingAnnotation(final String aID, final Manifest aManifest) {
         super(aID, aManifest);
-        setMotivation(Motivation.from(Purpose.HIGHLIGHTING));
+        setMotivation(Motivation.fromLabel(Purpose.HIGHLIGHTING));
     }
 
     /**
@@ -140,7 +140,7 @@ public class HighlightingAnnotation extends WebAnnotation implements Annotation<
      */
     public HighlightingAnnotation(final String aID, final Target aTarget) {
         super(aID, aTarget);
-        setMotivation(Motivation.from(Purpose.HIGHLIGHTING));
+        setMotivation(Motivation.fromLabel(Purpose.HIGHLIGHTING));
     }
 
     /**
@@ -241,7 +241,7 @@ public class HighlightingAnnotation extends WebAnnotation implements Annotation<
                     LOGGER.getMessage(MessageCodes.JPA_038, HighlightingAnnotation.class.getSimpleName(), aMotivation));
         }
 
-        return (HighlightingAnnotation) super.setMotivation(Motivation.from(Purpose.HIGHLIGHTING));
+        return (HighlightingAnnotation) super.setMotivation(Motivation.fromLabel(Purpose.HIGHLIGHTING));
     }
 
     @Override

@@ -33,7 +33,7 @@ public class SpecSnippetsTest extends AbstractCookbookTest {
     @Test
     public final void testSpecExample() throws IOException {
         final String expected = getExpected("spec-example");
-        final String found = Manifest.from(expected).toString();
+        final String found = Manifest.fromJSON(expected).toString();
 
         assertEquals(format(expected), format(found));
     }

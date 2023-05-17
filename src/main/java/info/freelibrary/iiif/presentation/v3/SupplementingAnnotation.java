@@ -92,7 +92,7 @@ public class SupplementingAnnotation extends AbstractCanvasAnnotation<Supplement
      */
     public <C extends CanvasResource<C>> SupplementingAnnotation(final String aID, final CanvasResource<C> aCanvas) {
         super(aID, aCanvas);
-        setMotivation(Motivation.from(Purpose.SUPPLEMENTING));
+        setMotivation(Motivation.fromLabel(Purpose.SUPPLEMENTING));
     }
 
     /**
@@ -106,7 +106,7 @@ public class SupplementingAnnotation extends AbstractCanvasAnnotation<Supplement
     public <C extends CanvasResource<C>> SupplementingAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
         super(aID, aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.SUPPLEMENTING));
+        setMotivation(Motivation.fromLabel(Purpose.SUPPLEMENTING));
     }
 
     /**
@@ -120,7 +120,7 @@ public class SupplementingAnnotation extends AbstractCanvasAnnotation<Supplement
     public <C extends CanvasResource<C>> SupplementingAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
         super(aID, aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.SUPPLEMENTING));
+        setMotivation(Motivation.fromLabel(Purpose.SUPPLEMENTING));
     }
 
     /**
@@ -399,7 +399,7 @@ public class SupplementingAnnotation extends AbstractCanvasAnnotation<Supplement
                     SupplementingAnnotation.class.getSimpleName(), aMotivation));
         }
 
-        return super.setMotivation(Motivation.from(Purpose.SUPPLEMENTING));
+        return super.setMotivation(Motivation.fromLabel(Purpose.SUPPLEMENTING));
     }
 
     @Override
@@ -463,11 +463,6 @@ public class SupplementingAnnotation extends AbstractCanvasAnnotation<Supplement
     @SafeVarargs
     public final SupplementingAnnotation setServices(final Service<?>... aServiceArray) {
         return (SupplementingAnnotation) super.setServices(aServiceArray);
-    }
-
-    @Override
-    public SupplementingAnnotation setSummary(final String aSummary) {
-        return (SupplementingAnnotation) super.setSummary(aSummary);
     }
 
     @Override

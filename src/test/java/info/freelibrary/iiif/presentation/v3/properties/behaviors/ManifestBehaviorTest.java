@@ -50,7 +50,7 @@ public class ManifestBehaviorTest {
      */
     @Test(expected = JsonParsingException.class)
     public final void testJsonDeserializationDisjoint() throws IOException {
-        Manifest.from(StringUtils.read(new File(TEST_MANIFEST)));
+        Manifest.fromJSON(StringUtils.read(new File(TEST_MANIFEST)));
     }
 
     /**
@@ -62,11 +62,11 @@ public class ManifestBehaviorTest {
     }
 
     /**
-     * Tests the fromString() method.
+     * Tests the fromLabel() method.
      */
     @Test
-    public final void fromString() {
-        assertEquals(ManifestBehavior.REPEAT, ManifestBehavior.from(BehaviorConstants.REPEAT));
+    public final void testFromLabel() {
+        assertEquals(ManifestBehavior.REPEAT, ManifestBehavior.fromLabel(BehaviorConstants.REPEAT).get());
     }
 
     /**

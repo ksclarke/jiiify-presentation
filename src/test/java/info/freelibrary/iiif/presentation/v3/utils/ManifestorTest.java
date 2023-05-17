@@ -45,7 +45,7 @@ public class ManifestorTest {
         final File tmpJsonFile = new File(TMP_DIR, UUID.randomUUID().toString() + JSON_EXT);
         final String json = StringUtils.read(MANIFEST);
 
-        new Manifestor().write(Manifest.from(json), tmpJsonFile);
+        new Manifestor().write(Manifest.fromJSON(json), tmpJsonFile);
         assertEquals(format(json), format(StringUtils.read(tmpJsonFile)));
     }
 

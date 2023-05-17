@@ -131,7 +131,7 @@ public class AuthTokenService1 extends AbstractService<AuthTokenService1> implem
          * @param aLabel A profile value's label
          * @return An optional auth token service profile, if found; else, an empty optional
          */
-        public static Optional<AuthTokenService1.Profile> from(final String aLabel) {
+        public static Optional<AuthTokenService1.Profile> fromLabel(final String aLabel) {
             for (final AuthTokenService1.Profile profile : AuthTokenService1.Profile.values()) {
                 if (profile.label().equals(aLabel)) {
                     return Optional.of(profile);

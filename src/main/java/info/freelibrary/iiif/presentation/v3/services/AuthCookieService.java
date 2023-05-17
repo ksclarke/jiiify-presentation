@@ -118,7 +118,7 @@ public interface AuthCookieService<T extends AuthCookieService<T>> extends Servi
          * @param aLabel A profile value's label
          * @return An optional cookie service profile, if found; else, an empty optional
          */
-        public static Optional<AuthCookieService.Profile> from(final String aLabel) {
+        public static Optional<AuthCookieService.Profile> fromLabel(final String aLabel) {
             for (final AuthCookieService.Profile profile : AuthCookieService.Profile.values()) {
                 if (profile.label().equalsIgnoreCase(aLabel)) {
                     return Optional.of(profile);

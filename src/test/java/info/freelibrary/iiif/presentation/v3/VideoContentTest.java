@@ -63,6 +63,6 @@ public class VideoContentTest {
     @Test
     public final void testFixture0003() throws IOException {
         final String json = format(StringUtils.read(new File("src/test/resources/fixtures/0003-mvm-video.json")));
-        assertEquals(json, format(Manifest.from(json).toString()));
+        assertEquals(json, format(Manifest.fromJSON(json).toString()));
     }
 }

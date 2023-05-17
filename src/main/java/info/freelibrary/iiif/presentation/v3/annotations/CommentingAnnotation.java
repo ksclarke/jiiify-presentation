@@ -36,7 +36,7 @@ public class CommentingAnnotation extends WebAnnotation implements Annotation<We
      */
     public CommentingAnnotation(final Minter aMinter) {
         this(aMinter.getAnnotationID(), new Target(aMinter.getManifestID()));
-        setMotivation(Motivation.from(Purpose.COMMENTING));
+        setMotivation(Motivation.fromLabel(Purpose.COMMENTING));
     }
 
     /**
@@ -62,7 +62,7 @@ public class CommentingAnnotation extends WebAnnotation implements Annotation<We
     public <C extends CanvasResource<C>> CommentingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
         super(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.COMMENTING));
+        setMotivation(Motivation.fromLabel(Purpose.COMMENTING));
     }
 
     /**
@@ -77,7 +77,7 @@ public class CommentingAnnotation extends WebAnnotation implements Annotation<We
     public <C extends CanvasResource<C>> CommentingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
         super(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.COMMENTING));
+        setMotivation(Motivation.fromLabel(Purpose.COMMENTING));
     }
 
     /**
@@ -89,7 +89,7 @@ public class CommentingAnnotation extends WebAnnotation implements Annotation<We
      */
     public <C extends CanvasResource<C>> CommentingAnnotation(final String aID, final CanvasResource<C> aCanvas) {
         super(aID, aCanvas);
-        setMotivation(Motivation.from(Purpose.COMMENTING));
+        setMotivation(Motivation.fromLabel(Purpose.COMMENTING));
     }
 
     /**
@@ -103,7 +103,7 @@ public class CommentingAnnotation extends WebAnnotation implements Annotation<We
     public <C extends CanvasResource<C>> CommentingAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
         super(aID, aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.COMMENTING));
+        setMotivation(Motivation.fromLabel(Purpose.COMMENTING));
     }
 
     /**
@@ -117,7 +117,7 @@ public class CommentingAnnotation extends WebAnnotation implements Annotation<We
     public <C extends CanvasResource<C>> CommentingAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
         super(aID, aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.COMMENTING));
+        setMotivation(Motivation.fromLabel(Purpose.COMMENTING));
     }
 
     /**
@@ -128,7 +128,7 @@ public class CommentingAnnotation extends WebAnnotation implements Annotation<We
      */
     public CommentingAnnotation(final String aID, final Manifest aManifest) {
         super(aID, aManifest);
-        setMotivation(Motivation.from(Purpose.COMMENTING));
+        setMotivation(Motivation.fromLabel(Purpose.COMMENTING));
     }
 
     /**
@@ -139,7 +139,7 @@ public class CommentingAnnotation extends WebAnnotation implements Annotation<We
      */
     public CommentingAnnotation(final String aID, final Target aTarget) {
         super(aID, aTarget);
-        setMotivation(Motivation.from(Purpose.COMMENTING));
+        setMotivation(Motivation.fromLabel(Purpose.COMMENTING));
     }
 
     /**
@@ -239,7 +239,7 @@ public class CommentingAnnotation extends WebAnnotation implements Annotation<We
                     LOGGER.getMessage(MessageCodes.JPA_038, CommentingAnnotation.class.getSimpleName(), aMotivation));
         }
 
-        return (CommentingAnnotation) super.setMotivation(Motivation.from(Purpose.COMMENTING));
+        return (CommentingAnnotation) super.setMotivation(Motivation.fromLabel(Purpose.COMMENTING));
     }
 
     @Override

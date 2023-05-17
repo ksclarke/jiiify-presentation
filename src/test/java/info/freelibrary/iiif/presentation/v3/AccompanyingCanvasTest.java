@@ -136,7 +136,7 @@ public class AccompanyingCanvasTest {
     @Test
     public final void testCanvasFromString() throws IOException {
         final String json = getFixture(Canvas.class);
-        final Canvas canvas = Canvas.from(json);
+        final Canvas canvas = Canvas.fromJSON(json);
 
         assertEquals(json, canvas.toString());
     }
@@ -149,7 +149,7 @@ public class AccompanyingCanvasTest {
     @Test
     public final void testCollectionFromString() throws IOException {
         final String json = getFixture(Collection.class);
-        final Collection collection = Collection.from(json);
+        final Collection collection = Collection.fromJSON(json);
 
         assertEquals(json, collection.toString());
     }
@@ -162,7 +162,7 @@ public class AccompanyingCanvasTest {
     @Test
     public final void testManifestFromString() throws IOException {
         final String json = getFixture(Manifest.class);
-        final Manifest manifest = Manifest.from(json);
+        final Manifest manifest = Manifest.fromJSON(json);
 
         assertEquals(json, manifest.toString());
     }
@@ -175,7 +175,7 @@ public class AccompanyingCanvasTest {
     @Test
     public final void testRangeFromString() throws IOException {
         final String json = getFixture(Range.class);
-        final Range range = Range.from(json);
+        final Range range = Range.fromJSON(json);
 
         assertEquals(json, range.toString());
     }

@@ -19,19 +19,19 @@ public class ImageService2Test {
      * Expected LEVEL_0 profile.
      */
     private static final Profile LEVEL_0 =
-            (ImageService2.Profile) Profile.from("http://iiif.io/api/image/2/level0.json").get();
+            (ImageService2.Profile) Profile.fromLabel("http://iiif.io/api/image/2/level0.json").get();
 
     /**
      * Expected LEVEL_1 profile.
      */
     private static final Profile LEVEL_1 =
-            (ImageService2.Profile) Profile.from("http://iiif.io/api/image/2/level1.json").get();
+            (ImageService2.Profile) Profile.fromLabel("http://iiif.io/api/image/2/level1.json").get();
 
     /**
      * Expected LEVEL_2 profile.
      */
     private static final Profile LEVEL_2 =
-            (ImageService2.Profile) Profile.from("http://iiif.io/api/image/2/level2.json").get();
+            (ImageService2.Profile) Profile.fromLabel("http://iiif.io/api/image/2/level2.json").get();
 
     /**
      * The ImageService2 ID.
@@ -96,9 +96,9 @@ public class ImageService2Test {
      */
     @Test
     public void testProfileFromString() {
-        assertEquals(LEVEL_0, Profile.from(LEVEL_0.toString()).get());
-        assertEquals(LEVEL_1, Profile.from(LEVEL_1.toString()).get());
-        assertEquals(LEVEL_2, Profile.from(LEVEL_2.toString()).get());
+        assertEquals(LEVEL_0, Profile.fromLabel(LEVEL_0.toString()).get());
+        assertEquals(LEVEL_1, Profile.fromLabel(LEVEL_1.toString()).get());
+        assertEquals(LEVEL_2, Profile.fromLabel(LEVEL_2.toString()).get());
     }
 
 }

@@ -8,6 +8,7 @@ import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
@@ -22,7 +23,9 @@ import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * Text content that can be associated with an annotation or used as a thumbnail.
@@ -92,6 +95,11 @@ public class TextContent extends AbstractContentResource<TextContent>
     @Override
     public TextContent setLabel(final Label aLabel) {
         return (TextContent) super.setLabel(aLabel);
+    }
+
+    @Override
+    public TextContent setLanguages(final String... aLangArray) {
+        return (TextContent) super.setLanguages(aLangArray);
     }
 
     @Override
@@ -168,11 +176,6 @@ public class TextContent extends AbstractContentResource<TextContent>
     }
 
     @Override
-    public TextContent setSummary(final String aSummary) {
-        return (TextContent) super.setSummary(aSummary);
-    }
-
-    @Override
     public TextContent setSummary(final Summary aSummary) {
         return (TextContent) super.setSummary(aSummary);
     }
@@ -187,4 +190,18 @@ public class TextContent extends AbstractContentResource<TextContent>
         return (TextContent) super.setThumbnails(aThumbnailList);
     }
 
+    /**
+     * Returns text content from its JSON representation.
+     *
+     * @param aJsonString A JSON serialization of a text content resource
+     * @return The text content
+     * @throws JsonParsingException If the text content cannot be deserialized from the supplied JSON
+     */
+    static TextContent fromJSON(final String aJsonString) {
+        try {
+            return JSON.getReader(TextContent.class).readValue(aJsonString);
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details);
+        }
+    }
 }

@@ -95,12 +95,12 @@ public class SpecificResourceTest extends AbstractTest {
     }
 
     /**
-     * Tests {@link SpecificResource#from(String) fromString} method.
+     * Tests {@link SpecificResource#fromJSON(String) fromString} method.
      */
     @Test
     public final void testFromString() {
         final String json = TestUtils.format(StringUtils.format(JSON, myID, myOtherID));
-        assertEquals(json, SpecificResource.from(json).toString());
+        assertEquals(json, SpecificResource.fromJSON(json).toString());
     }
 
 }

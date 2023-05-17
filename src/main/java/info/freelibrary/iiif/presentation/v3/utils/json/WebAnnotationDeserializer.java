@@ -220,7 +220,7 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
     @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY, "PMD.CyclomaticComplexity" })
     private WebAnnotation getAnnotation(final String aID, final String aMotivation, final JsonNode aNode,
             final JsonParser aParser) throws InputCoercionException {
-        final Optional<Purpose> purpose = Purpose.forLabel(aMotivation);
+        final Optional<Purpose> purpose = Purpose.fromLabel(aMotivation);
         final JsonNode targetNode = aNode.get(JsonKeys.TARGET);
 
         if (purpose.isPresent()) {
@@ -242,7 +242,7 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
             };
         }
 
-        return new WebAnnotation(aID, getTarget(targetNode, aParser)).setMotivation(Motivation.from(aMotivation));
+        return new WebAnnotation(aID, getTarget(targetNode, aParser)).setMotivation(Motivation.fromLabel(aMotivation));
     }
 
     /**

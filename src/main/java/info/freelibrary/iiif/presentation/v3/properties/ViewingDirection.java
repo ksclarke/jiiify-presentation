@@ -6,12 +6,13 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+import info.freelibrary.iiif.presentation.v3.utils.Labeled;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * The direction that a sequence of canvases should be displayed to the user.
  */
-public enum ViewingDirection {
+public enum ViewingDirection implements Labeled {
 
     /** A left-to-right viewing direction. */
     LEFT_TO_RIGHT("left-to-right"),
@@ -42,10 +43,22 @@ public enum ViewingDirection {
 
     /**
      * Gets the string representation of the viewing direction.
+     *
+     * @return A string representation of the ViewingDirection
      */
     @Override
     @JsonValue
     public String toString() {
+        return myValue;
+    }
+
+    /**
+     * Gets the viewingDirection label.
+     *
+     * @return the viewingDirection label
+     */
+    @Override
+    public String label() {
         return myValue;
     }
 
@@ -57,7 +70,7 @@ public enum ViewingDirection {
      * @return The ViewingDirection for the supplied value
      * @throws IllegalArgumentException If the supplied value isn't a valid viewing direction
      */
-    public static ViewingDirection from(final String aViewingDirection) {
+    public static ViewingDirection fromLabel(final String aViewingDirection) {
         for (final ViewingDirection direction : values()) {
             if (direction.toString().equalsIgnoreCase(aViewingDirection)) {
                 return direction;

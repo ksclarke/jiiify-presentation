@@ -50,7 +50,7 @@ public class CanvasBehaviorTest {
      */
     @Test(expected = JsonParsingException.class)
     public final void testJsonDeserializationDisjoint() throws IOException {
-        Manifest.from(StringUtils.read(new File(TEST_MANIFEST), StandardCharsets.UTF_8));
+        Manifest.fromJSON(StringUtils.read(new File(TEST_MANIFEST), StandardCharsets.UTF_8));
     }
 
     /**
@@ -62,11 +62,11 @@ public class CanvasBehaviorTest {
     }
 
     /**
-     * Tests the fromString() method.
+     * Tests the fromLabel() method.
      */
     @Test
-    public final void fromString() {
-        assertEquals(CanvasBehavior.NON_PAGED, CanvasBehavior.fromString(BehaviorConstants.NON_PAGED));
+    public final void testFromLabel() {
+        assertEquals(CanvasBehavior.NON_PAGED, CanvasBehavior.fromLabel(BehaviorConstants.NON_PAGED).get());
     }
 
     /**

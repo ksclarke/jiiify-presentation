@@ -12,4 +12,5 @@ public interface Labeled {
      * @return A label
      */
     String label();
+
 }

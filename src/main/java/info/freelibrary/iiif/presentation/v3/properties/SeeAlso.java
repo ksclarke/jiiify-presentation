@@ -150,7 +150,7 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
      * @return A SeeAlso
      * @throws JsonParsingException If the supplied JSON couldn't be parsed into a SeeAlso object
      */
-    public static SeeAlso from(final String aJsonString) {
+    static SeeAlso fromJSON(final String aJsonString) {
         try {
             return JSON.getReader(SeeAlso.class).readValue(aJsonString);
         } catch (final JsonProcessingException details) {

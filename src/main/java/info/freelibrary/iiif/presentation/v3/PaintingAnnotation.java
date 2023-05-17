@@ -66,7 +66,7 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
     public <C extends CanvasResource<C>> PaintingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
         super(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.PAINTING));
+        setMotivation(Motivation.fromLabel(Purpose.PAINTING));
     }
 
     /**
@@ -81,7 +81,7 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
     public <C extends CanvasResource<C>> PaintingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
         super(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.PAINTING));
+        setMotivation(Motivation.fromLabel(Purpose.PAINTING));
     }
 
     /**
@@ -93,7 +93,7 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
      */
     public <C extends CanvasResource<C>> PaintingAnnotation(final String aID, final CanvasResource<C> aCanvas) {
         super(aID, aCanvas);
-        setMotivation(Motivation.from(Purpose.PAINTING));
+        setMotivation(Motivation.fromLabel(Purpose.PAINTING));
     }
 
     /**
@@ -107,7 +107,7 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
     public <C extends CanvasResource<C>> PaintingAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
         super(aID, aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.PAINTING));
+        setMotivation(Motivation.fromLabel(Purpose.PAINTING));
     }
 
     /**
@@ -121,7 +121,7 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
     public <C extends CanvasResource<C>> PaintingAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
         super(aID, aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.PAINTING));
+        setMotivation(Motivation.fromLabel(Purpose.PAINTING));
     }
 
     /**
@@ -400,7 +400,7 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
                     LOGGER.getMessage(MessageCodes.JPA_038, PaintingAnnotation.class.getSimpleName(), aMotivation));
         }
 
-        return super.setMotivation(Motivation.from(Purpose.PAINTING));
+        return super.setMotivation(Motivation.fromLabel(Purpose.PAINTING));
     }
 
     @Override
@@ -464,11 +464,6 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
     @SafeVarargs
     public final PaintingAnnotation setServices(final Service<?>... aServiceArray) {
         return (PaintingAnnotation) super.setServices(aServiceArray);
-    }
-
-    @Override
-    public PaintingAnnotation setSummary(final String aSummary) {
-        return (PaintingAnnotation) super.setSummary(aSummary);
     }
 
     @Override

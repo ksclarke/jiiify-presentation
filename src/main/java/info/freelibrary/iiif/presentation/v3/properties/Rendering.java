@@ -127,7 +127,7 @@ public class Rendering extends AbstractLinkProperty<Rendering> {
      * @throws JsonParsingException If the supplied JSON string cannot be successfully parsed
      * @return This rendering
      */
-    public static Rendering from(final String aJsonString) {
+    static Rendering fromJSON(final String aJsonString) {
         try {
             return JSON.getReader(Rendering.class).readValue(aJsonString);
         } catch (final JsonProcessingException details) {

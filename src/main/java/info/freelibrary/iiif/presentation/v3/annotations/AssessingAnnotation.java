@@ -38,7 +38,7 @@ public class AssessingAnnotation extends WebAnnotation implements Annotation<Web
      */
     public AssessingAnnotation(final Minter aMinter) {
         this(aMinter.getAnnotationID(), new Target(aMinter.getManifestID()));
-        setMotivation(Motivation.from(Purpose.ASSESSING));
+        setMotivation(Motivation.fromLabel(Purpose.ASSESSING));
     }
 
     /**
@@ -64,7 +64,7 @@ public class AssessingAnnotation extends WebAnnotation implements Annotation<Web
     public <C extends CanvasResource<C>> AssessingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
         super(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.ASSESSING));
+        setMotivation(Motivation.fromLabel(Purpose.ASSESSING));
     }
 
     /**
@@ -79,7 +79,7 @@ public class AssessingAnnotation extends WebAnnotation implements Annotation<Web
     public <C extends CanvasResource<C>> AssessingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
         super(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.ASSESSING));
+        setMotivation(Motivation.fromLabel(Purpose.ASSESSING));
     }
 
     /**
@@ -91,7 +91,7 @@ public class AssessingAnnotation extends WebAnnotation implements Annotation<Web
      */
     public <C extends CanvasResource<C>> AssessingAnnotation(final String aID, final CanvasResource<C> aCanvas) {
         super(aID, aCanvas);
-        setMotivation(Motivation.from(Purpose.ASSESSING));
+        setMotivation(Motivation.fromLabel(Purpose.ASSESSING));
     }
 
     /**
@@ -105,7 +105,7 @@ public class AssessingAnnotation extends WebAnnotation implements Annotation<Web
     public <C extends CanvasResource<C>> AssessingAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
         super(aID, aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.ASSESSING));
+        setMotivation(Motivation.fromLabel(Purpose.ASSESSING));
     }
 
     /**
@@ -119,7 +119,7 @@ public class AssessingAnnotation extends WebAnnotation implements Annotation<Web
     public <C extends CanvasResource<C>> AssessingAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
         super(aID, aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.ASSESSING));
+        setMotivation(Motivation.fromLabel(Purpose.ASSESSING));
     }
 
     /**
@@ -130,7 +130,7 @@ public class AssessingAnnotation extends WebAnnotation implements Annotation<Web
      */
     public AssessingAnnotation(final String aID, final Manifest aManifest) {
         super(aID, aManifest);
-        setMotivation(Motivation.from(Purpose.ASSESSING));
+        setMotivation(Motivation.fromLabel(Purpose.ASSESSING));
     }
 
     /**
@@ -141,7 +141,7 @@ public class AssessingAnnotation extends WebAnnotation implements Annotation<Web
      */
     public AssessingAnnotation(final String aID, final Target aTarget) {
         super(aID, aTarget);
-        setMotivation(Motivation.from(Purpose.ASSESSING));
+        setMotivation(Motivation.fromLabel(Purpose.ASSESSING));
     }
 
     /**
@@ -263,7 +263,7 @@ public class AssessingAnnotation extends WebAnnotation implements Annotation<Web
                     LOGGER.getMessage(MessageCodes.JPA_038, AssessingAnnotation.class.getSimpleName(), aMotivation));
         }
 
-        return (AssessingAnnotation) super.setMotivation(Motivation.from(Purpose.ASSESSING));
+        return (AssessingAnnotation) super.setMotivation(Motivation.fromLabel(Purpose.ASSESSING));
     }
 
     @Override

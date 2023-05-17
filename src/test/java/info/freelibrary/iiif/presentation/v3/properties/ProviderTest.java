@@ -177,6 +177,6 @@ public class ProviderTest extends AbstractTest {
     @Test
     public final void testFromToString() throws IOException {
         final String testFixture = format(StringUtils.read(TEST_FIXTURE));
-        assertEquals(testFixture, Provider.from(testFixture).toString());
+        assertEquals(testFixture, Provider.fromJSON(testFixture).toString());
     }
 }

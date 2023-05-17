@@ -208,11 +208,6 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
     }
 
     @Override
-    public AnnotationCollection setSummary(final String aSummary) {
-        return (AnnotationCollection) super.setSummary(aSummary);
-    }
-
-    @Override
     public AnnotationCollection setSummary(final Summary aSummary) {
         return (AnnotationCollection) super.setSummary(aSummary);
     }

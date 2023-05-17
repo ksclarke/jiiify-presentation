@@ -47,11 +47,11 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 @SuppressWarnings({ "PMD.ExcessivePublicCount", "PMD.ExcessiveImports", "PMD.GodClass" })
 public class Range extends NavigableResource<Range> implements Resource<Range> {
 
-    /** The range's items. */
-    private final List<Item> myItems = new ArrayList<>();
-
     /** The range's accompanying canvas. */
     private AccompanyingCanvas myAccompanyingCanvas;
+
+    /** The range's items. */
+    private final List<Item> myItems = new ArrayList<>();
 
     /** The range's placeholder canvas. */
     private PlaceholderCanvas myPlaceholderCanvas;
@@ -64,25 +64,6 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
 
     /** The range's viewing directions. */
     private ViewingDirection myViewingDirection;
-
-    /**
-     * Creates a new range from the supplied ID.
-     *
-     * @param aID A range ID
-     */
-    public Range(final String aID) {
-        super(ResourceTypes.RANGE, aID, RangeBehavior.class);
-    }
-
-    /**
-     * Creates a new range from the supplied ID and label.
-     *
-     * @param aID A range ID
-     * @param aLabel A descriptive label for the range
-     */
-    public Range(final String aID, final Label aLabel) {
-        super(ResourceTypes.RANGE, aID, aLabel, RangeBehavior.class);
-    }
 
     /**
      * Creates a new range, using the supplied minter to create the range ID.
@@ -104,6 +85,25 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     /**
+     * Creates a new range from the supplied ID.
+     *
+     * @param aID A range ID
+     */
+    public Range(final String aID) {
+        super(ResourceTypes.RANGE, aID, RangeBehavior.class);
+    }
+
+    /**
+     * Creates a new range from the supplied ID and label.
+     *
+     * @param aID A range ID
+     * @param aLabel A descriptive label for the range
+     */
+    public Range(final String aID, final Label aLabel) {
+        super(ResourceTypes.RANGE, aID, aLabel, RangeBehavior.class);
+    }
+
+    /**
      * A default constructor that allows Jackson to create a new range during deserialization.
      */
     private Range() {
@@ -111,38 +111,34 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     /**
-     * Sets the supplementary annotations for this range.
+     * Clears the currently set items from this range.
      *
-     * @param aAnnotationsCollection An annotation collection that supplements the range
      * @return The range
      */
-    @JsonSetter(JsonKeys.SUPPLEMENTARY)
-    public Range setSupplementaryAnnotations(final SupplementaryAnnotations aAnnotationsCollection) {
-        mySupplementaryAnnotations = Objects.requireNonNull(aAnnotationsCollection);
+    public Range clearItems() {
+        myItems.clear();
         return this;
     }
 
     /**
-     * Gets the supplementary annotations for this range.
+     * Gets the range's accompanying canvas.
      *
-     * @return The annotation collection linked to this range
+     * @return The accompanying canvas
      */
-    @JsonGetter(JsonKeys.SUPPLEMENTARY)
+    @JsonGetter(JsonKeys.ACCOMPANYING_CANVAS)
     @JsonInclude(Include.NON_ABSENT)
-    public Optional<SupplementaryAnnotations> getSupplementaryAnnotations() {
-        return Optional.ofNullable(mySupplementaryAnnotations);
+    public Optional<AccompanyingCanvas> getAccompanyingCanvas() {
+        return Optional.ofNullable(myAccompanyingCanvas);
     }
 
-    @Override
-    @JsonSetter(JsonKeys.PROVIDER)
-    public Range setProviders(final Provider... aProviderArray) {
-        return setProviders(Arrays.asList(aProviderArray));
-    }
-
-    @Override
-    @JsonIgnore
-    public Range setProviders(final List<Provider> aProviderList) {
-        return (Range) super.setProviders(aProviderList);
+    /**
+     * Gets a list of the range's items.
+     *
+     * @return A list of range items
+     */
+    @JsonGetter(JsonKeys.ITEMS)
+    public List<Item> getItems() {
+        return myItems;
     }
 
     /**
@@ -157,26 +153,35 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     /**
-     * Sets the range's placeholder canvas.
+     * Gets the range's optional start.
      *
-     * @param aCanvas A placeholder canvas
-     * @return This range
+     * @return The optional start
      */
-    @JsonSetter(JsonKeys.PLACEHOLDER_CANVAS)
-    public Range setPlaceholderCanvas(final PlaceholderCanvas aCanvas) {
-        myPlaceholderCanvas = aCanvas;
-        return this;
+    @JsonGetter(JsonKeys.START)
+    @JsonInclude(Include.NON_ABSENT)
+    public Optional<Start> getStart() {
+        return Optional.ofNullable(myStart);
     }
 
     /**
-     * Gets the range's accompanying canvas.
+     * Gets the supplementary annotations for this range.
      *
-     * @return The accompanying canvas
+     * @return The annotation collection linked to this range
      */
-    @JsonGetter(JsonKeys.ACCOMPANYING_CANVAS)
+    @JsonGetter(JsonKeys.SUPPLEMENTARY)
     @JsonInclude(Include.NON_ABSENT)
-    public Optional<AccompanyingCanvas> getAccompanyingCanvas() {
-        return Optional.ofNullable(myAccompanyingCanvas);
+    public Optional<SupplementaryAnnotations> getSupplementaryAnnotations() {
+        return Optional.ofNullable(mySupplementaryAnnotations);
+    }
+
+    /**
+     * Gets the range's viewing direction.
+     *
+     * @return The viewing direction
+     */
+    @JsonGetter(JsonKeys.VIEWING_DIRECTION)
+    public ViewingDirection getViewingDirection() {
+        return myViewingDirection;
     }
 
     /**
@@ -207,59 +212,19 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
         return (Range) super.setBehaviors(aBehaviorList);
     }
 
-    /**
-     * Sets the range's optional start.
-     *
-     * @param aStart A start
-     * @return The range
-     */
-    @JsonSetter(JsonKeys.START)
-    public Range setStart(final Start aStart) {
-        myStart = aStart;
-        return this;
+    @Override
+    public Range setHomepages(final Homepage... aHomepageArray) {
+        return (Range) super.setHomepages(aHomepageArray);
     }
 
-    /**
-     * Gets the range's optional start.
-     *
-     * @return The optional start
-     */
-    @JsonGetter(JsonKeys.START)
-    @JsonInclude(Include.NON_ABSENT)
-    public Optional<Start> getStart() {
-        return Optional.ofNullable(myStart);
+    @Override
+    public Range setHomepages(final List<Homepage> aHomepageList) {
+        return (Range) super.setHomepages(aHomepageList);
     }
 
-    /**
-     * Sets the range's viewing direction. To remove a viewing direction, set this value to null.
-     *
-     * @param aViewingDirection A viewing direction
-     * @return The range
-     */
-    @JsonSetter(JsonKeys.VIEWING_DIRECTION)
-    public Range setViewingDirection(final ViewingDirection aViewingDirection) {
-        myViewingDirection = aViewingDirection;
-        return this;
-    }
-
-    /**
-     * Gets the range's viewing direction.
-     *
-     * @return The viewing direction
-     */
-    @JsonGetter(JsonKeys.VIEWING_DIRECTION)
-    public ViewingDirection getViewingDirection() {
-        return myViewingDirection;
-    }
-
-    /**
-     * Gets a list of the range's items.
-     *
-     * @return A list of range items
-     */
-    @JsonGetter(JsonKeys.ITEMS)
-    public List<Item> getItems() {
-        return myItems;
+    @Override
+    public Range setID(final String aID) {
+        return (Range) super.setID(aID);
     }
 
     /**
@@ -275,40 +240,19 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
         return this;
     }
 
-    /**
-     * Clears the currently set items from this range.
-     *
-     * @return The range
-     */
-    public Range clearItems() {
-        myItems.clear();
-        return this;
+    @Override
+    public Range setLabel(final Label aLabel) {
+        return (Range) super.setLabel(aLabel);
     }
 
     @Override
-    public Range setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
-        return (Range) super.setSeeAlsoRefs(aSeeAlsoArray);
+    public Range setMetadata(final List<Metadata> aMetadataList) {
+        return (Range) super.setMetadata(aMetadataList);
     }
 
     @Override
-    public Range setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
-        return (Range) super.setSeeAlsoRefs(aSeeAlsoList);
-    }
-
-    @Override
-    @SafeVarargs
-    public final Range setServices(final Service<?>... aServiceArray) {
-        return (Range) super.setServices(aServiceArray);
-    }
-
-    @Override
-    public Range setServices(final List<Service<?>> aServiceList) {
-        return (Range) super.setServices(aServiceList);
-    }
-
-    @Override
-    public Range setPartOfs(final PartOf... aPartOfArray) {
-        return (Range) super.setPartOfs(aPartOfArray);
+    public Range setMetadata(final Metadata... aMetadataArray) {
+        return (Range) super.setMetadata(aMetadataArray);
     }
 
     @Override
@@ -317,8 +261,32 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     @Override
-    public Range setRenderings(final Rendering... aRenderingArray) {
-        return (Range) super.setRenderings(aRenderingArray);
+    public Range setPartOfs(final PartOf... aPartOfArray) {
+        return (Range) super.setPartOfs(aPartOfArray);
+    }
+
+    /**
+     * Sets the range's placeholder canvas.
+     *
+     * @param aCanvas A placeholder canvas
+     * @return This range
+     */
+    @JsonSetter(JsonKeys.PLACEHOLDER_CANVAS)
+    public Range setPlaceholderCanvas(final PlaceholderCanvas aCanvas) {
+        myPlaceholderCanvas = aCanvas;
+        return this;
+    }
+
+    @Override
+    @JsonIgnore
+    public Range setProviders(final List<Provider> aProviderList) {
+        return (Range) super.setProviders(aProviderList);
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.PROVIDER)
+    public Range setProviders(final Provider... aProviderArray) {
+        return setProviders(Arrays.asList(aProviderArray));
     }
 
     @Override
@@ -327,13 +295,68 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     @Override
-    public Range setHomepages(final Homepage... aHomepageArray) {
-        return (Range) super.setHomepages(aHomepageArray);
+    public Range setRenderings(final Rendering... aRenderingArray) {
+        return (Range) super.setRenderings(aRenderingArray);
     }
 
     @Override
-    public Range setHomepages(final List<Homepage> aHomepageList) {
-        return (Range) super.setHomepages(aHomepageList);
+    public Range setRequiredStatement(final RequiredStatement aStatement) {
+        return (Range) super.setRequiredStatement(aStatement);
+    }
+
+    @Override
+    public Range setRights(final String aRights) {
+        return (Range) super.setRights(aRights);
+    }
+
+    @Override
+    public Range setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
+        return (Range) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public Range setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
+        return (Range) super.setSeeAlsoRefs(aSeeAlsoArray);
+    }
+
+    @Override
+    public Range setServices(final List<Service<?>> aServiceList) {
+        return (Range) super.setServices(aServiceList);
+    }
+
+    @Override
+    @SafeVarargs
+    public final Range setServices(final Service<?>... aServiceArray) {
+        return (Range) super.setServices(aServiceArray);
+    }
+
+    /**
+     * Sets the range's optional start.
+     *
+     * @param aStart A start
+     * @return The range
+     */
+    @JsonSetter(JsonKeys.START)
+    public Range setStart(final Start aStart) {
+        myStart = aStart;
+        return this;
+    }
+
+    @Override
+    public Range setSummary(final Summary aSummary) {
+        return (Range) super.setSummary(aSummary);
+    }
+
+    /**
+     * Sets the supplementary annotations for this range.
+     *
+     * @param aAnnotationsCollection An annotation collection that supplements the range
+     * @return The range
+     */
+    @JsonSetter(JsonKeys.SUPPLEMENTARY)
+    public Range setSupplementaryAnnotations(final SupplementaryAnnotations aAnnotationsCollection) {
+        mySupplementaryAnnotations = Objects.requireNonNull(aAnnotationsCollection);
+        return this;
     }
 
     @Override
@@ -346,44 +369,16 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
         return (Range) super.setThumbnails(aThumbnailList);
     }
 
-    @Override
-    public Range setID(final String aID) {
-        return (Range) super.setID(aID);
-    }
-
-    @Override
-    public Range setRights(final String aRights) {
-        return (Range) super.setRights(aRights);
-    }
-
-    @Override
-    public Range setRequiredStatement(final RequiredStatement aStatement) {
-        return (Range) super.setRequiredStatement(aStatement);
-    }
-
-    @Override
-    public Range setSummary(final String aSummary) {
-        return (Range) super.setSummary(aSummary);
-    }
-
-    @Override
-    public Range setSummary(final Summary aSummary) {
-        return (Range) super.setSummary(aSummary);
-    }
-
-    @Override
-    public Range setMetadata(final Metadata... aMetadataArray) {
-        return (Range) super.setMetadata(aMetadataArray);
-    }
-
-    @Override
-    public Range setMetadata(final List<Metadata> aMetadataList) {
-        return (Range) super.setMetadata(aMetadataList);
-    }
-
-    @Override
-    public Range setLabel(final Label aLabel) {
-        return (Range) super.setLabel(aLabel);
+    /**
+     * Sets the range's viewing direction. To remove a viewing direction, set this value to null.
+     *
+     * @param aViewingDirection A viewing direction
+     * @return The range
+     */
+    @JsonSetter(JsonKeys.VIEWING_DIRECTION)
+    public Range setViewingDirection(final ViewingDirection aViewingDirection) {
+        myViewingDirection = aViewingDirection;
+        return this;
     }
 
     /**
@@ -407,8 +402,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
      * @return The range
      * @throws JsonParsingException If the JSON string cannot be deserialized
      */
-    @JsonIgnore
-    public static Range from(final String aJsonString) {
+    static Range fromJSON(final String aJsonString) {
         try {
             return JSON.getReader(Range.class).readValue(aJsonString);
         } catch (final JsonProcessingException details) {
@@ -505,29 +499,6 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
         }
 
         /**
-         * Gets the type of the resource wrapped by this item.
-         *
-         * @return The resource type
-         * @throws I18nRuntimeException If the range does not contain a range, canvas, or specific resource.
-         */
-        @JsonIgnore
-        public String getType() {
-            if (mySpecificResource != null) {
-                return mySpecificResource.getType();
-            }
-
-            if (myCanvas != null) {
-                return myCanvas.getType();
-            }
-
-            if (myRange != null) {
-                return myRange.getType();
-            }
-
-            throw new I18nRuntimeException(MessageCodes.BUNDLE, MessageCodes.JPA_040);
-        }
-
-        /**
          * Gets the resource wrapped by this item.
          *
          * @return The item's resource
@@ -545,6 +516,29 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
 
             if (myRange != null) {
                 return myRange;
+            }
+
+            throw new I18nRuntimeException(MessageCodes.BUNDLE, MessageCodes.JPA_040);
+        }
+
+        /**
+         * Gets the type of the resource wrapped by this item.
+         *
+         * @return The resource type
+         * @throws I18nRuntimeException If the range does not contain a range, canvas, or specific resource.
+         */
+        @JsonIgnore
+        public String getType() {
+            if (mySpecificResource != null) {
+                return mySpecificResource.getType();
+            }
+
+            if (myCanvas != null) {
+                return myCanvas.getType();
+            }
+
+            if (myRange != null) {
+                return myRange.getType();
             }
 
             throw new I18nRuntimeException(MessageCodes.BUNDLE, MessageCodes.JPA_040);

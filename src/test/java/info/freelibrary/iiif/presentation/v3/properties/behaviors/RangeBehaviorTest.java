@@ -40,11 +40,11 @@ public class RangeBehaviorTest {
     }
 
     /**
-     * Tests the fromString() method.
+     * Tests the fromLabel() method.
      */
     @Test
-    public final void fromString() {
-        assertEquals(RangeBehavior.SEQUENCE, RangeBehavior.fromString(BehaviorConstants.SEQUENCE));
+    public final void testFromLabel() {
+        assertEquals(RangeBehavior.SEQUENCE, RangeBehavior.fromLabel(BehaviorConstants.SEQUENCE).get());
     }
 
     /**

@@ -38,7 +38,7 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-import info.freelibrary.iiif.presentation.v3.utils.json.BehaviorsDeserializer;
+import info.freelibrary.iiif.presentation.v3.utils.json.BehaviorDeserializer;
 
 /**
  * A resource that can be used as a base for more specific IIIF presentation resources.
@@ -64,7 +64,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
 
     /** The resource's behaviors. */
     @JsonProperty(JsonKeys.BEHAVIOR)
-    @JsonDeserialize(using = BehaviorsDeserializer.class)
+    @JsonDeserialize(using = BehaviorDeserializer.class)
     private List<Behavior> myBehaviors;
 
     /** The resource's homepage. */
@@ -154,7 +154,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
     }
 
     /**
-     * Gets the resource's behaviors in an unmodifiable list.
+     * Gets the resource's behaviors.
      *
      * @return The resource's behaviors
      */
@@ -607,18 +607,6 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
     @JsonIgnore
     protected AbstractResource<T> setServices(final Service<?>... aServiceArray) {
         return setServices(Arrays.asList(aServiceArray));
-    }
-
-    /**
-     * Sets the resource summary.
-     *
-     * @param aSummary The resource summary
-     * @return The resource
-     */
-    @JsonIgnore
-    protected AbstractResource<T> setSummary(final String aSummary) {
-        mySummary = new Summary(aSummary);
-        return this;
     }
 
     /**

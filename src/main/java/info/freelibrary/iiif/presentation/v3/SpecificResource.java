@@ -178,7 +178,7 @@ public class SpecificResource {
      * @throws JsonParsingException If the specific resource cannot be deserialized from the supplied JSON
      */
     @JsonIgnore
-    public static SpecificResource from(final String aJsonString) {
+    public static SpecificResource fromJSON(final String aJsonString) {
         try {
             return JSON.getReader(SpecificResource.class).readValue(aJsonString);
         } catch (final JsonProcessingException details) {

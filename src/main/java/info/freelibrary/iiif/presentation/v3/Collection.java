@@ -40,6 +40,7 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CollectionBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.Labeled;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
@@ -332,11 +333,6 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     }
 
     @Override
-    public Collection setSummary(final String aSummary) {
-        return (Collection) super.setSummary(aSummary);
-    }
-
-    @Override
     public Collection setSummary(final Summary aSummary) {
         return (Collection) super.setSummary(aSummary);
     }
@@ -396,9 +392,8 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      * @return The collection manifest
      * @throws JsonParsingException If there is trouble parsing the JSON
      */
-    @JsonIgnore
     @SuppressWarnings("PMD.PreserveStackTrace")
-    public static Collection from(final String aJsonString) {
+    public static Collection fromJSON(final String aJsonString) {
         try {
             return JSON.getReader(Collection.class).readValue(aJsonString);
         } catch (final JsonProcessingException details) {
@@ -423,15 +418,11 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     }
 
     /**
-     * A wrapper for {@link Manifest}s and/or {@link Collection}s embedded in, and/or referenced from, a
-     * {@link Collection}.
+     * A wrapper for {@link Manifest}s and/or {@link Collection}s embedded in or referenced from a {@link Collection}.
      */
     @JsonInclude(Include.NON_EMPTY)
     @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.THUMBNAIL, JsonKeys.NAV_DATE })
     public static class Item {
-
-        /** The logger used by <code>Collection.Item</code>. */
-        private static final Logger LOGGER = LoggerFactory.getLogger(Item.class, MessageCodes.BUNDLE);
 
         /** The collection item's ID. */
         private String myID;
@@ -461,7 +452,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
                 myThumbnails.addAll(thumbnails);
             }
 
-            myType = Item.Type.fromString(ResourceTypes.COLLECTION);
+            myType = Item.Type.fromLabel(ResourceTypes.COLLECTION).get();
             myLabel = Objects.requireNonNull(aCollection.getLabel());
             myID = aCollection.getID();
         }
@@ -479,7 +470,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
                 myThumbnails.addAll(thumbnails);
             }
 
-            myType = Item.Type.fromString(ResourceTypes.MANIFEST);
+            myType = Item.Type.fromLabel(ResourceTypes.MANIFEST).get();
             myLabel = Objects.requireNonNull(aManifest.getLabel());
             myID = aManifest.getID(); // ID rules should have been checked by manifest's constructor / setter
         }
@@ -605,17 +596,18 @@ public class Collection extends NavigableResource<Collection> implements Resourc
          *
          * @param aType A collection item type
          * @return The item
+         * @throws InvalidArgumentException If the programmer has supplied an invalid type
          */
         @JsonSetter(JsonKeys.TYPE)
         private Item setType(final String aType) {
-            myType = Type.fromString(aType);
+            myType = Type.fromLabel(aType).orElseThrow();
             return this;
         }
 
         /**
          * The type of collection item.
          */
-        private enum Type {
+        private enum Type implements Labeled {
 
             /**
              * A collection type of collection item.
@@ -628,17 +620,17 @@ public class Collection extends NavigableResource<Collection> implements Resourc
             MANIFEST(ResourceTypes.MANIFEST);
 
             /**
-             * Serialization value for <code>Item.Type</code>.
+             * Serialization label for <code>Item.Type</code>.
              */
-            private String myValue;
+            private String myLabel;
 
             /**
              * Create a new <code>Item.Type</code>.
              *
-             * @param aValue A value.
+             * @param aLabel A value.
              */
-            Type(final String aValue) {
-                myValue = aValue;
+            Type(final String aLabel) {
+                myLabel = aLabel;
             }
 
             /**
@@ -648,24 +640,33 @@ public class Collection extends NavigableResource<Collection> implements Resourc
              */
             @Override
             public String toString() {
-                return myValue;
+                return myLabel;
             }
 
             /**
-             * Creates a collection item type from a supplied string value.
+             * Returns the collection item's label.
              *
-             * @param aType A JSON serialization of a collection type
-             * @return A collection type
-             * @throws IllegalArgumentException If the type string doesn't correspond to a valid type
+             * @return The collection item's label
              */
-            public static Type fromString(final String aType) {
+            @Override
+            public String label() {
+                return myLabel;
+            }
+
+            /**
+             * Creates a collection item type from a supplied label value.
+             *
+             * @param aLabel A label
+             * @return A collection type
+             */
+            public static Optional<Type> fromLabel(final String aLabel) {
                 for (final Type type : Type.values()) {
-                    if (type.toString().equalsIgnoreCase(aType)) {
-                        return type;
+                    if (type.label().equalsIgnoreCase(aLabel)) {
+                        return Optional.of(type);
                     }
                 }
 
-                throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_118, aType));
+                return Optional.empty();
             }
         }
 

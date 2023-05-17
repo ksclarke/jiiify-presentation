@@ -246,7 +246,7 @@ public class ImageService2 extends AbstractImageService<ImageService2> implement
          * @param aLabel A profile label
          * @return An image service profile
          */
-        public static Optional<ImageService2.Profile> from(final String aLabel) {
+        public static Optional<ImageService2.Profile> fromLabel(final String aLabel) {
             for (final ImageService2.Profile profile : ImageService2.Profile.values()) {
                 if (profile.label().equalsIgnoreCase(aLabel)) {
                     return Optional.of(profile);

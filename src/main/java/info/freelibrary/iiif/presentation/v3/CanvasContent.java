@@ -52,6 +52,11 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
     }
 
     @Override
+    public final CanvasContent setLanguages(final String... aLangArray) {
+        return (CanvasContent) super.setLanguages(aLangArray);
+    }
+
+    @Override
     @JsonSetter(JsonKeys.PROVIDER)
     public CanvasContent setProviders(final Provider... aProviderArray) {
         return setProviders(Arrays.asList(aProviderArray));
@@ -153,11 +158,6 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
     @Override
     public CanvasContent setRequiredStatement(final RequiredStatement aStatement) {
         return (CanvasContent) super.setRequiredStatement(aStatement);
-    }
-
-    @Override
-    public CanvasContent setSummary(final String aSummary) {
-        return (CanvasContent) super.setSummary(aSummary);
     }
 
     @Override

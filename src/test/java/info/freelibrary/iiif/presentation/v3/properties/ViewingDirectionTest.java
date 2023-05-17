@@ -24,7 +24,7 @@ public class ViewingDirectionTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testIllegalArgumentExceptionOnFromString() {
-        ViewingDirection.from("SOME_BOGUS_VALUE");
+        ViewingDirection.fromLabel("SOME_BOGUS_VALUE");
         fail(LOGGER.getMessage(MessageCodes.JPA_018));
     }
 
@@ -33,7 +33,8 @@ public class ViewingDirectionTest {
      */
     @Test
     public void testParsingLeftToRight() {
-        assertEquals(ViewingDirection.LEFT_TO_RIGHT, ViewingDirection.from(ViewingDirection.values()[0].toString()));
+        assertEquals(ViewingDirection.LEFT_TO_RIGHT,
+                ViewingDirection.fromLabel(ViewingDirection.values()[0].toString()));
     }
 
     /**
@@ -41,7 +42,8 @@ public class ViewingDirectionTest {
      */
     @Test
     public void testParsingRightToLeft() {
-        assertEquals(ViewingDirection.RIGHT_TO_LEFT, ViewingDirection.from(ViewingDirection.values()[1].toString()));
+        assertEquals(ViewingDirection.RIGHT_TO_LEFT,
+                ViewingDirection.fromLabel(ViewingDirection.values()[1].toString()));
     }
 
     /**
@@ -49,7 +51,8 @@ public class ViewingDirectionTest {
      */
     @Test
     public void testParsingTopToBottom() {
-        assertEquals(ViewingDirection.TOP_TO_BOTTOM, ViewingDirection.from(ViewingDirection.values()[2].toString()));
+        assertEquals(ViewingDirection.TOP_TO_BOTTOM,
+                ViewingDirection.fromLabel(ViewingDirection.values()[2].toString()));
     }
 
     /**
@@ -57,7 +60,8 @@ public class ViewingDirectionTest {
      */
     @Test
     public void testParsingBottomToTop() {
-        assertEquals(ViewingDirection.BOTTOM_TO_TOP, ViewingDirection.from(ViewingDirection.values()[3].toString()));
+        assertEquals(ViewingDirection.BOTTOM_TO_TOP,
+                ViewingDirection.fromLabel(ViewingDirection.values()[3].toString()));
     }
 
     /**

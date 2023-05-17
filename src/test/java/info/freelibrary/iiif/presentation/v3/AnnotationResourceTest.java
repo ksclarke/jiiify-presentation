@@ -59,7 +59,7 @@ public class AnnotationResourceTest extends AbstractTest {
         final AnnotationPage<?> page;
 
         node.remove(JsonKeys.CONTEXT); // Confirm this isn't added if it isn't present
-        page = AnnotationPage.from(node.toString());
+        page = AnnotationPage.fromJSON(node.toString());
 
         assertEquals(node, reader.readTree(page.toString()));
     }
@@ -67,13 +67,13 @@ public class AnnotationResourceTest extends AbstractTest {
     /**
      * Tests the deserialization and serialization of a stand-alone annotation page.
      *
-     * @param <T> A class that implements the {@code Annotation} interface.
+     * @param <A> A class that implements the {@code Annotation} interface.
      * @throws IOException If the test fixtures cannot be read
      */
     @Test
-    public <T extends Annotation<T>> void testExternalAnnotationPageToString() throws IOException {
+    public <A extends Annotation<A>> void testExternalAnnotationPageToString() throws IOException {
         final String expectedJSON = StringUtils.read(ANNOTATION_PAGE);
-        final String foundJSON = AnnotationPage.from(expectedJSON).toString();
+        final String foundJSON = AnnotationPage.fromJSON(expectedJSON).toString();
         final ObjectReader reader = JSON.getReader();
 
         assertEquals(reader.readTree(expectedJSON), reader.readTree(foundJSON));

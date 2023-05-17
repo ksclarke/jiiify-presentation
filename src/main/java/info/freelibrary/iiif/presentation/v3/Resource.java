@@ -304,14 +304,6 @@ public interface Resource<T extends Resource<T>> {
     /**
      * Sets the resource summary.
      *
-     * @param aSummary A summary
-     * @return The resource
-     */
-    T setSummary(String aSummary);
-
-    /**
-     * Sets the resource summary.
-     *
      * @param aSummary A resource's summary
      * @return The resource
      */

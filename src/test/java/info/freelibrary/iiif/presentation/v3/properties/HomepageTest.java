@@ -162,8 +162,8 @@ public class HomepageTest {
      */
     @Test
     public final void testHashCode() throws IOException {
-        final Homepage homepage1 = Homepage.from(getTestFixture());
-        final Homepage homepage2 = Homepage.from(getTestFixture());
+        final Homepage homepage1 = Homepage.fromJSON(getTestFixture());
+        final Homepage homepage2 = Homepage.fromJSON(getTestFixture());
 
         assertEquals(homepage1.hashCode(), homepage2.hashCode());
     }
@@ -175,8 +175,8 @@ public class HomepageTest {
      */
     @Test
     public final void testEquals() throws IOException {
-        final Homepage homepage1 = Homepage.from(getTestFixture());
-        final Homepage homepage2 = Homepage.from(getTestFixture());
+        final Homepage homepage1 = Homepage.fromJSON(getTestFixture());
+        final Homepage homepage2 = Homepage.fromJSON(getTestFixture());
 
         assertTrue(homepage1.equals(homepage2));
     }
@@ -189,7 +189,7 @@ public class HomepageTest {
     @Test
     public final void testToFromString() throws IOException {
         final String json = getTestFixture();
-        assertEquals(json, Homepage.from(json).toString());
+        assertEquals(json, Homepage.fromJSON(json).toString());
     }
 
     /**

@@ -109,7 +109,7 @@ public class CollectionTest {
     @Test
     public void testReadingCollection() throws IOException {
         final String expected = format(StringUtils.read(TEST_FILE1));
-        final Collection collection = Collection.from(expected);
+        final Collection collection = Collection.fromJSON(expected);
 
         assertEquals(expected, collection.toString());
     }
@@ -131,9 +131,9 @@ public class CollectionTest {
      * Tests reading a collection document from JSON.
      */
     @Test
-    public void testFrom() throws IOException {
+    public void testFromJSON() throws IOException {
         final String json = format(StringUtils.read(TEST_FILE1));
-        final Collection collection = Collection.from(json);
+        final Collection collection = Collection.fromJSON(json);
 
         assertEquals(json, collection.toString());
     }
@@ -143,7 +143,7 @@ public class CollectionTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testFromManifest() throws IOException {
-        Collection.from(StringUtils.read(new File(TestUtils.TEST_DIR, "z1960050.json")));
+        Collection.fromJSON(StringUtils.read(new File(TestUtils.TEST_DIR, "z1960050.json")));
     }
 
     /**
@@ -152,7 +152,7 @@ public class CollectionTest {
     @Test
     public void testFromString() throws IOException {
         final String json = format(StringUtils.read(TEST_FILE1));
-        assertEquals(json, Collection.from(json).toString());
+        assertEquals(json, Collection.fromJSON(json).toString());
     }
 
     /**

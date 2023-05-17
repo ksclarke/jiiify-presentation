@@ -116,7 +116,7 @@ public class PartOf extends AbstractLinkProperty<PartOf> {
      * @throws JsonParsingException If the supplied JSON string cannot be successfully parsed
      * @return This PartOf
      */
-    public static PartOf from(final String aJsonString) {
+    static PartOf fromJSON(final String aJsonString) {
         try {
             return JSON.getReader(PartOf.class).readValue(aJsonString);
         } catch (final JsonProcessingException details) {

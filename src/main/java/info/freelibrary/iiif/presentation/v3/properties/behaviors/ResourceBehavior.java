@@ -1,16 +1,12 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.behaviors;
 
-import static info.freelibrary.util.Constants.MESSAGE_SLOT;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-
 import info.freelibrary.iiif.presentation.v3.Resource;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * The behaviors attributable to {@link Resource}s.
@@ -20,11 +16,8 @@ public enum ResourceBehavior implements Behavior {
     /** A hidden resource behavior. */
     HIDDEN(BehaviorConstants.HIDDEN);
 
-    /** The ResourceBehavior logger. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(ResourceBehavior.class, MessageCodes.BUNDLE);
-
-    /** The value of the resource behavior. */
-    private final String myValue;
+    /** The label of the resource behavior. */
+    private final String myLabel;
 
     /**
      * Creates a resource behavior from the supplied string.
@@ -32,7 +25,7 @@ public enum ResourceBehavior implements Behavior {
      * @param aBehavior A resource behavior
      */
     ResourceBehavior(final String aBehavior) {
-        myValue = aBehavior;
+        myLabel = aBehavior;
     }
 
     /**
@@ -43,24 +36,32 @@ public enum ResourceBehavior implements Behavior {
     @Override
     @JsonValue
     public String toString() {
-        return myValue;
+        return myLabel;
     }
 
     /**
-     * Maps a behavior string to an enum constant of this type.
+     * Gets the label of the resource behavior.
      *
-     * @param aBehavior A behavior string
-     * @return A resource behavior
-     * @throws IllegalArgumentException If the behavior string doesn't correspond to a resource behavior
+     * @return The resource behavior's label
      */
-    public static ResourceBehavior fromString(final String aBehavior) {
+    @Override
+    public String label() {
+        return myLabel;
+    }
+
+    /**
+     * Returns an enumeration constant from a behavior label.
+     *
+     * @param aBehavior A behavior label
+     * @return A resource behavior
+     */
+    public static Optional<ResourceBehavior> fromLabel(final String aBehavior) {
         for (final ResourceBehavior behavior : values()) {
             if (behavior.toString().equalsIgnoreCase(aBehavior)) {
-                return behavior;
+                return Optional.of(behavior);
             }
         }
 
-        // If BehaviorsDeserializer.deserialize is the caller, then the resource type will be filled in there
-        throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_010, aBehavior, MESSAGE_SLOT));
+        return Optional.empty();
     }
 }

@@ -38,11 +38,11 @@ public class ResourceBehaviorTest {
     }
 
     /**
-     * Tests the fromString() method.
+     * Tests the fromLabel() method.
      */
     @Test
-    public final void fromString() {
-        assertEquals(ResourceBehavior.HIDDEN, ResourceBehavior.fromString(BehaviorConstants.HIDDEN));
+    public final void testFromLabel() {
+        assertEquals(ResourceBehavior.HIDDEN, ResourceBehavior.fromLabel(BehaviorConstants.HIDDEN).get());
     }
 
     /**

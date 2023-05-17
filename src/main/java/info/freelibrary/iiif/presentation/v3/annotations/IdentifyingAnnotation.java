@@ -37,7 +37,7 @@ public class IdentifyingAnnotation extends WebAnnotation implements Annotation<W
      */
     public IdentifyingAnnotation(final Minter aMinter) {
         this(aMinter.getAnnotationID(), new Target(aMinter.getManifestID()));
-        setMotivation(Motivation.from(Purpose.IDENTIFYING));
+        setMotivation(Motivation.fromLabel(Purpose.IDENTIFYING));
     }
 
     /**
@@ -63,7 +63,7 @@ public class IdentifyingAnnotation extends WebAnnotation implements Annotation<W
     public <C extends CanvasResource<C>> IdentifyingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
         super(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.IDENTIFYING));
+        setMotivation(Motivation.fromLabel(Purpose.IDENTIFYING));
     }
 
     /**
@@ -78,7 +78,7 @@ public class IdentifyingAnnotation extends WebAnnotation implements Annotation<W
     public <C extends CanvasResource<C>> IdentifyingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
         super(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.IDENTIFYING));
+        setMotivation(Motivation.fromLabel(Purpose.IDENTIFYING));
     }
 
     /**
@@ -90,7 +90,7 @@ public class IdentifyingAnnotation extends WebAnnotation implements Annotation<W
      */
     public <C extends CanvasResource<C>> IdentifyingAnnotation(final String aID, final CanvasResource<C> aCanvas) {
         super(aID, aCanvas);
-        setMotivation(Motivation.from(Purpose.IDENTIFYING));
+        setMotivation(Motivation.fromLabel(Purpose.IDENTIFYING));
     }
 
     /**
@@ -104,7 +104,7 @@ public class IdentifyingAnnotation extends WebAnnotation implements Annotation<W
     public <C extends CanvasResource<C>> IdentifyingAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
         super(aID, aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.IDENTIFYING));
+        setMotivation(Motivation.fromLabel(Purpose.IDENTIFYING));
     }
 
     /**
@@ -118,7 +118,7 @@ public class IdentifyingAnnotation extends WebAnnotation implements Annotation<W
     public <C extends CanvasResource<C>> IdentifyingAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
         super(aID, aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.IDENTIFYING));
+        setMotivation(Motivation.fromLabel(Purpose.IDENTIFYING));
     }
 
     /**
@@ -129,7 +129,7 @@ public class IdentifyingAnnotation extends WebAnnotation implements Annotation<W
      */
     public IdentifyingAnnotation(final String aID, final Manifest aManifest) {
         super(aID, aManifest);
-        setMotivation(Motivation.from(Purpose.IDENTIFYING));
+        setMotivation(Motivation.fromLabel(Purpose.IDENTIFYING));
     }
 
     /**
@@ -140,7 +140,7 @@ public class IdentifyingAnnotation extends WebAnnotation implements Annotation<W
      */
     public IdentifyingAnnotation(final String aID, final Target aTarget) {
         super(aID, aTarget);
-        setMotivation(Motivation.from(Purpose.IDENTIFYING));
+        setMotivation(Motivation.fromLabel(Purpose.IDENTIFYING));
     }
 
     /**
@@ -241,7 +241,7 @@ public class IdentifyingAnnotation extends WebAnnotation implements Annotation<W
                     LOGGER.getMessage(MessageCodes.JPA_038, IdentifyingAnnotation.class.getSimpleName(), aMotivation));
         }
 
-        return (IdentifyingAnnotation) super.setMotivation(Motivation.from(Purpose.IDENTIFYING));
+        return (IdentifyingAnnotation) super.setMotivation(Motivation.fromLabel(Purpose.IDENTIFYING));
     }
 
     @Override

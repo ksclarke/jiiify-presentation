@@ -140,6 +140,11 @@ public class ImageContent extends AbstractContentResource<ImageContent>
     }
 
     @Override
+    public ImageContent setLanguages(final String... aLangArray) {
+        return (ImageContent) super.setLanguages(aLangArray);
+    }
+
+    @Override
     public ImageContent setMetadata(final List<Metadata> aMetadataList) {
         return (ImageContent) super.setMetadata(aMetadataList);
     }
@@ -213,11 +218,6 @@ public class ImageContent extends AbstractContentResource<ImageContent>
     }
 
     @Override
-    public ImageContent setSummary(final String aSummary) {
-        return (ImageContent) super.setSummary(aSummary);
-    }
-
-    @Override
     public ImageContent setSummary(final Summary aSummary) {
         return (ImageContent) super.setSummary(aSummary);
     }
@@ -279,7 +279,7 @@ public class ImageContent extends AbstractContentResource<ImageContent>
      * @return The image content
      * @throws JsonParsingException If the image content cannot be deserialized from the supplied JSON
      */
-    public static ImageContent from(final String aJsonString) {
+    static ImageContent fromJSON(final String aJsonString) {
         try {
             return JSON.getReader(ImageContent.class).readValue(aJsonString);
         } catch (final JsonProcessingException details) {

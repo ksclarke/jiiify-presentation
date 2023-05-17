@@ -170,11 +170,6 @@ public class SoundContent extends AbstractContentResource<SoundContent>
     }
 
     @Override
-    public SoundContent setSummary(final String aSummary) {
-        return (SoundContent) super.setSummary(aSummary);
-    }
-
-    @Override
     public SoundContent setSummary(final Summary aSummary) {
         return (SoundContent) super.setSummary(aSummary);
     }
@@ -192,6 +187,11 @@ public class SoundContent extends AbstractContentResource<SoundContent>
     @Override
     public SoundContent setLabel(final Label aLabel) {
         return (SoundContent) super.setLabel(aLabel);
+    }
+
+    @Override
+    public SoundContent setLanguages(final String... aLangArray) {
+        return (SoundContent) super.setLanguages(aLangArray);
     }
 
     /**
@@ -226,7 +226,7 @@ public class SoundContent extends AbstractContentResource<SoundContent>
      * @return The sound content
      * @throws JsonParsingException If there is trouble parsing the JSON
      */
-    public static SoundContent from(final String aJsonString) {
+    static SoundContent fromJSON(final String aJsonString) {
         try {
             return JSON.getReader(SoundContent.class).readValue(aJsonString);
         } catch (final JsonProcessingException details) {

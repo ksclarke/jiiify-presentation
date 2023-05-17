@@ -1,15 +1,12 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.behaviors;
 
+import java.util.Optional;
+
 import com.fasterxml.jackson.annotation.JsonValue;
 
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-
 import info.freelibrary.iiif.presentation.v3.Canvas;
-import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * The behaviors attributable to {@link Canvas}es.
@@ -28,11 +25,8 @@ public enum CanvasBehavior implements Behavior {
     /** A non-paged behavior on a canvas. */
     NON_PAGED(BehaviorConstants.NON_PAGED);
 
-    /** The canvas behavior logger. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(CanvasBehavior.class, MessageCodes.BUNDLE);
-
-    /** The value of canvas behavior. */
-    private final String myValue;
+    /** The canvas behavior label. */
+    private final String myLabel;
 
     /**
      * Creates a new canvas behavior from the supplied string.
@@ -40,7 +34,7 @@ public enum CanvasBehavior implements Behavior {
      * @param aBehavior A canvas behavior
      */
     CanvasBehavior(final String aBehavior) {
-        myValue = aBehavior;
+        myLabel = aBehavior;
     }
 
     /**
@@ -51,23 +45,32 @@ public enum CanvasBehavior implements Behavior {
     @Override
     @JsonValue
     public String toString() {
-        return myValue;
+        return myLabel;
     }
 
     /**
-     * Maps a behavior string to an enum constant of this type.
+     * Gets the enumeration value's label.
      *
-     * @param aBehavior A behavior string
-     * @return A canvas behavior
-     * @throws IllegalArgumentException If the behavior string doesn't correspond to a canvas behavior
+     * @return The enumeration value's label
      */
-    public static CanvasBehavior fromString(final String aBehavior) {
+    @Override
+    public String label() {
+        return myLabel;
+    }
+
+    /**
+     * Returns an enumeration constant from a behavior label.
+     *
+     * @param aBehavior A behavior label
+     * @return A canvas behavior
+     */
+    public static Optional<CanvasBehavior> fromLabel(final String aBehavior) {
         for (final CanvasBehavior behavior : values()) {
             if (behavior.toString().equalsIgnoreCase(aBehavior)) {
-                return behavior;
+                return Optional.of(behavior);
             }
         }
 
-        throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_010, aBehavior, ResourceTypes.CANVAS));
+        return Optional.empty();
     }
 }

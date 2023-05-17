@@ -37,7 +37,7 @@ public class LinkingAnnotation extends WebAnnotation implements Annotation<WebAn
      */
     public LinkingAnnotation(final Minter aMinter) {
         this(aMinter.getAnnotationID(), new Target(aMinter.getManifestID()));
-        setMotivation(Motivation.from(Purpose.LINKING));
+        setMotivation(Motivation.fromLabel(Purpose.LINKING));
     }
 
     /**
@@ -63,7 +63,7 @@ public class LinkingAnnotation extends WebAnnotation implements Annotation<WebAn
     public <C extends CanvasResource<C>> LinkingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
         super(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.LINKING));
+        setMotivation(Motivation.fromLabel(Purpose.LINKING));
     }
 
     /**
@@ -78,7 +78,7 @@ public class LinkingAnnotation extends WebAnnotation implements Annotation<WebAn
     public <C extends CanvasResource<C>> LinkingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
         super(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.LINKING));
+        setMotivation(Motivation.fromLabel(Purpose.LINKING));
     }
 
     /**
@@ -90,7 +90,7 @@ public class LinkingAnnotation extends WebAnnotation implements Annotation<WebAn
      */
     public <C extends CanvasResource<C>> LinkingAnnotation(final String aID, final CanvasResource<C> aCanvas) {
         super(aID, aCanvas);
-        setMotivation(Motivation.from(Purpose.LINKING));
+        setMotivation(Motivation.fromLabel(Purpose.LINKING));
     }
 
     /**
@@ -104,7 +104,7 @@ public class LinkingAnnotation extends WebAnnotation implements Annotation<WebAn
     public <C extends CanvasResource<C>> LinkingAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
         super(aID, aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.LINKING));
+        setMotivation(Motivation.fromLabel(Purpose.LINKING));
     }
 
     /**
@@ -118,7 +118,7 @@ public class LinkingAnnotation extends WebAnnotation implements Annotation<WebAn
     public <C extends CanvasResource<C>> LinkingAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
         super(aID, aCanvas, aCanvasRegion);
-        setMotivation(Motivation.from(Purpose.LINKING));
+        setMotivation(Motivation.fromLabel(Purpose.LINKING));
     }
 
     /**
@@ -129,7 +129,7 @@ public class LinkingAnnotation extends WebAnnotation implements Annotation<WebAn
      */
     public LinkingAnnotation(final String aID, final Manifest aManifest) {
         super(aID, aManifest);
-        setMotivation(Motivation.from(Purpose.LINKING));
+        setMotivation(Motivation.fromLabel(Purpose.LINKING));
     }
 
     /**
@@ -140,7 +140,7 @@ public class LinkingAnnotation extends WebAnnotation implements Annotation<WebAn
      */
     public LinkingAnnotation(final String aID, final Target aTarget) {
         super(aID, aTarget);
-        setMotivation(Motivation.from(Purpose.LINKING));
+        setMotivation(Motivation.fromLabel(Purpose.LINKING));
     }
 
     /**
@@ -241,7 +241,7 @@ public class LinkingAnnotation extends WebAnnotation implements Annotation<WebAn
                     LOGGER.getMessage(MessageCodes.JPA_038, LinkingAnnotation.class.getSimpleName(), aMotivation));
         }
 
-        return (LinkingAnnotation) super.setMotivation(Motivation.from(Purpose.LINKING));
+        return (LinkingAnnotation) super.setMotivation(Motivation.fromLabel(Purpose.LINKING));
     }
 
     @Override

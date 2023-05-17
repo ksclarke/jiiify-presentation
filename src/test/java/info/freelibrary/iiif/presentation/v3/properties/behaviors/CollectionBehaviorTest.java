@@ -52,7 +52,7 @@ public class CollectionBehaviorTest {
      */
     @Test(expected = JsonParsingException.class)
     public final void testJsonDeserializationDisjoint() throws IOException {
-        Collection.from(StringUtils.read(new File(TEST_MANIFEST), StandardCharsets.UTF_8));
+        Collection.fromJSON(StringUtils.read(new File(TEST_MANIFEST), StandardCharsets.UTF_8));
     }
 
     /**
@@ -64,11 +64,11 @@ public class CollectionBehaviorTest {
     }
 
     /**
-     * Tests the fromString() method.
+     * Tests the fromLabel() method.
      */
     @Test
-    public final void fromString() {
-        assertEquals(CollectionBehavior.TOGETHER, CollectionBehavior.fromString(BehaviorConstants.TOGETHER));
+    public final void testFromLabel() {
+        assertEquals(CollectionBehavior.TOGETHER, CollectionBehavior.fromLabel(BehaviorConstants.TOGETHER).get());
     }
 
     /**

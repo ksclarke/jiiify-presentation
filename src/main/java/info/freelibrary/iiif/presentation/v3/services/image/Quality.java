@@ -64,7 +64,7 @@ public enum Quality implements Labeled {
      * @param aLabel A quality label
      * @return An optional image service quality or an empty optional
      */
-    public static Optional<Quality> from(final String aLabel) {
+    public static Optional<Quality> fromLabel(final String aLabel) {
         for (final Quality quality : Quality.values()) {
             if (quality.label().equalsIgnoreCase(aLabel)) {
                 return Optional.of(quality);
