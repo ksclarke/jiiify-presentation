@@ -12,21 +12,23 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.StringUtils;
 
-import info.freelibrary.iiif.presentation.v3.JsonParsingException;
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.TestConstants;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * A test of ManifestBehavior.
  */
 public class ManifestBehaviorTest {
 
+    /** The expected behavior values. */
     private static final String[] VALUES = { BehaviorConstants.AUTO_ADVANCE, BehaviorConstants.NO_AUTO_ADVANCE,
         BehaviorConstants.INDIVIDUALS, BehaviorConstants.CONTINUOUS, BehaviorConstants.REPEAT,
         BehaviorConstants.NO_REPEAT, BehaviorConstants.PAGED, BehaviorConstants.UNORDERED };
 
+    /** A test fixture. */
     private static final String TEST_MANIFEST =
             new File(TestUtils.TEST_DIR, "manifest-disjoint-manifest-behavior.json").getAbsolutePath();
 
@@ -44,11 +46,11 @@ public class ManifestBehaviorTest {
     /**
      * Tests the JSON deserialization of a manifest with mutually exclusive behaviors.
      *
-     * @throws DecodeException
+     * @throws DecodeException If the JSON cannot be deserialized
      */
     @Test(expected = JsonParsingException.class)
     public final void testJsonDeserializationDisjoint() throws IOException {
-        Manifest.from(StringUtils.read(new File(TEST_MANIFEST)));
+        Manifest.fromJSON(StringUtils.read(new File(TEST_MANIFEST)));
     }
 
     /**
@@ -60,11 +62,11 @@ public class ManifestBehaviorTest {
     }
 
     /**
-     * Tests the fromString() method.
+     * Tests the fromLabel() method.
      */
     @Test
-    public final void fromString() {
-        assertEquals(ManifestBehavior.REPEAT, ManifestBehavior.from(BehaviorConstants.REPEAT));
+    public final void testFromLabel() {
+        assertEquals(ManifestBehavior.REPEAT, ManifestBehavior.fromLabel(BehaviorConstants.REPEAT).get());
     }
 
     /**

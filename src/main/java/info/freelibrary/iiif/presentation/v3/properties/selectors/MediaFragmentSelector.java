@@ -234,6 +234,7 @@ public class MediaFragmentSelector implements FragmentSelector {
 
             return temporalFragment;
         }
+
         if (aStart != null) {
             checkStartTime(aStart);
 
@@ -243,6 +244,7 @@ public class MediaFragmentSelector implements FragmentSelector {
             temporalFragment = new NPTFragment();
             temporalFragment.setEnd(aEnd.getClocktime());
         }
+
         return temporalFragment;
     }
 
@@ -265,6 +267,7 @@ public class MediaFragmentSelector implements FragmentSelector {
      *
      * @param aStart A start time
      * @param aEnd An end time
+     * @throws IllegalArgumentException If the end time precedes the start
      */
     private void checkEndTime(final StartTime aStart, final EndTime aEnd) {
         Objects.requireNonNull(aStart);
@@ -283,7 +286,7 @@ public class MediaFragmentSelector implements FragmentSelector {
     /**
      * Gets the value of the media fragment selector, with the spatial part ordered before the temporal part.
      *
-     * @return The value in string form
+     * @return The serialization of the selector
      */
     @Override
     public String toString() {
@@ -399,6 +402,13 @@ public class MediaFragmentSelector implements FragmentSelector {
         return myEnd - myStart;
     }
 
+    /**
+     * Sets the start and end for the selector.
+     *
+     * @param aStart A start
+     * @param aEnd An end
+     * @return This selector
+     */
     private MediaFragmentSelector setStartEnd(final Number aStart, final Number aEnd) {
         myStart = aStart.floatValue();
         myEnd = aEnd.floatValue();
@@ -406,6 +416,15 @@ public class MediaFragmentSelector implements FragmentSelector {
         return this;
     }
 
+    /**
+     * Sets the dimensions of the media fragment selector.
+     *
+     * @param aX An 'X' coordinate
+     * @param aY A 'Y' coordinate
+     * @param aWidth A width coordinate
+     * @param aHeight A height coordinate
+     * @return This selector
+     */
     private MediaFragmentSelector setXYWidthHeight(final int aX, final int aY, final int aWidth, final int aHeight) {
         myX = aX;
         myY = aY;

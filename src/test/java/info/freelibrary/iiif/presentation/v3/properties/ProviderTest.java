@@ -26,16 +26,22 @@ import info.freelibrary.iiif.presentation.v3.ResourceTypes;
  */
 public class ProviderTest extends AbstractTest {
 
+    /** Test fixture used by tests. */
     private static final File TEST_FIXTURE = new File("src/test/resources/json/provider.json");
 
-    private URI myID;
+    /** A test ID. */
+    private String myID;
 
+    /** A test label. */
     private Label myLabel;
 
+    /** A test homepage. */
     private Homepage myHomepage;
 
+    /** A test logo. */
     private ImageContent myLogo;
 
+    /** A test seeAlso. */
     private SeeAlso mySeeAlso;
 
     /**
@@ -43,10 +49,10 @@ public class ProviderTest extends AbstractTest {
      */
     @Before
     public final void setUp() {
-        myID = URI.create(UUID.randomUUID().toString());
+        myID = UUID.randomUUID().toString();
         myLabel = new Label(myLoremIpsum.getTitle(5));
-        myHomepage = new Homepage(myLoremIpsum.getUrl(), myLoremIpsum.getTitle(5));
-        myLogo = new ImageContent(StringUtils.format("http://library.ucla.edu/images/{}/image.jpg", myID));
+        myHomepage = new Homepage(myLoremIpsum.getUrl(), new Label(myLoremIpsum.getTitle(5)));
+        myLogo = new ImageContent("https://library.ucla.edu/images/asdf/image.jpg");
         mySeeAlso = new SeeAlso(myLoremIpsum.getUrl(), ResourceTypes.TEXT);
     }
 
@@ -69,7 +75,7 @@ public class ProviderTest extends AbstractTest {
      */
     @Test
     public final void testSetGetID() {
-        final URI id = URI.create(myLoremIpsum.getUrl());
+        final String id = myLoremIpsum.getUrl();
         assertEquals(myID, new Provider(id, myLabel).setID(myID).getID());
     }
 
@@ -80,15 +86,6 @@ public class ProviderTest extends AbstractTest {
     public final void testSetGetLabelLabel() {
         final Label label = new Label(myLoremIpsum.getTitle(5));
         assertEquals(myLabel, new Provider(myID, label).setLabel(myLabel).getLabel());
-    }
-
-    /**
-     * Test method for {@link Provider#setLabel(String)}.
-     */
-    @Test
-    public final void testSetGetLabelString() {
-        final Label label = new Label(myLoremIpsum.getTitle(5));
-        assertEquals(myLabel, new Provider(myID, label).setLabel(myLabel.getString()).getLabel());
     }
 
     /**
@@ -180,6 +177,6 @@ public class ProviderTest extends AbstractTest {
     @Test
     public final void testFromToString() throws IOException {
         final String testFixture = format(StringUtils.read(TEST_FIXTURE));
-        assertEquals(testFixture, Provider.from(testFixture).toString());
+        assertEquals(testFixture, Provider.fromJSON(testFixture).toString());
     }
 }

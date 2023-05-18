@@ -22,14 +22,19 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  */
 public class LabelTest extends AbstractTest {
 
-    private static final String AAAA = "aaaa";
+    /** A test ID. */
+    private static final String AAAA = "https://aaaa";
 
+    /** A test language code. */
     private static final String ENG = "eng";
 
+    /** A test value. */
     private static final String NONE = "none";
 
+    /** The test manifest. */
     private Manifest myManifest;
 
+    /** JSON input test fixture. */
     private ObjectNode myJSON;
 
     /**
@@ -37,7 +42,7 @@ public class LabelTest extends AbstractTest {
      */
     @Before
     public void setUp() {
-        myManifest = new Manifest(AAAA, "bbbb");
+        myManifest = new Manifest(AAAA, new Label("bbbb"));
         myJSON = JSON.createObjectNode().put(JsonKeys.CONTEXT, "http://iiif.io/api/presentation/3/context.json");
     }
 
@@ -73,7 +78,7 @@ public class LabelTest extends AbstractTest {
     public void testSingleLabel() throws JsonProcessingException {
         final String labelText = myLoremIpsum.getWords(3, 6);
 
-        myManifest.setLabel(labelText);
+        myManifest.setLabel(new Label(labelText));
         myJSON.put(JsonKeys.ID, AAAA).put(JsonKeys.TYPE, ResourceTypes.MANIFEST).set(JsonKeys.LABEL,
                 JSON.createObjectNode().set(NONE, JSON.createArrayNode().add(labelText)));
 

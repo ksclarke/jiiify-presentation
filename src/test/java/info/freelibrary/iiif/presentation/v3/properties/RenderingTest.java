@@ -8,7 +8,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,7 +19,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.Manifest;
-import info.freelibrary.iiif.presentation.v3.MediaType;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
@@ -31,26 +29,37 @@ import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
  */
 public class RenderingTest {
 
-    private static final URI TEST_URI_1 = URI.create("https://example.org/1.pdf");
+    /** A test URI. */
+    private static final String TEST_URI_1 = "https://example.org/1.pdf";
 
-    private static final URI TEST_URI_2 = URI.create("https://example.org/2.pdf");
+    /** A test URI. */
+    private static final String TEST_URI_2 = "https://example.org/2.pdf";
 
+    /** A test label. */
     private static final Label TEST_LABEL_1 = new Label("PDF Rendering of Book");
 
+    /** A test label. */
     private static final Label TEST_LABEL_2 = new Label("PDF Rendering 2 of Book");
 
+    /** A test format. */
     private static final String TEST_FORMAT = "application/pdf";
 
+    /** A test language code. */
     private static final String ISO_639_1_WELSH = "cy";
 
+    /** A test language code. */
     private static final String ISO_639_2_CHEROKEE = "chr";
 
+    /** A test fixture file. */
     private static final File RENDERING_SIMPLE_ONE = new File(TestUtils.TEST_DIR, "rendering-simple-one.json");
 
+    /** A test fixture file. */
     private static final File RENDERING_SIMPLE_TWO = new File(TestUtils.TEST_DIR, "rendering-simple-two.json");
 
+    /** A test fixture file. */
     private static final File RENDERING_FULL_ONE = new File(TestUtils.TEST_DIR, "rendering-full-one.json");
 
+    /** A test manifest. */
     private Manifest myManifest;
 
     /**
@@ -58,7 +67,7 @@ public class RenderingTest {
      */
     @Before
     public final void setUp() {
-        myManifest = new Manifest("https://example.org/iiif/book1/manifest", "Book 1");
+        myManifest = new Manifest("https://example.org/iiif/book1/manifest", new Label("Book 1"));
     }
 
     /**
@@ -76,15 +85,6 @@ public class RenderingTest {
     }
 
     /**
-     * Tests a rendering constructor.
-     */
-    @Test
-    public final void testRenderingStringStringString() {
-        assertEquals(TEST_URI_1,
-                new Rendering(TEST_URI_1.toString(), ResourceTypes.TEXT, TEST_LABEL_1.getString()).getID());
-    }
-
-    /**
      * Tests rendering (de)serialization.
      *
      * @throws IOException If there is trouble reading or deserializing the rendering file or serializing the
@@ -92,8 +92,8 @@ public class RenderingTest {
      */
     @Test
     public final void testFullRendering() throws IOException {
-        myManifest.setRenderings(new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1).setFormat(TEST_FORMAT)
-                .setLanguages(ISO_639_1_WELSH, ISO_639_2_CHEROKEE));
+        myManifest.setRenderings(new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1)
+                .setFormat(MediaType.fromString(TEST_FORMAT).get()).setLanguages(ISO_639_1_WELSH, ISO_639_2_CHEROKEE));
 
         checkDeserialization(RENDERING_FULL_ONE);
         checkSerialization(RENDERING_FULL_ONE);
@@ -145,8 +145,8 @@ public class RenderingTest {
      */
     @Test
     public final void testSetFormat() {
-        assertEquals(MediaType.APPLICATION_PDF,
-                new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1).setFormat(TEST_FORMAT).getFormat().get());
+        assertEquals(MediaType.APPLICATION_PDF, new Rendering(TEST_URI_1, ResourceTypes.TEXT, TEST_LABEL_1)
+                .setFormat(MediaType.fromString(TEST_FORMAT).get()).getFormat().get());
     }
 
     /**
@@ -174,8 +174,8 @@ public class RenderingTest {
      */
     @Test
     public final void testHashCode() throws IOException {
-        final Rendering rendering1 = Rendering.from(getTestFixture());
-        final Rendering rendering2 = Rendering.from(getTestFixture());
+        final Rendering rendering1 = Rendering.fromJSON(getTestFixture());
+        final Rendering rendering2 = Rendering.fromJSON(getTestFixture());
 
         assertEquals(rendering1.hashCode(), rendering2.hashCode());
     }
@@ -187,8 +187,8 @@ public class RenderingTest {
      */
     @Test
     public final void testEquals() throws IOException {
-        final Rendering rendering1 = Rendering.from(getTestFixture());
-        final Rendering rendering2 = Rendering.from(getTestFixture());
+        final Rendering rendering1 = Rendering.fromJSON(getTestFixture());
+        final Rendering rendering2 = Rendering.fromJSON(getTestFixture());
 
         assertTrue(rendering1.equals(rendering2));
     }
@@ -201,7 +201,7 @@ public class RenderingTest {
     @Test
     public final void testToFromString() throws IOException {
         final String json = getTestFixture();
-        assertEquals(format(json), format(Rendering.from(json).toString()));
+        assertEquals(format(json), format(Rendering.fromJSON(json).toString()));
     }
 
     /**

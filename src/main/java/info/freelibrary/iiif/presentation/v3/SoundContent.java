@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,6 +15,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
+import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.properties.Metadata;
 import info.freelibrary.iiif.presentation.v3.properties.PartOf;
 import info.freelibrary.iiif.presentation.v3.properties.Provider;
@@ -23,64 +23,45 @@ import info.freelibrary.iiif.presentation.v3.properties.Rendering;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
+import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * Sound content that can be associated with an annotation or used as a thumbnail.
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.DURATION,
     JsonKeys.LANGUAGE })
-public class SoundContent extends AbstractContentResource<SoundContent> implements AnnotationBody<SoundContent>,
-        ContentResource<SoundContent>, TemporalContentResource<SoundContent>, Resource<SoundContent> {
+public class SoundContent extends AbstractContentResource<SoundContent>
+        implements ContentResource<SoundContent>, TemporalContentResource<SoundContent>, Resource<SoundContent> {
 
-    /**
-     * The class of media type this content represents.
-     */
+    /** The class of media type this content represents. */
     private static final String MEDIA_TYPE_CLASS = "audio";
 
-    /**
-     * The sound content's duration.
-     */
+    /** The sound content's duration. */
     private float myDuration;
 
     /**
      * Creates sound content with the supplied ID.
      *
-     * @param aURI A sound content ID in string form
+     * @param aID A sound content ID
      */
-    public SoundContent(final String aURI) {
-        super(ResourceTypes.SOUND, aURI);
-        setFormatFromMediaType(MediaType.parse(URI.create(aURI), MEDIA_TYPE_CLASS).orElse(null));
-    }
-
-    /**
-     * Creates sound content with the supplied ID.
-     *
-     * @param aURI A sound content ID
-     */
-    public SoundContent(final URI aURI) {
-        super(ResourceTypes.SOUND, aURI);
-        setFormatFromMediaType(MediaType.parse(aURI, MEDIA_TYPE_CLASS).orElse(null));
+    public SoundContent(final String aID) {
+        super(ResourceTypes.SOUND, aID, ResourceBehavior.class);
+        setFormat(MediaType.parse(aID, MEDIA_TYPE_CLASS).orElse(null));
     }
 
     /**
      * Constructs a sound content resource for Jackson's deserialization process.
      */
     private SoundContent() {
-        super(ResourceTypes.SOUND);
+        super(ResourceTypes.SOUND, ResourceBehavior.class);
     }
 
     @Override
-    @JsonIgnore
-    public SoundContent setFormat(final MediaType aMediaType) {
-        return (SoundContent) super.setFormat(aMediaType);
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.FORMAT)
-    public SoundContent setFormat(final String aMediaType) {
+    public final SoundContent setFormat(final MediaType aMediaType) {
         return (SoundContent) super.setFormat(aMediaType);
     }
 
@@ -97,29 +78,19 @@ public class SoundContent extends AbstractContentResource<SoundContent> implemen
     }
 
     @Override
-    public SoundContent clearBehaviors() {
-        return (SoundContent) super.clearBehaviors();
+    @JsonIgnore
+    public SoundContent setBehaviors(final Behavior... aBehaviorArray) {
+        return setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorArray));
     }
 
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
-    public SoundContent setBehaviors(final Behavior... aBehaviorArray) {
-        return (SoundContent) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorArray));
-    }
-
-    @Override
     public SoundContent setBehaviors(final List<Behavior> aBehaviorList) {
-        return (SoundContent) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorList));
-    }
+        if (aBehaviorList instanceof BehaviorList) {
+            ((BehaviorList) aBehaviorList).checkType(ResourceBehavior.class, this.getClass());
+        }
 
-    @Override
-    public SoundContent addBehaviors(final Behavior... aBehaviorArray) {
-        return (SoundContent) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorArray));
-    }
-
-    @Override
-    public SoundContent addBehaviors(final List<Behavior> aBehaviorList) {
-        return (SoundContent) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorList));
+        return (SoundContent) super.setBehaviors(aBehaviorList);
     }
 
     @Override
@@ -189,28 +160,13 @@ public class SoundContent extends AbstractContentResource<SoundContent> implemen
     }
 
     @Override
-    public SoundContent setID(final URI aID) {
-        return (SoundContent) super.setID(aID);
-    }
-
-    @Override
     public SoundContent setRights(final String aRights) {
-        return (SoundContent) super.setRights(aRights);
-    }
-
-    @Override
-    public SoundContent setRights(final URI aRights) {
         return (SoundContent) super.setRights(aRights);
     }
 
     @Override
     public SoundContent setRequiredStatement(final RequiredStatement aStatement) {
         return (SoundContent) super.setRequiredStatement(aStatement);
-    }
-
-    @Override
-    public SoundContent setSummary(final String aSummary) {
-        return (SoundContent) super.setSummary(aSummary);
     }
 
     @Override
@@ -229,13 +185,13 @@ public class SoundContent extends AbstractContentResource<SoundContent> implemen
     }
 
     @Override
-    public SoundContent setLabel(final String aLabel) {
+    public SoundContent setLabel(final Label aLabel) {
         return (SoundContent) super.setLabel(aLabel);
     }
 
     @Override
-    public SoundContent setLabel(final Label aLabel) {
-        return (SoundContent) super.setLabel(aLabel);
+    public SoundContent setLanguages(final String... aLangArray) {
+        return (SoundContent) super.setLanguages(aLangArray);
     }
 
     /**
@@ -266,10 +222,11 @@ public class SoundContent extends AbstractContentResource<SoundContent> implemen
     /**
      * Returns sound content from its JSON representation.
      *
-     * @param aJsonString A sound content resource in string form
+     * @param aJsonString A JSON serialization of sound content
      * @return The sound content
+     * @throws JsonParsingException If there is trouble parsing the JSON
      */
-    public static SoundContent from(final String aJsonString) {
+    static SoundContent fromJSON(final String aJsonString) {
         try {
             return JSON.getReader(SoundContent.class).readValue(aJsonString);
         } catch (final JsonProcessingException details) {

@@ -2,7 +2,6 @@
 package info.freelibrary.iiif.presentation.v3.properties;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -92,9 +91,8 @@ class I18nProperty<T extends I18nProperty<T>> {
     public String getString() {
         if (hasStrings()) {
             return myI18ns.get(0).getStrings().get(0);
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**
@@ -115,9 +113,8 @@ class I18nProperty<T extends I18nProperty<T>> {
     public boolean equals(final Object aObject) {
         if (aObject != null && getClass().getName().equals(aObject.getClass().getName())) {
             return toMap().equals(((I18nProperty<?>) aObject).toMap());
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
@@ -137,22 +134,19 @@ class I18nProperty<T extends I18nProperty<T>> {
      */
     @Override
     public String toString() {
-        if (hasStrings()) {
-            final Iterator<I18n> iterator = myI18ns.iterator();
-            final StringBuilder builder = new StringBuilder();
-
-            while (iterator.hasNext()) {
-                final I18n i18n = iterator.next();
-                final String[] strings = i18n.getStrings().toArray(new String[i18n.size()]);
-
-                builder.append(i18n.getLang()).append('=');
-                builder.append(StringUtils.toString(strings, '|')).append(System.lineSeparator());
-            }
-
-            return builder.toString();
-        } else {
+        if (!hasStrings()) {
             return null;
         }
+        final StringBuilder builder = new StringBuilder();
+
+        for (final I18n i18n : myI18ns) {
+            final String[] strings = i18n.getStrings().toArray(new String[i18n.size()]);
+
+            builder.append(i18n.getLang()).append('=');
+            builder.append(StringUtils.toString(strings, '|')).append(System.lineSeparator());
+        }
+
+        return builder.toString();
     }
 
     /**
@@ -182,20 +176,15 @@ class I18nProperty<T extends I18nProperty<T>> {
      */
     @JsonValue
     protected Object toMap() {
-        if (hasStrings()) {
-            final Map<String, Object> map = new LinkedHashMap<>(); // maintains insertion order
-            final Iterator<I18n> iterator = myI18ns.iterator();
-
-            while (iterator.hasNext()) {
-                final I18n i18n = iterator.next();
-
-                map.put(i18n.getLang(), i18n.getStrings());
-            }
-
-            return map;
-        } else {
+        if (!hasStrings()) {
             return null;
         }
+        final Map<String, Object> map = new LinkedHashMap<>(); // maintains insertion order
+        for (final I18n i18n : myI18ns) {
+            map.put(i18n.getLang(), i18n.getStrings());
+        }
+
+        return map;
     }
 
     /**
@@ -203,6 +192,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      *
      * @param aStringArray An array of strings
      * @return The property
+     * @throws UnsupportedOperationException If a supplied string cannot be added as an I18n
      */
     private I18nProperty<T> addCheckedStrings(final String... aStringArray) {
         Objects.requireNonNull(aStringArray, MessageCodes.JPA_001);
@@ -223,6 +213,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      *
      * @param aI18nArray An array of internationalized values
      * @return The property
+     * @throws UnsupportedOperationException If the I18n cannot be added
      */
     private I18nProperty<T> addCheckedI18ns(final I18n... aI18nArray) {
         Objects.requireNonNull(aI18nArray, MessageCodes.JPA_001);

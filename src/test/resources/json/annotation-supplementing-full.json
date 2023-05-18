@@ -1,11 +1,11 @@
 {
-  "id": "1408c0a9-7402-4a44-8091-fa11d32172f9",
+  "id": "https://1408c0a9-7402-4a44-8091-fa11d32172f9",
   "type": "Annotation",
   "motivation": "supplementing",
   "body": {
-    "id": "e03f1662-2a33-48a4-82ba-3a726cee15c9.html",
+    "id": "https://e03f1662-2a33-48a4-82ba-3a726cee15c9.html",
     "type": "Text",
     "format": "text/html"
   },
-  "target": "cf6da69c-7d60-4dbe-965b-e40be626f2eb"
+  "target": "https://cf6da69c-7d60-4dbe-965b-e40be626f2eb"
 }

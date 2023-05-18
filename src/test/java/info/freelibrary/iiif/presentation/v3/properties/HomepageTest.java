@@ -8,7 +8,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,7 +19,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.Manifest;
-import info.freelibrary.iiif.presentation.v3.MediaType;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
@@ -30,26 +28,37 @@ import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
  */
 public class HomepageTest {
 
-    private static final URI TEST_URI_1 = URI.create("https://example.com/info/");
+    /** A test ID. */
+    private static final String TEST_URI_1 = "https://example.com/info/";
 
-    private static final URI TEST_URI_2 = URI.create("https://example.com/info2/");
+    /** A test ID. */
+    private static final String TEST_URI_2 = "https://example.com/info2/";
 
+    /** A test label. */
     private static final Label TEST_LABEL_1 = new Label("Homepage for Example Object");
 
+    /** A test label. */
     private static final Label TEST_LABEL_2 = new Label("Homepage 2 for Example Object");
 
+    /** A test format. */
     private static final String TEST_FORMAT = "text/html";
 
+    /** A test language code. */
     private static final String ISO_639_1_PERSIAN = "fa";
 
+    /** A test language code. */
     private static final String ISO_639_1_UIGHUR = "ug";
 
+    /** A simple test homepage fixture. */
     private static final File HOMEPAGE_SIMPLE_ONE = new File(TestUtils.TEST_DIR, "homepage-simple-one.json");
 
+    /** A simple test homepage fixture. */
     private static final File HOMEPAGE_SIMPLE_TWO = new File(TestUtils.TEST_DIR, "homepage-simple-two.json");
 
+    /** A full test homepage fixture. */
     private static final File HOMEPAGE_FULL_ONE = new File(TestUtils.TEST_DIR, "homepage-full-one.json");
 
+    /** The test manifest. */
     private Manifest myManifest;
 
     /**
@@ -57,7 +66,7 @@ public class HomepageTest {
      */
     @Before
     public final void setUp() {
-        myManifest = new Manifest("https://example.org/iiif/book1/manifest", "Book 1");
+        myManifest = new Manifest("https://example.org/iiif/book1/manifest", new Label("Book 1"));
     }
 
     /**
@@ -75,16 +84,6 @@ public class HomepageTest {
     }
 
     /**
-     * Tests a homepage constructor and homepage (de)serialization.
-     *
-     * @throws IOException If there is trouble reading the homepage
-     */
-    @Test
-    public final void testHomepageStringStringString() throws IOException {
-        myManifest.setHomepages(new Homepage(TEST_URI_1.toString(), TEST_LABEL_1.getString()));
-    }
-
-    /**
      * Tests homepage (de)serialization.
      *
      * @throws IOException If there is trouble reading or deserializing the homepage file or serializing the constructed
@@ -92,8 +91,8 @@ public class HomepageTest {
      */
     @Test
     public final void testFullHomepage() throws IOException {
-        myManifest.setHomepages(new Homepage(TEST_URI_1, TEST_LABEL_1).setFormat(TEST_FORMAT)
-                .setLanguages(ISO_639_1_PERSIAN, ISO_639_1_UIGHUR));
+        myManifest.setHomepages(new Homepage(TEST_URI_1, TEST_LABEL_1)
+                .setFormat(MediaType.fromString(TEST_FORMAT).get()).setLanguages(ISO_639_1_PERSIAN, ISO_639_1_UIGHUR));
 
         checkDeserialization(HOMEPAGE_FULL_ONE);
         checkSerialization(HOMEPAGE_FULL_ONE);
@@ -134,7 +133,8 @@ public class HomepageTest {
      */
     @Test
     public final void testSetFormat() {
-        final MediaType format = new Homepage(TEST_URI_1, TEST_LABEL_1).setFormat(TEST_FORMAT).getFormat().get();
+        final MediaType format = new Homepage(TEST_URI_1, TEST_LABEL_1)
+                .setFormat(MediaType.fromString(TEST_FORMAT).get()).getFormat().get();
         assertEquals(MediaType.TEXT_HTML, format);
     }
 
@@ -162,8 +162,8 @@ public class HomepageTest {
      */
     @Test
     public final void testHashCode() throws IOException {
-        final Homepage homepage1 = Homepage.from(getTestFixture());
-        final Homepage homepage2 = Homepage.from(getTestFixture());
+        final Homepage homepage1 = Homepage.fromJSON(getTestFixture());
+        final Homepage homepage2 = Homepage.fromJSON(getTestFixture());
 
         assertEquals(homepage1.hashCode(), homepage2.hashCode());
     }
@@ -175,8 +175,8 @@ public class HomepageTest {
      */
     @Test
     public final void testEquals() throws IOException {
-        final Homepage homepage1 = Homepage.from(getTestFixture());
-        final Homepage homepage2 = Homepage.from(getTestFixture());
+        final Homepage homepage1 = Homepage.fromJSON(getTestFixture());
+        final Homepage homepage2 = Homepage.fromJSON(getTestFixture());
 
         assertTrue(homepage1.equals(homepage2));
     }
@@ -189,7 +189,7 @@ public class HomepageTest {
     @Test
     public final void testToFromString() throws IOException {
         final String json = getTestFixture();
-        assertEquals(json, Homepage.from(json).toString());
+        assertEquals(json, Homepage.fromJSON(json).toString());
     }
 
     /**

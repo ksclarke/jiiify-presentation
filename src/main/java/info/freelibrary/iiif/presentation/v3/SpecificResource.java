@@ -1,11 +1,10 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -13,9 +12,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import info.freelibrary.util.warnings.Eclipse;
 import info.freelibrary.util.warnings.PMD;
 
+import info.freelibrary.iiif.presentation.v3.ids.UriUtils;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.Selector;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * A specific resource that can reference a particular region, time frame, or other aspect of another resource.
@@ -32,22 +33,12 @@ public class SpecificResource {
     /**
      * The specific resource's resource URI.
      */
-    private URI mySource;
+    private String mySource;
 
     /**
      * The specific resources's ID.
      */
-    private URI myID;
-
-    /**
-     * Creates a new specific resource from the supplied source and selector.
-     *
-     * @param aSource A source in string form
-     * @param aSelector A selector
-     */
-    public SpecificResource(final String aSource, final Selector aSelector) {
-        this(URI.create(aSource), aSelector);
-    }
+    private String myID;
 
     /**
      * Creates a new specific resource from the supplied source and selector.
@@ -55,21 +46,9 @@ public class SpecificResource {
      * @param aSource A source
      * @param aSelector A selector
      */
-    public SpecificResource(final URI aSource, final Selector aSelector) {
-        mySource = aSource;
+    public SpecificResource(final String aSource, final Selector aSelector) {
+        mySource = UriUtils.checkID(aSource, true);
         mySelector = aSelector;
-    }
-
-    /**
-     * Creates a new specific resource from the supplied ID, source, and selector.
-     *
-     * @param aID An ID in string form
-     * @param aSource A source in string form
-     * @param aSelector A selector
-     */
-    public SpecificResource(final String aID, final String aSource, final Selector aSelector) {
-        this(URI.create(aSource), aSelector);
-        myID = URI.create(aID);
     }
 
     /**
@@ -79,9 +58,9 @@ public class SpecificResource {
      * @param aSource A source
      * @param aSelector A selector
      */
-    public SpecificResource(final URI aID, final URI aSource, final Selector aSelector) {
+    public SpecificResource(final String aID, final String aSource, final Selector aSelector) {
         this(aSource, aSelector);
-        myID = aID;
+        myID = UriUtils.checkID(aID, true);
     }
 
     /**
@@ -98,7 +77,8 @@ public class SpecificResource {
      * @return The ID
      */
     @JsonGetter(JsonKeys.ID)
-    public URI getID() {
+    @JsonInclude(Include.NON_EMPTY)
+    public String getID() {
         return myID;
     }
 
@@ -128,7 +108,8 @@ public class SpecificResource {
      * @return The specific resource's source
      */
     @JsonGetter(JsonKeys.SOURCE)
-    public URI getSource() {
+    @JsonInclude(Include.NON_EMPTY)
+    public String getSource() {
         return mySource;
     }
 
@@ -142,14 +123,14 @@ public class SpecificResource {
     }
 
     /**
-     * Sets the ID in string form.
+     * Sets the ID.
      *
-     * @param aID The ID in string form
+     * @param aID The ID
      * @return This specific resource
      */
     @JsonSetter(JsonKeys.ID)
     private SpecificResource setID(final String aID) {
-        myID = URI.create(aID);
+        myID = UriUtils.checkID(aID, true);
         return this;
     }
 
@@ -168,12 +149,12 @@ public class SpecificResource {
     /**
      * Sets the specific resource's source.
      *
-     * @param aSource A source in string form
+     * @param aSource A source
      * @return This specific resource
      */
     @JsonSetter(JsonKeys.SOURCE)
     private SpecificResource setSource(final String aSource) {
-        mySource = URI.create(aSource);
+        mySource = UriUtils.checkID(aSource, true);
         return this;
     }
 
@@ -192,11 +173,12 @@ public class SpecificResource {
     /**
      * Returns a SpecificResource from its JSON representation.
      *
-     * @param aJsonString A specific resource in string form
+     * @param aJsonString A JSON serialization of a specific resource
      * @return The specific resource
+     * @throws JsonParsingException If the specific resource cannot be deserialized from the supplied JSON
      */
     @JsonIgnore
-    public static SpecificResource from(final String aJsonString) {
+    public static SpecificResource fromJSON(final String aJsonString) {
         try {
             return JSON.getReader(SpecificResource.class).readValue(aJsonString);
         } catch (final JsonProcessingException details) {

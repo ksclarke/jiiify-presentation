@@ -29,48 +29,66 @@ import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.Metadata;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
+import info.freelibrary.iiif.presentation.v3.properties.behaviors.InvalidBehaviorException;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.services.ImageService3;
 import info.freelibrary.iiif.presentation.v3.services.ImageService3.Profile;
 import info.freelibrary.iiif.presentation.v3.services.OtherService3;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * A manifest test.
  */
 public class ManifestTest extends AbstractTest {
 
+    /** A test fixture. */
     private static final String SINAI_JSON = new File(TestUtils.TEST_DIR, "z1960050.json").getAbsolutePath();
 
+    /** A fake IIIF server. */
     private static final String SERVER = "https://sinai-images.library.ucla.edu/iiif/";
 
+    /** A test manifest ID. */
     private static final String MANIFEST_ID = "ark:%2F21198%2Fz1960050";
 
+    /** A test manifest URI. */
     private static final String MANIFEST_URI = SERVER + MANIFEST_ID + "/manifest";
 
+    /** A test thumbnail path. */
     private static final String THUMBNAIL_PATH = "/0,1022,6132,6132/150,150/0/default.jpg";
 
+    /** An encoded test ID. */
     private static final String ENCODED_MANIFEST_THUMBNAIL_ARK = "ark:%2F21198%2Fz1d79t3q";
 
+    /** A test manifest thumbnail URI. */
     private static final String MANIFEST_THUMBNAIL_URI = SERVER + ENCODED_MANIFEST_THUMBNAIL_ARK + THUMBNAIL_PATH;
 
+    /** A test title. */
     private static final String TEST_TITLE = "Georgian NF Fragment 68a";
 
+    /** A constant for the HTTPS protocol. */
+    private static final String HTTPS = "https://";
+
+    /** A test list of metadata pairs. */
     private static final List<String[]> METADATA_PAIRS = Stream.of( //
             new String[] { "Title", TEST_TITLE }, //
             new String[] { "Extent", "1 f" }, //
             new String[] { "Overtext Language", "Georgian" }, //
             new String[] { "Undertext Language(s)", "Christian Palestinian Aramaic" }).collect(Collectors.toList());
 
+    /** A test height. */
     private static final int HEIGHT = 8176;
 
+    /** A test width. */
     private static final int WIDTH = 6132;
 
+    /** A list of test contexts. */
     private final List<URI> myContexts = Arrays.asList(URI.create(getURL()), URI.create(getURL()), URI.create(getURL()),
             URI.create(getURL()), URI.create(getURL()), URI.create(getURL()), URI.create(getURL()),
             URI.create(getURL()), URI.create(getURL()), URI.create(getURL()), URI.create(getURL()),
             AbstractResource.PRESENTATION_CONTEXT_URI);
 
+    /** The test manifest. */
     private Manifest myManifest;
 
     /**
@@ -96,12 +114,12 @@ public class ManifestTest extends AbstractTest {
 
         manifestThumbService = new ImageService3(Profile.LEVEL_TWO, SERVER + ENCODED_MANIFEST_THUMBNAIL_ARK);
 
-        myManifest = new Manifest(MANIFEST_URI, TEST_TITLE);
+        myManifest = new Manifest(MANIFEST_URI, new Label(TEST_TITLE));
         myManifest.setMetadata(metadata);
         myManifest.setThumbnails(new ImageContent(MANIFEST_THUMBNAIL_URI).setServices(manifestThumbService));
 
         final String id1 = SERVER + MANIFEST_ID + "/canvas/canvas-1";
-        final String label1 = "GeoNF-frg68a_001r_K-64-001";
+        final Label label1 = new Label("GeoNF-frg68a_001r_K-64-001");
         final ImageContent thumbnail1 = new ImageContent(SERVER + "ark:%2F21198%2Fz10v8vhm" + THUMBNAIL_PATH);
         final Canvas canvas1 = new Canvas(id1, label1).setWidthHeight(WIDTH, HEIGHT).setThumbnails(thumbnail1);
         final PaintingAnnotation content1 =
@@ -119,11 +137,12 @@ public class ManifestTest extends AbstractTest {
             final ImageService3 service = new ImageService3(Profile.LEVEL_TWO, SERVER + values[1]);
             final ImageContent resource = new ImageContent(id).setServices(service);
 
-            content1.setChoice(true).getBodies().add(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(values[0]));
+            content1.setChoice(true).getBody()
+                    .add(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(new Label(values[0])));
         }
 
         final String id2 = SERVER + MANIFEST_ID + "/canvas/canvas-2";
-        final String label2 = "GeoNF-frg68a_001v_K-64-002";
+        final Label label2 = new Label("GeoNF-frg68a_001v_K-64-002");
         final ImageContent thumbnail2 = new ImageContent(SERVER + "ark:%2F21198%2Fz1gq7dfx" + THUMBNAIL_PATH);
         final Canvas canvas2 = new Canvas(id2, label2).setWidthHeight(WIDTH, HEIGHT).setThumbnails(thumbnail2);
         final PaintingAnnotation content2;
@@ -139,12 +158,13 @@ public class ManifestTest extends AbstractTest {
             final ImageService3 service = new ImageService3(Profile.LEVEL_TWO, SERVER + values[1]);
             final ImageContent resource = new ImageContent(id).setServices(service);
 
-            content2.setChoice(true).getBodies().add(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(values[0]));
+            content2.setChoice(true).getBody()
+                    .add(resource.setWidthHeight(WIDTH, HEIGHT).setLabel(new Label(values[0])));
         }
 
         reqStmt = new RequiredStatement("Attribution", "Provided courtesy of Example Institution");
-        otherService = new OtherService3("https://example.org/service/example", "example")
-                .setProfile("https://example.org/docs/example-service.html");
+        otherService = new OtherService3("https://example.org/service/example", "example",
+                new OtherService3.Profile("http://example.org/docs/example-service.html"));
 
         myManifest.setRights("http://creativecommons.org/licenses/by/4.0/").setBehaviors(ManifestBehavior.PAGED)
                 .setRequiredStatement(reqStmt).setServices(otherService);
@@ -182,17 +202,7 @@ public class ManifestTest extends AbstractTest {
     @Test
     public void testConstructorStringLabel() {
         myManifest = new Manifest(MANIFEST_URI, new Label(TEST_TITLE));
-        assertEquals(URI.create(MANIFEST_URI), myManifest.getID());
-        assertEquals(TEST_TITLE, myManifest.getLabel().getString());
-    }
-
-    /**
-     * Tests the manifest constructor.
-     */
-    @Test
-    public void testConstructorStringString() {
-        myManifest = new Manifest(MANIFEST_URI, TEST_TITLE);
-        assertEquals(URI.create(MANIFEST_URI), myManifest.getID());
+        assertEquals(MANIFEST_URI, myManifest.getID());
         assertEquals(TEST_TITLE, myManifest.getLabel().getString());
     }
 
@@ -201,8 +211,8 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public void testConstructorUriLabel() {
-        myManifest = new Manifest(URI.create(MANIFEST_URI), new Label(TEST_TITLE));
-        assertEquals(URI.create(MANIFEST_URI), myManifest.getID());
+        myManifest = new Manifest(MANIFEST_URI, new Label(TEST_TITLE));
+        assertEquals(MANIFEST_URI, myManifest.getID());
         assertEquals(TEST_TITLE, myManifest.getLabel().getString());
     }
 
@@ -212,7 +222,7 @@ public class ManifestTest extends AbstractTest {
     @Test
     public void testClearContexts() {
         assertEquals(1, myManifest.getContexts().size());
-        myManifest.addContexts(myLoremIpsum.getUrl(), myLoremIpsum.getUrl());
+        myManifest.addContexts(URI.create(myLoremIpsum.getUrl()), URI.create(myLoremIpsum.getUrl()));
         assertEquals(3, myManifest.getContexts().size());
         assertEquals(1, myManifest.clearContexts().getContexts().size());
     }
@@ -241,9 +251,9 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public void testRemoveContext() {
-        final URI uri = URI.create(myLoremIpsum.getUrl());
+        final URI uri = URI.create("https://asdf.example.com");
 
-        myManifest.addContexts(uri, URI.create(myLoremIpsum.getUrl()));
+        myManifest.addContexts(uri, URI.create("https://fdsa.example.com"));
         assertTrue(myManifest.getContexts().contains(uri));
         assertTrue(myManifest.removeContext(uri));
         assertEquals(2, myManifest.getContexts().size());
@@ -262,8 +272,8 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public void testSetGetCanvases() {
-        final String cID1 = UUID.randomUUID().toString();
-        final String cID2 = UUID.randomUUID().toString();
+        final String cID1 = HTTPS + UUID.randomUUID().toString();
+        final String cID2 = HTTPS + UUID.randomUUID().toString();
         final Canvas canvas1 = new Canvas(cID1);
         final Canvas canvas2 = new Canvas(cID2);
         final List<Canvas> canvases;
@@ -272,8 +282,8 @@ public class ManifestTest extends AbstractTest {
         canvases = myManifest.getCanvases();
 
         assertEquals(2, canvases.size());
-        assertEquals(cID1, canvases.get(0).getID().toString());
-        assertEquals(cID2, canvases.get(1).getID().toString());
+        assertEquals(cID1, canvases.get(0).getID());
+        assertEquals(cID2, canvases.get(1).getID());
     }
 
     /**
@@ -281,8 +291,8 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public void testSetGetCanvasesList() {
-        final String cID1 = UUID.randomUUID().toString();
-        final String cID2 = UUID.randomUUID().toString();
+        final String cID1 = HTTPS + UUID.randomUUID().toString();
+        final String cID2 = HTTPS + UUID.randomUUID().toString();
         final Canvas canvas1 = new Canvas(cID1);
         final Canvas canvas2 = new Canvas(cID2);
         final List<Canvas> canvases;
@@ -291,8 +301,8 @@ public class ManifestTest extends AbstractTest {
         canvases = myManifest.getCanvases();
 
         assertEquals(2, canvases.size());
-        assertEquals(cID1, canvases.get(0).getID().toString());
-        assertEquals(cID2, canvases.get(1).getID().toString());
+        assertEquals(cID1, canvases.get(0).getID());
+        assertEquals(cID2, canvases.get(1).getID());
     }
 
     /**
@@ -300,8 +310,8 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public void testSetGetRanges() {
-        final String rID1 = UUID.randomUUID().toString();
-        final String rID2 = UUID.randomUUID().toString();
+        final String rID1 = HTTPS + UUID.randomUUID().toString();
+        final String rID2 = HTTPS + UUID.randomUUID().toString();
         final Range range1 = new Range(rID1);
         final Range range2 = new Range(rID2);
         final List<Range> ranges;
@@ -310,8 +320,8 @@ public class ManifestTest extends AbstractTest {
         ranges = myManifest.getRanges();
 
         assertEquals(2, ranges.size());
-        assertEquals(rID1, ranges.get(0).getID().toString());
-        assertEquals(rID2, ranges.get(1).getID().toString());
+        assertEquals(rID1, ranges.get(0).getID());
+        assertEquals(rID2, ranges.get(1).getID());
     }
 
     /**
@@ -319,8 +329,8 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public void testSetGetRangesList() {
-        final String rID1 = UUID.randomUUID().toString();
-        final String rID2 = UUID.randomUUID().toString();
+        final String rID1 = HTTPS + UUID.randomUUID().toString();
+        final String rID2 = HTTPS + UUID.randomUUID().toString();
         final Range range1 = new Range(rID1);
         final Range range2 = new Range(rID2);
         final List<Range> ranges;
@@ -329,8 +339,8 @@ public class ManifestTest extends AbstractTest {
         ranges = myManifest.getRanges();
 
         assertEquals(2, ranges.size());
-        assertEquals(rID1, ranges.get(0).getID().toString());
-        assertEquals(rID2, ranges.get(1).getID().toString());
+        assertEquals(rID1, ranges.get(0).getID());
+        assertEquals(rID2, ranges.get(1).getID());
     }
 
     /**
@@ -353,17 +363,17 @@ public class ManifestTest extends AbstractTest {
      * Tests manifest creation fromJSON().
      */
     @Test
-    public void testFrom() throws IOException {
+    public void testFromJSON() throws IOException {
         final String json = format(StringUtils.read(new File(SINAI_JSON)));
-        assertEquals(json, format(Manifest.from(json).toString()));
+        assertEquals(json, format(Manifest.fromJSON(json).toString()));
     }
 
     /**
-     * Test manifest creation using from() with a Collection.
+     * Test manifest creation using fromJSON() with a Collection.
      */
     @Test(expected = JsonParsingException.class)
     public void testFromStringCollection() throws IOException {
-        Manifest.from(StringUtils.read(new File(TestUtils.TEST_DIR, "collection1.json")));
+        Manifest.fromJSON(StringUtils.read(new File(TestUtils.TEST_DIR, "collection1.json")));
     }
 
     /**
@@ -378,24 +388,9 @@ public class ManifestTest extends AbstractTest {
     /**
      * Test setting disallowed manifest behaviors.
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = InvalidBehaviorException.class)
     public final void testSetDisallowedBehaviors() {
         myManifest.setBehaviors(ManifestBehavior.AUTO_ADVANCE, CanvasBehavior.NON_PAGED);
     }
 
-    /**
-     * Test adding manifest behaviors.
-     */
-    @Test
-    public final void testAddBehaviors() {
-        assertEquals(2, myManifest.addBehaviors(ManifestBehavior.NO_AUTO_ADVANCE).getBehaviors().size());
-    }
-
-    /**
-     * Test adding disallowed manifest behaviors.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public final void testAddDisallowedBehaviors() {
-        myManifest.addBehaviors(ManifestBehavior.CONTINUOUS, CanvasBehavior.AUTO_ADVANCE);
-    }
 }

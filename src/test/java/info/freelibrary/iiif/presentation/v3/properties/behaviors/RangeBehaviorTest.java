@@ -15,7 +15,7 @@ import info.freelibrary.iiif.presentation.v3.utils.TestConstants;
  */
 public class RangeBehaviorTest {
 
-    /* The expected values. */
+    /** The expected values. */
     private static final String[] VALUES = { BehaviorConstants.AUTO_ADVANCE, BehaviorConstants.NO_AUTO_ADVANCE,
         BehaviorConstants.INDIVIDUALS, BehaviorConstants.NO_NAV, BehaviorConstants.CONTINUOUS, BehaviorConstants.PAGED,
         BehaviorConstants.UNORDERED, BehaviorConstants.THUMBNAIL_NAV, BehaviorConstants.SEQUENCE };
@@ -40,11 +40,11 @@ public class RangeBehaviorTest {
     }
 
     /**
-     * Tests the fromString() method.
+     * Tests the fromLabel() method.
      */
     @Test
-    public final void fromString() {
-        assertEquals(RangeBehavior.SEQUENCE, RangeBehavior.fromString(BehaviorConstants.SEQUENCE));
+    public final void testFromLabel() {
+        assertEquals(RangeBehavior.SEQUENCE, RangeBehavior.fromLabel(BehaviorConstants.SEQUENCE).get());
     }
 
     /**

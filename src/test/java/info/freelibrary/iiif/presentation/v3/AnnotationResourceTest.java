@@ -6,7 +6,6 @@ import static org.junit.Assert.assertEquals;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URI;
 import java.util.UUID;
 
 import org.junit.Before;
@@ -17,7 +16,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import info.freelibrary.util.StringUtils;
 
-import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
+import info.freelibrary.iiif.presentation.v3.properties.behaviors.InvalidBehaviorException;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
@@ -27,7 +26,7 @@ import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 /**
  * An annotation page for testing.
  */
-public class AnnotationPageTest<T extends Annotation<T>> extends AbstractTest {
+public class AnnotationResourceTest extends AbstractTest {
 
     /**
      * An annotation page serialization.
@@ -44,7 +43,7 @@ public class AnnotationPageTest<T extends Annotation<T>> extends AbstractTest {
      */
     @Before
     public void setUp() {
-        myID = UUID.randomUUID().toString();
+        myID = "https://" + UUID.randomUUID().toString();
     }
 
     /**
@@ -57,10 +56,10 @@ public class AnnotationPageTest<T extends Annotation<T>> extends AbstractTest {
     public void testAnnotationPageToString() throws IOException {
         final ObjectReader reader = JSON.getReader();
         final ObjectNode node = (ObjectNode) reader.readTree(new FileReader(ANNOTATION_PAGE));
-        final AnnotationPage<T> page;
+        final AnnotationPage<?> page;
 
         node.remove(JsonKeys.CONTEXT); // Confirm this isn't added if it isn't present
-        page = AnnotationPage.from(node.toString());
+        page = AnnotationPage.fromJSON(node.toString());
 
         assertEquals(node, reader.readTree(page.toString()));
     }
@@ -68,15 +67,16 @@ public class AnnotationPageTest<T extends Annotation<T>> extends AbstractTest {
     /**
      * Tests the deserialization and serialization of a stand-alone annotation page.
      *
+     * @param <A> A class that implements the {@code Annotation} interface.
      * @throws IOException If the test fixtures cannot be read
      */
     @Test
-    public void testExternalAnnotationPageToString() throws IOException {
-        final String json = StringUtils.read(ANNOTATION_PAGE);
-        final AnnotationPage<T> page = AnnotationPage.from(json);
+    public <A extends Annotation<A>> void testExternalAnnotationPageToString() throws IOException {
+        final String expectedJSON = StringUtils.read(ANNOTATION_PAGE);
+        final String foundJSON = AnnotationPage.fromJSON(expectedJSON).toString();
         final ObjectReader reader = JSON.getReader();
 
-        assertEquals(reader.readTree(json), reader.readTree(page.toString()));
+        assertEquals(reader.readTree(expectedJSON), reader.readTree(foundJSON));
     }
 
     /**
@@ -84,15 +84,7 @@ public class AnnotationPageTest<T extends Annotation<T>> extends AbstractTest {
      */
     @Test
     public void testAnnotationPageStringId() {
-        assertEquals(myID, new AnnotationPage<PaintingAnnotation>(myID).getID().toString());
-    }
-
-    /**
-     * Tests constructing an annotation page.
-     */
-    @Test
-    public void testAnnotationPageUriId() {
-        assertEquals(URI.create(myID), new AnnotationPage<PaintingAnnotation>(URI.create(myID)).getID());
+        assertEquals(myID, new AnnotationPage<PaintingAnnotation>(myID).getID());
     }
 
     /**
@@ -107,27 +99,9 @@ public class AnnotationPageTest<T extends Annotation<T>> extends AbstractTest {
     /**
      * Test setting disallowed annotation page behaviors.
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = InvalidBehaviorException.class)
     public final void testSetDisallowedBehaviors() {
         new AnnotationPage<PaintingAnnotation>(myID).setBehaviors(ManifestBehavior.AUTO_ADVANCE);
-    }
-
-    /**
-     * Test adding annotation page behaviors.
-     */
-    @Test
-    public final void testAddBehaviors() {
-        assertEquals(1, new AnnotationPage<PaintingAnnotation>(myID).addBehaviors(ResourceBehavior.HIDDEN)
-                .getBehaviors().size());
-    }
-
-    /**
-     * Test adding disallowed annotation page behaviors.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public final void testAddDisallowedBehaviors() {
-        new AnnotationPage<PaintingAnnotation>(myID).addBehaviors(ManifestBehavior.CONTINUOUS,
-                CanvasBehavior.AUTO_ADVANCE);
     }
 
 }

@@ -3,7 +3,6 @@ package info.freelibrary.iiif.presentation.v3.services;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,14 +27,14 @@ public class KioskCookieService1Test {
     /**
      * A unique ID used in testing.
      */
-    private static URI myID;
+    private static String myID;
 
     /**
      * Sets up the testing environment.
      */
     @Before
     public final void setUp() {
-        myID = URI.create(UUID.randomUUID().toString());
+        myID = UUID.randomUUID().toString();
     }
 
     /**
@@ -51,7 +50,7 @@ public class KioskCookieService1Test {
      */
     @Test
     public final void testGetType() {
-        assertEquals(AuthCookieService1.class.getSimpleName(), new KioskCookieService1(myID).getType());
+        assertEquals(KioskCookieService1.TYPE, new KioskCookieService1(myID).getType());
     }
 
     /**
@@ -78,7 +77,7 @@ public class KioskCookieService1Test {
      */
     @Test
     public final void testGetProfile() {
-        assertEquals(AuthCookieService1.Profile.KIOSK, new KioskCookieService1(myID).getProfile().get());
+        assertEquals(AuthCookieService.Profile.KIOSK, new KioskCookieService1(myID).getProfile().get());
     }
 
     /**
@@ -108,7 +107,7 @@ public class KioskCookieService1Test {
      */
     @Test
     public final void testKioskCookieService1String() {
-        assertEquals(myID, new KioskCookieService1(myID.toString()).getID());
+        assertEquals(myID, new KioskCookieService1(myID).getID());
     }
 
     /**
@@ -124,16 +123,9 @@ public class KioskCookieService1Test {
      */
     @Test
     public final void testKioskCookieService1StringServiceOfQArray() {
-        final KioskCookieService1 cookieService = new KioskCookieService1(myID.toString(), new AuthTokenService1(myID));
-        assertEquals(1, cookieService.getServices().size());
-    }
+        final AuthTokenService1 tokenService = new AuthTokenService1(myID);
+        final KioskCookieService1 cookieService = new KioskCookieService1(myID).setServices(tokenService);
 
-    /**
-     * Test method for {@link KioskCookieService1#KioskCookieService1(URI, Service[])}.
-     */
-    @Test
-    public final void testKioskCookieService1URIServiceOfQArray() {
-        final KioskCookieService1 cookieService = new KioskCookieService1(myID, new AuthTokenService1(myID));
         assertEquals(1, cookieService.getServices().size());
     }
 
@@ -142,7 +134,7 @@ public class KioskCookieService1Test {
      */
     @Test
     public final void testSetIDURI() {
-        final KioskCookieService1 cookieService = new KioskCookieService1(URI.create(myID.toString().substring(2)));
+        final KioskCookieService1 cookieService = new KioskCookieService1(myID.substring(2));
         assertEquals(myID, cookieService.setID(myID).getID());
     }
 
@@ -151,7 +143,7 @@ public class KioskCookieService1Test {
      */
     @Test
     public final void testSetIDString() {
-        final KioskCookieService1 cookieService = new KioskCookieService1(myID.toString().substring(2));
+        final KioskCookieService1 cookieService = new KioskCookieService1(myID.substring(2));
         assertEquals(myID, cookieService.setID(myID).getID());
     }
 
@@ -161,7 +153,7 @@ public class KioskCookieService1Test {
     @Test
     public final void testSetTypeString() {
         try {
-            new KioskCookieService1(myID).setType(AuthCookieService1.class.getSimpleName());
+            new KioskCookieService1(myID).setType(AuthCookieService.class.getSimpleName());
         } catch (final IllegalArgumentException details) {
             Assert.fail(details.getMessage());
         }
@@ -173,46 +165,6 @@ public class KioskCookieService1Test {
     @Test(expected = IllegalArgumentException.class)
     public final void testSetTypeStringInvalid() {
         new KioskCookieService1(myID).setType(AuthTokenService1.class.getSimpleName());
-    }
-
-    /**
-     * Test method for {@link KioskCookieService1#setProfile(String)}.
-     */
-    @Test
-    public final void testSetProfileString() {
-        try {
-            new KioskCookieService1(myID).setProfile(AuthCookieService1.Profile.KIOSK.string());
-        } catch (final IllegalArgumentException details) {
-            fail(details.getMessage());
-        }
-    }
-
-    /**
-     * Test method for {@link KioskCookieService1#setProfile(String)}.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public final void testSetProfileStringBad() {
-        new KioskCookieService1(myID).setProfile(AuthCookieService1.Profile.EXTERNAL.string());
-    }
-
-    /**
-     * Test method for {@link KioskCookieService1#setProfile(AuthService.Profile)}.
-     */
-    @Test
-    public final void testSetProfileProfile() {
-        try {
-            new KioskCookieService1(myID).setProfile(AuthCookieService1.Profile.KIOSK);
-        } catch (final IllegalArgumentException details) {
-            fail(details.getMessage());
-        }
-    }
-
-    /**
-     * Test method for {@link KioskCookieService1#setProfile(AuthService.Profile)}.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public final void testSetProfileProfileBad() {
-        new KioskCookieService1(myID).setProfile(AuthCookieService1.Profile.EXTERNAL);
     }
 
     /**

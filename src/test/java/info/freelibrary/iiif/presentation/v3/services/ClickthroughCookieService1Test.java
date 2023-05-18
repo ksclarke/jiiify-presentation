@@ -4,8 +4,6 @@ package info.freelibrary.iiif.presentation.v3.services;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +13,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import info.freelibrary.util.StringUtils;
-
 import info.freelibrary.iiif.presentation.v3.Service;
 
 /**
@@ -24,22 +20,16 @@ import info.freelibrary.iiif.presentation.v3.Service;
  */
 public class ClickthroughCookieService1Test {
 
-    /**
-     * A unique ID used in testing.
-     */
-    private static URI myID;
+    /** A unique ID used in testing. */
+    private static String myID;
 
-    /**
-     * A service label to use in testing.
-     */
+    /** A service label to use in testing. */
     private static String myLabel;
 
-    /**
-     * Sets up the testing environment.
-     */
+    /** Sets up the testing environment. */
     @Before
     public final void setUp() {
-        myID = URI.create(UUID.randomUUID().toString());
+        myID = UUID.randomUUID().toString();
         myLabel = UUID.randomUUID().toString();
     }
 
@@ -56,17 +46,7 @@ public class ClickthroughCookieService1Test {
      */
     @Test
     public final void testGetType() {
-        assertEquals(AuthCookieService1.class.getSimpleName(), new ClickthroughCookieService1(myID, myLabel).getType());
-    }
-
-    /**
-     * Tests {@link ClickthroughCookieService1#getServices() getServices}.
-     */
-    @Test
-    public final void testGetServices() {
-        final ClickthroughCookieService1 service =
-                new ClickthroughCookieService1(myID, myLabel, new AuthTokenService1(myID));
-        assertEquals(1, service.getServices().size());
+        assertEquals(ClickthroughCookieService1.TYPE, new ClickthroughCookieService1(myID, myLabel).getType());
     }
 
     /**
@@ -75,7 +55,7 @@ public class ClickthroughCookieService1Test {
     @Test
     public final void testGetProfile() {
         final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
-        assertEquals(AuthCookieService1.Profile.CLICKTHROUGH, service.getProfile().get());
+        assertEquals(AuthCookieService.Profile.CLICKTHROUGH, service.getProfile().get());
     }
 
     /**
@@ -149,7 +129,7 @@ public class ClickthroughCookieService1Test {
      */
     @Test
     public final void testClickthroughCookieService1StringString() {
-        final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID.toString(), myLabel);
+        final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
 
         assertEquals(myID, service.getID());
         assertEquals(myLabel, service.getLabel());
@@ -167,38 +147,12 @@ public class ClickthroughCookieService1Test {
     }
 
     /**
-     * Tests ClickthroughCookieService1 constructor that takes string ID, string label, and an array of services.
-     */
-    @Test
-    public final void testClickthroughCookieService1StringStringServiceOfQArray() {
-        final ClickthroughCookieService1 service =
-                new ClickthroughCookieService1(myID.toString(), myLabel, new AuthTokenService1(myID));
-
-        assertEquals(myID, service.getID());
-        assertEquals(myLabel, service.getLabel());
-        assertEquals(1, service.getServices().size());
-    }
-
-    /**
-     * Tests ClickthroughCookieService1 constructor that takes URI ID, string label, and an array of services.
-     */
-    @Test
-    public final void testClickthroughCookieService1URIStringServiceOfQArray() {
-        final ClickthroughCookieService1 service =
-                new ClickthroughCookieService1(myID, myLabel, new AuthTokenService1(myID));
-
-        assertEquals(myID, service.getID());
-        assertEquals(myLabel, service.getLabel());
-        assertEquals(1, service.getServices().size());
-    }
-
-    /**
      * Tests {@link ClickthroughCookieService1#setID(URI) setID}.
      */
     @Test
     public final void testSetIDURI() {
         final ClickthroughCookieService1 service =
-                new ClickthroughCookieService1(myID.toString().substring(2), myLabel).setID(myID);
+                new ClickthroughCookieService1(myID.substring(2), myLabel).setID(myID);
 
         assertEquals(myID, service.getID());
     }
@@ -209,7 +163,7 @@ public class ClickthroughCookieService1Test {
     @Test
     public final void testSetIDString() {
         final ClickthroughCookieService1 service =
-                new ClickthroughCookieService1(myID.toString().substring(2), myLabel).setID(myID.toString());
+                new ClickthroughCookieService1(myID.substring(2), myLabel).setID(myID);
 
         assertEquals(myID, service.getID());
     }
@@ -221,8 +175,8 @@ public class ClickthroughCookieService1Test {
     public final void testSetTypeString() {
         final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
 
-        assertEquals(AuthCookieService1.class.getSimpleName(),
-                service.setType(AuthCookieService1.class.getSimpleName()).getType());
+        assertEquals(AuthCookieService.class.getSimpleName(),
+                service.setType(AuthCookieService.class.getSimpleName()).getType());
     }
 
     /**
@@ -233,44 +187,6 @@ public class ClickthroughCookieService1Test {
         final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
 
         service.setType(ClickthroughCookieService1.class.getSimpleName());
-    }
-
-    /**
-     * Tests {@link ClickthroughCookieService1#setProfile(String) setProfile}.
-     */
-    @Test
-    public final void testSetProfileString() {
-        final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
-
-        assertEquals(AuthCookieService1.Profile.CLICKTHROUGH,
-                service.setProfile(AuthCookieService1.Profile.CLICKTHROUGH.string()).getProfile().get());
-    }
-
-    /**
-     * Tests {@link ClickthroughCookieService1#setProfile(String) setProfile}.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public final void testSetProfileStringInvalid() {
-        new ClickthroughCookieService1(myID, myLabel).setProfile(AuthCookieService1.Profile.EXTERNAL.string());
-    }
-
-    /**
-     * Tests {@link ClickthroughCookieService1#setProfile(Profile) setProfile}.
-     */
-    @Test
-    public final void testSetProfileProfile() {
-        final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
-
-        assertEquals(AuthCookieService1.Profile.CLICKTHROUGH,
-                service.setProfile(AuthCookieService1.Profile.CLICKTHROUGH).getProfile().get());
-    }
-
-    /**
-     * Tests {@link ClickthroughCookieService1#setProfile(Profile) setProfile}.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public final void testSetProfileProfileInvalid() {
-        new ClickthroughCookieService1(myID, myLabel).setProfile(AuthCookieService1.Profile.EXTERNAL);
     }
 
     /**
@@ -360,23 +276,6 @@ public class ClickthroughCookieService1Test {
         final String description = UUID.randomUUID().toString();
 
         assertEquals(description, service.setDescription(description).getDescription());
-    }
-
-    /**
-     * Tests {@link ClickthroughCookieService1#toString() toString}.
-     */
-    @Test
-    public final void testToString() throws IOException {
-        final String json = StringUtils.read(new File("src/test/resources/json/clickthrough-cookie-service.json"));
-        final AuthTokenService1 tokenService = new AuthTokenService1(myID);
-        final ClickthroughCookieService1 cookieService = new ClickthroughCookieService1(myID, myLabel, tokenService);
-
-        cookieService.setConfirmLabel("Confirm Label");
-        cookieService.setDescription("Description");
-        cookieService.setFailureDescription("Failure description");
-        cookieService.setFailureHeader("Failure Header");
-
-        assertEquals(StringUtils.format(json, myID, myLabel, myID), cookieService.toString());
     }
 
 }

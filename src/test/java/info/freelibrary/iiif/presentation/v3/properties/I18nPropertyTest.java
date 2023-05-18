@@ -1,7 +1,10 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -12,16 +15,22 @@ import org.junit.Test;
  */
 public class I18nPropertyTest {
 
+    /** Sample test value. */
     private static final String ONE = "one";
 
+    /** Sample test value. */
     private static final String TWO = "two";
 
+    /** Sample test value. */
     private static final String THREE = "three";
 
+    /** Sample test value. */
     private static final String FOUR = "four";
 
+    /** Sample test value. */
     private static final String ENG = "eng";
 
+    /** Sample test value. */
     private static final String FRE = "fre";
 
     /**
@@ -60,7 +69,7 @@ public class I18nPropertyTest {
     }
 
     /**
-     * Test of hashCode with double values
+     * Test of hashCode with double values.
      */
     @Test
     public void testHashCodeDoubleValue() {
@@ -71,7 +80,7 @@ public class I18nPropertyTest {
     }
 
     /**
-     * Test of hashCode with double values
+     * Test of hashCode with double values.
      */
     @Test
     public void testHashCodeDifferentDoubleValue() {

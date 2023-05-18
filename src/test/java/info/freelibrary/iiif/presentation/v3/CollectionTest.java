@@ -7,9 +7,8 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,6 +21,7 @@ import info.freelibrary.iiif.presentation.v3.Collection.Item;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.NavDate;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CollectionBehavior;
+import info.freelibrary.iiif.presentation.v3.properties.behaviors.InvalidBehaviorException;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 
@@ -30,10 +30,13 @@ import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
  */
 public class CollectionTest {
 
+    /** The test fixture. */
     private static final File TEST_FILE1 = new File(TestUtils.TEST_DIR, "collection1.json");
 
-    private URI myID;
+    /** The test ID. */
+    private String myID;
 
+    /** The test label. */
     private Label myLabel;
 
     /**
@@ -41,7 +44,7 @@ public class CollectionTest {
      */
     @Before
     public void setUp() {
-        myID = URI.create(UUID.randomUUID().toString());
+        myID = "https://" + UUID.randomUUID().toString();
         myLabel = new Label("label-" + UUID.randomUUID().toString());
     }
 
@@ -78,40 +81,35 @@ public class CollectionTest {
     }
 
     /**
-     * Tests writing a simple collection manifest
+     * Tests writing a simple collection manifest.
      *
      * @throws IOException If there is trouble reading the test JSON file
      */
     @Test
     public void testWritingCollection() throws IOException {
-        final Collection collection = new Collection("ID-a", "label-a");
-        final String manifestOneID = "http://iiif.library.ucla.edu/asdf1234/manifest";
-        final String manifestTwoID = "http://iiif.library.ucla.edu/1234asdf/manifest";
-        final String thumbnailID = "http://brand.ucla.edu/images/logo-ucla.svg";
-        final List<Collection.Item> items = new ArrayList<>();
-        final Collection.Item manifest1 = new Collection.Item(Item.Type.MANIFEST, manifestOneID);
-        final Collection.Item manifest2 = new Collection.Item(Item.Type.MANIFEST, manifestTwoID);
-        final String expected = format(StringUtils.read(TEST_FILE1));
+        final Collection collection = new Collection("https://ID-a", new Label("label-a"));
+        final String manifestOneID = "https://iiif.library.ucla.edu/asdf1234/manifest";
+        final String manifestTwoID = "https://iiif.library.ucla.edu/1234asdf/manifest";
+        final String thumbnailID = "https://brand.ucla.edu/images/logo-ucla.svg";
+        final Manifest manifest1 = new Manifest(manifestOneID, new Label("A placeholder fake manifest: 1"));
+        final Manifest manifest2 = new Manifest(manifestTwoID, new Label("A placeholder fake manifest: 2"));
+        final List<Collection.Item> items = Arrays.asList(new Item(manifest1), new Item(manifest2));
 
-        manifest1.setLabel("A placeholder fake manifest: 1");
-        items.add(manifest1);
-        manifest2.setLabel("A placeholder fake manifest: 2");
-        items.add(manifest2);
         collection.setItems(items);
         collection.setThumbnails(new ImageContent(thumbnailID));
 
-        assertEquals(expected, collection.toString());
+        assertEquals(format(StringUtils.read(TEST_FILE1)), collection.toString());
     }
 
     /**
-     * Tests reading a collection
+     * Tests reading a collection.
      *
      * @throws IOException If there is trouble reading the test JSON file.
      */
     @Test
     public void testReadingCollection() throws IOException {
         final String expected = format(StringUtils.read(TEST_FILE1));
-        final Collection collection = Collection.from(expected);
+        final Collection collection = Collection.fromJSON(expected);
 
         assertEquals(expected, collection.toString());
     }
@@ -133,9 +131,9 @@ public class CollectionTest {
      * Tests reading a collection document from JSON.
      */
     @Test
-    public void testFrom() throws IOException {
+    public void testFromJSON() throws IOException {
         final String json = format(StringUtils.read(TEST_FILE1));
-        final Collection collection = Collection.from(json);
+        final Collection collection = Collection.fromJSON(json);
 
         assertEquals(json, collection.toString());
     }
@@ -145,7 +143,7 @@ public class CollectionTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testFromManifest() throws IOException {
-        Collection.from(StringUtils.read(new File(TestUtils.TEST_DIR, "z1960050.json")));
+        Collection.fromJSON(StringUtils.read(new File(TestUtils.TEST_DIR, "z1960050.json")));
     }
 
     /**
@@ -154,7 +152,7 @@ public class CollectionTest {
     @Test
     public void testFromString() throws IOException {
         final String json = format(StringUtils.read(TEST_FILE1));
-        assertEquals(json, Collection.from(json).toString());
+        assertEquals(json, Collection.fromJSON(json).toString());
     }
 
     /**
@@ -169,25 +167,9 @@ public class CollectionTest {
     /**
      * Test setting disallowed collection behaviors.
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = InvalidBehaviorException.class)
     public final void testSetDisallowedBehaviors() {
         new Collection(myID, myLabel).setBehaviors(CollectionBehavior.AUTO_ADVANCE, ManifestBehavior.NO_AUTO_ADVANCE);
     }
 
-    /**
-     * Test adding collection behaviors.
-     */
-    @Test
-    public final void testAddBehaviors() {
-        assertEquals(1,
-                new Collection(myID, myLabel).addBehaviors(CollectionBehavior.AUTO_ADVANCE).getBehaviors().size());
-    }
-
-    /**
-     * Test adding disallowed collection behaviors.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public final void testAddDisallowedBehaviors() {
-        new Collection(myID, myLabel).addBehaviors(CollectionBehavior.CONTINUOUS, ManifestBehavior.AUTO_ADVANCE);
-    }
 }

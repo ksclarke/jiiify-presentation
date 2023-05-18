@@ -12,8 +12,8 @@ import java.nio.file.Path;
 import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.Collection;
-import info.freelibrary.iiif.presentation.v3.JsonParsingException;
 import info.freelibrary.iiif.presentation.v3.Manifest;
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * The manifestor serializes and deserializes {@link Manifest}s and {@link Collection}s to and from files.
@@ -42,7 +42,7 @@ public class Manifestor {
      * @throws JsonParsingException If the manifest isn't valid
      */
     public Manifest readManifest(final File aJsonFile, final Charset aCharset) throws IOException {
-        return Manifest.from(StringUtils.read(aJsonFile, aCharset));
+        return Manifest.fromJSON(StringUtils.read(aJsonFile, aCharset));
     }
 
     /**
@@ -67,7 +67,7 @@ public class Manifestor {
      * @throws JsonParsingException If the collection isn't valid
      */
     public Collection readCollection(final File aJsonFile, final Charset aCharset) throws IOException {
-        return Collection.from(StringUtils.read(aJsonFile, aCharset));
+        return Collection.fromJSON(StringUtils.read(aJsonFile, aCharset));
     }
 
     /**
@@ -116,6 +116,14 @@ public class Manifestor {
         writeJsonString(aJsonFile.toPath(), aCollection.toString(), aCharset);
     }
 
+    /**
+     * Writes a JSON string to the supplied path using the supplied character set.
+     *
+     * @param aPath An output path
+     * @param aJsonString An input JSON string
+     * @param aCharset A character set
+     * @throws IOException If the JSON cannot be written to the supplied path
+     */
     private void writeJsonString(final Path aPath, final String aJsonString, final Charset aCharset)
             throws IOException {
         try (BufferedWriter writer = Files.newBufferedWriter(aPath, aCharset)) {

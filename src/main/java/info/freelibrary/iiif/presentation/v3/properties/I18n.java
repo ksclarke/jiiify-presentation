@@ -21,10 +21,10 @@ import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.PMD;
 
-import info.freelibrary.iiif.presentation.v3.JsonParsingException;
 import info.freelibrary.iiif.presentation.v3.utils.I18nUtils;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * An internationalization. String values without a corresponding language tag should use "none" (which is represented
@@ -232,7 +232,7 @@ public class I18n implements Iterable<String> {
     }
 
     /**
-     * Adds all the strings in the supplied list to the internationalization
+     * Adds all the strings in the supplied list to the internationalization.
      *
      * @param aStringList A list of strings to add
      * @return True if the new strings were successfully added; else, false
@@ -268,7 +268,7 @@ public class I18n implements Iterable<String> {
     }
 
     /**
-     * Returns the number of strings in this internationalization
+     * Returns the number of strings in this internationalization.
      *
      * @return The number of strings in this internationalization
      */

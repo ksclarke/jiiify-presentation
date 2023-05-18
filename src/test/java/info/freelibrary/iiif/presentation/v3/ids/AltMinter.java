@@ -1,8 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3.ids;
 
-import java.net.URI;
-
 import info.freelibrary.iiif.presentation.v3.CanvasResource;
 
 /**
@@ -10,40 +8,41 @@ import info.freelibrary.iiif.presentation.v3.CanvasResource;
  */
 public final class AltMinter implements Minter {
 
-    private final URI myManifestID;
+    /** The test manifest ID. */
+    private final String myManifestID;
 
     /**
      * Creates an alternate minter.
      *
      * @param aID A manifest ID to use with the AltMinter.
      */
-    AltMinter(final URI aID) {
+    AltMinter(final String aID) {
         myManifestID = aID;
     }
 
     @Override
-    public URI getManifestID() {
+    public String getManifestID() {
         return myManifestID;
     }
 
     @Override
-    public URI getCanvasID() {
-        return URI.create(AltMinter.class.getSimpleName());
+    public String getCanvasID() {
+        return AltMinter.class.getSimpleName();
     }
 
     @Override
-    public URI getAnnotationID() {
-        return URI.create(AltMinter.class.getSimpleName());
+    public String getAnnotationID() {
+        return AltMinter.class.getSimpleName();
     }
 
     @Override
-    public <C extends CanvasResource<C>> URI getAnnotationPageID(final CanvasResource<C> aCanvasResource) {
-        return URI.create(AltMinter.class.getSimpleName());
+    public <C extends CanvasResource<C>> String getAnnotationPageID(final CanvasResource<C> aCanvasResource) {
+        return AltMinter.class.getSimpleName();
     }
 
     @Override
-    public URI getRangeID() {
-        return URI.create(AltMinter.class.getSimpleName());
+    public String getRangeID() {
+        return AltMinter.class.getSimpleName();
     }
 
     @Override

@@ -1,20 +1,16 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
-import java.net.URI;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.warnings.PMD;
 
-import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
@@ -24,89 +20,71 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 @JsonPropertyOrder({ JsonKeys.CONTEXT, JsonKeys.V2_ID, JsonKeys.V2_TYPE, JsonKeys.PROFILE, JsonKeys.LABEL,
     JsonKeys.HEADER, JsonKeys.DESCRIPTION, JsonKeys.CONFIRM_LABEL, JsonKeys.FAILURE_HEADER,
     JsonKeys.FAILURE_DESCRIPTION, JsonKeys.SERVICE })
-abstract class AbstractCookieService<T extends AbstractCookieService<T>> extends AbstractAuthService<T> {
+@JsonInclude(Include.NON_EMPTY)
+abstract class AbstractCookieService<T extends AbstractCookieService<T>> extends AbstractService<T> {
 
-    /**
-     * Context for the AbstractCookieService service.
-     */
-    static final String AUTH_COOKIE_SERVICE_1_CONTEXT = "http://iiif.io/api/auth/1/context.json";
+    /** Context for the abstract cookie service. */
+    static final String CONTEXT = "http://iiif.io/api/auth/1/context.json";
 
-    /**
-     * The AbstractCookieService logger.
-     */
+    /** The auth cookie service type. */
+    static final String TYPE = "AuthCookieService1";
+
+    /** The abstract cookie service logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractCookieService.class, MessageCodes.BUNDLE);
 
-    /**
-     * The failure header for the service's failure description.
-     */
-    private String myFailureHeader;
-
-    /**
-     * The service's failure description.
-     */
+    /** The service's failure description. */
+    @JsonProperty(JsonKeys.FAILURE_DESCRIPTION)
     private String myFailureDescription;
 
-    /**
-     * Creates a new cookie service from the supplied service profile.
-     *
-     * @param aProfile A service profile
-     * @param aID A service ID in string form
-     */
-    protected AbstractCookieService(final AuthCookieService1.Profile aProfile, final String aID) {
-        super(aProfile, URI.create(aID));
-    }
-
-    /**
-     * Creates a new cookie service from the supplied service profile.
-     *
-     * @param aProfile A service profile
-     * @param aID A service ID in string form
-     */
-    protected AbstractCookieService(final AuthCookieService1.Profile aProfile, final URI aID) {
-        super(aProfile, aID);
-    }
-
-    /**
-     * Creates a new cookie service from the supplied profile, ID, label and services.
-     *
-     * @param aProfile A service profile
-     * @param aID A service ID in string form
-     * @param aServicesArray An array of services
-     */
-    protected AbstractCookieService(final AuthCookieService1.Profile aProfile, final String aID,
-            final Service<?>... aServicesArray) {
-        this(aProfile, URI.create(aID), aServicesArray);
-    }
-
-    /**
-     * Creates a new cookie service from the supplied profile, ID, label and services.
-     *
-     * @param aProfile A service profile
-     * @param aID A service ID
-     * @param aServicesArray An array of services
-     */
-    protected AbstractCookieService(final AuthCookieService1.Profile aProfile, final URI aID,
-            final Service<?>... aServicesArray) {
-        super(aProfile, aID, aServicesArray);
-    }
+    /** The failure header for the service's failure description. */
+    @JsonProperty(JsonKeys.FAILURE_HEADER)
+    private String myFailureHeader;
 
     /**
      * Creates a new cookie service from the supplied profile.
      *
      * @param aProfile An auth cookie service profile
      */
-    protected AbstractCookieService(final AuthCookieService1.Profile aProfile) {
-        super(aProfile);
+    protected AbstractCookieService(final AuthCookieService.Profile aProfile) {
+        super(null, TYPE, aProfile);
     }
 
     /**
-     * Creates a new cookie service from the supplied profile and services.
+     * Creates a new cookie service from the supplied service profile.
      *
-     * @param aProfile An auth cookie service profile
-     * @param aServicesArray An array of related services
+     * @param aProfile A service profile
+     * @param aID A service ID
      */
-    protected AbstractCookieService(final AuthCookieService1.Profile aProfile, final Service<?>... aServicesArray) {
-        super(aProfile, aServicesArray);
+    protected AbstractCookieService(final AuthCookieService.Profile aProfile, final String aID) {
+        super(aID, TYPE, aProfile);
+    }
+
+    /**
+     * Gets the cookie service's context.
+     *
+     * @return The cookie service's context
+     */
+    @JsonGetter(JsonKeys.CONTEXT)
+    protected String getContext() {
+        return CONTEXT;
+    }
+
+    /**
+     * Gets the failure description for the cookie service.
+     *
+     * @return The failure description for the cookie service
+     */
+    protected String getFailureDescription() {
+        return myFailureDescription;
+    }
+
+    /**
+     * Gets the failure description header for the cookie service.
+     *
+     * @return The failure description header for the cookie service
+     */
+    protected String getFailureHeader() {
+        return myFailureHeader;
     }
 
     /**
@@ -116,31 +94,17 @@ abstract class AbstractCookieService<T extends AbstractCookieService<T>> extends
      */
     @Override
     @JsonGetter(JsonKeys.V2_ID)
-    public URI getID() {
+    protected String getID() {
         return super.getID();
     }
 
     /**
-     * Sets the failure description header for the cookie service.
-     *
-     * @param aFailureHeader A cookie service failure description header
-     * @return This service
+     * Gets the cookie service type.
      */
-    @JsonSetter(JsonKeys.FAILURE_HEADER)
-    public AbstractCookieService<T> setFailureHeader(final String aFailureHeader) {
-        myFailureHeader = aFailureHeader;
-        return this;
-    }
-
-    /**
-     * Gets the failure description header for the cookie service.
-     *
-     * @return The failure description header for the cookie service
-     */
-    @JsonGetter(JsonKeys.FAILURE_HEADER)
-    @JsonInclude(Include.NON_NULL)
-    public String getFailureHeader() {
-        return myFailureHeader;
+    @Override
+    @JsonGetter(JsonKeys.V2_TYPE)
+    protected String getType() {
+        return super.getType();
     }
 
     /**
@@ -149,48 +113,32 @@ abstract class AbstractCookieService<T extends AbstractCookieService<T>> extends
      * @param aFailureDescription An cookie service failure description
      * @return This service
      */
-    @JsonSetter(JsonKeys.FAILURE_DESCRIPTION)
-    public AbstractCookieService<T> setFailureDescription(final String aFailureDescription) {
+    protected AbstractCookieService<T> setFailureDescription(final String aFailureDescription) {
         myFailureDescription = aFailureDescription;
         return this;
     }
 
     /**
-     * Gets the failure description for the cookie service.
+     * Sets the failure description header for the cookie service.
      *
-     * @return The failure description for the cookie service
-     */
-    @JsonGetter(JsonKeys.FAILURE_DESCRIPTION)
-    @JsonInclude(Include.NON_NULL)
-    public String getFailureDescription() {
-        return myFailureDescription;
-    }
-
-    /**
-     * Gets the cookie service's context.
-     *
-     * @return The cookie service's context
-     */
-    @JsonGetter(JsonKeys.CONTEXT)
-    public String getContext() {
-        return AUTH_COOKIE_SERVICE_1_CONTEXT;
-    }
-
-    /**
-     * Sets the cookie service's context.
-     *
-     * @param aContext A cookie service context
+     * @param aFailureHeader A cookie service failure description header
      * @return This service
      */
-    @JsonSetter(JsonKeys.CONTEXT)
-    @SuppressWarnings(PMD.UNUSED_FORMAL_PARAMETER)
-    private AbstractCookieService<T> setContext(final String aContext) {
-        if (!AUTH_COOKIE_SERVICE_1_CONTEXT.equals(aContext)) {
-            final String message = LOGGER.getMessage(MessageCodes.JPA_126, aContext, getClass().getSimpleName());
-            throw new IllegalArgumentException(message);
-        }
-
+    protected AbstractCookieService<T> setFailureHeader(final String aFailureHeader) {
+        myFailureHeader = aFailureHeader;
         return this;
+    }
+
+    /**
+     * Sets the cookie service ID.
+     *
+     * @param aID A cookie service ID
+     * @return This cookie service
+     */
+    @Override
+    @JsonSetter(JsonKeys.V2_ID)
+    protected AbstractCookieService<T> setID(final String aID) {
+        return (AbstractCookieService<T>) super.setID(aID);
     }
 
     /**
@@ -201,59 +149,15 @@ abstract class AbstractCookieService<T extends AbstractCookieService<T>> extends
      * @throws IllegalArgumentException If an incorrect type for the service class is set
      */
     @Override
-    public AbstractCookieService<T> setType(final String aType) {
-        if (!AuthCookieService1.class.getSimpleName().equals(aType)) {
-            final String message = LOGGER.getMessage(MessageCodes.JPA_125, aType, getClass().getSimpleName());
-            throw new IllegalArgumentException(message);
+    @JsonSetter(JsonKeys.V2_TYPE)
+    protected AbstractCookieService<T> setType(final String aType) {
+        final String type = AuthCookieService.class.getSimpleName();
+
+        if (!type.equals(aType)) {
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_125, aType, type));
         }
 
+        super.setType(type);
         return this;
     }
-
-    @Override
-    public AbstractCookieService<T> setProfile(final String aProfile) {
-        return (AbstractCookieService<T>) super.setProfile(aProfile);
-    }
-
-    /**
-     * Gets the service type.
-     */
-    @Override
-    @JsonGetter(JsonKeys.V2_TYPE)
-    public String getType() {
-        return AuthCookieService1.class.getSimpleName();
-    }
-
-    /**
-     * Gets the services related to this cookie service.
-     *
-     * @return A list of services
-     */
-    @Override
-    public List<Service<?>> getServices() {
-        return super.getServices();
-    }
-
-    /**
-     * Sets the services related to this cookie service.
-     *
-     * @param aServiceList A list of related services
-     * @return This service
-     */
-    @Override
-    public AbstractCookieService<T> setServices(final List<Service<?>> aServiceList) {
-        return (AbstractCookieService<T>) super.setServices(aServiceList);
-    }
-
-    /**
-     * Sets the services related to this cookie service.
-     *
-     * @param aServicesArray An array of related services
-     * @return This service
-     */
-    @Override
-    public AbstractCookieService<T> setServices(final Service<?>... aServicesArray) {
-        return (AbstractCookieService<T>) super.setServices(aServicesArray);
-    }
-
 }

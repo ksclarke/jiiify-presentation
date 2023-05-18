@@ -1,5 +1,5 @@
 {
-  "id": "MY_RANGE_ID",
+  "id": "https://example.org/range-1",
   "type": "Range",
   "label": {
     "none": [
@@ -8,7 +8,7 @@
   },
   "items": [
     {
-      "id": "MY_SUBRANGE_ID",
+      "id": "https://example.org/range-2",
       "type": "Range",
       "label": {
         "none": [

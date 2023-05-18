@@ -1,7 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import java.net.URI;
+import static info.freelibrary.util.Constants.SINGLE_INSTANCE;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -11,118 +12,75 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
-import info.freelibrary.iiif.presentation.v3.JsonParsingException;
-import info.freelibrary.iiif.presentation.v3.MediaType;
+import info.freelibrary.iiif.presentation.v3.ids.UriUtils;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
+import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeDeserializer;
+import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeKeySerializer;
+import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeSerializer;
 
 /**
  * A linking class that specific linking properties can extend.
  */
+@JsonInclude(Include.NON_EMPTY)
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.FORMAT, JsonKeys.PROFILE, JsonKeys.LANGUAGE })
 abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implements Localized<T> {
 
-    /**
-     * The AbstractLinkProperty logger.
-     */
+    /** The linking property logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractLinkProperty.class, MessageCodes.BUNDLE);
 
-    /**
-     * The size of a single value array.
-     */
-    private static final int SINGLE_VALUE_ARRAY_SIZE = 1;
+    /** The link property ID. */
+    private String myID;
 
-    /**
-     * The link property ID.
-     */
-    private URI myID;
-
-    /**
-     * The link property type.
-     */
+    /** The link property type. */
     private String myType;
 
-    /**
-     * The link property format.
-     */
+    /** The link property format. */
+    @JsonDeserialize(using = MediaTypeDeserializer.class)
+    @JsonProperty(JsonKeys.FORMAT)
     private MediaType myFormat;
 
-    /**
-     * The link property profile.
-     */
-    private URI myProfile;
+    /** The link property profile. */
+    private String myProfile;
 
-    /**
-     * The link property label.
-     */
+    /** The link property label. */
     private Label myLabel;
 
-    /**
-     * The link property languages.
-     */
+    /** The link property languages. */
     private List<String> myLanguages;
 
     /**
      * Creates an abstract link property.
      *
-     * @param aID An ID in string form
+     * @param aID An ID
      * @param aType A resource type
      */
     protected AbstractLinkProperty(final String aID, final String aType) {
-        this(URI.create(aID), aType);
+        this(aType);
+        myID = UriUtils.checkID(aID, false);
     }
 
     /**
      * Creates an abstract link property.
      *
      * @param aID An ID
-     * @param aType A resource type
-     */
-    protected AbstractLinkProperty(final URI aID, final String aType) {
-        myID = Objects.requireNonNull(aID);
-        myType = Objects.requireNonNull(aType);
-    }
-
-    /**
-     * Creates an abstract link property.
-     *
-     * @param aID An ID in string form
-     * @param aType A resource type
-     * @param aLabel A label in string form
-     */
-    protected AbstractLinkProperty(final String aID, final String aType, final String aLabel) {
-        this(URI.create(aID), aType, new Label(aLabel));
-    }
-
-    /**
-     * Creates an abstract link property.
-     *
-     * @param aID An ID in string form
      * @param aType A resource type
      * @param aLabel A label
      */
     protected AbstractLinkProperty(final String aID, final String aType, final Label aLabel) {
-        this(URI.create(aID), aType, aLabel);
-    }
-
-    /**
-     * Creates an abstract link property.
-     *
-     * @param aID An ID
-     * @param aType A resource type
-     * @param aLabel A label
-     */
-    protected AbstractLinkProperty(final URI aID, final String aType, final Label aLabel) {
-        myID = Objects.requireNonNull(aID);
-        myType = Objects.requireNonNull(aType);
+        this(aID, aType);
         myLabel = Objects.requireNonNull(aLabel);
     }
 
@@ -148,8 +106,9 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      * @param aID An ID
      * @return The resource whose ID is being set
      */
-    protected AbstractLinkProperty<T> setID(final URI aID) {
-        myID = Objects.requireNonNull(aID);
+    @JsonSetter(JsonKeys.ID)
+    protected AbstractLinkProperty<T> setID(final String aID) {
+        myID = UriUtils.checkID(aID, false);
         return this;
     }
 
@@ -159,7 +118,7 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      * @return An ID
      */
     @JsonGetter(JsonKeys.ID)
-    public URI getID() {
+    public String getID() {
         return myID;
     }
 
@@ -188,32 +147,10 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      *
      * @return An optional media type format
      */
-    @JsonIgnore
+    @JsonInclude(Include.NON_EMPTY)
+    @JsonSerialize(contentUsing = MediaTypeSerializer.class, keyUsing = MediaTypeKeySerializer.class)
     public Optional<MediaType> getFormat() {
         return Optional.ofNullable(myFormat);
-    }
-
-    /**
-     * Gets format as a string.
-     *
-     * @return An optional string format
-     */
-    @JsonGetter(JsonKeys.FORMAT)
-    @JsonInclude(Include.NON_EMPTY)
-    protected Optional<String> getFormatAsString() {
-        return myFormat != null ? Optional.of(myFormat.toString()) : Optional.empty();
-    }
-
-    /**
-     * Sets format in string form.
-     *
-     * @param aFormat A resource's format
-     * @return The resource whose format is being set
-     */
-    @JsonSetter(JsonKeys.FORMAT)
-    protected AbstractLinkProperty<T> setFormat(final String aFormat) {
-        myFormat = MediaType.fromString(aFormat).orElse(null);
-        return this;
     }
 
     /**
@@ -222,7 +159,6 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      * @param aFormat A resource's format
      * @return The resource whose format is being set
      */
-    @JsonIgnore
     protected AbstractLinkProperty<T> setFormat(final MediaType aFormat) {
         myFormat = Objects.requireNonNull(aFormat);
         return this;
@@ -248,8 +184,8 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      *
      * @return An optional profile URI
      */
-    @JsonIgnore
-    public Optional<URI> getProfile() {
+    @JsonGetter(JsonKeys.PROFILE)
+    public Optional<String> getProfile() {
         return Optional.ofNullable(myProfile);
     }
 
@@ -259,9 +195,9 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      * @param aProfile A profile
      * @return The resource whose profile is being set
      */
-    @JsonIgnore
-    protected AbstractLinkProperty<T> setProfile(final URI aProfile) {
-        myProfile = Objects.requireNonNull(aProfile);
+    @JsonSetter(JsonKeys.PROFILE)
+    protected AbstractLinkProperty<T> setProfile(final String aProfile) {
+        myProfile = UriUtils.checkID(aProfile, false);
         return this;
     }
 
@@ -308,11 +244,9 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
         if (aObject instanceof AbstractLinkProperty) {
             final AbstractLinkProperty<?> otherLink = (AbstractLinkProperty<?>) aObject;
 
-            return Objects.equals(myID, otherLink.myID) //
-                    && Objects.equals(myType, otherLink.myType) //
-                    && Objects.equals(myFormat, otherLink.myFormat) //
-                    && Objects.equals(myProfile, otherLink.myProfile) //
-                    && Objects.equals(myLabel, otherLink.myLabel);
+            return Objects.equals(myID, otherLink.myID) && Objects.equals(myType, otherLink.myType) &&
+                    Objects.equals(myFormat, otherLink.myFormat) && Objects.equals(myProfile, otherLink.myProfile) &&
+                    Objects.equals(myLabel, otherLink.myLabel);
         }
 
         return false;
@@ -342,7 +276,7 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
     protected Object getLanguageProperty() {
         final List<String> languages = getLanguages();
 
-        if (languages.size() == SINGLE_VALUE_ARRAY_SIZE) {
+        if (languages.size() == SINGLE_INSTANCE) {
             return languages.get(0);
         }
 

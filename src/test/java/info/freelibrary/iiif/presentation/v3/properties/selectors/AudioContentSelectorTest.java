@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.selectors;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
@@ -10,6 +10,7 @@ import org.junit.Test;
  */
 public class AudioContentSelectorTest {
 
+    /** A test selector name. */
     private static final String SELECTOR_NAME = "AudioContentSelector";
 
     /**

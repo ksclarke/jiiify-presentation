@@ -6,7 +6,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
@@ -20,6 +19,7 @@ import info.freelibrary.util.StringUtils;
  */
 public class CanvasContentTest {
 
+    /** A test ID. */
     private String myID;
 
     /**
@@ -27,15 +27,7 @@ public class CanvasContentTest {
      */
     @Before
     public final void setup() {
-        myID = UUID.randomUUID().toString();
-    }
-
-    /**
-     * Tests constructing new canvas content with an ID in string form.
-     */
-    @Test
-    public final void testCanvasContentString() {
-        assertEquals(URI.create(myID), new CanvasContent(myID).getID());
+        myID = "https://" + UUID.randomUUID().toString();
     }
 
     /**
@@ -43,7 +35,7 @@ public class CanvasContentTest {
      */
     @Test
     public final void testCanvasContentURI() {
-        assertEquals(URI.create(myID), new CanvasContent(URI.create(myID)).getID());
+        assertEquals(myID, new CanvasContent(myID).getID());
     }
 
     /**
@@ -55,7 +47,7 @@ public class CanvasContentTest {
     public final void testDeSerialization() throws IOException {
         final String json =
                 StringUtils.read(new File("src/test/resources/json/canvas-content.json"), StandardCharsets.UTF_8);
-        final Manifest manifest = Manifest.from(json);
+        final Manifest manifest = Manifest.fromJSON(json);
         final Canvas canvas = manifest.getCanvases().get(0);
 
         assertEquals(1, canvas.getSupplementingPages().get(0).getAnnotations().size());

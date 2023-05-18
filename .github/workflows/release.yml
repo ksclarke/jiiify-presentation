@@ -1,42 +1,35 @@
 name: Maven Release
 
-# Performs a Maven release using JDK 11 when a new GitHub release has been published
+# Performs a Maven release using JDK 17 when a new GitHub release has been published
 on:
   release:
     types: [ published ]
 
 jobs:
   release:
-    name: Maven Artifact Publisher (JDK 11)
+    name: Maven Artifact Publisher (JDK 17)
     runs-on: ubuntu-latest
     env:
       AUTORELEASE_ARTIFACT: ${{ secrets.AUTORELEASE_ARTIFACT }}
-      MAVEN_CACHE_KEY: ${{ secrets.MAVEN_CACHE_KEY }}
 
     steps:
 
       - name: Check out source code
-        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2
+        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # v3.0.2
 
-      - name: Install JDK 11 and Maven
-        uses: actions/setup-java@d202f5dbf7256730fb690ec59f6381650114feb2 # v1
+      - name: Install JDK ${{ matrix.java }}
+        uses: actions/setup-java@860f60056505705214d223b91ed7a30f173f6142 # v3.3.0
         with:
-          java-version: 11
+          cache: maven
+          distribution: 'adopt'
+          java-version: ${{ matrix.java }}
 
       # If running locally in act, install Maven
       - name: Set up Maven if needed
         if: ${{ env.ACT }}
-        uses: stCarolas/setup-maven@1d56b37995622db66cce1214d81014b09807fb5a # v4
+        uses: stCarolas/setup-maven@07fbbe97d97ef44336b7382563d66743297e442f # v4.5
         with:
-          maven-version: 3.6.3
-
-      - name: Set up Maven cache
-        uses: actions/cache@0781355a23dac32fd3bac414512f4b903437991a # v2
-        if: ${{ env.MAVEN_CACHE_KEY }}
-        with:
-          path: ~/.m2
-          key: maven-cache-${{ secrets.MAVEN_CACHE_KEY }}-${{ hashFiles('**/pom.xml') }}
-          restore-keys: maven-cache-${{ secrets.MAVEN_CACHE_KEY }}-
+          maven-version: 3.8.2
 
       - name: Set autorelease config
         if: env.AUTORELEASE_ARTIFACT == null

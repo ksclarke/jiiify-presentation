@@ -18,6 +18,7 @@ import info.freelibrary.util.StringUtils;
  */
 public class SoundContentTest extends AbstractTest {
 
+    /** The test ID. */
     private String myID;
 
     /**
@@ -25,7 +26,7 @@ public class SoundContentTest extends AbstractTest {
      */
     @Before
     public final void setUp() {
-        myID = UUID.randomUUID().toString() + ".mp3";
+        myID = "https://" + UUID.randomUUID().toString() + ".mp3";
     }
 
     /**
@@ -44,6 +45,6 @@ public class SoundContentTest extends AbstractTest {
     @Test
     public final void testFixture0003() throws IOException {
         final String json = format(StringUtils.read(new File("src/test/resources/fixtures/0002-mvm-audio.json")));
-        assertEquals(json, format(Manifest.from(json).toString()));
+        assertEquals(json, format(Manifest.fromJSON(json).toString()));
     }
 }

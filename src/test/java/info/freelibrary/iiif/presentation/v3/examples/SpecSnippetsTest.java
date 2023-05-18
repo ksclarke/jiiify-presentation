@@ -33,7 +33,7 @@ public class SpecSnippetsTest extends AbstractCookbookTest {
     @Test
     public final void testSpecExample() throws IOException {
         final String expected = getExpected("spec-example");
-        final String found = Manifest.from(expected).toString();
+        final String found = Manifest.fromJSON(expected).toString();
 
         assertEquals(format(expected), format(found));
     }
@@ -42,7 +42,7 @@ public class SpecSnippetsTest extends AbstractCookbookTest {
      * Gets a cookbook manifest as a string.
      *
      * @param aManifestName A manifest file name
-     * @return A manifest in string form
+     * @return A JSON serialization of a manifest
      * @throws IOException If there is trouble reading the manifest file
      */
     @Override

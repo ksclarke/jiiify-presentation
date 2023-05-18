@@ -28,6 +28,7 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public class PythonExamplesIT extends AbstractCookbookTest {
 
+    /** The test logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(PythonExamplesIT.class, MessageCodes.BUNDLE);
 
     /**

@@ -2,6 +2,8 @@
 package info.freelibrary.iiif.presentation.v3.utils;
 
 import static info.freelibrary.util.Constants.EMPTY;
+import static info.freelibrary.util.Constants.SINGLE_INSTANCE;
+import static info.freelibrary.util.Constants.SPACE;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -29,76 +31,42 @@ import info.freelibrary.iiif.presentation.v3.properties.I18n;
 @SuppressWarnings(PMD.TOO_MANY_METHODS)
 public final class I18nUtils {
 
-    /**
-     * Logger used by the I18nUtils class.
-     */
+    /** Logger used by the I18nUtils class. */
     private static final Logger LOGGER = LoggerFactory.getLogger(I18nUtils.class, MessageCodes.BUNDLE);
 
-    /**
-     * A regex pattern that will match any tag.
-     */
+    /** A regex pattern that will match any tag. */
     private static final Pattern ANY_TAG_PATTERN = Pattern.compile("<[a-zA-Z0-9\\-]+\\s*\\/?\\s*>", Pattern.DOTALL);
 
-    /**
-     * A regex pattern that will match fragments.
-     */
+    /** A regex pattern that will match fragments. */
     private static final Pattern FRAGMENT_PATTERN =
             Pattern.compile("^<[a-zA-Z0-9\\-]+.*>.*</[a-zA-Z0-9\\-]+>$", Pattern.DOTALL);
 
-    /**
-     * A regex pattern that will match CDATA sections.
-     */
+    /** A regex pattern that will match CDATA sections. */
     private static final String CDATA_PATTERN = "<\\!\\[CDATA\\[.*\\]\\]\\>";
 
-    /**
-     * The expected number of root nodes.
-     */
-    private static final int ROOT_NODE_COUNT = 1;
-
-    /**
-     * The tag used for link elements.
-     */
+    /** The tag used for link elements. */
     private static final String LINK_TAG = "a";
 
-    /**
-     * The tag used for image elements.
-     */
+    /** The tag used for image elements. */
     private static final String IMAGE_TAG = "img";
 
-    /**
-     * Tags from index position three on are tags that should have content in them
-     */
+    /** Tags from index position three on are tags that should have content in them. */
     private static final String[] TAGS = { IMAGE_TAG, "br", LINK_TAG, "p", "b", "i", "small", "span", "sub", "sup" };
 
-    /**
-     * Supported link protocols.
-     */
+    /** Supported link protocols. */
     private static final String[] PROTOCOLS = { "http", "https", "mailto" };
 
-    /**
-     * Supported image attributes.
-     */
+    /** Supported image attributes. */
     private static final String[] IMAGE_ATTRIBUTES = { "src", "alt" };
 
-    /**
-     * Supported link attributes.
-     */
+    /** Supported link attributes. */
     private static final String[] LINK_ATTRIBUTES = { "href" };
 
-    /**
-     * A greater than symbol used for opening tag names.
-     */
+    /** A greater than symbol used for opening tag names. */
     private static final String GREATER_THAN = ">";
 
-    /**
-     * A less than symbol used for closing tag names.
-     */
+    /** A less than symbol used for closing tag names. */
     private static final String LESS_THAN = "<";
-
-    /**
-     * A constant for the space character.
-     */
-    private static final String SPACE = " ";
 
     /**
      * A constructor for I18nUtils.
@@ -227,7 +195,7 @@ public final class I18nUtils {
             // We start with third position tag because earlier ones are empty elements by definition
             for (int index = 2; index < TAGS.length; index++) {
                 if (TAGS[index].equals(element.tagName()) && element.children().isEmpty() &&
-                        (!element.hasText() || element.text().trim().equals(EMPTY))) {
+                        (!element.hasText() || EMPTY.equals(element.text().trim()))) {
                     element.remove();
                 }
             }
@@ -242,9 +210,10 @@ public final class I18nUtils {
      *
      * @param aBody A body element
      * @return A valid body element
+     * @throws IllegalArgumentException If the supplied element has children but not a single child
      */
     private static Element checkForFragment(final Element aBody) {
-        if (aBody.childrenSize() != ROOT_NODE_COUNT) {
+        if (aBody.childrenSize() != SINGLE_INSTANCE) {
             final String htmlFragment = aBody.children().toString();
             throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_032, htmlFragment));
         }
@@ -303,36 +272,36 @@ public final class I18nUtils {
     }
 
     /**
-     * This is a workaround for Jsoup not properly handling text that has a stand-alone &lt; character. It's
-     * <strike>probably</strike> definitely not perfect (i.e. this obviously isn't a full-fledged HTML parser).
+     * This is a workaround for Jsoup not properly handling text that has a stand-alone &lt; character. It's definitely
+     * not perfect (i.e. this obviously isn't a full-fledged HTML parser).
      *
      * @param aString A string to check for less than characters.
      * @return A string with less than characters HTML encoded
      */
     private static String encodeSingleBrackets(final String aString) {
-        if (!aString.contains(LESS_THAN)) {
-            return aString;
+        if (aString.contains(LESS_THAN)) {
+            final StringBuilder builder = new StringBuilder(aString);
+
+            int start = 0;
+
+            // Move through character sequence in string, checking character relationships
+            do {
+                start = builder.indexOf(LESS_THAN, start);
+
+                final int nextGt = builder.indexOf(GREATER_THAN, start);
+                final int nextSpace = builder.indexOf(SPACE, start);
+
+                // Check opening tag for possibilities other than an actual HTML element
+                if (hasSpace(start, nextSpace, nextGt) && hasNoAttribute(builder, start, nextGt) &&
+                        isNotComment(builder, start) && isNotPI(builder, nextGt)) {
+                    builder.replace(start, start + 1, "&lt;");
+                }
+            } while (++start != 0); // i.e., while we're able to find a positive start index
+
+            return builder.toString();
         }
 
-        final StringBuilder builder = new StringBuilder(aString);
-
-        int start = 0;
-
-        // Move through character sequence in string, checking character relationships
-        do {
-            start = builder.indexOf(LESS_THAN, start);
-
-            final int nextGt = builder.indexOf(GREATER_THAN, start);
-            final int nextSpace = builder.indexOf(SPACE, start);
-
-            // Check opening tag for possibilities other than an actual HTML element
-            if (hasSpace(start, nextSpace, nextGt) && hasNoAttribute(builder, start, nextGt) &&
-                    isNotComment(builder, start) && isNotPI(builder, nextGt)) {
-                builder.replace(start, start + 1, "&lt;");
-            }
-        } while (++start != 0); // i.e., while we're able to find a positive start index
-
-        return builder.toString();
+        return aString;
     }
 
     /**

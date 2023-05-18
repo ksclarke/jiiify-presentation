@@ -6,7 +6,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.util.UUID;
 
 import org.junit.Before;
@@ -19,6 +18,7 @@ import info.freelibrary.util.StringUtils;
  */
 public class VideoContentTest {
 
+    /** The test ID. */
     private String myID;
 
     /**
@@ -26,23 +26,15 @@ public class VideoContentTest {
      */
     @Before
     public final void setup() {
-        myID = UUID.randomUUID().toString() + ".mp4";
-    }
-
-    /**
-     * Tests constructing new video content with an ID in string form.
-     */
-    @Test
-    public final void testVideoContentString() {
-        assertEquals(URI.create(myID), new VideoContent(myID).getID());
+        myID = "https://" + UUID.randomUUID().toString() + ".mp4";
     }
 
     /**
      * Tests constructing new video content with an ID.
      */
     @Test
-    public final void testVideoContentURI() {
-        assertEquals(URI.create(myID), new VideoContent(URI.create(myID)).getID());
+    public final void testVideoContentString() {
+        assertEquals(myID, new VideoContent(myID).getID());
     }
 
     /**
@@ -50,7 +42,7 @@ public class VideoContentTest {
      */
     @Test
     public final void testSetGetWidthHeight() {
-        final VideoContent video = new VideoContent(URI.create(myID)).setWidthHeight(480, 360);
+        final VideoContent video = new VideoContent(myID).setWidthHeight(480, 360);
         assertEquals(480, video.getWidth());
         assertEquals(360, video.getHeight());
     }
@@ -60,7 +52,7 @@ public class VideoContentTest {
      */
     @Test
     public final void testSetGetDuration() {
-        assertEquals(2f, new VideoContent(URI.create(myID)).setDuration(2f).getDuration(), 0);
+        assertEquals(2f, new VideoContent(myID).setDuration(2f).getDuration(), 0);
     }
 
     /**
@@ -71,6 +63,6 @@ public class VideoContentTest {
     @Test
     public final void testFixture0003() throws IOException {
         final String json = format(StringUtils.read(new File("src/test/resources/fixtures/0003-mvm-video.json")));
-        assertEquals(json, format(Manifest.from(json).toString()));
+        assertEquals(json, format(Manifest.fromJSON(json).toString()));
     }
 }

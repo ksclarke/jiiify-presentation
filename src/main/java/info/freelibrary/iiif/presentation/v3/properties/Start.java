@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import java.net.URI;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
@@ -15,6 +14,7 @@ import info.freelibrary.util.warnings.Eclipse;
 import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.ids.UriUtils;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.Selector;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
@@ -27,12 +27,12 @@ public class Start {
     /**
      * The start ID.
      */
-    private URI myID;
+    private String myID;
 
     /**
      * The start source.
      */
-    private URI mySource;
+    private String mySource;
 
     /**
      * The start selector.
@@ -40,34 +40,12 @@ public class Start {
     private Selector mySelector;
 
     /**
-     * Creates a canvas start from the supplied ID in string form.
-     *
-     * @param aID A start ID
-     */
-    public Start(final String aID) {
-        myID = URI.create(aID);
-    }
-
-    /**
      * Creates a canvas start from the supplied ID.
      *
      * @param aID A start ID
      */
-    public Start(final URI aID) {
-        myID = aID;
-    }
-
-    /**
-     * Creates a Specific Resource start from the supplied ID in string form, a canvas source, and a selector.
-     *
-     * @param aID A start ID in string form
-     * @param aSource A source for the selector in string form
-     * @param aSelector A type of selector
-     */
-    public Start(final String aID, final String aSource, final Selector aSelector) {
-        myID = URI.create(aID);
-        mySource = URI.create(aSource);
-        mySelector = aSelector;
+    public Start(final String aID) {
+        myID = UriUtils.checkID(aID, true);
     }
 
     /**
@@ -77,10 +55,10 @@ public class Start {
      * @param aSource A source for the selector
      * @param aSelector A type of selector
      */
-    public Start(final URI aID, final URI aSource, final Selector aSelector) {
-        myID = aID;
+    public Start(final String aID, final String aSource, final Selector aSelector) {
+        this(aID);
+        mySource = UriUtils.checkID(aSource, true);
         mySelector = aSelector;
-        mySource = aSource;
     }
 
     /**
@@ -92,26 +70,14 @@ public class Start {
     }
 
     /**
-     * Sets the start ID in string form.
+     * Sets the start ID.
      *
-     * @param aID A start ID in string form
+     * @param aID A start ID
      * @return This start
      */
     @JsonSetter(JsonKeys.ID)
     public Start setID(final String aID) {
-        myID = URI.create(aID);
-        return this;
-    }
-
-    /**
-     * Sets the start ID.
-     *
-     * @param aID The start ID
-     * @return This start
-     */
-    @JsonIgnore
-    public Start setID(final URI aID) {
-        myID = aID;
+        myID = UriUtils.checkID(aID, true);
         return this;
     }
 
@@ -121,7 +87,7 @@ public class Start {
      * @return This start's ID
      */
     @JsonGetter(JsonKeys.ID)
-    public URI getID() {
+    public String getID() {
         return myID;
     }
 
@@ -136,7 +102,7 @@ public class Start {
     }
 
     /**
-     * Sets the start source in string form.
+     * Sets the start source.
      *
      * @param aSource A source
      * @param aSelector A selector
@@ -144,22 +110,8 @@ public class Start {
      */
     @JsonIgnore
     public Start setSpecificResource(final String aSource, final Selector aSelector) {
-        mySource = URI.create(aSource);
+        mySource = UriUtils.checkID(aSource, true);
         mySelector = aSelector;
-        return this;
-    }
-
-    /**
-     * Sets the start source.
-     *
-     * @param aSource A source
-     * @param aSelector A selector
-     * @return The start
-     */
-    @JsonIgnore
-    public Start setSpecificResource(final URI aSource, final Selector aSelector) {
-        mySelector = aSelector;
-        mySource = aSource;
         return this;
     }
 
@@ -170,7 +122,7 @@ public class Start {
      */
     @JsonGetter(JsonKeys.SOURCE)
     @JsonInclude(Include.NON_ABSENT)
-    public Optional<URI> getSource() {
+    public Optional<String> getSource() {
         return Optional.ofNullable(mySource);
     }
 
@@ -193,7 +145,7 @@ public class Start {
      */
     @JsonSetter(JsonKeys.SOURCE)
     private Start setSource(final String aSource) {
-        mySource = URI.create(aSource);
+        mySource = UriUtils.checkID(aSource, true);
         return this;
     }
 

@@ -27,12 +27,19 @@ import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
  */
 public class PlaceholderCanvasTest extends AbstractTest {
 
+    /** A template for canvas IDs. */
     private static final String NOID_PATTERN = "/canvas-[a-z0-9]{4}";
 
+    /** A file name pattern for test fixtures. */
     private static final String FILE = "{}-placeholder.json";
 
+    /** A label pattern for testing. */
     private static final String LABEL = "My label for '{}'";
 
+    /** A constant for HTTPS. */
+    private static final String HTTPS = "https://";
+
+    /** The test ID. */
     private String myID;
 
     /**
@@ -40,52 +47,27 @@ public class PlaceholderCanvasTest extends AbstractTest {
      */
     @Before
     public final void setUp() {
-        myID = UUID.randomUUID().toString();
+        myID = HTTPS + UUID.randomUUID().toString();
     }
 
     /**
      * Tests {@link PlaceholderCanvas#PlaceholderCanvas(URI) PlaceholderCanvas}.
      */
     @Test
-    public final void testPlaceholderCanvasURI() {
-        final URI id = URI.create(myID);
-        final PlaceholderCanvas canvas = new PlaceholderCanvas(id);
-
-        assertEquals(id, canvas.getID());
+    public final void testPlaceholderCanvasID() {
+        assertEquals(myID, new PlaceholderCanvas(myID).getID());
     }
 
     /**
-     * Tests {@link PlaceholderCanvas#PlaceholderCanvas(String) PlaceholderCanvas}.
-     */
-    @Test
-    public final void testPlaceholderCanvasString() {
-        final PlaceholderCanvas canvas = new PlaceholderCanvas(myID);
-        assertEquals(URI.create(myID), canvas.getID());
-    }
-
-    /**
-     * Tests {@link PlaceholderCanvas#PlaceholderCanvas(URI, Label) PlaceholderCanvas}.
+     * Tests {@link PlaceholderCanvas#PlaceholderCanvas(String, Label) PlaceholderCanvas}.
      */
     @Test
     public final void testPlaceholderCanvasURILabel() {
-        final URI id = URI.create(myID);
         final Label label = new Label(StringUtils.format(LABEL, myID));
-        final PlaceholderCanvas canvas = new PlaceholderCanvas(id, label);
-
-        assertEquals(id, canvas.getID());
-        assertEquals(label, canvas.getLabel());
-    }
-
-    /**
-     * Tests {@link PlaceholderCanvas#PlaceholderCanvas(String, String) PlaceholderCanvas}.
-     */
-    @Test
-    public final void testPlaceholderCanvasStringString() {
-        final String label = StringUtils.format(LABEL, myID);
         final PlaceholderCanvas canvas = new PlaceholderCanvas(myID, label);
 
-        assertEquals(URI.create(myID), canvas.getID());
-        assertEquals(new Label(label), canvas.getLabel());
+        assertEquals(myID, canvas.getID());
+        assertEquals(label, canvas.getLabel());
     }
 
     /**
@@ -93,11 +75,11 @@ public class PlaceholderCanvasTest extends AbstractTest {
      */
     @Test
     public final void testPlaceholderCanvasMinter() {
-        final URI id = URI.create(UUID.randomUUID().toString());
+        final String id = HTTPS + UUID.randomUUID().toString();
         final Minter minter = MinterFactory.getMinter(id);
         final PlaceholderCanvas canvas = new PlaceholderCanvas(minter);
 
-        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID().toString()).matches());
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID()).matches());
     }
 
     /**
@@ -105,12 +87,12 @@ public class PlaceholderCanvasTest extends AbstractTest {
      */
     @Test
     public final void testPlaceholderCanvasMinterLabel() {
-        final URI id = URI.create(UUID.randomUUID().toString());
+        final String id = HTTPS + UUID.randomUUID().toString();
         final Minter minter = MinterFactory.getMinter(id);
         final Label label = new Label(StringUtils.format(LABEL, id));
         final PlaceholderCanvas canvas = new PlaceholderCanvas(minter, label);
 
-        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID().toString()).matches());
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID()).matches());
     }
 
     /**
@@ -118,12 +100,12 @@ public class PlaceholderCanvasTest extends AbstractTest {
      */
     @Test
     public final void testPlaceholderCanvasMinterLabelAsString() {
-        final URI id = URI.create(UUID.randomUUID().toString());
+        final String id = HTTPS + UUID.randomUUID().toString();
         final Minter minter = MinterFactory.getMinter(id);
-        final String label = StringUtils.format(LABEL, id);
+        final Label label = new Label(StringUtils.format(LABEL, id));
         final PlaceholderCanvas canvas = new PlaceholderCanvas(minter, label);
 
-        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID().toString()).matches());
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID()).matches());
     }
 
     /**
@@ -134,7 +116,7 @@ public class PlaceholderCanvasTest extends AbstractTest {
     @Test
     public final void testCanvasFromString() throws IOException {
         final String json = getFixture(Canvas.class);
-        final Canvas canvas = Canvas.from(json);
+        final Canvas canvas = Canvas.fromJSON(json);
 
         assertEquals(json, canvas.toString());
     }
@@ -147,7 +129,7 @@ public class PlaceholderCanvasTest extends AbstractTest {
     @Test
     public final void testCollectionFromString() throws IOException {
         final String json = getFixture(Collection.class);
-        final Collection collection = Collection.from(json);
+        final Collection collection = Collection.fromJSON(json);
 
         assertEquals(json, collection.toString());
     }
@@ -160,7 +142,7 @@ public class PlaceholderCanvasTest extends AbstractTest {
     @Test
     public final void testManifestFromString() throws IOException {
         final String json = getFixture(Manifest.class);
-        assertEquals(json, Manifest.from(json).toString());
+        assertEquals(json, Manifest.fromJSON(json).toString());
     }
 
     /**
@@ -171,7 +153,7 @@ public class PlaceholderCanvasTest extends AbstractTest {
     @Test
     public final void testRangeFromString() throws IOException {
         final String json = getFixture(Range.class);
-        final Range range = Range.from(json);
+        final Range range = Range.fromJSON(json);
 
         assertEquals(json, range.toString());
     }

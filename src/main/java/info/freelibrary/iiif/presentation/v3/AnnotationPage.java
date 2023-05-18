@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -30,40 +31,43 @@ import info.freelibrary.iiif.presentation.v3.properties.Rendering;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
+import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
- * A collection of {@link Annotation}(s) included in the items property of the Canvas (and whose target is that Canvas).
+ * A page of {@link Annotation}(s) that associates different content resources with their respective {@link Canvas}(es).
+ * An AnnotationPage may included in the items property of the Canvas (and whose target is that Canvas) or on a Manifest
+ * (and whose target is that Manifest).
  */
-@SuppressWarnings(PMD.GOD_CLASS)
-public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<AnnotationPage<T>> // NOPMD
-        implements Resource<AnnotationPage<T>> {
+@SuppressWarnings({ PMD.GOD_CLASS, "PMD.GodClass" })
+public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<AnnotationPage<A>>
+        implements Resource<AnnotationPage<A>> {
 
-    /**
-     * The logger used by the AnnotationPage.
-     */
+    /** The logger used by the AnnotationPage. */
     private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationPage.class, MessageCodes.BUNDLE);
 
-    /**
-     * The AnnotationPage's annotations.
-     */
-    private List<T> myAnnotations;
-
-    /**
-     * Whether the annotation page is intended to be used outside of a manifest (i.e. whether it needs its own context).
-     */
+    /** Whether the annotation page is intended to be used outside of a manifest. */
     private boolean isExternal;
 
+    /** The AnnotationPage's annotations. */
+    private List<A> myAnnotations;
+
+    /** The next annotation page in an {@link AnnotationCollection}. */
+    private AnnotationPage<?> myNextAnnotationPage;
+
     /**
-     * Creates a new annotation page.
+     * Creates a new annotation page for a supplied {@link CanvasResource}.
      *
-     * @param aID An annotation page ID in string form
+     * @param <C> The type of CanvasResource
+     * @param aMinter An ID minter
+     * @param aCanvas A parent canvas resource
      */
-    public AnnotationPage(final String aID) {
-        super(ResourceTypes.ANNOTATION_PAGE, aID);
+    public <C extends CanvasResource<C>> AnnotationPage(final Minter aMinter, final CanvasResource<C> aCanvas) {
+        super(ResourceTypes.ANNOTATION_PAGE, aMinter.getAnnotationPageID(aCanvas), ResourceBehavior.class);
     }
 
     /**
@@ -71,102 +75,27 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
      *
      * @param aID An annotation page ID
      */
-    public AnnotationPage(final URI aID) {
-        super(ResourceTypes.ANNOTATION_PAGE, aID);
-    }
-
-    /**
-     * Creates a new annotation page for a supplied {@link CanvasResource}.
-     *
-     * @param <C> The type of CanvasResource
-     * @param aMinter An ID minter
-     * @param aCanvas A canvas resource
-     */
-    public <C extends CanvasResource<C>> AnnotationPage(final Minter aMinter, final CanvasResource<C> aCanvas) {
-        super(ResourceTypes.ANNOTATION_PAGE, aMinter.getAnnotationPageID(aCanvas));
+    public AnnotationPage(final String aID) {
+        super(ResourceTypes.ANNOTATION_PAGE, aID, ResourceBehavior.class);
     }
 
     /**
      * Allows Jackson to deserialize JSON.
      */
     private AnnotationPage() {
-        super(ResourceTypes.ANNOTATION_PAGE);
-    }
-
-    /**
-     * Sets the page as external to a manifest; this ensures it is serialized with its own context.
-     *
-     * @return This annotation page
-     */
-    @JsonIgnore
-    public AnnotationPage<T> setExternalContext() {
-        isExternal = true;
-        return this;
-    }
-
-    /**
-     * Removes the external context from an annotation page so that it can be used inside a manifest.
-     *
-     * @return This annotation page
-     */
-    public AnnotationPage<T> removeExternalContext() {
-        isExternal = false;
-        return this;
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.PROVIDER)
-    public AnnotationPage<T> setProviders(final Provider... aProviderArray) {
-        return setProviders(Arrays.asList(aProviderArray));
-    }
-
-    @Override
-    @JsonIgnore
-    public AnnotationPage<T> setProviders(final List<Provider> aProviderList) {
-        return (AnnotationPage<T>) super.setProviders(aProviderList);
-    }
-
-    /**
-     * Sets the annotation page's annotations.
-     *
-     * @param aAnnotationArray An annotation array
-     * @return The annotation page
-     */
-    @JsonSetter(JsonKeys.ITEMS)
-    @SafeVarargs
-    public final AnnotationPage<T> setAnnotations(final T... aAnnotationArray) {
-        if (myAnnotations != null) {
-            myAnnotations.clear();
-        }
-
-        return addAnnotations(aAnnotationArray);
-    }
-
-    /**
-     * Sets the annotation page's annotations.
-     *
-     * @param aAnnotationList A list of annotations
-     * @return The annotation page
-     */
-    @JsonIgnore
-    public final AnnotationPage<T> setAnnotations(final List<T> aAnnotationList) {
-        if (myAnnotations != null) {
-            myAnnotations.clear();
-        }
-
-        return addAnnotations(aAnnotationList);
+        super(ResourceTypes.ANNOTATION_PAGE, ResourceBehavior.class);
     }
 
     /**
      * Adds annotations to the annotation page.
      *
-     * @param aAnnotationArray Annotations to be added to the annotation page
+     * @param aAnnotationList Annotations to be added to the annotation page
      * @return The annotation page
+     * @throws UnsupportedOperationException If the supplied annotations cannot be added to the page
      */
-    @SafeVarargs
-    public final AnnotationPage<T> addAnnotations(final T... aAnnotationArray) {
-        if (!Collections.addAll(getAnnotations(), Objects.requireNonNull(aAnnotationArray))) {
-            final String details = getListIDs(Arrays.asList(aAnnotationArray));
+    public final AnnotationPage<A> addAnnotations(final List<A> aAnnotationList) {
+        if (!getAnnotations().addAll(Objects.requireNonNull(aAnnotationList))) {
+            final String details = getListIDs(aAnnotationList);
             throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_050, details));
         }
 
@@ -176,12 +105,14 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
     /**
      * Adds annotations to the annotation page.
      *
-     * @param aAnnotationList Annotations to be added to the annotation page
+     * @param aAnnotationArray Annotations to be added to the annotation page
      * @return The annotation page
+     * @throws UnsupportedOperationException If the supplied annotations cannot be added to the page
      */
-    public final AnnotationPage<T> addAnnotations(final List<T> aAnnotationList) {
-        if (!getAnnotations().addAll(Objects.requireNonNull(aAnnotationList))) {
-            final String details = getListIDs(aAnnotationList);
+    @SafeVarargs
+    public final AnnotationPage<A> addAnnotations(final A... aAnnotationArray) {
+        if (!Collections.addAll(getAnnotations(), Objects.requireNonNull(aAnnotationArray))) {
+            final String details = getListIDs(Arrays.asList(aAnnotationArray));
             throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_050, details));
         }
 
@@ -194,153 +125,211 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
      * @return The annotation page's annotations
      */
     @JsonGetter(JsonKeys.ITEMS)
-    public List<T> getAnnotations() {
+    public List<A> getAnnotations() {
         if (myAnnotations == null) {
             myAnnotations = new ArrayList<>();
+        }
+
+        if (!myAnnotations.isEmpty()) {
+            myAnnotations.get(0).getMotivation();
         }
 
         return myAnnotations;
     }
 
+    /**
+     * Gets the annotation page that should follow this one in an {@link AnnotationCollection}.
+     *
+     * @return The optional annotation page that follows this one
+     */
+    public Optional<AnnotationPage<?>> getNextPage() {
+        return Optional.ofNullable(myNextAnnotationPage);
+    }
+
+    /**
+     * Removes the external context from an annotation page so that it can be used inside a manifest.
+     *
+     * @return This annotation page
+     */
+    public AnnotationPage<A> removeExternalContext() {
+        isExternal = false;
+        return this;
+    }
+
+    /**
+     * Sets the annotation page's annotations.
+     *
+     * @param aAnnotationList A list of annotations
+     * @return The annotation page
+     */
+    @JsonSetter(JsonKeys.ITEMS)
+    public final AnnotationPage<A> setAnnotations(final List<A> aAnnotationList) {
+        if (myAnnotations != null) {
+            myAnnotations.clear();
+        }
+
+        return addAnnotations(aAnnotationList);
+    }
+
+    /**
+     * Sets the annotation page's annotations.
+     *
+     * @param aAnnotationArray An annotation array
+     * @return The annotation page
+     */
+    @JsonIgnore
+    @SafeVarargs
+    public final AnnotationPage<A> setAnnotations(final A... aAnnotationArray) {
+        if (myAnnotations != null) {
+            myAnnotations.clear();
+        }
+
+        return addAnnotations(aAnnotationArray);
+    }
+
     @Override
-    public AnnotationPage<T> clearBehaviors() {
-        return (AnnotationPage<T>) super.clearBehaviors();
+    @JsonIgnore
+    public AnnotationPage<A> setBehaviors(final Behavior... aBehaviorArray) {
+        return setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorArray));
     }
 
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
-    public AnnotationPage<T> setBehaviors(final Behavior... aBehaviorArray) {
-        return (AnnotationPage<T>) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorArray));
+    public AnnotationPage<A> setBehaviors(final List<Behavior> aBehaviorList) {
+        if (aBehaviorList instanceof BehaviorList) {
+            ((BehaviorList) aBehaviorList).checkType(ResourceBehavior.class, this.getClass());
+        }
+
+        return (AnnotationPage<A>) super.setBehaviors(aBehaviorList);
+    }
+
+    /**
+     * Sets the page as external to a manifest; this ensures it is serialized with its own context.
+     *
+     * @return This annotation page
+     */
+    @JsonIgnore
+    public AnnotationPage<A> setExternalContext() {
+        isExternal = true;
+        return this;
     }
 
     @Override
-    public AnnotationPage<T> setBehaviors(final List<Behavior> aBehaviorList) {
-        return (AnnotationPage<T>) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorList));
+    public AnnotationPage<A> setHomepages(final Homepage... aHomepageArray) {
+        return (AnnotationPage<A>) super.setHomepages(aHomepageArray);
     }
 
     @Override
-    public AnnotationPage<T> addBehaviors(final Behavior... aBehaviorArray) {
-        return (AnnotationPage<T>) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorArray));
+    public AnnotationPage<A> setHomepages(final List<Homepage> aHomepageList) {
+        return (AnnotationPage<A>) super.setHomepages(aHomepageList);
     }
 
     @Override
-    public AnnotationPage<T> addBehaviors(final List<Behavior> aBehaviorList) {
-        return (AnnotationPage<T>) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorList));
+    public AnnotationPage<A> setID(final String aID) {
+        return (AnnotationPage<A>) super.setID(aID);
     }
 
     @Override
-    public AnnotationPage<T> setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
-        return (AnnotationPage<T>) super.setSeeAlsoRefs(aSeeAlsoArray);
+    public AnnotationPage<A> setLabel(final Label aLabel) {
+        return (AnnotationPage<A>) super.setLabel(aLabel);
     }
 
     @Override
-    public AnnotationPage<T> setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
-        return (AnnotationPage<T>) super.setSeeAlsoRefs(aSeeAlsoList);
+    public AnnotationPage<A> setMetadata(final List<Metadata> aMetadataList) {
+        return (AnnotationPage<A>) super.setMetadata(aMetadataList);
     }
 
     @Override
-    public AnnotationPage<T> setServices(final Service<?>... aServiceArray) {
-        return (AnnotationPage<T>) super.setServices(aServiceArray);
+    public AnnotationPage<A> setMetadata(final Metadata... aMetadataArray) {
+        return (AnnotationPage<A>) super.setMetadata(aMetadataArray);
+    }
+
+    /**
+     * Sets the annotation page that should follow this one in an {@link AnnotationCollection}.
+     *
+     * @param anAnnotationPage A next annotation page
+     * @return This annotation page
+     */
+    public AnnotationPage<?> setNextPage(final AnnotationPage<?> anAnnotationPage) {
+        myNextAnnotationPage = anAnnotationPage;
+        return this;
     }
 
     @Override
-    public AnnotationPage<T> setServices(final List<Service<?>> aServiceList) {
-        return (AnnotationPage<T>) super.setServices(aServiceList);
+    public AnnotationPage<A> setPartOfs(final List<PartOf> aPartOfList) {
+        return (AnnotationPage<A>) super.setPartOfs(aPartOfList);
     }
 
     @Override
-    public AnnotationPage<T> setPartOfs(final PartOf... aPartOfArray) {
-        return (AnnotationPage<T>) super.setPartOfs(aPartOfArray);
+    public AnnotationPage<A> setPartOfs(final PartOf... aPartOfArray) {
+        return (AnnotationPage<A>) super.setPartOfs(aPartOfArray);
     }
 
     @Override
-    public AnnotationPage<T> setPartOfs(final List<PartOf> aPartOfList) {
-        return (AnnotationPage<T>) super.setPartOfs(aPartOfList);
+    @JsonSetter(JsonKeys.PROVIDER)
+    public AnnotationPage<A> setProviders(final List<Provider> aProviderList) {
+        return (AnnotationPage<A>) super.setProviders(aProviderList);
     }
 
     @Override
-    public AnnotationPage<T> setRenderings(final Rendering... aRenderingArray) {
-        return (AnnotationPage<T>) super.setRenderings(aRenderingArray);
+    @JsonIgnore
+    public AnnotationPage<A> setProviders(final Provider... aProviderArray) {
+        return setProviders(Arrays.asList(aProviderArray));
     }
 
     @Override
-    public AnnotationPage<T> setRenderings(final List<Rendering> aRenderingList) {
-        return (AnnotationPage<T>) super.setRenderings(aRenderingList);
+    public AnnotationPage<A> setRenderings(final List<Rendering> aRenderingList) {
+        return (AnnotationPage<A>) super.setRenderings(aRenderingList);
     }
 
     @Override
-    public AnnotationPage<T> setHomepages(final Homepage... aHomepageArray) {
-        return (AnnotationPage<T>) super.setHomepages(aHomepageArray);
+    public AnnotationPage<A> setRenderings(final Rendering... aRenderingArray) {
+        return (AnnotationPage<A>) super.setRenderings(aRenderingArray);
     }
 
     @Override
-    public AnnotationPage<T> setHomepages(final List<Homepage> aHomepageList) {
-        return (AnnotationPage<T>) super.setHomepages(aHomepageList);
+    public AnnotationPage<A> setRequiredStatement(final RequiredStatement aStatement) {
+        return (AnnotationPage<A>) super.setRequiredStatement(aStatement);
     }
 
     @Override
-    public AnnotationPage<T> setThumbnails(final ContentResource<?>... aThumbnailArray) {
-        return (AnnotationPage<T>) super.setThumbnails(aThumbnailArray);
+    public AnnotationPage<A> setRights(final String aRights) {
+        return (AnnotationPage<A>) super.setRights(aRights);
     }
 
     @Override
-    public AnnotationPage<T> setThumbnails(final List<ContentResource<?>> aThumbnailList) {
-        return (AnnotationPage<T>) super.setThumbnails(aThumbnailList);
+    public AnnotationPage<A> setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
+        return (AnnotationPage<A>) super.setSeeAlsoRefs(aSeeAlsoList);
     }
 
     @Override
-    public AnnotationPage<T> setID(final String aID) {
-        return (AnnotationPage<T>) super.setID(aID);
+    public AnnotationPage<A> setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
+        return (AnnotationPage<A>) super.setSeeAlsoRefs(aSeeAlsoArray);
     }
 
     @Override
-    public AnnotationPage<T> setID(final URI aID) {
-        return (AnnotationPage<T>) super.setID(aID);
+    public AnnotationPage<A> setServices(final List<Service<?>> aServiceList) {
+        return (AnnotationPage<A>) super.setServices(aServiceList);
     }
 
     @Override
-    public AnnotationPage<T> setRights(final String aRights) {
-        return (AnnotationPage<T>) super.setRights(aRights);
+    public AnnotationPage<A> setServices(final Service<?>... aServiceArray) {
+        return (AnnotationPage<A>) super.setServices(aServiceArray);
     }
 
     @Override
-    public AnnotationPage<T> setRights(final URI aRights) {
-        return (AnnotationPage<T>) super.setRights(aRights);
+    public AnnotationPage<A> setSummary(final Summary aSummary) {
+        return (AnnotationPage<A>) super.setSummary(aSummary);
     }
 
     @Override
-    public AnnotationPage<T> setRequiredStatement(final RequiredStatement aStatement) {
-        return (AnnotationPage<T>) super.setRequiredStatement(aStatement);
+    public AnnotationPage<A> setThumbnails(final ContentResource<?>... aThumbnailArray) {
+        return (AnnotationPage<A>) super.setThumbnails(aThumbnailArray);
     }
 
     @Override
-    public AnnotationPage<T> setSummary(final String aSummary) {
-        return (AnnotationPage<T>) super.setSummary(aSummary);
-    }
-
-    @Override
-    public AnnotationPage<T> setSummary(final Summary aSummary) {
-        return (AnnotationPage<T>) super.setSummary(aSummary);
-    }
-
-    @Override
-    public AnnotationPage<T> setMetadata(final Metadata... aMetadataArray) {
-        return (AnnotationPage<T>) super.setMetadata(aMetadataArray);
-    }
-
-    @Override
-    public AnnotationPage<T> setMetadata(final List<Metadata> aMetadataList) {
-        return (AnnotationPage<T>) super.setMetadata(aMetadataList);
-    }
-
-    @Override
-    public AnnotationPage<T> setLabel(final String aLabel) {
-        return (AnnotationPage<T>) super.setLabel(aLabel);
-    }
-
-    @Override
-    public AnnotationPage<T> setLabel(final Label aLabel) {
-        return (AnnotationPage<T>) super.setLabel(aLabel);
+    public AnnotationPage<A> setThumbnails(final List<ContentResource<?>> aThumbnailList) {
+        return (AnnotationPage<A>) super.setThumbnails(aThumbnailList);
     }
 
     /**
@@ -359,22 +348,6 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
     }
 
     /**
-     * Returns an annotation from its JSON representation.
-     *
-     * @param <T> The type of annotation contained in this page
-     * @param aJsonString An annotation in JSON form
-     * @return The Annotation
-     * @throws JsonParsingException If there is trouble parsing the annotation page from the supplied JSON string
-     */
-    public static <T extends Annotation<T>> AnnotationPage<T> from(final String aJsonString) {
-        try {
-            return JSON.getReader(new TypeReference<AnnotationPage<T>>() {}).readValue(aJsonString);
-        } catch (final IOException details) {
-            throw new JsonParsingException(details);
-        }
-    }
-
-    /**
      * Gets the context when the annotation page is intended to be used outside of a manifest.
      *
      * @return The context URI
@@ -385,30 +358,15 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
     }
 
     /**
-     * Allows Jackson to set the external context flag.
-     *
-     * @param aContextURI A annotation page context URI
-     * @return This annotation page
-     */
-    @JsonSetter(JsonKeys.CONTEXT)
-    private AnnotationPage<T> setExternalContext(final String aContextURI) {
-        if (PRESENTATION_CONTEXT_URI.toString().equalsIgnoreCase(aContextURI)) {
-            setExternalContext();
-        }
-
-        return this;
-    }
-
-    /**
      * Get the IDs of the annotations in the supplied list and return them as a single string.
      *
      * @param aAnnotationList A list of annotations
      * @return A string containing the IDs
      */
-    private String getListIDs(final List<T> aAnnotationList) {
+    private String getListIDs(final List<A> aAnnotationList) {
         final StringBuilder builder = new StringBuilder();
 
-        for (final T annotation : aAnnotationList) {
+        for (final A annotation : aAnnotationList) {
             builder.append(annotation.getID()).append('|');
         }
 
@@ -417,5 +375,36 @@ public class AnnotationPage<T extends Annotation<T>> extends AbstractResource<An
         }
 
         return builder.toString();
+    }
+
+    /**
+     * Allows Jackson to set the external context flag.
+     *
+     * @param aContextURI A annotation page context URI
+     * @return This annotation page
+     */
+    @JsonSetter(JsonKeys.CONTEXT)
+    private AnnotationPage<A> setExternalContext(final String aContextURI) {
+        if (PRESENTATION_CONTEXT_URI.toString().equalsIgnoreCase(aContextURI)) {
+            setExternalContext();
+        }
+
+        return this;
+    }
+
+    /**
+     * Returns an annotation from its JSON representation.
+     *
+     * @param <A> The type of annotation contained in this page
+     * @param aJsonString An annotation in JSON form
+     * @return The Annotation
+     * @throws JsonParsingException If there is trouble parsing the annotation page from the supplied JSON string
+     */
+    static <A extends Annotation<A>> AnnotationPage<A> fromJSON(final String aJsonString) {
+        try {
+            return JSON.getReader(new TypeReference<AnnotationPage<A>>() {}).readValue(aJsonString);
+        } catch (final IOException details) {
+            throw new JsonParsingException(details);
+        }
     }
 }

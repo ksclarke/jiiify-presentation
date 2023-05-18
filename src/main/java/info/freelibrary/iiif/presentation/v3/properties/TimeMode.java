@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
+import java.util.Optional;
+
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
@@ -25,27 +27,43 @@ public enum TimeMode {
     LOOP("loop");
 
     /**
-     * The TimeMode value in string form.
+     * The <code>TimeMode</code> label.
      */
-    private final String myValue;
+    private final String myLabel;
 
     /**
-     * Creates a new TimeMode from the supplied string.
+     * Creates a new <code>TimeMode</code> from the supplied label.
      *
-     * @param aTimeMode A time mode in string form
+     * @param aLabel A label
      */
-    TimeMode(final String aTimeMode) {
-        myValue = aTimeMode;
+    TimeMode(final String aLabel) {
+        myLabel = aLabel;
     }
 
     /**
-     * Gets a string representation of the time-mode.
+     * Gets a string representation of the <code>TimeMode</code>.
      *
-     * @return A string representation of the time-mode
+     * @return A string representation of the <code>TimeMode</code>
      */
     @Override
     @JsonValue
     public String toString() {
-        return myValue;
+        return myLabel;
+    }
+
+    /**
+     * Gets a <code>TimeMode</code> by its label.
+     *
+     * @param aLabel A label
+     * @return An empty optional or one containing the <code>TimeMode</code> corresponding to the supplied label
+     */
+    public static Optional<TimeMode> forLabel(final String aLabel) {
+        for (final TimeMode timeMode : values()) {
+            if (timeMode.myLabel.equalsIgnoreCase(aLabel)) {
+                return Optional.of(timeMode);
+            }
+        }
+
+        return Optional.empty();
     }
 }

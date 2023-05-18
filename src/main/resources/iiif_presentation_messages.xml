@@ -97,5 +97,12 @@
   <entry key="JPA-124">{} missing the required label</entry>
   <entry key="JPA-125">{} is not a valid type for {}</entry>
   <entry key="JPA-126">{} is not a valid context for {}</entry>
+  <entry key="JPA-127">ID URI '{}' does not start with 'https://'</entry>
+  <entry key="JPA-128">Canvas IDs are not allowed to have URI fragments: {}</entry>
+  <entry key="JPA-129">The '{}' JSON node isn't a leaf/value node, as expected</entry>
+  <entry key="JPA-130">Unexpected annotation timeMode was ignored during deserialization: {}</entry>
+  <entry key="JPA-131">Unable to parse SpecificResource's incoming JSON structure: {}</entry>
+  <entry key="JPA-132">Annotation target is missing from incoming JSON</entry>
+  <entry key="JPA-133">Unexpected format (i.e. MediaType) value: {}</entry>
 
 </properties>

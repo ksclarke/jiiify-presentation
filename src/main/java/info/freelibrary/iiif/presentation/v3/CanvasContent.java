@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
+import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.properties.Metadata;
 import info.freelibrary.iiif.presentation.v3.properties.PartOf;
 import info.freelibrary.iiif.presentation.v3.properties.Provider;
@@ -18,6 +18,7 @@ import info.freelibrary.iiif.presentation.v3.properties.Rendering;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
+import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
@@ -25,46 +26,34 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  * Canvas content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
  */
 public class CanvasContent extends AbstractContentResource<CanvasContent>
-        implements AnnotationBody<CanvasContent>, EmbeddedResource<CanvasContent>, Resource<CanvasContent> {
-
-    /**
-     * Creates a canvas content resource from the supplied ID.
-     *
-     * @param aID A canvas content resource ID in string form
-     */
-    public CanvasContent(final String aID) {
-        super(ResourceTypes.CANVAS, aID);
-        super.setFormatFromMediaType(MediaType.APPLICATION_JSON);
-    }
+        implements ContentResource<CanvasContent>, Resource<CanvasContent> {
 
     /**
      * Creates a canvas content resource from the supplied ID.
      *
      * @param aID A canvas content resource ID
      */
-    public CanvasContent(final URI aID) {
-        super(ResourceTypes.CANVAS, aID);
-        super.setFormatFromMediaType(MediaType.APPLICATION_JSON);
+    public CanvasContent(final String aID) {
+        super(ResourceTypes.CANVAS, aID, ResourceBehavior.class);
+        setFormat(MediaType.APPLICATION_JSON);
     }
 
     /**
      * Creates a canvas content resource for Jackson's deserialization processes.
      */
     private CanvasContent() {
-        super(ResourceTypes.CANVAS);
-        super.setFormatFromMediaType(MediaType.APPLICATION_JSON);
+        super(ResourceTypes.CANVAS, ResourceBehavior.class);
+        setFormat(MediaType.APPLICATION_JSON);
     }
 
     @Override
-    @JsonSetter(JsonKeys.FORMAT)
-    public CanvasContent setFormat(final String aMediaType) {
+    public final CanvasContent setFormat(final MediaType aMediaType) {
         return (CanvasContent) super.setFormat(aMediaType);
     }
 
     @Override
-    @JsonIgnore
-    public CanvasContent setFormat(final MediaType aMediaType) {
-        return (CanvasContent) super.setFormat(aMediaType);
+    public final CanvasContent setLanguages(final String... aLangArray) {
+        return (CanvasContent) super.setLanguages(aLangArray);
     }
 
     @Override
@@ -80,29 +69,19 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
     }
 
     @Override
-    public CanvasContent clearBehaviors() {
-        return (CanvasContent) super.clearBehaviors();
+    @JsonIgnore
+    public CanvasContent setBehaviors(final Behavior... aBehaviorArray) {
+        return setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorArray));
     }
 
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
-    public CanvasContent setBehaviors(final Behavior... aBehaviorArray) {
-        return (CanvasContent) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorArray));
-    }
-
-    @Override
     public CanvasContent setBehaviors(final List<Behavior> aBehaviorList) {
-        return (CanvasContent) super.setBehaviors(checkBehaviors(ResourceBehavior.class, true, aBehaviorList));
-    }
+        if (aBehaviorList instanceof BehaviorList) {
+            ((BehaviorList) aBehaviorList).checkType(ResourceBehavior.class, this.getClass());
+        }
 
-    @Override
-    public CanvasContent addBehaviors(final Behavior... aBehaviorArray) {
-        return (CanvasContent) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorArray));
-    }
-
-    @Override
-    public CanvasContent addBehaviors(final List<Behavior> aBehaviorList) {
-        return (CanvasContent) super.addBehaviors(checkBehaviors(ResourceBehavior.class, false, aBehaviorList));
+        return (CanvasContent) super.setBehaviors(aBehaviorList);
     }
 
     @Override
@@ -172,28 +151,13 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
     }
 
     @Override
-    public CanvasContent setID(final URI aID) {
-        return (CanvasContent) super.setID(aID);
-    }
-
-    @Override
     public CanvasContent setRights(final String aRights) {
-        return (CanvasContent) super.setRights(aRights);
-    }
-
-    @Override
-    public CanvasContent setRights(final URI aRights) {
         return (CanvasContent) super.setRights(aRights);
     }
 
     @Override
     public CanvasContent setRequiredStatement(final RequiredStatement aStatement) {
         return (CanvasContent) super.setRequiredStatement(aStatement);
-    }
-
-    @Override
-    public CanvasContent setSummary(final String aSummary) {
-        return (CanvasContent) super.setSummary(aSummary);
     }
 
     @Override
@@ -209,11 +173,6 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
     @Override
     public CanvasContent setMetadata(final List<Metadata> aMetadataList) {
         return (CanvasContent) super.setMetadata(aMetadataList);
-    }
-
-    @Override
-    public CanvasContent setLabel(final String aLabel) {
-        return (CanvasContent) super.setLabel(aLabel);
     }
 
     @Override

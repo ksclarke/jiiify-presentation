@@ -6,13 +6,14 @@ package info.freelibrary.iiif.presentation.v3.utils;
  */
 public final class TestConstants {
 
-    /* A quotation mark. */
+    /** A quotation mark. */
     public static final String QUOTE = "\"";
 
     /**
      * Creates a new TestConstants class.
      */
     private TestConstants() {
+        // This is intentionally left empty.
     }
 
 }

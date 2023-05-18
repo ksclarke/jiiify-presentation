@@ -15,11 +15,11 @@ import info.freelibrary.iiif.presentation.v3.utils.TestConstants;
  */
 public class TimeModeTest {
 
-    /* Expected values */
+    /** Expected values. */
     private static final String[] VALUES = { "trim", "scale", "loop" };
 
     /**
-     * Tests the time mode's JSON serialization
+     * Tests the time mode's JSON serialization.
      *
      * @throws JsonProcessingException If there is trouble serializing the time mode
      */

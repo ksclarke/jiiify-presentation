@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -20,51 +19,33 @@ import info.freelibrary.util.IllegalArgumentI18nException;
 import info.freelibrary.util.warnings.Eclipse;
 
 import info.freelibrary.iiif.presentation.v3.ImageContent;
-import info.freelibrary.iiif.presentation.v3.JsonParsingException;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.ids.UriUtils;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * An organization or person that contributed to providing the content of the resource.
  */
+@JsonInclude(Include.NON_EMPTY)
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.HOMEPAGE, JsonKeys.LOGO, JsonKeys.SEE_ALSO })
 public class Provider {
 
-    /**
-     * The provider's ID.
-     */
-    private URI myID;
+    /** The provider's ID. */
+    private String myID;
 
-    /**
-     * The provider's label.
-     */
+    /** The provider's label. */
     private Label myLabel;
 
-    /**
-     * The provider's homepages.
-     */
+    /** The provider's homepages. */
     private List<Homepage> myHomepages;
 
-    /**
-     * The provider's logos.
-     */
+    /** The provider's logos. */
     private List<ImageContent> myLogos;
 
-    /**
-     * The provider's seeAlso references.
-     */
+    /** The provider's seeAlso references. */
     private List<SeeAlso> mySeeAlsoRefs;
-
-    /**
-     * Creates a new resource provider from the supplied ID and label.
-     *
-     * @param aID An ID in string form
-     * @param aLabel A label in string form
-     */
-    public Provider(final String aID, final String aLabel) {
-        this(URI.create(aID), new Label(aLabel));
-    }
 
     /**
      * Creates a new resource provider from the supplied ID and label.
@@ -73,18 +54,7 @@ public class Provider {
      * @param aLabel A label
      */
     public Provider(final String aID, final Label aLabel) {
-        myID = URI.create(Objects.requireNonNull(aID));
-        myLabel = Objects.requireNonNull(aLabel);
-    }
-
-    /**
-     * Creates a new resource provider from the supplied ID and label.
-     *
-     * @param aID An ID
-     * @param aLabel A label
-     */
-    public Provider(final URI aID, final Label aLabel) {
-        myID = Objects.requireNonNull(aID);
+        myID = UriUtils.checkID(aID, false);
         myLabel = Objects.requireNonNull(aLabel);
     }
 
@@ -97,23 +67,8 @@ public class Provider {
      * @param aLogo A logo
      */
     public Provider(final String aID, final Label aLabel, final Homepage aHomepage, final ImageContent aLogo) {
-        myID = URI.create(Objects.requireNonNull(aID));
-        myLabel = Objects.requireNonNull(aLabel);
-        getLogos().add(Objects.requireNonNull(aLogo));
-        getHomepages().add(Objects.requireNonNull(aHomepage));
-    }
+        this(aID, aLabel);
 
-    /**
-     * Creates a new resource provider from the supplied ID and label.
-     *
-     * @param aID An ID
-     * @param aLabel A label
-     * @param aHomepage A homepage
-     * @param aLogo A logo
-     */
-    public Provider(final URI aID, final Label aLabel, final Homepage aHomepage, final ImageContent aLogo) {
-        myID = Objects.requireNonNull(aID);
-        myLabel = Objects.requireNonNull(aLabel);
         getLogos().add(Objects.requireNonNull(aLogo));
         getHomepages().add(Objects.requireNonNull(aHomepage));
     }
@@ -132,8 +87,9 @@ public class Provider {
      * @param aID An ID
      * @return The provider
      */
-    public Provider setID(final URI aID) {
-        myID = Objects.requireNonNull(aID);
+    @JsonSetter(JsonKeys.ID)
+    public Provider setID(final String aID) {
+        myID = UriUtils.checkID(aID, false);
         return this;
     }
 
@@ -143,7 +99,7 @@ public class Provider {
      * @return An ID
      */
     @JsonGetter(JsonKeys.ID)
-    public URI getID() {
+    public String getID() {
         return myID;
     }
 
@@ -178,7 +134,6 @@ public class Provider {
      * @return A descriptive label
      */
     @JsonGetter(JsonKeys.LABEL)
-    @JsonInclude(Include.NON_EMPTY)
     public Label getLabel() {
         return myLabel;
     }
@@ -192,18 +147,6 @@ public class Provider {
     @JsonSetter(JsonKeys.LABEL)
     public Provider setLabel(final Label aLabel) {
         myLabel = Objects.requireNonNull(aLabel);
-        return this;
-    }
-
-    /**
-     * Sets the descriptive label in string form.
-     *
-     * @param aLabel A descriptive label in string form
-     * @return The provider
-     */
-    @JsonIgnore
-    public Provider setLabel(final String aLabel) {
-        myLabel = new Label(aLabel);
         return this;
     }
 
@@ -241,7 +184,6 @@ public class Provider {
      * @return The provider's homepages
      */
     @JsonGetter(JsonKeys.HOMEPAGE)
-    @JsonInclude(Include.NON_EMPTY)
     public List<Homepage> getHomepages() {
         if (myHomepages == null) {
             myHomepages = new ArrayList<>();
@@ -285,7 +227,6 @@ public class Provider {
      * @return The provider's logos
      */
     @JsonGetter(JsonKeys.LOGO)
-    @JsonInclude(Include.NON_EMPTY)
     public List<ImageContent> getLogos() {
         if (myLogos == null) {
             myLogos = new ArrayList<>();
@@ -300,7 +241,6 @@ public class Provider {
      * @return The see also reference(s)
      */
     @JsonGetter(JsonKeys.SEE_ALSO)
-    @JsonInclude(Include.NON_EMPTY)
     public List<SeeAlso> getSeeAlsoRefs() {
         if (mySeeAlsoRefs == null) {
             mySeeAlsoRefs = new ArrayList<>();
@@ -382,8 +322,9 @@ public class Provider {
      *
      * @param aJsonString A provider in its JSON form
      * @return A provider
+     * @throws JsonParsingException If the supplied JSON cannot be parsed into a Provider object
      */
-    public static Provider from(final String aJsonString) {
+    static Provider fromJSON(final String aJsonString) {
         try {
             return JSON.getReader(Provider.class).readValue(aJsonString);
         } catch (final JsonProcessingException details) {

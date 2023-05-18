@@ -29,6 +29,7 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public class RubyExamplesIT extends AbstractCookbookTest {
 
+    /** The test logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(RubyExamplesIT.class, MessageCodes.BUNDLE);
 
     /**

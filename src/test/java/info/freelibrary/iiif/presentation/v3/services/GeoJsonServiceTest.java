@@ -3,7 +3,6 @@ package info.freelibrary.iiif.presentation.v3.services;
 
 import static org.junit.Assert.assertEquals;
 
-import java.net.URI;
 import java.util.UUID;
 
 import org.junit.Before;
@@ -17,14 +16,14 @@ public class GeoJsonServiceTest {
     /**
      * The GeoJSON service ID.
      */
-    private URI myID;
+    private String myID;
 
     /**
      * Sets up the testing environment.
      */
     @Before
     public void setUp() {
-        myID = URI.create(UUID.randomUUID().toString());
+        myID = UUID.randomUUID().toString();
     }
 
     /**

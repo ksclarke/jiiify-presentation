@@ -2,7 +2,6 @@
 package info.freelibrary.iiif.presentation.v3.ids;
 
 import java.lang.reflect.InvocationTargetException;
-import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,34 +13,22 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public final class MinterFactory {
 
-    /**
-     * The minter name property.
-     */
+    /** The minter name property. */
     public static final String MINTER_NAME_PROPERTY = "jp.noid.minter";
 
-    /**
-     * The environmental property for the minter name.
-     */
+    /** The environmental property for the minter name. */
     public static final String ENV_MINTER_NAME = "JP_NOID_MINTER";
 
-    /**
-     * The default minter class' name.
-     */
+    /** The default minter class' name. */
     private static final String DEFAULT_MINTER_NAME = DefaultMinter.class.getName();
 
-    /**
-     * A map of minters.
-     */
-    private static final Map<URI, Minter> MINTERS = new HashMap<>();
+    /** A map of minters. */
+    private static final Map<String, Minter> MINTERS = new HashMap<>();
 
-    /**
-     * We keep an internal modifiable environmental map so we can modify it during testing.
-     */
+    /** We keep an internal modifiable environmental map so we can modify it during testing. */
     private static final Map<String, String> ENV_PROPERTIES;
 
-    /**
-     * The static map initializations.
-     */
+    // The static map initializations.
     static {
         ENV_PROPERTIES = new HashMap<>(); // MinterFactory map is modifiable
         ENV_PROPERTIES.putAll(System.getenv()); // System map is not modifiable
@@ -70,7 +57,7 @@ public final class MinterFactory {
      * @param aManifestID The ID of a manifest associated with the minter
      * @return The minter associated with the supplied manifest ID
      */
-    public static Minter getMinter(final URI aManifestID) {
+    public static Minter getMinter(final String aManifestID) {
         return MINTERS.getOrDefault(aManifestID, getNewMinter(aManifestID));
     }
 
@@ -97,6 +84,7 @@ public final class MinterFactory {
      *
      * @param aManifest The manifest associated with this minter
      * @return A new minter for manifest component IDs
+     * @throws MintingException If there is trouble retrieving the minter
      */
     private static Minter getNewMinter(final Manifest aManifest) {
         try {
@@ -115,11 +103,12 @@ public final class MinterFactory {
      *
      * @param aManifestID The ID of the manifest associated with this minter
      * @return A new minter for manifest component IDs
+     * @throws MintingException If there is trouble retrieving the minter
      */
-    private static Minter getNewMinter(final URI aManifestID) {
+    private static Minter getNewMinter(final String aManifestID) {
         try {
             final Class<?> clath = Class.forName(getMinterName());
-            final Class<?>[] args = { URI.class };
+            final Class<?>[] args = { String.class };
 
             return MINTERS.put(aManifestID, (Minter) clath.getDeclaredConstructor(args).newInstance(aManifestID));
         } catch (IllegalAccessException | ClassNotFoundException | InstantiationException | NoSuchMethodException |

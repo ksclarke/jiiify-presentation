@@ -6,6 +6,7 @@ module JiiifyPresentation0003_2
   require_relative '../../../target/jiiify-presentation-v3-' + ARGV[0] + '-uber.jar'
 
   include_package 'info.freelibrary.iiif.presentation.v3'
+  include_package 'info.freelibrary.iiif.presentation.v3.annotations'
   include_package 'info.freelibrary.iiif.presentation.v3.ids'
   include_package 'info.freelibrary.iiif.presentation.v3.properties'
 
@@ -22,7 +23,8 @@ module JiiifyPresentation0003_2
   anno = PaintingAnnotation.new(annoID, canvas)
 
   videoContent.setDuration(572.034)
-  annoPage.addAnnotations(anno.setBodies(videoContent).setTarget(canvasID))
+  target = Target.new(canvasID)
+  annoPage.addAnnotations(anno.setBody(videoContent).setTarget(target))
   manifest.setCanvases(canvas.setPaintingPages(annoPage))
 
   puts manifest.toString()

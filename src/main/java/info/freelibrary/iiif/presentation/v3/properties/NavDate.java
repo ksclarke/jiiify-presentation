@@ -19,9 +19,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  */
 public class NavDate {
 
-    /**
-     * The navDate's zoned datetime.
-     */
+    /** The navDate's zoned datetime. */
     private final String myZonedDateTime;
 
     /**
@@ -35,6 +33,11 @@ public class NavDate {
         myZonedDateTime = zdt.format(DateTimeFormatter.ISO_INSTANT);
     }
 
+    /**
+     * Creates a new navigation date from a string representation of a zoned date time.
+     *
+     * @param aZonedDateTime A string representation of a zoned date time
+     */
     private NavDate(final String aZonedDateTime) {
         myZonedDateTime = aZonedDateTime;
     }
@@ -50,7 +53,7 @@ public class NavDate {
     }
 
     /**
-     * Returns the navigation date in string form.
+     * Returns a string representation of the navigation date.
      *
      * @return A string representation of the navigation date
      */

@@ -1,123 +1,57 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
-import java.net.URI;
-import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import info.freelibrary.iiif.presentation.v3.JsonParsingException;
-import info.freelibrary.iiif.presentation.v3.MediaType;
 import info.freelibrary.iiif.presentation.v3.Service;
-import info.freelibrary.iiif.presentation.v3.utils.JSON;
+import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeDeserializer;
+import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeKeySerializer;
+import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeSerializer;
 
 /**
  * An abstract class for other services.
  *
  * @param <T> The type of other service
  */
+@JsonPropertyOrder({ JsonKeys.CONTEXT, JsonKeys.V2_ID, JsonKeys.ID, JsonKeys.V2_TYPE, JsonKeys.TYPE, JsonKeys.PROFILE,
+    JsonKeys.LABEL, JsonKeys.SERVICE })
+@JsonInclude(Include.NON_EMPTY)
 abstract class AbstractOtherService<T extends AbstractOtherService<T>> extends AbstractService<T> {
 
-    /**
-     * The type of other service.
-     */
-    private String myType;
-
-    /**
-     * This service's format.
-     */
+    /** This service's format. */
+    @JsonDeserialize(using = MediaTypeDeserializer.class)
+    @JsonProperty(JsonKeys.FORMAT)
     private MediaType myFormat;
 
     /**
-     * This service's profile.
-     */
-    private OtherService.Profile myProfile;
-
-    /**
-     * Creates a new unknown service.
-     */
-    protected AbstractOtherService() {
-        super();
-    }
-
-    /**
-     * Creates a service from the supplied ID.
+     * Creates a new unspecified service from the supplied ID and type.
      *
      * @param aID A service ID
+     * @param aType A service type
      */
-    protected AbstractOtherService(final String aID) {
-        super(aID);
+    protected AbstractOtherService(final String aID, final String aType) {
+        super(aID, aType);
     }
 
     /**
-     * Creates a service from the supplied ID.
+     * Creates a new unspecified service from the supplied ID, type, and profile.
      *
      * @param aID A service ID
-     */
-    protected AbstractOtherService(final URI aID) {
-        super(aID);
-    }
-
-    /**
-     * Gets the other service profile.
-     *
-     * @return The service
-     */
-    @JsonGetter(JsonKeys.PROFILE)
-    @JsonInclude(Include.NON_ABSENT)
-    public Optional<Service.Profile> getProfile() {
-        return Optional.ofNullable(myProfile);
-    }
-
-    /**
-     * Sets the other service profile.
-     *
+     * @param aType A service type
      * @param aProfile A service profile
-     * @return This service
      */
-    @JsonIgnore
-    public AbstractOtherService<T> setProfile(final OtherService.Profile aProfile) {
-        myProfile = aProfile;
-        return this;
-    }
-
-    /**
-     * Sets the other service profile in string form.
-     *
-     * @param aProfile A service profile
-     * @return This service
-     */
-    @JsonSetter(JsonKeys.PROFILE)
-    public abstract T setProfile(String aProfile);
-
-    /**
-     * Sets the other service's format from the supplied media-type.
-     *
-     * @param aFormat A format
-     * @return This service
-     */
-    public AbstractOtherService<T> setFormat(final MediaType aFormat) {
-        myFormat = aFormat;
-        return this;
-    }
-
-    /**
-     * Sets the other service's format.
-     *
-     * @param aFormat A format
-     * @return This service
-     */
-    @JsonSetter(JsonKeys.FORMAT)
-    public AbstractOtherService<T> setFormat(final String aFormat) {
-        MediaType.fromString(aFormat).ifPresentOrElse(format -> myFormat = format, () -> myFormat = null);
-        return this;
+    protected AbstractOtherService(final String aID, final String aType, final Service.Profile aProfile) {
+        super(aID, aType, aProfile);
     }
 
     /**
@@ -125,88 +59,21 @@ abstract class AbstractOtherService<T extends AbstractOtherService<T>> extends A
      *
      * @return The service's media-type
      */
-    @JsonIgnore
-    public Optional<MediaType> getFormatMediaType() {
+    @JsonInclude(Include.NON_EMPTY)
+    @JsonSerialize(contentUsing = MediaTypeSerializer.class, keyUsing = MediaTypeKeySerializer.class)
+    protected Optional<MediaType> getFormat() {
         return Optional.ofNullable(myFormat);
     }
 
     /**
-     * Gets the other service format.
+     * Sets the other service's format from the supplied media-type.
      *
-     * @return The service's format
+     * @param aFormat A format
+     * @return This service
      */
-    @JsonGetter(JsonKeys.FORMAT)
-    public String getFormat() {
-        return myFormat != null ? myFormat.name() : null;
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.TYPE)
-    public AbstractOtherService<T> setType(final String aType) {
-        myType = aType;
+    protected AbstractOtherService<T> setFormat(final MediaType aFormat) {
+        myFormat = Objects.requireNonNull(aFormat);
         return this;
     }
 
-    @Override
-    @JsonGetter(JsonKeys.TYPE)
-    @JsonInclude(Include.NON_EMPTY)
-    public String getType() {
-        return myType;
-    }
-
-    @Override
-    public String toString() {
-        try {
-            return JSON.getWriter().writeValueAsString(toJsonValue());
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details);
-        }
-    }
-
-    /**
-     * Transforms an "other" service to a map for JSON serialization.
-     *
-     * @return A map form of the other service
-     */
-    protected abstract Map<String, Object> toJsonValue();
-
-    /**
-     * An other service profile.
-     */
-    public static class Profile implements OtherService.Profile {
-
-        /**
-         * The string representation of the OtherService profile.
-         */
-        private final String myProfile;
-
-        /**
-         * Creates a profile from the supplied string.
-         *
-         * @param aProfile A profile string
-         */
-        Profile(final String aProfile) {
-            myProfile = aProfile;
-        }
-
-        @Override
-        public String string() {
-            return myProfile;
-        }
-
-        @Override
-        public URI uri() {
-            return URI.create(myProfile);
-        }
-
-        /**
-         * Creates a profile from the supplied string.
-         *
-         * @param aProfile A string form of a service profile
-         * @return The OtherService profile for the supplied string value
-         */
-        public static Profile fromString(final String aProfile) {
-            return new Profile(aProfile);
-        }
-    }
 }

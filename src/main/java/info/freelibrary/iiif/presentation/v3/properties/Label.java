@@ -37,7 +37,7 @@ public class Label extends I18nProperty<Label> {
     }
 
     /**
-     * Create a label from a language tag and a string value. // FIXME: test this compared to above and create others
+     * Create a label from a language tag and a string value.
      *
      * @param aLangTag A language tag
      * @param aValue A string value

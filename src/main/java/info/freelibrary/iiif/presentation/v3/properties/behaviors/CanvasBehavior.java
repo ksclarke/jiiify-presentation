@@ -1,58 +1,40 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.behaviors;
 
+import java.util.Optional;
+
 import com.fasterxml.jackson.annotation.JsonValue;
 
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-
 import info.freelibrary.iiif.presentation.v3.Canvas;
-import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * The behaviors attributable to {@link Canvas}es.
  */
 public enum CanvasBehavior implements Behavior {
 
-    /**
-     * A auto-advance behavior on a canvas.
-     */
-    AUTO_ADVANCE(BehaviorConstants.AUTO_ADVANCE), //
+    /** A auto-advance behavior on a canvas. */
+    AUTO_ADVANCE(BehaviorConstants.AUTO_ADVANCE),
 
-    /**
-     * A no-auto-advance behavior on a canvas.
-     */
-    NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE), //
+    /** A no-auto-advance behavior on a canvas. */
+    NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE),
 
-    /**
-     * A facing-pages behavior on a canvas.
-     */
-    FACING_PAGES(BehaviorConstants.FACING_PAGES), //
+    /** A facing-pages behavior on a canvas. */
+    FACING_PAGES(BehaviorConstants.FACING_PAGES),
 
-    /**
-     * A non-paged behavior on a canvas.
-     */
+    /** A non-paged behavior on a canvas. */
     NON_PAGED(BehaviorConstants.NON_PAGED);
 
-    /**
-     * The CanvasBehavior logger.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(CanvasBehavior.class, MessageCodes.BUNDLE);
+    /** The canvas behavior label. */
+    private final String myLabel;
 
     /**
-     * The value of CanvasBehavior.
-     */
-    private final String myValue;
-
-    /**
-     * Creates a new CanvasBehavior from the supplied behavior in string form.
+     * Creates a new canvas behavior from the supplied string.
      *
-     * @param aBehavior A canvas behavior in string form
+     * @param aBehavior A canvas behavior
      */
     CanvasBehavior(final String aBehavior) {
-        myValue = aBehavior;
+        myLabel = aBehavior;
     }
 
     /**
@@ -63,23 +45,32 @@ public enum CanvasBehavior implements Behavior {
     @Override
     @JsonValue
     public String toString() {
-        return myValue;
+        return myLabel;
     }
 
     /**
-     * Maps a behavior string to an enum constant of this type.
+     * Gets the enumeration value's label.
      *
-     * @param aBehavior A behavior string
-     * @return A canvas behavior
-     * @throws IllegalArgumentException If the behavior string doesn't correspond to a canvas behavior
+     * @return The enumeration value's label
      */
-    public static CanvasBehavior fromString(final String aBehavior) {
+    @Override
+    public String label() {
+        return myLabel;
+    }
+
+    /**
+     * Returns an enumeration constant from a behavior label.
+     *
+     * @param aBehavior A behavior label
+     * @return A canvas behavior
+     */
+    public static Optional<CanvasBehavior> fromLabel(final String aBehavior) {
         for (final CanvasBehavior behavior : values()) {
             if (behavior.toString().equalsIgnoreCase(aBehavior)) {
-                return behavior;
+                return Optional.of(behavior);
             }
         }
 
-        throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_010, aBehavior, ResourceTypes.CANVAS));
+        return Optional.empty();
     }
 }

@@ -1,19 +1,19 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import java.net.URI;
 import java.util.Objects;
 import java.util.Optional;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.Eclipse;
 
-import info.freelibrary.iiif.presentation.v3.JsonParsingException;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * A containing resource that includes the resource that has the <code>partOf</code> property. For example, the
@@ -21,6 +21,7 @@ import info.freelibrary.iiif.presentation.v3.utils.JSON;
  * discovery of further relevant information. Similarly, a Manifest can reference a containing Collection using
  * <code>partOf</code> to aid in navigation.
  */
+@JsonInclude(Include.NON_EMPTY)
 public class PartOf extends AbstractLinkProperty<PartOf> {
 
     /**
@@ -29,18 +30,8 @@ public class PartOf extends AbstractLinkProperty<PartOf> {
      * @param aID A partOf ID
      * @param aType A partOf type
      */
-    public PartOf(final URI aID, final String aType) {
-        super(aID, aType);
-    }
-
-    /**
-     * Creates a partOf reference.
-     *
-     * @param aID A partOf ID in string form
-     * @param aType A partOf type
-     */
     public PartOf(final String aID, final String aType) {
-        this(URI.create(aID), aType);
+        super(aID, aType);
     }
 
     /**
@@ -54,23 +45,13 @@ public class PartOf extends AbstractLinkProperty<PartOf> {
     /**
      * Sets the ID.
      *
-     * @param aID An ID
-     * @return The partOf
-     */
-    @Override
-    public PartOf setID(final URI aID) {
-        return (PartOf) super.setID(aID);
-    }
-
-    /**
-     * Sets the ID from the supplied string.
-     *
-     * @param aID The ID in string form
+     * @param aID The ID
      * @return The resource whose ID is being set
      */
-    @JsonIgnore
+    @Override
+    @JsonSetter(JsonKeys.ID)
     public PartOf setID(final String aID) {
-        return (PartOf) super.setID(URI.create(aID));
+        return (PartOf) super.setID(aID);
     }
 
     /**
@@ -89,9 +70,13 @@ public class PartOf extends AbstractLinkProperty<PartOf> {
      *
      * @return An optional descriptive label
      */
-    @JsonInclude(Include.NON_ABSENT)
     public Optional<Label> getLabel() {
         return Optional.ofNullable(super.getNullableLabel());
+    }
+
+    @Override
+    public Optional<MediaType> getFormat() {
+        return super.getFormat();
     }
 
     /**
@@ -103,17 +88,6 @@ public class PartOf extends AbstractLinkProperty<PartOf> {
     @Override
     public PartOf setLabel(final Label aLabel) {
         return (PartOf) super.setLabel(aLabel);
-    }
-
-    /**
-     * Sets the label of the PartOf.
-     *
-     * @param aLabel A PartOf's label
-     * @return The PartOf
-     */
-    @JsonIgnore
-    public PartOf setLabel(final String aLabel) {
-        return (PartOf) super.setLabel(new Label(aLabel));
     }
 
     @Override
@@ -138,11 +112,11 @@ public class PartOf extends AbstractLinkProperty<PartOf> {
     /**
      * Returns a PartOf from its JSON representation.
      *
-     * @param aJsonString A PartOf in string form
+     * @param aJsonString A JSON serialization of a PartOf
      * @throws JsonParsingException If the supplied JSON string cannot be successfully parsed
      * @return This PartOf
      */
-    public static PartOf from(final String aJsonString) {
+    static PartOf fromJSON(final String aJsonString) {
         try {
             return JSON.getReader(PartOf.class).readValue(aJsonString);
         } catch (final JsonProcessingException details) {

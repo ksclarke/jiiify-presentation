@@ -15,7 +15,7 @@ import info.freelibrary.iiif.presentation.v3.utils.TestConstants;
  */
 public class ResourceBehaviorTest {
 
-    /* The expected values. */
+    /** The expected values. */
     private static final String[] VALUES = { BehaviorConstants.HIDDEN };
 
     /**
@@ -38,11 +38,11 @@ public class ResourceBehaviorTest {
     }
 
     /**
-     * Tests the fromString() method.
+     * Tests the fromLabel() method.
      */
     @Test
-    public final void fromString() {
-        assertEquals(ResourceBehavior.HIDDEN, ResourceBehavior.fromString(BehaviorConstants.HIDDEN));
+    public final void testFromLabel() {
+        assertEquals(ResourceBehavior.HIDDEN, ResourceBehavior.fromLabel(BehaviorConstants.HIDDEN).get());
     }
 
     /**

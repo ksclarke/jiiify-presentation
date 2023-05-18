@@ -1,11 +1,12 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
-import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import info.freelibrary.iiif.presentation.v3.Service;
-import info.freelibrary.iiif.presentation.v3.services.image.ImageAPI;
+import info.freelibrary.iiif.presentation.v3.services.image.Format;
+import info.freelibrary.iiif.presentation.v3.services.image.Quality;
 import info.freelibrary.iiif.presentation.v3.services.image.Size;
 import info.freelibrary.iiif.presentation.v3.services.image.Tile;
 
@@ -22,7 +23,7 @@ public interface ImageService<T extends ImageService<T>> extends Service<T> {
      * @param aFormatList A list of extra formats
      * @return This image service
      */
-    T setExtraFormats(List<ImageAPI.ImageFormat> aFormatList);
+    T setExtraFormats(List<Format> aFormatList);
 
     /**
      * Sets the image service's extra formats.
@@ -30,14 +31,14 @@ public interface ImageService<T extends ImageService<T>> extends Service<T> {
      * @param aFormatArray A list of extra formats
      * @return This image service
      */
-    T setExtraFormats(ImageAPI.ImageFormat... aFormatArray);
+    T setExtraFormats(Format... aFormatArray);
 
     /**
      * Gets the image service's extra formats.
      *
      * @return The list of extra formats
      */
-    List<ImageAPI.ImageFormat> getExtraFormats();
+    List<Format> getExtraFormats();
 
     /**
      * Sets the image service's extra qualities.
@@ -45,7 +46,7 @@ public interface ImageService<T extends ImageService<T>> extends Service<T> {
      * @param aQualityList A list of extra qualities
      * @return This image service
      */
-    T setExtraQualities(List<ImageAPI.ImageQuality> aQualityList);
+    T setExtraQualities(List<Quality> aQualityList);
 
     /**
      * Sets the image service's extra qualities.
@@ -53,29 +54,29 @@ public interface ImageService<T extends ImageService<T>> extends Service<T> {
      * @param aQualityArray An array of extra qualities
      * @return This image service
      */
-    T setExtraQualities(ImageAPI.ImageQuality... aQualityArray);
+    T setExtraQualities(Quality... aQualityArray);
 
     /**
      * Gets the image service's extra qualities.
      *
      * @return The list of extra qualities
      */
-    List<ImageAPI.ImageFormat> getExtraQualities();
+    List<Quality> getExtraQualities();
 
     /**
      * Gets the protocol for an Image API service.
      *
      * @return The image service protocol
      */
-    URI getProtocol();
+    Optional<String> getProtocol();
 
     /**
      * Sets whether the protocol should be included in the output JSON.
      *
-     * @param aProtocolFlag A protocol flag
+     * @param aSetValue Whether the protocol should be serialized
      * @return The image service
      */
-    T setProtocol(boolean aProtocolFlag);
+    T setProtocol(boolean aSetValue);
 
     /**
      * Sets the service's tiles from a list of tiles.
@@ -122,26 +123,5 @@ public interface ImageService<T extends ImageService<T>> extends Service<T> {
      * @return A list of sizes supported by the service
      */
     List<Size> getSizes();
-
-    /**
-     * Sets the image service profile.
-     *
-     * @param aProfile A image service profile
-     * @return This image service
-     */
-    T setProfile(ImageService.Profile aProfile);
-
-    /**
-     * The interface for {@link ImageService} profiles.
-     */
-    interface Profile extends Service.Profile {
-
-        @Override
-        String string();
-
-        @Override
-        URI uri();
-
-    }
 
 }

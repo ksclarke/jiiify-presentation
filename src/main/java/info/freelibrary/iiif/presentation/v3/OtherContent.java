@@ -1,22 +1,28 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
 import java.util.Map;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import info.freelibrary.util.warnings.PMD;
 
+import info.freelibrary.iiif.presentation.v3.ids.UriUtils;
+import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeKeySerializer;
+import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeSerializer;
 
 /**
  * A content resource for other types of resources than those described by the
@@ -24,12 +30,13 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  * class is always JSON. Look in the {@link JsonNode} if the wrapped context has a format in its JSON representation.
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE })
-public class OtherContent implements AnnotationBody<OtherContent>, ContentResource<OtherContent> {
+@JsonInclude(Include.NON_EMPTY)
+public class OtherContent implements ContentResource<OtherContent> {
 
     /**
      * The ID for other content.
      */
-    private URI myID;
+    private String myID;
 
     /**
      * The type for other content.
@@ -51,42 +58,29 @@ public class OtherContent implements AnnotationBody<OtherContent>, ContentResour
     }
 
     @Override
-    @JsonIgnore
+    @JsonInclude(Include.NON_EMPTY)
+    @JsonSerialize(contentUsing = MediaTypeSerializer.class, keyUsing = MediaTypeKeySerializer.class)
     public Optional<MediaType> getFormat() {
         return Optional.of(MediaType.APPLICATION_JSON);
     }
 
     @Override
-    @JsonIgnore
+    @JsonSetter(JsonKeys.FORMAT)
     public OtherContent setFormat(final MediaType aMediaType) {
         // Our other content is always JSON because it's just a wrapper for JSON
         return this;
     }
 
     @Override
-    @JsonSetter(JsonKeys.FORMAT)
-    public OtherContent setFormat(final String aMediaType) {
-        // Our other content is always JSON because it's just a wrapper for JSON
-        return this;
-    }
-
-    @Override
     @JsonGetter(JsonKeys.ID)
-    public URI getID() {
+    public String getID() {
         return myID;
     }
 
     @Override
-    @JsonIgnore
+    @JsonSetter(JsonKeys.ID)
     public OtherContent setID(final String aID) {
-        myID = URI.create(aID);
-        return this;
-    }
-
-    @Override
-    @JsonIgnore
-    public OtherContent setID(final URI aID) {
-        myID = aID;
+        myID = UriUtils.checkID(aID, false);
         return this;
     }
 
@@ -136,7 +130,7 @@ public class OtherContent implements AnnotationBody<OtherContent>, ContentResour
     /**
      * Gets the format as a string for Jackson's deserialization process.
      *
-     * @return The format in string form
+     * @return The format
      */
     @JsonGetter(JsonKeys.FORMAT)
     private Optional<String> getFormatAsString() {
@@ -154,7 +148,7 @@ public class OtherContent implements AnnotationBody<OtherContent>, ContentResour
         final JsonNode typeNode = aJsonNode.get(JsonKeys.TYPE);
 
         if (idNode != null && idNode.isTextual()) {
-            myID = URI.create(idNode.textValue());
+            myID = UriUtils.checkID(idNode.textValue(), true);
         }
 
         if (typeNode != null && typeNode.isTextual()) {

@@ -1,5 +1,5 @@
 {
-  "id": "MY_RANGE_ID",
+  "id": "https://example.org/range-1",
   "type": "Range",
   "label": {
     "none": [
@@ -8,9 +8,9 @@
   },
   "items": [
     {
-      "id": "MY_RESOURCE_ID",
+      "id": "https://example.org/specific-resource-1",
       "type": "SpecificResource",
-      "source": "MY_RESOURCE_SOURCE",
+      "source": "https://example.org/source-1",
       "selector": {
         "type": "AudioContentSelector"
       }

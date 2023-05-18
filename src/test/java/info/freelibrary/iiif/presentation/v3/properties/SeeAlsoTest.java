@@ -3,14 +3,12 @@ package info.freelibrary.iiif.presentation.v3.properties;
 
 import static org.junit.Assert.assertEquals;
 
-import java.net.URI;
 import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import info.freelibrary.iiif.presentation.v3.AbstractTest;
-import info.freelibrary.iiif.presentation.v3.MediaType;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 
 /**
@@ -18,10 +16,13 @@ import info.freelibrary.iiif.presentation.v3.ResourceTypes;
  */
 public class SeeAlsoTest extends AbstractTest {
 
+    /** A test format. */
     private static final String JPEG_FORMAT = "image/jpeg";
 
+    /** A test mime-type. */
     private static final MediaType MIME_TYPE = MediaType.fromString(JPEG_FORMAT).get();
 
+    /** A test ID. */
     private String myID;
 
     /**
@@ -39,7 +40,7 @@ public class SeeAlsoTest extends AbstractTest {
     public void testSeeAlsoStringConstructor() {
         final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.DATASET);
 
-        assertEquals(URI.create(myID), seeAlso.getID());
+        assertEquals(myID, seeAlso.getID());
         assertEquals(ResourceTypes.DATASET, seeAlso.getType());
     }
 
@@ -48,9 +49,9 @@ public class SeeAlsoTest extends AbstractTest {
      */
     @Test
     public void testSeeAlsoURIConstructor() {
-        final SeeAlso seeAlso = new SeeAlso(URI.create(myID), ResourceTypes.TEXT);
+        final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.TEXT);
 
-        assertEquals(URI.create(myID), seeAlso.getID());
+        assertEquals(myID, seeAlso.getID());
         assertEquals(ResourceTypes.TEXT, seeAlso.getType());
     }
 
@@ -59,10 +60,10 @@ public class SeeAlsoTest extends AbstractTest {
      */
     @Test
     public void testSetGetProfile() {
-        final SeeAlso seeAlso = new SeeAlso(URI.create(myID), ResourceTypes.TEXT);
+        final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.TEXT);
         final String url = myLoremIpsum.getUrl();
 
-        assertEquals(URI.create(url), seeAlso.setProfile(url).getProfile().get());
+        assertEquals(url, seeAlso.setProfile(url).getProfile().get());
     }
 
     /**
@@ -70,8 +71,8 @@ public class SeeAlsoTest extends AbstractTest {
      */
     @Test
     public void testSetGetProfileURI() {
-        final SeeAlso seeAlso = new SeeAlso(URI.create(myID), ResourceTypes.TEXT);
-        final URI uri = URI.create(myLoremIpsum.getUrl());
+        final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.TEXT);
+        final String uri = myLoremIpsum.getUrl();
 
         assertEquals(uri, seeAlso.setProfile(uri).getProfile().get());
     }
@@ -122,7 +123,7 @@ public class SeeAlsoTest extends AbstractTest {
         final String text = myLoremIpsum.getWords(4);
         final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.DATASET);
 
-        assertEquals(Optional.of(new Label(text)), seeAlso.setLabel(text).getLabel());
+        assertEquals(Optional.of(new Label(text)), seeAlso.setLabel(new Label(text)).getLabel());
     }
 
     /**

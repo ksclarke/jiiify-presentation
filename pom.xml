@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>jiiify-presentation-v3</artifactId>
   <packaging>jar</packaging>
   <version>${revision}</version>
+
   <name>jiiify-presentation</name>
   <description>A Java Library for version 3 of the IIIF Presentation API</description>
   <url>http://projects.freelibrary.info/jiiify-presentation-v3</url>
@@ -35,14 +39,15 @@
       <email>ksclarke@ksclarke.io</email>
       <timezone>America/New_York</timezone>
     </developer>
+    <!-- Also https://github.com/ksclarke/jiiify-presentation/graphs/contributors -->
   </developers>
 
   <properties>
     <revision>0.0.0-SNAPSHOT</revision>
-
     <jackson.version>2.13.4</jackson.version>
     <jackson.databind.version>2.13.4.2</jackson.databind.version>
-    <freelib.utils.version>3.3.0</freelib.utils.version>
+    <throwing.function.version>1.5.1</throwing.function.version>
+    <freelib.utils.version>4.0.1</freelib.utils.version>
     <jsoup.version>1.15.3</jsoup.version>
     <combinatorics.version>3.3.0</combinatorics.version>
     <media.fragments.uri.version>2.4</media.fragments.uri.version>
@@ -91,6 +96,11 @@
       <version>${jackson.version}</version>
     </dependency>
     <dependency>
+      <groupId>com.pivovarit</groupId>
+      <artifactId>throwing-function</artifactId>
+      <version>${throwing.function.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.jsoup</groupId>
       <artifactId>jsoup</artifactId>
       <version>${jsoup.version}</version>
@@ -105,6 +115,7 @@
       <artifactId>combinatoricslib3</artifactId>
       <version>${combinatorics.version}</version>
     </dependency>
+
     <!-- Below dependencies are only used for testing -->
     <dependency>
       <groupId>ch.qos.logback</groupId>
@@ -158,14 +169,17 @@
         <filtering>true</filtering>
       </testResource>
     </testResources>
+
     <plugins>
       <!-- Generate our MessageCodes class from the messages resource file -->
       <plugin>
         <groupId>info.freelibrary</groupId>
         <artifactId>freelib-maven-plugins</artifactId>
+
         <configuration>
           <generatedSourcesDirectory>${project.basedir}/src/main/generated</generatedSourcesDirectory>
         </configuration>
+
         <executions>
           <execution>
             <id>generate-i18n-codes</id>
@@ -181,46 +195,54 @@
               <goal>generate-mediatype</goal>
             </goals>
             <configuration>
-              <mediaTypePackage>info.freelibrary.iiif.presentation.v3</mediaTypePackage>
+              <mediaTypePackage>info.freelibrary.iiif.presentation.v3.properties</mediaTypePackage>
             </configuration>
           </execution>
         </executions>
       </plugin>
+
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
-          <stylesheetfile>stylesheet.css</stylesheetfile>
           <links>
-            <link>https://javadoc.io/doc/info.freelibrary/freelib-utils/${freelib.utils.version}/apidocs</link>
+            <link>
+              https://javadoc.io/doc/info.freelibrary/freelib-utils/${freelib.utils.version}/apidocs</link>
           </links>
-          <quiet>true</quiet>
         </configuration>
       </plugin>
+
       <plugin>
         <artifactId>maven-pmd-plugin</artifactId>
       </plugin>
+
       <plugin>
         <artifactId>maven-checkstyle-plugin</artifactId>
       </plugin>
+
       <plugin>
         <artifactId>maven-enforcer-plugin</artifactId>
       </plugin>
+
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
       </plugin>
+
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
       </plugin>
+
       <plugin>
         <groupId>net.revelc.code.formatter</groupId>
         <artifactId>formatter-maven-plugin</artifactId>
       </plugin>
+
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <argLine>${jacoco.agent.arg}</argLine>
         </configuration>
       </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
@@ -228,9 +250,10 @@
           <systemPropertyVariables>
             <jiiify.version>${project.version}</jiiify.version>
           </systemPropertyVariables>
-          <argLine>${jacoco.agent.arg}</argLine>
+          <argLine>--add-opens java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED</argLine>
         </configuration>
       </plugin>
+
       <!-- Create an uber jar for use with JRuby, Jython, etc. -->
       <plugin>
         <groupId>io.reactiverse</groupId>
@@ -283,7 +306,7 @@
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>8.0.0</version>
+    <version>8.0.2</version>
   </parent>
 
 </project>

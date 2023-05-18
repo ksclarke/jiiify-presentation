@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static info.freelibrary.util.Constants.EMPTY;
+
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -19,7 +21,7 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 /**
  * Deserializes a Range's Item.
  */
-class RangeItemDeserializer extends StdDeserializer<Range.Item> {
+public class RangeItemDeserializer extends StdDeserializer<Range.Item> {
 
     /**
      * The logger used by the RangeItemDeserializer.
@@ -55,13 +57,13 @@ class RangeItemDeserializer extends StdDeserializer<Range.Item> {
             throws IOException, JsonProcessingException {
         final TreeNode treeNode = aParser.getCodec().readTree(aParser);
 
-        switch (treeNode.get(JsonKeys.TYPE).toString().replace("\"", "")) {
+        switch (treeNode.get(JsonKeys.TYPE).toString().replace("\"", EMPTY)) {
             case ResourceTypes.RANGE:
-                return new Range.Item(Range.from(treeNode.toString()));
+                return new Range.Item(Range.fromJSON(treeNode.toString()));
             case ResourceTypes.CANVAS:
-                return new Range.Item(Canvas.from(treeNode.toString()), true); // always embed whatever is there
+                return new Range.Item(Canvas.fromJSON(treeNode.toString()), true); // always embed whatever is there
             case ResourceTypes.SPECIFIC_RESOURCE:
-                return new Range.Item(SpecificResource.from(treeNode.toString()));
+                return new Range.Item(SpecificResource.fromJSON(treeNode.toString()));
             default:
                 throw new JsonParseException(aParser, LOGGER.getMessage(MessageCodes.JPA_041, treeNode.toString()));
         }

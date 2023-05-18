@@ -14,22 +14,23 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.Collection;
-import info.freelibrary.iiif.presentation.v3.JsonParsingException;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.TestConstants;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * A test of CollectionBehavior.
  */
 public class CollectionBehaviorTest {
 
-    /* The expected values */
+    /** The expected behavior values. */
     private static final String[] VALUES = { BehaviorConstants.AUTO_ADVANCE, BehaviorConstants.NO_AUTO_ADVANCE,
         BehaviorConstants.INDIVIDUALS, BehaviorConstants.CONTINUOUS, BehaviorConstants.REPEAT,
         BehaviorConstants.NO_REPEAT, BehaviorConstants.PAGED, BehaviorConstants.UNORDERED, BehaviorConstants.MULTI_PART,
         BehaviorConstants.TOGETHER };
 
+    /** A test fixture. */
     private static final String TEST_MANIFEST =
             new File(TestUtils.TEST_DIR, "collection-disjoint-collection-behavior.json").getAbsolutePath();
 
@@ -51,7 +52,7 @@ public class CollectionBehaviorTest {
      */
     @Test(expected = JsonParsingException.class)
     public final void testJsonDeserializationDisjoint() throws IOException {
-        Collection.from(StringUtils.read(new File(TEST_MANIFEST), StandardCharsets.UTF_8));
+        Collection.fromJSON(StringUtils.read(new File(TEST_MANIFEST), StandardCharsets.UTF_8));
     }
 
     /**
@@ -63,11 +64,11 @@ public class CollectionBehaviorTest {
     }
 
     /**
-     * Tests the fromString() method.
+     * Tests the fromLabel() method.
      */
     @Test
-    public final void fromString() {
-        assertEquals(CollectionBehavior.TOGETHER, CollectionBehavior.fromString(BehaviorConstants.TOGETHER));
+    public final void testFromLabel() {
+        assertEquals(CollectionBehavior.TOGETHER, CollectionBehavior.fromLabel(BehaviorConstants.TOGETHER).get());
     }
 
     /**

@@ -8,6 +8,8 @@ import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import info.freelibrary.iiif.presentation.v3.utils.Labeled;
+
 /**
  * An interface for service implementations.
  *
@@ -21,38 +23,7 @@ public interface Service<T extends Service<T>> {
      *
      * @return The ID
      */
-    URI getID();
-
-    /**
-     * Sets the service ID.
-     *
-     * @param aID The service ID
-     * @return The service
-     */
-    T setID(URI aID);
-
-    /**
-     * Sets the service ID in string form.
-     *
-     * @param aID The service ID in string form
-     * @return The service
-     */
-    T setID(String aID);
-
-    /**
-     * Gets the service type.
-     *
-     * @return The service type
-     */
-    String getType();
-
-    /**
-     * Sets the service type.
-     *
-     * @param aType A service type
-     * @return The service
-     */
-    T setType(String aType);
+    String getID();
 
     /**
      * Gets an optional service profile.
@@ -62,12 +33,26 @@ public interface Service<T extends Service<T>> {
     Optional<Service.Profile> getProfile();
 
     /**
-     * Sets the service profile from a string value.
+     * Gets other services that are related to this service.
      *
-     * @param aProfile A service profile
-     * @return The service.
+     * @return A list of services
      */
-    T setProfile(String aProfile);
+    List<Service<?>> getServices();
+
+    /**
+     * Gets the service type.
+     *
+     * @return The service type
+     */
+    String getType();
+
+    /**
+     * Sets the service ID.
+     *
+     * @param aID The service ID
+     * @return The service
+     */
+    T setID(String aID);
 
     /**
      * Sets other services that are related to this service.
@@ -86,24 +71,34 @@ public interface Service<T extends Service<T>> {
     T setServices(Service<?>... aServiceArray);
 
     /**
-     * Gets other services that are related to this service.
+     * Sets the service type.
      *
-     * @return A list of services
+     * @param aType A service type
+     * @return The service
      */
-    List<Service<?>> getServices();
+    T setType(String aType);
 
     /**
      * An interface for {@link Service} profiles.
      */
-    interface Profile {
+    interface Profile extends Labeled {
+
+        /**
+         * Returns the profile label.
+         *
+         * @return The label
+         */
+        @Override
+        @JsonValue
+        String label();
 
         /**
          * Returns the string form of the profile.
          *
          * @return The string form of the profile
          */
-        @JsonValue
-        String string();
+        @Override
+        String toString();
 
         /**
          * Returns the URI form of the profile.
@@ -111,6 +106,5 @@ public interface Service<T extends Service<T>> {
          * @return The URI form of the profile
          */
         URI uri();
-
     }
 }

@@ -2,11 +2,12 @@
 package info.freelibrary.iiif.presentation.v3;
 
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.UUID;
@@ -25,6 +26,7 @@ import info.freelibrary.iiif.presentation.v3.ids.MinterFactory;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.NavDate;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
+import info.freelibrary.iiif.presentation.v3.properties.behaviors.InvalidBehaviorException;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.RangeBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
@@ -35,19 +37,27 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  */
 public class RangeTest extends AbstractTest {
 
+    /** An HTTPS protocol constant. */
+    private static final String HTTPS = "https://";
+
+    /** A range pattern for IDs. */
     private static final String NOID_PATTERN = "/range-[a-z0-9]{4}";
 
+    /** A test label. */
     private static final String LABEL = "Test Label";
 
+    /** JSON representing a range item. */
     private static final String RANGE_ITEM_JSON;
 
+    /** JSON representing a canvas item. */
     private static final String CANVAS_ITEM_JSON;
 
+    /** JSON representing a canvas' items. */
     private static final String CANVAS_ITEMS_JSON;
 
+    /** JSON representing a specific resource item. */
     private static final String SPECIFIC_RESOURCE_ITEM_JSON;
 
-    // Read our test fixtures file.
     static {
         final File specificResourceJsonFile = new File("src/test/resources/json/range-specificresource.json");
         final File canvasArrayJsonFile = new File("src/test/resources/json/range-canvas.json");
@@ -69,11 +79,11 @@ public class RangeTest extends AbstractTest {
      */
     @Test
     public final void testRangeMinter() {
-        final URI id = URI.create(UUID.randomUUID().toString());
+        final String id = HTTPS + UUID.randomUUID().toString();
         final Minter minter = MinterFactory.getMinter(id);
         final Range range = new Range(minter);
 
-        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(range.getID().toString()).matches());
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(range.getID()).matches());
     }
 
     /**
@@ -81,24 +91,12 @@ public class RangeTest extends AbstractTest {
      */
     @Test
     public final void testRangeMinterLabel() {
-        final URI id = URI.create(UUID.randomUUID().toString());
+        final String id = HTTPS + UUID.randomUUID().toString();
         final Minter minter = MinterFactory.getMinter(id);
         final Label label = new Label(LABEL);
         final Range range = new Range(minter, label);
 
-        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(range.getID().toString()).matches());
-    }
-
-    /**
-     * Tests {@link Range#Range(Minter, String) Range}.
-     */
-    @Test
-    public final void testRangeMinterLabelAsString() {
-        final URI id = URI.create(UUID.randomUUID().toString());
-        final Minter minter = MinterFactory.getMinter(id);
-        final Range range = new Range(minter, LABEL);
-
-        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(range.getID().toString()).matches());
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(range.getID()).matches());
     }
 
     /**
@@ -120,35 +118,35 @@ public class RangeTest extends AbstractTest {
     }
 
     /**
-     * Tests the {@link Range#from(String) fromString} method.
+     * Tests the {@link Range#fromJSON(String) fromString} method.
      */
     @Test
     public void testFromStringRange() {
-        assertEquals(format(RANGE_ITEM_JSON), Range.from(RANGE_ITEM_JSON).toString());
+        assertEquals(format(RANGE_ITEM_JSON), Range.fromJSON(RANGE_ITEM_JSON).toString());
     }
 
     /**
-     * Tests the {@link Range#from(String) fromString} method.
+     * Tests the {@link Range#fromJSON(String) fromString} method.
      */
     @Test
     public void testFromStringCanvasArray() {
-        assertEquals(format(CANVAS_ITEMS_JSON), Range.from(CANVAS_ITEMS_JSON).toString());
+        assertEquals(format(CANVAS_ITEMS_JSON), Range.fromJSON(CANVAS_ITEMS_JSON).toString());
     }
 
     /**
-     * Tests the {@link Range#from(String) fromString} method.
+     * Tests the {@link Range#fromJSON(String) fromString} method.
      */
     @Test
     public void testFromStringCanvasRef() {
-        assertEquals(format(CANVAS_ITEM_JSON), Range.from(CANVAS_ITEM_JSON).toString());
+        assertEquals(format(CANVAS_ITEM_JSON), Range.fromJSON(CANVAS_ITEM_JSON).toString());
     }
 
     /**
-     * Tests the {@link Range#from(String) fromString} method.
+     * Tests the {@link Range#fromJSON(String) fromString} method.
      */
     @Test
     public void testFromStringSpecificResource() {
-        assertEquals(format(SPECIFIC_RESOURCE_ITEM_JSON), Range.from(SPECIFIC_RESOURCE_ITEM_JSON).toString());
+        assertEquals(format(SPECIFIC_RESOURCE_ITEM_JSON), Range.fromJSON(SPECIFIC_RESOURCE_ITEM_JSON).toString());
     }
 
     /**
@@ -157,7 +155,7 @@ public class RangeTest extends AbstractTest {
     @Test
     public void testRangeStringString() {
         final String id = getURL();
-        assertEquals(id, new Range(id, myLoremIpsum.getWords(4)).getID().toString());
+        assertEquals(id, new Range(id, new Label(myLoremIpsum.getWords(4))).getID().toString());
     }
 
     /**
@@ -165,8 +163,8 @@ public class RangeTest extends AbstractTest {
      */
     @Test
     public void testGetSetSupplementaryAnnotations() throws JsonProcessingException {
+        final SupplementaryAnnotations annos = new SupplementaryAnnotations(getURL());
         final Range range = new Range(getURL());
-        final SupplementaryAnnotations annos = new SupplementaryAnnotations(getID());
         final JsonNode supplementary;
         final JsonNode json;
 
@@ -183,7 +181,7 @@ public class RangeTest extends AbstractTest {
     @Test
     public void testRangeURILabel() {
         final String id = getURL();
-        assertEquals(URI.create(id), new Range(URI.create(id), new Label(myLoremIpsum.getWords(4))).getID());
+        assertEquals(id, new Range(id, new Label(myLoremIpsum.getWords(4))).getID());
     }
 
     /**
@@ -209,7 +207,7 @@ public class RangeTest extends AbstractTest {
      */
     @Test
     public final void testSetBehaviors() {
-        final RangeBehavior[] behaviors = new RangeBehavior[] { RangeBehavior.AUTO_ADVANCE, RangeBehavior.INDIVIDUALS };
+        final RangeBehavior[] behaviors = { RangeBehavior.AUTO_ADVANCE, RangeBehavior.INDIVIDUALS };
 
         assertEquals(2, getRange().setBehaviors(behaviors).getBehaviors().size());
     }
@@ -217,43 +215,37 @@ public class RangeTest extends AbstractTest {
     /**
      * Test setting disallowed range behaviors.
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = InvalidBehaviorException.class)
     public final void testSetDisallowedBehaviors() {
         getRange().setBehaviors(RangeBehavior.AUTO_ADVANCE, ManifestBehavior.AUTO_ADVANCE);
     }
 
     /**
-     * Test adding range behaviors.
-     */
-    @Test
-    public final void testAddBehaviors() {
-        assertEquals(1, getRange().addBehaviors(RangeBehavior.AUTO_ADVANCE).getBehaviors().size());
-    }
-
-    /**
-     * Test adding disallowed range behaviors.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public final void testAddDisallowedBehaviors() {
-        getRange().addBehaviors(RangeBehavior.AUTO_ADVANCE, ManifestBehavior.INDIVIDUALS);
-    }
-
-    /**
      * Tests round-tripping test fixture 0024.
      *
-     * @throws IOException
+     * @throws IOException If there is trouble reading from the test fixture
      */
     @Test
     public final void testFixture0024() throws IOException {
         final String json = StringUtils.read(new File("src/test/resources/fixtures/0024-book-4-toc.json"));
-        assertEquals(format(json), Manifest.from(json).toString());
+        assertEquals(format(json), Manifest.fromJSON(json).toString());
     }
 
+    /**
+     * Gets test range.
+     *
+     * @return A test range
+     */
     private Range getRange() {
-        return new Range(URI.create("MY_RANGE_ID"), new Label("My range label"));
+        return new Range("https://example.org/range-1", new Label("My range label"));
     }
 
+    /**
+     * Gets a test sub-range.
+     *
+     * @return A test sub-range
+     */
     private Range getSubRange() {
-        return new Range("MY_SUBRANGE_ID", "My subrange label");
+        return new Range("https://example.org/range-2", new Label("My subrange label"));
     }
 }

@@ -16,6 +16,7 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public class ViewingDirectionTest {
 
+    /** A test logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(ViewingDirection.class, MessageCodes.BUNDLE);
 
     /**
@@ -23,7 +24,7 @@ public class ViewingDirectionTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testIllegalArgumentExceptionOnFromString() {
-        ViewingDirection.fromString("SOME_BOGUS_VALUE");
+        ViewingDirection.fromLabel("SOME_BOGUS_VALUE");
         fail(LOGGER.getMessage(MessageCodes.JPA_018));
     }
 
@@ -33,7 +34,7 @@ public class ViewingDirectionTest {
     @Test
     public void testParsingLeftToRight() {
         assertEquals(ViewingDirection.LEFT_TO_RIGHT,
-                ViewingDirection.fromString(ViewingDirection.values()[0].toString()));
+                ViewingDirection.fromLabel(ViewingDirection.values()[0].toString()));
     }
 
     /**
@@ -42,7 +43,7 @@ public class ViewingDirectionTest {
     @Test
     public void testParsingRightToLeft() {
         assertEquals(ViewingDirection.RIGHT_TO_LEFT,
-                ViewingDirection.fromString(ViewingDirection.values()[1].toString()));
+                ViewingDirection.fromLabel(ViewingDirection.values()[1].toString()));
     }
 
     /**
@@ -51,7 +52,7 @@ public class ViewingDirectionTest {
     @Test
     public void testParsingTopToBottom() {
         assertEquals(ViewingDirection.TOP_TO_BOTTOM,
-                ViewingDirection.fromString(ViewingDirection.values()[2].toString()));
+                ViewingDirection.fromLabel(ViewingDirection.values()[2].toString()));
     }
 
     /**
@@ -60,7 +61,7 @@ public class ViewingDirectionTest {
     @Test
     public void testParsingBottomToTop() {
         assertEquals(ViewingDirection.BOTTOM_TO_TOP,
-                ViewingDirection.fromString(ViewingDirection.values()[3].toString()));
+                ViewingDirection.fromLabel(ViewingDirection.values()[3].toString()));
     }
 
     /**

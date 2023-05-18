@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3;
+package info.freelibrary.iiif.presentation.v3.utils.json;
 
 import java.util.Locale;
 
