@@ -112,7 +112,6 @@ class Resource~T~ {
     +setSeeAlsoRefs(List~SeeAlso~ aSeeAlsoList) Resource~T~
     +setServices(Service~?~ aServiceArray) Resource~T~
     +setServices(List~Service~?~~ aServiceList) Resource~T~
-    +setSummary(String aSummary) Resource~T~
     +setSummary(Summary aSummary) Resource~T~
     +setThumbnails(ContentResource~?~... aThumbnailArray) Resource~T~
     +setThumbnails(List~ContentResource~?~~ aThumbnailList) Resource~T~
@@ -141,7 +140,6 @@ class WebAnnotation {
     +setBody(List~ContentResource~?~~ aResourceList) WebAnnotation
     +setChoice(boolean aChoice) WebAnnotation
     +setID(String aID) WebAnnotation
-    +setLabel(String aLabel) WebAnnotation
     +setLabel(Label alabel) WebAnnotation
     +setMotivation(Motivation aMotivation) WebAnnotation
     +setTarget(Target aTarget) WebAnnotation
@@ -165,7 +163,6 @@ class AssessingAnnotation {
     +setBody(List~ContentResource~?~~ aResourceList) AssessingAnnotation
     +setChoice(boolean aChoice) AssessingAnnotation
     +setID(String aID) AssessingAnnotation
-    +setLabel(String aLabel) AssessingAnnotation
     +setLabel(Label aLabel) AssessingAnnotation
     +setMotivation(Motivation aMotivation) AssessingAnnotation
     +setTarget(Target aTarget) AssessingAnnotation
@@ -189,7 +186,6 @@ class BookmarkingAnnotation {
     +setBody(List~ContentResource~?~~ aResourceList) BookmarkingAnnotation
     +setChoice(boolean aChoice) BookmarkingAnnotation
     +setID(String aID) BookmarkingAnnotation
-    +setLabel(String aLabel) BookmarkingAnnotation
     +setLabel(Label aLabel) BookmarkingAnnotation
     +setMotivation(Motivation aMotivation) BookmarkingAnnotation
     +setTarget(Target aTarget) BookmarkingAnnotation
@@ -213,7 +209,6 @@ class ClassifyingAnnotation {
     +setBody(List~ContentResource~?~~ aResourceList) ClassifyingAnnotation
     +setChoice(boolean aChoice) ClassifyingAnnotation
     +setID(String aID) ClassifyingAnnotation
-    +setLabel(String aLabel) ClassifyingAnnotation
     +setLabel(Label aLabel) ClassifyingAnnotation
     +setMotivation(Motivation aMotivation) ClassifyingAnnotation
     +setTarget(Target aTarget) ClassifyingAnnotation
@@ -237,7 +232,6 @@ class CommentingAnnotation {
     +setBody(List~ContentResource~?~~ aResourceList) CommentingAnnotation
     +setChoice(boolean aChoice) CommentingAnnotation
     +setID(String aID) CommentingAnnotation
-    +setLabel(String aLabel) CommentingAnnotation
     +setLabel(Label aLabel) CommentingAnnotation
     +setMotivation(Motivation aMotivation) CommentingAnnotation
     +setTarget(Target aTarget) CommentingAnnotation
@@ -261,7 +255,6 @@ class DescribingAnnotation {
     +setBody(List~ContentResource~?~~ aResourceList) DescribingAnnotation
     +setChoice(boolean aChoice) DescribingAnnotation
     +setID(String aID) DescribingAnnotation
-    +setLabel(String aLabel) DescribingAnnotation
     +setLabel(Label aLabel) DescribingAnnotation
     +setMotivation(Motivation aMotivation) DescribingAnnotation
     +setTarget(Target aTarget) DescribingAnnotation
@@ -285,7 +278,6 @@ class EditingAnnotation {
     +setBody(List~ContentResource~?~~ aResourceList) EditingAnnotation
     +setChoice(boolean aChoice) EditingAnnotation
     +setID(String aID) EditingAnnotation
-    +setLabel(String aLabel) EditingAnnotation
     +setLabel(Label aLabel) EditingAnnotation
     +setMotivation(Motivation aMotivation) EditingAnnotation
     +setTarget(Target aTarget) EditingAnnotation
@@ -309,7 +301,6 @@ class HighlightingAnnotation {
     +setBody(List~ContentResource~?~~ aResourceList) HighlightingAnnotation
     +setChoice(boolean aChoice) HighlightingAnnotation
     +setID(String aID) HighlightingAnnotation
-    +setLabel(String aLabel) HighlightingAnnotation
     +setLabel(Label aLabel) HighlightingAnnotation
     +setMotivation(Motivation aMotivation) HighlightingAnnotation
     +setTarget(Target aTarget) HighlightingAnnotation
@@ -333,7 +324,6 @@ class IdentifyingAnnotation {
     +setBody(List~ContentResource~?~~ aResourceList) IdentifyingAnnotation
     +setChoice(boolean aChoice) IdentifyingAnnotation
     +setID(String aID) IdentifyingAnnotation
-    +setLabel(String aLabel) IdentifyingAnnotation
     +setLabel(Label aLabel) IdentifyingAnnotation
     +setMotivation(Motivation aMotivation) IdentifyingAnnotation
     +setTarget(Target aTarget) IdentifyingAnnotation
@@ -357,7 +347,6 @@ class LinkingAnnotation {
     +setBody(List~ContentResource~?~~ aResourceList) LinkingAnnotation
     +setChoice(boolean aChoice) LinkingAnnotation
     +setID(String aID) LinkingAnnotation
-    +setLabel(String aLabel) LinkingAnnotation
     +setLabel(Label aLabel) LinkingAnnotation
     +setMotivation(Motivation aMotivation) LinkingAnnotation
     +setTarget(Target aTarget) LinkingAnnotation
@@ -381,7 +370,6 @@ class ModeratingAnnotation {
     +setBody(List~ContentResource~?~~ aResourceList) ModeratingAnnotation
     +setChoice(boolean aChoice) ModeratingAnnotation
     +setID(String aID) ModeratingAnnotation
-    +setLabel(String aLabel) ModeratingAnnotation
     +setLabel(Label aLabel) ModeratingAnnotation
     +setMotivation(Motivation aMotivation) ModeratingAnnotation
     +setTarget(Target aTarget) ModeratingAnnotation
@@ -405,7 +393,6 @@ class QuestioningAnnotation {
     +setBody(List~ContentResource~?~~ aResourceList) QuestioningAnnotation
     +setChoice(boolean aChoice) QuestioningAnnotation
     +setID(String aID) QuestioningAnnotation
-    +setLabel(String aLabel) QuestioningAnnotation
     +setLabel(Label aLabel) QuestioningAnnotation
     +setMotivation(Motivation aMotivation) QuestioningAnnotation
     +setTarget(Target aTarget) QuestioningAnnotation
@@ -429,7 +416,6 @@ class ReplyingAnnotation {
     +setBody(List~ContentResource~?~~ aResourceList) ReplyingAnnotation
     +setChoice(boolean aChoice) ReplyingAnnotation
     +setID(String aID) ReplyingAnnotation
-    +setLabel(String aLabel) ReplyingAnnotation
     +setLabel(Label aLabel) ReplyingAnnotation
     +setMotivation(Motivation aMotivation) ReplyingAnnotation
     +setTarget(Target aTarget) ReplyingAnnotation
@@ -453,7 +439,6 @@ class TaggingAnnotation {
     +setBody(List~ContentResource~?~~ aResourceList) TaggingAnnotation
     +setChoice(boolean aChoice) TaggingAnnotation
     +setID(String aID) TaggingAnnotation
-    +setLabel(String aLabel) TaggingAnnotation
     +setLabel(Label aLabel) TaggingAnnotation
     +setMotivation(Motivation aMotivation) TaggingAnnotation
     +setTarget(Target aTarget) TaggingAnnotation
@@ -494,7 +479,6 @@ class PaintingAnnotation {
     +setHomepages(List~Homepage~ aHomepageList) PaintingAnnotation
     +setID(String aID) PaintingAnnotation
     +setLabel(Label aLabel) PaintingAnnotation
-    +setLabel(String aLabel) PaintingAnnotation
     +setMetadata(Metadata... aMetadataArray) PaintingAnnotation
     +setMetadata(List~Metadata~ aMetadataList) PaintingAnnotation
     +setMotivation(Motivation aMotivation) PaintingAnnotation
@@ -510,7 +494,6 @@ class PaintingAnnotation {
     +setSeeAlsoRefs(List~SeeAlso~ aSeeAlsoList) PaintingAnnotation
     +setServices(Service~?~ aServiceArray) PaintingAnnotation
     +setServices(List~Service~?~~ aServiceList) PaintingAnnotation
-    +setSummary(String aSummary) PaintingAnnotation
     +setSummary(Summary aSumamry) PaintingAnnotation
     +setTarget(Target aTarget) PaintingAnnotation
     +setThumbnails(ContentResource~?~... aThumbnailArray) PaintingAnnotation
@@ -550,7 +533,6 @@ class SupplementingAnnotation {
     +setHomepages(List~Homepage~ aHomepageList) SupplementingAnnotation
     +setID(String aID) SupplementingAnnotation
     +setLabel(Label aLabel) SupplementingAnnotation
-    +setLabel(String aLabel) SupplementingAnnotation
     +setMetadata(Metadata... aMetadataArray) SupplementingAnnotation
     +setMetadata(List~Metadata~ aMetadataList) SupplementingAnnotation
     +setMotivation(Motivation aMotivation) SupplementingAnnotation
@@ -566,7 +548,6 @@ class SupplementingAnnotation {
     +setSeeAlsoRefs(List~SeeAlso~ aSeeAlsoList) SupplementingAnnotation
     +setServices(Service~?~ aServiceArray) SupplementingAnnotation
     +setServices(List~Service~?~~ aServiceList) SupplementingAnnotation
-    +setSummary(String aSummary) SupplementingAnnotation
     +setSummary(Summary aSummary) SupplementingAnnotation
     +setTarget(Target aTarget) SupplementingAnnotation
     +setThumbnails(ContentResource~?~... aThumbnailArray) SupplementingAnnotation
