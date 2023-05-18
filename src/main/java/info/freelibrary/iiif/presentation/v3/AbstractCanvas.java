@@ -50,7 +50,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  * canvas and images, text and other resources are &quot;painted&quot; on to it.
  */
 @SuppressWarnings({ PMD.GOD_CLASS, "PMD.GodClass", PMD.EXCESSIVE_IMPORTS, "PMD.ExcessiveImports",
-    PMD.CYCLOMATIC_COMPLEXITY, "PMD.CyclomaticComplexity" })
+    PMD.CYCLOMATIC_COMPLEXITY, "PMD.CyclomaticComplexity", PMD.TOO_MANY_METHODS, "PMD.TooManyMethods" })
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.HEIGHT, JsonKeys.WIDTH, JsonKeys.DURATION,
     JsonKeys.THUMBNAIL, JsonKeys.PLACEHOLDER_CANVAS, JsonKeys.ACCOMPANYING_CANVAS, JsonKeys.METADATA, JsonKeys.ITEMS,
     JsonKeys.ANNOTATIONS })

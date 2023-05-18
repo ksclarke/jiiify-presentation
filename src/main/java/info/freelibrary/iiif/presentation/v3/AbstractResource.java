@@ -44,7 +44,8 @@ import info.freelibrary.iiif.presentation.v3.utils.json.BehaviorDeserializer;
  * A resource that can be used as a base for more specific IIIF presentation resources.
  */
 @SuppressWarnings({ PMD.EXCESSIVE_IMPORTS, "PMD.ExcessiveImports", PMD.ABSTRACT_CLASS_WITHOUT_ABSTRACT_METHOD,
-    "PMD.AbstractClassWithoutAbstractMethod", PMD.GOD_CLASS, "PMD.GodClass", "PMD.TooManyFields" })
+    "PMD.AbstractClassWithoutAbstractMethod", PMD.GOD_CLASS, "PMD.GodClass", "PMD.TooManyFields", PMD.TOO_MANY_METHODS,
+    "PMD.TooManyMethods" })
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({ JsonKeys.CONTEXT, JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.PROVIDER, JsonKeys.PART_OF,
     JsonKeys.BEHAVIOR, JsonKeys.HOMEPAGE, JsonKeys.THUMBNAIL, JsonKeys.SUMMARY, JsonKeys.METADATA, JsonKeys.START,

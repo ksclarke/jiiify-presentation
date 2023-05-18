@@ -139,8 +139,7 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
     @JsonGetter(JsonKeys.PROFILE)
     @JsonInclude(Include.NON_NULL)
     private String getProfileAsString() {
-        final Optional<String> profile = super.getProfile();
-        return profile.isEmpty() ? null : profile.get().toString();
+        return super.getProfile().orElse(null);
     }
 
     /**
