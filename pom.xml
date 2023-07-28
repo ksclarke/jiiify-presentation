@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>jiiify-presentation-v3</artifactId>
@@ -40,15 +41,15 @@
   <properties>
     <revision>0.0.0-SNAPSHOT</revision>
 
-    <jackson.version>2.13.4</jackson.version>
-    <jackson.databind.version>2.13.4.2</jackson.databind.version>
-    <freelib.utils.version>3.3.0</freelib.utils.version>
-    <jsoup.version>1.15.3</jsoup.version>
+    <jackson.version>2.15.2</jackson.version>
+    <jackson.databind.version>2.15.2</jackson.databind.version>
+    <freelib.utils.version>4.0.2</freelib.utils.version>
+    <jsoup.version>1.16.1</jsoup.version>
     <combinatorics.version>3.3.0</combinatorics.version>
     <media.fragments.uri.version>2.4</media.fragments.uri.version>
 
     <!-- Plugin related versions -->
-    <freelib.maven.version>0.4.5</freelib.maven.version>
+    <freelib.maven.version>0.4.7</freelib.maven.version>
     <vertx.plugin.version>1.0.28</vertx.plugin.version>
 
     <!-- Test related versions -->
@@ -151,7 +152,7 @@
 
       <!-- We can also override the default logging configuration with a file in our root project directory -->
       <testResource>
-        <directory>${basedir}</directory>
+        <directory>${project.basedir}</directory>
         <includes>
           <include>logback-test.xml</include>
         </includes>
@@ -201,6 +202,10 @@
       </plugin>
       <plugin>
         <artifactId>maven-checkstyle-plugin</artifactId>
+        <configuration>
+          <!-- Turn off on bug-fix branch -->
+          <skip>true</skip>
+        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-enforcer-plugin</artifactId>
@@ -210,6 +215,9 @@
       </plugin>
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
+        <configuration>
+          <propertiesEncoding>UTF-8</propertiesEncoding>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>net.revelc.code.formatter</groupId>
@@ -231,6 +239,7 @@
           <argLine>${jacoco.agent.arg}</argLine>
         </configuration>
       </plugin>
+
       <!-- Create an uber jar for use with JRuby, Jython, etc. -->
       <plugin>
         <groupId>io.reactiverse</groupId>
@@ -264,6 +273,7 @@
           <plugin>
             <groupId>io.snyk</groupId>
             <artifactId>snyk-maven-plugin</artifactId>
+
             <!-- Configurations have to be overridden in the executions' configuration elements -->
             <executions>
               <execution>
@@ -283,7 +293,7 @@
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>8.0.0</version>
+    <version>8.0.3</version>
   </parent>
 
 </project>

@@ -3,7 +3,9 @@ package info.freelibrary.iiif.presentation.v3;
 
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.toJson;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,10 +16,13 @@ import org.junit.Test;
 import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.properties.Label;
+import info.freelibrary.iiif.presentation.v3.properties.TextGranularity;
+import info.freelibrary.iiif.presentation.v3.properties.TextGranularity.Level;
 import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
+import info.freelibrary.iiif.presentation.v3.properties.selectors.FragmentSelector;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 
@@ -27,6 +32,9 @@ import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 public class SupplementingAnnotationTest extends AbstractTest {
 
     private static final File ANNOTATION = new File(TestUtils.TEST_DIR, "annotation-supplementing-full.json");
+
+    private static final File TEXT_GRANULARITY =
+            new File(TestUtils.TEST_DIR, "annotation-supplementing-text-granularity.json");
 
     private final Label myCanvasLabel = new Label(myLoremIpsum.getWords(4));
 
@@ -200,5 +208,28 @@ public class SupplementingAnnotationTest extends AbstractTest {
                 new SupplementingAnnotation(myAnnoID, myCanvas).setBodies(content).setTarget(myCanvasID);
 
         assertEquals(format(StringUtils.read(ANNOTATION)), format(toJson(annotation)));
+    }
+
+    /**
+     * Tests serializing a supplementing annotation that contains a text granularity.
+     *
+     * @throws IOException If there is trouble reading the annotation file or serializing the constructed annotation
+     */
+    @Test
+    public final void testSerializationWithTextGranularity() throws IOException {
+        final String annoID = "https://example.org/iiif/aeneid/book1/transcription-line1";
+        final Canvas canvas = new Canvas("https://example.org/aeneid/canvas/1r");
+        final SupplementingAnnotation annotation = new SupplementingAnnotation(annoID, canvas);
+        final FragmentSelector selector = new MediaFragmentSelector("xywh=500,1100,3500,100");
+        final SpecificResource specificResource = new SpecificResource(canvas.getID(), selector);
+        final TextualBody body = new TextualBody();
+
+        body.setLanguage("la");
+        body.setValue("arma virumque cano, Troiae qui primus ab oris");
+
+        annotation.setTextGranularity(new TextGranularity(Level.LINE));
+        annotation.setBodies(body).setTarget(specificResource);
+
+        assertEquals(format(StringUtils.read(TEXT_GRANULARITY)), format(toJson(annotation)));
     }
 }

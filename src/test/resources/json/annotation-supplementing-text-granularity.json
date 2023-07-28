@@ -1,0 +1,20 @@
+{
+  "id": "https://example.org/iiif/aeneid/book1/transcription-line1",
+  "type": "Annotation",
+  "textGranularity": "line",
+  "motivation": "supplementing",
+  "body": {
+    "type": "TextualBody",
+    "language": "la",
+    "value": "arma virumque cano, Troiae qui primus ab oris"
+   },
+   "target": {
+     "type": "SpecificResource",
+     "source": "https://example.org/aeneid/canvas/1r",
+     "selector": {
+        "type": "FragmentSelector",
+        "conformsTo" : "http://www.w3.org/TR/media-frags/",
+        "value": "xywh=500,1100,3500,100"
+     }
+   }
+}

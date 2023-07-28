@@ -314,6 +314,11 @@ public final class JsonKeys {
     public static final String FAILURE_DESCRIPTION = "failureDescription";
 
     /**
+     * A property name for the pattern for indicating the level of text granularity for a supplementing annotation.
+     */
+    public static final String TEXT_GRANULARITY = "textGranularity";
+
+    /**
      * Creates a new JSON keys constants class.
      */
     private JsonKeys() {
