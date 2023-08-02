@@ -232,4 +232,15 @@ public class SupplementingAnnotationTest extends AbstractTest {
 
         assertEquals(format(StringUtils.read(TEXT_GRANULARITY)), format(toJson(annotation)));
     }
+
+    /**
+     * Tests a round-trip serialization/deserialization.
+     *
+     * @throws IOException If there is trouble reading the test resource.
+     */
+    @Test
+    public final void testDeserialization() throws IOException {
+        final String manifest = StringUtils.read(new File(TestUtils.TEST_DIR, "text-granularity.json"));
+        assertEquals(format(manifest), format(Manifest.from(manifest).toString()));
+    }
 }
