@@ -3,10 +3,14 @@ package info.freelibrary.iiif.presentation.v3; // NOPMD -- ExcessiveImports
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.Logger;
@@ -28,6 +32,7 @@ import info.freelibrary.iiif.presentation.v3.properties.Rendering;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
+import info.freelibrary.iiif.presentation.v3.properties.TextGranularity;
 import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
@@ -37,11 +42,23 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  * An annotation used for associating supplementary content resources with a canvas resource.
  */
 @SuppressWarnings({ PMD.GOD_CLASS, "PMD.GodClass" })
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonPropertyOrder({ JsonKeys.CONTEXT, JsonKeys.ID, JsonKeys.TYPE, JsonKeys.TEXT_GRANULARITY, JsonKeys.MOTIVATION,
+    JsonKeys.LABEL, JsonKeys.SUMMARY, JsonKeys.REQUIRED_STATEMENT, JsonKeys.RIGHTS, JsonKeys.PART_OF, JsonKeys.HOMEPAGE,
+    JsonKeys.THUMBNAIL, JsonKeys.METADATA, JsonKeys.ITEMS, JsonKeys.SERVICE, JsonKeys.TIMEMODE, JsonKeys.BODY,
+    JsonKeys.TARGET })
 public class SupplementingAnnotation extends AbstractCanvasAnnotation<SupplementingAnnotation>
         implements Resource<SupplementingAnnotation>, Annotation<SupplementingAnnotation> {
 
     /** The logger that SupplementingAnnotation uses. */
     private static final Logger LOGGER = LoggerFactory.getLogger(SupplementingAnnotation.class, MessageCodes.BUNDLE);
+
+    /**
+     * An optional text granularity, as specified by the <a href= "https://iiif.io/api/extension/text-granularity/">Text
+     * Granularity Extension</a>.
+     */
+    @JsonProperty(JsonKeys.TEXT_GRANULARITY)
+    private TextGranularity myTextGranularity;
 
     /**
      * Creates a supplementing annotation from the supplied canvas resource, using the supplied minter to create the ID.
@@ -305,6 +322,15 @@ public class SupplementingAnnotation extends AbstractCanvasAnnotation<Supplement
     }
 
     /**
+     * Gets the supplementing annotation's text granularity if it exists.
+     *
+     * @return An optional text granularity
+     */
+    public Optional<TextGranularity> getTextGranularity() {
+        return Optional.ofNullable(myTextGranularity);
+    }
+
+    /**
      * Gets a list of resource thumbnails. A thumbnail can be any type of content resource, not just
      * {@link ImageContent}.
      *
@@ -473,6 +499,17 @@ public class SupplementingAnnotation extends AbstractCanvasAnnotation<Supplement
     @Override
     public SupplementingAnnotation setTarget(final Target aTarget) {
         return super.setTarget(aTarget);
+    }
+
+    /**
+     * Sets an optional text granularity for the supplementing annotation.
+     *
+     * @param aTextGranularity A text granularity
+     * @return This supplementing annotation
+     */
+    public SupplementingAnnotation setTextGranularity(final TextGranularity aTextGranularity) {
+        myTextGranularity = Objects.requireNonNull(aTextGranularity);
+        return this;
     }
 
     @Override
