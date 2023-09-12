@@ -44,11 +44,11 @@
 
   <properties>
     <revision>0.0.0-SNAPSHOT</revision>
-    <jackson.version>2.13.4</jackson.version>
-    <jackson.databind.version>2.13.4.2</jackson.databind.version>
+    <jackson.version>2.15.2</jackson.version>
+    <jackson.databind.version>2.15.2</jackson.databind.version>
     <throwing.function.version>1.5.1</throwing.function.version>
-    <freelib.utils.version>4.0.1</freelib.utils.version>
-    <jsoup.version>1.15.3</jsoup.version>
+    <freelib.utils.version>4.0.2</freelib.utils.version>
+    <jsoup.version>1.16.1</jsoup.version>
     <combinatorics.version>3.3.0</combinatorics.version>
     <media.fragments.uri.version>2.4</media.fragments.uri.version>
 
@@ -162,7 +162,7 @@
 
       <!-- We can also override the default logging configuration with a file in our root project directory -->
       <testResource>
-        <directory>${basedir}</directory>
+        <directory>${project.basedir}</directory>
         <includes>
           <include>logback-test.xml</include>
         </includes>
@@ -306,7 +306,7 @@
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>8.0.2</version>
+    <version>8.0.3</version>
   </parent>
 
 </project>
