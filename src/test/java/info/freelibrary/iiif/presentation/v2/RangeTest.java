@@ -18,8 +18,10 @@ import info.freelibrary.iiif.presentation.v2.properties.ViewingHint;
  */
 public class RangeTest {
 
+    /** A test URI. */
     private static final URI ID = URI.create("http://example.org/id");
 
+    /** A test label. */
     private static final String LABEL = "My great label";
 
     /**

@@ -77,6 +77,7 @@ public class Type {
      *
      * @param aType A type value
      * @return The type property
+     * @throws UnsupportedOperationException If a supplied type couldn't be added
      */
     public Type addValue(final String aType) {
         if (!myTypes.add(aType)) {

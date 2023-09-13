@@ -19,8 +19,10 @@ import info.freelibrary.iiif.presentation.v2.properties.ViewingHint;
  */
 public class SequenceTest {
 
+    /** A test value. */
     private Canvas myCanvas;
 
+    /** A test value. */
     private String myID;
 
     /**

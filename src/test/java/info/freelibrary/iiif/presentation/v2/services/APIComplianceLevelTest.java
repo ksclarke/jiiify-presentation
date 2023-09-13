@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v2.services;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -15,10 +15,13 @@ import org.junit.Test;
  */
 public class APIComplianceLevelTest {
 
+    /** A test level. */
     public static final String IMAGE_INFO_LEVEL_0 = "http://iiif.io/api/image/2/level0.json";
 
+    /** A test level. */
     public static final String IMAGE_INFO_LEVEL_1 = "http://iiif.io/api/image/2/level1.json";
 
+    /** A test level. */
     public static final String IMAGE_INFO_LEVEL_2 = "http://iiif.io/api/image/2/level2.json";
 
     /**

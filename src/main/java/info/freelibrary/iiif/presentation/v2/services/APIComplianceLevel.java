@@ -5,10 +5,11 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
-import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
 import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+
+import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
 
 /**
  * The profile levels supported by a IIIF Image API service.
@@ -71,6 +72,7 @@ public enum APIComplianceLevel {
      * Returns a URL representation of the profile level.
      *
      * @return A URL representation of the profile level
+     * @throws I18nRuntimeException If the internal URL isn't a valid URL
      */
     public URL url() {
         try {

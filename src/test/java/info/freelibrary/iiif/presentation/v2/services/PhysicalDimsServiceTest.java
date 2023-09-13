@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v2.services;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.net.URI;
 
@@ -12,10 +12,13 @@ import org.junit.Test;
  */
 public class PhysicalDimsServiceTest {
 
+    /** A test value. */
     private static final URI ID = URI.create("asdf");
 
+    /** A test value. */
     private static final double SCALE = 4.123;
 
+    /** A test value. */
     private static final String UNITS = "in";
 
     /**

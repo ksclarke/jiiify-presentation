@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v2.properties;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,22 +18,31 @@ import io.vertx.core.json.JsonObject;
  */
 public class MetadataTest extends AbstractTest {
 
+    /** A test value. */
     private static final String AAAA = "aaaa";
 
+    /** A test value. */
     private static final String BBBB = "bbbb";
 
+    /** A test value. */
     private static final String CCCC = "cccc";
 
+    /** A test value. */
     private static final String DDDD = "dddd";
 
+    /** A test value. */
     private static final String EEEE = "eeee";
 
+    /** A test value. */
     private static final String ENG = "eng";
 
+    /** A test value. */
     private static final String FRE = "fre";
 
+    /** A test manifest. */
     private Manifest myManifest;
 
+    /** A test JSON object. */
     private JsonObject myJSON;
 
     /**

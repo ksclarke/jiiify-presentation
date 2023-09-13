@@ -70,7 +70,7 @@ public class Manifest extends Resource<Manifest> {
     private static final String TYPE = "sc:Manifest";
 
     /**
-     * The manifest's context
+     * The manifest's context.
      */
     private static final URI CONTEXT = URI.create("http://iiif.io/api/presentation/2/context.json");
 
@@ -181,7 +181,7 @@ public class Manifest extends Resource<Manifest> {
     }
 
     /**
-     * Adds a new context URI to the manifest
+     * Adds a new context URI to the manifest.
      *
      * @param aContext Manifest context URIs(s)
      * @return The manifest
@@ -192,7 +192,7 @@ public class Manifest extends Resource<Manifest> {
     }
 
     /**
-     * Adds a new context URI to the manifest
+     * Adds a new context URI to the manifest.
      *
      * @param aContext Manifest context URI(s)
      * @return The manifest
@@ -268,6 +268,7 @@ public class Manifest extends Resource<Manifest> {
      *
      * @param aSequence Sequence(s) to add to the manifest
      * @return The manifest
+     * @throws UnsupportedOperationException If a supplied sequence couldn't be added to the manifest
      */
     public Manifest addSequence(final Sequence... aSequence) {
         Objects.requireNonNull(aSequence, LOGGER.getMessage(MessageCodes.JPA_008));

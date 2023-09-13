@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v2.utils;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
@@ -16,20 +16,28 @@ import io.vertx.core.json.JsonObject;
  */
 public class MetadataDeserializerTest {
 
+    /** A test value. */
     private static final String LABEL = "label";
 
+    /** A test value. */
     private static final String VALUE = "value";
 
+    /** A test value. */
     private static final String TITLE = "Title";
 
+    /** A test value. */
     private static final String EXTENT = "Extent";
 
+    /** A test value. */
     private static final String OVERTEXT = "Overtext Language";
 
+    /** A test value. */
     private static final String TEST_TITLE = "Georgian NF Fragment 68a";
 
+    /** A test value. */
     private static final String TEST_EXTENT = "1 f";
 
+    /** A test value. */
     private static final String TEST_OVERTEXT = "Georgian";
 
     /**

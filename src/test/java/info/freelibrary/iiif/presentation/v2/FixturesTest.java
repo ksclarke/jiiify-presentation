@@ -28,14 +28,19 @@ import io.vertx.core.json.JsonObject;
  */
 public class FixturesTest {
 
+    /** A test logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(FixturesTest.class, MessageCodes.BUNDLE);
 
+    /** A test value. */
     private static final String FIXTURE_PATH = "src/test/resources/fixtures/2.1/{}/manifest.json";
 
+    /** A test value. */
     private static final String COLLECTION_TEST_FILE = "src/test/resources/fixtures/2.1/collection.json";
 
+    /** A test value. */
     private static final String JSON_EXT = ".json";
 
+    /** A test value. */
     private String myTestID;
 
     /**
@@ -627,10 +632,23 @@ public class FixturesTest {
         assertEquals(expected, found);
     }
 
+    /**
+     * Creates a new test.
+     *
+     * @param aFixtureFilePath A fixture file path
+     * @throws IOException If there is trouble reading the fixture file
+     */
     private void test(final String aFixtureFilePath) throws IOException {
         test(aFixtureFilePath, false);
     }
 
+    /**
+     * Creates a new test.
+     *
+     * @param aFixtureFilePath A fixture file path
+     * @param aFormatCheck A flag indicating whether to check format or not
+     * @throws IOException If there is trouble reading the fixture file
+     */
     private void test(final String aFixtureFilePath, final boolean aFormatCheck) throws IOException {
         final TestData data = prepareTest(new File(aFixtureFilePath), aFormatCheck);
 
@@ -644,6 +662,14 @@ public class FixturesTest {
         }
     }
 
+    /**
+     * Sets up a test.
+     *
+     * @param aFixtureFile A test fixture file
+     * @param aFormatCheck A flag indicating whether format should be checked or not
+     * @return A new test data object
+     * @throws IOException If there is trouble reading from a test fixture
+     */
     private TestData prepareTest(final File aFixtureFile, final boolean aFormatCheck) throws IOException {
         final File outputFile = File.createTempFile(myTestID, JSON_EXT);
         final Manifestor manifestor = new Manifestor();
@@ -663,6 +689,11 @@ public class FixturesTest {
         return new TestData(expected, found, outputFile);
     }
 
+    /**
+     * Cleans a supplied JSON object for comparison during testing.
+     *
+     * @param aJsonObject A JSON object
+     */
     private void removeImageResourceFormat(final JsonObject aJsonObject) {
         final JsonArray sequences = aJsonObject.getJsonArray(Constants.SEQUENCES);
 
@@ -706,28 +737,56 @@ public class FixturesTest {
         }
     }
 
+    /**
+     * Creates a new test data object.
+     */
     private final class TestData {
 
+        /** An expected JSON object. */
         private final JsonObject myExpected;
 
+        /** The found JSON object. */
         private final JsonObject myFound;
 
+        /** A test file. */
         private final File myTestFile;
 
+        /**
+         * Creates a new test data object.
+         *
+         * @param aExpected The expected JSON object
+         * @param aFound The found JSON object
+         * @param aTestFile A test file
+         */
         private TestData(final JsonObject aExpected, final JsonObject aFound, final File aTestFile) {
             myExpected = aExpected;
             myFound = aFound;
             myTestFile = aTestFile;
         }
 
+        /**
+         * Gets the expected test result.
+         *
+         * @return A JSON object
+         */
         private JsonObject getExpected() {
             return myExpected;
         }
 
+        /**
+         * Gets the actual test result.
+         *
+         * @return A JSON object
+         */
         private JsonObject getFound() {
             return myFound;
         }
 
+        /**
+         * Gets the test file.
+         *
+         * @return A file
+         */
         private File getTestFile() {
             return myTestFile;
         }

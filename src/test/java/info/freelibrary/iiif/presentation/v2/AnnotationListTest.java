@@ -16,6 +16,7 @@ import info.freelibrary.iiif.presentation.v2.properties.ViewingHint;
  */
 public class AnnotationListTest {
 
+    /** A test value. */
     private static final URI ID = URI.create("http://example.org/id");
 
     /**

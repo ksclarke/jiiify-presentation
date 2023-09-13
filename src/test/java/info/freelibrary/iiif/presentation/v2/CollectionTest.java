@@ -17,10 +17,12 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 
+import info.freelibrary.util.StringUtils;
+
 import info.freelibrary.iiif.presentation.v2.properties.Label;
 import info.freelibrary.iiif.presentation.v2.properties.NavDate;
 import info.freelibrary.iiif.presentation.v2.properties.ViewingHint;
-import info.freelibrary.util.StringUtils;
+
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 
@@ -29,12 +31,16 @@ import io.vertx.core.json.JsonObject;
  */
 public class CollectionTest {
 
+    /** A test file. */
     private static final File TEST_FILE1 = new File("src/test/resources/json/collection1.json");
 
+    /** A test ID. */
     private String myID;
 
+    /** A test label. */
     private String myLabel;
 
+    /** A Vert.x instance. */
     private Vertx myVertx;
 
     /**
@@ -53,7 +59,7 @@ public class CollectionTest {
     @Test
     public void testCollectionManifestManifestConstructor() {
         final Collection.Manifest manifest =
-            new Collection.Manifest(new info.freelibrary.iiif.presentation.v2.Collection.Manifest(myID, myLabel));
+                new Collection.Manifest(new info.freelibrary.iiif.presentation.v2.Collection.Manifest(myID, myLabel));
 
         assertEquals(URI.create(myID), manifest.getID());
         assertEquals(new Label(myLabel), manifest.getLabel());
@@ -81,7 +87,7 @@ public class CollectionTest {
     }
 
     /**
-     * Tests writing a simple collection manifest
+     * Tests writing a simple collection manifest.
      *
      * @throws IOException If there is trouble reading the test JSON file
      */
@@ -109,7 +115,7 @@ public class CollectionTest {
     }
 
     /**
-     * Tests reading a collection
+     * Tests reading a collection.
      *
      * @throws IOException If there is trouble reading the test JSON file.
      */
@@ -151,7 +157,7 @@ public class CollectionTest {
     @Test
     public void testFromString() {
         final String json =
-            myVertx.fileSystem().readFileBlocking(TEST_FILE1.getAbsolutePath()).toString(StandardCharsets.UTF_8);
+                myVertx.fileSystem().readFileBlocking(TEST_FILE1.getAbsolutePath()).toString(StandardCharsets.UTF_8);
         final Collection collection = Collection.fromString(json);
 
         assertEquals(new JsonObject(json), collection.toJSON());

@@ -17,10 +17,13 @@ import info.freelibrary.iiif.presentation.v2.properties.ViewingHint;
  */
 public class OtherContentTest {
 
+    /** A test value. */
     private static final URI ID = URI.create("http://example.org/id");
 
+    /** A test canvas. */
     private static final Canvas CANVAS = new Canvas("aaaa", "a  label", 100, 100);
 
+    /** A test label. */
     private static final Label LABEL = new Label("Label for " + ID);
 
     /**

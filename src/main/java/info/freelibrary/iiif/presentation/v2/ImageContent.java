@@ -15,7 +15,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.StringUtils;
@@ -112,10 +111,16 @@ public class ImageContent extends Content<ImageContent> {
         return MOTIVATION;
     }
 
+    /**
+     * Sets the image content's motivation.
+     *
+     * @param aMotivation A motivation value
+     * @throws IllegalArgumentException If the wrong motivation is supplied
+     */
     @JsonSetter(Constants.MOTIVATION)
     private void setMotivation(final String aMotivation) {
         if (!MOTIVATION.equals(aMotivation)) {
-            throw new I18nRuntimeException();
+            throw new IllegalArgumentException();
         }
     }
 
@@ -416,44 +421,13 @@ public class ImageContent extends Content<ImageContent> {
             return null;
         }
 
-        /**
-         * A image resource map.
-         */
         final Map<?, ?> map = (Map<?, ?>) aImageResourceMap;
-
-        /**
-         * A new image resource.
-         */
         final ImageResource resource = new ImageResource(URI.create((String) map.get(Constants.ID)));
-
-        /**
-         * The image resource label.
-         */
         final String label = (String) map.get(Constants.LABEL);
-
-        /**
-         * The image resource service map.
-         */
         final Map<?, ?> service = (Map<?, ?>) map.get(Constants.SERVICE);
-
-        /**
-         * The image resource map's width object.
-         */
         final Object widthObj = map.get(Constants.WIDTH);
-
-        /**
-         * The image resource map's height object.
-         */
         final Object heightObj = map.get(Constants.HEIGHT);
-
-        /**
-         * The image resource's width.
-         */
         final int width;
-
-        /**
-         * The image resource's height.
-         */
         final int height;
 
         if (widthObj == null) {

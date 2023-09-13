@@ -13,10 +13,11 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.net.MediaType;
 
-import info.freelibrary.iiif.presentation.v2.utils.Constants;
-import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+
+import info.freelibrary.iiif.presentation.v2.utils.Constants;
+import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
 
 /**
  * A link to a machine readable document that semantically describes the resource with the seeAlso property, such as an
@@ -40,6 +41,7 @@ public class SeeAlso {
      * Creates a new see also.
      *
      * @param aID The see also's ID(s)
+     * @throws UnsupportedOperationException If a supplied seeAlso ID couldn't be added
      */
     public SeeAlso(final String... aID) {
         myValues = new ArrayList<>();
@@ -57,6 +59,7 @@ public class SeeAlso {
      * Creates a new see also.
      *
      * @param aID The see also's ID(s)
+     * @throws UnsupportedOperationException If a supplied ID could not be added
      */
     public SeeAlso(final URI... aID) {
         myValues = new ArrayList<>();
@@ -86,6 +89,7 @@ public class SeeAlso {
      *
      * @param aID The see also's ID
      * @param aMediaType A media type
+     * @throws UnsupportedOperationException If the supplied ID and media type couldn't be set
      */
     public SeeAlso(final URI aID, final MediaType aMediaType) {
         myValues = new ArrayList<>();
@@ -126,6 +130,7 @@ public class SeeAlso {
      * @param aID The see also's ID
      * @param aMediaType A media type
      * @param aProfile A profile
+     * @throws UnsupportedOperationException If the supplied values couldn't be added as a seeAlso value
      */
     public SeeAlso(final URI aID, final MediaType aMediaType, final URI aProfile) {
         myValues = new ArrayList<>();
@@ -195,6 +200,7 @@ public class SeeAlso {
      *
      * @param aID A see also value
      * @return The see also
+     * @throws UnsupportedOperationException If the supplied ID couldn't be added to the seeAlso
      */
     public SeeAlso addValue(final String... aID) {
         for (final String id : aID) {
@@ -213,6 +219,7 @@ public class SeeAlso {
      *
      * @param aID A see also value
      * @return The see also
+     * @throws UnsupportedOperationException If a supplied ID couldn't be added to the seeAlso
      */
     public SeeAlso addValue(final URI... aID) {
         for (final URI id : aID) {

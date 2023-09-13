@@ -13,6 +13,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.util.IllegalArgumentI18nException;
+
 import info.freelibrary.iiif.presentation.v2.properties.Attribution;
 import info.freelibrary.iiif.presentation.v2.properties.Description;
 import info.freelibrary.iiif.presentation.v2.properties.Label;
@@ -27,7 +29,6 @@ import info.freelibrary.iiif.presentation.v2.properties.ViewingHint.Option;
 import info.freelibrary.iiif.presentation.v2.services.Service;
 import info.freelibrary.iiif.presentation.v2.utils.Constants;
 import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
-import info.freelibrary.util.IllegalArgumentI18nException;
 
 /**
  * A virtual container that represents a page or view and has content resources associated with it or with parts of it.
@@ -238,6 +239,7 @@ public class Canvas extends Resource<Canvas> {
      *
      * @param aImageContent Image content to be added to the canvas
      * @return The canvas
+     * @throws UnsupportedOperationException If a supplied {@link ImageContent} could not be added
      */
     public Canvas addImageContent(final ImageContent... aImageContent) {
         if (!Collections.addAll(getImageContent(), aImageContent)) {
@@ -252,6 +254,7 @@ public class Canvas extends Resource<Canvas> {
      *
      * @param aOtherContent Other content to be added to the canvas
      * @return The canvas
+     * @throws UnsupportedOperationException If a supplied {@link OtherContent} could not be added
      */
     public Canvas addOtherContent(final OtherContent... aOtherContent) {
         if (Collections.addAll(getOtherContent(), aOtherContent)) {
@@ -419,6 +422,7 @@ public class Canvas extends Resource<Canvas> {
      *
      * @param aWidth A canvas width
      * @param aHeight A canvas height
+     * @throws IllegalArgumentI18nException If the height or width is less than zero
      */
     @JsonIgnore
     private void setWidthHeight(final int aWidth, final int aHeight) {

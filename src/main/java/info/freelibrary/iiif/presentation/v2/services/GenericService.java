@@ -14,11 +14,12 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.net.MediaType;
 
-import info.freelibrary.iiif.presentation.v2.utils.Constants;
-import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
 import info.freelibrary.util.FileUtils;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+
+import info.freelibrary.iiif.presentation.v2.utils.Constants;
+import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
 
 /**
  * A generic service class for other service implementations.
@@ -203,6 +204,11 @@ public class GenericService implements Service<GenericService> {
         return myFormat;
     }
 
+    /**
+     * Sets the media type from the supplied URI's extension.
+     *
+     * @param aURI A URI that contains a media type extension
+     */
     @JsonIgnore
     private void setMediaTypeFromExt(final String aURI) {
         final String mimeType = FileUtils.getMimeType(aURI);
@@ -222,6 +228,7 @@ public class GenericService implements Service<GenericService> {
      * Returns the service as a JSON value.
      *
      * @return The service as a JSON value
+     * @throws IllegalArgumentException If the service's ID isn't set
      */
     @JsonValue
     @SuppressWarnings({ "PMD.CyclomaticComplexity", "PMD.UnusedPrivateMethod" })

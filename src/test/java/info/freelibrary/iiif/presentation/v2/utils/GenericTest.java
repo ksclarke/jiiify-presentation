@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v2.utils;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.UUID;
 
@@ -16,8 +16,10 @@ import info.freelibrary.iiif.presentation.v2.Manifest;
  */
 public class GenericTest {
 
+    /** A test value. */
     private String myID;
 
+    /** A test value. */
     private String myLabel;
 
     /**

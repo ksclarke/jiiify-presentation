@@ -44,7 +44,7 @@ public class MetadataDeserializer extends StdDeserializer<Metadata> {
     }
 
     /**
-     *
+     * Deserializes the supplied metadata from its JSON source.
      */
     @Override
     @SuppressWarnings({ "PMD.CyclomaticComplexity", "PMD.CognitiveComplexity" })

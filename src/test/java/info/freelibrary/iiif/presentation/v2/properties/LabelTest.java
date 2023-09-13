@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v2.properties;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,14 +17,19 @@ import io.vertx.core.json.JsonObject;
  */
 public class LabelTest extends AbstractTest {
 
+    /** A test value. */
     private static final String MANIFEST = "sc:Manifest";
 
+    /** A test value. */
     private static final String ASDF = "asdf";
 
+    /** A test value. */
     private static final String AAAA = "aaaa";
 
+    /** A test manifest. */
     private Manifest myManifest;
 
+    /** A test JSON object. */
     private JsonObject myJSON;
 
     /**

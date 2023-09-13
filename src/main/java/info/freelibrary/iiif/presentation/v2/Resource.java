@@ -13,6 +13,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+
 import info.freelibrary.iiif.presentation.v2.properties.Attribution;
 import info.freelibrary.iiif.presentation.v2.properties.Description;
 import info.freelibrary.iiif.presentation.v2.properties.Label;
@@ -27,8 +30,6 @@ import info.freelibrary.iiif.presentation.v2.properties.ViewingHint.Option;
 import info.freelibrary.iiif.presentation.v2.services.Service;
 import info.freelibrary.iiif.presentation.v2.utils.Constants;
 import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
 
 /**
  * A resource that can be used as a base for more specific IIIF presentation resources.
@@ -709,11 +710,14 @@ class Resource<T extends Resource<T>> {
      * @param aArgs An array of arguments passed to the constructor
      * @param aNames An array of names corresponding to the arguments passed to the constructor
      * @param aNumber The number of required arguments
+     * @throws IndexOutOfBoundsException If the supplied number is out of bounds
+     * @throws IllegalArgumentException If the supplied object and string arrays aren't the same length
      */
     private void checkArgs(final Object[] aArgs, final String[] aNames, final int aNumber) {
         if (aArgs.length < aNumber) {
             throw new IndexOutOfBoundsException(String.valueOf(aNumber));
         }
+
         if (aArgs.length != aNames.length) {
             throw new IllegalArgumentException("Number of arguments is not equal to the number of names");
         }

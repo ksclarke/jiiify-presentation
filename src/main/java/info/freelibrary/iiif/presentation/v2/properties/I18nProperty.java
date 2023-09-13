@@ -3,16 +3,16 @@ package info.freelibrary.iiif.presentation.v2.properties;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-import info.freelibrary.iiif.presentation.v2.utils.Constants;
-import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+
+import info.freelibrary.iiif.presentation.v2.utils.Constants;
+import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
 
 /**
  * A property value that can be used in the label, description, attribution and the label and value fields.
@@ -92,6 +92,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      *
      * @param aValue A String property value
      * @return A String value to the property
+     * @throws UnsupportedOperationException If a supplied value could not be added
      */
     protected I18nProperty<T> addValue(final String... aValue) {
         Objects.requireNonNull(aValue, LOGGER.getMessage(MessageCodes.JPA_001));
@@ -112,6 +113,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      *
      * @param aValue A I18N property value
      * @return A String value to the property
+     * @throws UnsupportedOperationException If a supplied value could not be added
      */
     protected I18nProperty<T> addValue(final Value... aValue) {
         Objects.requireNonNull(aValue, LOGGER.getMessage(MessageCodes.JPA_001));
@@ -158,21 +160,20 @@ class I18nProperty<T extends I18nProperty<T>> {
      */
     @JsonValue
     protected Object getJsonValue() {
+        final List<Object> list = new ArrayList<>();
+
         if (!hasValues()) {
             return null;
         }
+
         if (myValues.size() == Constants.SINGLE_INSTANCE) {
             if (myValues.get(0).getLang().isPresent()) {
                 return myValues.get(0);
             }
             return myValues.get(0).getValue();
         }
-        final List<Object> list = new ArrayList<>();
-        final Iterator<Value> iterator = myValues.iterator();
 
-        while (iterator.hasNext()) {
-            final Value entry = iterator.next();
-
+        for (final Value entry : myValues) {
             if (entry.getLang().isPresent()) {
                 list.add(entry);
             } else {

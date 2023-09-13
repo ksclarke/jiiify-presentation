@@ -129,6 +129,7 @@ class ServiceProperty<T extends ServiceProperty<T>> {
      *
      * @param aID The URI ID for the image
      * @return The property
+     * @throws UnsupportedOperationException If a URI couldn't be added
      */
     private ServiceProperty<T> addImagePrivately(final URI... aID) {
         for (final URI id : aID) {
@@ -171,6 +172,7 @@ class ServiceProperty<T extends ServiceProperty<T>> {
      * @param aWidth A image width
      * @param aHeight A image height
      * @return The property
+     * @throws UnsupportedOperationException If the supplied values cannot be added as a new {@link ServiceImage}
      */
     private ServiceProperty<T> addImagePrivately(final URI aURI, final int aWidth, final int aHeight) {
         if (!getImagesPrivately().add(new ServiceImage(aURI, aWidth, aHeight))) {
@@ -208,6 +210,7 @@ class ServiceProperty<T extends ServiceProperty<T>> {
      * @param aID The ID for the image
      * @param aService A service for the image
      * @return The property
+     * @throws UnsupportedOperationException If a supplied ID and service couldn't be added
      */
     private ServiceProperty<T> addImagePrivately(final URI aID, final ImageInfoService aService) {
         if (!getImagesPrivately().add(new ServiceImage(aID, aService))) {
@@ -249,7 +252,7 @@ class ServiceProperty<T extends ServiceProperty<T>> {
     }
 
     /**
-     * Gets the first image ID
+     * Gets the first image ID.
      *
      * @return The first image ID
      */
@@ -317,6 +320,7 @@ class ServiceProperty<T extends ServiceProperty<T>> {
      *
      * @param aImage A list of images
      * @return The property
+     * @throws UnsupportedOperationException If a supplied {@link ServiceImage} couldn't be added
      */
     private ServiceProperty<T> addImagePrivately(final ServiceImage... aImage) {
         if (!Collections.addAll(getImagesPrivately(), aImage)) {

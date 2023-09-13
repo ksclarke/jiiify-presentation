@@ -15,8 +15,10 @@ import info.freelibrary.iiif.presentation.v2.properties.ViewingHint;
  */
 public class ImageContentTest {
 
+    /** A test value. */
     private String myID;
 
+    /** A test value. */
     private String myLabel;
 
     /**

@@ -1,7 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v2;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.util.UUID;
@@ -25,12 +26,16 @@ import io.vertx.ext.unit.junit.VertxUnitRunner;
 @RunWith(VertxUnitRunner.class)
 public class ManifestorTest {
 
+    /** A test manifest file. */
     private static final File MANIFEST = new File("src/test/resources/json/z1960050.json");
 
+    /** A test temporary directory. */
     private static final File TMP_DIR = new File(System.getProperty("java.io.tmpdir"));
 
+    /** A test extension. */
     private static final String JSON_EXT = ".json";
 
+    /** A Vert.x instance. */
     private Vertx myVertx;
 
     /**

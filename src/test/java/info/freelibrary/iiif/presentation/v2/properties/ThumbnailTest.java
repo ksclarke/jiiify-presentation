@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v2.properties;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,27 +11,34 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import info.freelibrary.util.StringUtils;
+
 import info.freelibrary.iiif.presentation.v2.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.v2.utils.TestUtils;
-import info.freelibrary.util.StringUtils;
 
 /**
  * A thumbnail test.
  */
 public class ThumbnailTest {
 
+    /** A test URI. */
     public static final URI THUMBNAIL_ID_1 =
             URI.create("http://example.org/images/book1-page1/full/80,100/0/default.jpg");
 
+    /** A test URI. */
     public static final URI PAGE_ID_1 = URI.create("http://example.org/images/book1-page1");
 
+    /** A test URI. */
     public static final URI THUMBNAIL_ID_2 =
             URI.create("http://example.org/images/book1-page2/full/80,100/0/default.jpg");
 
+    /** A test URI. */
     public static final URI PAGE_ID_2 = URI.create("http://example.org/images/book1-page2");
 
+    /** A test file name. */
     private static final String TN_FULL_SINGLE = "thumbnail-full-single.json";
 
+    /** The test resources directory. */
     private static final File TEST_DIR = new File("src/test/resources/json");
 
     /**

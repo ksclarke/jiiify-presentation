@@ -172,6 +172,7 @@ public class Sequence extends Resource<Sequence> {
      *
      * @param aCanvas A canvas to add to this sequence
      * @return The sequence
+     * @throws UnsupportedOperationException If a supplied canvas could not be added
      */
     public Sequence addCanvas(final Canvas... aCanvas) {
         if (!Collections.addAll(myCanvases, aCanvas)) {
