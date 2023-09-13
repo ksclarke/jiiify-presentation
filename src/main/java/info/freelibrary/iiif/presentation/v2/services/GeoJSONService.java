@@ -41,7 +41,7 @@ public class GeoJSONService implements Service<GeoJSONService> {
     }
 
     /**
-     * Gets the ID
+     * Gets the ID.
      *
      * @return The ID
      */

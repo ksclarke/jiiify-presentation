@@ -23,6 +23,7 @@ import info.freelibrary.iiif.presentation.v2.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v2.properties.ViewingHint;
 import info.freelibrary.iiif.presentation.v2.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.v2.utils.Constants;
+
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.JsonObject;
@@ -32,34 +33,50 @@ import io.vertx.core.json.JsonObject;
  */
 public class ManifestTest extends AbstractTest {
 
+    /** A test value. */
     private static final String SINAI_JSON = "src/test/resources/json/z1960050.json";
 
+    /** A test value. */
     private static final String SERVER = "https://sinai-images.library.ucla.edu/iiif/";
 
+    /** A test value. */
     private static final String MANIFEST_ID = "ark:%2F21198%2Fz1960050";
 
+    /** A test value. */
     private static final String MANIFEST_URI = SERVER + MANIFEST_ID + "/manifest";
 
+    /** A test value. */
     private static final String SEQUENCE_URI = SERVER + MANIFEST_ID + "/sequence/sequence-0";
 
+    /** A test value. */
     private static final String THUMBNAIL_PATH = "/0,1022,6132,6132/150,150/0/default.jpg";
 
+    /** A test value. */
     private static final String MANIFEST_THUMBNAIL_URI = SERVER + "ark:%2F21198%2Fz1d79t3q" + THUMBNAIL_PATH;
 
+    /** A test value. */
     private static final String LOGO_URI = "https://sinai-images.library.ucla.edu/images/logos/iiif_logo.png";
 
+    /** A test value. */
     private static final String TEST_TITLE = "Georgian NF Fragment 68a";
 
-    private static final List<String[]> METADATA_PAIRS = Stream.of(new String[] { "Title", TEST_TITLE },
-        new String[] { "Extent", "1 f" }, new String[] { "Overtext Language", "Georgian" },
-        new String[] { "Undertext Language(s)", "Christian Palestinian Aramaic" }).collect(Collectors.toList());
+    /** A test value. */
+    private static final List<String[]> METADATA_PAIRS = Stream
+            .of(new String[] { "Title", TEST_TITLE }, new String[] { "Extent", "1 f" },
+                    new String[] { "Overtext Language", "Georgian" },
+                    new String[] { "Undertext Language(s)", "Christian Palestinian Aramaic" })
+            .collect(Collectors.toList());
 
+    /** A test height value. */
     private static final int HEIGHT = 8176;
 
+    /** A test width value. */
     private static final int WIDTH = 6132;
 
+    /** A test manifest. */
     private Manifest myManifest;
 
+    /** A Vert.x instance. */
     private Vertx myVertx;
 
     /**

@@ -35,6 +35,11 @@ public class NavDate {
         myZonedDateTime = zdt.format(DateTimeFormatter.ISO_INSTANT);
     }
 
+    /**
+     * Creates a new {@link NavDate}.
+     *
+     * @param aZonedDateTime A zoned date time
+     */
     private NavDate(final String aZonedDateTime) {
         myZonedDateTime = aZonedDateTime;
     }

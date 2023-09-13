@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v2.services;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.net.URI;
 
@@ -12,8 +12,10 @@ import org.junit.Test;
  */
 public class ImageInfoServiceTest {
 
+    /** A test value. */
     public static final URI CONTEXT = URI.create("http://iiif.io/api/image/2/context.json");
 
+    /** A test value. */
     private static final URI ID = URI.create("asdf");
 
     /**

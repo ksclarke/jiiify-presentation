@@ -13,15 +13,16 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.google.common.net.MediaType;
 
+import info.freelibrary.util.FileUtils;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+
 import info.freelibrary.iiif.presentation.v2.properties.Logo;
 import info.freelibrary.iiif.presentation.v2.properties.Thumbnail;
 import info.freelibrary.iiif.presentation.v2.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.v2.services.Service;
 import info.freelibrary.iiif.presentation.v2.utils.Constants;
 import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
-import info.freelibrary.util.FileUtils;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
 
 /**
  * An image resource from a {@link Service} that is used as an {@link ImageResource}, and in {@link Logo}s and
@@ -68,7 +69,7 @@ public class ServiceImage {
     private Optional<ImageInfoService> myService;
 
     /**
-     * Creates an image
+     * Creates an image.
      *
      * @param aURI An image ID
      */
@@ -82,7 +83,7 @@ public class ServiceImage {
     }
 
     /**
-     * Creates an image
+     * Creates an image.
      *
      * @param aID An image ID
      */
@@ -260,7 +261,7 @@ public class ServiceImage {
     }
 
     /**
-     * Gets the image ID
+     * Gets the image ID.
      *
      * @return The image ID
      */
@@ -306,7 +307,7 @@ public class ServiceImage {
     }
 
     /**
-     * Sets the image's service
+     * Sets the image's service.
      *
      * @param aService The image's service
      * @return The image

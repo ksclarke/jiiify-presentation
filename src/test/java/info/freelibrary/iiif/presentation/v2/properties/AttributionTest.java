@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v2.properties;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
@@ -10,6 +10,7 @@ import org.junit.Test;
  */
 public class AttributionTest {
 
+    /** A test value. */
     private static final String VALUE = "asdf";
 
     /**

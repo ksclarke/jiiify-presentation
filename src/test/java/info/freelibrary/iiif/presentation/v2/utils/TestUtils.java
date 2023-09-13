@@ -11,7 +11,11 @@ import com.fasterxml.jackson.databind.SerializationFeature;
  */
 public final class TestUtils {
 
+    /**
+     * Creates a new utilities class for the tests.
+     */
     private TestUtils() {
+        // This is intentionally left empty
     }
 
     /**

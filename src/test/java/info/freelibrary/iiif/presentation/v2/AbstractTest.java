@@ -10,7 +10,11 @@ import io.vertx.core.json.jackson.DatabindCodec;
  */
 public class AbstractTest {
 
+    /**
+     * Creates a new abstract test.
+     */
     protected AbstractTest() {
+        // This is intentionally empty
     }
 
     /**

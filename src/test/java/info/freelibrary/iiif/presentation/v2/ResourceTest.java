@@ -23,12 +23,16 @@ import info.freelibrary.iiif.presentation.v2.services.ImageInfoService;
  */
 public class ResourceTest extends AbstractTest {
 
+    /** A test value. */
     private static final String AAAA = "aaaa";
 
+    /** A test value. */
     private static final String BBBB = "bbbb";
 
+    /** A test value. */
     private static final String ASDF_JPG = "asdf.jpg";
 
+    /** A test value. */
     private static final String SILS_URL = "http://ils.unc.edu";
 
     /**
@@ -91,6 +95,9 @@ public class ResourceTest extends AbstractTest {
      */
     class TestResource extends Resource<TestResource> {
 
+        /**
+         * Creates a new test resource.
+         */
         TestResource() {
             super("fake", 1);
         }

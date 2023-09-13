@@ -17,8 +17,10 @@ import info.freelibrary.iiif.presentation.v2.properties.ViewingHint;
  */
 public class CanvasTest {
 
+    /** A test URI. */
     private static final String TEST_URI = "http://example.org/iiif/book1/canvas/p1";
 
+    /** A test label. */
     private static final String TEST_LABEL = "My Test Canvas";
 
     /**

@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v2.properties;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.net.URI;
 import java.util.Optional;
@@ -15,10 +15,13 @@ import com.google.common.net.MediaType;
  */
 public class SeeAlsoTest {
 
+    /** A test URI. */
     private static final URI URI_ONE = URI.create("http://www.example.org/one");
 
+    /** A test URI. */
     private static final URI URI_TWO = URI.create("http://www.example.org/two");
 
+    /** A test media type. */
     private static final MediaType MIME_TYPE = MediaType.parse("image/jpeg");
 
     /**

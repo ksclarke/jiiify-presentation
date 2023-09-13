@@ -1,7 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v2.properties;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -10,8 +11,10 @@ import org.junit.Test;
  */
 public class ValueTest {
 
+    /** A test language code. */
     private static final String ENG = "eng";
 
+    /** A test value. */
     private static final String ONE = "one";
 
     /**

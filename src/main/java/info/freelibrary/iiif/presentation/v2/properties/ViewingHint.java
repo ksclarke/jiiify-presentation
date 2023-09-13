@@ -11,10 +11,11 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-import info.freelibrary.iiif.presentation.v2.utils.Constants;
-import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+
+import info.freelibrary.iiif.presentation.v2.utils.Constants;
+import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
 
 /**
  * A hint to the client as to the most appropriate method of displaying the resource. This specification defines the
@@ -239,6 +240,7 @@ public class ViewingHint {
      *
      * @param aValue New values to add to the viewing hint
      * @return The viewing hint
+     * @throws UnsupportedOperationException If a supplied value couldn't be added
      */
     public ViewingHint addValue(final String... aValue) {
         final ViewingHint.Value[] array = new ViewingHint.Value[aValue.length];
@@ -258,7 +260,7 @@ public class ViewingHint {
     }
 
     /**
-     * Gets the raw value of the viewing hint
+     * Gets the raw value of the viewing hint.
      * <p>
      * For a viewing hint with a single value this will be a <code>String</code> and for a viewing hint with multiple
      * values this will be a <code>List&lt;ViewingHint.Value&gt;</code>.
@@ -307,6 +309,7 @@ public class ViewingHint {
          * Create a new viewing hint from the supplied string.
          *
          * @param aValue A string representation of the viewing hint value
+         * @throws IllegalArgumentException If the supplied value isn't a URI
          */
         public Value(final String aValue) {
             final String value = aValue.toUpperCase(Locale.US).replaceAll("\\-", "");

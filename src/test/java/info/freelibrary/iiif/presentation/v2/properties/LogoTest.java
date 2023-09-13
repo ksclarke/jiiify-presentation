@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v2.properties;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,33 +12,44 @@ import org.junit.Test;
 
 import com.google.common.net.MediaType;
 
+import info.freelibrary.util.StringUtils;
+
 import info.freelibrary.iiif.presentation.v2.services.ImageInfoService;
 import info.freelibrary.iiif.presentation.v2.utils.TestUtils;
-import info.freelibrary.util.StringUtils;
 
 /**
  * A logo test.
  */
 public class LogoTest {
 
+    /** A test value. */
     private static final URI LOGO_ID_1 = URI.create("http://example.org/images/logo1.jpg");
 
+    /** A test value. */
     private static final URI LOGO_ID_2 = URI.create("http://example.org/images/logo2.jpg");
 
+    /** A test value. */
     private static final String LOGO_SIMPLE_2 = "logo-simple-two.json";
 
+    /** A test value. */
     private static final String LOGO_ID_W_H = "logo-id-width-height.json";
 
+    /** A test value. */
     private static final String LOGO_IMAGE_SERVICE = "logo-string-imageinfoservice.json";
 
+    /** A test value. */
     private static final String LOGO_ID_W_H_DOUBLE = "logo-id-width-height-double.json";
 
+    /** A test value. */
     private static final String LOGO_ADD_IMAGE = "logo-addimage-string-imageinfoservice.json";
 
+    /** A test value. */
     private static final File TEST_DIR = new File("src/test/resources/json");
 
+    /** A test value. */
     private static final ImageInfoService SERVICE = new ImageInfoService("http://example.org/asdf");
 
+    /** A test value. */
     private static final String MIME_TYPE = "image/jpeg";
 
     /**

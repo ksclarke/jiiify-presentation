@@ -2,7 +2,6 @@
 package info.freelibrary.iiif.presentation.v2.properties;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -13,11 +12,12 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+
 import info.freelibrary.iiif.presentation.v2.utils.Constants;
 import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v2.utils.MetadataDeserializer;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
 
 /**
  * A list of short descriptive entries, given as pairs of human readable label and value to be displayed to the user.
@@ -105,6 +105,7 @@ public class Metadata {
      *
      * @param aMetadataEntry A metadata entry
      * @return The metadata
+     * @throws UnsupportedOperationException If the supplied metadata entry couldn't be added
      */
     public Metadata add(final Metadata.Entry aMetadataEntry) {
         if (!getEntries().add(aMetadataEntry)) {
@@ -120,6 +121,7 @@ public class Metadata {
      * @param aLabel A metadata label
      * @param aValue A metadata values list
      * @return The metadata
+     * @throws UnsupportedOperationException If a supplied label and value couldn't be added
      */
     public Metadata add(final String aLabel, final String... aValue) {
         if (!getEntries().add(new Metadata.Entry(aLabel, aValue))) {
@@ -135,6 +137,7 @@ public class Metadata {
      * @param aLabel A metadata label
      * @param aValue A metadata values list
      * @return The metadata
+     * @throws UnsupportedOperationException If a supplied label and value couldn't be added
      */
     public Metadata add(final String aLabel, final Value... aValue) {
         if (!getEntries().add(new Metadata.Entry(aLabel, aValue))) {
@@ -152,11 +155,7 @@ public class Metadata {
      */
     @JsonIgnore
     public Optional<String> getValue(final String aLabel) {
-        final Iterator<Metadata.Entry> iterator = myEntries.iterator();
-
-        while (iterator.hasNext()) {
-            final Metadata.Entry entry = iterator.next();
-
+        for (final Entry entry : myEntries) {
             if (entry.getLabel().equals(aLabel)) {
                 return Optional.of(entry.getString());
             }
@@ -174,16 +173,9 @@ public class Metadata {
      */
     @JsonIgnore
     public Optional<String> getValue(final String aLabel, final String aLangCode) {
-        final Iterator<Metadata.Entry> entryIterator = myEntries.iterator();
-
-        while (entryIterator.hasNext()) {
-            final Metadata.Entry entry = entryIterator.next();
-
+        for (final Entry entry : myEntries) {
             if (entry.getLabel().equals(aLabel)) {
-                final Iterator<Value> valuesIterator = entry.myValues.iterator();
-
-                while (valuesIterator.hasNext()) {
-                    final Value value = valuesIterator.next();
+                for (final Value value : entry.myValues) {
                     final Optional<String> lang = value.getLang();
 
                     if (lang.isPresent() && lang.get().equals(aLangCode)) {
@@ -204,11 +196,7 @@ public class Metadata {
      */
     @JsonIgnore
     public List<Value> getValues(final String aLabel) {
-        final Iterator<Metadata.Entry> iterator = myEntries.iterator();
-
-        while (iterator.hasNext()) {
-            final Metadata.Entry entry = iterator.next();
-
+        for (final Entry entry : myEntries) {
             if (entry.getLabel().equals(aLabel)) {
                 return entry.getValues();
             }
@@ -274,7 +262,7 @@ public class Metadata {
         }
 
         /**
-         * Returns true if the metadata entry has values; else, false
+         * Returns true if the metadata entry has values; else, false.
          *
          * @return True if the metadata entry has values; else, false
          */
@@ -346,6 +334,7 @@ public class Metadata {
          *
          * @param aValue A list of values
          * @return The metadata entry
+         * @throws UnsupportedOperationException If a supplied value couldn't be added
          */
         public final Entry addValues(final String... aValue) {
             Objects.requireNonNull(aValue, LOGGER.getMessage(MessageCodes.JPA_001));
@@ -366,6 +355,7 @@ public class Metadata {
          *
          * @param aValue A list of values
          * @return The metadata entry
+         * @throws UnsupportedOperationException If a supplied value could not be added
          */
         public final Entry addValues(final Value... aValue) {
             Objects.requireNonNull(aValue, LOGGER.getMessage(MessageCodes.JPA_001));
@@ -398,11 +388,7 @@ public class Metadata {
             }
 
             final List<Object> list = new ArrayList<>();
-            final Iterator<Value> iterator = myValues.iterator();
-
-            while (iterator.hasNext()) {
-                final Value entry = iterator.next();
-
+            for (final Value entry : myValues) {
                 if (entry.getLang().isPresent()) {
                     list.add(entry);
                 } else {

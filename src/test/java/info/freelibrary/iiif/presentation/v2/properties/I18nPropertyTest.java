@@ -1,7 +1,10 @@
 
 package info.freelibrary.iiif.presentation.v2.properties;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,16 +16,22 @@ import org.junit.Test;
  */
 public class I18nPropertyTest {
 
+    /** A test value. */
     private static final String ONE = "one";
 
+    /** A test value. */
     private static final String TWO = "two";
 
+    /** A test value. */
     private static final String THREE = "three";
 
+    /** A test value. */
     private static final String FOUR = "four";
 
+    /** A test value. */
     private static final String ENG = "eng";
 
+    /** A test value. */
     private static final String FRE = "fre";
 
     /**
@@ -61,7 +70,7 @@ public class I18nPropertyTest {
     }
 
     /**
-     * Test of hashCode with double values
+     * Test of hashCode with double values.
      */
     @Test
     public void testHashCodeDoubleValue() {
@@ -72,7 +81,7 @@ public class I18nPropertyTest {
     }
 
     /**
-     * Test of hashCode with double values
+     * Test of hashCode with double values.
      */
     @Test
     public void testHashCodeDifferentDoubleValue() {
@@ -195,7 +204,7 @@ public class I18nPropertyTest {
      */
     @Test
     public void testGetValueSimpleValueTwo() {
-        final List<String> expected = Arrays.asList(new String[] { ONE, TWO });
+        final List<String> expected = Arrays.asList(ONE, TWO);
         assertEquals(expected, new I18nProperty<>(new Value(ONE), new Value(TWO)).getJsonValue());
     }
 

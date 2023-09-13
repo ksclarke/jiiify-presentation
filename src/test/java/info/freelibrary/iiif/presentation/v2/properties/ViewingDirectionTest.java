@@ -16,6 +16,7 @@ import info.freelibrary.iiif.presentation.v2.utils.MessageCodes;
  */
 public class ViewingDirectionTest {
 
+    /** A test logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(ViewingDirection.class, MessageCodes.BUNDLE);
 
     /**

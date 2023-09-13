@@ -20,14 +20,10 @@ import info.freelibrary.iiif.presentation.v2.utils.Constants;
  */
 public class License {
 
-    /**
-     * The list padding for license.
-     */
+    /** The list padding for license. */
     private static final int LIST_PADDING = 2;
 
-    /**
-     * The URLs associated with the license.
-     */
+    /** The URLs associated with the license. */
     private final List<URL> myURLs;
 
     /**
@@ -58,6 +54,7 @@ public class License {
      * Creates a new license property.
      *
      * @param aURL A license's URL
+     * @throws MalformedURLException If the supplied value isn't a valid URL
      */
     @SuppressWarnings("unused")
     private License(final String aURL) throws MalformedURLException {
@@ -106,6 +103,7 @@ public class License {
      *
      * @param aURL Additional license URL(s)
      * @return True if the supplied URL(s) were added
+     * @throws UnsupportedOperationException If a supplied license URL could not be added
      */
     @JsonIgnore
     public License addValue(final URL... aURL) {

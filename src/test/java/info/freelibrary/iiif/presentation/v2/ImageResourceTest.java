@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v2;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.net.URI;
 
@@ -16,12 +16,16 @@ import info.freelibrary.iiif.presentation.v2.services.ImageInfoService;
  */
 public class ImageResourceTest {
 
+    /** A test URI. */
     private static final URI IMAGE_URI = URI.create("http://example.org/image/001.jpg");
 
+    /** A test URI. */
     private static final URI SERVICE_URI = URI.create("http://example.org/service");
 
+    /** A test image info service. */
     private static final ImageInfoService SERVICE = new ImageInfoService(SERVICE_URI);
 
+    /** A test image media type. */
     private static final String IMAGE_PNG = "image/png";
 
     /**

@@ -1,7 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v2.properties;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.net.URI;
 
@@ -14,14 +15,16 @@ import info.freelibrary.iiif.presentation.v2.properties.ViewingHint.Option;
  */
 public class ViewingHintTest {
 
-    private static final Option[] HINTS = new Option[] { Option.INDIVIDUALS, Option.PAGED, Option.CONTINUOUS,
-        Option.MULTIPART, Option.NONPAGED, Option.TOP, Option.FACINGPAGES };
+    /** Expected hint keys. */
+    private static final Option[] HINTS = { Option.INDIVIDUALS, Option.PAGED, Option.CONTINUOUS, Option.MULTIPART,
+        Option.NONPAGED, Option.TOP, Option.FACINGPAGES };
 
-    private static final String[] VALUES =
-            new String[] { "individuals", "paged", "continuous", "multi-part", "non-paged", "top", "facing-pages" };
+    /** Expected hint values. */
+    private static final String[] VALUES = { "individuals", "paged", "continuous", "multi-part", "non-paged", //
+        "top", "facing-pages" };
 
-    private static final URI[] URIS =
-            new URI[] { URI.create("http://library.unc.edu"), URI.create("http://library.ucla.edu") };
+    /** Expected URIs. */
+    private static final URI[] URIS = { URI.create("http://library.unc.edu"), URI.create("http://library.ucla.edu") };
 
     /**
      * Tests that the enum values are what we expect them to be.
@@ -41,7 +44,8 @@ public class ViewingHintTest {
         int index = 0;
 
         for (final ViewingHint.Value value : new ViewingHint(VALUES).getValues()) {
-            assertEquals(VALUES[index++], value.getString());
+            assertEquals(VALUES[index], value.getString());
+            index++;
         }
     }
 
@@ -62,7 +66,8 @@ public class ViewingHintTest {
 
         for (final ViewingHint.Value value : new ViewingHint(URIS).getValues()) {
             assertTrue(value.isURI());
-            assertEquals(URIS[index++], value.getURI());
+            assertEquals(URIS[index], value.getURI());
+            index++;
         }
     }
 

@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v2.properties;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -13,6 +13,7 @@ import org.junit.Test;
  */
 public class LicenseTest {
 
+    /** A license URL. */
     private static final URL LICENSE_URL;
 
     static {
