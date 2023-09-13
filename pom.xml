@@ -46,9 +46,9 @@
     <!-- Project dependencies -->
     <jackson.version>2.13.4</jackson.version>
     <jackson.databind.version>2.13.4.2</jackson.databind.version>
-    <guava.version>31.1-jre</guava.version>
+    <guava.version>32.0.0-jre</guava.version>
     <freelib.utils.version>3.2.4</freelib.utils.version>
-    <vertx.version>4.3.7</vertx.version>
+    <vertx.version>4.4.5</vertx.version>
 
     <!-- Test related versions -->
     <opencsv.version>4.6</opencsv.version>
