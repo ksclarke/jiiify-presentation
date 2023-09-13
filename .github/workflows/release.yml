@@ -1,13 +1,13 @@
 name: Maven Release
 
-# Performs a Maven release using JDK 11 when a new GitHub release has been published
+# Performs a Maven release using JDK 17 when a new GitHub release has been published
 on:
   release:
     types: [ published ]
 
 jobs:
   publish:
-    name: Maven Artifact Publisher (JDK 11)
+    name: Maven Artifact Publisher (JDK 17)
     runs-on: ubuntu-latest
     env:
       AUTORELEASE_ARTIFACT: ${{ secrets.AUTORELEASE_ARTIFACT }}
@@ -15,10 +15,10 @@ jobs:
     steps:
       - name: Check out source code
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2
-      - name: Install JDK 11 and Maven
+      - name: Install JDK 17 and Maven
         uses: actions/setup-java@d202f5dbf7256730fb690ec59f6381650114feb2 # v1
         with:
-          java-version: 11
+          java-version: 17
       # If running locally in act, install Maven
       - name: Set up Maven if needed
         if: ${{ env.ACT }}

@@ -38,16 +38,17 @@
       </roles>
       <timezone>America/New_York</timezone>
     </developer>
+    <!-- Also https://github.com/ksclarke/jiiify-presentation/graphs/contributors -->
   </developers>
 
   <properties>
     <revision>0.0.0-SNAPSHOT</revision>
 
     <!-- Project dependencies -->
-    <jackson.version>2.13.4</jackson.version>
-    <jackson.databind.version>2.13.4.2</jackson.databind.version>
+    <jackson.version>2.15.2</jackson.version>
+    <jackson.databind.version>2.15.2</jackson.databind.version>
     <guava.version>32.0.0-jre</guava.version>
-    <freelib.utils.version>3.2.4</freelib.utils.version>
+    <freelib.utils.version>4.0.2</freelib.utils.version>
     <vertx.version>4.4.5</vertx.version>
 
     <!-- Test related versions -->
@@ -216,7 +217,7 @@
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>7.4.2</version>
+    <version>8.0.3</version>
   </parent>
 
 </project>

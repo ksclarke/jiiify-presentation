@@ -15,7 +15,7 @@ jobs:
       MAVEN_CACHE_KEY: ${{ secrets.MAVEN_CACHE_KEY }}
     strategy:
       matrix:
-        java: [ 11, 17 ]
+        java: [ 17 ]
 
     steps:
       - name: Check out code
