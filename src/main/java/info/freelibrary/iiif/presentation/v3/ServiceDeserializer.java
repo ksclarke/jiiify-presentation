@@ -311,8 +311,19 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
      */
     @SuppressWarnings(PMD.UNUSED_PRIVATE_METHOD)
     private Service<?> deserializeImageService(final JsonNode aNode, final ImageService<?> aImageService) { // NOPMD
+        final JsonNode width;
+        final JsonNode height;
+
         if (aNode.get(ImageAPI.PROTOCOL) != null) {
             aImageService.setProtocol(true);
+        }
+
+        if ((width = aNode.get(JsonKeys.WIDTH)) != null) {
+            aImageService.setWidth(width.asInt());
+        }
+
+        if ((height = aNode.get(JsonKeys.HEIGHT)) != null) {
+            aImageService.setHeight(height.asInt());
         }
 
         deserializeExtraQualities(aNode, aImageService);

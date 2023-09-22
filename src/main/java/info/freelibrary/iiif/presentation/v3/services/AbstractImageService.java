@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.iiif.presentation.v3.services.image.Format;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageAPI;
@@ -32,20 +33,26 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
     @JsonProperty(ImageAPI.EXTRA_FORMATS)
     private List<Format> myFormats;
 
+    /** My height. */
+    private int myHeight;
+
+    /** Whether this service has a protocol set. */
+    private boolean myProtocolIsSet;
+
     /** The image service's qualities. */
     @JsonProperty(ImageAPI.EXTRA_QUALITIES)
     private List<Quality> myQualities;
-
-    /** The image service's tiles. */
-    @JsonProperty(ImageAPI.TILES)
-    private List<Tile> myTiles;
 
     /** The image service's sizes. */
     @JsonProperty(ImageAPI.SIZES)
     private List<Size> mySizes;
 
-    /** Whether this service has a protocol set. */
-    private boolean myProtocolIsSet;
+    /** The image service's tiles. */
+    @JsonProperty(ImageAPI.TILES)
+    private List<Tile> myTiles;
+
+    /** My width. */
+    private int myWidth;
 
     /**
      * An empty constructor for Jackson's deserialization process.
@@ -84,6 +91,17 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
     }
 
     /**
+     * Gets the image service's height.
+     *
+     * @return The image service's height
+     */
+    @JsonGetter(JsonKeys.HEIGHT)
+    @JsonInclude(Include.NON_DEFAULT)
+    protected int getHeight() {
+        return myHeight;
+    }
+
+    /**
      * Gets the image service protocol if it's been set.
      *
      * @return The service's optional protocol if it's been set; else, an empty optional
@@ -112,6 +130,17 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
     }
 
     /**
+     * Gets the service image's width.
+     *
+     * @return The service images's width
+     */
+    @JsonGetter(JsonKeys.WIDTH)
+    @JsonInclude(Include.NON_DEFAULT)
+    protected int getWidth() {
+        return myWidth;
+    }
+
+    /**
      * Sets the image service's extra formats.
      *
      * @param aFormatArray An array of extra formats
@@ -135,6 +164,17 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
     /**
      * Sets the image service's extra qualities.
      *
+     * @param aQualityList A list of extra qualities
+     * @return This service
+     */
+    protected AbstractImageService<T> setExtraQualities(final List<Quality> aQualityList) {
+        myQualities = aQualityList;
+        return this;
+    }
+
+    /**
+     * Sets the image service's extra qualities.
+     *
      * @param aQualityArray An array of extra qualities
      * @return This service
      */
@@ -143,13 +183,14 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
     }
 
     /**
-     * Sets the image service's extra qualities.
+     * Sets the image service's height.
      *
-     * @param aQualityList A list of extra qualities
-     * @return This service
+     * @param aHeight A height
+     * @return This image service
      */
-    protected AbstractImageService<T> setExtraQualities(final List<Quality> aQualityList) {
-        myQualities = aQualityList;
+    @JsonSetter(JsonKeys.HEIGHT)
+    protected AbstractImageService<T> setHeight(final int aHeight) {
+        myHeight = aHeight;
         return this;
     }
 
@@ -205,6 +246,18 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
      */
     protected AbstractImageService<T> setTiles(final Tile... aTileArray) {
         return setTiles(Arrays.asList(aTileArray));
+    }
+
+    /**
+     * Sets the service image's width.
+     *
+     * @param aWidth A width
+     * @return This image service
+     */
+    @JsonSetter(JsonKeys.WIDTH)
+    protected AbstractImageService<T> setWidth(final int aWidth) {
+        myWidth = aWidth;
+        return this;
     }
 
 }

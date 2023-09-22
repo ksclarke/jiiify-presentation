@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
-import info.freelibrary.iiif.presentation.v3.annotations.Target;
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 
 /**
@@ -24,7 +23,7 @@ public class MediaTypeSerializer extends StdSerializer<MediaType> {
      * Creates a new <code>MediaTypeSerializer</code>.
      */
     public MediaTypeSerializer() {
-        super(Target.class, true);
+        super(MediaType.class, true);
     }
 
     @Override

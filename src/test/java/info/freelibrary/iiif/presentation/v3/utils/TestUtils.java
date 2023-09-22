@@ -1,14 +1,28 @@
 
 package info.freelibrary.iiif.presentation.v3.utils;
 
+import static info.freelibrary.iiif.presentation.v3.utils.JsonKeys.CONTEXT;
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Base64.Encoder;
 import java.util.List;
+
+import org.junit.Assert;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SequenceWriter;
 
+import info.freelibrary.util.StringUtils;
+
 import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
+
+import info.freelibrary.json.Json;
+import info.freelibrary.json.JsonOptions;
+import info.freelibrary.json.JsonValue;
 
 /**
  * Utilities for running tests.
@@ -17,6 +31,9 @@ public final class TestUtils {
 
     /** The directory path of test fixtures. */
     public static final String TEST_DIR = "src/test/resources/json";
+
+    /** The JSON properties that are okay to collapse. */
+    private static final List<String> COLLAPSIBLES = Arrays.asList(CONTEXT);
 
     /**
      * Creates a new private test utilities class.
@@ -137,6 +154,32 @@ public final class TestUtils {
             return JSON.getReader().readTree(aJsonString).toPrettyString();
         } catch (final JsonProcessingException details) {
             throw new JsonParsingException(details);
+        }
+    }
+
+    /**
+     * Tests equality of two JSON strings.
+     *
+     * @param anExpectedResult An expected JSON result
+     * @param anActualResult An actual JSON result
+     * @throws AssertionError If the two JSON strings are not equal
+     */
+    public static void assertEquals(final String anExpectedResult, final String anActualResult) {
+        final JsonOptions config = new JsonOptions().ignoreOrder(true).setCollapsibleArrays(COLLAPSIBLES).format(true);
+        final JsonValue expected = Json.parse(anExpectedResult);
+        final JsonValue actual = Json.parse(anActualResult);
+
+        if (!expected.equals(actual, config)) {
+            try {
+                Assert.assertEquals(expected.toString(config), actual.toString(config));
+            } catch (final AssertionError details) {
+                final Encoder encoder = Base64.getEncoder();
+                throw new AssertionError(
+                        StringUtils.format("\"https://jsondiff.com/#left=data:base64,{}&right=data:base64,{}\"",
+                                new String(encoder.encode(expected.toString(config).getBytes()), UTF_8),
+                                new String(encoder.encode(actual.toString(config).getBytes()), UTF_8)),
+                        details);
+            }
         }
     }
 }

@@ -116,6 +116,13 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     }
 
     @Override
+    @JsonGetter(JsonKeys.ITEMS)
+    @JsonInclude(Include.NON_NULL)
+    public List<AnnotationPage<PaintingAnnotation>> getPaintingPages() {
+        return super.getPaintingPages();
+    }
+
+    @Override
     @SafeVarargs
     public final Canvas paintWith(final Minter aMinter, final boolean aChoice,
             final ContentResource<?>... aContentArray) {

@@ -201,6 +201,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      * @return The canvas' annotation pages for painting annotations
      */
     @JsonGetter(JsonKeys.ITEMS)
+    @JsonInclude(Include.NON_EMPTY)
     public List<AnnotationPage<PaintingAnnotation>> getPaintingPages() {
         if (myPaintingPageList == null) {
             myPaintingPageList = new ArrayList<>();
@@ -514,6 +515,20 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         page.getAnnotations().add(anno);
 
         return this;
+    }
+
+    /**
+     * Gets the manifest context. The manifest can either have a single context or an array of contexts (Cf.
+     * https://iiif.io/api/presentation/3.0/#46-linked-data-context-and-extensions)
+     *
+     * @return The manifest context
+     */
+    @Override
+    @JsonGetter(JsonKeys.CONTEXT)
+    @JsonInclude(Include.NON_NULL)
+    @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
+    protected Object getJsonContext() {
+        return null;
     }
 
     /**

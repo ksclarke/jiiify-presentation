@@ -195,6 +195,10 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
                     resources.add(getResource(aTypeCheck.apply(JsonKeys.TYPE, aNode.get(JsonKeys.TYPE)), aNode));
                 } else if (aNode.isValueNode() && ResourceTypes.RDF_NIL.equals(aNode.asText())) {
                     resources.add(null);
+                } else if (aNode.isArray()) { // below added
+                    aNode.elements().forEachRemaining(node -> {
+                        resources.add(getResource(aTypeCheck.apply(JsonKeys.TYPE, node.get(JsonKeys.TYPE)), node));
+                    });
                 } // else warning?
             } else {
                 itemsNode.forEach(node -> {
@@ -252,6 +256,7 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
      * @param aNode A JSON node representing the resource
      * @return A new content resource to add to the annotation's body
      */
+    @SuppressWarnings("PMD.CyclomaticComplexity")
     private ContentResource<?> getResource(final String aType, final JsonNode aNode) {
         return switch (aType) {
             case ResourceTypes.SOUND -> JSON.convertValue(aNode, SoundContent.class);
@@ -262,6 +267,7 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
             case ResourceTypes.MODEL -> JSON.convertValue(aNode, ModelContent.class);
             case ResourceTypes.CANVAS -> JSON.convertValue(aNode, CanvasContent.class);
             case ResourceTypes.TEXTUAL_BODY -> JSON.convertValue(aNode, TextualBody.class);
+            case ResourceTypes.SPECIFIC_RESOURCE -> JSON.convertValue(aNode, SpecificResource.class);
             default -> new OtherContent(JSON.valueToTree(aNode));
         };
     }

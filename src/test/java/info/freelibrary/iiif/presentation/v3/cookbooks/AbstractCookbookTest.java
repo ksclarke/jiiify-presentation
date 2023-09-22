@@ -67,8 +67,8 @@ public abstract class AbstractCookbookTest {
      * Since the minter's randomly generated IDs will differ from the ones in the expected JSON file, we normalize IDs.
      *
      * @param aJsonString A JSON string whose IDs should be normalized
-     * @throws IOException If the test fixture cannot be read
      * @return The JSON string with its IDs normalized
+     * @throws IOException If there is trouble reading the JSON input
      */
     protected String normalizeIDs(final String aJsonString) throws IOException {
         final ObjectNode jsonNode = (ObjectNode) JSON.getReader().readTree(aJsonString);

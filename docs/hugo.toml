@@ -1,0 +1,11 @@
+baseURL = "https://example.com/"
+title = "Jiiify Presentation Documentation"
+enableRobotsTXT = true
+
+theme = ["github.com/onweru/compose"]
+enableGitInfo = true
+
+# disableKinds = ["taxonomy", "taxonomyTerm"]
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]

@@ -4,11 +4,13 @@ package info.freelibrary.iiif.presentation.v3.properties;
 import java.util.List;
 import java.util.Locale;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
@@ -21,7 +23,7 @@ public interface Localized<T> {
      *
      * @return The localized external resource's languages
      */
-    @JsonIgnore
+    @JsonGetter(JsonKeys.LANGUAGE)
     List<String> getLanguages();
 
     /**

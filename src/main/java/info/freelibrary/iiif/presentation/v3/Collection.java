@@ -17,7 +17,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.Eclipse;
@@ -97,16 +96,6 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     @JsonInclude(Include.NON_ABSENT)
     public Optional<AccompanyingCanvas> getAccompanyingCanvas() {
         return myAccompanyingCanvas;
-    }
-
-    /**
-     * Gets the context.
-     *
-     * @return The context
-     */
-    @JsonGetter(JsonKeys.CONTEXT)
-    public URI getContext() {
-        return PRESENTATION_CONTEXT_URI;
     }
 
     /**
@@ -374,15 +363,60 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     }
 
     /**
-     * Method used internally to set context from JSON.
+     * Gets an unmodifiable list of collection contexts. To remove contexts, use {@link Collection#removeContext(URI)
+     * removeContext} or {@link Collection#clearContexts() clearContexts}.
      *
-     * @param aContext A manifest context
+     * @return The manifest context
      */
-    @JsonSetter(JsonKeys.CONTEXT)
-    private void setContext(final String aContext) {
-        if (!PRESENTATION_CONTEXT_URI.equals(URI.create(aContext))) {
-            throw new I18nRuntimeException(MessageCodes.JPA_037, aContext);
-        }
+    @Override
+    @JsonIgnore
+    public List<URI> getContexts() {
+        return super.getContexts();
+    }
+
+    /**
+     * Clears all contexts, but the required one.
+     *
+     * @return The collection
+     */
+    @Override
+    public Collection clearContexts() {
+        return (Collection) super.clearContexts();
+    }
+
+    /**
+     * Remove the supplied context. This will not remove the default required context though. If that's supplied, an
+     * {@link UnsupportedOperationException} will be thrown.
+     *
+     * @param aContextURI A context to be removed from the contexts list
+     * @return True if the context was removed; else, false
+     * @throws UnsupportedOperationException If the required context is supplied to be removed
+     */
+    @Override
+    public boolean removeContext(final URI aContextURI) {
+        return super.removeContext(aContextURI);
+    }
+
+    /**
+     * Gets the primary collection context.
+     *
+     * @return The collection context
+     */
+    @Override
+    @JsonIgnore
+    public URI getContext() {
+        return PRESENTATION_CONTEXT_URI;
+    }
+
+    /**
+     * Adds an array of new context URIs to the manifest.
+     *
+     * @param aContextArray Collection context URIs(s)
+     * @return The collection
+     */
+    @Override
+    public Collection addContexts(final URI... aContextArray) {
+        return (Collection) super.addContexts(aContextArray);
     }
 
     /**
@@ -622,7 +656,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
             /**
              * Serialization label for <code>Item.Type</code>.
              */
-            private String myLabel;
+            private final String myLabel;
 
             /**
              * Create a new <code>Item.Type</code>.

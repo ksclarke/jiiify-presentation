@@ -1,11 +1,14 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static info.freelibrary.util.Constants.SINGLE_INSTANCE;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -29,9 +32,6 @@ import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeSerializer;
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
 abstract class AbstractContentResource<T extends AbstractResource<AbstractContentResource<T>>>
         extends AbstractResource<AbstractContentResource<T>> implements Localized<T> {
-
-    /** The number of languages for a single (non-array) value. */
-    private static final int SINGLE_LANGUAGE_COUNT = 1;
 
     /** The content resource's media type. */
     private MediaType myFormat;
@@ -68,6 +68,7 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
      * @return A list of languages
      */
     @Override
+    @JsonIgnore
     public List<String> getLanguages() {
         if (myLanguages == null) {
             myLanguages = new ArrayList<>();
@@ -108,8 +109,9 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
     @JsonGetter(JsonKeys.LANGUAGE)
     @JsonInclude(Include.NON_EMPTY)
     private Object getLanguage() {
+        // FIXME? Unclear if this should ALWAYS be an array
         final List<String> languages = getLanguages();
-        return languages.size() == SINGLE_LANGUAGE_COUNT ? languages.get(0) : languages;
+        return languages.size() == SINGLE_INSTANCE ? languages.get(0) : languages;
     }
 
     /**

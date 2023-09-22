@@ -93,7 +93,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         final String manifestID = "https://iiif.io/api/cookbook/recipe/0001-mvm-image/manifest";
         final String imageID = "https://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png";
 
-        final Manifest manifest = new Manifest(manifestID, new Label("en", "Image 1"));
+        final Manifest manifest = new Manifest(manifestID, new Label("en", "Single Image Example"));
         final Minter minter = MinterFactory.getMinter(manifest);
         final Canvas canvas = new Canvas(minter).setWidthHeight(1200, 1800);
         final ImageContent imageContent = new ImageContent(imageID).setWidthHeight(1200, 1800);
@@ -104,7 +104,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check HERE
-        assertEquals(getExpected("0001-mvm-image"), normalizeIDs(manifest.toString()));
+        assertEquals(getExpected("0001-mvm-image/manifest"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -118,7 +118,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         final String annoID = "https://iiif.io/api/cookbook/recipe/0001-mvm-image/annotation/p0001-image";
         final String annoPageID = "https://iiif.io/api/cookbook/recipe/0001-mvm-image/page/p1/1";
 
-        final Manifest manifest = new Manifest(manifestID, new Label("en", "Image 1"));
+        final Manifest manifest = new Manifest(manifestID, new Label("en", "Single Image Example"));
         final Canvas canvas = new Canvas(canvasID).setWidthHeight(1200, 1800);
         final ImageContent imageContent = new ImageContent(imageID).setWidthHeight(1200, 1800);
         final AnnotationPage<PaintingAnnotation> annoPage = new AnnotationPage<>(annoPageID);
@@ -130,7 +130,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0001-mvm-image"), normalizeIDs(manifest.toString()));
+        assertEquals(getExpected("0001-mvm-image/manifest"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -152,7 +152,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0002-mvm-audio"), normalizeIDs(manifest.toString()));
+        assertEquals(getExpected("0002-mvm-audio/manifest"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -178,7 +178,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0002-mvm-audio"), normalizeIDs(manifest.toString()));
+        assertEquals(getExpected("0002-mvm-audio/manifest"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -202,7 +202,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0003-mvm-video"), normalizeIDs(manifest.toString()));
+        assertEquals(getExpected("0003-mvm-video/manifest"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -230,7 +230,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0003-mvm-video"), normalizeIDs(manifest.toString()));
+        assertEquals(getExpected("0003-mvm-video/manifest"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -254,7 +254,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0004-canvas-size"), normalizeIDs(manifest.toString()));
+        assertEquals(getExpected("0004-canvas-size/manifest"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -278,10 +278,8 @@ public class CookbooksTest extends AbstractCookbookTest {
         annoPage.addAnnotations(anno.setBody(imageContent).setTarget(new Target(canvasID)));
         manifest.setCanvases(canvas.setPaintingPages(annoPage));
 
-        System.out.println(manifest);
-
         // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0004-canvas-size"), normalizeIDs(manifest.toString()));
+        assertEquals(getExpected("0004-canvas-size/manifest"), normalizeIDs(manifest.toString()));
     }
 
     /**

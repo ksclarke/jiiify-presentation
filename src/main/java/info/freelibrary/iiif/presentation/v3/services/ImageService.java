@@ -18,12 +18,53 @@ import info.freelibrary.iiif.presentation.v3.services.image.Tile;
 public interface ImageService<T extends ImageService<T>> extends Service<T> {
 
     /**
-     * Sets the image service's extra formats.
+     * Gets the image service's extra formats.
      *
-     * @param aFormatList A list of extra formats
-     * @return This image service
+     * @return The list of extra formats
      */
-    T setExtraFormats(List<Format> aFormatList);
+    List<Format> getExtraFormats();
+
+    /**
+     * Gets the image service's extra qualities.
+     *
+     * @return The list of extra qualities
+     */
+    List<Quality> getExtraQualities();
+
+    /**
+     * Gets the image service's height.
+     *
+     * @return The height for the image service
+     */
+    int getHeight();
+
+    /**
+     * Gets the protocol for an Image API service.
+     *
+     * @return The image service protocol
+     */
+    Optional<String> getProtocol();
+
+    /**
+     * Gets the service's sizes.
+     *
+     * @return A list of sizes supported by the service
+     */
+    List<Size> getSizes();
+
+    /**
+     * Gets the service's tiles.
+     *
+     * @return A list of tiles supported by the service
+     */
+    List<Tile> getTiles();
+
+    /**
+     * Gets the image service's width.
+     *
+     * @return The width for the image service
+     */
+    int getWidth();
 
     /**
      * Sets the image service's extra formats.
@@ -34,11 +75,12 @@ public interface ImageService<T extends ImageService<T>> extends Service<T> {
     T setExtraFormats(Format... aFormatArray);
 
     /**
-     * Gets the image service's extra formats.
+     * Sets the image service's extra formats.
      *
-     * @return The list of extra formats
+     * @param aFormatList A list of extra formats
+     * @return This image service
      */
-    List<Format> getExtraFormats();
+    T setExtraFormats(List<Format> aFormatList);
 
     /**
      * Sets the image service's extra qualities.
@@ -57,18 +99,12 @@ public interface ImageService<T extends ImageService<T>> extends Service<T> {
     T setExtraQualities(Quality... aQualityArray);
 
     /**
-     * Gets the image service's extra qualities.
+     * Sets the image service's height.
      *
-     * @return The list of extra qualities
+     * @param aWidth A height of an image service image
+     * @return The image service
      */
-    List<Quality> getExtraQualities();
-
-    /**
-     * Gets the protocol for an Image API service.
-     *
-     * @return The image service protocol
-     */
-    Optional<String> getProtocol();
+    T setHeight(int aWidth);
 
     /**
      * Sets whether the protocol should be included in the output JSON.
@@ -77,29 +113,6 @@ public interface ImageService<T extends ImageService<T>> extends Service<T> {
      * @return The image service
      */
     T setProtocol(boolean aSetValue);
-
-    /**
-     * Sets the service's tiles from a list of tiles.
-     *
-     * @param aTileList A list of tiles for the service
-     * @return This image service
-     */
-    T setTiles(List<Tile> aTileList);
-
-    /**
-     * Sets the service's tiles from an array of tiles.
-     *
-     * @param aTileArray An array of tiles for the service
-     * @return This image service
-     */
-    T setTiles(Tile... aTileArray);
-
-    /**
-     * Gets the service's tiles.
-     *
-     * @return A list of tiles supported by the service
-     */
-    List<Tile> getTiles();
 
     /**
      * Sets the service's sizes from a list of sizes.
@@ -118,10 +131,27 @@ public interface ImageService<T extends ImageService<T>> extends Service<T> {
     T setSizes(Size... aSizeArray);
 
     /**
-     * Gets the service's sizes.
+     * Sets the service's tiles from a list of tiles.
      *
-     * @return A list of sizes supported by the service
+     * @param aTileList A list of tiles for the service
+     * @return This image service
      */
-    List<Size> getSizes();
+    T setTiles(List<Tile> aTileList);
+
+    /**
+     * Sets the service's tiles from an array of tiles.
+     *
+     * @param aTileArray An array of tiles for the service
+     * @return This image service
+     */
+    T setTiles(Tile... aTileArray);
+
+    /**
+     * Sets the image service's width.
+     *
+     * @param aWidth A width of an image service image
+     * @return The image service
+     */
+    T setWidth(int aWidth);
 
 }

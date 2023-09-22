@@ -1,0 +1,38 @@
+
+0001-mvm-image,green,
+0002-mvm-audio,green,
+0003-mvm-video,green,
+0004-canvas-size,green,
+0005-image-service,green,
+0006-text-language,green,
+0007-string-formats,green,
+0008-rights,green,
+0009-book-1,green,
+0010-book-2-viewing-direction,green,
+0011-book-3-behavior,green,
+0013-placeholderCanvas,green,
+0014-accompanyingcanvas,green,
+0015-start,green,
+0016-transcription-image,red,Recipe not yet completed
+0017-transcription-av,red,Recipe not yet completed
+0018-transcription-xml,red,Recipe not yet completed
+0019-comments,red,Recipe not yet completed
+0020-fragment-selector,red,Recipe not yet completed
+0021-tagging,red,Recipe not yet completed
+0022-linking,red,Recipe not yet completed
+0023-annotating-specific-resources,red,Recipe not yet completed
+0024-book-4-toc,green,
+0026-toc-opera,green,
+0029-metadata-anywhere,green,
+0030-multi-volume,green,
+0046-rendering,green,
+0053-seeAlso,green,
+0064-opera-one-canvas,green,
+0065-opera-multiple-canvases,green,
+0068-newspaper,greem,
+0117-add-image-thumbnail,green,
+0118_multivalue,green,
+0139-geolocate-canvas-fragment,green,"JP supports supplementing and painting annotations as primary methods; the GeoJSON annotation body is handled by an OtherContent class, which wraps the body's content in a JsonNode. This makes the tagging annotation available to the code without having specific classes to handle it. Widely used standards can be added to JP's classes in the future, with OtherContent still being used as a generic fallback."
+0202-start-canvas,green,
+0219-using-caption-file,green,
+0230-navdate,green,

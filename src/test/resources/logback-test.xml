@@ -11,14 +11,28 @@
     </encoder>
   </appender>
 
+  <!-- Log file for the fixture files update check -->
+  <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+    <file>target/fixtures-update.log</file>
+    <encoder>
+      <pattern>[%level] %logger{45}:%line -- %msg%n</pattern>
+    </encoder>
+  </appender>
+
   <logger name="io.netty" level="ERROR" additivity="false">
     <appender-ref ref="STDOUT" />
   </logger>
   <logger name="info.freelibrary.util" level="ERROR" additivity="false">
     <appender-ref ref="STDOUT" />
   </logger>
+  <logger name="info.freelibrary.json" level="WARN" additivity="false">
+    <appender-ref ref="STDOUT" />
+  </logger>
   <logger name="io.vertx" level="OFF" additivity="false">
     <appender-ref ref="STDOUT"/>
+  </logger>
+  <logger name="info.freelibrary.iiif.presentation.v3.utils.CookbookUtils" level="DEBUG" additivity="false">
+    <appender-ref ref="FILE"/>
   </logger>
 
   <root level="${testLogLevel}">

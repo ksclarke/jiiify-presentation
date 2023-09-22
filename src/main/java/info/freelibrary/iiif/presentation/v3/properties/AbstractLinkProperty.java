@@ -1,15 +1,12 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import static info.freelibrary.util.Constants.SINGLE_INSTANCE;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -160,7 +157,7 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      * @return The resource whose format is being set
      */
     protected AbstractLinkProperty<T> setFormat(final MediaType aFormat) {
-        myFormat = Objects.requireNonNull(aFormat);
+        myFormat = aFormat;
         return this;
     }
 
@@ -170,7 +167,7 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      * @return A list of the resource's languages
      */
     @Override
-    @JsonIgnore
+    @JsonGetter(JsonKeys.LANGUAGE)
     public List<String> getLanguages() {
         if (myLanguages == null) {
             myLanguages = new ArrayList<>();
@@ -267,23 +264,6 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
     }
 
     /**
-     * Used by Jackson's serialization processes.
-     *
-     * @return A form of language ready to be serialized
-     */
-    @JsonGetter(JsonKeys.LANGUAGE)
-    @JsonInclude(Include.NON_EMPTY)
-    protected Object getLanguageProperty() {
-        final List<String> languages = getLanguages();
-
-        if (languages.size() == SINGLE_INSTANCE) {
-            return languages.get(0);
-        }
-
-        return languages;
-    }
-
-    /**
      * Used by Jackson's deserialization processes.
      *
      * @param aObject An object to be deserialized
@@ -291,7 +271,7 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
      * @throws IllegalArgumentException If the object supplied is unsupported
      */
     @JsonSetter(JsonKeys.LANGUAGE)
-    protected AbstractLinkProperty<T> setLanguageProperty(final Object aObject) {
+    private AbstractLinkProperty<T> setLanguageProperty(final Object aObject) {
         final List<?> languageList;
 
         if (aObject instanceof String) {

@@ -1,8 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3.cookbooks;
 
-import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
-import static org.junit.Assert.assertEquals;
+import static info.freelibrary.iiif.presentation.v3.utils.CookbookUtils.checkCookbooks;
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,9 +19,11 @@ import info.freelibrary.iiif.presentation.v3.Manifest;
  */
 public class RoundTripTest extends AbstractCookbookTest {
 
-    /**
-     * A pattern from which to pull manifest from the test resources directory.
-     */
+    static {
+        checkCookbooks(); // Check status of cookbooks and emit warnings if we're out of sync
+    }
+
+    /** A pattern from which to pull manifest from the test resources directory. */
     private static final String MANIFEST_PATTERN = "src/test/resources/cookbook/{}.json";
 
     /**
@@ -31,10 +33,8 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0001MvmImage() throws IOException {
-        final String expected = getExpected("0001-mvm-image");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0001-mvm-image/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -44,10 +44,8 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0002MvmAudio() throws IOException {
-        final String expected = getExpected("0002-mvm-audio");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0002-mvm-audio/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -57,10 +55,8 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0003MvmVideo() throws IOException {
-        final String expected = getExpected("0003-mvm-video");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0003-mvm-video/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -70,10 +66,8 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0004CanvasSize() throws IOException {
-        final String expected = getExpected("0004-canvas-size");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0004-canvas-size/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -83,10 +77,8 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0005ImageService() throws IOException {
-        final String expected = getExpected("0005-image-service");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0005-image-service/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -96,10 +88,8 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0006TextLanguage() throws IOException {
-        final String expected = getExpected("0006-text-language");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0006-text-language/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -109,10 +99,8 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0007StringFormats() throws IOException {
-        final String expected = getExpected("0007-string-formats");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0007-string-formats/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -122,10 +110,8 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0008Rights() throws IOException {
-        final String expected = getExpected("0008-rights");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0008-rights/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -135,10 +121,8 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0009Book1() throws IOException {
-        final String expected = getExpected("0009-book-1");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0009-book-1/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -148,10 +132,8 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0010Book2ViewingDirectionRtl() throws IOException {
-        final String expected = getExpected("0010-book-2-viewing-direction-rtl");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0010-book-2-viewing-direction/manifest-rtl");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -161,10 +143,8 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0010Book2ViewingDirectionTtb() throws IOException {
-        final String expected = getExpected("0010-book-2-viewing-direction-ttb");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0010-book-2-viewing-direction/manifest-ttb");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -174,10 +154,8 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0011Book3BehaviorContinuous() throws IOException {
-        final String expected = getExpected("0011-book-3-behavior-continuous");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0011-book-3-behavior/manifest-continuous");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -187,10 +165,8 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0011Book3BehaviorIndividuals() throws IOException {
-        final String expected = getExpected("0011-book-3-behavior-individuals");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0011-book-3-behavior/manifest-individuals");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -200,10 +176,8 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0013PlaceholderCanvas() throws IOException {
-        final String expected = getExpected("0013-placeholderCanvas");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0013-placeholderCanvas/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -213,10 +187,8 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0014AccompanyingCanvas() throws IOException {
-        final String expected = getExpected("0014-accompanyingcanvas");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0014-accompanyingcanvas/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -226,23 +198,53 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0015Start() throws IOException {
-        final String expected = getExpected("0015-start");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0015-start/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
-     * Tests the 0021 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0021-tagging/).
+     * Tests the 0017 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0017-transcription-av/).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
     @Test
-    public final void test0021TaggingAnnotation() throws IOException {
-        final String expected = getExpected("0021-tagging");
-        final String found = Manifest.fromJSON(expected).toString();
+    public final void test0017TranscriptionAV() throws IOException {
+        final String expected = getExpected("0017-transcription-av/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
+    }
 
-        assertEquals(format(expected), format(found));
+    /**
+     * Tests the 0019 HTML in annotations manifest (cf. https://iiif.io/api/cookbook/recipe/0019-html-in-annotations/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0019HtmlInAnnotations() throws IOException {
+        final String expected = getExpected("0019-html-in-annotations/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
+    }
+
+    /**
+     * Tests the 0021 tagging manifest (cf. https://iiif.io/api/cookbook/recipe/0021-tagging/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0021Tagging() throws IOException {
+        final String expected = getExpected("0021-tagging/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
+    }
+
+    /**
+     * Tests the 0022 linking with hotspot manifest (cf.
+     * https://iiif.io/api/cookbook/recipe/0022-linking-with-a-hotspot/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0022LinkingWithHotspot() throws IOException {
+        final String expected = getExpected("0022-linking-with-a-hotspot/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -252,10 +254,8 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0024Book4Toc() throws IOException {
-        final String expected = getExpected("0024-book-4-toc");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0024-book-4-toc/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -265,10 +265,8 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0026TocOpera() throws IOException {
-        final String expected = getExpected("0026-toc-opera");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0026-toc-opera/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -278,10 +276,19 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0029MetadataAnywhere() throws IOException {
-        final String expected = getExpected("0029-metadata-anywhere");
-        final String found = Manifest.fromJSON(expected).toString();
+        final String expected = getExpected("0029-metadata-anywhere/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
+    }
 
-        assertEquals(format(expected), format(found));
+    /**
+     * Tests the 0030 collection cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0030-multi-volume/).
+     *
+     * @throws IOException If there is trouble reading the collection file
+     */
+    @Test
+    public final void test0030MultiVolumeCollection() throws IOException {
+        final String expected = getExpected("0030-multi-volume/collection");
+        assertEquals(expected, Collection.fromJSON(expected).toString());
     }
 
     /**
@@ -291,10 +298,8 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0030MultiVolumeV1() throws IOException {
-        final String expected = getExpected("0030-multi-volume_v1");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0030-multi-volume/manifest_v1");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -304,10 +309,41 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0030MultiVolumeV2() throws IOException {
-        final String expected = getExpected("0030-multi-volume_v2");
-        final String found = Manifest.fromJSON(expected).toString();
+        final String expected = getExpected("0030-multi-volume/manifest_v2");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
+    }
 
-        assertEquals(format(expected), format(found));
+    /**
+     * Tests the 0032 collection's collection doc (cf. https://iiif.io/api/cookbook/recipe/0032-collection/).
+     *
+     * @throws IOException If there is trouble reading the collection document
+     */
+    @Test
+    public final void test0032CollectionDoc() throws IOException {
+        final String expected = getExpected("0032-collection/collection");
+        assertEquals(expected, Collection.fromJSON(expected).toString());
+    }
+
+    /**
+     * Tests the 0032 collection's first manifest (cf. https://iiif.io/api/cookbook/recipe/0032-collection/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0032CollectionManifest1() throws IOException {
+        final String expected = getExpected("0032-collection/manifest-01");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
+    }
+
+    /**
+     * Tests the 0032 collection's second manifest (cf. https://iiif.io/api/cookbook/recipe/0032-collection/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0032CollectionManifest2() throws IOException {
+        final String expected = getExpected("0032-collection/manifest-02");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -317,10 +353,19 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0046Rendering() throws IOException {
-        final String expected = getExpected("0046-rendering");
-        final String found = Manifest.fromJSON(expected).toString();
+        final String expected = getExpected("0046-rendering/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
+    }
 
-        assertEquals(format(expected), format(found));
+    /**
+     * Tests the 0047 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0047-homepage/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0047Homepage() throws IOException {
+        final String expected = getExpected("0047-homepage/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -330,10 +375,8 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0053SeeAlso() throws IOException {
-        final String expected = getExpected("0053-seeAlso");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0053-seeAlso/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -343,10 +386,8 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0064OperaOneCanvas() throws IOException {
-        final String expected = getExpected("0064-opera-one-canvas");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0064-opera-one-canvas/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -356,10 +397,8 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0065OperaMultipleCanvases() throws IOException {
-        final String expected = getExpected("0065-opera-multiple-canvases");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0065-opera-multiple-canvases/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -369,10 +408,8 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0068NewspaperIssue1() throws IOException {
-        final String expected = getExpected("0068-newspaper_issue_1");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0068-newspaper/newspaper_issue_1-manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -382,10 +419,8 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0068NewspaperIssue2() throws IOException {
-        final String expected = getExpected("0068-newspaper_issue_2");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0068-newspaper/newspaper_issue_2-manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -396,10 +431,20 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0068NewspaperTitleCollection() throws IOException {
-        final String expected = getExpected("0068-newspaper_title-collection");
-        final String found = Collection.fromJSON(expected).toString();
+        final String expected = getExpected("0068-newspaper/newspaper_title-collection");
+        assertEquals(expected, Collection.fromJSON(expected).toString());
+    }
 
-        assertEquals(format(expected), format(found));
+    /**
+     * Tests the 0074 multiple language caption cookbook's manifest doc (cf.
+     * https://iiif.io/api/cookbook/recipe/0074-multiple-language-captions/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0074MultipleLanguageCaptions() throws IOException {
+        final String expected = getExpected("0074-multiple-language-captions/manifest");
+        assertEquals(expected, updateDuration(Manifest.fromJSON(expected).toString()));
     }
 
     /**
@@ -409,10 +454,8 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0117AddImageThumbnail() throws IOException {
-        final String expected = getExpected("0117-add-image-thumbnail");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0117-add-image-thumbnail/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -422,10 +465,8 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0118Multivalue() throws IOException {
-        final String expected = getExpected("0118_multivalue");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0118-multivalue/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -435,10 +476,8 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0139GeolocateCanvasFragment() throws IOException {
-        final String expected = getExpected("0139-geolocate-canvas-fragment");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0139-geolocate-canvas-fragment/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -448,10 +487,8 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0202StartCanvas() throws IOException {
-        final String expected = getExpected("0202-start-canvas");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0202-start-canvas/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -461,10 +498,8 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0219UsingCaptionFile() throws IOException {
-        final String expected = getExpected("0219-using-caption-file");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0219-using-caption-file/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -474,10 +509,8 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0230NavDateMap2() throws IOException {
-        final String expected = getExpected("0230-navdate_map_2-manifest");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0230-navdate/navdate_map_2-manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
@@ -487,36 +520,76 @@ public class RoundTripTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0230NavDateMap1() throws IOException {
-        final String expected = getExpected("0230-navdate_map_1-manifest");
-        final String found = Manifest.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0230-navdate/navdate_map_1-manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**
      * Tests the 0230 collection cookbook's collection doc (cf. https://iiif.io/api/cookbook/recipe/0230-navdate/).
      *
-     * @throws IOException If there is trouble reading the manifest file
+     * @throws IOException If there is trouble reading the collection file
      */
     @Test
     public final void test0230NavDateCollection() throws IOException {
-        final String expected = getExpected("0230-navdate-collection");
-        final String found = Collection.fromJSON(expected).toString();
-
-        assertEquals(format(expected), format(found));
+        final String expected = getExpected("0230-navdate/navdate-collection");
+        assertEquals(expected, Collection.fromJSON(expected).toString());
     }
 
     /**
-     * Tests the 0266 full canvas annotation (cf. https://iiif.io/api/cookbook/recipe/0266-full-canvas-annotation/).
+     * Tests the 0232 image thumbnail manifest fixture's AV structure (cf.
+     * https://iiif.io/api/cookbook/recipe/0232-image-thumbnail-canvas/).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
     @Test
-    public final void test0266FullCanvasAnnotation() throws IOException {
-        final String expected = getExpected("0266-full-canvas-annotation");
-        final String found = Manifest.fromJSON(expected).toString();
+    public final void test0232ImageThumbnailCanvasAV() throws IOException {
+        final String expected = getExpected("0232-image-thumbnail-canvas/manifest-av");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
+    }
 
-        assertEquals(format(expected), format(found));
+    /**
+     * Tests the 0232 image thumbnail manifest fixture's image structure (cf.
+     * https://iiif.io/api/cookbook/recipe/0232-image-thumbnail-canvas/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0232ImageThumbnailCanvasImage() throws IOException {
+        final String expected = getExpected("0232-image-thumbnail-canvas/manifest-image");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
+    }
+
+    /**
+     * Tests the 0234 provider manifest fixture (cf. https://iiif.io/api/cookbook/recipe/0234-provider/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0234Provider() throws IOException {
+        final String expected = getExpected("0234-provider/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
+    }
+
+    /**
+     * Tests the 0283 missing image fixture (cf. https://iiif.io/api/cookbook/recipe/0283-missing-image/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0283MissingImage() throws IOException {
+        final String expected = getExpected("0283-missing-image/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
+    }
+
+    /**
+     * Tests the 0299 region manifest fixture (cf. https://iiif.io/api/cookbook/recipe/0299-region/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0299Region() throws IOException {
+        final String expected = getExpected("0299-region/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
     /**

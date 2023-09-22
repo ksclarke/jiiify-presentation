@@ -28,11 +28,11 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public class ImageService3 extends AbstractImageService<ImageService3> implements ImageService<ImageService3> {
 
-    /** The logger for this service. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(ImageService3.class, MessageCodes.BUNDLE);
-
     /** The default profile level for the image info service. */
     private static final ImageService3.Profile DEFAULT_LEVEL = ImageService3.Profile.LEVEL_TWO;
+
+    /** The logger for this service. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImageService3.class, MessageCodes.BUNDLE);
 
     /**
      * Creates a new IIIF Image API 3 service.
@@ -62,36 +62,6 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
     }
 
     @Override
-    @JsonGetter(JsonKeys.ID)
-    public String getID() {
-        return super.getID();
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.TYPE)
-    public ImageService3 setType(final String aType) {
-        final String serviceType = ImageService3.class.getSimpleName();
-
-        if (!serviceType.equals(aType)) {
-            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_125, aType, serviceType));
-        }
-
-        return this;
-    }
-
-    @Override
-    @JsonGetter(JsonKeys.TYPE)
-    public String getType() {
-        return super.getType();
-    }
-
-    @Override
-    @JsonGetter(JsonKeys.SERVICE)
-    public List<Service<?>> getServices() {
-        return super.getServices();
-    }
-
-    @Override
     @JsonGetter(ImageAPI.EXTRA_FORMATS)
     public List<Format> getExtraFormats() {
         return super.getExtraFormats();
@@ -104,9 +74,33 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
     }
 
     @Override
+    @JsonGetter(JsonKeys.HEIGHT)
+    public int getHeight() {
+        return super.getHeight();
+    }
+
+    @Override
+    @JsonGetter(JsonKeys.ID)
+    public String getID() {
+        return super.getID();
+    }
+
+    @Override
     @JsonGetter(JsonKeys.PROFILE)
     public Optional<Service.Profile> getProfile() {
         return super.getProfile();
+    }
+
+    @Override
+    @JsonGetter(ImageAPI.PROTOCOL)
+    public Optional<String> getProtocol() {
+        return super.getProtocol();
+    }
+
+    @Override
+    @JsonGetter(JsonKeys.SERVICE)
+    public List<Service<?>> getServices() {
+        return super.getServices();
     }
 
     @Override
@@ -122,6 +116,18 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
     }
 
     @Override
+    @JsonGetter(JsonKeys.TYPE)
+    public String getType() {
+        return super.getType();
+    }
+
+    @Override
+    @JsonGetter(JsonKeys.WIDTH)
+    public int getWidth() {
+        return super.getWidth();
+    }
+
+    @Override
     @JsonIgnore
     public ImageService3 setExtraFormats(final Format... aFormatArray) {
         return (ImageService3) super.setExtraFormats(aFormatArray);
@@ -134,15 +140,21 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
     }
 
     @Override
+    @JsonSetter(ImageAPI.EXTRA_QUALITIES)
+    public ImageService3 setExtraQualities(final List<Quality> aQualityList) {
+        return (ImageService3) super.setExtraQualities(aQualityList);
+    }
+
+    @Override
     @JsonIgnore
     public ImageService3 setExtraQualities(final Quality... aQualityArray) {
         return (ImageService3) super.setExtraQualities(aQualityArray);
     }
 
     @Override
-    @JsonSetter(ImageAPI.EXTRA_QUALITIES)
-    public ImageService3 setExtraQualities(final List<Quality> aQualityList) {
-        return (ImageService3) super.setExtraQualities(aQualityList);
+    @JsonSetter(JsonKeys.HEIGHT)
+    public ImageService3 setHeight(final int aHeight) {
+        return (ImageService3) super.setHeight(aHeight);
     }
 
     @Override
@@ -155,12 +167,6 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
     @JsonIgnore
     public ImageService3 setProtocol(final boolean aSetValue) {
         return (ImageService3) super.setProtocol(aSetValue);
-    }
-
-    @Override
-    @JsonGetter(ImageAPI.PROTOCOL)
-    public Optional<String> getProtocol() {
-        return super.getProtocol();
     }
 
     @Override
@@ -199,15 +205,28 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
         return (ImageService3) super.setTiles(aTileArray);
     }
 
+    @Override
+    @JsonSetter(JsonKeys.TYPE)
+    public ImageService3 setType(final String aType) {
+        final String serviceType = ImageService3.class.getSimpleName();
+
+        if (!serviceType.equals(aType)) {
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_125, aType, serviceType));
+        }
+
+        return this;
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.WIDTH)
+    public ImageService3 setWidth(final int aWidth) {
+        return (ImageService3) super.setWidth(aWidth);
+    }
+
     /**
      * The profiles (API compliance levels) supported by an {@link ImageService3}.
      */
     public enum Profile implements Service.Profile {
-
-        /**
-         * The level0 profile (Cf. http://iiif.io/api/image/3/level0.json)
-         */
-        LEVEL_ZERO("level0"),
 
         /**
          * The level1 profile (Cf. http://iiif.io/api/image/3/level1.json)
@@ -217,12 +236,17 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
         /**
          * The level2 profile (Cf. http://iiif.io/api/image/3/level2.json)
          */
-        LEVEL_TWO("level2");
+        LEVEL_TWO("level2"),
+
+        /**
+         * The level0 profile (Cf. http://iiif.io/api/image/3/level0.json)
+         */
+        LEVEL_ZERO("level0");
 
         /**
          * An image service profile label.
          */
-        private String myLabel;
+        private final String myLabel;
 
         /**
          * Creates a new profile from the supplied profile label.
@@ -234,12 +258,12 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
         }
 
         @Override
-        public String toString() {
+        public String label() {
             return myLabel;
         }
 
         @Override
-        public String label() {
+        public String toString() {
             return myLabel;
         }
 

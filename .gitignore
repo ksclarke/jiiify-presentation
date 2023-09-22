@@ -14,3 +14,9 @@ src/main/tools/eclipse
 
 # In support of using $revision in the version element in the POM
 .flattened-pom.xml
+
+# Build tools only needed for site generation
+docs/node_modules
+
+# The build location the documentation site
+public/

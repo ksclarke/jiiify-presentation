@@ -134,10 +134,13 @@ class I18nProperty<T extends I18nProperty<T>> {
      */
     @Override
     public String toString() {
+        final StringBuilder builder;
+
         if (!hasStrings()) {
             return null;
         }
-        final StringBuilder builder = new StringBuilder();
+
+        builder = new StringBuilder();
 
         for (final I18n i18n : myI18ns) {
             final String[] strings = i18n.getStrings().toArray(new String[i18n.size()]);
@@ -176,10 +179,14 @@ class I18nProperty<T extends I18nProperty<T>> {
      */
     @JsonValue
     protected Object toMap() {
+        final Map<String, Object> map;
+
         if (!hasStrings()) {
             return null;
         }
-        final Map<String, Object> map = new LinkedHashMap<>(); // maintains insertion order
+
+        map = new LinkedHashMap<>(); // maintains insertion order
+
         for (final I18n i18n : myI18ns) {
             map.put(i18n.getLang(), i18n.getStrings());
         }

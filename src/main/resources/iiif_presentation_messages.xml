@@ -51,7 +51,7 @@
   <entry key="JPA-046">Unable to add rights URLs: {}</entry>
   <entry key="JPA-047">Unable to add seeAlso: {}</entry>
   <entry key="JPA-048">Unable to add ServiceImage to ServiceProperty: {}</entry>
-  <entry key="JPA-049">Testing Python example file: {}</entry>
+  <entry key="JPA-049"></entry>
   <entry key="JPA-050">Unable to add annotation(s) to AnnotationPage: [{}]</entry>
   <entry key="JPA-051">Service doesn't contain the expected type: {}</entry>
   <entry key="JPA-052">Unexpected object supplied to setLanguageProperty: {}</entry>
@@ -90,7 +90,7 @@
   <entry key="JPA-117">Won't try to build a PointSelector without a temporal or X and Y point</entry>
   <entry key="JPA-118">The supplied value isn't a valid collection item type: {}</entry>
   <entry key="JPA-119">The supplied JSON object does not look like it's a {}; its type is: {}</entry>
-  <entry key="JPA-120">Testing Ruby example file: {}</entry>
+  <entry key="JPA-120"></entry>
   <entry key="JPA-121">The {}'s setProfile method should have been overridden by subclass</entry>
   <entry key="JPA-122">{} is not a valid profile for {}</entry>
   <entry key="JPA-123">{} missing the required profile</entry>
@@ -104,5 +104,8 @@
   <entry key="JPA-131">Unable to parse SpecificResource's incoming JSON structure: {}</entry>
   <entry key="JPA-132">Annotation target is missing from incoming JSON</entry>
   <entry key="JPA-133">Unexpected format (i.e. MediaType) value: {}</entry>
+  <entry key="JPA-134">Cookbook test fixture needs updating:{} {}</entry>
+  <entry key="JPA-135">New cookbook test fixture to download:{} {}</entry>
+  <entry key="JPA-136">Test fixtures are not the same: {}{}{}{}</entry>
 
 </properties>

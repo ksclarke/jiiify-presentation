@@ -382,6 +382,19 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     /**
+     * Gets the manifest context. The manifest can either have a single context or an array of contexts (Cf.
+     * https://iiif.io/api/presentation/3.0/#46-linked-data-context-and-extensions)
+     *
+     * @return The manifest context
+     */
+    @Override
+    @JsonGetter(JsonKeys.CONTEXT)
+    @JsonInclude(Include.NON_NULL)
+    protected Object getJsonContext() {
+        return null;
+    }
+
+    /**
      * Gets a string representation of a range.
      *
      * @return A string representation of a range
@@ -451,9 +464,9 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
          */
         public Item(final Canvas aCanvas, final boolean aEmbeddedCanvas) {
             if (aEmbeddedCanvas) {
-                myCanvas = aCanvas;
+                myCanvas = new RangeCanvas(aCanvas);
             } else {
-                myCanvas = new Canvas(aCanvas.getID());
+                myCanvas = new RangeCanvas(new Canvas(aCanvas.getID()));
             }
         }
 

@@ -1,18 +1,13 @@
 
 package info.freelibrary.iiif.presentation.v3; // NOPMD
 
-import static info.freelibrary.util.Constants.SINGLE_INSTANCE;
-
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -56,9 +51,6 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
 
     /** The manifest's logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(Manifest.class, MessageCodes.BUNDLE);
-
-    /** The manifest's contexts. */
-    private final List<URI> myContexts = Stream.of(PRESENTATION_CONTEXT_URI).collect(Collectors.toList());
 
     /** The manifest's annotations. */
     private List<AnnotationPage<? extends WebAnnotation>> myAnnotations;
@@ -182,13 +174,10 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      *
      * @return The manifest context
      */
+    @Override
     @JsonIgnore
     public List<URI> getContexts() {
-        if (myContexts.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        return Collections.unmodifiableList(myContexts);
+        return super.getContexts();
     }
 
     /**
@@ -196,11 +185,9 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      *
      * @return The manifest
      */
+    @Override
     public Manifest clearContexts() {
-        myContexts.clear();
-        myContexts.add(PRESENTATION_CONTEXT_URI);
-
-        return this;
+        return (Manifest) super.clearContexts();
     }
 
     /**
@@ -211,12 +198,9 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @return True if the context was removed; else, false
      * @throws UnsupportedOperationException If the required context is supplied to be removed
      */
+    @Override
     public boolean removeContext(final URI aContextURI) {
-        if (PRESENTATION_CONTEXT_URI.equals(aContextURI)) {
-            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_039, PRESENTATION_CONTEXT_URI));
-        }
-
-        return myContexts.remove(aContextURI);
+        return super.removeContext(aContextURI);
     }
 
     /**
@@ -224,6 +208,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      *
      * @return The manifest context
      */
+    @Override
     @JsonIgnore
     public URI getContext() {
         return PRESENTATION_CONTEXT_URI;
@@ -235,19 +220,9 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @param aContextArray Manifest context URIs(s)
      * @return The manifest
      */
+    @Override
     public Manifest addContexts(final URI... aContextArray) {
-        Objects.requireNonNull(aContextArray, MessageCodes.JPA_007);
-
-        for (final URI uri : aContextArray) {
-            Objects.requireNonNull(uri, MessageCodes.JPA_007);
-
-            if (!PRESENTATION_CONTEXT_URI.equals(uri)) {
-                myContexts.add(uri);
-            }
-        }
-
-        Collections.sort(myContexts, new ContextListComparator<>());
-        return this;
+        return (Manifest) super.addContexts(aContextArray);
     }
 
     /**
@@ -620,107 +595,5 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
             // JsonProcessingException wraps other runtime exceptions, too (e.g., IllegalArgumentException(s))
             throw new JsonParsingException(details);
         }
-    }
-
-    /**
-     * Method used internally to set context from JSON.
-     *
-     * @param aObject A Jackson deserialization object
-     */
-    @JsonSetter(JsonKeys.CONTEXT)
-    private void deserializeContexts(final Object aObject) {
-        if (aObject instanceof String) {
-            deserializeContexts(List.of((String) aObject));
-        } else if (aObject instanceof List<?>) {
-            final List<?> genericList = (List<?>) aObject;
-
-            if (genericList.isEmpty() || !genericList.get(0).getClass().equals(String.class)) {
-                throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_113));
-            }
-
-            setContexts(genericList);
-        } else {
-            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_113));
-        }
-    }
-
-    /**
-     * Sets the manifest's contexts from a list that Jackson builds.
-     *
-     * @param aContextList A list of contexts
-     */
-    @JsonIgnore
-    private void setContexts(final List<?> aContextList) {
-        final List<Integer> indices = new ArrayList<>();
-        final List<URI> contextList = new ArrayList<>();
-
-        for (int index = 0; index < aContextList.size(); index++) {
-            final URI context = URI.create((String) aContextList.get(index));
-
-            if (PRESENTATION_CONTEXT_URI.equals(context)) {
-                indices.add(index); // We may have more than one required context in supplied list
-
-                if (indices.size() == SINGLE_INSTANCE) { // Only keep one if this is the case
-                    contextList.add(context);
-                }
-            } else {
-                contextList.add(context);
-            }
-        }
-
-        // Remove required context; we'll add it back at the end
-        if (!indices.isEmpty()) {
-            contextList.remove((int) indices.get(0));
-        }
-
-        myContexts.clear();
-        myContexts.addAll(contextList);
-        myContexts.add(PRESENTATION_CONTEXT_URI); // Add required context at end
-    }
-
-    /**
-     * Gets the manifest context. The manifest can either have a single context or an array of contexts (Cf.
-     * https://iiif.io/api/presentation/3.0/#46-linked-data-context-and-extensions)
-     *
-     * @return The manifest context
-     */
-    @JsonGetter(JsonKeys.CONTEXT)
-    private Object getJsonContext() {
-        if (myContexts.size() == SINGLE_INSTANCE) {
-            return myContexts.get(0);
-        }
-
-        if (!myContexts.isEmpty()) {
-            return myContexts;
-        }
-
-        return null;
-    }
-
-    /**
-     * A context list comparator that makes sure the required context is always last in the list.
-     * <p>
-     * Cf. https://iiif.io/api/presentation/3.0/#46-linked-data-context-and-extensions
-     * </p>
-     */
-    static class ContextListComparator<U> implements Comparator<U> {
-
-        @Override
-        public int compare(final U aFirstURI, final U aSecondURI) {
-            if (PRESENTATION_CONTEXT_URI.equals(aFirstURI) && PRESENTATION_CONTEXT_URI.equals(aSecondURI)) {
-                return 0;
-            }
-
-            if (PRESENTATION_CONTEXT_URI.equals(aFirstURI)) {
-                return 1;
-            }
-
-            if (PRESENTATION_CONTEXT_URI.equals(aSecondURI)) {
-                return -1;
-            }
-
-            return 0; // We leave all non-required contexts where they are
-        }
-
     }
 }
