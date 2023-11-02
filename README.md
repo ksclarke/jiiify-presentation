@@ -2,9 +2,12 @@
 
 Jiiify Presentation is a [IIIF Presentation](http://iiif.io/api/presentation) library for Java. It does not contain a server. It's just for working with IIIF presentation manifests.
 
-If you are interested in using the library with Python or Ruby (using Jython or JRuby) you'll want the [uber jar](https://repo1.maven.org/maven2/info/freelibrary/jiiify-presentation-v3/0.10.0/jiiify-presentation-v3-0.10.0-uber.jar) that's available from Maven Central. To assist with getting started, there are a few simple Ruby and Python examples in the [tests](https://github.com/ksclarke/jiiify-presentation/tree/v3/src/test) directory. They can also be found in the newly started [Jiiify Presentation GitBook](https://ksclarke.gitbook.io/jiiify-presentation/).
-
 *Warning:* The API for v3 is still in active development. There will definitely be breaking changes before the library reaches version 1.0.0. After it reaches 1.0.0 and becomes stable, the project will use semantic versioning to indicate the types of changes associated with new releases.
+
+### Prerequisites
+
+* JDK >= 17 (this is the JDK that the released version uses)
+* Maven >= 3.8.7 (this is what's used for building the project)
 
 ### Getting Started
 
