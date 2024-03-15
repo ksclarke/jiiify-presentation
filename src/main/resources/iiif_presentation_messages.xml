@@ -2,7 +2,6 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
   <entry key="message-class-name">info.freelibrary.iiif.presentation.v3.utils.MessageCodes</entry>
-
   <!-- Messages to be stored in the MessageCodes class -->
   <entry key="JPA-001">Property value cannot be null</entry>
   <entry key="JPA-002">Label cannot be null</entry>
@@ -48,10 +47,10 @@
   <entry key="JPA-043">I18n couldn't be added to I18nProperty: {}</entry>
   <entry key="JPA-044">Unable to add metadata: {}</entry>
   <entry key="JPA-045">Unable to add required statement: {}</entry>
-  <entry key="JPA-046">Unable to add rights URLs: {}</entry>
+  <entry key="JPA-046">Unable to add rights URLs: {}</entry>A '{}' geometry array should contain an array
   <entry key="JPA-047">Unable to add seeAlso: {}</entry>
   <entry key="JPA-048">Unable to add ServiceImage to ServiceProperty: {}</entry>
-  <entry key="JPA-049"></entry>
+  <entry key="JPA-049">A '{}' geometry should contain an array</entry>
   <entry key="JPA-050">Unable to add annotation(s) to AnnotationPage: [{}]</entry>
   <entry key="JPA-051">Service doesn't contain the expected type: {}</entry>
   <entry key="JPA-052">Unexpected object supplied to setLanguageProperty: {}</entry>
@@ -90,7 +89,7 @@
   <entry key="JPA-117">Won't try to build a PointSelector without a temporal or X and Y point</entry>
   <entry key="JPA-118">The supplied value isn't a valid collection item type: {}</entry>
   <entry key="JPA-119">The supplied JSON object does not look like it's a {}; its type is: {}</entry>
-  <entry key="JPA-120"></entry>
+  <entry key="JPA-120">A '{}' geometry array should contain an array</entry>
   <entry key="JPA-121">The {}'s setProfile method should have been overridden by subclass</entry>
   <entry key="JPA-122">{} is not a valid profile for {}</entry>
   <entry key="JPA-123">{} missing the required profile</entry>
@@ -107,5 +106,7 @@
   <entry key="JPA-134">Cookbook test fixture needs updating:{} {}</entry>
   <entry key="JPA-135">New cookbook test fixture to download:{} {}</entry>
   <entry key="JPA-136">Test fixtures are not the same: {}{}{}{}</entry>
-
+  <entry key="JPA-137">A '{}' must have an array of coordinates</entry>
+  <entry key="JPA-138">Geometry JSON has an unsupported type: {}</entry>
+  <entry key="JPA-139">Geometry doesn't have the required type property</entry>
 </properties>

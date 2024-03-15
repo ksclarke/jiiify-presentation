@@ -1,5 +1,5 @@
-module compose-exampleSite
+module github.com/ksclarke/jiiify-presentation-v3
 
-go 1.19
+go 1.21.7
 
-require github.com/onweru/compose v0.0.0-20230823103345-61fa78130dec // indirect
+require github.com/google/docsy v0.9.1 // indirect

@@ -20,3 +20,8 @@ docs/node_modules
 
 # The build location the documentation site
 public/
+
+# Ignores for the documentation site generated with Hugo
+docs/resources/_gen
+docs/public/
+docs/.env

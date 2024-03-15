@@ -21,12 +21,14 @@ import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.Metadata;
+import info.freelibrary.iiif.presentation.v3.properties.NavDate;
 import info.freelibrary.iiif.presentation.v3.properties.PartOf;
 import info.freelibrary.iiif.presentation.v3.properties.Provider;
 import info.freelibrary.iiif.presentation.v3.properties.Rendering;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
+import info.freelibrary.iiif.presentation.v3.properties.geo.NavPlace;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
@@ -248,6 +250,30 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     @Override
     public Canvas setLabel(final Label aLabel) {
         return (Canvas) super.setLabel(aLabel);
+    }
+
+    @Override
+    @JsonGetter(JsonKeys.NAV_DATE)
+    public NavDate getNavDate() {
+        return super.getNavDate();
+    }
+
+    @Override
+    @JsonGetter(JsonKeys.NAV_PLACE)
+    public NavPlace getNavPlace() {
+        return super.getNavPlace();
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.NAV_DATE)
+    public Canvas setNavDate(final NavDate aNavDate) {
+        return (Canvas) super.setNavDate(aNavDate);
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.NAV_PLACE)
+    public Canvas setNavPlace(final NavPlace aNavPlace) {
+        return (Canvas) super.setNavPlace(aNavPlace);
     }
 
     @Override

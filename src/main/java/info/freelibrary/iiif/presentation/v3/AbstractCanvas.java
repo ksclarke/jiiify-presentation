@@ -652,7 +652,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      */
     @SuppressWarnings({ PMD.N_PATH_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY })
     private Canvas getCanvasFragment(final MediaFragmentSelector aCanvasRegion) { // NOPMD
-        final String canvasID = getID().toString() + Constants.HASH + aCanvasRegion.toString();
+        final String canvasID = getID() + Constants.HASH + aCanvasRegion.toString();
         final Canvas canvasFragment = new Canvas(canvasID);
         final double duration;
         final int height;

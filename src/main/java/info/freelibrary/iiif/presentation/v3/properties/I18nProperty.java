@@ -17,7 +17,7 @@ import info.freelibrary.util.StringUtils;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
- * A base class for label, summary, attribution and metadata's label and value fields.
+ * A base class for label, summary, attribution, property, and metadata's label and value fields.
  */
 class I18nProperty<T extends I18nProperty<T>> {
 
@@ -92,6 +92,7 @@ class I18nProperty<T extends I18nProperty<T>> {
         if (hasStrings()) {
             return myI18ns.get(0).getStrings().get(0);
         }
+
         return null;
     }
 
@@ -114,6 +115,7 @@ class I18nProperty<T extends I18nProperty<T>> {
         if (aObject != null && getClass().getName().equals(aObject.getClass().getName())) {
             return toMap().equals(((I18nProperty<?>) aObject).toMap());
         }
+
         return false;
     }
 

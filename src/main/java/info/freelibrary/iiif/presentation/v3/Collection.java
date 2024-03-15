@@ -37,6 +37,7 @@ import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CollectionBehavior;
+import info.freelibrary.iiif.presentation.v3.properties.geo.NavPlace;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.Labeled;
@@ -467,6 +468,9 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         /** The collection item's navDate. */
         private NavDate myNavDate;
 
+        /** The collection item's navPlace. */
+        private NavPlace myNavPlace;
+
         /** The collection item's thumbnails. */
         private List<ContentResource<?>> myThumbnails;
 
@@ -548,6 +552,16 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         }
 
         /**
+         * Gets a navigation place.
+         *
+         * @return The navigation place
+         */
+        @JsonGetter(JsonKeys.NAV_PLACE)
+        public NavPlace getNavPlace() {
+            return myNavPlace;
+        }
+
+        /**
          * Gets a list of item thumbnails, initializing the list if this hasn't been done already.
          *
          * @return The items's thumbnails
@@ -594,6 +608,18 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         @JsonSetter(JsonKeys.NAV_DATE)
         public Item setNavDate(final NavDate aNavDate) {
             myNavDate = aNavDate;
+            return this;
+        }
+
+        /**
+         * Sets a navigation place.
+         *
+         * @param aNavPlace The navigation place
+         * @return The navigable resource
+         */
+        @JsonSetter(JsonKeys.NAV_PLACE)
+        public Item setNavPlace(final NavPlace aNavPlace) {
+            myNavPlace = aNavPlace;
             return this;
         }
 

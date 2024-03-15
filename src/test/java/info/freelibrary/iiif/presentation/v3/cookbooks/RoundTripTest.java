@@ -314,6 +314,17 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
+     * Tests the 0031 bound multivolume manifest (cf. https://iiif.io/api/cookbook/recipe/0031-bound-multivolume/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0031BoundMultiVolume() throws IOException {
+        final String expected = getExpected("0031-bound-multivolume/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
+    }
+
+    /**
      * Tests the 0032 collection's collection doc (cf. https://iiif.io/api/cookbook/recipe/0032-collection/).
      *
      * @throws IOException If there is trouble reading the collection document
@@ -567,6 +578,17 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0234Provider() throws IOException {
         final String expected = getExpected("0234-provider/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
+    }
+
+    /**
+     * Tests the 0240 navPlace on canvases fixture (cf. https://iiif.io/api/cookbook/recipe/0240-navPlace-on-canvases/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0240NavPlaceOnCanvases() throws IOException {
+        final String expected = getExpected("0240-navPlace-on-canvases/manifest");
         assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 

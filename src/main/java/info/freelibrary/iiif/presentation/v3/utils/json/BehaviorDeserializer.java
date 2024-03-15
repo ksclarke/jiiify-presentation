@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.JDK;
 import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.Resource;
@@ -58,7 +59,7 @@ public class BehaviorDeserializer extends StdDeserializer<List<Behavior>> {
     }
 
     @Override
-    @SuppressWarnings(PMD.PRESERVE_STACK_TRACE)
+    @SuppressWarnings({ PMD.PRESERVE_STACK_TRACE, JDK.DEPRECATION })
     public List<Behavior> deserialize(final JsonParser aParser, final DeserializationContext aContext)
             throws IOException, JsonProcessingException {
         final JsonNode currentNode = aParser.getCodec().readTree(aParser);

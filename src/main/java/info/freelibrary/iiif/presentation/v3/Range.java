@@ -23,6 +23,7 @@ import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.Metadata;
+import info.freelibrary.iiif.presentation.v3.properties.NavDate;
 import info.freelibrary.iiif.presentation.v3.properties.PartOf;
 import info.freelibrary.iiif.presentation.v3.properties.Provider;
 import info.freelibrary.iiif.presentation.v3.properties.Rendering;
@@ -33,6 +34,7 @@ import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.RangeBehavior;
+import info.freelibrary.iiif.presentation.v3.properties.geo.NavPlace;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
@@ -161,6 +163,30 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     @JsonInclude(Include.NON_ABSENT)
     public Optional<Start> getStart() {
         return Optional.ofNullable(myStart);
+    }
+
+    @Override
+    @JsonGetter(JsonKeys.NAV_DATE)
+    public NavDate getNavDate() {
+        return super.getNavDate();
+    }
+
+    @Override
+    @JsonGetter(JsonKeys.NAV_PLACE)
+    public NavPlace getNavPlace() {
+        return super.getNavPlace();
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.NAV_DATE)
+    public Range setNavDate(final NavDate aNavDate) {
+        return (Range) super.setNavDate(aNavDate);
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.NAV_PLACE)
+    public Range setNavPlace(final NavPlace aNavPlace) {
+        return (Range) super.setNavPlace(aNavPlace);
     }
 
     /**
@@ -497,7 +523,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
         @JsonIgnore
         public String getID() {
             if (mySpecificResource != null) {
-                return mySpecificResource.getID().toString();
+                return mySpecificResource.getID();
             }
 
             if (myCanvas != null) {

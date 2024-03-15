@@ -95,7 +95,6 @@
   <rule ref="category/java/errorprone.xml">
     <exclude name="AssignmentInOperand" />
     <exclude name="DataflowAnomalyAnalysis" />
-    <exclude name="BeanMembersShouldSerialize" />
   </rule>
 
   <rule ref="category/java/performance.xml">

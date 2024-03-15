@@ -1,0 +1,18 @@
+
+// Making fonts a little more readable for older eyes (like mine)
+.lead .mt-5 { font-weight: 500; text-shadow: black 1px 1px; }
+.display-1 { font-weight: 500; text-shadow: black 1px 1px; }
+.td-navbar .navbar-brand__name { font-weight: 500; }
+
+// Tweak the color scheme and layout on Home and About pages
+.td-box--3 { background-color: white; }
+.td-footer { padding-top: 1em; min-height: 100px; }
+
+// Give a little more whitespace around items in the in-page TOCs
+.td-page-meta a { padding-top: 30px; }
+
+// Hide links to the doc sources, leaving just a feedback button 
+.td-page-meta__child { display: none !important; }
+.td-page-meta__view { display: none !important; }
+.td-page-meta__edit { display: none !important; }
+

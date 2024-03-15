@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.JDK;
 
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
@@ -89,6 +90,7 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
      * @return A media fragment selector
      * @throws JsonMappingException If there is trouble deserializing the fragment selector
      */
+    @SuppressWarnings({ JDK.DEPRECATION })
     private PointSelector deserializePointSelector(final JsonNode aNode, final JsonParser aParser)
             throws JsonMappingException {
         final int pointX = getInt(aNode, PointSelector.X_COORDINATE, -1);
@@ -125,6 +127,7 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
      * @return A media fragment selector
      * @throws JsonMappingException If there is trouble deserializing the fragment selector
      */
+    @SuppressWarnings({ JDK.DEPRECATION })
     private MediaFragmentSelector deserializeFragmentSelector(final JsonNode aNode, final JsonParser aParser)
             throws JsonMappingException {
         final JsonNode conformsToNode = aNode.get(JsonKeys.CONFORMS_TO);
@@ -192,6 +195,7 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
      * @param aDefaultValue The default string value for missing nodes
      * @return The text from the node or the default value
      */
+    @SuppressWarnings({ JDK.DEPRECATION })
     private String getText(final JsonNode aNode, final String aNodeName, final String aDefaultValue) {
         final JsonNode node = aNode.get(aNodeName);
 

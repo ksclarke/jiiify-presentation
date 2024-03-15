@@ -22,6 +22,7 @@ import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.NavDate;
+import info.freelibrary.iiif.presentation.v3.properties.geo.NavPlace;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
@@ -38,6 +39,9 @@ class NavigableResource<T extends NavigableResource<T>> extends AbstractResource
 
     /** The date of the navigable resource. */
     private NavDate myNavDate;
+
+    /** The place of a navigable resource. */
+    private NavPlace myNavPlace;
 
     /**
      * Creates a navigable resource.
@@ -79,7 +83,7 @@ class NavigableResource<T extends NavigableResource<T>> extends AbstractResource
      * @return The navigation date
      */
     @JsonGetter(JsonKeys.NAV_DATE)
-    public NavDate getNavDate() {
+    protected NavDate getNavDate() {
         return myNavDate;
     }
 
@@ -92,6 +96,28 @@ class NavigableResource<T extends NavigableResource<T>> extends AbstractResource
     @JsonSetter(JsonKeys.NAV_DATE)
     protected NavigableResource<T> setNavDate(final NavDate aNavDate) {
         myNavDate = aNavDate;
+        return this;
+    }
+
+    /**
+     * Gets the navigation place.
+     *
+     * @return The navigation place
+     */
+    @JsonGetter(JsonKeys.NAV_PLACE)
+    protected NavPlace getNavPlace() {
+        return myNavPlace;
+    }
+
+    /**
+     * Sets the navigation place.
+     *
+     * @param aNavPlace The navigation place
+     * @return The navigable resource
+     */
+    @JsonSetter(JsonKeys.NAV_PLACE)
+    protected NavigableResource<T> setNavPlace(final NavPlace aNavPlace) {
+        myNavPlace = aNavPlace;
         return this;
     }
 

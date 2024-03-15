@@ -44,11 +44,11 @@
 
   <properties>
     <revision>0.0.0-SNAPSHOT</revision>
-    <jackson.version>2.15.3</jackson.version>
-    <jackson.databind.version>2.15.3</jackson.databind.version>
+    <jackson.version>2.17.0</jackson.version>
+    <jackson.databind.version>2.17.0</jackson.databind.version>
     <throwing.function.version>1.5.1</throwing.function.version>
     <freelib.utils.version>4.0.2</freelib.utils.version>
-    <jsoup.version>1.16.1</jsoup.version>
+    <jsoup.version>1.17.2</jsoup.version>
     <combinatorics.version>3.3.0</combinatorics.version>
     <media.fragments.uri.version>2.4</media.fragments.uri.version>
 
@@ -184,13 +184,6 @@
 
         <executions>
           <execution>
-            <id>generate-i18n-codes</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>generate-codes</goal>
-            </goals>
-          </execution>
-          <execution>
             <id>generate-media-types</id>
             <phase>generate-sources</phase>
             <goals>
@@ -211,6 +204,11 @@
               https://javadoc.io/doc/info.freelibrary/freelib-utils/${freelib.utils.version}/apidocs</link>
           </links>
         </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
       </plugin>
 
       <plugin>
@@ -290,7 +288,7 @@
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>8.0.3</version>
+    <version>8.0.7</version>
   </parent>
 
 </project>

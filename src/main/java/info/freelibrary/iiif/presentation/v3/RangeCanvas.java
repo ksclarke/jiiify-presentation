@@ -23,6 +23,7 @@ import info.freelibrary.iiif.presentation.v3.properties.Rendering;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
+import info.freelibrary.iiif.presentation.v3.properties.geo.NavPlace;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
@@ -120,6 +121,11 @@ class RangeCanvas extends Canvas {
     @Override
     public NavDate getNavDate() {
         return mySourceCanvas.getNavDate();
+    }
+
+    @Override
+    public NavPlace getNavPlace() {
+        return mySourceCanvas.getNavPlace();
     }
 
     @Override
@@ -382,11 +388,6 @@ class RangeCanvas extends Canvas {
     @Override
     protected boolean removeContext(final URI aContextURI) {
         return mySourceCanvas.removeContext(aContextURI);
-    }
-
-    @Override
-    protected NavigableResource<AbstractCanvas<Canvas>> setNavDate(final NavDate aNavDate) {
-        return mySourceCanvas.setNavDate(aNavDate);
     }
 
     @Override
