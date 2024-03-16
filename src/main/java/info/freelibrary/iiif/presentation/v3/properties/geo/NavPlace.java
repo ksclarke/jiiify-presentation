@@ -123,12 +123,11 @@ public class NavPlace {
      * Sets the navPlace type.
      *
      * @param aType The navPlace type
-     * @return This navPlace
      */
     @JsonSetter(JsonKeys.TYPE)
     private void setType(final String aType) {
         if (!JsonKeys.FEATURE_COLLECTION.equals(aType)) {
-            throw new IllegalArgumentException(LOGGER.getMessage("{} is not a valid navPlace type", aType));
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_140, aType));
         }
     }
 }

@@ -615,6 +615,29 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
+     * Tests the 0326 annotating image layer fixture (cf.
+     * https://iiif.io/api/cookbook/recipe/0326-annotating-image-layer/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0326AnnotatingImageLayer() throws IOException {
+        final String expected = getExpected("0326-annotating-image-layer/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
+    }
+
+    /**
+     * Tests the 0377 image in annotation fixture (cf. https://iiif.io/api/cookbook/recipe/0377-image-in-annotation/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0377ImageInAnnotation() throws IOException {
+        final String expected = getExpected("0377-image-in-annotation/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
+    }
+
+    /**
      * Gets a cookbook manifest as a string.
      *
      * @param aManifestName A manifest file name

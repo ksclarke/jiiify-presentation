@@ -4,7 +4,9 @@ package info.freelibrary.iiif.presentation.v3;
 import static info.freelibrary.util.Constants.SINGLE_INSTANCE;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
@@ -17,6 +19,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import info.freelibrary.util.warnings.JDK;
+
+import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Localized;
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
@@ -32,6 +37,9 @@ import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeSerializer;
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
 abstract class AbstractContentResource<T extends AbstractResource<AbstractContentResource<T>>>
         extends AbstractResource<AbstractContentResource<T>> implements Localized<T> {
+
+    /** The content resource's Web annotations. */
+    private List<AnnotationPage<WebAnnotation>> myAnnotations;
 
     /** The content resource's media type. */
     private MediaType myFormat;
@@ -99,6 +107,49 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
     protected AbstractContentResource<T> setFormat(final MediaType aMediaType) {
         myFormat = aMediaType;
         return this;
+    }
+
+    /**
+     * Gets the content resource's annotations.
+     *
+     * @return The content resource's annotations
+     */
+    @JsonGetter(JsonKeys.ANNOTATIONS)
+    protected List<AnnotationPage<WebAnnotation>> getAnnotations() {
+        if (myAnnotations == null) {
+            myAnnotations = new ArrayList<>();
+        }
+
+        return myAnnotations;
+    }
+
+    /**
+     * Sets the content resource's annotations.
+     *
+     * @param aAnnotationList A list of annotation pages
+     * @return The content resource
+     */
+    @JsonSetter(JsonKeys.ANNOTATIONS)
+    protected AbstractContentResource<T> setAnnotations(final List<AnnotationPage<WebAnnotation>> aAnnotationList) {
+        final List<AnnotationPage<WebAnnotation>> annotations = getAnnotations();
+
+        Objects.requireNonNull(aAnnotationList);
+        annotations.clear();
+        annotations.addAll(aAnnotationList);
+
+        return this;
+    }
+
+    /**
+     * Sets the content resource's annotation pages from an array.
+     *
+     * @param aAnnotationArray An array of annotation pages
+     * @return The content resource
+     */
+    @SuppressWarnings(JDK.UNCHECKED)
+    @JsonIgnore
+    protected AbstractContentResource<T> setAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
+        return setAnnotations(Arrays.asList(aAnnotationArray));
     }
 
     /**

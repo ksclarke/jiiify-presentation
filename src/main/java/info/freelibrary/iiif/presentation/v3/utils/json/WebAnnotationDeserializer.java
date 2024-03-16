@@ -292,13 +292,7 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
         }
 
         // If our target is not a value node, it should be a specific resource
-        try {
-            return new Target((SpecificResource) JSON.getReader(SpecificResource.class).readTree(aParser));
-        } catch (final IOException details) {
-            final String message = LOGGER.getMessage(MessageCodes.JPA_131, aNode.toString());
-            throw (InputCoercionException) new InputCoercionException(aParser, message, aParser.getCurrentToken(),
-                    WebAnnotation.class).fillInStackTrace();
-        }
+        return new Target(JSON.convertValue(aNode, SpecificResource.class));
     }
 
     /**

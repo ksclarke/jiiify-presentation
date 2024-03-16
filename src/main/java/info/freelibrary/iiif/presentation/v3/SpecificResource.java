@@ -216,6 +216,10 @@ public class SpecificResource implements ContentResource<SpecificResource> {
     @JsonSetter(JsonKeys.TYPE)
     @SuppressWarnings(PMD.UNUSED_FORMAL_PARAMETER) // This method is just used by Jackson's deserialization processes
     public SpecificResource setType(final String aType) { // NOPMD
+        if (!ResourceTypes.SPECIFIC_RESOURCE.equals(aType)) {
+            throw new IllegalArgumentException(aType);
+        }
+
         return this;
     }
 

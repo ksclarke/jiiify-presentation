@@ -1,6 +1,10 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.selectors;
 
+import java.util.Optional;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.StringUtils;
@@ -80,27 +84,27 @@ public class ImageApiSelector implements Selector {
     /**
      * The Image API selector's region.
      */
-    private String myRegion = DEFAULT_REGION;
+    private String myRegion;
 
     /**
      * The Image API selector's size.
      */
-    private String mySize = DEFAULT_SIZE;
+    private String mySize;
 
     /**
      * The Image API selector's rotation.
      */
-    private String myRotation = DEFAULT_ROTATION;
+    private String myRotation;
 
     /**
      * The Image API selector's quality.
      */
-    private String myQuality = DEFAULT_QUALITY;
+    private String myQuality;
 
     /**
      * The Image API selector's format.
      */
-    private String myFormat = DEFAULT_FORMAT;
+    private String myFormat;
 
     /**
      * Creates an Image API selector.
@@ -157,8 +161,8 @@ public class ImageApiSelector implements Selector {
      *
      * @return The requested region
      */
-    public String getRegion() {
-        return myRegion;
+    public Optional<String> getRegion() {
+        return Optional.ofNullable(myRegion);
     }
 
     /**
@@ -177,8 +181,8 @@ public class ImageApiSelector implements Selector {
      *
      * @return The requested size
      */
-    public String getSize() {
-        return mySize;
+    public Optional<String> getSize() {
+        return Optional.ofNullable(mySize);
     }
 
     /**
@@ -197,8 +201,9 @@ public class ImageApiSelector implements Selector {
      *
      * @return The requested rotation
      */
-    public String getRotation() {
-        return myRotation;
+    @JsonInclude(JsonInclude.Include.NON_ABSENT)
+    public Optional<String> getRotation() {
+        return Optional.ofNullable(myRotation);
     }
 
     /**
@@ -217,8 +222,9 @@ public class ImageApiSelector implements Selector {
      *
      * @return The requested image quality
      */
-    public String getQuality() {
-        return myQuality;
+    @JsonInclude(JsonInclude.Include.NON_ABSENT)
+    public Optional<String> getQuality() {
+        return Optional.ofNullable(myQuality);
     }
 
     /**
@@ -237,8 +243,9 @@ public class ImageApiSelector implements Selector {
      *
      * @return The image format
      */
-    public String getFormat() {
-        return myFormat;
+    @JsonInclude(JsonInclude.Include.NON_ABSENT)
+    public Optional<String> getFormat() {
+        return Optional.ofNullable(myFormat);
     }
 
     /**
@@ -259,6 +266,12 @@ public class ImageApiSelector implements Selector {
      */
     @Override
     public String toString() {
-        return StringUtils.format("/{}/{}/{}/{}.{}", myRegion, mySize, myRotation, myQuality, myFormat);
+        final String region = myRegion == null ? DEFAULT_REGION : myRegion;
+        final String size = mySize == null ? DEFAULT_SIZE : mySize;
+        final String rotation = myRotation == null ? DEFAULT_ROTATION : myRotation;
+        final String quality = myQuality == null ? DEFAULT_QUALITY : myQuality;
+        final String format = myFormat == null ? DEFAULT_FORMAT : myFormat;
+
+        return StringUtils.format("/{}/{}/{}/{}.{}", region, size, rotation, quality, format);
     }
 }

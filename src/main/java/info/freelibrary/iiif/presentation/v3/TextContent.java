@@ -10,6 +10,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import info.freelibrary.util.warnings.JDK;
+
+import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -32,7 +35,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
 public class TextContent extends AbstractContentResource<TextContent>
-        implements ContentResource<TextContent>, Resource<TextContent> {
+        implements ContentResource<TextContent>, Resource<TextContent>, AnnotatedContent<TextContent> {
 
     /**
      * Creates a text content resource.
@@ -188,6 +191,22 @@ public class TextContent extends AbstractContentResource<TextContent>
     @Override
     public TextContent setThumbnails(final List<ContentResource<?>> aThumbnailList) {
         return (TextContent) super.setThumbnails(aThumbnailList);
+    }
+
+    @Override
+    public List<AnnotationPage<WebAnnotation>> getAnnotations() {
+        return super.getAnnotations();
+    }
+
+    @Override
+    @SuppressWarnings(JDK.UNCHECKED)
+    public TextContent setAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
+        return (TextContent) super.setAnnotations(aAnnotationArray);
+    }
+
+    @Override
+    public TextContent setAnnotations(final List<AnnotationPage<WebAnnotation>> aAnnotationArray) {
+        return (TextContent) super.setAnnotations(aAnnotationArray);
     }
 
     /**

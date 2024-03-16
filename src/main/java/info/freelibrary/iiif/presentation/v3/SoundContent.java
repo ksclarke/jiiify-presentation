@@ -12,6 +12,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import info.freelibrary.util.warnings.JDK;
+
+import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -34,8 +37,8 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.DURATION,
     JsonKeys.LANGUAGE })
-public class SoundContent extends AbstractContentResource<SoundContent>
-        implements ContentResource<SoundContent>, TemporalContentResource<SoundContent>, Resource<SoundContent> {
+public class SoundContent extends AbstractContentResource<SoundContent> implements ContentResource<SoundContent>,
+        TemporalContentResource<SoundContent>, Resource<SoundContent>, AnnotatedContent<SoundContent> {
 
     /** The class of media type this content represents. */
     private static final String MEDIA_TYPE_CLASS = "audio";
@@ -217,6 +220,22 @@ public class SoundContent extends AbstractContentResource<SoundContent>
     public SoundContent setDuration(final Number aDuration) {
         myDuration = convertToFinitePositiveFloat(aDuration);
         return this;
+    }
+
+    @Override
+    public List<AnnotationPage<WebAnnotation>> getAnnotations() {
+        return super.getAnnotations();
+    }
+
+    @Override
+    @SuppressWarnings(JDK.UNCHECKED)
+    public SoundContent setAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
+        return (SoundContent) super.setAnnotations(aAnnotationArray);
+    }
+
+    @Override
+    public SoundContent setAnnotations(final List<AnnotationPage<WebAnnotation>> aAnnotationArray) {
+        return (SoundContent) super.setAnnotations(aAnnotationArray);
     }
 
     /**

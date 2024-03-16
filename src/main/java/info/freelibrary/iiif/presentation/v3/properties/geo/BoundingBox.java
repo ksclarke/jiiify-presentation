@@ -5,7 +5,7 @@ import java.util.OptionalDouble;
 
 /**
  * An array of length 2*n where n is the number of dimensions represented in the contained geometries, with all axes of
- * the most southwesterly point followed by all axes of the more northeasterly point
+ * the most southwesterly point followed by all axes of the more northeasterly point.
  */
 public class BoundingBox {
 
@@ -136,7 +136,7 @@ public class BoundingBox {
     /**
      * Sets the bounding box's southerly boundary.
      *
-     * @param aEast The southerly boundary
+     * @param aSouth The southerly boundary
      * @return This bounding box
      */
     public BoundingBox setSouth(final double aSouth) {
@@ -187,7 +187,7 @@ public class BoundingBox {
     /**
      * Sets the bounding box's minimum altitude.
      *
-     * @param aMaxAltitude A minimum altitude
+     * @param aMinAltitude A minimum altitude
      * @return This bounding box
      */
     public BoundingBox setMinAltitude(final double aMinAltitude) {

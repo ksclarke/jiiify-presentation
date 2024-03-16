@@ -62,9 +62,9 @@ public class MultiLineString implements Geometry {
     }
 
     /**
-     * Gets a stream of the <code>MultiLineString</code>'s <code>LineString<code>s.
+     * Gets a stream of the <code>MultiLineString</code>'s <code>LineString</code>s.
      *
-     * &#64;return A stream of the <code>MultiLineString</code>'s <code>LineString</code>s
+     * @return A stream of the <code>MultiLineString</code>'s <code>LineString</code>s
      */
     public Stream<LineString> stream() {
         return Arrays.stream(myLineStrings);

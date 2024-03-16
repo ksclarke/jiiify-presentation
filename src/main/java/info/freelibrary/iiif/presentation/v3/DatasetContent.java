@@ -9,6 +9,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import info.freelibrary.util.warnings.JDK;
+
+import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -31,7 +34,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
 public class DatasetContent extends AbstractContentResource<DatasetContent>
-        implements ContentResource<DatasetContent>, Resource<DatasetContent> {
+        implements ContentResource<DatasetContent>, Resource<DatasetContent>, AnnotatedContent<DatasetContent> {
 
     /**
      * Creates a dataset content resource from the supplied ID.
@@ -181,6 +184,22 @@ public class DatasetContent extends AbstractContentResource<DatasetContent>
     @Override
     public DatasetContent setLanguages(final String... aLangArray) {
         return (DatasetContent) super.setLanguages(aLangArray);
+    }
+
+    @Override
+    public List<AnnotationPage<WebAnnotation>> getAnnotations() {
+        return super.getAnnotations();
+    }
+
+    @Override
+    @SuppressWarnings(JDK.UNCHECKED)
+    public DatasetContent setAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
+        return (DatasetContent) super.setAnnotations(aAnnotationArray);
+    }
+
+    @Override
+    public DatasetContent setAnnotations(final List<AnnotationPage<WebAnnotation>> aAnnotationArray) {
+        return (DatasetContent) super.setAnnotations(aAnnotationArray);
     }
 
     /**

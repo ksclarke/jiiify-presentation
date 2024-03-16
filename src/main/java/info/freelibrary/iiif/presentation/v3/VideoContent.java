@@ -12,6 +12,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import info.freelibrary.util.warnings.JDK;
+
+import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -34,8 +37,9 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.HEIGHT, JsonKeys.WIDTH, JsonKeys.DURATION,
     JsonKeys.FORMAT, JsonKeys.LANGUAGE })
-public class VideoContent extends AbstractContentResource<VideoContent> implements ContentResource<VideoContent>,
-        SpatialContentResource<VideoContent>, TemporalContentResource<VideoContent>, Resource<VideoContent> {
+public class VideoContent extends AbstractContentResource<VideoContent>
+        implements ContentResource<VideoContent>, SpatialContentResource<VideoContent>,
+        TemporalContentResource<VideoContent>, Resource<VideoContent>, AnnotatedContent<VideoContent> {
 
     /** The class of media type this content represents. */
     private static final String MEDIA_TYPE_CLASS = "video";
@@ -198,6 +202,22 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
     @Override
     public VideoContent setLanguages(final String... aLangArray) {
         return (VideoContent) super.setLanguages(aLangArray);
+    }
+
+    @Override
+    public List<AnnotationPage<WebAnnotation>> getAnnotations() {
+        return super.getAnnotations();
+    }
+
+    @Override
+    @SuppressWarnings(JDK.UNCHECKED)
+    public VideoContent setAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
+        return (VideoContent) super.setAnnotations(aAnnotationArray);
+    }
+
+    @Override
+    public VideoContent setAnnotations(final List<AnnotationPage<WebAnnotation>> aAnnotationArray) {
+        return (VideoContent) super.setAnnotations(aAnnotationArray);
     }
 
     /**

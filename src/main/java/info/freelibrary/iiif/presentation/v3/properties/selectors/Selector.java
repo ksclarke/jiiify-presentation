@@ -22,6 +22,7 @@ public interface Selector {
      */
     @JsonProperty(JsonKeys.TYPE)
     default String getType() {
+        // Gets the implementation class name since that's how we create selectors
         return getClass().getSimpleName();
     }
 
