@@ -161,6 +161,7 @@ public class ImageApiSelector implements Selector {
      *
      * @return The requested region
      */
+    @JsonInclude(JsonInclude.Include.NON_ABSENT)
     public Optional<String> getRegion() {
         return Optional.ofNullable(myRegion);
     }
@@ -181,6 +182,7 @@ public class ImageApiSelector implements Selector {
      *
      * @return The requested size
      */
+    @JsonInclude(JsonInclude.Include.NON_ABSENT)
     public Optional<String> getSize() {
         return Optional.ofNullable(mySize);
     }

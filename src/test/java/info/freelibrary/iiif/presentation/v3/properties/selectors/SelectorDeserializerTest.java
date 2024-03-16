@@ -3,6 +3,7 @@ package info.freelibrary.iiif.presentation.v3.properties.selectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
@@ -64,7 +65,7 @@ public class SelectorDeserializerTest extends AbstractTest {
         final String json = JSON.getWriter(ImageApiSelector.class).writeValueAsString(new ImageApiSelector());
         final Selector selector = JSON.getReader(Selector.class).readValue(json);
 
-        assertEquals(ImageApiSelector.DEFAULT_REGION, ((ImageApiSelector) selector).getRegion());
+        assertTrue(((ImageApiSelector) selector).getRegion().isEmpty());
     }
 
     /**
@@ -88,6 +89,6 @@ public class SelectorDeserializerTest extends AbstractTest {
                         ImageApiSelector.class.getSimpleName());
         final Selector selector = JSON.getReader(Selector.class).readValue(jsonNode.toPrettyString());
 
-        assertEquals(ImageApiSelector.DEFAULT_REGION, ((ImageApiSelector) selector).getRegion());
+        assertEquals(ImageApiSelector.DEFAULT_REGION, ((ImageApiSelector) selector).getRegion().get());
     }
 }
