@@ -12,7 +12,7 @@ import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
  *
  * @param <T> A type of <code>ContentResource</code>
  */
-public interface AnnotatedContent<T> {
+public interface AnnotatedContentResource<T extends AnnotatedContentResource<T>> extends ContentResource<T> {
 
     /**
      * Gets the content resource's annotations.

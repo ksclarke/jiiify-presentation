@@ -14,9 +14,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
+import info.freelibrary.iiif.presentation.v3.exts.geo.Properties;
 import info.freelibrary.iiif.presentation.v3.properties.I18n;
 import info.freelibrary.iiif.presentation.v3.properties.Property;
-import info.freelibrary.iiif.presentation.v3.properties.geo.Properties;
 
 /**
  * A deserializer for GeoJSON properties.

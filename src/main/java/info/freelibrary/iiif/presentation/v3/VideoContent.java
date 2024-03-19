@@ -37,9 +37,8 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.HEIGHT, JsonKeys.WIDTH, JsonKeys.DURATION,
     JsonKeys.FORMAT, JsonKeys.LANGUAGE })
-public class VideoContent extends AbstractContentResource<VideoContent>
-        implements ContentResource<VideoContent>, SpatialContentResource<VideoContent>,
-        TemporalContentResource<VideoContent>, Resource<VideoContent>, AnnotatedContent<VideoContent> {
+public class VideoContent extends AbstractContentResource<VideoContent> implements SpatialContentResource<VideoContent>,
+        TemporalContentResource<VideoContent>, AnnotatedContentResource<VideoContent>, Resource<VideoContent> {
 
     /** The class of media type this content represents. */
     private static final String MEDIA_TYPE_CLASS = "video";

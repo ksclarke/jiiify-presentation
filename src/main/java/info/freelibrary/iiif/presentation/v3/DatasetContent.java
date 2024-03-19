@@ -34,7 +34,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
 public class DatasetContent extends AbstractContentResource<DatasetContent>
-        implements ContentResource<DatasetContent>, Resource<DatasetContent>, AnnotatedContent<DatasetContent> {
+        implements AnnotatedContentResource<DatasetContent>, Resource<DatasetContent> {
 
     /**
      * Creates a dataset content resource from the supplied ID.

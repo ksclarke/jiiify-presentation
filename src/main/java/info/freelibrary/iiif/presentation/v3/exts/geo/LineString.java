@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3.properties.geo;
+package info.freelibrary.iiif.presentation.v3.exts.geo;
 
 import java.util.Arrays;
 import java.util.List;

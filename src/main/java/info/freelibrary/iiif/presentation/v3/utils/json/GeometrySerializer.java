@@ -11,11 +11,11 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
-import info.freelibrary.iiif.presentation.v3.properties.geo.Geometry;
-import info.freelibrary.iiif.presentation.v3.properties.geo.LineString;
-import info.freelibrary.iiif.presentation.v3.properties.geo.MultiLineString;
-import info.freelibrary.iiif.presentation.v3.properties.geo.MultiPoint;
-import info.freelibrary.iiif.presentation.v3.properties.geo.Point;
+import info.freelibrary.iiif.presentation.v3.exts.geo.Geometry;
+import info.freelibrary.iiif.presentation.v3.exts.geo.LineString;
+import info.freelibrary.iiif.presentation.v3.exts.geo.MultiLineString;
+import info.freelibrary.iiif.presentation.v3.exts.geo.MultiPoint;
+import info.freelibrary.iiif.presentation.v3.exts.geo.Point;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**

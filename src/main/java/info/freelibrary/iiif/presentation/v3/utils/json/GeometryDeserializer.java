@@ -18,11 +18,11 @@ import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.JDK;
 
-import info.freelibrary.iiif.presentation.v3.properties.geo.Geometry;
-import info.freelibrary.iiif.presentation.v3.properties.geo.LineString;
-import info.freelibrary.iiif.presentation.v3.properties.geo.MultiLineString;
-import info.freelibrary.iiif.presentation.v3.properties.geo.MultiPoint;
-import info.freelibrary.iiif.presentation.v3.properties.geo.Point;
+import info.freelibrary.iiif.presentation.v3.exts.geo.Geometry;
+import info.freelibrary.iiif.presentation.v3.exts.geo.LineString;
+import info.freelibrary.iiif.presentation.v3.exts.geo.MultiLineString;
+import info.freelibrary.iiif.presentation.v3.exts.geo.MultiPoint;
+import info.freelibrary.iiif.presentation.v3.exts.geo.Point;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 

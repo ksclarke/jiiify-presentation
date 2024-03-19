@@ -38,8 +38,8 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.HEIGHT,
     JsonKeys.WIDTH, JsonKeys.LANGUAGE, JsonKeys.SERVICE })
-public class ImageContent extends AbstractContentResource<ImageContent> implements ContentResource<ImageContent>,
-        SpatialContentResource<ImageContent>, Resource<ImageContent>, AnnotatedContent<ImageContent> {
+public class ImageContent extends AbstractContentResource<ImageContent> implements
+        AnnotatedContentResource<ImageContent>, SpatialContentResource<ImageContent>, Resource<ImageContent> {
 
     /** The class of media type this content represents. */
     private static final String MEDIA_TYPE_CLASS = "image";

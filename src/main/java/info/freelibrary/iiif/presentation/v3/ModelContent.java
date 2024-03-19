@@ -34,7 +34,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
 public class ModelContent extends AbstractContentResource<ModelContent>
-        implements ContentResource<ModelContent>, Resource<ModelContent>, AnnotatedContent<ModelContent> {
+        implements AnnotatedContentResource<ModelContent>, Resource<ModelContent> {
 
     /**
      * Creates a model content resource from the supplied ID.

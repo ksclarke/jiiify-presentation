@@ -7,9 +7,9 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
+import info.freelibrary.iiif.presentation.v3.exts.geo.Properties;
 import info.freelibrary.iiif.presentation.v3.properties.I18n;
 import info.freelibrary.iiif.presentation.v3.properties.Property;
-import info.freelibrary.iiif.presentation.v3.properties.geo.Properties;
 
 /**
  * A serializer for the <code>NavPlaceFeature</code>'s properties.
