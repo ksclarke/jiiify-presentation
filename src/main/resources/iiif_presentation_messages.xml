@@ -110,4 +110,6 @@
   <entry key="JPA-138">Geometry JSON has an unsupported type: {}</entry>
   <entry key="JPA-139">Geometry doesn't have the required type property</entry>
   <entry key="JPA-140">'{}' is not a valid navPlace type</entry>
+  <entry key="JPA-141">SvgSelector's value could not be parsed: {}</entry>
+  <entry key="JPA-142">Stylesheet on PaintingAnnotation must have a value or URI</entry>
 </properties>

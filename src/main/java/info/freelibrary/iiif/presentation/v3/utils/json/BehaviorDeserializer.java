@@ -99,7 +99,7 @@ public class BehaviorDeserializer extends StdDeserializer<List<Behavior>> {
             if (behavior.isEmpty()) {
                 errors.add(new JsonMappingException(aParser,
                         LOGGER.getMessage(MessageCodes.JPA_010, label, behaviors.getBehaviorType()),
-                        aParser.getCurrentLocation()));
+                        aParser.currentLocation()));
             } else {
                 behaviors.add(behavior.get());
             }

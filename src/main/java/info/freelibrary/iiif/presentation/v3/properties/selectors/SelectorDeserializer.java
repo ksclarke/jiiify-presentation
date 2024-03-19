@@ -1,10 +1,15 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.selectors;
 
+import static info.freelibrary.util.Constants.EMPTY;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
+
+import org.jsoup.Jsoup;
+import org.jsoup.parser.Parser;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -15,7 +20,6 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.warnings.JDK;
 
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
@@ -69,12 +73,30 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
                     return deserializeImageApiSelector(node);
                 case "PointSelector":
                     return deserializePointSelector(node, aParser);
+                case "SvgSelector":
+                    return deserializeSvgSelector(node);
                 default:
                     // Checkstyle wants us to have a default; this default falls through to the final `return null`
             }
         }
 
         return null; // Return nothing (which will be ignored)
+    }
+
+    /**
+     * Deserializes a JSON node that represents an SvgSelector.
+     *
+     * @param aNode A JSON node representing an SvgSelector
+     * @return A new <code>SvgSelector</code>
+     */
+    private SvgSelector deserializeSvgSelector(final JsonNode aNode) {
+        final Optional<String> value = getText(aNode, JsonKeys.VALUE);
+
+        if (value.isEmpty()) {
+            return null;
+        }
+
+        return new SvgSelector(Jsoup.parse(value.get(), EMPTY, Parser.xmlParser()));
     }
 
     /**
@@ -108,7 +130,6 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
      * @return A media fragment selector
      * @throws JsonMappingException If there is trouble deserializing the fragment selector
      */
-    @SuppressWarnings({ JDK.DEPRECATION })
     private PointSelector deserializePointSelector(final JsonNode aNode, final JsonParser aParser)
             throws JsonMappingException {
         final int pointX = getInt(aNode, PointSelector.X_COORDINATE, -1);
@@ -118,8 +139,7 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
 
         // We could play this looser but let's be explicit with what we expect
         if (pointT == -1F && (pointX == -1 || pointY == -1)) {
-            throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_117),
-                    aParser.getCurrentLocation());
+            throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_117), aParser.currentLocation());
         }
 
         // If we have everything we're expecting, let's go ahead and build it
@@ -145,7 +165,6 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
      * @return A media fragment selector
      * @throws JsonMappingException If there is trouble deserializing the fragment selector
      */
-    @SuppressWarnings({ JDK.DEPRECATION })
     private MediaFragmentSelector deserializeFragmentSelector(final JsonNode aNode, final JsonParser aParser)
             throws JsonMappingException {
         final JsonNode conformsToNode = aNode.get(JsonKeys.CONFORMS_TO);
@@ -163,7 +182,7 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
             }
 
             throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_061, conformsTo),
-                    aParser.getCurrentLocation());
+                    aParser.currentLocation());
         } catch (final URISyntaxException details) {
             throw new JsonMappingException(aParser, details.getMessage(), details);
         }

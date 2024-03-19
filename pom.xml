@@ -51,6 +51,7 @@
     <jsoup.version>1.17.2</jsoup.version>
     <combinatorics.version>3.3.0</combinatorics.version>
     <media.fragments.uri.version>2.4</media.fragments.uri.version>
+    <xom.version>1.3.9</xom.version>
 
     <!-- Plugin related versions -->
     <freelib.maven.version>0.4.7</freelib.maven.version>

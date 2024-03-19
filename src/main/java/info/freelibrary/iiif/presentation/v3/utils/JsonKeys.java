@@ -201,7 +201,13 @@ public final class JsonKeys {
     /** A constant for the structures property. */
     public static final String STRUCTURES = "structures";
 
-    /** A constant for the summary property. */
+    /** The constant for the specific resource's styleClass. */
+    public static final String STYLE_CLASS = "styleClass";
+
+    /** The constant for the specific resource's stylesheet. */
+    public static final String STYLESHEET = "stylesheet";
+
+    /** The constant for the summary property. */
     public static final String SUMMARY = "summary";
 
     /** The constants for the supplementary property. */

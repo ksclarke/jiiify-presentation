@@ -4,6 +4,7 @@ package info.freelibrary.iiif.presentation.v3.utils;
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -35,6 +36,10 @@ public final class JSON {
             .configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true)
             .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true).registerModules(
                     new Jdk8Module(), new SimpleModule().addSerializer(float.class, new JSON().new FloatSerializer()));
+
+    static {
+        MAPPER.getFactory().enable(JsonParser.Feature.INCLUDE_SOURCE_IN_LOCATION);
+    }
 
     /**
      * Creates a new (de)serialization configuration.

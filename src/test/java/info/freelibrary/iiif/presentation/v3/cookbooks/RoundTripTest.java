@@ -358,6 +358,30 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
+     * Tests the 0040 image rotation service fixture (cf.
+     * https://iiif.io/api/cookbook/recipe/0040-image-rotation-service/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0040ImageRotationService() throws IOException {
+        final String expected = getExpected("0040-image-rotation-service/manifest-service");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
+    }
+
+    /**
+     * Tests the 0040 image rotation with CSS fixture (cf.
+     * https://iiif.io/api/cookbook/recipe/0040-image-rotation-service/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0040ImageRotationWithCSS() throws IOException {
+        final String expected = getExpected("0040-image-rotation-service/manifest-css");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
+    }
+
+    /**
      * Tests the 0046 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0046-rendering/).
      *
      * @throws IOException If there is trouble reading the manifest file
@@ -481,13 +505,37 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0139 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0139-geolocate-canvas-fragment/).
+     * Tests the 0135 annotating point in canvas (cf.
+     * https://iiif.io/api/cookbook/recipe/0135-annotating-point-in-canvas/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0135AnnotatingPointInCanvas() throws IOException {
+        final String expected = getExpected("0135-annotating-point-in-canvas/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
+    }
+
+    /**
+     * Tests the 0139 cookbook manifest fixture (cf.
+     * https://iiif.io/api/cookbook/recipe/0139-geolocate-canvas-fragment/).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
     @Test
     public final void test0139GeolocateCanvasFragment() throws IOException {
         final String expected = getExpected("0139-geolocate-canvas-fragment/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
+    }
+
+    /**
+     * Tests the 0154 GeoJSON extension fixture (cf. https://iiif.io/api/cookbook/recipe/0154-geo-extension/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0154GeoExtension() throws IOException {
+        final String expected = getExpected("0154-geo-extension/manifest");
         assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 
@@ -589,6 +637,42 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0240NavPlaceOnCanvases() throws IOException {
         final String expected = getExpected("0240-navPlace-on-canvases/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
+    }
+
+    /**
+     * Tests the 0258 tagging external resource fixture (cf.
+     * https://iiif.io/api/cookbook/recipe/0258-tagging-external-resource/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0258TaggingExternalResource() throws IOException {
+        final String expected = getExpected("0258-tagging-external-resource/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
+    }
+
+    /**
+     * Tests the 0261 non-rectangular commenting fixture (cf.
+     * https://iiif.io/api/cookbook/recipe/0261-non-rectangular-commenting/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0261NonRectangularCommenting() throws IOException {
+        final String expected = getExpected("0261-non-rectangular-commenting/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
+    }
+
+    /**
+     * Tests the 0266 full canvas annotation fixture (cf.
+     * https://iiif.io/api/cookbook/recipe/0266-full-canvas-annotation/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0266FullCanvasAnnotation() throws IOException {
+        final String expected = getExpected("0266-full-canvas-annotation/manifest");
         assertEquals(expected, Manifest.fromJSON(expected).toString());
     }
 

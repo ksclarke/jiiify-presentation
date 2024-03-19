@@ -7,6 +7,11 @@ import info.freelibrary.util.warnings.JDK;
 
 import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
 
+/**
+ * An interface for {@code ContentResources} that can have annotations.
+ *
+ * @param <T> A type of <code>ContentResource</code>
+ */
 public interface AnnotatedContent<T> {
 
     /**
@@ -22,7 +27,7 @@ public interface AnnotatedContent<T> {
      * @param aAnnotationList A list of annotations
      * @return The content resource
      */
-    T setAnnotations(final List<AnnotationPage<WebAnnotation>> aAnnotationList);
+    T setAnnotations(List<AnnotationPage<WebAnnotation>> aAnnotationList);
 
     /**
      * Sets the content resource's annotations.
@@ -31,6 +36,6 @@ public interface AnnotatedContent<T> {
      * @return The content resource
      */
     @SuppressWarnings(JDK.UNCHECKED)
-    T setAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray);
+    T setAnnotations(AnnotationPage<WebAnnotation>... aAnnotationArray);
 
 }

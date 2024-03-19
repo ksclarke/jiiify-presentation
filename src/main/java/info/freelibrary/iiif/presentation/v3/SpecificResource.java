@@ -49,6 +49,9 @@ public class SpecificResource implements ContentResource<SpecificResource> {
     /** The specific resource's source. */
     private Source mySource;
 
+    /** The specific resource's styleClass. */
+    private String myStyleClass;
+
     /**
      * Creates a new specific resource from the supplied source and selector.
      *
@@ -147,6 +150,17 @@ public class SpecificResource implements ContentResource<SpecificResource> {
     }
 
     /**
+     * Gets the specific resource's styleClass.
+     *
+     * @return The specific resource's styleClass
+     */
+    @JsonGetter(JsonKeys.STYLE_CLASS)
+    @JsonInclude(Include.NON_ABSENT)
+    public Optional<String> getStyleClass() {
+        return Optional.ofNullable(myStyleClass);
+    }
+
+    /**
      * Gets the specific resource type.
      *
      * @return The specific resource type
@@ -204,6 +218,17 @@ public class SpecificResource implements ContentResource<SpecificResource> {
     @JsonSetter(JsonKeys.SOURCE)
     public SpecificResource setSource(final Source aSource) {
         mySource = aSource;
+        return this;
+    }
+
+    /**
+     * Sets the specific resource's styleClass.
+     *
+     * @return The specific resource
+     */
+    @JsonSetter(JsonKeys.STYLE_CLASS)
+    public SpecificResource setStyleClass(final String aStyleClass) {
+        myStyleClass = aStyleClass;
         return this;
     }
 
