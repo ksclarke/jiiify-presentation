@@ -316,7 +316,6 @@ public class SupplementingAnnotation extends AbstractCanvasAnnotation<Supplement
      * @return The annotation target
      */
     @Override
-    @JsonSetter(JsonKeys.TARGET)
     public Target getTarget() {
         return super.getTarget();
     }

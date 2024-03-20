@@ -3,18 +3,21 @@ package info.freelibrary.iiif.presentation.v3.annotations;
 
 import java.util.Optional;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.SpecificResource;
 import info.freelibrary.iiif.presentation.v3.ids.UriUtils;
+import info.freelibrary.iiif.presentation.v3.utils.json.AnnotationTargetDeserializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.AnnotationTargetSerializer;
 
 /**
  * An annotation target.
  */
 @JsonSerialize(using = AnnotationTargetSerializer.class)
+@JsonDeserialize(using = AnnotationTargetDeserializer.class)
 public class Target {
 
     /** The specific resource target, if applicable. */

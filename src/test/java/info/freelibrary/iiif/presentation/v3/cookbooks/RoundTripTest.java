@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import info.freelibrary.util.StringUtils;
 
+import info.freelibrary.iiif.presentation.v3.AnnotationPage;
 import info.freelibrary.iiif.presentation.v3.Collection;
 import info.freelibrary.iiif.presentation.v3.Manifest;
 
@@ -468,6 +469,50 @@ public class RoundTripTest extends AbstractCookbookTest {
     public final void test0068NewspaperTitleCollection() throws IOException {
         final String expected = getExpected("0068-newspaper/newspaper_title-collection");
         assertEquals(expected, Collection.fromJSON(expected).toString());
+    }
+
+    /**
+     * Tests the 0068 issue 1, annotation 1 test fixtures (cf. https://iiif.io/api/cookbook/recipe/0068-newspaper/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0068NewspaperIssue1Anno1() throws IOException {
+        final String expected = getExpected("0068-newspaper/newspaper_issue_1-anno_p1");
+        assertEquals(expected, AnnotationPage.fromJSON(expected).toString());
+    }
+
+    /**
+     * Tests the 0068 issue 1, annotation 2 test fixtures (cf. https://iiif.io/api/cookbook/recipe/0068-newspaper/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0068NewspaperIssue1Anno2() throws IOException {
+        final String expected = getExpected("0068-newspaper/newspaper_issue_1-anno_p2");
+        assertEquals(expected, AnnotationPage.fromJSON(expected).toString());
+    }
+
+    /**
+     * Tests the 0068 issue 2, annotation 1 test fixtures (cf. https://iiif.io/api/cookbook/recipe/0068-newspaper/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0068NewspaperIssue2Anno1() throws IOException {
+        final String expected = getExpected("0068-newspaper/newspaper_issue_2-anno_p1");
+        assertEquals(expected, AnnotationPage.fromJSON(expected).toString());
+    }
+
+    /**
+     * Tests the 0068 issue 2, annotation 2 test fixtures (cf. https://iiif.io/api/cookbook/recipe/0068-newspaper/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0068NewspaperIssue2Anno2() throws IOException {
+        final String expected = getExpected("0068-newspaper/newspaper_issue_2-anno_p2");
+        assertEquals(expected, AnnotationPage.fromJSON(expected).toString());
     }
 
     /**

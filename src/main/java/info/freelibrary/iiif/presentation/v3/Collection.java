@@ -57,13 +57,13 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     private static final Logger LOGGER = LoggerFactory.getLogger(Collection.class, MessageCodes.BUNDLE);
 
     /** The collection's accompanying canvas. */
-    private Optional<AccompanyingCanvas> myAccompanyingCanvas;
+    private AccompanyingCanvas myAccompanyingCanvas;
 
     /** The collection's list of items. */
     private List<Item> myItems;
 
     /** The collection's placeholder canvas. */
-    private Optional<PlaceholderCanvas> myPlaceholderCanvas;
+    private PlaceholderCanvas myPlaceholderCanvas;
 
     /** The collection's service definitions. */
     private List<Service<?>> myServiceDefinitions;
@@ -96,7 +96,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     @JsonGetter(JsonKeys.ACCOMPANYING_CANVAS)
     @JsonInclude(Include.NON_ABSENT)
     public Optional<AccompanyingCanvas> getAccompanyingCanvas() {
-        return myAccompanyingCanvas;
+        return Optional.ofNullable(myAccompanyingCanvas);
     }
 
     /**
@@ -121,7 +121,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     @JsonGetter(JsonKeys.PLACEHOLDER_CANVAS)
     @JsonInclude(Include.NON_ABSENT)
     public Optional<PlaceholderCanvas> getPlaceholderCanvas() {
-        return myPlaceholderCanvas;
+        return Optional.ofNullable(myPlaceholderCanvas);
     }
 
     /**
@@ -156,7 +156,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      */
     @JsonSetter(JsonKeys.ACCOMPANYING_CANVAS)
     public Collection setAccompanyingCanvas(final AccompanyingCanvas aCanvas) {
-        myAccompanyingCanvas = Optional.of(aCanvas);
+        myAccompanyingCanvas = aCanvas;
         return this;
     }
 
@@ -236,7 +236,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      */
     @JsonSetter(JsonKeys.PLACEHOLDER_CANVAS)
     public Collection setPlaceholderCanvas(final PlaceholderCanvas aCanvas) {
-        myPlaceholderCanvas = Optional.of(aCanvas);
+        myPlaceholderCanvas = aCanvas;
         return this;
     }
 

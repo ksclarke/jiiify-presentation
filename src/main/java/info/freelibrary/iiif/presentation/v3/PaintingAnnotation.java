@@ -308,7 +308,6 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
      * @return The annotation target
      */
     @Override
-    @JsonSetter(JsonKeys.TARGET)
     public Target getTarget() {
         return super.getTarget();
     }

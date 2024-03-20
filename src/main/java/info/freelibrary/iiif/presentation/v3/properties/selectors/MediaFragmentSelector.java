@@ -81,7 +81,9 @@ public class MediaFragmentSelector implements FragmentSelector {
      */
     public MediaFragmentSelector(final String aFragment) {
         try {
-            myMediaFragment = new FragmentParser(new StringReader(aFragment)).run(MediaFragment.Type.FRAGMENT);
+            final String fragmentValue = aFragment.charAt(0) == '#' ? aFragment.substring(1) : aFragment;
+
+            myMediaFragment = new FragmentParser(new StringReader(fragmentValue)).run(MediaFragment.Type.FRAGMENT);
         } catch (final ParseException details) {
             throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_042, aFragment, details));
         }

@@ -54,7 +54,6 @@ public class GeometryDeserializer extends StdDeserializer<Geometry> {
     }
 
     @Override
-    @SuppressWarnings(JDK.DEPRECATION)
     public Geometry deserialize(final JsonParser aParser, final DeserializationContext aContext)
             throws IOException, JsonProcessingException {
         final JsonNode currentNode = aParser.getCodec().readTree(aParser);
@@ -63,8 +62,7 @@ public class GeometryDeserializer extends StdDeserializer<Geometry> {
         final JsonNode coordinates = currentNode.get(JsonKeys.COORDINATES);
 
         if (!type.isPresent()) {
-            throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_139),
-                    aParser.getCurrentLocation());
+            throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_139), aParser.currentLocation());
         }
 
         return switch (type.get()) {
@@ -73,7 +71,7 @@ public class GeometryDeserializer extends StdDeserializer<Geometry> {
             case LINESTRING -> new LineString(getPoints(coordinates, aParser, type.get()));
             case MULTILINESTRING -> new MultiLineString(getLineStrings(coordinates, aParser, type.get()));
             default -> throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_138, type.get()),
-                    aParser.getCurrentLocation());
+                    aParser.currentLocation());
         };
     }
 

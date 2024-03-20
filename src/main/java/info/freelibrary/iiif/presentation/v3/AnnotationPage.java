@@ -400,7 +400,7 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
      * @return The Annotation
      * @throws JsonParsingException If there is trouble parsing the annotation page from the supplied JSON string
      */
-    static <A extends Annotation<A>> AnnotationPage<A> fromJSON(final String aJsonString) {
+    public static <A extends Annotation<A>> AnnotationPage<A> fromJSON(final String aJsonString) {
         try {
             return JSON.getReader(new TypeReference<AnnotationPage<A>>() {}).readValue(aJsonString);
         } catch (final IOException details) {
