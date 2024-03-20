@@ -722,6 +722,30 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
+     * Tests the 0269 manifest fixture (cf.
+     * https://iiif.io/api/cookbook/recipe/0269-embedded-or-referenced-annotations/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0269EmbeddedOrReferencedAnnotationsManifest() throws IOException {
+        final String expected = getExpected("0269-embedded-or-referenced-annotations/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
+    }
+
+    /**
+     * Tests the 0269 annotation page fixture (cf.
+     * https://iiif.io/api/cookbook/recipe/0269-embedded-or-referenced-annotations/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0269EmbeddedOrReferencedAnnotationsAnnoPage() throws IOException {
+        final String expected = getExpected("0269-embedded-or-referenced-annotations/annotationpage");
+        assertEquals(expected, AnnotationPage.fromJSON(expected).toString());
+    }
+
+    /**
      * Tests the 0283 missing image fixture (cf. https://iiif.io/api/cookbook/recipe/0283-missing-image/).
      *
      * @throws IOException If there is trouble reading the manifest file
@@ -741,6 +765,29 @@ public class RoundTripTest extends AbstractCookbookTest {
     public final void test0299Region() throws IOException {
         final String expected = getExpected("0299-region/manifest");
         assertEquals(expected, Manifest.fromJSON(expected).toString());
+    }
+
+    /**
+     * Tests the 0306 manifest fixture (cf. https://iiif.io/api/cookbook/recipe/0306-linking-annotations-to-manifests/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0306LinkingAnnotationsToManifestsManifest() throws IOException {
+        final String expected = getExpected("0306-linking-annotations-to-manifests/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
+    }
+
+    /**
+     * Tests the 0306 annotation page fixture (cf.
+     * https://iiif.io/api/cookbook/recipe/0306-linking-annotations-to-manifests/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0306LinkingAnnotationsToManifestsAnnoPage() throws IOException {
+        final String expected = getExpected("0306-linking-annotations-to-manifests/annotationpage");
+        assertEquals(expected, AnnotationPage.fromJSON(expected).toString());
     }
 
     /**
