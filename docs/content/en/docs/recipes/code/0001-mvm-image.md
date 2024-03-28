@@ -13,15 +13,13 @@ Presentation resource.
 | Manifest: | https://iiif.io/api/cookbook/recipe/0001-mvm-image/manifest.json |
 
 ```java
-Manifest manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0001-mvm-image/manifest",
+var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0001-mvm-image/manifest",
     new Label("en", "Single Image Example"));
-Minter minter = MinterFactory.getMinter(manifest);
-Canvas canvas = new Canvas(minter).setWidthHeight(1200, 1800);
-ImageContent image =
-    new ImageContent("https://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png")
-        .setWidthHeight(1200, 1800);
+var minter = MinterFactory.getMinter(manifest);
+var canvas = new Canvas(minter).setWidthHeight(1200, 1800);
+var image = new ImageContent("https://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png");
 
-canvas.paintWith(minter, image);
+canvas.paintWith(minter, image.setWidthHeight(1200, 1800));
 manifest.setCanvases(canvas);
 
 System.out.println(manifest);

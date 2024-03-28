@@ -117,11 +117,11 @@ public class CookbooksTest extends AbstractCookbookTest {
         final String annoID = "https://iiif.io/api/cookbook/recipe/0001-mvm-image/annotation/p0001-image";
         final String annoPageID = "https://iiif.io/api/cookbook/recipe/0001-mvm-image/page/p1/1";
 
-        final Manifest manifest = new Manifest(manifestID, new Label("en", "Single Image Example"));
-        final Canvas canvas = new Canvas(canvasID).setWidthHeight(1200, 1800);
-        final ImageContent imageContent = new ImageContent(imageID).setWidthHeight(1200, 1800);
-        final AnnotationPage<PaintingAnnotation> annoPage = new AnnotationPage<>(annoPageID);
-        final PaintingAnnotation anno = new PaintingAnnotation(annoID, canvas);
+        final var manifest = new Manifest(manifestID, new Label("en", "Single Image Example"));
+        final var canvas = new Canvas(canvasID).setWidthHeight(1200, 1800);
+        final var imageContent = new ImageContent(imageID).setWidthHeight(1200, 1800);
+        final var annoPage = new AnnotationPage<PaintingAnnotation>(annoPageID);
+        final var anno = new PaintingAnnotation(annoID, canvas);
 
         annoPage.addAnnotations(anno.setBody(imageContent).setTarget(new Target(canvasID)));
         manifest.setCanvases(canvas.setPaintingPages(annoPage));
