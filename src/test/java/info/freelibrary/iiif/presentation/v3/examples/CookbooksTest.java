@@ -90,20 +90,19 @@ public class CookbooksTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0001WithMinter() throws IOException {
-        final String manifestID = "https://iiif.io/api/cookbook/recipe/0001-mvm-image/manifest";
-        final String imageID = "https://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png";
+        final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0001-mvm-image/manifest",
+                new Label("en", "Single Image Example"));
+        final var minter = MinterFactory.getMinter(manifest);
+        final var canvas = new Canvas(minter).setWidthHeight(1200, 1800);
+        final var image =
+                new ImageContent("https://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png");
 
-        final Manifest manifest = new Manifest(manifestID, new Label("en", "Single Image Example"));
-        final Minter minter = MinterFactory.getMinter(manifest);
-        final Canvas canvas = new Canvas(minter).setWidthHeight(1200, 1800);
-        final ImageContent imageContent = new ImageContent(imageID).setWidthHeight(1200, 1800);
-
-        canvas.paintWith(minter, imageContent);
+        canvas.paintWith(minter, image.setWidthHeight(1200, 1800));
         manifest.setCanvases(canvas);
 
-        System.out.println(manifest);
+        System.out.println(manifest.toString());
 
-        // Don't include this in the example; it's just a sanity check HERE
+        // Don't include this in the example; it's just a sanity check
         assertEquals(getExpected("0001-mvm-image/manifest"), normalizeIDs(manifest.toString()));
     }
 

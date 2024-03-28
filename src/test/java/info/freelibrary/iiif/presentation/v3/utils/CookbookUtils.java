@@ -77,13 +77,37 @@ public final class CookbookUtils {
             final SortedSet<String> urlSet = new TreeSet<>(); // another de-duplication and final sort
 
             links.distinct().map(link -> link.attr(HREF)).filter(url -> url.matches(RECIPE_PAGE_RE)).forEach(url -> {
-                urlSet.addAll(getJsonURLs(url.replaceAll("^/", BASE_COOKBOOK_URL + url)));
+                urlSet.addAll(getJsonURLs(url.replaceFirst("^/", BASE_COOKBOOK_URL + SLASH)));
             });
 
             compareLocalFiles(urlSet, options);
         } catch (final IOException details) {
             throw new CookbookRecipeException(details);
         }
+    }
+
+    /**
+     * Gets a list of URLs to compare against against the local files..
+     *
+     * @param aHref An href from a recipe page link
+     * @return A list of related JSON URLs
+     * @throws CookbookRecipeException If a JSON URL cannot be scraped from the cookbook site
+     */
+    private static List<String> getJsonURLs(final String aHref) {
+        final String baseURL = !aHref.endsWith(SLASH) ? aHref + SLASH : aHref;
+        final List<String> urlList = new ArrayList<>();
+
+        try {
+            final Stream<Element> links = Jsoup.connect(aHref).get().select(LINK).stream();
+
+            links.distinct().map(link -> link.attr(HREF)).filter(url -> url.matches(RECIPE_RE)).forEach(path -> {
+                urlList.add(baseURL + path);
+            });
+        } catch (final IOException details) {
+            throw new CookbookRecipeException(details);
+        }
+
+        return urlList;
     }
 
     /**
@@ -114,29 +138,5 @@ public final class CookbookUtils {
                 throw new CookbookRecipeException(details);
             }
         });
-    }
-
-    /**
-     * Gets a list of URLs to compare against against the local files..
-     *
-     * @param aHref An href from a recipe page link
-     * @return A list of related JSON URLs
-     * @throws CookbookRecipeException If a JSON URL cannot be scraped from the cookbook site
-     */
-    private static List<String> getJsonURLs(final String aHref) {
-        final String baseURL = !aHref.endsWith(SLASH) ? aHref + SLASH : aHref;
-        final List<String> urlList = new ArrayList<>();
-
-        try {
-            final Stream<Element> links = Jsoup.connect(aHref).get().select(LINK).stream();
-
-            links.distinct().map(link -> link.attr(HREF)).filter(url -> url.matches(RECIPE_RE)).forEach(path -> {
-                urlList.add(baseURL + path);
-            });
-        } catch (final IOException details) {
-            throw new CookbookRecipeException(details);
-        }
-
-        return urlList;
     }
 }

@@ -15,6 +15,9 @@ src/main/tools/eclipse
 # In support of using $revision in the version element in the POM
 .flattened-pom.xml
 
+# In support of creating an uber jar
+dependency-reduced-pom.xml
+
 # Build tools only needed for site generation
 docs/node_modules
 

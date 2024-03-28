@@ -135,7 +135,7 @@ offlineSearch = true
 prism_syntax_highlighting = true
 
 [params.copyright]
-  authors = "[Kevin S. Clarke](mailto:ksclarke@ksclarke.io) | [CC BY-ND 4.0](https://creativecommons.org/licenses/by-nd/4.0/)"
+  authors = "[Kevin S. Clarke](mailto:ksclarke@ksclarke.io) under the [CC BY-ND 4.0](https://creativecommons.org/licenses/by-nd/4.0/)"
   from_year = 2020
 
 # User interface configuration
@@ -147,9 +147,10 @@ navbar_logo = false
 # Set to true if you don't want the top navbar to be translucent when over a `block/cover`, like on the homepage.
 navbar_translucent_over_cover_disable = false
 # Enable to show the side bar menu in its compact state.
-sidebar_menu_compact = false
+sidebar_menu_compact = true
 # Set to true to hide the sidebar search box (the top nav search box will still be displayed if search is enabled)
 sidebar_search_disable = false
+sidebar_menu_foldable = false
 
 # Adds a H2 section titled "Feedback" to the bottom of each doc. The responses are sent to Google Analytics as events.
 # This feature depends on [services.googleAnalytics] and will be disabled if "services.googleAnalytics.id" is not set.

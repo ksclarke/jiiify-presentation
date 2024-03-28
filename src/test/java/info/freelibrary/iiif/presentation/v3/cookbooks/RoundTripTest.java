@@ -359,6 +359,40 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
+     * Tests the 0033 choice manifest (cf. https://iiif.io/api/cookbook/recipe/0033-choice/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0033Choice() throws IOException {
+        final String expected = getExpected("0033-choice/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
+    }
+
+    /**
+     * Tests the 0035 foldouts manifest (cf. https://iiif.io/api/cookbook/recipe/0035-foldouts/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0035Foldouts() throws IOException {
+        final String expected = getExpected("0035-foldouts/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
+    }
+
+    /**
+     * Tests the 0036 composition from multiple images manifest (cf.
+     * https://iiif.io/api/cookbook/recipe/0036-composition-from-multiple-images/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0036CompositionFromMultipleImages() throws IOException {
+        final String expected = getExpected("0036-composition-from-multiple-images/manifest");
+        assertEquals(expected, Manifest.fromJSON(expected).toString());
+    }
+
+    /**
      * Tests the 0040 image rotation service fixture (cf.
      * https://iiif.io/api/cookbook/recipe/0040-image-rotation-service/).
      *

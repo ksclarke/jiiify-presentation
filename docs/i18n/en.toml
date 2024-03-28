@@ -64,9 +64,9 @@ other = "Print entire section"
 
 # Community
 [community_join]
-other = "Join the {{ .Site.Title }} community"
+other = "Contribute to {{ .Site.Title }}"
 [community_introduce]
-other = "{{ .Site.Title }} is an open source project that anyone in the community can use, improve, and enjoy. We'd love you to join us! Here's a few ways to find out what's happening and get involved."
+other = "{{ .Site.Title }} is an open source project that anyone can use, improve, and enjoy."
 [community_learn]
 other = "Learn and Connect"
 [community_using]

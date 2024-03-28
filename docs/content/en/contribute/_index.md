@@ -1,5 +1,6 @@
 ---
-title: Community
+title: Get Involved!
+linkTitle: Get Involved!
 menu: {main: {weight: 40}}
 ---
 

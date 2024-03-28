@@ -2,11 +2,11 @@
 // Making fonts a little more readable for older eyes (like mine)
 .lead .mt-5 { font-weight: 500; text-shadow: black 1px 1px; }
 .display-1 { font-weight: 500; text-shadow: black 1px 1px; }
-.td-navbar .navbar-brand__name { font-weight: 500; }
+.td-navbar .navbar-brand__name { font-weight: 700; margin-left: 10px; text-shadow: black 1px 1px; }
 
 // Tweak the color scheme and layout on Home and About pages
 .td-box--3 { background-color: white; }
-.td-footer { padding-top: 1em; min-height: 100px; }
+.td-footer { padding-top: 1em; min-height: 75px; }
 
 // Give a little more whitespace around items in the in-page TOCs
 .td-page-meta a { padding-top: 30px; }
@@ -16,3 +16,16 @@
 .td-page-meta__view { display: none !important; }
 .td-page-meta__edit { display: none !important; }
 
+// Table tweaks
+.td-sidebar-nav__section .ul-1 ul { padding-left: .75em; }
+.td-sidebar-nav > .td-sidebar-nav__section { padding-left: .75em; }
+.status { width: 28px; }
+.table { --bs-table-striped-bg: #fff; }
+td:nth-child(3) { text-align: center !important; }
+td:nth-child(2) { text-align: left !important; padding-left: 1.5em !important; }
+
+.td-max-width-on-larger-screens {
+  @include media-breakpoint-up(lg) {
+    max-width: 95%;
+  }
+}
