@@ -2,12 +2,16 @@
 package info.freelibrary.iiif.presentation.v3;
 
 import java.util.List;
+import java.util.Optional;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import info.freelibrary.util.warnings.JDK;
 import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
+import info.freelibrary.iiif.presentation.v3.ids.MintingException;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.SelectorOutOfBoundsException;
 
@@ -18,6 +22,23 @@ import info.freelibrary.iiif.presentation.v3.properties.selectors.SelectorOutOfB
  */
 @SuppressWarnings({ PMD.TOO_MANY_METHODS, "PMD.TooManyMethods" })
 public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T> {
+
+    /**
+     * Gets the canvas' minter, if there is one.
+     *
+     * @return An optional minter
+     */
+    @JsonIgnore
+    Optional<Minter> getMinter();
+
+    /**
+     * Sets the canvas' minter.
+     *
+     * @param aMinter An ID minter
+     * @return This canvas
+     */
+    @JsonIgnore
+    T setMinter(Minter aMinter);
 
     /**
      * Gets the ID.
@@ -66,7 +87,8 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
     T setWidthHeight(int aWidth, int aHeight);
 
     /**
-     * Paints content resources onto the canvas using a {@link PaintingAnnotation}.
+     * Paints content resources onto a {@link Minter} initialized canvas using a {@link PaintingAnnotation}. If the
+     * minter does not exist, a {@link MinterException} is thrown.
      * <p>
      * Calling this method with a single {@link ContentResource} associates that resource with the canvas using an
      * annotation with a single body.
@@ -79,16 +101,17 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
      * list returned by {@link #getPaintingPages() getPaintingPages()}.
      *
-     * @param aMinter An ID minter
      * @param aContentArray An array of content resources
      * @return This canvas
+     * @throws MintingException If the canvas resource wasn't initialized with a {@link Minter}
      * @throws ContentOutOfBoundsException If the content resource has dimensions which this canvas does not have, or
      *         which are not within the bounds of the dimensions of this canvas
      */
-    T paintWith(Minter aMinter, ContentResource<?>... aContentArray);
+    T paintWith(ContentResource<?>... aContentArray);
 
     /**
-     * Paints content resources onto the canvas using a {@link PaintingAnnotation}.
+     * Paints content resources onto a {@link Minter} initialized canvas using a {@link PaintingAnnotation}. If the
+     * minter does not exist, a {@link MintingException} is thrown.
      * <p>
      * Calling this method with a single {@link ContentResource} associates that resource with the canvas using an
      * annotation with a single body.
@@ -104,17 +127,18 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
      * list returned by {@link #getPaintingPages() getPaintingPages()}.
      *
-     * @param aMinter An ID minter
      * @param aChoice Whether the supplied content resources should be put into a Choice
      * @param aContentArray An array of content resources
      * @return This canvas
+     * @throws MintingException If the canvas resource wasn't initialized with a {@link Minter}
      * @throws ContentOutOfBoundsException If the content resource has dimensions which this canvas does not have, or
      *         which are not within the bounds of the dimensions of this canvas
      */
-    T paintWith(Minter aMinter, boolean aChoice, ContentResource<?>... aContentArray);
+    T paintWith(boolean aChoice, ContentResource<?>... aContentArray);
 
     /**
-     * Paints content resources onto the canvas using a {@link PaintingAnnotation}.
+     * Paints content resources onto a {@link Minter} initialized canvas using a {@link PaintingAnnotation}. If the
+     * minter does not exist, a {@link MintingException} is thrown.
      * <p>
      * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
      * canvas using an annotation with a single body.
@@ -127,16 +151,17 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
      * list returned by {@link #getPaintingPages() getPaintingPages()}.
      *
-     * @param aMinter An ID minter
      * @param aContentList A list of content resources
      * @return This canvas
+     * @throws MintingException If the canvas resource wasn't initialized with a {@link Minter}
      * @throws ContentOutOfBoundsException If the content resource has dimensions which this canvas does not have, or
      *         which are not within the bounds of the dimensions of this canvas
      */
-    T paintWith(Minter aMinter, List<ContentResource<?>> aContentList);
+    T paintWith(List<ContentResource<?>> aContentList);
 
     /**
-     * Paints content resources onto the canvas using a {@link PaintingAnnotation}.
+     * Paints content resources onto a {@link Minter} initialized canvas using a {@link PaintingAnnotation}. If the
+     * minter does not exist, a {@link MintingException} is thrown.
      * <p>
      * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
      * canvas using an annotation with a single body.
@@ -152,17 +177,18 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
      * list returned by {@link #getPaintingPages() getPaintingPages()}.
      *
-     * @param aMinter An ID minter
      * @param aChoice Whether the supplied content resources should be put into a Choice
      * @param aContentList A list of content resources
      * @return This canvas
+     * @throws MintingException If the canvas resource wasn't initialized with a {@link Minter}
      * @throws ContentOutOfBoundsException If the content resource has dimensions which this canvas does not have, or
      *         which are not within the bounds of the dimensions of this canvas
      */
-    T paintWith(Minter aMinter, boolean aChoice, List<ContentResource<?>> aContentList);
+    T paintWith(boolean aChoice, List<ContentResource<?>> aContentList);
 
     /**
-     * Paints content resources onto the canvas region using a {@link PaintingAnnotation}.
+     * Paints content resources onto a region of a {@link Minter} initialized canvas using a {@link PaintingAnnotation}.
+     * If the minter does not exist, a {@link MintingException} is thrown.
      * <p>
      * Calling this method with a single {@link ContentResource} associates that resource with the canvas region using
      * an annotation with a single body.
@@ -175,19 +201,20 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
      * list returned by {@link #getPaintingPages() getPaintingPages()}.
      *
-     * @param aMinter An ID minter
      * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to paint
      * @param aContentArray An array of content resources
      * @return This canvas
+     * @throws MintingException If the canvas resource wasn't initialized with a {@link Minter}
      * @throws ContentOutOfBoundsException If the content resource has dimensions which this canvas region does not
      *         have, or which are not within the bounds of the dimensions of this canvas region
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given {@link MediaFragmentSelector}
      *         does not exist
      */
-    T paintWith(Minter aMinter, MediaFragmentSelector aCanvasRegion, ContentResource<?>... aContentArray);
+    T paintWith(MediaFragmentSelector aCanvasRegion, ContentResource<?>... aContentArray);
 
     /**
-     * Paints content resources onto the canvas region using a {@link PaintingAnnotation}.
+     * Paints content resources onto a region of a {@link Minter} initialized canvas using a {@link PaintingAnnotation}.
+     * If the minter does not exist, a {@link MintingException} is thrown.
      * <p>
      * Calling this method with a single {@link ContentResource} associates that resource with the canvas region using
      * an annotation with a single body.
@@ -203,21 +230,21 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
      * list returned by {@link #getPaintingPages() getPaintingPages()}.
      *
-     * @param aMinter An ID minter
      * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to paint
      * @param aChoice Whether the supplied content resources should be put into a Choice
      * @param aContentArray An array of content resources
      * @return This canvas
+     * @throws MintingException If the canvas resource wasn't initialized with a {@link Minter}
      * @throws ContentOutOfBoundsException If the content resource has dimensions which this canvas region does not
      *         have, or which are not within the bounds of the dimensions of this canvas region
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given {@link MediaFragmentSelector}
      *         does not exist
      */
-    T paintWith(Minter aMinter, MediaFragmentSelector aCanvasRegion, boolean aChoice,
-            ContentResource<?>... aContentArray);
+    T paintWith(MediaFragmentSelector aCanvasRegion, boolean aChoice, ContentResource<?>... aContentArray);
 
     /**
-     * Paints content resources onto the canvas region using a {@link PaintingAnnotation}.
+     * Paints content resources onto a region of a {@link Minter} initialized canvas using a {@link PaintingAnnotation}.
+     * If the minter does not exist, a {@link MintingException} is thrown.
      * <p>
      * Calling this method with a single {@link ContentResource} associates that resource with the canvas region using
      * an annotation with a single body.
@@ -230,18 +257,19 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
      * list returned by {@link #getPaintingPages() getPaintingPages()}.
      *
-     * @param aMinter An ID minter
      * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to paint
      * @param aContentArray An array of content resources
      * @return This canvas
+     * @throws MintingException If the canvas resource wasn't initialized with a {@link Minter}
      * @throws ContentOutOfBoundsException If the content resource has dimensions which this canvas region does not
      *         have, or which are not within the bounds of the dimensions of this canvas region
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given media fragment does not exist
      */
-    T paintWith(Minter aMinter, String aCanvasRegion, ContentResource<?>... aContentArray);
+    T paintWith(String aCanvasRegion, ContentResource<?>... aContentArray);
 
     /**
-     * Paints content resources onto the canvas region using a {@link PaintingAnnotation}.
+     * Paints content resources onto a region of a {@link Minter} initialized canvas using a {@link PaintingAnnotation}.
+     * If the minter does not exist, a {@link MintingException} is thrown.
      * <p>
      * Calling this method with a single {@link ContentResource} associates that resource with the canvas region using
      * an annotation with a single body.
@@ -257,19 +285,20 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
      * list returned by {@link #getPaintingPages() getPaintingPages()}.
      *
-     * @param aMinter An ID minter
      * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to paint
      * @param aChoice Whether the supplied content resources should be put into a Choice
      * @param aContentArray An array of content resources
      * @return This canvas
+     * @throws MintingException If the canvas resource wasn't initialized with a {@link Minter}
      * @throws ContentOutOfBoundsException If the content resource has dimensions which this canvas region does not
      *         have, or which are not within the bounds of the dimensions of this canvas region
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given media fragment does not exist
      */
-    T paintWith(Minter aMinter, String aCanvasRegion, boolean aChoice, ContentResource<?>... aContentArray);
+    T paintWith(String aCanvasRegion, boolean aChoice, ContentResource<?>... aContentArray);
 
     /**
-     * Paints content resources onto the canvas region using a {@link PaintingAnnotation}.
+     * Paints content resources onto a region of a {@link Minter} initialized canvas using a {@link PaintingAnnotation}.
+     * If the minter does not exist, a {@link MintingException} is thrown.
      * <p>
      * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
      * canvas region using an annotation with a single body.
@@ -282,19 +311,20 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
      * list returned by {@link #getPaintingPages() getPaintingPages()}.
      *
-     * @param aMinter An ID minter
      * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to paint
      * @param aContentList A list of content resources
      * @return This canvas
+     * @throws MintingException If the canvas resource wasn't initialized with a {@link Minter}
      * @throws ContentOutOfBoundsException If the content resource has dimensions which this canvas region does not
      *         have, or which are not within the bounds of the dimensions of this canvas region
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given {@link MediaFragmentSelector}
      *         does not exist
      */
-    T paintWith(Minter aMinter, MediaFragmentSelector aCanvasRegion, List<ContentResource<?>> aContentList);
+    T paintWith(MediaFragmentSelector aCanvasRegion, List<ContentResource<?>> aContentList);
 
     /**
-     * Paints content resources onto the canvas region using a {@link PaintingAnnotation}.
+     * Paints content resources onto a region of a {@link Minter} initialized canvas using a {@link PaintingAnnotation}.
+     * If the minter does not exist, a {@link MintingException} is thrown.
      * <p>
      * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
      * canvas region using an annotation with a single body.
@@ -310,21 +340,21 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
      * list returned by {@link #getPaintingPages() getPaintingPages()}.
      *
-     * @param aMinter An ID minter
      * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to paint
      * @param aChoice Whether the supplied content resources should be put into a Choice
      * @param aContentList A list of content resources
      * @return This canvas
+     * @throws MintingException If the canvas resource wasn't initialized with a {@link Minter}
      * @throws ContentOutOfBoundsException If the content resource has dimensions which this canvas region does not
      *         have, or which are not within the bounds of the dimensions of this canvas region
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given {@link MediaFragmentSelector}
      *         does not exist
      */
-    T paintWith(Minter aMinter, MediaFragmentSelector aCanvasRegion, boolean aChoice,
-            List<ContentResource<?>> aContentList);
+    T paintWith(MediaFragmentSelector aCanvasRegion, boolean aChoice, List<ContentResource<?>> aContentList);
 
     /**
-     * Paints content resources onto the canvas region using a {@link PaintingAnnotation}.
+     * Paints content resources onto a region of a {@link Minter} initialized canvas using a {@link PaintingAnnotation}.
+     * If the minter does not exist, a {@link MintingException} is thrown.
      * <p>
      * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
      * canvas region using an annotation with a single body.
@@ -337,18 +367,19 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
      * list returned by {@link #getPaintingPages() getPaintingPages()}.
      *
-     * @param aMinter An ID minter
      * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to paint
      * @param aContentList A list of content resources
      * @return This canvas
+     * @throws MintingException If the canvas resource wasn't initialized with a {@link Minter}
      * @throws ContentOutOfBoundsException If the content resource has dimensions which this canvas region does not
      *         have, or which are not within the bounds of the dimensions of this canvas region
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given media fragment does not exist
      */
-    T paintWith(Minter aMinter, String aCanvasRegion, List<ContentResource<?>> aContentList);
+    T paintWith(String aCanvasRegion, List<ContentResource<?>> aContentList);
 
     /**
-     * Paints content resources onto the canvas region using a {@link PaintingAnnotation}.
+     * Paints content resources onto a region of a {@link Minter} initialized canvas using a {@link PaintingAnnotation}.
+     * If the minter does not exist, a {@link MintingException} is thrown.
      * <p>
      * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
      * canvas region using an annotation with a single body.
@@ -364,19 +395,20 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
      * list returned by {@link #getPaintingPages() getPaintingPages()}.
      *
-     * @param aMinter An ID minter
      * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to paint
      * @param aChoice Whether the supplied content resources should be put into a Choice
      * @param aContentList A list of content resources
      * @return This canvas
+     * @throws MintingException If the canvas resource wasn't initialized with a {@link Minter}
      * @throws ContentOutOfBoundsException If the content resource has dimensions which this canvas region does not
      *         have, or which are not within the bounds of the dimensions of this canvas region
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given media fragment does not exist
      */
-    T paintWith(Minter aMinter, String aCanvasRegion, boolean aChoice, List<ContentResource<?>> aContentList);
+    T paintWith(String aCanvasRegion, boolean aChoice, List<ContentResource<?>> aContentList);
 
     /**
-     * Associates supplementing content resources with the canvas using a {@link SupplementingAnnotation}.
+     * Associates supplementing content resources onto a {@link Minter} initialized canvas using a
+     * {@link SupplementingAnnotation}. If the minter does not exist, a {@link MintingException} is thrown.
      * <p>
      * Calling this method with a single {@link ContentResource} associates that resource with the canvas using an
      * annotation with a single body.
@@ -389,14 +421,15 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
      * list returned by {@link #getSupplementingPages() getSupplementingPages()}.
      *
-     * @param aMinter An ID minter
      * @param aContentArray An array of content resources
      * @return This canvas
+     * @throws MintingException If the canvas resource wasn't initialized with a {@link Minter}
      */
-    T supplementWith(Minter aMinter, ContentResource<?>... aContentArray);
+    T supplementWith(ContentResource<?>... aContentArray);
 
     /**
-     * Associates supplementing content resources with the canvas using a {@link SupplementingAnnotation}.
+     * Associates supplementing content resources onto a {@link Minter} initialized canvas using a
+     * {@link SupplementingAnnotation}. If the minter does not exist, a {@link MintingException} is thrown.
      * <p>
      * Calling this method with a single {@link ContentResource} associates that resource with the canvas using an
      * annotation with a single body.
@@ -412,15 +445,16 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
      * list returned by {@link #getSupplementingPages() getSupplementingPages()}.
      *
-     * @param aMinter An ID minter
      * @param aChoice Whether the supplied content resources should be put into a Choice
      * @param aContentArray An array of content resources
      * @return This canvas
+     * @throws MintingException If the canvas resource wasn't initialized with a {@link Minter}
      */
-    T supplementWith(Minter aMinter, boolean aChoice, ContentResource<?>... aContentArray);
+    T supplementWith(boolean aChoice, ContentResource<?>... aContentArray);
 
     /**
-     * Associates supplementing content resources with the canvas using a {@link SupplementingAnnotation}.
+     * Associates supplementing content resources onto a {@link Minter} initialized canvas using a
+     * {@link SupplementingAnnotation}. If the minter does not exist, a {@link MintingException} is thrown.
      * <p>
      * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
      * canvas using an annotation with a single body.
@@ -433,14 +467,15 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
      * list returned by {@link #getSupplementingPages() getSupplementingPages()}.
      *
-     * @param aMinter An ID minter
      * @param aContentList A list of content resources
      * @return This canvas
+     * @throws MintingException If the canvas resource wasn't initialized with a {@link Minter}
      */
-    T supplementWith(Minter aMinter, List<ContentResource<?>> aContentList);
+    T supplementWith(List<ContentResource<?>> aContentList);
 
     /**
-     * Associates supplementing content resources with the canvas using a {@link SupplementingAnnotation}.
+     * Associates supplementing content resources onto a {@link Minter} initialized canvas using a
+     * {@link SupplementingAnnotation}. If the minter does not exist, a {@link MintingException} is thrown.
      * <p>
      * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
      * canvas using an annotation with a single body.
@@ -456,15 +491,16 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
      * list returned by {@link #getSupplementingPages() getSupplementingPages()}.
      *
-     * @param aMinter An ID minter
      * @param aChoice Whether the supplied content resources should be put into a Choice
      * @param aContentList A list of content resources
      * @return This canvas
+     * @throws MintingException If the canvas resource wasn't initialized with a {@link Minter}
      */
-    T supplementWith(Minter aMinter, boolean aChoice, List<ContentResource<?>> aContentList);
+    T supplementWith(boolean aChoice, List<ContentResource<?>> aContentList);
 
     /**
-     * Associates supplementing content resources with the canvas region using a {@link SupplementingAnnotation}.
+     * Associates supplementing content resources onto a region of a {@link Minter} initialized canvas using a
+     * {@link SupplementingAnnotation}. If the minter does not exist, a {@link MintingException} is thrown.
      * <p>
      * Calling this method with a single {@link ContentResource} associates that resource with the canvas region using
      * an annotation with a single body.
@@ -477,16 +513,17 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
      * list returned by {@link #getSupplementingPages() getSupplementingPages()}.
      *
-     * @param aMinter An ID minter
      * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to supplement
      * @param aContentArray An array of content resources
      * @return This canvas
+     * @throws MintingException If the canvas resource wasn't initialized with a {@link Minter}
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given media fragment does not exist
      */
-    T supplementWith(Minter aMinter, MediaFragmentSelector aCanvasRegion, ContentResource<?>... aContentArray);
+    T supplementWith(MediaFragmentSelector aCanvasRegion, ContentResource<?>... aContentArray);
 
     /**
-     * Associates supplementing content resources with the canvas region using a {@link SupplementingAnnotation}.
+     * Associates supplementing content resources onto a region of a {@link Minter} initialized canvas using a
+     * {@link SupplementingAnnotation}. If the minter does not exist, a {@link MintingException} is thrown.
      * <p>
      * Calling this method with a single {@link ContentResource} associates that resource with the canvas region using
      * an annotation with a single body.
@@ -502,18 +539,18 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
      * list returned by {@link #getSupplementingPages() getSupplementingPages()}.
      *
-     * @param aMinter An ID minter
      * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to supplement
      * @param aChoice Whether the supplied content resources should be put into a Choice
      * @param aContentArray An array of content resources
      * @return This canvas
+     * @throws MintingException If the canvas resource wasn't initialized with a {@link Minter}
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given media fragment does not exist
      */
-    T supplementWith(Minter aMinter, MediaFragmentSelector aCanvasRegion, boolean aChoice,
-            ContentResource<?>... aContentArray);
+    T supplementWith(MediaFragmentSelector aCanvasRegion, boolean aChoice, ContentResource<?>... aContentArray);
 
     /**
-     * Associates supplementing content resources with the canvas region using a {@link SupplementingAnnotation}.
+     * Associates supplementing content resources onto a region of a {@link Minter} initialized canvas using a
+     * {@link SupplementingAnnotation}. If the minter does not exist, a {@link MintingException} is thrown.
      * <p>
      * Calling this method with a single {@link ContentResource} associates that resource with the canvas region using
      * an annotation with a single body.
@@ -526,16 +563,17 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
      * list returned by {@link #getSupplementingPages() getSupplementingPages()}.
      *
-     * @param aMinter An ID minter
      * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to supplement
      * @param aContentArray An array of content resources
      * @return This canvas
+     * @throws MintingException If the canvas resource wasn't initialized with a {@link Minter}
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given media fragment does not exist
      */
-    T supplementWith(Minter aMinter, String aCanvasRegion, ContentResource<?>... aContentArray);
+    T supplementWith(String aCanvasRegion, ContentResource<?>... aContentArray);
 
     /**
-     * Associates supplementing content resources with the canvas region using a {@link SupplementingAnnotation}.
+     * Associates supplementing content resources onto a region of a {@link Minter} initialized canvas using a
+     * {@link SupplementingAnnotation}. If the minter does not exist, a {@link MintingException} is thrown.
      * <p>
      * Calling this method with a single {@link ContentResource} associates that resource with the canvas region using
      * an annotation with a single body.
@@ -551,17 +589,18 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
      * list returned by {@link #getSupplementingPages() getSupplementingPages()}.
      *
-     * @param aMinter An ID minter
      * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to supplement
      * @param aChoice Whether the supplied content resources should be put into a Choice
      * @param aContentArray An array of content resources
      * @return This canvas
+     * @throws MintingException If the canvas resource wasn't initialized with a {@link Minter}
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given media fragment does not exist
      */
-    T supplementWith(Minter aMinter, String aCanvasRegion, boolean aChoice, ContentResource<?>... aContentArray);
+    T supplementWith(String aCanvasRegion, boolean aChoice, ContentResource<?>... aContentArray);
 
     /**
-     * Associates supplementing content resources with the canvas region using a {@link SupplementingAnnotation}.
+     * Associates supplementing content resources onto a region of a {@link Minter} initialized canvas using a
+     * {@link SupplementingAnnotation}. If the minter does not exist, a {@link MintingException} is thrown.
      * <p>
      * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
      * canvas region using an annotation with a single body.
@@ -574,16 +613,17 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
      * list returned by {@link #getSupplementingPages() getSupplementingPages()}.
      *
-     * @param aMinter An ID minter
      * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to supplement
      * @param aContentList A list of content resources
      * @return This canvas
+     * @throws MintingException If the canvas resource wasn't initialized with a {@link Minter}
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given media fragment does not exist
      */
-    T supplementWith(Minter aMinter, MediaFragmentSelector aCanvasRegion, List<ContentResource<?>> aContentList);
+    T supplementWith(MediaFragmentSelector aCanvasRegion, List<ContentResource<?>> aContentList);
 
     /**
-     * Associates supplementing content resources with the canvas region using a {@link SupplementingAnnotation}.
+     * Associates supplementing content resources onto a region of a {@link Minter} initialized canvas using a
+     * {@link SupplementingAnnotation}. If the minter does not exist, a {@link MintingException} is thrown.
      * <p>
      * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
      * canvas region using an annotation with a single body.
@@ -599,18 +639,18 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
      * list returned by {@link #getSupplementingPages() getSupplementingPages()}.
      *
-     * @param aMinter An ID minter
      * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to supplement
      * @param aChoice Whether the supplied content resources should be put into a Choice
      * @param aContentList A list of content resources
      * @return This canvas
+     * @throws MintingException If the canvas resource wasn't initialized with a {@link Minter}
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given media fragment does not exist
      */
-    T supplementWith(Minter aMinter, MediaFragmentSelector aCanvasRegion, boolean aChoice,
-            List<ContentResource<?>> aContentList);
+    T supplementWith(MediaFragmentSelector aCanvasRegion, boolean aChoice, List<ContentResource<?>> aContentList);
 
     /**
-     * Associates supplementing content resources with the canvas region using a {@link SupplementingAnnotation}.
+     * Associates supplementing content resources onto a region of a {@link Minter} initialized canvas using a
+     * {@link SupplementingAnnotation}. If the minter does not exist, a {@link MintingException} is thrown.
      * <p>
      * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
      * canvas region using an annotation with a single body.
@@ -623,16 +663,17 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
      * list returned by {@link #getSupplementingPages() getSupplementingPages()}.
      *
-     * @param aMinter An ID minter
      * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to supplement
      * @param aContentList A list of content resources
      * @return This canvas
+     * @throws MintingException If the canvas resource wasn't initialized with a {@link Minter}
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given media fragment does not exist
      */
-    T supplementWith(Minter aMinter, String aCanvasRegion, List<ContentResource<?>> aContentList);
+    T supplementWith(String aCanvasRegion, List<ContentResource<?>> aContentList);
 
     /**
-     * Associates supplementing content resources with the canvas region using a {@link SupplementingAnnotation}.
+     * Associates supplementing content resources onto a region of a {@link Minter} initialized canvas using a
+     * {@link SupplementingAnnotation}. If the minter does not exist, a {@link MintingException} is thrown.
      * <p>
      * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
      * canvas region using an annotation with a single body.
@@ -648,14 +689,14 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
      * list returned by {@link #getSupplementingPages() getSupplementingPages()}.
      *
-     * @param aMinter An ID minter
      * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to supplement
      * @param aChoice Whether the supplied content resources should be put into a Choice
      * @param aContentList A list of content resources
      * @return This canvas
+     * @throws MintingException If the canvas resource wasn't initialized with a {@link Minter}
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given media fragment does not exist
      */
-    T supplementWith(Minter aMinter, String aCanvasRegion, boolean aChoice, List<ContentResource<?>> aContentList);
+    T supplementWith(String aCanvasRegion, boolean aChoice, List<ContentResource<?>> aContentList);
 
     /**
      * Gets the canvas' annotation pages for non-painting annotations.

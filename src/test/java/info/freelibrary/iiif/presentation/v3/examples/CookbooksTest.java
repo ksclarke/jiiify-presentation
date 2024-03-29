@@ -94,10 +94,10 @@ public class CookbooksTest extends AbstractCookbookTest {
                 new Label("en", "Single Image Example"));
         final var minter = MinterFactory.getMinter(manifest);
         final var canvas = new Canvas(minter).setWidthHeight(1200, 1800);
-        final var image =
+        final var imageContent =
                 new ImageContent("https://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png");
 
-        canvas.paintWith(minter, image.setWidthHeight(1200, 1800));
+        canvas.paintWith(imageContent.setWidthHeight(1200, 1800));
         manifest.setCanvases(canvas);
 
         System.out.println(manifest.toString());
@@ -145,7 +145,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         final Canvas canvas = new Canvas(minter).setDuration(1985.024);
         final SoundContent soundContent = new SoundContent(soundID).setDuration(1985.024);
 
-        canvas.paintWith(minter, soundContent);
+        canvas.paintWith(soundContent);
         manifest.setCanvases(canvas);
 
         System.out.println(manifest);
@@ -195,7 +195,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         final VideoContent videoContent = new VideoContent(videoID).setWidthHeight(480, 360);
 
         videoContent.setDuration(572.034);
-        canvas.paintWith(minter, videoContent);
+        canvas.paintWith(videoContent);
         manifest.setCanvases(canvas);
 
         System.out.println(manifest);
@@ -244,9 +244,9 @@ public class CookbooksTest extends AbstractCookbookTest {
         final Manifest manifest = new Manifest(manifestID, label);
         final Minter minter = MinterFactory.getMinter(manifest);
         final Canvas canvas = new Canvas(minter).setWidthHeight(1920, 1080);
-        final ImageContent imageContent = new ImageContent(imageID).setWidthHeight(640, 360);
+        final ImageContent imageContent = new ImageContent(imageID);
 
-        canvas.paintWith(minter, imageContent);
+        canvas.paintWith(imageContent.setWidthHeight(640, 360));
         manifest.setCanvases(canvas);
 
         // System.setOut(myOutStream);
