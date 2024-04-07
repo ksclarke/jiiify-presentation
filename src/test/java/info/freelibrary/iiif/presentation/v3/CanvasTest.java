@@ -79,9 +79,6 @@ public class CanvasTest extends AbstractCookbookTest {
     /** A test image info service ID. */
     private static final String IMAGE_INFO_SERVICE_ID = "https://example.org/iiif/book1/page1";
 
-    /** A test sound canvas ID. */
-    private static final String SOUND_CANVAS_ID = "https://example.org/iiif/lp1/side1/track1/canvas-1";
-
     /** A test sound resource ID. */
     private static final String SOUND_1_ID = "https://example.org/iiif/lp1/side1/track1.mp3";
 
@@ -90,9 +87,6 @@ public class CanvasTest extends AbstractCookbookTest {
 
     /** A test sound resource ID. */
     private static final String SOUND_3_ID = "https://example.org/iiif/lp1/side1/track2.mp3";
-
-    /** A test video canvas ID. */
-    private static final String VIDEO_CANVAS_ID = "https://example.org/iiif/reel1/segment1/canvas-1";
 
     /** A test video ID. */
     private static final String VIDEO_1_ID = "https://example.org/iiif/reel1/segment1.mp4";

@@ -1,35 +1,28 @@
 ---
 title: Getting Started
-description: What does your user need to know to try your project?
+description: A step-by-step guide to getting started with JPv3
 categories: [Examples, Placeholders]
 tags: [test, docs]
 weight: 2
 ---
 
 {{% pageinfo %}}
-This is a placeholder page that shows you how to use this template site.
+This is a placeholder page for information about getting started with JPv3
 {{% /pageinfo %}}
 
-Information in this section helps your user try your project themselves.
-
-* What do your users need to do to start using your project? This could include downloading/installation instructions, including any prerequisites or system requirements.
-
-* Introductory “Hello World” example, if appropriate. More complex tutorials should live in the Tutorials section.
-
-Consider using the headings below for your getting started page. You can delete any that are not applicable to your project.
 
 ## Prerequisites
 
-Are there any system requirements for using your project? What languages are supported (if any)? Do users need to already have any software or tools installed?
+This section to describe the required prerequisites.
+
+## Building the Project
+
+This section to explain how to build the project.
 
 ## Installation
 
-Where can your user find your project code? How can they install it (binaries, installable package, build from source)? Are there multiple options/versions they can install and how should they choose the right one for them?
-
-## Setup
-
-Is there any initial setup users need to do after installation to try your project?
+This section to explain how to use a Jar file from Maven Central.
 
 ## Try it out!
 
-Can your users test their installation, for example by running a command or deploying a Hello World example?
+This section to point out the code sandbox where JPv3 snippets can be tested.
