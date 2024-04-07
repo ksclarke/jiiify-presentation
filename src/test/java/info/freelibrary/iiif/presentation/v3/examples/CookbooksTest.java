@@ -281,6 +281,7 @@ public class CookbooksTest extends AbstractCookbookTest {
      * Runs the 0005 cookbook example with a minter.
      */
     @Test
+    @SuppressWarnings("Checkstyle.LineLengthCheck")
     public final void test0005WithMinter() throws IOException {
         final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0005-image-service/manifest.json",
                 new Label("en", "Picture of Göttingen taken during the 2019 IIIF Conference"));
@@ -305,6 +306,7 @@ public class CookbooksTest extends AbstractCookbookTest {
      * Runs the 0005 cookbook example without a minter.
      */
     @Test
+    @SuppressWarnings("Checkstyle.LineLengthCheck")
     public final void test0005WithoutMinter() throws IOException {
         final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0005-image-service/manifest.json",
                 new Label("en", "Picture of Göttingen taken during the 2019 IIIF Conference"));
@@ -333,6 +335,7 @@ public class CookbooksTest extends AbstractCookbookTest {
      * Runs the 0006 cookbook example with a minter.
      */
     @Test
+    @SuppressWarnings("Checkstyle.LineLengthCheck")
     public final void test0006WithMinter() throws IOException {
         final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0006-text-language/manifest.json",
                 new Label(new I18n("en", "Whistler's Mother"), new I18n("fr", "La Mère de Whistler")));
@@ -375,6 +378,7 @@ public class CookbooksTest extends AbstractCookbookTest {
      * Runs the 0006 cookbook example without a minter.
      */
     @Test
+    @SuppressWarnings("Checkstyle.LineLengthCheck")
     public final void test0006WithoutMinter() throws IOException {
         final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0006-text-language/manifest.json",
                 new Label(new I18n("en", "Whistler's Mother"), new I18n("fr", "La Mère de Whistler")));
