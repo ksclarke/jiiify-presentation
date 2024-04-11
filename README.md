@@ -4,6 +4,11 @@ Jiiify Presentation is a [IIIF Presentation](http://iiif.io/api/presentation) li
 
 *Warning:* The API for v3 is still in active development. There will definitely be breaking changes before the library reaches version 1.0.0. After it reaches 1.0.0 and becomes stable, the project will use semantic versioning to indicate the types of changes associated with new releases.
 
+### Prerequisites
+
+* JDK >= 17 (this is the JDK that the released version uses)
+* Maven >= 3.8.7 (this is what's used for building the project)
+
 ### Getting Started
 
 A very simple Java example of using jiiify-presentation follows:
