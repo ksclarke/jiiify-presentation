@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -210,7 +209,6 @@ public class AssessingAnnotation extends WebAnnotation implements Annotation<Web
      * @return The annotation target
      */
     @Override
-    @JsonSetter(JsonKeys.TARGET)
     public Target getTarget() {
         return super.getTarget();
     }

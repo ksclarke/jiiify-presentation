@@ -8,4 +8,5 @@
   <suppress files="src[\\/]test[\\/]generated[\\/]" checks="."/>
   <suppress files="target[\\/]" checks="."/>
   <suppress files=".mvn[\\/]" checks="."/>
+  <suppress files="docs[\\/]" checks="."/>
 </suppressions>

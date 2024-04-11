@@ -35,11 +35,11 @@ public class ImageApiSelectorTest {
     public void testFullConstructor() {
         final ImageApiSelector selector = new ImageApiSelector(FULL, MAX, ZERO, DEFAULT, JPG);
 
-        assertEquals(FULL, selector.getRegion());
-        assertEquals(MAX, selector.getSize());
-        assertEquals(ZERO, selector.getRotation());
-        assertEquals(DEFAULT, selector.getQuality());
-        assertEquals(JPG, selector.getFormat());
+        assertEquals(FULL, selector.getRegion().get());
+        assertEquals(MAX, selector.getSize().get());
+        assertEquals(ZERO, selector.getRotation().get());
+        assertEquals(DEFAULT, selector.getQuality().get());
+        assertEquals(JPG, selector.getFormat().get());
     }
 
     /**
@@ -49,11 +49,11 @@ public class ImageApiSelectorTest {
     public void testPathConstructor() {
         final ImageApiSelector selector = new ImageApiSelector("/full/full/0/default.jpg");
 
-        assertEquals(FULL, selector.getRegion());
-        assertEquals(FULL, selector.getSize());
-        assertEquals(ZERO, selector.getRotation());
-        assertEquals(DEFAULT, selector.getQuality());
-        assertEquals(JPG, selector.getFormat());
+        assertEquals(FULL, selector.getRegion().get());
+        assertEquals(FULL, selector.getSize().get());
+        assertEquals(ZERO, selector.getRotation().get());
+        assertEquals(DEFAULT, selector.getQuality().get());
+        assertEquals(JPG, selector.getFormat().get());
     }
 
     /**
@@ -61,7 +61,7 @@ public class ImageApiSelectorTest {
      */
     @Test
     public void testSetRegion() {
-        assertEquals(FULL, new ImageApiSelector(PATH).setRegion(FULL).getRegion());
+        assertEquals(FULL, new ImageApiSelector(PATH).setRegion(FULL).getRegion().get());
     }
 
     /**
@@ -69,7 +69,7 @@ public class ImageApiSelectorTest {
      */
     @Test
     public void testSetSize() {
-        assertEquals(FULL, new ImageApiSelector(PATH).setSize(FULL).getSize());
+        assertEquals(FULL, new ImageApiSelector(PATH).setSize(FULL).getSize().get());
     }
 
     /**
@@ -77,7 +77,7 @@ public class ImageApiSelectorTest {
      */
     @Test
     public void testSetRotation() {
-        assertEquals(ZERO, new ImageApiSelector(PATH).setRotation(ZERO).getRotation());
+        assertEquals(ZERO, new ImageApiSelector(PATH).setRotation(ZERO).getRotation().get());
     }
 
     /**
@@ -85,7 +85,7 @@ public class ImageApiSelectorTest {
      */
     @Test
     public void testSetQuality() {
-        assertEquals(DEFAULT, new ImageApiSelector(PATH).setQuality(DEFAULT).getQuality());
+        assertEquals(DEFAULT, new ImageApiSelector(PATH).setQuality(DEFAULT).getQuality().get());
     }
 
     /**
@@ -93,7 +93,7 @@ public class ImageApiSelectorTest {
      */
     @Test
     public void testSetFormat() {
-        assertEquals(JPG, new ImageApiSelector(PATH).setFormat(JPG).getFormat());
+        assertEquals(JPG, new ImageApiSelector(PATH).setFormat(JPG).getFormat().get());
     }
 
     /**

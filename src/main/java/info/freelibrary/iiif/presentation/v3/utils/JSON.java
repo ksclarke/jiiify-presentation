@@ -4,6 +4,7 @@ package info.freelibrary.iiif.presentation.v3.utils;
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -32,8 +33,13 @@ public final class JSON {
      */
     private static final ObjectMapper MAPPER = new ObjectMapper().configure(SerializationFeature.INDENT_OUTPUT, true)
             .configure(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT, true)
+            .configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true)
             .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true).registerModules(
                     new Jdk8Module(), new SimpleModule().addSerializer(float.class, new JSON().new FloatSerializer()));
+
+    static {
+        MAPPER.getFactory().enable(JsonParser.Feature.INCLUDE_SOURCE_IN_LOCATION);
+    }
 
     /**
      * Creates a new (de)serialization configuration.
@@ -221,7 +227,7 @@ public final class JSON {
      * A float serializer that serializes floats that are really integers as integers rather than floats. This avoids
      * outputting decimal values when they carry no value.
      */
-    private class FloatSerializer extends JsonSerializer<Float> {
+    private final class FloatSerializer extends JsonSerializer<Float> {
 
         @Override
         public void serialize(final Float aFloat, final JsonGenerator aJsonGenerator,

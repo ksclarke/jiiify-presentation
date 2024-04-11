@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.JDK;
 import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
@@ -97,7 +98,7 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
      * @throws JsonParseException If there is trouble parsing the JSON
      */
     @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY, "PMD.CyclomaticComplexity", "PMD.CognitiveComplexity",
-        PMD.COGNITIVE_COMPLEXITY })
+        PMD.COGNITIVE_COMPLEXITY, JDK.DEPRECATION })
     private Service<?> deserializeServiceNode(final JsonParser aParser, final JsonNode aNode)
             throws JsonProcessingException {
         final Service<?> service;
@@ -155,6 +156,7 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
      * @param aID A service ID
      * @return The GeoJSON service
      */
+    @SuppressWarnings(JDK.DEPRECATION)
     private Service<?> deserializeGeoJsonService(final JsonNode aNode, final String aID) {
         final GeoJsonService service = new GeoJsonService(aID);
         final JsonNode typeNode = aNode.get(JsonKeys.TYPE);
@@ -179,6 +181,7 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
      * @return The v1 auth cookie service
      * @throws JsonParseException If there is trouble parsing the JSON
      */
+    @SuppressWarnings(JDK.DEPRECATION)
     private Service<?> deserializeV1AuthCookieService(final JsonParser aParser, final JsonNode aNode, final String aID)
             throws JsonParseException {
         final String profile = aNode.get(JsonKeys.PROFILE).asText(); // To get here, presence has been confirmed
@@ -284,6 +287,7 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
      * @return The ID associated with the service
      * @throws JsonParseException If the service was lacking an ID
      */
+    @SuppressWarnings(JDK.DEPRECATION)
     private String getServiceID(final JsonNode aNode, final JsonParser aParser) throws JsonParseException {
         final JsonNode idNode = aNode.get(JsonKeys.ID);
         final JsonNode v2IdNode;
@@ -311,8 +315,19 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
      */
     @SuppressWarnings(PMD.UNUSED_PRIVATE_METHOD)
     private Service<?> deserializeImageService(final JsonNode aNode, final ImageService<?> aImageService) { // NOPMD
+        final JsonNode width;
+        final JsonNode height;
+
         if (aNode.get(ImageAPI.PROTOCOL) != null) {
             aImageService.setProtocol(true);
+        }
+
+        if ((width = aNode.get(JsonKeys.WIDTH)) != null) {
+            aImageService.setWidth(width.asInt());
+        }
+
+        if ((height = aNode.get(JsonKeys.HEIGHT)) != null) {
+            aImageService.setHeight(height.asInt());
         }
 
         deserializeExtraQualities(aNode, aImageService);
@@ -453,6 +468,7 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
      * @param aNode A JSON node
      * @return An optional value
      */
+    @SuppressWarnings(JDK.DEPRECATION)
     private Optional<String> getValue(final JsonNode aNode) {
         if (aNode != null) {
             return Optional.ofNullable(aNode.asText(null));

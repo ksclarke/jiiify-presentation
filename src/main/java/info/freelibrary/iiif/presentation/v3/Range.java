@@ -18,11 +18,13 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import info.freelibrary.util.I18nRuntimeException;
 
+import info.freelibrary.iiif.presentation.v3.exts.geo.NavPlace;
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.Metadata;
+import info.freelibrary.iiif.presentation.v3.properties.NavDate;
 import info.freelibrary.iiif.presentation.v3.properties.PartOf;
 import info.freelibrary.iiif.presentation.v3.properties.Provider;
 import info.freelibrary.iiif.presentation.v3.properties.Rendering;
@@ -161,6 +163,30 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     @JsonInclude(Include.NON_ABSENT)
     public Optional<Start> getStart() {
         return Optional.ofNullable(myStart);
+    }
+
+    @Override
+    @JsonGetter(JsonKeys.NAV_DATE)
+    public NavDate getNavDate() {
+        return super.getNavDate();
+    }
+
+    @Override
+    @JsonGetter(JsonKeys.NAV_PLACE)
+    public NavPlace getNavPlace() {
+        return super.getNavPlace();
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.NAV_DATE)
+    public Range setNavDate(final NavDate aNavDate) {
+        return (Range) super.setNavDate(aNavDate);
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.NAV_PLACE)
+    public Range setNavPlace(final NavPlace aNavPlace) {
+        return (Range) super.setNavPlace(aNavPlace);
     }
 
     /**
@@ -382,6 +408,19 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     /**
+     * Gets the manifest context. The manifest can either have a single context or an array of contexts (Cf.
+     * https://iiif.io/api/presentation/3.0/#46-linked-data-context-and-extensions)
+     *
+     * @return The manifest context
+     */
+    @Override
+    @JsonGetter(JsonKeys.CONTEXT)
+    @JsonInclude(Include.NON_NULL)
+    protected Object getJsonContext() {
+        return null;
+    }
+
+    /**
      * Gets a string representation of a range.
      *
      * @return A string representation of a range
@@ -451,9 +490,9 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
          */
         public Item(final Canvas aCanvas, final boolean aEmbeddedCanvas) {
             if (aEmbeddedCanvas) {
-                myCanvas = aCanvas;
+                myCanvas = new RangeCanvas(aCanvas);
             } else {
-                myCanvas = new Canvas(aCanvas.getID());
+                myCanvas = new RangeCanvas(new Canvas(aCanvas.getID()));
             }
         }
 
@@ -484,7 +523,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
         @JsonIgnore
         public String getID() {
             if (mySpecificResource != null) {
-                return mySpecificResource.getID().toString();
+                return mySpecificResource.getID();
             }
 
             if (myCanvas != null) {

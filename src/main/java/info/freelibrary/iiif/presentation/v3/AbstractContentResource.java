@@ -1,11 +1,16 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static info.freelibrary.util.Constants.SINGLE_INSTANCE;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,6 +19,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import info.freelibrary.util.warnings.JDK;
+
+import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Localized;
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
@@ -30,8 +38,8 @@ import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeSerializer;
 abstract class AbstractContentResource<T extends AbstractResource<AbstractContentResource<T>>>
         extends AbstractResource<AbstractContentResource<T>> implements Localized<T> {
 
-    /** The number of languages for a single (non-array) value. */
-    private static final int SINGLE_LANGUAGE_COUNT = 1;
+    /** The content resource's Web annotations. */
+    private List<AnnotationPage<WebAnnotation>> myAnnotations;
 
     /** The content resource's media type. */
     private MediaType myFormat;
@@ -68,6 +76,7 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
      * @return A list of languages
      */
     @Override
+    @JsonIgnore
     public List<String> getLanguages() {
         if (myLanguages == null) {
             myLanguages = new ArrayList<>();
@@ -101,6 +110,49 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
     }
 
     /**
+     * Gets the content resource's annotations.
+     *
+     * @return The content resource's annotations
+     */
+    @JsonGetter(JsonKeys.ANNOTATIONS)
+    protected List<AnnotationPage<WebAnnotation>> getAnnotations() {
+        if (myAnnotations == null) {
+            myAnnotations = new ArrayList<>();
+        }
+
+        return myAnnotations;
+    }
+
+    /**
+     * Sets the content resource's annotations.
+     *
+     * @param aAnnotationList A list of annotation pages
+     * @return The content resource
+     */
+    @JsonSetter(JsonKeys.ANNOTATIONS)
+    protected AbstractContentResource<T> setAnnotations(final List<AnnotationPage<WebAnnotation>> aAnnotationList) {
+        final List<AnnotationPage<WebAnnotation>> annotations = getAnnotations();
+
+        Objects.requireNonNull(aAnnotationList);
+        annotations.clear();
+        annotations.addAll(aAnnotationList);
+
+        return this;
+    }
+
+    /**
+     * Sets the content resource's annotation pages from an array.
+     *
+     * @param aAnnotationArray An array of annotation pages
+     * @return The content resource
+     */
+    @SuppressWarnings(JDK.UNCHECKED)
+    @JsonIgnore
+    protected AbstractContentResource<T> setAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
+        return setAnnotations(Arrays.asList(aAnnotationArray));
+    }
+
+    /**
      * Used by Jackson't serialization processes.
      *
      * @return A form of language ready to be serialized
@@ -108,8 +160,9 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
     @JsonGetter(JsonKeys.LANGUAGE)
     @JsonInclude(Include.NON_EMPTY)
     private Object getLanguage() {
+        // FIXME? Unclear if this should ALWAYS be an array
         final List<String> languages = getLanguages();
-        return languages.size() == SINGLE_LANGUAGE_COUNT ? languages.get(0) : languages;
+        return languages.size() == SINGLE_INSTANCE ? languages.get(0) : languages;
     }
 
     /**

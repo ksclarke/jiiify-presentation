@@ -113,25 +113,28 @@ public class WebAnnotationSerializer extends StdSerializer<WebAnnotation> {
             aJsonGenerator.writeObjectField(JsonKeys.BODY, aList.get(0));
         } else {
             aJsonGenerator.writeFieldName(JsonKeys.BODY);
-            aJsonGenerator.writeStartObject();
 
             if (aChoice) {
+                aJsonGenerator.writeStartObject();
                 aJsonGenerator.writeObjectField(JsonKeys.TYPE, ResourceTypes.CHOICE);
+                aJsonGenerator.writeArrayFieldStart(JsonKeys.ITEMS);
+            } else {
+                aJsonGenerator.writeStartArray();
             }
 
-            aJsonGenerator.writeArrayFieldStart(JsonKeys.ITEMS);
-            aJsonGenerator.writeStartArray();
-
-            for (final ContentResource<?> body : aList) {
-                if (body == null) {
+            for (final ContentResource<?> contentResource : aList) {
+                if (contentResource == null) {
                     aJsonGenerator.writeString(ResourceTypes.RDF_NIL);
                 } else {
-                    aJsonGenerator.writeObject(body);
+                    aJsonGenerator.writeObject(contentResource);
                 }
             }
 
             aJsonGenerator.writeEndArray();
-            aJsonGenerator.writeEndObject();
+
+            if (aChoice) {
+                aJsonGenerator.writeEndObject();
+            }
         }
     }
 }

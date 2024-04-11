@@ -1,0 +1,5 @@
+TMP=`mktemp`
+tail -n +2 $@ >> $TMP
+echo "/exit" >> $TMP
+/usr/bin/env jshell --startup src/test/scripts/imports.jsh -q --class-path target/jiiify-presentation-v3-0.0.0-SNAPSHOT-uber.jar $TMP
+rm $TMP

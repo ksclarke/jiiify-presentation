@@ -17,7 +17,7 @@ import info.freelibrary.util.StringUtils;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
- * A base class for label, summary, attribution and metadata's label and value fields.
+ * A base class for label, summary, attribution, property, and metadata's label and value fields.
  */
 class I18nProperty<T extends I18nProperty<T>> {
 
@@ -92,6 +92,7 @@ class I18nProperty<T extends I18nProperty<T>> {
         if (hasStrings()) {
             return myI18ns.get(0).getStrings().get(0);
         }
+
         return null;
     }
 
@@ -114,6 +115,7 @@ class I18nProperty<T extends I18nProperty<T>> {
         if (aObject != null && getClass().getName().equals(aObject.getClass().getName())) {
             return toMap().equals(((I18nProperty<?>) aObject).toMap());
         }
+
         return false;
     }
 
@@ -134,10 +136,13 @@ class I18nProperty<T extends I18nProperty<T>> {
      */
     @Override
     public String toString() {
+        final StringBuilder builder;
+
         if (!hasStrings()) {
             return null;
         }
-        final StringBuilder builder = new StringBuilder();
+
+        builder = new StringBuilder();
 
         for (final I18n i18n : myI18ns) {
             final String[] strings = i18n.getStrings().toArray(new String[i18n.size()]);
@@ -176,10 +181,14 @@ class I18nProperty<T extends I18nProperty<T>> {
      */
     @JsonValue
     protected Object toMap() {
+        final Map<String, Object> map;
+
         if (!hasStrings()) {
             return null;
         }
-        final Map<String, Object> map = new LinkedHashMap<>(); // maintains insertion order
+
+        map = new LinkedHashMap<>(); // maintains insertion order
+
         for (final I18n i18n : myI18ns) {
             map.put(i18n.getLang(), i18n.getStrings());
         }

@@ -17,12 +17,12 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.Eclipse;
 import info.freelibrary.util.warnings.PMD;
 
+import info.freelibrary.iiif.presentation.v3.exts.geo.NavPlace;
 import info.freelibrary.iiif.presentation.v3.ids.UriUtils;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
@@ -57,13 +57,13 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     private static final Logger LOGGER = LoggerFactory.getLogger(Collection.class, MessageCodes.BUNDLE);
 
     /** The collection's accompanying canvas. */
-    private Optional<AccompanyingCanvas> myAccompanyingCanvas;
+    private AccompanyingCanvas myAccompanyingCanvas;
 
     /** The collection's list of items. */
     private List<Item> myItems;
 
     /** The collection's placeholder canvas. */
-    private Optional<PlaceholderCanvas> myPlaceholderCanvas;
+    private PlaceholderCanvas myPlaceholderCanvas;
 
     /** The collection's service definitions. */
     private List<Service<?>> myServiceDefinitions;
@@ -96,17 +96,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     @JsonGetter(JsonKeys.ACCOMPANYING_CANVAS)
     @JsonInclude(Include.NON_ABSENT)
     public Optional<AccompanyingCanvas> getAccompanyingCanvas() {
-        return myAccompanyingCanvas;
-    }
-
-    /**
-     * Gets the context.
-     *
-     * @return The context
-     */
-    @JsonGetter(JsonKeys.CONTEXT)
-    public URI getContext() {
-        return PRESENTATION_CONTEXT_URI;
+        return Optional.ofNullable(myAccompanyingCanvas);
     }
 
     /**
@@ -131,7 +121,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     @JsonGetter(JsonKeys.PLACEHOLDER_CANVAS)
     @JsonInclude(Include.NON_ABSENT)
     public Optional<PlaceholderCanvas> getPlaceholderCanvas() {
-        return myPlaceholderCanvas;
+        return Optional.ofNullable(myPlaceholderCanvas);
     }
 
     /**
@@ -166,7 +156,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      */
     @JsonSetter(JsonKeys.ACCOMPANYING_CANVAS)
     public Collection setAccompanyingCanvas(final AccompanyingCanvas aCanvas) {
-        myAccompanyingCanvas = Optional.of(aCanvas);
+        myAccompanyingCanvas = aCanvas;
         return this;
     }
 
@@ -246,7 +236,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      */
     @JsonSetter(JsonKeys.PLACEHOLDER_CANVAS)
     public Collection setPlaceholderCanvas(final PlaceholderCanvas aCanvas) {
-        myPlaceholderCanvas = Optional.of(aCanvas);
+        myPlaceholderCanvas = aCanvas;
         return this;
     }
 
@@ -374,15 +364,60 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     }
 
     /**
-     * Method used internally to set context from JSON.
+     * Gets an unmodifiable list of collection contexts. To remove contexts, use {@link Collection#removeContext(URI)
+     * removeContext} or {@link Collection#clearContexts() clearContexts}.
      *
-     * @param aContext A manifest context
+     * @return The manifest context
      */
-    @JsonSetter(JsonKeys.CONTEXT)
-    private void setContext(final String aContext) {
-        if (!PRESENTATION_CONTEXT_URI.equals(URI.create(aContext))) {
-            throw new I18nRuntimeException(MessageCodes.JPA_037, aContext);
-        }
+    @Override
+    @JsonIgnore
+    public List<URI> getContexts() {
+        return super.getContexts();
+    }
+
+    /**
+     * Clears all contexts, but the required one.
+     *
+     * @return The collection
+     */
+    @Override
+    public Collection clearContexts() {
+        return (Collection) super.clearContexts();
+    }
+
+    /**
+     * Remove the supplied context. This will not remove the default required context though. If that's supplied, an
+     * {@link UnsupportedOperationException} will be thrown.
+     *
+     * @param aContextURI A context to be removed from the contexts list
+     * @return True if the context was removed; else, false
+     * @throws UnsupportedOperationException If the required context is supplied to be removed
+     */
+    @Override
+    public boolean removeContext(final URI aContextURI) {
+        return super.removeContext(aContextURI);
+    }
+
+    /**
+     * Gets the primary collection context.
+     *
+     * @return The collection context
+     */
+    @Override
+    @JsonIgnore
+    public URI getContext() {
+        return PRESENTATION_CONTEXT_URI;
+    }
+
+    /**
+     * Adds an array of new context URIs to the manifest.
+     *
+     * @param aContextArray Collection context URIs(s)
+     * @return The collection
+     */
+    @Override
+    public Collection addContexts(final URI... aContextArray) {
+        return (Collection) super.addContexts(aContextArray);
     }
 
     /**
@@ -432,6 +467,9 @@ public class Collection extends NavigableResource<Collection> implements Resourc
 
         /** The collection item's navDate. */
         private NavDate myNavDate;
+
+        /** The collection item's navPlace. */
+        private NavPlace myNavPlace;
 
         /** The collection item's thumbnails. */
         private List<ContentResource<?>> myThumbnails;
@@ -514,6 +552,16 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         }
 
         /**
+         * Gets a navigation place.
+         *
+         * @return The navigation place
+         */
+        @JsonGetter(JsonKeys.NAV_PLACE)
+        public NavPlace getNavPlace() {
+            return myNavPlace;
+        }
+
+        /**
          * Gets a list of item thumbnails, initializing the list if this hasn't been done already.
          *
          * @return The items's thumbnails
@@ -560,6 +608,18 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         @JsonSetter(JsonKeys.NAV_DATE)
         public Item setNavDate(final NavDate aNavDate) {
             myNavDate = aNavDate;
+            return this;
+        }
+
+        /**
+         * Sets a navigation place.
+         *
+         * @param aNavPlace The navigation place
+         * @return The navigable resource
+         */
+        @JsonSetter(JsonKeys.NAV_PLACE)
+        public Item setNavPlace(final NavPlace aNavPlace) {
+            myNavPlace = aNavPlace;
             return this;
         }
 
@@ -622,7 +682,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
             /**
              * Serialization label for <code>Item.Type</code>.
              */
-            private String myLabel;
+            private final String myLabel;
 
             /**
              * Create a new <code>Item.Type</code>.

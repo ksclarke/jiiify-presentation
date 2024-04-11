@@ -58,7 +58,7 @@ public class BehaviorDeserializer extends StdDeserializer<List<Behavior>> {
     }
 
     @Override
-    @SuppressWarnings(PMD.PRESERVE_STACK_TRACE)
+    @SuppressWarnings({ PMD.PRESERVE_STACK_TRACE })
     public List<Behavior> deserialize(final JsonParser aParser, final DeserializationContext aContext)
             throws IOException, JsonProcessingException {
         final JsonNode currentNode = aParser.getCodec().readTree(aParser);
@@ -98,7 +98,7 @@ public class BehaviorDeserializer extends StdDeserializer<List<Behavior>> {
             if (behavior.isEmpty()) {
                 errors.add(new JsonMappingException(aParser,
                         LOGGER.getMessage(MessageCodes.JPA_010, label, behaviors.getBehaviorType()),
-                        aParser.getCurrentLocation()));
+                        aParser.currentLocation()));
             } else {
                 behaviors.add(behavior.get());
             }

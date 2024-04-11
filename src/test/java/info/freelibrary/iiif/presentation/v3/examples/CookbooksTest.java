@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3.examples;
 
+import static info.freelibrary.iiif.presentation.v3.properties.MediaType.IMAGE_JPEG;
+import static info.freelibrary.iiif.presentation.v3.services.ImageService3.Profile.LEVEL_ONE;
 import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayOutputStream;
@@ -26,9 +28,14 @@ import info.freelibrary.iiif.presentation.v3.SoundContent;
 import info.freelibrary.iiif.presentation.v3.VideoContent;
 import info.freelibrary.iiif.presentation.v3.annotations.Target;
 import info.freelibrary.iiif.presentation.v3.cookbooks.AbstractCookbookTest;
-import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.ids.MinterFactory;
+import info.freelibrary.iiif.presentation.v3.properties.I18n;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
+import info.freelibrary.iiif.presentation.v3.properties.Metadata;
+import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
+import info.freelibrary.iiif.presentation.v3.properties.Summary;
+import info.freelibrary.iiif.presentation.v3.properties.Value;
+import info.freelibrary.iiif.presentation.v3.services.ImageService3;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
@@ -90,21 +97,19 @@ public class CookbooksTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0001WithMinter() throws IOException {
-        final String manifestID = "https://iiif.io/api/cookbook/recipe/0001-mvm-image/manifest";
-        final String imageID = "https://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png";
+        final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0001-mvm-image/manifest",
+                new Label("en", "Single Image Example"));
+        final var canvas = new Canvas(MinterFactory.getMinter(manifest)).setWidthHeight(1200, 1800);
+        final var imageContent =
+                new ImageContent("https://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png");
 
-        final Manifest manifest = new Manifest(manifestID, new Label("en", "Image 1"));
-        final Minter minter = MinterFactory.getMinter(manifest);
-        final Canvas canvas = new Canvas(minter).setWidthHeight(1200, 1800);
-        final ImageContent imageContent = new ImageContent(imageID).setWidthHeight(1200, 1800);
-
-        canvas.paintWith(minter, imageContent);
+        canvas.paintWith(imageContent.setWidthHeight(1200, 1800));
         manifest.setCanvases(canvas);
 
-        System.out.println(manifest);
+        System.out.println(manifest.toString());
 
-        // Don't include this in the example; it's just a sanity check HERE
-        assertEquals(getExpected("0001-mvm-image"), normalizeIDs(manifest.toString()));
+        // Don't include this in the example; it's just a sanity check
+        assertEquals(getExpected("0001-mvm-image/manifest"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -112,25 +117,25 @@ public class CookbooksTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0001WithoutMinter() throws IOException {
-        final String manifestID = "https://iiif.io/api/cookbook/recipe/0001-mvm-image/manifest";
-        final String canvasID = "https://iiif.io/api/cookbook/recipe/0001-mvm-image/canvas/p1";
-        final String imageID = "https://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png";
-        final String annoID = "https://iiif.io/api/cookbook/recipe/0001-mvm-image/annotation/p0001-image";
-        final String annoPageID = "https://iiif.io/api/cookbook/recipe/0001-mvm-image/page/p1/1";
+        final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0001-mvm-image/manifest",
+                new Label("en", "Single Image Example"));
+        final var canvas = new Canvas("https://iiif.io/api/cookbook/recipe/0001-mvm-image/canvas/p1");
+        final var imageContent =
+                new ImageContent("https://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png");
+        final var page =
+                new AnnotationPage<PaintingAnnotation>("https://iiif.io/api/cookbook/recipe/0001-mvm-image/page/p1/1");
+        final var annotation = new PaintingAnnotation(
+                "https://iiif.io/api/cookbook/recipe/0001-mvm-image/annotation/p0001-image", canvas);
 
-        final Manifest manifest = new Manifest(manifestID, new Label("en", "Image 1"));
-        final Canvas canvas = new Canvas(canvasID).setWidthHeight(1200, 1800);
-        final ImageContent imageContent = new ImageContent(imageID).setWidthHeight(1200, 1800);
-        final AnnotationPage<PaintingAnnotation> annoPage = new AnnotationPage<>(annoPageID);
-        final PaintingAnnotation anno = new PaintingAnnotation(annoID, canvas);
-
-        annoPage.addAnnotations(anno.setBody(imageContent).setTarget(new Target(canvasID)));
-        manifest.setCanvases(canvas.setPaintingPages(annoPage));
+        canvas.setWidthHeight(1200, 1800);
+        imageContent.setWidthHeight(1200, 1800);
+        page.addAnnotations(annotation.setBody(imageContent).setTarget(new Target(canvas)));
+        manifest.setCanvases(canvas.setPaintingPages(page));
 
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0001-mvm-image"), normalizeIDs(manifest.toString()));
+        assertEquals(getExpected("0001-mvm-image/manifest"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -138,21 +143,19 @@ public class CookbooksTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0002WithMinter() throws IOException {
-        final String manifestID = "https://iiif.io/api/cookbook/recipe/0002-mvm-audio/manifest";
-        final String soundID = "https://fixtures.iiif.io/audio/indiana/mahler-symphony-3/CD1/medium/128Kbps.mp4";
+        final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0002-mvm-audio/manifest",
+                new Label("en", "Simplest Audio Example 1"));
+        final var canvas = new Canvas(MinterFactory.getMinter(manifest)).setDuration(1985.024);
+        final var soundContent =
+                new SoundContent("https://fixtures.iiif.io/audio/indiana/mahler-symphony-3/CD1/medium/128Kbps.mp4");
 
-        final Manifest manifest = new Manifest(manifestID, new Label("en", "Simplest Audio Example 1"));
-        final Minter minter = MinterFactory.getMinter(manifest);
-        final Canvas canvas = new Canvas(minter).setDuration(1985.024);
-        final SoundContent soundContent = new SoundContent(soundID).setDuration(1985.024);
-
-        canvas.paintWith(minter, soundContent);
+        canvas.paintWith(soundContent.setDuration(1985.024));
         manifest.setCanvases(canvas);
 
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0002-mvm-audio"), normalizeIDs(manifest.toString()));
+        assertEquals(getExpected("0002-mvm-audio/manifest"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -160,25 +163,25 @@ public class CookbooksTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0002WithoutMinter() throws IOException {
-        final String manifestID = "https://iiif.io/api/cookbook/recipe/0002-mvm-audio/manifest.json";
-        final String canvasID = "https://iiif.io/api/cookbook/recipe/0002-mvm-audio/canvas";
-        final String soundID = "https://fixtures.iiif.io/audio/indiana/mahler-symphony-3/CD1/medium/128Kbps.mp4";
-        final String annoID = "https://iiif.io/api/cookbook/recipe/0002-mvm-audio/canvas/page/annotation";
-        final String annoPageID = "https://iiif.io/api/cookbook/recipe/0002-mvm-audio/canvas/page";
+        final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0002-mvm-audio/manifest.json",
+                new Label("en", "Simplest Audio Example 1"));
+        final var canvas = new Canvas("https://iiif.io/api/cookbook/recipe/0002-mvm-audio/canvas");
+        final var soundContent =
+                new SoundContent("https://fixtures.iiif.io/audio/indiana/mahler-symphony-3/CD1/medium/128Kbps.mp4");
+        final var page = new AnnotationPage<PaintingAnnotation>(
+                "https://iiif.io/api/cookbook/recipe/0002-mvm-audio/canvas/page");
+        final var annotation = new PaintingAnnotation(
+                "https://iiif.io/api/cookbook/recipe/0002-mvm-audio/canvas/page/annotation", canvas);
 
-        final Manifest manifest = new Manifest(manifestID, new Label("en", "Simplest Audio Example 1"));
-        final Canvas canvas = new Canvas(canvasID).setDuration(1985.024);
-        final SoundContent soundContent = new SoundContent(soundID).setDuration(1985.024);
-        final AnnotationPage<PaintingAnnotation> annoPage = new AnnotationPage<>(annoPageID);
-        final PaintingAnnotation anno = new PaintingAnnotation(annoID, canvas);
-
-        annoPage.addAnnotations(anno.setBody(soundContent).setTarget(new Target(canvasID)));
-        manifest.setCanvases(canvas.setPaintingPages(annoPage));
+        canvas.setDuration(1985.024);
+        soundContent.setDuration(1985.024);
+        page.addAnnotations(annotation.setBody(soundContent).setTarget(new Target(canvas)));
+        manifest.setCanvases(canvas.setPaintingPages(page));
 
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0002-mvm-audio"), normalizeIDs(manifest.toString()));
+        assertEquals(getExpected("0002-mvm-audio/manifest"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -186,23 +189,20 @@ public class CookbooksTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0003WithMinter() throws IOException {
-        final String manifestID = "https://iiif.io/api/cookbook/recipe/0003-mvm-video/manifest";
-        final String videoID =
-                "https://fixtures.iiif.io/video/indiana/lunchroom_manners/high/lunchroom_manners_1024kb.mp4";
+        final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0003-mvm-video/manifest",
+                new Label("en", "Video Example 3"));
+        final var minter = MinterFactory.getMinter(manifest);
+        final var canvas = new Canvas(minter).setWidthHeight(640, 360).setDuration(572.034);
+        final var videoContent = new VideoContent(
+                "https://fixtures.iiif.io/video/indiana/lunchroom_manners/high/lunchroom_manners_1024kb.mp4");
 
-        final Manifest manifest = new Manifest(manifestID, new Label("en", "Video Example 3"));
-        final Minter minter = MinterFactory.getMinter(manifest);
-        final Canvas canvas = new Canvas(minter).setWidthHeight(640, 360).setDuration(572.034);
-        final VideoContent videoContent = new VideoContent(videoID).setWidthHeight(480, 360);
-
-        videoContent.setDuration(572.034);
-        canvas.paintWith(minter, videoContent);
+        canvas.paintWith(videoContent.setDuration(572.034).setWidthHeight(480, 360));
         manifest.setCanvases(canvas);
 
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0003-mvm-video"), normalizeIDs(manifest.toString()));
+        assertEquals(getExpected("0003-mvm-video/manifest"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -210,27 +210,25 @@ public class CookbooksTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0003WithoutMinter() throws IOException {
-        final String manifestID = "https://iiif.io/api/cookbook/recipe/0003-mvm-video/manifest.json";
-        final String canvasID = "https://iiif.io/api/cookbook/recipe/0003-mvm-video/canvas";
-        final String videoID =
-                "https://fixtures.iiif.io/video/indiana/lunchroom_manners/high/lunchroom_manners_1024kb.mp4";
-        final String annoID = "https://iiif.io/api/cookbook/recipe/0003-mvm-video/canvas/page/annotation";
-        final String annoPageID = "https://iiif.io/api/cookbook/recipe/0003-mvm-video/canvas/page";
+        final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0003-mvm-video/manifest.json",
+                new Label("en", "Video Example 3"));
+        final var canvas = new Canvas("https://iiif.io/api/cookbook/recipe/0003-mvm-video/canvas");
+        final var videoContent = new VideoContent(
+                "https://fixtures.iiif.io/video/indiana/lunchroom_manners/high/lunchroom_manners_1024kb.mp4");
+        final var page = new AnnotationPage<PaintingAnnotation>(
+                "https://iiif.io/api/cookbook/recipe/0003-mvm-video/canvas/page");
+        final var annotation = new PaintingAnnotation(
+                "https://iiif.io/api/cookbook/recipe/0003-mvm-video/canvas/page/annotation", canvas);
 
-        final Manifest manifest = new Manifest(manifestID, new Label("en", "Video Example 3"));
-        final Canvas canvas = new Canvas(canvasID).setDuration(572.034).setWidthHeight(640, 360);
-        final VideoContent videoContent = new VideoContent(videoID).setWidthHeight(480, 360);
-        final AnnotationPage<PaintingAnnotation> annoPage = new AnnotationPage<>(annoPageID);
-        final PaintingAnnotation anno = new PaintingAnnotation(annoID, canvas);
-
-        videoContent.setDuration(572.034);
-        annoPage.addAnnotations(anno.setBody(videoContent).setTarget(new Target(canvasID)));
-        manifest.setCanvases(canvas.setPaintingPages(annoPage));
+        canvas.setDuration(572.034).setWidthHeight(640, 360);
+        videoContent.setDuration(572.034).setWidthHeight(480, 360);
+        page.addAnnotations(annotation.setBody(videoContent).setTarget(new Target(canvas)));
+        manifest.setCanvases(canvas.setPaintingPages(page));
 
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0003-mvm-video"), normalizeIDs(manifest.toString()));
+        assertEquals(getExpected("0003-mvm-video/manifest"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -238,23 +236,19 @@ public class CookbooksTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0004WithMinter() throws IOException {
-        final String manifestID = "https://iiif.io/api/cookbook/recipe/0004-canvas-size/manifest";
-        final String imageID = "https://fixtures.iiif.io/video/indiana/donizetti-elixir/act1-thumbnail.png";
+        final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0004-canvas-size/manifest",
+                new Label("en", "Still image from an opera performance at Indiana University"));
+        final var canvas = new Canvas(MinterFactory.getMinter(manifest)).setWidthHeight(1920, 1080);
+        final var imageContent =
+                new ImageContent("https://fixtures.iiif.io/video/indiana/donizetti-elixir/act1-thumbnail.png");
 
-        final Label label = new Label("en", "Still image from an opera performance at Indiana University");
-        final Manifest manifest = new Manifest(manifestID, label);
-        final Minter minter = MinterFactory.getMinter(manifest);
-        final Canvas canvas = new Canvas(minter).setWidthHeight(1920, 1080);
-        final ImageContent imageContent = new ImageContent(imageID).setWidthHeight(640, 360);
-
-        canvas.paintWith(minter, imageContent);
+        canvas.paintWith(imageContent.setWidthHeight(640, 360));
         manifest.setCanvases(canvas);
 
-        // System.setOut(myOutStream);
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0004-canvas-size"), normalizeIDs(manifest.toString()));
+        assertEquals(getExpected("0004-canvas-size/manifest"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -262,26 +256,170 @@ public class CookbooksTest extends AbstractCookbookTest {
      */
     @Test
     public final void test0004WithoutMinter() throws IOException {
-        final String manifestID = "https://iiif.io/api/cookbook/recipe/0004-canvas-size/manifest";
-        final String canvasID = "https://iiif.io/api/cookbook/recipe/0004-canvas-size/canvas/p1";
-        final String imageID = "https://fixtures.iiif.io/video/indiana/donizetti-elixir/act1-thumbnail.png";
-        final String annoID = "https://iiif.io/api/cookbook/recipe/0004-canvas-size/annotation/p0001-image";
-        final String annoPageID = "https://iiif.io/api/cookbook/recipe/0004-canvas-size/page/p1/1";
+        final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0004-canvas-size/manifest",
+                new Label("en", "Still image from an opera performance at Indiana University"));
+        final var canvas = new Canvas("https://iiif.io/api/cookbook/recipe/0004-canvas-size/canvas/p1");
+        final var imageContent =
+                new ImageContent("https://fixtures.iiif.io/video/indiana/donizetti-elixir/act1-thumbnail.png");
+        final var page = new AnnotationPage<PaintingAnnotation>(
+                "https://iiif.io/api/cookbook/recipe/0004-canvas-size/page/p1/1");
+        final var annotation = new PaintingAnnotation(
+                "https://iiif.io/api/cookbook/recipe/0004-canvas-size/annotation/p0001-image", canvas);
 
-        final Label label = new Label("en", "Still image from an opera performance at Indiana University");
-        final Manifest manifest = new Manifest(manifestID, label);
-        final Canvas canvas = new Canvas(canvasID).setWidthHeight(1920, 1080);
-        final ImageContent imageContent = new ImageContent(imageID).setWidthHeight(640, 360);
-        final AnnotationPage<PaintingAnnotation> annoPage = new AnnotationPage<>(annoPageID);
-        final PaintingAnnotation anno = new PaintingAnnotation(annoID, canvas);
-
-        annoPage.addAnnotations(anno.setBody(imageContent).setTarget(new Target(canvasID)));
-        manifest.setCanvases(canvas.setPaintingPages(annoPage));
+        canvas.setWidthHeight(1920, 1080);
+        imageContent.setWidthHeight(640, 360);
+        page.addAnnotations(annotation.setBody(imageContent).setTarget(new Target(canvas)));
+        manifest.setCanvases(canvas.setPaintingPages(page));
 
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0004-canvas-size"), normalizeIDs(manifest.toString()));
+        assertEquals(getExpected("0004-canvas-size/manifest"), normalizeIDs(manifest.toString()));
+    }
+
+    /**
+     * Runs the 0005 cookbook example with a minter.
+     */
+    @Test
+    @SuppressWarnings("Checkstyle.LineLengthCheck")
+    public final void test0005WithMinter() throws IOException {
+        final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0005-image-service/manifest.json",
+                new Label("en", "Picture of Göttingen taken during the 2019 IIIF Conference"));
+        final var canvas =
+                new Canvas(MinterFactory.getMinter(manifest), new Label("en", "Canvas with a single IIIF image"));
+        final var imageContent = new ImageContent(
+                "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen/full/max/0/default.jpg");
+        final var service = new ImageService3(LEVEL_ONE,
+                "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen");
+
+        imageContent.setWidthHeight(4032, 3024).setFormat(IMAGE_JPEG).setServices(service);
+        canvas.setWidthHeight(4032, 3024).paintWith(imageContent);
+        manifest.addCanvases(canvas);
+
+        System.out.println(manifest);
+
+        // Don't include this in the example; it's just a sanity check
+        assertEquals(getExpected("0005-image-service/manifest"), normalizeIDs(manifest.toString()));
+    }
+
+    /**
+     * Runs the 0005 cookbook example without a minter.
+     */
+    @Test
+    @SuppressWarnings("Checkstyle.LineLengthCheck")
+    public final void test0005WithoutMinter() throws IOException {
+        final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0005-image-service/manifest.json",
+                new Label("en", "Picture of Göttingen taken during the 2019 IIIF Conference"));
+        final var canvas =
+                new Canvas(MinterFactory.getMinter(manifest), new Label("en", "Canvas with a single IIIF image"));
+        final var page = new AnnotationPage<PaintingAnnotation>(
+                "https://iiif.io/api/cookbook/recipe/0005-image-service/page/p1/1");
+        final var annotation = new PaintingAnnotation(
+                "https://iiif.io/api/cookbook/recipe/0005-image-service/annotation/p0001-image", canvas);
+        final var imageContent = new ImageContent(
+                "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen/full/max/0/default.jpg");
+        final var service = new ImageService3(LEVEL_ONE,
+                "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen");
+
+        imageContent.setWidthHeight(4032, 3024).setFormat(IMAGE_JPEG).setServices(service);
+        page.addAnnotations(annotation.setBody(imageContent).setTarget(new Target(canvas)));
+        manifest.setCanvases(canvas.setWidthHeight(4032, 3024).setPaintingPages(page));
+
+        System.out.println(manifest);
+
+        // Don't include this in the example; it's just a sanity check
+        assertEquals(getExpected("0005-image-service/manifest"), normalizeIDs(manifest.toString()));
+    }
+
+    /**
+     * Runs the 0006 cookbook example with a minter.
+     */
+    @Test
+    @SuppressWarnings("Checkstyle.LineLengthCheck")
+    public final void test0006WithMinter() throws IOException {
+        final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0006-text-language/manifest.json",
+                new Label(new I18n("en", "Whistler's Mother"), new I18n("fr", "La Mère de Whistler")));
+        final var canvas = new Canvas(MinterFactory.getMinter(manifest));
+        final var imageContent = new ImageContent(
+                "https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother/full/max/0/default.jpg");
+        final var service = new ImageService3(LEVEL_ONE,
+                "https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother");
+
+        final var creatorLabel = new Label(new I18n("en", "Creator"), new I18n("fr", "Auteur"));
+        final var creator = new Metadata(creatorLabel, new Value("Whistler, James Abbott McNeill"));
+
+        final var subjectLabel = new Label(new I18n("en", "Subject"), new I18n("fr", "Sujet"));
+        final var subjectEN = new I18n("en", "McNeill Anna Matilda, mother of Whistler (1804-1881)");
+        final var subjectFR = new I18n("fr", "McNeill Anna Matilda, mère de Whistler (1804-1881)");
+        final var subject = new Metadata(subjectLabel, new Value(subjectEN, subjectFR));
+
+        final var summaryEN =
+                new I18n("en", "Arrangement in Grey and Black No. 1, also called Portrait of the Artist's Mother.");
+        final var summaryFR =
+                new I18n("fr", "Arrangement en gris et noir n°1, also called Portrait de la mère de l'artiste.");
+
+        final var reqStmtLabel = new Label(new I18n("en", "Held By"), new I18n("fr", "Détenu par"));
+        final var reqStmt = new Value("Musée d'Orsay, Paris, France");
+
+        manifest.setMetadata(creator, subject);
+        manifest.setSummary(new Summary(summaryEN, summaryFR));
+        manifest.setRequiredStatement(new RequiredStatement(reqStmtLabel, reqStmt));
+
+        imageContent.setWidthHeight(1114, 991).setFormat(IMAGE_JPEG).setServices(service);
+        manifest.addCanvases(canvas.setWidthHeight(1114, 991).paintWith(imageContent));
+
+        System.out.println(manifest);
+
+        // Don't include this in the example; it's just a sanity check
+        assertEquals(getExpected("0006-text-language/manifest"), normalizeIDs(manifest.toString()));
+    }
+
+    /**
+     * Runs the 0006 cookbook example without a minter.
+     */
+    @Test
+    @SuppressWarnings("Checkstyle.LineLengthCheck")
+    public final void test0006WithoutMinter() throws IOException {
+        final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0006-text-language/manifest.json",
+                new Label(new I18n("en", "Whistler's Mother"), new I18n("fr", "La Mère de Whistler")));
+        final var canvas = new Canvas("https://iiif.io/api/cookbook/recipe/0006-text-language/canvas/p1");
+        final var page = new AnnotationPage<PaintingAnnotation>(
+                "https://iiif.io/api/cookbook/recipe/0006-text-language/page/p1/1");
+        final var annotation = new PaintingAnnotation(
+                "https://iiif.io/api/cookbook/recipe/0006-text-language/annotation/p0001-image", canvas);
+        final var imageContent = new ImageContent(
+                "https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother/full/max/0/default.jpg");
+        final var service = new ImageService3(LEVEL_ONE,
+                "https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother");
+
+        final var creatorLabel = new Label(new I18n("en", "Creator"), new I18n("fr", "Auteur"));
+        final var creator = new Metadata(creatorLabel, new Value("Whistler, James Abbott McNeill"));
+
+        final var subjectLabel = new Label(new I18n("en", "Subject"), new I18n("fr", "Sujet"));
+        final var subjectEN = new I18n("en", "McNeill Anna Matilda, mother of Whistler (1804-1881)");
+        final var subjectFR = new I18n("fr", "McNeill Anna Matilda, mère de Whistler (1804-1881)");
+        final var subject = new Metadata(subjectLabel, new Value(subjectEN, subjectFR));
+
+        final var summaryEN =
+                new I18n("en", "Arrangement in Grey and Black No. 1, also called Portrait of the Artist's Mother.");
+        final var summaryFR =
+                new I18n("fr", "Arrangement en gris et noir n°1, also called Portrait de la mère de l'artiste.");
+
+        final var reqStmtLabel = new Label(new I18n("en", "Held By"), new I18n("fr", "Détenu par"));
+        final var reqStmt = new Value("Musée d'Orsay, Paris, France");
+
+        manifest.setMetadata(creator, subject);
+        manifest.setSummary(new Summary(summaryEN, summaryFR));
+        manifest.setRequiredStatement(new RequiredStatement(reqStmtLabel, reqStmt));
+
+        imageContent.setWidthHeight(1114, 991).setFormat(IMAGE_JPEG).setServices(service);
+        page.addAnnotations(annotation.setBody(imageContent).setTarget(new Target(canvas)));
+        manifest.addCanvases(canvas.setWidthHeight(1114, 991).setPaintingPages(page));
+
+        System.out.println(manifest);
+
+        // Don't include this in the example; it's just a sanity check
+        assertEquals(getExpected("0006-text-language/manifest"), normalizeIDs(manifest.toString()));
     }
 
     /**

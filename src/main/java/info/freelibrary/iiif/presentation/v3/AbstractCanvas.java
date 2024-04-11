@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
@@ -31,6 +32,7 @@ import info.freelibrary.util.warnings.PMD;
 import info.freelibrary.iiif.presentation.v3.annotations.Purpose;
 import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
+import info.freelibrary.iiif.presentation.v3.ids.MintingException;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
@@ -89,6 +91,9 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     /** The canvas' height. */
     private int myHeight;
 
+    /** The canvas' optional minter. */
+    private Minter myMinter;
+
     /**
      * Creates a new canvas.
      *
@@ -116,6 +121,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      */
     protected AbstractCanvas(final Minter aMinter, final Label aLabel) {
         super(ResourceTypes.CANVAS, aMinter.getCanvasID(), aLabel, CanvasBehavior.class);
+        myMinter = aMinter;
     }
 
     /**
@@ -125,6 +131,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      */
     protected AbstractCanvas(final Minter aMinter) {
         super(ResourceTypes.CANVAS, aMinter.getCanvasID(), CanvasBehavior.class);
+        myMinter = aMinter;
     }
 
     /**
@@ -132,6 +139,28 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      */
     protected AbstractCanvas() {
         super(ResourceTypes.CANVAS, CanvasBehavior.class);
+    }
+
+    /**
+     * Sets the canvas' minter.
+     *
+     * @param aMinter An ID minter
+     * @return This canvas
+     */
+    @JsonIgnore
+    protected AbstractCanvas<T> setMinter(final Minter aMinter) {
+        myMinter = Objects.requireNonNull(aMinter);
+        return this;
+    }
+
+    /**
+     * Gets the canvas' minter, if there is one.
+     *
+     * @return An optional minter
+     */
+    @JsonIgnore
+    protected Optional<Minter> getMinter() {
+        return Optional.ofNullable(myMinter);
     }
 
     /**
@@ -201,6 +230,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      * @return The canvas' annotation pages for painting annotations
      */
     @JsonGetter(JsonKeys.ITEMS)
+    @JsonInclude(Include.NON_EMPTY)
     public List<AnnotationPage<PaintingAnnotation>> getPaintingPages() {
         if (myPaintingPageList == null) {
             myPaintingPageList = new ArrayList<>();
@@ -365,61 +395,64 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     }
 
     /**
-     * Paints a canvas with content resources.
+     * Paints a canvas, that has been initialized with a minter, with the supplied content resources. If the canvas was
+     * not initialized with a minter, a {@code MintingException} is thrown.
      *
      * @param <C> A type of canvas
      * @param aCanvas A canvas
-     * @param aMinter An ID minter
      * @param aChoice Whether the content resource are painted on the canvas as a choice
      * @param aContentArray An array of content resources
      * @return The canvas
      * @throws ContentOutOfBoundsException If the painted content is out of bounds of the canvas
+     * @throws MintingException If the canvas was created without a minter
      */
     protected final <C extends CanvasResource<C>> AbstractCanvas<T> paint(final CanvasResource<C> aCanvas,
-            final Minter aMinter, final boolean aChoice, final ContentResource<?>... aContentArray) {
-        final PaintingAnnotation anno = new PaintingAnnotation(aMinter.getAnnotationID(), aCanvas);
+            final boolean aChoice, final ContentResource<?>... aContentArray) {
+        final PaintingAnnotation annotation =
+                new PaintingAnnotation(getMinter(MessageCodes.JPA_143).getAnnotationID(), aCanvas);
         final AnnotationPage<PaintingAnnotation> page;
         final int pageCount;
 
-        anno.setChoice(aChoice);
+        annotation.setChoice(aChoice);
 
         for (final ContentResource<?> content : aContentArray) {
             if (canFrame(content)) {
-                anno.getBody().add(content);
+                annotation.getBody().add(content);
             }
         }
 
         pageCount = getPaintingPages().size();
 
         if (pageCount == 0) {
-            page = new AnnotationPage<>(aMinter.getAnnotationPageID(aCanvas));
+            page = new AnnotationPage<>(myMinter.getAnnotationPageID(aCanvas));
             getPaintingPages().add(page);
         } else {
             page = getPaintingPages().get(pageCount - 1);
         }
 
-        page.getAnnotations().add(anno);
+        page.getAnnotations().add(annotation);
 
         return this;
     }
 
     /**
-     * Paints a canvas with content resources.
+     * Paints a canvas, that has been initialized with a minter, with the supplied content resources. If the canvas was
+     * not initialized with a minter, a {@code MintingException} is thrown.
      *
      * @param <C> A type of canvas
      * @param aCanvas A canvas
-     * @param aMinter An ID minter
      * @param aCanvasRegion A canvas region
      * @param aChoice Whether the content resource are painted on the canvas as a choice
      * @param aContentArray An array of content resources
      * @return The canvas
      * @throws ContentOutOfBoundsException If the painted content is out of bounds of the canvas
      * @throws SelectorOutOfBoundsException If the supplied selector is out of bounds of the canvas
+     * @throws MintingException If the canvas was created without a minter
      */
     protected final <C extends CanvasResource<C>> AbstractCanvas<T> paint(final CanvasResource<C> aCanvas,
-            final Minter aMinter, final MediaFragmentSelector aCanvasRegion, final boolean aChoice,
+            final MediaFragmentSelector aCanvasRegion, final boolean aChoice,
             final ContentResource<?>... aContentArray) {
-        final PaintingAnnotation anno = new PaintingAnnotation(aMinter, aCanvas, aCanvasRegion);
+        final PaintingAnnotation anno = new PaintingAnnotation(getMinter(MessageCodes.JPA_143), aCanvas, aCanvasRegion);
         final AnnotationPage<PaintingAnnotation> page;
         final int pageCount;
 
@@ -434,7 +467,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         pageCount = getPaintingPages().size();
 
         if (pageCount == 0) {
-            page = new AnnotationPage<>(aMinter.getAnnotationPageID(aCanvas));
+            page = new AnnotationPage<>(myMinter.getAnnotationPageID(aCanvas));
             getPaintingPages().add(page);
         } else {
             page = getPaintingPages().get(pageCount - 1);
@@ -446,55 +479,58 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     }
 
     /**
-     * Supplements a canvas with content resources.
+     * Supplements a canvas, that has been initialized with a minter, with the supplied content resources. If the canvas
+     * was not initialized with a minter, a {@code MintingException} is thrown.
      *
      * @param <C> A type of canvas resource
      * @param aCanvas A canvas
-     * @param aMinter An ID minter
      * @param aChoice Whether content resources on the canvas use a choice
      * @param aContentArray An array of content resources
      * @return This canvas
+     * @throws MintingException If the canvas was created without a minter
      */
     protected final <C extends CanvasResource<C>> AbstractCanvas<T> supplement(final CanvasResource<C> aCanvas,
-            final Minter aMinter, final boolean aChoice, final ContentResource<?>... aContentArray) {
-        final SupplementingAnnotation anno = new SupplementingAnnotation(aMinter.getAnnotationID(), aCanvas);
+            final boolean aChoice, final ContentResource<?>... aContentArray) {
+        final SupplementingAnnotation annotation =
+                new SupplementingAnnotation(getMinter(MessageCodes.JPA_144).getAnnotationID(), aCanvas);
         final List<ContentResource<?>> resources = new ArrayList<>();
         final int pageCount = getSupplementingPages().size();
         final AnnotationPage<SupplementingAnnotation> page;
 
         Collections.addAll(resources, aContentArray);
 
-        anno.setChoice(aChoice).getBody().addAll(resources);
+        annotation.setChoice(aChoice).getBody().addAll(resources);
 
         if (pageCount == 0) {
-            page = new AnnotationPage<>(aMinter.getAnnotationPageID(aCanvas));
+            page = new AnnotationPage<>(myMinter.getAnnotationPageID(aCanvas));
             getSupplementingPages().add(page);
         } else {
             page = getSupplementingPages().get(pageCount - 1);
         }
 
-        page.getAnnotations().add(anno);
+        page.getAnnotations().add(annotation);
 
         return this;
     }
 
     /**
-     * Supplements a canvas with content resources.
+     * Supplements a canvas, that has been initialized with a minter, with the supplied content resources. If the canvas
+     * was not initialized with a minter, a {@code MintingException} is thrown.
      *
      * @param <C> A type of canvas resource
      * @param aCanvas A canvas
-     * @param aMinter An ID minter
      * @param aCanvasRegion A canvas region
      * @param aChoice Whether content resources on the canvas use a choice
      * @param aContentArray An array of content resources
      * @return This canvas
      * @throws SelectorOutOfBoundsException If the canvas region is out of bounds
+     * @throws MintingException If the canvas was created without a minter
      */
     protected final <C extends CanvasResource<C>> AbstractCanvas<T> supplement(final CanvasResource<C> aCanvas,
-            final Minter aMinter, final MediaFragmentSelector aCanvasRegion, final boolean aChoice,
+            final MediaFragmentSelector aCanvasRegion, final boolean aChoice,
             final ContentResource<?>... aContentArray) {
-        final SupplementingAnnotation anno =
-                new SupplementingAnnotation(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
+        final SupplementingAnnotation annotation =
+                new SupplementingAnnotation(getMinter(MessageCodes.JPA_144).getAnnotationID(), aCanvas, aCanvasRegion);
         final List<ContentResource<?>> resources = new ArrayList<>();
         final int pageCount = getSupplementingPages().size();
         final AnnotationPage<SupplementingAnnotation> page;
@@ -502,18 +538,32 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         Collections.addAll(resources, aContentArray);
 
         getCanvasFragment(aCanvasRegion); // Check that the canvas region is valid by absence of exceptions
-        anno.setChoice(aChoice).getBody().addAll(resources);
+        annotation.setChoice(aChoice).getBody().addAll(resources);
 
         if (pageCount == 0) {
-            page = new AnnotationPage<>(aMinter.getAnnotationPageID(aCanvas));
+            page = new AnnotationPage<>(myMinter.getAnnotationPageID(aCanvas));
             getSupplementingPages().add(page);
         } else {
             page = getSupplementingPages().get(pageCount - 1);
         }
 
-        page.getAnnotations().add(anno);
+        page.getAnnotations().add(annotation);
 
         return this;
+    }
+
+    /**
+     * Gets the manifest context. The manifest can either have a single context or an array of contexts (Cf.
+     * https://iiif.io/api/presentation/3.0/#46-linked-data-context-and-extensions)
+     *
+     * @return The manifest context
+     */
+    @Override
+    @JsonGetter(JsonKeys.CONTEXT)
+    @JsonInclude(Include.NON_NULL)
+    @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
+    protected Object getJsonContext() {
+        return null;
     }
 
     /**
@@ -545,6 +595,22 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         } catch (final JsonProcessingException details) {
             throw new JsonParsingException(details);
         }
+    }
+
+    /**
+     * Gets the minter if it's been initialized and throws a {@code MintingException} if it has not been.
+     *
+     * @param aMessageCode A message code to use if the minter cannot be found
+     * @return A minter if the canvas was initialized with a minter
+     * @throws MintingException If the canvas' minter has not been initialized
+     */
+    @JsonIgnore
+    private Minter getMinter(final String aMessageCode) {
+        if (myMinter == null) {
+            throw new MintingException(aMessageCode);
+        }
+
+        return myMinter;
     }
 
     /**
@@ -637,7 +703,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      */
     @SuppressWarnings({ PMD.N_PATH_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY })
     private Canvas getCanvasFragment(final MediaFragmentSelector aCanvasRegion) { // NOPMD
-        final String canvasID = getID().toString() + Constants.HASH + aCanvasRegion.toString();
+        final String canvasID = getID() + Constants.HASH + aCanvasRegion.toString();
         final Canvas canvasFragment = new Canvas(canvasID);
         final double duration;
         final int height;

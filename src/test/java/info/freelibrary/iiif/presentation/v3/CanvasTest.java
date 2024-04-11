@@ -79,9 +79,6 @@ public class CanvasTest extends AbstractCookbookTest {
     /** A test image info service ID. */
     private static final String IMAGE_INFO_SERVICE_ID = "https://example.org/iiif/book1/page1";
 
-    /** A test sound canvas ID. */
-    private static final String SOUND_CANVAS_ID = "https://example.org/iiif/lp1/side1/track1/canvas-1";
-
     /** A test sound resource ID. */
     private static final String SOUND_1_ID = "https://example.org/iiif/lp1/side1/track1.mp3";
 
@@ -90,9 +87,6 @@ public class CanvasTest extends AbstractCookbookTest {
 
     /** A test sound resource ID. */
     private static final String SOUND_3_ID = "https://example.org/iiif/lp1/side1/track2.mp3";
-
-    /** A test video canvas ID. */
-    private static final String VIDEO_CANVAS_ID = "https://example.org/iiif/reel1/segment1/canvas-1";
 
     /** A test video ID. */
     private static final String VIDEO_1_ID = "https://example.org/iiif/reel1/segment1.mp4";
@@ -136,9 +130,6 @@ public class CanvasTest extends AbstractCookbookTest {
     /** A test canvas. */
     private Canvas myCanvas;
 
-    /** A test ID minter. */
-    private Minter myMinter;
-
     /**
      * Sets up the testing environment.
      */
@@ -147,9 +138,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final String id = HTTPS + UUID.randomUUID().toString();
         final int index = id.indexOf('-');
 
-        // Each minter will take a different path through the NOIDs available in the internal list
-        myMinter = MinterFactory.getMinter("https://example.org/iiif/" + id.substring(0, index));
-        myCanvas = new Canvas(IMAGE_CANVAS_ID, LABEL);
+        myCanvas = new Canvas(MinterFactory.getMinter("https://example.org/iiif/" + id.substring(0, index)), LABEL);
     }
 
     /**
@@ -157,9 +146,10 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test
     public void testConstructorStringLabel() {
-        myCanvas = new Canvas(IMAGE_CANVAS_ID, LABEL);
-        assertEquals(IMAGE_CANVAS_ID, myCanvas.getID());
-        assertEquals(LABEL, myCanvas.getLabel());
+        final Canvas canvas = new Canvas(IMAGE_CANVAS_ID, LABEL);
+
+        assertEquals(IMAGE_CANVAS_ID, canvas.getID());
+        assertEquals(LABEL, canvas.getLabel());
     }
 
     /**
@@ -168,8 +158,7 @@ public class CanvasTest extends AbstractCookbookTest {
     @Test
     public final void testCanvasMinter() {
         final String id = HTTPS + UUID.randomUUID().toString();
-        final Minter minter = MinterFactory.getMinter(id);
-        final Canvas canvas = new Canvas(minter);
+        final Canvas canvas = new Canvas(MinterFactory.getMinter(id));
 
         assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID()).matches());
     }
@@ -180,8 +169,7 @@ public class CanvasTest extends AbstractCookbookTest {
     @Test
     public final void testCanvasMinterLabel() {
         final String id = HTTPS + UUID.randomUUID().toString();
-        final Minter minter = MinterFactory.getMinter(id);
-        final Canvas canvas = new Canvas(minter, LABEL);
+        final Canvas canvas = new Canvas(MinterFactory.getMinter(id), LABEL);
 
         assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID()).matches());
     }
@@ -192,8 +180,7 @@ public class CanvasTest extends AbstractCookbookTest {
     @Test
     public final void testCanvasMinterLabelAsString() {
         final String id = HTTPS + UUID.randomUUID().toString();
-        final Minter minter = MinterFactory.getMinter(id);
-        final Canvas canvas = new Canvas(minter, LABEL);
+        final Canvas canvas = new Canvas(MinterFactory.getMinter(id), LABEL);
 
         assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID()).matches());
     }
@@ -270,7 +257,6 @@ public class CanvasTest extends AbstractCookbookTest {
     @Test
     public final void testSetBehaviors() {
         myCanvas.setBehaviors(CanvasBehavior.FACING_PAGES, CanvasBehavior.AUTO_ADVANCE);
-
         assertEquals(2, myCanvas.getBehaviors().size());
     }
 
@@ -287,10 +273,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test
     public final void testPaintImageOnSpatialCanvas() {
-        final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
-
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, image);
-
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT));
         assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
     }
 
@@ -299,10 +282,8 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test
     public final void testPaintImageOnSpatiotemporalCanvas() {
-        final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
-
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, image);
-
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION)
+                .paintWith(new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT));
         assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
     }
 
@@ -311,10 +292,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test
     public final void testPaintSoundOnTemporalCanvas() {
-        final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
-
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, sound);
-
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(new SoundContent(SOUND_1_ID).setDuration(DURATION));
         assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
     }
 
@@ -323,10 +301,8 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test
     public final void testPaintSoundOnSpatiotemporalCanvas() {
-        final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
-
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, sound);
-
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION)
+                .paintWith(new SoundContent(SOUND_1_ID).setDuration(DURATION));
         assertEquals(SOUND_1_ID, getPaintingContentResourceID());
     }
 
@@ -335,10 +311,8 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test
     public final void testPaintVideoOnSpatiotemporalCanvas() {
-        final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
-
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, video);
-
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION)
+                .paintWith(new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION));
         assertEquals(VIDEO_1_ID, getPaintingContentResourceID());
     }
 
@@ -347,10 +321,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test
     public final void testPaintImageOnSpatialCanvasNoDims() {
-        final ImageContent image = new ImageContent(IMAGE_1_ID);
-
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, image);
-
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(new ImageContent(IMAGE_1_ID));
         assertEquals(IMAGE_1_ID, getPaintingContentResourceID());
     }
 
@@ -359,10 +330,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test
     public final void testPaintImageOnSpatiotemporalCanvasNoDims() {
-        final ImageContent image = new ImageContent(IMAGE_1_ID);
-
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, image);
-
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(new ImageContent(IMAGE_1_ID));
         assertEquals(IMAGE_1_ID, getPaintingContentResourceID());
     }
 
@@ -371,10 +339,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test
     public final void testPaintSoundOnTemporalCanvasNoDims() {
-        final SoundContent sound = new SoundContent(SOUND_1_ID);
-
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, sound);
-
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(new SoundContent(SOUND_1_ID));
         assertEquals(SOUND_1_ID, getPaintingContentResourceID());
     }
 
@@ -383,10 +348,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test
     public final void testPaintSoundOnSpatiotemporalCanvasNoDims() {
-        final SoundContent sound = new SoundContent(SOUND_1_ID);
-
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, sound);
-
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(new SoundContent(SOUND_1_ID));
         assertEquals(SOUND_1_ID, getPaintingContentResourceID());
     }
 
@@ -395,10 +357,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test
     public final void testPaintVideoOnSpatiotemporalCanvasNoDims() {
-        final VideoContent video = new VideoContent(VIDEO_1_ID);
-
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, video);
-
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(new VideoContent(VIDEO_1_ID));
         assertEquals(VIDEO_1_ID, getPaintingContentResourceID());
     }
 
@@ -407,7 +366,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test(expected = ContentOutOfBoundsException.class)
     public final void testPaintImageOnTemoporalCanvas() {
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, new ImageContent(IMAGE_1_ID));
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(new ImageContent(IMAGE_1_ID));
     }
 
     /**
@@ -415,7 +374,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test(expected = ContentOutOfBoundsException.class)
     public final void testPaintSoundOnSpatialCanvas() {
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, new SoundContent(SOUND_1_ID));
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(new SoundContent(SOUND_1_ID));
     }
 
     /**
@@ -423,7 +382,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test(expected = ContentOutOfBoundsException.class)
     public final void testPaintVideoOnSpatialCanvas() {
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, new VideoContent(VIDEO_1_ID));
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(new VideoContent(VIDEO_1_ID));
     }
 
     /**
@@ -431,7 +390,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test(expected = ContentOutOfBoundsException.class)
     public final void testPaintVideoOnTemoporalCanvas() {
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, new VideoContent(VIDEO_1_ID));
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(new VideoContent(VIDEO_1_ID));
     }
 
     /**
@@ -439,9 +398,8 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test(expected = ContentOutOfBoundsException.class)
     public final void testPaintImageOnSpatialCanvasOutOfBounds() {
-        final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
-
-        myCanvas.setWidthHeight(WIDTH - 1, HEIGHT).paintWith(myMinter, image);
+        myCanvas.setWidthHeight(WIDTH - 1, HEIGHT)
+                .paintWith(new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT));
     }
 
     /**
@@ -449,9 +407,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test(expected = ContentOutOfBoundsException.class)
     public final void testPaintSoundOnTemporalCanvasOutOfBounds() {
-        final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
-
-        myCanvas.setDuration(DURATION - 1).paintWith(myMinter, sound);
+        myCanvas.setDuration(DURATION - 1).paintWith(new SoundContent(SOUND_1_ID).setDuration(DURATION));
     }
 
     /**
@@ -459,9 +415,8 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test(expected = ContentOutOfBoundsException.class)
     public final void testPaintVideoOnSpatiotemporalCanvasOutOfBoundsSpatial() {
-        final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
-
-        myCanvas.setWidthHeight(WIDTH, HEIGHT - 1).setDuration(CANVAS_DURATION).paintWith(myMinter, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT - 1).setDuration(CANVAS_DURATION)
+                .paintWith(new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION));
     }
 
     /**
@@ -469,9 +424,8 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test(expected = ContentOutOfBoundsException.class)
     public final void testPaintVideoOnSpatiotemporalCanvasOutOfBoundsTemporal() {
-        final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
-
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION - 1).paintWith(myMinter, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION - 1)
+                .paintWith(new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION));
     }
 
     /**
@@ -482,7 +436,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, image);
 
         assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
         assertEquals(selector.toString(), getPaintingMediaFragment());
@@ -496,7 +450,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, image);
 
         assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
         assertEquals(selector.toString(), getPaintingMediaFragment().toString());
@@ -511,7 +465,7 @@ public class CanvasTest extends AbstractCookbookTest {
         // A time interval with a start time of 0 and an end time of DURATION has a duration of DURATION
         final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION));
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, image);
 
         assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
         assertEquals(selector.toString(), getPaintingMediaFragment());
@@ -526,7 +480,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, image);
 
         assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
         assertEquals(selector.toString(), getPaintingMediaFragment());
@@ -540,7 +494,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION));
 
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, sound);
 
         assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
         assertEquals(selector.toString(), getPaintingMediaFragment());
@@ -554,7 +508,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, sound);
 
         assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
         assertEquals(selector.toString(), getPaintingMediaFragment());
@@ -568,7 +522,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION));
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, sound);
 
         assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
         assertEquals(selector.toString(), getPaintingMediaFragment());
@@ -583,7 +537,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, sound);
 
         assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
         assertEquals(selector.toString(), getPaintingMediaFragment());
@@ -597,7 +551,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, video);
 
         assertEquals(VIDEO_1_ID, getPaintingContentResourceID().toString());
         assertEquals(selector.toString(), getPaintingMediaFragment());
@@ -612,7 +566,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION));
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, video);
 
         assertEquals(VIDEO_1_ID, getPaintingContentResourceID().toString());
         assertEquals(selector.toString(), getPaintingMediaFragment());
@@ -627,7 +581,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION), 0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, video);
 
         assertEquals(VIDEO_1_ID, getPaintingContentResourceID().toString());
         assertEquals(selector.toString(), getPaintingMediaFragment());
@@ -643,7 +597,7 @@ public class CanvasTest extends AbstractCookbookTest {
         // bottom-right point is at the bottom-right corner of the canvas.
         final MediaFragmentSelector selector = new MediaFragmentSelector(WIDTH / 2, HEIGHT / 2, WIDTH / 2, HEIGHT / 2);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, image);
 
         assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
         assertEquals(selector.toString(), getPaintingMediaFragment());
@@ -660,7 +614,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(DURATION), new EndTime(1.5f * DURATION));
 
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, sound);
 
         assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
         assertEquals(selector.toString(), getPaintingMediaFragment());
@@ -678,7 +632,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(CANVAS_DURATION - DURATION / 2), 0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, video);
 
         assertEquals(VIDEO_1_ID, getPaintingContentResourceID().toString());
         assertEquals(selector.toString(), getPaintingMediaFragment());
@@ -692,7 +646,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
         final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION));
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, image);
     }
 
     /**
@@ -703,7 +657,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, image);
     }
 
     /**
@@ -715,7 +669,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, image);
     }
 
     /**
@@ -727,7 +681,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, image);
     }
 
     /**
@@ -738,7 +692,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION));
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, sound);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, sound);
     }
 
     /**
@@ -749,7 +703,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, sound);
     }
 
     /**
@@ -761,7 +715,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, sound);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, sound);
     }
 
     /**
@@ -773,7 +727,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, sound);
     }
 
     /**
@@ -784,7 +738,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION));
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, video);
     }
 
     /**
@@ -795,7 +749,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, video);
     }
 
     /**
@@ -807,7 +761,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, video);
     }
 
     /**
@@ -819,7 +773,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, video);
     }
 
     /**
@@ -831,7 +785,7 @@ public class CanvasTest extends AbstractCookbookTest {
         // A fragment selector that is taller than the canvas.
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT + 1);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, image);
     }
 
     /**
@@ -843,7 +797,7 @@ public class CanvasTest extends AbstractCookbookTest {
         // A fragment selector that is wider than the canvas.
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH + 1, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, image);
     }
 
     /**
@@ -856,7 +810,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION + 1));
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, image);
     }
 
     /**
@@ -869,7 +823,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION + 1), 0, 0, WIDTH, HEIGHT + 1);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, image);
     }
 
     /**
@@ -882,7 +836,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(CANVAS_DURATION), new EndTime(CANVAS_DURATION + DURATION));
 
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, sound);
     }
 
     /**
@@ -895,7 +849,7 @@ public class CanvasTest extends AbstractCookbookTest {
         // whose bottom-right point is outside the canvas.
         final MediaFragmentSelector selector = new MediaFragmentSelector(WIDTH, HEIGHT, WIDTH + WIDTH, HEIGHT + HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, sound);
     }
 
     /**
@@ -908,7 +862,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(CANVAS_DURATION / 2), new EndTime(3.0f / 2 * CANVAS_DURATION));
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, sound);
     }
 
     /**
@@ -920,7 +874,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION), 0, 0, WIDTH + 1, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, sound);
     }
 
     /**
@@ -931,7 +885,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH + 1, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, video);
     }
 
     /**
@@ -943,7 +897,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION + 1));
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, video);
     }
 
     /**
@@ -955,7 +909,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION), 0, 0, WIDTH + 1, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, video);
     }
 
     /**
@@ -966,7 +920,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
         final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION));
 
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, image);
     }
 
     /**
@@ -977,7 +931,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, sound);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, sound);
     }
 
     /**
@@ -988,7 +942,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, video);
     }
 
     /**
@@ -999,7 +953,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION));
 
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, video);
     }
 
     /**
@@ -1010,7 +964,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH - 1, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, image);
     }
 
     /**
@@ -1021,7 +975,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT - 1);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, image);
     }
 
     /**
@@ -1033,7 +987,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION));
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, image);
     }
 
     /**
@@ -1046,7 +1000,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION), 0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, image);
     }
 
     /**
@@ -1057,7 +1011,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION - 1));
 
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, sound);
     }
 
     /**
@@ -1068,7 +1022,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(CANVAS_DURATION + 1);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, sound);
     }
 
     /**
@@ -1079,7 +1033,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION - 1));
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, sound);
     }
 
     /**
@@ -1092,7 +1046,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION - 1), 0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, sound);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, sound);
     }
 
     /**
@@ -1103,7 +1057,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH - 1, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, video);
     }
 
     /**
@@ -1114,7 +1068,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
         final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION - 1));
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, video);
     }
 
     /**
@@ -1127,7 +1081,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, selector, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, video);
     }
 
     /**
@@ -1135,9 +1089,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testPaintImageInvalidFragment() {
-        final ImageContent image = new ImageContent(IMAGE_1_ID);
-
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, "xywh=", image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith("xywh=", new ImageContent(IMAGE_1_ID));
     }
 
     /**
@@ -1145,9 +1097,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testPaintSoundInvalidFragment() {
-        final SoundContent sound = new SoundContent(SOUND_1_ID);
-
-        myCanvas.setDuration(CANVAS_DURATION).paintWith(myMinter, "t=", sound);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith("t=", new SoundContent(SOUND_1_ID));
     }
 
     /**
@@ -1155,9 +1105,8 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testPaintVideoInvalidFragment() {
-        final VideoContent video = new VideoContent(VIDEO_1_ID);
-
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(myMinter, "xywh=&t=", video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith("xywh=&t=",
+                new VideoContent(VIDEO_1_ID));
     }
 
     /**
@@ -1165,11 +1114,8 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test
     public final void testSupplementTextOnSpatialCanvas() {
-        final TextContent text = new TextContent(TEXT_ID);
-
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).supplementWith(myMinter, text);
-
-        assertEquals(text.getID(), getSupplementingContentResourceID());
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).supplementWith(new TextContent(TEXT_ID));
+        assertEquals(TEXT_ID, getSupplementingContentResourceID());
     }
 
     /**
@@ -1179,7 +1125,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final TextContent text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).supplementWith(myMinter, selector, text);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).supplementWith(selector, text);
 
         assertEquals(text.getID(), getSupplementingContentResourceID());
         assertEquals(selector.toString(), getSupplementingMediaFragment());
@@ -1194,7 +1140,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION));
 
-        myCanvas.setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
+        myCanvas.setDuration(CANVAS_DURATION).supplementWith(selector, text);
 
         assertEquals(text.getID(), getSupplementingContentResourceID());
         assertEquals(selector.toString(), getSupplementingMediaFragment());
@@ -1208,7 +1154,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final TextContent text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).supplementWith(selector, text);
 
         assertEquals(text.getID(), getSupplementingContentResourceID());
         assertEquals(selector.toString(), getSupplementingMediaFragment());
@@ -1223,7 +1169,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION));
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).supplementWith(selector, text);
 
         assertEquals(text.getID(), getSupplementingContentResourceID());
         assertEquals(selector.toString(), getSupplementingMediaFragment());
@@ -1238,7 +1184,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION), 0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).supplementWith(selector, text);
 
         assertEquals(text.getID(), getSupplementingContentResourceID());
         assertEquals(selector.toString(), getSupplementingMediaFragment());
@@ -1252,7 +1198,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final ContentResource<TextContent> text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION));
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).supplementWith(myMinter, selector, text);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).supplementWith(selector, text);
     }
 
     /**
@@ -1264,7 +1210,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).supplementWith(myMinter, selector, text);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).supplementWith(selector, text);
     }
 
     /**
@@ -1275,7 +1221,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final ContentResource<TextContent> text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
+        myCanvas.setDuration(CANVAS_DURATION).supplementWith(selector, text);
     }
 
     /**
@@ -1287,7 +1233,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0, WIDTH, HEIGHT);
 
-        myCanvas.setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
+        myCanvas.setDuration(CANVAS_DURATION).supplementWith(selector, text);
     }
 
     /**
@@ -1298,7 +1244,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final ContentResource<TextContent> text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT + 1);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).supplementWith(myMinter, selector, text);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).supplementWith(selector, text);
     }
 
     /**
@@ -1310,7 +1256,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(CANVAS_DURATION), new EndTime(CANVAS_DURATION + DURATION));
 
-        myCanvas.setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
+        myCanvas.setDuration(CANVAS_DURATION).supplementWith(selector, text);
     }
 
     /**
@@ -1321,7 +1267,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final ContentResource<TextContent> text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT + 1);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).supplementWith(selector, text);
     }
 
     /**
@@ -1333,7 +1279,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION + 1));
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).supplementWith(selector, text);
     }
 
     /**
@@ -1345,7 +1291,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION + 1), 0, 0, WIDTH, HEIGHT + 1);
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).supplementWith(myMinter, selector, text);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).supplementWith(selector, text);
     }
 
     /**
@@ -1371,7 +1317,7 @@ public class CanvasTest extends AbstractCookbookTest {
         myCanvas.setPaintingPages(new AnnotationPage<PaintingAnnotation>(IMAGE_PAGE_ID).addAnnotations(pAnno));
         myCanvas.setSupplementingPages(new AnnotationPage<SupplementingAnnotation>(TEXT_PAGE_ID).addAnnotations(sAnno));
 
-        assertEquals(getExpected(FULL_CANVAS_FIXTURE), format(toJson(myCanvas)));
+        assertEquals(normalizeIDs(getExpected(FULL_CANVAS_FIXTURE)), format(normalizeIDs(toJson(myCanvas))));
     }
 
     /**
@@ -1387,8 +1333,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final ImageContent thumbnail = new ImageContent(IMAGE_THUMBNAIL_ID).setWidthHeight(THUMBNAIL_WH, THUMBNAIL_WH)
                 .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).setThumbnails(thumbnail).paintWith(myMinter, image)
-                .supplementWith(myMinter, text);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setThumbnails(thumbnail).paintWith(image).supplementWith(text);
         assertEquals(normalizeIDs(getExpected(FULL_CANVAS_FIXTURE)), normalizeIDs(toJson(myCanvas)));
     }
 
@@ -1402,7 +1347,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT)
                 .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, image);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(image);
         assertEquals(normalizeIDs(getExpected("canvas-image.json")), normalizeIDs(toJson(myCanvas)));
     }
 
@@ -1419,7 +1364,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final ImageContent image2 = new ImageContent(IMAGE_2_ID).setWidthHeight(WIDTH, HEIGHT)
                 .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(myMinter, true, image1, image2);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(true, image1, image2);
         assertEquals(normalizeIDs(getExpected("canvas-image-choice.json")), normalizeIDs(toJson(myCanvas)));
     }
 
@@ -1437,8 +1382,8 @@ public class CanvasTest extends AbstractCookbookTest {
                 .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT * 2)
-                .paintWith(myMinter, StringUtils.format(URI_FRAG_XYWH_TEMPLATE, 0, 0, WIDTH, HEIGHT), image1)
-                .paintWith(myMinter, StringUtils.format(URI_FRAG_XYWH_TEMPLATE, 0, HEIGHT, WIDTH, HEIGHT), image2);
+                .paintWith(StringUtils.format(URI_FRAG_XYWH_TEMPLATE, 0, 0, WIDTH, HEIGHT), image1)
+                .paintWith(StringUtils.format(URI_FRAG_XYWH_TEMPLATE, 0, HEIGHT, WIDTH, HEIGHT), image2);
         assertEquals(normalizeIDs(getExpected(MULTI_IMAGE_CANVAS_FIXTURE)), normalizeIDs(toJson(myCanvas)));
     }
 
@@ -1455,9 +1400,10 @@ public class CanvasTest extends AbstractCookbookTest {
         final ImageContent image2 = new ImageContent(IMAGE_2_ID).setWidthHeight(WIDTH, HEIGHT)
                 .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
 
-        myCanvas.setWidthHeight(WIDTH, HEIGHT * 2).paintWith(myMinter,
-                new MediaFragmentSelector(StringUtils.format(URI_FRAG_XYWH_TEMPLATE, 0, 0, WIDTH, HEIGHT)), image1)
-                .paintWith(myMinter,
+        myCanvas.setWidthHeight(WIDTH, HEIGHT * 2)
+                .paintWith(new MediaFragmentSelector(StringUtils.format(URI_FRAG_XYWH_TEMPLATE, 0, 0, WIDTH, HEIGHT)),
+                        image1)
+                .paintWith(
                         new MediaFragmentSelector(StringUtils.format(URI_FRAG_XYWH_TEMPLATE, 0, HEIGHT, WIDTH, HEIGHT)),
                         image2);
         assertEquals(normalizeIDs(getExpected(MULTI_IMAGE_CANVAS_FIXTURE)), normalizeIDs(toJson(myCanvas)));
@@ -1470,9 +1416,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test
     public final void testPaintSoundSerialization() throws IOException {
-        final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
-
-        myCanvas = new Canvas(SOUND_CANVAS_ID, LABEL).setDuration(CANVAS_DURATION).paintWith(myMinter, sound);
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(new SoundContent(SOUND_1_ID).setDuration(DURATION));
         assertEquals(normalizeIDs(getExpected("canvas-sound.json")), normalizeIDs(TestUtils.toJson(myCanvas)));
     }
 
@@ -1489,9 +1433,9 @@ public class CanvasTest extends AbstractCookbookTest {
         final SoundContent sound2 = new SoundContent(SOUND_2_ID).setDuration(DURATION);
         final SoundContent sound3 = new SoundContent(SOUND_3_ID).setDuration(DURATION);
 
-        myCanvas = new Canvas(SOUND_CANVAS_ID, LABEL).setDuration(CANVAS_DURATION)
-                .paintWith(myMinter, StringUtils.format(URI_FRAG_T_TEMPLATE, 0, DURATION), true, sound1, sound2)
-                .paintWith(myMinter, StringUtils.format(URI_FRAG_T_TEMPLATE, DURATION, DURATION + DURATION), sound3);
+        myCanvas.setDuration(CANVAS_DURATION)
+                .paintWith(StringUtils.format(URI_FRAG_T_TEMPLATE, 0, DURATION), true, sound1, sound2)
+                .paintWith(StringUtils.format(URI_FRAG_T_TEMPLATE, DURATION, DURATION + DURATION), sound3);
         assertEquals(normalizeIDs(getExpected(MULTI_SOUND_CHOICE_FIXTURE)), normalizeIDs(toJson(myCanvas)));
     }
 
@@ -1508,10 +1452,10 @@ public class CanvasTest extends AbstractCookbookTest {
         final SoundContent sound2 = new SoundContent(SOUND_2_ID).setDuration(DURATION);
         final SoundContent sound3 = new SoundContent(SOUND_3_ID).setDuration(DURATION);
 
-        myCanvas = new Canvas(SOUND_CANVAS_ID, LABEL).setDuration(CANVAS_DURATION)
-                .paintWith(myMinter, new MediaFragmentSelector(StringUtils.format(URI_FRAG_T_TEMPLATE, 0, DURATION)),
-                        true, sound1, sound2)
-                .paintWith(myMinter, new MediaFragmentSelector(
+        myCanvas.setDuration(CANVAS_DURATION)
+                .paintWith(new MediaFragmentSelector(StringUtils.format(URI_FRAG_T_TEMPLATE, 0, DURATION)), true,
+                        sound1, sound2)
+                .paintWith(new MediaFragmentSelector(
                         StringUtils.format(URI_FRAG_T_TEMPLATE, DURATION, DURATION + DURATION)), sound3);
         assertEquals(normalizeIDs(getExpected(MULTI_SOUND_CHOICE_FIXTURE)), normalizeIDs(toJson(myCanvas)));
     }
@@ -1523,10 +1467,8 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test
     public final void testPaintVideoSerialization() throws IOException {
-        final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
-
-        myCanvas = new Canvas(VIDEO_CANVAS_ID, LABEL).setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION)
-                .paintWith(myMinter, video);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION)
+                .paintWith(new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION));
         assertEquals(normalizeIDs(getExpected("canvas-video.json")), normalizeIDs(toJson(myCanvas)));
     }
 
@@ -1545,8 +1487,8 @@ public class CanvasTest extends AbstractCookbookTest {
         final String selector2 =
                 StringUtils.format(URI_FRAG_TXYWH_TEMPLATE, DURATION, DURATION + DURATION, 0, 0, WIDTH, HEIGHT);
 
-        myCanvas = new Canvas(VIDEO_CANVAS_ID, LABEL).setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION)
-                .paintWith(myMinter, selector1, video1).paintWith(myMinter, selector2, video2);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector1, video1)
+                .paintWith(selector2, video2);
         assertEquals(normalizeIDs(getExpected(MULTI_VIDEO_CANVAS_FIXTURE)), normalizeIDs(toJson(myCanvas)));
     }
 
@@ -1566,8 +1508,8 @@ public class CanvasTest extends AbstractCookbookTest {
         final MediaFragmentSelector selector2 = new MediaFragmentSelector(
                 StringUtils.format(URI_FRAG_TXYWH_TEMPLATE, DURATION, DURATION + DURATION, 0, 0, WIDTH, HEIGHT));
 
-        myCanvas = new Canvas(VIDEO_CANVAS_ID, LABEL).setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION)
-                .paintWith(myMinter, selector1, video1).paintWith(myMinter, selector2, video2);
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector1, video1)
+                .paintWith(selector2, video2);
         assertEquals(normalizeIDs(getExpected(MULTI_VIDEO_CANVAS_FIXTURE)), normalizeIDs(toJson(myCanvas)));
     }
 

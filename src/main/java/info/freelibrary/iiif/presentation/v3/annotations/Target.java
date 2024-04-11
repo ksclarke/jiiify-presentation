@@ -3,18 +3,22 @@ package info.freelibrary.iiif.presentation.v3.annotations;
 
 import java.util.Optional;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import info.freelibrary.util.StringUtils;
 
+import info.freelibrary.iiif.presentation.v3.Canvas;
 import info.freelibrary.iiif.presentation.v3.SpecificResource;
 import info.freelibrary.iiif.presentation.v3.ids.UriUtils;
+import info.freelibrary.iiif.presentation.v3.utils.json.AnnotationTargetDeserializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.AnnotationTargetSerializer;
 
 /**
  * An annotation target.
  */
 @JsonSerialize(using = AnnotationTargetSerializer.class)
+@JsonDeserialize(using = AnnotationTargetDeserializer.class)
 public class Target {
 
     /** The specific resource target, if applicable. */
@@ -39,6 +43,15 @@ public class Target {
      */
     public Target(final String aURI) {
         myURI = UriUtils.checkID(aURI, false);
+    }
+
+    /**
+     * Creates a new <code>WebAnnotation</code> target from the supplied canvas.
+     *
+     * @param aCanvas A canvas
+     */
+    public Target(final Canvas aCanvas) {
+        myURI = aCanvas.getID();
     }
 
     /**

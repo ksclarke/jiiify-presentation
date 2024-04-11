@@ -1,9 +1,15 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.selectors;
 
+import static info.freelibrary.util.Constants.EMPTY;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Optional;
+
+import org.jsoup.Jsoup;
+import org.jsoup.parser.Parser;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -64,21 +70,56 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
                 case "FragmentSelector":
                     return deserializeFragmentSelector(node, aParser);
                 case "ImageApiSelector":
-                    final String size = getText(node, ImageApiSelector.SIZE, ImageApiSelector.DEFAULT_SIZE);
-                    final String region = getText(node, ImageApiSelector.REGION, ImageApiSelector.DEFAULT_REGION);
-                    final String format = getText(node, ImageApiSelector.FORMAT, ImageApiSelector.DEFAULT_FORMAT);
-                    final String quality = getText(node, ImageApiSelector.QUALITY, ImageApiSelector.DEFAULT_QUALITY);
-                    final String rotation = getText(node, ImageApiSelector.ROTATION, ImageApiSelector.DEFAULT_ROTATION);
-
-                    return new ImageApiSelector(region, size, rotation, quality, format);
+                    return deserializeImageApiSelector(node);
                 case "PointSelector":
                     return deserializePointSelector(node, aParser);
+                case "SvgSelector":
+                    return deserializeSvgSelector(node);
                 default:
                     // Checkstyle wants us to have a default; this default falls through to the final `return null`
             }
         }
 
         return null; // Return nothing (which will be ignored)
+    }
+
+    /**
+     * Deserializes a JSON node that represents an SvgSelector.
+     *
+     * @param aNode A JSON node representing an SvgSelector
+     * @return A new <code>SvgSelector</code>
+     */
+    private SvgSelector deserializeSvgSelector(final JsonNode aNode) {
+        final Optional<String> value = getText(aNode, JsonKeys.VALUE);
+
+        if (value.isEmpty()) {
+            return null;
+        }
+
+        return new SvgSelector(Jsoup.parse(value.get(), EMPTY, Parser.xmlParser()));
+    }
+
+    /**
+     * Deserializes a JSON node that represents an ImageApiSelector.
+     *
+     * @param aNode A JSON node representing an ImageApiSelector
+     * @return A new <code>ImageApiSelector</code>
+     */
+    private ImageApiSelector deserializeImageApiSelector(final JsonNode aNode) {
+        final Optional<String> size = getText(aNode, ImageApiSelector.SIZE);
+        final Optional<String> region = getText(aNode, ImageApiSelector.REGION);
+        final Optional<String> format = getText(aNode, ImageApiSelector.FORMAT);
+        final Optional<String> quality = getText(aNode, ImageApiSelector.QUALITY);
+        final Optional<String> rotation = getText(aNode, ImageApiSelector.ROTATION);
+        final ImageApiSelector selector = new ImageApiSelector();
+
+        size.ifPresent(value -> selector.setSize(value));
+        region.ifPresent(value -> selector.setRegion(value));
+        format.ifPresent(value -> selector.setFormat(value));
+        quality.ifPresent(value -> selector.setQuality(value));
+        rotation.ifPresent(value -> selector.setRotation(value));
+
+        return selector;
     }
 
     /**
@@ -98,8 +139,7 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
 
         // We could play this looser but let's be explicit with what we expect
         if (pointT == -1F && (pointX == -1 || pointY == -1)) {
-            throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_117),
-                    aParser.getCurrentLocation());
+            throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_117), aParser.currentLocation());
         }
 
         // If we have everything we're expecting, let's go ahead and build it
@@ -142,7 +182,7 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
             }
 
             throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_061, conformsTo),
-                    aParser.getCurrentLocation());
+                    aParser.currentLocation());
         } catch (final URISyntaxException details) {
             throw new JsonMappingException(aParser, details.getMessage(), details);
         }
@@ -189,16 +229,10 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
      *
      * @param aNode A parent node
      * @param aNodeName The name of an optional child node
-     * @param aDefaultValue The default string value for missing nodes
      * @return The text from the node or the default value
      */
-    private String getText(final JsonNode aNode, final String aNodeName, final String aDefaultValue) {
+    private Optional<String> getText(final JsonNode aNode, final String aNodeName) {
         final JsonNode node = aNode.get(aNodeName);
-
-        if (node == null) {
-            return aDefaultValue;
-        }
-
-        return node.asText(aDefaultValue);
+        return node == null ? Optional.empty() : Optional.ofNullable(node.asText());
     }
 }
