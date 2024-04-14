@@ -28,7 +28,7 @@ public final class UriUtils {
      * @throws InvalidIdentifierException If the supplied identifier doesn't conform to IIIF's rules
      */
     @SuppressWarnings({ "PMD.AvoidCatchingGenericException", PMD.AVOID_CATCHING_GENERIC_EXCEPTION,
-        "PMD.AvoidCatchingNPE" })
+        "PMD.AvoidCatchingNPE", PMD.AVOID_CATCHING_NPE })
     public static String checkID(final String aID, final boolean aHttpsReq) {
         final URI id;
 

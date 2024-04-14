@@ -17,13 +17,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.utils.I18nUtils;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
@@ -37,11 +34,6 @@ public class I18n implements Iterable<String> {
      * The default language tag for the I18n class.
      */
     public static final String DEFAULT_LANG = "none";
-
-    /**
-     * The logger used by I18n.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(I18n.class, MessageCodes.BUNDLE);
 
     /**
      * The standard types of immutable lists in Java; it doesn't include third party libraries like Guava.
@@ -64,6 +56,25 @@ public class I18n implements Iterable<String> {
      * A locale for the string value.
      */
     private Locale myLocale;
+
+    /**
+     * Creates an internationalization, using the default language tag, from the supplied string value.
+     *
+     * @param aString An internationalized value
+     */
+    public I18n(final String aString) {
+        this(DEFAULT_LANG, aString);
+    }
+
+    /**
+     * Creates an internationalization, using the default language tag, from the supplied string value.
+     *
+     * @param aString An internationalized value
+     * @param aHtmlAllowed Whether the supplied value can contain HTML
+     */
+    public I18n(final String aString, final boolean aHtmlAllowed) {
+        this(DEFAULT_LANG, aString, aHtmlAllowed);
+    }
 
     /**
      * Creates an internationalization from the supplied language tag and string value.
@@ -153,7 +164,7 @@ public class I18n implements Iterable<String> {
      *         in the list of strings after being disallowed
      */
     public I18n(final Locale aLocale, final List<String> aStringList, final boolean aHtmlValueAllowed) {
-        myLocale = checkLangTag(aLocale);
+        myLocale = I18nUtils.checkLocale(aLocale);
         isAllowingHTML = aHtmlValueAllowed;
 
         if (!isAllowingHTML) {
@@ -194,7 +205,7 @@ public class I18n implements Iterable<String> {
      */
     @JsonIgnore
     public I18n setLang(final String aLangTag) {
-        myLocale = checkLangTag(Locale.forLanguageTag(aLangTag));
+        myLocale = I18nUtils.checkLocale(Locale.forLanguageTag(aLangTag));
         return this;
     }
 
@@ -207,7 +218,7 @@ public class I18n implements Iterable<String> {
      */
     @JsonIgnore
     public I18n setLang(final Locale aLocale) {
-        myLocale = checkLangTag(aLocale);
+        myLocale = I18nUtils.checkLocale(aLocale);
         return this;
     }
 
@@ -306,19 +317,4 @@ public class I18n implements Iterable<String> {
         return Map.of(myLocale.toLanguageTag(), myStrings);
     }
 
-    /**
-     * Checks the language tag of the supplied Locale. If the language tag is "und" the Locale is undefined and an
-     * IllegalArgumentException is thrown.
-     *
-     * @param aLocale A locale
-     * @return The valid locale
-     * @throws IllegalArgumentException If the supplied locale is not a pre-defined locale
-     */
-    private Locale checkLangTag(final Locale aLocale) {
-        if ("und".equals(aLocale.toLanguageTag())) {
-            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_020, aLocale.getDisplayName()));
-        }
-
-        return aLocale;
-    }
 }

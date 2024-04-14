@@ -8,6 +8,7 @@ import static info.freelibrary.util.Constants.SPACE;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
@@ -21,6 +22,7 @@ import org.jsoup.safety.Safelist;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.StringUtils;
 import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.properties.I18n;
@@ -28,7 +30,7 @@ import info.freelibrary.iiif.presentation.v3.properties.I18n;
 /**
  * A utilities class for internationalizations.
  */
-@SuppressWarnings(PMD.TOO_MANY_METHODS)
+@SuppressWarnings({ PMD.GOD_CLASS, "PMD.GodClass" })
 public final class I18nUtils {
 
     /** Logger used by the I18nUtils class. */
@@ -67,6 +69,9 @@ public final class I18nUtils {
 
     /** A less than symbol used for closing tag names. */
     private static final String LESS_THAN = "<";
+
+    /** The largest valid array size for I18n string matrices. */
+    private static final int MAX_ARRAY_SIZE = 2;
 
     /**
      * A constructor for I18nUtils.
@@ -238,41 +243,71 @@ public final class I18nUtils {
     }
 
     /**
-     * Creates an array of I18ns from an array of strings, checking for HTML if it isn't allowed.
+     * Creates an array of I18ns from a string matrix, checking for HTML if it isn't allowed if that flag is passed.
      *
-     * @param aHtmlAllowed Whether HTML markup is allowed in the I18n
-     * @param aStringArray The strings to convert into I18ns
+     * @param aHtmlAllowed Whether HTML mark-up is allowed in the I18ns
+     * @param aLangTag A default language tag to use with the I18n matrix
+     * @param aMatrix A matrix of strings to convert into I18ns
      * @return An array of I18ns
-     * @throws IllegalArgumentException If HTML is not allowed, but one of the strings contains markup
+     * @throws IllegalArgumentException If HTML is not allowed, but one of the strings contains mark-up
      */
-    public static I18n[] createI18ns(final boolean aHtmlAllowed, final String... aStringArray) {
+    @SuppressWarnings({ "PMD.UseVarargs", "PMD.CognitiveComplexity", "PMD.CyclomaticComplexity" })
+    public static I18n[] createI18ns(final boolean aHtmlAllowed, final String aLangTag, final String[][] aMatrix) {
+        final String langTag = StringUtils.trimToNull(aLangTag) == null ? I18n.DEFAULT_LANG
+                : checkLocale(Locale.forLanguageTag(aLangTag)).toLanguageTag();
         final List<I18n> i18ns = new ArrayList<>();
 
-        for (final String string : aStringArray) {
-            final I18n i18n;
-
-            // If our internationalization isn't supposed to have HTML, strip any that's found there
-            if (aHtmlAllowed) {
-                // Since our strings don't have language codes, we'll just use the default of "none"
-                i18n = new I18n(I18n.DEFAULT_LANG, cleanHTML(string), aHtmlAllowed);
-            } else {
-                if (hasHTML(string)) {
-                    // We don't really need to see this warning unless there might be HTML in the string
-                    LOGGER.warn(MessageCodes.JPA_033, string);
-                }
-
-                // Since our strings don't have language codes, we'll just use the default of "none"
-                i18n = new I18n(I18n.DEFAULT_LANG, stripHTML(string), aHtmlAllowed);
+        for (final String[] values : aMatrix) {
+            if (values.length > MAX_ARRAY_SIZE) {
+                throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.BUNDLE, MessageCodes.JPA_145));
             }
 
-            i18ns.add(i18n);
+            if (aHtmlAllowed) {
+                if (values.length == SINGLE_INSTANCE) {
+                    i18ns.add(new I18n(langTag, cleanHTML(values[0]), aHtmlAllowed));
+                } else if (values.length == MAX_ARRAY_SIZE) {
+                    i18ns.add(new I18n(values[0], cleanHTML(values[1]), aHtmlAllowed));
+                } else {
+                    LOGGER.warn(MessageCodes.JPA_146);
+                }
+            } else if (values.length == SINGLE_INSTANCE) {
+                if (hasHTML(values[0])) {
+                    LOGGER.warn(MessageCodes.JPA_033, values[0]);
+                }
+
+                i18ns.add(new I18n(langTag, cleanHTML(values[0]), aHtmlAllowed));
+            } else if (values.length == MAX_ARRAY_SIZE) {
+                if (hasHTML(values[1])) {
+                    LOGGER.warn(MessageCodes.JPA_033, values[1]);
+                }
+
+                i18ns.add(new I18n(values[0], stripHTML(values[1]), aHtmlAllowed));
+            } else {
+                LOGGER.warn(MessageCodes.JPA_146);
+            }
         }
 
         return i18ns.toArray(new I18n[0]);
     }
 
     /**
-     * This is a workaround for Jsoup not properly handling text that has a stand-alone &lt; character. It's definitely
+     * Checks the language tag of the supplied Locale. If the language tag is "und" the Locale is undefined and an
+     * IllegalArgumentException is thrown.
+     *
+     * @param aLocale A locale
+     * @return The valid locale
+     * @throws IllegalArgumentException If the supplied locale is not a pre-defined locale
+     */
+    public static Locale checkLocale(final Locale aLocale) {
+        if ("und".equals(aLocale.toLanguageTag())) {
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_020, aLocale.getDisplayName()));
+        }
+
+        return aLocale;
+    }
+
+    /**
+     * This is a workaround for JSoup not properly handling text that has a stand-alone &lt; character. It's definitely
      * not perfect (i.e. this obviously isn't a full-fledged HTML parser).
      *
      * @param aString A string to check for less than characters.

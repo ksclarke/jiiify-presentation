@@ -422,6 +422,84 @@ public class CookbooksTest extends AbstractCookbookTest {
         assertEquals(getExpected("0006-text-language/manifest"), normalizeIDs(manifest.toString()));
     }
 
+    @Test
+    @SuppressWarnings("Checkstyle.LineLengthCheck")
+    public final void test0006WithMinterAndMatrix() throws IOException {
+
+        final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0006-text-language/manifest.json",
+                new Label(new String[][] { { "en", "Whistler's Mother" }, { "fr", "La Mère de Whistler" } }));
+
+        final var canvas = new Canvas(MinterFactory.getMinter(manifest));
+        final var imageContent = new ImageContent(
+                "https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother/full/max/0/default.jpg");
+        final var service = new ImageService3(LEVEL_ONE,
+                "https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother");
+
+        final var creator = new Metadata(new Label(new String[][] { { "en", "Creator" }, { "fr", "Auteur" } }),
+                new Value("Whistler, James Abbott McNeill"));
+
+        final var creatir = new Metadata(new Label(new I18n("en", "Creator"), new I18n("fr", "Auteur")),
+                new Value("Whistler, James Abbott McNeill"));
+
+        final var subject = new Metadata(new Label(new String[][] { { "en", "Subject" }, { "fr", "Sujet" } }),
+                new Value(new String[][] { { "en", "McNeill Anna Matilda, mother of Whistler (1804-1881)" },
+                    { "fr", "McNeill Anna Matilda, mère de Whistler (1804-1881)" } }));
+
+        final var summaryEN =
+                new I18n("en", "Arrangement in Grey and Black No. 1, also called Portrait of the Artist's Mother.");
+        final var summaryFR =
+                new I18n("fr", "Arrangement en gris et noir n°1, also called Portrait de la mère de l'artiste.");
+
+        final var reqStmtLabel = new Label(new I18n("en", "Held By"), new I18n("fr", "Détenu par"));
+        final var reqStmt = new Value("Musée d'Orsay, Paris, France");
+
+        manifest.setMetadata(creator, subject);
+        manifest.setSummary(new Summary(summaryEN, summaryFR));
+        manifest.setRequiredStatement(new RequiredStatement(reqStmtLabel, reqStmt));
+
+        imageContent.setWidthHeight(1114, 991).setFormat(IMAGE_JPEG).setServices(service);
+        manifest.addCanvases(canvas.setWidthHeight(1114, 991).paintWith(imageContent));
+
+        System.out.println(manifest);
+    }
+
+    /**
+     * Runs the 0007 cookbook example with a minter.
+     */
+    @Test
+    @SuppressWarnings("Checkstyle.LineLengthCheck")
+    public final void test0007WithMinter() throws IOException {
+        final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0007-string-formats/manifest.json",
+                new Label("en", "Picture of Göttingen taken during the 2019 IIIF Conference"));
+        final var summary = new Summary(new I18n("en",
+                "<p>Picture taken by the <a href=\"https://github.com/glenrobson\">IIIF Technical Coordinator</a></p>",
+                true));
+
+        final var label = new Label("en", "Author");
+        final var value = new Value(
+                new I18n("none", "<span><a href='https://github.com/glenrobson'>Glen Robson</a></span>", true));
+
+        final var metadata = new Metadata(label, value);
+
+        // System.out.println(manifest);
+
+        // Don't include this in the example; it's just a sanity check
+        // assertEquals(getExpected("0006-text-language/manifest"), normalizeIDs(manifest.toString()));
+    }
+
+    /**
+     * Runs the 0007 cookbook example without a minter.
+     */
+    @Test
+    @SuppressWarnings("Checkstyle.LineLengthCheck")
+    public final void test0007WithoutMinter() throws IOException {
+
+        // System.out.println(manifest);
+
+        // Don't include this in the example; it's just a sanity check
+        // assertEquals(getExpected("0006-text-language/manifest"), normalizeIDs(manifest.toString()));
+    }
+
     /**
      * Gets the expected JSON output with its IDs normalized.
      *

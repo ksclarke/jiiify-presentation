@@ -113,4 +113,8 @@
   <entry key="JPA-142">Stylesheet on PaintingAnnotation must have a value or URI</entry>
   <entry key="JPA-143">The paintWith() method cannot be used if the canvas doesn't have a minter set</entry>
   <entry key="JPA-144">The supplementWith() method cannot be usd if the canvas doesn't have a minter set </entry>
+  <entry key="JPA-145">An I18n matrix must contain a single value or key value pairs, nothing more</entry>
+  <entry key="JPA-146">An empty string matrix was passed to I18nUtils.createI18ns()</entry>
+  <entry key="JPA-147"></entry>
+  <entry key="JPA-148"></entry>
 </properties>

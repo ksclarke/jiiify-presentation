@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.Eclipse;
+import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
@@ -37,7 +38,8 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  * resource. A placeholder canvas is likely to have different dimensions to those of the canvas(es) of the resource that
  * has the placeholderCanvas property.
  */
-@SuppressWarnings({ "PMD.TooManyMethods", "PMD.ExcessivePublicCount" })
+@SuppressWarnings({ PMD.TOO_MANY_METHODS, "PMD.TooManyMethods", PMD.EXCESSIVE_PUBLIC_COUNT,
+    "PMD.ExcessivePublicCount" })
 public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas>
         implements Resource<PlaceholderCanvas>, CanvasResource<PlaceholderCanvas> {
 
