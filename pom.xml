@@ -294,6 +294,7 @@
                         <exclude>META-INF/*.RSA</exclude>
                         <exclude>META-INF/NOTICE</exclude>
                         <exclude>META-INF/LICENSE</exclude>
+                        <exclude>META-INF/LICENSE.txt</exclude>
                         <exclude>META-INF/MANIFEST.MF</exclude>
                         <exclude>META-INF/versions/9/module-info.class</exclude>
                       </excludes>

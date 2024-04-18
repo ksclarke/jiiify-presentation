@@ -4,6 +4,8 @@ linkTitle: "0003-mvn-video"
 weight: 0
 ---
 
+### Use Case
+
 The simplest viable manifest for video content. This pattern presents a single video file in a IIIF Presentation resource.
 
 | | |

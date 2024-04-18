@@ -4,6 +4,8 @@ linkTitle: "0002-mvn-audio"
 weight: 0
 ---
 
+### Use Case
+
 The simplest viable manifest for audio content. This pattern presents a single audio file in a IIIF Presentation resource.
 
 | | |

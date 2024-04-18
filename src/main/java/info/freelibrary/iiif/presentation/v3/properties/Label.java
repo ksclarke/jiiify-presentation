@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import java.util.Objects;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -15,7 +15,6 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  * between pages or between a choice of images to display.
  */
 @JsonDeserialize(using = LabelDeserializer.class)
-@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public class Label extends I18nProperty<Label> {
 
     /**
@@ -48,64 +47,23 @@ public class Label extends I18nProperty<Label> {
     }
 
     /**
-     * Creates a label from the supplied string matrix. This gives the constructor more flexibility when all the values
-     * are known up-front, but also provides the opportunity to submit invalid data. When invalid data is submitted, an
-     * IllegalArgumentException is thrown.
-     * <p>
-     * The submitted matrix should be an array that contains arrays of:
-     * <ul>
-     * <li>1) pairs of language tag and internationalizations</li>
-     * <li>2) internationalizations without the language tag (which will get the 'none' language tag)</li>
-     * </ul>
-     * </p>
-     * <p>
-     * For example:
+     * Creates a label from the supplied internationalizations.
      *
-     * <pre>
-     * <code>
-     * Label label = new Label({ { "en", "An English value" }, { "A 'none' value" } });
-     * </code>
-     * </pre>
-     * </p>
-     *
-     * @param aI18nMatrix An array of string arrays to be composed into internationalizations
-     * @throws IllegalArgumentException If the supplied matrix doesn't contain arrays with either zero, one, or two
-     *         elements
+     * @param aI18nList A list of internationalizations for the label
+     * @throws IllegalArgumentException If the supplied internationalizations have HTML markup
      */
-    @SuppressWarnings("PMD.UseVarargs")
-    public Label(final String[][] aI18nMatrix) {
-        super(I18nUtils.createI18ns(false, null, aI18nMatrix));
+    public Label(final List<I18n> aI18nList) {
+        super(I18nUtils.validateI18ns(false, aI18nList.toArray(new I18n[0])));
     }
 
     /**
-     * Creates a label from the supplied string matrix. This gives the constructor more flexibility when all the values
-     * are known up-front, but also provides the opportunity to submit invalid data. When invalid data is submitted, an
-     * IllegalArgumentException is thrown.
-     * <p>
-     * The submitted matrix should be an array that contains arrays of:
-     * <ul>
-     * <li>1) pairs of language tag and internationalizations</li>
-     * <li>2) internationalizations without the language tag (which will get the default language tag)</li>
-     * </ul>
-     * </p>
-     * <p>
-     * For example:
+     * Creates a label from the supplied internationalization(s). The submitted array should alternate between language
+     * code and string value.
      *
-     * <pre>
-     * <code>
-     * Label label = new Label("fr", { { "en", "An English value" }, { "A French value" } });
-     * </code>
-     * </pre>
-     * </p>
-     *
-     * @param aDefaultLangTag A default language tag to use when one isn't supplied
-     * @param aI18nMatrix An array of string arrays to be composed into internationalizations
-     * @throws IllegalArgumentException If the supplied matrix doesn't contain arrays with either zero, one, or two
-     *         elements
+     * @param aDataArray An array of language codes and string values
      */
-    @SuppressWarnings("PMD.UseVarargs")
-    public Label(final String aDefaultLangTag, final String[][] aI18nMatrix) {
-        super(I18nUtils.createI18ns(false, Objects.requireNonNull(aDefaultLangTag), aI18nMatrix));
+    public Label(final String... aDataArray) {
+        super(I18nUtils.parseArray(false, aDataArray));
     }
 
     /**
@@ -117,147 +75,19 @@ public class Label extends I18nProperty<Label> {
      */
     @Override
     public Label setI18ns(final I18n... aI18nArray) {
-        myI18ns.clear();
-        return addI18ns(I18nUtils.validateI18ns(false, aI18nArray));
+        return (Label) super.setI18ns(I18nUtils.validateI18ns(false, aI18nArray));
     }
 
     /**
-     * Sets a label from the supplied string matrix. This provides more flexibility when all the values are known
-     * up-front, but also provides the opportunity to submit invalid data. When invalid data is submitted, an
-     * IllegalArgumentException is thrown.
-     * <p>
-     * The submitted matrix should be an array that contains arrays of:
-     * <ul>
-     * <li>1) pairs of language tag and internationalizations</li>
-     * <li>2) internationalizations without the language tag (which will get the 'none' language tag)</li>
-     * </ul>
-     * </p>
-     * <p>
-     * For example:
+     * Sets the internationalizations of the label, removing all other previous internationalizations.
      *
-     * <pre>
-     * <code>
-     * label.setI18ns({ { "en", "An English value" }, { "A 'none' value" } });
-     * </code>
-     * </pre>
-     * </p>
-     *
-     * @param aI18nMatrix An array of string arrays to be composed into internationalizations
+     * @param aI18nList A list of internationalizations
      * @return This Label
-     * @throws IllegalArgumentException If the supplied matrix doesn't contain arrays with either zero, one, or two
-     *         elements
-     */
-    @SuppressWarnings("PMD.UseVarargs")
-    public Label setI18ns(final String[][] aI18nMatrix) {
-        myI18ns.clear();
-        return (Label) super.addI18ns(false, null, aI18nMatrix);
-    }
-
-    /**
-     * Sets a label from the supplied string matrix. This provides more flexibility when all the values are known
-     * up-front, but also provides the opportunity to submit invalid data. When invalid data is submitted, an
-     * IllegalArgumentException is thrown.
-     * <p>
-     * The submitted matrix should be an array that contains arrays of:
-     * <ul>
-     * <li>1) pairs of language tag and internationalizations</li>
-     * <li>2) internationalizations without the language tag (which will get the default language tag)</li>
-     * </ul>
-     * </p>
-     * <p>
-     * For example:
-     *
-     * <pre>
-     * <code>
-     * label.setI18ns("fr", { { "en", "An English value" }, { "A French value" } });
-     * </code>
-     * </pre>
-     * </p>
-     *
-     * @param aDefaultLangTag A default language tag to use when one isn't supplied
-     * @param aI18nMatrix An array of string arrays to be composed into internationalizations
-     * @return This Label
-     * @throws IllegalArgumentException If the supplied matrix doesn't contain arrays with either zero, one, or two
-     *         elements
-     */
-    @SuppressWarnings("PMD.UseVarargs")
-    public Label setI18ns(final String aDefaultLangTag, final String[][] aI18nMatrix) {
-        myI18ns.clear();
-        return (Label) super.addI18ns(false, Objects.requireNonNull(aDefaultLangTag), aI18nMatrix);
-    }
-
-    /**
-     * Adds an internationalization to the label.
-     *
-     * @param aI18nArray An array of internationalizations
-     * @return The label
+     * @throws IllegalArgumentException If the supplied internationalizations contain HTML markup
      */
     @Override
-    public Label addI18ns(final I18n... aI18nArray) {
-        return (Label) super.addI18ns(I18nUtils.validateI18ns(false, aI18nArray));
-    }
-
-    /**
-     * Adds label values from the supplied string matrix. This provides more flexibility when all the values are known
-     * up-front, but also provides the opportunity to submit invalid data. When invalid data is submitted, an
-     * IllegalArgumentException is thrown.
-     * <p>
-     * The submitted matrix should be an array that contains arrays of:
-     * <ul>
-     * <li>1) pairs of language tag and internationalizations</li>
-     * <li>2) internationalizations without the language tag (which will get the 'none' language tag)</li>
-     * </ul>
-     * </p>
-     * <p>
-     * For example:
-     *
-     * <pre>
-     * <code>
-     * label.addI18ns({ { "en", "An English value" }, { "A 'none' value" } });
-     * </code>
-     * </pre>
-     * </p>
-     *
-     * @param aI18nMatrix An array of string arrays to be composed into internationalizations
-     * @return This Label
-     * @throws IllegalArgumentException If the supplied matrix doesn't contain arrays with either zero, one, or two
-     *         elements
-     */
-    @SuppressWarnings("PMD.UseVarargs")
-    public Label addI18ns(final String[][] aI18nMatrix) {
-        return (Label) super.addI18ns(false, aI18nMatrix);
-    }
-
-    /**
-     * Adds label values from the supplied string matrix. This provides more flexibility when all the values are known
-     * up-front, but also provides the opportunity to submit invalid data. When invalid data is submitted, an
-     * IllegalArgumentException is thrown.
-     * <p>
-     * The submitted matrix should be an array that contains arrays of:
-     * <ul>
-     * <li>1) pairs of language tag and internationalizations</li>
-     * <li>2) internationalizations without the language tag (which will get the default language tag)</li>
-     * </ul>
-     * </p>
-     * <p>
-     * For example:
-     *
-     * <pre>
-     * <code>
-     * label.addI18ns("fr", { { "en", "An English value" }, { "A French value" } });
-     * </code>
-     * </pre>
-     * </p>
-     *
-     * @param aDefaultLangTag A default language tag to use when one isn't supplied
-     * @param aI18nMatrix An array of string arrays to be composed into internationalizations
-     * @return This Label
-     * @throws IllegalArgumentException If the supplied matrix doesn't contain arrays with either zero, one, or two
-     *         elements
-     */
-    @SuppressWarnings("PMD.UseVarargs")
-    public Label addI18ns(final String aDefaultLangTag, final String[][] aI18nMatrix) {
-        return (Label) super.addI18ns(false, Objects.requireNonNull(aDefaultLangTag), aI18nMatrix);
+    public Label setI18ns(final List<I18n> aI18nList) {
+        return (Label) super.setI18ns(I18nUtils.validateI18ns(false, aI18nList.toArray(new I18n[0])));
     }
 
     @Override

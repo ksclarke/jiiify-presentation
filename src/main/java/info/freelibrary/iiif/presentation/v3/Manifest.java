@@ -285,6 +285,17 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     /**
+     * Adds one or more canvases to the manifest.
+     *
+     * @param aCanvasList A list of canvases to add to the manifest
+     * @return The manifest
+     */
+    public Manifest addCanvases(final List<Canvas> aCanvasList) {
+        getCanvases().addAll(aCanvasList);
+        return this;
+    }
+
+    /**
      * Adds one or more ranges to the manifest.
      *
      * @param aRangeArray An array of ranges to add to the manifest
@@ -292,6 +303,17 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      */
     public Manifest addRanges(final Range... aRangeArray) {
         Collections.addAll(getRanges(), aRangeArray);
+        return this;
+    }
+
+    /**
+     * Adds one or more ranges to the manifest.
+     *
+     * @param aRangeList A list of ranges to add to the manifest
+     * @return The manifest
+     */
+    public Manifest addRanges(final List<Range> aRangeList) {
+        getRanges().addAll(aRangeList);
         return this;
     }
 

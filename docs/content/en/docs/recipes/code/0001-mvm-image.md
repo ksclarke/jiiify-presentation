@@ -4,6 +4,8 @@ linkTitle: "0001-mvm-image"
 weight: 0
 ---
 
+### Use Case
+
 The simplest viable manifest for image content. If all you have for an object is one image on the web and a label to go along with it, this pattern turns it into a IIIF 
 Presentation resource.
 

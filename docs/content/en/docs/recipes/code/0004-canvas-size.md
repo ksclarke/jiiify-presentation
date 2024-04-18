@@ -4,6 +4,8 @@ linkTitle: "0004-canvas-size"
 weight: 0
 ---
 
+### Use Case
+
 You have an image ready for annotating that is expected to be replaced later by a higher resolution image. You would like to provide a sufficiently high-resolution 
 coordinate space to position the annotations precisely. IIIF Presentation v3.0 allows you to describe a Canvas with the dimensions of the larger image to come, fill it 
 with the smaller image you have ready now, and capture annotations on the smaller image in confidence that they will be positioned appropriately on the larger image when 

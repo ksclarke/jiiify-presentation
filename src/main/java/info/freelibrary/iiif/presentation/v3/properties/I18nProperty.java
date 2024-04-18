@@ -1,110 +1,59 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.StringUtils;
-
-import info.freelibrary.iiif.presentation.v3.utils.I18nUtils;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * A base class for label, summary, attribution, property, and metadata's label and value fields.
  */
-@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 class I18nProperty<T extends I18nProperty<T>> {
-
-    /**
-     * The logger used by I18nProperty.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(I18nProperty.class, MessageCodes.BUNDLE);
 
     /**
      * A list of internationalized values.
      */
-    protected final List<I18n> myI18ns;
+    private final List<I18n> myI18ns;
 
     /**
-     * Creates a property from an array of internationalizations.
+     * Creates an I18n property from an array of internationalizations. If the passed array contains a null, it will be
+     * dropped.
      *
-     * @param aI18nArray An array of internationalizations for the property
+     * @param aI18nArray An array of internationalizations
      */
     I18nProperty(final I18n... aI18nArray) {
-        myI18ns = new ArrayList<>();
-        addCheckedI18ns(aI18nArray);
+        myI18ns = Arrays.stream(aI18nArray).filter(i18n -> i18n != null).collect(Collectors.toList());
     }
 
     /**
-     * Creates a property from a matrix of internationalization values.
+     * Creates an I18n property from a list of internationalizations. If the passed list contains a null, it will be
+     * dropped.
      *
-     * @param aHtmlAllowed Whether HTML is allowed in the internationalization values
-     * @param aI18nMatrix A matrix of internationalization values
-     * @throws IllegalArgumentException If the supplied matrix isn't valid
+     * @param aI18nList A list of internationalizations
      */
-    @SuppressWarnings("PMD.UseVarargs")
-    I18nProperty(final boolean aHtmlAllowed, final String[][] aI18nMatrix) {
-        myI18ns = List.of(I18nUtils.createI18ns(aHtmlAllowed, null, aI18nMatrix));
+    I18nProperty(final List<I18n> aI18nList) {
+        myI18ns = aI18nList.stream().filter(i18n -> i18n != null).collect(Collectors.toList());
     }
 
     /**
-     * Creates a property from a matrix of internationalization values.
+     * Tests if the supplied object equals this one.
      *
-     * @param aHtmlAllowed Whether HTML is allowed in the internationalization values
-     * @param aDefaultLangTag A default language tag that can be used with the matrix
-     * @param aI18nMatrix A matrix of internationalization values
-     * @throws IllegalArgumentException If the supplied matrix isn't valid
+     * @return True if they are equal; else, false
      */
-    @SuppressWarnings("PMD.UseVarargs")
-    I18nProperty(final boolean aHtmlAllowed, final String aDefaultLangTag, final String[][] aI18nMatrix) {
-        myI18ns = List.of(I18nUtils.createI18ns(aHtmlAllowed, Objects.requireNonNull(aDefaultLangTag), aI18nMatrix));
-    }
+    @Override
+    public boolean equals(final Object aObject) {
+        if (aObject != null && getClass().getName().equals(aObject.getClass().getName())) {
+            return toMap().equals(((I18nProperty<?>) aObject).toMap());
+        }
 
-    /**
-     * Sets the internationalization of the property, removing all other previous internationalizations.
-     *
-     * @param aI18nArray An array of I18n(s).
-     * @return True if the property's value was set
-     */
-    protected I18nProperty<T> setI18ns(final I18n... aI18nArray) {
-        myI18ns.clear();
-        return addCheckedI18ns(aI18nArray);
-    }
-
-    /**
-     * Sets the internationalizations of the property from the supplied matrix of values.
-     *
-     * @param aHtmlAllowed Whether HTML is allowed in internationalized values
-     * @param aI18nMatrix A matrix of values to be turned into internationalizations in the property
-     * @return An I18n property
-     */
-    @SuppressWarnings("PMD.UseVarargs")
-    protected I18nProperty<T> setI18ns(final boolean aHtmlAllowed, final String[][] aI18nMatrix) {
-        myI18ns.clear();
-        return addCheckedI18ns(I18nUtils.createI18ns(aHtmlAllowed, null, aI18nMatrix));
-    }
-
-    /**
-     * Sets the internationalizations of the property from the supplied matrix of values and a default language tag.
-     *
-     * @param aHtmlAllowed Whether HTML is allowed in internationalized values
-     * @param aDefaultLangTag A default language tag to use if one isn't supplied in the matrix
-     * @param aI18nMatrix A matrix of values to be turned into internationalizations in the property
-     * @return An I18n property
-     */
-    @SuppressWarnings("PMD.UseVarargs")
-    protected I18nProperty<T> setI18ns(final boolean aHtmlAllowed, final String aDefaultLangTag,
-            final String[][] aI18nMatrix) {
-        myI18ns.clear();
-        return addCheckedI18ns(
-                I18nUtils.createI18ns(aHtmlAllowed, Objects.requireNonNull(aDefaultLangTag), aI18nMatrix));
+        return false;
     }
 
     /**
@@ -130,29 +79,6 @@ class I18nProperty<T extends I18nProperty<T>> {
     }
 
     /**
-     * Returns whether the property has any internationalizations.
-     *
-     * @return True if the property has internationalizations; else, false
-     */
-    public boolean hasStrings() {
-        return !myI18ns.isEmpty();
-    }
-
-    /**
-     * Tests if the supplied object equals this one.
-     *
-     * @return True if they are equal; else, false
-     */
-    @Override
-    public boolean equals(final Object aObject) {
-        if (aObject != null && getClass().getName().equals(aObject.getClass().getName())) {
-            return toMap().equals(((I18nProperty<?>) aObject).toMap());
-        }
-
-        return false;
-    }
-
-    /**
      * Returns a hash code for this property.
      *
      * @return A hash code
@@ -160,6 +86,15 @@ class I18nProperty<T extends I18nProperty<T>> {
     @Override
     public int hashCode() {
         return toMap().hashCode();
+    }
+
+    /**
+     * Returns whether the property has any internationalizations.
+     *
+     * @return True if the property has internationalizations; else, false
+     */
+    public boolean hasStrings() {
+        return !myI18ns.isEmpty();
     }
 
     /**
@@ -188,40 +123,27 @@ class I18nProperty<T extends I18nProperty<T>> {
     }
 
     /**
-     * Adds an internationalization to the property.
+     * Sets the internationalization(s) of the property, removing all other previous internationalizations.
      *
-     * @param aI18nArray A list of internationalizations
-     * @return The property
+     * @param aI18nArray An array of I18n(s).
+     * @return This property
      */
-    protected I18nProperty<T> addI18ns(final I18n... aI18nArray) {
-        return addCheckedI18ns(aI18nArray);
+    protected I18nProperty<T> setI18ns(final I18n... aI18nArray) {
+        myI18ns.clear();
+        Arrays.stream(aI18nArray).filter(Objects::isNull).forEach(myI18ns::add);
+        return this;
     }
 
     /**
-     * Adds an internationalization to the property in the form of a matrix of values.
+     * Sets the internationalization(s) of the property, removing all other previous internationalizations.
      *
-     * @param aHtmlAllowed Whether the internationalization values can contain HTML
-     * @param aI18nMatrix A matrix of values to turn into internationalizations
-     * @return The property
+     * @param aI18nList A list of I18n(s).
+     * @return This property
      */
-    @SuppressWarnings("PMD.UseVarargs")
-    protected I18nProperty<T> addI18ns(final boolean aHtmlAllowed, final String[][] aI18nMatrix) {
-        return addCheckedI18ns(I18nUtils.createI18ns(aHtmlAllowed, null, aI18nMatrix));
-    }
-
-    /**
-     * Adds an internationalization to the property in the form of a matrix of values.
-     *
-     * @param aHtmlAllowed Whether HTML is allowed in the property's value(s)
-     * @param aDefaultLangTag A default language tag to use when the matrix values don't contain one
-     * @param aI18nMatrix A matrix of values to turn into internationalizations
-     * @return The property
-     */
-    @SuppressWarnings("PMD.UseVarargs")
-    protected I18nProperty<T> addI18ns(final boolean aHtmlAllowed, final String aDefaultLangTag,
-            final String[][] aI18nMatrix) {
-        return addCheckedI18ns(
-                I18nUtils.createI18ns(aHtmlAllowed, Objects.requireNonNull(aDefaultLangTag), aI18nMatrix));
+    protected I18nProperty<T> setI18ns(final List<I18n> aI18nList) {
+        myI18ns.clear();
+        aI18nList.stream().filter(Objects::isNull).forEach(myI18ns::add);
+        return this;
     }
 
     /**
@@ -246,24 +168,4 @@ class I18nProperty<T extends I18nProperty<T>> {
         return map;
     }
 
-    /**
-     * Adds internationalized values to the I18nProperty after they've been checked and confirmed to not be null.
-     *
-     * @param aI18nArray An array of internationalized values
-     * @return The property
-     * @throws UnsupportedOperationException If the I18n cannot be added
-     */
-    private I18nProperty<T> addCheckedI18ns(final I18n... aI18nArray) {
-        Objects.requireNonNull(aI18nArray, MessageCodes.JPA_001);
-
-        for (final I18n i18n : aI18nArray) {
-            Objects.requireNonNull(i18n, MessageCodes.JPA_001);
-
-            if (!myI18ns.add(i18n)) {
-                throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_043, i18n.toString()));
-            }
-        }
-
-        return this;
-    }
 }

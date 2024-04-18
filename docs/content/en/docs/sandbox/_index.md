@@ -50,14 +50,14 @@ System.out.println(manifest);
                 var replResults = document.getElementById("replResults");
 
                 if (xhr.status === 200) {
-                    replResults.innerHTML = xhr.responseText;
+                    replResults.innerHTML = xhr.responseText.replace(/</g, "&lt;").replace(/>/g, "&gt;");
                 } else {
                     replResults.innerHTML = xhr.status;
                 }
             }
         };
 
-        xhr.open('POST', 'http://jpv3/cgi-bin/jpv3.cgi', true);
+        xhr.open('POST', 'https://jsh4jpv3.lisforge.net/cgi-bin/jpv3.cgi', true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.send("code=" + encodeURIComponent(code));
     }
@@ -65,7 +65,7 @@ System.out.println(manifest);
 
 <button onclick="runCode()">Run Code</button> <button onclick="clearResults()">Clear Results</button>
 
-<div style="margin-bottom: 30px; margin-top:30px;"><div style="font-weight: bold; padding-bottom: 20px;">Results should appear below (approximately 5 seconds or so after 
+<div style="margin-bottom: 30px; margin-top:30px;"><div style="font-weight: bold; padding-bottom: 20px;">Results should appear below (approximately 15 seconds or so after 
 you click the button above)</div>If, on submission, you see <code style="font-weight: bold">jshell&gt;</code> prompt in the box below, JShell failed to parse the 
 submitted code, likely because of a syntax issue (e.g., a missing parenthesis).</div>
 

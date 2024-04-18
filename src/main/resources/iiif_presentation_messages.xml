@@ -46,7 +46,8 @@
   <entry key="JPA-043">I18n couldn't be added to I18nProperty: {}</entry>
   <entry key="JPA-044">Unable to add metadata: {}</entry>
   <entry key="JPA-045">Unable to add required statement: {}</entry>
-  <entry key="JPA-046">Unable to add rights URLs: {}</entry>A '{}' geometry array should contain an array
+  <entry key="JPA-046">Unable to add rights URLs: {}</entry>
+  A '{}' geometry array should contain an array
   <entry key="JPA-047">Unable to add seeAlso: {}</entry>
   <entry key="JPA-048">Unable to add ServiceImage to ServiceProperty: {}</entry>
   <entry key="JPA-049">A '{}' geometry should contain an array</entry>
@@ -113,8 +114,9 @@
   <entry key="JPA-142">Stylesheet on PaintingAnnotation must have a value or URI</entry>
   <entry key="JPA-143">The paintWith() method cannot be used if the canvas doesn't have a minter set</entry>
   <entry key="JPA-144">The supplementWith() method cannot be usd if the canvas doesn't have a minter set </entry>
-  <entry key="JPA-145">An I18n matrix must contain a single value or key value pairs, nothing more</entry>
-  <entry key="JPA-146">An empty string matrix was passed to I18nUtils.createI18ns()</entry>
+  <entry key="JPA-145">Internationalizations must be submitted in an array that alternates between language codes and
+    string values</entry>
+  <entry key="JPA-146"></entry>
   <entry key="JPA-147"></entry>
   <entry key="JPA-148"></entry>
 </properties>

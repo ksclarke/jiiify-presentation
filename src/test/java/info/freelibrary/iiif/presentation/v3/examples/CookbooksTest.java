@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation.v3.examples;
 
 import static info.freelibrary.iiif.presentation.v3.properties.MediaType.IMAGE_JPEG;
+import static info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior.PAGED;
 import static info.freelibrary.iiif.presentation.v3.services.ImageService3.Profile.LEVEL_ONE;
 import static org.junit.Assert.assertEquals;
 
@@ -10,6 +11,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -339,19 +343,20 @@ public class CookbooksTest extends AbstractCookbookTest {
     public final void test0006WithMinter() throws IOException {
         final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0006-text-language/manifest.json",
                 new Label(new I18n("en", "Whistler's Mother"), new I18n("fr", "La Mère de Whistler")));
+
         final var canvas = new Canvas(MinterFactory.getMinter(manifest));
         final var imageContent = new ImageContent(
                 "https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother/full/max/0/default.jpg");
         final var service = new ImageService3(LEVEL_ONE,
                 "https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother");
 
-        final var creatorLabel = new Label(new I18n("en", "Creator"), new I18n("fr", "Auteur"));
-        final var creator = new Metadata(creatorLabel, new Value("Whistler, James Abbott McNeill"));
+        final var creator = new Metadata(new Label(new I18n("en", "Creator"), new I18n("fr", "Auteur")),
+                new Value("Whistler, James Abbott McNeill"));
 
-        final var subjectLabel = new Label(new I18n("en", "Subject"), new I18n("fr", "Sujet"));
         final var subjectEN = new I18n("en", "McNeill Anna Matilda, mother of Whistler (1804-1881)");
         final var subjectFR = new I18n("fr", "McNeill Anna Matilda, mère de Whistler (1804-1881)");
-        final var subject = new Metadata(subjectLabel, new Value(subjectEN, subjectFR));
+        final var subject = new Metadata(new Label(new I18n("en", "Subject"), new I18n("fr", "Sujet")),
+                new Value(subjectEN, subjectFR));
 
         final var summaryEN =
                 new I18n("en", "Arrangement in Grey and Black No. 1, also called Portrait of the Artist's Mother.");
@@ -392,13 +397,13 @@ public class CookbooksTest extends AbstractCookbookTest {
         final var service = new ImageService3(LEVEL_ONE,
                 "https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother");
 
-        final var creatorLabel = new Label(new I18n("en", "Creator"), new I18n("fr", "Auteur"));
-        final var creator = new Metadata(creatorLabel, new Value("Whistler, James Abbott McNeill"));
+        final var creator = new Metadata(new Label(new I18n("en", "Creator"), new I18n("fr", "Auteur")),
+                new Value("Whistler, James Abbott McNeill"));
 
-        final var subjectLabel = new Label(new I18n("en", "Subject"), new I18n("fr", "Sujet"));
         final var subjectEN = new I18n("en", "McNeill Anna Matilda, mother of Whistler (1804-1881)");
         final var subjectFR = new I18n("fr", "McNeill Anna Matilda, mère de Whistler (1804-1881)");
-        final var subject = new Metadata(subjectLabel, new Value(subjectEN, subjectFR));
+        final var subject = new Metadata(new Label(new I18n("en", "Subject"), new I18n("fr", "Sujet")),
+                new Value(subjectEN, subjectFR));
 
         final var summaryEN =
                 new I18n("en", "Arrangement in Grey and Black No. 1, also called Portrait of the Artist's Mother.");
@@ -422,12 +427,16 @@ public class CookbooksTest extends AbstractCookbookTest {
         assertEquals(getExpected("0006-text-language/manifest"), normalizeIDs(manifest.toString()));
     }
 
+    /**
+     * Runs the 0006 cookbook example with a minter and the internationalization data arrays.
+     *
+     * @throws IOException If there is a problem running the test
+     */
     @Test
     @SuppressWarnings("Checkstyle.LineLengthCheck")
     public final void test0006WithMinterAndMatrix() throws IOException {
-
         final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0006-text-language/manifest.json",
-                new Label(new String[][] { { "en", "Whistler's Mother" }, { "fr", "La Mère de Whistler" } }));
+                new Label("en", "Whistler's Mother", "fr", "La Mère de Whistler"));
 
         final var canvas = new Canvas(MinterFactory.getMinter(manifest));
         final var imageContent = new ImageContent(
@@ -435,32 +444,31 @@ public class CookbooksTest extends AbstractCookbookTest {
         final var service = new ImageService3(LEVEL_ONE,
                 "https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother");
 
-        final var creator = new Metadata(new Label(new String[][] { { "en", "Creator" }, { "fr", "Auteur" } }),
-                new Value("Whistler, James Abbott McNeill"));
+        final var creator =
+                new Metadata(new Label("en", "Creator", "fr", "Auteur"), new Value("Whistler, James Abbott McNeill"));
 
-        final var creatir = new Metadata(new Label(new I18n("en", "Creator"), new I18n("fr", "Auteur")),
-                new Value("Whistler, James Abbott McNeill"));
+        final var subject = new Metadata(new Label("en", "Subject", "fr", "Sujet"),
+                new Value("en", "McNeill Anna Matilda, mother of Whistler (1804-1881)", "fr",
+                        "McNeill Anna Matilda, mère de Whistler (1804-1881)"));
 
-        final var subject = new Metadata(new Label(new String[][] { { "en", "Subject" }, { "fr", "Sujet" } }),
-                new Value(new String[][] { { "en", "McNeill Anna Matilda, mother of Whistler (1804-1881)" },
-                    { "fr", "McNeill Anna Matilda, mère de Whistler (1804-1881)" } }));
+        final var summary =
+                new Summary("en", "Arrangement in Grey and Black No. 1, also called Portrait of the Artist's Mother.",
+                        "fr", "Arrangement en gris et noir n°1, also called Portrait de la mère de l'artiste.");
 
-        final var summaryEN =
-                new I18n("en", "Arrangement in Grey and Black No. 1, also called Portrait of the Artist's Mother.");
-        final var summaryFR =
-                new I18n("fr", "Arrangement en gris et noir n°1, also called Portrait de la mère de l'artiste.");
-
-        final var reqStmtLabel = new Label(new I18n("en", "Held By"), new I18n("fr", "Détenu par"));
-        final var reqStmt = new Value("Musée d'Orsay, Paris, France");
+        final var reqStatement = new RequiredStatement(new Label("en", "Held By", "fr", "Détenu par"),
+                new Value("Musée d'Orsay, Paris, France"));
 
         manifest.setMetadata(creator, subject);
-        manifest.setSummary(new Summary(summaryEN, summaryFR));
-        manifest.setRequiredStatement(new RequiredStatement(reqStmtLabel, reqStmt));
+        manifest.setSummary(summary);
+        manifest.setRequiredStatement(reqStatement);
 
         imageContent.setWidthHeight(1114, 991).setFormat(IMAGE_JPEG).setServices(service);
         manifest.addCanvases(canvas.setWidthHeight(1114, 991).paintWith(imageContent));
 
         System.out.println(manifest);
+
+        // Don't include this in the example; it's just a sanity check
+        assertEquals(getExpected("0006-text-language/manifest"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -471,20 +479,28 @@ public class CookbooksTest extends AbstractCookbookTest {
     public final void test0007WithMinter() throws IOException {
         final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0007-string-formats/manifest.json",
                 new Label("en", "Picture of Göttingen taken during the 2019 IIIF Conference"));
-        final var summary = new Summary(new I18n("en",
-                "<p>Picture taken by the <a href=\"https://github.com/glenrobson\">IIIF Technical Coordinator</a></p>",
-                true));
 
-        final var label = new Label("en", "Author");
-        final var value = new Value(
-                new I18n("none", "<span><a href='https://github.com/glenrobson'>Glen Robson</a></span>", true));
+        final var canvas = new Canvas(MinterFactory.getMinter(manifest));
+        final var imageContent = new ImageContent(
+                "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen/full/max/0/default.jpg");
+        final var service = new ImageService3(LEVEL_ONE,
+                "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen");
 
-        final var metadata = new Metadata(label, value);
+        manifest.setSummary(new Summary("en",
+                "<p>Picture taken by the <a href=\"https://github.com/glenrobson\">IIIF Technical Coordinator</a></p>"));
+        manifest.setMetadata(new Metadata(new Label("en", "Author"),
+                new Value("<span><a href='https://github.com/glenrobson'>Glen Robson</a></span>")));
+        manifest.setRights("http://creativecommons.org/licenses/by-sa/3.0/");
+        manifest.setRequiredStatement(new RequiredStatement(new Label("en", "Attribution"), new Value("en",
+                "<span>Glen Robson, IIIF Technical Coordinator. <a href=\"https://creativecommons.org/licenses/by-sa/3.0\">CC BY-SA 3.0</a> <img src=\"https://licensebuttons.net/l/by-sa/3.0/88x31.png\"/></span>")));
 
-        // System.out.println(manifest);
+        imageContent.setWidthHeight(4032, 3024).setFormat(IMAGE_JPEG).setServices(service);
+        manifest.addCanvases(canvas.setWidthHeight(4032, 3024).paintWith(imageContent));
+
+        System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        // assertEquals(getExpected("0006-text-language/manifest"), normalizeIDs(manifest.toString()));
+        assertEquals(getExpected("0007-string-formats/manifest"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -493,11 +509,277 @@ public class CookbooksTest extends AbstractCookbookTest {
     @Test
     @SuppressWarnings("Checkstyle.LineLengthCheck")
     public final void test0007WithoutMinter() throws IOException {
+        final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0007-string-formats/manifest.json",
+                new Label("en", "Picture of Göttingen taken during the 2019 IIIF Conference"));
+        final var canvas = new Canvas("https://iiif.io/api/cookbook/recipe/0007-string-formats/canvas/p1");
+        final var page = new AnnotationPage<PaintingAnnotation>(
+                "https://iiif.io/api/cookbook/recipe/0007-string-formats/page/p1/1");
+        final var annotation = new PaintingAnnotation(
+                "https://iiif.io/api/cookbook/recipe/0007-string-formats/annotation/p0001-image", canvas);
+        final var imageContent = new ImageContent(
+                "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen/full/max/0/default.jpg");
+        final var service = new ImageService3(LEVEL_ONE,
+                "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen");
 
-        // System.out.println(manifest);
+        manifest.setSummary(new Summary("en",
+                "<p>Picture taken by the <a href=\"https://github.com/glenrobson\">IIIF Technical Coordinator</a></p>"));
+        manifest.setMetadata(new Metadata(new Label("en", "Author"),
+                new Value("<span><a href='https://github.com/glenrobson'>Glen Robson</a></span>")));
+        manifest.setRights("http://creativecommons.org/licenses/by-sa/3.0/");
+        manifest.setRequiredStatement(new RequiredStatement(new Label("en", "Attribution"), new Value("en",
+                "<span>Glen Robson, IIIF Technical Coordinator. <a href=\"https://creativecommons.org/licenses/by-sa/3.0\">CC BY-SA 3.0</a> <img src=\"https://licensebuttons.net/l/by-sa/3.0/88x31.png\"/></span>")));
+
+        imageContent.setWidthHeight(4032, 3024).setFormat(IMAGE_JPEG).setServices(service);
+        page.addAnnotations(annotation.setBody(imageContent).setTarget(new Target(canvas)));
+        manifest.addCanvases(canvas.setWidthHeight(4032, 3024).setPaintingPages(page));
+
+        System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        // assertEquals(getExpected("0006-text-language/manifest"), normalizeIDs(manifest.toString()));
+        assertEquals(getExpected("0007-string-formats/manifest"), normalizeIDs(manifest.toString()));
+    }
+
+    /**
+     * Runs the 0008 cookbook example with a minter.
+     */
+    @Test
+    @SuppressWarnings("Checkstyle.LineLengthCheck")
+    public final void test0008WithMinter() throws IOException {
+        final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0008-rights/manifest.json",
+                new Label("en", "Picture of Göttingen taken during the 2019 IIIF Conference"));
+
+        final var canvas = new Canvas(MinterFactory.getMinter(manifest));
+        final var imageContent = new ImageContent(
+                "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen/full/max/0/default.jpg");
+        final var service = new ImageService3(LEVEL_ONE,
+                "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen");
+
+        manifest.setSummary(new Summary("en",
+                "<p>Picture taken by the <a href=\"https://github.com/glenrobson\">IIIF Technical Coordinator</a></p>"));
+        manifest.setRights("http://creativecommons.org/licenses/by-sa/3.0/");
+        manifest.setRequiredStatement(new RequiredStatement(new Label("en", "Attribution"), new Value("en",
+                "<span>Glen Robson, IIIF Technical Coordinator. <a href=\"https://creativecommons.org/licenses/by-sa/3.0\">CC BY-SA 3.0</a> <a href=\"https://creativecommons.org/licenses/by-sa/3.0\" title=\"CC BY-SA 3.0\"><img src=\"https://licensebuttons.net/l/by-sa/3.0/88x31.png\"/></a></span>")));
+
+        imageContent.setWidthHeight(4032, 3024).setFormat(IMAGE_JPEG).setServices(service);
+        manifest.addCanvases(canvas.setWidthHeight(4032, 3024).paintWith(imageContent));
+
+        System.out.println(manifest);
+
+        // Don't include this in the example; it's just a sanity check
+        assertEquals(getExpected("0008-rights/manifest"), normalizeIDs(manifest.toString()));
+    }
+
+    /**
+     * Runs the 0008 cookbook example without a minter.
+     */
+    @Test
+    @SuppressWarnings("Checkstyle.LineLengthCheck")
+    public final void test0008WithoutMinter() throws IOException {
+        final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0008-rights/manifest.json",
+                new Label("en", "Picture of Göttingen taken during the 2019 IIIF Conference"));
+        final var canvas = new Canvas("https://iiif.io/api/cookbook/recipe/0008-rights/canvas/p1");
+        final var page =
+                new AnnotationPage<PaintingAnnotation>("https://iiif.io/api/cookbook/recipe/0008-rights/page/p1/1");
+        final var annotation = new PaintingAnnotation(
+                "https://iiif.io/api/cookbook/recipe/0008-rights/annotation/p0001-image", canvas);
+        final var imageContent = new ImageContent(
+                "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen/full/max/0/default.jpg");
+        final var service = new ImageService3(LEVEL_ONE,
+                "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen");
+
+        manifest.setSummary(new Summary("en",
+                "<p>Picture taken by the <a href=\"https://github.com/glenrobson\">IIIF Technical Coordinator</a></p>"));
+        manifest.setRights("http://creativecommons.org/licenses/by-sa/3.0/");
+        manifest.setRequiredStatement(new RequiredStatement(new Label("en", "Attribution"), new Value("en",
+                "<span>Glen Robson, IIIF Technical Coordinator. <a href=\"https://creativecommons.org/licenses/by-sa/3.0\">CC BY-SA 3.0</a> <a href=\"https://creativecommons.org/licenses/by-sa/3.0\" title=\"CC BY-SA 3.0\"><img src=\"https://licensebuttons.net/l/by-sa/3.0/88x31.png\"/></a></span>")));
+
+        imageContent.setWidthHeight(4032, 3024).setFormat(IMAGE_JPEG).setServices(service);
+        page.addAnnotations(annotation.setBody(imageContent).setTarget(new Target(canvas)));
+        manifest.addCanvases(canvas.setWidthHeight(4032, 3024).setPaintingPages(page));
+
+        System.out.println(manifest);
+
+        // Don't include this in the example; it's just a sanity check
+        assertEquals(getExpected("0008-rights/manifest"), normalizeIDs(manifest.toString()));
+    }
+
+    /**
+     * Runs the 0009 cookbook example with a minter.
+     */
+    @Test
+    @SuppressWarnings("Checkstyle.LineLengthCheck")
+    public final void test0009WithMinter() throws IOException {
+        final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0009-book-1/manifest.json",
+                new Label("en", "Simple Manifest - Book"));
+        final var minter = MinterFactory.getMinter(manifest);
+
+        final var canvas1 = new Canvas(minter, new Label("en", "Blank page"));
+        final var imageContent1 = new ImageContent(
+                "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f18/full/max/0/default.jpg");
+        final var service1 = new ImageService3(LEVEL_ONE,
+                "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f18");
+
+        final var canvas2 = new Canvas(minter, new Label("en", "Frontispiece"));
+        final var imageContent2 = new ImageContent(
+                "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f19/full/max/0/default.jpg");
+        final var service2 = new ImageService3(LEVEL_ONE,
+                "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f19");
+
+        final var canvas3 = new Canvas(minter, new Label("en", "Title page"));
+        final var imageContent3 = new ImageContent(
+                "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f20/full/max/0/default.jpg");
+        final var service3 = new ImageService3(LEVEL_ONE,
+                "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f20");
+
+        final var canvas4 = new Canvas(minter, new Label("en", "Blank page"));
+        final var imageContent4 = new ImageContent(
+                "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f21/full/max/0/default.jpg");
+        final var service4 = new ImageService3(LEVEL_ONE,
+                "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f21");
+
+        final var canvas5 = new Canvas(minter, new Label("en", "Bookplate"));
+        final var imageContent5 = new ImageContent(
+                "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f22/full/max/0/default.jpg");
+        final var service5 = new ImageService3(LEVEL_ONE,
+                "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f22");
+
+        manifest.setBehaviors(PAGED);
+
+        imageContent1.setWidthHeight(3204, 4613).setFormat(IMAGE_JPEG).setServices(service1);
+        canvas1.setWidthHeight(3204, 4613).paintWith(imageContent1);
+
+        imageContent2.setWidthHeight(3186, 4612).setFormat(IMAGE_JPEG).setServices(service2);
+        canvas2.setWidthHeight(3186, 4612).paintWith(imageContent2);
+
+        imageContent3.setWidthHeight(3204, 4613).setFormat(IMAGE_JPEG).setServices(service3);
+        canvas3.setWidthHeight(3204, 4613).paintWith(imageContent3);
+
+        imageContent4.setWidthHeight(3174, 4578).setFormat(IMAGE_JPEG).setServices(service4);
+        canvas4.setWidthHeight(3174, 4578).paintWith(imageContent4);
+
+        imageContent5.setWidthHeight(3198, 4632).setFormat(IMAGE_JPEG).setServices(service5);
+        canvas5.setWidthHeight(3198, 4632).paintWith(imageContent5);
+
+        manifest.addCanvases(canvas1, canvas2, canvas3, canvas4, canvas5);
+
+        System.out.println(manifest);
+
+        // Don't include this in the example; it's just a sanity check
+        assertEquals(getExpected("0009-book-1/manifest"), normalizeIDs(manifest.toString()));
+    }
+
+    /**
+     * Runs the 0009 cookbook example with a minter, looped.
+     */
+    @Test
+    @SuppressWarnings("Checkstyle.LineLengthCheck")
+    public final void test0009WithMinterLooped() throws IOException {
+        final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0009-book-1/manifest.json",
+                new Label("en", "Simple Manifest - Book"));
+        final var minter = MinterFactory.getMinter(manifest);
+        final var canvases = new ArrayList<Canvas>();
+
+        final List<String[]> data = Arrays.asList( //
+                new String[] { "Blank page",
+                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f18/full/max/0/default.jpg",
+                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f18",
+                    "3204", "4613" }, //
+                new String[] { "Frontispiece",
+                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f19/full/max/0/default.jpg",
+                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f19",
+                    "3186", "4612" }, //
+                new String[] { "Title page",
+                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f20/full/max/0/default.jpg",
+                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f20",
+                    "3204", "4613" }, //
+                new String[] { "Blank page",
+                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f21/full/max/0/default.jpg",
+                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f21",
+                    "3174", "4578" }, //
+                new String[] { "Bookplate",
+                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f22/full/max/0/default.jpg",
+                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f22",
+                    "3198", "4632" } //
+        );
+
+        data.forEach(array -> {
+            final var canvas = new Canvas(minter, new Label("en", array[0]));
+            final var imageContent = new ImageContent(array[1]);
+            final var service = new ImageService3(LEVEL_ONE, array[2]);
+            final var width = Integer.valueOf(array[3]);
+            final var height = Integer.valueOf(array[4]);
+
+            imageContent.setWidthHeight(width, height).setFormat(IMAGE_JPEG).setServices(service);
+            canvases.add(canvas.setWidthHeight(width, height).paintWith(imageContent));
+        });
+
+        manifest.setBehaviors(PAGED);
+        manifest.addCanvases(canvases);
+
+        System.out.println(manifest);
+
+        // Don't include this in the example; it's just a sanity check
+        assertEquals(getExpected("0009-book-1/manifest"), normalizeIDs(manifest.toString()));
+    }
+
+    /**
+     * Runs the 0009 cookbook example without a minter but with a loop.
+     */
+    @Test
+    @SuppressWarnings("Checkstyle.LineLengthCheck")
+    public final void test0009WithoutMinterLooped() throws IOException {
+        final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0009-book-1/manifest.json",
+                new Label("en", "Simple Manifest - Book"));
+        final var canvases = new ArrayList<Canvas>();
+
+        final List<String[]> pageList = Arrays.asList( //
+                new String[] { "Blank page",
+                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f18/full/max/0/default.jpg",
+                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f18",
+                    "3204", "4613" }, //
+                new String[] { "Frontispiece",
+                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f19/full/max/0/default.jpg",
+                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f19",
+                    "3186", "4612" }, //
+                new String[] { "Title page",
+                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f20/full/max/0/default.jpg",
+                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f20",
+                    "3204", "4613" }, //
+                new String[] { "Blank page",
+                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f21/full/max/0/default.jpg",
+                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f21",
+                    "3174", "4578" }, //
+                new String[] { "Bookplate",
+                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f22/full/max/0/default.jpg",
+                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f22",
+                    "3198", "4632" } //
+        );
+
+        for (int index = 0; index < pageList.size(); index++) {
+            final var pageData = pageList.get(index);
+            final var canvas = new Canvas("https://iiif.io/api/cookbook/recipe/0009-book-1/canvas/p" + index,
+                    new Label("en", pageData[0]));
+            final var page = new AnnotationPage<PaintingAnnotation>(
+                    "https://iiif.io/api/cookbook/recipe/0008-rights/page/p" + index + "/1");
+            final var annotation = new PaintingAnnotation(
+                    "https://iiif.io/api/cookbook/recipe/0008-rights/annotation/p000" + index + "-image", canvas);
+            final var imageContent = new ImageContent(pageData[1]);
+            final var service = new ImageService3(LEVEL_ONE, pageData[2]);
+            final var width = Integer.valueOf(pageData[3]);
+            final var height = Integer.valueOf(pageData[4]);
+
+            imageContent.setWidthHeight(width, height).setFormat(IMAGE_JPEG).setServices(service);
+            page.addAnnotations(annotation.setBody(imageContent).setTarget(new Target(canvas)));
+            canvases.add(canvas.setWidthHeight(width, height).setPaintingPages(page));
+        }
+
+        manifest.setBehaviors(PAGED);
+        manifest.addCanvases(canvases);
+
+        System.out.println(manifest);
+
+        // Don't include this in the example; it's just a sanity check
+        assertEquals(getExpected("0009-book-1/manifest"), normalizeIDs(manifest.toString()));
     }
 
     /**

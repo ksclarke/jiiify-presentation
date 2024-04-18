@@ -22,13 +22,12 @@ import org.jsoup.safety.Safelist;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.StringUtils;
 import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.properties.I18n;
 
 /**
- * A utilities class for internationalizations.
+ * A utilities class for working with internationalizations.
  */
 @SuppressWarnings({ PMD.GOD_CLASS, "PMD.GodClass" })
 public final class I18nUtils {
@@ -70,14 +69,11 @@ public final class I18nUtils {
     /** A less than symbol used for closing tag names. */
     private static final String LESS_THAN = "<";
 
-    /** The largest valid array size for I18n string matrices. */
-    private static final int MAX_ARRAY_SIZE = 2;
-
     /**
      * A constructor for I18nUtils.
      */
     private I18nUtils() {
-        // This is intentionally empty
+        // This is intentionally left empty.
     }
 
     /**
@@ -211,6 +207,30 @@ public final class I18nUtils {
     }
 
     /**
+     * Parses raw internationalization data into a list of {@code I18n}s.
+     *
+     * @param aHtmlAllowed Whether HTML is allowed in the internationalized string values
+     * @param aDataArray An array of language tag and strings
+     * @return A list of {@code I18n}s
+     * @throws IllegalArgumentException If the data array isn't structured like it should be
+     */
+    public static List<I18n> parseArray(final boolean aHtmlAllowed, final String... aDataArray) {
+        final List<I18n> i18ns = new ArrayList<>();
+
+        // Make sure we have an even number of inputs (i.e., KV pairs)
+        if (aDataArray.length % 2 != 0) {
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_145));
+        }
+
+        // Start the extraction index at the odd number positions
+        for (int index = 0; index <= aDataArray.length / 2; index += 2) {
+            i18ns.add(new I18n(aDataArray[index], aDataArray[index + 1], aHtmlAllowed));
+        }
+
+        return i18ns;
+    }
+
+    /**
      * Check to confirm we have a single root node; if we don't, our string input is invalid.
      *
      * @param aBody A body element
@@ -240,54 +260,6 @@ public final class I18nUtils {
         }
 
         return stripHTML(aI18nArray);
-    }
-
-    /**
-     * Creates an array of I18ns from a string matrix, checking for HTML if it isn't allowed if that flag is passed.
-     *
-     * @param aHtmlAllowed Whether HTML mark-up is allowed in the I18ns
-     * @param aLangTag A default language tag to use with the I18n matrix
-     * @param aMatrix A matrix of strings to convert into I18ns
-     * @return An array of I18ns
-     * @throws IllegalArgumentException If HTML is not allowed, but one of the strings contains mark-up
-     */
-    @SuppressWarnings({ "PMD.UseVarargs", "PMD.CognitiveComplexity", "PMD.CyclomaticComplexity" })
-    public static I18n[] createI18ns(final boolean aHtmlAllowed, final String aLangTag, final String[][] aMatrix) {
-        final String langTag = StringUtils.trimToNull(aLangTag) == null ? I18n.DEFAULT_LANG
-                : checkLocale(Locale.forLanguageTag(aLangTag)).toLanguageTag();
-        final List<I18n> i18ns = new ArrayList<>();
-
-        for (final String[] values : aMatrix) {
-            if (values.length > MAX_ARRAY_SIZE) {
-                throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.BUNDLE, MessageCodes.JPA_145));
-            }
-
-            if (aHtmlAllowed) {
-                if (values.length == SINGLE_INSTANCE) {
-                    i18ns.add(new I18n(langTag, cleanHTML(values[0]), aHtmlAllowed));
-                } else if (values.length == MAX_ARRAY_SIZE) {
-                    i18ns.add(new I18n(values[0], cleanHTML(values[1]), aHtmlAllowed));
-                } else {
-                    LOGGER.warn(MessageCodes.JPA_146);
-                }
-            } else if (values.length == SINGLE_INSTANCE) {
-                if (hasHTML(values[0])) {
-                    LOGGER.warn(MessageCodes.JPA_033, values[0]);
-                }
-
-                i18ns.add(new I18n(langTag, cleanHTML(values[0]), aHtmlAllowed));
-            } else if (values.length == MAX_ARRAY_SIZE) {
-                if (hasHTML(values[1])) {
-                    LOGGER.warn(MessageCodes.JPA_033, values[1]);
-                }
-
-                i18ns.add(new I18n(values[0], stripHTML(values[1]), aHtmlAllowed));
-            } else {
-                LOGGER.warn(MessageCodes.JPA_146);
-            }
-        }
-
-        return i18ns.toArray(new I18n[0]);
     }
 
     /**

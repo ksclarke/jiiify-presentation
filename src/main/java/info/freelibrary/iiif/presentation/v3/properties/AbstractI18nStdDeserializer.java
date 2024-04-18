@@ -55,12 +55,13 @@ abstract class AbstractI18nStdDeserializer<T> extends StdDeserializer<T> {
             if (jsonNode.isArray()) {
                 final ArrayNode arrayNode = (ArrayNode) jsonNode;
                 final List<String> langStrings = new ArrayList<>();
+                final String langTag = entry.getKey();
 
                 for (int index = 0; index < arrayNode.size(); index++) {
                     langStrings.add(arrayNode.get(index).asText());
                 }
 
-                i18n.add(new I18n(entry.getKey(), langStrings));
+                i18n.add(new I18n(langTag, langStrings));
             }
         }
 

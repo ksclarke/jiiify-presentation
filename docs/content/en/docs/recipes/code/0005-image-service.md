@@ -4,6 +4,8 @@ linkTitle: "0005-image-service"
 weight: 0
 ---
 
+### Use Case
+
 You have a rare or special object in your collection that you’d like to make available for research to a large audience, including those without the ability to be 
 present at your institution to examine the object in person. Presenting a medium-resolution flat digital image of the object using IIIF is possible, but if you have 
 implemented a IIIF Image API service, you have significantly enhanced interaction possibilities for research and engagement. Specifying a IIIF Image API service in your 
