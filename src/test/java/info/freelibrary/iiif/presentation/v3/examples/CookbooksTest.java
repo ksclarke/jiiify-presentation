@@ -679,35 +679,35 @@ public class CookbooksTest extends AbstractCookbookTest {
         final var minter = MinterFactory.getMinter(manifest);
         final var canvases = new ArrayList<Canvas>();
 
-        final List<String[]> data = Arrays.asList( //
-                new String[] { "Blank page",
-                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f18/full/max/0/default.jpg",
-                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f18",
-                    "3204", "4613" }, //
-                new String[] { "Frontispiece",
-                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f19/full/max/0/default.jpg",
-                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f19",
-                    "3186", "4612" }, //
-                new String[] { "Title page",
-                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f20/full/max/0/default.jpg",
-                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f20",
-                    "3204", "4613" }, //
-                new String[] { "Blank page",
-                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f21/full/max/0/default.jpg",
-                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f21",
-                    "3174", "4578" }, //
-                new String[] { "Bookplate",
-                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f22/full/max/0/default.jpg",
-                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f22",
-                    "3198", "4632" } //
+        final List<List<String>> canvasList = Arrays.asList( //
+                List.of("Blank page",
+                        "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f18/full/max/0/default.jpg",
+                        "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f18",
+                        "3204", "4613"), //
+                List.of("Frontispiece",
+                        "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f19/full/max/0/default.jpg",
+                        "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f19",
+                        "3186", "4612"), //
+                List.of("Title page",
+                        "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f20/full/max/0/default.jpg",
+                        "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f20",
+                        "3204", "4613"), //
+                List.of("Blank page",
+                        "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f21/full/max/0/default.jpg",
+                        "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f21",
+                        "3174", "4578"), //
+                List.of("Bookplate",
+                        "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f22/full/max/0/default.jpg",
+                        "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f22",
+                        "3198", "4632") //
         );
 
-        data.forEach(array -> {
-            final var canvas = new Canvas(minter, new Label("en", array[0]));
-            final var imageContent = new ImageContent(array[1]);
-            final var service = new ImageService3(LEVEL_ONE, array[2]);
-            final var width = Integer.valueOf(array[3]);
-            final var height = Integer.valueOf(array[4]);
+        canvasList.forEach(canvasData -> {
+            final var canvas = new Canvas(minter, new Label("en", canvasData.get(0)));
+            final var imageContent = new ImageContent(canvasData.get(1));
+            final var service = new ImageService3(LEVEL_ONE, canvasData.get(2));
+            final var width = Integer.valueOf(canvasData.get(3));
+            final var height = Integer.valueOf(canvasData.get(4));
 
             imageContent.setWidthHeight(width, height).setFormat(IMAGE_JPEG).setServices(service);
             canvases.add(canvas.setWidthHeight(width, height).paintWith(imageContent));
@@ -732,41 +732,41 @@ public class CookbooksTest extends AbstractCookbookTest {
                 new Label("en", "Simple Manifest - Book"));
         final var canvases = new ArrayList<Canvas>();
 
-        final List<String[]> pageList = Arrays.asList( //
-                new String[] { "Blank page",
-                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f18/full/max/0/default.jpg",
-                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f18",
-                    "3204", "4613" }, //
-                new String[] { "Frontispiece",
-                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f19/full/max/0/default.jpg",
-                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f19",
-                    "3186", "4612" }, //
-                new String[] { "Title page",
-                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f20/full/max/0/default.jpg",
-                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f20",
-                    "3204", "4613" }, //
-                new String[] { "Blank page",
-                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f21/full/max/0/default.jpg",
-                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f21",
-                    "3174", "4578" }, //
-                new String[] { "Bookplate",
-                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f22/full/max/0/default.jpg",
-                    "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f22",
-                    "3198", "4632" } //
+        final List<List<String>> pageList = Arrays.asList( //
+                List.of("Blank page",
+                        "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f18/full/max/0/default.jpg",
+                        "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f18",
+                        "3204", "4613"), //
+                List.of("Frontispiece",
+                        "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f19/full/max/0/default.jpg",
+                        "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f19",
+                        "3186", "4612"), //
+                List.of("Title page",
+                        "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f20/full/max/0/default.jpg",
+                        "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f20",
+                        "3204", "4613"), //
+                List.of("Blank page",
+                        "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f21/full/max/0/default.jpg",
+                        "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f21",
+                        "3174", "4578"), //
+                List.of("Bookplate",
+                        "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f22/full/max/0/default.jpg",
+                        "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f22",
+                        "3198", "4632") //
         );
 
         for (int index = 0; index < pageList.size(); index++) {
-            final var pageData = pageList.get(index);
+            final var pageDataList = pageList.get(index);
             final var canvas = new Canvas("https://iiif.io/api/cookbook/recipe/0009-book-1/canvas/p" + index,
-                    new Label("en", pageData[0]));
+                    new Label("en", pageDataList.get(0)));
             final var page = new AnnotationPage<PaintingAnnotation>(
                     "https://iiif.io/api/cookbook/recipe/0008-rights/page/p" + index + "/1");
             final var annotation = new PaintingAnnotation(
                     "https://iiif.io/api/cookbook/recipe/0008-rights/annotation/p000" + index + "-image", canvas);
-            final var imageContent = new ImageContent(pageData[1]);
-            final var service = new ImageService3(LEVEL_ONE, pageData[2]);
-            final var width = Integer.valueOf(pageData[3]);
-            final var height = Integer.valueOf(pageData[4]);
+            final var imageContent = new ImageContent(pageDataList.get(1));
+            final var service = new ImageService3(LEVEL_ONE, pageDataList.get(2));
+            final var width = Integer.valueOf(pageDataList.get(3));
+            final var height = Integer.valueOf(pageDataList.get(4));
 
             imageContent.setWidthHeight(width, height).setFormat(IMAGE_JPEG).setServices(service);
             page.addAnnotations(annotation.setBody(imageContent).setTarget(new Target(canvas)));
