@@ -11,7 +11,7 @@ The simplest viable manifest for audio content. This pattern presents a single a
 | | |
 | :--- | :---: |
 | Recipe: | https://iiif.io/api/cookbook/recipe/0002-mvm-audio/ |
-| Manifest: | https://iiif.io/api/cookbook/recipe/0002-mvm-audio/manifest.json |
+| JSON: | https://iiif.io/api/cookbook/recipe/0002-mvm-audio/manifest.json |
 
 ### Method One
 

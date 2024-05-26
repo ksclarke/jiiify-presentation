@@ -14,7 +14,7 @@ it is swapped in.
 | | |
 | :--- | :---: |
 | Recipe: | https://iiif.io/api/cookbook/recipe/0004-canvas-size/ |
-| Manifest: | https://iiif.io/api/cookbook/recipe/0004-canvas-size/manifest.json |
+| JSON: | https://iiif.io/api/cookbook/recipe/0004-canvas-size/manifest.json |
 
 ### Method One
 

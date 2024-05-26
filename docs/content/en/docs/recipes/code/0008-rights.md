@@ -15,7 +15,7 @@ about that property.
 | | |
 | :--- | :---: |
 | Recipe: | https://iiif.io/api/cookbook/recipe/0008-rights/ |
-| Manifest: | https://iiif.io/api/cookbook/recipe/0008-rights/manifest.json |
+| JSON: | https://iiif.io/api/cookbook/recipe/0008-rights/manifest.json |
 
 ### Method One
 

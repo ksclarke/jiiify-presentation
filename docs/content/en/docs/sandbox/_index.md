@@ -57,8 +57,7 @@ System.out.println(manifest);
             }
         };
 
-        xhr.open('POST', 'http://localhost:8080/cgi-bin/jpv3.cgi', true);
-//        xhr.open('POST', 'https://jsh4jpv3.lisforge.net/cgi-bin/jpv3.cgi', true);
+        xhr.open('POST', 'https://jsh4jpv3.lisforge.net/cgi-bin/jpv3.cgi', true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.send("code=" + encodeURIComponent(code));
     }

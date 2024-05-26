@@ -12,7 +12,7 @@ Presentation resource.
 | | |
 | :--- | :---: |
 | Recipe: | https://iiif.io/api/cookbook/recipe/0001-mvm-image/ |
-| Manifest: | https://iiif.io/api/cookbook/recipe/0001-mvm-image/manifest.json |
+| JSON: | https://iiif.io/api/cookbook/recipe/0001-mvm-image/manifest.json |
 
 ### Method One
 

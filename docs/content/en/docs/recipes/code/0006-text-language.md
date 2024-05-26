@@ -13,7 +13,7 @@ descriptive metadata field labels in multiple languages for different language a
 | | |
 | :--- | :---: |
 | Recipe: | https://iiif.io/api/cookbook/recipe/0006-text-language/ |
-| Manifest: | https://iiif.io/api/cookbook/recipe/0006-text-language/manifest.json |
+| JSON: | https://iiif.io/api/cookbook/recipe/0006-text-language/manifest.json |
 
 ### Method One
 

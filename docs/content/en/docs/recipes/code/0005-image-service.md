@@ -16,7 +16,7 @@ sophisticated inspection of the object and more possibilities for stable, durabl
 | | |
 | :--- | :---: |
 | Recipe: | https://iiif.io/api/cookbook/recipe/0005-image-service/ |
-| Manifest: | https://iiif.io/api/cookbook/recipe/0005-image-service/manifest.json |
+| JSON: | https://iiif.io/api/cookbook/recipe/0005-image-service/manifest.json |
 
 ### Method One
 

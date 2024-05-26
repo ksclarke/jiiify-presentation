@@ -12,7 +12,7 @@ might need special formatting and links out to other sites benefit from being ac
 | | |
 | :--- | :---: |
 | Recipe: | https://iiif.io/api/cookbook/recipe/0007-string-formats/ |
-| Manifest: | https://iiif.io/api/cookbook/recipe/0007-string-formats/manifest.json |
+| JSON: | https://iiif.io/api/cookbook/recipe/0007-string-formats/manifest.json |
 
 ### Method One
 
