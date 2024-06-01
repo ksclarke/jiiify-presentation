@@ -59,7 +59,7 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 /**
  * A deserializer for {@code WebAnnotation}(s).
  */
-@SuppressWarnings({ PMD.GOD_CLASS, "PMD.GodClass" })
+@SuppressWarnings({ PMD.GOD_CLASS })
 public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
 
     /** The deserializer's logger. */
@@ -221,7 +221,7 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
      * @throws InputCoercionException If there is trouble parsing the incoming JSON
      * @throws IllegalArgumentException If the found motivation is not one of the expected ones
      */
-    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY, "PMD.CyclomaticComplexity" })
+    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY })
     private WebAnnotation getAnnotation(final String aID, final String aMotivation, final JsonNode aNode,
             final JsonParser aParser) throws InputCoercionException {
         final Optional<Purpose> purpose = Purpose.fromLabel(aMotivation);
@@ -256,7 +256,7 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
      * @param aNode A JSON node representing the resource
      * @return A new content resource to add to the annotation's body
      */
-    @SuppressWarnings("PMD.CyclomaticComplexity")
+    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY })
     private ContentResource<?> getResource(final String aType, final JsonNode aNode) {
         return switch (aType) {
             case ResourceTypes.SOUND -> JSON.convertValue(aNode, SoundContent.class);

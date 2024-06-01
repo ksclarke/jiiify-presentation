@@ -97,8 +97,7 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
      * @throws JsonProcessingException If there is trouble parsing the JSON
      * @throws JsonParseException If there is trouble parsing the JSON
      */
-    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY, "PMD.CyclomaticComplexity", "PMD.CognitiveComplexity",
-        PMD.COGNITIVE_COMPLEXITY, JDK.DEPRECATION })
+    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY, PMD.COGNITIVE_COMPLEXITY, JDK.DEPRECATION })
     private Service<?> deserializeServiceNode(final JsonParser aParser, final JsonNode aNode)
             throws JsonProcessingException {
         final Service<?> service;

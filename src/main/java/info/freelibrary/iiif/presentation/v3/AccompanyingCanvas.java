@@ -35,8 +35,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  * an image to show while a duration-only canvas is playing audio, or 2) background audio to play while a user is
  * navigating an image-only manifest.
  */
-@SuppressWarnings({ PMD.TOO_MANY_METHODS, "PMD.TooManyMethods", PMD.EXCESSIVE_PUBLIC_COUNT, "PMD.ExcessivePublicCount",
-    PMD.CYCLOMATIC_COMPLEXITY, "PMD.CyclomaticComplexity" })
+@SuppressWarnings({ PMD.TOO_MANY_METHODS, PMD.EXCESSIVE_PUBLIC_COUNT, PMD.CYCLOMATIC_COMPLEXITY, PMD.GOD_CLASS })
 public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
         implements CanvasResource<AccompanyingCanvas> {
 
@@ -431,6 +430,11 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
         } catch (final JsonProcessingException details) {
             throw new JsonParsingException(details);
         }
+    }
+
+    @Override
+    protected Object getJsonContext() {
+        return null;
     }
 
 }

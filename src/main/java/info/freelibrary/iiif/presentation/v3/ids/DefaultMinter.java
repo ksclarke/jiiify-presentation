@@ -253,7 +253,7 @@ class DefaultMinter implements Minter {
      * @param aManifest A supplied manifest
      * @throws MintingException If a pre-existing ID is attempted to be added
      */
-    @SuppressWarnings({ "PMD.CognitiveComplexity", PMD.COGNITIVE_COMPLEXITY })
+    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY })
     private void findPreexistingIDs(final Manifest aManifest) {
         for (final Canvas canvas : aManifest.getCanvases()) {
             if (!myExistingIDs.add(canvas.getID())) {

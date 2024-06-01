@@ -39,8 +39,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  * of a canvas is borrowed from standards like PDF and HTML, or applications like Photoshop and Powerpoint, where the
  * display starts from a blank canvas and images, text and other resources are &quot;painted&quot; on to it.
  */
-@SuppressWarnings({ PMD.TOO_MANY_METHODS, "PMD.TooManyMethods", PMD.EXCESSIVE_PUBLIC_COUNT,
-    "PMD.ExcessivePublicCount" })
+@SuppressWarnings({ PMD.TOO_MANY_METHODS, PMD.EXCESSIVE_PUBLIC_COUNT })
 public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Canvas> {
 
     /** The canvas' accompanying canvas. */
@@ -503,6 +502,11 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     public final Canvas supplementWith(final String aCanvasRegion, final List<ContentResource<?>> aContentList) {
         return (Canvas) super.supplement(this, new MediaFragmentSelector(aCanvasRegion), false,
                 aContentList.toArray(new ContentResource[0]));
+    }
+
+    @Override
+    protected Object getJsonContext() {
+        return null;
     }
 
     /**

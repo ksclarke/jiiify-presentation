@@ -427,7 +427,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      * @return The collection manifest
      * @throws JsonParsingException If there is trouble parsing the JSON
      */
-    @SuppressWarnings("PMD.PreserveStackTrace")
+    @SuppressWarnings({ PMD.PRESERVE_STACK_TRACE })
     public static Collection fromJSON(final String aJsonString) {
         try {
             return JSON.getReader(Collection.class).readValue(aJsonString);

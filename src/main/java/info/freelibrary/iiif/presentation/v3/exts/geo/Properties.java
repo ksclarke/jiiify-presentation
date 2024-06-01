@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import info.freelibrary.iiif.presentation.v3.properties.Property;
 import info.freelibrary.iiif.presentation.v3.utils.json.PropertiesDeserializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.PropertiesSerializer;
+import info.freelibrary.util.warnings.PMD;
 
 /**
  * A wrapper for I18n properties.
@@ -143,7 +144,7 @@ public class Properties implements Iterable<Property> {
      * @param aProperties The properties to test
      * @return True if the properties are equal to these; else, false
      */
-    @SuppressWarnings("PMD.SuspiciousEqualsMethodName")
+    @SuppressWarnings({ PMD.SUSPICIOUS_EQUALS_METHOD_NAME })
     public boolean equals(final Properties aProperties) {
         return myProperties.equals(aProperties.myProperties);
     }

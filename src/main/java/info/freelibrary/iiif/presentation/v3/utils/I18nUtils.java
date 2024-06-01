@@ -29,7 +29,7 @@ import info.freelibrary.iiif.presentation.v3.properties.I18n;
 /**
  * A utilities class for working with internationalizations.
  */
-@SuppressWarnings({ PMD.GOD_CLASS, "PMD.GodClass" })
+@SuppressWarnings({ PMD.GOD_CLASS })
 public final class I18nUtils {
 
     /** Logger used by the I18nUtils class. */

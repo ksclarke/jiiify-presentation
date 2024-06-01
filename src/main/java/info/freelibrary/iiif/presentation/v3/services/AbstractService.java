@@ -14,6 +14,8 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import info.freelibrary.util.warnings.PMD;
+
 import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.ids.UriUtils;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
@@ -23,7 +25,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 /**
  * An abstract service class that specific services can extend.
  */
-@SuppressWarnings("PMD.AbstractClassWithoutAbstractMethod")
+@SuppressWarnings({ PMD.ABSTRACT_CLASS_WITHOUT_ABSTRACT_METHOD })
 @JsonInclude(Include.NON_EMPTY)
 abstract class AbstractService<T extends AbstractService<T>> {
 

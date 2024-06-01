@@ -38,8 +38,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  * resource. A placeholder canvas is likely to have different dimensions to those of the canvas(es) of the resource that
  * has the placeholderCanvas property.
  */
-@SuppressWarnings({ PMD.TOO_MANY_METHODS, "PMD.TooManyMethods", PMD.EXCESSIVE_PUBLIC_COUNT,
-    "PMD.ExcessivePublicCount" })
+@SuppressWarnings({ PMD.TOO_MANY_METHODS, PMD.EXCESSIVE_PUBLIC_COUNT })
 public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas>
         implements Resource<PlaceholderCanvas>, CanvasResource<PlaceholderCanvas> {
 
@@ -420,6 +419,11 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas>
             final List<ContentResource<?>> aContentList) {
         return (PlaceholderCanvas) super.supplement(this, new MediaFragmentSelector(aCanvasRegion), false,
                 aContentList.toArray(new ContentResource[0]));
+    }
+
+    @Override
+    protected Object getJsonContext() {
+        return null;
     }
 
     /**

@@ -9,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.util.warnings.PMD;
+
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -27,6 +29,7 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 /**
  * A grouping of {@link AnnotationPage}(s) that should be managed together as a collection of {@link Annotation}(s).
  */
+@SuppressWarnings({ PMD.COUPLING_BETWEEN_OBJECTS })
 public class AnnotationCollection extends AbstractResource<AnnotationCollection>
         implements Resource<AnnotationCollection> {
 

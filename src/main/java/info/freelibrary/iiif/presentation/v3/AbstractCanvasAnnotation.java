@@ -47,7 +47,7 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
     JsonKeys.SUMMARY, JsonKeys.REQUIRED_STATEMENT, JsonKeys.RIGHTS, JsonKeys.PART_OF, JsonKeys.HOMEPAGE,
     JsonKeys.THUMBNAIL, JsonKeys.METADATA, JsonKeys.ITEMS, JsonKeys.SERVICE, JsonKeys.TIMEMODE, JsonKeys.BODY,
     JsonKeys.TARGET })
-@SuppressWarnings({ PMD.GOD_CLASS, "PMD.GodClass" })
+@SuppressWarnings({ PMD.GOD_CLASS })
 abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> extends AbstractResource<A> {
 
     /** The annotation's logger. */

@@ -20,7 +20,7 @@ import info.freelibrary.iiif.presentation.v3.properties.selectors.SelectorOutOfB
  *
  * @param <T> The class that implements {@code CanvasResource}
  */
-@SuppressWarnings({ PMD.TOO_MANY_METHODS, "PMD.TooManyMethods" })
+@SuppressWarnings({ PMD.TOO_MANY_METHODS })
 public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T> {
 
     /**

@@ -35,7 +35,7 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  * An implementation of <code>List&lt;Behavior&gt;</code> that checks for disjointed behaviors. This ensures that
  * behaviors in the list are valid together and, also, valid for the resource with which they're being associated.
  */
-@SuppressWarnings({ PMD.TOO_MANY_STATIC_IMPORTS, "PMD.TooManyStaticImports" })
+@SuppressWarnings({ PMD.TOO_MANY_STATIC_IMPORTS })
 public class BehaviorList extends ArrayList<Behavior> implements List<Behavior> {
 
     /** The behavior list's <code>serialVersionUID</code>. */
@@ -93,7 +93,7 @@ public class BehaviorList extends ArrayList<Behavior> implements List<Behavior> 
      * @param aBehaviorArray An array of behaviors
      * @throws InvalidBehaviorException If there is a disjoint in the supplied behavior list
      */
-    @SuppressWarnings({ "PMD.ConstructorCallsOverridableMethod" })
+    @SuppressWarnings({ PMD.CONSTRUCTOR_CALLS_OVERRIDABLE_METHOD })
     public BehaviorList(final Class<? extends Behavior> aBehaviorClass, final Behavior... aBehaviorArray) {
         this(aBehaviorClass);
 
@@ -107,7 +107,7 @@ public class BehaviorList extends ArrayList<Behavior> implements List<Behavior> 
      * @param aBehaviorList A list of behaviors
      * @throws InvalidBehaviorException If there is a disjoint in the supplied behavior list
      */
-    @SuppressWarnings({ "PMD.ConstructorCallsOverridableMethod" })
+    @SuppressWarnings({ PMD.CONSTRUCTOR_CALLS_OVERRIDABLE_METHOD })
     public BehaviorList(final Class<? extends Behavior> aBehaviorClass, final List<Behavior> aBehaviorList) {
         myBehaviorClass = Objects.requireNonNull(aBehaviorClass);
         addBehaviors(Objects.requireNonNull(aBehaviorList));

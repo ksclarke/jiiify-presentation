@@ -34,9 +34,17 @@ jobs:
         with:
           maven-version: 3.8.2
 
-      - name: Build with Maven
-        uses: samuelmeuli/action-maven-publish@201a45a3f311b2ee888f252ba9f4194257545709 # v1.4.0
+      - name: Cache SonarCloud packages
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
         with:
-          maven_goals_phases: "clean verify"
-          maven_profiles: default
-          maven_args: "-V -ntp -Dorg.slf4j.simpleLogger.log.net.sourceforge.pmd=error"
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Build with Maven
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          mvn -B -ntp -Dorg.slf4j.simpleLogger.log.net.sourceforge.pmd=error verify
+          org.codehaus.mojo:sonar-maven-plugin:sonar -Dsonar.projectKey=ksclarke_jiiify-presentation

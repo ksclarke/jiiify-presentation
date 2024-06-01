@@ -57,7 +57,7 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  * Joke about this kludge: There isn't anything one more layer of abstraction cannot solve!
  * </p>
  */
-@SuppressWarnings({ "PMD.ExcessivePublicCount", PMD.EXCESSIVE_PUBLIC_COUNT })
+@SuppressWarnings({ PMD.EXCESSIVE_PUBLIC_COUNT })
 class RangeCanvas extends Canvas {
 
     /** The wrapped canvas. */

@@ -51,8 +51,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  * standards like PDF and HTML, or applications like Photoshop and Powerpoint, where the display starts from a blank
  * canvas and images, text and other resources are &quot;painted&quot; on to it.
  */
-@SuppressWarnings({ PMD.GOD_CLASS, "PMD.GodClass", PMD.EXCESSIVE_IMPORTS, "PMD.ExcessiveImports",
-    PMD.CYCLOMATIC_COMPLEXITY, "PMD.CyclomaticComplexity", PMD.TOO_MANY_METHODS, "PMD.TooManyMethods" })
+@SuppressWarnings({ PMD.GOD_CLASS, PMD.EXCESSIVE_IMPORTS, PMD.CYCLOMATIC_COMPLEXITY, PMD.TOO_MANY_METHODS })
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.HEIGHT, JsonKeys.WIDTH, JsonKeys.DURATION,
     JsonKeys.THUMBNAIL, JsonKeys.PLACEHOLDER_CANVAS, JsonKeys.ACCOMPANYING_CANVAS, JsonKeys.METADATA, JsonKeys.ITEMS,
     JsonKeys.ANNOTATIONS })
@@ -561,10 +560,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     @Override
     @JsonGetter(JsonKeys.CONTEXT)
     @JsonInclude(Include.NON_NULL)
-    @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
-    protected Object getJsonContext() {
-        return null;
-    }
+    protected abstract Object getJsonContext();
 
     /**
      * Converts the canvas to its string/JSON representation.
@@ -644,7 +640,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      * @return <code>true</code> if the content resource fits within the bounds of the canvas
      * @throws ContentOutOfBoundsException If the content resource won't fit
      */
-    @SuppressWarnings({ "PMD.CyclomaticComplexity" })
+    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY })
     boolean canFrame(final ContentResource<?> aContent) {
         if (aContent instanceof SpatialContentResource) {
             final SpatialContentResource<?> spatialPainting;

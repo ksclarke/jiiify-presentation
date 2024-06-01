@@ -17,6 +17,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import info.freelibrary.util.I18nRuntimeException;
+import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.exts.geo.NavPlace;
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
@@ -46,7 +47,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  * chapters, verses, sections, non-content-bearing pages, the table of contents or similar. Equally, physical features
  * might be important such as quires or gatherings, sections that have been added later and so forth.
  */
-@SuppressWarnings({ "PMD.ExcessivePublicCount", "PMD.ExcessiveImports", "PMD.GodClass" })
+@SuppressWarnings({ PMD.EXCESSIVE_PUBLIC_COUNT, PMD.EXCESSIVE_IMPORTS, PMD.GOD_CLASS })
 public class Range extends NavigableResource<Range> implements Resource<Range> {
 
     /** The range's accompanying canvas. */

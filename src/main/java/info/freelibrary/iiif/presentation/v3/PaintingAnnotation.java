@@ -41,7 +41,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.StylesheetSerializer;
 /**
  * An annotation used for painting content resources onto a {@link Canvas}.
  */
-@SuppressWarnings({ PMD.GOD_CLASS, "PMD.GodClass" })
+@SuppressWarnings({ PMD.GOD_CLASS })
 public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotation>
         implements Resource<PaintingAnnotation>, Annotation<PaintingAnnotation> {
 
