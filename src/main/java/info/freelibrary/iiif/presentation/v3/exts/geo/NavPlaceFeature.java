@@ -22,17 +22,17 @@ public class NavPlaceFeature {
     /** The NavPlaceFeature's logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(NavPlaceFeature.class, MessageCodes.BUNDLE);
 
+    /** A bounding box for the navPlace feature. */
+    private BoundingBox myBoundingBox;
+
+    /** A geometry for the navPlace feature. */
+    private Geometry myGeometry;
+
     /** The navPlace feature ID. */
     private String myID;
 
     /** A set of navPlace feature properties. */
     private Properties myProperties;
-
-    /** A geometry for the navPlace feature. */
-    private Geometry myGeometry;
-
-    /** A bounding box for the navPlace feature. */
-    private BoundingBox myBoundingBox;
 
     /**
      * Creates a new navPlace feature.
@@ -51,6 +51,26 @@ public class NavPlaceFeature {
     }
 
     /**
+     * Gets the navPlace's bounding box.
+     *
+     * @return An optional bounding box
+     */
+    @JsonGetter(JsonKeys.BOUNDING_BOX)
+    public Optional<BoundingBox> getBoundingBox() {
+        return Optional.ofNullable(myBoundingBox);
+    }
+
+    /**
+     * Gets the navPlace's geometry.
+     *
+     * @return The navPlace's geometry
+     */
+    @JsonGetter(JsonKeys.GEOMETRY)
+    public Geometry getGeometry() {
+        return myGeometry;
+    }
+
+    /**
      * Gets the navPlace feature ID.
      *
      * @return The navPlace feature ID
@@ -58,18 +78,6 @@ public class NavPlaceFeature {
     @JsonGetter(JsonKeys.ID)
     public String getID() {
         return myID;
-    }
-
-    /**
-     * Sets the navPlace feature ID.
-     *
-     * @param aID A feature ID
-     * @return This feature
-     */
-    @JsonSetter(JsonKeys.ID)
-    public NavPlaceFeature setID(final String aID) {
-        myID = aID;
-        return this;
     }
 
     /**
@@ -87,37 +95,13 @@ public class NavPlaceFeature {
     }
 
     /**
-     * Sets the navPlace properties.
+     * Gets the NavPlaceFeature's type.
      *
-     * @param aProperties A {@code LinkedHashSet} of properties
-     * @return This feature
+     * @return The feature's type
      */
-    @JsonSetter(JsonKeys.PROPERTIES)
-    public NavPlaceFeature setProperties(final Properties aProperties) {
-        myProperties = aProperties;
-        return this;
-    }
-
-    /**
-     * Gets the navPlace's geometry.
-     *
-     * @return The navPlace's geometry
-     */
-    @JsonGetter(JsonKeys.GEOMETRY)
-    public Geometry getGeometry() {
-        return myGeometry;
-    }
-
-    /**
-     * Sets the navPlace's geometry.
-     *
-     * @param aGeometry A geometry
-     * @return This feature
-     */
-    @JsonSetter(JsonKeys.GEOMETRY)
-    public NavPlaceFeature setGeometry(final Geometry aGeometry) {
-        myGeometry = aGeometry;
-        return this;
+    @JsonGetter(JsonKeys.TYPE)
+    public String getType() {
+        return JsonKeys.FEATURE;
     }
 
     /**
@@ -133,23 +117,39 @@ public class NavPlaceFeature {
     }
 
     /**
-     * Gets the navPlace's bounding box.
+     * Sets the navPlace's geometry.
      *
-     * @return An optional bounding box
+     * @param aGeometry A geometry
+     * @return This feature
      */
-    @JsonGetter(JsonKeys.BOUNDING_BOX)
-    public Optional<BoundingBox> getBoundingBox() {
-        return Optional.ofNullable(myBoundingBox);
+    @JsonSetter(JsonKeys.GEOMETRY)
+    public NavPlaceFeature setGeometry(final Geometry aGeometry) {
+        myGeometry = aGeometry;
+        return this;
     }
 
     /**
-     * Gets the NavPlaceFeature's type.
+     * Sets the navPlace feature ID.
      *
-     * @return The feature's type
+     * @param aID A feature ID
+     * @return This feature
      */
-    @JsonGetter(JsonKeys.TYPE)
-    public String getType() {
-        return JsonKeys.FEATURE;
+    @JsonSetter(JsonKeys.ID)
+    public NavPlaceFeature setID(final String aID) {
+        myID = aID;
+        return this;
+    }
+
+    /**
+     * Sets the navPlace properties.
+     *
+     * @param aProperties A {@code LinkedHashSet} of properties
+     * @return This feature
+     */
+    @JsonSetter(JsonKeys.PROPERTIES)
+    public NavPlaceFeature setProperties(final Properties aProperties) {
+        myProperties = aProperties;
+        return this;
     }
 
     /**

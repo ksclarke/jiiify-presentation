@@ -21,31 +21,6 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 public class Manifestor {
 
     /**
-     * Deserializes a {@link Manifest} from a file using the UTF-8 character set.
-     *
-     * @param aJsonFile A JSON file representing a manifest
-     * @return A Manifest object
-     * @throws IOException If the supplied JSON file could not be read
-     * @throws JsonParsingException If the manifest isn't valid
-     */
-    public Manifest readManifest(final File aJsonFile) throws IOException {
-        return readManifest(aJsonFile, StandardCharsets.UTF_8);
-    }
-
-    /**
-     * Deserializes a {@link Manifest} from a file using the supplied character set.
-     *
-     * @param aJsonFile A JSON file representing a manifest
-     * @param aCharset A character set to use when reading the supplied file
-     * @return A Manifest object
-     * @throws IOException If the supplied JSON file could not be read
-     * @throws JsonParsingException If the manifest isn't valid
-     */
-    public Manifest readManifest(final File aJsonFile, final Charset aCharset) throws IOException {
-        return Manifest.fromJSON(StringUtils.read(aJsonFile, aCharset));
-    }
-
-    /**
      * Deserializes a {@link Collection} from a file using the UTF-8 character set.
      *
      * @param aJsonFile A JSON file representing a collection
@@ -71,26 +46,28 @@ public class Manifestor {
     }
 
     /**
-     * Serializes a {@link Manifest} to a file using the UTF-8 character set.
+     * Deserializes a {@link Manifest} from a file using the UTF-8 character set.
      *
-     * @param aManifest A Manifest object to serialize
-     * @param aJsonFile The file to write to
-     * @throws IOException If the file cannot be written
+     * @param aJsonFile A JSON file representing a manifest
+     * @return A Manifest object
+     * @throws IOException If the supplied JSON file could not be read
+     * @throws JsonParsingException If the manifest isn't valid
      */
-    public void write(final Manifest aManifest, final File aJsonFile) throws IOException {
-        write(aManifest, aJsonFile, StandardCharsets.UTF_8);
+    public Manifest readManifest(final File aJsonFile) throws IOException {
+        return readManifest(aJsonFile, StandardCharsets.UTF_8);
     }
 
     /**
-     * Serializes a {@link Manifest} to a file using the supplied character set.
+     * Deserializes a {@link Manifest} from a file using the supplied character set.
      *
-     * @param aManifest A Manifest object to serialize
-     * @param aJsonFile The file to write to
-     * @param aCharset A character set that should be used when writing the manifest
-     * @throws IOException If the file cannot be written
+     * @param aJsonFile A JSON file representing a manifest
+     * @param aCharset A character set to use when reading the supplied file
+     * @return A Manifest object
+     * @throws IOException If the supplied JSON file could not be read
+     * @throws JsonParsingException If the manifest isn't valid
      */
-    public void write(final Manifest aManifest, final File aJsonFile, final Charset aCharset) throws IOException {
-        writeJsonString(aJsonFile.toPath(), aManifest.toString(), aCharset);
+    public Manifest readManifest(final File aJsonFile, final Charset aCharset) throws IOException {
+        return Manifest.fromJSON(StringUtils.read(aJsonFile, aCharset));
     }
 
     /**
@@ -114,6 +91,29 @@ public class Manifestor {
      */
     public void write(final Collection aCollection, final File aJsonFile, final Charset aCharset) throws IOException {
         writeJsonString(aJsonFile.toPath(), aCollection.toString(), aCharset);
+    }
+
+    /**
+     * Serializes a {@link Manifest} to a file using the UTF-8 character set.
+     *
+     * @param aManifest A Manifest object to serialize
+     * @param aJsonFile The file to write to
+     * @throws IOException If the file cannot be written
+     */
+    public void write(final Manifest aManifest, final File aJsonFile) throws IOException {
+        write(aManifest, aJsonFile, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * Serializes a {@link Manifest} to a file using the supplied character set.
+     *
+     * @param aManifest A Manifest object to serialize
+     * @param aJsonFile The file to write to
+     * @param aCharset A character set that should be used when writing the manifest
+     * @throws IOException If the file cannot be written
+     */
+    public void write(final Manifest aManifest, final File aJsonFile, final Charset aCharset) throws IOException {
+        writeJsonString(aJsonFile.toPath(), aManifest.toString(), aCharset);
     }
 
     /**

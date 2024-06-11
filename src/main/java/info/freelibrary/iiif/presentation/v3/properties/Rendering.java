@@ -42,6 +42,45 @@ public class Rendering extends AbstractLinkProperty<Rendering> {
         super();
     }
 
+    @Override
+    public boolean equals(final Object aObject) {
+        if (!super.equals(aObject) || getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        return getLanguages().equals(((Rendering) aObject).getLanguages());
+    }
+
+    @Override
+    public Optional<MediaType> getFormat() {
+        return super.getFormat();
+    }
+
+    /**
+     * Gets a descriptive label.
+     *
+     * @return A descriptive label
+     */
+    public Label getLabel() {
+        return super.getNullableLabel();
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * super.hashCode() + Objects.hash(getLanguages());
+    }
+
+    /**
+     * Sets format.
+     *
+     * @param aMediaType A resource's format
+     * @return The resource whose format is being set
+     */
+    @Override
+    public Rendering setFormat(final MediaType aMediaType) {
+        return (Rendering) super.setFormat(aMediaType);
+    }
+
     /**
      * Sets the ID.
      *
@@ -52,26 +91,6 @@ public class Rendering extends AbstractLinkProperty<Rendering> {
     @JsonSetter(JsonKeys.ID)
     public Rendering setID(final String aID) {
         return (Rendering) super.setID(aID);
-    }
-
-    /**
-     * Sets the rendering type.
-     *
-     * @param aType A type of rendering
-     * @return The rendering
-     */
-    @Override
-    public Rendering setType(final String aType) {
-        return (Rendering) super.setType(aType);
-    }
-
-    /**
-     * Gets a descriptive label.
-     *
-     * @return A descriptive label
-     */
-    public Label getLabel() {
-        return super.getNullableLabel();
     }
 
     /**
@@ -86,38 +105,19 @@ public class Rendering extends AbstractLinkProperty<Rendering> {
     }
 
     @Override
-    public Optional<MediaType> getFormat() {
-        return super.getFormat();
-    }
-
-    /**
-     * Sets format.
-     *
-     * @param aMediaType A resource's format
-     * @return The resource whose format is being set
-     */
-    @Override
-    public Rendering setFormat(final MediaType aMediaType) {
-        return (Rendering) super.setFormat(aMediaType);
-    }
-
-    @Override
     public Rendering setLanguages(final String... aLangArray) {
         return (Rendering) super.setLanguages(aLangArray);
     }
 
+    /**
+     * Sets the rendering type.
+     *
+     * @param aType A type of rendering
+     * @return The rendering
+     */
     @Override
-    public int hashCode() {
-        return 31 * super.hashCode() + Objects.hash(getLanguages());
-    }
-
-    @Override
-    public boolean equals(final Object aObject) {
-        if (!super.equals(aObject) || getClass() != aObject.getClass()) {
-            return false;
-        }
-
-        return getLanguages().equals(((Rendering) aObject).getLanguages());
+    public Rendering setType(final String aType) {
+        return (Rendering) super.setType(aType);
     }
 
     /**

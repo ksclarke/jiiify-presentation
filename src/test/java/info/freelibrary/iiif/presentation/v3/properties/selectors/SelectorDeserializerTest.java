@@ -33,31 +33,6 @@ public class SelectorDeserializerTest extends AbstractTest {
     }
 
     /**
-     * Tests deserializing VisualContentSelector.
-     */
-    @Test
-    public void testVisualContentSelector() throws JsonProcessingException {
-        final String json = JSON.getWriter(VisualContentSelector.class).writeValueAsString(new VisualContentSelector());
-        final Selector selector = JSON.getReader(Selector.class).readValue(json);
-
-        assertEquals(VisualContentSelector.class.getSimpleName(), selector.getType());
-    }
-
-    /**
-     * Tests deserializing MediaFragmentSelector.
-     */
-    @Test
-    public void testMediaFragmentSelector() throws JsonProcessingException {
-        final String rawMediaFragment = "xywh=0,0,50,50";
-        final String json = JSON.getWriter(MediaFragmentSelector.class)
-                .writeValueAsString(new MediaFragmentSelector(rawMediaFragment));
-        final MediaFragmentSelector selector = (MediaFragmentSelector) JSON.getReader(Selector.class).readValue(json);
-
-        assertEquals("FragmentSelector", selector.getType()); // Don't use class name here so we know if it changes
-        assertEquals(rawMediaFragment, selector.toString());
-    }
-
-    /**
      * Tests deserializing ImageApiSelector.
      */
     @Test
@@ -90,5 +65,30 @@ public class SelectorDeserializerTest extends AbstractTest {
         final Selector selector = JSON.getReader(Selector.class).readValue(jsonNode.toPrettyString());
 
         assertEquals(ImageApiSelector.DEFAULT_REGION, ((ImageApiSelector) selector).getRegion().get());
+    }
+
+    /**
+     * Tests deserializing MediaFragmentSelector.
+     */
+    @Test
+    public void testMediaFragmentSelector() throws JsonProcessingException {
+        final String rawMediaFragment = "xywh=0,0,50,50";
+        final String json = JSON.getWriter(MediaFragmentSelector.class)
+                .writeValueAsString(new MediaFragmentSelector(rawMediaFragment));
+        final MediaFragmentSelector selector = (MediaFragmentSelector) JSON.getReader(Selector.class).readValue(json);
+
+        assertEquals("FragmentSelector", selector.getType()); // Don't use class name here so we know if it changes
+        assertEquals(rawMediaFragment, selector.toString());
+    }
+
+    /**
+     * Tests deserializing VisualContentSelector.
+     */
+    @Test
+    public void testVisualContentSelector() throws JsonProcessingException {
+        final String json = JSON.getWriter(VisualContentSelector.class).writeValueAsString(new VisualContentSelector());
+        final Selector selector = JSON.getReader(Selector.class).readValue(json);
+
+        assertEquals(VisualContentSelector.class.getSimpleName(), selector.getType());
     }
 }

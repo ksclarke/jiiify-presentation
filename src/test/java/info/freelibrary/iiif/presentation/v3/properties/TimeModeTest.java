@@ -16,7 +16,7 @@ import info.freelibrary.iiif.presentation.v3.utils.TestConstants;
 public class TimeModeTest {
 
     /** Expected values. */
-    private static final String[] VALUES = { "trim", "scale", "loop" };
+    private static final String[] VALUES = { "loop", "scale", "trim" };
 
     /**
      * Tests the time mode's JSON serialization.
@@ -25,7 +25,7 @@ public class TimeModeTest {
      */
     @Test
     public final void testJsonSerialization() throws JsonProcessingException {
-        assertEquals(TestConstants.QUOTE + VALUES[2] + TestConstants.QUOTE,
+        assertEquals(TestConstants.QUOTE + VALUES[0] + TestConstants.QUOTE,
                 JSON.getWriter().writeValueAsString(TimeMode.LOOP));
     }
 
@@ -34,7 +34,7 @@ public class TimeModeTest {
      */
     @Test
     public final void testToString() {
-        assertEquals(VALUES[2], TimeMode.LOOP.toString());
+        assertEquals(VALUES[0], TimeMode.LOOP.toString());
     }
 
     /**

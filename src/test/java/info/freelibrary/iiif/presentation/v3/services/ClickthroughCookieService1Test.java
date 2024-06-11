@@ -34,97 +34,6 @@ public class ClickthroughCookieService1Test {
     }
 
     /**
-     * Tests {@link ClickthroughCookieService1#getID() getID}.
-     */
-    @Test
-    public final void testGetID() {
-        Assert.assertEquals(myID, new ClickthroughCookieService1(myID, myLabel).getID());
-    }
-
-    /**
-     * Tests {@link ClickthroughCookieService1#getType() getType}.
-     */
-    @Test
-    public final void testGetType() {
-        assertEquals(ClickthroughCookieService1.TYPE, new ClickthroughCookieService1(myID, myLabel).getType());
-    }
-
-    /**
-     * Tests {@link ClickthroughCookieService1#getProfile() getProfile}.
-     */
-    @Test
-    public final void testGetProfile() {
-        final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
-        assertEquals(AuthCookieService.Profile.CLICKTHROUGH, service.getProfile().get());
-    }
-
-    /**
-     * Tests {@link ClickthroughCookieService1#getFailureHeader() getFailureHeader}.
-     */
-    @Test
-    public final void testGetFailureHeader() {
-        final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
-        final String failureHeader = UUID.randomUUID().toString();
-
-        assertEquals(failureHeader, service.setFailureHeader(failureHeader).getFailureHeader());
-    }
-
-    /**
-     * Tests {@link ClickthroughCookieService1#getFailureDescription() getFailureDescription}.
-     */
-    @Test
-    public final void testGetFailureDescription() {
-        final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
-        final String failureDescription = UUID.randomUUID().toString();
-
-        assertEquals(failureDescription, service.setFailureDescription(failureDescription).getFailureDescription());
-    }
-
-    /**
-     * Tests {@link ClickthroughCookieService1#getLabel() getLabel}.
-     */
-    @Test
-    public final void testGetLabel() {
-        assertEquals(myLabel, new ClickthroughCookieService1(myID, myLabel).getLabel());
-    }
-
-    /**
-     * Tests {@link ClickthroughCookieService1#getConfirmLabel() getConfirmLabel}.
-     */
-    @Test
-    public final void testGetConfirmLabel() {
-        final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
-        final String confirmLabel = UUID.randomUUID().toString();
-
-        service.setConfirmLabel(confirmLabel);
-        assertEquals(confirmLabel, service.getConfirmLabel());
-    }
-
-    /**
-     * Tests {@link ClickthroughCookieService1#getHeader() getHeader}.
-     */
-    @Test
-    public final void testGetHeader() {
-        final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
-        final String header = UUID.randomUUID().toString();
-
-        service.setHeader(header);
-        assertEquals(header, service.getHeader());
-    }
-
-    /**
-     * Tests {@link ClickthroughCookieService1#getDescription() getDescription}.
-     */
-    @Test
-    public final void testGetDescription() {
-        final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
-        final String description = UUID.randomUUID().toString();
-
-        service.setDescription(description);
-        assertEquals(description, service.getDescription());
-    }
-
-    /**
      * Tests ClickthroughCookieService1 constructor with string ID and label.
      */
     @Test
@@ -147,46 +56,127 @@ public class ClickthroughCookieService1Test {
     }
 
     /**
-     * Tests {@link ClickthroughCookieService1#setID(URI) setID}.
+     * Tests {@link ClickthroughCookieService1#getConfirmLabel() getConfirmLabel}.
      */
     @Test
-    public final void testSetIDURI() {
-        final ClickthroughCookieService1 service =
-                new ClickthroughCookieService1(myID.substring(2), myLabel).setID(myID);
-
-        assertEquals(myID, service.getID());
-    }
-
-    /**
-     * Tests {@link ClickthroughCookieService1#setID(String) setID}.
-     */
-    @Test
-    public final void testSetIDString() {
-        final ClickthroughCookieService1 service =
-                new ClickthroughCookieService1(myID.substring(2), myLabel).setID(myID);
-
-        assertEquals(myID, service.getID());
-    }
-
-    /**
-     * Tests {@link ClickthroughCookieService1#setType(String) setType}.
-     */
-    @Test
-    public final void testSetTypeString() {
+    public final void testGetConfirmLabel() {
         final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
+        final String confirmLabel = UUID.randomUUID().toString();
 
-        assertEquals(AuthCookieService.class.getSimpleName(),
-                service.setType(AuthCookieService.class.getSimpleName()).getType());
+        service.setConfirmLabel(confirmLabel);
+        assertEquals(confirmLabel, service.getConfirmLabel());
     }
 
     /**
-     * Tests {@link ClickthroughCookieService1#setType(String) setType}.
+     * Tests {@link ClickthroughCookieService1#getDescription() getDescription}.
      */
-    @Test(expected = IllegalArgumentException.class)
-    public final void testSetTypeStringInvalid() {
+    @Test
+    public final void testGetDescription() {
         final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
+        final String description = UUID.randomUUID().toString();
 
-        service.setType(ClickthroughCookieService1.class.getSimpleName());
+        service.setDescription(description);
+        assertEquals(description, service.getDescription());
+    }
+
+    /**
+     * Tests {@link ClickthroughCookieService1#getFailureDescription() getFailureDescription}.
+     */
+    @Test
+    public final void testGetFailureDescription() {
+        final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
+        final String failureDescription = UUID.randomUUID().toString();
+
+        assertEquals(failureDescription, service.setFailureDescription(failureDescription).getFailureDescription());
+    }
+
+    /**
+     * Tests {@link ClickthroughCookieService1#getFailureHeader() getFailureHeader}.
+     */
+    @Test
+    public final void testGetFailureHeader() {
+        final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
+        final String failureHeader = UUID.randomUUID().toString();
+
+        assertEquals(failureHeader, service.setFailureHeader(failureHeader).getFailureHeader());
+    }
+
+    /**
+     * Tests {@link ClickthroughCookieService1#getHeader() getHeader}.
+     */
+    @Test
+    public final void testGetHeader() {
+        final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
+        final String header = UUID.randomUUID().toString();
+
+        service.setHeader(header);
+        assertEquals(header, service.getHeader());
+    }
+
+    /**
+     * Tests {@link ClickthroughCookieService1#getID() getID}.
+     */
+    @Test
+    public final void testGetID() {
+        Assert.assertEquals(myID, new ClickthroughCookieService1(myID, myLabel).getID());
+    }
+
+    /**
+     * Tests {@link ClickthroughCookieService1#getLabel() getLabel}.
+     */
+    @Test
+    public final void testGetLabel() {
+        assertEquals(myLabel, new ClickthroughCookieService1(myID, myLabel).getLabel());
+    }
+
+    /**
+     * Tests {@link ClickthroughCookieService1#getProfile() getProfile}.
+     */
+    @Test
+    public final void testGetProfile() {
+        final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
+        assertEquals(AuthCookieService.Profile.CLICKTHROUGH, service.getProfile().get());
+    }
+
+    /**
+     * Tests {@link ClickthroughCookieService1#getType() getType}.
+     */
+    @Test
+    public final void testGetType() {
+        assertEquals(ClickthroughCookieService1.TYPE, new ClickthroughCookieService1(myID, myLabel).getType());
+    }
+
+    /**
+     * Tests {@link ClickthroughCookieService1#setConfirmLabel(String) setConfirmLabel}.
+     */
+    @Test
+    public final void testSetConfirmLabelString() {
+        final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
+        final String confirmLabel = UUID.randomUUID().toString();
+
+        assertEquals(confirmLabel, service.setConfirmLabel(confirmLabel).getConfirmLabel());
+    }
+
+    /**
+     * Tests {@link ClickthroughCookieService1#setDescription(String) setDescription}.
+     */
+    @Test
+    public final void testSetDescriptionString() {
+        final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
+        final String description = UUID.randomUUID().toString();
+
+        assertEquals(description, service.setDescription(description).getDescription());
+    }
+
+    /**
+     * Tests {@link ClickthroughCookieService1#setFailureDescription(String) setFailureDescription}.
+     */
+    @Test
+    public final void testSetFailureDescriptionString() {
+        final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
+        final String failureDescription = UUID.randomUUID().toString();
+
+        assertEquals(failureDescription, service.setFailureDescription(failureDescription).getFailureDescription());
     }
 
     /**
@@ -201,14 +191,47 @@ public class ClickthroughCookieService1Test {
     }
 
     /**
-     * Tests {@link ClickthroughCookieService1#setFailureDescription(String) setFailureDescription}.
+     * Tests {@link ClickthroughCookieService1#setHeader(String) setHeader}.
      */
     @Test
-    public final void testSetFailureDescriptionString() {
+    public final void testSetHeaderString() {
         final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
-        final String failureDescription = UUID.randomUUID().toString();
+        final String header = UUID.randomUUID().toString();
 
-        assertEquals(failureDescription, service.setFailureDescription(failureDescription).getFailureDescription());
+        assertEquals(header, service.setHeader(header).getHeader());
+    }
+
+    /**
+     * Tests {@link ClickthroughCookieService1#setID(String) setID}.
+     */
+    @Test
+    public final void testSetIDString() {
+        final ClickthroughCookieService1 service =
+                new ClickthroughCookieService1(myID.substring(2), myLabel).setID(myID);
+
+        assertEquals(myID, service.getID());
+    }
+
+    /**
+     * Tests {@link ClickthroughCookieService1#setID(URI) setID}.
+     */
+    @Test
+    public final void testSetIDURI() {
+        final ClickthroughCookieService1 service =
+                new ClickthroughCookieService1(myID.substring(2), myLabel).setID(myID);
+
+        assertEquals(myID, service.getID());
+    }
+
+    /**
+     * Tests {@link ClickthroughCookieService1#setLabel(String) setLabel}.
+     */
+    @Test
+    public final void testSetLabelString() {
+        final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
+        final String label = UUID.randomUUID().toString();
+
+        assertEquals(label, service.setLabel(label).getLabel());
     }
 
     /**
@@ -235,47 +258,24 @@ public class ClickthroughCookieService1Test {
     }
 
     /**
-     * Tests {@link ClickthroughCookieService1#setLabel(String) setLabel}.
+     * Tests {@link ClickthroughCookieService1#setType(String) setType}.
      */
     @Test
-    public final void testSetLabelString() {
+    public final void testSetTypeString() {
         final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
-        final String label = UUID.randomUUID().toString();
 
-        assertEquals(label, service.setLabel(label).getLabel());
+        assertEquals(AuthCookieService.class.getSimpleName(),
+                service.setType(AuthCookieService.class.getSimpleName()).getType());
     }
 
     /**
-     * Tests {@link ClickthroughCookieService1#setConfirmLabel(String) setConfirmLabel}.
+     * Tests {@link ClickthroughCookieService1#setType(String) setType}.
      */
-    @Test
-    public final void testSetConfirmLabelString() {
+    @Test(expected = IllegalArgumentException.class)
+    public final void testSetTypeStringInvalid() {
         final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
-        final String confirmLabel = UUID.randomUUID().toString();
 
-        assertEquals(confirmLabel, service.setConfirmLabel(confirmLabel).getConfirmLabel());
-    }
-
-    /**
-     * Tests {@link ClickthroughCookieService1#setHeader(String) setHeader}.
-     */
-    @Test
-    public final void testSetHeaderString() {
-        final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
-        final String header = UUID.randomUUID().toString();
-
-        assertEquals(header, service.setHeader(header).getHeader());
-    }
-
-    /**
-     * Tests {@link ClickthroughCookieService1#setDescription(String) setDescription}.
-     */
-    @Test
-    public final void testSetDescriptionString() {
-        final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
-        final String description = UUID.randomUUID().toString();
-
-        assertEquals(description, service.setDescription(description).getDescription());
+        service.setType(ClickthroughCookieService1.class.getSimpleName());
     }
 
 }

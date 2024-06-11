@@ -12,9 +12,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum TimeMode {
 
     /**
-     * A trim time-mode.
+     * A loop time-mode.
      */
-    TRIM("trim"), //
+    LOOP("loop"), //
 
     /**
      * A scale time-mode.
@@ -22,9 +22,9 @@ public enum TimeMode {
     SCALE("scale"), //
 
     /**
-     * A loop time-mode.
+     * A trim time-mode.
      */
-    LOOP("loop");
+    TRIM("trim");
 
     /**
      * The <code>TimeMode</code> label.

@@ -24,25 +24,22 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  */
 public class CollectionBehaviorTest {
 
-    /** The expected behavior values. */
-    private static final String[] VALUES = { BehaviorConstants.AUTO_ADVANCE, BehaviorConstants.NO_AUTO_ADVANCE,
-        BehaviorConstants.INDIVIDUALS, BehaviorConstants.CONTINUOUS, BehaviorConstants.REPEAT,
-        BehaviorConstants.NO_REPEAT, BehaviorConstants.PAGED, BehaviorConstants.UNORDERED, BehaviorConstants.MULTI_PART,
-        BehaviorConstants.TOGETHER };
-
     /** A test fixture. */
     private static final String TEST_MANIFEST =
             new File(TestUtils.TEST_DIR, "collection-disjoint-collection-behavior.json").getAbsolutePath();
 
+    /** The expected behavior values. */
+    private static final String[] VALUES = { BehaviorConstants.AUTO_ADVANCE, BehaviorConstants.CONTINUOUS,
+        BehaviorConstants.INDIVIDUALS, BehaviorConstants.MULTI_PART, BehaviorConstants.NO_AUTO_ADVANCE,
+        BehaviorConstants.NO_REPEAT, BehaviorConstants.PAGED, BehaviorConstants.REPEAT, BehaviorConstants.TOGETHER,
+        BehaviorConstants.UNORDERED };
+
     /**
-     * Tests the JSON serialization.
-     *
-     * @throws JsonProcessingException If there is trouble serializing the behavior.
+     * Tests the fromLabel() method.
      */
     @Test
-    public final void testJsonSerialization() throws JsonProcessingException {
-        assertEquals(TestConstants.QUOTE + BehaviorConstants.TOGETHER + TestConstants.QUOTE,
-                JSON.getWriter().writeValueAsString(CollectionBehavior.TOGETHER));
+    public final void testFromLabel() {
+        assertEquals(CollectionBehavior.TOGETHER, CollectionBehavior.fromLabel(BehaviorConstants.TOGETHER).get());
     }
 
     /**
@@ -56,19 +53,22 @@ public class CollectionBehaviorTest {
     }
 
     /**
+     * Tests the JSON serialization.
+     *
+     * @throws JsonProcessingException If there is trouble serializing the behavior.
+     */
+    @Test
+    public final void testJsonSerialization() throws JsonProcessingException {
+        assertEquals(TestConstants.QUOTE + BehaviorConstants.TOGETHER + TestConstants.QUOTE,
+                JSON.getWriter().writeValueAsString(CollectionBehavior.TOGETHER));
+    }
+
+    /**
      * Tests the toString() method.
      */
     @Test
     public final void testToString() {
         assertEquals(BehaviorConstants.TOGETHER, CollectionBehavior.TOGETHER.toString());
-    }
-
-    /**
-     * Tests the fromLabel() method.
-     */
-    @Test
-    public final void testFromLabel() {
-        assertEquals(CollectionBehavior.TOGETHER, CollectionBehavior.fromLabel(BehaviorConstants.TOGETHER).get());
     }
 
     /**

@@ -92,12 +92,6 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
     }
 
     @Override
-    @JsonIgnore
-    public AccompanyingCanvas setMinter(final Minter aMinter) {
-        return (AccompanyingCanvas) super.setMinter(aMinter);
-    }
-
-    @Override
     @SafeVarargs
     public final AccompanyingCanvas paintWith(final boolean aChoice, final ContentResource<?>... aContentArray) {
         return (AccompanyingCanvas) super.paint(this, aChoice, aContentArray);
@@ -218,6 +212,12 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
     @Override
     public AccompanyingCanvas setMetadata(final Metadata... aMetadataArray) {
         return (AccompanyingCanvas) super.setMetadata(aMetadataArray);
+    }
+
+    @Override
+    @JsonIgnore
+    public AccompanyingCanvas setMinter(final Minter aMinter) {
+        return (AccompanyingCanvas) super.setMinter(aMinter);
     }
 
     @SuppressWarnings(JDK.UNCHECKED)
@@ -417,6 +417,11 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
                 aContentList.toArray(new ContentResource[0]));
     }
 
+    @Override
+    protected Object getJsonContext() {
+        return null;
+    }
+
     /**
      * Returns an AccompanyingCanvas from its JSON representation.
      *
@@ -430,11 +435,6 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
         } catch (final JsonProcessingException details) {
             throw new JsonParsingException(details);
         }
-    }
-
-    @Override
-    protected Object getJsonContext() {
-        return null;
     }
 
 }

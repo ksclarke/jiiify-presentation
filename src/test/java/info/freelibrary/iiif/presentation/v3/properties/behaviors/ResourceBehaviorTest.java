@@ -19,6 +19,14 @@ public class ResourceBehaviorTest {
     private static final String[] VALUES = { BehaviorConstants.HIDDEN };
 
     /**
+     * Tests the fromLabel() method.
+     */
+    @Test
+    public final void testFromLabel() {
+        assertEquals(ResourceBehavior.HIDDEN, ResourceBehavior.fromLabel(BehaviorConstants.HIDDEN).get());
+    }
+
+    /**
      * Test the JSON serialization.
      *
      * @throws JsonProcessingException If there is trouble serializing to JSON
@@ -35,14 +43,6 @@ public class ResourceBehaviorTest {
     @Test
     public final void testToString() {
         assertEquals(BehaviorConstants.HIDDEN, ResourceBehavior.HIDDEN.toString());
-    }
-
-    /**
-     * Tests the fromLabel() method.
-     */
-    @Test
-    public final void testFromLabel() {
-        assertEquals(ResourceBehavior.HIDDEN, ResourceBehavior.fromLabel(BehaviorConstants.HIDDEN).get());
     }
 
     /**

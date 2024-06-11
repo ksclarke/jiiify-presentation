@@ -38,9 +38,6 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 @SuppressWarnings({ PMD.TOO_MANY_STATIC_IMPORTS })
 public class BehaviorList extends ArrayList<Behavior> implements List<Behavior> {
 
-    /** The behavior list's <code>serialVersionUID</code>. */
-    private static final long serialVersionUID = -877432424934929199L;
-
     /**
      * A map of behavior disjoints.
      */
@@ -73,6 +70,9 @@ public class BehaviorList extends ArrayList<Behavior> implements List<Behavior> 
             new AbstractMap.SimpleEntry<>(THUMBNAIL_NAV, Set.of(SEQUENCE, NO_NAV)), //
             new AbstractMap.SimpleEntry<>(NO_NAV, Set.of(SEQUENCE, THUMBNAIL_NAV)) //
     );
+
+    /** The behavior list's <code>serialVersionUID</code>. */
+    private static final long serialVersionUID = -877432424934929199L;
 
     /** The list's type of <code>Behavior</code>. */
     private final Class<? extends Behavior> myBehaviorClass;

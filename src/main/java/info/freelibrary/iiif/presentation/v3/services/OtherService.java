@@ -49,12 +49,12 @@ public interface OtherService<T extends OtherService<T>> extends Service<T> {
         }
 
         @Override
-        public String toString() {
+        public String label() {
             return myValue;
         }
 
         @Override
-        public String label() {
+        public String toString() {
             return myValue;
         }
 

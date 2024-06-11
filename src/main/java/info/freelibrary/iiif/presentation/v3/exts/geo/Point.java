@@ -36,6 +36,11 @@ public class Point implements Geometry {
         myY = aPoint.getY();
     }
 
+    @Override
+    public Geometry.Type getType() {
+        return Geometry.Type.POINT;
+    }
+
     /**
      * Gets the point's X coordinate.
      *
@@ -52,11 +57,6 @@ public class Point implements Geometry {
      */
     public double getY() {
         return myY;
-    }
-
-    @Override
-    public Geometry.Type getType() {
-        return Geometry.Type.POINT;
     }
 
     /**

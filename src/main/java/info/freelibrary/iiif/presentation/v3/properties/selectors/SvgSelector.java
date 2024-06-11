@@ -40,6 +40,17 @@ public class SvgSelector implements Selector {
     }
 
     /**
+     * Gets the SVG value of the <code>SvgSelector</code>.
+     *
+     * @return An SVG document
+     */
+    @JsonGetter(JsonKeys.VALUE)
+    @JsonSerialize(using = SvgSerializer.class)
+    public Document getValue() {
+        return mySvgDocument;
+    }
+
+    /**
      * Sets the SVG value of the <code>SvgSelector</code>.
      *
      * @param anSvgDocument An SVG document
@@ -50,17 +61,6 @@ public class SvgSelector implements Selector {
     public SvgSelector setValue(final Document anSvgDocument) {
         mySvgDocument = anSvgDocument;
         return this;
-    }
-
-    /**
-     * Gets the SVG value of the <code>SvgSelector</code>.
-     *
-     * @return An SVG document
-     */
-    @JsonGetter(JsonKeys.VALUE)
-    @JsonSerialize(using = SvgSerializer.class)
-    public Document getValue() {
-        return mySvgDocument;
     }
 
 }

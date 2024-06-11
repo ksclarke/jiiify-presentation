@@ -14,17 +14,14 @@ import info.freelibrary.iiif.presentation.v3.services.ImageService3;
  */
 public class ImageContentTest {
 
+    /** A sample image format. */
+    private static final String IMAGE_PNG = "image/png";
+
     /** A sample image ID. */
     private static final String IMAGE_URI = "https://example.org/image/001.jpg";
 
-    /** A sample service URI. */
-    private static final String SERVICE_URI = "https://example.org/service";
-
     /** A test image service. */
-    private static final ImageService3 SERVICE = new ImageService3(SERVICE_URI);
-
-    /** A sample image format. */
-    private static final String IMAGE_PNG = "image/png";
+    private static final ImageService3 SERVICE = new ImageService3("https://example.org/service");
 
     /**
      * Tests image content constructor.
@@ -32,14 +29,6 @@ public class ImageContentTest {
     @Test
     public void testImageContentString() {
         assertEquals(IMAGE_URI, new ImageContent(IMAGE_URI).getID());
-    }
-
-    /**
-     * Tests setting and getting the image service.
-     */
-    @Test
-    public void testSetGetService() {
-        assertEquals(SERVICE, new ImageContent(IMAGE_URI).setServices(SERVICE).getServices().get(0));
     }
 
     /**
@@ -53,11 +42,11 @@ public class ImageContentTest {
     }
 
     /**
-     * Tests setting width.
+     * Tests setting and getting the image service.
      */
     @Test
-    public void testSetWidthInt() {
-        assertEquals(100, new ImageContent(IMAGE_URI).setWidthHeight(100, 200).getWidth());
+    public void testSetGetService() {
+        assertEquals(SERVICE, new ImageContent(IMAGE_URI).setServices(SERVICE).getServices().get(0));
     }
 
     /**
@@ -76,5 +65,13 @@ public class ImageContentTest {
         final Label label = new Label("MY LABEL");
 
         assertEquals(label, new ImageContent(IMAGE_URI).setLabel(label).getLabel());
+    }
+
+    /**
+     * Tests setting width.
+     */
+    @Test
+    public void testSetWidthInt() {
+        assertEquals(100, new ImageContent(IMAGE_URI).setWidthHeight(100, 200).getWidth());
     }
 }

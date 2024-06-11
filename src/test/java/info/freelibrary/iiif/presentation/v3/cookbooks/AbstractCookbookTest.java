@@ -25,6 +25,17 @@ public abstract class AbstractCookbookTest {
     /**
      * A method to retrieve a test fixture JSON document.
      *
+     * @param aFile The file to use as a test fixture
+     * @return The string representation of the JSON test fixture
+     * @throws IOException If there is trouble reading the test fixture
+     */
+    protected String getExpected(final File aFile) throws IOException {
+        return getExpected(aFile.getName());
+    }
+
+    /**
+     * A method to retrieve a test fixture JSON document.
+     *
      * @param aName The name of the file to use as a test fixture
      * @return The string representation of the JSON test fixture
      * @throws IOException If there is trouble reading the test fixture
@@ -32,14 +43,20 @@ public abstract class AbstractCookbookTest {
     protected abstract String getExpected(String aName) throws IOException;
 
     /**
-     * A method to retrieve a test fixture JSON document.
+     * Since the minter's randomly generated IDs will differ from the ones in the expected JSON file, we normalize IDs.
      *
-     * @param aFile The file to use as a test fixture
-     * @return The string representation of the JSON test fixture
-     * @throws IOException If there is trouble reading the test fixture
+     * @param aJsonString A JSON string whose IDs should be normalized
+     * @return The JSON string with its IDs normalized
+     * @throws IOException If there is trouble reading the JSON input
      */
-    protected String getExpected(final File aFile) throws IOException {
-        return getExpected(aFile.getName());
+    protected String normalizeIDs(final String aJsonString) throws IOException {
+        final ObjectNode jsonNode = (ObjectNode) JSON.getReader().readTree(aJsonString);
+
+        normalizeID(JsonKeys.ID, jsonNode.findParents(JsonKeys.ID));
+        normalizeID(JsonKeys.SOURCE, jsonNode.findParents(JsonKeys.SOURCE));
+        normalizeID(JsonKeys.TARGET, jsonNode.findParents(JsonKeys.TARGET));
+
+        return jsonNode.toPrettyString();
     }
 
     /**
@@ -59,23 +76,6 @@ public abstract class AbstractCookbookTest {
                 ((ObjectNode) node).put(JsonKeys.DURATION, Float.valueOf(duration));
             }
         }
-
-        return jsonNode.toPrettyString();
-    }
-
-    /**
-     * Since the minter's randomly generated IDs will differ from the ones in the expected JSON file, we normalize IDs.
-     *
-     * @param aJsonString A JSON string whose IDs should be normalized
-     * @return The JSON string with its IDs normalized
-     * @throws IOException If there is trouble reading the JSON input
-     */
-    protected String normalizeIDs(final String aJsonString) throws IOException {
-        final ObjectNode jsonNode = (ObjectNode) JSON.getReader().readTree(aJsonString);
-
-        normalizeID(JsonKeys.ID, jsonNode.findParents(JsonKeys.ID));
-        normalizeID(JsonKeys.SOURCE, jsonNode.findParents(JsonKeys.SOURCE));
-        normalizeID(JsonKeys.TARGET, jsonNode.findParents(JsonKeys.TARGET));
 
         return jsonNode.toPrettyString();
     }

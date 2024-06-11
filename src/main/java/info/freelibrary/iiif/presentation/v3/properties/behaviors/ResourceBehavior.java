@@ -29,6 +29,16 @@ public enum ResourceBehavior implements Behavior {
     }
 
     /**
+     * Gets the label of the resource behavior.
+     *
+     * @return The resource behavior's label
+     */
+    @Override
+    public String label() {
+        return myLabel;
+    }
+
+    /**
      * Gets a string representation of the resource behavior.
      *
      * @return A string representation of the resource behavior
@@ -36,16 +46,6 @@ public enum ResourceBehavior implements Behavior {
     @Override
     @JsonValue
     public String toString() {
-        return myLabel;
-    }
-
-    /**
-     * Gets the label of the resource behavior.
-     *
-     * @return The resource behavior's label
-     */
-    @Override
-    public String label() {
         return myLabel;
     }
 

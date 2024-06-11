@@ -29,14 +29,14 @@ public class ProviderTest extends AbstractTest {
     /** Test fixture used by tests. */
     private static final File TEST_FIXTURE = new File("src/test/resources/json/provider.json");
 
+    /** A test homepage. */
+    private Homepage myHomepage;
+
     /** A test ID. */
     private String myID;
 
     /** A test label. */
     private Label myLabel;
-
-    /** A test homepage. */
-    private Homepage myHomepage;
 
     /** A test logo. */
     private ImageContent myLogo;
@@ -57,6 +57,29 @@ public class ProviderTest extends AbstractTest {
     }
 
     /**
+     * Test method for {@link Provider#equals(Object)}.
+     */
+    @Test
+    public final void testEqualsObject() {
+        final Provider firstProvider = new Provider(myID, myLabel);
+        final Provider secondProvider = new Provider(myID, myLabel);
+
+        firstProvider.setHomepages(myHomepage).setLogos(myLogo).setSeeAlsoRefs(mySeeAlso);
+        secondProvider.setHomepages(myHomepage).setLogos(myLogo).setSeeAlsoRefs(mySeeAlso);
+
+        assertTrue(firstProvider.equals(secondProvider));
+    }
+
+    /**
+     * Test method for {@link Provider#toString()}.
+     */
+    @Test
+    public final void testFromToString() throws IOException {
+        final String testFixture = format(StringUtils.read(TEST_FIXTURE));
+        assertEquals(testFixture, Provider.fromJSON(testFixture).toString());
+    }
+
+    /**
      * Test method for {@link Provider#hashCode()}.
      */
     @Test
@@ -68,24 +91,6 @@ public class ProviderTest extends AbstractTest {
         secondProvider.setHomepages(myHomepage).setLogos(myLogo).setSeeAlsoRefs(mySeeAlso);
 
         assertEquals(firstProvider.hashCode(), secondProvider.hashCode());
-    }
-
-    /**
-     * Test method for {@link Provider#setID(URI)}.
-     */
-    @Test
-    public final void testSetGetID() {
-        final String id = myLoremIpsum.getUrl();
-        assertEquals(myID, new Provider(id, myLabel).setID(myID).getID());
-    }
-
-    /**
-     * Test method for {@link Provider#setLabel(Label)}.
-     */
-    @Test
-    public final void testSetGetLabelLabel() {
-        final Label label = new Label(myLoremIpsum.getTitle(5));
-        assertEquals(myLabel, new Provider(myID, label).setLabel(myLabel).getLabel());
     }
 
     /**
@@ -112,14 +117,21 @@ public class ProviderTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link Provider#setLogos(Logo[])}.
+     * Test method for {@link Provider#setID(URI)}.
      */
     @Test
-    public final void testSetLogosLogoArray() {
-        final Provider provider = new Provider(myID, myLabel);
+    public final void testSetGetID() {
+        final String id = myLoremIpsum.getUrl();
+        assertEquals(myID, new Provider(id, myLabel).setID(myID).getID());
+    }
 
-        assertEquals(0, provider.getLogos().size());
-        assertEquals(1, provider.setLogos(myLogo).getLogos().size());
+    /**
+     * Test method for {@link Provider#setLabel(Label)}.
+     */
+    @Test
+    public final void testSetGetLabelLabel() {
+        final Label label = new Label(myLoremIpsum.getTitle(5));
+        assertEquals(myLabel, new Provider(myID, label).setLabel(myLabel).getLabel());
     }
 
     /**
@@ -135,14 +147,14 @@ public class ProviderTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link Provider#setSeeAlsoRefs(SeeAlso[])}.
+     * Test method for {@link Provider#setLogos(Logo[])}.
      */
     @Test
-    public final void testSetSeeAlsoRefsSeeAlsoArray() {
+    public final void testSetLogosLogoArray() {
         final Provider provider = new Provider(myID, myLabel);
 
-        assertEquals(0, provider.getSeeAlsoRefs().size());
-        assertEquals(1, provider.setSeeAlsoRefs(mySeeAlso).getSeeAlsoRefs().size());
+        assertEquals(0, provider.getLogos().size());
+        assertEquals(1, provider.setLogos(myLogo).getLogos().size());
     }
 
     /**
@@ -158,25 +170,13 @@ public class ProviderTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link Provider#equals(Object)}.
+     * Test method for {@link Provider#setSeeAlsoRefs(SeeAlso[])}.
      */
     @Test
-    public final void testEqualsObject() {
-        final Provider firstProvider = new Provider(myID, myLabel);
-        final Provider secondProvider = new Provider(myID, myLabel);
+    public final void testSetSeeAlsoRefsSeeAlsoArray() {
+        final Provider provider = new Provider(myID, myLabel);
 
-        firstProvider.setHomepages(myHomepage).setLogos(myLogo).setSeeAlsoRefs(mySeeAlso);
-        secondProvider.setHomepages(myHomepage).setLogos(myLogo).setSeeAlsoRefs(mySeeAlso);
-
-        assertTrue(firstProvider.equals(secondProvider));
-    }
-
-    /**
-     * Test method for {@link Provider#toString()}.
-     */
-    @Test
-    public final void testFromToString() throws IOException {
-        final String testFixture = format(StringUtils.read(TEST_FIXTURE));
-        assertEquals(testFixture, Provider.fromJSON(testFixture).toString());
+        assertEquals(0, provider.getSeeAlsoRefs().size());
+        assertEquals(1, provider.setSeeAlsoRefs(mySeeAlso).getSeeAlsoRefs().size());
     }
 }

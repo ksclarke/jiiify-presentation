@@ -23,14 +23,21 @@ public class Tile {
     private int myHeight;
 
     /**
+     * My scale factors.
+     */
+    private int[] myScaleFactors;
+
+    /**
      * My tile width.
      */
     private int myWidth;
 
     /**
-     * My scale factors.
+     * Creates a new Image API tile.
      */
-    private int[] myScaleFactors;
+    public Tile() {
+        // This constructor is intentionally empty
+    }
 
     /**
      * Creates a new Image API tile.
@@ -46,10 +53,36 @@ public class Tile {
     }
 
     /**
-     * Creates a new Image API tile.
+     * Gets the tile's height.
+     *
+     * @return The tile height
      */
-    public Tile() {
-        // This constructor is intentionally empty
+    @JsonGetter(JsonKeys.HEIGHT)
+    @JsonInclude(Include.NON_DEFAULT)
+    public int getHeight() {
+        return myHeight;
+    }
+
+    /**
+     * Gets the tile's scale factors.
+     *
+     * @return The tile's scale factors
+     */
+    @JsonGetter(ImageAPI.SCALE_FACTORS)
+    @JsonInclude(Include.NON_EMPTY)
+    public int[] getScaleFactors() {
+        return Arrays.copyOf(myScaleFactors, myScaleFactors.length);
+    }
+
+    /**
+     * Gets the tile's width.
+     *
+     * @return A tile width
+     */
+    @JsonGetter(JsonKeys.WIDTH)
+    @JsonInclude(Include.NON_DEFAULT)
+    public int getWidth() {
+        return myWidth;
     }
 
     /**
@@ -65,40 +98,6 @@ public class Tile {
     }
 
     /**
-     * Gets the tile's height.
-     *
-     * @return The tile height
-     */
-    @JsonGetter(JsonKeys.HEIGHT)
-    @JsonInclude(Include.NON_DEFAULT)
-    public int getHeight() {
-        return myHeight;
-    }
-
-    /**
-     * Sets the tile's width.
-     *
-     * @param aWidth A tile width
-     * @return This tile
-     */
-    @JsonSetter(JsonKeys.WIDTH)
-    public Tile setWidth(final int aWidth) {
-        myWidth = aWidth;
-        return this;
-    }
-
-    /**
-     * Gets the tile's width.
-     *
-     * @return A tile width
-     */
-    @JsonGetter(JsonKeys.WIDTH)
-    @JsonInclude(Include.NON_DEFAULT)
-    public int getWidth() {
-        return myWidth;
-    }
-
-    /**
      * Sets the tile's scale factors.
      *
      * @param aScaleFactorArray A tile's scale factors
@@ -111,13 +110,14 @@ public class Tile {
     }
 
     /**
-     * Gets the tile's scale factors.
+     * Sets the tile's width.
      *
-     * @return The tile's scale factors
+     * @param aWidth A tile width
+     * @return This tile
      */
-    @JsonGetter(ImageAPI.SCALE_FACTORS)
-    @JsonInclude(Include.NON_EMPTY)
-    public int[] getScaleFactors() {
-        return Arrays.copyOf(myScaleFactors, myScaleFactors.length);
+    @JsonSetter(JsonKeys.WIDTH)
+    public Tile setWidth(final int aWidth) {
+        myWidth = aWidth;
+        return this;
     }
 }

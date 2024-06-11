@@ -10,23 +10,23 @@ import org.junit.Test;
  */
 public class ImageApiSelectorTest {
 
-    /** A test path. */
-    private static final String PATH = "/pct:0,0,10,10/pct:90/90/gray.png";
+    /** A constant for default. */
+    private static final String DEFAULT = "default";
 
     /** A constant for full. */
     private static final String FULL = "full";
 
+    /** A constant for jpg. */
+    private static final String JPG = "jpg";
+
     /** A constant for max. */
     private static final String MAX = "max";
 
+    /** A test path. */
+    private static final String PATH = "/pct:0,0,10,10/pct:90/90/gray.png";
+
     /** A constant for zero. */
     private static final String ZERO = "0";
-
-    /** A constant for default. */
-    private static final String DEFAULT = "default";
-
-    /** A constant for jpg. */
-    private static final String JPG = "jpg";
 
     /**
      * Tests the full constructor.
@@ -57,27 +57,11 @@ public class ImageApiSelectorTest {
     }
 
     /**
-     * Tests setting the region.
+     * Tests setting the format.
      */
     @Test
-    public void testSetRegion() {
-        assertEquals(FULL, new ImageApiSelector(PATH).setRegion(FULL).getRegion().get());
-    }
-
-    /**
-     * Tests setting the size.
-     */
-    @Test
-    public void testSetSize() {
-        assertEquals(FULL, new ImageApiSelector(PATH).setSize(FULL).getSize().get());
-    }
-
-    /**
-     * Tests setting the rotation.
-     */
-    @Test
-    public void testSetRotation() {
-        assertEquals(ZERO, new ImageApiSelector(PATH).setRotation(ZERO).getRotation().get());
+    public void testSetFormat() {
+        assertEquals(JPG, new ImageApiSelector(PATH).setFormat(JPG).getFormat().get());
     }
 
     /**
@@ -89,11 +73,27 @@ public class ImageApiSelectorTest {
     }
 
     /**
-     * Tests setting the format.
+     * Tests setting the region.
      */
     @Test
-    public void testSetFormat() {
-        assertEquals(JPG, new ImageApiSelector(PATH).setFormat(JPG).getFormat().get());
+    public void testSetRegion() {
+        assertEquals(FULL, new ImageApiSelector(PATH).setRegion(FULL).getRegion().get());
+    }
+
+    /**
+     * Tests setting the rotation.
+     */
+    @Test
+    public void testSetRotation() {
+        assertEquals(ZERO, new ImageApiSelector(PATH).setRotation(ZERO).getRotation().get());
+    }
+
+    /**
+     * Tests setting the size.
+     */
+    @Test
+    public void testSetSize() {
+        assertEquals(FULL, new ImageApiSelector(PATH).setSize(FULL).getSize().get());
     }
 
     /**

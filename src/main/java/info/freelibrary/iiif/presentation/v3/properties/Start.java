@@ -30,14 +30,14 @@ public class Start {
     private String myID;
 
     /**
-     * The start source.
-     */
-    private String mySource;
-
-    /**
      * The start selector.
      */
     private Selector mySelector;
+
+    /**
+     * The start source.
+     */
+    private String mySource;
 
     /**
      * Creates a canvas start from the supplied ID.
@@ -70,18 +70,6 @@ public class Start {
     }
 
     /**
-     * Sets the start ID.
-     *
-     * @param aID A start ID
-     * @return This start
-     */
-    @JsonSetter(JsonKeys.ID)
-    public Start setID(final String aID) {
-        myID = UriUtils.checkID(aID, true);
-        return this;
-    }
-
-    /**
      * Gets the ID for this start.
      *
      * @return This start's ID
@@ -92,6 +80,28 @@ public class Start {
     }
 
     /**
+     * Gets a selector.
+     *
+     * @return A selector
+     */
+    @JsonGetter(JsonKeys.SELECTOR)
+    @JsonInclude(Include.NON_ABSENT)
+    public Optional<Selector> getSelector() {
+        return Optional.ofNullable(mySelector);
+    }
+
+    /**
+     * Gets the start source.
+     *
+     * @return The start source
+     */
+    @JsonGetter(JsonKeys.SOURCE)
+    @JsonInclude(Include.NON_ABSENT)
+    public Optional<String> getSource() {
+        return Optional.ofNullable(mySource);
+    }
+
+    /**
      * Gets the type of SpecificResource.
      *
      * @return The start type
@@ -99,6 +109,18 @@ public class Start {
     @JsonGetter(JsonKeys.TYPE)
     public String getType() {
         return mySource == null ? ResourceTypes.CANVAS : ResourceTypes.SPECIFIC_RESOURCE;
+    }
+
+    /**
+     * Sets the start ID.
+     *
+     * @param aID A start ID
+     * @return This start
+     */
+    @JsonSetter(JsonKeys.ID)
+    public Start setID(final String aID) {
+        myID = UriUtils.checkID(aID, true);
+        return this;
     }
 
     /**
@@ -116,25 +138,15 @@ public class Start {
     }
 
     /**
-     * Gets the start source.
+     * Sets the start's selector. This is private because it's only used by Jackson's deserialization.
      *
-     * @return The start source
+     * @param aSelector A selector
+     * @return This start
      */
-    @JsonGetter(JsonKeys.SOURCE)
-    @JsonInclude(Include.NON_ABSENT)
-    public Optional<String> getSource() {
-        return Optional.ofNullable(mySource);
-    }
-
-    /**
-     * Gets a selector.
-     *
-     * @return A selector
-     */
-    @JsonGetter(JsonKeys.SELECTOR)
-    @JsonInclude(Include.NON_ABSENT)
-    public Optional<Selector> getSelector() {
-        return Optional.ofNullable(mySelector);
+    @JsonSetter(JsonKeys.SELECTOR)
+    private Start setSelector(final Selector aSelector) {
+        mySelector = aSelector;
+        return this;
     }
 
     /**
@@ -146,18 +158,6 @@ public class Start {
     @JsonSetter(JsonKeys.SOURCE)
     private Start setSource(final String aSource) {
         mySource = UriUtils.checkID(aSource, true);
-        return this;
-    }
-
-    /**
-     * Sets the start's selector. This is private because it's only used by Jackson's deserialization.
-     *
-     * @param aSelector A selector
-     * @return This start
-     */
-    @JsonSetter(JsonKeys.SELECTOR)
-    private Start setSelector(final Selector aSelector) {
-        mySelector = aSelector;
         return this;
     }
 

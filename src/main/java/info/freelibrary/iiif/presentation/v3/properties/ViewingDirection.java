@@ -14,6 +14,9 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public enum ViewingDirection implements Labeled {
 
+    /** A bottom-to-top viewing direction. */
+    BOTTOM_TO_TOP("bottom-to-top"),
+
     /** A left-to-right viewing direction. */
     LEFT_TO_RIGHT("left-to-right"),
 
@@ -21,10 +24,7 @@ public enum ViewingDirection implements Labeled {
     RIGHT_TO_LEFT("right-to-left"),
 
     /** A top-to-bottom viewing direction. */
-    TOP_TO_BOTTOM("top-to-bottom"),
-
-    /** A bottom-to-top viewing direction. */
-    BOTTOM_TO_TOP("bottom-to-top");
+    TOP_TO_BOTTOM("top-to-bottom");
 
     /** The viewing direction's logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(ViewingDirection.class, MessageCodes.BUNDLE);
@@ -42,6 +42,16 @@ public enum ViewingDirection implements Labeled {
     }
 
     /**
+     * Gets the viewingDirection label.
+     *
+     * @return the viewingDirection label
+     */
+    @Override
+    public String label() {
+        return myValue;
+    }
+
+    /**
      * Gets the string representation of the viewing direction.
      *
      * @return A string representation of the ViewingDirection
@@ -49,16 +59,6 @@ public enum ViewingDirection implements Labeled {
     @Override
     @JsonValue
     public String toString() {
-        return myValue;
-    }
-
-    /**
-     * Gets the viewingDirection label.
-     *
-     * @return the viewingDirection label
-     */
-    @Override
-    public String label() {
         return myValue;
     }
 

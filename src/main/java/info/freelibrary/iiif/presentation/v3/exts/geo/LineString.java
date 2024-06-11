@@ -16,12 +16,12 @@ public class LineString implements Geometry {
     private final Point[] myPoints;
 
     /**
-     * Creates a new <code>LineString</code> from the supplied points array.
+     * Creates a new <code>LineString</code> from the supplied one.
      *
-     * @param aPointsArray An array of points
+     * @param aLineString A source <code>LineString</code>
      */
-    public LineString(final Point... aPointsArray) {
-        myPoints = aPointsArray.clone();
+    public LineString(final LineString aLineString) {
+        myPoints = Arrays.copyOf(aLineString.myPoints, aLineString.length());
     }
 
     /**
@@ -34,12 +34,17 @@ public class LineString implements Geometry {
     }
 
     /**
-     * Creates a new <code>LineString</code> from the supplied one.
+     * Creates a new <code>LineString</code> from the supplied points array.
      *
-     * @param aLineString A source <code>LineString</code>
+     * @param aPointsArray An array of points
      */
-    public LineString(final LineString aLineString) {
-        myPoints = Arrays.copyOf(aLineString.myPoints, aLineString.length());
+    public LineString(final Point... aPointsArray) {
+        myPoints = aPointsArray.clone();
+    }
+
+    @Override
+    public Geometry.Type getType() {
+        return Geometry.Type.LINESTRING;
     }
 
     /**
@@ -60,24 +65,6 @@ public class LineString implements Geometry {
      */
     public double getY(final int aIndex) {
         return myPoints[aIndex].getY();
-    }
-
-    /**
-     * Gets the number of points in the line.
-     *
-     * @return The number of points in the line
-     */
-    public int length() {
-        return myPoints.length;
-    }
-
-    /**
-     * Gets a stream of the <code>LineString</code>'s points.
-     *
-     * @return A stream of the <code>LineString</code>'s points
-     */
-    public Stream<Point> stream() {
-        return Arrays.stream(myPoints);
     }
 
     /**
@@ -146,9 +133,22 @@ public class LineString implements Geometry {
         };
     }
 
-    @Override
-    public Geometry.Type getType() {
-        return Geometry.Type.LINESTRING;
+    /**
+     * Gets the number of points in the line.
+     *
+     * @return The number of points in the line
+     */
+    public int length() {
+        return myPoints.length;
+    }
+
+    /**
+     * Gets a stream of the <code>LineString</code>'s points.
+     *
+     * @return A stream of the <code>LineString</code>'s points
+     */
+    public Stream<Point> stream() {
+        return Arrays.stream(myPoints);
     }
 
     /**

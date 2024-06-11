@@ -41,14 +41,14 @@ public final class SkolemIriFactory {
     private static SkolemIriFactory myFactory;
 
     /**
-     * The factory's well-known base.
-     */
-    private String myWellKnownBase;
-
-    /**
      * Whether the factory creates serializable IDs.
      */
     private boolean hasSerializableIDs;
+
+    /**
+     * The factory's well-known base.
+     */
+    private String myWellKnownBase;
 
     /**
      * Creates a new Skolem IRI factory.
@@ -58,16 +58,46 @@ public final class SkolemIriFactory {
     }
 
     /**
-     * Gets a new Skolem IRI factory.
+     * Sets whether the IDs created by the factory should be serialized into JSON outputs.
      *
-     * @return A Skolem IRI factory
+     * @param aBoolFlag True if IDs should be serialized; else, false
+     * @return This SkolemIriFactory
      */
-    public static SkolemIriFactory getFactory() {
-        if (myFactory == null) {
-            myFactory = new SkolemIriFactory();
+    public SkolemIriFactory createSerializableIDs(final boolean aBoolFlag) {
+        hasSerializableIDs = aBoolFlag;
+        return this;
+    }
+
+    /**
+     * Returns whether the IDs created by the factory should be serialized into JSON outputs.
+     *
+     * @return True if IDs should be serialized; else, false
+     */
+    public boolean createsSerializableIDs() {
+        return hasSerializableIDs;
+    }
+
+    /**
+     * Gets a new Skolem IRI for use as an ID (most commonly for the ID of a
+     * <a href="https://www.w3.org/TR/annotation-model/#embedded-textual-body">TextualBody</a>).
+     *
+     * @return The next Skolem IRI
+     */
+    public URI getSkolemIRI() {
+        if (myWellKnownBase == null) {
+            return URI.create(UUID.randomUUID().toString());
         }
 
-        return myFactory;
+        return URI.create(myWellKnownBase + COMPONENT_START + UUID.randomUUID().toString());
+    }
+
+    /**
+     * Gets the well-known Skolem IRI base that the factory uses.
+     *
+     * @return The well-known Skolem IRI base, if there is one set
+     */
+    public Optional<String> getWellKnownBase() {
+        return Optional.ofNullable(myWellKnownBase);
     }
 
     /**
@@ -88,45 +118,15 @@ public final class SkolemIriFactory {
     }
 
     /**
-     * Gets the well-known Skolem IRI base that the factory uses.
+     * Gets a new Skolem IRI factory.
      *
-     * @return The well-known Skolem IRI base, if there is one set
+     * @return A Skolem IRI factory
      */
-    public Optional<String> getWellKnownBase() {
-        return Optional.ofNullable(myWellKnownBase);
-    }
-
-    /**
-     * Gets a new Skolem IRI for use as an ID (most commonly for the ID of a
-     * <a href="https://www.w3.org/TR/annotation-model/#embedded-textual-body">TextualBody</a>).
-     *
-     * @return The next Skolem IRI
-     */
-    public URI getSkolemIRI() {
-        if (myWellKnownBase == null) {
-            return URI.create(UUID.randomUUID().toString());
+    public static SkolemIriFactory getFactory() {
+        if (myFactory == null) {
+            myFactory = new SkolemIriFactory();
         }
 
-        return URI.create(myWellKnownBase + COMPONENT_START + UUID.randomUUID().toString());
-    }
-
-    /**
-     * Returns whether the IDs created by the factory should be serialized into JSON outputs.
-     *
-     * @return True if IDs should be serialized; else, false
-     */
-    public boolean createsSerializableIDs() {
-        return hasSerializableIDs;
-    }
-
-    /**
-     * Sets whether the IDs created by the factory should be serialized into JSON outputs.
-     *
-     * @param aBoolFlag True if IDs should be serialized; else, false
-     * @return This SkolemIriFactory
-     */
-    public SkolemIriFactory createSerializableIDs(final boolean aBoolFlag) {
-        hasSerializableIDs = aBoolFlag;
-        return this;
+        return myFactory;
     }
 }

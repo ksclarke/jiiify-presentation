@@ -12,11 +12,6 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  */
 public interface FragmentSelector extends Selector {
 
-    @Override
-    default String getType() {
-        return FragmentSelector.class.getSimpleName();
-    }
-
     /**
      * Gets the URI of the standard to which this fragment selector conforms.
      *
@@ -24,6 +19,11 @@ public interface FragmentSelector extends Selector {
      */
     @JsonProperty(JsonKeys.CONFORMS_TO)
     URI getConformsTo();
+
+    @Override
+    default String getType() {
+        return FragmentSelector.class.getSimpleName();
+    }
 
     /**
      * Gets the value of the fragment selector.

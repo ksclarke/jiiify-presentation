@@ -21,19 +21,11 @@ import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
  */
 public class SpecificResourceTest extends AbstractTest {
 
-    /** The audio content selector. */
-    private static final Selector SELECTOR = new AudioContentSelector();
-
     /** A JSON test fixture. */
     private static final String JSON;
 
-    static {
-        try {
-            JSON = StringUtils.read(new File("src/test/resources/json/specificresource.json"));
-        } catch (final IOException details) {
-            throw new I18nRuntimeException(details);
-        }
-    }
+    /** The audio content selector. */
+    private static final Selector SELECTOR = new AudioContentSelector();
 
     /** The test ID. */
     private String myID;
@@ -63,19 +55,12 @@ public class SpecificResourceTest extends AbstractTest {
     }
 
     /**
-     * Tests String constructor.
+     * Tests {@link SpecificResource#fromJSON(String) fromString} method.
      */
     @Test
-    public final void testSpecificResourceIdStringSourceStringSelector() {
-        new SpecificResource(myID, myOtherID, SELECTOR);
-    }
-
-    /**
-     * Tests {@link SpecificResource#setID(String) setID} method.
-     */
-    @Test
-    public final void testSetIDString() {
-        assertEquals(myID, new SpecificResource(myID, myOtherID, SELECTOR).getID());
+    public final void testFromString() {
+        final String json = TestUtils.format(StringUtils.format(JSON, myID, myOtherID));
+        assertEquals(json, SpecificResource.fromJSON(json).toString());
     }
 
     /**
@@ -87,6 +72,14 @@ public class SpecificResourceTest extends AbstractTest {
     }
 
     /**
+     * Tests {@link SpecificResource#setID(String) setID} method.
+     */
+    @Test
+    public final void testSetIDString() {
+        assertEquals(myID, new SpecificResource(myID, myOtherID, SELECTOR).getID());
+    }
+
+    /**
      * Tests {@link SpecificResource#setSelector(Selector) setSelector} method.
      */
     @Test
@@ -95,12 +88,19 @@ public class SpecificResourceTest extends AbstractTest {
     }
 
     /**
-     * Tests {@link SpecificResource#fromJSON(String) fromString} method.
+     * Tests String constructor.
      */
     @Test
-    public final void testFromString() {
-        final String json = TestUtils.format(StringUtils.format(JSON, myID, myOtherID));
-        assertEquals(json, SpecificResource.fromJSON(json).toString());
+    public final void testSpecificResourceIdStringSourceStringSelector() {
+        new SpecificResource(myID, myOtherID, SELECTOR);
+    }
+
+    static {
+        try {
+            JSON = StringUtils.read(new File("src/test/resources/json/specificresource.json"));
+        } catch (final IOException details) {
+            throw new I18nRuntimeException(details);
+        }
     }
 
 }

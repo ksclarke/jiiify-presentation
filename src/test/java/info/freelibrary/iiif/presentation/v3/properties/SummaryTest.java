@@ -10,11 +10,11 @@ import org.junit.Test;
  */
 public class SummaryTest {
 
-    /** A test summary value. */
-    private static final String VALUE = "asdf";
-
     /** A test summary language. */
     private static final String LANG = "none";
+
+    /** A test summary value. */
+    private static final String VALUE = "asdf";
 
     /**
      * Tests a summary constructor.

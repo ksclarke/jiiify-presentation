@@ -19,31 +19,21 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 public class Value extends I18nProperty<Value> {
 
     /**
-     * Creates a value using the 'none' language tag.
-     *
-     * @param aValue A value
-     */
-    public Value(final String aValue) {
-        this(new I18n(I18n.DEFAULT_LANG, aValue, true));
-    }
-
-    /**
-     * Creates a value using the supplied language tag and value.
-     *
-     * @param aLangTag A language tag
-     * @param aValue A value of the label
-     */
-    public Value(final String aLangTag, final String aValue) {
-        this(new I18n(aLangTag, aValue, true));
-    }
-
-    /**
      * Creates a value from the supplied internationalization(s).
      *
      * @param aI18nArray An array of internationalizations for the value
      */
     public Value(final I18n... aI18nArray) {
         super(aI18nArray);
+    }
+
+    /**
+     * Creates a value using the 'none' language tag.
+     *
+     * @param aValue A value
+     */
+    public Value(final String aValue) {
+        this(new I18n(I18n.DEFAULT_LANG, aValue, true));
     }
 
     /**
@@ -54,6 +44,16 @@ public class Value extends I18nProperty<Value> {
      */
     public Value(final String... aDataArray) {
         super(I18nUtils.parseArray(true, aDataArray));
+    }
+
+    /**
+     * Creates a value using the supplied language tag and value.
+     *
+     * @param aLangTag A language tag
+     * @param aValue A value of the label
+     */
+    public Value(final String aLangTag, final String aValue) {
+        this(new I18n(aLangTag, aValue, true));
     }
 
     /**

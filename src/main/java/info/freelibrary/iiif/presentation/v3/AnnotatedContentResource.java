@@ -24,18 +24,18 @@ public interface AnnotatedContentResource<T extends AnnotatedContentResource<T>>
     /**
      * Sets the content resource's annotations.
      *
-     * @param aAnnotationList A list of annotations
-     * @return The content resource
-     */
-    T setAnnotations(List<AnnotationPage<WebAnnotation>> aAnnotationList);
-
-    /**
-     * Sets the content resource's annotations.
-     *
      * @param aAnnotationArray An array of annotations
      * @return The content resource
      */
     @SuppressWarnings(JDK.UNCHECKED)
     T setAnnotations(AnnotationPage<WebAnnotation>... aAnnotationArray);
+
+    /**
+     * Sets the content resource's annotations.
+     *
+     * @param aAnnotationList A list of annotations
+     * @return The content resource
+     */
+    T setAnnotations(List<AnnotationPage<WebAnnotation>> aAnnotationList);
 
 }

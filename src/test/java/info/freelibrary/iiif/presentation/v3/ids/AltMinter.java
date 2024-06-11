@@ -21,8 +21,13 @@ public final class AltMinter implements Minter {
     }
 
     @Override
-    public String getManifestID() {
-        return myManifestID;
+    public String getAnnotationID() {
+        return AltMinter.class.getSimpleName();
+    }
+
+    @Override
+    public <C extends CanvasResource<C>> String getAnnotationPageID(final CanvasResource<C> aCanvasResource) {
+        return AltMinter.class.getSimpleName();
     }
 
     @Override
@@ -31,13 +36,8 @@ public final class AltMinter implements Minter {
     }
 
     @Override
-    public String getAnnotationID() {
-        return AltMinter.class.getSimpleName();
-    }
-
-    @Override
-    public <C extends CanvasResource<C>> String getAnnotationPageID(final CanvasResource<C> aCanvasResource) {
-        return AltMinter.class.getSimpleName();
+    public String getManifestID() {
+        return myManifestID;
     }
 
     @Override
@@ -51,12 +51,12 @@ public final class AltMinter implements Minter {
     }
 
     @Override
-    public int size() {
+    public int remaining() {
         return Integer.MAX_VALUE;
     }
 
     @Override
-    public int remaining() {
+    public int size() {
         return Integer.MAX_VALUE;
     }
 }

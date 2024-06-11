@@ -16,29 +16,29 @@ public enum RangeBehavior implements Behavior {
     /** An auto-advance range behavior. */
     AUTO_ADVANCE(BehaviorConstants.AUTO_ADVANCE),
 
-    /** A no-auto-advance range behavior. */
-    NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE),
+    /** A continuous range behavior. */
+    CONTINUOUS(BehaviorConstants.CONTINUOUS),
 
     /** An individual range behavior. */
     INDIVIDUALS(BehaviorConstants.INDIVIDUALS),
 
+    /** A no-auto-advance range behavior. */
+    NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE),
+
     /** A no-nav range behavior. */
     NO_NAV(BehaviorConstants.NO_NAV),
-
-    /** A continuous range behavior. */
-    CONTINUOUS(BehaviorConstants.CONTINUOUS),
 
     /** A paged range behavior. */
     PAGED(BehaviorConstants.PAGED),
 
-    /** An unordered range behavior. */
-    UNORDERED(BehaviorConstants.UNORDERED),
+    /** A sequence range behavior. */
+    SEQUENCE(BehaviorConstants.SEQUENCE),
 
     /** A thumbnail-nav range behavior. */
     THUMBNAIL_NAV(BehaviorConstants.THUMBNAIL_NAV),
 
-    /** A sequence range behavior. */
-    SEQUENCE(BehaviorConstants.SEQUENCE);
+    /** An unordered range behavior. */
+    UNORDERED(BehaviorConstants.UNORDERED);
 
     /** The range behavior's label. */
     private final String myLabel;
@@ -53,6 +53,16 @@ public enum RangeBehavior implements Behavior {
     }
 
     /**
+     * Gets the label of the range behavior.
+     *
+     * @return The range behavior's label
+     */
+    @Override
+    public String label() {
+        return myLabel;
+    }
+
+    /**
      * Gets a string representation of the range behavior.
      *
      * @return A string representation of the range behavior
@@ -60,16 +70,6 @@ public enum RangeBehavior implements Behavior {
     @Override
     @JsonValue
     public String toString() {
-        return myLabel;
-    }
-
-    /**
-     * Gets the label of the range behavior.
-     *
-     * @return The range behavior's label
-     */
-    @Override
-    public String label() {
         return myLabel;
     }
 

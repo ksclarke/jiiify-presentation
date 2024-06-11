@@ -39,9 +39,29 @@ public class MediaFragmentSelector implements FragmentSelector {
     private static final Logger LOGGER = LoggerFactory.getLogger(MediaFragmentSelector.class, MessageCodes.BUNDLE);
 
     /**
+     * The selector's end.
+     */
+    private float myEnd;
+
+    /**
+     * The selector's height.
+     */
+    private int myHeight;
+
+    /**
      * The selector's media fragment.
      */
     private final MediaFragment myMediaFragment;
+
+    /**
+     * The selector's start.
+     */
+    private float myStart;
+
+    /**
+     * The selector's width.
+     */
+    private int myWidth;
 
     /**
      * The selector's x-coordinate.
@@ -54,51 +74,27 @@ public class MediaFragmentSelector implements FragmentSelector {
     private int myY;
 
     /**
-     * The selector's width.
-     */
-    private int myWidth;
-
-    /**
-     * The selector's height.
-     */
-    private int myHeight;
-
-    /**
-     * The selector's start.
-     */
-    private float myStart;
-
-    /**
-     * The selector's end.
-     */
-    private float myEnd;
-
-    /**
-     * Creates a media fragment selector from the supplied string.
+     * Creates a media fragment selector from the supplied temporal dimension.
      *
-     * @param aFragment A media fragment string
-     * @throws IllegalArgumentException If the supplied string isn't a valid media fragment
+     * @param aEnd The end time of an interval in seconds
+     * @throws IllegalArgumentException If the supplied dimension cannot be used to construct a valid media fragment
      */
-    public MediaFragmentSelector(final String aFragment) {
-        try {
-            final String fragmentValue = aFragment.charAt(0) == '#' ? aFragment.substring(1) : aFragment;
+    public MediaFragmentSelector(final EndTime aEnd) {
+        this(null, aEnd);
+    }
 
-            myMediaFragment = new FragmentParser(new StringReader(fragmentValue)).run(MediaFragment.Type.FRAGMENT);
-        } catch (final ParseException details) {
-            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_042, aFragment, details));
-        }
-
-        if (myMediaFragment.hasSpatialFragment()) {
-            final SpatialFragment sf = myMediaFragment.getSpatialFragment();
-
-            setXYWidthHeight((int) sf.getX(), (int) sf.getY(), (int) sf.getWidth(), (int) sf.getHeight());
-        }
-
-        if (myMediaFragment.hasTemporalFragment()) {
-            final TemporalFragment<?> tf = myMediaFragment.getTemporalFragment();
-
-            setStartEnd((float) tf.getStart().getValue(), (float) tf.getEnd().getValue());
-        }
+    /**
+     * Creates a media fragment selector from the supplied spatio-temporal dimensions.
+     *
+     * @param aX A x-coordinate
+     * @param aY A y-coordinate
+     * @param aWidth A width value
+     * @param aHeight a A height value
+     * @param aEnd The end time of an interval in seconds
+     * @throws IllegalArgumentException If the supplied dimensions cannot be used to construct a valid media fragment
+     */
+    public MediaFragmentSelector(final EndTime aEnd, final int aX, final int aY, final int aWidth, final int aHeight) {
+        this(null, aEnd, aX, aY, aWidth, aHeight);
     }
 
     /**
@@ -117,6 +113,16 @@ public class MediaFragmentSelector implements FragmentSelector {
     }
 
     /**
+     * Creates a media fragment selector from the supplied temporal dimension.
+     *
+     * @param aStart The start time of an interval in seconds
+     * @throws IllegalArgumentException If the supplied dimension cannot be used to construct a valid media fragment
+     */
+    public MediaFragmentSelector(final StartTime aStart) {
+        this(aStart, null);
+    }
+
+    /**
      * Creates a media fragment selector from the supplied temporal dimensions.
      *
      * @param aStart The start time of an interval in seconds
@@ -129,26 +135,6 @@ public class MediaFragmentSelector implements FragmentSelector {
 
         setStartEnd((float) myMediaFragment.getTemporalFragment().getStart().getValue(),
                 (float) myMediaFragment.getTemporalFragment().getEnd().getValue());
-    }
-
-    /**
-     * Creates a media fragment selector from the supplied temporal dimension.
-     *
-     * @param aStart The start time of an interval in seconds
-     * @throws IllegalArgumentException If the supplied dimension cannot be used to construct a valid media fragment
-     */
-    public MediaFragmentSelector(final StartTime aStart) {
-        this(aStart, null);
-    }
-
-    /**
-     * Creates a media fragment selector from the supplied temporal dimension.
-     *
-     * @param aEnd The end time of an interval in seconds
-     * @throws IllegalArgumentException If the supplied dimension cannot be used to construct a valid media fragment
-     */
-    public MediaFragmentSelector(final EndTime aEnd) {
-        this(null, aEnd);
     }
 
     /**
@@ -189,17 +175,185 @@ public class MediaFragmentSelector implements FragmentSelector {
     }
 
     /**
-     * Creates a media fragment selector from the supplied spatio-temporal dimensions.
+     * Creates a media fragment selector from the supplied string.
      *
-     * @param aX A x-coordinate
-     * @param aY A y-coordinate
-     * @param aWidth A width value
-     * @param aHeight a A height value
-     * @param aEnd The end time of an interval in seconds
-     * @throws IllegalArgumentException If the supplied dimensions cannot be used to construct a valid media fragment
+     * @param aFragment A media fragment string
+     * @throws IllegalArgumentException If the supplied string isn't a valid media fragment
      */
-    public MediaFragmentSelector(final EndTime aEnd, final int aX, final int aY, final int aWidth, final int aHeight) {
-        this(null, aEnd, aX, aY, aWidth, aHeight);
+    public MediaFragmentSelector(final String aFragment) {
+        try {
+            final String fragmentValue = aFragment.charAt(0) == '#' ? aFragment.substring(1) : aFragment;
+
+            myMediaFragment = new FragmentParser(new StringReader(fragmentValue)).run(MediaFragment.Type.FRAGMENT);
+        } catch (final ParseException details) {
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_042, aFragment, details));
+        }
+
+        if (myMediaFragment.hasSpatialFragment()) {
+            final SpatialFragment sf = myMediaFragment.getSpatialFragment();
+
+            setXYWidthHeight((int) sf.getX(), (int) sf.getY(), (int) sf.getWidth(), (int) sf.getHeight());
+        }
+
+        if (myMediaFragment.hasTemporalFragment()) {
+            final TemporalFragment<?> tf = myMediaFragment.getTemporalFragment();
+
+            setStartEnd((float) tf.getStart().getValue(), (float) tf.getEnd().getValue());
+        }
+    }
+
+    @Override
+    public URI getConformsTo() {
+        return MEDIA_FRAGMENT_SPECIFICATION_URI;
+    }
+
+    /**
+     * Gets the temporal duration for this selector.
+     *
+     * @return The temporal duration for this selector
+     */
+    @JsonIgnore
+    public float getDuration() {
+        return myEnd - myStart;
+    }
+
+    /**
+     * Gets the temporal end for this selector.
+     *
+     * @return The temporal end for this selector
+     */
+    @JsonIgnore
+    public float getEnd() {
+        return myEnd;
+    }
+
+    /**
+     * Gets the height for this selector.
+     *
+     * @return The height for this selector
+     */
+    @JsonIgnore
+    public int getHeight() {
+        return myHeight;
+    }
+
+    /**
+     * Gets the start for this selector.
+     *
+     * @return The start for this selector
+     */
+    @JsonIgnore
+    public float getStart() {
+        return myStart;
+    }
+
+    /**
+     * Gets the width for this selector.
+     *
+     * @return The width for this selector
+     */
+    @JsonIgnore
+    public int getWidth() {
+        return myWidth;
+    }
+
+    /**
+     * Gets the X coordinate for this selector.
+     *
+     * @return The X coordinate for this selector
+     */
+    @JsonIgnore
+    public int getX() {
+        return myX;
+    }
+
+    /**
+     * Gets the Y coordinate for this selector.
+     *
+     * @return The Y coordinate for this selector
+     */
+    @JsonIgnore
+    public int getY() {
+        return myY;
+    }
+
+    /**
+     * Gets whether this selector has a temporal end.
+     *
+     * @return True if this selector has a temporal end; else, false
+     */
+    public boolean hasEnd() {
+        return !Clocktime.INFINIT.equals(myMediaFragment.getTemporalFragment().getEnd());
+    }
+
+    /**
+     * Returns whether this selector is spatial or not.
+     *
+     * @return True if this selector is spatial; else, false
+     */
+    @JsonIgnore
+    public boolean isSpatial() {
+        return myMediaFragment.hasSpatialFragment();
+    }
+
+    /**
+     * Returns whether this selector is temporal or not.
+     *
+     * @return True if this selector is temporal; else, false
+     */
+    @JsonIgnore
+    public boolean isTemporal() {
+        return myMediaFragment.hasTemporalFragment();
+    }
+
+    /**
+     * Gets the value of the media fragment selector, with the spatial part ordered before the temporal part.
+     *
+     * @return The serialization of the selector
+     */
+    @Override
+    public String toString() {
+        final List<String> list = new ArrayList<>();
+
+        if (myMediaFragment.hasTemporalFragment()) {
+            list.add(myMediaFragment.getTemporalFragment().stringValue());
+        }
+
+        if (myMediaFragment.hasSpatialFragment()) {
+            list.add(myMediaFragment.getSpatialFragment().stringValue());
+        }
+
+        return String.join("&", list);
+    }
+
+    /**
+     * Checks that the supplied end time is valid and throws an IllegalArgumentException if it isn't.
+     *
+     * @param aStart A start time
+     * @param aEnd An end time
+     * @throws IllegalArgumentException If the end time precedes the start
+     */
+    private void checkEndTime(final StartTime aStart, final EndTime aEnd) {
+        Objects.requireNonNull(aStart);
+        Objects.requireNonNull(aEnd);
+
+        if (aEnd.getClocktime().compareTo(aStart.getClocktime()) < 0) {
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_062));
+        }
+    }
+
+    /**
+     * Checks that the supplied start time is valid and throws an IllegalArgumentException if it isn't.
+     *
+     * @param aStart A start time
+     * @throws IllegalArgumentException If the supplied start time isn't valid
+     */
+    private void checkStartTime(final StartTime aStart) {
+        Objects.requireNonNull(aStart);
+
+        if (aStart.getClocktime().compareTo(Clocktime.ZERO) < 0) {
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_063));
+        }
     }
 
     /**
@@ -251,160 +405,6 @@ public class MediaFragmentSelector implements FragmentSelector {
     }
 
     /**
-     * Checks that the supplied start time is valid and throws an IllegalArgumentException if it isn't.
-     *
-     * @param aStart A start time
-     * @throws IllegalArgumentException If the supplied start time isn't valid
-     */
-    private void checkStartTime(final StartTime aStart) {
-        Objects.requireNonNull(aStart);
-
-        if (aStart.getClocktime().compareTo(Clocktime.ZERO) < 0) {
-            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_063));
-        }
-    }
-
-    /**
-     * Checks that the supplied end time is valid and throws an IllegalArgumentException if it isn't.
-     *
-     * @param aStart A start time
-     * @param aEnd An end time
-     * @throws IllegalArgumentException If the end time precedes the start
-     */
-    private void checkEndTime(final StartTime aStart, final EndTime aEnd) {
-        Objects.requireNonNull(aStart);
-        Objects.requireNonNull(aEnd);
-
-        if (aEnd.getClocktime().compareTo(aStart.getClocktime()) < 0) {
-            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_062));
-        }
-    }
-
-    @Override
-    public URI getConformsTo() {
-        return MEDIA_FRAGMENT_SPECIFICATION_URI;
-    }
-
-    /**
-     * Gets the value of the media fragment selector, with the spatial part ordered before the temporal part.
-     *
-     * @return The serialization of the selector
-     */
-    @Override
-    public String toString() {
-        final List<String> list = new ArrayList<>();
-
-        if (myMediaFragment.hasTemporalFragment()) {
-            list.add(myMediaFragment.getTemporalFragment().stringValue());
-        }
-
-        if (myMediaFragment.hasSpatialFragment()) {
-            list.add(myMediaFragment.getSpatialFragment().stringValue());
-        }
-
-        return String.join("&", list);
-    }
-
-    /**
-     * Returns whether this selector is spatial or not.
-     *
-     * @return True if this selector is spatial; else, false
-     */
-    @JsonIgnore
-    public boolean isSpatial() {
-        return myMediaFragment.hasSpatialFragment();
-    }
-
-    /**
-     * Returns whether this selector is temporal or not.
-     *
-     * @return True if this selector is temporal; else, false
-     */
-    @JsonIgnore
-    public boolean isTemporal() {
-        return myMediaFragment.hasTemporalFragment();
-    }
-
-    /**
-     * Gets the X coordinate for this selector.
-     *
-     * @return The X coordinate for this selector
-     */
-    @JsonIgnore
-    public int getX() {
-        return myX;
-    }
-
-    /**
-     * Gets the Y coordinate for this selector.
-     *
-     * @return The Y coordinate for this selector
-     */
-    @JsonIgnore
-    public int getY() {
-        return myY;
-    }
-
-    /**
-     * Gets the width for this selector.
-     *
-     * @return The width for this selector
-     */
-    @JsonIgnore
-    public int getWidth() {
-        return myWidth;
-    }
-
-    /**
-     * Gets the height for this selector.
-     *
-     * @return The height for this selector
-     */
-    @JsonIgnore
-    public int getHeight() {
-        return myHeight;
-    }
-
-    /**
-     * Gets the start for this selector.
-     *
-     * @return The start for this selector
-     */
-    @JsonIgnore
-    public float getStart() {
-        return myStart;
-    }
-
-    /**
-     * Gets whether this selector has a temporal end.
-     *
-     * @return True if this selector has a temporal end; else, false
-     */
-    public boolean hasEnd() {
-        return !Clocktime.INFINIT.equals(myMediaFragment.getTemporalFragment().getEnd());
-    }
-
-    /**
-     * Gets the temporal end for this selector.
-     *
-     * @return The temporal end for this selector
-     */
-    @JsonIgnore
-    public float getEnd() {
-        return myEnd;
-    }
-
-    /**
-     * Gets the temporal duration for this selector.
-     *
-     * @return The temporal duration for this selector
-     */
-    @JsonIgnore
-    public float getDuration() {
-        return myEnd - myStart;
-    }
-
-    /**
      * Sets the start and end for the selector.
      *
      * @param aStart A start
@@ -437,37 +437,6 @@ public class MediaFragmentSelector implements FragmentSelector {
     }
 
     /**
-     * A class representing the start time in seconds of an interval used for constructing a
-     * {@link MediaFragmentSelector}.
-     */
-    public static class StartTime {
-
-        /**
-         * The start time's clock time.
-         */
-        private final Clocktime myClocktime;
-
-        /**
-         * Creates a new start time.
-         *
-         * @param aStart The start time of an interval in seconds
-         */
-        public StartTime(final Number aStart) {
-            myClocktime = new Clocktime(aStart.doubleValue());
-        }
-
-        /**
-         * Gets the {@link Clocktime} that represents the start time.
-         *
-         * @return The {@link Clocktime} representation of this start time.
-         */
-        Clocktime getClocktime() {
-            return myClocktime;
-        }
-
-    }
-
-    /**
      * A class representing the end time in seconds of an interval used for constructing a
      * {@link MediaFragmentSelector}.
      */
@@ -491,6 +460,37 @@ public class MediaFragmentSelector implements FragmentSelector {
          * Gets the {@link Clocktime} that represents the end time.
          *
          * @return The {@link Clocktime} representation of this end time.
+         */
+        Clocktime getClocktime() {
+            return myClocktime;
+        }
+
+    }
+
+    /**
+     * A class representing the start time in seconds of an interval used for constructing a
+     * {@link MediaFragmentSelector}.
+     */
+    public static class StartTime {
+
+        /**
+         * The start time's clock time.
+         */
+        private final Clocktime myClocktime;
+
+        /**
+         * Creates a new start time.
+         *
+         * @param aStart The start time of an interval in seconds
+         */
+        public StartTime(final Number aStart) {
+            myClocktime = new Clocktime(aStart.doubleValue());
+        }
+
+        /**
+         * Gets the {@link Clocktime} that represents the start time.
+         *
+         * @return The {@link Clocktime} representation of this start time.
          */
         Clocktime getClocktime() {
             return myClocktime;

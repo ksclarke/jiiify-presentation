@@ -9,20 +9,6 @@ import info.freelibrary.iiif.presentation.v3.CanvasResource;
 public interface Minter {
 
     /**
-     * Gets this minter's manifest ID.
-     *
-     * @return The manifest ID associated with this minter
-     */
-    String getManifestID();
-
-    /**
-     * Gets a new canvas ID.
-     *
-     * @return A new canvas ID
-     */
-    String getCanvasID();
-
-    /**
      * Gets a new annotation ID.
      *
      * @return A new annotation ID
@@ -39,6 +25,20 @@ public interface Minter {
     <C extends CanvasResource<C>> String getAnnotationPageID(CanvasResource<C> aCanvasResource);
 
     /**
+     * Gets a new canvas ID.
+     *
+     * @return A new canvas ID
+     */
+    String getCanvasID();
+
+    /**
+     * Gets this minter's manifest ID.
+     *
+     * @return The manifest ID associated with this minter
+     */
+    String getManifestID();
+
+    /**
      * Gets a new range ID.
      *
      * @return A new range ID
@@ -53,16 +53,16 @@ public interface Minter {
     boolean hasNext();
 
     /**
-     * Gets total number of IDs that this minter can mint.
-     *
-     * @return The total number of IDs that this minter can mint
-     */
-    int size();
-
-    /**
      * Gets the number of IDs that are available for use.
      *
      * @return The number of IDs that are available for use
      */
     int remaining();
+
+    /**
+     * Gets total number of IDs that this minter can mint.
+     *
+     * @return The total number of IDs that this minter can mint
+     */
+    int size();
 }

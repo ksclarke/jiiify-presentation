@@ -7,7 +7,7 @@ authors:
 - family-names: "Matney"
   given-names: "Mark A."
   name-suffix: "Jr."
-title: "Jiiify Presentation"
-version: 0.10.0
-date-released: 2021-09-17
+title: "Jiiify Presentation (v3)"
+version: 0.12.4
+date-released: 2023-07-28
 url: "https://github.com/ksclarke/jiiify-presentation"

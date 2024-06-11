@@ -124,90 +124,14 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
     }
 
     /**
-     * Gets an optional IIIF-style <code>Label</code> from the incoming JSOM.
+     * Assists with keeping error throwing code in the main flow of things concise.
      *
-     * @param aLabel A label node
-     * @return An optional label
+     * @param aParser A JSON parser
+     * @param aMessage An error message
+     * @return A new {@code InputCoercianException} with the supplied details
      */
-    private Optional<Label> getLabel(final JsonNode aLabel) {
-        return aLabel == null ? Optional.empty() : Optional.of(JSON.convertValue(aLabel, Label.class));
-    }
-
-    /**
-     * Gets an optional <code>TimeMode</code> from the incoming JSON.
-     *
-     * @param aTimeModeNode A JSON node representing a TimeMode
-     * @return An optional <code>TimeMode</code> if found; else, an empty <code>Optional</code>
-     */
-    private Optional<TimeMode> getTimeMode(final JsonNode aTimeModeNode) {
-        if (aTimeModeNode != null && aTimeModeNode.isValueNode()) {
-            final Optional<TimeMode> timeMode = TimeMode.forLabel(aTimeModeNode.asText());
-
-            if (timeMode.isEmpty()) {
-                LOGGER.warn(MessageCodes.JPA_130, aTimeModeNode.asText());
-            }
-
-            return timeMode;
-        }
-
-        if (aTimeModeNode != null) {
-            LOGGER.warn(MessageCodes.JPA_130, aTimeModeNode.toString());
-        }
-
-        return Optional.empty();
-    }
-
-    /**
-     * Gets whether the incoming body node contains a choice between resources.
-     *
-     * @param aBodyNode A <code>JsonNode</code> representing an annotation body
-     * @return True if the body contains a choice; else, false
-     */
-    private boolean getChoice(final JsonNode aBodyNode) {
-        if (aBodyNode != null) {
-            final JsonNode choiceNode = aBodyNode.get(JsonKeys.TYPE);
-
-            if (choiceNode != null && choiceNode.isValueNode() && ResourceTypes.CHOICE.equals(choiceNode.asText())) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Gets an annotation body from the supplied incoming JSON.
-     *
-     * @param aNode A <code>JsonNode</code> that represents an annotation body
-     * @param aTypeCheck A function that checks that the required value exists
-     * @return A list of annotation resources
-     */
-    private List<ContentResource<?>> getBody(final JsonNode aNode,
-            final BiFunction<String, JsonNode, String> aTypeCheck) {
-        final List<ContentResource<?>> resources = new ArrayList<>();
-
-        if (aNode != null) {
-            final JsonNode itemsNode = aNode.get(JsonKeys.ITEMS);
-
-            // If the items node is empty, we expect to have to parse a single object or a string value
-            if (itemsNode == null) {
-                if (aNode.isObject()) {
-                    resources.add(getResource(aTypeCheck.apply(JsonKeys.TYPE, aNode.get(JsonKeys.TYPE)), aNode));
-                } else if (aNode.isValueNode() && ResourceTypes.RDF_NIL.equals(aNode.asText())) {
-                    resources.add(null);
-                } else if (aNode.isArray()) { // below added
-                    aNode.elements().forEachRemaining(node -> {
-                        resources.add(getResource(aTypeCheck.apply(JsonKeys.TYPE, node.get(JsonKeys.TYPE)), node));
-                    });
-                } // else warning?
-            } else {
-                itemsNode.forEach(node -> {
-                    resources.add(getResource(aTypeCheck.apply(JsonKeys.TYPE, node.get(JsonKeys.TYPE)), node));
-                });
-            }
-        }
-
-        return resources;
+    private InputCoercionException error(final JsonParser aParser, final String aMessage) {
+        return new InputCoercionException(aParser, aMessage, aParser.getCurrentToken(), WebAnnotation.class);
     }
 
     /**
@@ -247,6 +171,69 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
         }
 
         return new WebAnnotation(aID, getTarget(targetNode, aParser)).setMotivation(Motivation.fromLabel(aMotivation));
+    }
+
+    /**
+     * Gets an annotation body from the supplied incoming JSON.
+     *
+     * @param aNode A <code>JsonNode</code> that represents an annotation body
+     * @param aTypeCheck A function that checks that the required value exists
+     * @return A list of annotation resources
+     */
+    private List<ContentResource<?>> getBody(final JsonNode aNode,
+            final BiFunction<String, JsonNode, String> aTypeCheck) {
+        final List<ContentResource<?>> resources = new ArrayList<>();
+
+        if (aNode != null) {
+            final JsonNode itemsNode = aNode.get(JsonKeys.ITEMS);
+
+            // If the items node is empty, we expect to have to parse a single object or a string value
+            if (itemsNode == null) {
+                if (aNode.isObject()) {
+                    resources.add(getResource(aTypeCheck.apply(JsonKeys.TYPE, aNode.get(JsonKeys.TYPE)), aNode));
+                } else if (aNode.isValueNode() && ResourceTypes.RDF_NIL.equals(aNode.asText())) {
+                    resources.add(null);
+                } else if (aNode.isArray()) { // below added
+                    aNode.elements().forEachRemaining(node -> {
+                        resources.add(getResource(aTypeCheck.apply(JsonKeys.TYPE, node.get(JsonKeys.TYPE)), node));
+                    });
+                } // else warning?
+            } else {
+                itemsNode.forEach(node -> {
+                    resources.add(getResource(aTypeCheck.apply(JsonKeys.TYPE, node.get(JsonKeys.TYPE)), node));
+                });
+            }
+        }
+
+        return resources;
+    }
+
+    /**
+     * Gets whether the incoming body node contains a choice between resources.
+     *
+     * @param aBodyNode A <code>JsonNode</code> representing an annotation body
+     * @return True if the body contains a choice; else, false
+     */
+    private boolean getChoice(final JsonNode aBodyNode) {
+        if (aBodyNode != null) {
+            final JsonNode choiceNode = aBodyNode.get(JsonKeys.TYPE);
+
+            if (choiceNode != null && choiceNode.isValueNode() && ResourceTypes.CHOICE.equals(choiceNode.asText())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Gets an optional IIIF-style <code>Label</code> from the incoming JSOM.
+     *
+     * @param aLabel A label node
+     * @return An optional label
+     */
+    private Optional<Label> getLabel(final JsonNode aLabel) {
+        return aLabel == null ? Optional.empty() : Optional.of(JSON.convertValue(aLabel, Label.class));
     }
 
     /**
@@ -296,13 +283,26 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
     }
 
     /**
-     * Assists with keeping error throwing code in the main flow of things concise.
+     * Gets an optional <code>TimeMode</code> from the incoming JSON.
      *
-     * @param aParser A JSON parser
-     * @param aMessage An error message
-     * @return A new {@code InputCoercianException} with the supplied details
+     * @param aTimeModeNode A JSON node representing a TimeMode
+     * @return An optional <code>TimeMode</code> if found; else, an empty <code>Optional</code>
      */
-    private InputCoercionException error(final JsonParser aParser, final String aMessage) {
-        return new InputCoercionException(aParser, aMessage, aParser.getCurrentToken(), WebAnnotation.class);
+    private Optional<TimeMode> getTimeMode(final JsonNode aTimeModeNode) {
+        if (aTimeModeNode != null && aTimeModeNode.isValueNode()) {
+            final Optional<TimeMode> timeMode = TimeMode.forLabel(aTimeModeNode.asText());
+
+            if (timeMode.isEmpty()) {
+                LOGGER.warn(MessageCodes.JPA_130, aTimeModeNode.asText());
+            }
+
+            return timeMode;
+        }
+
+        if (aTimeModeNode != null) {
+            LOGGER.warn(MessageCodes.JPA_130, aTimeModeNode.toString());
+        }
+
+        return Optional.empty();
     }
 }

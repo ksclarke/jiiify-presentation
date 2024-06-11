@@ -38,46 +38,14 @@ public class KioskCookieService1Test {
     }
 
     /**
-     * Test method for {@link KioskCookieService1#getID()}.
+     * Test method for {@link KioskCookieService1#getFailureDescription()}.
      */
     @Test
-    public final void testGetID() {
-        Assert.assertEquals(myID, new KioskCookieService1(myID).getID());
-    }
+    public final void testGetFailureDescription() {
+        final String failureDescription = UUID.randomUUID().toString();
+        final KioskCookieService1 service = new KioskCookieService1(myID).setFailureDescription(failureDescription);
 
-    /**
-     * Test method for {@link KioskCookieService1#getType()}.
-     */
-    @Test
-    public final void testGetType() {
-        assertEquals(KioskCookieService1.TYPE, new KioskCookieService1(myID).getType());
-    }
-
-    /**
-     * Test method for {@link KioskCookieService1#getServices()}.
-     */
-    @Test
-    public final void testGetServicesEmpty() {
-        assertEquals(0, new KioskCookieService1(myID).getServices().size());
-    }
-
-    /**
-     * Test method for {@link KioskCookieService1#getServices()}.
-     */
-    @Test
-    public final void testGetServices() {
-        final AuthTokenService1 tokenService = new AuthTokenService1(myID);
-        final KioskCookieService1 cookieService = new KioskCookieService1(myID);
-
-        assertEquals(1, cookieService.setServices(tokenService).getServices().size());
-    }
-
-    /**
-     * Test method for {@link KioskCookieService1#getProfile()}.
-     */
-    @Test
-    public final void testGetProfile() {
-        assertEquals(AuthCookieService.Profile.KIOSK, new KioskCookieService1(myID).getProfile().get());
+        assertEquals(failureDescription, service.getFailureDescription());
     }
 
     /**
@@ -92,14 +60,46 @@ public class KioskCookieService1Test {
     }
 
     /**
-     * Test method for {@link KioskCookieService1#getFailureDescription()}.
+     * Test method for {@link KioskCookieService1#getID()}.
      */
     @Test
-    public final void testGetFailureDescription() {
-        final String failureDescription = UUID.randomUUID().toString();
-        final KioskCookieService1 service = new KioskCookieService1(myID).setFailureDescription(failureDescription);
+    public final void testGetID() {
+        Assert.assertEquals(myID, new KioskCookieService1(myID).getID());
+    }
 
-        assertEquals(failureDescription, service.getFailureDescription());
+    /**
+     * Test method for {@link KioskCookieService1#getProfile()}.
+     */
+    @Test
+    public final void testGetProfile() {
+        assertEquals(AuthCookieService.Profile.KIOSK, new KioskCookieService1(myID).getProfile().get());
+    }
+
+    /**
+     * Test method for {@link KioskCookieService1#getServices()}.
+     */
+    @Test
+    public final void testGetServices() {
+        final AuthTokenService1 tokenService = new AuthTokenService1(myID);
+        final KioskCookieService1 cookieService = new KioskCookieService1(myID);
+
+        assertEquals(1, cookieService.setServices(tokenService).getServices().size());
+    }
+
+    /**
+     * Test method for {@link KioskCookieService1#getServices()}.
+     */
+    @Test
+    public final void testGetServicesEmpty() {
+        assertEquals(0, new KioskCookieService1(myID).getServices().size());
+    }
+
+    /**
+     * Test method for {@link KioskCookieService1#getType()}.
+     */
+    @Test
+    public final void testGetType() {
+        assertEquals(KioskCookieService1.TYPE, new KioskCookieService1(myID).getType());
     }
 
     /**
@@ -107,14 +107,6 @@ public class KioskCookieService1Test {
      */
     @Test
     public final void testKioskCookieService1String() {
-        assertEquals(myID, new KioskCookieService1(myID).getID());
-    }
-
-    /**
-     * Test method for {@link KioskCookieService1#KioskCookieService1(URI)}.
-     */
-    @Test
-    public final void testKioskCookieService1URI() {
         assertEquals(myID, new KioskCookieService1(myID).getID());
     }
 
@@ -130,50 +122,11 @@ public class KioskCookieService1Test {
     }
 
     /**
-     * Test method for {@link KioskCookieService1#setID(URI)}.
+     * Test method for {@link KioskCookieService1#KioskCookieService1(URI)}.
      */
     @Test
-    public final void testSetIDURI() {
-        final KioskCookieService1 cookieService = new KioskCookieService1(myID.substring(2));
-        assertEquals(myID, cookieService.setID(myID).getID());
-    }
-
-    /**
-     * Test method for {@link KioskCookieService1#setID(String)}.
-     */
-    @Test
-    public final void testSetIDString() {
-        final KioskCookieService1 cookieService = new KioskCookieService1(myID.substring(2));
-        assertEquals(myID, cookieService.setID(myID).getID());
-    }
-
-    /**
-     * Test method for {@link KioskCookieService1#setType(String)}.
-     */
-    @Test
-    public final void testSetTypeString() {
-        try {
-            new KioskCookieService1(myID).setType(AuthCookieService.class.getSimpleName());
-        } catch (final IllegalArgumentException details) {
-            Assert.fail(details.getMessage());
-        }
-    }
-
-    /**
-     * Test method for {@link KioskCookieService1#setType(String)}.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public final void testSetTypeStringInvalid() {
-        new KioskCookieService1(myID).setType(AuthTokenService1.class.getSimpleName());
-    }
-
-    /**
-     * Test method for {@link KioskCookieService1#setFailureHeader(String)}.
-     */
-    @Test
-    public final void testSetFailureHeaderString() {
-        final String failureHeader = UUID.randomUUID().toString();
-        assertEquals(failureHeader, new KioskCookieService1(myID).setFailureHeader(failureHeader).getFailureHeader());
+    public final void testKioskCookieService1URI() {
+        assertEquals(myID, new KioskCookieService1(myID).getID());
     }
 
     /**
@@ -186,6 +139,33 @@ public class KioskCookieService1Test {
 
         cookieService.setFailureDescription(failureDescription);
         assertEquals(failureDescription, cookieService.getFailureDescription());
+    }
+
+    /**
+     * Test method for {@link KioskCookieService1#setFailureHeader(String)}.
+     */
+    @Test
+    public final void testSetFailureHeaderString() {
+        final String failureHeader = UUID.randomUUID().toString();
+        assertEquals(failureHeader, new KioskCookieService1(myID).setFailureHeader(failureHeader).getFailureHeader());
+    }
+
+    /**
+     * Test method for {@link KioskCookieService1#setID(String)}.
+     */
+    @Test
+    public final void testSetIDString() {
+        final KioskCookieService1 cookieService = new KioskCookieService1(myID.substring(2));
+        assertEquals(myID, cookieService.setID(myID).getID());
+    }
+
+    /**
+     * Test method for {@link KioskCookieService1#setID(URI)}.
+     */
+    @Test
+    public final void testSetIDURI() {
+        final KioskCookieService1 cookieService = new KioskCookieService1(myID.substring(2));
+        assertEquals(myID, cookieService.setID(myID).getID());
     }
 
     /**
@@ -210,6 +190,26 @@ public class KioskCookieService1Test {
         final AuthTokenService1 tokenService = new AuthTokenService1(myID);
 
         assertEquals(1, cookieService.setServices(tokenService).getServices().size());
+    }
+
+    /**
+     * Test method for {@link KioskCookieService1#setType(String)}.
+     */
+    @Test
+    public final void testSetTypeString() {
+        try {
+            new KioskCookieService1(myID).setType(AuthCookieService.class.getSimpleName());
+        } catch (final IllegalArgumentException details) {
+            Assert.fail(details.getMessage());
+        }
+    }
+
+    /**
+     * Test method for {@link KioskCookieService1#setType(String)}.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public final void testSetTypeStringInvalid() {
+        new KioskCookieService1(myID).setType(AuthTokenService1.class.getSimpleName());
     }
 
     /**

@@ -23,8 +23,8 @@ public class TextGranularity implements Labeled {
      *
      * @param aLevel A text granularity level
      */
-    public TextGranularity(final String aLevel) {
-        myLabel = Level.fromLabel(aLevel).map(Level::label).orElse(aLevel);
+    public TextGranularity(final Level aLevel) {
+        myLabel = aLevel.label();
     }
 
     /**
@@ -32,8 +32,8 @@ public class TextGranularity implements Labeled {
      *
      * @param aLevel A text granularity level
      */
-    public TextGranularity(final Level aLevel) {
-        myLabel = aLevel.label();
+    public TextGranularity(final String aLevel) {
+        myLabel = Level.fromLabel(aLevel).map(Level::label).orElse(aLevel);
     }
 
     /**
@@ -77,23 +77,23 @@ public class TextGranularity implements Labeled {
      */
     public enum Level implements Labeled {
 
-        /** A page in a paginated document. */
-        PAGE("page"),
-
         /** An arbitrary region of text. */
         BLOCK("block"),
 
-        /** A paragraph. */
-        PARAGRAPH("paragraph"),
+        /** A single glyph or symbol. */
+        GLYPH("glyph"),
 
         /** A topographic line. */
         LINE("line"),
 
-        /** A single word. */
-        WORD("word"),
+        /** A page in a paginated document. */
+        PAGE("page"),
 
-        /** A single glyph or symbol. */
-        GLYPH("glyph");
+        /** A paragraph. */
+        PARAGRAPH("paragraph"),
+
+        /** A single word. */
+        WORD("word");
 
         /** The text granularity level's label. */
         private final String myLabel;

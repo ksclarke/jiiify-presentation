@@ -50,6 +50,16 @@ public class SupplementaryAnnotations {
     }
 
     /**
+     * Gets the type of the supplementary annotations.
+     *
+     * @return The supplementary annotations type
+     */
+    @JsonGetter(JsonKeys.TYPE)
+    public String getType() {
+        return ResourceTypes.ANNOTATION_COLLECTION;
+    }
+
+    /**
      * Sets the ID of the linked annotation collection.
      *
      * @param aID The ID of the linked annotation collection
@@ -59,16 +69,6 @@ public class SupplementaryAnnotations {
     public SupplementaryAnnotations setID(final String aID) {
         myID = UriUtils.checkID(aID, true);
         return this;
-    }
-
-    /**
-     * Gets the type of the supplementary annotations.
-     *
-     * @return The supplementary annotations type
-     */
-    @JsonGetter(JsonKeys.TYPE)
-    public String getType() {
-        return ResourceTypes.ANNOTATION_COLLECTION;
     }
 
     /**

@@ -28,6 +28,15 @@ public class Target {
     private String myURI;
 
     /**
+     * Creates a new <code>WebAnnotation</code> target from the supplied canvas.
+     *
+     * @param aCanvas A canvas
+     */
+    public Target(final Canvas aCanvas) {
+        myURI = aCanvas.getID();
+    }
+
+    /**
      * Creates a new <code>WebAnnotation</code> target from the supplied specific resource.
      *
      * @param aSpecificResource A specific resource target
@@ -43,15 +52,6 @@ public class Target {
      */
     public Target(final String aURI) {
         myURI = UriUtils.checkID(aURI, false);
-    }
-
-    /**
-     * Creates a new <code>WebAnnotation</code> target from the supplied canvas.
-     *
-     * @param aCanvas A canvas
-     */
-    public Target(final Canvas aCanvas) {
-        myURI = aCanvas.getID();
     }
 
     /**

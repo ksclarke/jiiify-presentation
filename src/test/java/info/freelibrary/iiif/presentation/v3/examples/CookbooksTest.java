@@ -51,14 +51,14 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 public class CookbooksTest extends AbstractCookbookTest {
 
     /**
-     * The logger to use for the cookbook recipe examples.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(CookbooksTest.class, MessageCodes.BUNDLE);
-
-    /**
      * A pattern for an expected JSON output.
      */
     private static final String EXPECTED = "src/test/resources/cookbook/{}.json";
+
+    /**
+     * The logger to use for the cookbook recipe examples.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(CookbooksTest.class, MessageCodes.BUNDLE);
 
     /**
      * A byte stream that redirects System.out to logging messages.
@@ -66,14 +66,14 @@ public class CookbooksTest extends AbstractCookbookTest {
     private ByteArrayOutputStream myByteStream;
 
     /**
-     * The standard Java System.out stream.
-     */
-    private PrintStream myOutStream;
-
-    /**
      * The redirected System.out stream.
      */
     private PrintStream myLogStream;
+
+    /**
+     * The standard Java System.out stream.
+     */
+    private PrintStream myOutStream;
 
     /**
      * Redirect standard System.out so we can include <code>System.out.println()</code> in our examples, but not
@@ -382,6 +382,50 @@ public class CookbooksTest extends AbstractCookbookTest {
     }
 
     /**
+     * Runs the 0006 cookbook example with a minter and the internationalization data arrays.
+     *
+     * @throws IOException If there is a problem running the test
+     */
+    @Test
+    @SuppressWarnings("Checkstyle.LineLengthCheck")
+    public final void test0006WithMinterAndMatrix() throws IOException {
+        final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0006-text-language/manifest.json",
+                new Label("en", "Whistler's Mother", "fr", "La Mère de Whistler"));
+
+        final var canvas = new Canvas(MinterFactory.getMinter(manifest));
+        final var imageContent = new ImageContent(
+                "https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother/full/max/0/default.jpg");
+        final var service = new ImageService3(LEVEL_ONE,
+                "https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother");
+
+        final var creator =
+                new Metadata(new Label("en", "Creator", "fr", "Auteur"), new Value("Whistler, James Abbott McNeill"));
+
+        final var subject = new Metadata(new Label("en", "Subject", "fr", "Sujet"),
+                new Value("en", "McNeill Anna Matilda, mother of Whistler (1804-1881)", "fr",
+                        "McNeill Anna Matilda, mère de Whistler (1804-1881)"));
+
+        final var summary =
+                new Summary("en", "Arrangement in Grey and Black No. 1, also called Portrait of the Artist's Mother.",
+                        "fr", "Arrangement en gris et noir n°1, also called Portrait de la mère de l'artiste.");
+
+        final var reqStatement = new RequiredStatement(new Label("en", "Held By", "fr", "Détenu par"),
+                new Value("Musée d'Orsay, Paris, France"));
+
+        manifest.setMetadata(creator, subject);
+        manifest.setSummary(summary);
+        manifest.setRequiredStatement(reqStatement);
+
+        imageContent.setWidthHeight(1114, 991).setFormat(IMAGE_JPEG).setServices(service);
+        manifest.addCanvases(canvas.setWidthHeight(1114, 991).paintWith(imageContent));
+
+        System.out.println(manifest);
+
+        // Don't include this in the example; it's just a sanity check
+        assertEquals(getExpected("0006-text-language/manifest"), normalizeIDs(manifest.toString()));
+    }
+
+    /**
      * Runs the 0006 cookbook example without a minter.
      */
     @Test
@@ -422,50 +466,6 @@ public class CookbooksTest extends AbstractCookbookTest {
         imageContent.setWidthHeight(1114, 991).setFormat(IMAGE_JPEG).setServices(service);
         page.addAnnotations(annotation.setBody(imageContent).setTarget(new Target(canvas)));
         manifest.addCanvases(canvas.setWidthHeight(1114, 991).setPaintingPages(page));
-
-        System.out.println(manifest);
-
-        // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0006-text-language/manifest"), normalizeIDs(manifest.toString()));
-    }
-
-    /**
-     * Runs the 0006 cookbook example with a minter and the internationalization data arrays.
-     *
-     * @throws IOException If there is a problem running the test
-     */
-    @Test
-    @SuppressWarnings("Checkstyle.LineLengthCheck")
-    public final void test0006WithMinterAndMatrix() throws IOException {
-        final var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0006-text-language/manifest.json",
-                new Label("en", "Whistler's Mother", "fr", "La Mère de Whistler"));
-
-        final var canvas = new Canvas(MinterFactory.getMinter(manifest));
-        final var imageContent = new ImageContent(
-                "https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother/full/max/0/default.jpg");
-        final var service = new ImageService3(LEVEL_ONE,
-                "https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother");
-
-        final var creator =
-                new Metadata(new Label("en", "Creator", "fr", "Auteur"), new Value("Whistler, James Abbott McNeill"));
-
-        final var subject = new Metadata(new Label("en", "Subject", "fr", "Sujet"),
-                new Value("en", "McNeill Anna Matilda, mother of Whistler (1804-1881)", "fr",
-                        "McNeill Anna Matilda, mère de Whistler (1804-1881)"));
-
-        final var summary =
-                new Summary("en", "Arrangement in Grey and Black No. 1, also called Portrait of the Artist's Mother.",
-                        "fr", "Arrangement en gris et noir n°1, also called Portrait de la mère de l'artiste.");
-
-        final var reqStatement = new RequiredStatement(new Label("en", "Held By", "fr", "Détenu par"),
-                new Value("Musée d'Orsay, Paris, France"));
-
-        manifest.setMetadata(creator, subject);
-        manifest.setSummary(summary);
-        manifest.setRequiredStatement(reqStatement);
-
-        imageContent.setWidthHeight(1114, 991).setFormat(IMAGE_JPEG).setServices(service);
-        manifest.addCanvases(canvas.setWidthHeight(1114, 991).paintWith(imageContent));
 
         System.out.println(manifest);
 
@@ -785,6 +785,115 @@ public class CookbooksTest extends AbstractCookbookTest {
     }
 
     /**
+     * Runs the 0010 cookbook example with a minter, looped.
+     */
+    @Test
+    @SuppressWarnings("Checkstyle.LineLengthCheck")
+    public final void test0010WithMinterLoopedRTL() throws IOException {
+        final var manifest =
+                new Manifest("https://iiif.io/api/cookbook/recipe/0010-book-2-viewing-direction/manifest-rtl.json",
+                        new Label("en", "Book with Right-to-Left Viewing Direction"));
+        final var minter = MinterFactory.getMinter(manifest);
+        final var canvases = new ArrayList<Canvas>();
+
+        final List<List<String>> canvasList = Arrays.asList( //
+                List.of("front cover",
+                        "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_001/full/max/0/default.jpg",
+                        "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_001",
+                        "3497", "4823"), //
+                List.of("pages 1–2",
+                        "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_002/full/max/0/default.jpg",
+                        "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_002",
+                        "6062", "4804"), //
+                List.of("pages 3–4",
+                        "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_003/full/max/0/default.jpg",
+                        "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_003",
+                        "6127", "4776"), //
+                List.of("pages 5–6",
+                        "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_004/full/max/0/default.jpg",
+                        "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_004",
+                        "6124", "4751"), //
+                List.of("back cover",
+                        "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_005/full/max/0/default.jpg",
+                        "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_005",
+                        "3510", "4808") //
+        );
+
+        canvasList.forEach(canvasData -> {
+            final var canvas = new Canvas(minter, new Label("en", canvasData.get(0)));
+            final var imageContent = new ImageContent(canvasData.get(1));
+            final var service = new ImageService3(LEVEL_ONE, canvasData.get(2));
+            final var width = Integer.valueOf(canvasData.get(3));
+            final var height = Integer.valueOf(canvasData.get(4));
+
+            imageContent.setWidthHeight(width, height).setFormat(IMAGE_JPEG).setServices(service);
+            canvases.add(canvas.setWidthHeight(width, height).paintWith(imageContent));
+        });
+
+        manifest.setSummary(new Summary("en",
+                "Playbill for \"Akiba gongen kaisen-banashi,\" \"Futatsu chōchō kuruwa nikki\" and \"Godairiki koi no fūjime\" performed at the Chikugo Theater in Osaka from the fifth month of Kaei 2 (May, 1849); main actors: Gadō Kataoka II, Ebizō Ichikawa VI, Kitō Sawamura II, Daigorō Mimasu IV and Karoku Nakamura I; on front cover: producer Mominosuke Ichikawa's crest."));
+        manifest.setViewingDirection(RIGHT_TO_LEFT);
+        manifest.addCanvases(canvases);
+
+        System.out.println(manifest);
+
+        // Don't include this in the example; it's just a sanity check
+        assertEquals(getExpected("0010-book-2-viewing-direction/manifest-rtl"), normalizeIDs(manifest.toString()));
+    }
+
+    /**
+     * Runs the 0010 cookbook example with a minter, looped.
+     */
+    @Test
+    @SuppressWarnings("Checkstyle.LineLengthCheck")
+    public final void test0010WithMinterLoopedTTB() throws IOException {
+        final var manifest =
+                new Manifest("https://iiif.io/api/cookbook/recipe/0010-book-2-viewing-direction/manifest-ttb.json",
+                        new Label("en", "Diary with Top-to-Bottom Viewing Direction"));
+        final var minter = MinterFactory.getMinter(manifest);
+        final var canvases = new ArrayList<Canvas>();
+
+        final List<List<String>> canvasList = Arrays.asList( //
+                List.of("image 1",
+                        "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_02/full/max/0/default.jpg",
+                        "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_02",
+                        "2251", "3152"), //
+                List.of("image 2",
+                        "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_03/full/max/0/default.jpg",
+                        "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_03",
+                        "2268", "3135"), //
+                List.of("image 3",
+                        "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_04/full/max/0/default.jpg",
+                        "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_04",
+                        "2274", "3135"), //
+                List.of("image 4",
+                        "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_05/full/max/0/default.jpg",
+                        "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_05",
+                        "2268", "3135"));
+
+        canvasList.forEach(canvasData -> {
+            final var canvas = new Canvas(minter, new Label("en", canvasData.get(0)));
+            final var imageContent = new ImageContent(canvasData.get(1));
+            final var service = new ImageService3(LEVEL_ONE, canvasData.get(2));
+            final var width = Integer.valueOf(canvasData.get(3));
+            final var height = Integer.valueOf(canvasData.get(4));
+
+            imageContent.setWidthHeight(width, height).setFormat(IMAGE_JPEG).setServices(service);
+            canvases.add(canvas.setWidthHeight(width, height).paintWith(imageContent));
+        });
+
+        manifest.setSummary(new Summary("en",
+                "William Lewis Sachtleben was an American long-distance cyclist who rode across Asia from Istanbul to Peking in 1891 to 1892 with Thomas Gaskell Allen Jr., his classmate from Washington University. This was part of a longer journey that began the day after they had graduated from college, when they travelled to New York and on to Liverpool; in all they travelled 15,044 miles by bicycle, 'the longest continuous land journey ever made around the world' as reported in their book <cite>Across Asia on a bicycle</cite> (1895). Sachtleben documented his travels with photographs and diaries, the latter of which he numbered sequentially. The diary of notebook 'No. 10' covers a portion of their journey through the Armenian area of Turkey from April 12 to May 9 (there is a 2-page reading list at the end). During this time they rode from Ankara (Angora in the diary) to Sivas, where they stayed for ten days while Allen had a bout of typhoid fever, and the first half of a ten-day excursion to Merzifon (Mersovan in the diary), taken by Sachtleben to give Allen additional time to recover."));
+        manifest.setViewingDirection(TOP_TO_BOTTOM);
+        manifest.addCanvases(canvases);
+
+        System.out.println(manifest);
+
+        // Don't include this in the example; it's just a sanity check
+        assertEquals(getExpected("0010-book-2-viewing-direction/manifest-ttb"), normalizeIDs(manifest.toString()));
+    }
+
+    /**
      * Runs the 0010 cookbook example with a minter.
      */
     @Test
@@ -853,60 +962,62 @@ public class CookbooksTest extends AbstractCookbookTest {
     }
 
     /**
-     * Runs the 0010 cookbook example with a minter, looped.
+     * Runs the 0010 cookbook example with a minter.
      */
     @Test
     @SuppressWarnings("Checkstyle.LineLengthCheck")
-    public final void test0010WithMinterLoopedRTL() throws IOException {
+    public final void test0010WithMinterTTB() throws IOException {
         final var manifest =
-                new Manifest("https://iiif.io/api/cookbook/recipe/0010-book-2-viewing-direction/manifest-rtl.json",
-                        new Label("en", "Book with Right-to-Left Viewing Direction"));
+                new Manifest("https://iiif.io/api/cookbook/recipe/0010-book-2-viewing-direction/manifest-ttb.json",
+                        new Label("en", "Diary with Top-to-Bottom Viewing Direction"));
         final var minter = MinterFactory.getMinter(manifest);
-        final var canvases = new ArrayList<Canvas>();
 
-        final List<List<String>> canvasList = Arrays.asList( //
-                List.of("front cover",
-                        "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_001/full/max/0/default.jpg",
-                        "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_001",
-                        "3497", "4823"), //
-                List.of("pages 1–2",
-                        "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_002/full/max/0/default.jpg",
-                        "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_002",
-                        "6062", "4804"), //
-                List.of("pages 3–4",
-                        "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_003/full/max/0/default.jpg",
-                        "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_003",
-                        "6127", "4776"), //
-                List.of("pages 5–6",
-                        "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_004/full/max/0/default.jpg",
-                        "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_004",
-                        "6124", "4751"), //
-                List.of("back cover",
-                        "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_005/full/max/0/default.jpg",
-                        "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_005",
-                        "3510", "4808") //
-        );
+        final var canvas1 = new Canvas(minter, new Label("en", "image 1"));
+        final var imageContent1 = new ImageContent(
+                "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_02/full/max/0/default.jpg");
+        final var service1 = new ImageService3(LEVEL_ONE,
+                "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_02");
 
-        canvasList.forEach(canvasData -> {
-            final var canvas = new Canvas(minter, new Label("en", canvasData.get(0)));
-            final var imageContent = new ImageContent(canvasData.get(1));
-            final var service = new ImageService3(LEVEL_ONE, canvasData.get(2));
-            final var width = Integer.valueOf(canvasData.get(3));
-            final var height = Integer.valueOf(canvasData.get(4));
+        final var canvas2 = new Canvas(minter, new Label("en", "image 2"));
+        final var imageContent2 = new ImageContent(
+                "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_03/full/max/0/default.jpg");
+        final var service2 = new ImageService3(LEVEL_ONE,
+                "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_03");
 
-            imageContent.setWidthHeight(width, height).setFormat(IMAGE_JPEG).setServices(service);
-            canvases.add(canvas.setWidthHeight(width, height).paintWith(imageContent));
-        });
+        final var canvas3 = new Canvas(minter, new Label("en", "image 3"));
+        final var imageContent3 = new ImageContent(
+                "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_04/full/max/0/default.jpg");
+        final var service3 = new ImageService3(LEVEL_ONE,
+                "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_04");
+
+        final var canvas4 = new Canvas(minter, new Label("en", "image 4"));
+        final var imageContent4 = new ImageContent(
+                "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_05/full/max/0/default.jpg");
+        final var service4 = new ImageService3(LEVEL_ONE,
+                "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_05");
 
         manifest.setSummary(new Summary("en",
-                "Playbill for \"Akiba gongen kaisen-banashi,\" \"Futatsu chōchō kuruwa nikki\" and \"Godairiki koi no fūjime\" performed at the Chikugo Theater in Osaka from the fifth month of Kaei 2 (May, 1849); main actors: Gadō Kataoka II, Ebizō Ichikawa VI, Kitō Sawamura II, Daigorō Mimasu IV and Karoku Nakamura I; on front cover: producer Mominosuke Ichikawa's crest."));
-        manifest.setViewingDirection(RIGHT_TO_LEFT);
-        manifest.addCanvases(canvases);
+                "William Lewis Sachtleben was an American long-distance cyclist who rode across Asia from Istanbul to Peking in 1891 to 1892 with Thomas Gaskell Allen Jr., his classmate from Washington University. This was part of a longer journey that began the day after they had graduated from college, when they travelled to New York and on to Liverpool; in all they travelled 15,044 miles by bicycle, 'the longest continuous land journey ever made around the world' as reported in their book <cite>Across Asia on a bicycle</cite> (1895). Sachtleben documented his travels with photographs and diaries, the latter of which he numbered sequentially. The diary of notebook 'No. 10' covers a portion of their journey through the Armenian area of Turkey from April 12 to May 9 (there is a 2-page reading list at the end). During this time they rode from Ankara (Angora in the diary) to Sivas, where they stayed for ten days while Allen had a bout of typhoid fever, and the first half of a ten-day excursion to Merzifon (Mersovan in the diary), taken by Sachtleben to give Allen additional time to recover."));
+        manifest.setViewingDirection(TOP_TO_BOTTOM);
+
+        imageContent1.setWidthHeight(2251, 3152).setFormat(IMAGE_JPEG).setServices(service1);
+        canvas1.setWidthHeight(2251, 3152).paintWith(imageContent1);
+
+        imageContent2.setWidthHeight(2268, 3135).setFormat(IMAGE_JPEG).setServices(service2);
+        canvas2.setWidthHeight(2268, 3135).paintWith(imageContent2);
+
+        imageContent3.setWidthHeight(2274, 3135).setFormat(IMAGE_JPEG).setServices(service3);
+        canvas3.setWidthHeight(2274, 3135).paintWith(imageContent3);
+
+        imageContent4.setWidthHeight(2268, 3135).setFormat(IMAGE_JPEG).setServices(service4);
+        canvas4.setWidthHeight(2268, 3135).paintWith(imageContent4);
+
+        manifest.addCanvases(canvas1, canvas2, canvas3, canvas4);
 
         System.out.println(manifest);
 
         // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0010-book-2-viewing-direction/manifest-rtl"), normalizeIDs(manifest.toString()));
+        assertEquals(getExpected("0010-book-2-viewing-direction/manifest-ttb"), normalizeIDs(manifest.toString()));
     }
 
     /**
@@ -973,117 +1084,6 @@ public class CookbooksTest extends AbstractCookbookTest {
 
         // Don't include this in the example; it's just a sanity check
         assertEquals(getExpected("0010-book-2-viewing-direction/manifest-rtl"), normalizeIDs(manifest.toString()));
-    }
-
-    /**
-     * Runs the 0010 cookbook example with a minter.
-     */
-    @Test
-    @SuppressWarnings("Checkstyle.LineLengthCheck")
-    public final void test0010WithMinterTTB() throws IOException {
-        final var manifest =
-                new Manifest("https://iiif.io/api/cookbook/recipe/0010-book-2-viewing-direction/manifest-ttb.json",
-                        new Label("en", "Diary with Top-to-Bottom Viewing Direction"));
-        final var minter = MinterFactory.getMinter(manifest);
-
-        final var canvas1 = new Canvas(minter, new Label("en", "image 1"));
-        final var imageContent1 = new ImageContent(
-                "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_02/full/max/0/default.jpg");
-        final var service1 = new ImageService3(LEVEL_ONE,
-                "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_02");
-
-        final var canvas2 = new Canvas(minter, new Label("en", "image 2"));
-        final var imageContent2 = new ImageContent(
-                "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_03/full/max/0/default.jpg");
-        final var service2 = new ImageService3(LEVEL_ONE,
-                "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_03");
-
-        final var canvas3 = new Canvas(minter, new Label("en", "image 3"));
-        final var imageContent3 = new ImageContent(
-                "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_04/full/max/0/default.jpg");
-        final var service3 = new ImageService3(LEVEL_ONE,
-                "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_04");
-
-        final var canvas4 = new Canvas(minter, new Label("en", "image 4"));
-        final var imageContent4 = new ImageContent(
-                "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_05/full/max/0/default.jpg");
-        final var service4 = new ImageService3(LEVEL_ONE,
-                "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_05");
-
-        manifest.setSummary(new Summary("en",
-                "William Lewis Sachtleben was an American long-distance cyclist who rode across Asia from Istanbul to Peking in 1891 to 1892 with Thomas Gaskell Allen Jr., his classmate from Washington University. This was part of a longer journey that began the day after they had graduated from college, when they travelled to New York and on to Liverpool; in all they travelled 15,044 miles by bicycle, 'the longest continuous land journey ever made around the world' as reported in their book <cite>Across Asia on a bicycle</cite> (1895). Sachtleben documented his travels with photographs and diaries, the latter of which he numbered sequentially. The diary of notebook 'No. 10' covers a portion of their journey through the Armenian area of Turkey from April 12 to May 9 (there is a 2-page reading list at the end). During this time they rode from Ankara (Angora in the diary) to Sivas, where they stayed for ten days while Allen had a bout of typhoid fever, and the first half of a ten-day excursion to Merzifon (Mersovan in the diary), taken by Sachtleben to give Allen additional time to recover."));
-        manifest.setViewingDirection(TOP_TO_BOTTOM);
-
-        imageContent1.setWidthHeight(2251, 3152).setFormat(IMAGE_JPEG).setServices(service1);
-        canvas1.setWidthHeight(2251, 3152).paintWith(imageContent1);
-
-        imageContent2.setWidthHeight(2268, 3135).setFormat(IMAGE_JPEG).setServices(service2);
-        canvas2.setWidthHeight(2268, 3135).paintWith(imageContent2);
-
-        imageContent3.setWidthHeight(2274, 3135).setFormat(IMAGE_JPEG).setServices(service3);
-        canvas3.setWidthHeight(2274, 3135).paintWith(imageContent3);
-
-        imageContent4.setWidthHeight(2268, 3135).setFormat(IMAGE_JPEG).setServices(service4);
-        canvas4.setWidthHeight(2268, 3135).paintWith(imageContent4);
-
-        manifest.addCanvases(canvas1, canvas2, canvas3, canvas4);
-
-        System.out.println(manifest);
-
-        // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0010-book-2-viewing-direction/manifest-ttb"), normalizeIDs(manifest.toString()));
-    }
-
-    /**
-     * Runs the 0010 cookbook example with a minter, looped.
-     */
-    @Test
-    @SuppressWarnings("Checkstyle.LineLengthCheck")
-    public final void test0010WithMinterLoopedTTB() throws IOException {
-        final var manifest =
-                new Manifest("https://iiif.io/api/cookbook/recipe/0010-book-2-viewing-direction/manifest-ttb.json",
-                        new Label("en", "Diary with Top-to-Bottom Viewing Direction"));
-        final var minter = MinterFactory.getMinter(manifest);
-        final var canvases = new ArrayList<Canvas>();
-
-        final List<List<String>> canvasList = Arrays.asList( //
-                List.of("image 1",
-                        "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_02/full/max/0/default.jpg",
-                        "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_02",
-                        "2251", "3152"), //
-                List.of("image 2",
-                        "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_03/full/max/0/default.jpg",
-                        "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_03",
-                        "2268", "3135"), //
-                List.of("image 3",
-                        "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_04/full/max/0/default.jpg",
-                        "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_04",
-                        "2274", "3135"), //
-                List.of("image 4",
-                        "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_05/full/max/0/default.jpg",
-                        "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_05",
-                        "2268", "3135"));
-
-        canvasList.forEach(canvasData -> {
-            final var canvas = new Canvas(minter, new Label("en", canvasData.get(0)));
-            final var imageContent = new ImageContent(canvasData.get(1));
-            final var service = new ImageService3(LEVEL_ONE, canvasData.get(2));
-            final var width = Integer.valueOf(canvasData.get(3));
-            final var height = Integer.valueOf(canvasData.get(4));
-
-            imageContent.setWidthHeight(width, height).setFormat(IMAGE_JPEG).setServices(service);
-            canvases.add(canvas.setWidthHeight(width, height).paintWith(imageContent));
-        });
-
-        manifest.setSummary(new Summary("en",
-                "William Lewis Sachtleben was an American long-distance cyclist who rode across Asia from Istanbul to Peking in 1891 to 1892 with Thomas Gaskell Allen Jr., his classmate from Washington University. This was part of a longer journey that began the day after they had graduated from college, when they travelled to New York and on to Liverpool; in all they travelled 15,044 miles by bicycle, 'the longest continuous land journey ever made around the world' as reported in their book <cite>Across Asia on a bicycle</cite> (1895). Sachtleben documented his travels with photographs and diaries, the latter of which he numbered sequentially. The diary of notebook 'No. 10' covers a portion of their journey through the Armenian area of Turkey from April 12 to May 9 (there is a 2-page reading list at the end). During this time they rode from Ankara (Angora in the diary) to Sivas, where they stayed for ten days while Allen had a bout of typhoid fever, and the first half of a ten-day excursion to Merzifon (Mersovan in the diary), taken by Sachtleben to give Allen additional time to recover."));
-        manifest.setViewingDirection(TOP_TO_BOTTOM);
-        manifest.addCanvases(canvases);
-
-        System.out.println(manifest);
-
-        // Don't include this in the example; it's just a sanity check
-        assertEquals(getExpected("0010-book-2-viewing-direction/manifest-ttb"), normalizeIDs(manifest.toString()));
     }
 
     /**

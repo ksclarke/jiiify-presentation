@@ -34,6 +34,33 @@ public class SeeAlsoTest extends AbstractTest {
     }
 
     /**
+     * Tests getting an empty format.
+     */
+    @Test
+    public void testGetFormatEmpty() {
+        final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.DATASET);
+        assertEquals(Optional.empty(), seeAlso.getFormat());
+    }
+
+    /**
+     * Tests getting an empty label.
+     */
+    @Test
+    public void testGetLabelEmpty() {
+        final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.DATASET);
+        assertEquals(Optional.empty(), seeAlso.getFormat());
+    }
+
+    /**
+     * Tests getting a seeAlso profile.
+     */
+    @Test
+    public void testGetProfileEmpty() {
+        final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.DATASET);
+        assertEquals(Optional.empty(), seeAlso.getProfile());
+    }
+
+    /**
      * Tests constructing a seeAlso.
      */
     @Test
@@ -53,37 +80,6 @@ public class SeeAlsoTest extends AbstractTest {
 
         assertEquals(myID, seeAlso.getID());
         assertEquals(ResourceTypes.TEXT, seeAlso.getType());
-    }
-
-    /**
-     * Tests getting a seeAlso profile.
-     */
-    @Test
-    public void testSetGetProfile() {
-        final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.TEXT);
-        final String url = myLoremIpsum.getUrl();
-
-        assertEquals(url, seeAlso.setProfile(url).getProfile().get());
-    }
-
-    /**
-     * Tests getting a seeAlso profile with URI.
-     */
-    @Test
-    public void testSetGetProfileURI() {
-        final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.TEXT);
-        final String uri = myLoremIpsum.getUrl();
-
-        assertEquals(uri, seeAlso.setProfile(uri).getProfile().get());
-    }
-
-    /**
-     * Tests getting a seeAlso profile.
-     */
-    @Test
-    public void testGetProfileEmpty() {
-        final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.DATASET);
-        assertEquals(Optional.empty(), seeAlso.getProfile());
     }
 
     /**
@@ -107,15 +103,6 @@ public class SeeAlsoTest extends AbstractTest {
     }
 
     /**
-     * Tests getting an empty format.
-     */
-    @Test
-    public void testGetFormatEmpty() {
-        final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.DATASET);
-        assertEquals(Optional.empty(), seeAlso.getFormat());
-    }
-
-    /**
      * Tests setting and getting a label.
      */
     @Test
@@ -127,12 +114,25 @@ public class SeeAlsoTest extends AbstractTest {
     }
 
     /**
-     * Tests getting an empty label.
+     * Tests getting a seeAlso profile.
      */
     @Test
-    public void testGetLabelEmpty() {
-        final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.DATASET);
-        assertEquals(Optional.empty(), seeAlso.getFormat());
+    public void testSetGetProfile() {
+        final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.TEXT);
+        final String url = myLoremIpsum.getUrl();
+
+        assertEquals(url, seeAlso.setProfile(url).getProfile().get());
+    }
+
+    /**
+     * Tests getting a seeAlso profile with URI.
+     */
+    @Test
+    public void testSetGetProfileURI() {
+        final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.TEXT);
+        final String uri = myLoremIpsum.getUrl();
+
+        assertEquals(uri, seeAlso.setProfile(uri).getProfile().get());
     }
 
 }

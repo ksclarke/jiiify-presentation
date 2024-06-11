@@ -37,41 +37,103 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  */
 public class RangeTest extends AbstractTest {
 
-    /** An HTTPS protocol constant. */
-    private static final String HTTPS = "https://";
-
-    /** A range pattern for IDs. */
-    private static final String NOID_PATTERN = "/range-[a-z0-9]{4}";
-
-    /** A test label. */
-    private static final String LABEL = "Test Label";
-
-    /** JSON representing a range item. */
-    private static final String RANGE_ITEM_JSON;
-
     /** JSON representing a canvas item. */
     private static final String CANVAS_ITEM_JSON;
 
     /** JSON representing a canvas' items. */
     private static final String CANVAS_ITEMS_JSON;
 
+    /** An HTTPS protocol constant. */
+    private static final String HTTPS = "https://";
+
+    /** A test label. */
+    private static final String LABEL = "Test Label";
+
+    /** A range pattern for IDs. */
+    private static final String NOID_PATTERN = "/range-[a-z0-9]{4}";
+
+    /** JSON representing a range item. */
+    private static final String RANGE_ITEM_JSON;
+
     /** JSON representing a specific resource item. */
     private static final String SPECIFIC_RESOURCE_ITEM_JSON;
 
-    static {
-        final File specificResourceJsonFile = new File("src/test/resources/json/range-specificresource.json");
-        final File canvasArrayJsonFile = new File("src/test/resources/json/range-canvas.json");
-        final File canvasRefJsonFile = new File("src/test/resources/json/range-canvas-ref.json");
-        final File rangeJsonFile = new File("src/test/resources/json/range.json");
+    /**
+     * Tests round-tripping test fixture 0024.
+     *
+     * @throws IOException If there is trouble reading from the test fixture
+     */
+    @Test
+    public final void testFixture0024() throws IOException {
+        final String json = StringUtils.read(new File("src/test/resources/fixtures/0024-book-4-toc.json"));
+        assertEquals(format(json), Manifest.fromJSON(json).toString());
+    }
 
-        try {
-            RANGE_ITEM_JSON = StringUtils.read(rangeJsonFile, StandardCharsets.UTF_8);
-            CANVAS_ITEM_JSON = StringUtils.read(canvasRefJsonFile, StandardCharsets.UTF_8);
-            CANVAS_ITEMS_JSON = StringUtils.read(canvasArrayJsonFile, StandardCharsets.UTF_8);
-            SPECIFIC_RESOURCE_ITEM_JSON = StringUtils.read(specificResourceJsonFile, StandardCharsets.UTF_8);
-        } catch (final IOException details) {
-            throw new I18nRuntimeException(details);
-        }
+    /**
+     * Tests the {@link Range#fromJSON(String) fromString} method.
+     */
+    @Test
+    public void testFromStringCanvasArray() {
+        assertEquals(format(CANVAS_ITEMS_JSON), Range.fromJSON(CANVAS_ITEMS_JSON).toString());
+    }
+
+    /**
+     * Tests the {@link Range#fromJSON(String) fromString} method.
+     */
+    @Test
+    public void testFromStringCanvasRef() {
+        assertEquals(format(CANVAS_ITEM_JSON), Range.fromJSON(CANVAS_ITEM_JSON).toString());
+    }
+
+    /**
+     * Tests the {@link Range#fromJSON(String) fromString} method.
+     */
+    @Test
+    public void testFromStringRange() {
+        assertEquals(format(RANGE_ITEM_JSON), Range.fromJSON(RANGE_ITEM_JSON).toString());
+    }
+
+    /**
+     * Tests the {@link Range#fromJSON(String) fromString} method.
+     */
+    @Test
+    public void testFromStringSpecificResource() {
+        assertEquals(format(SPECIFIC_RESOURCE_ITEM_JSON), Range.fromJSON(SPECIFIC_RESOURCE_ITEM_JSON).toString());
+    }
+
+    /**
+     * Tests setting and getting supplementary annotations.
+     */
+    @Test
+    public void testGetSetSupplementaryAnnotations() throws JsonProcessingException {
+        final SupplementaryAnnotations annos = new SupplementaryAnnotations(getURL());
+        final Range range = new Range(getURL());
+        final JsonNode supplementary;
+        final JsonNode json;
+
+        range.setSupplementaryAnnotations(annos);
+        json = JSON.getReader(Range.class).readTree(range.toString());
+
+        assertNotNull(supplementary = json.get(JsonKeys.SUPPLEMENTARY));
+        assertEquals(ResourceTypes.ANNOTATION_COLLECTION, supplementary.get(JsonKeys.TYPE).asText());
+    }
+
+    /**
+     * Sets setting the viewing direction.
+     */
+    @Test
+    public void testGetSetViewingDirection() {
+        final Range range = getRange().setViewingDirection(ViewingDirection.LEFT_TO_RIGHT);
+        assertEquals(ViewingDirection.LEFT_TO_RIGHT, range.getViewingDirection());
+    }
+
+    /**
+     * Tests setting and getting a navDate on a range.
+     */
+    @Test
+    public final void testNavDate() {
+        final NavDate navDate = NavDate.now();
+        assertEquals(navDate, getRange().setNavDate(navDate).getNavDate());
     }
 
     /**
@@ -100,56 +162,6 @@ public class RangeTest extends AbstractTest {
     }
 
     /**
-     * Tests the {@link Range#toJSON() toJSON} method.
-     */
-    @Test
-    public void testToJSON() {
-        assertEquals(format(RANGE_ITEM_JSON),
-                getRange().setItems(Arrays.asList(new Range.Item(getSubRange()))).toString());
-    }
-
-    /**
-     * Tests the {@link Range#toString() toString} method.
-     */
-    @Test
-    public void testToString() {
-        assertEquals(format(RANGE_ITEM_JSON),
-                getRange().setItems(Arrays.asList(new Range.Item(getSubRange()))).toString());
-    }
-
-    /**
-     * Tests the {@link Range#fromJSON(String) fromString} method.
-     */
-    @Test
-    public void testFromStringRange() {
-        assertEquals(format(RANGE_ITEM_JSON), Range.fromJSON(RANGE_ITEM_JSON).toString());
-    }
-
-    /**
-     * Tests the {@link Range#fromJSON(String) fromString} method.
-     */
-    @Test
-    public void testFromStringCanvasArray() {
-        assertEquals(format(CANVAS_ITEMS_JSON), Range.fromJSON(CANVAS_ITEMS_JSON).toString());
-    }
-
-    /**
-     * Tests the {@link Range#fromJSON(String) fromString} method.
-     */
-    @Test
-    public void testFromStringCanvasRef() {
-        assertEquals(format(CANVAS_ITEM_JSON), Range.fromJSON(CANVAS_ITEM_JSON).toString());
-    }
-
-    /**
-     * Tests the {@link Range#fromJSON(String) fromString} method.
-     */
-    @Test
-    public void testFromStringSpecificResource() {
-        assertEquals(format(SPECIFIC_RESOURCE_ITEM_JSON), Range.fromJSON(SPECIFIC_RESOURCE_ITEM_JSON).toString());
-    }
-
-    /**
      * Tests constructing a range.
      */
     @Test
@@ -159,47 +171,12 @@ public class RangeTest extends AbstractTest {
     }
 
     /**
-     * Tests setting and getting supplementary annotations.
-     */
-    @Test
-    public void testGetSetSupplementaryAnnotations() throws JsonProcessingException {
-        final SupplementaryAnnotations annos = new SupplementaryAnnotations(getURL());
-        final Range range = new Range(getURL());
-        final JsonNode supplementary;
-        final JsonNode json;
-
-        range.setSupplementaryAnnotations(annos);
-        json = JSON.getReader(Range.class).readTree(range.toString());
-
-        assertNotNull(supplementary = json.get(JsonKeys.SUPPLEMENTARY));
-        assertEquals(ResourceTypes.ANNOTATION_COLLECTION, supplementary.get(JsonKeys.TYPE).asText());
-    }
-
-    /**
      * Tests constructing a range.
      */
     @Test
     public void testRangeURILabel() {
         final String id = getURL();
         assertEquals(id, new Range(id, new Label(myLoremIpsum.getWords(4))).getID());
-    }
-
-    /**
-     * Tests setting and getting a navDate on a range.
-     */
-    @Test
-    public final void testNavDate() {
-        final NavDate navDate = NavDate.now();
-        assertEquals(navDate, getRange().setNavDate(navDate).getNavDate());
-    }
-
-    /**
-     * Sets setting the viewing direction.
-     */
-    @Test
-    public void testGetSetViewingDirection() {
-        final Range range = getRange().setViewingDirection(ViewingDirection.LEFT_TO_RIGHT);
-        assertEquals(ViewingDirection.LEFT_TO_RIGHT, range.getViewingDirection());
     }
 
     /**
@@ -221,14 +198,21 @@ public class RangeTest extends AbstractTest {
     }
 
     /**
-     * Tests round-tripping test fixture 0024.
-     *
-     * @throws IOException If there is trouble reading from the test fixture
+     * Tests the {@link Range#toJSON() toJSON} method.
      */
     @Test
-    public final void testFixture0024() throws IOException {
-        final String json = StringUtils.read(new File("src/test/resources/fixtures/0024-book-4-toc.json"));
-        assertEquals(format(json), Manifest.fromJSON(json).toString());
+    public void testToJSON() {
+        assertEquals(format(RANGE_ITEM_JSON),
+                getRange().setItems(Arrays.asList(new Range.Item(getSubRange()))).toString());
+    }
+
+    /**
+     * Tests the {@link Range#toString() toString} method.
+     */
+    @Test
+    public void testToString() {
+        assertEquals(format(RANGE_ITEM_JSON),
+                getRange().setItems(Arrays.asList(new Range.Item(getSubRange()))).toString());
     }
 
     /**
@@ -247,5 +231,21 @@ public class RangeTest extends AbstractTest {
      */
     private Range getSubRange() {
         return new Range("https://example.org/range-2", new Label("My subrange label"));
+    }
+
+    static {
+        final File specificResourceJsonFile = new File("src/test/resources/json/range-specificresource.json");
+        final File canvasArrayJsonFile = new File("src/test/resources/json/range-canvas.json");
+        final File canvasRefJsonFile = new File("src/test/resources/json/range-canvas-ref.json");
+        final File rangeJsonFile = new File("src/test/resources/json/range.json");
+
+        try {
+            RANGE_ITEM_JSON = StringUtils.read(rangeJsonFile, StandardCharsets.UTF_8);
+            CANVAS_ITEM_JSON = StringUtils.read(canvasRefJsonFile, StandardCharsets.UTF_8);
+            CANVAS_ITEMS_JSON = StringUtils.read(canvasArrayJsonFile, StandardCharsets.UTF_8);
+            SPECIFIC_RESOURCE_ITEM_JSON = StringUtils.read(specificResourceJsonFile, StandardCharsets.UTF_8);
+        } catch (final IOException details) {
+            throw new I18nRuntimeException(details);
+        }
     }
 }

@@ -71,6 +71,16 @@ public class Metadata {
     }
 
     /**
+     * Gets the metadata property's value.
+     *
+     * @return The metadata property's value
+     */
+    @JsonGetter(JsonKeys.VALUE)
+    public Value getValue() {
+        return myValue;
+    }
+
+    /**
      * Sets the label for the metadata property.
      *
      * @param aLabel A label
@@ -96,13 +106,14 @@ public class Metadata {
     }
 
     /**
-     * Gets the metadata property's value.
+     * Sets the metadata property's value.
      *
-     * @return The metadata property's value
+     * @param aValue A value
+     * @return This metadata property
      */
-    @JsonGetter(JsonKeys.VALUE)
-    public Value getValue() {
-        return myValue;
+    @JsonIgnore
+    public Metadata setValue(final String aValue) {
+        return setValue(new Value(aValue));
     }
 
     /**
@@ -117,17 +128,6 @@ public class Metadata {
         myValue = aValue;
 
         return this;
-    }
-
-    /**
-     * Sets the metadata property's value.
-     *
-     * @param aValue A value
-     * @return This metadata property
-     */
-    @JsonIgnore
-    public Metadata setValue(final String aValue) {
-        return setValue(new Value(aValue));
     }
 
     /**

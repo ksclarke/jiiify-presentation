@@ -121,6 +121,33 @@ abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> e
     }
 
     /**
+     * Sets the annotation resource's behaviors. The supplied behaviors are checked for compatibility with the resource.
+     *
+     * @param aBehaviorArray An array of annotation resource behaviors
+     * @return This annotation
+     */
+    @JsonIgnore
+    public AbstractCanvasAnnotation<A> setBehaviors(final Behavior... aBehaviorArray) {
+        return setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorArray));
+    }
+
+    /**
+     * Sets the annotation resource's behaviors. The supplied behaviors are checked for compatibility with the resource.
+     *
+     * @param aBehaviorList A list of annotation resource behaviors
+     * @return This annotation
+     */
+    @Override
+    @JsonSetter(JsonKeys.BEHAVIOR)
+    public AbstractCanvasAnnotation<A> setBehaviors(final List<Behavior> aBehaviorList) {
+        if (aBehaviorList instanceof BehaviorList) {
+            ((BehaviorList) aBehaviorList).checkType(ResourceBehavior.class, this.getClass());
+        }
+
+        return (AbstractCanvasAnnotation<A>) super.setBehaviors(aBehaviorList);
+    }
+
+    /**
      * Indicates whether there is a choice between annotation resources or just individual resources on an annotation.
      *
      * @return True if body contains a choice; else, false
@@ -169,33 +196,6 @@ abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> e
      */
     protected Optional<TimeMode> getTimeMode() {
         return Optional.ofNullable(myTimeMode);
-    }
-
-    /**
-     * Sets the annotation resource's behaviors. The supplied behaviors are checked for compatibility with the resource.
-     *
-     * @param aBehaviorArray An array of annotation resource behaviors
-     * @return This annotation
-     */
-    @JsonIgnore
-    public AbstractCanvasAnnotation<A> setBehaviors(final Behavior... aBehaviorArray) {
-        return setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorArray));
-    }
-
-    /**
-     * Sets the annotation resource's behaviors. The supplied behaviors are checked for compatibility with the resource.
-     *
-     * @param aBehaviorList A list of annotation resource behaviors
-     * @return This annotation
-     */
-    @Override
-    @JsonSetter(JsonKeys.BEHAVIOR)
-    public AbstractCanvasAnnotation<A> setBehaviors(final List<Behavior> aBehaviorList) {
-        if (aBehaviorList instanceof BehaviorList) {
-            ((BehaviorList) aBehaviorList).checkType(ResourceBehavior.class, this.getClass());
-        }
-
-        return (AbstractCanvasAnnotation<A>) super.setBehaviors(aBehaviorList);
     }
 
     /**

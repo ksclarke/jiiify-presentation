@@ -16,11 +16,11 @@ public enum CanvasBehavior implements Behavior {
     /** A auto-advance behavior on a canvas. */
     AUTO_ADVANCE(BehaviorConstants.AUTO_ADVANCE),
 
-    /** A no-auto-advance behavior on a canvas. */
-    NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE),
-
     /** A facing-pages behavior on a canvas. */
     FACING_PAGES(BehaviorConstants.FACING_PAGES),
+
+    /** A no-auto-advance behavior on a canvas. */
+    NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE),
 
     /** A non-paged behavior on a canvas. */
     NON_PAGED(BehaviorConstants.NON_PAGED);
@@ -38,6 +38,16 @@ public enum CanvasBehavior implements Behavior {
     }
 
     /**
+     * Gets the enumeration value's label.
+     *
+     * @return The enumeration value's label
+     */
+    @Override
+    public String label() {
+        return myLabel;
+    }
+
+    /**
      * Gets a string representation of a canvas behavior.
      *
      * @return A string representation of a canvas behavior
@@ -45,16 +55,6 @@ public enum CanvasBehavior implements Behavior {
     @Override
     @JsonValue
     public String toString() {
-        return myLabel;
-    }
-
-    /**
-     * Gets the enumeration value's label.
-     *
-     * @return The enumeration value's label
-     */
-    @Override
-    public String label() {
         return myLabel;
     }
 

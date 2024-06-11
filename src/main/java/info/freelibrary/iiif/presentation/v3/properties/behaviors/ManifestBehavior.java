@@ -16,23 +16,23 @@ public enum ManifestBehavior implements Behavior {
     /** An auto-advance manifest behavior. */
     AUTO_ADVANCE(BehaviorConstants.AUTO_ADVANCE),
 
-    /** A no-auto-advance manifest behavior. */
-    NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE),
+    /** A continuous manifest behavior. */
+    CONTINUOUS(BehaviorConstants.CONTINUOUS),
 
     /** An individuals manifest behavior. */
     INDIVIDUALS(BehaviorConstants.INDIVIDUALS),
 
-    /** A continuous manifest behavior. */
-    CONTINUOUS(BehaviorConstants.CONTINUOUS),
-
-    /** A repeat manifest behavior. */
-    REPEAT(BehaviorConstants.REPEAT),
+    /** A no-auto-advance manifest behavior. */
+    NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE),
 
     /** A no-repeat manifest behavior. */
     NO_REPEAT(BehaviorConstants.NO_REPEAT),
 
     /** A paged manifest behavior. */
     PAGED(BehaviorConstants.PAGED),
+
+    /** A repeat manifest behavior. */
+    REPEAT(BehaviorConstants.REPEAT),
 
     /** An unordered manifest behavior. */
     UNORDERED(BehaviorConstants.UNORDERED);
@@ -50,6 +50,16 @@ public enum ManifestBehavior implements Behavior {
     }
 
     /**
+     * Gets the manifest behavior's label.
+     *
+     * @return The manifest behavior's label
+     */
+    @Override
+    public String label() {
+        return myLabel;
+    }
+
+    /**
      * Gets a string representation of the manifest behavior.
      *
      * @return A string representation of the manifest behavior
@@ -57,16 +67,6 @@ public enum ManifestBehavior implements Behavior {
     @Override
     @JsonValue
     public String toString() {
-        return myLabel;
-    }
-
-    /**
-     * Gets the manifest behavior's label.
-     *
-     * @return The manifest behavior's label
-     */
-    @Override
-    public String label() {
         return myLabel;
     }
 

@@ -43,6 +43,48 @@ public final class TestUtils {
     }
 
     /**
+     * Tests equality of two JSON strings.
+     *
+     * @param anExpectedResult An expected JSON result
+     * @param anActualResult An actual JSON result
+     * @throws AssertionError If the two JSON strings are not equal
+     */
+    public static void assertEquals(final String anExpectedResult, final String anActualResult) {
+        final JsonOptions config = new JsonOptions().ignoreOrder(true).setCollapsibleArrays(COLLAPSIBLES).format(true);
+        final JsonValue expected = Json.parse(anExpectedResult);
+        final JsonValue actual = Json.parse(anActualResult);
+
+        if (!expected.equals(actual, config)) {
+            try {
+                Assert.assertEquals(expected.toString(config), actual.toString(config));
+            } catch (final AssertionError details) {
+                final Encoder encoder = Base64.getEncoder();
+                throw new AssertionError(
+                        StringUtils.format("\"https://jsondiff.com/#left=data:base64,{}&right=data:base64,{}\"",
+                                new String(encoder.encode(expected.toString(config).getBytes()), UTF_8),
+                                new String(encoder.encode(actual.toString(config).getBytes()), UTF_8)),
+                        details);
+            }
+        }
+    }
+
+    /**
+     * A convenience method that pretty prints a JSON string so that multiple comparison strings will have the same
+     * formatting.
+     *
+     * @param aJsonString A JSON string
+     * @return A formatted JSON string
+     * @throws JsonParsingException if the format cannot be parsed from supplied JSON string
+     */
+    public static String format(final String aJsonString) {
+        try {
+            return JSON.getReader().readTree(aJsonString).toPrettyString();
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details);
+        }
+    }
+
+    /**
      * Returns an object as JSON.
      *
      * @param aObject An object to convert into JSON
@@ -69,19 +111,6 @@ public final class TestUtils {
     }
 
     /**
-     * Returns a named object as JSON.
-     *
-     * @param aName A name for the supplied object
-     * @param aObject An object to convert into JSON
-     * @return The supplied object's JSON representation
-     * @throws JsonProcessingException If there is a JSON processing problem
-     * @throws IOException If there is trouble writing JSON to a StringWriter
-     */
-    public static String toJson(final String aName, final Object aObject) throws JsonProcessingException, IOException {
-        return toJson(aName, aObject, false, false);
-    }
-
-    /**
      * Returns an object as JSON.
      *
      * @param aObject An object to convert into JSON
@@ -94,6 +123,19 @@ public final class TestUtils {
     public static String toJson(final Object aObject, final boolean aList, final boolean aIndent)
             throws JsonProcessingException, IOException {
         return toJson(null, aObject, aList, aIndent);
+    }
+
+    /**
+     * Returns a named object as JSON.
+     *
+     * @param aName A name for the supplied object
+     * @param aObject An object to convert into JSON
+     * @return The supplied object's JSON representation
+     * @throws JsonProcessingException If there is a JSON processing problem
+     * @throws IOException If there is trouble writing JSON to a StringWriter
+     */
+    public static String toJson(final String aName, final Object aObject) throws JsonProcessingException, IOException {
+        return toJson(aName, aObject, false, false);
     }
 
     /**
@@ -139,47 +181,5 @@ public final class TestUtils {
         }
 
         return aName != null ? "{\"" + aName + "\" : " + writer.toString() + "}" : writer.toString();
-    }
-
-    /**
-     * A convenience method that pretty prints a JSON string so that multiple comparison strings will have the same
-     * formatting.
-     *
-     * @param aJsonString A JSON string
-     * @return A formatted JSON string
-     * @throws JsonParsingException if the format cannot be parsed from supplied JSON string
-     */
-    public static String format(final String aJsonString) {
-        try {
-            return JSON.getReader().readTree(aJsonString).toPrettyString();
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details);
-        }
-    }
-
-    /**
-     * Tests equality of two JSON strings.
-     *
-     * @param anExpectedResult An expected JSON result
-     * @param anActualResult An actual JSON result
-     * @throws AssertionError If the two JSON strings are not equal
-     */
-    public static void assertEquals(final String anExpectedResult, final String anActualResult) {
-        final JsonOptions config = new JsonOptions().ignoreOrder(true).setCollapsibleArrays(COLLAPSIBLES).format(true);
-        final JsonValue expected = Json.parse(anExpectedResult);
-        final JsonValue actual = Json.parse(anActualResult);
-
-        if (!expected.equals(actual, config)) {
-            try {
-                Assert.assertEquals(expected.toString(config), actual.toString(config));
-            } catch (final AssertionError details) {
-                final Encoder encoder = Base64.getEncoder();
-                throw new AssertionError(
-                        StringUtils.format("\"https://jsondiff.com/#left=data:base64,{}&right=data:base64,{}\"",
-                                new String(encoder.encode(expected.toString(config).getBytes()), UTF_8),
-                                new String(encoder.encode(actual.toString(config).getBytes()), UTF_8)),
-                        details);
-            }
-        }
     }
 }

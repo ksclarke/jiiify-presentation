@@ -29,15 +29,6 @@ import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
  */
 public class PartOfTest {
 
-    /** A test URI. */
-    private static final String TEST_URI_1 = "https://example.org/iiif/1";
-
-    /** A test URI. */
-    private static final String TEST_URI_2 = "https://example.org/iiif/2";
-
-    /** A test label. */
-    private static final Label TEST_LABEL = new Label("PartOf for Example Object");
-
     /** A test language code. */
     private static final String ISO_639_2_NAHUATL = "nah";
 
@@ -45,13 +36,22 @@ public class PartOfTest {
     private static final String ISO_639_2_VIETNAMESE = "vie";
 
     /** A test fixture. */
+    private static final File PART_OF_FULL_ONE = new File(TestUtils.TEST_DIR, "partof-full-one.json");
+
+    /** A test fixture. */
     private static final File PART_OF_SIMPLE_ONE = new File(TestUtils.TEST_DIR, "partof-simple-one.json");
 
     /** A test fixture. */
     private static final File PART_OF_SIMPLE_TWO = new File(TestUtils.TEST_DIR, "partof-simple-two.json");
 
-    /** A test fixture. */
-    private static final File PART_OF_FULL_ONE = new File(TestUtils.TEST_DIR, "partof-full-one.json");
+    /** A test label. */
+    private static final Label TEST_LABEL = new Label("PartOf for Example Object");
+
+    /** A test URI. */
+    private static final String TEST_URI_1 = "https://example.org/iiif/1";
+
+    /** A test URI. */
+    private static final String TEST_URI_2 = "https://example.org/iiif/2";
 
     /** A test manifest. */
     private Manifest myManifest;
@@ -65,25 +65,16 @@ public class PartOfTest {
     }
 
     /**
-     * Tests a partOf URI ID constructor and partOf (de)serialization.
+     * Tests that PartOfs with the same contents are equal.
      *
-     * @throws IOException If there is trouble reading or deserializing the partOf file or serializing the constructed
-     *         partOf
+     * @throws IOException If there is trouble reading the test fixture
      */
     @Test
-    public final void testPartOfURIString() throws IOException {
-        myManifest.setPartOfs(new PartOf(TEST_URI_1, ResourceTypes.MANIFEST));
+    public final void testEquals() throws IOException {
+        final PartOf partOf1 = PartOf.fromJSON(getTestFixture());
+        final PartOf partOf2 = PartOf.fromJSON(getTestFixture());
 
-        checkDeserialization(PART_OF_SIMPLE_ONE);
-        checkSerialization(PART_OF_SIMPLE_ONE);
-    }
-
-    /**
-     * Tests a partOf string ID constructor.
-     */
-    @Test
-    public final void testPartOfStringString() {
-        new PartOf(TEST_URI_1.toString(), ResourceTypes.MANIFEST);
+        assertTrue(partOf1.equals(partOf2));
     }
 
     /**
@@ -102,6 +93,19 @@ public class PartOfTest {
     }
 
     /**
+     * Tests that hash codes are consistently the same for PartOfs that are equal.
+     *
+     * @throws IOException If there is trouble reading the test fixture
+     */
+    @Test
+    public final void testHashCode() throws IOException {
+        final PartOf partOf1 = PartOf.fromJSON(getTestFixture());
+        final PartOf partOf2 = PartOf.fromJSON(getTestFixture());
+
+        assertEquals(partOf1.hashCode(), partOf2.hashCode());
+    }
+
+    /**
      * Tests (de)serialization of multiple partOfs.
      *
      * @throws IOException If there is trouble reading or deserializing the partOf file or serializing the constructed
@@ -117,20 +121,33 @@ public class PartOfTest {
     }
 
     /**
+     * Tests a partOf string ID constructor.
+     */
+    @Test
+    public final void testPartOfStringString() {
+        new PartOf(TEST_URI_1.toString(), ResourceTypes.MANIFEST);
+    }
+
+    /**
+     * Tests a partOf URI ID constructor and partOf (de)serialization.
+     *
+     * @throws IOException If there is trouble reading or deserializing the partOf file or serializing the constructed
+     *         partOf
+     */
+    @Test
+    public final void testPartOfURIString() throws IOException {
+        myManifest.setPartOfs(new PartOf(TEST_URI_1, ResourceTypes.MANIFEST));
+
+        checkDeserialization(PART_OF_SIMPLE_ONE);
+        checkSerialization(PART_OF_SIMPLE_ONE);
+    }
+
+    /**
      * Tests getting and setting a partOf's ID.
      */
     @Test
     public final void testSetID() {
         assertEquals(TEST_URI_1, new PartOf(TEST_URI_2, ResourceTypes.MANIFEST).setID(TEST_URI_1).getID());
-    }
-
-    /**
-     * Tests getting and setting a partOf's type.
-     */
-    @Test
-    public final void testSetType() {
-        assertEquals(ResourceTypes.MANIFEST,
-                new PartOf(TEST_URI_1, ResourceTypes.DATASET).setType(ResourceTypes.MANIFEST).getType());
     }
 
     /**
@@ -160,29 +177,12 @@ public class PartOfTest {
     }
 
     /**
-     * Tests that hash codes are consistently the same for PartOfs that are equal.
-     *
-     * @throws IOException If there is trouble reading the test fixture
+     * Tests getting and setting a partOf's type.
      */
     @Test
-    public final void testHashCode() throws IOException {
-        final PartOf partOf1 = PartOf.fromJSON(getTestFixture());
-        final PartOf partOf2 = PartOf.fromJSON(getTestFixture());
-
-        assertEquals(partOf1.hashCode(), partOf2.hashCode());
-    }
-
-    /**
-     * Tests that PartOfs with the same contents are equal.
-     *
-     * @throws IOException If there is trouble reading the test fixture
-     */
-    @Test
-    public final void testEquals() throws IOException {
-        final PartOf partOf1 = PartOf.fromJSON(getTestFixture());
-        final PartOf partOf2 = PartOf.fromJSON(getTestFixture());
-
-        assertTrue(partOf1.equals(partOf2));
+    public final void testSetType() {
+        assertEquals(ResourceTypes.MANIFEST,
+                new PartOf(TEST_URI_1, ResourceTypes.DATASET).setType(ResourceTypes.MANIFEST).getType());
     }
 
     /**

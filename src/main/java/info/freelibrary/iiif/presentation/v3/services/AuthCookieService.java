@@ -14,12 +14,11 @@ import info.freelibrary.iiif.presentation.v3.Service;
 public interface AuthCookieService<T extends AuthCookieService<T>> extends Service<T> {
 
     /**
-     * Sets the auth cookie service failure header.
+     * Gets the auth cookie service failure description.
      *
-     * @param aFailureHeader The failure header
-     * @return This service
+     * @return This service's failure description
      */
-    T setFailureHeader(String aFailureHeader);
+    String getFailureDescription();
 
     /**
      * Gets the auth cookie service failure header.
@@ -37,11 +36,12 @@ public interface AuthCookieService<T extends AuthCookieService<T>> extends Servi
     T setFailureDescription(String aFailureDescription);
 
     /**
-     * Gets the auth cookie service failure description.
+     * Sets the auth cookie service failure header.
      *
-     * @return This service's failure description
+     * @param aFailureHeader The failure header
+     * @return This service
      */
-    String getFailureDescription();
+    T setFailureHeader(String aFailureHeader);
 
     /**
      * The {@link AuthCookieService} profile.
@@ -49,14 +49,14 @@ public interface AuthCookieService<T extends AuthCookieService<T>> extends Servi
     enum Profile implements Service.Profile {
 
         /**
-         * The login profile.
-         */
-        LOGIN("http://iiif.io/api/auth/1/login"),
-
-        /**
          * The click-through profile.
          */
         CLICKTHROUGH("http://iiif.io/api/auth/1/clickthrough"),
+
+        /**
+         * The external profile.
+         */
+        EXTERNAL("http://iiif.io/api/auth/1/external"),
 
         /**
          * The kiosk profile.
@@ -64,9 +64,9 @@ public interface AuthCookieService<T extends AuthCookieService<T>> extends Servi
         KIOSK("http://iiif.io/api/auth/1/kiosk"),
 
         /**
-         * The external profile.
+         * The login profile.
          */
-        EXTERNAL("http://iiif.io/api/auth/1/external");
+        LOGIN("http://iiif.io/api/auth/1/login");
 
         /**
          * The profile label.
@@ -83,22 +83,22 @@ public interface AuthCookieService<T extends AuthCookieService<T>> extends Servi
         }
 
         /**
-         * Gets the service profile as a string.
-         *
-         * @return The service profile as a string
-         */
-        @Override
-        public String toString() {
-            return myLabel;
-        }
-
-        /**
          * Gets the profile's label.
          *
          * @return The profile's label
          */
         @Override
         public String label() {
+            return myLabel;
+        }
+
+        /**
+         * Gets the service profile as a string.
+         *
+         * @return The service profile as a string
+         */
+        @Override
+        public String toString() {
             return myLabel;
         }
 

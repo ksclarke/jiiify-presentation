@@ -51,6 +51,16 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
      * Creates a content resource.
      *
      * @param aType The type of resource
+     * @param aBehaviorClass A class of behavior for this resource
+     */
+    protected AbstractContentResource(final String aType, final Class<? extends Behavior> aBehaviorClass) {
+        super(aType, aBehaviorClass);
+    }
+
+    /**
+     * Creates a content resource.
+     *
+     * @param aType The type of resource
      * @param aID The resource ID
      * @param aBehaviorClass A class of behavior for this resource
      */
@@ -61,13 +71,14 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
     }
 
     /**
-     * Creates a content resource.
+     * Gets the media type format of the content resource.
      *
-     * @param aType The type of resource
-     * @param aBehaviorClass A class of behavior for this resource
+     * @return The media type format of the content resource
      */
-    protected AbstractContentResource(final String aType, final Class<? extends Behavior> aBehaviorClass) {
-        super(aType, aBehaviorClass);
+    @JsonInclude(Include.NON_EMPTY)
+    @JsonSerialize(contentUsing = MediaTypeSerializer.class, keyUsing = MediaTypeKeySerializer.class)
+    public Optional<MediaType> getFormat() {
+        return Optional.ofNullable(myFormat);
     }
 
     /**
@@ -86,30 +97,6 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
     }
 
     /**
-     * Gets the media type format of the content resource.
-     *
-     * @return The media type format of the content resource
-     */
-    @JsonInclude(Include.NON_EMPTY)
-    @JsonSerialize(contentUsing = MediaTypeSerializer.class, keyUsing = MediaTypeKeySerializer.class)
-    public Optional<MediaType> getFormat() {
-        return Optional.ofNullable(myFormat);
-    }
-
-    /**
-     * A non-public way to set format from a media type.
-     *
-     * @param aMediaType A media type
-     * @return This content resource
-     */
-    @JsonProperty(JsonKeys.FORMAT)
-    @JsonDeserialize(using = MediaTypeDeserializer.class)
-    protected AbstractContentResource<T> setFormat(final MediaType aMediaType) {
-        myFormat = aMediaType;
-        return this;
-    }
-
-    /**
      * Gets the content resource's annotations.
      *
      * @return The content resource's annotations
@@ -121,6 +108,18 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
         }
 
         return myAnnotations;
+    }
+
+    /**
+     * Sets the content resource's annotation pages from an array.
+     *
+     * @param aAnnotationArray An array of annotation pages
+     * @return The content resource
+     */
+    @SuppressWarnings(JDK.UNCHECKED)
+    @JsonIgnore
+    protected AbstractContentResource<T> setAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
+        return setAnnotations(Arrays.asList(aAnnotationArray));
     }
 
     /**
@@ -141,15 +140,16 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
     }
 
     /**
-     * Sets the content resource's annotation pages from an array.
+     * A non-public way to set format from a media type.
      *
-     * @param aAnnotationArray An array of annotation pages
-     * @return The content resource
+     * @param aMediaType A media type
+     * @return This content resource
      */
-    @SuppressWarnings(JDK.UNCHECKED)
-    @JsonIgnore
-    protected AbstractContentResource<T> setAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
-        return setAnnotations(Arrays.asList(aAnnotationArray));
+    @JsonProperty(JsonKeys.FORMAT)
+    @JsonDeserialize(using = MediaTypeDeserializer.class)
+    protected AbstractContentResource<T> setFormat(final MediaType aMediaType) {
+        myFormat = aMediaType;
+        return this;
     }
 
     /**

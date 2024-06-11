@@ -18,25 +18,6 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 public class Label extends I18nProperty<Label> {
 
     /**
-     * Creates a label using the 'none' language tag.
-     *
-     * @param aValue A value of the label
-     */
-    public Label(final String aValue) {
-        this(new I18n(I18n.DEFAULT_LANG, aValue));
-    }
-
-    /**
-     * Create a label from a language tag and a string value.
-     *
-     * @param aLangTag A language tag
-     * @param aValue A string value
-     */
-    public Label(final String aLangTag, final String aValue) {
-        this(new I18n(aLangTag, aValue));
-    }
-
-    /**
      * Creates a label from the supplied internationalizations.
      *
      * @param aI18nArray An array of internationalizations for the label
@@ -57,6 +38,15 @@ public class Label extends I18nProperty<Label> {
     }
 
     /**
+     * Creates a label using the 'none' language tag.
+     *
+     * @param aValue A value of the label
+     */
+    public Label(final String aValue) {
+        this(new I18n(I18n.DEFAULT_LANG, aValue));
+    }
+
+    /**
      * Creates a label from the supplied internationalization(s). The submitted array should alternate between language
      * code and string value.
      *
@@ -64,6 +54,16 @@ public class Label extends I18nProperty<Label> {
      */
     public Label(final String... aDataArray) {
         super(I18nUtils.parseArray(false, aDataArray));
+    }
+
+    /**
+     * Create a label from a language tag and a string value.
+     *
+     * @param aLangTag A language tag
+     * @param aValue A string value
+     */
+    public Label(final String aLangTag, final String aValue) {
+        this(new I18n(aLangTag, aValue));
     }
 
     /**

@@ -42,27 +42,18 @@ public class PartOf extends AbstractLinkProperty<PartOf> {
         super();
     }
 
-    /**
-     * Sets the ID.
-     *
-     * @param aID The ID
-     * @return The resource whose ID is being set
-     */
     @Override
-    @JsonSetter(JsonKeys.ID)
-    public PartOf setID(final String aID) {
-        return (PartOf) super.setID(aID);
+    public boolean equals(final Object aObject) {
+        if (!super.equals(aObject) || getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        return getLanguages().equals(((PartOf) aObject).getLanguages());
     }
 
-    /**
-     * Sets the partOf type.
-     *
-     * @param aType A type
-     * @return The partOf
-     */
     @Override
-    public PartOf setType(final String aType) {
-        return (PartOf) super.setType(aType);
+    public Optional<MediaType> getFormat() {
+        return super.getFormat();
     }
 
     /**
@@ -75,8 +66,20 @@ public class PartOf extends AbstractLinkProperty<PartOf> {
     }
 
     @Override
-    public Optional<MediaType> getFormat() {
-        return super.getFormat();
+    public int hashCode() {
+        return 31 * super.hashCode() + Objects.hash(getLanguages());
+    }
+
+    /**
+     * Sets the ID.
+     *
+     * @param aID The ID
+     * @return The resource whose ID is being set
+     */
+    @Override
+    @JsonSetter(JsonKeys.ID)
+    public PartOf setID(final String aID) {
+        return (PartOf) super.setID(aID);
     }
 
     /**
@@ -95,18 +98,15 @@ public class PartOf extends AbstractLinkProperty<PartOf> {
         return (PartOf) super.setLanguages(aLangArray);
     }
 
+    /**
+     * Sets the partOf type.
+     *
+     * @param aType A type
+     * @return The partOf
+     */
     @Override
-    public int hashCode() {
-        return 31 * super.hashCode() + Objects.hash(getLanguages());
-    }
-
-    @Override
-    public boolean equals(final Object aObject) {
-        if (!super.equals(aObject) || getClass() != aObject.getClass()) {
-            return false;
-        }
-
-        return getLanguages().equals(((PartOf) aObject).getLanguages());
+    public PartOf setType(final String aType) {
+        return (PartOf) super.setType(aType);
     }
 
     /**

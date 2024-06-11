@@ -39,6 +39,17 @@ public class StartTest extends AbstractTest {
     }
 
     /**
+     * Tests setting the selector.
+     */
+    @Test
+    public final void testSettingSelector() {
+        final AudioContentSelector selector = new AudioContentSelector();
+        final Start start = new Start(getURL(), getURL(), selector);
+
+        assertEquals(selector, start.getSelector().get());
+    }
+
+    /**
      * Tests the specific resources start.
      */
     @Test
@@ -53,16 +64,5 @@ public class StartTest extends AbstractTest {
 
         assertEquals(JSON.getPrettyWriter().writeValueAsString(json),
                 JSON.getPrettyWriter().writeValueAsString(new Start(idURL, sourceURL, selector)));
-    }
-
-    /**
-     * Tests setting the selector.
-     */
-    @Test
-    public final void testSettingSelector() {
-        final AudioContentSelector selector = new AudioContentSelector();
-        final Start start = new Start(getURL(), getURL(), selector);
-
-        assertEquals(selector, start.getSelector().get());
     }
 }

@@ -21,6 +21,9 @@ public final class JsonKeys {
     /** The constants for the body property. */
     public static final String BODY = "body";
 
+    /** A constant for a GeoJSON bounding box. */
+    public static final String BOUNDING_BOX = "bbox";
+
     /** The constants for the canvas property. */
     public static final String CANVAS = "canvas";
 
@@ -68,9 +71,6 @@ public final class JsonKeys {
 
     /** A constant for a GeoJSON navPlace features array. */
     public static final String FEATURES = "features";
-
-    /** A constant for a GeoJSON bounding box. */
-    public static final String BOUNDING_BOX = "bbox";
 
     /** The first AnnotationPage in an AnnotationCollection. */
     public static final String FIRST = "first";

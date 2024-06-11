@@ -43,16 +43,6 @@ public class NavDate {
     }
 
     /**
-     * Creates a new navigation date.
-     *
-     * @return A new <code>NavDate</code>
-     */
-    public static final NavDate now() {
-        final ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS);
-        return new NavDate(now.format(DateTimeFormatter.ISO_INSTANT));
-    }
-
-    /**
      * Returns a string representation of the navigation date.
      *
      * @return A string representation of the navigation date
@@ -70,6 +60,16 @@ public class NavDate {
     @JsonIgnore
     public ZonedDateTime getZonedDateTime() {
         return ZonedDateTime.parse(myZonedDateTime);
+    }
+
+    /**
+     * Creates a new navigation date.
+     *
+     * @return A new <code>NavDate</code>
+     */
+    public static final NavDate now() {
+        final ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS);
+        return new NavDate(now.format(DateTimeFormatter.ISO_INSTANT));
     }
 
 }

@@ -37,10 +37,6 @@ public final class JSON {
             .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true).registerModules(
                     new Jdk8Module(), new SimpleModule().addSerializer(float.class, new JSON().new FloatSerializer()));
 
-    static {
-        MAPPER.getFactory().enable(JsonParser.Feature.INCLUDE_SOURCE_IN_LOCATION);
-    }
-
     /**
      * Creates a new (de)serialization configuration.
      */
@@ -49,122 +45,15 @@ public final class JSON {
     }
 
     /**
-     * Gets a reader from the JSON mapper.
+     * Converts a supplied object into an instance of the supplied class.
      *
-     * @return An object reader
+     * @param <T> The output of the conversion
+     * @param aObject The input to the conversion
+     * @param aClass The class of output desired
+     * @return An instance of the output type
      */
-    public static ObjectReader getReader() {
-        return MAPPER.reader();
-    }
-
-    /**
-     * Gets a reader for the supplied Java type.
-     *
-     * @param aJavaType A Java type
-     * @return An object reader
-     */
-    public static ObjectReader getReader(final JavaType aJavaType) {
-        return MAPPER.readerFor(aJavaType);
-    }
-
-    /**
-     * Gets a reader for the supplied class.
-     *
-     * @param <T> A type of class to read
-     * @param aClass The class of the object to read
-     * @return An object reader
-     */
-    public static <T> ObjectReader getReader(final Class<T> aClass) {
-        return MAPPER.readerFor(aClass);
-    }
-
-    /**
-     * Gets a reader for the supplied type reference.
-     *
-     * @param <T> A type of reference to read
-     * @param aTypeRef A type reference
-     * @return An object reader
-     */
-    public static <T> ObjectReader getReader(final TypeReference<T> aTypeRef) {
-        return MAPPER.readerFor(aTypeRef);
-    }
-
-    /**
-     * Gets a generic writer.
-     *
-     * @return An object writer
-     */
-    public static ObjectWriter getWriter() {
-        return MAPPER.writer();
-    }
-
-    /**
-     * Gets a writer for the supplied Java type.
-     *
-     * @param aJavaType A Java type
-     * @return An object writer
-     */
-    public static ObjectWriter getWriter(final JavaType aJavaType) {
-        return MAPPER.writerFor(aJavaType);
-    }
-
-    /**
-     * Gets a writer for the supplied class.
-     *
-     * @param <T> A type of class
-     * @param aClass The class of the requested writer
-     * @return An object writer
-     */
-    public static <T> ObjectWriter getWriter(final Class<T> aClass) {
-        return MAPPER.writerFor(aClass);
-    }
-
-    /**
-     * Gets a writer for the supplied type reference.
-     *
-     * @param <T> A type of reference to write
-     * @param aTypeRef A type reference
-     * @return An object writer
-     */
-    public static <T> ObjectWriter getWriter(final TypeReference<T> aTypeRef) {
-        return MAPPER.writerFor(aTypeRef);
-    }
-
-    /**
-     * Gets a filter provider writer from the JSON mapper.
-     *
-     * @param aProvider A filter provider
-     * @return An object writer
-     */
-    public static ObjectWriter getWriter(final FilterProvider aProvider) {
-        return MAPPER.writer(aProvider);
-    }
-
-    /**
-     * Gets an object writer that pretty prints its output.
-     *
-     * @return An object writer
-     */
-    public static ObjectWriter getPrettyWriter() {
-        return MAPPER.writerWithDefaultPrettyPrinter();
-    }
-
-    /**
-     * Creates a new object node.
-     *
-     * @return An object node
-     */
-    public static ObjectNode createObjectNode() {
-        return MAPPER.createObjectNode();
-    }
-
-    /**
-     * Creates a new array node.
-     *
-     * @return An array node
-     */
-    public static ArrayNode createArrayNode() {
-        return MAPPER.createArrayNode();
+    public static <T> T convertValue(final Object aObject, final Class<T> aClass) {
+        return MAPPER.convertValue(aObject, aClass);
     }
 
     /**
@@ -192,15 +81,131 @@ public final class JSON {
     }
 
     /**
-     * Converts a supplied object into an instance of the supplied class.
+     * Creates a new array node.
      *
-     * @param <T> The output of the conversion
-     * @param aObject The input to the conversion
-     * @param aClass The class of output desired
-     * @return An instance of the output type
+     * @return An array node
      */
-    public static <T> T convertValue(final Object aObject, final Class<T> aClass) {
-        return MAPPER.convertValue(aObject, aClass);
+    public static ArrayNode createArrayNode() {
+        return MAPPER.createArrayNode();
+    }
+
+    /**
+     * Creates a new object node.
+     *
+     * @return An object node
+     */
+    public static ObjectNode createObjectNode() {
+        return MAPPER.createObjectNode();
+    }
+
+    /**
+     * Gets an object writer that pretty prints its output.
+     *
+     * @return An object writer
+     */
+    public static ObjectWriter getPrettyWriter() {
+        return MAPPER.writerWithDefaultPrettyPrinter();
+    }
+
+    /**
+     * Gets a reader from the JSON mapper.
+     *
+     * @return An object reader
+     */
+    public static ObjectReader getReader() {
+        return MAPPER.reader();
+    }
+
+    /**
+     * Gets a reader for the supplied class.
+     *
+     * @param <T> A type of class to read
+     * @param aClass The class of the object to read
+     * @return An object reader
+     */
+    public static <T> ObjectReader getReader(final Class<T> aClass) {
+        return MAPPER.readerFor(aClass);
+    }
+
+    /**
+     * Gets a reader for the supplied Java type.
+     *
+     * @param aJavaType A Java type
+     * @return An object reader
+     */
+    public static ObjectReader getReader(final JavaType aJavaType) {
+        return MAPPER.readerFor(aJavaType);
+    }
+
+    /**
+     * Gets a reader for the supplied type reference.
+     *
+     * @param <T> A type of reference to read
+     * @param aTypeRef A type reference
+     * @return An object reader
+     */
+    public static <T> ObjectReader getReader(final TypeReference<T> aTypeRef) {
+        return MAPPER.readerFor(aTypeRef);
+    }
+
+    /**
+     * Gets a type factory.
+     *
+     * @return A type factory
+     */
+    public static TypeFactory getTypeFactory() {
+        return MAPPER.getTypeFactory();
+    }
+
+    /**
+     * Gets a generic writer.
+     *
+     * @return An object writer
+     */
+    public static ObjectWriter getWriter() {
+        return MAPPER.writer();
+    }
+
+    /**
+     * Gets a writer for the supplied class.
+     *
+     * @param <T> A type of class
+     * @param aClass The class of the requested writer
+     * @return An object writer
+     */
+    public static <T> ObjectWriter getWriter(final Class<T> aClass) {
+        return MAPPER.writerFor(aClass);
+    }
+
+    /**
+     * Gets a filter provider writer from the JSON mapper.
+     *
+     * @param aProvider A filter provider
+     * @return An object writer
+     */
+    public static ObjectWriter getWriter(final FilterProvider aProvider) {
+        return MAPPER.writer(aProvider);
+    }
+
+    /**
+     * Gets a writer for the supplied Java type.
+     *
+     * @param aJavaType A Java type
+     * @return An object writer
+     */
+    public static ObjectWriter getWriter(final JavaType aJavaType) {
+        return MAPPER.writerFor(aJavaType);
+    }
+
+    /**
+     * Gets a writer for the supplied type reference.
+     *
+     * @param <T> A type of reference to write
+     * @param aTypeRef A type reference
+     * @return An object writer
+     */
+    public static <T> ObjectWriter getWriter(final TypeReference<T> aTypeRef) {
+        return MAPPER.writerFor(aTypeRef);
     }
 
     /**
@@ -214,13 +219,8 @@ public final class JSON {
         return MAPPER.valueToTree(aObject);
     }
 
-    /**
-     * Gets a type factory.
-     *
-     * @return A type factory
-     */
-    public static TypeFactory getTypeFactory() {
-        return MAPPER.getTypeFactory();
+    static {
+        MAPPER.getFactory().enable(JsonParser.Feature.INCLUDE_SOURCE_IN_LOCATION);
     }
 
     /**

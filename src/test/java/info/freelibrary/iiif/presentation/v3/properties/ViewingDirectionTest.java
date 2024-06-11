@@ -29,12 +29,21 @@ public class ViewingDirectionTest {
     }
 
     /**
+     * Tests parsing a bottom to top direction.
+     */
+    @Test
+    public void testParsingBottomToTop() {
+        assertEquals(ViewingDirection.BOTTOM_TO_TOP,
+                ViewingDirection.fromLabel(ViewingDirection.values()[0].toString()));
+    }
+
+    /**
      * Tests parsing a left to right direction.
      */
     @Test
     public void testParsingLeftToRight() {
         assertEquals(ViewingDirection.LEFT_TO_RIGHT,
-                ViewingDirection.fromLabel(ViewingDirection.values()[0].toString()));
+                ViewingDirection.fromLabel(ViewingDirection.values()[1].toString()));
     }
 
     /**
@@ -43,7 +52,7 @@ public class ViewingDirectionTest {
     @Test
     public void testParsingRightToLeft() {
         assertEquals(ViewingDirection.RIGHT_TO_LEFT,
-                ViewingDirection.fromLabel(ViewingDirection.values()[1].toString()));
+                ViewingDirection.fromLabel(ViewingDirection.values()[2].toString()));
     }
 
     /**
@@ -52,24 +61,7 @@ public class ViewingDirectionTest {
     @Test
     public void testParsingTopToBottom() {
         assertEquals(ViewingDirection.TOP_TO_BOTTOM,
-                ViewingDirection.fromLabel(ViewingDirection.values()[2].toString()));
-    }
-
-    /**
-     * Tests parsing a bottom to top direction.
-     */
-    @Test
-    public void testParsingBottomToTop() {
-        assertEquals(ViewingDirection.BOTTOM_TO_TOP,
                 ViewingDirection.fromLabel(ViewingDirection.values()[3].toString()));
-    }
-
-    /**
-     * Tests the number of viewingDirection options.
-     */
-    @Test
-    public void testViewingDirection() {
-        assertEquals(4, ViewingDirection.values().length);
     }
 
     /**
@@ -78,14 +70,6 @@ public class ViewingDirectionTest {
     @Test
     public void testToStringBtT() {
         assertEquals("bottom-to-top", ViewingDirection.BOTTOM_TO_TOP.toString());
-    }
-
-    /**
-     * Tests the top-to-bottom viewingDirection option.
-     */
-    @Test
-    public void testToStringTtB() {
-        assertEquals("top-to-bottom", ViewingDirection.TOP_TO_BOTTOM.toString());
     }
 
     /**
@@ -102,6 +86,22 @@ public class ViewingDirectionTest {
     @Test
     public void testToStringRtL() {
         assertEquals("right-to-left", ViewingDirection.RIGHT_TO_LEFT.toString());
+    }
+
+    /**
+     * Tests the top-to-bottom viewingDirection option.
+     */
+    @Test
+    public void testToStringTtB() {
+        assertEquals("top-to-bottom", ViewingDirection.TOP_TO_BOTTOM.toString());
+    }
+
+    /**
+     * Tests the number of viewingDirection options.
+     */
+    @Test
+    public void testViewingDirection() {
+        assertEquals(4, ViewingDirection.values().length);
     }
 
 }

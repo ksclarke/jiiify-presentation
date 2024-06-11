@@ -28,26 +28,8 @@ import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
  */
 public class HomepageTest {
 
-    /** A test ID. */
-    private static final String TEST_URI_1 = "https://example.com/info/";
-
-    /** A test ID. */
-    private static final String TEST_URI_2 = "https://example.com/info2/";
-
-    /** A test label. */
-    private static final Label TEST_LABEL_1 = new Label("Homepage for Example Object");
-
-    /** A test label. */
-    private static final Label TEST_LABEL_2 = new Label("Homepage 2 for Example Object");
-
-    /** A test format. */
-    private static final String TEST_FORMAT = "text/html";
-
-    /** A test language code. */
-    private static final String ISO_639_1_PERSIAN = "fa";
-
-    /** A test language code. */
-    private static final String ISO_639_1_UIGHUR = "ug";
+    /** A full test homepage fixture. */
+    private static final File HOMEPAGE_FULL_ONE = new File(TestUtils.TEST_DIR, "homepage-full-one.json");
 
     /** A simple test homepage fixture. */
     private static final File HOMEPAGE_SIMPLE_ONE = new File(TestUtils.TEST_DIR, "homepage-simple-one.json");
@@ -55,8 +37,26 @@ public class HomepageTest {
     /** A simple test homepage fixture. */
     private static final File HOMEPAGE_SIMPLE_TWO = new File(TestUtils.TEST_DIR, "homepage-simple-two.json");
 
-    /** A full test homepage fixture. */
-    private static final File HOMEPAGE_FULL_ONE = new File(TestUtils.TEST_DIR, "homepage-full-one.json");
+    /** A test language code. */
+    private static final String ISO_639_1_PERSIAN = "fa";
+
+    /** A test language code. */
+    private static final String ISO_639_1_UIGHUR = "ug";
+
+    /** A test format. */
+    private static final String TEST_FORMAT = "text/html";
+
+    /** A test label. */
+    private static final Label TEST_LABEL_1 = new Label("Homepage for Example Object");
+
+    /** A test label. */
+    private static final Label TEST_LABEL_2 = new Label("Homepage 2 for Example Object");
+
+    /** A test ID. */
+    private static final String TEST_URI_1 = "https://example.com/info/";
+
+    /** A test ID. */
+    private static final String TEST_URI_2 = "https://example.com/info2/";
 
     /** The test manifest. */
     private Manifest myManifest;
@@ -70,17 +70,16 @@ public class HomepageTest {
     }
 
     /**
-     * Tests a homepage constructor and homepage (de)serialization.
+     * Tests that Homepage(s) with the same contents are equal.
      *
-     * @throws IOException If there is trouble reading or deserializing the homepage file or serializing the constructed
-     *         homepage
+     * @throws IOException If there is trouble reading the test fixture
      */
     @Test
-    public final void testHomepageUriStringLabel() throws IOException {
-        myManifest.setHomepages(new Homepage(TEST_URI_1, TEST_LABEL_1));
+    public final void testEquals() throws IOException {
+        final Homepage homepage1 = Homepage.fromJSON(getTestFixture());
+        final Homepage homepage2 = Homepage.fromJSON(getTestFixture());
 
-        checkDeserialization(HOMEPAGE_SIMPLE_ONE);
-        checkSerialization(HOMEPAGE_SIMPLE_ONE);
+        assertTrue(homepage1.equals(homepage2));
     }
 
     /**
@@ -99,6 +98,33 @@ public class HomepageTest {
     }
 
     /**
+     * Tests that hash codes are consistently the same for Homepage(s) that are equal.
+     *
+     * @throws IOException If there is trouble reading the test fixture
+     */
+    @Test
+    public final void testHashCode() throws IOException {
+        final Homepage homepage1 = Homepage.fromJSON(getTestFixture());
+        final Homepage homepage2 = Homepage.fromJSON(getTestFixture());
+
+        assertEquals(homepage1.hashCode(), homepage2.hashCode());
+    }
+
+    /**
+     * Tests a homepage constructor and homepage (de)serialization.
+     *
+     * @throws IOException If there is trouble reading or deserializing the homepage file or serializing the constructed
+     *         homepage
+     */
+    @Test
+    public final void testHomepageUriStringLabel() throws IOException {
+        myManifest.setHomepages(new Homepage(TEST_URI_1, TEST_LABEL_1));
+
+        checkDeserialization(HOMEPAGE_SIMPLE_ONE);
+        checkSerialization(HOMEPAGE_SIMPLE_ONE);
+    }
+
+    /**
      * Tests (de)serialization of multiple homepages.
      *
      * @throws IOException If there is trouble reading or deserializing the homepage file or serializing the constructed
@@ -110,6 +136,16 @@ public class HomepageTest {
 
         checkDeserialization(HOMEPAGE_SIMPLE_TWO);
         checkSerialization(HOMEPAGE_SIMPLE_TWO);
+    }
+
+    /**
+     * Tests getting and setting a homepage's format.
+     */
+    @Test
+    public final void testSetFormat() {
+        final MediaType format = new Homepage(TEST_URI_1, TEST_LABEL_1)
+                .setFormat(MediaType.fromString(TEST_FORMAT).get()).getFormat().get();
+        assertEquals(MediaType.TEXT_HTML, format);
     }
 
     /**
@@ -129,16 +165,6 @@ public class HomepageTest {
     }
 
     /**
-     * Tests getting and setting a homepage's format.
-     */
-    @Test
-    public final void testSetFormat() {
-        final MediaType format = new Homepage(TEST_URI_1, TEST_LABEL_1)
-                .setFormat(MediaType.fromString(TEST_FORMAT).get()).getFormat().get();
-        assertEquals(MediaType.TEXT_HTML, format);
-    }
-
-    /**
      * Tests getting and setting a homepage's language.
      */
     @Test
@@ -153,32 +179,6 @@ public class HomepageTest {
     @Test(expected = IllegalArgumentException.class)
     public final void testSetLanguagesInvalid() {
         new Homepage(TEST_URI_1, TEST_LABEL_1).setLanguages("???");
-    }
-
-    /**
-     * Tests that hash codes are consistently the same for Homepage(s) that are equal.
-     *
-     * @throws IOException If there is trouble reading the test fixture
-     */
-    @Test
-    public final void testHashCode() throws IOException {
-        final Homepage homepage1 = Homepage.fromJSON(getTestFixture());
-        final Homepage homepage2 = Homepage.fromJSON(getTestFixture());
-
-        assertEquals(homepage1.hashCode(), homepage2.hashCode());
-    }
-
-    /**
-     * Tests that Homepage(s) with the same contents are equal.
-     *
-     * @throws IOException If there is trouble reading the test fixture
-     */
-    @Test
-    public final void testEquals() throws IOException {
-        final Homepage homepage1 = Homepage.fromJSON(getTestFixture());
-        final Homepage homepage2 = Homepage.fromJSON(getTestFixture());
-
-        assertTrue(homepage1.equals(homepage2));
     }
 
     /**

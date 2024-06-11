@@ -37,27 +37,22 @@ public class ExternalCookieService1Test {
     }
 
     /**
+     * Tests ExternalCookieService1's constructor that takes a varargs of services.
+     */
+    @Test
+    public final void testExternalCookieService1ServiceOfQArray() {
+        final AuthTokenService1 tokenService = new AuthTokenService1(myID);
+        final ExternalCookieService1 cookieService = new ExternalCookieService1().setServices(tokenService);
+
+        assertEquals(1, cookieService.getServices().size());
+    }
+
+    /**
      * Tests {@link ExternalCookieService1#getID() getID}.
      */
     @Test
     public final void testGetID() {
         assertEquals(null, new ExternalCookieService1().getID());
-    }
-
-    /**
-     * Tests {@link ExternalCookieService1#getType() getType}.
-     */
-    @Test
-    public final void testGetType() {
-        assertEquals(ExternalCookieService1.TYPE, new ExternalCookieService1().getType());
-    }
-
-    /**
-     * Tests {@link ExternalCookieService1#getServices() getServices}.
-     */
-    @Test
-    public final void testGetServicesEmpty() {
-        assertEquals(0, new ExternalCookieService1().getServices().size());
     }
 
     /**
@@ -69,14 +64,11 @@ public class ExternalCookieService1Test {
     }
 
     /**
-     * Tests {@link ExternalCookieService1#getFailureHeader() getFailureHeader}.
+     * Tests {@link ExternalCookieService1#getServices() getServices}.
      */
     @Test
-    public final void testGetSetFailureHeader() {
-        final String failureHeader = UUID.randomUUID().toString();
-        final ExternalCookieService1 cookieService = new ExternalCookieService1().setFailureHeader(failureHeader);
-
-        assertEquals(failureHeader, cookieService.getFailureHeader());
+    public final void testGetServicesEmpty() {
+        assertEquals(0, new ExternalCookieService1().getServices().size());
     }
 
     /**
@@ -92,22 +84,22 @@ public class ExternalCookieService1Test {
     }
 
     /**
-     * Tests ExternalCookieService1's constructor that takes a varargs of services.
+     * Tests {@link ExternalCookieService1#getFailureHeader() getFailureHeader}.
      */
     @Test
-    public final void testExternalCookieService1ServiceOfQArray() {
-        final AuthTokenService1 tokenService = new AuthTokenService1(myID);
-        final ExternalCookieService1 cookieService = new ExternalCookieService1().setServices(tokenService);
+    public final void testGetSetFailureHeader() {
+        final String failureHeader = UUID.randomUUID().toString();
+        final ExternalCookieService1 cookieService = new ExternalCookieService1().setFailureHeader(failureHeader);
 
-        assertEquals(1, cookieService.getServices().size());
+        assertEquals(failureHeader, cookieService.getFailureHeader());
     }
 
     /**
-     * Tests {@link ExternalCookieService1#setID(String) setID}.
+     * Tests {@link ExternalCookieService1#getType() getType}.
      */
     @Test
-    public final void testSetIDStringMissing() {
-        assertEquals(null, new ExternalCookieService1().getID());
+    public final void testGetType() {
+        assertEquals(ExternalCookieService1.TYPE, new ExternalCookieService1().getType());
     }
 
     /**
@@ -119,23 +111,11 @@ public class ExternalCookieService1Test {
     }
 
     /**
-     * Tests {@link ExternalCookieService1#setType(String) setType}.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public final void testSetTypeStringBad() {
-        new ExternalCookieService1().setType(UUID.randomUUID().toString());
-    }
-
-    /**
-     * Tests {@link ExternalCookieService1#setType(String) setType}.
+     * Tests {@link ExternalCookieService1#setID(String) setID}.
      */
     @Test
-    public final void testSetTypeString() {
-        try {
-            new ExternalCookieService1().setType(AuthCookieService.class.getSimpleName());
-        } catch (final IllegalArgumentException details) {
-            fail(details.getMessage());
-        }
+    public final void testSetIDStringMissing() {
+        assertEquals(null, new ExternalCookieService1().getID());
     }
 
     /**
@@ -160,6 +140,26 @@ public class ExternalCookieService1Test {
         final ExternalCookieService1 cookieService = new ExternalCookieService1();
 
         assertEquals(1, cookieService.setServices(tokenService).getServices().size());
+    }
+
+    /**
+     * Tests {@link ExternalCookieService1#setType(String) setType}.
+     */
+    @Test
+    public final void testSetTypeString() {
+        try {
+            new ExternalCookieService1().setType(AuthCookieService.class.getSimpleName());
+        } catch (final IllegalArgumentException details) {
+            fail(details.getMessage());
+        }
+    }
+
+    /**
+     * Tests {@link ExternalCookieService1#setType(String) setType}.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public final void testSetTypeStringBad() {
+        new ExternalCookieService1().setType(UUID.randomUUID().toString());
     }
 
     /**

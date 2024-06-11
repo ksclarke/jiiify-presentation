@@ -46,30 +46,6 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
     }
 
     /**
-     * Sets the ID.
-     *
-     * @param aID An ID
-     * @return The resource whose ID is being set
-     */
-    @Override
-    @JsonSetter(JsonKeys.ID)
-    public SeeAlso setID(final String aID) {
-        return (SeeAlso) super.setID(aID);
-    }
-
-    /**
-     * Sets the resource type.
-     *
-     * @param aType A resource type
-     * @return The resource whose type is being set
-     */
-    @Override
-    @JsonSetter(JsonKeys.TYPE)
-    public SeeAlso setType(final String aType) {
-        return (SeeAlso) super.setType(aType);
-    }
-
-    /**
      * Gets format as a media type.
      *
      * @return An optional media type format
@@ -77,6 +53,17 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
     @Override
     public Optional<MediaType> getFormat() {
         return super.getFormat();
+    }
+
+    /**
+     * Gets an optional descriptive label.
+     *
+     * @return An optional descriptive label
+     */
+    @JsonGetter(JsonKeys.LABEL)
+    @JsonInclude(Include.NON_ABSENT)
+    public Optional<Label> getLabel() {
+        return Optional.ofNullable(super.getNullableLabel());
     }
 
     /**
@@ -91,26 +78,15 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
     }
 
     /**
-     * Sets the profile.
+     * Sets the ID.
      *
-     * @param aProfile A profile
-     * @return The resource whose profile is being set
+     * @param aID An ID
+     * @return The resource whose ID is being set
      */
     @Override
-    @JsonSetter(JsonKeys.PROFILE)
-    public SeeAlso setProfile(final String aProfile) {
-        return (SeeAlso) super.setProfile(aProfile);
-    }
-
-    /**
-     * Gets an optional descriptive label.
-     *
-     * @return An optional descriptive label
-     */
-    @JsonGetter(JsonKeys.LABEL)
-    @JsonInclude(Include.NON_ABSENT)
-    public Optional<Label> getLabel() {
-        return Optional.ofNullable(super.getNullableLabel());
+    @JsonSetter(JsonKeys.ID)
+    public SeeAlso setID(final String aID) {
+        return (SeeAlso) super.setID(aID);
     }
 
     /**
@@ -129,6 +105,30 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
     @JsonIgnore
     public SeeAlso setLanguages(final String... aLangArray) {
         return (SeeAlso) super.setLanguages(aLangArray);
+    }
+
+    /**
+     * Sets the profile.
+     *
+     * @param aProfile A profile
+     * @return The resource whose profile is being set
+     */
+    @Override
+    @JsonSetter(JsonKeys.PROFILE)
+    public SeeAlso setProfile(final String aProfile) {
+        return (SeeAlso) super.setProfile(aProfile);
+    }
+
+    /**
+     * Sets the resource type.
+     *
+     * @param aType A resource type
+     * @return The resource whose type is being set
+     */
+    @Override
+    @JsonSetter(JsonKeys.TYPE)
+    public SeeAlso setType(final String aType) {
+        return (SeeAlso) super.setType(aType);
     }
 
     /**

@@ -48,25 +48,22 @@ public class Homepage extends AbstractLinkProperty<Homepage> {
     }
 
     /**
-     * Sets the ID.
+     * Determines if a compared object is equal to this one.
      *
-     * @param aID The ID of the homepage
-     * @return The homepage
+     * @return True if the objects are equal; else, false
      */
     @Override
-    @JsonSetter(JsonKeys.ID)
-    public Homepage setID(final String aID) {
-        return (Homepage) super.setID(aID);
+    public boolean equals(final Object aObject) {
+        if (!super.equals(aObject) || getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        return getLanguages().equals(((Homepage) aObject).getLanguages());
     }
 
     @Override
-    @JsonSetter(JsonKeys.TYPE)
-    protected Homepage setType(final String aType) {
-        if (!ResourceTypes.TEXT.equals(aType)) {
-            throw new IllegalArgumentI18nException(aType);
-        }
-
-        return this;
+    public Optional<MediaType> getFormat() {
+        return super.getFormat();
     }
 
     /**
@@ -77,6 +74,37 @@ public class Homepage extends AbstractLinkProperty<Homepage> {
     @JsonGetter(JsonKeys.LABEL)
     public Label getLabel() {
         return super.getNullableLabel();
+    }
+
+    /**
+     * Returns a hashCode for the homepage.
+     */
+    @Override
+    public int hashCode() {
+        return 31 * super.hashCode() + Objects.hash(getLanguages());
+    }
+
+    /**
+     * Sets format.
+     *
+     * @param aMediaType A resource's format
+     * @return The resource whose format is being set
+     */
+    @Override
+    public Homepage setFormat(final MediaType aMediaType) {
+        return (Homepage) super.setFormat(aMediaType);
+    }
+
+    /**
+     * Sets the ID.
+     *
+     * @param aID The ID of the homepage
+     * @return The homepage
+     */
+    @Override
+    @JsonSetter(JsonKeys.ID)
+    public Homepage setID(final String aID) {
+        return (Homepage) super.setID(aID);
     }
 
     /**
@@ -92,47 +120,19 @@ public class Homepage extends AbstractLinkProperty<Homepage> {
     }
 
     @Override
-    public Optional<MediaType> getFormat() {
-        return super.getFormat();
-    }
-
-    /**
-     * Sets format.
-     *
-     * @param aMediaType A resource's format
-     * @return The resource whose format is being set
-     */
-    @Override
-    public Homepage setFormat(final MediaType aMediaType) {
-        return (Homepage) super.setFormat(aMediaType);
-    }
-
-    @Override
     @JsonIgnore
     public Homepage setLanguages(final String... aLangArray) {
         return (Homepage) super.setLanguages(aLangArray);
     }
 
-    /**
-     * Returns a hashCode for the homepage.
-     */
     @Override
-    public int hashCode() {
-        return 31 * super.hashCode() + Objects.hash(getLanguages());
-    }
-
-    /**
-     * Determines if a compared object is equal to this one.
-     *
-     * @return True if the objects are equal; else, false
-     */
-    @Override
-    public boolean equals(final Object aObject) {
-        if (!super.equals(aObject) || getClass() != aObject.getClass()) {
-            return false;
+    @JsonSetter(JsonKeys.TYPE)
+    protected Homepage setType(final String aType) {
+        if (!ResourceTypes.TEXT.equals(aType)) {
+            throw new IllegalArgumentI18nException(aType);
         }
 
-        return getLanguages().equals(((Homepage) aObject).getLanguages());
+        return this;
     }
 
     /**

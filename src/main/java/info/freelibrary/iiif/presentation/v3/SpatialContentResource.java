@@ -9,18 +9,18 @@ package info.freelibrary.iiif.presentation.v3;
 public interface SpatialContentResource<T extends SpatialContentResource<T>> extends ContentResource<T> {
 
     /**
-     * Gets the width of this content resource.
-     *
-     * @return This content resource's width
-     */
-    int getWidth();
-
-    /**
      * Gets the height of this content resource.
      *
      * @return This content resource's height
      */
     int getHeight();
+
+    /**
+     * Gets the width of this content resource.
+     *
+     * @return This content resource's width
+     */
+    int getWidth();
 
     /**
      * Sets the width and height of this content resource.

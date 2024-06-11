@@ -31,17 +31,17 @@ public class DefaultMinterTest {
     /** The test logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultMinterTest.class, MessageCodes.BUNDLE);
 
-    /** The ID pattern string. */
-    private static final String NOID_PATTERN = "[0-9a-z]{4}";
-
     /** The maximum number of IDs minted. */
     private static final int MAX_NOID_COUNT = 1500625;
 
-    /** The test minter. */
-    private Minter myMinter;
+    /** The ID pattern string. */
+    private static final String NOID_PATTERN = "[0-9a-z]{4}";
 
     /** The test minter ID. */
     private String myManifestID;
+
+    /** The test minter. */
+    private Minter myMinter;
 
     /**
      * Sets up the testing environment.
@@ -53,46 +53,6 @@ public class DefaultMinterTest {
 
         myManifestID = "https://example.org/iiif/" + id.substring(0, index);
         myMinter = MinterFactory.getMinter(myManifestID);
-    }
-
-    /**
-     * Tests the constructor that takes a manifest.
-     */
-    @Test
-    public final void testManifestConstructor() {
-        final String id = myManifestID + "/canvas-kfb9";
-        final Manifest manifest = new Manifest(myManifestID, new Label("Label"));
-        final Minter minter = MinterFactory.getMinter(manifest.addCanvases(new Canvas(id)));
-
-        int counter = 0;
-
-        while (minter.hasNext()) {
-            minter.getCanvasID();
-            counter++;
-        }
-
-        // Should have one less than the max because our manifest has one ID already in it
-        assertEquals(MAX_NOID_COUNT - 1, counter);
-        assertEquals(0, minter.remaining());
-    }
-
-    /**
-     * Tests {@link DefaultMinter#getManifestID() getManifestID}.
-     */
-    @Test
-    public final void testGetManifestID() {
-        assertEquals(myManifestID, myMinter.getManifestID());
-    }
-
-    /**
-     * Tests {@link DefaultMinter#getCanvasID() getCanvasID}.
-     */
-    @Test
-    public final void testGetCanvasID() {
-        final String pattern = myManifestID + "/canvas-" + NOID_PATTERN;
-        final String id = myMinter.getCanvasID();
-
-        assertTrue(Pattern.compile(pattern).matcher(id).matches());
     }
 
     /**
@@ -116,6 +76,25 @@ public class DefaultMinterTest {
         final String id = myMinter.getAnnotationPageID(canvas);
 
         assertTrue(Pattern.compile(pattern).matcher(id).matches());
+    }
+
+    /**
+     * Tests {@link DefaultMinter#getCanvasID() getCanvasID}.
+     */
+    @Test
+    public final void testGetCanvasID() {
+        final String pattern = myManifestID + "/canvas-" + NOID_PATTERN;
+        final String id = myMinter.getCanvasID();
+
+        assertTrue(Pattern.compile(pattern).matcher(id).matches());
+    }
+
+    /**
+     * Tests {@link DefaultMinter#getManifestID() getManifestID}.
+     */
+    @Test
+    public final void testGetManifestID() {
+        assertEquals(myManifestID, myMinter.getManifestID());
     }
 
     /**
@@ -147,5 +126,26 @@ public class DefaultMinterTest {
 
         assertEquals(MAX_NOID_COUNT, ids.size());
         LOGGER.debug(MessageCodes.JPA_104, stopwatch.stop().getSeconds());
+    }
+
+    /**
+     * Tests the constructor that takes a manifest.
+     */
+    @Test
+    public final void testManifestConstructor() {
+        final String id = myManifestID + "/canvas-kfb9";
+        final Manifest manifest = new Manifest(myManifestID, new Label("Label"));
+        final Minter minter = MinterFactory.getMinter(manifest.addCanvases(new Canvas(id)));
+
+        int counter = 0;
+
+        while (minter.hasNext()) {
+            minter.getCanvasID();
+            counter++;
+        }
+
+        // Should have one less than the max because our manifest has one ID already in it
+        assertEquals(MAX_NOID_COUNT - 1, counter);
+        assertEquals(0, minter.remaining());
     }
 }

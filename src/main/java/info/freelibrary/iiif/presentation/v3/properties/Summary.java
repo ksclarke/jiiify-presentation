@@ -18,25 +18,6 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 public class Summary extends I18nProperty<Summary> {
 
     /**
-     * Creates a summary using the 'none' language tag.
-     *
-     * @param aValue A value
-     */
-    public Summary(final String aValue) {
-        this(new I18n(I18n.DEFAULT_LANG, aValue, true));
-    }
-
-    /**
-     * Creates a summary using the supplied language tag and value.
-     *
-     * @param aLangTag A language tag
-     * @param aValue A value of the summary
-     */
-    public Summary(final String aLangTag, final String aValue) {
-        this(new I18n(aLangTag, aValue, true));
-    }
-
-    /**
      * Creates a summary from the supplied internationalization(s).
      *
      * @param aI18nArray An array of internationalizations for the summary
@@ -55,6 +36,15 @@ public class Summary extends I18nProperty<Summary> {
     }
 
     /**
+     * Creates a summary using the 'none' language tag.
+     *
+     * @param aValue A value
+     */
+    public Summary(final String aValue) {
+        this(new I18n(I18n.DEFAULT_LANG, aValue, true));
+    }
+
+    /**
      * Creates a summary from the supplied internationalization(s). The submitted array should alternate between
      * language code and string value.
      *
@@ -62,6 +52,16 @@ public class Summary extends I18nProperty<Summary> {
      */
     public Summary(final String... aDataArray) {
         super(I18nUtils.parseArray(true, aDataArray));
+    }
+
+    /**
+     * Creates a summary using the supplied language tag and value.
+     *
+     * @param aLangTag A language tag
+     * @param aValue A value of the summary
+     */
+    public Summary(final String aLangTag, final String aValue) {
+        this(new I18n(aLangTag, aValue, true));
     }
 
     /**

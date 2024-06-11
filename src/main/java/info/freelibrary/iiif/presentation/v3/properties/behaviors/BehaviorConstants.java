@@ -25,6 +25,11 @@ final class BehaviorConstants {
     static final String FACING_PAGES = "facing-pages";
 
     /**
+     * The hidden behavior constant.
+     */
+    static final String HIDDEN = "hidden";
+
+    /**
      * The individuals behavior constant.
      */
     static final String INDIVIDUALS = "individuals";
@@ -83,11 +88,6 @@ final class BehaviorConstants {
      * The unordered behavior constant.
      */
     static final String UNORDERED = "unordered";
-
-    /**
-     * The hidden behavior constant.
-     */
-    static final String HIDDEN = "hidden";
 
     /**
      * Creates a new BehaviorConstants class.

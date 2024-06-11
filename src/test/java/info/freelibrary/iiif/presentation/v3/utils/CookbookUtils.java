@@ -31,20 +31,26 @@ import info.freelibrary.json.JsonReader;
  */
 public final class CookbookUtils {
 
-    /** The cookbook utilities logger. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(CookbookUtils.class, MessageCodes.BUNDLE);
-
-    /** The cookbook fixtures directory. */
-    private static final String RECIPE_TEST_DIR = "src/test/resources/cookbook/";
-
     /** The base URL for IIIF cookbooks. */
     private static final String BASE_COOKBOOK_URL = "https://iiif.io";
 
-    /** The URL for the IIIF cookbooks. */
-    private static final String COOKBOOK_URL = BASE_COOKBOOK_URL + "/api/cookbook/";
+    /** The path for cookbooks. */
+    private static final String COOKBOOK_PATH = "/api/cookbook/";
 
     /** The base cookbook recipe URL. */
-    private static final String COOKBOOK_RECIPE = COOKBOOK_URL + "recipe/";
+    private static final String COOKBOOK_RECIPE = BASE_COOKBOOK_URL + COOKBOOK_PATH + "recipe/";
+
+    /** The URL for the IIIF cookbooks. */
+    private static final String COOKBOOK_URL = BASE_COOKBOOK_URL + COOKBOOK_PATH;
+
+    /** A constant for the HREF attribute. */
+    private static final String HREF = "href";
+
+    /** A constant for the link tag. */
+    private static final String LINK = "a";
+
+    /** The cookbook utilities logger. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(CookbookUtils.class, MessageCodes.BUNDLE);
 
     /** A regular expression for a cookbook recipe page. */
     private static final String RECIPE_PAGE_RE = ".*\\/cookbook\\/recipe\\/\\d{4}.*";
@@ -52,11 +58,8 @@ public final class CookbookUtils {
     /** A regular expression for the cookbook recipe. */
     private static final String RECIPE_RE = "^(?!https?:\\/\\/).*\\.json";
 
-    /** A constant for the HREF attribute. */
-    private static final String HREF = "href";
-
-    /** A constant for the link tag. */
-    private static final String LINK = "a";
+    /** The cookbook fixtures directory. */
+    private static final String RECIPE_TEST_DIR = "src/test/resources/cookbook/";
 
     /**
      * Creates a new cookbook utilities instance.
@@ -87,30 +90,6 @@ public final class CookbookUtils {
     }
 
     /**
-     * Gets a list of URLs to compare against against the local files..
-     *
-     * @param aHref An href from a recipe page link
-     * @return A list of related JSON URLs
-     * @throws CookbookRecipeException If a JSON URL cannot be scraped from the cookbook site
-     */
-    private static List<String> getJsonURLs(final String aHref) {
-        final String baseURL = !aHref.endsWith(SLASH) ? aHref + SLASH : aHref;
-        final List<String> urlList = new ArrayList<>();
-
-        try {
-            final Stream<Element> links = Jsoup.connect(aHref).get().select(LINK).stream();
-
-            links.distinct().map(link -> link.attr(HREF)).filter(url -> url.matches(RECIPE_RE)).forEach(path -> {
-                urlList.add(baseURL + path);
-            });
-        } catch (final IOException details) {
-            throw new CookbookRecipeException(details);
-        }
-
-        return urlList;
-    }
-
-    /**
      * Compare the local recipe files against the downloaded files.
      *
      * @param aLinkSet A set of recipe links
@@ -138,5 +117,29 @@ public final class CookbookUtils {
                 throw new CookbookRecipeException(details);
             }
         });
+    }
+
+    /**
+     * Gets a list of URLs to compare against against the local files..
+     *
+     * @param aHref An href from a recipe page link
+     * @return A list of related JSON URLs
+     * @throws CookbookRecipeException If a JSON URL cannot be scraped from the cookbook site
+     */
+    private static List<String> getJsonURLs(final String aHref) {
+        final String baseURL = !aHref.endsWith(SLASH) ? aHref + SLASH : aHref;
+        final List<String> urlList = new ArrayList<>();
+
+        try {
+            final Stream<Element> links = Jsoup.connect(aHref).get().select(LINK).stream();
+
+            links.distinct().map(link -> link.attr(HREF)).filter(url -> url.matches(RECIPE_RE)).forEach(path -> {
+                urlList.add(baseURL + path);
+            });
+        } catch (final IOException details) {
+            throw new CookbookRecipeException(details);
+        }
+
+        return urlList;
     }
 }

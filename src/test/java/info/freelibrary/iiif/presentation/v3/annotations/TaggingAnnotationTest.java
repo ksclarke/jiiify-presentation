@@ -22,14 +22,14 @@ import info.freelibrary.iiif.presentation.v3.properties.MediaType;
  */
 public class TaggingAnnotationTest {
 
-    /** An annotation that can be used in testing. */
-    private static final File JSON_FILE = new File("src/test/resources/json/tagging-annotation.json");
-
     /** An annotation ID. */
     private static final String ANNO_ID = "https://iiif.io/api/cookbook/recipe/0021-tagging/annotation/p0002-tag";
 
     /** A canvas ID. */
     private static final String CANVAS_ID = "https://iiif.io/api/cookbook/recipe/0021-tagging/canvas/p1";
+
+    /** An annotation that can be used in testing. */
+    private static final File JSON_FILE = new File("src/test/resources/json/tagging-annotation.json");
 
     /**
      * Tests the {@code TaggingAnnotation#toString()}.

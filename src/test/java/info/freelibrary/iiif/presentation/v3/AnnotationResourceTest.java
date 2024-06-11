@@ -47,6 +47,14 @@ public class AnnotationResourceTest extends AbstractTest {
     }
 
     /**
+     * Tests constructing an annotation page.
+     */
+    @Test
+    public void testAnnotationPageStringId() {
+        assertEquals(myID, new AnnotationPage<PaintingAnnotation>(myID).getID());
+    }
+
+    /**
      * Tests that the deserialization and serialization of a stand-alone annotation page doesn't include a context URI
      * if there isn't one in the incoming JSON.
      *
@@ -77,14 +85,6 @@ public class AnnotationResourceTest extends AbstractTest {
         final ObjectReader reader = JSON.getReader();
 
         assertEquals(reader.readTree(expectedJSON), reader.readTree(foundJSON));
-    }
-
-    /**
-     * Tests constructing an annotation page.
-     */
-    @Test
-    public void testAnnotationPageStringId() {
-        assertEquals(myID, new AnnotationPage<PaintingAnnotation>(myID).getID());
     }
 
     /**

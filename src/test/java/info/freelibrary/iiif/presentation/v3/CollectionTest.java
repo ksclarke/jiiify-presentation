@@ -60,74 +60,6 @@ public class CollectionTest {
     }
 
     /**
-     * Tests that an empty collection doesn't return a null manifests list.
-     */
-    @Test
-    public void testGetCollectionNotNull() {
-        assertNotNull(new Collection(myID, myLabel).getItems());
-        assertEquals(0, new Collection(myID, myLabel).getItems().size());
-    }
-
-    /**
-     * Tests setting a navDate.
-     */
-    @Test
-    public void testNavDate1() {
-        final Collection collection = new Collection(myID, myLabel);
-        final NavDate navDate = NavDate.now();
-
-        collection.setNavDate(navDate);
-        assertEquals(navDate, collection.getNavDate());
-    }
-
-    /**
-     * Tests writing a simple collection manifest.
-     *
-     * @throws IOException If there is trouble reading the test JSON file
-     */
-    @Test
-    public void testWritingCollection() throws IOException {
-        final Collection collection = new Collection("https://ID-a", new Label("label-a"));
-        final String manifestOneID = "https://iiif.library.ucla.edu/asdf1234/manifest";
-        final String manifestTwoID = "https://iiif.library.ucla.edu/1234asdf/manifest";
-        final String thumbnailID = "https://brand.ucla.edu/images/logo-ucla.svg";
-        final Manifest manifest1 = new Manifest(manifestOneID, new Label("A placeholder fake manifest: 1"));
-        final Manifest manifest2 = new Manifest(manifestTwoID, new Label("A placeholder fake manifest: 2"));
-        final List<Collection.Item> items = Arrays.asList(new Item(manifest1), new Item(manifest2));
-
-        collection.setItems(items);
-        collection.setThumbnails(new ImageContent(thumbnailID));
-
-        assertEquals(format(StringUtils.read(TEST_FILE1)), collection.toString());
-    }
-
-    /**
-     * Tests reading a collection.
-     *
-     * @throws IOException If there is trouble reading the test JSON file.
-     */
-    @Test
-    public void testReadingCollection() throws IOException {
-        final String expected = format(StringUtils.read(TEST_FILE1));
-        final Collection collection = Collection.fromJSON(expected);
-
-        assertEquals(expected, collection.toString());
-    }
-
-    /**
-     * Tests setting a navDate.
-     */
-    @Test
-    public void testNavDate2() {
-        final Collection collection = new Collection(myID, myLabel);
-        final ZonedDateTime zonedDateTime = NavDate.now().getZonedDateTime();
-        final NavDate navDate = new NavDate(zonedDateTime);
-
-        collection.setNavDate(navDate);
-        assertEquals(navDate, collection.getNavDate());
-    }
-
-    /**
      * Tests reading a collection document from JSON.
      */
     @Test
@@ -156,6 +88,53 @@ public class CollectionTest {
     }
 
     /**
+     * Tests that an empty collection doesn't return a null manifests list.
+     */
+    @Test
+    public void testGetCollectionNotNull() {
+        assertNotNull(new Collection(myID, myLabel).getItems());
+        assertEquals(0, new Collection(myID, myLabel).getItems().size());
+    }
+
+    /**
+     * Tests setting a navDate.
+     */
+    @Test
+    public void testNavDate1() {
+        final Collection collection = new Collection(myID, myLabel);
+        final NavDate navDate = NavDate.now();
+
+        collection.setNavDate(navDate);
+        assertEquals(navDate, collection.getNavDate());
+    }
+
+    /**
+     * Tests setting a navDate.
+     */
+    @Test
+    public void testNavDate2() {
+        final Collection collection = new Collection(myID, myLabel);
+        final ZonedDateTime zonedDateTime = NavDate.now().getZonedDateTime();
+        final NavDate navDate = new NavDate(zonedDateTime);
+
+        collection.setNavDate(navDate);
+        assertEquals(navDate, collection.getNavDate());
+    }
+
+    /**
+     * Tests reading a collection.
+     *
+     * @throws IOException If there is trouble reading the test JSON file.
+     */
+    @Test
+    public void testReadingCollection() throws IOException {
+        final String expected = format(StringUtils.read(TEST_FILE1));
+        final Collection collection = Collection.fromJSON(expected);
+
+        assertEquals(expected, collection.toString());
+    }
+
+    /**
      * Test setting collection behaviors.
      */
     @Test
@@ -170,6 +149,27 @@ public class CollectionTest {
     @Test(expected = InvalidBehaviorException.class)
     public final void testSetDisallowedBehaviors() {
         new Collection(myID, myLabel).setBehaviors(CollectionBehavior.AUTO_ADVANCE, ManifestBehavior.NO_AUTO_ADVANCE);
+    }
+
+    /**
+     * Tests writing a simple collection manifest.
+     *
+     * @throws IOException If there is trouble reading the test JSON file
+     */
+    @Test
+    public void testWritingCollection() throws IOException {
+        final Collection collection = new Collection("https://ID-a", new Label("label-a"));
+        final String manifestOneID = "https://iiif.library.ucla.edu/asdf1234/manifest";
+        final String manifestTwoID = "https://iiif.library.ucla.edu/1234asdf/manifest";
+        final String thumbnailID = "https://brand.ucla.edu/images/logo-ucla.svg";
+        final Manifest manifest1 = new Manifest(manifestOneID, new Label("A placeholder fake manifest: 1"));
+        final Manifest manifest2 = new Manifest(manifestTwoID, new Label("A placeholder fake manifest: 2"));
+        final List<Collection.Item> items = Arrays.asList(new Item(manifest1), new Item(manifest2));
+
+        collection.setItems(items);
+        collection.setThumbnails(new ImageContent(thumbnailID));
+
+        assertEquals(format(StringUtils.read(TEST_FILE1)), collection.toString());
     }
 
 }

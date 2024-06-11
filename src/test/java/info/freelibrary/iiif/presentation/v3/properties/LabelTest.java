@@ -31,11 +31,11 @@ public class LabelTest extends AbstractTest {
     /** A test value. */
     private static final String NONE = "none";
 
-    /** The test manifest. */
-    private Manifest myManifest;
-
     /** JSON input test fixture. */
     private ObjectNode myJSON;
+
+    /** The test manifest. */
+    private Manifest myManifest;
 
     /**
      * Sets up the testing environment.
@@ -47,14 +47,18 @@ public class LabelTest extends AbstractTest {
     }
 
     /**
-     * Tests constructing a label.
+     * Tests setting a single label.
      */
     @Test
-    public void testValueConstructor() {
+    public void testSingleLabel() throws JsonProcessingException {
         final String labelText = myLoremIpsum.getWords(3, 6);
-        final Label label = new Label(new I18n(ENG, labelText));
 
-        assertEquals(labelText, label.getString());
+        myManifest.setLabel(new Label(labelText));
+        myJSON.put(JsonKeys.ID, AAAA).put(JsonKeys.TYPE, ResourceTypes.MANIFEST).set(JsonKeys.LABEL,
+                JSON.createObjectNode().set(NONE, JSON.createArrayNode().add(labelText)));
+
+        assertEquals(format(JSON.getWriter(JsonNode.class).writeValueAsString(myJSON)),
+                format(JSON.getWriter(Manifest.class).writeValueAsString(myManifest)));
     }
 
     /**
@@ -72,18 +76,14 @@ public class LabelTest extends AbstractTest {
     }
 
     /**
-     * Tests setting a single label.
+     * Tests constructing a label.
      */
     @Test
-    public void testSingleLabel() throws JsonProcessingException {
+    public void testValueConstructor() {
         final String labelText = myLoremIpsum.getWords(3, 6);
+        final Label label = new Label(new I18n(ENG, labelText));
 
-        myManifest.setLabel(new Label(labelText));
-        myJSON.put(JsonKeys.ID, AAAA).put(JsonKeys.TYPE, ResourceTypes.MANIFEST).set(JsonKeys.LABEL,
-                JSON.createObjectNode().set(NONE, JSON.createArrayNode().add(labelText)));
-
-        assertEquals(format(JSON.getWriter(JsonNode.class).writeValueAsString(myJSON)),
-                format(JSON.getWriter(Manifest.class).writeValueAsString(myManifest)));
+        assertEquals(labelText, label.getString());
     }
 
 }

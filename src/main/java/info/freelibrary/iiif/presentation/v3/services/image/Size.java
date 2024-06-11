@@ -16,14 +16,21 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 public class Size {
 
     /**
+     * My size height.
+     */
+    private int myHeight;
+
+    /**
      * My size width.
      */
     private int myWidth;
 
     /**
-     * My size height.
+     * Creates a new Image API size.
      */
-    private int myHeight;
+    public Size() {
+        // This is intentionally left empty
+    }
 
     /**
      * Creates a new Image API size from the supplied width and height.
@@ -37,22 +44,14 @@ public class Size {
     }
 
     /**
-     * Creates a new Image API size.
-     */
-    public Size() {
-        // This is intentionally left empty
-    }
-
-    /**
-     * Sets a new size width.
+     * Gets the size height.
      *
-     * @param aWidth A size width
-     * @return This size
+     * @return The size height
      */
-    @JsonSetter(JsonKeys.WIDTH)
-    public Size setWidth(final int aWidth) {
-        myWidth = aWidth;
-        return this;
+    @JsonGetter(JsonKeys.HEIGHT)
+    @JsonInclude(Include.NON_DEFAULT)
+    public int getHeight() {
+        return myHeight;
     }
 
     /**
@@ -79,14 +78,15 @@ public class Size {
     }
 
     /**
-     * Gets the size height.
+     * Sets a new size width.
      *
-     * @return The size height
+     * @param aWidth A size width
+     * @return This size
      */
-    @JsonGetter(JsonKeys.HEIGHT)
-    @JsonInclude(Include.NON_DEFAULT)
-    public int getHeight() {
-        return myHeight;
+    @JsonSetter(JsonKeys.WIDTH)
+    public Size setWidth(final int aWidth) {
+        myWidth = aWidth;
+        return this;
     }
 
 }

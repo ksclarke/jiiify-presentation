@@ -16,9 +16,24 @@ import info.freelibrary.iiif.presentation.v3.utils.TestConstants;
 public class RangeBehaviorTest {
 
     /** The expected values. */
-    private static final String[] VALUES = { BehaviorConstants.AUTO_ADVANCE, BehaviorConstants.NO_AUTO_ADVANCE,
-        BehaviorConstants.INDIVIDUALS, BehaviorConstants.NO_NAV, BehaviorConstants.CONTINUOUS, BehaviorConstants.PAGED,
-        BehaviorConstants.UNORDERED, BehaviorConstants.THUMBNAIL_NAV, BehaviorConstants.SEQUENCE };
+    private static final String[] VALUES = { //
+        BehaviorConstants.AUTO_ADVANCE, //
+        BehaviorConstants.CONTINUOUS, //
+        BehaviorConstants.INDIVIDUALS, //
+        BehaviorConstants.NO_AUTO_ADVANCE, //
+        BehaviorConstants.NO_NAV, //
+        BehaviorConstants.PAGED, //
+        BehaviorConstants.SEQUENCE, //
+        BehaviorConstants.THUMBNAIL_NAV, //
+        BehaviorConstants.UNORDERED };
+
+    /**
+     * Tests the fromLabel() method.
+     */
+    @Test
+    public final void testFromLabel() {
+        assertEquals(RangeBehavior.SEQUENCE, RangeBehavior.fromLabel(BehaviorConstants.SEQUENCE).get());
+    }
 
     /**
      * Tests the JSON serialization.
@@ -37,14 +52,6 @@ public class RangeBehaviorTest {
     @Test
     public final void testToString() {
         assertEquals(BehaviorConstants.SEQUENCE, RangeBehavior.SEQUENCE.toString());
-    }
-
-    /**
-     * Tests the fromLabel() method.
-     */
-    @Test
-    public final void testFromLabel() {
-        assertEquals(RangeBehavior.SEQUENCE, RangeBehavior.fromLabel(BehaviorConstants.SEQUENCE).get());
     }
 
     /**

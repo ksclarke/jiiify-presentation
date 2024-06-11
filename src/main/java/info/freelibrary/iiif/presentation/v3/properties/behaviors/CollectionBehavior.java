@@ -16,17 +16,17 @@ public enum CollectionBehavior implements Behavior {
     /** An auto-advance collection behavior. */
     AUTO_ADVANCE(BehaviorConstants.AUTO_ADVANCE),
 
-    /** A no-auto-advance collection behavior. */
-    NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE),
+    /** A continuous collection behavior. */
+    CONTINUOUS(BehaviorConstants.CONTINUOUS),
 
     /** A individuals collection behavior. */
     INDIVIDUALS(BehaviorConstants.INDIVIDUALS),
 
-    /** A continuous collection behavior. */
-    CONTINUOUS(BehaviorConstants.CONTINUOUS),
+    /** A multi-part collection behavior. */
+    MULTI_PART(BehaviorConstants.MULTI_PART),
 
-    /** A repeat collection behavior. */
-    REPEAT(BehaviorConstants.REPEAT),
+    /** A no-auto-advance collection behavior. */
+    NO_AUTO_ADVANCE(BehaviorConstants.NO_AUTO_ADVANCE),
 
     /** A no-repeat collection behavior. */
     NO_REPEAT(BehaviorConstants.NO_REPEAT),
@@ -34,14 +34,14 @@ public enum CollectionBehavior implements Behavior {
     /** A paged collection behavior. */
     PAGED(BehaviorConstants.PAGED),
 
-    /** An unordered collection behavior. */
-    UNORDERED(BehaviorConstants.UNORDERED),
-
-    /** A multi-part collection behavior. */
-    MULTI_PART(BehaviorConstants.MULTI_PART),
+    /** A repeat collection behavior. */
+    REPEAT(BehaviorConstants.REPEAT),
 
     /** A together collection behavior. */
-    TOGETHER(BehaviorConstants.TOGETHER);
+    TOGETHER(BehaviorConstants.TOGETHER),
+
+    /** An unordered collection behavior. */
+    UNORDERED(BehaviorConstants.UNORDERED);
 
     /** The label on the collection behavior. */
     private final String myLabel;
@@ -56,21 +56,21 @@ public enum CollectionBehavior implements Behavior {
     }
 
     /**
-     * Gets a string representation of a collection behavior.
-     */
-    @Override
-    @JsonValue
-    public String toString() {
-        return myLabel;
-    }
-
-    /**
      * Gets the label value of the collection behavior.
      *
      * @return A enumeration label
      */
     @Override
     public String label() {
+        return myLabel;
+    }
+
+    /**
+     * Gets a string representation of a collection behavior.
+     */
+    @Override
+    @JsonValue
+    public String toString() {
         return myLabel;
     }
 

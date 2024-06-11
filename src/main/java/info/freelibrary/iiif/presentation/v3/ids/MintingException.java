@@ -16,15 +16,6 @@ public class MintingException extends I18nRuntimeException {
     private static final long serialVersionUID = -8994128436406185140L;
 
     /**
-     * Creates a new minting exception from the supplied root cause.
-     *
-     * @param aCause A root cause of the minting exception
-     */
-    public MintingException(final Throwable aCause) {
-        super(aCause);
-    }
-
-    /**
      * Creates a new minting exception from the supplied message key.
      *
      * @param aMessageKey A message key for the exception
@@ -41,6 +32,15 @@ public class MintingException extends I18nRuntimeException {
      */
     public MintingException(final String aMessageKey, final Object... aDetailsArray) {
         super(MessageCodes.BUNDLE, aMessageKey, aDetailsArray);
+    }
+
+    /**
+     * Creates a new minting exception from the supplied root cause.
+     *
+     * @param aCause A root cause of the minting exception
+     */
+    public MintingException(final Throwable aCause) {
+        super(aCause);
     }
 
     /**

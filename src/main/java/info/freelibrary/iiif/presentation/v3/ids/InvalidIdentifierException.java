@@ -19,12 +19,25 @@ public class InvalidIdentifierException extends I18nRuntimeException {
     private static final long serialVersionUID = -5050999111947549190L;
 
     /**
-     * Creates a new <code>InvalidIdentifierException</code> from the supplied underlying cause.
+     * Creates a new <code>InvalidIdentifierException</code> using the supplied locale and message key.
      *
-     * @param aCause An underlying cause
+     * @param aLocale A locale that should be used to produce the exception message
+     * @param aMessageKey A key for the requested exception message
      */
-    public InvalidIdentifierException(final Throwable aCause) {
-        super(aCause);
+    public InvalidIdentifierException(final Locale aLocale, final String aMessageKey) {
+        super(aLocale, MessageCodes.BUNDLE, aMessageKey);
+    }
+
+    /**
+     * Creates a new <code>InvalidIdentifierException</code> from the supplied locale, message key, and additional
+     * message details.
+     *
+     * @param aLocale A locale that should be used to produce the exception message
+     * @param aMessageKey A key for the requested exception message
+     * @param aVarargs Additional details to be used in the exception message
+     */
+    public InvalidIdentifierException(final Locale aLocale, final String aMessageKey, final Object... aVarargs) {
+        super(aLocale, MessageCodes.BUNDLE, aMessageKey, aVarargs);
     }
 
     /**
@@ -34,16 +47,6 @@ public class InvalidIdentifierException extends I18nRuntimeException {
      */
     public InvalidIdentifierException(final String aMessageKey) {
         super(MessageCodes.BUNDLE, aMessageKey);
-    }
-
-    /**
-     * Creates a new <code>InvalidIdentifierException</code> using the supplied locale and message key.
-     *
-     * @param aLocale A locale that should be used to produce the exception message
-     * @param aMessageKey A key for the requested exception message
-     */
-    public InvalidIdentifierException(final Locale aLocale, final String aMessageKey) {
-        super(aLocale, MessageCodes.BUNDLE, aMessageKey);
     }
 
     /**
@@ -57,26 +60,12 @@ public class InvalidIdentifierException extends I18nRuntimeException {
     }
 
     /**
-     * Creates a new <code>InvalidIdentifierException</code> from the supplied underlying cause and using the supplied
-     * message key.
+     * Creates a new <code>InvalidIdentifierException</code> from the supplied underlying cause.
      *
      * @param aCause An underlying cause
-     * @param aMessageKey A key for the requested exception message
      */
-    public InvalidIdentifierException(final Throwable aCause, final String aMessageKey) {
-        super(aCause, MessageCodes.BUNDLE, aMessageKey);
-    }
-
-    /**
-     * Creates a new <code>InvalidIdentifierException</code> from the supplied locale, message key, and additional
-     * message details.
-     *
-     * @param aLocale A locale that should be used to produce the exception message
-     * @param aMessageKey A key for the requested exception message
-     * @param aVarargs Additional details to be used in the exception message
-     */
-    public InvalidIdentifierException(final Locale aLocale, final String aMessageKey, final Object... aVarargs) {
-        super(aLocale, MessageCodes.BUNDLE, aMessageKey, aVarargs);
+    public InvalidIdentifierException(final Throwable aCause) {
+        super(aCause);
     }
 
     /**
@@ -96,18 +85,6 @@ public class InvalidIdentifierException extends I18nRuntimeException {
      * key and additional message details.
      *
      * @param aCause An underlying cause
-     * @param aMessageKey A key for the requested exception message
-     * @param aVarargs Additional details to be used in the exception message
-     */
-    public InvalidIdentifierException(final Throwable aCause, final String aMessageKey, final Object... aVarargs) {
-        super(aCause, MessageCodes.BUNDLE, aMessageKey, aVarargs);
-    }
-
-    /**
-     * Creates a new <code>InvalidIdentifierException</code> using the underlying cause and from the supplied message
-     * key and additional message details.
-     *
-     * @param aCause An underlying cause
      * @param aLocale A locale that should be used to produce the exception message
      * @param aMessageKey A key for the requested exception message
      * @param aVarargs Additional details to be used in the exception message
@@ -115,6 +92,29 @@ public class InvalidIdentifierException extends I18nRuntimeException {
     public InvalidIdentifierException(final Throwable aCause, final Locale aLocale, final String aMessageKey,
             final Object... aVarargs) {
         super(aCause, aLocale, MessageCodes.BUNDLE, aMessageKey, aVarargs);
+    }
+
+    /**
+     * Creates a new <code>InvalidIdentifierException</code> from the supplied underlying cause and using the supplied
+     * message key.
+     *
+     * @param aCause An underlying cause
+     * @param aMessageKey A key for the requested exception message
+     */
+    public InvalidIdentifierException(final Throwable aCause, final String aMessageKey) {
+        super(aCause, MessageCodes.BUNDLE, aMessageKey);
+    }
+
+    /**
+     * Creates a new <code>InvalidIdentifierException</code> using the underlying cause and from the supplied message
+     * key and additional message details.
+     *
+     * @param aCause An underlying cause
+     * @param aMessageKey A key for the requested exception message
+     * @param aVarargs Additional details to be used in the exception message
+     */
+    public InvalidIdentifierException(final Throwable aCause, final String aMessageKey, final Object... aVarargs) {
+        super(aCause, MessageCodes.BUNDLE, aMessageKey, aVarargs);
     }
 
 }

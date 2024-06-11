@@ -35,20 +35,11 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 class DefaultMinter implements Minter {
 
-    /** The default minter's logger. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultMinter.class, MessageCodes.BUNDLE);
-
-    /** A template for supplying canvas IDs. */
-    private static final String CANVAS_ID_TEMPLATE = "{}/canvas-{}";
-
-    /** A template for supplying range IDs. */
-    private static final String RANGE_ID_TEMPLATE = "{}/range-{}";
-
     /** A template for supplying annotation IDs. */
     private static final String ANNO_ID_TEMPLATE = "{}/annotations/anno-{}";
 
-    /** A template for supplying page IDs. */
-    private static final String PAGE_ID_TEMPLATE = "{}/anno-page-{}";
+    /** A template for supplying canvas IDs. */
+    private static final String CANVAS_ID_TEMPLATE = "{}/canvas-{}";
 
     /**
      * All the alpha-numeric characters we use in creating NOIDs; lower case L is not used because it looks like "1".
@@ -56,34 +47,20 @@ class DefaultMinter implements Minter {
     private static final Character[] CHARS = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'm', 'n', 'o',
         'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
 
+    /** The default minter's logger. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultMinter.class, MessageCodes.BUNDLE);
+
     /** The maximum number of NOIDs, given the size of our character array. */
     private static final int MAX_NOID_COUNT = 1_500_625;
 
     /** The list of NOIDs. */
     private static final List<String> NOIDS; // Static array is initialized just once
 
-    // The static initialization of the NOID list.
-    static {
-        final Stopwatch stopwatch = new Stopwatch().start();
-        final List<String> noids = new ArrayList<>();
+    /** A template for supplying page IDs. */
+    private static final String PAGE_ID_TEMPLATE = "{}/anno-page-{}";
 
-        // Create a list of NOIDs for the manuscript to use in constructing IDs
-        Generator.<Character>permutation(CHARS).withRepetitions(4).stream().forEach(charList -> {
-            noids.add(charList.stream().map(String::valueOf).collect(Collectors.joining()));
-        });
-
-        // Shuffle them so they appear to be random
-        Collections.shuffle(noids);
-
-        // Finalize the NOIDs List for all future minters
-        NOIDS = Collections.unmodifiableList(noids);
-        LOGGER.debug(MessageCodes.JPA_101, stopwatch.stop().getSeconds());
-
-        // Do a sanity check on the number of NOIDs in our list
-        if (MAX_NOID_COUNT != NOIDS.size()) {
-            throw new I18nRuntimeException(MessageCodes.BUNDLE, MessageCodes.JPA_102, NOIDS.size(), MAX_NOID_COUNT);
-        }
-    }
+    /** A template for supplying range IDs. */
+    private static final String RANGE_ID_TEMPLATE = "{}/range-{}";
 
     /**
      * The existing IDs.
@@ -129,31 +106,6 @@ class DefaultMinter implements Minter {
     }
 
     /**
-     * Gets the manifest ID associated with this minter.
-     *
-     * @return The manifest ID associated with this minter
-     */
-    @Override
-    public String getManifestID() {
-        return myManifestID;
-    }
-
-    /**
-     * Gets a new canvas ID.
-     *
-     * @return An ID to use on a canvas
-     */
-    @Override
-    public String getCanvasID() {
-        try {
-            final String id = StringUtils.format(CANVAS_ID_TEMPLATE, myManifestID, myIterator.next());
-            return myExistingIDs.contains(id) ? getCanvasID() : increment(id);
-        } catch (final NoSuchElementException details) {
-            throw new MintingException(details, MessageCodes.JPA_105, myManifestID, Canvas.class.getSimpleName());
-        }
-    }
-
-    /**
      * Gets a new annotation ID.
      *
      * @return An ID to use on an annotation
@@ -167,8 +119,6 @@ class DefaultMinter implements Minter {
             throw new MintingException(details, MessageCodes.JPA_105, myManifestID, Annotation.class.getSimpleName());
         }
     }
-
-    // Could also do an annotation ID that lives under an AnnotationPage
 
     /**
      * Gets a new annotation page ID.
@@ -191,6 +141,33 @@ class DefaultMinter implements Minter {
     }
 
     /**
+     * Gets a new canvas ID.
+     *
+     * @return An ID to use on a canvas
+     */
+    @Override
+    public String getCanvasID() {
+        try {
+            final String id = StringUtils.format(CANVAS_ID_TEMPLATE, myManifestID, myIterator.next());
+            return myExistingIDs.contains(id) ? getCanvasID() : increment(id);
+        } catch (final NoSuchElementException details) {
+            throw new MintingException(details, MessageCodes.JPA_105, myManifestID, Canvas.class.getSimpleName());
+        }
+    }
+
+    /**
+     * Gets the manifest ID associated with this minter.
+     *
+     * @return The manifest ID associated with this minter
+     */
+    @Override
+    public String getManifestID() {
+        return myManifestID;
+    }
+
+    // Could also do an annotation ID that lives under an AnnotationPage
+
+    /**
      * Gets a new range ID.
      *
      * @return An ID to use on a range
@@ -206,13 +183,13 @@ class DefaultMinter implements Minter {
     }
 
     /**
-     * Gets total number of IDs that this minter can mint.
+     * Returns whether there is another ID available to be minted.
      *
-     * @return The number of IDs that this minter can mint
+     * @return Whether there is another ID available to be minted
      */
     @Override
-    public int size() {
-        return NOIDS.size();
+    public boolean hasNext() {
+        return myIterator.hasNext();
     }
 
     /**
@@ -226,24 +203,27 @@ class DefaultMinter implements Minter {
     }
 
     /**
-     * Returns whether there is another ID available to be minted.
+     * Gets total number of IDs that this minter can mint.
      *
-     * @return Whether there is another ID available to be minted
+     * @return The number of IDs that this minter can mint
      */
     @Override
-    public boolean hasNext() {
-        return myIterator.hasNext();
+    public int size() {
+        return NOIDS.size();
     }
 
     /**
-     * Increments the ID count, returning the ID to be used.
+     * Gets the IDs from annotations.
      *
-     * @param aID An ID to be used
-     * @return The ID to be used
+     * @param <A> A type of annotation
+     * @param aAnnotationList A list of annotations
      */
-    private String increment(final String aID) {
-        myUsedNOIDs += 1;
-        return aID;
+    private <A extends Annotation<A>> void findAnnotationIDs(final List<A> aAnnotationList) {
+        aAnnotationList.stream().forEach(annotation -> {
+            if (!myExistingIDs.add(annotation.getID())) {
+                LOGGER.warn(MessageCodes.JPA_100, annotation.getID());
+            }
+        });
     }
 
     /**
@@ -285,17 +265,37 @@ class DefaultMinter implements Minter {
     }
 
     /**
-     * Gets the IDs from annotations.
+     * Increments the ID count, returning the ID to be used.
      *
-     * @param <A> A type of annotation
-     * @param aAnnotationList A list of annotations
+     * @param aID An ID to be used
+     * @return The ID to be used
      */
-    private <A extends Annotation<A>> void findAnnotationIDs(final List<A> aAnnotationList) {
-        aAnnotationList.stream().forEach(annotation -> {
-            if (!myExistingIDs.add(annotation.getID())) {
-                LOGGER.warn(MessageCodes.JPA_100, annotation.getID());
-            }
+    private String increment(final String aID) {
+        myUsedNOIDs += 1;
+        return aID;
+    }
+
+    // The static initialization of the NOID list.
+    static {
+        final Stopwatch stopwatch = new Stopwatch().start();
+        final List<String> noids = new ArrayList<>();
+
+        // Create a list of NOIDs for the manuscript to use in constructing IDs
+        Generator.<Character>permutation(CHARS).withRepetitions(4).stream().forEach(charList -> {
+            noids.add(charList.stream().map(String::valueOf).collect(Collectors.joining()));
         });
+
+        // Shuffle them so they appear to be random
+        Collections.shuffle(noids);
+
+        // Finalize the NOIDs List for all future minters
+        NOIDS = Collections.unmodifiableList(noids);
+        LOGGER.debug(MessageCodes.JPA_101, stopwatch.stop().getSeconds());
+
+        // Do a sanity check on the number of NOIDs in our list
+        if (MAX_NOID_COUNT != NOIDS.size()) {
+            throw new I18nRuntimeException(MessageCodes.BUNDLE, MessageCodes.JPA_102, NOIDS.size(), MAX_NOID_COUNT);
+        }
     }
 
     /**
@@ -309,14 +309,9 @@ class DefaultMinter implements Minter {
         private static final int MAX_RANDOM_INT = 20;
 
         /**
-         * Where the iterator started cycling through the array.
+         * The number of NOIDs this iterator has returned.
          */
-        private final int myStart;
-
-        /**
-         * The number of NOIDs to skip in each iteration.
-         */
-        private int mySkipCount;
+        private int myCount;
 
         /**
          * The index position for the next available NOID.
@@ -324,14 +319,19 @@ class DefaultMinter implements Minter {
         private int myIndex;
 
         /**
-         * The number of NOIDs this iterator has returned.
-         */
-        private int myCount;
-
-        /**
          * The number of times we've cycled through the array.
          */
         private int myIteration;
+
+        /**
+         * The number of NOIDs to skip in each iteration.
+         */
+        private int mySkipCount;
+
+        /**
+         * Where the iterator started cycling through the array.
+         */
+        private final int myStart;
 
         /**
          * Creates a new NOID iterator with a randomized start and skip count.

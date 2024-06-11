@@ -89,13 +89,14 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
     /**
      * Adds annotations to the annotation page.
      *
-     * @param aAnnotationList Annotations to be added to the annotation page
+     * @param aAnnotationArray Annotations to be added to the annotation page
      * @return The annotation page
      * @throws UnsupportedOperationException If the supplied annotations cannot be added to the page
      */
-    public final AnnotationPage<A> addAnnotations(final List<A> aAnnotationList) {
-        if (!getAnnotations().addAll(Objects.requireNonNull(aAnnotationList))) {
-            final String details = getListIDs(aAnnotationList);
+    @SafeVarargs
+    public final AnnotationPage<A> addAnnotations(final A... aAnnotationArray) {
+        if (!Collections.addAll(getAnnotations(), Objects.requireNonNull(aAnnotationArray))) {
+            final String details = getListIDs(Arrays.asList(aAnnotationArray));
             throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_050, details));
         }
 
@@ -105,14 +106,13 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
     /**
      * Adds annotations to the annotation page.
      *
-     * @param aAnnotationArray Annotations to be added to the annotation page
+     * @param aAnnotationList Annotations to be added to the annotation page
      * @return The annotation page
      * @throws UnsupportedOperationException If the supplied annotations cannot be added to the page
      */
-    @SafeVarargs
-    public final AnnotationPage<A> addAnnotations(final A... aAnnotationArray) {
-        if (!Collections.addAll(getAnnotations(), Objects.requireNonNull(aAnnotationArray))) {
-            final String details = getListIDs(Arrays.asList(aAnnotationArray));
+    public final AnnotationPage<A> addAnnotations(final List<A> aAnnotationList) {
+        if (!getAnnotations().addAll(Objects.requireNonNull(aAnnotationList))) {
+            final String details = getListIDs(aAnnotationList);
             throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_050, details));
         }
 
@@ -159,21 +159,6 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
     /**
      * Sets the annotation page's annotations.
      *
-     * @param aAnnotationList A list of annotations
-     * @return The annotation page
-     */
-    @JsonSetter(JsonKeys.ITEMS)
-    public final AnnotationPage<A> setAnnotations(final List<A> aAnnotationList) {
-        if (myAnnotations != null) {
-            myAnnotations.clear();
-        }
-
-        return addAnnotations(aAnnotationList);
-    }
-
-    /**
-     * Sets the annotation page's annotations.
-     *
      * @param aAnnotationArray An annotation array
      * @return The annotation page
      */
@@ -185,6 +170,21 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
         }
 
         return addAnnotations(aAnnotationArray);
+    }
+
+    /**
+     * Sets the annotation page's annotations.
+     *
+     * @param aAnnotationList A list of annotations
+     * @return The annotation page
+     */
+    @JsonSetter(JsonKeys.ITEMS)
+    public final AnnotationPage<A> setAnnotations(final List<A> aAnnotationList) {
+        if (myAnnotations != null) {
+            myAnnotations.clear();
+        }
+
+        return addAnnotations(aAnnotationList);
     }
 
     @Override

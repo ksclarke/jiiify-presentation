@@ -14,19 +14,18 @@ import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 public interface ContentResource<T extends ContentResource<T>> {
 
     /**
+     * Gets the media type format of the content resource.
+     *
+     * @return The media type format of the content resource
+     */
+    Optional<MediaType> getFormat();
+
+    /**
      * Gets the content resource ID.
      *
      * @return The content resource's ID
      */
     String getID();
-
-    /**
-     * Sets the content resource ID.
-     *
-     * @param aID A content resource's ID
-     * @return The content resource
-     */
-    T setID(String aID);
 
     /**
      * Gets the type of the content resource.
@@ -36,18 +35,19 @@ public interface ContentResource<T extends ContentResource<T>> {
     String getType();
 
     /**
-     * Gets the media type format of the content resource.
-     *
-     * @return The media type format of the content resource
-     */
-    Optional<MediaType> getFormat();
-
-    /**
      * Sets the format of the content resource.
      *
      * @param aMediaType A media type
      * @return The content resource
      */
     T setFormat(MediaType aMediaType);
+
+    /**
+     * Sets the content resource ID.
+     *
+     * @param aID A content resource's ID
+     * @return The content resource
+     */
+    T setID(String aID);
 
 }

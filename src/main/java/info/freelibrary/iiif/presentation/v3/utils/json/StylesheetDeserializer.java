@@ -25,11 +25,11 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public class StylesheetDeserializer extends StdDeserializer<Stylesheet> {
 
-    /** The <code>serialVersionUID</code> of the <code>StylesheetDeserializer</code>. */
-    private static final long serialVersionUID = -7707466202850085859L;
-
     /** The logger for the <code>StylesheetDeserializer</code>. */
     private static final Logger LOGGER = LoggerFactory.getLogger(StylesheetDeserializer.class, MessageCodes.BUNDLE);
+
+    /** The <code>serialVersionUID</code> of the <code>StylesheetDeserializer</code>. */
+    private static final long serialVersionUID = -7707466202850085859L;
 
     /**
      * Creates a new {@code Stylesheet} deserializer.

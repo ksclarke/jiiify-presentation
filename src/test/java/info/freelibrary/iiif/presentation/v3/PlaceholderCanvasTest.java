@@ -27,17 +27,17 @@ import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
  */
 public class PlaceholderCanvasTest extends AbstractTest {
 
-    /** A template for canvas IDs. */
-    private static final String NOID_PATTERN = "/canvas-[a-z0-9]{4}";
-
     /** A file name pattern for test fixtures. */
     private static final String FILE = "{}-placeholder.json";
+
+    /** A constant for HTTPS. */
+    private static final String HTTPS = "https://";
 
     /** A label pattern for testing. */
     private static final String LABEL = "My label for '{}'";
 
-    /** A constant for HTTPS. */
-    private static final String HTTPS = "https://";
+    /** A template for canvas IDs. */
+    private static final String NOID_PATTERN = "/canvas-[a-z0-9]{4}";
 
     /** The test ID. */
     private String myID;
@@ -51,23 +51,48 @@ public class PlaceholderCanvasTest extends AbstractTest {
     }
 
     /**
+     * Tests reading placeholder canvas from string.
+     *
+     * @throws IOException If there is trouble reading the test fixture
+     */
+    @Test
+    public final void testCanvasFromString() throws IOException {
+        final String json = getFixture(Canvas.class);
+        final Canvas canvas = Canvas.fromJSON(json);
+
+        assertEquals(json, canvas.toString());
+    }
+
+    /**
+     * Tests reading placeholder canvas from string.
+     *
+     * @throws IOException If there is trouble reading the test fixture
+     */
+    @Test
+    public final void testCollectionFromString() throws IOException {
+        final String json = getFixture(Collection.class);
+        final Collection collection = Collection.fromJSON(json);
+
+        assertEquals(json, collection.toString());
+    }
+
+    /**
+     * Tests reading placeholder canvas from string.
+     *
+     * @throws IOException If there is trouble reading the test fixture
+     */
+    @Test
+    public final void testManifestFromString() throws IOException {
+        final String json = getFixture(Manifest.class);
+        assertEquals(json, Manifest.fromJSON(json).toString());
+    }
+
+    /**
      * Tests {@link PlaceholderCanvas#PlaceholderCanvas(URI) PlaceholderCanvas}.
      */
     @Test
     public final void testPlaceholderCanvasID() {
         assertEquals(myID, new PlaceholderCanvas(myID).getID());
-    }
-
-    /**
-     * Tests {@link PlaceholderCanvas#PlaceholderCanvas(String, Label) PlaceholderCanvas}.
-     */
-    @Test
-    public final void testPlaceholderCanvasURILabel() {
-        final Label label = new Label(StringUtils.format(LABEL, myID));
-        final PlaceholderCanvas canvas = new PlaceholderCanvas(myID, label);
-
-        assertEquals(myID, canvas.getID());
-        assertEquals(label, canvas.getLabel());
     }
 
     /**
@@ -109,40 +134,15 @@ public class PlaceholderCanvasTest extends AbstractTest {
     }
 
     /**
-     * Tests reading placeholder canvas from string.
-     *
-     * @throws IOException If there is trouble reading the test fixture
+     * Tests {@link PlaceholderCanvas#PlaceholderCanvas(String, Label) PlaceholderCanvas}.
      */
     @Test
-    public final void testCanvasFromString() throws IOException {
-        final String json = getFixture(Canvas.class);
-        final Canvas canvas = Canvas.fromJSON(json);
+    public final void testPlaceholderCanvasURILabel() {
+        final Label label = new Label(StringUtils.format(LABEL, myID));
+        final PlaceholderCanvas canvas = new PlaceholderCanvas(myID, label);
 
-        assertEquals(json, canvas.toString());
-    }
-
-    /**
-     * Tests reading placeholder canvas from string.
-     *
-     * @throws IOException If there is trouble reading the test fixture
-     */
-    @Test
-    public final void testCollectionFromString() throws IOException {
-        final String json = getFixture(Collection.class);
-        final Collection collection = Collection.fromJSON(json);
-
-        assertEquals(json, collection.toString());
-    }
-
-    /**
-     * Tests reading placeholder canvas from string.
-     *
-     * @throws IOException If there is trouble reading the test fixture
-     */
-    @Test
-    public final void testManifestFromString() throws IOException {
-        final String json = getFixture(Manifest.class);
-        assertEquals(json, Manifest.fromJSON(json).toString());
+        assertEquals(myID, canvas.getID());
+        assertEquals(label, canvas.getLabel());
     }
 
     /**

@@ -24,23 +24,20 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  */
 public class CanvasBehaviorTest {
 
-    /** Expected values. */
-    private static final String[] VALUES = { BehaviorConstants.AUTO_ADVANCE, BehaviorConstants.NO_AUTO_ADVANCE,
-        BehaviorConstants.FACING_PAGES, BehaviorConstants.NON_PAGED };
-
     /** A test manifest. */
     private static final String TEST_MANIFEST =
             new File(TestUtils.TEST_DIR, "manifest-disjoint-canvas-behavior.json").getAbsolutePath();
 
+    /** Expected values. */
+    private static final String[] VALUES = { BehaviorConstants.AUTO_ADVANCE, BehaviorConstants.FACING_PAGES,
+        BehaviorConstants.NO_AUTO_ADVANCE, BehaviorConstants.NON_PAGED };
+
     /**
-     * Tests the behavior's JSON serialization.
-     *
-     * @throws JsonProcessingException If there is trouble serializing the behavior
+     * Tests the fromLabel() method.
      */
     @Test
-    public final void testJsonSerialization() throws JsonProcessingException {
-        assertEquals(TestConstants.QUOTE + BehaviorConstants.NON_PAGED + TestConstants.QUOTE,
-                JSON.getWriter().writeValueAsString(CanvasBehavior.NON_PAGED));
+    public final void testFromLabel() {
+        assertEquals(CanvasBehavior.NON_PAGED, CanvasBehavior.fromLabel(BehaviorConstants.NON_PAGED).get());
     }
 
     /**
@@ -54,19 +51,22 @@ public class CanvasBehaviorTest {
     }
 
     /**
+     * Tests the behavior's JSON serialization.
+     *
+     * @throws JsonProcessingException If there is trouble serializing the behavior
+     */
+    @Test
+    public final void testJsonSerialization() throws JsonProcessingException {
+        assertEquals(TestConstants.QUOTE + BehaviorConstants.NON_PAGED + TestConstants.QUOTE,
+                JSON.getWriter().writeValueAsString(CanvasBehavior.NON_PAGED));
+    }
+
+    /**
      * Tests the toString() method.
      */
     @Test
     public final void testToString() {
         assertEquals(BehaviorConstants.NON_PAGED, CanvasBehavior.NON_PAGED.toString());
-    }
-
-    /**
-     * Tests the fromLabel() method.
-     */
-    @Test
-    public final void testFromLabel() {
-        assertEquals(CanvasBehavior.NON_PAGED, CanvasBehavior.fromLabel(BehaviorConstants.NON_PAGED).get());
     }
 
     /**

@@ -43,15 +43,6 @@ public class MultiLineString implements Geometry {
     }
 
     /**
-     * Gets the number of <code>LineString</code>s in this <code>MultiLineString</code>.
-     *
-     * @return The number of <code>LineString</code>s in this <code>MultiLineString</code>
-     */
-    public int size() {
-        return myLineStrings.length;
-    }
-
-    /**
      * Gets a <code>LineString</code> from the <code>MultiLineString</code>.
      *
      * @param aIndex The index position of the desired <code>LineString</code>
@@ -61,13 +52,9 @@ public class MultiLineString implements Geometry {
         return myLineStrings[aIndex];
     }
 
-    /**
-     * Gets a stream of the <code>MultiLineString</code>'s <code>LineString</code>s.
-     *
-     * @return A stream of the <code>MultiLineString</code>'s <code>LineString</code>s
-     */
-    public Stream<LineString> stream() {
-        return Arrays.stream(myLineStrings);
+    @Override
+    public Geometry.Type getType() {
+        return Geometry.Type.MULTILINESTRING;
     }
 
     /**
@@ -136,9 +123,22 @@ public class MultiLineString implements Geometry {
         };
     }
 
-    @Override
-    public Geometry.Type getType() {
-        return Geometry.Type.MULTILINESTRING;
+    /**
+     * Gets the number of <code>LineString</code>s in this <code>MultiLineString</code>.
+     *
+     * @return The number of <code>LineString</code>s in this <code>MultiLineString</code>
+     */
+    public int size() {
+        return myLineStrings.length;
+    }
+
+    /**
+     * Gets a stream of the <code>MultiLineString</code>'s <code>LineString</code>s.
+     *
+     * @return A stream of the <code>MultiLineString</code>'s <code>LineString</code>s
+     */
+    public Stream<LineString> stream() {
+        return Arrays.stream(myLineStrings);
     }
 
     /**

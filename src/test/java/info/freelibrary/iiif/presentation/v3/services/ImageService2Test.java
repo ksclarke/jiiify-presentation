@@ -65,15 +65,6 @@ public class ImageService2Test {
     }
 
     /**
-     * Tests API compliance level zero.
-     */
-    @Test
-    public void testLevelZero() {
-        assertEquals(LEVEL_0.toString(), Profile.LEVEL_ZERO.toString());
-        assertEquals(Profile.LEVEL_ZERO, Profile.valueOf("LEVEL_ZERO"));
-    }
-
-    /**
      * Tests API compliance level one.
      */
     @Test
@@ -89,6 +80,15 @@ public class ImageService2Test {
     public void testLevelTwo() {
         assertEquals(LEVEL_2.toString(), Profile.LEVEL_TWO.toString());
         assertEquals(Profile.LEVEL_TWO, Profile.valueOf("LEVEL_TWO"));
+    }
+
+    /**
+     * Tests API compliance level zero.
+     */
+    @Test
+    public void testLevelZero() {
+        assertEquals(LEVEL_0.toString(), Profile.LEVEL_ZERO.toString());
+        assertEquals(Profile.LEVEL_ZERO, Profile.valueOf("LEVEL_ZERO"));
     }
 
     /**

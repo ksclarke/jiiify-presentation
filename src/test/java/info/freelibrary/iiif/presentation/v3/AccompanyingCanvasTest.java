@@ -27,17 +27,17 @@ import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
  */
 public class AccompanyingCanvasTest {
 
-    /** An ID pattern for canvases. */
-    private static final String NOID_PATTERN = "/canvas-[a-z0-9]{4}";
-
     /** A file name pattern for test fixtures. */
     private static final String FILE = "{}-accompanying.json";
+
+    /** A constant for HTTPS. */
+    private static final String HTTPS = "https://";
 
     /** A test label. */
     private static final String LABEL = "My label for '{}'";
 
-    /** A constant for HTTPS. */
-    private static final String HTTPS = "https://";
+    /** An ID pattern for canvases. */
+    private static final String NOID_PATTERN = "/canvas-[a-z0-9]{4}";
 
     /** The test ID. */
     private String myID;
@@ -48,14 +48,6 @@ public class AccompanyingCanvasTest {
     @Before
     public final void setUp() {
         myID = HTTPS + UUID.randomUUID().toString();
-    }
-
-    /**
-     * Tests {@link AccompanyingCanvas#AccompanyingCanvas(URI) AccompanyingCanvas}.
-     */
-    @Test
-    public final void testAccompanyingCanvasURI() {
-        assertEquals(myID, new AccompanyingCanvas(myID).getID());
     }
 
     /**
@@ -105,10 +97,10 @@ public class AccompanyingCanvasTest {
     }
 
     /**
-     * Tests {@link AccompanyingCanvas#AccompanyingCanvas(URI, Label) AccompanyingCanvas}.
+     * Tests {@link AccompanyingCanvas#AccompanyingCanvas(String, String) AccompanyingCanvas}.
      */
     @Test
-    public final void testAccompanyingCanvasURILabel() {
+    public final void testAccompanyingCanvasStringString() {
         final Label label = new Label(StringUtils.format(LABEL, myID));
         final AccompanyingCanvas canvas = new AccompanyingCanvas(myID, label);
 
@@ -117,10 +109,18 @@ public class AccompanyingCanvasTest {
     }
 
     /**
-     * Tests {@link AccompanyingCanvas#AccompanyingCanvas(String, String) AccompanyingCanvas}.
+     * Tests {@link AccompanyingCanvas#AccompanyingCanvas(URI) AccompanyingCanvas}.
      */
     @Test
-    public final void testAccompanyingCanvasStringString() {
+    public final void testAccompanyingCanvasURI() {
+        assertEquals(myID, new AccompanyingCanvas(myID).getID());
+    }
+
+    /**
+     * Tests {@link AccompanyingCanvas#AccompanyingCanvas(URI, Label) AccompanyingCanvas}.
+     */
+    @Test
+    public final void testAccompanyingCanvasURILabel() {
         final Label label = new Label(StringUtils.format(LABEL, myID));
         final AccompanyingCanvas canvas = new AccompanyingCanvas(myID, label);
 

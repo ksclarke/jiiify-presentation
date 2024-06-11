@@ -56,6 +56,16 @@ public class Properties implements Iterable<Property> {
     }
 
     /**
+     * Removes all the properties.
+     *
+     * @return This <code>Properties</code>
+     */
+    public Properties clear() {
+        myProperties.clear();
+        return this;
+    }
+
+    /**
      * Tests whether the supplied property is contained with the properties.
      *
      * @param aProperty The property to test
@@ -76,18 +86,29 @@ public class Properties implements Iterable<Property> {
     }
 
     @Override
+    public boolean equals(final Object aObject) {
+        return aObject instanceof Properties && myProperties.equals(aObject);
+    }
+
+    /**
+     * Tests whether the supplied <code>Properties</code> are equal to these <code>Properties</code>.
+     *
+     * @param aProperties The properties to test
+     * @return True if the properties are equal to these; else, false
+     */
+    @SuppressWarnings({ PMD.SUSPICIOUS_EQUALS_METHOD_NAME })
+    public boolean equals(final Properties aProperties) {
+        return myProperties.equals(aProperties.myProperties);
+    }
+
+    @Override
     public void forEach(final Consumer<? super Property> aAction) {
         myProperties.forEach(aAction);
     }
 
     @Override
-    public Spliterator<Property> spliterator() {
-        return myProperties.spliterator();
-    }
-
-    @Override
-    public Iterator<Property> iterator() {
-        return myProperties.iterator();
+    public int hashCode() {
+        return myProperties.hashCode();
     }
 
     /**
@@ -97,6 +118,11 @@ public class Properties implements Iterable<Property> {
      */
     public boolean isEmpty() {
         return myProperties.isEmpty();
+    }
+
+    @Override
+    public Iterator<Property> iterator() {
+        return myProperties.iterator();
     }
 
     /**
@@ -120,6 +146,16 @@ public class Properties implements Iterable<Property> {
     }
 
     /**
+     * Remove properties if they match the supplied predicate filter.
+     *
+     * @param aFilter The predicate filter
+     * @return True if the property was successfully removed; else, false
+     */
+    public boolean removeIf(final Predicate<? super Property> aFilter) {
+        return myProperties.removeIf(aFilter);
+    }
+
+    /**
      * Removes all properties except those found in the supplied collection.
      *
      * @param aCollection A collection of properties to retain
@@ -138,35 +174,9 @@ public class Properties implements Iterable<Property> {
         return myProperties.size();
     }
 
-    /**
-     * Tests whether the supplied <code>Properties</code> are equal to these <code>Properties</code>.
-     *
-     * @param aProperties The properties to test
-     * @return True if the properties are equal to these; else, false
-     */
-    @SuppressWarnings({ PMD.SUSPICIOUS_EQUALS_METHOD_NAME })
-    public boolean equals(final Properties aProperties) {
-        return myProperties.equals(aProperties.myProperties);
-    }
-
     @Override
-    public boolean equals(final Object aObject) {
-        return aObject instanceof Properties && myProperties.equals(aObject);
-    }
-
-    @Override
-    public int hashCode() {
-        return myProperties.hashCode();
-    }
-
-    /**
-     * Removes all the properties.
-     *
-     * @return This <code>Properties</code>
-     */
-    public Properties clear() {
-        myProperties.clear();
-        return this;
+    public Spliterator<Property> spliterator() {
+        return myProperties.spliterator();
     }
 
     /**
@@ -176,15 +186,5 @@ public class Properties implements Iterable<Property> {
      */
     public Stream<Property> stream() {
         return myProperties.stream();
-    }
-
-    /**
-     * Remove properties if they match the supplied predicate filter.
-     *
-     * @param aFilter The predicate filter
-     * @return True if the property was successfully removed; else, false
-     */
-    public boolean removeIf(final Predicate<? super Property> aFilter) {
-        return myProperties.removeIf(aFilter);
     }
 }

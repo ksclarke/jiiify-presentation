@@ -19,14 +19,26 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public class SkolemIriFactoryTest {
 
+    /** A well-known base URL. */
+    private static final String BASE_URL = "http://freelibrary.info";
+
     /** The test's logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(SkolemIriFactoryTest.class, MessageCodes.BUNDLE);
 
-    /** A well-known base for testing. */
-    private static final String WELL_KNOWN_BASE = "https://freelibrary.info";
-
     /** A Skolem IRI start for testing. */
-    private static final String SKOLEM_IRI_START = WELL_KNOWN_BASE + "/.well-known/genid/";
+    private static final String SKOLEM_IRI_START = BASE_URL + "/.well-known/genid/";
+
+    /**
+     * Tests getting a SkolemIRI that has a well-known base set.
+     */
+    @Test
+    public final void testGetBlankNodeSkolemIRI() {
+        final SkolemIriFactory factory = SkolemIriFactory.getFactory();
+        final String skolemIRI = factory.setWellKnownBase(BASE_URL).getSkolemIRI().toString();
+
+        LOGGER.debug(MessageCodes.JPA_112, skolemIRI);
+        assertTrue(skolemIRI.startsWith(SKOLEM_IRI_START));
+    }
 
     /**
      * Tests that <code>getFactory()</code> return the same factory.
@@ -37,28 +49,6 @@ public class SkolemIriFactoryTest {
         final SkolemIriFactory factory2 = SkolemIriFactory.getFactory();
 
         assertEquals(factory1, factory2);
-    }
-
-    /**
-     * Tests setting the well-known Skolem IRI base.
-     */
-    @Test
-    public final void testSetWellKnownBase() {
-        final SkolemIriFactory factory = SkolemIriFactory.getFactory();
-
-        assertEquals(WELL_KNOWN_BASE, factory.setWellKnownBase(WELL_KNOWN_BASE).getWellKnownBase().get());
-    }
-
-    /**
-     * Tests getting a SkolemIRI that has a well-known base set.
-     */
-    @Test
-    public final void testGetBlankNodeSkolemIRI() {
-        final SkolemIriFactory factory = SkolemIriFactory.getFactory();
-        final String skolemIRI = factory.setWellKnownBase(WELL_KNOWN_BASE).getSkolemIRI().toString();
-
-        LOGGER.debug(MessageCodes.JPA_112, skolemIRI);
-        assertTrue(skolemIRI.startsWith(SKOLEM_IRI_START));
     }
 
     /**
@@ -77,8 +67,8 @@ public class SkolemIriFactoryTest {
      * Tests <code>hasSerializableIDs()</code>.
      */
     @Test
-    public final void testHasSerializableIDs() {
-        assertNotEquals(null, new TextualBody(SkolemIriFactory.getFactory().createSerializableIDs(true)).getID());
+    public final void testHasNonSerializableIDs() {
+        assertEquals(null, new TextualBody(SkolemIriFactory.getFactory().createSerializableIDs(false)).getID());
     }
 
     /**
@@ -95,7 +85,17 @@ public class SkolemIriFactoryTest {
      * Tests <code>hasSerializableIDs()</code>.
      */
     @Test
-    public final void testHasNonSerializableIDs() {
-        assertEquals(null, new TextualBody(SkolemIriFactory.getFactory().createSerializableIDs(false)).getID());
+    public final void testHasSerializableIDs() {
+        assertNotEquals(null, new TextualBody(SkolemIriFactory.getFactory().createSerializableIDs(true)).getID());
+    }
+
+    /**
+     * Tests setting the well-known Skolem IRI base.
+     */
+    @Test
+    public final void testSetWellKnownBase() {
+        final SkolemIriFactory factory = SkolemIriFactory.getFactory();
+
+        assertEquals(BASE_URL, factory.setWellKnownBase(BASE_URL).getWellKnownBase().get());
     }
 }

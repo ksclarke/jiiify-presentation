@@ -12,30 +12,22 @@ import org.junit.Test;
 public class I18nPropertyTest {
 
     /** Sample test value. */
-    private static final String ONE = "one";
-
-    /** Sample test value. */
-    private static final String TWO = "two";
-
-    /** Sample test value. */
     private static final String ENG = "eng";
 
     /** Sample test value. */
     private static final String FRE = "fre";
 
-    /**
-     * Tests construction of an internationalized property.
-     */
-    @Test
-    public void testI18nPropertyValueArray() {
-        assertEquals(ONE, new I18nProperty<Value>(new I18n(ENG, ONE), new I18n(FRE, TWO)).getString());
-    }
+    /** Sample test value. */
+    private static final String ONE = "one";
+
+    /** Sample test value. */
+    private static final String TWO = "two";
 
     /**
-     * Test of hashCode with double values.
+     * Test of hashCode override.
      */
     @Test
-    public void testHashCodeDoubleValue() {
+    public void testHashCode() {
         final I18nProperty<?> i18np1 = new I18nProperty<>(new I18n(ENG, ONE));
         final I18nProperty<?> i18np2 = new I18nProperty<>(new I18n(ENG, ONE));
 
@@ -54,14 +46,22 @@ public class I18nPropertyTest {
     }
 
     /**
-     * Test of hashCode override.
+     * Test of hashCode with double values.
      */
     @Test
-    public void testHashCode() {
+    public void testHashCodeDoubleValue() {
         final I18nProperty<?> i18np1 = new I18nProperty<>(new I18n(ENG, ONE));
         final I18nProperty<?> i18np2 = new I18nProperty<>(new I18n(ENG, ONE));
 
         assertEquals(i18np1.hashCode(), i18np2.hashCode());
+    }
+
+    /**
+     * Tests construction of an internationalized property.
+     */
+    @Test
+    public void testI18nPropertyValueArray() {
+        assertEquals(ONE, new I18nProperty<Value>(new I18n(ENG, ONE), new I18n(FRE, TWO)).getString());
     }
 
 }

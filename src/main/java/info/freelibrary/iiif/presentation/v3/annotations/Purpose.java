@@ -42,20 +42,20 @@ public enum Purpose implements Labeled {
     /** Used when the user intends to assign some value or quality to a target. */
     MODERATING("moderating"),
 
+    /** Used when the user intends to associate a painted resource with a target canvas. */
+    PAINTING("painting"),
+
     /** Used when the user intends to ask a question about a target. */
     QUESTIONING("questioning"),
 
     /** Used when the user intends to reply to a previous statement, either an Annotation or another resource. */
     REPLYING("replying"),
 
-    /** Used when the user intends to associate a tag with a target. */
-    TAGGING("tagging"),
-
-    /** Used when the user intends to associate a painted resource with a target canvas. */
-    PAINTING("painting"),
-
     /** Used when the user intends to associate a supplementing resource with the target canvas. */
-    SUPPLEMENTING("supplementing");
+    SUPPLEMENTING("supplementing"),
+
+    /** Used when the user intends to associate a tag with a target. */
+    TAGGING("tagging");
 
     /** The string form of the enumeration. */
     private final String myLabel;

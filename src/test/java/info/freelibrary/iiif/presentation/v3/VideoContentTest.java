@@ -30,11 +30,22 @@ public class VideoContentTest {
     }
 
     /**
-     * Tests constructing new video content with an ID.
+     * Tests video content test fixture.
+     *
+     * @throws IOException If there is trouble reading the test fixture.
      */
     @Test
-    public final void testVideoContentString() {
-        assertEquals(myID, new VideoContent(myID).getID());
+    public final void testFixture0003() throws IOException {
+        final String json = format(StringUtils.read(new File("src/test/resources/fixtures/0003-mvm-video.json")));
+        assertEquals(json, format(Manifest.fromJSON(json).toString()));
+    }
+
+    /**
+     * Tests setting and getting video content duration.
+     */
+    @Test
+    public final void testSetGetDuration() {
+        assertEquals(2f, new VideoContent(myID).setDuration(2f).getDuration(), 0);
     }
 
     /**
@@ -48,21 +59,10 @@ public class VideoContentTest {
     }
 
     /**
-     * Tests setting and getting video content duration.
+     * Tests constructing new video content with an ID.
      */
     @Test
-    public final void testSetGetDuration() {
-        assertEquals(2f, new VideoContent(myID).setDuration(2f).getDuration(), 0);
-    }
-
-    /**
-     * Tests video content test fixture.
-     *
-     * @throws IOException If there is trouble reading the test fixture.
-     */
-    @Test
-    public final void testFixture0003() throws IOException {
-        final String json = format(StringUtils.read(new File("src/test/resources/fixtures/0003-mvm-video.json")));
-        assertEquals(json, format(Manifest.fromJSON(json).toString()));
+    public final void testVideoContentString() {
+        assertEquals(myID, new VideoContent(myID).getID());
     }
 }

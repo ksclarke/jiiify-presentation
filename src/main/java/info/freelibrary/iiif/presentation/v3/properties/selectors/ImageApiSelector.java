@@ -17,34 +17,14 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 public class ImageApiSelector implements Selector {
 
     /**
-     * The Image API selector's size.
+     * The Image API selector's default format.
      */
-    protected static final String SIZE = "size";
+    protected static final String DEFAULT_FORMAT = "jpg";
 
     /**
-     * The Image API selector's region.
+     * The Image API selector's default quality.
      */
-    protected static final String REGION = "region";
-
-    /**
-     * The Image API selector's rotation.
-     */
-    protected static final String ROTATION = "rotation";
-
-    /**
-     * The Image API selector's quality.
-     */
-    protected static final String QUALITY = "quality";
-
-    /**
-     * The Image API selector's format.
-     */
-    protected static final String FORMAT = "format";
-
-    /**
-     * The Image API selector's max size.
-     */
-    protected static final String DEFAULT_SIZE = "max";
+    protected static final String DEFAULT_QUALITY = "default";
 
     /**
      * The Image API selector's full region.
@@ -57,19 +37,34 @@ public class ImageApiSelector implements Selector {
     protected static final String DEFAULT_ROTATION = "0";
 
     /**
-     * The Image API selector's default quality.
+     * The Image API selector's max size.
      */
-    protected static final String DEFAULT_QUALITY = "default";
+    protected static final String DEFAULT_SIZE = "max";
 
     /**
-     * The Image API selector's default format.
+     * The Image API selector's format.
      */
-    protected static final String DEFAULT_FORMAT = "jpg";
+    protected static final String FORMAT = "format";
 
     /**
-     * The Image API selector's logger.
+     * The Image API selector's quality.
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(ImageApiSelector.class, MessageCodes.BUNDLE);
+    protected static final String QUALITY = "quality";
+
+    /**
+     * The Image API selector's region.
+     */
+    protected static final String REGION = "region";
+
+    /**
+     * The Image API selector's rotation.
+     */
+    protected static final String ROTATION = "rotation";
+
+    /**
+     * The Image API selector's size.
+     */
+    protected static final String SIZE = "size";
 
     /**
      * The expected number of URL delimiters.
@@ -77,29 +72,14 @@ public class ImageApiSelector implements Selector {
     private static final int EXPECTED_URL_DELIM_COUNT = 4;
 
     /**
+     * The Image API selector's logger.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImageApiSelector.class, MessageCodes.BUNDLE);
+
+    /**
      * The Image API selector's slash constant.
      */
     private static final String SLASH = "/";
-
-    /**
-     * The Image API selector's region.
-     */
-    private String myRegion;
-
-    /**
-     * The Image API selector's size.
-     */
-    private String mySize;
-
-    /**
-     * The Image API selector's rotation.
-     */
-    private String myRotation;
-
-    /**
-     * The Image API selector's quality.
-     */
-    private String myQuality;
 
     /**
      * The Image API selector's format.
@@ -107,28 +87,30 @@ public class ImageApiSelector implements Selector {
     private String myFormat;
 
     /**
+     * The Image API selector's quality.
+     */
+    private String myQuality;
+
+    /**
+     * The Image API selector's region.
+     */
+    private String myRegion;
+
+    /**
+     * The Image API selector's rotation.
+     */
+    private String myRotation;
+
+    /**
+     * The Image API selector's size.
+     */
+    private String mySize;
+
+    /**
      * Creates an Image API selector.
      */
     public ImageApiSelector() {
         // This is intentionally empty
-    }
-
-    /**
-     * Creates an Image API selector.
-     *
-     * @param aRegion A region from an image
-     * @param aSize A size from an image
-     * @param aRotation A rotation from an image
-     * @param aQuality A quality of an image
-     * @param aFormat A format of an image
-     */
-    public ImageApiSelector(final String aRegion, final String aSize, final String aRotation, final String aQuality,
-            final String aFormat) {
-        myRegion = aRegion;
-        mySize = aSize;
-        myRotation = aRotation;
-        myQuality = aQuality;
-        myFormat = aFormat;
     }
 
     /**
@@ -157,6 +139,44 @@ public class ImageApiSelector implements Selector {
     }
 
     /**
+     * Creates an Image API selector.
+     *
+     * @param aRegion A region from an image
+     * @param aSize A size from an image
+     * @param aRotation A rotation from an image
+     * @param aQuality A quality of an image
+     * @param aFormat A format of an image
+     */
+    public ImageApiSelector(final String aRegion, final String aSize, final String aRotation, final String aQuality,
+            final String aFormat) {
+        myRegion = aRegion;
+        mySize = aSize;
+        myRotation = aRotation;
+        myQuality = aQuality;
+        myFormat = aFormat;
+    }
+
+    /**
+     * Gets the image format.
+     *
+     * @return The image format
+     */
+    @JsonInclude(JsonInclude.Include.NON_ABSENT)
+    public Optional<String> getFormat() {
+        return Optional.ofNullable(myFormat);
+    }
+
+    /**
+     * Gets the requested image quality.
+     *
+     * @return The requested image quality
+     */
+    @JsonInclude(JsonInclude.Include.NON_ABSENT)
+    public Optional<String> getQuality() {
+        return Optional.ofNullable(myQuality);
+    }
+
+    /**
      * Gets the requested region.
      *
      * @return The requested region
@@ -164,38 +184,6 @@ public class ImageApiSelector implements Selector {
     @JsonInclude(JsonInclude.Include.NON_ABSENT)
     public Optional<String> getRegion() {
         return Optional.ofNullable(myRegion);
-    }
-
-    /**
-     * Sets the requested region.
-     *
-     * @param aRegion A region to set
-     * @return This image API selector
-     */
-    public ImageApiSelector setRegion(final String aRegion) {
-        myRegion = aRegion;
-        return this;
-    }
-
-    /**
-     * Gets the requested size.
-     *
-     * @return The requested size
-     */
-    @JsonInclude(JsonInclude.Include.NON_ABSENT)
-    public Optional<String> getSize() {
-        return Optional.ofNullable(mySize);
-    }
-
-    /**
-     * Sets the requested size.
-     *
-     * @param aSize A size to set
-     * @return This image API selector
-     */
-    public ImageApiSelector setSize(final String aSize) {
-        mySize = aSize;
-        return this;
     }
 
     /**
@@ -209,24 +197,24 @@ public class ImageApiSelector implements Selector {
     }
 
     /**
-     * Sets the requested rotation.
+     * Gets the requested size.
      *
-     * @param aRotation A rotation to set
-     * @return This image API selector
+     * @return The requested size
      */
-    public ImageApiSelector setRotation(final String aRotation) {
-        myRotation = aRotation;
-        return this;
+    @JsonInclude(JsonInclude.Include.NON_ABSENT)
+    public Optional<String> getSize() {
+        return Optional.ofNullable(mySize);
     }
 
     /**
-     * Gets the requested image quality.
+     * Sets the image format.
      *
-     * @return The requested image quality
+     * @param aFormat The image format to set
+     * @return This image API selector
      */
-    @JsonInclude(JsonInclude.Include.NON_ABSENT)
-    public Optional<String> getQuality() {
-        return Optional.ofNullable(myQuality);
+    public ImageApiSelector setFormat(final String aFormat) {
+        myFormat = aFormat;
+        return this;
     }
 
     /**
@@ -241,23 +229,35 @@ public class ImageApiSelector implements Selector {
     }
 
     /**
-     * Gets the image format.
+     * Sets the requested region.
      *
-     * @return The image format
+     * @param aRegion A region to set
+     * @return This image API selector
      */
-    @JsonInclude(JsonInclude.Include.NON_ABSENT)
-    public Optional<String> getFormat() {
-        return Optional.ofNullable(myFormat);
+    public ImageApiSelector setRegion(final String aRegion) {
+        myRegion = aRegion;
+        return this;
     }
 
     /**
-     * Sets the image format.
+     * Sets the requested rotation.
      *
-     * @param aFormat The image format to set
+     * @param aRotation A rotation to set
      * @return This image API selector
      */
-    public ImageApiSelector setFormat(final String aFormat) {
-        myFormat = aFormat;
+    public ImageApiSelector setRotation(final String aRotation) {
+        myRotation = aRotation;
+        return this;
+    }
+
+    /**
+     * Sets the requested size.
+     *
+     * @param aSize A size to set
+     * @return This image API selector
+     */
+    public ImageApiSelector setSize(final String aSize) {
+        mySize = aSize;
         return this;
     }
 

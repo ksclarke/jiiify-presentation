@@ -35,16 +35,6 @@ public class MinterFactoryTest {
     }
 
     /**
-     * Tests the {@link MinterFactory#getMinter(URI)} when the minter is set via System property.
-     */
-    @Test
-    public final void testGetMinterViaSysProperty() {
-        System.setProperty(MinterFactory.MINTER_NAME_PROPERTY, AltMinter.class.getName());
-        assertEquals(AltMinter.class.getName(), MinterFactory.getMinter(myManifestID).getClass().getName());
-        System.clearProperty(MinterFactory.MINTER_NAME_PROPERTY);
-    }
-
-    /**
      * Tests the {@link MinterFactory#getMinter(URI)} when the minter is set via environmental property.
      */
     @Test
@@ -52,5 +42,15 @@ public class MinterFactoryTest {
         MinterFactory.setMinter(EnvAltMinter.class);
         assertEquals(EnvAltMinter.class.getName(), MinterFactory.getMinter(myManifestID).getClass().getName());
         assertEquals(EnvAltMinter.class.getName(), MinterFactory.clearMinter());
+    }
+
+    /**
+     * Tests the {@link MinterFactory#getMinter(URI)} when the minter is set via System property.
+     */
+    @Test
+    public final void testGetMinterViaSysProperty() {
+        System.setProperty(MinterFactory.MINTER_NAME_PROPERTY, AltMinter.class.getName());
+        assertEquals(AltMinter.class.getName(), MinterFactory.getMinter(myManifestID).getClass().getName());
+        System.clearProperty(MinterFactory.MINTER_NAME_PROPERTY);
     }
 }

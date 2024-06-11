@@ -16,15 +16,6 @@ public class MultiPoint implements Geometry {
     final Point[] myPoints;
 
     /**
-     * Creates a <code>MultiPoint</code> from an array of <code>Point</code>s.
-     *
-     * @param aPointArray An array of points
-     */
-    public MultiPoint(final Point... aPointArray) {
-        myPoints = aPointArray.clone();
-    }
-
-    /**
      * Creates a <code>MultiPoint</code> from a list of <code>Point</code>s.
      *
      * @param aPointList A list of points
@@ -43,21 +34,17 @@ public class MultiPoint implements Geometry {
     }
 
     /**
-     * The number of <code>Point</code>s in the <code>MultiPoint</code>.
+     * Creates a <code>MultiPoint</code> from an array of <code>Point</code>s.
      *
-     * @return The number of <code>Point</code>s <code>MultiPoint</code>
+     * @param aPointArray An array of points
      */
-    public int size() {
-        return myPoints.length;
+    public MultiPoint(final Point... aPointArray) {
+        myPoints = aPointArray.clone();
     }
 
-    /**
-     * Gets a stream of the <code>MultiPoint</code>'s <code>Point</code>s.
-     *
-     * @return A stream of the <code>MultiPoint</code>'s <code>Point</code>s
-     */
-    public Stream<Point> stream() {
-        return Arrays.stream(myPoints);
+    @Override
+    public Geometry.Type getType() {
+        return Geometry.Type.MULTIPOINT;
     }
 
     /**
@@ -126,8 +113,21 @@ public class MultiPoint implements Geometry {
         };
     }
 
-    @Override
-    public Geometry.Type getType() {
-        return Geometry.Type.MULTIPOINT;
+    /**
+     * The number of <code>Point</code>s in the <code>MultiPoint</code>.
+     *
+     * @return The number of <code>Point</code>s <code>MultiPoint</code>
+     */
+    public int size() {
+        return myPoints.length;
+    }
+
+    /**
+     * Gets a stream of the <code>MultiPoint</code>'s <code>Point</code>s.
+     *
+     * @return A stream of the <code>MultiPoint</code>'s <code>Point</code>s
+     */
+    public Stream<Point> stream() {
+        return Arrays.stream(myPoints);
     }
 }
