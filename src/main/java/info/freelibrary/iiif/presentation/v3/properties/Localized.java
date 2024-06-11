@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+import info.freelibrary.iiif.presentation.v3.utils.I18nUtils;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
@@ -42,7 +43,7 @@ public interface Localized<T> {
         for (final String element : aLangArray) {
             final String tag = Locale.forLanguageTag(element).toLanguageTag();
 
-            if ("und".equals(tag)) {
+            if (I18nUtils.UNDEFINED.equals(tag)) {
                 final Logger logger = LoggerFactory.getLogger(Localized.class, MessageCodes.BUNDLE);
                 throw new IllegalArgumentException(logger.getMessage(MessageCodes.JPA_020, element));
             }

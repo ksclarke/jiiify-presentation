@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.JDK;
+import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
@@ -33,6 +34,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  * Model content that can be associated with an annotation or used as a thumbnail.
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
+@SuppressWarnings({ PMD.COUPLING_BETWEEN_OBJECTS })
 public class ModelContent extends AbstractContentResource<ModelContent>
         implements AnnotatedContentResource<ModelContent>, Resource<ModelContent> {
 
@@ -53,21 +55,19 @@ public class ModelContent extends AbstractContentResource<ModelContent>
     }
 
     @Override
-    @JsonSetter(JsonKeys.FORMAT)
-    public ModelContent setFormat(final MediaType aMediaType) {
-        return (ModelContent) super.setFormat(aMediaType);
+    public List<AnnotationPage<WebAnnotation>> getAnnotations() {
+        return super.getAnnotations();
     }
 
     @Override
-    @JsonSetter(JsonKeys.PROVIDER)
-    public ModelContent setProviders(final Provider... aProviderArray) {
-        return setProviders(Arrays.asList(aProviderArray));
+    @SuppressWarnings(JDK.UNCHECKED)
+    public ModelContent setAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
+        return (ModelContent) super.setAnnotations(aAnnotationArray);
     }
 
     @Override
-    @JsonIgnore
-    public ModelContent setProviders(final List<Provider> aProviderList) {
-        return (ModelContent) super.setProviders(aProviderList);
+    public ModelContent setAnnotations(final List<AnnotationPage<WebAnnotation>> aAnnotationArray) {
+        return (ModelContent) super.setAnnotations(aAnnotationArray);
     }
 
     @Override
@@ -87,44 +87,9 @@ public class ModelContent extends AbstractContentResource<ModelContent>
     }
 
     @Override
-    public ModelContent setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
-        return (ModelContent) super.setSeeAlsoRefs(aSeeAlsoArray);
-    }
-
-    @Override
-    public ModelContent setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
-        return (ModelContent) super.setSeeAlsoRefs(aSeeAlsoList);
-    }
-
-    @Override
-    @SafeVarargs
-    public final ModelContent setServices(final Service<?>... aServiceArray) {
-        return (ModelContent) super.setServices(aServiceArray);
-    }
-
-    @Override
-    public ModelContent setServices(final List<Service<?>> aServiceList) {
-        return (ModelContent) super.setServices(aServiceList);
-    }
-
-    @Override
-    public ModelContent setPartOfs(final PartOf... aPartOfArray) {
-        return (ModelContent) super.setPartOfs(aPartOfArray);
-    }
-
-    @Override
-    public ModelContent setPartOfs(final List<PartOf> aPartOfList) {
-        return (ModelContent) super.setPartOfs(aPartOfList);
-    }
-
-    @Override
-    public ModelContent setRenderings(final Rendering... aRenderingArray) {
-        return (ModelContent) super.setRenderings(aRenderingArray);
-    }
-
-    @Override
-    public ModelContent setRenderings(final List<Rendering> aRenderingList) {
-        return (ModelContent) super.setRenderings(aRenderingList);
+    @JsonSetter(JsonKeys.FORMAT)
+    public ModelContent setFormat(final MediaType aMediaType) {
+        return (ModelContent) super.setFormat(aMediaType);
     }
 
     @Override
@@ -138,43 +103,8 @@ public class ModelContent extends AbstractContentResource<ModelContent>
     }
 
     @Override
-    public ModelContent setThumbnails(final ContentResource<?>... aThumbnailArray) {
-        return (ModelContent) super.setThumbnails(aThumbnailArray);
-    }
-
-    @Override
-    public ModelContent setThumbnails(final List<ContentResource<?>> aThumbnailList) {
-        return (ModelContent) super.setThumbnails(aThumbnailList);
-    }
-
-    @Override
     public ModelContent setID(final String aID) {
         return (ModelContent) super.setID(aID);
-    }
-
-    @Override
-    public ModelContent setRights(final String aRights) {
-        return (ModelContent) super.setRights(aRights);
-    }
-
-    @Override
-    public ModelContent setRequiredStatement(final RequiredStatement aStatement) {
-        return (ModelContent) super.setRequiredStatement(aStatement);
-    }
-
-    @Override
-    public ModelContent setSummary(final Summary aSummary) {
-        return (ModelContent) super.setSummary(aSummary);
-    }
-
-    @Override
-    public ModelContent setMetadata(final Metadata... aMetadataArray) {
-        return (ModelContent) super.setMetadata(aMetadataArray);
-    }
-
-    @Override
-    public ModelContent setMetadata(final List<Metadata> aMetadataList) {
-        return (ModelContent) super.setMetadata(aMetadataList);
     }
 
     @Override
@@ -188,19 +118,91 @@ public class ModelContent extends AbstractContentResource<ModelContent>
     }
 
     @Override
-    public List<AnnotationPage<WebAnnotation>> getAnnotations() {
-        return super.getAnnotations();
+    public ModelContent setMetadata(final List<Metadata> aMetadataList) {
+        return (ModelContent) super.setMetadata(aMetadataList);
     }
 
     @Override
-    @SuppressWarnings(JDK.UNCHECKED)
-    public ModelContent setAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
-        return (ModelContent) super.setAnnotations(aAnnotationArray);
+    public ModelContent setMetadata(final Metadata... aMetadataArray) {
+        return (ModelContent) super.setMetadata(aMetadataArray);
     }
 
     @Override
-    public ModelContent setAnnotations(final List<AnnotationPage<WebAnnotation>> aAnnotationArray) {
-        return (ModelContent) super.setAnnotations(aAnnotationArray);
+    public ModelContent setPartOfs(final List<PartOf> aPartOfList) {
+        return (ModelContent) super.setPartOfs(aPartOfList);
+    }
+
+    @Override
+    public ModelContent setPartOfs(final PartOf... aPartOfArray) {
+        return (ModelContent) super.setPartOfs(aPartOfArray);
+    }
+
+    @Override
+    @JsonIgnore
+    public ModelContent setProviders(final List<Provider> aProviderList) {
+        return (ModelContent) super.setProviders(aProviderList);
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.PROVIDER)
+    public ModelContent setProviders(final Provider... aProviderArray) {
+        return setProviders(Arrays.asList(aProviderArray));
+    }
+
+    @Override
+    public ModelContent setRenderings(final List<Rendering> aRenderingList) {
+        return (ModelContent) super.setRenderings(aRenderingList);
+    }
+
+    @Override
+    public ModelContent setRenderings(final Rendering... aRenderingArray) {
+        return (ModelContent) super.setRenderings(aRenderingArray);
+    }
+
+    @Override
+    public ModelContent setRequiredStatement(final RequiredStatement aStatement) {
+        return (ModelContent) super.setRequiredStatement(aStatement);
+    }
+
+    @Override
+    public ModelContent setRights(final String aRights) {
+        return (ModelContent) super.setRights(aRights);
+    }
+
+    @Override
+    public ModelContent setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
+        return (ModelContent) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public ModelContent setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
+        return (ModelContent) super.setSeeAlsoRefs(aSeeAlsoArray);
+    }
+
+    @Override
+    public ModelContent setServices(final List<Service<?>> aServiceList) {
+        return (ModelContent) super.setServices(aServiceList);
+    }
+
+    @Override
+    @SafeVarargs
+    public final ModelContent setServices(final Service<?>... aServiceArray) {
+        return (ModelContent) super.setServices(aServiceArray);
+    }
+
+    @Override
+    public ModelContent setSummary(final Summary aSummary) {
+        return (ModelContent) super.setSummary(aSummary);
+    }
+
+    @Override
+    public ModelContent setThumbnails(final ContentResource<?>... aThumbnailArray) {
+        return (ModelContent) super.setThumbnails(aThumbnailArray);
+    }
+
+    @Override
+    public ModelContent setThumbnails(final List<ContentResource<?>> aThumbnailList) {
+        return (ModelContent) super.setThumbnails(aThumbnailList);
     }
 
     /**

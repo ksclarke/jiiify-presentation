@@ -1,6 +1,9 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
+import static info.freelibrary.util.Constants.EQUALS;
+import static info.freelibrary.util.Constants.VERTICAL_BAR;
+
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -9,8 +12,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-
-import info.freelibrary.util.StringUtils;
 
 /**
  * A base class for label, summary, attribution, property, and metadata's label and value fields.
@@ -113,10 +114,10 @@ class I18nProperty<T extends I18nProperty<T>> {
         builder = new StringBuilder();
 
         for (final I18n i18n : myI18ns) {
-            final String[] strings = i18n.getStrings().toArray(new String[i18n.size()]);
+            final String[] strings = i18n.getStrings().toArray(new String[] {});
 
-            builder.append(i18n.getLang()).append('=');
-            builder.append(StringUtils.toString(strings, '|')).append(System.lineSeparator());
+            builder.append(i18n.getLang()).append(EQUALS).append(String.join(VERTICAL_BAR, strings))
+                    .append(System.lineSeparator());
         }
 
         return builder.toString();

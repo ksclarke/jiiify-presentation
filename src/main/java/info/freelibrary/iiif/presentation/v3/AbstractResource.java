@@ -62,6 +62,9 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
     @JsonProperty(JsonKeys.TYPE)
     protected String myType;
 
+    /** A class of behaviors supported by this resource. */
+    private final Class<? extends Behavior> myBehaviorClass;
+
     /** The resource's behaviors. */
     @JsonProperty(JsonKeys.BEHAVIOR)
     @JsonDeserialize(using = BehaviorDeserializer.class)
@@ -109,9 +112,6 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
     @JsonProperty(JsonKeys.THUMBNAIL)
     @JsonDeserialize(contentUsing = ContentResourceDeserializer.class)
     private List<ContentResource<?>> myThumbnails;
-
-    /** A class of behaviors supported by this resource. */
-    private final Class<? extends Behavior> myBehaviorClass;
 
     /**
      * Creates a new resource from the supplied type.

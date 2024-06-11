@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.JDK;
+import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
@@ -34,6 +35,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  * Text content that can be associated with an annotation or used as a thumbnail.
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
+@SuppressWarnings({ PMD.COUPLING_BETWEEN_OBJECTS })
 public class TextContent extends AbstractContentResource<TextContent>
         implements AnnotatedContentResource<TextContent>, Resource<TextContent> {
 
@@ -54,8 +56,24 @@ public class TextContent extends AbstractContentResource<TextContent>
     }
 
     @Override
+    public List<AnnotationPage<WebAnnotation>> getAnnotations() {
+        return super.getAnnotations();
+    }
+
+    @Override
     public Optional<MediaType> getFormat() {
         return super.getFormat();
+    }
+
+    @Override
+    @SuppressWarnings(JDK.UNCHECKED)
+    public TextContent setAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
+        return (TextContent) super.setAnnotations(aAnnotationArray);
+    }
+
+    @Override
+    public TextContent setAnnotations(final List<AnnotationPage<WebAnnotation>> aAnnotationArray) {
+        return (TextContent) super.setAnnotations(aAnnotationArray);
     }
 
     @Override
@@ -191,22 +209,6 @@ public class TextContent extends AbstractContentResource<TextContent>
     @Override
     public TextContent setThumbnails(final List<ContentResource<?>> aThumbnailList) {
         return (TextContent) super.setThumbnails(aThumbnailList);
-    }
-
-    @Override
-    public List<AnnotationPage<WebAnnotation>> getAnnotations() {
-        return super.getAnnotations();
-    }
-
-    @Override
-    @SuppressWarnings(JDK.UNCHECKED)
-    public TextContent setAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
-        return (TextContent) super.setAnnotations(aAnnotationArray);
-    }
-
-    @Override
-    public TextContent setAnnotations(final List<AnnotationPage<WebAnnotation>> aAnnotationArray) {
-        return (TextContent) super.setAnnotations(aAnnotationArray);
     }
 
     /**

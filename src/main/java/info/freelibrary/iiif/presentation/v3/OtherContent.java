@@ -39,14 +39,14 @@ public class OtherContent implements ContentResource<OtherContent> {
     private String myID;
 
     /**
-     * The type for other content.
-     */
-    private String myType;
-
-    /**
      * The other content's JSON wrapped in a JsonNode.
      */
     private JsonNode myJsonNode;
+
+    /**
+     * The type for other content.
+     */
+    private String myType;
 
     /**
      * Creates a generic content resource.
@@ -65,43 +65,9 @@ public class OtherContent implements ContentResource<OtherContent> {
     }
 
     @Override
-    @JsonSetter(JsonKeys.FORMAT)
-    public OtherContent setFormat(final MediaType aMediaType) {
-        // Our other content is always JSON because it's just a wrapper for JSON
-        return this;
-    }
-
-    @Override
     @JsonGetter(JsonKeys.ID)
     public String getID() {
         return myID;
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.ID)
-    public OtherContent setID(final String aID) {
-        myID = UriUtils.checkID(aID, false);
-        return this;
-    }
-
-    @Override
-    @JsonIgnore
-    public String getType() {
-        return myType;
-    }
-
-    /**
-     * Updates the content of this resource with the supplied JSON content. Changes to the JsonNode after it's been used
-     * to update this resource are not persisted. Another call to <code>setJSON(JsonNode)</code> is required to persist
-     * any additional changes.
-     *
-     * @param aJsonNode A JSON node
-     * @return This content
-     */
-    @JsonIgnore
-    public OtherContent setJSON(final JsonNode aJsonNode) {
-        myJsonNode = initializeObject(aJsonNode.deepCopy());
-        return this;
     }
 
     /**
@@ -116,15 +82,38 @@ public class OtherContent implements ContentResource<OtherContent> {
         return myJsonNode.deepCopy();
     }
 
+    @Override
+    @JsonIgnore
+    public String getType() {
+        return myType;
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.FORMAT)
+    public OtherContent setFormat(final MediaType aMediaType) {
+        // Our other content is always JSON because it's just a wrapper for JSON
+        return this;
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.ID)
+    public OtherContent setID(final String aID) {
+        myID = UriUtils.checkID(aID, false);
+        return this;
+    }
+
     /**
-     * Gets the generic content as an object map for Jackson.
+     * Updates the content of this resource with the supplied JSON content. Changes to the JsonNode after it's been used
+     * to update this resource are not persisted. Another call to <code>setJSON(JsonNode)</code> is required to persist
+     * any additional changes.
      *
-     * @return An object map representing the other content
+     * @param aJsonNode A JSON node
+     * @return This content
      */
-    @JsonValue
-    @SuppressWarnings(PMD.UNUSED_PRIVATE_METHOD) // It's used by Jackson's serialization processes
-    private Map<String, Object> toObjectMap() { // NOPMD
-        return JSON.convertValue(myJsonNode, new TypeReference<Map<String, Object>>() {});
+    @JsonIgnore
+    public OtherContent setJSON(final JsonNode aJsonNode) {
+        myJsonNode = initializeObject(aJsonNode.deepCopy());
+        return this;
     }
 
     /**
@@ -156,6 +145,17 @@ public class OtherContent implements ContentResource<OtherContent> {
         }
 
         return aJsonNode;
+    }
+
+    /**
+     * Gets the generic content as an object map for Jackson.
+     *
+     * @return An object map representing the other content
+     */
+    @JsonValue
+    @SuppressWarnings(PMD.UNUSED_PRIVATE_METHOD) // It's used by Jackson's serialization processes
+    private Map<String, Object> toObjectMap() {
+        return JSON.convertValue(myJsonNode, new TypeReference<>() {});
     }
 
 }

@@ -84,19 +84,34 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
     }
 
     /**
-     * Deserializes a JSON node that represents an SvgSelector.
+     * Deserializes a MediaFragmentSelector from the supplied JsonNode.
      *
-     * @param aNode A JSON node representing an SvgSelector
-     * @return A new <code>SvgSelector</code>
+     * @param aNode A JSON node
+     * @param aParser A JSON parser
+     * @return A media fragment selector
+     * @throws JsonMappingException If there is trouble deserializing the fragment selector
      */
-    private SvgSelector deserializeSvgSelector(final JsonNode aNode) {
-        final Optional<String> value = getText(aNode, JsonKeys.VALUE);
+    private MediaFragmentSelector deserializeFragmentSelector(final JsonNode aNode, final JsonParser aParser)
+            throws JsonMappingException {
+        final JsonNode conformsToNode = aNode.get(JsonKeys.CONFORMS_TO);
 
-        if (value.isEmpty()) {
-            return null;
+        // Fragment selectors SHOULD have a conformsTo but aren't required to have one
+        if (conformsToNode == null) {
+            return new MediaFragmentSelector(aNode.get(JsonKeys.VALUE).asText());
         }
 
-        return new SvgSelector(Jsoup.parse(value.get(), EMPTY, Parser.xmlParser()));
+        try {
+            final URI conformsTo = new URI(conformsToNode.asText());
+
+            if (MediaFragmentSelector.MEDIA_FRAGMENT_SPECIFICATION_URI.equals(conformsTo)) {
+                return new MediaFragmentSelector(aNode.get(JsonKeys.VALUE).asText());
+            }
+
+            throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_061, conformsTo),
+                    aParser.currentLocation());
+        } catch (final URISyntaxException details) {
+            throw new JsonMappingException(aParser, details.getMessage(), details);
+        }
     }
 
     /**
@@ -106,18 +121,13 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
      * @return A new <code>ImageApiSelector</code>
      */
     private ImageApiSelector deserializeImageApiSelector(final JsonNode aNode) {
-        final Optional<String> size = getText(aNode, ImageApiSelector.SIZE);
-        final Optional<String> region = getText(aNode, ImageApiSelector.REGION);
-        final Optional<String> format = getText(aNode, ImageApiSelector.FORMAT);
-        final Optional<String> quality = getText(aNode, ImageApiSelector.QUALITY);
-        final Optional<String> rotation = getText(aNode, ImageApiSelector.ROTATION);
         final ImageApiSelector selector = new ImageApiSelector();
 
-        size.ifPresent(value -> selector.setSize(value));
-        region.ifPresent(value -> selector.setRegion(value));
-        format.ifPresent(value -> selector.setFormat(value));
-        quality.ifPresent(value -> selector.setQuality(value));
-        rotation.ifPresent(value -> selector.setRotation(value));
+        getText(aNode, ImageApiSelector.SIZE).ifPresent(selector::setSize);
+        getText(aNode, ImageApiSelector.REGION).ifPresent(selector::setRegion);
+        getText(aNode, ImageApiSelector.FORMAT).ifPresent(selector::setFormat);
+        getText(aNode, ImageApiSelector.QUALITY).ifPresent(selector::setQuality);
+        getText(aNode, ImageApiSelector.ROTATION).ifPresent(selector::setRotation);
 
         return selector;
     }
@@ -158,52 +168,19 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
     }
 
     /**
-     * Deserializes a MediaFragmentSelector from the supplied JsonNode.
+     * Deserializes a JSON node that represents an SvgSelector.
      *
-     * @param aNode A JSON node
-     * @param aParser A JSON parser
-     * @return A media fragment selector
-     * @throws JsonMappingException If there is trouble deserializing the fragment selector
+     * @param aNode A JSON node representing an SvgSelector
+     * @return A new <code>SvgSelector</code>
      */
-    private MediaFragmentSelector deserializeFragmentSelector(final JsonNode aNode, final JsonParser aParser)
-            throws JsonMappingException {
-        final JsonNode conformsToNode = aNode.get(JsonKeys.CONFORMS_TO);
+    private SvgSelector deserializeSvgSelector(final JsonNode aNode) {
+        final Optional<String> value = getText(aNode, JsonKeys.VALUE);
 
-        // Fragment selectors SHOULD have a conformsTo but aren't required to have one
-        if (conformsToNode == null) {
-            return new MediaFragmentSelector(aNode.get(JsonKeys.VALUE).asText());
+        if (value.isEmpty()) {
+            return null;
         }
 
-        try {
-            final URI conformsTo = new URI(conformsToNode.asText());
-
-            if (MediaFragmentSelector.MEDIA_FRAGMENT_SPECIFICATION_URI.equals(conformsTo)) {
-                return new MediaFragmentSelector(aNode.get(JsonKeys.VALUE).asText());
-            }
-
-            throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_061, conformsTo),
-                    aParser.currentLocation());
-        } catch (final URISyntaxException details) {
-            throw new JsonMappingException(aParser, details.getMessage(), details);
-        }
-    }
-
-    /**
-     * Gets an integer from a node that may or may not exist in the JSON.
-     *
-     * @param aNode A parent node
-     * @param aNodeName The name of an optional child node
-     * @param aDefaultValue The default string value for missing nodes
-     * @return The text from the node or the default value
-     */
-    private int getInt(final JsonNode aNode, final String aNodeName, final int aDefaultValue) {
-        final JsonNode node = aNode.get(aNodeName);
-
-        if (node == null) {
-            return aDefaultValue;
-        }
-
-        return node.asInt(aDefaultValue);
+        return new SvgSelector(Jsoup.parse(value.get(), EMPTY, Parser.xmlParser()));
     }
 
     /**
@@ -222,6 +199,24 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
         }
 
         return node.floatValue();
+    }
+
+    /**
+     * Gets an integer from a node that may or may not exist in the JSON.
+     *
+     * @param aNode A parent node
+     * @param aNodeName The name of an optional child node
+     * @param aDefaultValue The default string value for missing nodes
+     * @return The text from the node or the default value
+     */
+    private int getInt(final JsonNode aNode, final String aNodeName, final int aDefaultValue) {
+        final JsonNode node = aNode.get(aNodeName);
+
+        if (node == null) {
+            return aDefaultValue;
+        }
+
+        return node.asInt(aDefaultValue);
     }
 
     /**

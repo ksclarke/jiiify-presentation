@@ -32,14 +32,14 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.HOMEPAGE, JsonKeys.LOGO, JsonKeys.SEE_ALSO })
 public class Provider {
 
+    /** The provider's homepages. */
+    private List<Homepage> myHomepages;
+
     /** The provider's ID. */
     private String myID;
 
     /** The provider's label. */
     private Label myLabel;
-
-    /** The provider's homepages. */
-    private List<Homepage> myHomepages;
 
     /** The provider's logos. */
     private List<ImageContent> myLogos;
@@ -82,15 +82,37 @@ public class Provider {
     }
 
     /**
-     * Sets the ID.
+     * Tests whether the supplied object equals this provider.
      *
-     * @param aID An ID
-     * @return The provider
+     * @return True if the objects are equal; else, false
      */
-    @JsonSetter(JsonKeys.ID)
-    public Provider setID(final String aID) {
-        myID = UriUtils.checkID(aID, false);
-        return this;
+    @Override
+    public boolean equals(final Object aObject) {
+        if (aObject instanceof Provider) {
+            final Provider otherProvider = (Provider) aObject;
+
+            return Objects.equals(myID, otherProvider.myID) //
+                    && Objects.equals(myLabel, otherProvider.myLabel) //
+                    && Objects.equals(myHomepages, otherProvider.myHomepages) //
+                    && Objects.equals(myLogos, otherProvider.myLogos) //
+                    && Objects.equals(mySeeAlsoRefs, otherProvider.mySeeAlsoRefs);
+        }
+
+        return false;
+    }
+
+    /**
+     * Gets a list of provider homepages, initializing the list if this hasn't been done already.
+     *
+     * @return The provider's homepages
+     */
+    @JsonGetter(JsonKeys.HOMEPAGE)
+    public final List<Homepage> getHomepages() {
+        if (myHomepages == null) {
+            myHomepages = new ArrayList<>();
+        }
+
+        return myHomepages;
     }
 
     /**
@@ -104,18 +126,41 @@ public class Provider {
     }
 
     /**
-     * Necessary for Jackson to be able to deserializer the provider.
+     * Gets a descriptive label.
      *
-     * @param aType A provider type
-     * @return The provider
+     * @return A descriptive label
      */
-    @JsonSetter(JsonKeys.TYPE)
-    private Provider setType(final String aType) {
-        if (!ResourceTypes.AGENT.equals(aType)) {
-            throw new IllegalArgumentI18nException(aType);
+    @JsonGetter(JsonKeys.LABEL)
+    public Label getLabel() {
+        return myLabel;
+    }
+
+    /**
+     * Gets a list of provider logos, initializing the list if this hasn't been done already.
+     *
+     * @return The provider's logos
+     */
+    @JsonGetter(JsonKeys.LOGO)
+    public final List<ImageContent> getLogos() {
+        if (myLogos == null) {
+            myLogos = new ArrayList<>();
         }
 
-        return this;
+        return myLogos;
+    }
+
+    /**
+     * Gets see also reference(s).
+     *
+     * @return The see also reference(s)
+     */
+    @JsonGetter(JsonKeys.SEE_ALSO)
+    public List<SeeAlso> getSeeAlsoRefs() {
+        if (mySeeAlsoRefs == null) {
+            mySeeAlsoRefs = new ArrayList<>();
+        }
+
+        return mySeeAlsoRefs;
     }
 
     /**
@@ -129,25 +174,13 @@ public class Provider {
     }
 
     /**
-     * Gets a descriptive label.
+     * Gets the hash code for the provider.
      *
-     * @return A descriptive label
+     * @return The provider's hash code
      */
-    @JsonGetter(JsonKeys.LABEL)
-    public Label getLabel() {
-        return myLabel;
-    }
-
-    /**
-     * Sets the descriptive label.
-     *
-     * @param aLabel A descriptive label
-     * @return The provider
-     */
-    @JsonSetter(JsonKeys.LABEL)
-    public Provider setLabel(final Label aLabel) {
-        myLabel = Objects.requireNonNull(aLabel);
-        return this;
+    @Override
+    public int hashCode() {
+        return Objects.hash(myID, myLabel, myHomepages, myLogos, mySeeAlsoRefs);
     }
 
     /**
@@ -179,17 +212,27 @@ public class Provider {
     }
 
     /**
-     * Gets a list of provider homepages, initializing the list if this hasn't been done already.
+     * Sets the ID.
      *
-     * @return The provider's homepages
+     * @param aID An ID
+     * @return The provider
      */
-    @JsonGetter(JsonKeys.HOMEPAGE)
-    public List<Homepage> getHomepages() {
-        if (myHomepages == null) {
-            myHomepages = new ArrayList<>();
-        }
+    @JsonSetter(JsonKeys.ID)
+    public Provider setID(final String aID) {
+        myID = UriUtils.checkID(aID, false);
+        return this;
+    }
 
-        return myHomepages;
+    /**
+     * Sets the descriptive label.
+     *
+     * @param aLabel A descriptive label
+     * @return The provider
+     */
+    @JsonSetter(JsonKeys.LABEL)
+    public Provider setLabel(final Label aLabel) {
+        myLabel = Objects.requireNonNull(aLabel);
+        return this;
     }
 
     /**
@@ -222,31 +265,15 @@ public class Provider {
     }
 
     /**
-     * Gets a list of provider logos, initializing the list if this hasn't been done already.
+     * Sets the provider's see also references.
      *
-     * @return The provider's logos
+     * @param aSeeAlsoList A list of see also references
+     * @return The provider
      */
-    @JsonGetter(JsonKeys.LOGO)
-    public List<ImageContent> getLogos() {
-        if (myLogos == null) {
-            myLogos = new ArrayList<>();
-        }
-
-        return myLogos;
-    }
-
-    /**
-     * Gets see also reference(s).
-     *
-     * @return The see also reference(s)
-     */
-    @JsonGetter(JsonKeys.SEE_ALSO)
-    public List<SeeAlso> getSeeAlsoRefs() {
-        if (mySeeAlsoRefs == null) {
-            mySeeAlsoRefs = new ArrayList<>();
-        }
-
-        return mySeeAlsoRefs;
+    @JsonSetter(JsonKeys.SEE_ALSO)
+    public Provider setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
+        getSeeAlsoRefs().addAll(aSeeAlsoList);
+        return this;
     }
 
     /**
@@ -262,48 +289,6 @@ public class Provider {
     }
 
     /**
-     * Sets the provider's see also references.
-     *
-     * @param aSeeAlsoList A list of see also references
-     * @return The provider
-     */
-    @JsonSetter(JsonKeys.SEE_ALSO)
-    public Provider setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
-        getSeeAlsoRefs().addAll(aSeeAlsoList);
-        return this;
-    }
-
-    /**
-     * Gets the hash code for the provider.
-     *
-     * @return The provider's hash code
-     */
-    @Override
-    public int hashCode() {
-        return Objects.hash(myID, myLabel, myHomepages, myLogos, mySeeAlsoRefs);
-    }
-
-    /**
-     * Tests whether the supplied object equals this provider.
-     *
-     * @return True if the objects are equal; else, false
-     */
-    @Override
-    public boolean equals(final Object aObject) {
-        if (aObject instanceof Provider) {
-            final Provider otherProvider = (Provider) aObject;
-
-            return Objects.equals(myID, otherProvider.myID) //
-                    && Objects.equals(myLabel, otherProvider.myLabel) //
-                    && Objects.equals(myHomepages, otherProvider.myHomepages) //
-                    && Objects.equals(myLogos, otherProvider.myLogos) //
-                    && Objects.equals(mySeeAlsoRefs, otherProvider.mySeeAlsoRefs);
-        }
-
-        return false;
-    }
-
-    /**
      * Gets a JSON string representation of the provider.
      *
      * @return A JSON string representation of this provider
@@ -315,6 +300,21 @@ public class Provider {
         } catch (final JsonProcessingException details) {
             throw new JsonParsingException(details);
         }
+    }
+
+    /**
+     * Necessary for Jackson to be able to deserializer the provider.
+     *
+     * @param aType A provider type
+     * @return The provider
+     */
+    @JsonSetter(JsonKeys.TYPE)
+    private Provider setType(final String aType) {
+        if (!ResourceTypes.AGENT.equals(aType)) {
+            throw new IllegalArgumentI18nException(aType);
+        }
+
+        return this;
     }
 
     /**

@@ -35,11 +35,11 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public class BehaviorDeserializer extends StdDeserializer<List<Behavior>> {
 
-    /** The <code>serialVersionUID</code> for BehaviorDeserializer. */
-    private static final long serialVersionUID = -5899455864378427817L;
-
     /** The deserializer's logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(BehaviorDeserializer.class, MessageCodes.BUNDLE);
+
+    /** The <code>serialVersionUID</code> for BehaviorDeserializer. */
+    private static final long serialVersionUID = -5899455864378427817L;
 
     /**
      * Creates a new behaviors deserializer.
@@ -58,7 +58,7 @@ public class BehaviorDeserializer extends StdDeserializer<List<Behavior>> {
     }
 
     @Override
-    @SuppressWarnings({ PMD.PRESERVE_STACK_TRACE })
+    @SuppressWarnings({ PMD.PRESERVE_STACK_TRACE, PMD.LOOSE_COUPLING })
     public List<Behavior> deserialize(final JsonParser aParser, final DeserializationContext aContext)
             throws IOException, JsonProcessingException {
         final JsonNode currentNode = aParser.getCodec().readTree(aParser);

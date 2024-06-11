@@ -39,7 +39,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  * of a canvas is borrowed from standards like PDF and HTML, or applications like Photoshop and Powerpoint, where the
  * display starts from a blank canvas and images, text and other resources are &quot;painted&quot; on to it.
  */
-@SuppressWarnings({ PMD.TOO_MANY_METHODS, PMD.EXCESSIVE_PUBLIC_COUNT })
+@SuppressWarnings({ PMD.TOO_MANY_METHODS, PMD.EXCESSIVE_PUBLIC_COUNT, PMD.COUPLING_BETWEEN_OBJECTS, PMD.GOD_CLASS })
 public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Canvas> {
 
     /** The canvas' accompanying canvas. */
@@ -95,29 +95,6 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     }
 
     /**
-     * Gets the canvas' minter, if there is one.
-     *
-     * @return An optional minter
-     */
-    @Override
-    @JsonIgnore
-    public Optional<Minter> getMinter() {
-        return super.getMinter();
-    }
-
-    /**
-     * Sets the canvas' minter.
-     *
-     * @param aMinter An ID minter
-     * @return This canvas
-     */
-    @Override
-    @JsonIgnore
-    public Canvas setMinter(final Minter aMinter) {
-        return (Canvas) super.setMinter(aMinter);
-    }
-
-    /**
      * Gets canvas' accompanying canvas.
      *
      * @return The accompanying canvas
@@ -129,6 +106,36 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     }
 
     /**
+     * Gets the canvas' minter, if there is one.
+     *
+     * @return An optional minter
+     */
+    @Override
+    @JsonIgnore
+    public Optional<Minter> getMinter() {
+        return super.getMinter();
+    }
+
+    @Override
+    @JsonGetter(JsonKeys.NAV_DATE)
+    public NavDate getNavDate() {
+        return super.getNavDate();
+    }
+
+    @Override
+    @JsonGetter(JsonKeys.NAV_PLACE)
+    public NavPlace getNavPlace() {
+        return super.getNavPlace();
+    }
+
+    @Override
+    @JsonGetter(JsonKeys.ITEMS)
+    @JsonInclude(Include.NON_NULL)
+    public List<AnnotationPage<PaintingAnnotation>> getPaintingPages() {
+        return super.getPaintingPages();
+    }
+
+    /**
      * Gets canvas' placeholder canvas.
      *
      * @return A placeholder canvas
@@ -137,13 +144,6 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     @JsonInclude(Include.NON_ABSENT)
     public Optional<PlaceholderCanvas> getPlaceholderCanvas() {
         return myPlaceholderCanvas;
-    }
-
-    @Override
-    @JsonGetter(JsonKeys.ITEMS)
-    @JsonInclude(Include.NON_NULL)
-    public List<AnnotationPage<PaintingAnnotation>> getPaintingPages() {
-        return super.getPaintingPages();
     }
 
     @Override
@@ -270,15 +270,25 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     }
 
     @Override
-    @JsonGetter(JsonKeys.NAV_DATE)
-    public NavDate getNavDate() {
-        return super.getNavDate();
+    public Canvas setMetadata(final List<Metadata> aMetadataList) {
+        return (Canvas) super.setMetadata(aMetadataList);
     }
 
     @Override
-    @JsonGetter(JsonKeys.NAV_PLACE)
-    public NavPlace getNavPlace() {
-        return super.getNavPlace();
+    public Canvas setMetadata(final Metadata... aMetadataArray) {
+        return (Canvas) super.setMetadata(aMetadataArray);
+    }
+
+    /**
+     * Sets the canvas' minter.
+     *
+     * @param aMinter An ID minter
+     * @return This canvas
+     */
+    @Override
+    @JsonIgnore
+    public Canvas setMinter(final Minter aMinter) {
+        return (Canvas) super.setMinter(aMinter);
     }
 
     @Override
@@ -291,16 +301,6 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     @JsonSetter(JsonKeys.NAV_PLACE)
     public Canvas setNavPlace(final NavPlace aNavPlace) {
         return (Canvas) super.setNavPlace(aNavPlace);
-    }
-
-    @Override
-    public Canvas setMetadata(final List<Metadata> aMetadataList) {
-        return (Canvas) super.setMetadata(aMetadataList);
-    }
-
-    @Override
-    public Canvas setMetadata(final Metadata... aMetadataArray) {
-        return (Canvas) super.setMetadata(aMetadataArray);
     }
 
     @Override

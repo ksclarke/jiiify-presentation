@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.JDK;
+import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
@@ -37,6 +38,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.DURATION,
     JsonKeys.LANGUAGE })
+@SuppressWarnings({ PMD.COUPLING_BETWEEN_OBJECTS })
 public class SoundContent extends AbstractContentResource<SoundContent> implements
         TemporalContentResource<SoundContent>, AnnotatedContentResource<SoundContent>, Resource<SoundContent> {
 
@@ -64,20 +66,31 @@ public class SoundContent extends AbstractContentResource<SoundContent> implemen
     }
 
     @Override
-    public final SoundContent setFormat(final MediaType aMediaType) {
-        return (SoundContent) super.setFormat(aMediaType);
+    public List<AnnotationPage<WebAnnotation>> getAnnotations() {
+        return super.getAnnotations();
+    }
+
+    /**
+     * Gets the duration of the sound content.
+     *
+     * @return The duration of the sound content
+     */
+    @Override
+    @JsonGetter(JsonKeys.DURATION)
+    @JsonInclude(Include.NON_DEFAULT)
+    public float getDuration() {
+        return myDuration;
     }
 
     @Override
-    @JsonSetter(JsonKeys.PROVIDER)
-    public SoundContent setProviders(final Provider... aProviderArray) {
-        return setProviders(Arrays.asList(aProviderArray));
+    @SuppressWarnings(JDK.UNCHECKED)
+    public SoundContent setAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
+        return (SoundContent) super.setAnnotations(aAnnotationArray);
     }
 
     @Override
-    @JsonIgnore
-    public SoundContent setProviders(final List<Provider> aProviderList) {
-        return (SoundContent) super.setProviders(aProviderList);
+    public SoundContent setAnnotations(final List<AnnotationPage<WebAnnotation>> aAnnotationArray) {
+        return (SoundContent) super.setAnnotations(aAnnotationArray);
     }
 
     @Override
@@ -96,119 +109,6 @@ public class SoundContent extends AbstractContentResource<SoundContent> implemen
         return (SoundContent) super.setBehaviors(aBehaviorList);
     }
 
-    @Override
-    public SoundContent setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
-        return (SoundContent) super.setSeeAlsoRefs(aSeeAlsoArray);
-    }
-
-    @Override
-    public SoundContent setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
-        return (SoundContent) super.setSeeAlsoRefs(aSeeAlsoList);
-    }
-
-    @Override
-    @SafeVarargs
-    public final SoundContent setServices(final Service<?>... aServiceArray) {
-        return (SoundContent) super.setServices(aServiceArray);
-    }
-
-    @Override
-    public SoundContent setServices(final List<Service<?>> aServiceList) {
-        return (SoundContent) super.setServices(aServiceList);
-    }
-
-    @Override
-    public SoundContent setPartOfs(final PartOf... aPartOfArray) {
-        return (SoundContent) super.setPartOfs(aPartOfArray);
-    }
-
-    @Override
-    public SoundContent setPartOfs(final List<PartOf> aPartOfList) {
-        return (SoundContent) super.setPartOfs(aPartOfList);
-    }
-
-    @Override
-    public SoundContent setRenderings(final Rendering... aRenderingArray) {
-        return (SoundContent) super.setRenderings(aRenderingArray);
-    }
-
-    @Override
-    public SoundContent setRenderings(final List<Rendering> aRenderingList) {
-        return (SoundContent) super.setRenderings(aRenderingList);
-    }
-
-    @Override
-    public SoundContent setHomepages(final Homepage... aHomepageArray) {
-        return (SoundContent) super.setHomepages(aHomepageArray);
-    }
-
-    @Override
-    public SoundContent setHomepages(final List<Homepage> aHomepageList) {
-        return (SoundContent) super.setHomepages(aHomepageList);
-    }
-
-    @Override
-    public SoundContent setThumbnails(final ContentResource<?>... aThumbnailArray) {
-        return (SoundContent) super.setThumbnails(aThumbnailArray);
-    }
-
-    @Override
-    public SoundContent setThumbnails(final List<ContentResource<?>> aThumbnailList) {
-        return (SoundContent) super.setThumbnails(aThumbnailList);
-    }
-
-    @Override
-    public SoundContent setID(final String aID) {
-        return (SoundContent) super.setID(aID);
-    }
-
-    @Override
-    public SoundContent setRights(final String aRights) {
-        return (SoundContent) super.setRights(aRights);
-    }
-
-    @Override
-    public SoundContent setRequiredStatement(final RequiredStatement aStatement) {
-        return (SoundContent) super.setRequiredStatement(aStatement);
-    }
-
-    @Override
-    public SoundContent setSummary(final Summary aSummary) {
-        return (SoundContent) super.setSummary(aSummary);
-    }
-
-    @Override
-    public SoundContent setMetadata(final Metadata... aMetadataArray) {
-        return (SoundContent) super.setMetadata(aMetadataArray);
-    }
-
-    @Override
-    public SoundContent setMetadata(final List<Metadata> aMetadataList) {
-        return (SoundContent) super.setMetadata(aMetadataList);
-    }
-
-    @Override
-    public SoundContent setLabel(final Label aLabel) {
-        return (SoundContent) super.setLabel(aLabel);
-    }
-
-    @Override
-    public SoundContent setLanguages(final String... aLangArray) {
-        return (SoundContent) super.setLanguages(aLangArray);
-    }
-
-    /**
-     * Gets the duration of the sound content.
-     *
-     * @return The duration of the sound content
-     */
-    @Override
-    @JsonGetter(JsonKeys.DURATION)
-    @JsonInclude(Include.NON_DEFAULT)
-    public float getDuration() {
-        return myDuration;
-    }
-
     /**
      * Sets the duration of the sound content. Duration must be positive and finite.
      *
@@ -223,19 +123,121 @@ public class SoundContent extends AbstractContentResource<SoundContent> implemen
     }
 
     @Override
-    public List<AnnotationPage<WebAnnotation>> getAnnotations() {
-        return super.getAnnotations();
+    public final SoundContent setFormat(final MediaType aMediaType) {
+        return (SoundContent) super.setFormat(aMediaType);
     }
 
     @Override
-    @SuppressWarnings(JDK.UNCHECKED)
-    public SoundContent setAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
-        return (SoundContent) super.setAnnotations(aAnnotationArray);
+    public SoundContent setHomepages(final Homepage... aHomepageArray) {
+        return (SoundContent) super.setHomepages(aHomepageArray);
     }
 
     @Override
-    public SoundContent setAnnotations(final List<AnnotationPage<WebAnnotation>> aAnnotationArray) {
-        return (SoundContent) super.setAnnotations(aAnnotationArray);
+    public SoundContent setHomepages(final List<Homepage> aHomepageList) {
+        return (SoundContent) super.setHomepages(aHomepageList);
+    }
+
+    @Override
+    public SoundContent setID(final String aID) {
+        return (SoundContent) super.setID(aID);
+    }
+
+    @Override
+    public SoundContent setLabel(final Label aLabel) {
+        return (SoundContent) super.setLabel(aLabel);
+    }
+
+    @Override
+    public SoundContent setLanguages(final String... aLangArray) {
+        return (SoundContent) super.setLanguages(aLangArray);
+    }
+
+    @Override
+    public SoundContent setMetadata(final List<Metadata> aMetadataList) {
+        return (SoundContent) super.setMetadata(aMetadataList);
+    }
+
+    @Override
+    public SoundContent setMetadata(final Metadata... aMetadataArray) {
+        return (SoundContent) super.setMetadata(aMetadataArray);
+    }
+
+    @Override
+    public SoundContent setPartOfs(final List<PartOf> aPartOfList) {
+        return (SoundContent) super.setPartOfs(aPartOfList);
+    }
+
+    @Override
+    public SoundContent setPartOfs(final PartOf... aPartOfArray) {
+        return (SoundContent) super.setPartOfs(aPartOfArray);
+    }
+
+    @Override
+    @JsonIgnore
+    public SoundContent setProviders(final List<Provider> aProviderList) {
+        return (SoundContent) super.setProviders(aProviderList);
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.PROVIDER)
+    public SoundContent setProviders(final Provider... aProviderArray) {
+        return setProviders(Arrays.asList(aProviderArray));
+    }
+
+    @Override
+    public SoundContent setRenderings(final List<Rendering> aRenderingList) {
+        return (SoundContent) super.setRenderings(aRenderingList);
+    }
+
+    @Override
+    public SoundContent setRenderings(final Rendering... aRenderingArray) {
+        return (SoundContent) super.setRenderings(aRenderingArray);
+    }
+
+    @Override
+    public SoundContent setRequiredStatement(final RequiredStatement aStatement) {
+        return (SoundContent) super.setRequiredStatement(aStatement);
+    }
+
+    @Override
+    public SoundContent setRights(final String aRights) {
+        return (SoundContent) super.setRights(aRights);
+    }
+
+    @Override
+    public SoundContent setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
+        return (SoundContent) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public SoundContent setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
+        return (SoundContent) super.setSeeAlsoRefs(aSeeAlsoArray);
+    }
+
+    @Override
+    public SoundContent setServices(final List<Service<?>> aServiceList) {
+        return (SoundContent) super.setServices(aServiceList);
+    }
+
+    @Override
+    @SafeVarargs
+    public final SoundContent setServices(final Service<?>... aServiceArray) {
+        return (SoundContent) super.setServices(aServiceArray);
+    }
+
+    @Override
+    public SoundContent setSummary(final Summary aSummary) {
+        return (SoundContent) super.setSummary(aSummary);
+    }
+
+    @Override
+    public SoundContent setThumbnails(final ContentResource<?>... aThumbnailArray) {
+        return (SoundContent) super.setThumbnails(aThumbnailArray);
+    }
+
+    @Override
+    public SoundContent setThumbnails(final List<ContentResource<?>> aThumbnailList) {
+        return (SoundContent) super.setThumbnails(aThumbnailList);
     }
 
     /**

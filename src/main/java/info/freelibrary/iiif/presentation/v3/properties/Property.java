@@ -12,6 +12,17 @@ public class Property extends I18nProperty<Property> {
     private String myName;
 
     /**
+     * Creates a new property from the supplied name and {@code I18n}s.
+     *
+     * @param aName A property name
+     * @param aI18nArray An array of property values
+     */
+    public Property(final String aName, final I18n... aI18nArray) {
+        super(aI18nArray);
+        myName = Objects.requireNonNull(aName);
+    }
+
+    /**
      * Creates a new property from the supplied name and {@code I18n} language code and value.
      *
      * @param aName A property name
@@ -35,21 +46,10 @@ public class Property extends I18nProperty<Property> {
     }
 
     /**
-     * Creates a new property from the supplied name and {@code I18n}s.
-     *
-     * @param aName A property name
-     * @param aI18nArray An array of property values
-     */
-    public Property(final String aName, final I18n... aI18nArray) {
-        super(aI18nArray);
-        myName = Objects.requireNonNull(aName);
-    }
-
-    /**
      * A private constructor just used by Jackson for its deserialization process.
      */
     private Property() {
-        super(new I18n[] {});
+        super();
     }
 
     /**

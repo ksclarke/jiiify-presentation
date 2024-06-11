@@ -47,7 +47,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  * chapters, verses, sections, non-content-bearing pages, the table of contents or similar. Equally, physical features
  * might be important such as quires or gatherings, sections that have been added later and so forth.
  */
-@SuppressWarnings({ PMD.EXCESSIVE_PUBLIC_COUNT, PMD.EXCESSIVE_IMPORTS, PMD.GOD_CLASS })
+@SuppressWarnings({ PMD.EXCESSIVE_PUBLIC_COUNT, PMD.EXCESSIVE_IMPORTS, PMD.GOD_CLASS, PMD.COUPLING_BETWEEN_OBJECTS })
 public class Range extends NavigableResource<Range> implements Resource<Range> {
 
     /** The range's accompanying canvas. */
@@ -144,6 +144,18 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
         return myItems;
     }
 
+    @Override
+    @JsonGetter(JsonKeys.NAV_DATE)
+    public NavDate getNavDate() {
+        return super.getNavDate();
+    }
+
+    @Override
+    @JsonGetter(JsonKeys.NAV_PLACE)
+    public NavPlace getNavPlace() {
+        return super.getNavPlace();
+    }
+
     /**
      * Gets the range's placeholder canvas.
      *
@@ -164,30 +176,6 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     @JsonInclude(Include.NON_ABSENT)
     public Optional<Start> getStart() {
         return Optional.ofNullable(myStart);
-    }
-
-    @Override
-    @JsonGetter(JsonKeys.NAV_DATE)
-    public NavDate getNavDate() {
-        return super.getNavDate();
-    }
-
-    @Override
-    @JsonGetter(JsonKeys.NAV_PLACE)
-    public NavPlace getNavPlace() {
-        return super.getNavPlace();
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.NAV_DATE)
-    public Range setNavDate(final NavDate aNavDate) {
-        return (Range) super.setNavDate(aNavDate);
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.NAV_PLACE)
-    public Range setNavPlace(final NavPlace aNavPlace) {
-        return (Range) super.setNavPlace(aNavPlace);
     }
 
     /**
@@ -280,6 +268,18 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     @Override
     public Range setMetadata(final Metadata... aMetadataArray) {
         return (Range) super.setMetadata(aMetadataArray);
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.NAV_DATE)
+    public Range setNavDate(final NavDate aNavDate) {
+        return (Range) super.setNavDate(aNavDate);
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.NAV_PLACE)
+    public Range setNavPlace(final NavPlace aNavPlace) {
+        return (Range) super.setNavPlace(aNavPlace);
     }
 
     @Override
@@ -409,19 +409,6 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     /**
-     * Gets the manifest context. The manifest can either have a single context or an array of contexts (Cf.
-     * https://iiif.io/api/presentation/3.0/#46-linked-data-context-and-extensions)
-     *
-     * @return The manifest context
-     */
-    @Override
-    @JsonGetter(JsonKeys.CONTEXT)
-    @JsonInclude(Include.NON_NULL)
-    protected Object getJsonContext() {
-        return null;
-    }
-
-    /**
      * Gets a string representation of a range.
      *
      * @return A string representation of a range
@@ -433,6 +420,19 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
         } catch (final JsonProcessingException details) {
             throw new JsonParsingException(details);
         }
+    }
+
+    /**
+     * Gets the manifest context. The manifest can either have a single context or an array of contexts (Cf.
+     * https://iiif.io/api/presentation/3.0/#46-linked-data-context-and-extensions)
+     *
+     * @return The manifest context
+     */
+    @Override
+    @JsonGetter(JsonKeys.CONTEXT)
+    @JsonInclude(Include.NON_NULL)
+    protected Object getJsonContext() {
+        return null;
     }
 
     /**

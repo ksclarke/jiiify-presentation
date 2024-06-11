@@ -38,25 +38,41 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
     /** The linking property logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractLinkProperty.class, MessageCodes.BUNDLE);
 
-    /** The link property ID. */
-    private String myID;
-
-    /** The link property type. */
-    private String myType;
-
     /** The link property format. */
     @JsonDeserialize(using = MediaTypeDeserializer.class)
     @JsonProperty(JsonKeys.FORMAT)
     private MediaType myFormat;
 
-    /** The link property profile. */
-    private String myProfile;
+    /** The link property ID. */
+    private String myID;
 
     /** The link property label. */
     private Label myLabel;
 
     /** The link property languages. */
     private List<String> myLanguages;
+
+    /** The link property profile. */
+    private String myProfile;
+
+    /** The link property type. */
+    private String myType;
+
+    /**
+     * Creates an abstract link property for the Jackson deserialization process.
+     */
+    protected AbstractLinkProperty() {
+        // This is intentionally empty
+    }
+
+    /**
+     * Creates an abstract link property with a supplied type.
+     *
+     * @param aType The type of link property
+     */
+    protected AbstractLinkProperty(final String aType) {
+        myType = Objects.requireNonNull(aType);
+    }
 
     /**
      * Creates an abstract link property.
@@ -82,61 +98,21 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
     }
 
     /**
-     * Creates an abstract link property for the Jackson deserialization process.
-     */
-    protected AbstractLinkProperty() {
-        // This is intentionally empty
-    }
-
-    /**
-     * Creates an abstract link property with a supplied type.
+     * Tests whether the supplied object is equal to this one.
      *
-     * @param aType The type of link property
+     * @return True if the objects are equal; else, false
      */
-    protected AbstractLinkProperty(final String aType) {
-        myType = Objects.requireNonNull(aType);
-    }
+    @Override
+    public boolean equals(final Object aObject) {
+        if (aObject instanceof AbstractLinkProperty) {
+            final AbstractLinkProperty<?> otherLink = (AbstractLinkProperty<?>) aObject;
 
-    /**
-     * Sets the ID.
-     *
-     * @param aID An ID
-     * @return The resource whose ID is being set
-     */
-    @JsonSetter(JsonKeys.ID)
-    protected AbstractLinkProperty<T> setID(final String aID) {
-        myID = UriUtils.checkID(aID, false);
-        return this;
-    }
+            return Objects.equals(myID, otherLink.myID) && Objects.equals(myType, otherLink.myType) &&
+                    Objects.equals(myFormat, otherLink.myFormat) && Objects.equals(myProfile, otherLink.myProfile) &&
+                    Objects.equals(myLabel, otherLink.myLabel);
+        }
 
-    /**
-     * Gets the ID.
-     *
-     * @return An ID
-     */
-    @JsonGetter(JsonKeys.ID)
-    public String getID() {
-        return myID;
-    }
-
-    /**
-     * Sets the resource type.
-     *
-     * @param aType A resource type
-     * @return The resource whose type is being set
-     */
-    protected AbstractLinkProperty<T> setType(final String aType) {
-        myType = Objects.requireNonNull(aType);
-        return this;
-    }
-
-    /**
-     * Gets the resource type.
-     *
-     * @return The resource type
-     */
-    public String getType() {
-        return myType;
+        return false;
     }
 
     /**
@@ -151,14 +127,13 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
     }
 
     /**
-     * Sets format.
+     * Gets the ID.
      *
-     * @param aFormat A resource's format
-     * @return The resource whose format is being set
+     * @return An ID
      */
-    protected AbstractLinkProperty<T> setFormat(final MediaType aFormat) {
-        myFormat = aFormat;
-        return this;
+    @JsonGetter(JsonKeys.ID)
+    public String getID() {
+        return myID;
     }
 
     /**
@@ -187,15 +162,36 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
     }
 
     /**
-     * Sets the profile.
+     * Gets the resource type.
      *
-     * @param aProfile A profile
-     * @return The resource whose profile is being set
+     * @return The resource type
      */
-    @JsonSetter(JsonKeys.PROFILE)
-    protected AbstractLinkProperty<T> setProfile(final String aProfile) {
-        myProfile = UriUtils.checkID(aProfile, false);
-        return this;
+    public String getType() {
+        return myType;
+    }
+
+    /**
+     * Gets a hash code for this property.
+     *
+     * @return A hash code
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(myID, myType, myFormat, myProfile, myLabel);
+    }
+
+    /**
+     * Returns a JSON string representing this resource.
+     *
+     * @return A JSON string representing this resource
+     */
+    @Override
+    public String toString() {
+        try {
+            return JSON.getWriter(this.getClass()).writeValueAsString(this);
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details);
+        }
     }
 
     /**
@@ -207,6 +203,29 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
     @JsonInclude(Include.NON_EMPTY)
     protected Label getNullableLabel() {
         return myLabel;
+    }
+
+    /**
+     * Sets format.
+     *
+     * @param aFormat A resource's format
+     * @return The resource whose format is being set
+     */
+    protected AbstractLinkProperty<T> setFormat(final MediaType aFormat) {
+        myFormat = aFormat;
+        return this;
+    }
+
+    /**
+     * Sets the ID.
+     *
+     * @param aID An ID
+     * @return The resource whose ID is being set
+     */
+    @JsonSetter(JsonKeys.ID)
+    protected AbstractLinkProperty<T> setID(final String aID) {
+        myID = UriUtils.checkID(aID, false);
+        return this;
     }
 
     /**
@@ -222,45 +241,26 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
     }
 
     /**
-     * Gets a hash code for this property.
+     * Sets the profile.
      *
-     * @return A hash code
+     * @param aProfile A profile
+     * @return The resource whose profile is being set
      */
-    @Override
-    public int hashCode() {
-        return Objects.hash(myID, myType, myFormat, myProfile, myLabel);
+    @JsonSetter(JsonKeys.PROFILE)
+    protected AbstractLinkProperty<T> setProfile(final String aProfile) {
+        myProfile = UriUtils.checkID(aProfile, false);
+        return this;
     }
 
     /**
-     * Tests whether the supplied object is equal to this one.
+     * Sets the resource type.
      *
-     * @return True if the objects are equal; else, false
+     * @param aType A resource type
+     * @return The resource whose type is being set
      */
-    @Override
-    public boolean equals(final Object aObject) {
-        if (aObject instanceof AbstractLinkProperty) {
-            final AbstractLinkProperty<?> otherLink = (AbstractLinkProperty<?>) aObject;
-
-            return Objects.equals(myID, otherLink.myID) && Objects.equals(myType, otherLink.myType) &&
-                    Objects.equals(myFormat, otherLink.myFormat) && Objects.equals(myProfile, otherLink.myProfile) &&
-                    Objects.equals(myLabel, otherLink.myLabel);
-        }
-
-        return false;
-    }
-
-    /**
-     * Returns a JSON string representing this resource.
-     *
-     * @return A JSON string representing this resource
-     */
-    @Override
-    public String toString() {
-        try {
-            return JSON.getWriter(this.getClass()).writeValueAsString(this);
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details);
-        }
+    protected AbstractLinkProperty<T> setType(final String aType) {
+        myType = Objects.requireNonNull(aType);
+        return this;
     }
 
     /**

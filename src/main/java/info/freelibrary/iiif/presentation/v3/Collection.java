@@ -89,6 +89,27 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     }
 
     /**
+     * Adds an array of new context URIs to the manifest.
+     *
+     * @param aContextArray Collection context URIs(s)
+     * @return The collection
+     */
+    @Override
+    public Collection addContexts(final URI... aContextArray) {
+        return (Collection) super.addContexts(aContextArray);
+    }
+
+    /**
+     * Clears all contexts, but the required one.
+     *
+     * @return The collection
+     */
+    @Override
+    public Collection clearContexts() {
+        return (Collection) super.clearContexts();
+    }
+
+    /**
      * Gets the collection's accompanying canvas.
      *
      * @return The accompanying canvas
@@ -97,6 +118,29 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     @JsonInclude(Include.NON_ABSENT)
     public Optional<AccompanyingCanvas> getAccompanyingCanvas() {
         return Optional.ofNullable(myAccompanyingCanvas);
+    }
+
+    /**
+     * Gets the primary collection context.
+     *
+     * @return The collection context
+     */
+    @Override
+    @JsonIgnore
+    public URI getContext() {
+        return PRESENTATION_CONTEXT_URI;
+    }
+
+    /**
+     * Gets an unmodifiable list of collection contexts. To remove contexts, use {@link Collection#removeContext(URI)
+     * removeContext} or {@link Collection#clearContexts() clearContexts}.
+     *
+     * @return The manifest context
+     */
+    @Override
+    @JsonIgnore
+    public List<URI> getContexts() {
+        return super.getContexts();
     }
 
     /**
@@ -146,6 +190,19 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     @JsonGetter(JsonKeys.VIEWING_DIRECTION)
     public ViewingDirection getViewingDirection() {
         return myViewingDirection;
+    }
+
+    /**
+     * Remove the supplied context. This will not remove the default required context though. If that's supplied, an
+     * {@link UnsupportedOperationException} will be thrown.
+     *
+     * @param aContextURI A context to be removed from the contexts list
+     * @return True if the context was removed; else, false
+     * @throws UnsupportedOperationException If the required context is supplied to be removed
+     */
+    @Override
+    public boolean removeContext(final URI aContextURI) {
+        return super.removeContext(aContextURI);
     }
 
     /**
@@ -361,63 +418,6 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         } catch (final JsonProcessingException details) {
             throw new JsonParsingException(details);
         }
-    }
-
-    /**
-     * Gets an unmodifiable list of collection contexts. To remove contexts, use {@link Collection#removeContext(URI)
-     * removeContext} or {@link Collection#clearContexts() clearContexts}.
-     *
-     * @return The manifest context
-     */
-    @Override
-    @JsonIgnore
-    public List<URI> getContexts() {
-        return super.getContexts();
-    }
-
-    /**
-     * Clears all contexts, but the required one.
-     *
-     * @return The collection
-     */
-    @Override
-    public Collection clearContexts() {
-        return (Collection) super.clearContexts();
-    }
-
-    /**
-     * Remove the supplied context. This will not remove the default required context though. If that's supplied, an
-     * {@link UnsupportedOperationException} will be thrown.
-     *
-     * @param aContextURI A context to be removed from the contexts list
-     * @return True if the context was removed; else, false
-     * @throws UnsupportedOperationException If the required context is supplied to be removed
-     */
-    @Override
-    public boolean removeContext(final URI aContextURI) {
-        return super.removeContext(aContextURI);
-    }
-
-    /**
-     * Gets the primary collection context.
-     *
-     * @return The collection context
-     */
-    @Override
-    @JsonIgnore
-    public URI getContext() {
-        return PRESENTATION_CONTEXT_URI;
-    }
-
-    /**
-     * Adds an array of new context URIs to the manifest.
-     *
-     * @param aContextArray Collection context URIs(s)
-     * @return The collection
-     */
-    @Override
-    public Collection addContexts(final URI... aContextArray) {
-        return (Collection) super.addContexts(aContextArray);
     }
 
     /**
@@ -694,16 +694,6 @@ public class Collection extends NavigableResource<Collection> implements Resourc
             }
 
             /**
-             * A string representation of the collection item.
-             *
-             * @return A string representation of the collection item
-             */
-            @Override
-            public String toString() {
-                return myLabel;
-            }
-
-            /**
              * Returns the collection item's label.
              *
              * @return The collection item's label
@@ -714,13 +704,23 @@ public class Collection extends NavigableResource<Collection> implements Resourc
             }
 
             /**
+             * A string representation of the collection item.
+             *
+             * @return A string representation of the collection item
+             */
+            @Override
+            public String toString() {
+                return myLabel;
+            }
+
+            /**
              * Creates a collection item type from a supplied label value.
              *
              * @param aLabel A label
              * @return A collection type
              */
             public static Optional<Type> fromLabel(final String aLabel) {
-                for (final Type type : Type.values()) {
+                for (final Type type : values()) {
                     if (type.label().equalsIgnoreCase(aLabel)) {
                         return Optional.of(type);
                     }

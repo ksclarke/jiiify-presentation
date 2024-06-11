@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.JDK;
+import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.exts.geo.Geometry;
 import info.freelibrary.iiif.presentation.v3.exts.geo.LineString;
@@ -31,11 +32,11 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public class GeometryDeserializer extends StdDeserializer<Geometry> {
 
-    /** The <code>serialVersionUID</code> for GeometryDeserializer. */
-    private static final long serialVersionUID = -5899453866378497817L;
-
     /** The deserializer's logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(GeometryDeserializer.class, MessageCodes.BUNDLE);
+
+    /** The <code>serialVersionUID</code> for GeometryDeserializer. */
+    private static final long serialVersionUID = -5899453866378497817L;
 
     /**
      * Creates a new <code>GeometryDeserializer</code>.
@@ -76,32 +77,6 @@ public class GeometryDeserializer extends StdDeserializer<Geometry> {
     }
 
     /**
-     * Deserializes a point from the supplied JSON node.
-     *
-     * @param aNode A JSON node
-     * @param aParser A JSON parser
-     * @param aType A type of geometry
-     * @return A deserialized point
-     * @throws JsonMappingException If there is trouble deserializing the JSON structures
-     */
-    @SuppressWarnings({ JDK.DEPRECATION })
-    private Point getPoint(final JsonNode aNode, final JsonParser aParser, final Geometry.Type aType)
-            throws JsonMappingException {
-        final double xCoordinate;
-        final double yCoordinate;
-
-        if (!aNode.isArray()) {
-            throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_137, aType),
-                    aParser.getCurrentLocation());
-        }
-
-        xCoordinate = aNode.get(0).asDouble();
-        yCoordinate = aNode.get(1).asDouble();
-
-        return new Point(xCoordinate, yCoordinate);
-    }
-
-    /**
      * Deserializes a list of <code>LineString</code>s from the supplied JSON node.
      *
      * @param aNode A JSON node
@@ -110,7 +85,7 @@ public class GeometryDeserializer extends StdDeserializer<Geometry> {
      * @return A list of <code>LineString</code>s
      * @throws JsonMappingException If there is trouble deserializing the supplied JSON node
      */
-    @SuppressWarnings(JDK.DEPRECATION)
+    @SuppressWarnings({ JDK.DEPRECATION, PMD.LOOSE_COUPLING })
     private List<LineString> getLineStrings(final JsonNode aNode, final JsonParser aParser, final Geometry.Type aType)
             throws JsonMappingException {
         final ArrayList<LineString> lineStrings = new ArrayList<>();
@@ -157,6 +132,32 @@ public class GeometryDeserializer extends StdDeserializer<Geometry> {
     }
 
     /**
+     * Deserializes a point from the supplied JSON node.
+     *
+     * @param aNode A JSON node
+     * @param aParser A JSON parser
+     * @param aType A type of geometry
+     * @return A deserialized point
+     * @throws JsonMappingException If there is trouble deserializing the JSON structures
+     */
+    @SuppressWarnings({ JDK.DEPRECATION })
+    private Point getPoint(final JsonNode aNode, final JsonParser aParser, final Geometry.Type aType)
+            throws JsonMappingException {
+        final double xCoordinate;
+        final double yCoordinate;
+
+        if (!aNode.isArray()) {
+            throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_137, aType),
+                    aParser.getCurrentLocation());
+        }
+
+        xCoordinate = aNode.get(0).asDouble();
+        yCoordinate = aNode.get(1).asDouble();
+
+        return new Point(xCoordinate, yCoordinate);
+    }
+
+    /**
      * Deserializes a list of points.
      *
      * @param aNode The JSON node being parsed
@@ -165,7 +166,7 @@ public class GeometryDeserializer extends StdDeserializer<Geometry> {
      * @return A list of points
      * @throws JsonMappingException If there is trouble deserializing the JSON
      */
-    @SuppressWarnings(JDK.DEPRECATION)
+    @SuppressWarnings({ JDK.DEPRECATION, PMD.LOOSE_COUPLING })
     private List<Point> getPoints(final JsonNode aNode, final JsonParser aParser, final Geometry.Type aType)
             throws JsonMappingException {
         final ArrayList<Point> points = new ArrayList<>();

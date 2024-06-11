@@ -99,7 +99,7 @@ public class AuthTokenService1 extends AbstractService<AuthTokenService1> implem
         TOKEN_SERVICE("http://iiif.io/api/auth/1/token");
 
         /** The profile's label. */
-        private String myLabel;
+        private final String myLabel;
 
         /**
          * Creates a new auth token service profile from the supplied label.

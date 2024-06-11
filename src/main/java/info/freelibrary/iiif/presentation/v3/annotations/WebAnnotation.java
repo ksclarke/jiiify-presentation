@@ -45,14 +45,14 @@ public class WebAnnotation implements Annotation<WebAnnotation> {
     private String myID;
 
     /**
-     * The annotation's motivation.
-     */
-    private Motivation myMotivation;
-
-    /**
      * The annotation label. This is a IIIF rather than W3C Annotation label.
      */
     private Label myLabel;
+
+    /**
+     * The annotation's motivation.
+     */
+    private Motivation myMotivation;
 
     /**
      * The annotation's resources.
@@ -68,17 +68,6 @@ public class WebAnnotation implements Annotation<WebAnnotation> {
      * The annotation's time mode.
      */
     private TimeMode myTimeMode;
-
-    /**
-     * Creates a new Web annotation.
-     *
-     * @param aID An annotation ID
-     * @param aTarget An annotation target
-     */
-    public WebAnnotation(final String aID, final Target aTarget) {
-        myID = UriUtils.checkID(aID, false);
-        myTarget = aTarget;
-    }
 
     /**
      * Creates a new Web annotation.
@@ -126,6 +115,17 @@ public class WebAnnotation implements Annotation<WebAnnotation> {
      */
     public WebAnnotation(final String aID, final Manifest aManifest) {
         this(aID, new Target(aManifest.getID()));
+    }
+
+    /**
+     * Creates a new Web annotation.
+     *
+     * @param aID An annotation ID
+     * @param aTarget An annotation target
+     */
+    public WebAnnotation(final String aID, final Target aTarget) {
+        myID = UriUtils.checkID(aID, false);
+        myTarget = aTarget;
     }
 
     /**

@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.JDK;
+import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
@@ -33,6 +34,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  * Dataset content that can be associated with an annotation or set as a thumbnail.
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
+@SuppressWarnings({ PMD.COUPLING_BETWEEN_OBJECTS })
 public class DatasetContent extends AbstractContentResource<DatasetContent>
         implements AnnotatedContentResource<DatasetContent>, Resource<DatasetContent> {
 
@@ -53,20 +55,19 @@ public class DatasetContent extends AbstractContentResource<DatasetContent>
     }
 
     @Override
-    public DatasetContent setFormat(final MediaType aMediaType) {
-        return (DatasetContent) super.setFormat(aMediaType);
+    public List<AnnotationPage<WebAnnotation>> getAnnotations() {
+        return super.getAnnotations();
     }
 
     @Override
-    @JsonSetter(JsonKeys.PROVIDER)
-    public DatasetContent setProviders(final Provider... aProviderArray) {
-        return setProviders(Arrays.asList(aProviderArray));
+    @SuppressWarnings(JDK.UNCHECKED)
+    public DatasetContent setAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
+        return (DatasetContent) super.setAnnotations(aAnnotationArray);
     }
 
     @Override
-    @JsonIgnore
-    public DatasetContent setProviders(final List<Provider> aProviderList) {
-        return (DatasetContent) super.setProviders(aProviderList);
+    public DatasetContent setAnnotations(final List<AnnotationPage<WebAnnotation>> aAnnotationArray) {
+        return (DatasetContent) super.setAnnotations(aAnnotationArray);
     }
 
     @Override
@@ -86,44 +87,8 @@ public class DatasetContent extends AbstractContentResource<DatasetContent>
     }
 
     @Override
-    public DatasetContent setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
-        return (DatasetContent) super.setSeeAlsoRefs(aSeeAlsoArray);
-    }
-
-    @Override
-    public DatasetContent setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
-        return (DatasetContent) super.setSeeAlsoRefs(aSeeAlsoList);
-    }
-
-    @Override
-    @SafeVarargs
-    public final DatasetContent setServices(final Service<?>... aServiceArray) {
-        return (DatasetContent) super.setServices(aServiceArray);
-    }
-
-    @Override
-    public DatasetContent setServices(final List<Service<?>> aServiceList) {
-        return (DatasetContent) super.setServices(aServiceList);
-    }
-
-    @Override
-    public DatasetContent setPartOfs(final PartOf... aPartOfArray) {
-        return (DatasetContent) super.setPartOfs(aPartOfArray);
-    }
-
-    @Override
-    public DatasetContent setPartOfs(final List<PartOf> aPartOfList) {
-        return (DatasetContent) super.setPartOfs(aPartOfList);
-    }
-
-    @Override
-    public DatasetContent setRenderings(final Rendering... aRenderingArray) {
-        return (DatasetContent) super.setRenderings(aRenderingArray);
-    }
-
-    @Override
-    public DatasetContent setRenderings(final List<Rendering> aRenderingList) {
-        return (DatasetContent) super.setRenderings(aRenderingList);
+    public DatasetContent setFormat(final MediaType aMediaType) {
+        return (DatasetContent) super.setFormat(aMediaType);
     }
 
     @Override
@@ -137,43 +102,8 @@ public class DatasetContent extends AbstractContentResource<DatasetContent>
     }
 
     @Override
-    public DatasetContent setThumbnails(final ContentResource<?>... aThumbnailArray) {
-        return (DatasetContent) super.setThumbnails(aThumbnailArray);
-    }
-
-    @Override
-    public DatasetContent setThumbnails(final List<ContentResource<?>> aThumbnailList) {
-        return (DatasetContent) super.setThumbnails(aThumbnailList);
-    }
-
-    @Override
     public DatasetContent setID(final String aID) {
         return (DatasetContent) super.setID(aID);
-    }
-
-    @Override
-    public DatasetContent setRights(final String aRights) {
-        return (DatasetContent) super.setRights(aRights);
-    }
-
-    @Override
-    public DatasetContent setRequiredStatement(final RequiredStatement aStatement) {
-        return (DatasetContent) super.setRequiredStatement(aStatement);
-    }
-
-    @Override
-    public DatasetContent setSummary(final Summary aSummary) {
-        return (DatasetContent) super.setSummary(aSummary);
-    }
-
-    @Override
-    public DatasetContent setMetadata(final Metadata... aMetadataArray) {
-        return (DatasetContent) super.setMetadata(aMetadataArray);
-    }
-
-    @Override
-    public DatasetContent setMetadata(final List<Metadata> aMetadataList) {
-        return (DatasetContent) super.setMetadata(aMetadataList);
     }
 
     @Override
@@ -187,19 +117,91 @@ public class DatasetContent extends AbstractContentResource<DatasetContent>
     }
 
     @Override
-    public List<AnnotationPage<WebAnnotation>> getAnnotations() {
-        return super.getAnnotations();
+    public DatasetContent setMetadata(final List<Metadata> aMetadataList) {
+        return (DatasetContent) super.setMetadata(aMetadataList);
     }
 
     @Override
-    @SuppressWarnings(JDK.UNCHECKED)
-    public DatasetContent setAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
-        return (DatasetContent) super.setAnnotations(aAnnotationArray);
+    public DatasetContent setMetadata(final Metadata... aMetadataArray) {
+        return (DatasetContent) super.setMetadata(aMetadataArray);
     }
 
     @Override
-    public DatasetContent setAnnotations(final List<AnnotationPage<WebAnnotation>> aAnnotationArray) {
-        return (DatasetContent) super.setAnnotations(aAnnotationArray);
+    public DatasetContent setPartOfs(final List<PartOf> aPartOfList) {
+        return (DatasetContent) super.setPartOfs(aPartOfList);
+    }
+
+    @Override
+    public DatasetContent setPartOfs(final PartOf... aPartOfArray) {
+        return (DatasetContent) super.setPartOfs(aPartOfArray);
+    }
+
+    @Override
+    @JsonIgnore
+    public DatasetContent setProviders(final List<Provider> aProviderList) {
+        return (DatasetContent) super.setProviders(aProviderList);
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.PROVIDER)
+    public DatasetContent setProviders(final Provider... aProviderArray) {
+        return setProviders(Arrays.asList(aProviderArray));
+    }
+
+    @Override
+    public DatasetContent setRenderings(final List<Rendering> aRenderingList) {
+        return (DatasetContent) super.setRenderings(aRenderingList);
+    }
+
+    @Override
+    public DatasetContent setRenderings(final Rendering... aRenderingArray) {
+        return (DatasetContent) super.setRenderings(aRenderingArray);
+    }
+
+    @Override
+    public DatasetContent setRequiredStatement(final RequiredStatement aStatement) {
+        return (DatasetContent) super.setRequiredStatement(aStatement);
+    }
+
+    @Override
+    public DatasetContent setRights(final String aRights) {
+        return (DatasetContent) super.setRights(aRights);
+    }
+
+    @Override
+    public DatasetContent setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
+        return (DatasetContent) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public DatasetContent setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
+        return (DatasetContent) super.setSeeAlsoRefs(aSeeAlsoArray);
+    }
+
+    @Override
+    public DatasetContent setServices(final List<Service<?>> aServiceList) {
+        return (DatasetContent) super.setServices(aServiceList);
+    }
+
+    @Override
+    @SafeVarargs
+    public final DatasetContent setServices(final Service<?>... aServiceArray) {
+        return (DatasetContent) super.setServices(aServiceArray);
+    }
+
+    @Override
+    public DatasetContent setSummary(final Summary aSummary) {
+        return (DatasetContent) super.setSummary(aSummary);
+    }
+
+    @Override
+    public DatasetContent setThumbnails(final ContentResource<?>... aThumbnailArray) {
+        return (DatasetContent) super.setThumbnails(aThumbnailArray);
+    }
+
+    @Override
+    public DatasetContent setThumbnails(final List<ContentResource<?>> aThumbnailList) {
+        return (DatasetContent) super.setThumbnails(aThumbnailList);
     }
 
     /**

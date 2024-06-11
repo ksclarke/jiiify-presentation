@@ -19,6 +19,7 @@ import com.pivovarit.function.ThrowingBiFunction;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.ContentResource;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
@@ -33,11 +34,11 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public class WebAnnotationSerializer extends StdSerializer<WebAnnotation> {
 
-    /** The <code>serialVersionUID</code> for a <code>WebAnnotationSerializer</code>. */
-    private static final long serialVersionUID = -5755418273140298532L;
-
     /** A logger for the serializer. */
     private static final Logger LOGGER = LoggerFactory.getLogger(WebAnnotationSerializer.class, MessageCodes.BUNDLE);
+
+    /** The <code>serialVersionUID</code> for a <code>WebAnnotationSerializer</code>. */
+    private static final long serialVersionUID = -5755418273140298532L;
 
     /**
      * Creates a new <code>WebAnnotationSerializer</code>.
@@ -47,6 +48,7 @@ public class WebAnnotationSerializer extends StdSerializer<WebAnnotation> {
     }
 
     @Override
+    @SuppressWarnings({ PMD.PRESERVE_STACK_TRACE })
     public void serialize(final WebAnnotation aWebAnnotation, final JsonGenerator aJsonGenerator,
             final SerializerProvider aProvider) throws IOException, JsonProcessingException {
         final List<ContentResource<?>> resources = aWebAnnotation.getBody();

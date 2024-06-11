@@ -41,7 +41,7 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 /**
  * An annotation used for associating supplementary content resources with a canvas resource.
  */
-@SuppressWarnings({ PMD.GOD_CLASS })
+@SuppressWarnings({ PMD.GOD_CLASS, PMD.EXCESSIVE_PUBLIC_COUNT })
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({ JsonKeys.CONTEXT, JsonKeys.ID, JsonKeys.TYPE, JsonKeys.TEXT_GRANULARITY, JsonKeys.MOTIVATION,
     JsonKeys.LABEL, JsonKeys.SUMMARY, JsonKeys.REQUIRED_STATEMENT, JsonKeys.RIGHTS, JsonKeys.PART_OF, JsonKeys.HOMEPAGE,

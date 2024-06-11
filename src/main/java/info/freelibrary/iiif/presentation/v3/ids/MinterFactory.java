@@ -13,32 +13,35 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public final class MinterFactory {
 
-    /** The minter name property. */
-    public static final String MINTER_NAME_PROPERTY = "jp.noid.minter";
-
     /** The environmental property for the minter name. */
     public static final String ENV_MINTER_NAME = "JP_NOID_MINTER";
+
+    /** The minter name property. */
+    public static final String MINTER_NAME_PROPERTY = "jp.noid.minter";
 
     /** The default minter class' name. */
     private static final String DEFAULT_MINTER_NAME = DefaultMinter.class.getName();
 
-    /** A map of minters. */
-    private static final Map<String, Minter> MINTERS = new HashMap<>();
-
     /** We keep an internal modifiable environmental map so we can modify it during testing. */
     private static final Map<String, String> ENV_PROPERTIES;
 
-    // The static map initializations.
-    static {
-        ENV_PROPERTIES = new HashMap<>(); // MinterFactory map is modifiable
-        ENV_PROPERTIES.putAll(System.getenv()); // System map is not modifiable
-    }
+    /** A map of minters. */
+    private static final Map<String, Minter> MINTERS = new HashMap<>();
 
     /**
      * Private constructor for the factory.
      */
     private MinterFactory() {
         // This is intentionally empty
+    }
+
+    /**
+     * Allows removing a particular minter implementation that has been set.
+     *
+     * @return The class name of the previously set minter implementation
+     */
+    public static String clearMinter() {
+        return ENV_PROPERTIES.remove(ENV_MINTER_NAME);
     }
 
     /**
@@ -67,16 +70,22 @@ public final class MinterFactory {
      * @param aClass A minter implementation class
      */
     public static void setMinter(final Class<?> aClass) {
-        ENV_PROPERTIES.put(MinterFactory.ENV_MINTER_NAME, aClass.getName());
+        ENV_PROPERTIES.put(ENV_MINTER_NAME, aClass.getName());
     }
 
     /**
-     * Allows removing a particular minter implementation that has been set.
+     * Gets the name of the minter implementation.
      *
-     * @return The class name of the previously set minter implementation
+     * @return The name of the minter implementation
      */
-    public static String clearMinter() {
-        return ENV_PROPERTIES.remove(MinterFactory.ENV_MINTER_NAME);
+    private static String getMinterName() {
+        final String minterName = ENV_PROPERTIES.get(ENV_MINTER_NAME);
+
+        if (minterName == null) {
+            return System.getProperty(MINTER_NAME_PROPERTY, DEFAULT_MINTER_NAME);
+        }
+
+        return minterName;
     }
 
     /**
@@ -117,18 +126,9 @@ public final class MinterFactory {
         }
     }
 
-    /**
-     * Gets the name of the minter implementation.
-     *
-     * @return The name of the minter implementation
-     */
-    private static String getMinterName() {
-        final String minterName = ENV_PROPERTIES.get(ENV_MINTER_NAME);
-
-        if (minterName == null) {
-            return System.getProperty(MINTER_NAME_PROPERTY, DEFAULT_MINTER_NAME);
-        }
-
-        return minterName;
+    // The static map initializations.
+    static {
+        ENV_PROPERTIES = new HashMap<>(); // MinterFactory map is modifiable
+        ENV_PROPERTIES.putAll(System.getenv()); // System map is not modifiable
     }
 }

@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.JDK;
+import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
@@ -38,6 +39,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.HEIGHT,
     JsonKeys.WIDTH, JsonKeys.LANGUAGE, JsonKeys.SERVICE })
+@SuppressWarnings({ PMD.COUPLING_BETWEEN_OBJECTS })
 public class ImageContent extends AbstractContentResource<ImageContent> implements
         AnnotatedContentResource<ImageContent>, SpatialContentResource<ImageContent>, Resource<ImageContent> {
 
@@ -65,6 +67,11 @@ public class ImageContent extends AbstractContentResource<ImageContent> implemen
      */
     private ImageContent() {
         super(ResourceTypes.IMAGE, ResourceBehavior.class);
+    }
+
+    @Override
+    public List<AnnotationPage<WebAnnotation>> getAnnotations() {
+        return super.getAnnotations();
     }
 
     /**
@@ -99,6 +106,17 @@ public class ImageContent extends AbstractContentResource<ImageContent> implemen
     @JsonInclude(Include.NON_DEFAULT)
     public int getWidth() {
         return myWidth;
+    }
+
+    @Override
+    @SuppressWarnings(JDK.UNCHECKED)
+    public ImageContent setAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
+        return (ImageContent) super.setAnnotations(aAnnotationArray);
+    }
+
+    @Override
+    public ImageContent setAnnotations(final List<AnnotationPage<WebAnnotation>> aAnnotationArray) {
+        return (ImageContent) super.setAnnotations(aAnnotationArray);
     }
 
     @Override
@@ -249,22 +267,6 @@ public class ImageContent extends AbstractContentResource<ImageContent> implemen
         setHeight(aHeight);
 
         return this;
-    }
-
-    @Override
-    public List<AnnotationPage<WebAnnotation>> getAnnotations() {
-        return super.getAnnotations();
-    }
-
-    @Override
-    @SuppressWarnings(JDK.UNCHECKED)
-    public ImageContent setAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
-        return (ImageContent) super.setAnnotations(aAnnotationArray);
-    }
-
-    @Override
-    public ImageContent setAnnotations(final List<AnnotationPage<WebAnnotation>> aAnnotationArray) {
-        return (ImageContent) super.setAnnotations(aAnnotationArray);
     }
 
     /**

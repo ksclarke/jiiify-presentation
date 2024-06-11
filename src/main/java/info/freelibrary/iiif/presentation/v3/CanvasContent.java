@@ -7,6 +7,8 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.util.warnings.PMD;
+
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -25,6 +27,7 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 /**
  * Canvas content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
  */
+@SuppressWarnings({ PMD.COUPLING_BETWEEN_OBJECTS })
 public class CanvasContent extends AbstractContentResource<CanvasContent>
         implements ContentResource<CanvasContent>, Resource<CanvasContent> {
 
@@ -47,28 +50,6 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
     }
 
     @Override
-    public final CanvasContent setFormat(final MediaType aMediaType) {
-        return (CanvasContent) super.setFormat(aMediaType);
-    }
-
-    @Override
-    public final CanvasContent setLanguages(final String... aLangArray) {
-        return (CanvasContent) super.setLanguages(aLangArray);
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.PROVIDER)
-    public CanvasContent setProviders(final Provider... aProviderArray) {
-        return setProviders(Arrays.asList(aProviderArray));
-    }
-
-    @Override
-    @JsonIgnore
-    public CanvasContent setProviders(final List<Provider> aProviderList) {
-        return (CanvasContent) super.setProviders(aProviderList);
-    }
-
-    @Override
     @JsonIgnore
     public CanvasContent setBehaviors(final Behavior... aBehaviorArray) {
         return setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorArray));
@@ -85,44 +66,8 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
     }
 
     @Override
-    public CanvasContent setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
-        return (CanvasContent) super.setSeeAlsoRefs(aSeeAlsoArray);
-    }
-
-    @Override
-    public CanvasContent setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
-        return (CanvasContent) super.setSeeAlsoRefs(aSeeAlsoList);
-    }
-
-    @Override
-    @SafeVarargs
-    public final CanvasContent setServices(final Service<?>... aServiceArray) {
-        return (CanvasContent) super.setServices(aServiceArray);
-    }
-
-    @Override
-    public CanvasContent setServices(final List<Service<?>> aServiceList) {
-        return (CanvasContent) super.setServices(aServiceList);
-    }
-
-    @Override
-    public CanvasContent setPartOfs(final PartOf... aPartOfArray) {
-        return (CanvasContent) super.setPartOfs(aPartOfArray);
-    }
-
-    @Override
-    public CanvasContent setPartOfs(final List<PartOf> aPartOfList) {
-        return (CanvasContent) super.setPartOfs(aPartOfList);
-    }
-
-    @Override
-    public CanvasContent setRenderings(final Rendering... aRenderingArray) {
-        return (CanvasContent) super.setRenderings(aRenderingArray);
-    }
-
-    @Override
-    public CanvasContent setRenderings(final List<Rendering> aRenderingList) {
-        return (CanvasContent) super.setRenderings(aRenderingList);
+    public final CanvasContent setFormat(final MediaType aMediaType) {
+        return (CanvasContent) super.setFormat(aMediaType);
     }
 
     @Override
@@ -136,38 +81,18 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
     }
 
     @Override
-    public CanvasContent setThumbnails(final ContentResource<?>... aThumbnailArray) {
-        return (CanvasContent) super.setThumbnails(aThumbnailArray);
-    }
-
-    @Override
-    public CanvasContent setThumbnails(final List<ContentResource<?>> aThumbnailList) {
-        return (CanvasContent) super.setThumbnails(aThumbnailList);
-    }
-
-    @Override
     public CanvasContent setID(final String aID) {
         return (CanvasContent) super.setID(aID);
     }
 
     @Override
-    public CanvasContent setRights(final String aRights) {
-        return (CanvasContent) super.setRights(aRights);
+    public CanvasContent setLabel(final Label aLabel) {
+        return (CanvasContent) super.setLabel(aLabel);
     }
 
     @Override
-    public CanvasContent setRequiredStatement(final RequiredStatement aStatement) {
-        return (CanvasContent) super.setRequiredStatement(aStatement);
-    }
-
-    @Override
-    public CanvasContent setSummary(final Summary aSummary) {
-        return (CanvasContent) super.setSummary(aSummary);
-    }
-
-    @Override
-    public CanvasContent setMetadata(final Metadata... aMetadataArray) {
-        return (CanvasContent) super.setMetadata(aMetadataArray);
+    public final CanvasContent setLanguages(final String... aLangArray) {
+        return (CanvasContent) super.setLanguages(aLangArray);
     }
 
     @Override
@@ -176,8 +101,86 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
     }
 
     @Override
-    public CanvasContent setLabel(final Label aLabel) {
-        return (CanvasContent) super.setLabel(aLabel);
+    public CanvasContent setMetadata(final Metadata... aMetadataArray) {
+        return (CanvasContent) super.setMetadata(aMetadataArray);
+    }
+
+    @Override
+    public CanvasContent setPartOfs(final List<PartOf> aPartOfList) {
+        return (CanvasContent) super.setPartOfs(aPartOfList);
+    }
+
+    @Override
+    public CanvasContent setPartOfs(final PartOf... aPartOfArray) {
+        return (CanvasContent) super.setPartOfs(aPartOfArray);
+    }
+
+    @Override
+    @JsonIgnore
+    public CanvasContent setProviders(final List<Provider> aProviderList) {
+        return (CanvasContent) super.setProviders(aProviderList);
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.PROVIDER)
+    public CanvasContent setProviders(final Provider... aProviderArray) {
+        return setProviders(Arrays.asList(aProviderArray));
+    }
+
+    @Override
+    public CanvasContent setRenderings(final List<Rendering> aRenderingList) {
+        return (CanvasContent) super.setRenderings(aRenderingList);
+    }
+
+    @Override
+    public CanvasContent setRenderings(final Rendering... aRenderingArray) {
+        return (CanvasContent) super.setRenderings(aRenderingArray);
+    }
+
+    @Override
+    public CanvasContent setRequiredStatement(final RequiredStatement aStatement) {
+        return (CanvasContent) super.setRequiredStatement(aStatement);
+    }
+
+    @Override
+    public CanvasContent setRights(final String aRights) {
+        return (CanvasContent) super.setRights(aRights);
+    }
+
+    @Override
+    public CanvasContent setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
+        return (CanvasContent) super.setSeeAlsoRefs(aSeeAlsoList);
+    }
+
+    @Override
+    public CanvasContent setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
+        return (CanvasContent) super.setSeeAlsoRefs(aSeeAlsoArray);
+    }
+
+    @Override
+    public CanvasContent setServices(final List<Service<?>> aServiceList) {
+        return (CanvasContent) super.setServices(aServiceList);
+    }
+
+    @Override
+    @SafeVarargs
+    public final CanvasContent setServices(final Service<?>... aServiceArray) {
+        return (CanvasContent) super.setServices(aServiceArray);
+    }
+
+    @Override
+    public CanvasContent setSummary(final Summary aSummary) {
+        return (CanvasContent) super.setSummary(aSummary);
+    }
+
+    @Override
+    public CanvasContent setThumbnails(final ContentResource<?>... aThumbnailArray) {
+        return (CanvasContent) super.setThumbnails(aThumbnailArray);
+    }
+
+    @Override
+    public CanvasContent setThumbnails(final List<ContentResource<?>> aThumbnailList) {
+        return (CanvasContent) super.setThumbnails(aThumbnailList);
     }
 
 }

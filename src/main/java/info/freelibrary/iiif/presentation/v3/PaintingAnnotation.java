@@ -41,7 +41,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.StylesheetSerializer;
 /**
  * An annotation used for painting content resources onto a {@link Canvas}.
  */
-@SuppressWarnings({ PMD.GOD_CLASS })
+@SuppressWarnings({ PMD.GOD_CLASS, PMD.EXCESSIVE_PUBLIC_COUNT })
 public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotation>
         implements Resource<PaintingAnnotation>, Annotation<PaintingAnnotation> {
 
@@ -293,6 +293,15 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
     }
 
     /**
+     * Gets the specific resource's CSS stylesheet.
+     *
+     * @return The specific resource's CSS stylesheet
+     */
+    public Optional<Stylesheet> getStylesheet() {
+        return Optional.ofNullable(myStylesheet);
+    }
+
+    /**
      * Gets the resource summary.
      *
      * @return The resource's summary
@@ -473,6 +482,17 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
         return (PaintingAnnotation) super.setServices(aServiceArray);
     }
 
+    /**
+     * Sets the specific resource's CSS stylesheet.
+     *
+     * @param aStylesheet A CSS stylesheet
+     * @return The specific resource
+     */
+    public PaintingAnnotation setStylesheet(final Stylesheet aStylesheet) {
+        myStylesheet = aStylesheet;
+        return this;
+    }
+
     @Override
     public PaintingAnnotation setSummary(final Summary aSummary) {
         return (PaintingAnnotation) super.setSummary(aSummary);
@@ -499,26 +519,6 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
     }
 
     /**
-     * Sets the specific resource's CSS stylesheet.
-     *
-     * @param aStylesheet A CSS stylesheet
-     * @return The specific resource
-     */
-    public PaintingAnnotation setStylesheet(final Stylesheet aStylesheet) {
-        myStylesheet = aStylesheet;
-        return this;
-    }
-
-    /**
-     * Gets the specific resource's CSS stylesheet.
-     *
-     * @return The specific resource's CSS stylesheet
-     */
-    public Optional<Stylesheet> getStylesheet() {
-        return Optional.ofNullable(myStylesheet);
-    }
-
-    /**
      * A SpecificResource's CSS stylesheet. This may be represented by a single URI or a combination of type and value.
      */
     @JsonSerialize(using = StylesheetSerializer.class)
@@ -528,21 +528,11 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
         /** The specific resource's Stylesheet type. */
         public static final String TYPE = "CssStylesheet";
 
-        /** The value of the stylesheet (either a URI to an external CSS stylesheet or a CSS value). */
-        private String myValue;
-
         /** Whether the value represents a URI to an external CSS or a CSS value. */
         private boolean isURI;
 
-        /**
-         * Creates a new SpecificResource stylesheet from the supplied URI.
-         *
-         * @param aURI A URI for an external CSS stylesheet
-         */
-        public Stylesheet(final URI aURI) {
-            myValue = aURI.toString();
-            isURI = true;
-        }
+        /** The value of the stylesheet (either a URI to an external CSS stylesheet or a CSS value). */
+        private String myValue;
 
         /**
          * Creates a new SpecificResource stylesheet from the supplied styling value.
@@ -552,6 +542,16 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
         public Stylesheet(final String aValue) {
             myValue = aValue;
             isURI = false;
+        }
+
+        /**
+         * Creates a new SpecificResource stylesheet from the supplied URI.
+         *
+         * @param aURI A URI for an external CSS stylesheet
+         */
+        public Stylesheet(final URI aURI) {
+            myValue = aURI.toString();
+            isURI = true;
         }
 
         /**
@@ -573,19 +573,6 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
         }
 
         /**
-         * Sets an internal stylesheet value, zeroing out the external CSS URI.
-         *
-         * @param aValue A styling value
-         * @return This stylesheet
-         */
-        public Stylesheet setValue(final String aValue) {
-            myValue = aValue;
-            isURI = false;
-
-            return this;
-        }
-
-        /**
          * Sets a URI for an external CSS stylesheet, zeroing out the internal stylesheet value.
          *
          * @param aURI A URI to an external CSS stylesheet
@@ -594,6 +581,19 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
         public Stylesheet setURI(final URI aURI) {
             myValue = aURI.toString();
             isURI = true;
+
+            return this;
+        }
+
+        /**
+         * Sets an internal stylesheet value, zeroing out the external CSS URI.
+         *
+         * @param aValue A styling value
+         * @return This stylesheet
+         */
+        public Stylesheet setValue(final String aValue) {
+            myValue = aValue;
+            isURI = false;
 
             return this;
         }

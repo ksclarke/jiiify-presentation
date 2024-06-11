@@ -32,42 +32,45 @@ import info.freelibrary.iiif.presentation.v3.properties.I18n;
 @SuppressWarnings({ PMD.GOD_CLASS })
 public final class I18nUtils {
 
-    /** Logger used by the I18nUtils class. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(I18nUtils.class, MessageCodes.BUNDLE);
+    /** An undefined I18n value. */
+    public static final String UNDEFINED = "und";
 
     /** A regex pattern that will match any tag. */
     private static final Pattern ANY_TAG_PATTERN = Pattern.compile("<[a-zA-Z0-9\\-]+\\s*\\/?\\s*>", Pattern.DOTALL);
+
+    /** A regex pattern that will match CDATA sections. */
+    private static final String CDATA_PATTERN = "<\\!\\[CDATA\\[.*\\]\\]\\>";
 
     /** A regex pattern that will match fragments. */
     private static final Pattern FRAGMENT_PATTERN =
             Pattern.compile("^<[a-zA-Z0-9\\-]+.*>.*</[a-zA-Z0-9\\-]+>$", Pattern.DOTALL);
 
-    /** A regex pattern that will match CDATA sections. */
-    private static final String CDATA_PATTERN = "<\\!\\[CDATA\\[.*\\]\\]\\>";
-
-    /** The tag used for link elements. */
-    private static final String LINK_TAG = "a";
-
-    /** The tag used for image elements. */
-    private static final String IMAGE_TAG = "img";
-
-    /** Tags from index position three on are tags that should have content in them. */
-    private static final String[] TAGS = { IMAGE_TAG, "br", LINK_TAG, "p", "b", "i", "small", "span", "sub", "sup" };
-
-    /** Supported link protocols. */
-    private static final String[] PROTOCOLS = { "http", "https", "mailto" };
+    /** A greater than symbol used for opening tag names. */
+    private static final String GREATER_THAN = ">";
 
     /** Supported image attributes. */
     private static final String[] IMAGE_ATTRIBUTES = { "src", "alt" };
 
-    /** Supported link attributes. */
-    private static final String[] LINK_ATTRIBUTES = { "href" };
-
-    /** A greater than symbol used for opening tag names. */
-    private static final String GREATER_THAN = ">";
+    /** The tag used for image elements. */
+    private static final String IMAGE_TAG = "img";
 
     /** A less than symbol used for closing tag names. */
     private static final String LESS_THAN = "<";
+
+    /** Supported link attributes. */
+    private static final String[] LINK_ATTRIBUTES = { "href" };
+
+    /** The tag used for link elements. */
+    private static final String LINK_TAG = "a";
+
+    /** Logger used by the I18nUtils class. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(I18nUtils.class, MessageCodes.BUNDLE);
+
+    /** Supported link protocols. */
+    private static final String[] PROTOCOLS = { "http", "https", "mailto" };
+
+    /** Tags from index position three on are tags that should have content in them. */
+    private static final String[] TAGS = { IMAGE_TAG, "br", LINK_TAG, "p", "b", "i", "small", "span", "sub", "sup" };
 
     /**
      * A constructor for I18nUtils.
@@ -77,72 +80,19 @@ public final class I18nUtils {
     }
 
     /**
-     * Determines whether the supplied string is an HTML fragment.
+     * Checks the language tag of the supplied Locale. If the language tag is "und" the Locale is undefined and an
+     * IllegalArgumentException is thrown.
      *
-     * @param aString A string to check for an HTML fragment
-     * @return True if the supplied string contains an HTML fragment; else, false
+     * @param aLocale A locale
+     * @return The valid locale
+     * @throws IllegalArgumentException If the supplied locale is not a pre-defined locale
      */
-    public static boolean isHtmlFragment(final String aString) {
-        return FRAGMENT_PATTERN.matcher(aString).matches();
-    }
-
-    /**
-     * Determines whether the supplied string contains an HTML tag. This is a course pattern match, just intended to
-     * give a rough sense of whether it should be processed for HTML elements.
-     *
-     * @param aString A string to check for an HTML tag
-     * @return True if the supplied string contains and HTML fragment; else, false.
-     */
-    public static boolean hasHTML(final String aString) {
-        return ANY_TAG_PATTERN.matcher(aString).find();
-    }
-
-    /**
-     * Strips HTML from a single string.
-     *
-     * @param aString A string that may contain HTML elements
-     * @return A string without an HTML elements
-     */
-    public static String stripHTML(final String aString) {
-        return Parser.unescapeEntities(
-                Jsoup.clean(encodeSingleBrackets(aString.replaceAll(CDATA_PATTERN, EMPTY)), Safelist.none()), false);
-    }
-
-    /**
-     * Strips HTML from a list of strings.
-     *
-     * @param aStringList A list of string
-     * @return A list of strings without any HTML
-     */
-    public static List<String> stripHTML(final List<String> aStringList) {
-        final List<String> list = new ArrayList<>(aStringList);
-
-        for (int index = 0; index < aStringList.size(); index++) {
-            list.set(index, stripHTML(list.get(index)));
+    public static Locale checkLocale(final Locale aLocale) {
+        if (UNDEFINED.equals(aLocale.toLanguageTag())) {
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_020, aLocale.getDisplayName()));
         }
 
-        return list;
-    }
-
-    /**
-     * Returns an array of internationalizations with any HTML in string values stripped.
-     *
-     * @param aI18nArray An array of internationalizations
-     * @return An array of internationalizations guaranteed not to contain HTML markup
-     */
-    public static I18n[] stripHTML(final I18n... aI18nArray) {
-        for (final I18n i18n : aI18nArray) {
-            final List<String> strings = new ArrayList<>(i18n.getStrings());
-
-            for (int index = 0; index < strings.size(); index++) {
-                strings.set(index, stripHTML(strings.get(index)));
-            }
-
-            i18n.clear();
-            i18n.addStrings(strings);
-        }
-
-        return aI18nArray;
+        return aLocale;
     }
 
     /**
@@ -207,6 +157,27 @@ public final class I18nUtils {
     }
 
     /**
+     * Determines whether the supplied string contains an HTML tag. This is a course pattern match, just intended to
+     * give a rough sense of whether it should be processed for HTML elements.
+     *
+     * @param aString A string to check for an HTML tag
+     * @return True if the supplied string contains and HTML fragment; else, false.
+     */
+    public static boolean hasHTML(final String aString) {
+        return ANY_TAG_PATTERN.matcher(aString).find();
+    }
+
+    /**
+     * Determines whether the supplied string is an HTML fragment.
+     *
+     * @param aString A string to check for an HTML fragment
+     * @return True if the supplied string contains an HTML fragment; else, false
+     */
+    public static boolean isHtmlFragment(final String aString) {
+        return FRAGMENT_PATTERN.matcher(aString).matches();
+    }
+
+    /**
      * Parses raw internationalization data into a list of {@code I18n}s.
      *
      * @param aHtmlAllowed Whether HTML is allowed in the internationalized string values
@@ -231,19 +202,51 @@ public final class I18nUtils {
     }
 
     /**
-     * Check to confirm we have a single root node; if we don't, our string input is invalid.
+     * Returns an array of internationalizations with any HTML in string values stripped.
      *
-     * @param aBody A body element
-     * @return A valid body element
-     * @throws IllegalArgumentException If the supplied element has children but not a single child
+     * @param aI18nArray An array of internationalizations
+     * @return An array of internationalizations guaranteed not to contain HTML markup
      */
-    private static Element checkForFragment(final Element aBody) {
-        if (aBody.childrenSize() != SINGLE_INSTANCE) {
-            final String htmlFragment = aBody.children().toString();
-            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_032, htmlFragment));
+    public static I18n[] stripHTML(final I18n... aI18nArray) {
+        for (final I18n i18n : aI18nArray) {
+            final List<String> strings = new ArrayList<>(i18n.getStrings());
+
+            for (int index = 0; index < strings.size(); index++) {
+                strings.set(index, stripHTML(strings.get(index)));
+            }
+
+            i18n.clear();
+            i18n.addStrings(strings);
         }
 
-        return aBody;
+        return aI18nArray;
+    }
+
+    /**
+     * Strips HTML from a list of strings.
+     *
+     * @param aStringList A list of string
+     * @return A list of strings without any HTML
+     */
+    public static List<String> stripHTML(final List<String> aStringList) {
+        final List<String> list = new ArrayList<>(aStringList);
+
+        for (int index = 0; index < aStringList.size(); index++) {
+            list.set(index, stripHTML(list.get(index)));
+        }
+
+        return list;
+    }
+
+    /**
+     * Strips HTML from a single string.
+     *
+     * @param aString A string that may contain HTML elements
+     * @return A string without an HTML elements
+     */
+    public static String stripHTML(final String aString) {
+        return Parser.unescapeEntities(
+                Jsoup.clean(encodeSingleBrackets(aString.replaceAll(CDATA_PATTERN, EMPTY)), Safelist.none()), false);
     }
 
     /**
@@ -263,19 +266,19 @@ public final class I18nUtils {
     }
 
     /**
-     * Checks the language tag of the supplied Locale. If the language tag is "und" the Locale is undefined and an
-     * IllegalArgumentException is thrown.
+     * Check to confirm we have a single root node; if we don't, our string input is invalid.
      *
-     * @param aLocale A locale
-     * @return The valid locale
-     * @throws IllegalArgumentException If the supplied locale is not a pre-defined locale
+     * @param aBody A body element
+     * @return A valid body element
+     * @throws IllegalArgumentException If the supplied element has children but not a single child
      */
-    public static Locale checkLocale(final Locale aLocale) {
-        if ("und".equals(aLocale.toLanguageTag())) {
-            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_020, aLocale.getDisplayName()));
+    private static Element checkForFragment(final Element aBody) {
+        if (aBody.childrenSize() != SINGLE_INSTANCE) {
+            final String htmlFragment = aBody.children().toString();
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_032, htmlFragment));
         }
 
-        return aLocale;
+        return aBody;
     }
 
     /**

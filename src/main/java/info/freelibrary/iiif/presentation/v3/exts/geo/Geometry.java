@@ -18,23 +18,30 @@ import info.freelibrary.iiif.presentation.v3.utils.json.GeometrySerializer;
 @JsonSerialize(using = GeometrySerializer.class)
 public interface Geometry {
 
+    /**
+     * Gets the type of geometry.
+     *
+     * @return The geometry type
+     */
+    Type getType();
+
     /** The geometry object type. */
     enum Type implements Labeled {
 
         /** The Coordinates geometry type. */
         COORDINATES("Coordinates"),
 
-        /** The Point geometry type. */
-        POINT("Point"),
-
         /** The LineString geometry type. */
         LINESTRING("LineString"),
+
+        /** The MultiLineString geometry type. */
+        MULTILINESTRING("MultiLineString"),
 
         /** The MultiPoint geometry type. */
         MULTIPOINT("MultiPoint"),
 
-        /** The MultiLineString geometry type. */
-        MULTILINESTRING("MultiLineString");
+        /** The Point geometry type. */
+        POINT("Point");
 
         /** The internal name of the type enum. */
         private final String myName;
@@ -65,7 +72,7 @@ public interface Geometry {
          * @return An optional geometry type
          */
         public static Optional<Type> fromLabel(final String aLabel) {
-            for (final Type type : Type.values()) {
+            for (final Type type : values()) {
                 if (type.label().equalsIgnoreCase(aLabel)) {
                     return Optional.of(type);
                 }
@@ -74,12 +81,5 @@ public interface Geometry {
             return Optional.empty();
         }
     }
-
-    /**
-     * Gets the type of geometry.
-     *
-     * @return The geometry type
-     */
-    Type getType();
 
 }

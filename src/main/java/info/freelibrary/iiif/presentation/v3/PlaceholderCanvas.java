@@ -38,7 +38,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  * resource. A placeholder canvas is likely to have different dimensions to those of the canvas(es) of the resource that
  * has the placeholderCanvas property.
  */
-@SuppressWarnings({ PMD.TOO_MANY_METHODS, PMD.EXCESSIVE_PUBLIC_COUNT })
+@SuppressWarnings({ PMD.TOO_MANY_METHODS, PMD.EXCESSIVE_PUBLIC_COUNT, PMD.COUPLING_BETWEEN_OBJECTS, PMD.GOD_CLASS })
 public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas>
         implements Resource<PlaceholderCanvas>, CanvasResource<PlaceholderCanvas> {
 
@@ -92,12 +92,6 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas>
     @JsonIgnore
     public Optional<Minter> getMinter() {
         return super.getMinter();
-    }
-
-    @Override
-    @JsonIgnore
-    public PlaceholderCanvas setMinter(final Minter aMinter) {
-        return (PlaceholderCanvas) super.setMinter(aMinter);
     }
 
     @Override
@@ -221,6 +215,12 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas>
     @Override
     public PlaceholderCanvas setMetadata(final Metadata... aMetadataArray) {
         return (PlaceholderCanvas) super.setMetadata(aMetadataArray);
+    }
+
+    @Override
+    @JsonIgnore
+    public PlaceholderCanvas setMinter(final Minter aMinter) {
+        return (PlaceholderCanvas) super.setMinter(aMinter);
     }
 
     @Override

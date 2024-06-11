@@ -12,17 +12,17 @@ import info.freelibrary.iiif.presentation.v3.utils.Labeled;
  */
 public enum Quality implements Labeled {
 
-    /** Color image quality. */
-    COLOR("color"),
-
-    /** Grey image quality. */
-    GRAY("gray"),
-
     /** Bitonal image quality. */
     BITONAL("bitonal"),
 
+    /** Color image quality. */
+    COLOR("color"),
+
     /** Default image quality. */
-    DEFAULT("default");
+    DEFAULT("default"),
+
+    /** Grey image quality. */
+    GRAY("gray");
 
     /** The image quality label. */
     private final String myLabel;
@@ -37,16 +37,6 @@ public enum Quality implements Labeled {
     }
 
     /**
-     * Gets the lower case string representation of this quality.
-     *
-     * @return The lower case string representation of this quality
-     */
-    @Override
-    public String toString() {
-        return myLabel;
-    }
-
-    /**
      * Gets the quality's label.
      *
      * @return A label
@@ -58,6 +48,16 @@ public enum Quality implements Labeled {
     }
 
     /**
+     * Gets the lower case string representation of this quality.
+     *
+     * @return The lower case string representation of this quality
+     */
+    @Override
+    public String toString() {
+        return myLabel;
+    }
+
+    /**
      * Creates an Image API extra quality from a supplied label. Returns an empty optional if the supplied label isn't
      * valid.
      *
@@ -65,7 +65,7 @@ public enum Quality implements Labeled {
      * @return An optional image service quality or an empty optional
      */
     public static Optional<Quality> fromLabel(final String aLabel) {
-        for (final Quality quality : Quality.values()) {
+        for (final Quality quality : values()) {
             if (quality.label().equalsIgnoreCase(aLabel)) {
                 return Optional.of(quality);
             }

@@ -172,7 +172,7 @@ public class PhysicalDimsService extends AbstractService<PhysicalDimsService> im
         DIMS_SERVICE("http://iiif.io/api/annex/services/physdim");
 
         /** The profile's label. */
-        private String myLabel;
+        private final String myLabel;
 
         /**
          * Creates a new dims service profile from the supplied label.
@@ -184,12 +184,12 @@ public class PhysicalDimsService extends AbstractService<PhysicalDimsService> im
         }
 
         @Override
-        public String toString() {
+        public String label() {
             return myLabel;
         }
 
         @Override
-        public String label() {
+        public String toString() {
             return myLabel;
         }
 
