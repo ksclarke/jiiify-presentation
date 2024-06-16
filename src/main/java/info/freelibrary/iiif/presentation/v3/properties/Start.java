@@ -170,7 +170,7 @@ public class Start {
      */
     @JsonSetter(JsonKeys.TYPE)
     @SuppressWarnings(PMD.UNUSED_FORMAL_PARAMETER)
-    private Start setType(final String aType) { // NOPMD
+    private Start setType(final String aType) {
         return this;
     }
 }

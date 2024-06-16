@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3; // NOPMD - excessive imports
+package info.freelibrary.iiif.presentation.v3;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,8 +47,8 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 /**
  * Deserializes services from JSON documents into {@link Service} implementations.
  */
-@SuppressWarnings(PMD.GOD_CLASS)
-class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
+@SuppressWarnings({ PMD.GOD_CLASS, PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS })
+class ServiceDeserializer extends StdDeserializer<Service<?>> {
 
     /**
      * The logger for the service deserializer.
@@ -163,7 +163,7 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> { // NOPMD
      * @return The fleshed out service
      */
     @SuppressWarnings(PMD.UNUSED_PRIVATE_METHOD)
-    private Service<?> deserializeImageService(final JsonNode aNode, final ImageService<?> aImageService) { // NOPMD
+    private Service<?> deserializeImageService(final JsonNode aNode, final ImageService<?> aImageService) {
         final JsonNode width;
         final JsonNode height;
 

@@ -240,7 +240,7 @@ public class TextualBody implements ContentResource<TextualBody> {
      */
     @JsonSetter(JsonKeys.TYPE)
     @SuppressWarnings(PMD.UNUSED_FORMAL_PARAMETER) // This method is just used by Jackson's deserialization processes
-    private TextualBody setType(final String aType) { // NOPMD
+    private TextualBody setType(final String aType) {
         return this;
     }
 }

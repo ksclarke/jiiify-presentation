@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3; // NOPMD
+package info.freelibrary.iiif.presentation.v3;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,7 +35,8 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  * an image to show while a duration-only canvas is playing audio, or 2) background audio to play while a user is
  * navigating an image-only manifest.
  */
-@SuppressWarnings({ PMD.TOO_MANY_METHODS, PMD.EXCESSIVE_PUBLIC_COUNT, PMD.CYCLOMATIC_COMPLEXITY, PMD.GOD_CLASS })
+@SuppressWarnings({ PMD.TOO_MANY_METHODS, PMD.EXCESSIVE_PUBLIC_COUNT, PMD.CYCLOMATIC_COMPLEXITY, PMD.GOD_CLASS,
+    PMD.COUPLING_BETWEEN_OBJECTS })
 public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
         implements CanvasResource<AccompanyingCanvas> {
 

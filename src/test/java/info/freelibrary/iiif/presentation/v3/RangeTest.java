@@ -58,6 +58,22 @@ public class RangeTest extends AbstractTest {
     /** JSON representing a specific resource item. */
     private static final String SPECIFIC_RESOURCE_ITEM_JSON;
 
+    static {
+        final File specificResourceJsonFile = new File("src/test/resources/json/range-specificresource.json");
+        final File canvasArrayJsonFile = new File("src/test/resources/json/range-canvas.json");
+        final File canvasRefJsonFile = new File("src/test/resources/json/range-canvas-ref.json");
+        final File rangeJsonFile = new File("src/test/resources/json/range.json");
+
+        try {
+            RANGE_ITEM_JSON = StringUtils.read(rangeJsonFile, StandardCharsets.UTF_8);
+            CANVAS_ITEM_JSON = StringUtils.read(canvasRefJsonFile, StandardCharsets.UTF_8);
+            CANVAS_ITEMS_JSON = StringUtils.read(canvasArrayJsonFile, StandardCharsets.UTF_8);
+            SPECIFIC_RESOURCE_ITEM_JSON = StringUtils.read(specificResourceJsonFile, StandardCharsets.UTF_8);
+        } catch (final IOException details) {
+            throw new I18nRuntimeException(details);
+        }
+    }
+
     /**
      * Tests round-tripping test fixture 0024.
      *
@@ -231,21 +247,5 @@ public class RangeTest extends AbstractTest {
      */
     private Range getSubRange() {
         return new Range("https://example.org/range-2", new Label("My subrange label"));
-    }
-
-    static {
-        final File specificResourceJsonFile = new File("src/test/resources/json/range-specificresource.json");
-        final File canvasArrayJsonFile = new File("src/test/resources/json/range-canvas.json");
-        final File canvasRefJsonFile = new File("src/test/resources/json/range-canvas-ref.json");
-        final File rangeJsonFile = new File("src/test/resources/json/range.json");
-
-        try {
-            RANGE_ITEM_JSON = StringUtils.read(rangeJsonFile, StandardCharsets.UTF_8);
-            CANVAS_ITEM_JSON = StringUtils.read(canvasRefJsonFile, StandardCharsets.UTF_8);
-            CANVAS_ITEMS_JSON = StringUtils.read(canvasArrayJsonFile, StandardCharsets.UTF_8);
-            SPECIFIC_RESOURCE_ITEM_JSON = StringUtils.read(specificResourceJsonFile, StandardCharsets.UTF_8);
-        } catch (final IOException details) {
-            throw new I18nRuntimeException(details);
-        }
     }
 }

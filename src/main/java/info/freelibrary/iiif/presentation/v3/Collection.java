@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3; // NOPMD
+package info.freelibrary.iiif.presentation.v3;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -50,8 +50,8 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  * own descriptive information. They can also provide clients with a means to locate all of the manifests known to the
  * publishing institution.
  */
-@SuppressWarnings({ PMD.EXCESSIVE_PUBLIC_COUNT, PMD.EXCESSIVE_IMPORTS, PMD.GOD_CLASS })
-public class Collection extends NavigableResource<Collection> implements Resource<Collection> { // NOPMD
+@SuppressWarnings({ PMD.EXCESSIVE_PUBLIC_COUNT, PMD.EXCESSIVE_IMPORTS, PMD.GOD_CLASS, PMD.COUPLING_BETWEEN_OBJECTS })
+public class Collection extends NavigableResource<Collection> implements Resource<Collection> {
 
     /** The logger used by the collection. */
     private static final Logger LOGGER = LoggerFactory.getLogger(Collection.class, MessageCodes.BUNDLE);

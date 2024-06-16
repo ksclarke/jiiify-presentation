@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3; // NOPMD - ExcessiveImports
+package info.freelibrary.iiif.presentation.v3;
 
 import java.io.IOException;
 import java.net.URI;
@@ -43,7 +43,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  * An AnnotationPage may included in the items property of the Canvas (and whose target is that Canvas) or on a Manifest
  * (and whose target is that Manifest).
  */
-@SuppressWarnings({ PMD.GOD_CLASS })
+@SuppressWarnings({ PMD.GOD_CLASS, PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS })
 public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<AnnotationPage<A>>
         implements Resource<AnnotationPage<A>> {
 

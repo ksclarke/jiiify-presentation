@@ -7,7 +7,7 @@ import static info.freelibrary.util.Constants.SPACE;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -104,7 +104,7 @@ public final class CookbookUtils {
             try {
                 if (file.exists()) {
                     final JsonObject local = (JsonObject) Json.parse(new JsonReader(file));
-                    final JsonObject remote = (JsonObject) Json.parse(new JsonReader(new URL(url)));
+                    final JsonObject remote = (JsonObject) Json.parse(new JsonReader(URI.create(url).toURL()));
 
                     if (!remote.equals(local, aConfig)) {
                         LOGGER.warn(MessageCodes.JPA_134, EOL, String.join(EOL + EOL, file.getAbsolutePath(),

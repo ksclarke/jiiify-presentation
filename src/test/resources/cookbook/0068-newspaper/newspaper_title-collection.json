@@ -1,32 +1,14 @@
 {
-  "@context": [ "http://iiif.io/api/presentation/3/context.json" ],
-  "id": "https://iiif.io/api/cookbook/recipe/0068-newspaper/newspaper_title-collection.json",
+  "@context": [
+    "http://iiif.io/api/presentation/3/context.json"
+  ],
   "type": "Collection",
+  "id": "https://iiif.io/api/cookbook/recipe/0068-newspaper/newspaper_title-collection.json",
   "label": {
     "de": [
       "Berliner Tageblatt"
     ]
   },
-  "provider": [
-    {
-      "id": "https://www.europeana.eu/",
-      "type": "Agent",
-      "label": {
-        "en": [
-          "Europeana"
-        ]
-      },
-      "logo": [
-        {
-          "id": "https://style.europeana.eu/images/europeana-logo-default.png",
-          "type": "Image",
-          "format": "image/png",
-          "height": 310,
-          "width": 100
-        }
-      ]
-    }
-  ],
   "metadata": [
     {
       "label": {
@@ -69,10 +51,30 @@
     },
     "value": {
       "en": [
-        "<a href='https://www.europeana.eu/portal/record/9200355/BibliographicResource_3000096302605.html'>Berliner Tageblatt</a> - Staatsbibliothek zu Berlin - Preußischer Kulturbesitz. Public Domain Mark - http://creativecommons.org/publicdomain/mark/1.0/"
+        "<p><a href='https://www.europeana.eu/portal/record/9200355/BibliographicResource_3000096302605.html'>Berliner Tageblatt</a> - Staatsbibliothek zu Berlin - Preußischer Kulturbesitz. Public Domain Mark - http://creativecommons.org/publicdomain/mark/1.0/</p>"
       ]
     }
   },
+  "provider": [
+    {
+      "id": "https://www.europeana.eu/",
+      "type": "Agent",
+      "label": {
+        "en": [
+          "Europeana"
+        ]
+      },
+      "logo": [
+        {
+          "id": "https://style.europeana.eu/images/europeana-logo-default.png",
+          "type": "Image",
+          "format": "image/png",
+          "height": 310,
+          "width": 100
+        }
+      ]
+    }
+  ],
   "seeAlso": [
     {
       "id": "https://www.europeana.eu/api/v2/record/9200355/BibliographicResource_3000096302605.json-ld",

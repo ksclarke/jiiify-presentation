@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3; // NOPMD
+package info.freelibrary.iiif.presentation.v3;
 
 import java.util.List;
 

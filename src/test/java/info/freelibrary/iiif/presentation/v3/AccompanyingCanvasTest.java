@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -189,7 +188,7 @@ public class AccompanyingCanvasTest {
      */
     private String getFixture(final Class<?> aClass) throws IOException {
         final String className = aClass.getSimpleName().toLowerCase(Locale.US);
-        return format(StringUtils.read(new File(TestUtils.TEST_DIR, StringUtils.format(FILE, className))));
+        return TestUtils.format(StringUtils.read(new File(TestUtils.TEST_DIR, StringUtils.format(FILE, className))));
     }
 
 }

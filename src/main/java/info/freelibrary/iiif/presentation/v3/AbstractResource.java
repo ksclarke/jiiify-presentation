@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3; // NOPMD
+package info.freelibrary.iiif.presentation.v3;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.BehaviorDeserializer;
  * A resource that can be used as a base for more specific IIIF presentation resources.
  */
 @SuppressWarnings({ PMD.EXCESSIVE_IMPORTS, PMD.ABSTRACT_CLASS_WITHOUT_ABSTRACT_METHOD, PMD.GOD_CLASS,
-    PMD.TOO_MANY_FIELDS, PMD.TOO_MANY_METHODS })
+    PMD.TOO_MANY_FIELDS, PMD.TOO_MANY_METHODS, PMD.COUPLING_BETWEEN_OBJECTS })
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({ JsonKeys.CONTEXT, JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.PROVIDER, JsonKeys.PART_OF,
     JsonKeys.BEHAVIOR, JsonKeys.HOMEPAGE, JsonKeys.THUMBNAIL, JsonKeys.SUMMARY, JsonKeys.METADATA, JsonKeys.START,

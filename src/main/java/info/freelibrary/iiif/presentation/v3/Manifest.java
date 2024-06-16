@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3; // NOPMD
+package info.freelibrary.iiif.presentation.v3;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -48,8 +48,9 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  * information about the object or the intellectual work that it conveys. Each manifest describes how to present a
  * single object such as a book, a photograph, or a statue.
  */
-@SuppressWarnings({ PMD.EXCESSIVE_PUBLIC_COUNT, PMD.EXCESSIVE_IMPORTS })
-public class Manifest extends NavigableResource<Manifest> implements Resource<Manifest> { // NOPMD
+@SuppressWarnings({ PMD.EXCESSIVE_PUBLIC_COUNT, PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS, PMD.GOD_CLASS,
+    PMD.TOO_MANY_METHODS })
+public class Manifest extends NavigableResource<Manifest> implements Resource<Manifest> {
 
     /** The manifest's logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(Manifest.class, MessageCodes.BUNDLE);

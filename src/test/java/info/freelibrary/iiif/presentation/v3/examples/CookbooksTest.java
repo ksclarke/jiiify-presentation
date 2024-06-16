@@ -83,8 +83,8 @@ public class CookbooksTest extends AbstractCookbookTest {
     public final void setUp() {
         myByteStream = new ByteArrayOutputStream();
         myLogStream = new PrintStream(myByteStream, true, StandardCharsets.UTF_8);
-        // myOutStream = System.out;
-        // System.setOut(myLogStream);
+        myOutStream = System.out;
+        System.setOut(myLogStream);
     }
 
     /**
@@ -94,7 +94,7 @@ public class CookbooksTest extends AbstractCookbookTest {
     public final void tearDown() {
         final String log = myByteStream.toString(StandardCharsets.UTF_8);
 
-        // System.setOut(myOutStream);
+        System.setOut(myOutStream);
         LOGGER.trace(log);
     }
 

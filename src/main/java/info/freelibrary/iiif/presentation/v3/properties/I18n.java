@@ -313,7 +313,7 @@ public class I18n implements Iterable<String> {
      */
     @JsonValue
     @SuppressWarnings(PMD.UNUSED_PRIVATE_METHOD) // This is actually used by Jackson's deserialization process
-    private Map<String, List<String>> toMap() { // NOPMD
+    private Map<String, List<String>> toMap() {
         return Map.of(myLocale.toLanguageTag(), myStrings);
     }
 

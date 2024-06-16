@@ -79,7 +79,7 @@ public class SupplementaryAnnotations {
      */
     @JsonSetter(JsonKeys.TYPE)
     @SuppressWarnings(PMD.UNUSED_FORMAL_PARAMETER) // This method is just used by Jackson's deserialization processes
-    private SupplementaryAnnotations setType(final String aType) { // NOPMD
+    private SupplementaryAnnotations setType(final String aType) {
         return this;
     }
 

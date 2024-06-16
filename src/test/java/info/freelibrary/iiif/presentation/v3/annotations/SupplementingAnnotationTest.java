@@ -47,11 +47,9 @@ public class SupplementingAnnotationTest extends AbstractTest {
     /** A test annotation ID. */
     private final String myAnnoID = "https://1408c0a9-7402-4a44-8091-fa11d32172f9";
 
-    /** A test canvas ID. */
-    private final String myCanvID = "https://cf6da69c-7d60-4dbe-965b-e40be626f2eb";
-
     /** A test canvas. */
-    private final Canvas myCanvas = new Canvas(myCanvID, new Label(myLoremIpsum.getWords(4)));
+    private final Canvas myCanvas =
+            new Canvas("https://cf6da69c-7d60-4dbe-965b-e40be626f2eb", new Label(myLoremIpsum.getWords(4)));
 
     /** A test fragment selector. */
     private final MediaFragmentSelector myFragmentSelector = new MediaFragmentSelector("xywh=0,0,1,1");
@@ -67,8 +65,8 @@ public class SupplementingAnnotationTest extends AbstractTest {
     @Test
     public final void testSerialization() throws IOException {
         final TextContent content = new TextContent(myTextContentID);
-        final SupplementingAnnotation annotation =
-                new SupplementingAnnotation(myAnnoID, myCanvas).setBody(content).setTarget(new Target(myCanvID));
+        final SupplementingAnnotation annotation = new SupplementingAnnotation(myAnnoID, myCanvas).setBody(content)
+                .setTarget(new Target(myCanvas.getID()));
 
         assertEquals(format(StringUtils.read(ANNOTATION)), format(toJson(annotation)));
     }

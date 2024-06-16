@@ -27,6 +27,14 @@ public class SpecificResourceTest extends AbstractTest {
     /** The audio content selector. */
     private static final Selector SELECTOR = new AudioContentSelector();
 
+    static {
+        try {
+            JSON = StringUtils.read(new File("src/test/resources/json/specificresource.json"));
+        } catch (final IOException details) {
+            throw new I18nRuntimeException(details);
+        }
+    }
+
     /** The test ID. */
     private String myID;
 
@@ -93,14 +101,6 @@ public class SpecificResourceTest extends AbstractTest {
     @Test
     public final void testSpecificResourceIdStringSourceStringSelector() {
         new SpecificResource(myID, myOtherID, SELECTOR);
-    }
-
-    static {
-        try {
-            JSON = StringUtils.read(new File("src/test/resources/json/specificresource.json"));
-        } catch (final IOException details) {
-            throw new I18nRuntimeException(details);
-        }
     }
 
 }

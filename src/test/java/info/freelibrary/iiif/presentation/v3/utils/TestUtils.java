@@ -6,12 +6,17 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Base64.Encoder;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.rules.TestName;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SequenceWriter;
@@ -29,6 +34,9 @@ import info.freelibrary.json.JsonValue;
  */
 public final class TestUtils {
 
+    /** A file into which to write out any error diffs. */
+    public static final Path DIFF_LINKS = Path.of("target/fixtures-diffs.html");
+
     /** The directory path of test fixtures. */
     public static final String TEST_DIR = "src/test/resources/json";
 
@@ -45,25 +53,38 @@ public final class TestUtils {
     /**
      * Tests equality of two JSON strings.
      *
+     * @param aName The name of the test being executed
      * @param anExpectedResult An expected JSON result
      * @param anActualResult An actual JSON result
      * @throws AssertionError If the two JSON strings are not equal
+     * @throws RuntimeException If the fixtures' diffs file could not be written
      */
-    public static void assertEquals(final String anExpectedResult, final String anActualResult) {
+    public static void assertEquals(final TestName aName, final String anExpectedResult, final String anActualResult) {
         final JsonOptions config = new JsonOptions().ignoreOrder(true).setCollapsibleArrays(COLLAPSIBLES).format(true);
         final JsonValue expected = Json.parse(anExpectedResult);
         final JsonValue actual = Json.parse(anActualResult);
 
+        // This double equality check can be problematic, since the first equals is looser than the assertEquals --
+        // `equals` will normalize duration floats, but `assertEquals` will not; so, the wrong error may be displayed
         if (!expected.equals(actual, config)) {
             try {
                 Assert.assertEquals(expected.toString(config), actual.toString(config));
             } catch (final AssertionError details) {
                 final Encoder encoder = Base64.getEncoder();
-                throw new AssertionError(
-                        StringUtils.format("\"https://jsondiff.com/#left=data:base64,{}&right=data:base64,{}\"",
-                                new String(encoder.encode(expected.toString(config).getBytes()), UTF_8),
-                                new String(encoder.encode(actual.toString(config).getBytes()), UTF_8)),
-                        details);
+                final String diffLink = StringUtils.format(
+                        "<a href=\"https://jsondiff.com/#left=data:base64,{}&right=data:base64,{}\">{}</a>",
+                        new String(encoder.encode(expected.toString(config).getBytes()), UTF_8),
+                        new String(encoder.encode(actual.toString(config).getBytes()), UTF_8), aName.getMethodName());
+
+                try {
+                    // Write file of HTML links pointing to a better diffs display than what JUnit outputs
+                    Files.write(DIFF_LINKS, Collections.singletonList(diffLink), StandardOpenOption.CREATE,
+                            StandardOpenOption.APPEND);
+                } catch (final IOException ioErrDetails) {
+                    throw new RuntimeException(ioErrDetails);
+                }
+
+                throw new AssertionError(details.getMessage());
             }
         }
     }

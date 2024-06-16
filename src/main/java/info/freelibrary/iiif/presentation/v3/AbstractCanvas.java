@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3; // NOPMD
+package info.freelibrary.iiif.presentation.v3;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,7 +51,8 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  * standards like PDF and HTML, or applications like Photoshop and Powerpoint, where the display starts from a blank
  * canvas and images, text and other resources are &quot;painted&quot; on to it.
  */
-@SuppressWarnings({ PMD.GOD_CLASS, PMD.EXCESSIVE_IMPORTS, PMD.CYCLOMATIC_COMPLEXITY, PMD.TOO_MANY_METHODS })
+@SuppressWarnings({ PMD.GOD_CLASS, PMD.EXCESSIVE_IMPORTS, PMD.CYCLOMATIC_COMPLEXITY, PMD.TOO_MANY_METHODS,
+    PMD.COUPLING_BETWEEN_OBJECTS })
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.HEIGHT, JsonKeys.WIDTH, JsonKeys.DURATION,
     JsonKeys.THUMBNAIL, JsonKeys.PLACEHOLDER_CANVAS, JsonKeys.ACCOMPANYING_CANVAS, JsonKeys.METADATA, JsonKeys.ITEMS,
     JsonKeys.ANNOTATIONS })
@@ -256,7 +257,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         final Set<String> filtered = new HashSet<>();
 
         // Don't write duration if it's zero
-        if (myDuration == 0F) { // NOPMD
+        if (myDuration == ZERO_DURATION) {
             filtered.add(JsonKeys.DURATION);
         }
 
@@ -677,8 +678,8 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given {@link MediaFragmentSelector}
      *         doesn't exist
      */
-    @SuppressWarnings({ PMD.N_PATH_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY })
-    private Canvas getCanvasFragment(final MediaFragmentSelector aCanvasRegion) { // NOPMD
+    @SuppressWarnings({ PMD.N_PATH_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY, PMD.COGNITIVE_COMPLEXITY })
+    private Canvas getCanvasFragment(final MediaFragmentSelector aCanvasRegion) {
         final String canvasID = getID() + Constants.HASH + aCanvasRegion.toString();
         final Canvas canvasFragment = new Canvas(canvasID);
         final double duration;

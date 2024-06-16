@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3; // NOPMD -- ExcessiveImports
+package info.freelibrary.iiif.presentation.v3;
 
 import java.util.Arrays;
 import java.util.List;
@@ -41,7 +41,7 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 /**
  * An annotation used for associating supplementary content resources with a canvas resource.
  */
-@SuppressWarnings({ PMD.GOD_CLASS, PMD.EXCESSIVE_PUBLIC_COUNT })
+@SuppressWarnings({ PMD.GOD_CLASS, PMD.EXCESSIVE_PUBLIC_COUNT, PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS })
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({ JsonKeys.CONTEXT, JsonKeys.ID, JsonKeys.TYPE, JsonKeys.TEXT_GRANULARITY, JsonKeys.MOTIVATION,
     JsonKeys.LABEL, JsonKeys.SUMMARY, JsonKeys.REQUIRED_STATEMENT, JsonKeys.RIGHTS, JsonKeys.PART_OF, JsonKeys.HOMEPAGE,

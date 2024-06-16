@@ -1,7 +1,8 @@
 
-package info.freelibrary.iiif.presentation.v3.utils.json; // NOPMD - ExcessiveImports
+package info.freelibrary.iiif.presentation.v3.utils.json;
 
 import static info.freelibrary.util.Constants.EMPTY;
+import static info.freelibrary.util.Constants.SINGLE_INSTANCE;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -12,9 +13,11 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
+import info.freelibrary.util.Constants;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.JDK;
+import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
@@ -22,6 +25,7 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 /**
  * A deserializer for {@code MediaType}(s).
  */
+@SuppressWarnings(PMD.EXCESSIVE_IMPORTS)
 public class MediaTypeDeserializer extends StdDeserializer<MediaType> {
 
     /** Logger for this deserializer. */
@@ -52,10 +56,18 @@ public class MediaTypeDeserializer extends StdDeserializer<MediaType> {
             throws IOException, JacksonException {
         final JsonNode node = aParser.getCodec().readTree(aParser);
         final String value = node.asText(EMPTY);
-        final Optional<MediaType> mediaType = MediaType.fromString(value);
 
+        Optional<MediaType> mediaType = MediaType.fromString(value);
+
+        // We take a stab at guessing based on the supplied value
         if (mediaType.isEmpty()) {
-            LOGGER.warn(MessageCodes.JPA_133, value);
+            final String[] parts = value.split(Constants.SLASH);
+
+            if (parts.length > SINGLE_INSTANCE) {
+                mediaType = MediaType.fromExt(parts[1], parts[0]);
+            } else if ((mediaType = MediaType.fromExt(parts[0])).isEmpty()) {
+                LOGGER.warn(MessageCodes.JPA_133, value);
+            }
         }
 
         return mediaType.isPresent() ? mediaType.get() : null;

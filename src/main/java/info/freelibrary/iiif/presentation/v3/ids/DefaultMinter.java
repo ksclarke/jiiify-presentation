@@ -62,6 +62,29 @@ class DefaultMinter implements Minter {
     /** A template for supplying range IDs. */
     private static final String RANGE_ID_TEMPLATE = "{}/range-{}";
 
+    // The static initialization of the NOID list.
+    static {
+        final Stopwatch stopwatch = new Stopwatch().start();
+        final List<String> noids = new ArrayList<>();
+
+        // Create a list of NOIDs for the manuscript to use in constructing IDs
+        Generator.<Character>permutation(CHARS).withRepetitions(4).stream().forEach(charList -> {
+            noids.add(charList.stream().map(String::valueOf).collect(Collectors.joining()));
+        });
+
+        // Shuffle them so they appear to be random
+        Collections.shuffle(noids);
+
+        // Finalize the NOIDs List for all future minters
+        NOIDS = Collections.unmodifiableList(noids);
+        LOGGER.debug(MessageCodes.JPA_101, stopwatch.stop().getSeconds());
+
+        // Do a sanity check on the number of NOIDs in our list
+        if (MAX_NOID_COUNT != NOIDS.size()) {
+            throw new I18nRuntimeException(MessageCodes.BUNDLE, MessageCodes.JPA_102, NOIDS.size(), MAX_NOID_COUNT);
+        }
+    }
+
     /**
      * The existing IDs.
      */
@@ -155,6 +178,8 @@ class DefaultMinter implements Minter {
         }
     }
 
+    // Could also do an annotation ID that lives under an AnnotationPage
+
     /**
      * Gets the manifest ID associated with this minter.
      *
@@ -164,8 +189,6 @@ class DefaultMinter implements Minter {
     public String getManifestID() {
         return myManifestID;
     }
-
-    // Could also do an annotation ID that lives under an AnnotationPage
 
     /**
      * Gets a new range ID.
@@ -275,29 +298,6 @@ class DefaultMinter implements Minter {
         return aID;
     }
 
-    // The static initialization of the NOID list.
-    static {
-        final Stopwatch stopwatch = new Stopwatch().start();
-        final List<String> noids = new ArrayList<>();
-
-        // Create a list of NOIDs for the manuscript to use in constructing IDs
-        Generator.<Character>permutation(CHARS).withRepetitions(4).stream().forEach(charList -> {
-            noids.add(charList.stream().map(String::valueOf).collect(Collectors.joining()));
-        });
-
-        // Shuffle them so they appear to be random
-        Collections.shuffle(noids);
-
-        // Finalize the NOIDs List for all future minters
-        NOIDS = Collections.unmodifiableList(noids);
-        LOGGER.debug(MessageCodes.JPA_101, stopwatch.stop().getSeconds());
-
-        // Do a sanity check on the number of NOIDs in our list
-        if (MAX_NOID_COUNT != NOIDS.size()) {
-            throw new I18nRuntimeException(MessageCodes.BUNDLE, MessageCodes.JPA_102, NOIDS.size(), MAX_NOID_COUNT);
-        }
-    }
-
     /**
      * An iterator that returns NOIDs in a pseudo-random order.
      */
@@ -372,7 +372,7 @@ class DefaultMinter implements Minter {
                     myIndex = ++myIteration + myStart;
 
                     // Loop around to get the remaining ones from the start of the array
-                    if (myIndex >= mySkipCount + myStart) { // NOPMD
+                    if (myIndex >= (mySkipCount + myStart)) {
                         mySkipCount = 1;
                         myIndex = 0;
                     }

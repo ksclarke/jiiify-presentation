@@ -37,6 +37,10 @@ public final class JSON {
             .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true).registerModules(
                     new Jdk8Module(), new SimpleModule().addSerializer(float.class, new JSON().new FloatSerializer()));
 
+    static {
+        MAPPER.getFactory().enable(JsonParser.Feature.INCLUDE_SOURCE_IN_LOCATION);
+    }
+
     /**
      * Creates a new (de)serialization configuration.
      */
@@ -217,10 +221,6 @@ public final class JSON {
      */
     public static <T extends JsonNode> T valueToTree(final Object aObject) {
         return MAPPER.valueToTree(aObject);
-    }
-
-    static {
-        MAPPER.getFactory().enable(JsonParser.Feature.INCLUDE_SOURCE_IN_LOCATION);
     }
 
     /**

@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3.utils.json; // NOPMD - ExcessiveImports
+package info.freelibrary.iiif.presentation.v3.utils.json;
 
 import static com.pivovarit.function.ThrowingBiFunction.sneaky;
 
@@ -59,7 +59,7 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 /**
  * A deserializer for {@code WebAnnotation}(s).
  */
-@SuppressWarnings({ PMD.GOD_CLASS })
+@SuppressWarnings({ PMD.GOD_CLASS, PMD.EXCESSIVE_IMPORTS })
 public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
 
     /** The deserializer's logger. */

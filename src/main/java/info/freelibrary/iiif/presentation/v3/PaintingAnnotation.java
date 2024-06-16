@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3; // NOPMD -- ExcessiveImports
+package info.freelibrary.iiif.presentation.v3;
 
 import java.net.URI;
 import java.util.Arrays;
@@ -41,7 +41,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.StylesheetSerializer;
 /**
  * An annotation used for painting content resources onto a {@link Canvas}.
  */
-@SuppressWarnings({ PMD.GOD_CLASS, PMD.EXCESSIVE_PUBLIC_COUNT })
+@SuppressWarnings({ PMD.GOD_CLASS, PMD.EXCESSIVE_PUBLIC_COUNT, PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS })
 public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotation>
         implements Resource<PaintingAnnotation>, Annotation<PaintingAnnotation> {
 

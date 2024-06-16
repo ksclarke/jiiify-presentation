@@ -28,6 +28,12 @@ public final class MinterFactory {
     /** A map of minters. */
     private static final Map<String, Minter> MINTERS = new HashMap<>();
 
+    // The static map initializations.
+    static {
+        ENV_PROPERTIES = new HashMap<>(); // MinterFactory map is modifiable
+        ENV_PROPERTIES.putAll(System.getenv()); // System map is not modifiable
+    }
+
     /**
      * Private constructor for the factory.
      */
@@ -124,11 +130,5 @@ public final class MinterFactory {
                 InvocationTargetException details) {
             throw new MintingException(details, MessageCodes.JPA_107, details.getMessage());
         }
-    }
-
-    // The static map initializations.
-    static {
-        ENV_PROPERTIES = new HashMap<>(); // MinterFactory map is modifiable
-        ENV_PROPERTIES.putAll(System.getenv()); // System map is not modifiable
     }
 }
