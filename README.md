@@ -1,13 +1,13 @@
 # jiiify-presentation (JPv3) <br>[![IIIF Presentation 3.0](https://img.shields.io/badge/IIIF%20Presentation-3.0-brightgreen)](https://iiif.io/api/presentation/3.0/) [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip) [![Maven PR Build](https://github.com/ksclarke/jiiify-presentation/actions/workflows/build.yml/badge.svg)](https://github.com/ksclarke/jiiify-presentation/actions/workflows/build.yml) [![Maven](https://img.shields.io/maven-metadata/v/https/repo1.maven.org/maven2/info/freelibrary/jiiify-presentation-v3/maven-metadata.xml.svg?colorB=brightgreen)](https://search.maven.org/artifact/info.freelibrary/jiiify-presentation-v3) [![Javadocs](http://javadoc.io/badge2/info.freelibrary/jiiify-presentation-v3/latest/javadoc.svg)](https://javadoc.io/doc/info.freelibrary/jiiify-presentation-v3/latest/index.html)
 
-Jiiify Presentation is a [IIIF Presentation](http://iiif.io/api/presentation) library for Java. It does not contain a server. It's just for working with IIIF presentation manifests.
+Jiiify Presentation is a [IIIF Presentation](http://iiif.io/api/presentation) library for Java. It does not contain a manifest server. While it could be used to write such a server, it's purpose is just to provide a way to work with IIIF manifests.
 
-*Warning:* The API for v3 is still in active development. There will be breaking changes in the `main` branch before the library reaches version 1.0.0. After the 1.0.0 release, the project will use [semantic versioning](https://semver.org/) to reflect the types of ongoing changes being made.
+*Warning:* The API for v3 is still being actively developed. There will be breaking changes in the `main` branch before the library reaches version 1.0.0. After the stable release, the project will use [semantic versioning](https://semver.org/) to represent the types of ongoing changes being made.
 
 ### Prerequisites
 
 * JDK >= 17 (this is the JDK that the released version uses)
-* Maven >= 3.8.7 (this is what's used for building the project)
+* Maven >= 3.6.3 (this is what's used for building the project)
 
 ### Getting Started
 
