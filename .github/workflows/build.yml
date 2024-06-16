@@ -46,5 +46,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn -B -ntp -Dorg.slf4j.simpleLogger.log.net.sourceforge.pmd=error verify
-          org.codehaus.mojo:sonar-maven-plugin:sonar -Dsonar.projectKey=ksclarke_jiiify-presentation
+          mvn -B -ntp -Dorg.slf4j.simpleLogger.log.net.sourceforge.pmd=error verify 
+          org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=ksclarke_jiiify-presentation
