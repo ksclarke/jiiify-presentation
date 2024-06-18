@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [ 17 ]
+        java: [ 17, 21 ]
 
     steps:
 
@@ -29,7 +29,6 @@ jobs:
 
       # If running locally in act, install Maven
       - name: Set up Maven if needed
-        if: ${{ env.ACT }}
         uses: stCarolas/setup-maven@07fbbe97d97ef44336b7382563d66743297e442f # v4.5
         with:
           maven-version: 3.8.2
@@ -46,5 +45,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn -B -ntp -Dorg.slf4j.simpleLogger.log.net.sourceforge.pmd=error verify 
-          org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=ksclarke_jiiify-presentation
+          mvn -B -ntp -Dorg.slf4j.simpleLogger.log.net.sourceforge.pmd=error -Psonar verify
