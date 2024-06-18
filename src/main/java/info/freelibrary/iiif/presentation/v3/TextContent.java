@@ -86,7 +86,7 @@ public class TextContent extends AbstractContentResource<TextContent>
     @JsonSetter(JsonKeys.BEHAVIOR)
     public TextContent setBehaviors(final List<Behavior> aBehaviorList) {
         if (aBehaviorList instanceof BehaviorList) {
-            ((BehaviorList) aBehaviorList).checkType(ResourceBehavior.class, this.getClass());
+            ((BehaviorList) aBehaviorList).checkType(ResourceBehavior.class, getClass());
         }
 
         return (TextContent) super.setBehaviors(aBehaviorList);

@@ -188,7 +188,7 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
     @Override
     public String toString() {
         try {
-            return JSON.getWriter(this.getClass()).writeValueAsString(this);
+            return JSON.getWriter(getClass()).writeValueAsString(this);
         } catch (final JsonProcessingException details) {
             throw new JsonParsingException(details);
         }

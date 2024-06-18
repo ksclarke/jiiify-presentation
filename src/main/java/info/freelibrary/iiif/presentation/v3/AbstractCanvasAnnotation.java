@@ -121,6 +121,20 @@ abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> e
     }
 
     /**
+     * Gets the content resources associated with this annotation.
+     *
+     * @return The content resources associated with this annotation
+     */
+    @JsonIgnore
+    public List<ContentResource<?>> getBody() {
+        if (myResources == null) {
+            myResources = new ArrayList<>();
+        }
+
+        return myResources;
+    }
+
+    /**
      * Sets the annotation resource's behaviors. The supplied behaviors are checked for compatibility with the resource.
      *
      * @param aBehaviorArray An array of annotation resource behaviors
@@ -139,9 +153,10 @@ abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> e
      */
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
+    @SuppressWarnings({ PMD.LOOSE_COUPLING })
     public AbstractCanvasAnnotation<A> setBehaviors(final List<Behavior> aBehaviorList) {
-        if (aBehaviorList instanceof BehaviorList) {
-            ((BehaviorList) aBehaviorList).checkType(ResourceBehavior.class, this.getClass());
+        if (aBehaviorList instanceof final BehaviorList behaviorList) {
+            behaviorList.checkType(ResourceBehavior.class, getClass());
         }
 
         return (AbstractCanvasAnnotation<A>) super.setBehaviors(aBehaviorList);
@@ -154,20 +169,6 @@ abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> e
      */
     protected boolean bodyHasChoice() {
         return myBodyHasChoice;
-    }
-
-    /**
-     * Gets the content resources associated with this annotation.
-     *
-     * @return The content resources associated with this annotation
-     */
-    @JsonIgnore
-    protected List<ContentResource<?>> getBody() {
-        if (myResources == null) {
-            myResources = new ArrayList<>();
-        }
-
-        return myResources;
     }
 
     /**
@@ -320,9 +321,7 @@ abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> e
      */
     private void deserializeListBody(final List<?> aListBody) {
         if (!aListBody.isEmpty() && aListBody.get(0) instanceof Map) {
-            aListBody.forEach(mapObject -> {
-                deserializeContentMap((Map<?, ?>) mapObject);
-            });
+            aListBody.forEach(mapObject -> deserializeContentMap((Map<?, ?>) mapObject));
         }
     }
 
@@ -340,9 +339,7 @@ abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> e
             setChoice(true);
 
             if (!items.isEmpty() && items.get(0) instanceof Map) {
-                items.forEach(mapObject -> {
-                    deserializeContentMap((Map<?, ?>) mapObject);
-                });
+                items.forEach(mapObject -> deserializeContentMap((Map<?, ?>) mapObject));
             }
         } else {
             deserializeContentMap(aMapBody);

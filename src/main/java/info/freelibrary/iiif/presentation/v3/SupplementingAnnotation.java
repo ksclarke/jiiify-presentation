@@ -169,17 +169,6 @@ public class SupplementingAnnotation extends AbstractCanvasAnnotation<Supplement
     }
 
     /**
-     * Gets the resources associated with this annotation.
-     *
-     * @return The resources associated with this annotation
-     */
-    @Override
-    @JsonIgnore
-    public List<ContentResource<?>> getBody() {
-        return super.getBody();
-    }
-
-    /**
      * Gets a list of resource homepages.
      *
      * @return The resource's homepages

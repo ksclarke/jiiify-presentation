@@ -227,7 +227,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     @JsonSetter(JsonKeys.BEHAVIOR)
     public Collection setBehaviors(final List<Behavior> aBehaviorList) {
         if (aBehaviorList instanceof BehaviorList) {
-            ((BehaviorList) aBehaviorList).checkType(CollectionBehavior.class, this.getClass());
+            ((BehaviorList) aBehaviorList).checkType(CollectionBehavior.class, getClass());
         }
 
         return (Collection) super.setBehaviors(aBehaviorList);

@@ -45,4 +45,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn -B -ntp -Dorg.slf4j.simpleLogger.log.net.sourceforge.pmd=error -Psonar verify
+          mvn -B -ntp -Dorg.slf4j.simpleLogger.log.net.sourceforge.pmd=error
+          -Psonar verify javadocs:javadocs

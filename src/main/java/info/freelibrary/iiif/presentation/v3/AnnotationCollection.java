@@ -90,7 +90,7 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
     @JsonSetter(JsonKeys.BEHAVIOR)
     public AnnotationCollection setBehaviors(final List<Behavior> aBehaviorList) {
         if (aBehaviorList instanceof BehaviorList) {
-            ((BehaviorList) aBehaviorList).checkType(ResourceBehavior.class, this.getClass());
+            ((BehaviorList) aBehaviorList).checkType(ResourceBehavior.class, getClass());
         }
 
         return (AnnotationCollection) super.setBehaviors(aBehaviorList);

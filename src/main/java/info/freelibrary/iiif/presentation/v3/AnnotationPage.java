@@ -197,7 +197,7 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
     @JsonSetter(JsonKeys.BEHAVIOR)
     public AnnotationPage<A> setBehaviors(final List<Behavior> aBehaviorList) {
         if (aBehaviorList instanceof BehaviorList) {
-            ((BehaviorList) aBehaviorList).checkType(ResourceBehavior.class, this.getClass());
+            ((BehaviorList) aBehaviorList).checkType(ResourceBehavior.class, getClass());
         }
 
         return (AnnotationPage<A>) super.setBehaviors(aBehaviorList);

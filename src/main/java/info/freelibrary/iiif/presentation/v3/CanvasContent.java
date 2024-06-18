@@ -59,7 +59,7 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
     @JsonSetter(JsonKeys.BEHAVIOR)
     public CanvasContent setBehaviors(final List<Behavior> aBehaviorList) {
         if (aBehaviorList instanceof BehaviorList) {
-            ((BehaviorList) aBehaviorList).checkType(ResourceBehavior.class, this.getClass());
+            ((BehaviorList) aBehaviorList).checkType(ResourceBehavior.class, getClass());
         }
 
         return (CanvasContent) super.setBehaviors(aBehaviorList);

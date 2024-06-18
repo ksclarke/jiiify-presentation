@@ -136,8 +136,7 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
     T paintWith(boolean aChoice, List<ContentResource<?>> aContentList);
 
     /**
-     * Paints content resources onto a {@link Minter} initialized canvas using a {@link PaintingAnnotation}. If the
-     * minter does not exist, a {@link MinterException} is thrown.
+     * Paints content resources onto a {@link Minter} initialized canvas using a {@link PaintingAnnotation}.
      * <p>
      * Calling this method with a single {@link ContentResource} associates that resource with the canvas using an
      * annotation with a single body.

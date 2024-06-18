@@ -131,9 +131,10 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
 
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
+    @SuppressWarnings({ PMD.LOOSE_COUPLING })
     public VideoContent setBehaviors(final List<Behavior> aBehaviorList) {
-        if (aBehaviorList instanceof BehaviorList) {
-            ((BehaviorList) aBehaviorList).checkType(ResourceBehavior.class, this.getClass());
+        if (aBehaviorList instanceof final BehaviorList behaviorList) {
+            behaviorList.checkType(ResourceBehavior.class, getClass());
         }
 
         return (VideoContent) super.setBehaviors(aBehaviorList);

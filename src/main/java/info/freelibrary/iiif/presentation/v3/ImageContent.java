@@ -129,7 +129,7 @@ public class ImageContent extends AbstractContentResource<ImageContent> implemen
     @JsonSetter(JsonKeys.BEHAVIOR)
     public ImageContent setBehaviors(final List<Behavior> aBehaviorList) {
         if (aBehaviorList instanceof BehaviorList) {
-            ((BehaviorList) aBehaviorList).checkType(ResourceBehavior.class, this.getClass());
+            ((BehaviorList) aBehaviorList).checkType(ResourceBehavior.class, getClass());
         }
 
         return (ImageContent) super.setBehaviors(aBehaviorList);

@@ -103,7 +103,7 @@ public class SoundContent extends AbstractContentResource<SoundContent> implemen
     @JsonSetter(JsonKeys.BEHAVIOR)
     public SoundContent setBehaviors(final List<Behavior> aBehaviorList) {
         if (aBehaviorList instanceof BehaviorList) {
-            ((BehaviorList) aBehaviorList).checkType(ResourceBehavior.class, this.getClass());
+            ((BehaviorList) aBehaviorList).checkType(ResourceBehavior.class, getClass());
         }
 
         return (SoundContent) super.setBehaviors(aBehaviorList);

@@ -402,9 +402,10 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      */
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
+    @SuppressWarnings({ PMD.LOOSE_COUPLING })
     protected AbstractCanvas<T> setBehaviors(final List<Behavior> aBehaviorList) {
-        if (aBehaviorList instanceof BehaviorList) {
-            ((BehaviorList) aBehaviorList).checkType(CanvasBehavior.class, this.getClass());
+        if (aBehaviorList instanceof final BehaviorList behaviorList) {
+            behaviorList.checkType(CanvasBehavior.class, getClass());
         }
 
         return (AbstractCanvas<T>) super.setBehaviors(aBehaviorList);
@@ -659,13 +660,8 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     private List<AnnotationPage<?>> getAnnotations() {
         final List<AnnotationPage<?>> annotations = new ArrayList<>();
 
-        getSupplementingPages().forEach(page -> {
-            annotations.add(page);
-        });
-
-        getOtherAnnotations().forEach(page -> {
-            annotations.add(page);
-        });
+        getSupplementingPages().forEach(annotations::add);
+        getOtherAnnotations().forEach(annotations::add);
 
         return annotations;
     }

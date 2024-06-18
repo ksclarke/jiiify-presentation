@@ -361,7 +361,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     @JsonSetter(JsonKeys.BEHAVIOR)
     public Manifest setBehaviors(final List<Behavior> aBehaviorList) {
         if (aBehaviorList instanceof BehaviorList) {
-            ((BehaviorList) aBehaviorList).checkType(ManifestBehavior.class, this.getClass());
+            ((BehaviorList) aBehaviorList).checkType(ManifestBehavior.class, getClass());
         }
 
         return (Manifest) super.setBehaviors(aBehaviorList);
