@@ -19,6 +19,8 @@ jobs:
 
       - name: Check out code
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # v3.0.2
+        with:
+          fetch-depth: 0  # Unshallow checkout helps SonarCloud provide more info
 
       - name: Install JDK ${{ matrix.java }}
         uses: actions/setup-java@860f60056505705214d223b91ed7a30f173f6142 # v3.3.0

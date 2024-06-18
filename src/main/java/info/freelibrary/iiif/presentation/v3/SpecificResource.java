@@ -224,6 +224,7 @@ public class SpecificResource implements ContentResource<SpecificResource> {
     /**
      * Sets the specific resource's styleClass.
      *
+     * @param aStyleClass The style class for this specific resource
      * @return The specific resource
      */
     @JsonSetter(JsonKeys.STYLE_CLASS)
