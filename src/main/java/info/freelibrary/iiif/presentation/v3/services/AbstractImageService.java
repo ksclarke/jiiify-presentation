@@ -13,6 +13,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.util.warnings.JDK;
+
 import info.freelibrary.iiif.presentation.v3.services.image.Format;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageAPI;
 import info.freelibrary.iiif.presentation.v3.services.image.Quality;
@@ -77,7 +79,8 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
      *
      * @return The service's extra image formats
      */
-    protected List<Format> getExtraFormats() {
+    @JsonGetter(ImageAPI.EXTRA_FORMATS)
+    public List<Format> getExtraFormats() {
         return myFormats;
     }
 
@@ -86,7 +89,8 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
      *
      * @return The service's extra image qualities
      */
-    protected List<Quality> getExtraQualities() {
+    @JsonGetter(ImageAPI.EXTRA_QUALITIES)
+    public List<Quality> getExtraQualities() {
         return myQualities;
     }
 
@@ -97,7 +101,7 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
      */
     @JsonGetter(JsonKeys.HEIGHT)
     @JsonInclude(Include.NON_DEFAULT)
-    protected int getHeight() {
+    public int getHeight() {
         return myHeight;
     }
 
@@ -107,7 +111,7 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
      * @return The service's optional protocol if it's been set; else, an empty optional
      */
     @JsonGetter(ImageAPI.PROTOCOL)
-    protected Optional<String> getProtocol() {
+    public Optional<String> getProtocol() {
         return myProtocolIsSet ? Optional.of("http://iiif.io/api/image") : Optional.empty();
     }
 
@@ -116,7 +120,8 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
      *
      * @return The image service sizes
      */
-    protected List<Size> getSizes() {
+    @JsonGetter(ImageAPI.SIZES)
+    public List<Size> getSizes() {
         return mySizes;
     }
 
@@ -125,7 +130,8 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
      *
      * @return The image service tiles
      */
-    protected List<Tile> getTiles() {
+    @JsonGetter(ImageAPI.TILES)
+    public List<Tile> getTiles() {
         return myTiles;
     }
 
@@ -136,7 +142,7 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
      */
     @JsonGetter(JsonKeys.WIDTH)
     @JsonInclude(Include.NON_DEFAULT)
-    protected int getWidth() {
+    public int getWidth() {
         return myWidth;
     }
 
@@ -146,7 +152,8 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
      * @param aFormatArray An array of extra formats
      * @return This service
      */
-    protected AbstractImageService<T> setExtraFormats(final Format... aFormatArray) {
+    @JsonIgnore
+    public T setExtraFormats(final Format... aFormatArray) {
         return setExtraFormats(Arrays.asList(aFormatArray));
     }
 
@@ -156,9 +163,11 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
      * @param aFormatList A list of extra formats
      * @return This service
      */
-    protected AbstractImageService<T> setExtraFormats(final List<Format> aFormatList) {
+    @SuppressWarnings({ JDK.UNCHECKED })
+    @JsonSetter(ImageAPI.EXTRA_FORMATS)
+    public T setExtraFormats(final List<Format> aFormatList) {
         myFormats = aFormatList;
-        return this;
+        return (T) this;
     }
 
     /**
@@ -167,9 +176,11 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
      * @param aQualityList A list of extra qualities
      * @return This service
      */
-    protected AbstractImageService<T> setExtraQualities(final List<Quality> aQualityList) {
+    @SuppressWarnings({ JDK.UNCHECKED })
+    @JsonSetter(ImageAPI.EXTRA_QUALITIES)
+    public T setExtraQualities(final List<Quality> aQualityList) {
         myQualities = aQualityList;
-        return this;
+        return (T) this;
     }
 
     /**
@@ -178,7 +189,8 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
      * @param aQualityArray An array of extra qualities
      * @return This service
      */
-    protected AbstractImageService<T> setExtraQualities(final Quality... aQualityArray) {
+    @JsonIgnore
+    public T setExtraQualities(final Quality... aQualityArray) {
         return setExtraQualities(Arrays.asList(aQualityArray));
     }
 
@@ -189,9 +201,10 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
      * @return This image service
      */
     @JsonSetter(JsonKeys.HEIGHT)
-    protected AbstractImageService<T> setHeight(final int aHeight) {
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public T setHeight(final int aHeight) {
         myHeight = aHeight;
-        return this;
+        return (T) this;
     }
 
     /**
@@ -201,9 +214,10 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
      * @return The image service
      */
     @JsonIgnore
-    protected AbstractImageService<T> setProtocol(final boolean aSetValue) {
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public T setProtocol(final boolean aSetValue) {
         myProtocolIsSet = aSetValue;
-        return this;
+        return (T) this;
     }
 
     /**
@@ -212,9 +226,11 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
      * @param aSizeList A list of sizes
      * @return This service
      */
-    protected AbstractImageService<T> setSizes(final List<Size> aSizeList) {
+    @SuppressWarnings({ JDK.UNCHECKED })
+    @JsonSetter(ImageAPI.SIZES)
+    public T setSizes(final List<Size> aSizeList) {
         mySizes = aSizeList;
-        return this;
+        return (T) this;
     }
 
     /**
@@ -223,7 +239,8 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
      * @param aSizeArray A list of sizes for the service
      * @return This image service
      */
-    protected AbstractImageService<T> setSizes(final Size... aSizeArray) {
+    @JsonIgnore
+    public T setSizes(final Size... aSizeArray) {
         return setSizes(Arrays.asList(aSizeArray));
     }
 
@@ -233,9 +250,11 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
      * @param aTileList A list of tiles for the service
      * @return This image service
      */
-    protected AbstractImageService<T> setTiles(final List<Tile> aTileList) {
+    @SuppressWarnings({ JDK.UNCHECKED })
+    @JsonSetter(ImageAPI.TILES)
+    public T setTiles(final List<Tile> aTileList) {
         myTiles = aTileList;
-        return this;
+        return (T) this;
     }
 
     /**
@@ -244,7 +263,8 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
      * @param aTileArray An array of tiles for the service
      * @return This image service
      */
-    protected AbstractImageService<T> setTiles(final Tile... aTileArray) {
+    @JsonIgnore
+    public T setTiles(final Tile... aTileArray) {
         return setTiles(Arrays.asList(aTileArray));
     }
 
@@ -255,9 +275,9 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
      * @return This image service
      */
     @JsonSetter(JsonKeys.WIDTH)
-    protected AbstractImageService<T> setWidth(final int aWidth) {
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public T setWidth(final int aWidth) {
         myWidth = aWidth;
-        return this;
+        return (T) this;
     }
-
 }

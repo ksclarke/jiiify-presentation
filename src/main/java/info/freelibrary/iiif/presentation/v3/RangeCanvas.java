@@ -74,6 +74,16 @@ class RangeCanvas extends Canvas {
     }
 
     @Override
+    public Canvas addContexts(final URI... aContextArray) {
+        return mySourceCanvas.addContexts(aContextArray);
+    }
+
+    @Override
+    public Canvas clearContexts() {
+        return mySourceCanvas.clearContexts();
+    }
+
+    @Override
     public boolean equals(final Object aObject) {
         return mySourceCanvas.equals(aObject);
     }
@@ -86,6 +96,16 @@ class RangeCanvas extends Canvas {
     @Override
     public List<Behavior> getBehaviors() {
         return mySourceCanvas.getBehaviors();
+    }
+
+    @Override
+    public URI getContext() {
+        return mySourceCanvas.getContext();
+    }
+
+    @Override
+    public List<URI> getContexts() {
+        return mySourceCanvas.getContexts();
     }
 
     @Override
@@ -208,6 +228,11 @@ class RangeCanvas extends Canvas {
     @Override
     public int hashCode() {
         return mySourceCanvas.hashCode();
+    }
+
+    @Override
+    public boolean removeContext(final URI aContextURI) {
+        return mySourceCanvas.removeContext(aContextURI);
     }
 
     @Override
@@ -351,16 +376,6 @@ class RangeCanvas extends Canvas {
     }
 
     @Override
-    protected NavigableResource<?> addContexts(final URI... aContextArray) {
-        return mySourceCanvas.addContexts(aContextArray);
-    }
-
-    @Override
-    protected NavigableResource<?> clearContexts() {
-        return mySourceCanvas.clearContexts();
-    }
-
-    @Override
     protected float convertToFinitePositiveFloat(final Number aNumber) {
         return mySourceCanvas.convertToFinitePositiveFloat(aNumber);
     }
@@ -371,23 +386,8 @@ class RangeCanvas extends Canvas {
     }
 
     @Override
-    protected URI getContext() {
-        return mySourceCanvas.getContext();
-    }
-
-    @Override
-    protected List<URI> getContexts() {
-        return mySourceCanvas.getContexts();
-    }
-
-    @Override
     protected Object getJsonContext() {
         return mySourceCanvas.getJsonContext();
-    }
-
-    @Override
-    protected boolean removeContext(final URI aContextURI) {
-        return mySourceCanvas.removeContext(aContextURI);
     }
 
     @Override

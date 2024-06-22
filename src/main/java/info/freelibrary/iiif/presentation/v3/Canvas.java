@@ -1,12 +1,10 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -15,20 +13,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import info.freelibrary.util.warnings.Eclipse;
 import info.freelibrary.util.warnings.PMD;
 
-import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
-import info.freelibrary.iiif.presentation.v3.exts.geo.NavPlace;
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
-import info.freelibrary.iiif.presentation.v3.properties.Behavior;
-import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
-import info.freelibrary.iiif.presentation.v3.properties.Metadata;
-import info.freelibrary.iiif.presentation.v3.properties.NavDate;
-import info.freelibrary.iiif.presentation.v3.properties.PartOf;
-import info.freelibrary.iiif.presentation.v3.properties.Provider;
-import info.freelibrary.iiif.presentation.v3.properties.Rendering;
-import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
-import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
-import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
@@ -105,33 +91,12 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
         return myAccompanyingCanvas;
     }
 
-    /**
-     * Gets the canvas' minter, if there is one.
-     *
-     * @return An optional minter
-     */
-    @Override
-    @JsonIgnore
-    public Optional<Minter> getMinter() {
-        return super.getMinter();
-    }
-
-    @Override
-    @JsonGetter(JsonKeys.NAV_DATE)
-    public NavDate getNavDate() {
-        return super.getNavDate();
-    }
-
-    @Override
-    @JsonGetter(JsonKeys.NAV_PLACE)
-    public NavPlace getNavPlace() {
-        return super.getNavPlace();
-    }
-
     @Override
     @JsonGetter(JsonKeys.ITEMS)
     @JsonInclude(Include.NON_NULL)
     public List<AnnotationPage<PaintingAnnotation>> getPaintingPages() {
+        // This getPaintingPages overrides the parent class method because of the NON_NULL serialization configuration
+        // This allows outputting a missing items array (Cf. https://iiif.io/api/cookbook/recipe/0283-missing-image/)
         return super.getPaintingPages();
     }
 
@@ -147,77 +112,69 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     }
 
     @Override
-    @SafeVarargs
     public final Canvas paintWith(final boolean aChoice, final ContentResource<?>... aContentArray) {
-        return (Canvas) super.paint(this, aChoice, aContentArray);
+        return super.paint(this, aChoice, aContentArray);
     }
 
     @Override
     public final Canvas paintWith(final boolean aChoice, final List<ContentResource<?>> aContentList) {
-        return (Canvas) super.paint(this, aChoice, aContentList.toArray(new ContentResource[0]));
+        return super.paint(this, aChoice, aContentList);
     }
 
     @Override
-    @SafeVarargs
     public final Canvas paintWith(final ContentResource<?>... aContentArray) {
-        return (Canvas) super.paint(this, false, aContentArray);
+        return super.paint(this, false, aContentArray);
     }
 
     @Override
     public final Canvas paintWith(final List<ContentResource<?>> aContentList) {
-        return (Canvas) super.paint(this, false, aContentList.toArray(new ContentResource[0]));
+        return super.paint(this, false, aContentList);
     }
 
     @Override
-    @SafeVarargs
     public final Canvas paintWith(final MediaFragmentSelector aCanvasRegion, final boolean aChoice,
             final ContentResource<?>... aContentArray) {
-        return (Canvas) super.paint(this, aCanvasRegion, aChoice, aContentArray);
+        return super.paint(this, aCanvasRegion, aChoice, aContentArray);
     }
 
     @Override
     public final Canvas paintWith(final MediaFragmentSelector aCanvasRegion, final boolean aChoice,
             final List<ContentResource<?>> aContentList) {
-        return (Canvas) super.paint(this, aCanvasRegion, aChoice, aContentList.toArray(new ContentResource[0]));
+        return super.paint(this, aCanvasRegion, aChoice, aContentList);
     }
 
     @Override
-    @SafeVarargs
     public final Canvas paintWith(final MediaFragmentSelector aCanvasRegion,
             final ContentResource<?>... aContentArray) {
-        return (Canvas) super.paint(this, aCanvasRegion, false, aContentArray);
+        return super.paint(this, aCanvasRegion, false, aContentArray);
     }
 
     @Override
     public final Canvas paintWith(final MediaFragmentSelector aCanvasRegion,
             final List<ContentResource<?>> aContentList) {
-        return (Canvas) super.paint(this, aCanvasRegion, false, aContentList.toArray(new ContentResource[0]));
+        return super.paint(this, aCanvasRegion, false, aContentList);
     }
 
     @Override
-    @SafeVarargs
     public final Canvas paintWith(final String aCanvasRegion, final boolean aChoice,
             final ContentResource<?>... aContentArray) {
-        return (Canvas) super.paint(this, new MediaFragmentSelector(aCanvasRegion), aChoice, aContentArray);
+        return super.paint(this, new MediaFragmentSelector(aCanvasRegion), aChoice, aContentArray);
     }
 
     @Override
     public final Canvas paintWith(final String aCanvasRegion, final boolean aChoice,
             final List<ContentResource<?>> aContentList) {
-        return (Canvas) super.paint(this, new MediaFragmentSelector(aCanvasRegion), aChoice,
-                aContentList.toArray(new ContentResource[0]));
+        return super.paint(this, new MediaFragmentSelector(aCanvasRegion), aChoice, aContentList);
     }
 
     @Override
-    @SafeVarargs
     public final Canvas paintWith(final String aCanvasRegion, final ContentResource<?>... aContentArray) {
-        return (Canvas) super.paint(this, new MediaFragmentSelector(aCanvasRegion), false, aContentArray);
+        return super.paint(this, new MediaFragmentSelector(aCanvasRegion), false, aContentArray);
     }
 
     @Override
     public final Canvas paintWith(final String aCanvasRegion, final List<ContentResource<?>> aContentList) {
-        return (Canvas) super.paint(this, new MediaFragmentSelector(aCanvasRegion), false,
-                aContentList.toArray(new ContentResource[0]));
+        return super.paint(this, new MediaFragmentSelector(aCanvasRegion), false, aContentList);
     }
 
     /**
@@ -230,109 +187,6 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     public Canvas setAccompanyingCanvas(final AccompanyingCanvas aCanvas) {
         myAccompanyingCanvas = Optional.ofNullable(aCanvas);
         return this;
-    }
-
-    @Override
-    @JsonIgnore
-    public Canvas setBehaviors(final Behavior... aBehaviorArray) {
-        return (Canvas) super.setBehaviors(aBehaviorArray);
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.BEHAVIOR)
-    public Canvas setBehaviors(final List<Behavior> aBehaviorList) {
-        return (Canvas) super.setBehaviors(aBehaviorList);
-    }
-
-    @Override
-    public Canvas setDuration(final Number aDuration) {
-        return (Canvas) super.setDuration(aDuration);
-    }
-
-    @Override
-    public Canvas setHomepages(final Homepage... aHomepageArray) {
-        return (Canvas) super.setHomepages(aHomepageArray);
-    }
-
-    @Override
-    public Canvas setHomepages(final List<Homepage> aHomepageList) {
-        return (Canvas) super.setHomepages(aHomepageList);
-    }
-
-    @Override
-    public Canvas setID(final String aID) {
-        return (Canvas) super.setID(aID);
-    }
-
-    @Override
-    public Canvas setLabel(final Label aLabel) {
-        return (Canvas) super.setLabel(aLabel);
-    }
-
-    @Override
-    public Canvas setMetadata(final List<Metadata> aMetadataList) {
-        return (Canvas) super.setMetadata(aMetadataList);
-    }
-
-    @Override
-    public Canvas setMetadata(final Metadata... aMetadataArray) {
-        return (Canvas) super.setMetadata(aMetadataArray);
-    }
-
-    /**
-     * Sets the canvas' minter.
-     *
-     * @param aMinter An ID minter
-     * @return This canvas
-     */
-    @Override
-    @JsonIgnore
-    public Canvas setMinter(final Minter aMinter) {
-        return (Canvas) super.setMinter(aMinter);
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.NAV_DATE)
-    public Canvas setNavDate(final NavDate aNavDate) {
-        return (Canvas) super.setNavDate(aNavDate);
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.NAV_PLACE)
-    public Canvas setNavPlace(final NavPlace aNavPlace) {
-        return (Canvas) super.setNavPlace(aNavPlace);
-    }
-
-    @Override
-    @SafeVarargs
-    public final Canvas setOtherAnnotations(final AnnotationPage<WebAnnotation>... aPageArray) {
-        return (Canvas) super.setOtherAnnotations(aPageArray);
-    }
-
-    @Override
-    public final Canvas setOtherAnnotations(final List<AnnotationPage<WebAnnotation>> aPageList) {
-        return (Canvas) super.setOtherAnnotations(aPageList);
-    }
-
-    @Override
-    @SafeVarargs
-    public final Canvas setPaintingPages(final AnnotationPage<PaintingAnnotation>... aPageArray) {
-        return (Canvas) super.setPaintingPages(aPageArray);
-    }
-
-    @Override
-    public final Canvas setPaintingPages(final List<AnnotationPage<PaintingAnnotation>> aPageList) {
-        return (Canvas) super.setPaintingPages(aPageList);
-    }
-
-    @Override
-    public Canvas setPartOfs(final List<PartOf> aPartOfList) {
-        return (Canvas) super.setPartOfs(aPartOfList);
-    }
-
-    @Override
-    public Canvas setPartOfs(final PartOf... aPartOfArray) {
-        return (Canvas) super.setPartOfs(aPartOfArray);
     }
 
     /**
@@ -348,159 +202,76 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     }
 
     @Override
-    @JsonIgnore
-    public Canvas setProviders(final List<Provider> aProviderList) {
-        return (Canvas) super.setProviders(aProviderList);
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.PROVIDER)
-    public Canvas setProviders(final Provider... aProviderArray) {
-        return setProviders(Arrays.asList(aProviderArray));
-    }
-
-    @Override
-    public Canvas setRenderings(final List<Rendering> aRenderingList) {
-        return (Canvas) super.setRenderings(aRenderingList);
-    }
-
-    @Override
-    public Canvas setRenderings(final Rendering... aRenderingArray) {
-        return (Canvas) super.setRenderings(aRenderingArray);
-    }
-
-    @Override
-    public Canvas setRequiredStatement(final RequiredStatement aStatement) {
-        return (Canvas) super.setRequiredStatement(aStatement);
-    }
-
-    @Override
-    public Canvas setRights(final String aRights) {
-        return (Canvas) super.setRights(aRights);
-    }
-
-    @Override
-    public Canvas setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
-        return (Canvas) super.setSeeAlsoRefs(aSeeAlsoList);
-    }
-
-    @Override
-    public Canvas setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
-        return (Canvas) super.setSeeAlsoRefs(aSeeAlsoArray);
-    }
-
-    @Override
-    public Canvas setServices(final List<Service<?>> aServiceList) {
-        return (Canvas) super.setServices(aServiceList);
-    }
-
-    @Override
-    public Canvas setServices(final Service<?>... aServiceArray) {
-        return (Canvas) super.setServices(aServiceArray);
-    }
-
-    @Override
-    public Canvas setSummary(final Summary aSummary) {
-        return (Canvas) super.setSummary(aSummary);
-    }
-
-    @Override
-    @SafeVarargs
-    public final Canvas setSupplementingPages(final AnnotationPage<SupplementingAnnotation>... aPageArray) {
-        return (Canvas) super.setSupplementingPages(aPageArray);
-    }
-
-    @Override
-    public final Canvas setSupplementingPages(final List<AnnotationPage<SupplementingAnnotation>> aPageList) {
-        return (Canvas) super.setSupplementingPages(aPageList);
-    }
-
-    @Override
-    public Canvas setThumbnails(final ContentResource<?>... aThumbnailArray) {
-        return (Canvas) super.setThumbnails(aThumbnailArray);
-    }
-
-    @Override
-    public Canvas setThumbnails(final List<ContentResource<?>> aThumbnailList) {
-        return (Canvas) super.setThumbnails(aThumbnailList);
-    }
-
-    @Override
-    public Canvas setWidthHeight(final int aWidth, final int aHeight) {
-        return (Canvas) super.setWidthHeight(aWidth, aHeight);
-    }
-
-    @Override
     @SafeVarargs
     public final Canvas supplementWith(final boolean aChoice, final ContentResource<?>... aContentArray) {
-        return (Canvas) super.supplement(this, aChoice, aContentArray);
+        return super.supplement(this, aChoice, aContentArray);
     }
 
     @Override
     public final Canvas supplementWith(final boolean aChoice, final List<ContentResource<?>> aContentList) {
-        return (Canvas) super.supplement(this, aChoice, aContentList.toArray(new ContentResource[0]));
+        return super.supplement(this, aChoice, aContentList.toArray(new ContentResource[0]));
     }
 
     @Override
     @SafeVarargs
     public final Canvas supplementWith(final ContentResource<?>... aContentArray) {
-        return (Canvas) super.supplement(this, false, aContentArray);
+        return super.supplement(this, false, aContentArray);
     }
 
     @Override
     public final Canvas supplementWith(final List<ContentResource<?>> aContentList) {
-        return (Canvas) super.supplement(this, false, aContentList.toArray(new ContentResource[0]));
+        return super.supplement(this, false, aContentList.toArray(new ContentResource[0]));
     }
 
     @Override
     @SafeVarargs
     public final Canvas supplementWith(final MediaFragmentSelector aCanvasRegion, final boolean aChoice,
             final ContentResource<?>... aContentArray) {
-        return (Canvas) super.supplement(this, aCanvasRegion, aChoice, aContentArray);
+        return super.supplement(this, aCanvasRegion, aChoice, aContentArray);
     }
 
     @Override
     public final Canvas supplementWith(final MediaFragmentSelector aCanvasRegion, final boolean aChoice,
             final List<ContentResource<?>> aContentList) {
-        return (Canvas) super.supplement(this, aCanvasRegion, aChoice, aContentList.toArray(new ContentResource[0]));
+        return super.supplement(this, aCanvasRegion, aChoice, aContentList.toArray(new ContentResource[0]));
     }
 
     @Override
     @SafeVarargs
     public final Canvas supplementWith(final MediaFragmentSelector aCanvasRegion,
             final ContentResource<?>... aContentArray) {
-        return (Canvas) super.supplement(this, aCanvasRegion, false, aContentArray);
+        return super.supplement(this, aCanvasRegion, false, aContentArray);
     }
 
     @Override
     public final Canvas supplementWith(final MediaFragmentSelector aCanvasRegion,
             final List<ContentResource<?>> aContentList) {
-        return (Canvas) super.supplement(this, aCanvasRegion, false, aContentList.toArray(new ContentResource[0]));
+        return super.supplement(this, aCanvasRegion, false, aContentList.toArray(new ContentResource[0]));
     }
 
     @Override
     @SafeVarargs
     public final Canvas supplementWith(final String aCanvasRegion, final boolean aChoice,
             final ContentResource<?>... aContentArray) {
-        return (Canvas) super.supplement(this, new MediaFragmentSelector(aCanvasRegion), aChoice, aContentArray);
+        return super.supplement(this, new MediaFragmentSelector(aCanvasRegion), aChoice, aContentArray);
     }
 
     @Override
     public final Canvas supplementWith(final String aCanvasRegion, final boolean aChoice,
             final List<ContentResource<?>> aContentList) {
-        return (Canvas) super.supplement(this, new MediaFragmentSelector(aCanvasRegion), aChoice,
+        return super.supplement(this, new MediaFragmentSelector(aCanvasRegion), aChoice,
                 aContentList.toArray(new ContentResource[0]));
     }
 
     @Override
     @SafeVarargs
     public final Canvas supplementWith(final String aCanvasRegion, final ContentResource<?>... aContentArray) {
-        return (Canvas) super.supplement(this, new MediaFragmentSelector(aCanvasRegion), false, aContentArray);
+        return super.supplement(this, new MediaFragmentSelector(aCanvasRegion), false, aContentArray);
     }
 
     @Override
     public final Canvas supplementWith(final String aCanvasRegion, final List<ContentResource<?>> aContentList) {
-        return (Canvas) super.supplement(this, new MediaFragmentSelector(aCanvasRegion), false,
+        return super.supplement(this, new MediaFragmentSelector(aCanvasRegion), false,
                 aContentList.toArray(new ContentResource[0]));
     }
 

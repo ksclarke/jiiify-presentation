@@ -64,7 +64,7 @@ public class Value extends I18nProperty<Value> {
      */
     @Override
     public Value setI18ns(final I18n... aI18nArray) {
-        return (Value) super.setI18ns(aI18nArray);
+        return super.setI18ns(aI18nArray);
     }
 
     /**
@@ -75,7 +75,7 @@ public class Value extends I18nProperty<Value> {
      */
     @Override
     public Value setI18ns(final List<I18n> aI18nList) {
-        return (Value) super.setI18ns(aI18nList);
+        return super.setI18ns(aI18nList);
     }
 
     @Override

@@ -2,11 +2,9 @@
 package info.freelibrary.iiif.presentation.v3.services;
 
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -45,16 +43,6 @@ public class AuthTokenService1 extends AbstractService<AuthTokenService1> implem
     }
 
     @Override
-    public Optional<Service.Profile> getProfile() {
-        return super.getProfile();
-    }
-
-    @Override
-    public List<Service<?>> getServices() {
-        return super.getServices();
-    }
-
-    @Override
     @JsonGetter(JsonKeys.V2_TYPE)
     public String getType() {
         return AuthTokenService1.class.getSimpleName();
@@ -63,18 +51,7 @@ public class AuthTokenService1 extends AbstractService<AuthTokenService1> implem
     @Override
     @JsonSetter(JsonKeys.V2_ID)
     public AuthTokenService1 setID(final String aID) {
-        return (AuthTokenService1) super.setID(aID);
-    }
-
-    @Override
-    public AuthTokenService1 setServices(final List<Service<?>> aServiceList) {
-        return (AuthTokenService1) super.setServices(aServiceList);
-    }
-
-    @Override
-    @JsonIgnore
-    public AuthTokenService1 setServices(final Service<?>... aServiceArray) {
-        return (AuthTokenService1) super.setServices(aServiceArray);
+        return super.setID(aID);
     }
 
     @Override
@@ -86,8 +63,7 @@ public class AuthTokenService1 extends AbstractService<AuthTokenService1> implem
             throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_125, aType, type));
         }
 
-        super.setType(type);
-        return this;
+        return super.setType(type);
     }
 
     /**

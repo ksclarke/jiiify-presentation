@@ -3,7 +3,10 @@ package info.freelibrary.iiif.presentation.v3;
 
 import java.util.Optional;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
  * An interface that defines web resources that can be referenced by or embedded in an {@link Annotation}. Examples of
@@ -40,6 +43,7 @@ public interface ContentResource<T extends ContentResource<T>> {
      * @param aMediaType A media type
      * @return The content resource
      */
+    @JsonSetter(JsonKeys.FORMAT)
     T setFormat(MediaType aMediaType);
 
     /**

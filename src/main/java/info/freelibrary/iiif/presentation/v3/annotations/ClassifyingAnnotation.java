@@ -1,24 +1,15 @@
 
 package info.freelibrary.iiif.presentation.v3.annotations;
 
-import java.util.List;
-import java.util.Optional;
-
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.Eclipse;
 
 import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.CanvasResource;
-import info.freelibrary.iiif.presentation.v3.ContentResource;
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
-import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
-import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
@@ -150,88 +141,6 @@ public class ClassifyingAnnotation extends WebAnnotation implements Annotation<W
         super();
     }
 
-    /**
-     * Indicates whether there is a choice between annotation resources or just individual resources on an annotation.
-     *
-     * @return True if body contains a choice; else, false
-     */
-    @Override
-    public boolean bodyHasChoice() {
-        return super.bodyHasChoice();
-    }
-
-    /**
-     * Gets the resources associated with this annotation.
-     *
-     * @return The resources associated with this annotation
-     */
-    @Override
-    @JsonIgnore
-    public List<ContentResource<?>> getBody() {
-        return super.getBody();
-    }
-
-    /**
-     * Gets the annotation ID.
-     *
-     * @return The annotation ID
-     */
-    @Override
-    public String getID() {
-        return super.getID();
-    }
-
-    /**
-     * Gets the motivation of the annotation.
-     *
-     * @return The motivation
-     */
-    @Override
-    @JsonGetter(JsonKeys.MOTIVATION)
-    public Motivation getMotivation() {
-        return super.getMotivation();
-    }
-
-    /**
-     * Gets the annotation target.
-     *
-     * @return The annotation target
-     */
-    @Override
-    public Target getTarget() {
-        return super.getTarget();
-    }
-
-    /**
-     * Gets the annotation's time mode.
-     *
-     * @return The time mode
-     */
-    @Override
-    public Optional<TimeMode> getTimeMode() {
-        return super.getTimeMode();
-    }
-
-    @Override
-    public ClassifyingAnnotation setBody(final ContentResource<?>... aBody) {
-        return (ClassifyingAnnotation) super.setBody(aBody);
-    }
-
-    @Override
-    public ClassifyingAnnotation setBody(final List<ContentResource<?>> aBody) {
-        return setBody(aBody.toArray(new ContentResource[0]));
-    }
-
-    @Override
-    public ClassifyingAnnotation setChoice(final boolean aChoice) {
-        return (ClassifyingAnnotation) super.setChoice(aChoice);
-    }
-
-    @Override
-    public ClassifyingAnnotation setID(final String aID) {
-        return (ClassifyingAnnotation) super.setID(aID);
-    }
-
     @Override
     public final ClassifyingAnnotation setMotivation(final Motivation aMotivation) {
         if (!Purpose.CLASSIFYING.toString().equalsIgnoreCase(aMotivation.toString())) {
@@ -240,15 +149,5 @@ public class ClassifyingAnnotation extends WebAnnotation implements Annotation<W
         }
 
         return (ClassifyingAnnotation) super.setMotivation(Motivation.fromLabel(Purpose.CLASSIFYING));
-    }
-
-    @Override
-    public ClassifyingAnnotation setTarget(final Target aTarget) {
-        return (ClassifyingAnnotation) super.setTarget(aTarget);
-    }
-
-    @Override
-    public ClassifyingAnnotation setTimeMode(final TimeMode aTimeMode) {
-        return (ClassifyingAnnotation) super.setTimeMode(aTimeMode);
     }
 }

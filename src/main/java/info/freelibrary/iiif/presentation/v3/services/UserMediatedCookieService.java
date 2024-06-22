@@ -3,6 +3,8 @@ package info.freelibrary.iiif.presentation.v3.services;
 
 /**
  * A user mediated type of cookie service.
+ *
+ * @param <T> The specific type of user mediated cookie service
  */
 public interface UserMediatedCookieService<T extends UserMediatedCookieService<T>> extends AuthCookieService<T> {
 

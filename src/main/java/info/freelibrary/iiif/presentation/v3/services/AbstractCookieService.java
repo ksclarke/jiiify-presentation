@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.JDK;
 
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
@@ -65,7 +66,7 @@ abstract class AbstractCookieService<T extends AbstractCookieService<T>> extends
      * @return The cookie service's context
      */
     @JsonGetter(JsonKeys.CONTEXT)
-    protected String getContext() {
+    public String getContext() {
         return CONTEXT;
     }
 
@@ -74,7 +75,7 @@ abstract class AbstractCookieService<T extends AbstractCookieService<T>> extends
      *
      * @return The failure description for the cookie service
      */
-    protected String getFailureDescription() {
+    public String getFailureDescription() {
         return myFailureDescription;
     }
 
@@ -83,7 +84,7 @@ abstract class AbstractCookieService<T extends AbstractCookieService<T>> extends
      *
      * @return The failure description header for the cookie service
      */
-    protected String getFailureHeader() {
+    public String getFailureHeader() {
         return myFailureHeader;
     }
 
@@ -94,7 +95,7 @@ abstract class AbstractCookieService<T extends AbstractCookieService<T>> extends
      */
     @Override
     @JsonGetter(JsonKeys.V2_ID)
-    protected String getID() {
+    public String getID() {
         return super.getID();
     }
 
@@ -103,7 +104,7 @@ abstract class AbstractCookieService<T extends AbstractCookieService<T>> extends
      */
     @Override
     @JsonGetter(JsonKeys.V2_TYPE)
-    protected String getType() {
+    public String getType() {
         return super.getType();
     }
 
@@ -113,9 +114,10 @@ abstract class AbstractCookieService<T extends AbstractCookieService<T>> extends
      * @param aFailureDescription An cookie service failure description
      * @return This service
      */
-    protected AbstractCookieService<T> setFailureDescription(final String aFailureDescription) {
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public T setFailureDescription(final String aFailureDescription) {
         myFailureDescription = aFailureDescription;
-        return this;
+        return (T) this;
     }
 
     /**
@@ -124,9 +126,10 @@ abstract class AbstractCookieService<T extends AbstractCookieService<T>> extends
      * @param aFailureHeader A cookie service failure description header
      * @return This service
      */
-    protected AbstractCookieService<T> setFailureHeader(final String aFailureHeader) {
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public T setFailureHeader(final String aFailureHeader) {
         myFailureHeader = aFailureHeader;
-        return this;
+        return (T) this;
     }
 
     /**
@@ -137,8 +140,8 @@ abstract class AbstractCookieService<T extends AbstractCookieService<T>> extends
      */
     @Override
     @JsonSetter(JsonKeys.V2_ID)
-    protected AbstractCookieService<T> setID(final String aID) {
-        return (AbstractCookieService<T>) super.setID(aID);
+    public T setID(final String aID) {
+        return super.setID(aID);
     }
 
     /**
@@ -150,14 +153,14 @@ abstract class AbstractCookieService<T extends AbstractCookieService<T>> extends
      */
     @Override
     @JsonSetter(JsonKeys.V2_TYPE)
-    protected AbstractCookieService<T> setType(final String aType) {
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public T setType(final String aType) {
         final String type = AuthCookieService.class.getSimpleName();
 
         if (!type.equals(aType)) {
             throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_125, aType, type));
         }
 
-        super.setType(type);
-        return this;
+        return super.setType(type);
     }
 }

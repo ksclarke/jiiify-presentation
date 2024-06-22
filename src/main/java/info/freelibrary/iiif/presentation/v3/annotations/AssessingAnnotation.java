@@ -1,25 +1,15 @@
 
 package info.freelibrary.iiif.presentation.v3.annotations;
 
-import java.util.List;
-import java.util.Optional;
-
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.Eclipse;
 
 import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.CanvasResource;
-import info.freelibrary.iiif.presentation.v3.ContentResource;
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
-import info.freelibrary.iiif.presentation.v3.properties.Label;
-import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
-import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
@@ -144,114 +134,11 @@ public class AssessingAnnotation extends WebAnnotation implements Annotation<Web
     }
 
     /**
-     * Creates a bookmarking annotation. This is used by Jackson's deserialization processes.
+     * Creates a assessing annotation. This is used by Jackson's deserialization processes.
      */
     @SuppressWarnings(Eclipse.UNUSED)
     private AssessingAnnotation() {
         super();
-    }
-
-    /**
-     * Indicates whether there is a choice between annotation resources or just individual resources on an annotation.
-     *
-     * @return True if body contains a choice; else, false
-     */
-    @Override
-    public boolean bodyHasChoice() {
-        return super.bodyHasChoice();
-    }
-
-    /**
-     * Gets the resources associated with this annotation.
-     *
-     * @return The resources associated with this annotation
-     */
-    @Override
-    @JsonIgnore
-    public List<ContentResource<?>> getBody() {
-        return super.getBody();
-    }
-
-    /**
-     * Gets the annotation ID.
-     *
-     * @return The annotation ID
-     */
-    @Override
-    public String getID() {
-        return super.getID();
-    }
-
-    /**
-     * Gets the optional annotation label.
-     *
-     * @return The optional annotation's label
-     */
-    @Override
-    public Optional<Label> getLabel() {
-        return super.getLabel();
-    }
-
-    /**
-     * Gets the motivation of the annotation.
-     *
-     * @return The motivation
-     */
-    @Override
-    @JsonGetter(JsonKeys.MOTIVATION)
-    public Motivation getMotivation() {
-        return super.getMotivation();
-    }
-
-    /**
-     * Gets the annotation target.
-     *
-     * @return The annotation target
-     */
-    @Override
-    public Target getTarget() {
-        return super.getTarget();
-    }
-
-    /**
-     * Gets the annotation's time mode.
-     *
-     * @return The time mode
-     */
-    @Override
-    public Optional<TimeMode> getTimeMode() {
-        return super.getTimeMode();
-    }
-
-    @Override
-    public AssessingAnnotation setBody(final ContentResource<?>... aResourceArray) {
-        return (AssessingAnnotation) super.setBody(aResourceArray);
-    }
-
-    @Override
-    public AssessingAnnotation setBody(final List<ContentResource<?>> aResourceList) {
-        return setBody(aResourceList.toArray(new ContentResource[0]));
-    }
-
-    @Override
-    public AssessingAnnotation setChoice(final boolean aChoice) {
-        return (AssessingAnnotation) super.setChoice(aChoice);
-    }
-
-    @Override
-    public AssessingAnnotation setID(final String aID) {
-        return (AssessingAnnotation) super.setID(aID);
-    }
-
-    /**
-     * Sets the annotation label.
-     *
-     * @param aLabel A label to assign to the annotation
-     * @return This annotation
-     */
-    @Override
-    public AssessingAnnotation setLabel(final Label aLabel) {
-        return (AssessingAnnotation) super.setLabel(aLabel);
     }
 
     @Override
@@ -262,15 +149,5 @@ public class AssessingAnnotation extends WebAnnotation implements Annotation<Web
         }
 
         return (AssessingAnnotation) super.setMotivation(Motivation.fromLabel(Purpose.ASSESSING));
-    }
-
-    @Override
-    public AssessingAnnotation setTarget(final Target aTarget) {
-        return (AssessingAnnotation) super.setTarget(aTarget);
-    }
-
-    @Override
-    public AssessingAnnotation setTimeMode(final TimeMode aTimeMode) {
-        return (AssessingAnnotation) super.setTimeMode(aTimeMode);
     }
 }

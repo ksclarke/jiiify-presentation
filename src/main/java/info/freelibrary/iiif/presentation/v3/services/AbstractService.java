@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import info.freelibrary.util.warnings.JDK;
 import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.Service;
@@ -75,24 +76,12 @@ abstract class AbstractService<T extends AbstractService<T>> {
     }
 
     /**
-     * Outputs a JSON string representation of the service.
-     */
-    @Override
-    public String toString() {
-        try {
-            return JSON.getWriter(getClass()).writeValueAsString(this);
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details); // RuntimeException because this shouldn't fail
-        }
-    }
-
-    /**
      * Gets the service ID.
      *
      * @return The service ID
      */
     @JsonSetter(JsonKeys.ID)
-    protected String getID() {
+    public String getID() {
         return myID;
     }
 
@@ -102,7 +91,7 @@ abstract class AbstractService<T extends AbstractService<T>> {
      * @return The service profile, if one exists
      */
     @JsonGetter(JsonKeys.PROFILE)
-    protected Optional<Service.Profile> getProfile() {
+    public Optional<Service.Profile> getProfile() {
         return Optional.ofNullable(myProfile);
     }
 
@@ -112,7 +101,7 @@ abstract class AbstractService<T extends AbstractService<T>> {
      * @return A list of services related to this service
      */
     @JsonGetter(JsonKeys.SERVICE)
-    protected List<Service<?>> getServices() {
+    public List<Service<?>> getServices() {
         if (myServices == null) {
             myServices = new ArrayList<>();
         }
@@ -126,7 +115,7 @@ abstract class AbstractService<T extends AbstractService<T>> {
      * @return The service type
      */
     @JsonGetter(JsonKeys.TYPE)
-    protected String getType() {
+    public String getType() {
         return myType;
     }
 
@@ -137,9 +126,10 @@ abstract class AbstractService<T extends AbstractService<T>> {
      * @return This serviceaID
      */
     @JsonSetter(JsonKeys.ID)
-    protected AbstractService<T> setID(final String aID) {
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public T setID(final String aID) {
         myID = UriUtils.checkID(aID, false);
-        return this;
+        return (T) this;
     }
 
     /**
@@ -149,7 +139,8 @@ abstract class AbstractService<T extends AbstractService<T>> {
      * @return This service
      */
     @JsonSetter(JsonKeys.SERVICE)
-    protected AbstractService<T> setServices(final List<Service<?>> aServiceList) {
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public T setServices(final List<Service<?>> aServiceList) {
         if (!aServiceList.isEmpty()) {
             final List<Service<?>> services = getServices();
 
@@ -159,7 +150,7 @@ abstract class AbstractService<T extends AbstractService<T>> {
             services.addAll(aServiceList);
         }
 
-        return this;
+        return (T) this;
     }
 
     /**
@@ -169,7 +160,7 @@ abstract class AbstractService<T extends AbstractService<T>> {
      * @return This service
      */
     @JsonIgnore
-    protected AbstractService<T> setServices(final Service<?>... aServiceArray) {
+    public T setServices(final Service<?>... aServiceArray) {
         return setServices(Arrays.asList(aServiceArray));
     }
 
@@ -180,8 +171,21 @@ abstract class AbstractService<T extends AbstractService<T>> {
      * @return This service
      */
     @JsonSetter(JsonKeys.TYPE)
-    protected AbstractService<T> setType(final String aType) {
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public T setType(final String aType) {
         myType = aType;
-        return this;
+        return (T) this;
+    }
+
+    /**
+     * Outputs a JSON string representation of the service.
+     */
+    @Override
+    public String toString() {
+        try {
+            return JSON.getWriter(getClass()).writeValueAsString(this);
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details); // RuntimeException because this shouldn't fail
+        }
     }
 }

@@ -1,12 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
-import java.util.List;
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.Logger;
@@ -45,69 +40,6 @@ public class GeoJsonService extends AbstractService<GeoJsonService> implements S
     @JsonGetter(JsonKeys.CONTEXT)
     public String getContext() {
         return CONTEXT;
-    }
-
-    @Override
-    @JsonGetter(JsonKeys.ID)
-    public String getID() {
-        return super.getID();
-    }
-
-    @Override
-    public Optional<Service.Profile> getProfile() {
-        return super.getProfile();
-    }
-
-    /**
-     * Gets the services related to this GeoJSON service.
-     *
-     * @return A list of related services
-     */
-    @Override
-    public List<Service<?>> getServices() {
-        return super.getServices();
-    }
-
-    @Override
-    @JsonGetter(JsonKeys.TYPE)
-    @JsonInclude(Include.NON_EMPTY)
-    public String getType() {
-        return super.getType();
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.ID)
-    public GeoJsonService setID(final String aID) {
-        return (GeoJsonService) super.setID(aID);
-    }
-
-    /**
-     * Sets services related to this GeoJSON service.
-     *
-     * @param aServiceList A list of related services
-     * @return This service
-     */
-    @Override
-    public GeoJsonService setServices(final List<Service<?>> aServiceList) {
-        return (GeoJsonService) super.setServices(aServiceList);
-    }
-
-    /**
-     * Sets services related to this GeoJSON service.
-     *
-     * @param aServiceArray A varargs of related services
-     * @return This service
-     */
-    @Override
-    @SafeVarargs
-    public final GeoJsonService setServices(final Service<?>... aServiceArray) {
-        return (GeoJsonService) super.setServices(aServiceArray);
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.TYPE)
-    public GeoJsonService setType(final String aType) {
-        return (GeoJsonService) super.setType(aType);
     }
 
     /**

@@ -11,6 +11,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import info.freelibrary.util.warnings.JDK;
+
 import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
@@ -61,7 +63,7 @@ abstract class AbstractOtherService<T extends AbstractOtherService<T>> extends A
      */
     @JsonInclude(Include.NON_EMPTY)
     @JsonSerialize(contentUsing = MediaTypeSerializer.class, keyUsing = MediaTypeKeySerializer.class)
-    protected Optional<MediaType> getFormat() {
+    public Optional<MediaType> getFormat() {
         return Optional.ofNullable(myFormat);
     }
 
@@ -71,9 +73,9 @@ abstract class AbstractOtherService<T extends AbstractOtherService<T>> extends A
      * @param aFormat A format
      * @return This service
      */
-    protected AbstractOtherService<T> setFormat(final MediaType aFormat) {
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public T setFormat(final MediaType aFormat) {
         myFormat = Objects.requireNonNull(aFormat);
-        return this;
+        return (T) this;
     }
-
 }

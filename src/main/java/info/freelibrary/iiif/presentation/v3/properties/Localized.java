@@ -6,9 +6,11 @@ import java.util.Locale;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.JDK;
 
 import info.freelibrary.iiif.presentation.v3.utils.I18nUtils;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
@@ -16,6 +18,8 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * Interface that allows resources to be localized.
+ *
+ * @param <T> The type of resource that's localized
  */
 public interface Localized<T> {
 
@@ -30,12 +34,25 @@ public interface Localized<T> {
     /**
      * Sets the languages for this localized external resource.
      *
+     * @param aLangList The languages to set
+     * @return The localized external resource
+     * @throws IllegalArgumentException If the language tag is invalid
+     */
+    @JsonSetter(JsonKeys.LANGUAGE)
+    default T setLanguages(final List<String> aLangList) {
+        return setLanguages(aLangList.toArray(new String[] {}));
+    }
+
+    /**
+     * Sets the languages for this localized external resource.
+     *
      * @param aLangArray The languages to set
      * @return The localized external resource
      * @throws IllegalArgumentException If the language tag is invalid
      */
     @JsonIgnore
-    default Localized<T> setLanguages(final String... aLangArray) {
+    @SuppressWarnings({ JDK.UNCHECKED })
+    default T setLanguages(final String... aLangArray) {
         final List<String> languages = getLanguages();
 
         languages.clear();
@@ -51,6 +68,6 @@ public interface Localized<T> {
             languages.add(tag);
         }
 
-        return this;
+        return (T) this;
     }
 }

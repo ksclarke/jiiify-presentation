@@ -35,14 +35,14 @@ import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeSerializer;
  */
 @JsonInclude(Include.NON_EMPTY)
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
-abstract class AbstractContentResource<T extends AbstractResource<AbstractContentResource<T>>>
-        extends AbstractResource<AbstractContentResource<T>> implements Localized<T> {
+abstract class AbstractContentResource<T extends AbstractContentResource<T>> extends AbstractResource<T>
+        implements Localized<T> {
+
+    /** The content resource's media type. */
+    protected MediaType myFormat;
 
     /** The content resource's Web annotations. */
     private List<AnnotationPage<WebAnnotation>> myAnnotations;
-
-    /** The content resource's media type. */
-    private MediaType myFormat;
 
     /** The content resource's languages. */
     private List<String> myLanguages;
@@ -63,11 +63,28 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
      * @param aType The type of resource
      * @param aID The resource ID
      * @param aBehaviorClass A class of behavior for this resource
+     * @param aMediaTypeHint An optional hint as to the class of media type should be used
      */
     protected AbstractContentResource(final String aType, final String aID,
-            final Class<? extends Behavior> aBehaviorClass) {
+            final Class<? extends Behavior> aBehaviorClass, final String aMediaTypeHint) {
         super(aType, aID, aBehaviorClass);
-        myFormat = MediaType.parse(aID).orElse(null);
+
+        myFormat = aMediaTypeHint != null ? MediaType.parse(aID, aMediaTypeHint).orElse(null)
+                : MediaType.parse(aID).orElse(null);
+    }
+
+    /**
+     * Gets the content resource's annotations.
+     *
+     * @return The content resource's annotations
+     */
+    @JsonGetter(JsonKeys.ANNOTATIONS)
+    public List<AnnotationPage<WebAnnotation>> getAnnotations() {
+        if (myAnnotations == null) {
+            myAnnotations = new ArrayList<>();
+        }
+
+        return myAnnotations;
     }
 
     /**
@@ -97,28 +114,14 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
     }
 
     /**
-     * Gets the content resource's annotations.
-     *
-     * @return The content resource's annotations
-     */
-    @JsonGetter(JsonKeys.ANNOTATIONS)
-    protected List<AnnotationPage<WebAnnotation>> getAnnotations() {
-        if (myAnnotations == null) {
-            myAnnotations = new ArrayList<>();
-        }
-
-        return myAnnotations;
-    }
-
-    /**
      * Sets the content resource's annotation pages from an array.
      *
      * @param aAnnotationArray An array of annotation pages
      * @return The content resource
      */
-    @SuppressWarnings(JDK.UNCHECKED)
+    @SuppressWarnings({ JDK.UNCHECKED })
     @JsonIgnore
-    protected AbstractContentResource<T> setAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
+    public T setAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
         return setAnnotations(Arrays.asList(aAnnotationArray));
     }
 
@@ -128,15 +131,16 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
      * @param aAnnotationList A list of annotation pages
      * @return The content resource
      */
+    @SuppressWarnings({ JDK.UNCHECKED })
     @JsonSetter(JsonKeys.ANNOTATIONS)
-    protected AbstractContentResource<T> setAnnotations(final List<AnnotationPage<WebAnnotation>> aAnnotationList) {
+    public T setAnnotations(final List<AnnotationPage<WebAnnotation>> aAnnotationList) {
         final List<AnnotationPage<WebAnnotation>> annotations = getAnnotations();
 
         Objects.requireNonNull(aAnnotationList);
         annotations.clear();
         annotations.addAll(aAnnotationList);
 
-        return this;
+        return (T) this;
     }
 
     /**
@@ -147,9 +151,10 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
      */
     @JsonProperty(JsonKeys.FORMAT)
     @JsonDeserialize(using = MediaTypeDeserializer.class)
-    protected AbstractContentResource<T> setFormat(final MediaType aMediaType) {
-        myFormat = aMediaType;
-        return this;
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public T setFormat(final MediaType aMediaType) {
+        myFormat = Objects.requireNonNull(aMediaType);
+        return (T) this;
     }
 
     /**
@@ -174,11 +179,11 @@ abstract class AbstractContentResource<T extends AbstractResource<AbstractConten
     @JsonSetter(JsonKeys.LANGUAGE)
     private AbstractContentResource<T> setLanguage(final Object aObject) {
         if (aObject instanceof String) {
-            return (AbstractContentResource<T>) setLanguages((String) aObject);
+            return setLanguages((String) aObject);
         }
 
         if (aObject instanceof String[]) {
-            return (AbstractContentResource<T>) setLanguages((String[]) aObject);
+            return setLanguages((String[]) aObject);
         }
 
         return this;

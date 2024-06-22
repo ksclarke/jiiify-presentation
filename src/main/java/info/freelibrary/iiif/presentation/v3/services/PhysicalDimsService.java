@@ -2,7 +2,6 @@
 package info.freelibrary.iiif.presentation.v3.services;
 
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -51,11 +50,6 @@ public class PhysicalDimsService extends AbstractService<PhysicalDimsService> im
         myPhysicalUnits = aUnits;
     }
 
-    @Override
-    public String getID() {
-        return super.getID();
-    }
-
     /**
      * Gets the physical scale.
      *
@@ -74,26 +68,6 @@ public class PhysicalDimsService extends AbstractService<PhysicalDimsService> im
         return myPhysicalUnits;
     }
 
-    @Override
-    public Optional<Service.Profile> getProfile() {
-        return super.getProfile();
-    }
-
-    /**
-     * Gets the services related to this PhysicalDims service.
-     *
-     * @return A list of related services
-     */
-    @Override
-    public List<Service<?>> getServices() {
-        return super.getServices();
-    }
-
-    @Override
-    public String getType() {
-        return super.getType();
-    }
-
     /**
      * Sets the physical scale and units in a single method.
      *
@@ -106,11 +80,6 @@ public class PhysicalDimsService extends AbstractService<PhysicalDimsService> im
         myPhysicalScale = aPhysicalScale;
         myPhysicalUnits = aPhysicalUnits;
         return this;
-    }
-
-    @Override
-    public PhysicalDimsService setID(final String aID) {
-        return (PhysicalDimsService) super.setID(aID);
     }
 
     /**
@@ -133,34 +102,6 @@ public class PhysicalDimsService extends AbstractService<PhysicalDimsService> im
     public PhysicalDimsService setPhysicalUnits(final String aPhysicalUnits) {
         myPhysicalUnits = aPhysicalUnits;
         return this;
-    }
-
-    /**
-     * Sets services related to this PhysicalDims service.
-     *
-     * @param aServiceList A list of related services
-     * @return This service
-     */
-    @Override
-    public PhysicalDimsService setServices(final List<Service<?>> aServiceList) {
-        return (PhysicalDimsService) super.setServices(aServiceList);
-    }
-
-    /**
-     * Sets services related to this PhysicalDims service.
-     *
-     * @param aServiceArray A varargs of related services
-     * @return This service
-     */
-    @Override
-    @SafeVarargs
-    public final PhysicalDimsService setServices(final Service<?>... aServiceArray) {
-        return (PhysicalDimsService) super.setServices(aServiceArray);
-    }
-
-    @Override
-    public PhysicalDimsService setType(final String aType) {
-        return (PhysicalDimsService) super.setType(aType);
     }
 
     /**

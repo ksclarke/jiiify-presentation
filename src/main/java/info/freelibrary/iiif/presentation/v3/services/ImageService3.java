@@ -2,11 +2,9 @@
 package info.freelibrary.iiif.presentation.v3.services;
 
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.Logger;
@@ -14,11 +12,6 @@ import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.Eclipse;
 
 import info.freelibrary.iiif.presentation.v3.Service;
-import info.freelibrary.iiif.presentation.v3.services.image.Format;
-import info.freelibrary.iiif.presentation.v3.services.image.ImageAPI;
-import info.freelibrary.iiif.presentation.v3.services.image.Quality;
-import info.freelibrary.iiif.presentation.v3.services.image.Size;
-import info.freelibrary.iiif.presentation.v3.services.image.Tile;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
@@ -62,57 +55,9 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
     }
 
     @Override
-    @JsonGetter(ImageAPI.EXTRA_FORMATS)
-    public List<Format> getExtraFormats() {
-        return super.getExtraFormats();
-    }
-
-    @Override
-    @JsonGetter(ImageAPI.EXTRA_QUALITIES)
-    public List<Quality> getExtraQualities() {
-        return super.getExtraQualities();
-    }
-
-    @Override
-    @JsonGetter(JsonKeys.HEIGHT)
-    public int getHeight() {
-        return super.getHeight();
-    }
-
-    @Override
     @JsonGetter(JsonKeys.ID)
     public String getID() {
         return super.getID();
-    }
-
-    @Override
-    @JsonGetter(JsonKeys.PROFILE)
-    public Optional<Service.Profile> getProfile() {
-        return super.getProfile();
-    }
-
-    @Override
-    @JsonGetter(ImageAPI.PROTOCOL)
-    public Optional<String> getProtocol() {
-        return super.getProtocol();
-    }
-
-    @Override
-    @JsonGetter(JsonKeys.SERVICE)
-    public List<Service<?>> getServices() {
-        return super.getServices();
-    }
-
-    @Override
-    @JsonGetter(ImageAPI.SIZES)
-    public List<Size> getSizes() {
-        return super.getSizes();
-    }
-
-    @Override
-    @JsonGetter(ImageAPI.TILES)
-    public List<Tile> getTiles() {
-        return super.getTiles();
     }
 
     @Override
@@ -122,87 +67,9 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
     }
 
     @Override
-    @JsonGetter(JsonKeys.WIDTH)
-    public int getWidth() {
-        return super.getWidth();
-    }
-
-    @Override
-    @JsonIgnore
-    public ImageService3 setExtraFormats(final Format... aFormatArray) {
-        return (ImageService3) super.setExtraFormats(aFormatArray);
-    }
-
-    @Override
-    @JsonSetter(ImageAPI.EXTRA_FORMATS)
-    public ImageService3 setExtraFormats(final List<Format> aFormatList) {
-        return (ImageService3) super.setExtraFormats(aFormatList);
-    }
-
-    @Override
-    @JsonSetter(ImageAPI.EXTRA_QUALITIES)
-    public ImageService3 setExtraQualities(final List<Quality> aQualityList) {
-        return (ImageService3) super.setExtraQualities(aQualityList);
-    }
-
-    @Override
-    @JsonIgnore
-    public ImageService3 setExtraQualities(final Quality... aQualityArray) {
-        return (ImageService3) super.setExtraQualities(aQualityArray);
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.HEIGHT)
-    public ImageService3 setHeight(final int aHeight) {
-        return (ImageService3) super.setHeight(aHeight);
-    }
-
-    @Override
     @JsonSetter(JsonKeys.ID)
     public ImageService3 setID(final String aID) {
-        return (ImageService3) super.setID(aID);
-    }
-
-    @Override
-    @JsonIgnore
-    public ImageService3 setProtocol(final boolean aSetValue) {
-        return (ImageService3) super.setProtocol(aSetValue);
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.SERVICE)
-    public ImageService3 setServices(final List<Service<?>> aServiceList) {
-        return (ImageService3) super.setServices(aServiceList);
-    }
-
-    @Override
-    @JsonIgnore
-    public ImageService3 setServices(final Service<?>... aServiceArray) {
-        return (ImageService3) super.setServices(aServiceArray);
-    }
-
-    @Override
-    @JsonSetter(ImageAPI.SIZES)
-    public ImageService3 setSizes(final List<Size> aSizeList) {
-        return (ImageService3) super.setSizes(aSizeList);
-    }
-
-    @Override
-    @JsonIgnore
-    public ImageService3 setSizes(final Size... aSizeArray) {
-        return (ImageService3) super.setSizes(aSizeArray);
-    }
-
-    @Override
-    @JsonSetter(ImageAPI.TILES)
-    public ImageService3 setTiles(final List<Tile> aTileList) {
-        return (ImageService3) super.setTiles(aTileList);
-    }
-
-    @Override
-    @JsonIgnore
-    public ImageService3 setTiles(final Tile... aTileArray) {
-        return (ImageService3) super.setTiles(aTileArray);
+        return super.setID(aID);
     }
 
     @Override
@@ -215,12 +82,6 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
         }
 
         return this;
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.WIDTH)
-    public ImageService3 setWidth(final int aWidth) {
-        return (ImageService3) super.setWidth(aWidth);
     }
 
     /**

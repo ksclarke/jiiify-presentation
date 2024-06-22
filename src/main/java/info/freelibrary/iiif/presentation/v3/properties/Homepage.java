@@ -1,11 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import java.util.Objects;
-import java.util.Optional;
-
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -27,7 +22,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  */
 @JsonInclude(Include.NON_EMPTY)
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
-public class Homepage extends AbstractLinkProperty<Homepage> {
+public class Homepage extends AbstractLinkProperty<Homepage> implements Localized<Homepage> {
 
     /**
      * Creates a IIIF presentation homepage.
@@ -48,86 +43,17 @@ public class Homepage extends AbstractLinkProperty<Homepage> {
     }
 
     /**
-     * Determines if a compared object is equal to this one.
+     * Gets a descriptive label.
      *
-     * @return True if the objects are equal; else, false
+     * @return A descriptive label
      */
-    @Override
-    public boolean equals(final Object aObject) {
-        if (!super.equals(aObject) || getClass() != aObject.getClass()) {
-            return false;
-        }
-
-        return getLanguages().equals(((Homepage) aObject).getLanguages());
-    }
-
-    @Override
-    public Optional<MediaType> getFormat() {
-        return super.getFormat();
-    }
-
-    /**
-     * Gets the label.
-     *
-     * @return The label
-     */
-    @JsonGetter(JsonKeys.LABEL)
     public Label getLabel() {
-        return super.getNullableLabel();
-    }
-
-    /**
-     * Returns a hashCode for the homepage.
-     */
-    @Override
-    public int hashCode() {
-        return 31 * super.hashCode() + Objects.hash(getLanguages());
-    }
-
-    /**
-     * Sets format.
-     *
-     * @param aMediaType A resource's format
-     * @return The resource whose format is being set
-     */
-    @Override
-    public Homepage setFormat(final MediaType aMediaType) {
-        return (Homepage) super.setFormat(aMediaType);
-    }
-
-    /**
-     * Sets the ID.
-     *
-     * @param aID The ID of the homepage
-     * @return The homepage
-     */
-    @Override
-    @JsonSetter(JsonKeys.ID)
-    public Homepage setID(final String aID) {
-        return (Homepage) super.setID(aID);
-    }
-
-    /**
-     * Sets the descriptive label.
-     *
-     * @param aLabel A descriptive label
-     * @return The homepage
-     */
-    @Override
-    @JsonSetter(JsonKeys.LABEL)
-    public Homepage setLabel(final Label aLabel) {
-        return (Homepage) super.setLabel(aLabel);
-    }
-
-    @Override
-    @JsonIgnore
-    public Homepage setLanguages(final String... aLangArray) {
-        return (Homepage) super.setLanguages(aLangArray);
+        return myLabel;
     }
 
     @Override
     @JsonSetter(JsonKeys.TYPE)
-    protected Homepage setType(final String aType) {
+    public Homepage setType(final String aType) {
         if (!ResourceTypes.TEXT.equals(aType)) {
             throw new IllegalArgumentI18nException(aType);
         }

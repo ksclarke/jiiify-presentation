@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import info.freelibrary.util.warnings.JDK;
+
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
@@ -47,7 +49,7 @@ abstract class AbstractUserMediatedService<T extends AbstractUserMediatedService
      *
      * @return The service confirmation label
      */
-    protected String getConfirmLabel() {
+    public String getConfirmLabel() {
         return myConfirmLabel;
     }
 
@@ -56,7 +58,7 @@ abstract class AbstractUserMediatedService<T extends AbstractUserMediatedService
      *
      * @return The description for the service
      */
-    protected String getDescription() {
+    public String getDescription() {
         return myDescription;
     }
 
@@ -65,7 +67,7 @@ abstract class AbstractUserMediatedService<T extends AbstractUserMediatedService
      *
      * @return The description header for the service
      */
-    protected String getHeader() {
+    public String getHeader() {
         return myHeader;
     }
 
@@ -74,7 +76,7 @@ abstract class AbstractUserMediatedService<T extends AbstractUserMediatedService
      *
      * @return The label of the service
      */
-    protected String getLabel() {
+    public String getLabel() {
         return myLabel;
     }
 
@@ -84,9 +86,10 @@ abstract class AbstractUserMediatedService<T extends AbstractUserMediatedService
      * @param aLabel A confirmation label
      * @return This service
      */
-    protected AbstractUserMediatedService<T> setConfirmLabel(final String aLabel) {
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public T setConfirmLabel(final String aLabel) {
         myConfirmLabel = aLabel;
-        return this;
+        return (T) this;
     }
 
     /**
@@ -95,9 +98,10 @@ abstract class AbstractUserMediatedService<T extends AbstractUserMediatedService
      * @param aDescription A service description
      * @return This service
      */
-    protected AbstractUserMediatedService<T> setDescription(final String aDescription) {
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public T setDescription(final String aDescription) {
         myDescription = aDescription;
-        return this;
+        return (T) this;
     }
 
     /**
@@ -106,9 +110,10 @@ abstract class AbstractUserMediatedService<T extends AbstractUserMediatedService
      * @param aHeader A service header
      * @return This service
      */
-    protected AbstractUserMediatedService<T> setHeader(final String aHeader) {
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public T setHeader(final String aHeader) {
         myHeader = aHeader;
-        return this;
+        return (T) this;
     }
 
     /**
@@ -117,9 +122,10 @@ abstract class AbstractUserMediatedService<T extends AbstractUserMediatedService
      * @param aLabel A service label
      * @return This service
      */
-    protected AbstractUserMediatedService<T> setLabel(final String aLabel) {
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public T setLabel(final String aLabel) {
         myLabel = aLabel;
-        return this;
+        return (T) this;
     }
 
 }

@@ -135,9 +135,7 @@ public class AccompanyingCanvasTest {
     @Test
     public final void testCanvasFromString() throws IOException {
         final String json = getFixture(Canvas.class);
-        final Canvas canvas = Canvas.fromJSON(json);
-
-        assertEquals(json, canvas.toString());
+        assertEquals(json, Canvas.fromJSON(json).toString());
     }
 
     /**

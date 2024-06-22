@@ -1,18 +1,13 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import java.util.Objects;
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.Eclipse;
 
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
-import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
@@ -20,7 +15,6 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  * property. Examples include a rendering of a book as a PDF or EPUB, a slide deck with images of a building, or a 3D
  * model of a statue.
  */
-@JsonInclude(Include.NON_EMPTY)
 public class Rendering extends AbstractLinkProperty<Rendering> {
 
     /**
@@ -42,82 +36,14 @@ public class Rendering extends AbstractLinkProperty<Rendering> {
         super();
     }
 
-    @Override
-    public boolean equals(final Object aObject) {
-        if (!super.equals(aObject) || getClass() != aObject.getClass()) {
-            return false;
-        }
-
-        return getLanguages().equals(((Rendering) aObject).getLanguages());
-    }
-
-    @Override
-    public Optional<MediaType> getFormat() {
-        return super.getFormat();
-    }
-
     /**
      * Gets a descriptive label.
      *
      * @return A descriptive label
      */
+    @JsonInclude(Include.NON_EMPTY)
     public Label getLabel() {
-        return super.getNullableLabel();
-    }
-
-    @Override
-    public int hashCode() {
-        return 31 * super.hashCode() + Objects.hash(getLanguages());
-    }
-
-    /**
-     * Sets format.
-     *
-     * @param aMediaType A resource's format
-     * @return The resource whose format is being set
-     */
-    @Override
-    public Rendering setFormat(final MediaType aMediaType) {
-        return (Rendering) super.setFormat(aMediaType);
-    }
-
-    /**
-     * Sets the ID.
-     *
-     * @param aID An ID
-     * @return This rendering
-     */
-    @Override
-    @JsonSetter(JsonKeys.ID)
-    public Rendering setID(final String aID) {
-        return (Rendering) super.setID(aID);
-    }
-
-    /**
-     * Sets the descriptive label.
-     *
-     * @param aLabel A descriptive label
-     * @return The resource whose label is being set
-     */
-    @Override
-    public Rendering setLabel(final Label aLabel) {
-        return (Rendering) super.setLabel(aLabel);
-    }
-
-    @Override
-    public Rendering setLanguages(final String... aLangArray) {
-        return (Rendering) super.setLanguages(aLangArray);
-    }
-
-    /**
-     * Sets the rendering type.
-     *
-     * @param aType A type of rendering
-     * @return The rendering
-     */
-    @Override
-    public Rendering setType(final String aType) {
-        return (Rendering) super.setType(aType);
+        return myLabel;
     }
 
     /**

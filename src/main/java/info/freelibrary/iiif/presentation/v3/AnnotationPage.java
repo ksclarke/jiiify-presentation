@@ -22,15 +22,6 @@ import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
-import info.freelibrary.iiif.presentation.v3.properties.Homepage;
-import info.freelibrary.iiif.presentation.v3.properties.Label;
-import info.freelibrary.iiif.presentation.v3.properties.Metadata;
-import info.freelibrary.iiif.presentation.v3.properties.PartOf;
-import info.freelibrary.iiif.presentation.v3.properties.Provider;
-import info.freelibrary.iiif.presentation.v3.properties.Rendering;
-import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
-import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
-import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
@@ -42,6 +33,8 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  * A page of {@link Annotation}(s) that associates different content resources with their respective {@link Canvas}(es).
  * An AnnotationPage may included in the items property of the Canvas (and whose target is that Canvas) or on a Manifest
  * (and whose target is that Manifest).
+ *
+ * @param <A> The type of annotation encapsulated on the page
  */
 @SuppressWarnings({ PMD.GOD_CLASS, PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS })
 public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<AnnotationPage<A>>
@@ -200,7 +193,7 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
             ((BehaviorList) aBehaviorList).checkType(ResourceBehavior.class, getClass());
         }
 
-        return (AnnotationPage<A>) super.setBehaviors(aBehaviorList);
+        return super.setBehaviors(aBehaviorList);
     }
 
     /**
@@ -214,36 +207,6 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
         return this;
     }
 
-    @Override
-    public AnnotationPage<A> setHomepages(final Homepage... aHomepageArray) {
-        return (AnnotationPage<A>) super.setHomepages(aHomepageArray);
-    }
-
-    @Override
-    public AnnotationPage<A> setHomepages(final List<Homepage> aHomepageList) {
-        return (AnnotationPage<A>) super.setHomepages(aHomepageList);
-    }
-
-    @Override
-    public AnnotationPage<A> setID(final String aID) {
-        return (AnnotationPage<A>) super.setID(aID);
-    }
-
-    @Override
-    public AnnotationPage<A> setLabel(final Label aLabel) {
-        return (AnnotationPage<A>) super.setLabel(aLabel);
-    }
-
-    @Override
-    public AnnotationPage<A> setMetadata(final List<Metadata> aMetadataList) {
-        return (AnnotationPage<A>) super.setMetadata(aMetadataList);
-    }
-
-    @Override
-    public AnnotationPage<A> setMetadata(final Metadata... aMetadataArray) {
-        return (AnnotationPage<A>) super.setMetadata(aMetadataArray);
-    }
-
     /**
      * Sets the annotation page that should follow this one in an {@link AnnotationCollection}.
      *
@@ -253,83 +216,6 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
     public AnnotationPage<?> setNextPage(final AnnotationPage<?> anAnnotationPage) {
         myNextAnnotationPage = anAnnotationPage;
         return this;
-    }
-
-    @Override
-    public AnnotationPage<A> setPartOfs(final List<PartOf> aPartOfList) {
-        return (AnnotationPage<A>) super.setPartOfs(aPartOfList);
-    }
-
-    @Override
-    public AnnotationPage<A> setPartOfs(final PartOf... aPartOfArray) {
-        return (AnnotationPage<A>) super.setPartOfs(aPartOfArray);
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.PROVIDER)
-    public AnnotationPage<A> setProviders(final List<Provider> aProviderList) {
-        return (AnnotationPage<A>) super.setProviders(aProviderList);
-    }
-
-    @Override
-    @JsonIgnore
-    public AnnotationPage<A> setProviders(final Provider... aProviderArray) {
-        return setProviders(Arrays.asList(aProviderArray));
-    }
-
-    @Override
-    public AnnotationPage<A> setRenderings(final List<Rendering> aRenderingList) {
-        return (AnnotationPage<A>) super.setRenderings(aRenderingList);
-    }
-
-    @Override
-    public AnnotationPage<A> setRenderings(final Rendering... aRenderingArray) {
-        return (AnnotationPage<A>) super.setRenderings(aRenderingArray);
-    }
-
-    @Override
-    public AnnotationPage<A> setRequiredStatement(final RequiredStatement aStatement) {
-        return (AnnotationPage<A>) super.setRequiredStatement(aStatement);
-    }
-
-    @Override
-    public AnnotationPage<A> setRights(final String aRights) {
-        return (AnnotationPage<A>) super.setRights(aRights);
-    }
-
-    @Override
-    public AnnotationPage<A> setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
-        return (AnnotationPage<A>) super.setSeeAlsoRefs(aSeeAlsoList);
-    }
-
-    @Override
-    public AnnotationPage<A> setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
-        return (AnnotationPage<A>) super.setSeeAlsoRefs(aSeeAlsoArray);
-    }
-
-    @Override
-    public AnnotationPage<A> setServices(final List<Service<?>> aServiceList) {
-        return (AnnotationPage<A>) super.setServices(aServiceList);
-    }
-
-    @Override
-    public AnnotationPage<A> setServices(final Service<?>... aServiceArray) {
-        return (AnnotationPage<A>) super.setServices(aServiceArray);
-    }
-
-    @Override
-    public AnnotationPage<A> setSummary(final Summary aSummary) {
-        return (AnnotationPage<A>) super.setSummary(aSummary);
-    }
-
-    @Override
-    public AnnotationPage<A> setThumbnails(final ContentResource<?>... aThumbnailArray) {
-        return (AnnotationPage<A>) super.setThumbnails(aThumbnailArray);
-    }
-
-    @Override
-    public AnnotationPage<A> setThumbnails(final List<ContentResource<?>> aThumbnailList) {
-        return (AnnotationPage<A>) super.setThumbnails(aThumbnailList);
     }
 
     /**

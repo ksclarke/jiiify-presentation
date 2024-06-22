@@ -121,6 +121,15 @@ abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> e
     }
 
     /**
+     * Indicates whether there is a choice between annotation resources or just individual resources on an annotation.
+     *
+     * @return True if body contains a choice; else, false
+     */
+    public boolean bodyHasChoice() {
+        return myBodyHasChoice;
+    }
+
+    /**
      * Gets the content resources associated with this annotation.
      *
      * @return The content resources associated with this annotation
@@ -135,13 +144,43 @@ abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> e
     }
 
     /**
+     * Gets the annotation's motivation.
+     *
+     * @return The annotation's motivation
+     */
+    @JsonGetter(JsonKeys.MOTIVATION)
+    public Motivation getMotivation() {
+        return myMotivation;
+    }
+
+    /**
+     * Gets the annotation's target.
+     *
+     * @return The annotation's target
+     */
+    public Target getTarget() {
+        return myTarget;
+    }
+
+    /**
+     * Gets the annotation's time mode.
+     *
+     * @return The annotation's optional time mode
+     */
+    public Optional<TimeMode> getTimeMode() {
+        return Optional.ofNullable(myTimeMode);
+    }
+
+    /**
      * Sets the annotation resource's behaviors. The supplied behaviors are checked for compatibility with the resource.
      *
      * @param aBehaviorArray An array of annotation resource behaviors
      * @return This annotation
      */
+    @Override
     @JsonIgnore
-    public AbstractCanvasAnnotation<A> setBehaviors(final Behavior... aBehaviorArray) {
+    @SuppressWarnings(JDK.UNCHECKED)
+    public A setBehaviors(final Behavior... aBehaviorArray) {
         return setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorArray));
     }
 
@@ -154,49 +193,12 @@ abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> e
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
     @SuppressWarnings({ PMD.LOOSE_COUPLING })
-    public AbstractCanvasAnnotation<A> setBehaviors(final List<Behavior> aBehaviorList) {
+    public A setBehaviors(final List<Behavior> aBehaviorList) {
         if (aBehaviorList instanceof final BehaviorList behaviorList) {
             behaviorList.checkType(ResourceBehavior.class, getClass());
         }
 
-        return (AbstractCanvasAnnotation<A>) super.setBehaviors(aBehaviorList);
-    }
-
-    /**
-     * Indicates whether there is a choice between annotation resources or just individual resources on an annotation.
-     *
-     * @return True if body contains a choice; else, false
-     */
-    protected boolean bodyHasChoice() {
-        return myBodyHasChoice;
-    }
-
-    /**
-     * Gets the annotation's motivation.
-     *
-     * @return The annotation's motivation
-     */
-    @JsonGetter(JsonKeys.MOTIVATION)
-    protected Motivation getMotivation() {
-        return myMotivation;
-    }
-
-    /**
-     * Gets the annotation's target.
-     *
-     * @return The annotation's target
-     */
-    protected Target getTarget() {
-        return myTarget;
-    }
-
-    /**
-     * Gets the annotation's time mode.
-     *
-     * @return The annotation's optional time mode
-     */
-    protected Optional<TimeMode> getTimeMode() {
-        return Optional.ofNullable(myTimeMode);
+        return super.setBehaviors(aBehaviorList);
     }
 
     /**
@@ -207,7 +209,7 @@ abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> e
      */
     @JsonIgnore
     @SuppressWarnings(JDK.UNCHECKED)
-    protected A setBody(final ContentResource<?>... aResourceArray) {
+    public A setBody(final ContentResource<?>... aResourceArray) {
         final List<ContentResource<?>> resources = getBody();
 
         resources.clear();
@@ -223,7 +225,7 @@ abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> e
      * @return This annotation
      */
     @JsonIgnore
-    protected A setBody(final List<ContentResource<?>> aResourceList) {
+    public A setBody(final List<ContentResource<?>> aResourceList) {
         return setBody(aResourceList.toArray(new ContentResource[0]));
     }
 
@@ -234,8 +236,32 @@ abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> e
      * @return This annotation
      */
     @SuppressWarnings(JDK.UNCHECKED)
-    protected A setChoice(final boolean aChoice) {
+    public A setChoice(final boolean aChoice) {
         myBodyHasChoice = aChoice;
+        return (A) this;
+    }
+
+    /**
+     * Sets the target of the annotation.
+     *
+     * @param aTarget A target
+     * @return The annotation
+     */
+    @SuppressWarnings(JDK.UNCHECKED)
+    public A setTarget(final Target aTarget) {
+        myTarget = aTarget;
+        return (A) this;
+    }
+
+    /**
+     * Sets the time mode of the annotation.
+     *
+     * @param aTimeMode A time mode
+     * @return The annotation
+     */
+    @SuppressWarnings(JDK.UNCHECKED)
+    public A setTimeMode(final TimeMode aTimeMode) {
+        myTimeMode = aTimeMode;
         return (A) this;
     }
 
@@ -248,30 +274,6 @@ abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> e
     @JsonSetter(JsonKeys.MOTIVATION)
     protected A setMotivation(final Motivation aMotivation) {
         myMotivation = aMotivation;
-        return (A) this;
-    }
-
-    /**
-     * Sets the target of the annotation.
-     *
-     * @param aTarget A target
-     * @return The annotation
-     */
-    @SuppressWarnings(JDK.UNCHECKED)
-    protected A setTarget(final Target aTarget) {
-        myTarget = aTarget;
-        return (A) this;
-    }
-
-    /**
-     * Sets the time mode of the annotation.
-     *
-     * @param aTimeMode A time mode
-     * @return The annotation
-     */
-    @SuppressWarnings(JDK.UNCHECKED)
-    protected A setTimeMode(final TimeMode aTimeMode) {
-        myTimeMode = aTimeMode;
         return (A) this;
     }
 

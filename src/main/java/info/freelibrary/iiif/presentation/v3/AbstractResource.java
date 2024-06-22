@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.JDK;
 import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.ids.UriUtils;
@@ -50,7 +51,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.BehaviorDeserializer;
     JsonKeys.BEHAVIOR, JsonKeys.HOMEPAGE, JsonKeys.THUMBNAIL, JsonKeys.SUMMARY, JsonKeys.METADATA, JsonKeys.START,
     JsonKeys.RIGHTS, JsonKeys.REQUIRED_STATEMENT, JsonKeys.VIEWING_DIRECTION, JsonKeys.RENDERING, JsonKeys.SEE_ALSO,
     JsonKeys.ITEMS, JsonKeys.SERVICE, JsonKeys.STRUCTURES, JsonKeys.SERVICES, JsonKeys.NAV_DATE, JsonKeys.ANNOTATIONS })
-abstract class AbstractResource<T extends AbstractResource<T>> {
+abstract class AbstractResource<T extends AbstractResource<T>> implements Resource<T> {
 
     /** The IIIF Presentation context URI. */
     protected static final URI PRESENTATION_CONTEXT_URI = URI.create("http://iiif.io/api/presentation/3/context.json");
@@ -158,6 +159,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      *
      * @return The resource's behaviors
      */
+    @Override
     @JsonGetter(JsonKeys.BEHAVIOR)
     public List<Behavior> getBehaviors() {
         if (myBehaviors == null) {
@@ -172,6 +174,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      *
      * @return The resource's homepages
      */
+    @Override
     @JsonGetter(JsonKeys.HOMEPAGE)
     public List<Homepage> getHomepages() {
         if (myHomepages == null) {
@@ -186,6 +189,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      *
      * @return The ID
      */
+    @Override
     @JsonGetter(JsonKeys.ID)
     public String getID() {
         return myID;
@@ -196,6 +200,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      *
      * @return The label
      */
+    @Override
     @JsonUnwrapped
     public Label getLabel() {
         return myLabel;
@@ -206,6 +211,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      *
      * @return The metadata
      */
+    @Override
     @JsonGetter(JsonKeys.METADATA)
     public List<Metadata> getMetadata() {
         if (myMetadata == null) {
@@ -220,6 +226,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      *
      * @return The resource's partOfs
      */
+    @Override
     @JsonGetter(JsonKeys.PART_OF)
     public List<PartOf> getPartOfs() {
         if (myPartOfs == null) {
@@ -234,6 +241,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      *
      * @return The resource's providers
      */
+    @Override
     @JsonGetter(JsonKeys.PROVIDER)
     public List<Provider> getProviders() {
         return getResourceProviders();
@@ -244,6 +252,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      *
      * @return The resource's renderings
      */
+    @Override
     @JsonGetter(JsonKeys.RENDERING)
     public List<Rendering> getRenderings() {
         if (myRenderings == null) {
@@ -258,6 +267,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      *
      * @return The required statement
      */
+    @Override
     @JsonGetter(JsonKeys.REQUIRED_STATEMENT)
     public RequiredStatement getRequiredStatement() {
         return myRequiredStatement;
@@ -268,6 +278,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      *
      * @return The rights
      */
+    @Override
     @JsonProperty
     public String getRights() {
         return myRights;
@@ -278,6 +289,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      *
      * @return The see also reference(s)
      */
+    @Override
     @JsonGetter(JsonKeys.SEE_ALSO)
     public List<SeeAlso> getSeeAlsoRefs() {
         if (mySeeAlsoRefs == null) {
@@ -292,6 +304,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      *
      * @return The resource's services
      */
+    @Override
     @JsonGetter(JsonKeys.SERVICE)
     public List<Service<?>> getServices() {
         if (myServices == null) {
@@ -306,6 +319,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      *
      * @return The summary
      */
+    @Override
     @JsonUnwrapped
     public Summary getSummary() {
         return mySummary;
@@ -316,6 +330,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      *
      * @return The resource's thumbnails
      */
+    @Override
     @JsonGetter(JsonKeys.THUMBNAIL)
     public List<ContentResource<?>> getThumbnails() {
         return getResourceThumbnails();
@@ -326,9 +341,333 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
      *
      * @return The type
      */
+    @Override
     @JsonGetter(JsonKeys.TYPE)
     public String getType() {
         return myType;
+    }
+
+    @Override
+    @JsonIgnore
+    public T setBehaviors(final Behavior... aBehaviorArray) {
+        return setBehaviors(Arrays.asList(aBehaviorArray));
+    }
+
+    @Override
+    @JsonSetter(JsonKeys.BEHAVIOR)
+    @SuppressWarnings(JDK.UNCHECKED)
+    public T setBehaviors(final List<Behavior> aBehaviorList) {
+        myBehaviors = Objects.requireNonNull(aBehaviorList);
+        return (T) this;
+    }
+
+    /**
+     * Sets the resource's homepages.
+     *
+     * @param aHomepageArray An array of homepages
+     * @return The resource
+     */
+    @Override
+    @JsonSetter(JsonKeys.HOMEPAGE)
+    @SuppressWarnings(JDK.UNCHECKED)
+    public T setHomepages(final Homepage... aHomepageArray) {
+        return setHomepages(Arrays.asList(aHomepageArray));
+    }
+
+    /**
+     * Sets the resource's homepages.
+     *
+     * @param aHomepageList A list of homepages
+     * @return The resource
+     */
+    @Override
+    @JsonIgnore
+    @SuppressWarnings(JDK.UNCHECKED)
+    public T setHomepages(final List<Homepage> aHomepageList) {
+        final List<Homepage> homepages = getHomepages();
+
+        Objects.requireNonNull(aHomepageList);
+        homepages.clear();
+        homepages.addAll(aHomepageList);
+
+        return (T) this;
+    }
+
+    /**
+     * Sets the resource ID.
+     *
+     * @param aID An ID
+     * @return The resource
+     */
+    @Override
+    @JsonIgnore
+    @SuppressWarnings(JDK.UNCHECKED)
+    public T setID(final String aID) {
+        myID = UriUtils.checkID(aID, true);
+        return (T) this;
+    }
+
+    /**
+     * Sets the resource label.
+     *
+     * @param aLabel A label to assign to the resource
+     * @return The resource
+     */
+    @Override
+    @JsonSetter(JsonKeys.LABEL)
+    @SuppressWarnings(JDK.UNCHECKED)
+    public T setLabel(final Label aLabel) {
+        Objects.requireNonNull(aLabel);
+        myLabel = aLabel;
+        return (T) this;
+    }
+
+    /**
+     * Sets the resource metadata from a list of metadata.
+     *
+     * @param aMetadataList A list of metadata
+     * @return The resource
+     */
+    @Override
+    @JsonSetter(JsonKeys.METADATA)
+    @SuppressWarnings(JDK.UNCHECKED)
+    public T setMetadata(final List<Metadata> aMetadataList) {
+        final List<Metadata> metadata = getMetadata();
+
+        Objects.requireNonNull(aMetadataList);
+        metadata.clear();
+        metadata.addAll(aMetadataList);
+
+        return (T) this;
+    }
+
+    /**
+     * Sets the resource metadata.
+     *
+     * @param aMetadataArray The metadata to associate with the resource
+     * @return The resource
+     */
+    @Override
+    @JsonIgnore
+    @SuppressWarnings(JDK.UNCHECKED)
+    public T setMetadata(final Metadata... aMetadataArray) {
+        return setMetadata(Arrays.asList(aMetadataArray));
+    }
+
+    /**
+     * Sets the resource's partOfs.
+     *
+     * @param aPartOfList A list of partOfs
+     * @return The resource
+     */
+    @Override
+    @JsonSetter(JsonKeys.PART_OF)
+    @SuppressWarnings(JDK.UNCHECKED)
+    public T setPartOfs(final List<PartOf> aPartOfList) {
+        final List<PartOf> partOfs = getPartOfs();
+
+        Objects.requireNonNull(aPartOfList);
+        partOfs.clear();
+        partOfs.addAll(aPartOfList);
+
+        return (T) this;
+    }
+
+    /**
+     * Sets the resource's partOfs.
+     *
+     * @param aPartOfArray An array of partOfs
+     * @return The resource
+     */
+    @Override
+    @JsonIgnore
+    @SuppressWarnings(JDK.UNCHECKED)
+    public T setPartOfs(final PartOf... aPartOfArray) {
+        return setPartOfs(Arrays.asList(aPartOfArray));
+    }
+
+    /**
+     * Sets the resource's providers.
+     *
+     * @param aProviderList A list of providers
+     * @return The resource
+     */
+    @Override
+    @SuppressWarnings(JDK.UNCHECKED)
+    public T setProviders(final List<Provider> aProviderList) {
+        return (T) setResourceProviders(aProviderList);
+    }
+
+    /**
+     * Sets the resource's providers.
+     *
+     * @param aProviderArray An array of providers
+     * @return The resource
+     */
+    @Override
+    @SuppressWarnings(JDK.UNCHECKED)
+    public T setProviders(final Provider... aProviderArray) {
+        return setProviders(Arrays.asList(aProviderArray));
+    }
+
+    /**
+     * Sets the resource's renderings.
+     *
+     * @param aRenderingList A list of renderings
+     * @return The resource
+     */
+    @Override
+    @JsonSetter(JsonKeys.RENDERING)
+    @SuppressWarnings(JDK.UNCHECKED)
+    public T setRenderings(final List<Rendering> aRenderingList) {
+        final List<Rendering> renderings = getRenderings();
+
+        Objects.requireNonNull(renderings);
+        renderings.clear();
+        renderings.addAll(aRenderingList);
+
+        return (T) this;
+    }
+
+    /**
+     * Sets the resource's renderings.
+     *
+     * @param aRenderingArray An array of renderings
+     * @return The resource
+     */
+    @Override
+    @JsonIgnore
+    @SuppressWarnings(JDK.UNCHECKED)
+    public T setRenderings(final Rendering... aRenderingArray) {
+        return setRenderings(Arrays.asList(aRenderingArray));
+    }
+
+    /**
+     * Sets the resource's required statement.
+     *
+     * @param aStatement A required statement
+     * @return The resource
+     */
+    @Override
+    @JsonSetter(JsonKeys.REQUIRED_STATEMENT)
+    @SuppressWarnings(JDK.UNCHECKED)
+    public T setRequiredStatement(final RequiredStatement aStatement) {
+        myRequiredStatement = aStatement;
+        return (T) this;
+    }
+
+    /**
+     * Sets the resource's rights URI.
+     *
+     * @param aRights A rights URI
+     * @return The resource
+     */
+    @Override
+    @JsonProperty
+    @SuppressWarnings(JDK.UNCHECKED)
+    public T setRights(final String aRights) {
+        myRights = UriUtils.checkID(aRights, false);
+        return (T) this;
+    }
+
+    /**
+     * Sets the resource's seeAlso references.
+     *
+     * @param aSeeAlsoList A list of seeAlso references
+     * @return The resource
+     */
+    @Override
+    @JsonSetter(JsonKeys.SEE_ALSO)
+    @SuppressWarnings(JDK.UNCHECKED)
+    public T setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
+        getSeeAlsoRefs().addAll(aSeeAlsoList);
+        return (T) this;
+    }
+
+    /**
+     * Sets the resource's seeAlso references.
+     *
+     * @param aSeeAlsoArray An array of seeAlso references
+     * @return The resource
+     */
+    @Override
+    @JsonIgnore
+    @SuppressWarnings(JDK.UNCHECKED)
+    public T setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
+        Collections.addAll(getSeeAlsoRefs(), aSeeAlsoArray);
+        return (T) this;
+    }
+
+    /**
+     * Sets the resource's services.
+     *
+     * @param aServiceList A list of services
+     * @return The resource
+     */
+    @Override
+    @JsonSetter(JsonKeys.SERVICE)
+    @SuppressWarnings(JDK.UNCHECKED)
+    public T setServices(final List<Service<?>> aServiceList) {
+        final List<Service<?>> services = getServices();
+
+        Objects.requireNonNull(aServiceList);
+        services.clear();
+        services.addAll(aServiceList);
+
+        return (T) this;
+    }
+
+    /**
+     * Sets the resource's services.
+     *
+     * @param aServiceArray An array of services
+     * @return The resource
+     */
+    @Override
+    @JsonIgnore
+    @SuppressWarnings(JDK.UNCHECKED)
+    public T setServices(final Service<?>... aServiceArray) {
+        return setServices(Arrays.asList(aServiceArray));
+    }
+
+    /**
+     * Sets the resource summary.
+     *
+     * @param aSummary The resource summary
+     * @return The resource
+     */
+    @Override
+    @SuppressWarnings(JDK.UNCHECKED)
+    public T setSummary(final Summary aSummary) {
+        Objects.requireNonNull(aSummary);
+        mySummary = aSummary;
+        return (T) this;
+    }
+
+    /**
+     * Sets the resource's thumbnails.
+     *
+     * @param aThumbnailArray A thumbnails array
+     * @return The resource
+     */
+    @Override
+    @JsonSetter(JsonKeys.THUMBNAIL)
+    @SuppressWarnings(JDK.UNCHECKED)
+    public T setThumbnails(final ContentResource<?>... aThumbnailArray) {
+        return (T) setResourceThumbnails(Arrays.asList(aThumbnailArray));
+    }
+
+    /**
+     * Sets the resource's thumbnails.
+     *
+     * @param aThumbnailList A thumbnails list
+     * @return The resource
+     */
+    @Override
+    @JsonIgnore
+    @SuppressWarnings(JDK.UNCHECKED)
+    public T setThumbnails(final List<ContentResource<?>> aThumbnailList) {
+        return (T) setResourceThumbnails(aThumbnailList);
     }
 
     /**
@@ -360,287 +699,6 @@ abstract class AbstractResource<T extends AbstractResource<T>> {
         }
 
         throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_024, floatValue));
-    }
-
-    /**
-     * Sets the resource's behaviors.
-     *
-     * @param aBehaviorList A list of behaviors
-     * @return The resource
-     */
-    @JsonSetter(JsonKeys.BEHAVIOR)
-    protected AbstractResource<T> setBehaviors(final List<Behavior> aBehaviorList) {
-        myBehaviors = Objects.requireNonNull(aBehaviorList);
-        return this;
-    }
-
-    /**
-     * Sets the resource's homepages.
-     *
-     * @param aHomepageArray An array of homepages
-     * @return The resource
-     */
-    @JsonSetter(JsonKeys.HOMEPAGE)
-    protected AbstractResource<T> setHomepages(final Homepage... aHomepageArray) {
-        return setHomepages(Arrays.asList(aHomepageArray));
-    }
-
-    /**
-     * Sets the resource's homepages.
-     *
-     * @param aHomepageList A list of homepages
-     * @return The resource
-     */
-    @JsonIgnore
-    protected AbstractResource<T> setHomepages(final List<Homepage> aHomepageList) {
-        final List<Homepage> homepages = getHomepages();
-
-        Objects.requireNonNull(aHomepageList);
-        homepages.clear();
-        homepages.addAll(aHomepageList);
-
-        return this;
-    }
-
-    /**
-     * Sets the resource ID.
-     *
-     * @param aID An ID
-     * @return The resource
-     */
-    @JsonIgnore
-    protected AbstractResource<T> setID(final String aID) {
-        myID = UriUtils.checkID(aID, true);
-        return this;
-    }
-
-    /**
-     * Sets the resource label.
-     *
-     * @param aLabel A label to assign to the resource
-     * @return The resource
-     */
-    @JsonSetter(JsonKeys.LABEL)
-    protected AbstractResource<T> setLabel(final Label aLabel) {
-        Objects.requireNonNull(aLabel);
-        myLabel = aLabel;
-        return this;
-    }
-
-    /**
-     * Sets the resource metadata from a list of metadata.
-     *
-     * @param aMetadataList A list of metadata
-     * @return The resource
-     */
-    @JsonSetter(JsonKeys.METADATA)
-    protected AbstractResource<T> setMetadata(final List<Metadata> aMetadataList) {
-        final List<Metadata> metadata = getMetadata();
-
-        Objects.requireNonNull(aMetadataList);
-        metadata.clear();
-        metadata.addAll(aMetadataList);
-
-        return this;
-    }
-
-    /**
-     * Sets the resource metadata.
-     *
-     * @param aMetadataArray The metadata to associate with the resource
-     * @return The resource
-     */
-    @JsonIgnore
-    protected AbstractResource<T> setMetadata(final Metadata... aMetadataArray) {
-        return setMetadata(Arrays.asList(aMetadataArray));
-    }
-
-    /**
-     * Sets the resource's partOfs.
-     *
-     * @param aPartOfList A list of partOfs
-     * @return The resource
-     */
-    @JsonSetter(JsonKeys.PART_OF)
-    protected AbstractResource<T> setPartOfs(final List<PartOf> aPartOfList) {
-        final List<PartOf> partOfs = getPartOfs();
-
-        Objects.requireNonNull(aPartOfList);
-        partOfs.clear();
-        partOfs.addAll(aPartOfList);
-
-        return this;
-    }
-
-    /**
-     * Sets the resource's partOfs.
-     *
-     * @param aPartOfArray An array of partOfs
-     * @return The resource
-     */
-    @JsonIgnore
-    protected AbstractResource<T> setPartOfs(final PartOf... aPartOfArray) {
-        return setPartOfs(Arrays.asList(aPartOfArray));
-    }
-
-    /**
-     * Sets the resource's providers.
-     *
-     * @param aProviderList A list of providers
-     * @return The resource
-     */
-    @JsonSetter(JsonKeys.PROVIDER)
-    protected AbstractResource<T> setProviders(final List<Provider> aProviderList) {
-        return setResourceProviders(aProviderList);
-    }
-
-    /**
-     * Sets the resource's providers.
-     *
-     * @param aProviderArray An array of providers
-     * @return The resource
-     */
-    @JsonIgnore
-    protected AbstractResource<T> setProviders(final Provider... aProviderArray) {
-        return setProviders(Arrays.asList(aProviderArray));
-    }
-
-    /**
-     * Sets the resource's renderings.
-     *
-     * @param aRenderingList A list of renderings
-     * @return The resource
-     */
-    @JsonSetter(JsonKeys.RENDERING)
-    protected AbstractResource<T> setRenderings(final List<Rendering> aRenderingList) {
-        final List<Rendering> renderings = getRenderings();
-
-        Objects.requireNonNull(renderings);
-        renderings.clear();
-        renderings.addAll(aRenderingList);
-
-        return this;
-    }
-
-    /**
-     * Sets the resource's renderings.
-     *
-     * @param aRenderingArray An array of renderings
-     * @return The resource
-     */
-    @JsonIgnore
-    protected AbstractResource<T> setRenderings(final Rendering... aRenderingArray) {
-        return setRenderings(Arrays.asList(aRenderingArray));
-    }
-
-    /**
-     * Sets the resource's required statement.
-     *
-     * @param aStatement A required statement
-     * @return The resource
-     */
-    @JsonSetter(JsonKeys.REQUIRED_STATEMENT)
-    protected AbstractResource<T> setRequiredStatement(final RequiredStatement aStatement) {
-        myRequiredStatement = aStatement;
-        return this;
-    }
-
-    /**
-     * Sets the resource's rights URI.
-     *
-     * @param aRights A rights URI
-     * @return The resource
-     */
-    @JsonProperty
-    protected AbstractResource<T> setRights(final String aRights) {
-        myRights = UriUtils.checkID(aRights, false);
-        return this;
-    }
-
-    /**
-     * Sets the resource's seeAlso references.
-     *
-     * @param aSeeAlsoList A list of seeAlso references
-     * @return The resource
-     */
-    @JsonSetter(JsonKeys.SEE_ALSO)
-    protected AbstractResource<T> setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
-        getSeeAlsoRefs().addAll(aSeeAlsoList);
-        return this;
-    }
-
-    /**
-     * Sets the resource's seeAlso references.
-     *
-     * @param aSeeAlsoArray An array of seeAlso references
-     * @return The resource
-     */
-    @JsonIgnore
-    protected AbstractResource<T> setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
-        Collections.addAll(getSeeAlsoRefs(), aSeeAlsoArray);
-        return this;
-    }
-
-    /**
-     * Sets the resource's services.
-     *
-     * @param aServiceList A list of services
-     * @return The resource
-     */
-    @JsonSetter(JsonKeys.SERVICE)
-    protected AbstractResource<T> setServices(final List<Service<?>> aServiceList) {
-        final List<Service<?>> services = getServices();
-
-        Objects.requireNonNull(aServiceList);
-        services.clear();
-        services.addAll(aServiceList);
-
-        return this;
-    }
-
-    /**
-     * Sets the resource's services.
-     *
-     * @param aServiceArray An array of services
-     * @return The resource
-     */
-    @JsonIgnore
-    protected AbstractResource<T> setServices(final Service<?>... aServiceArray) {
-        return setServices(Arrays.asList(aServiceArray));
-    }
-
-    /**
-     * Sets the resource summary.
-     *
-     * @param aSummary The resource summary
-     * @return The resource
-     */
-    protected AbstractResource<T> setSummary(final Summary aSummary) {
-        Objects.requireNonNull(aSummary);
-        mySummary = aSummary;
-        return this;
-    }
-
-    /**
-     * Sets the resource's thumbnails.
-     *
-     * @param aThumbnailArray A thumbnails array
-     * @return The resource
-     */
-    @JsonSetter(JsonKeys.THUMBNAIL)
-    protected AbstractResource<T> setThumbnails(final ContentResource<?>... aThumbnailArray) {
-        return setResourceThumbnails(Arrays.asList(aThumbnailArray));
-    }
-
-    /**
-     * Sets the resource's thumbnails.
-     *
-     * @param aThumbnailList A thumbnails list
-     * @return The resource
-     */
-    @JsonIgnore
-    protected AbstractResource<T> setThumbnails(final List<ContentResource<?>> aThumbnailList) {
-        return setResourceThumbnails(aThumbnailList);
     }
 
     /**

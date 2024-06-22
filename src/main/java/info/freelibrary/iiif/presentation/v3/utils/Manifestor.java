@@ -21,6 +21,13 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 public class Manifestor {
 
     /**
+     * Creates a new manifest and collection document manifestor.
+     */
+    public Manifestor() {
+        // This is intentionally left empty
+    }
+
+    /**
      * Deserializes a {@link Collection} from a file using the UTF-8 character set.
      *
      * @param aJsonFile A JSON file representing a collection

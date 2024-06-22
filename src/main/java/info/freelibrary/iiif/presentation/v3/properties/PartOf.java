@@ -1,18 +1,15 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import java.util.Objects;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.Eclipse;
 
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
-import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
@@ -21,7 +18,6 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  * discovery of further relevant information. Similarly, a Manifest can reference a containing Collection using
  * <code>partOf</code> to aid in navigation.
  */
-@JsonInclude(Include.NON_EMPTY)
 public class PartOf extends AbstractLinkProperty<PartOf> {
 
     /**
@@ -42,71 +38,14 @@ public class PartOf extends AbstractLinkProperty<PartOf> {
         super();
     }
 
-    @Override
-    public boolean equals(final Object aObject) {
-        if (!super.equals(aObject) || getClass() != aObject.getClass()) {
-            return false;
-        }
-
-        return getLanguages().equals(((PartOf) aObject).getLanguages());
-    }
-
-    @Override
-    public Optional<MediaType> getFormat() {
-        return super.getFormat();
-    }
-
     /**
-     * Gets an optional descriptive label.
+     * Gets a descriptive label.
      *
-     * @return An optional descriptive label
+     * @return A descriptive label
      */
+    @JsonInclude(Include.NON_EMPTY)
     public Optional<Label> getLabel() {
-        return Optional.ofNullable(super.getNullableLabel());
-    }
-
-    @Override
-    public int hashCode() {
-        return 31 * super.hashCode() + Objects.hash(getLanguages());
-    }
-
-    /**
-     * Sets the ID.
-     *
-     * @param aID The ID
-     * @return The resource whose ID is being set
-     */
-    @Override
-    @JsonSetter(JsonKeys.ID)
-    public PartOf setID(final String aID) {
-        return (PartOf) super.setID(aID);
-    }
-
-    /**
-     * Sets the descriptive label.
-     *
-     * @param aLabel A descriptive label
-     * @return The property whose label is being set
-     */
-    @Override
-    public PartOf setLabel(final Label aLabel) {
-        return (PartOf) super.setLabel(aLabel);
-    }
-
-    @Override
-    public PartOf setLanguages(final String... aLangArray) {
-        return (PartOf) super.setLanguages(aLangArray);
-    }
-
-    /**
-     * Sets the partOf type.
-     *
-     * @param aType A type
-     * @return The partOf
-     */
-    @Override
-    public PartOf setType(final String aType) {
-        return (PartOf) super.setType(aType);
+        return Optional.ofNullable(myLabel);
     }
 
     /**

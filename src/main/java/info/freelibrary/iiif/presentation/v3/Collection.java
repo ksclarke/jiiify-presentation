@@ -25,16 +25,8 @@ import info.freelibrary.util.warnings.PMD;
 import info.freelibrary.iiif.presentation.v3.exts.geo.NavPlace;
 import info.freelibrary.iiif.presentation.v3.ids.UriUtils;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
-import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
-import info.freelibrary.iiif.presentation.v3.properties.Metadata;
 import info.freelibrary.iiif.presentation.v3.properties.NavDate;
-import info.freelibrary.iiif.presentation.v3.properties.PartOf;
-import info.freelibrary.iiif.presentation.v3.properties.Provider;
-import info.freelibrary.iiif.presentation.v3.properties.Rendering;
-import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
-import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
-import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CollectionBehavior;
@@ -89,27 +81,6 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     }
 
     /**
-     * Adds an array of new context URIs to the manifest.
-     *
-     * @param aContextArray Collection context URIs(s)
-     * @return The collection
-     */
-    @Override
-    public Collection addContexts(final URI... aContextArray) {
-        return (Collection) super.addContexts(aContextArray);
-    }
-
-    /**
-     * Clears all contexts, but the required one.
-     *
-     * @return The collection
-     */
-    @Override
-    public Collection clearContexts() {
-        return (Collection) super.clearContexts();
-    }
-
-    /**
      * Gets the collection's accompanying canvas.
      *
      * @return The accompanying canvas
@@ -129,18 +100,6 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     @JsonIgnore
     public URI getContext() {
         return PRESENTATION_CONTEXT_URI;
-    }
-
-    /**
-     * Gets an unmodifiable list of collection contexts. To remove contexts, use {@link Collection#removeContext(URI)
-     * removeContext} or {@link Collection#clearContexts() clearContexts}.
-     *
-     * @return The manifest context
-     */
-    @Override
-    @JsonIgnore
-    public List<URI> getContexts() {
-        return super.getContexts();
     }
 
     /**
@@ -193,19 +152,6 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     }
 
     /**
-     * Remove the supplied context. This will not remove the default required context though. If that's supplied, an
-     * {@link UnsupportedOperationException} will be thrown.
-     *
-     * @param aContextURI A context to be removed from the contexts list
-     * @return True if the context was removed; else, false
-     * @throws UnsupportedOperationException If the required context is supplied to be removed
-     */
-    @Override
-    public boolean removeContext(final URI aContextURI) {
-        return super.removeContext(aContextURI);
-    }
-
-    /**
      * Sets the collection's accompanying canvas.
      *
      * @param aCanvas An accompanying canvas
@@ -230,22 +176,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
             ((BehaviorList) aBehaviorList).checkType(CollectionBehavior.class, getClass());
         }
 
-        return (Collection) super.setBehaviors(aBehaviorList);
-    }
-
-    @Override
-    public Collection setHomepages(final Homepage... aHomepageArray) {
-        return (Collection) super.setHomepages(aHomepageArray);
-    }
-
-    @Override
-    public Collection setHomepages(final List<Homepage> aHomepageList) {
-        return (Collection) super.setHomepages(aHomepageList);
-    }
-
-    @Override
-    public Collection setID(final String aID) {
-        return (Collection) super.setID(aID);
+        return super.setBehaviors(aBehaviorList);
     }
 
     /**
@@ -260,31 +191,6 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         return this;
     }
 
-    @Override
-    public Collection setLabel(final Label aLabel) {
-        return (Collection) super.setLabel(aLabel);
-    }
-
-    @Override
-    public Collection setMetadata(final List<Metadata> aMetadataList) {
-        return (Collection) super.setMetadata(aMetadataList);
-    }
-
-    @Override
-    public Collection setMetadata(final Metadata... aMetadataArray) {
-        return (Collection) super.setMetadata(aMetadataArray);
-    }
-
-    @Override
-    public Collection setPartOfs(final List<PartOf> aPartOfList) {
-        return (Collection) super.setPartOfs(aPartOfList);
-    }
-
-    @Override
-    public Collection setPartOfs(final PartOf... aPartOfArray) {
-        return (Collection) super.setPartOfs(aPartOfArray);
-    }
-
     /**
      * Sets the collection's placeholder canvas.
      *
@@ -295,48 +201,6 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     public Collection setPlaceholderCanvas(final PlaceholderCanvas aCanvas) {
         myPlaceholderCanvas = aCanvas;
         return this;
-    }
-
-    @Override
-    @JsonIgnore
-    public Collection setProviders(final List<Provider> aProviderList) {
-        return (Collection) super.setProviders(aProviderList);
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.PROVIDER)
-    public Collection setProviders(final Provider... aProviderArray) {
-        return setProviders(Arrays.asList(aProviderArray));
-    }
-
-    @Override
-    public Collection setRenderings(final List<Rendering> aRenderingList) {
-        return (Collection) super.setRenderings(aRenderingList);
-    }
-
-    @Override
-    public Collection setRenderings(final Rendering... aRenderingArray) {
-        return (Collection) super.setRenderings(aRenderingArray);
-    }
-
-    @Override
-    public Collection setRequiredStatement(final RequiredStatement aStatement) {
-        return (Collection) super.setRequiredStatement(aStatement);
-    }
-
-    @Override
-    public Collection setRights(final String aRights) {
-        return (Collection) super.setRights(aRights);
-    }
-
-    @Override
-    public Collection setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
-        return (Collection) super.setSeeAlsoRefs(aSeeAlsoList);
-    }
-
-    @Override
-    public Collection setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
-        return (Collection) super.setSeeAlsoRefs(aSeeAlsoArray);
     }
 
     /**
@@ -366,32 +230,6 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     @SafeVarargs
     public final Collection setServiceDefinitions(final Service<?>... aServiceArray) {
         return setServiceDefinitions(Arrays.asList(aServiceArray));
-    }
-
-    @Override
-    public Collection setServices(final List<Service<?>> aServiceList) {
-        return (Collection) super.setServices(aServiceList);
-    }
-
-    @Override
-    @SafeVarargs
-    public final Collection setServices(final Service<?>... aServiceArray) {
-        return (Collection) super.setServices(aServiceArray);
-    }
-
-    @Override
-    public Collection setSummary(final Summary aSummary) {
-        return (Collection) super.setSummary(aSummary);
-    }
-
-    @Override
-    public Collection setThumbnails(final ContentResource<?>... aThumbnailArray) {
-        return (Collection) super.setThumbnails(aThumbnailArray);
-    }
-
-    @Override
-    public Collection setThumbnails(final List<ContentResource<?>> aThumbnailList) {
-        return (Collection) super.setThumbnails(aThumbnailList);
     }
 
     /**

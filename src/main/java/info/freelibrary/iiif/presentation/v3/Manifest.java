@@ -21,19 +21,9 @@ import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
-import info.freelibrary.iiif.presentation.v3.exts.geo.NavPlace;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
-import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
-import info.freelibrary.iiif.presentation.v3.properties.Metadata;
-import info.freelibrary.iiif.presentation.v3.properties.NavDate;
-import info.freelibrary.iiif.presentation.v3.properties.PartOf;
-import info.freelibrary.iiif.presentation.v3.properties.Provider;
-import info.freelibrary.iiif.presentation.v3.properties.Rendering;
-import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
-import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Start;
-import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
@@ -120,17 +110,6 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     /**
-     * Adds an array of new context URIs to the manifest.
-     *
-     * @param aContextArray Manifest context URIs(s)
-     * @return The manifest
-     */
-    @Override
-    public Manifest addContexts(final URI... aContextArray) {
-        return (Manifest) super.addContexts(aContextArray);
-    }
-
-    /**
      * Adds one or more ranges to the manifest.
      *
      * @param aRangeList A list of ranges to add to the manifest
@@ -150,16 +129,6 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     public Manifest addRanges(final Range... aRangeArray) {
         Collections.addAll(getRanges(), aRangeArray);
         return this;
-    }
-
-    /**
-     * Clears all contexts, but the required one.
-     *
-     * @return The manifest
-     */
-    @Override
-    public Manifest clearContexts() {
-        return (Manifest) super.clearContexts();
     }
 
     /**
@@ -210,30 +179,6 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     @JsonIgnore
     public URI getContext() {
         return PRESENTATION_CONTEXT_URI;
-    }
-
-    /**
-     * Gets an unmodifiable list of manifest contexts. To remove contexts, use {@link Manifest#removeContext(URI)
-     * removeContext} or {@link Manifest#clearContexts() clearContexts}.
-     *
-     * @return The manifest context
-     */
-    @Override
-    @JsonIgnore
-    public List<URI> getContexts() {
-        return super.getContexts();
-    }
-
-    @Override
-    @JsonGetter(JsonKeys.NAV_DATE)
-    public NavDate getNavDate() {
-        return super.getNavDate();
-    }
-
-    @Override
-    @JsonGetter(JsonKeys.NAV_PLACE)
-    public NavPlace getNavPlace() {
-        return super.getNavPlace();
     }
 
     /**
@@ -297,19 +242,6 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     /**
-     * Remove the supplied context. This will not remove the default required context though. If that's supplied, an
-     * {@link UnsupportedOperationException} will be thrown.
-     *
-     * @param aContextURI A context to be removed from the contexts list
-     * @return True if the context was removed; else, false
-     * @throws UnsupportedOperationException If the required context is supplied to be removed
-     */
-    @Override
-    public boolean removeContext(final URI aContextURI) {
-        return super.removeContext(aContextURI);
-    }
-
-    /**
      * Sets the manifest's accompanying canvas.
      *
      * @param aCanvas An accompanying canvas
@@ -364,7 +296,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
             ((BehaviorList) aBehaviorList).checkType(ManifestBehavior.class, getClass());
         }
 
-        return (Manifest) super.setBehaviors(aBehaviorList);
+        return super.setBehaviors(aBehaviorList);
     }
 
     /**
@@ -395,58 +327,6 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
         return this;
     }
 
-    @Override
-    public Manifest setHomepages(final Homepage... aHomepageArray) {
-        return (Manifest) super.setHomepages(aHomepageArray);
-    }
-
-    @Override
-    public Manifest setHomepages(final List<Homepage> aHomepageList) {
-        return (Manifest) super.setHomepages(aHomepageList);
-    }
-
-    @Override
-    public Manifest setID(final String aID) {
-        return (Manifest) super.setID(aID);
-    }
-
-    @Override
-    public Manifest setLabel(final Label aLabel) {
-        return (Manifest) super.setLabel(aLabel);
-    }
-
-    @Override
-    public Manifest setMetadata(final List<Metadata> aMetadataList) {
-        return (Manifest) super.setMetadata(aMetadataList);
-    }
-
-    @Override
-    public Manifest setMetadata(final Metadata... aMetadataArray) {
-        return (Manifest) super.setMetadata(aMetadataArray);
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.NAV_DATE)
-    public Manifest setNavDate(final NavDate aNavDate) {
-        return (Manifest) super.setNavDate(aNavDate);
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.NAV_PLACE)
-    public Manifest setNavPlace(final NavPlace aNavPlace) {
-        return (Manifest) super.setNavPlace(aNavPlace);
-    }
-
-    @Override
-    public Manifest setPartOfs(final List<PartOf> aPartOfList) {
-        return (Manifest) super.setPartOfs(aPartOfList);
-    }
-
-    @Override
-    public Manifest setPartOfs(final PartOf... aPartOfArray) {
-        return (Manifest) super.setPartOfs(aPartOfArray);
-    }
-
     /**
      * Sets the manifest's placeholder canvas.
      *
@@ -457,18 +337,6 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     public Manifest setPlaceholderCanvas(final PlaceholderCanvas aCanvas) {
         myPlaceholderCanvas = aCanvas;
         return this;
-    }
-
-    @Override
-    @JsonIgnore
-    public Manifest setProviders(final List<Provider> aProviderList) {
-        return (Manifest) super.setProviders(aProviderList);
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.PROVIDER)
-    public Manifest setProviders(final Provider... aProviderArray) {
-        return setProviders(Arrays.asList(aProviderArray));
     }
 
     /**
@@ -497,36 +365,6 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     public Manifest setRanges(final Range... aRangeArray) {
         getRanges().clear();
         return addRanges(aRangeArray);
-    }
-
-    @Override
-    public Manifest setRenderings(final List<Rendering> aRenderingList) {
-        return (Manifest) super.setRenderings(aRenderingList);
-    }
-
-    @Override
-    public Manifest setRenderings(final Rendering... aRenderingArray) {
-        return (Manifest) super.setRenderings(aRenderingArray);
-    }
-
-    @Override
-    public Manifest setRequiredStatement(final RequiredStatement aRequiredStatement) {
-        return (Manifest) super.setRequiredStatement(aRequiredStatement);
-    }
-
-    @Override
-    public Manifest setRights(final String aRights) {
-        return (Manifest) super.setRights(aRights);
-    }
-
-    @Override
-    public Manifest setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
-        return (Manifest) super.setSeeAlsoRefs(aSeeAlsoList);
-    }
-
-    @Override
-    public Manifest setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
-        return (Manifest) super.setSeeAlsoRefs(aSeeAlsoArray);
     }
 
     /**
@@ -558,17 +396,6 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
         return setServiceDefinitions(Arrays.asList(aServiceArray));
     }
 
-    @Override
-    public Manifest setServices(final List<Service<?>> aServiceList) {
-        return (Manifest) super.setServices(aServiceList);
-    }
-
-    @Override
-    @SafeVarargs
-    public final Manifest setServices(final Service<?>... aServiceArray) {
-        return (Manifest) super.setServices(aServiceArray);
-    }
-
     /**
      * Sets the optional start.
      *
@@ -579,21 +406,6 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     public Manifest setStart(final Start aStart) {
         myStart = aStart;
         return this;
-    }
-
-    @Override
-    public Manifest setSummary(final Summary aSummary) {
-        return (Manifest) super.setSummary(aSummary);
-    }
-
-    @Override
-    public Manifest setThumbnails(final ContentResource<?>... aThumbnailArray) {
-        return (Manifest) super.setThumbnails(aThumbnailArray);
-    }
-
-    @Override
-    public Manifest setThumbnails(final List<ContentResource<?>> aThumbnailList) {
-        return (Manifest) super.setThumbnails(aThumbnailList);
     }
 
     /**

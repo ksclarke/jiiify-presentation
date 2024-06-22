@@ -3,18 +3,14 @@ package info.freelibrary.iiif.presentation.v3.properties;
 
 import java.util.Optional;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.Eclipse;
 
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
-import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
@@ -23,8 +19,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  * provide a longer description of the resource. The profile and format properties of the document should be given to
  * help the client to make appropriate use of the document.
  */
-@JsonInclude(Include.NON_EMPTY)
-public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
+public class SeeAlso extends AbstractLinkProperty<SeeAlso> implements Localized<SeeAlso> {
 
     /**
      * Creates a new see also value from the supplied string ID and string type. Constant values for type can be found
@@ -46,100 +41,13 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
     }
 
     /**
-     * Gets format as a media type.
-     *
-     * @return An optional media type format
-     */
-    @Override
-    public Optional<MediaType> getFormat() {
-        return super.getFormat();
-    }
-
-    /**
      * Gets an optional descriptive label.
      *
      * @return An optional descriptive label
      */
-    @JsonGetter(JsonKeys.LABEL)
-    @JsonInclude(Include.NON_ABSENT)
+    @JsonInclude(Include.NON_EMPTY)
     public Optional<Label> getLabel() {
-        return Optional.ofNullable(super.getNullableLabel());
-    }
-
-    /**
-     * Sets format.
-     *
-     * @param aMediaType A resource's format
-     * @return The resource whose format is being set
-     */
-    @Override
-    public SeeAlso setFormat(final MediaType aMediaType) {
-        return (SeeAlso) super.setFormat(aMediaType);
-    }
-
-    /**
-     * Sets the ID.
-     *
-     * @param aID An ID
-     * @return The resource whose ID is being set
-     */
-    @Override
-    @JsonSetter(JsonKeys.ID)
-    public SeeAlso setID(final String aID) {
-        return (SeeAlso) super.setID(aID);
-    }
-
-    /**
-     * Sets the descriptive label.
-     *
-     * @param aLabel A descriptive label
-     * @return The resource whose label is being set
-     */
-    @Override
-    @JsonSetter(JsonKeys.LABEL)
-    public SeeAlso setLabel(final Label aLabel) {
-        return (SeeAlso) super.setLabel(aLabel);
-    }
-
-    @Override
-    @JsonIgnore
-    public SeeAlso setLanguages(final String... aLangArray) {
-        return (SeeAlso) super.setLanguages(aLangArray);
-    }
-
-    /**
-     * Sets the profile.
-     *
-     * @param aProfile A profile
-     * @return The resource whose profile is being set
-     */
-    @Override
-    @JsonSetter(JsonKeys.PROFILE)
-    public SeeAlso setProfile(final String aProfile) {
-        return (SeeAlso) super.setProfile(aProfile);
-    }
-
-    /**
-     * Sets the resource type.
-     *
-     * @param aType A resource type
-     * @return The resource whose type is being set
-     */
-    @Override
-    @JsonSetter(JsonKeys.TYPE)
-    public SeeAlso setType(final String aType) {
-        return (SeeAlso) super.setType(aType);
-    }
-
-    /**
-     * A private getter that Jackson uses in deserialization.
-     *
-     * @return The SeeAlso's profile URI as a string
-     */
-    @JsonGetter(JsonKeys.PROFILE)
-    @JsonInclude(Include.NON_NULL)
-    private String getProfileAsString() {
-        return super.getProfile().orElse(null);
+        return Optional.ofNullable(myLabel);
     }
 
     /**

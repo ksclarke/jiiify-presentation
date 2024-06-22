@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import info.freelibrary.util.warnings.JDK;
+
 /**
  * A base class for label, summary, attribution, property, and metadata's label and value fields.
  */
@@ -99,6 +101,32 @@ class I18nProperty<T extends I18nProperty<T>> {
     }
 
     /**
+     * Sets the internationalization(s) of the property, removing all other previous internationalizations.
+     *
+     * @param aI18nArray An array of I18n(s).
+     * @return This property
+     */
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public T setI18ns(final I18n... aI18nArray) {
+        myI18ns.clear();
+        Arrays.stream(aI18nArray).filter(Objects::isNull).forEach(myI18ns::add);
+        return (T) this;
+    }
+
+    /**
+     * Sets the internationalization(s) of the property, removing all other previous internationalizations.
+     *
+     * @param aI18nList A list of I18n(s).
+     * @return This property
+     */
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public T setI18ns(final List<I18n> aI18nList) {
+        myI18ns.clear();
+        aI18nList.stream().filter(Objects::isNull).forEach(myI18ns::add);
+        return (T) this;
+    }
+
+    /**
      * Returns a string representation of this property.
      *
      * @return A string representation of this property
@@ -121,30 +149,6 @@ class I18nProperty<T extends I18nProperty<T>> {
         }
 
         return builder.toString();
-    }
-
-    /**
-     * Sets the internationalization(s) of the property, removing all other previous internationalizations.
-     *
-     * @param aI18nArray An array of I18n(s).
-     * @return This property
-     */
-    protected I18nProperty<T> setI18ns(final I18n... aI18nArray) {
-        myI18ns.clear();
-        Arrays.stream(aI18nArray).filter(Objects::isNull).forEach(myI18ns::add);
-        return this;
-    }
-
-    /**
-     * Sets the internationalization(s) of the property, removing all other previous internationalizations.
-     *
-     * @param aI18nList A list of I18n(s).
-     * @return This property
-     */
-    protected I18nProperty<T> setI18ns(final List<I18n> aI18nList) {
-        myI18ns.clear();
-        aI18nList.stream().filter(Objects::isNull).forEach(myI18ns::add);
-        return this;
     }
 
     /**

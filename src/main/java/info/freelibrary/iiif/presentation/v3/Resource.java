@@ -3,6 +3,9 @@ package info.freelibrary.iiif.presentation.v3;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
+
 import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
@@ -15,6 +18,7 @@ import info.freelibrary.iiif.presentation.v3.properties.Rendering;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
  * An interface that defines methods relevant to all <a href="http://iiif.io/api/presentation/3/">IIIF Presentation</a>
@@ -222,19 +226,21 @@ public interface Resource<T extends Resource<T>> {
     T setPartOfs(PartOf... aPartOfArray);
 
     /**
-     * Sets the providers for this resource.
+     * Sets the resource's providers.
      *
-     * @param aProviderList The providers to set for this resource
+     * @param aProviderList A list of providers
      * @return The resource
      */
+    @JsonSetter(JsonKeys.PROVIDER)
     T setProviders(List<Provider> aProviderList);
 
     /**
-     * Sets the providers for this resource.
+     * Sets the resource's providers.
      *
-     * @param aProviderArray The providers to set for this resource
+     * @param aProviderArray An array of providers
      * @return The resource
      */
+    @JsonIgnore
     T setProviders(Provider... aProviderArray);
 
     /**
@@ -243,6 +249,7 @@ public interface Resource<T extends Resource<T>> {
      * @param aRenderingList The renderings to set for this resource
      * @return The resource
      */
+    @JsonSetter(JsonKeys.RENDERING)
     T setRenderings(List<Rendering> aRenderingList);
 
     /**
@@ -251,6 +258,7 @@ public interface Resource<T extends Resource<T>> {
      * @param aRenderingArray The renderings to set for this resource
      * @return The resource
      */
+    @JsonIgnore
     T setRenderings(Rendering... aRenderingArray);
 
     /**

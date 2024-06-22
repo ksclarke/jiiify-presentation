@@ -75,7 +75,7 @@ public class Label extends I18nProperty<Label> {
      */
     @Override
     public Label setI18ns(final I18n... aI18nArray) {
-        return (Label) super.setI18ns(I18nUtils.validateI18ns(false, aI18nArray));
+        return super.setI18ns(I18nUtils.validateI18ns(false, aI18nArray));
     }
 
     /**
@@ -87,13 +87,13 @@ public class Label extends I18nProperty<Label> {
      */
     @Override
     public Label setI18ns(final List<I18n> aI18nList) {
-        return (Label) super.setI18ns(I18nUtils.validateI18ns(false, aI18nList.toArray(new I18n[0])));
+        return super.setI18ns(I18nUtils.validateI18ns(false, aI18nList.toArray(new I18n[0])));
     }
 
     @Override
     @JsonGetter(JsonKeys.LABEL)
     protected Object toMap() {
-        return super.toMap();
+        return super.toMap(); // This is needed to assign the Label getter annotation
     }
 
 }

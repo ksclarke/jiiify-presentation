@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.JDK;
 
 import info.freelibrary.iiif.presentation.v3.exts.geo.NavPlace;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
@@ -29,7 +30,7 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 /**
  * A navigable resource.
  */
-class NavigableResource<T extends NavigableResource<T>> extends AbstractResource<NavigableResource<T>> {
+class NavigableResource<T extends NavigableResource<T>> extends AbstractResource<T> {
 
     /** The navigable resource's logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(Manifest.class, MessageCodes.BUNDLE);
@@ -83,7 +84,8 @@ class NavigableResource<T extends NavigableResource<T>> extends AbstractResource
      * @param aContextArray Context URIs(s)
      * @return The navigable resource
      */
-    protected NavigableResource<?> addContexts(final URI... aContextArray) {
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public T addContexts(final URI... aContextArray) {
         Objects.requireNonNull(aContextArray, MessageCodes.JPA_007);
 
         for (final URI uri : aContextArray) {
@@ -95,7 +97,7 @@ class NavigableResource<T extends NavigableResource<T>> extends AbstractResource
         }
 
         Collections.sort(myContexts, new ContextListComparator<>());
-        return this;
+        return (T) this;
     }
 
     /**
@@ -103,11 +105,99 @@ class NavigableResource<T extends NavigableResource<T>> extends AbstractResource
      *
      * @return The navigable resource
      */
-    protected NavigableResource<?> clearContexts() {
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public T clearContexts() {
         myContexts.clear();
         myContexts.add(PRESENTATION_CONTEXT_URI);
 
-        return this;
+        return (T) this;
+    }
+
+    /**
+     * Gets the primary context.
+     *
+     * @return The primary context
+     */
+    @JsonIgnore
+    public URI getContext() {
+        return PRESENTATION_CONTEXT_URI;
+    }
+
+    /**
+     * Gets an unmodifiable list of contexts. To remove contexts, use {@link #removeContext(URI) removeContext} or
+     * {@link #clearContexts() clearContexts}.
+     *
+     * @return The context
+     */
+    @JsonIgnore
+    public List<URI> getContexts() {
+        if (myContexts.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return Collections.unmodifiableList(myContexts);
+    }
+
+    /**
+     * Gets a navigation date.
+     *
+     * @return The navigation date
+     */
+    @JsonGetter(JsonKeys.NAV_DATE)
+    public NavDate getNavDate() {
+        return myNavDate;
+    }
+
+    /**
+     * Gets the navigation place.
+     *
+     * @return The navigation place
+     */
+    @JsonGetter(JsonKeys.NAV_PLACE)
+    public NavPlace getNavPlace() {
+        return myNavPlace;
+    }
+
+    /**
+     * Remove the supplied context. This will not remove the default required context though. If that's supplied, an
+     * {@link UnsupportedOperationException} will be thrown.
+     *
+     * @param aContextURI A context to be removed from the contexts list
+     * @return True if the context was removed; else, false
+     * @throws UnsupportedOperationException If the required context is supplied to be removed
+     */
+    public boolean removeContext(final URI aContextURI) {
+        if (PRESENTATION_CONTEXT_URI.equals(aContextURI)) {
+            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_039, PRESENTATION_CONTEXT_URI));
+        }
+
+        return myContexts.remove(aContextURI);
+    }
+
+    /**
+     * Sets a navigation date.
+     *
+     * @param aNavDate The navigation date
+     * @return The navigable resource
+     */
+    @JsonSetter(JsonKeys.NAV_DATE)
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public T setNavDate(final NavDate aNavDate) {
+        myNavDate = aNavDate;
+        return (T) this;
+    }
+
+    /**
+     * Sets the navigation place.
+     *
+     * @param aNavPlace The navigation place
+     * @return The navigable resource
+     */
+    @JsonSetter(JsonKeys.NAV_PLACE)
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public T setNavPlace(final NavPlace aNavPlace) {
+        myNavPlace = aNavPlace;
+        return (T) this;
     }
 
     /**
@@ -119,9 +209,7 @@ class NavigableResource<T extends NavigableResource<T>> extends AbstractResource
     protected void deserializeContexts(final Object aObject) {
         if (aObject instanceof String) {
             deserializeContexts(List.of((String) aObject));
-        } else if (aObject instanceof List<?>) {
-            final List<?> genericList = (List<?>) aObject;
-
+        } else if (aObject instanceof final List<?> genericList) {
             if (genericList.isEmpty() || !genericList.get(0).getClass().equals(String.class)) {
                 throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_113));
             }
@@ -130,31 +218,6 @@ class NavigableResource<T extends NavigableResource<T>> extends AbstractResource
         } else {
             throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_113));
         }
-    }
-
-    /**
-     * Gets the primary context.
-     *
-     * @return The primary context
-     */
-    @JsonIgnore
-    protected URI getContext() {
-        return PRESENTATION_CONTEXT_URI;
-    }
-
-    /**
-     * Gets an unmodifiable list of contexts. To remove contexts, use {@link #removeContext(URI) removeContext} or
-     * {@link #clearContexts() clearContexts}.
-     *
-     * @return The context
-     */
-    @JsonIgnore
-    protected List<URI> getContexts() {
-        if (myContexts.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        return Collections.unmodifiableList(myContexts);
     }
 
     /**
@@ -174,66 +237,6 @@ class NavigableResource<T extends NavigableResource<T>> extends AbstractResource
         }
 
         return null;
-    }
-
-    /**
-     * Gets a navigation date.
-     *
-     * @return The navigation date
-     */
-    @JsonGetter(JsonKeys.NAV_DATE)
-    protected NavDate getNavDate() {
-        return myNavDate;
-    }
-
-    /**
-     * Gets the navigation place.
-     *
-     * @return The navigation place
-     */
-    @JsonGetter(JsonKeys.NAV_PLACE)
-    protected NavPlace getNavPlace() {
-        return myNavPlace;
-    }
-
-    /**
-     * Remove the supplied context. This will not remove the default required context though. If that's supplied, an
-     * {@link UnsupportedOperationException} will be thrown.
-     *
-     * @param aContextURI A context to be removed from the contexts list
-     * @return True if the context was removed; else, false
-     * @throws UnsupportedOperationException If the required context is supplied to be removed
-     */
-    protected boolean removeContext(final URI aContextURI) {
-        if (PRESENTATION_CONTEXT_URI.equals(aContextURI)) {
-            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_039, PRESENTATION_CONTEXT_URI));
-        }
-
-        return myContexts.remove(aContextURI);
-    }
-
-    /**
-     * Sets a navigation date.
-     *
-     * @param aNavDate The navigation date
-     * @return The navigable resource
-     */
-    @JsonSetter(JsonKeys.NAV_DATE)
-    protected NavigableResource<T> setNavDate(final NavDate aNavDate) {
-        myNavDate = aNavDate;
-        return this;
-    }
-
-    /**
-     * Sets the navigation place.
-     *
-     * @param aNavPlace The navigation place
-     * @return The navigable resource
-     */
-    @JsonSetter(JsonKeys.NAV_PLACE)
-    protected NavigableResource<T> setNavPlace(final NavPlace aNavPlace) {
-        myNavPlace = aNavPlace;
-        return this;
     }
 
     /**

@@ -2,7 +2,6 @@
 package info.freelibrary.iiif.presentation.v3;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -19,20 +18,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.warnings.PMD;
 
-import info.freelibrary.iiif.presentation.v3.exts.geo.NavPlace;
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
-import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
-import info.freelibrary.iiif.presentation.v3.properties.Metadata;
-import info.freelibrary.iiif.presentation.v3.properties.NavDate;
-import info.freelibrary.iiif.presentation.v3.properties.PartOf;
-import info.freelibrary.iiif.presentation.v3.properties.Provider;
-import info.freelibrary.iiif.presentation.v3.properties.Rendering;
-import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
-import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Start;
-import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.RangeBehavior;
@@ -144,18 +133,6 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
         return myItems;
     }
 
-    @Override
-    @JsonGetter(JsonKeys.NAV_DATE)
-    public NavDate getNavDate() {
-        return super.getNavDate();
-    }
-
-    @Override
-    @JsonGetter(JsonKeys.NAV_PLACE)
-    public NavPlace getNavPlace() {
-        return super.getNavPlace();
-    }
-
     /**
      * Gets the range's placeholder canvas.
      *
@@ -224,22 +201,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
             ((BehaviorList) aBehaviorList).checkType(RangeBehavior.class, getClass());
         }
 
-        return (Range) super.setBehaviors(aBehaviorList);
-    }
-
-    @Override
-    public Range setHomepages(final Homepage... aHomepageArray) {
-        return (Range) super.setHomepages(aHomepageArray);
-    }
-
-    @Override
-    public Range setHomepages(final List<Homepage> aHomepageList) {
-        return (Range) super.setHomepages(aHomepageList);
-    }
-
-    @Override
-    public Range setID(final String aID) {
-        return (Range) super.setID(aID);
+        return super.setBehaviors(aBehaviorList);
     }
 
     /**
@@ -255,43 +217,6 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
         return this;
     }
 
-    @Override
-    public Range setLabel(final Label aLabel) {
-        return (Range) super.setLabel(aLabel);
-    }
-
-    @Override
-    public Range setMetadata(final List<Metadata> aMetadataList) {
-        return (Range) super.setMetadata(aMetadataList);
-    }
-
-    @Override
-    public Range setMetadata(final Metadata... aMetadataArray) {
-        return (Range) super.setMetadata(aMetadataArray);
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.NAV_DATE)
-    public Range setNavDate(final NavDate aNavDate) {
-        return (Range) super.setNavDate(aNavDate);
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.NAV_PLACE)
-    public Range setNavPlace(final NavPlace aNavPlace) {
-        return (Range) super.setNavPlace(aNavPlace);
-    }
-
-    @Override
-    public Range setPartOfs(final List<PartOf> aPartOfList) {
-        return (Range) super.setPartOfs(aPartOfList);
-    }
-
-    @Override
-    public Range setPartOfs(final PartOf... aPartOfArray) {
-        return (Range) super.setPartOfs(aPartOfArray);
-    }
-
     /**
      * Sets the range's placeholder canvas.
      *
@@ -302,59 +227,6 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     public Range setPlaceholderCanvas(final PlaceholderCanvas aCanvas) {
         myPlaceholderCanvas = aCanvas;
         return this;
-    }
-
-    @Override
-    @JsonIgnore
-    public Range setProviders(final List<Provider> aProviderList) {
-        return (Range) super.setProviders(aProviderList);
-    }
-
-    @Override
-    @JsonSetter(JsonKeys.PROVIDER)
-    public Range setProviders(final Provider... aProviderArray) {
-        return setProviders(Arrays.asList(aProviderArray));
-    }
-
-    @Override
-    public Range setRenderings(final List<Rendering> aRenderingList) {
-        return (Range) super.setRenderings(aRenderingList);
-    }
-
-    @Override
-    public Range setRenderings(final Rendering... aRenderingArray) {
-        return (Range) super.setRenderings(aRenderingArray);
-    }
-
-    @Override
-    public Range setRequiredStatement(final RequiredStatement aStatement) {
-        return (Range) super.setRequiredStatement(aStatement);
-    }
-
-    @Override
-    public Range setRights(final String aRights) {
-        return (Range) super.setRights(aRights);
-    }
-
-    @Override
-    public Range setSeeAlsoRefs(final List<SeeAlso> aSeeAlsoList) {
-        return (Range) super.setSeeAlsoRefs(aSeeAlsoList);
-    }
-
-    @Override
-    public Range setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
-        return (Range) super.setSeeAlsoRefs(aSeeAlsoArray);
-    }
-
-    @Override
-    public Range setServices(final List<Service<?>> aServiceList) {
-        return (Range) super.setServices(aServiceList);
-    }
-
-    @Override
-    @SafeVarargs
-    public final Range setServices(final Service<?>... aServiceArray) {
-        return (Range) super.setServices(aServiceArray);
     }
 
     /**
@@ -369,11 +241,6 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
         return this;
     }
 
-    @Override
-    public Range setSummary(final Summary aSummary) {
-        return (Range) super.setSummary(aSummary);
-    }
-
     /**
      * Sets the supplementary annotations for this range.
      *
@@ -384,16 +251,6 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     public Range setSupplementaryAnnotations(final SupplementaryAnnotations aAnnotationsCollection) {
         mySupplementaryAnnotations = Objects.requireNonNull(aAnnotationsCollection);
         return this;
-    }
-
-    @Override
-    public Range setThumbnails(final ContentResource<?>... aThumbnailArray) {
-        return (Range) super.setThumbnails(aThumbnailArray);
-    }
-
-    @Override
-    public Range setThumbnails(final List<ContentResource<?>> aThumbnailList) {
-        return (Range) super.setThumbnails(aThumbnailList);
     }
 
     /**

@@ -64,28 +64,6 @@ public class Summary extends I18nProperty<Summary> {
         this(new I18n(aLangTag, aValue, true));
     }
 
-    /**
-     * Sets the internationalizations of the property, removing all other previous internationalizations.
-     *
-     * @param aI18nArray An array of I18n(s).
-     * @return This summary
-     */
-    @Override
-    public Summary setI18ns(final I18n... aI18nArray) {
-        return (Summary) super.setI18ns(aI18nArray);
-    }
-
-    /**
-     * Sets the internationalizations of the property, removing all other previous internationalizations.
-     *
-     * @param aI18nList A list of I18n(s).
-     * @return This summary
-     */
-    @Override
-    public Summary setI18ns(final List<I18n> aI18nList) {
-        return (Summary) super.setI18ns(aI18nList);
-    }
-
     @Override
     @JsonGetter(JsonKeys.SUMMARY)
     protected Object toMap() {

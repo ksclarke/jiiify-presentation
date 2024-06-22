@@ -224,10 +224,8 @@ public class BehaviorList extends ArrayList<Behavior> implements List<Behavior> 
      */
     private void checkBehaviorValidity(final Class<?> aClass, final Behavior aBehavior) {
         if (!aClass.isInstance(aBehavior)) {
-            final String className = aClass.getSimpleName();
             final String behaviorName = aBehavior.getClass().getSimpleName();
-
-            throw new InvalidBehaviorException(MessageCodes.JPA_031, behaviorName, className);
+            throw new InvalidBehaviorException(MessageCodes.JPA_031, behaviorName, aClass.getSimpleName());
         }
     }
 }

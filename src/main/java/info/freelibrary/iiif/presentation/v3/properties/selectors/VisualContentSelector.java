@@ -7,6 +7,13 @@ package info.freelibrary.iiif.presentation.v3.properties.selectors;
 public class VisualContentSelector implements ContentSelector {
 
     /**
+     * Creates a new video content selector.
+     */
+    public VisualContentSelector() {
+        // This is intentionally left empty
+    }
+
+    /**
      * Gets a string representation of the visual content selector.
      *
      * @return A string representation of the visual content selector
