@@ -47,7 +47,7 @@
     <jackson.version>2.17.1</jackson.version>
     <jackson.databind.version>2.17.1</jackson.databind.version>
     <throwing.function.version>1.5.1</throwing.function.version>
-    <freelib.utils.version>5.0.0</freelib.utils.version>
+    <freelib.utils.version>5.0.1</freelib.utils.version>
     <jsoup.version>1.17.2</jsoup.version>
     <combinatorics.version>3.3.0</combinatorics.version>
     <media.fragments.uri.version>2.4</media.fragments.uri.version>
@@ -373,7 +373,7 @@
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>9.0.1</version>
+    <version>9.0.3</version>
   </parent>
 
 </project>

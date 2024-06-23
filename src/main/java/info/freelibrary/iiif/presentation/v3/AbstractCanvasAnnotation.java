@@ -192,7 +192,6 @@ abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> e
      */
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
-    @SuppressWarnings({ PMD.LOOSE_COUPLING })
     public A setBehaviors(final List<Behavior> aBehaviorList) {
         if (aBehaviorList instanceof final BehaviorList behaviorList) {
             behaviorList.checkType(ResourceBehavior.class, getClass());

@@ -12,6 +12,7 @@
 
   <rule ref="category/java/bestpractices.xml">
     <exclude name="GuardLogStatement" />
+    <exclude name="LooseCoupling" />
   </rule>
   <rule ref="category/java/bestpractices.xml/UnusedPrivateMethod">
     <properties>
@@ -76,11 +77,9 @@
   <rule ref="category/java/design.xml">
     <exclude name="LawOfDemeter" />
     <exclude name="LoosePackageCoupling" />
-    <exclude name="UselessOverridingMethod" />
     <exclude name="SimplifyBooleanReturns" />
     <exclude name="DataClass" />
   </rule>
-
   <rule ref="category/java/design.xml/TooManyMethods">
     <properties>
       <property name="maxmethods" value="20" />

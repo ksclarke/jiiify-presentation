@@ -249,7 +249,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      */
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
-    @SuppressWarnings({ PMD.LOOSE_COUPLING, JDK.UNCHECKED })
+    @SuppressWarnings({ JDK.UNCHECKED })
     public T setBehaviors(final List<Behavior> aBehaviorList) {
         if (aBehaviorList instanceof final BehaviorList behaviorList) {
             behaviorList.checkType(CanvasBehavior.class, getClass());
@@ -688,30 +688,22 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      */
     @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY })
     boolean canFrame(final ContentResource aContent) {
-        if (aContent instanceof SpatialContentResource) {
-            final SpatialContentResource spatialPainting;
-
+        if (aContent instanceof final SpatialContentResource spatialPainting) {
             // The canvas must have a width and height, which must not be smaller than that of the content
             if (myWidth == 0 || myHeight == 0) {
                 throw new ContentOutOfBoundsException(MessageCodes.JPA_059, aContent.getID(), SPATIAL, getID());
             }
-
-            spatialPainting = (SpatialContentResource) aContent;
 
             if (getWidth() < spatialPainting.getWidth() || getHeight() < spatialPainting.getHeight()) {
                 throw new ContentOutOfBoundsException(MessageCodes.JPA_060, aContent.getID(), SPATIAL, getID());
             }
         }
 
-        if (aContent instanceof TemporalContentResource) {
-            final TemporalContentResource temporalPainting;
-
+        if (aContent instanceof final TemporalContentResource temporalPainting) {
             // The canvas must have a duration, which must not be shorter than that of the content
             if (myDuration == ZERO_DURATION) {
                 throw new ContentOutOfBoundsException(MessageCodes.JPA_059, aContent.getID(), TEMPORAL, getID());
             }
-
-            temporalPainting = (TemporalContentResource) aContent;
 
             if (getDuration() < temporalPainting.getDuration()) {
                 throw new ContentOutOfBoundsException(MessageCodes.JPA_060, aContent.getID(), TEMPORAL, getID());

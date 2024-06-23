@@ -1,8 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
@@ -54,28 +52,6 @@ public class Value extends I18nProperty<Value> {
      */
     public Value(final String aLangTag, final String aValue) {
         this(new I18n(aLangTag, aValue, true));
-    }
-
-    /**
-     * Sets the I18n values, removing all other previous internationalizations.
-     *
-     * @param aI18nArray An array of I18n(s).
-     * @return This Value
-     */
-    @Override
-    public Value setI18ns(final I18n... aI18nArray) {
-        return super.setI18ns(aI18nArray);
-    }
-
-    /**
-     * Sets the I18n values, removing all other previous internationalizations.
-     *
-     * @param aI18nList A list of I18n(s).
-     * @return This Value
-     */
-    @Override
-    public Value setI18ns(final List<I18n> aI18nList) {
-        return super.setI18ns(aI18nList);
     }
 
     @Override

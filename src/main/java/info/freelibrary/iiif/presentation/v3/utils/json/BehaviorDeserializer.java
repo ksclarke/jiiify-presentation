@@ -58,7 +58,7 @@ public class BehaviorDeserializer extends StdDeserializer<List<Behavior>> {
     }
 
     @Override
-    @SuppressWarnings({ PMD.PRESERVE_STACK_TRACE, PMD.LOOSE_COUPLING })
+    @SuppressWarnings({ PMD.PRESERVE_STACK_TRACE, PMD.UNUSED_ASSIGNMENT })
     public List<Behavior> deserialize(final JsonParser aParser, final DeserializationContext aContext)
             throws IOException, JsonProcessingException {
         final JsonNode currentNode = aParser.getCodec().readTree(aParser);
@@ -66,30 +66,28 @@ public class BehaviorDeserializer extends StdDeserializer<List<Behavior>> {
         final List<JsonMappingException> errors = new ArrayList<>();
 
         final Function<String, Optional<? extends Behavior>> getBehavior;
-        final BehaviorList behaviors;
-
-        switch (((Resource<?>) currentContext).getType()) {
-            case ResourceTypes.CANVAS:
+        final BehaviorList behaviors = switch (((Resource<?>) currentContext).getType()) {
+            case ResourceTypes.CANVAS -> {
                 getBehavior = CanvasBehavior::fromLabel;
-                behaviors = new BehaviorList(CanvasBehavior.class);
-                break;
-            case ResourceTypes.COLLECTION:
+                yield new BehaviorList(CanvasBehavior.class);
+            }
+            case ResourceTypes.COLLECTION -> {
                 getBehavior = CollectionBehavior::fromLabel;
-                behaviors = new BehaviorList(CollectionBehavior.class);
-                break;
-            case ResourceTypes.MANIFEST:
+                yield new BehaviorList(CollectionBehavior.class);
+            }
+            case ResourceTypes.MANIFEST -> {
                 getBehavior = ManifestBehavior::fromLabel;
-                behaviors = new BehaviorList(ManifestBehavior.class);
-                break;
-            case ResourceTypes.RANGE:
+                yield new BehaviorList(ManifestBehavior.class);
+            }
+            case ResourceTypes.RANGE -> {
                 getBehavior = RangeBehavior::fromLabel;
-                behaviors = new BehaviorList(RangeBehavior.class);
-                break;
-            default:
+                yield new BehaviorList(RangeBehavior.class);
+            }
+            default -> {
                 getBehavior = ResourceBehavior::fromLabel;
-                behaviors = new BehaviorList(ResourceBehavior.class);
-                break;
-        }
+                yield new BehaviorList(ResourceBehavior.class);
+            }
+        };
 
         currentNode.forEach(childNode -> {
             final String label = childNode.textValue();

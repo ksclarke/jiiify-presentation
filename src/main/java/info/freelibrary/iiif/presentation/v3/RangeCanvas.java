@@ -381,11 +381,6 @@ class RangeCanvas extends Canvas {
     }
 
     @Override
-    protected void deserializeContexts(final Object aObject) {
-        super.deserializeContexts(aObject);
-    }
-
-    @Override
     protected Object getJsonContext() {
         return mySourceCanvas.getJsonContext();
     }

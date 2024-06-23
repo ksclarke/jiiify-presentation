@@ -172,8 +172,8 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
     public Collection setBehaviors(final List<Behavior> aBehaviorList) {
-        if (aBehaviorList instanceof BehaviorList) {
-            ((BehaviorList) aBehaviorList).checkType(CollectionBehavior.class, getClass());
+        if (aBehaviorList instanceof final BehaviorList behaviorList) {
+            behaviorList.checkType(CollectionBehavior.class, getClass());
         }
 
         return super.setBehaviors(aBehaviorList);
@@ -328,7 +328,8 @@ public class Collection extends NavigableResource<Collection> implements Resourc
                 myThumbnails.addAll(thumbnails);
             }
 
-            myType = Item.Type.fromLabel(ResourceTypes.COLLECTION).get();
+            myType = Item.Type.fromLabel(ResourceTypes.COLLECTION).orElseThrow();
+            // myType = Item.Type.fromLabel(ResourceTypes.COLLECTION).get();
             myLabel = Objects.requireNonNull(aCollection.getLabel());
             myID = aCollection.getID();
         }

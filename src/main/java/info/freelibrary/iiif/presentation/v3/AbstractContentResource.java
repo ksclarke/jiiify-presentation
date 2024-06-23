@@ -165,7 +165,6 @@ abstract class AbstractContentResource<T extends AbstractContentResource<T>> ext
     @JsonGetter(JsonKeys.LANGUAGE)
     @JsonInclude(Include.NON_EMPTY)
     private Object getLanguage() {
-        // FIXME? Unclear if this should ALWAYS be an array
         final List<String> languages = getLanguages();
         return languages.size() == SINGLE_INSTANCE ? languages.get(0) : languages;
     }
@@ -178,12 +177,12 @@ abstract class AbstractContentResource<T extends AbstractContentResource<T>> ext
      */
     @JsonSetter(JsonKeys.LANGUAGE)
     private AbstractContentResource<T> setLanguage(final Object aObject) {
-        if (aObject instanceof String) {
-            return setLanguages((String) aObject);
+        if (aObject instanceof final String language) {
+            return setLanguages(language);
         }
 
-        if (aObject instanceof String[]) {
-            return setLanguages((String[]) aObject);
+        if (aObject instanceof final String[] languages) {
+            return setLanguages(languages);
         }
 
         return this;

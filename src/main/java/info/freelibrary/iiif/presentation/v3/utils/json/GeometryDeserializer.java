@@ -17,7 +17,6 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.JDK;
-import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.exts.geo.Geometry;
 import info.freelibrary.iiif.presentation.v3.exts.geo.LineString;
@@ -85,7 +84,7 @@ public class GeometryDeserializer extends StdDeserializer<Geometry> {
      * @return A list of <code>LineString</code>s
      * @throws JsonMappingException If there is trouble deserializing the supplied JSON node
      */
-    @SuppressWarnings({ JDK.DEPRECATION, PMD.LOOSE_COUPLING })
+    @SuppressWarnings({ JDK.DEPRECATION })
     private List<LineString> getLineStrings(final JsonNode aNode, final JsonParser aParser, final Geometry.Type aType)
             throws JsonMappingException {
         final ArrayList<LineString> lineStrings = new ArrayList<>();
@@ -166,7 +165,7 @@ public class GeometryDeserializer extends StdDeserializer<Geometry> {
      * @return A list of points
      * @throws JsonMappingException If there is trouble deserializing the JSON
      */
-    @SuppressWarnings({ JDK.DEPRECATION, PMD.LOOSE_COUPLING })
+    @SuppressWarnings({ JDK.DEPRECATION })
     private List<Point> getPoints(final JsonNode aNode, final JsonParser aParser, final Geometry.Type aType)
             throws JsonMappingException {
         final ArrayList<Point> points = new ArrayList<>();
