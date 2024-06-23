@@ -50,8 +50,8 @@ public class DatasetContent extends AbstractContentResource<DatasetContent>
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
     public DatasetContent setBehaviors(final List<Behavior> aBehaviorList) {
-        if (aBehaviorList instanceof BehaviorList) {
-            ((BehaviorList) aBehaviorList).checkType(ResourceBehavior.class, getClass());
+        if (aBehaviorList instanceof final BehaviorList behaviorList) {
+            behaviorList.checkType(ResourceBehavior.class, getClass());
         }
 
         return super.setBehaviors(aBehaviorList);

@@ -7,7 +7,6 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
@@ -56,7 +55,7 @@ class ContentResourceDeserializer extends StdDeserializer<ContentResource> {
      */
     @Override
     public ContentResource deserialize(final JsonParser aParser, final DeserializationContext aContext)
-            throws IOException, JsonProcessingException {
+            throws IOException {
         final TreeNode treeNode = aParser.getCodec().readTree(aParser);
 
         return switch (treeNode.get(JsonKeys.TYPE).toString().replace("\"", EMPTY)) {
@@ -66,8 +65,8 @@ class ContentResourceDeserializer extends StdDeserializer<ContentResource> {
             case ResourceTypes.SOUND -> JSON.getReader(SoundContent.class).readValue(treeNode.toString());
             case ResourceTypes.TEXT -> JSON.getReader(TextContent.class).readValue(treeNode.toString());
             case ResourceTypes.VIDEO -> JSON.getReader(VideoContent.class).readValue(treeNode.toString());
-            default ->
-                throw new JsonParseException(aParser, LOGGER.getMessage(MessageCodes.JPA_056, treeNode.toString()));
+            default -> throw new JsonParseException(aParser,
+                    LOGGER.getMessage(MessageCodes.JPA_056, treeNode.toString()));
         };
     }
 

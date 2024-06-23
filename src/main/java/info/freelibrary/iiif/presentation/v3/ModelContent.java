@@ -53,8 +53,8 @@ public class ModelContent extends AbstractContentResource<ModelContent>
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
     public ModelContent setBehaviors(final List<Behavior> aBehaviorList) {
-        if (aBehaviorList instanceof BehaviorList) {
-            ((BehaviorList) aBehaviorList).checkType(ResourceBehavior.class, getClass());
+        if (aBehaviorList instanceof final BehaviorList behaviorList) {
+            behaviorList.checkType(ResourceBehavior.class, getClass());
         }
 
         return super.setBehaviors(aBehaviorList);

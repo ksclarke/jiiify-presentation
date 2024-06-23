@@ -83,8 +83,7 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> {
      * @throws JsonProcessingException If there is trouble parsing the JSON
      */
     @Override
-    public Service<?> deserialize(final JsonParser aParser, final DeserializationContext aContext)
-            throws IOException, JsonProcessingException {
+    public Service<?> deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException {
         return deserializeServiceNode(aParser, aParser.getCodec().readTree(aParser));
     }
 
@@ -218,9 +217,8 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> {
             otherService = new OtherService2(aID);
         }
 
-        getValue(aNode.get(JsonKeys.FORMAT)).ifPresent(value -> {
-            otherService.setFormat(MediaType.fromString(value).get());
-        });
+        getValue(aNode.get(JsonKeys.FORMAT))
+                .ifPresent(value -> otherService.setFormat(MediaType.fromString(value).get()));
 
         return otherService;
     }

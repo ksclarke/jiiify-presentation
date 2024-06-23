@@ -197,8 +197,8 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
     public Range setBehaviors(final List<Behavior> aBehaviorList) {
-        if (aBehaviorList instanceof BehaviorList) {
-            ((BehaviorList) aBehaviorList).checkType(RangeBehavior.class, getClass());
+        if (aBehaviorList instanceof final BehaviorList behaviorList) {
+            behaviorList.checkType(RangeBehavior.class, getClass());
         }
 
         return super.setBehaviors(aBehaviorList);

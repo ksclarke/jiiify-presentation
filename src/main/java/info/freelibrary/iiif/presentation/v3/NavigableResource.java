@@ -207,8 +207,8 @@ class NavigableResource<T extends NavigableResource<T>> extends AbstractResource
      */
     @JsonSetter(JsonKeys.CONTEXT)
     protected void deserializeContexts(final Object aObject) {
-        if (aObject instanceof String) {
-            deserializeContexts(List.of((String) aObject));
+        if (aObject instanceof final String context) {
+            deserializeContexts(List.of(context));
         } else if (aObject instanceof final List<?> genericList) {
             if (genericList.isEmpty() || !genericList.get(0).getClass().equals(String.class)) {
                 throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_113));

@@ -7,7 +7,6 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
@@ -53,20 +52,16 @@ public class RangeItemDeserializer extends StdDeserializer<Range.Item> {
      * Deserializes a Range.Item from its JSON structure.
      */
     @Override
-    public Range.Item deserialize(final JsonParser aParser, final DeserializationContext aContext)
-            throws IOException, JsonProcessingException {
+    public Range.Item deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException {
         final TreeNode treeNode = aParser.getCodec().readTree(aParser);
 
-        switch (treeNode.get(JsonKeys.TYPE).toString().replace("\"", EMPTY)) {
-            case ResourceTypes.RANGE:
-                return new Range.Item(Range.fromJSON(treeNode.toString()));
-            case ResourceTypes.CANVAS:
-                return new Range.Item(Canvas.fromJSON(treeNode.toString()), true); // always embed whatever is there
-            case ResourceTypes.SPECIFIC_RESOURCE:
-                return new Range.Item(SpecificResource.fromJSON(treeNode.toString()));
-            default:
-                throw new JsonParseException(aParser, LOGGER.getMessage(MessageCodes.JPA_041, treeNode.toString()));
-        }
+        return switch (treeNode.get(JsonKeys.TYPE).toString().replace("\"", EMPTY)) {
+            case ResourceTypes.RANGE -> new Range.Item(Range.fromJSON(treeNode.toString()));
+            case ResourceTypes.CANVAS -> new Range.Item(Canvas.fromJSON(treeNode.toString()), true);
+            case ResourceTypes.SPECIFIC_RESOURCE -> new Range.Item(SpecificResource.fromJSON(treeNode.toString()));
+            default -> throw new JsonParseException(aParser,
+                    LOGGER.getMessage(MessageCodes.JPA_041, treeNode.toString()));
+        };
     }
 
 }

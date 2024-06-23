@@ -329,9 +329,8 @@ public class Collection extends NavigableResource<Collection> implements Resourc
             }
 
             myType = Item.Type.fromLabel(ResourceTypes.COLLECTION).orElseThrow();
-            // myType = Item.Type.fromLabel(ResourceTypes.COLLECTION).get();
             myLabel = Objects.requireNonNull(aCollection.getLabel());
-            myID = aCollection.getID();
+            myID = aCollection.getID(); // ID rules should have been checked by Collection already
         }
 
         /**
@@ -347,9 +346,9 @@ public class Collection extends NavigableResource<Collection> implements Resourc
                 myThumbnails.addAll(thumbnails);
             }
 
-            myType = Item.Type.fromLabel(ResourceTypes.MANIFEST).get();
+            myType = Item.Type.fromLabel(ResourceTypes.MANIFEST).orElseThrow();
             myLabel = Objects.requireNonNull(aManifest.getLabel());
-            myID = aManifest.getID(); // ID rules should have been checked by manifest's constructor / setter
+            myID = aManifest.getID(); // ID rules should have been checked by Manifest already
         }
 
         /**
