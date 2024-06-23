@@ -310,7 +310,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         private NavPlace myNavPlace;
 
         /** The collection item's thumbnails. */
-        private List<ContentResource<?>> myThumbnails;
+        private List<ContentResource> myThumbnails;
 
         /** The collection item's type. */
         private Type myType;
@@ -321,7 +321,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
          * @param aCollection A full collection
          */
         public Item(final Collection aCollection) {
-            final List<ContentResource<?>> thumbnails = aCollection.getThumbnails();
+            final List<ContentResource> thumbnails = aCollection.getThumbnails();
 
             if (!thumbnails.isEmpty()) {
                 myThumbnails = new ArrayList<>();
@@ -339,7 +339,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
          * @param aManifest A full manifest
          */
         public Item(final Manifest aManifest) {
-            final List<ContentResource<?>> thumbnails = aManifest.getThumbnails();
+            final List<ContentResource> thumbnails = aManifest.getThumbnails();
 
             if (!thumbnails.isEmpty()) {
                 myThumbnails = new ArrayList<>();
@@ -405,7 +405,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
          * @return The items's thumbnails
          */
         @JsonGetter(JsonKeys.THUMBNAIL)
-        public List<ContentResource<?>> getThumbnails() {
+        public List<ContentResource> getThumbnails() {
             if (myThumbnails == null) {
                 myThumbnails = new ArrayList<>();
             }
@@ -468,7 +468,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
          * @return The resource
          */
         @JsonSetter(JsonKeys.THUMBNAIL)
-        public Item setThumbnails(final ContentResource<?>... aThumbnailArray) {
+        public Item setThumbnails(final ContentResource... aThumbnailArray) {
             if (myThumbnails == null) {
                 myThumbnails = new ArrayList<>();
             }

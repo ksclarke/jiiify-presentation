@@ -3,10 +3,8 @@ package info.freelibrary.iiif.presentation.v3;
 
 /**
  * An interface for content resources that have spatial characteristics.
- *
- * @param <T> A type of spatial content resource
  */
-public interface SpatialContentResource<T extends SpatialContentResource<T>> extends ContentResource<T> {
+public interface SpatialContentResource extends ContentResource {
 
     /**
      * Gets the height of this content resource.
@@ -29,6 +27,6 @@ public interface SpatialContentResource<T extends SpatialContentResource<T>> ext
      * @param aHeight The height of this content resource
      * @return This content resource
      */
-    T setWidthHeight(int aWidth, int aHeight);
+    SpatialContentResource setWidthHeight(int aWidth, int aHeight);
 
 }

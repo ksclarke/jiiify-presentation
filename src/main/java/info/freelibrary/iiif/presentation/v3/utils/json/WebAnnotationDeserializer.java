@@ -180,9 +180,8 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
      * @param aTypeCheck A function that checks that the required value exists
      * @return A list of annotation resources
      */
-    private List<ContentResource<?>> getBody(final JsonNode aNode,
-            final BiFunction<String, JsonNode, String> aTypeCheck) {
-        final List<ContentResource<?>> resources = new ArrayList<>();
+    private List<ContentResource> getBody(final JsonNode aNode, final BiFunction<String, JsonNode, String> aTypeCheck) {
+        final List<ContentResource> resources = new ArrayList<>();
 
         if (aNode != null) {
             final JsonNode itemsNode = aNode.get(JsonKeys.ITEMS);
@@ -244,7 +243,7 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
      * @return A new content resource to add to the annotation's body
      */
     @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY })
-    private ContentResource<?> getResource(final String aType, final JsonNode aNode) {
+    private ContentResource getResource(final String aType, final JsonNode aNode) {
         return switch (aType) {
             case ResourceTypes.SOUND -> JSON.convertValue(aNode, SoundContent.class);
             case ResourceTypes.VIDEO -> JSON.convertValue(aNode, VideoContent.class);

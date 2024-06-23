@@ -26,8 +26,8 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.DURATION,
     JsonKeys.LANGUAGE })
 @SuppressWarnings({ PMD.COUPLING_BETWEEN_OBJECTS })
-public class SoundContent extends AbstractContentResource<SoundContent> implements
-        TemporalContentResource<SoundContent>, AnnotatedContentResource<SoundContent>, Resource<SoundContent> {
+public class SoundContent extends AbstractContentResource<SoundContent>
+        implements TemporalContentResource, AnnotatedContentResource<SoundContent>, Resource<SoundContent> {
 
     /** The class of media type this content represents. */
     private static final String MEDIA_TYPE_CLASS = "audio";

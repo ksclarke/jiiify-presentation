@@ -64,7 +64,7 @@ abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> e
     private Motivation myMotivation;
 
     /** The annotation's resources. */
-    private List<ContentResource<?>> myResources;
+    private List<ContentResource> myResources;
 
     /** The target of the annotation. */
     private Target myTarget;
@@ -135,7 +135,7 @@ abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> e
      * @return The content resources associated with this annotation
      */
     @JsonIgnore
-    public List<ContentResource<?>> getBody() {
+    public List<ContentResource> getBody() {
         if (myResources == null) {
             myResources = new ArrayList<>();
         }
@@ -209,8 +209,8 @@ abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> e
      */
     @JsonIgnore
     @SuppressWarnings(JDK.UNCHECKED)
-    public A setBody(final ContentResource<?>... aResourceArray) {
-        final List<ContentResource<?>> resources = getBody();
+    public A setBody(final ContentResource... aResourceArray) {
+        final List<ContentResource> resources = getBody();
 
         resources.clear();
         resources.addAll(Arrays.asList(aResourceArray));
@@ -225,7 +225,7 @@ abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> e
      * @return This annotation
      */
     @JsonIgnore
-    public A setBody(final List<ContentResource<?>> aResourceList) {
+    public A setBody(final List<ContentResource> aResourceList) {
         return setBody(aResourceList.toArray(new ContentResource[0]));
     }
 
@@ -392,7 +392,7 @@ abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> e
 
         map.put(JsonKeys.TYPE, ResourceTypes.CHOICE);
 
-        for (final ContentResource<?> resource : myResources) {
+        for (final ContentResource resource : myResources) {
             if (resource == null) {
                 itemList.add(RDF_NIL);
             } else {

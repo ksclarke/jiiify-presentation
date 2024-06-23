@@ -34,7 +34,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeSerializer;
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.VALUE, JsonKeys.LANGUAGE, JsonKeys.FORMAT })
 @JsonInclude(Include.NON_EMPTY)
-public class TextualBody implements ContentResource<TextualBody> {
+public class TextualBody implements ContentResource {
 
     /**
      * The TextualBody uses serializable IDs.

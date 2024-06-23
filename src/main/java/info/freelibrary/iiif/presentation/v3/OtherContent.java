@@ -31,7 +31,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeSerializer;
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE })
 @JsonInclude(Include.NON_EMPTY)
-public class OtherContent implements ContentResource<OtherContent> {
+public class OtherContent implements ContentResource {
 
     /**
      * The ID for other content.

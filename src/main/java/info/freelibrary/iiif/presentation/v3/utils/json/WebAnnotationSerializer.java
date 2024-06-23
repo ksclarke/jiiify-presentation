@@ -51,7 +51,7 @@ public class WebAnnotationSerializer extends StdSerializer<WebAnnotation> {
     @SuppressWarnings({ PMD.PRESERVE_STACK_TRACE })
     public void serialize(final WebAnnotation aWebAnnotation, final JsonGenerator aJsonGenerator,
             final SerializerProvider aProvider) throws IOException, JsonProcessingException {
-        final List<ContentResource<?>> resources = aWebAnnotation.getBody();
+        final List<ContentResource> resources = aWebAnnotation.getBody();
         final String motivation = aWebAnnotation.getMotivation().toString();
         final Optional<TimeMode> timeMode = aWebAnnotation.getTimeMode();
         final Optional<Label> label = aWebAnnotation.getLabel();
@@ -109,7 +109,7 @@ public class WebAnnotationSerializer extends StdSerializer<WebAnnotation> {
      * @throws IOException If there is trouble writing to the generator
      * @throws JsonProcessingException If there is trouble parsing the source annotation
      */
-    private void serializeResources(final List<ContentResource<?>> aList, final boolean aChoice,
+    private void serializeResources(final List<ContentResource> aList, final boolean aChoice,
             final JsonGenerator aJsonGenerator) throws IOException, JsonProcessingException {
         if (aList.size() == SINGLE_INSTANCE) {
             aJsonGenerator.writeObjectField(JsonKeys.BODY, aList.get(0));
@@ -124,7 +124,7 @@ public class WebAnnotationSerializer extends StdSerializer<WebAnnotation> {
                 aJsonGenerator.writeStartArray();
             }
 
-            for (final ContentResource<?> contentResource : aList) {
+            for (final ContentResource contentResource : aList) {
                 if (contentResource == null) {
                     aJsonGenerator.writeString(ResourceTypes.RDF_NIL);
                 } else {

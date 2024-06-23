@@ -35,7 +35,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.SourceSerializer;
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.SOURCE, JsonKeys.SELECTOR })
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class SpecificResource implements ContentResource<SpecificResource> {
+public class SpecificResource implements ContentResource {
 
     /** A format for this specific resource. */
     private MediaType myFormat;

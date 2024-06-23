@@ -11,10 +11,8 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 /**
  * An interface that defines web resources that can be referenced by or embedded in an {@link Annotation}. Examples of
  * content resources include: {@link DatasetContent} and {@link ImageContent}).
- *
- * @param <T> The type of content resource
  */
-public interface ContentResource<T extends ContentResource<T>> {
+public interface ContentResource {
 
     /**
      * Gets the media type format of the content resource.
@@ -44,7 +42,7 @@ public interface ContentResource<T extends ContentResource<T>> {
      * @return The content resource
      */
     @JsonSetter(JsonKeys.FORMAT)
-    T setFormat(MediaType aMediaType);
+    ContentResource setFormat(MediaType aMediaType);
 
     /**
      * Sets the content resource ID.
@@ -52,6 +50,6 @@ public interface ContentResource<T extends ContentResource<T>> {
      * @param aID A content resource's ID
      * @return The content resource
      */
-    T setID(String aID);
+    ContentResource setID(String aID);
 
 }

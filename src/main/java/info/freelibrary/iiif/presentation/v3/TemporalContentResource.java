@@ -3,10 +3,8 @@ package info.freelibrary.iiif.presentation.v3;
 
 /**
  * An interface for content resources that have temporal characteristics.
- *
- * @param <T> A type of temporal content resource
  */
-public interface TemporalContentResource<T extends TemporalContentResource<T>> extends ContentResource<T> {
+public interface TemporalContentResource extends ContentResource {
 
     /**
      * Gets the duration of this content resource.
@@ -21,6 +19,6 @@ public interface TemporalContentResource<T extends TemporalContentResource<T>> e
      * @param aDuration The duration of this content resource
      * @return This content resource
      */
-    T setDuration(Number aDuration);
+    TemporalContentResource setDuration(Number aDuration);
 
 }

@@ -1334,7 +1334,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testSupplementImageOnUndefinedSpatiotemporalFragmentOfSpatialCanvas() {
-        final ContentResource<TextContent> text = new TextContent(TEXT_ID);
+        final TextContent text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0, WIDTH, HEIGHT);
 
@@ -1427,7 +1427,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testSupplementTextOnUndefinedSpatialFragmentOfSpatialCanvas() {
-        final ContentResource<TextContent> text = new TextContent(TEXT_ID);
+        final TextContent text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT + 1);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).supplementWith(selector, text);
@@ -1438,7 +1438,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testSupplementTextOnUndefinedSpatialFragmentOfSpatiotemporalCanvas() {
-        final ContentResource<TextContent> text = new TextContent(TEXT_ID);
+        final TextContent text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT + 1);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).supplementWith(selector, text);
@@ -1449,7 +1449,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testSupplementTextOnUndefinedSpatialFragmentOfTemporalCanvas() {
-        final ContentResource<TextContent> text = new TextContent(TEXT_ID);
+        final TextContent text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
 
         myCanvas.setDuration(CANVAS_DURATION).supplementWith(selector, text);
@@ -1460,7 +1460,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testSupplementTextOnUndefinedSpatiotemporalFragmentOfSpatiotemporalCanvas() {
-        final ContentResource<TextContent> text = new TextContent(TEXT_ID);
+        final TextContent text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION + 1), 0, 0, WIDTH, HEIGHT + 1);
 
@@ -1472,7 +1472,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testSupplementTextOnUndefinedSpatiotemporalFragmentOfTemporalCanvas() {
-        final ContentResource<TextContent> text = new TextContent(TEXT_ID);
+        final TextContent text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0, WIDTH, HEIGHT);
 
@@ -1484,7 +1484,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testSupplementTextOnUndefinedTemporalFragmentOfSpatialCanvas() {
-        final ContentResource<TextContent> text = new TextContent(TEXT_ID);
+        final TextContent text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).supplementWith(selector, text);
@@ -1495,7 +1495,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testSupplementTextOnUndefinedTemporalFragmentOfSpatiotemporalCanvas() {
-        final ContentResource<TextContent> text = new TextContent(TEXT_ID);
+        final TextContent text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION + 1));
 
@@ -1507,7 +1507,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test(expected = SelectorOutOfBoundsException.class)
     public final void testSupplementTextOnUndefinedTemporalFragmentOfTemporalCanvas() {
-        final ContentResource<TextContent> text = new TextContent(TEXT_ID);
+        final TextContent text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(CANVAS_DURATION), new EndTime(CANVAS_DURATION + DURATION));
 

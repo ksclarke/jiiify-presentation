@@ -112,7 +112,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> implements Resour
     /** The resource's thumbnails. */
     @JsonProperty(JsonKeys.THUMBNAIL)
     @JsonDeserialize(contentUsing = ContentResourceDeserializer.class)
-    private List<ContentResource<?>> myThumbnails;
+    private List<ContentResource> myThumbnails;
 
     /**
      * Creates a new resource from the supplied type.
@@ -332,7 +332,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> implements Resour
      */
     @Override
     @JsonGetter(JsonKeys.THUMBNAIL)
-    public List<ContentResource<?>> getThumbnails() {
+    public List<ContentResource> getThumbnails() {
         return getResourceThumbnails();
     }
 
@@ -653,7 +653,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> implements Resour
     @Override
     @JsonSetter(JsonKeys.THUMBNAIL)
     @SuppressWarnings(JDK.UNCHECKED)
-    public T setThumbnails(final ContentResource<?>... aThumbnailArray) {
+    public T setThumbnails(final ContentResource... aThumbnailArray) {
         return (T) setResourceThumbnails(Arrays.asList(aThumbnailArray));
     }
 
@@ -666,7 +666,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> implements Resour
     @Override
     @JsonIgnore
     @SuppressWarnings(JDK.UNCHECKED)
-    public T setThumbnails(final List<ContentResource<?>> aThumbnailList) {
+    public T setThumbnails(final List<ContentResource> aThumbnailList) {
         return (T) setResourceThumbnails(aThumbnailList);
     }
 
@@ -721,7 +721,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> implements Resour
      * @return The resource's thumbnails
      */
     @JsonIgnore
-    private List<ContentResource<?>> getResourceThumbnails() {
+    private List<ContentResource> getResourceThumbnails() {
         if (myThumbnails == null) {
             myThumbnails = new ArrayList<>();
         }
@@ -753,8 +753,8 @@ abstract class AbstractResource<T extends AbstractResource<T>> implements Resour
      * @return This resource
      */
     @JsonIgnore
-    private AbstractResource<T> setResourceThumbnails(final List<ContentResource<?>> aThumbnailList) {
-        final List<ContentResource<?>> thumbnails = getResourceThumbnails();
+    private AbstractResource<T> setResourceThumbnails(final List<ContentResource> aThumbnailList) {
+        final List<ContentResource> thumbnails = getResourceThumbnails();
 
         Objects.requireNonNull(aThumbnailList);
         thumbnails.clear();

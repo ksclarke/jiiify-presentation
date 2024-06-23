@@ -22,7 +22,7 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 /**
  * Deserializes a Thumbnail.
  */
-class ContentResourceDeserializer extends StdDeserializer<ContentResource<?>> {
+class ContentResourceDeserializer extends StdDeserializer<ContentResource> {
 
     /**
      * The logger used by ContentResourceDeserializer.
@@ -55,26 +55,20 @@ class ContentResourceDeserializer extends StdDeserializer<ContentResource<?>> {
      * Deserializes a Thumbnail from its JSON structure.
      */
     @Override
-    public ContentResource<?> deserialize(final JsonParser aParser, final DeserializationContext aContext)
+    public ContentResource deserialize(final JsonParser aParser, final DeserializationContext aContext)
             throws IOException, JsonProcessingException {
         final TreeNode treeNode = aParser.getCodec().readTree(aParser);
 
-        switch (treeNode.get(JsonKeys.TYPE).toString().replace("\"", EMPTY)) {
-            case ResourceTypes.DATASET:
-                return JSON.getReader(DatasetContent.class).readValue(treeNode.toString());
-            case ResourceTypes.IMAGE:
-                return JSON.getReader(ImageContent.class).readValue(treeNode.toString());
-            case ResourceTypes.MODEL:
-                return JSON.getReader(ModelContent.class).readValue(treeNode.toString());
-            case ResourceTypes.SOUND:
-                return JSON.getReader(SoundContent.class).readValue(treeNode.toString());
-            case ResourceTypes.TEXT:
-                return JSON.getReader(TextContent.class).readValue(treeNode.toString());
-            case ResourceTypes.VIDEO:
-                return JSON.getReader(VideoContent.class).readValue(treeNode.toString());
-            default:
+        return switch (treeNode.get(JsonKeys.TYPE).toString().replace("\"", EMPTY)) {
+            case ResourceTypes.DATASET -> JSON.getReader(DatasetContent.class).readValue(treeNode.toString());
+            case ResourceTypes.IMAGE -> JSON.getReader(ImageContent.class).readValue(treeNode.toString());
+            case ResourceTypes.MODEL -> JSON.getReader(ModelContent.class).readValue(treeNode.toString());
+            case ResourceTypes.SOUND -> JSON.getReader(SoundContent.class).readValue(treeNode.toString());
+            case ResourceTypes.TEXT -> JSON.getReader(TextContent.class).readValue(treeNode.toString());
+            case ResourceTypes.VIDEO -> JSON.getReader(VideoContent.class).readValue(treeNode.toString());
+            default ->
                 throw new JsonParseException(aParser, LOGGER.getMessage(MessageCodes.JPA_056, treeNode.toString()));
-        }
+        };
     }
 
 }

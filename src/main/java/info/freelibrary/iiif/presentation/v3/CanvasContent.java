@@ -19,7 +19,7 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  */
 @SuppressWarnings({ PMD.COUPLING_BETWEEN_OBJECTS })
 public class CanvasContent extends AbstractContentResource<CanvasContent>
-        implements ContentResource<CanvasContent>, Resource<CanvasContent> {
+        implements ContentResource, Resource<CanvasContent> {
 
     /**
      * Creates a canvas content resource from the supplied ID.

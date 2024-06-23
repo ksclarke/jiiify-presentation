@@ -211,7 +211,7 @@ class RangeCanvas extends Canvas {
     }
 
     @Override
-    public List<ContentResource<?>> getThumbnails() {
+    public List<ContentResource> getThumbnails() {
         return mySourceCanvas.getThumbnails();
     }
 
@@ -356,12 +356,12 @@ class RangeCanvas extends Canvas {
     }
 
     @Override
-    public Canvas setThumbnails(final ContentResource<?>... aThumbnailArray) {
+    public Canvas setThumbnails(final ContentResource... aThumbnailArray) {
         return mySourceCanvas.setThumbnails(aThumbnailArray);
     }
 
     @Override
-    public Canvas setThumbnails(final List<ContentResource<?>> aThumbnailList) {
+    public Canvas setThumbnails(final List<ContentResource> aThumbnailList) {
         return mySourceCanvas.setThumbnails(aThumbnailList);
     }
 
@@ -391,7 +391,7 @@ class RangeCanvas extends Canvas {
     }
 
     @Override
-    boolean canFrame(final ContentResource<?> aContent) {
+    boolean canFrame(final ContentResource aContent) {
         return mySourceCanvas.canFrame(aContent);
     }
 }
