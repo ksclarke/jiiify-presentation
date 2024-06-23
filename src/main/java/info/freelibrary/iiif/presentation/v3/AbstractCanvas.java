@@ -503,7 +503,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      */
     protected final <C extends CanvasResource<C>> T paint(final CanvasResource<C> aCanvas, final boolean aChoice,
             final List<ContentResource<?>> aContentList) {
-        return paint(aCanvas, aChoice, aContentList);
+        return paint(aCanvas, aChoice, aContentList.toArray(new ContentResource[0]));
     }
 
     /**
@@ -567,7 +567,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     protected final <C extends CanvasResource<C>> T paint(final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion, final boolean aChoice,
             final List<ContentResource<?>> aContentList) {
-        return paint(aCanvas, aCanvasRegion, aChoice, aContentList);
+        return paint(aCanvas, aCanvasRegion, aChoice, aContentList.toArray(new ContentResource[0]));
     }
 
     /**
@@ -619,7 +619,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      */
     protected final <C extends CanvasResource<C>> T supplement(final CanvasResource<C> aCanvas, final boolean aChoice,
             final List<ContentResource<?>> aContentList) {
-        return supplement(aCanvas, aChoice, aContentList);
+        return supplement(aCanvas, aChoice, aContentList.toArray(new ContentResource[0]));
     }
 
     /**
@@ -678,7 +678,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     protected final <C extends CanvasResource<C>> T supplement(final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion, final boolean aChoice,
             final List<ContentResource<?>> aContentList) {
-        return supplement(aCanvas, aCanvasRegion, aChoice, aContentList);
+        return supplement(aCanvas, aCanvasRegion, aChoice, aContentList.toArray(new ContentResource[0]));
     }
 
     /**
