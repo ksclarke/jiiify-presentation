@@ -81,7 +81,7 @@ public class AuthTokenService1Test {
      * @throws JsonParsingException If there is trouble parsing the found service
      * @throws JsonProcessingException If there is trouble processing the found service
      */
-    private String found(final Service<?> aService) throws JsonParsingException, JsonProcessingException {
+    private String found(final Service aService) throws JsonParsingException, JsonProcessingException {
         return JSON.getPrettyWriter().writeValueAsString(aService);
     }
 }

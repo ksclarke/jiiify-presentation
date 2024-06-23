@@ -6,7 +6,7 @@ package info.freelibrary.iiif.presentation.v3.services;
  * button within the client using content provided in the service description.
  */
 public class ClickthroughCookieService1 extends AbstractUserMediatedService<ClickthroughCookieService1>
-        implements UserMediatedCookieService<ClickthroughCookieService1> {
+        implements UserMediatedCookieService {
 
     /**
      * Creates a new access cookie service using the click-through pattern.

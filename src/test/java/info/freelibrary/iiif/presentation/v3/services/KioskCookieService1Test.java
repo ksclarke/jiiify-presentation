@@ -173,7 +173,7 @@ public class KioskCookieService1Test {
      */
     @Test
     public final void testSetServicesListOfServiceOfQ() {
-        final List<Service<?>> services = new ArrayList<>();
+        final List<Service> services = new ArrayList<>();
         final KioskCookieService1 cookieService = new KioskCookieService1(myID);
         final AuthTokenService1 tokenService = new AuthTokenService1(myID);
 

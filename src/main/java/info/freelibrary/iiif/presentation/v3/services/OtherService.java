@@ -13,7 +13,7 @@ import info.freelibrary.iiif.presentation.v3.properties.MediaType;
  *
  * @param <T> A type of other service
  */
-public interface OtherService<T extends OtherService<T>> extends Service<T> {
+public interface OtherService<T extends OtherService<T>> extends Service {
 
     /**
      * Gets the optional format of this service.

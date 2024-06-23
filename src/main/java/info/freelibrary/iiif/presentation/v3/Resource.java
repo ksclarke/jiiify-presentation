@@ -111,7 +111,7 @@ public interface Resource<T extends Resource<T>> {
      *
      * @return The resource's services
      */
-    List<Service<?>> getServices();
+    List<Service> getServices();
 
     /**
      * Gets the resource summary.
@@ -299,7 +299,7 @@ public interface Resource<T extends Resource<T>> {
      * @param aServiceList The services to set for this resource
      * @return The resource
      */
-    T setServices(List<Service<?>> aServiceList);
+    T setServices(List<Service> aServiceList);
 
     /**
      * Sets the services for this resource.
@@ -307,7 +307,7 @@ public interface Resource<T extends Resource<T>> {
      * @param aServiceArray The services to set for this resource
      * @return The resource
      */
-    T setServices(Service<?>... aServiceArray);
+    T setServices(Service... aServiceArray);
 
     /**
      * Sets the resource summary.

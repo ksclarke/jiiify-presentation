@@ -48,7 +48,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  * Deserializes services from JSON documents into {@link Service} implementations.
  */
 @SuppressWarnings({ PMD.GOD_CLASS, PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS })
-class ServiceDeserializer extends StdDeserializer<Service<?>> {
+class ServiceDeserializer extends StdDeserializer<Service> {
 
     /**
      * The logger for the service deserializer.
@@ -83,7 +83,7 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> {
      * @throws JsonProcessingException If there is trouble parsing the JSON
      */
     @Override
-    public Service<?> deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException {
+    public Service deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException {
         return deserializeServiceNode(aParser, aParser.getCodec().readTree(aParser));
     }
 
@@ -93,7 +93,7 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> {
      * @param aNode A JSON node
      * @param aImageService The image service that's being built
      */
-    private void deserializeExtraFormats(final JsonNode aNode, final ImageService<?> aImageService) {
+    private void deserializeExtraFormats(final JsonNode aNode, final ImageService aImageService) {
         final JsonNode extraFormats = aNode.get(ImageAPI.EXTRA_FORMATS);
 
         if (extraFormats != null && extraFormats.isArray()) {
@@ -115,7 +115,7 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> {
      * @param aNode A JSON node
      * @param aImageService The image service that's being built
      */
-    private void deserializeExtraQualities(final JsonNode aNode, final ImageService<?> aImageService) {
+    private void deserializeExtraQualities(final JsonNode aNode, final ImageService aImageService) {
         final JsonNode extraQualities = aNode.get(ImageAPI.EXTRA_QUALITIES);
 
         if (extraQualities != null && extraQualities.isArray()) {
@@ -139,7 +139,7 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> {
      * @return The GeoJSON service
      */
     @SuppressWarnings(JDK.DEPRECATION)
-    private Service<?> deserializeGeoJsonService(final JsonNode aNode, final String aID) {
+    private Service deserializeGeoJsonService(final JsonNode aNode, final String aID) {
         final GeoJsonService service = new GeoJsonService(aID);
         final JsonNode typeNode = aNode.get(JsonKeys.TYPE);
 
@@ -162,7 +162,7 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> {
      * @return The fleshed out service
      */
     @SuppressWarnings(PMD.UNUSED_PRIVATE_METHOD)
-    private Service<?> deserializeImageService(final JsonNode aNode, final ImageService<?> aImageService) {
+    private Service deserializeImageService(final JsonNode aNode, final ImageService aImageService) {
         final JsonNode width;
         final JsonNode height;
 
@@ -193,7 +193,7 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> {
      * @param aID A service ID
      * @return The other service
      */
-    private Service<?> deserializeOtherService(final JsonNode aNode, final String aID) {
+    private Service deserializeOtherService(final JsonNode aNode, final String aID) {
         final Optional<String> profileLabel = getValue(aNode.get(JsonKeys.PROFILE));
         final JsonNode v2Type = aNode.get(JsonKeys.V2_TYPE);
         final JsonNode v3Type = aNode.get(JsonKeys.TYPE);
@@ -230,7 +230,7 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> {
      * @param aID A service ID
      * @return The physical dims service
      */
-    private Service<?> deserializePhysicalDimsService(final JsonNode aNode, final String aID) {
+    private Service deserializePhysicalDimsService(final JsonNode aNode, final String aID) {
         final JsonNode scale = aNode.get(JsonKeys.PHYSICAL_SCALE);
         final JsonNode units = aNode.get(JsonKeys.PHYSICAL_UNITS);
 
@@ -251,14 +251,14 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> {
      * @throws JsonParseException If there is trouble parsing the JSON
      */
     @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY, PMD.COGNITIVE_COMPLEXITY, JDK.DEPRECATION })
-    private Service<?> deserializeServiceNode(final JsonParser aParser, final JsonNode aNode)
+    private Service deserializeServiceNode(final JsonParser aParser, final JsonNode aNode)
             throws JsonProcessingException {
-        final Service<?> service;
+        final Service service;
 
         if (aNode.isTextual()) {
             service = new OtherService3(aNode.textValue());
         } else if (aNode.isObject()) {
-            final List<Service<?>> services = getRelatedServices(aParser, aNode.get(JsonKeys.SERVICE));
+            final List<Service> services = getRelatedServices(aParser, aNode.get(JsonKeys.SERVICE));
             final JsonNode profileNode = aNode.get(JsonKeys.PROFILE);
             final String id = getServiceID(aNode, aParser);
 
@@ -267,12 +267,12 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> {
 
                 if (ImageService3.Profile.fromLabel(profileLabel).isPresent()) {
                     final ImageService3.Profile profile = ImageService3.Profile.fromLabel(profileLabel).get();
-                    final ImageService<?> imageService = new ImageService3(profile, id);
+                    final ImageService imageService = new ImageService3(profile, id);
 
                     service = deserializeImageService(aNode, imageService).setServices(services);
                 } else if (ImageService2.Profile.fromLabel(profileLabel).isPresent()) {
                     final ImageService2.Profile profile = ImageService2.Profile.fromLabel(profileLabel).get();
-                    final ImageService<?> imageService = new ImageService2(profile, id);
+                    final ImageService imageService = new ImageService2(profile, id);
 
                     service = deserializeImageService(aNode, imageService).setServices(services);
                 } else if (AuthCookieService.Profile.fromLabel(profileLabel).isPresent()) {
@@ -308,7 +308,7 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> {
      * @param aImageService The image service that's being built
      * @throws JsonParsingException If sizes cannot be deserialized
      */
-    private void deserializeSizes(final JsonNode aNode, final ImageService<?> aImageService) {
+    private void deserializeSizes(final JsonNode aNode, final ImageService aImageService) {
         final JsonNode sizesNode = aNode.get(ImageAPI.SIZES);
 
         if (sizesNode != null && sizesNode.isArray()) {
@@ -335,7 +335,7 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> {
      * @param aImageService The image service that's being built
      * @throws JsonParsingException If there is trouble parsing the JSON
      */
-    private void deserializeTiles(final JsonNode aNode, final ImageService<?> aImageService) {
+    private void deserializeTiles(final JsonNode aNode, final ImageService aImageService) {
         final JsonNode tilesNode = aNode.get(ImageAPI.TILES);
 
         if (tilesNode != null && tilesNode.isArray()) {
@@ -365,12 +365,12 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> {
      * @throws JsonParseException If there is trouble parsing the JSON
      */
     @SuppressWarnings(JDK.DEPRECATION)
-    private Service<?> deserializeV1AuthCookieService(final JsonParser aParser, final JsonNode aNode, final String aID)
+    private Service deserializeV1AuthCookieService(final JsonParser aParser, final JsonNode aNode, final String aID)
             throws JsonParseException {
         final String profile = aNode.get(JsonKeys.PROFILE).asText(); // To get here, presence has been confirmed
         final JsonNode failureDescription = aNode.get(JsonKeys.FAILURE_DESCRIPTION);
         final JsonNode failureHeader = aNode.get(JsonKeys.FAILURE_HEADER);
-        final AuthCookieService<?> cookieService;
+        final AuthCookieService cookieService;
 
         if (AuthCookieService.Profile.LOGIN.toString().equals(profile) ||
                 AuthCookieService.Profile.CLICKTHROUGH.toString().equals(profile)) {
@@ -414,16 +414,16 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> {
      * @return A list of related services
      * @throws JsonProcessingException If there is trouble parsing the JSON
      */
-    private List<Service<?>> getRelatedServices(final JsonParser aParser, final JsonNode aNode)
+    private List<Service> getRelatedServices(final JsonParser aParser, final JsonNode aNode)
             throws JsonProcessingException {
-        final List<Service<?>> services = new ArrayList<>();
+        final List<Service> services = new ArrayList<>();
 
         if (aNode != null && aNode.isArray()) {
             final ArrayNode arrayNode = (ArrayNode) aNode;
 
             for (int index = 0; index < arrayNode.size(); index++) {
                 final JsonNode serviceNode = arrayNode.get(index);
-                final Service<?> service = deserializeServiceNode(aParser, serviceNode);
+                final Service service = deserializeServiceNode(aParser, serviceNode);
 
                 services.add(service);
             }
@@ -515,7 +515,7 @@ class ServiceDeserializer extends StdDeserializer<Service<?>> {
          *
          * @return An underlying auth service
          */
-        private AuthCookieService<?> getService() {
+        private AuthCookieService getService() {
             if (myClickthroughService != null) {
                 return myClickthroughService;
             }

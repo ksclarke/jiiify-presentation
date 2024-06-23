@@ -104,7 +104,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> implements Resour
 
     /** The resource's services. */
     @JsonDeserialize(contentUsing = ServiceDeserializer.class)
-    private List<Service<?>> myServices;
+    private List<Service> myServices;
 
     /** The resource summary. */
     private Summary mySummary;
@@ -306,7 +306,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> implements Resour
      */
     @Override
     @JsonGetter(JsonKeys.SERVICE)
-    public List<Service<?>> getServices() {
+    public List<Service> getServices() {
         if (myServices == null) {
             myServices = new ArrayList<>();
         }
@@ -607,8 +607,8 @@ abstract class AbstractResource<T extends AbstractResource<T>> implements Resour
     @Override
     @JsonSetter(JsonKeys.SERVICE)
     @SuppressWarnings(JDK.UNCHECKED)
-    public T setServices(final List<Service<?>> aServiceList) {
-        final List<Service<?>> services = getServices();
+    public T setServices(final List<Service> aServiceList) {
+        final List<Service> services = getServices();
 
         Objects.requireNonNull(aServiceList);
         services.clear();
@@ -626,7 +626,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> implements Resour
     @Override
     @JsonIgnore
     @SuppressWarnings(JDK.UNCHECKED)
-    public T setServices(final Service<?>... aServiceArray) {
+    public T setServices(final Service... aServiceArray) {
         return setServices(Arrays.asList(aServiceArray));
     }
 

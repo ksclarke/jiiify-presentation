@@ -15,7 +15,7 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 /**
  * An external service that provides <a href="http://geojson.org/">GeoJSON</a> information.
  */
-public class GeoJsonService extends AbstractService<GeoJsonService> implements Service<GeoJsonService> {
+public class GeoJsonService extends AbstractService<GeoJsonService> implements Service {
 
     /** Context for the GeoJsonService service. */
     public static final String CONTEXT = "http://geojson.org/geojson-ld/geojson-context.jsonld";

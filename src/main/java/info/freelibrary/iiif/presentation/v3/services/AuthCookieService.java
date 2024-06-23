@@ -11,7 +11,7 @@ import info.freelibrary.iiif.presentation.v3.Service;
  *
  * @param <T> A type of cookie service
  */
-public interface AuthCookieService<T extends AuthCookieService<T>> extends Service<T> {
+public interface AuthCookieService extends Service {
 
     /**
      * Gets the auth cookie service failure description.
@@ -33,7 +33,7 @@ public interface AuthCookieService<T extends AuthCookieService<T>> extends Servi
      * @param aFailureDescription The failure description
      * @return This service
      */
-    T setFailureDescription(String aFailureDescription);
+    AuthCookieService setFailureDescription(String aFailureDescription);
 
     /**
      * Sets the auth cookie service failure header.
@@ -41,7 +41,7 @@ public interface AuthCookieService<T extends AuthCookieService<T>> extends Servi
      * @param aFailureHeader The failure header
      * @return This service
      */
-    T setFailureHeader(String aFailureHeader);
+    AuthCookieService setFailureHeader(String aFailureHeader);
 
     /**
      * The {@link AuthCookieService} profile.

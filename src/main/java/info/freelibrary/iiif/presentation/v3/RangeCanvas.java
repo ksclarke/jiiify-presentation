@@ -196,7 +196,7 @@ class RangeCanvas extends Canvas {
     }
 
     @Override
-    public List<Service<?>> getServices() {
+    public List<Service> getServices() {
         return mySourceCanvas.getServices();
     }
 
@@ -341,12 +341,12 @@ class RangeCanvas extends Canvas {
     }
 
     @Override
-    public Canvas setServices(final List<Service<?>> aServiceList) {
+    public Canvas setServices(final List<Service> aServiceList) {
         return mySourceCanvas.setServices(aServiceList);
     }
 
     @Override
-    public Canvas setServices(final Service<?>... aServiceArray) {
+    public Canvas setServices(final Service... aServiceArray) {
         return mySourceCanvas.setServices(aServiceArray);
     }
 

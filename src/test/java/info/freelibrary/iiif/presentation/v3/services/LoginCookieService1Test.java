@@ -246,7 +246,7 @@ public class LoginCookieService1Test {
      */
     @Test
     public final void testSetServicesListOfServiceOfQ() {
-        final List<Service<?>> services = new ArrayList<>();
+        final List<Service> services = new ArrayList<>();
         final LoginCookieService1 service = new LoginCookieService1(myID, myLabel);
 
         assertTrue(services.add(new AuthTokenService1(myID)));

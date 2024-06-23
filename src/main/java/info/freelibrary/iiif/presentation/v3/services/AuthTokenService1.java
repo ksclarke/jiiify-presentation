@@ -22,7 +22,7 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 @JsonPropertyOrder({ JsonKeys.CONTEXT, JsonKeys.V2_ID, JsonKeys.V2_TYPE, JsonKeys.PROFILE })
 @JsonInclude(Include.NON_EMPTY)
-public class AuthTokenService1 extends AbstractService<AuthTokenService1> implements Service<AuthTokenService1> {
+public class AuthTokenService1 extends AbstractService<AuthTokenService1> implements Service {
 
     /** The auth token service's logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthTokenService1.class, MessageCodes.BUNDLE);

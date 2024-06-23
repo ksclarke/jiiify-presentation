@@ -3,10 +3,8 @@ package info.freelibrary.iiif.presentation.v3.services;
 
 /**
  * A user mediated type of cookie service.
- *
- * @param <T> The specific type of user mediated cookie service
  */
-public interface UserMediatedCookieService<T extends UserMediatedCookieService<T>> extends AuthCookieService<T> {
+public interface UserMediatedCookieService extends AuthCookieService {
 
     /**
      * Gets the service confirmation label.
@@ -42,7 +40,7 @@ public interface UserMediatedCookieService<T extends UserMediatedCookieService<T
      * @param aLabel A confirmation label
      * @return This service
      */
-    T setConfirmLabel(String aLabel);
+    UserMediatedCookieService setConfirmLabel(String aLabel);
 
     /**
      * Sets the service description.
@@ -50,7 +48,7 @@ public interface UserMediatedCookieService<T extends UserMediatedCookieService<T
      * @param aDescription A service description
      * @return This service
      */
-    T setDescription(String aDescription);
+    UserMediatedCookieService setDescription(String aDescription);
 
     /**
      * Sets the service header.
@@ -58,7 +56,7 @@ public interface UserMediatedCookieService<T extends UserMediatedCookieService<T
      * @param aHeader A service header
      * @return This service
      */
-    T setHeader(String aHeader);
+    UserMediatedCookieService setHeader(String aHeader);
 
     /**
      * Sets the service label.
@@ -66,5 +64,5 @@ public interface UserMediatedCookieService<T extends UserMediatedCookieService<T
      * @param aLabel A service label
      * @return This service
      */
-    T setLabel(String aLabel);
+    UserMediatedCookieService setLabel(String aLabel);
 }

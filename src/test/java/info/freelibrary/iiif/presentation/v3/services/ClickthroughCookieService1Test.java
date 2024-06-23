@@ -240,7 +240,7 @@ public class ClickthroughCookieService1Test {
     @Test
     public final void testSetServicesListOfServiceOfQ() {
         final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
-        final List<Service<?>> services = new ArrayList<>();
+        final List<Service> services = new ArrayList<>();
 
         assertTrue(services.add(new AuthTokenService1(myID)));
         assertEquals(1, service.setServices(services).getServices().size());

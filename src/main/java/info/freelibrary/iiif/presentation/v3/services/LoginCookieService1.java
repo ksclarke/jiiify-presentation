@@ -6,7 +6,7 @@ package info.freelibrary.iiif.presentation.v3.services;
  * separate window with a UI provided by an external authentication system.
  */
 public class LoginCookieService1 extends AbstractUserMediatedService<LoginCookieService1>
-        implements UserMediatedCookieService<LoginCookieService1> {
+        implements UserMediatedCookieService {
 
     /**
      * Creates a new access cookie service using the login pattern.

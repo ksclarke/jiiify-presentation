@@ -16,7 +16,7 @@ import info.freelibrary.iiif.presentation.v3.utils.Labeled;
  * @param <T> A type of service
  */
 @JsonDeserialize(using = ServiceDeserializer.class)
-public interface Service<T extends Service<T>> {
+public interface Service {
 
     /**
      * Gets the service ID.
@@ -37,7 +37,7 @@ public interface Service<T extends Service<T>> {
      *
      * @return A list of services
      */
-    List<Service<?>> getServices();
+    List<Service> getServices();
 
     /**
      * Gets the service type.
@@ -52,7 +52,7 @@ public interface Service<T extends Service<T>> {
      * @param aID The service ID
      * @return The service
      */
-    T setID(String aID);
+    Service setID(String aID);
 
     /**
      * Sets other services that are related to this service.
@@ -60,7 +60,7 @@ public interface Service<T extends Service<T>> {
      * @param aServiceList A list of services
      * @return This service
      */
-    T setServices(List<Service<?>> aServiceList);
+    Service setServices(List<Service> aServiceList);
 
     /**
      * Sets other services that are related to this service.
@@ -68,7 +68,7 @@ public interface Service<T extends Service<T>> {
      * @param aServiceArray An array of services
      * @return This service
      */
-    T setServices(Service<?>... aServiceArray);
+    Service setServices(Service... aServiceArray);
 
     /**
      * Sets the service type.
@@ -76,7 +76,7 @@ public interface Service<T extends Service<T>> {
      * @param aType A service type
      * @return The service
      */
-    T setType(String aType);
+    Service setType(String aType);
 
     /**
      * An interface for {@link Service} profiles.

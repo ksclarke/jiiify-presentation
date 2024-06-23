@@ -58,7 +58,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     private PlaceholderCanvas myPlaceholderCanvas;
 
     /** The collection's service definitions. */
-    private List<Service<?>> myServiceDefinitions;
+    private List<Service> myServiceDefinitions;
 
     /** The collection's viewing direction. */
     private ViewingDirection myViewingDirection;
@@ -133,7 +133,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      * @return A list of services referenced by different parts of the collection document
      */
     @JsonGetter(JsonKeys.SERVICES)
-    public List<Service<?>> getServiceDefinitions() {
+    public List<Service> getServiceDefinitions() {
         if (myServiceDefinitions == null) {
             myServiceDefinitions = new ArrayList<>();
         }
@@ -210,8 +210,8 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      * @return The collection document
      */
     @JsonSetter(JsonKeys.SERVICES)
-    public Collection setServiceDefinitions(final List<Service<?>> aServiceList) {
-        final List<Service<?>> serviceList = getServiceDefinitions();
+    public Collection setServiceDefinitions(final List<Service> aServiceList) {
+        final List<Service> serviceList = getServiceDefinitions();
 
         Objects.requireNonNull(aServiceList);
         serviceList.clear();
@@ -228,7 +228,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      */
     @JsonIgnore
     @SafeVarargs
-    public final Collection setServiceDefinitions(final Service<?>... aServiceArray) {
+    public final Collection setServiceDefinitions(final Service... aServiceArray) {
         return setServiceDefinitions(Arrays.asList(aServiceArray));
     }
 

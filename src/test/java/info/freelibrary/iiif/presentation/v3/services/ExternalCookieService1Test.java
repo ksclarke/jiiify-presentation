@@ -123,7 +123,7 @@ public class ExternalCookieService1Test {
      */
     @Test
     public final void testSetServicesListOfServiceOfQ() {
-        final List<Service<?>> services = new ArrayList<>();
+        final List<Service> services = new ArrayList<>();
         final AuthTokenService1 tokenService = new AuthTokenService1(myID);
         final ExternalCookieService1 cookieService = new ExternalCookieService1();
 

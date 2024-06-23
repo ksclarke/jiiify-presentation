@@ -37,7 +37,7 @@ abstract class AbstractService<T extends AbstractService<T>> {
     private Service.Profile myProfile;
 
     /** A list of services related to this service. */
-    private List<Service<?>> myServices;
+    private List<Service> myServices;
 
     /** The service's type. */
     private String myType;
@@ -101,7 +101,7 @@ abstract class AbstractService<T extends AbstractService<T>> {
      * @return A list of services related to this service
      */
     @JsonGetter(JsonKeys.SERVICE)
-    public List<Service<?>> getServices() {
+    public List<Service> getServices() {
         if (myServices == null) {
             myServices = new ArrayList<>();
         }
@@ -140,9 +140,9 @@ abstract class AbstractService<T extends AbstractService<T>> {
      */
     @JsonSetter(JsonKeys.SERVICE)
     @SuppressWarnings({ JDK.UNCHECKED })
-    public T setServices(final List<Service<?>> aServiceList) {
+    public T setServices(final List<Service> aServiceList) {
         if (!aServiceList.isEmpty()) {
-            final List<Service<?>> services = getServices();
+            final List<Service> services = getServices();
 
             Objects.requireNonNull(aServiceList);
 
@@ -160,7 +160,7 @@ abstract class AbstractService<T extends AbstractService<T>> {
      * @return This service
      */
     @JsonIgnore
-    public T setServices(final Service<?>... aServiceArray) {
+    public T setServices(final Service... aServiceArray) {
         return setServices(Arrays.asList(aServiceArray));
     }
 

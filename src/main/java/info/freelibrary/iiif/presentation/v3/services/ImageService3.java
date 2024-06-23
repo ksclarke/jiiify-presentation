@@ -19,7 +19,7 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  * A service that will return information about a particular image via <a href="https://iiif.io/api/image/3/">IIIF Image
  * API 3</a>.
  */
-public class ImageService3 extends AbstractImageService<ImageService3> implements ImageService<ImageService3> {
+public class ImageService3 extends AbstractImageService<ImageService3> implements ImageService {
 
     /** The default profile level for the image info service. */
     private static final ImageService3.Profile DEFAULT_LEVEL = ImageService3.Profile.LEVEL_TWO;

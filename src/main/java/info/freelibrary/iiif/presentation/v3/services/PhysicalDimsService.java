@@ -17,7 +17,7 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  * information useful for rulers, etc.
  */
 @JsonInclude(Include.NON_EMPTY)
-public class PhysicalDimsService extends AbstractService<PhysicalDimsService> implements Service<PhysicalDimsService> {
+public class PhysicalDimsService extends AbstractService<PhysicalDimsService> implements Service {
 
     /** The physical scale of the service. */
     @JsonProperty(JsonKeys.PHYSICAL_SCALE)

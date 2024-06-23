@@ -59,8 +59,8 @@ public class RangeItemDeserializer extends StdDeserializer<Range.Item> {
             case ResourceTypes.RANGE -> new Range.Item(Range.fromJSON(treeNode.toString()));
             case ResourceTypes.CANVAS -> new Range.Item(Canvas.fromJSON(treeNode.toString()), true);
             case ResourceTypes.SPECIFIC_RESOURCE -> new Range.Item(SpecificResource.fromJSON(treeNode.toString()));
-            default -> throw new JsonParseException(aParser,
-                    LOGGER.getMessage(MessageCodes.JPA_041, treeNode.toString()));
+            default ->
+                throw new JsonParseException(aParser, LOGGER.getMessage(MessageCodes.JPA_041, treeNode.toString()));
         };
     }
 

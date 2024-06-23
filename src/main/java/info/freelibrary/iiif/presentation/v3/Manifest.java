@@ -61,7 +61,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     private List<Range> myRanges;
 
     /** The manifest's service definitions. */
-    private List<Service<?>> myServiceDefinitions;
+    private List<Service> myServiceDefinitions;
 
     /** The manifest's start. */
     private Start myStart;
@@ -212,7 +212,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @return A list of services referenced by different parts of the manifest
      */
     @JsonGetter(JsonKeys.SERVICES)
-    public List<Service<?>> getServiceDefinitions() {
+    public List<Service> getServiceDefinitions() {
         if (myServiceDefinitions == null) {
             myServiceDefinitions = new ArrayList<>();
         }
@@ -374,8 +374,8 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @return The manifest
      */
     @JsonSetter(JsonKeys.SERVICES)
-    public Manifest setServiceDefinitions(final List<Service<?>> aServiceList) {
-        final List<Service<?>> serviceList = getServiceDefinitions();
+    public Manifest setServiceDefinitions(final List<Service> aServiceList) {
+        final List<Service> serviceList = getServiceDefinitions();
 
         Objects.requireNonNull(aServiceList);
         serviceList.clear();
@@ -392,7 +392,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      */
     @JsonIgnore
     @SafeVarargs
-    public final Manifest setServiceDefinitions(final Service<?>... aServiceArray) {
+    public final Manifest setServiceDefinitions(final Service... aServiceArray) {
         return setServiceDefinitions(Arrays.asList(aServiceArray));
     }
 

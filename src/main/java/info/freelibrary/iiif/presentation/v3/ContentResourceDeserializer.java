@@ -65,8 +65,8 @@ class ContentResourceDeserializer extends StdDeserializer<ContentResource> {
             case ResourceTypes.SOUND -> JSON.getReader(SoundContent.class).readValue(treeNode.toString());
             case ResourceTypes.TEXT -> JSON.getReader(TextContent.class).readValue(treeNode.toString());
             case ResourceTypes.VIDEO -> JSON.getReader(VideoContent.class).readValue(treeNode.toString());
-            default -> throw new JsonParseException(aParser,
-                    LOGGER.getMessage(MessageCodes.JPA_056, treeNode.toString()));
+            default ->
+                throw new JsonParseException(aParser, LOGGER.getMessage(MessageCodes.JPA_056, treeNode.toString()));
         };
     }
 

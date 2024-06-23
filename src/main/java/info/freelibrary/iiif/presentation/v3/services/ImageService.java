@@ -15,7 +15,7 @@ import info.freelibrary.iiif.presentation.v3.services.image.Tile;
  *
  * @param <T> A type of image service
  */
-public interface ImageService<T extends ImageService<T>> extends Service<T> {
+public interface ImageService extends Service {
 
     /**
      * Gets the image service's extra formats.
@@ -72,7 +72,7 @@ public interface ImageService<T extends ImageService<T>> extends Service<T> {
      * @param aFormatArray A list of extra formats
      * @return This image service
      */
-    T setExtraFormats(Format... aFormatArray);
+    ImageService setExtraFormats(Format... aFormatArray);
 
     /**
      * Sets the image service's extra formats.
@@ -80,7 +80,7 @@ public interface ImageService<T extends ImageService<T>> extends Service<T> {
      * @param aFormatList A list of extra formats
      * @return This image service
      */
-    T setExtraFormats(List<Format> aFormatList);
+    ImageService setExtraFormats(List<Format> aFormatList);
 
     /**
      * Sets the image service's extra qualities.
@@ -88,7 +88,7 @@ public interface ImageService<T extends ImageService<T>> extends Service<T> {
      * @param aQualityList A list of extra qualities
      * @return This image service
      */
-    T setExtraQualities(List<Quality> aQualityList);
+    ImageService setExtraQualities(List<Quality> aQualityList);
 
     /**
      * Sets the image service's extra qualities.
@@ -96,7 +96,7 @@ public interface ImageService<T extends ImageService<T>> extends Service<T> {
      * @param aQualityArray An array of extra qualities
      * @return This image service
      */
-    T setExtraQualities(Quality... aQualityArray);
+    ImageService setExtraQualities(Quality... aQualityArray);
 
     /**
      * Sets the image service's height.
@@ -104,7 +104,7 @@ public interface ImageService<T extends ImageService<T>> extends Service<T> {
      * @param aWidth A height of an image service image
      * @return The image service
      */
-    T setHeight(int aWidth);
+    ImageService setHeight(int aWidth);
 
     /**
      * Sets whether the protocol should be included in the output JSON.
@@ -112,7 +112,7 @@ public interface ImageService<T extends ImageService<T>> extends Service<T> {
      * @param aSetValue Whether the protocol should be serialized
      * @return The image service
      */
-    T setProtocol(boolean aSetValue);
+    ImageService setProtocol(boolean aSetValue);
 
     /**
      * Sets the service's sizes from a list of sizes.
@@ -120,7 +120,7 @@ public interface ImageService<T extends ImageService<T>> extends Service<T> {
      * @param aSizeList A list of sizes for the service
      * @return This image service
      */
-    T setSizes(List<Size> aSizeList);
+    ImageService setSizes(List<Size> aSizeList);
 
     /**
      * Sets the service's sizes from an array of sizes.
@@ -128,7 +128,7 @@ public interface ImageService<T extends ImageService<T>> extends Service<T> {
      * @param aSizeArray An array of sizes for the service
      * @return This image service
      */
-    T setSizes(Size... aSizeArray);
+    ImageService setSizes(Size... aSizeArray);
 
     /**
      * Sets the service's tiles from a list of tiles.
@@ -136,7 +136,7 @@ public interface ImageService<T extends ImageService<T>> extends Service<T> {
      * @param aTileList A list of tiles for the service
      * @return This image service
      */
-    T setTiles(List<Tile> aTileList);
+    ImageService setTiles(List<Tile> aTileList);
 
     /**
      * Sets the service's tiles from an array of tiles.
@@ -144,7 +144,7 @@ public interface ImageService<T extends ImageService<T>> extends Service<T> {
      * @param aTileArray An array of tiles for the service
      * @return This image service
      */
-    T setTiles(Tile... aTileArray);
+    ImageService setTiles(Tile... aTileArray);
 
     /**
      * Sets the image service's width.
@@ -152,6 +152,6 @@ public interface ImageService<T extends ImageService<T>> extends Service<T> {
      * @param aWidth A width of an image service image
      * @return The image service
      */
-    T setWidth(int aWidth);
+    ImageService setWidth(int aWidth);
 
 }
