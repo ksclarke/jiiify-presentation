@@ -50,7 +50,7 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
     private List<A> myAnnotations;
 
     /** The next annotation page in an {@link AnnotationCollection}. */
-    private AnnotationPage<?> myNextAnnotationPage;
+    private AnnotationPage<? extends Annotation<?>> myNextAnnotationPage;
 
     /**
      * Creates a new annotation page for a supplied {@link CanvasResource}.
@@ -135,7 +135,7 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
      *
      * @return The optional annotation page that follows this one
      */
-    public Optional<AnnotationPage<?>> getNextPage() {
+    public Optional<AnnotationPage<? extends Annotation<?>>> getNextPage() {
         return Optional.ofNullable(myNextAnnotationPage);
     }
 
@@ -211,9 +211,10 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
      * Sets the annotation page that should follow this one in an {@link AnnotationCollection}.
      *
      * @param anAnnotationPage A next annotation page
+     * @param <T> The type of annotation page set as the next one
      * @return This annotation page
      */
-    public AnnotationPage<?> setNextPage(final AnnotationPage<?> anAnnotationPage) {
+    public <T extends Annotation<T>> AnnotationPage<A> setNextPage(final AnnotationPage<T> anAnnotationPage) {
         myNextAnnotationPage = anAnnotationPage;
         return this;
     }
