@@ -18,6 +18,7 @@ import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.JDK;
 import info.freelibrary.util.warnings.PMD;
+import info.freelibrary.util.warnings.Sonar;
 
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.services.AuthCookieService;
@@ -47,7 +48,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 /**
  * Deserializes services from JSON documents into {@link Service} implementations.
  */
-@SuppressWarnings({ PMD.GOD_CLASS, PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS })
+@SuppressWarnings({ PMD.GOD_CLASS, PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS, Sonar.COGNITIVE_COMPLEXITY })
 class ServiceDeserializer extends StdDeserializer<Service> {
 
     /**
@@ -197,7 +198,7 @@ class ServiceDeserializer extends StdDeserializer<Service> {
         final Optional<String> profileLabel = getValue(aNode.get(JsonKeys.PROFILE));
         final JsonNode v2Type = aNode.get(JsonKeys.V2_TYPE);
         final JsonNode v3Type = aNode.get(JsonKeys.TYPE);
-        final OtherService<?> otherService;
+        final OtherService otherService;
 
         if (v3Type != null) {
             if (profileLabel.isPresent()) {
@@ -263,24 +264,26 @@ class ServiceDeserializer extends StdDeserializer<Service> {
             final String id = getServiceID(aNode, aParser);
 
             if (profileNode != null) {
-                final String profileLabel = profileNode.asText();
+                final Optional<Service.Profile> optProfile = Service.Profile.fromLabel(profileNode.asText());
 
-                if (ImageService3.Profile.fromLabel(profileLabel).isPresent()) {
-                    final ImageService3.Profile profile = ImageService3.Profile.fromLabel(profileLabel).get();
-                    final ImageService imageService = new ImageService3(profile, id);
+                if (optProfile.isPresent()) {
+                    final Service.Profile serviceProfile = optProfile.get();
 
-                    service = deserializeImageService(aNode, imageService).setServices(services);
-                } else if (ImageService2.Profile.fromLabel(profileLabel).isPresent()) {
-                    final ImageService2.Profile profile = ImageService2.Profile.fromLabel(profileLabel).get();
-                    final ImageService imageService = new ImageService2(profile, id);
-
-                    service = deserializeImageService(aNode, imageService).setServices(services);
-                } else if (AuthCookieService.Profile.fromLabel(profileLabel).isPresent()) {
-                    service = deserializeV1AuthCookieService(aParser, aNode, id).setServices(services);
-                } else if (AuthTokenService1.Profile.fromLabel(profileLabel).isPresent()) {
-                    service = new AuthTokenService1(id);
-                } else if (PhysicalDimsService.Profile.fromLabel(profileLabel).isPresent()) {
-                    service = deserializePhysicalDimsService(aNode, id).setServices(services);
+                    if (serviceProfile instanceof final ImageService3.Profile profile) {
+                        final ImageService imageService = new ImageService3(id, profile);
+                        service = deserializeImageService(aNode, imageService).setServices(services);
+                    } else if (serviceProfile instanceof final ImageService2.Profile profile) {
+                        final ImageService imageService = new ImageService2(id, profile);
+                        service = deserializeImageService(aNode, imageService).setServices(services);
+                    } else if (serviceProfile instanceof AuthCookieService.Profile) {
+                        service = deserializeV1AuthCookieService(aParser, aNode, id).setServices(services);
+                    } else if (serviceProfile instanceof AuthTokenService1.Profile) {
+                        service = new AuthTokenService1(id);
+                    } else if (serviceProfile instanceof PhysicalDimsService.Profile) {
+                        service = deserializePhysicalDimsService(aNode, id).setServices(services);
+                    } else {
+                        service = deserializeOtherService(aNode, id).setServices(services);
+                    }
                 } else {
                     service = deserializeOtherService(aNode, id).setServices(services);
                 }

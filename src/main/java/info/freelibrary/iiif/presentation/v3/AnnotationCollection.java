@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.util.warnings.JDK;
 import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
@@ -46,19 +47,23 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
     /**
      * Gets the collection's first annotation page.
      *
+     * @param <T> A type of annotation
      * @return An optional annotation page
      */
-    public Optional<AnnotationPage<?>> getFirstPage() {
-        return Optional.ofNullable(myFirstAnnotationPage);
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public <T extends Annotation<T>> Optional<AnnotationPage<T>> getFirstPage() {
+        return Optional.ofNullable((AnnotationPage<T>) myFirstAnnotationPage);
     }
 
     /**
      * Gets the collection's last annotation page.
      *
+     * @param <T> A type of annotation
      * @return An optional annotation page
      */
-    public Optional<AnnotationPage<?>> getLastPage() {
-        return Optional.ofNullable(myLastAnnotationPage);
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public <T extends Annotation<T>> Optional<AnnotationPage<T>> getLastPage() {
+        return Optional.ofNullable((AnnotationPage<T>) myLastAnnotationPage);
     }
 
     /**

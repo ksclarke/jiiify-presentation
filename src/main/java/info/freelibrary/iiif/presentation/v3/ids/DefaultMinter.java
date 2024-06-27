@@ -68,9 +68,8 @@ class DefaultMinter implements Minter {
         final List<String> noids = new ArrayList<>();
 
         // Create a list of NOIDs for the manuscript to use in constructing IDs
-        Generator.<Character>permutation(CHARS).withRepetitions(4).stream().forEach(charList -> {
-            noids.add(charList.stream().map(String::valueOf).collect(Collectors.joining()));
-        });
+        Generator.<Character>permutation(CHARS).withRepetitions(4).stream()
+                .forEach(charList -> noids.add(charList.stream().map(String::valueOf).collect(Collectors.joining())));
 
         // Shuffle them so they appear to be random
         Collections.shuffle(noids);
@@ -358,7 +357,7 @@ class DefaultMinter implements Minter {
             final String noid;
 
             if (!hasNext()) {
-                throw new IndexOutOfBoundsException(myIndex);
+                throw new NoSuchElementException(new IndexOutOfBoundsException(myIndex));
             }
 
             noid = NOIDS.get(myIndex);
@@ -372,7 +371,7 @@ class DefaultMinter implements Minter {
                     myIndex = ++myIteration + myStart;
 
                     // Loop around to get the remaining ones from the start of the array
-                    if (myIndex >= (mySkipCount + myStart)) {
+                    if (myIndex >= mySkipCount + myStart) {
                         mySkipCount = 1;
                         myIndex = 0;
                     }

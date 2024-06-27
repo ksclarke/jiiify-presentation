@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import info.freelibrary.util.warnings.PMD;
+import info.freelibrary.util.warnings.Sonar;
 
 import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.exts.geo.NavPlace;
@@ -57,7 +58,7 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  * Joke about this kludge: There isn't anything one more layer of abstraction cannot solve!
  * </p>
  */
-@SuppressWarnings({ PMD.EXCESSIVE_PUBLIC_COUNT, PMD.COUPLING_BETWEEN_OBJECTS })
+@SuppressWarnings({ PMD.EXCESSIVE_PUBLIC_COUNT, PMD.COUPLING_BETWEEN_OBJECTS, Sonar.MONSTER_CLASS })
 class RangeCanvas extends Canvas {
 
     /** The wrapped canvas. */

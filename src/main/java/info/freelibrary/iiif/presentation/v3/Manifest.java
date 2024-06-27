@@ -18,6 +18,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.JDK;
 import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
@@ -49,7 +50,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     private AccompanyingCanvas myAccompanyingCanvas;
 
     /** The manifest's annotations. */
-    private List<AnnotationPage<? extends WebAnnotation>> myAnnotations;
+    private List<AnnotationPage<WebAnnotation>> myAnnotations;
 
     /** The manifest's canvases. */
     private List<Canvas> myCanvases;
@@ -148,7 +149,9 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @return This manifest's annotation pages
      */
     @JsonGetter(JsonKeys.ANNOTATIONS)
-    public List<AnnotationPage<? extends WebAnnotation>> getAnnotations() {
+    @SuppressWarnings({ JDK.UNCHECKED })
+    // <AnnotationPage<? extends WebAnnotation>>
+    public List<AnnotationPage<WebAnnotation>> getAnnotations() {
         if (myAnnotations == null) {
             myAnnotations = new ArrayList<>();
         }
@@ -261,7 +264,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      */
     @SafeVarargs
     @JsonIgnore
-    public final Manifest setAnnotations(final AnnotationPage<? extends WebAnnotation>... aPageList) {
+    public final Manifest setAnnotations(final AnnotationPage<WebAnnotation>... aPageList) {
         setAnnotations(List.of(aPageList));
         return this;
     }
@@ -273,8 +276,8 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @return This manifest
      */
     @JsonSetter(JsonKeys.ANNOTATIONS)
-    public Manifest setAnnotations(final List<AnnotationPage<? extends WebAnnotation>> aPageList) {
-        final List<AnnotationPage<? extends WebAnnotation>> annotations = getAnnotations();
+    public Manifest setAnnotations(final List<AnnotationPage<WebAnnotation>> aPageList) {
+        final List<AnnotationPage<WebAnnotation>> annotations = getAnnotations();
 
         Objects.requireNonNull(aPageList);
         annotations.clear();

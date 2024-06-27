@@ -18,6 +18,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.JDK;
 import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
@@ -133,10 +134,12 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
     /**
      * Gets the annotation page that should follow this one in an {@link AnnotationCollection}.
      *
+     * @param <T> The type of annotation in the returned annotation page
      * @return The optional annotation page that follows this one
      */
-    public Optional<AnnotationPage<? extends Annotation<?>>> getNextPage() {
-        return Optional.ofNullable(myNextAnnotationPage);
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public <T extends Annotation<T>> Optional<AnnotationPage<T>> getNextPage() {
+        return Optional.ofNullable((AnnotationPage<T>) myNextAnnotationPage);
     }
 
     /**

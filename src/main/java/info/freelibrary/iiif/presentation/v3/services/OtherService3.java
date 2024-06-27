@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
  * A generic service class for other service implementations.
  */
 @JsonInclude(Include.NON_EMPTY)
-public final class OtherService3 extends AbstractOtherService<OtherService3> implements OtherService<OtherService3> {
+public final class OtherService3 extends AbstractOtherService<OtherService3> implements OtherService {
 
     /**
      * Creates a new unspecified service from the supplied ID.
@@ -16,7 +16,7 @@ public final class OtherService3 extends AbstractOtherService<OtherService3> imp
      * @param aID A service ID
      */
     public OtherService3(final String aID) {
-        this(aID, (String) null);
+        super(aID, null);
     }
 
     /**
@@ -26,7 +26,7 @@ public final class OtherService3 extends AbstractOtherService<OtherService3> imp
      * @param aProfile An other service profile
      */
     public OtherService3(final String aID, final OtherService.Profile aProfile) {
-        this(aID, null, aProfile);
+        super(aID, null, aProfile);
     }
 
     /**

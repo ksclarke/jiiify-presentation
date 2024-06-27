@@ -11,7 +11,6 @@ import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.Eclipse;
 
-import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
@@ -28,22 +27,22 @@ public class ImageService2 extends AbstractImageService<ImageService2> implement
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageService2.class, MessageCodes.BUNDLE);
 
     /**
-     * Creates a new IIIF Image API 2 service.
-     *
-     * @param aProfile A profile for the service
-     * @param aID The ID
-     */
-    public ImageService2(final ImageService2.Profile aProfile, final String aID) {
-        super(aProfile, aID, ImageService2.class.getSimpleName());
-    }
-
-    /**
      * Creates a new IIIF Image API 2 service with a default level of two.
      *
      * @param aID The ID
      */
     public ImageService2(final String aID) {
-        super(DEFAULT_LEVEL, aID, ImageService2.class.getSimpleName());
+        super(aID, ImageService2.class.getSimpleName(), DEFAULT_LEVEL);
+    }
+
+    /**
+     * Creates a new IIIF Image API 2 service.
+     *
+     * @param aProfile A profile for the service
+     * @param aID The ID
+     */
+    public ImageService2(final String aID, final ImageService2.Profile aProfile) {
+        super(aID, ImageService2.class.getSimpleName(), aProfile);
     }
 
     /**
@@ -87,7 +86,7 @@ public class ImageService2 extends AbstractImageService<ImageService2> implement
     /**
      * The profiles (API compliance levels) supported by an {@link ImageService2}.
      */
-    public enum Profile implements Service.Profile {
+    public enum Profile implements ImageService.Profile {
 
         /** The <a href="http://iiif.io/api/image/2/level1.json">Level One</a> definition. */
         LEVEL_ONE("http://iiif.io/api/image/2/level1.json"),

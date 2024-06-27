@@ -28,6 +28,7 @@ import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.JDK;
 import info.freelibrary.util.warnings.PMD;
+import info.freelibrary.util.warnings.Sonar;
 
 import info.freelibrary.iiif.presentation.v3.annotations.Purpose;
 import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
@@ -750,7 +751,8 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      * @throws SelectorOutOfBoundsException If the canvas fragment identified by the given {@link MediaFragmentSelector}
      *         doesn't exist
      */
-    @SuppressWarnings({ PMD.N_PATH_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY, PMD.COGNITIVE_COMPLEXITY })
+    @SuppressWarnings({ PMD.N_PATH_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY, PMD.COGNITIVE_COMPLEXITY,
+        Sonar.COGNITIVE_COMPLEXITY })
     private Canvas getCanvasFragment(final MediaFragmentSelector aCanvasRegion) {
         final String canvasID = getID() + Constants.HASH + aCanvasRegion.toString();
         final Canvas canvasFragment = new Canvas(canvasID);

@@ -210,11 +210,7 @@ class NavigableResource<T extends NavigableResource<T>> extends AbstractResource
         if (aObject instanceof final String context) {
             deserializeContexts(List.of(context));
         } else if (aObject instanceof final List<?> genericList) {
-            if (genericList.isEmpty() || !genericList.get(0).getClass().equals(String.class)) {
-                throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_113));
-            }
-
-            setContexts(genericList);
+            validateAndSetContexts(genericList);
         } else {
             throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_113));
         }
@@ -274,6 +270,21 @@ class NavigableResource<T extends NavigableResource<T>> extends AbstractResource
     }
 
     /**
+     * Sets the contexts after confirming their validity.
+     *
+     * @param aContextList A list of contexts
+     * @throws IllegalArgumentException if a supplied context isn't a string
+     */
+    @SuppressWarnings({ JDK.UNCHECKED })
+    private void validateAndSetContexts(final List<?> aContextList) {
+        if (aContextList.isEmpty() || aContextList.stream().anyMatch(item -> !(item instanceof String))) {
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_113));
+        }
+
+        setContexts(aContextList);
+    }
+
+    /**
      * A context list comparator that makes sure the required context is always last in the list.
      * <p>
      * Cf. https://iiif.io/api/presentation/3.0/#46-linked-data-context-and-extensions
@@ -283,19 +294,17 @@ class NavigableResource<T extends NavigableResource<T>> extends AbstractResource
 
         @Override
         public int compare(final U aFirstURI, final U aSecondURI) {
-            if (PRESENTATION_CONTEXT_URI.equals(aFirstURI) && PRESENTATION_CONTEXT_URI.equals(aSecondURI)) {
-                return 0;
+            int result = 0;
+
+            if (!PRESENTATION_CONTEXT_URI.equals(aFirstURI) || !PRESENTATION_CONTEXT_URI.equals(aSecondURI)) {
+                if (PRESENTATION_CONTEXT_URI.equals(aFirstURI)) {
+                    result = 1;
+                } else if (PRESENTATION_CONTEXT_URI.equals(aSecondURI)) {
+                    result = -1;
+                }
             }
 
-            if (PRESENTATION_CONTEXT_URI.equals(aFirstURI)) {
-                return 1;
-            }
-
-            if (PRESENTATION_CONTEXT_URI.equals(aSecondURI)) {
-                return -1;
-            }
-
-            return 0; // We leave all non-required contexts where they are
+            return result;
         }
 
     }

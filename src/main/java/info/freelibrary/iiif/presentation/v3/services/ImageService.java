@@ -154,4 +154,26 @@ public interface ImageService extends Service {
      */
     ImageService setWidth(int aWidth);
 
+    /**
+     * An {@code ImageService} profile.
+     */
+    interface Profile extends Service.Profile {
+
+        /**
+         * Gets an {@code ImageService} profile from the supplied profile label.
+         *
+         * @param aLabel A profile label
+         * @return An {@code ImageService.Profile} optional if found; or, an empty optional if not
+         */
+        static Optional<Profile> fromLabel(final String aLabel) {
+            final Optional<ImageService3.Profile> profile = ImageService3.Profile.fromLabel(aLabel);
+
+            if (profile.isPresent()) {
+                return profile.map(ImageService.Profile.class::cast);
+            }
+
+            return ImageService2.Profile.fromLabel(aLabel).map(ImageService.Profile.class::cast);
+        }
+    }
+
 }

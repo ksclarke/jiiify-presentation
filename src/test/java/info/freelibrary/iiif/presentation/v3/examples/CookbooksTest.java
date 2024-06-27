@@ -295,8 +295,9 @@ public class CookbooksTest extends AbstractCookbookTest {
                 new Canvas(MinterFactory.getMinter(manifest), new Label("en", "Canvas with a single IIIF image"));
         final var imageContent = new ImageContent(
                 "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen/full/max/0/default.jpg");
-        final var service = new ImageService3(LEVEL_ONE,
-                "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen");
+        final var service = new ImageService3(
+                "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen",
+                LEVEL_ONE);
 
         imageContent.setWidthHeight(4032, 3024).setFormat(IMAGE_JPEG).setServices(service);
         canvas.setWidthHeight(4032, 3024).paintWith(imageContent);
@@ -324,8 +325,9 @@ public class CookbooksTest extends AbstractCookbookTest {
                 "https://iiif.io/api/cookbook/recipe/0005-image-service/annotation/p0001-image", canvas);
         final var imageContent = new ImageContent(
                 "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen/full/max/0/default.jpg");
-        final var service = new ImageService3(LEVEL_ONE,
-                "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen");
+        final var service = new ImageService3(
+                "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen",
+                LEVEL_ONE);
 
         imageContent.setWidthHeight(4032, 3024).setFormat(IMAGE_JPEG).setServices(service);
         page.addAnnotations(annotation.setBody(imageContent).setTarget(new Target(canvas)));
@@ -349,8 +351,9 @@ public class CookbooksTest extends AbstractCookbookTest {
         final var canvas = new Canvas(MinterFactory.getMinter(manifest));
         final var imageContent = new ImageContent(
                 "https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother/full/max/0/default.jpg");
-        final var service = new ImageService3(LEVEL_ONE,
-                "https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother");
+        final var service = new ImageService3(
+                "https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother",
+                LEVEL_ONE);
 
         final var creator = new Metadata(new Label(new I18n("en", "Creator"), new I18n("fr", "Auteur")),
                 new Value("Whistler, James Abbott McNeill"));
@@ -395,8 +398,9 @@ public class CookbooksTest extends AbstractCookbookTest {
         final var canvas = new Canvas(MinterFactory.getMinter(manifest));
         final var imageContent = new ImageContent(
                 "https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother/full/max/0/default.jpg");
-        final var service = new ImageService3(LEVEL_ONE,
-                "https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother");
+        final var service = new ImageService3(
+                "https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother",
+                LEVEL_ONE);
 
         final var creator =
                 new Metadata(new Label("en", "Creator", "fr", "Auteur"), new Value("Whistler, James Abbott McNeill"));
@@ -440,8 +444,9 @@ public class CookbooksTest extends AbstractCookbookTest {
                 "https://iiif.io/api/cookbook/recipe/0006-text-language/annotation/p0001-image", canvas);
         final var imageContent = new ImageContent(
                 "https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother/full/max/0/default.jpg");
-        final var service = new ImageService3(LEVEL_ONE,
-                "https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother");
+        final var service = new ImageService3(
+                "https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother",
+                LEVEL_ONE);
 
         final var creator = new Metadata(new Label(new I18n("en", "Creator"), new I18n("fr", "Auteur")),
                 new Value("Whistler, James Abbott McNeill"));
@@ -485,8 +490,9 @@ public class CookbooksTest extends AbstractCookbookTest {
         final var canvas = new Canvas(MinterFactory.getMinter(manifest));
         final var imageContent = new ImageContent(
                 "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen/full/max/0/default.jpg");
-        final var service = new ImageService3(LEVEL_ONE,
-                "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen");
+        final var service = new ImageService3(
+                "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen",
+                LEVEL_ONE);
 
         manifest.setSummary(new Summary("en",
                 "<p>Picture taken by the <a href=\"https://github.com/glenrobson\">IIIF Technical Coordinator</a></p>"));
@@ -520,8 +526,9 @@ public class CookbooksTest extends AbstractCookbookTest {
                 "https://iiif.io/api/cookbook/recipe/0007-string-formats/annotation/p0001-image", canvas);
         final var imageContent = new ImageContent(
                 "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen/full/max/0/default.jpg");
-        final var service = new ImageService3(LEVEL_ONE,
-                "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen");
+        final var service = new ImageService3(
+                "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen",
+                LEVEL_ONE);
 
         manifest.setSummary(new Summary("en",
                 "<p>Picture taken by the <a href=\"https://github.com/glenrobson\">IIIF Technical Coordinator</a></p>"));
@@ -553,8 +560,9 @@ public class CookbooksTest extends AbstractCookbookTest {
         final var canvas = new Canvas(MinterFactory.getMinter(manifest));
         final var imageContent = new ImageContent(
                 "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen/full/max/0/default.jpg");
-        final var service = new ImageService3(LEVEL_ONE,
-                "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen");
+        final var service = new ImageService3(
+                "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen",
+                LEVEL_ONE);
 
         manifest.setSummary(new Summary("en",
                 "<p>Picture taken by the <a href=\"https://github.com/glenrobson\">IIIF Technical Coordinator</a></p>"));
@@ -586,8 +594,9 @@ public class CookbooksTest extends AbstractCookbookTest {
                 "https://iiif.io/api/cookbook/recipe/0008-rights/annotation/p0001-image", canvas);
         final var imageContent = new ImageContent(
                 "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen/full/max/0/default.jpg");
-        final var service = new ImageService3(LEVEL_ONE,
-                "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen");
+        final var service = new ImageService3(
+                "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen",
+                LEVEL_ONE);
 
         manifest.setSummary(new Summary("en",
                 "<p>Picture taken by the <a href=\"https://github.com/glenrobson\">IIIF Technical Coordinator</a></p>"));
@@ -618,32 +627,37 @@ public class CookbooksTest extends AbstractCookbookTest {
         final var canvas1 = new Canvas(minter, new Label("en", "Blank page"));
         final var imageContent1 = new ImageContent(
                 "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f18/full/max/0/default.jpg");
-        final var service1 = new ImageService3(LEVEL_ONE,
-                "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f18");
+        final var service1 = new ImageService3(
+                "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f18",
+                LEVEL_ONE);
 
         final var canvas2 = new Canvas(minter, new Label("en", "Frontispiece"));
         final var imageContent2 = new ImageContent(
                 "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f19/full/max/0/default.jpg");
-        final var service2 = new ImageService3(LEVEL_ONE,
-                "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f19");
+        final var service2 = new ImageService3(
+                "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f19",
+                LEVEL_ONE);
 
         final var canvas3 = new Canvas(minter, new Label("en", "Title page"));
         final var imageContent3 = new ImageContent(
                 "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f20/full/max/0/default.jpg");
-        final var service3 = new ImageService3(LEVEL_ONE,
-                "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f20");
+        final var service3 = new ImageService3(
+                "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f20",
+                LEVEL_ONE);
 
         final var canvas4 = new Canvas(minter, new Label("en", "Blank page"));
         final var imageContent4 = new ImageContent(
                 "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f21/full/max/0/default.jpg");
-        final var service4 = new ImageService3(LEVEL_ONE,
-                "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f21");
+        final var service4 = new ImageService3(
+                "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f21",
+                LEVEL_ONE);
 
         final var canvas5 = new Canvas(minter, new Label("en", "Bookplate"));
         final var imageContent5 = new ImageContent(
                 "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f22/full/max/0/default.jpg");
-        final var service5 = new ImageService3(LEVEL_ONE,
-                "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f22");
+        final var service5 = new ImageService3(
+                "https://iiif.io/api/image/3.0/example/reference/59d09e6773341f28ea166e9f3c1e674f-gallica_ark_12148_bpt6k1526005v_f22",
+                LEVEL_ONE);
 
         manifest.setBehaviors(PAGED);
 
@@ -707,7 +721,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         canvasList.forEach(canvasData -> {
             final var canvas = new Canvas(minter, new Label("en", canvasData.get(0)));
             final var imageContent = new ImageContent(canvasData.get(1));
-            final var service = new ImageService3(LEVEL_ONE, canvasData.get(2));
+            final var service = new ImageService3(canvasData.get(2), LEVEL_ONE);
             final var width = Integer.valueOf(canvasData.get(3));
             final var height = Integer.valueOf(canvasData.get(4));
 
@@ -766,7 +780,7 @@ public class CookbooksTest extends AbstractCookbookTest {
             final var annotation = new PaintingAnnotation(
                     "https://iiif.io/api/cookbook/recipe/0008-rights/annotation/p000" + index + "-image", canvas);
             final var imageContent = new ImageContent(pageDataList.get(1));
-            final var service = new ImageService3(LEVEL_ONE, pageDataList.get(2));
+            final var service = new ImageService3(pageDataList.get(2), LEVEL_ONE);
             final var width = Integer.valueOf(pageDataList.get(3));
             final var height = Integer.valueOf(pageDataList.get(4));
 
@@ -822,7 +836,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         canvasList.forEach(canvasData -> {
             final var canvas = new Canvas(minter, new Label("en", canvasData.get(0)));
             final var imageContent = new ImageContent(canvasData.get(1));
-            final var service = new ImageService3(LEVEL_ONE, canvasData.get(2));
+            final var service = new ImageService3(canvasData.get(2), LEVEL_ONE);
             final var width = Integer.valueOf(canvasData.get(3));
             final var height = Integer.valueOf(canvasData.get(4));
 
@@ -874,7 +888,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         canvasList.forEach(canvasData -> {
             final var canvas = new Canvas(minter, new Label("en", canvasData.get(0)));
             final var imageContent = new ImageContent(canvasData.get(1));
-            final var service = new ImageService3(LEVEL_ONE, canvasData.get(2));
+            final var service = new ImageService3(canvasData.get(2), LEVEL_ONE);
             final var width = Integer.valueOf(canvasData.get(3));
             final var height = Integer.valueOf(canvasData.get(4));
 
@@ -907,32 +921,37 @@ public class CookbooksTest extends AbstractCookbookTest {
         final var canvas1 = new Canvas(minter, new Label("en", "front cover"));
         final var imageContent1 = new ImageContent(
                 "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_001/full/max/0/default.jpg");
-        final var service1 = new ImageService3(LEVEL_ONE,
-                "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_001");
+        final var service1 = new ImageService3(
+                "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_001",
+                LEVEL_ONE);
 
         final var canvas2 = new Canvas(minter, new Label("en", "pages 1–2"));
         final var imageContent2 = new ImageContent(
                 "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_002/full/max/0/default.jpg");
-        final var service2 = new ImageService3(LEVEL_ONE,
-                "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_002");
+        final var service2 = new ImageService3(
+                "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_002",
+                LEVEL_ONE);
 
         final var canvas3 = new Canvas(minter, new Label("en", "pages 3–4"));
         final var imageContent3 = new ImageContent(
                 "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_003/full/max/0/default.jpg");
-        final var service3 = new ImageService3(LEVEL_ONE,
-                "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_003");
+        final var service3 = new ImageService3(
+                "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_003",
+                LEVEL_ONE);
 
         final var canvas4 = new Canvas(minter, new Label("en", "pages 5–6"));
         final var imageContent4 = new ImageContent(
                 "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_004/full/max/0/default.jpg");
-        final var service4 = new ImageService3(LEVEL_ONE,
-                "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_004");
+        final var service4 = new ImageService3(
+                "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_004",
+                LEVEL_ONE);
 
         final var canvas5 = new Canvas(minter, new Label("en", "back cover"));
         final var imageContent5 = new ImageContent(
                 "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_005/full/max/0/default.jpg");
-        final var service5 = new ImageService3(LEVEL_ONE,
-                "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_005");
+        final var service5 = new ImageService3(
+                "https://iiif.io/api/image/3.0/example/reference/4f92cceb12dd53b52433425ce44308c7-ucla_bib1987273_no001_rs_005",
+                LEVEL_ONE);
 
         manifest.setSummary(new Summary("en",
                 "Playbill for \"Akiba gongen kaisen-banashi,\" \"Futatsu chōchō kuruwa nikki\" and \"Godairiki koi no fūjime\" performed at the Chikugo Theater in Osaka from the fifth month of Kaei 2 (May, 1849); main actors: Gadō Kataoka II, Ebizō Ichikawa VI, Kitō Sawamura II, Daigorō Mimasu IV and Karoku Nakamura I; on front cover: producer Mominosuke Ichikawa's crest."));
@@ -975,26 +994,30 @@ public class CookbooksTest extends AbstractCookbookTest {
         final var canvas1 = new Canvas(minter, new Label("en", "image 1"));
         final var imageContent1 = new ImageContent(
                 "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_02/full/max/0/default.jpg");
-        final var service1 = new ImageService3(LEVEL_ONE,
-                "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_02");
+        final var service1 = new ImageService3(
+                "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_02",
+                LEVEL_ONE);
 
         final var canvas2 = new Canvas(minter, new Label("en", "image 2"));
         final var imageContent2 = new ImageContent(
                 "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_03/full/max/0/default.jpg");
-        final var service2 = new ImageService3(LEVEL_ONE,
-                "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_03");
+        final var service2 = new ImageService3(
+                "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_03",
+                LEVEL_ONE);
 
         final var canvas3 = new Canvas(minter, new Label("en", "image 3"));
         final var imageContent3 = new ImageContent(
                 "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_04/full/max/0/default.jpg");
-        final var service3 = new ImageService3(LEVEL_ONE,
-                "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_04");
+        final var service3 = new ImageService3(
+                "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_04",
+                LEVEL_ONE);
 
         final var canvas4 = new Canvas(minter, new Label("en", "image 4"));
         final var imageContent4 = new ImageContent(
                 "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_05/full/max/0/default.jpg");
-        final var service4 = new ImageService3(LEVEL_ONE,
-                "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_05");
+        final var service4 = new ImageService3(
+                "https://iiif.io/api/image/3.0/example/reference/9ee11092dfd2782634f5e8e2c87c16d5-uclamss_1841_diary_07_05",
+                LEVEL_ONE);
 
         manifest.setSummary(new Summary("en",
                 "William Lewis Sachtleben was an American long-distance cyclist who rode across Asia from Istanbul to Peking in 1891 to 1892 with Thomas Gaskell Allen Jr., his classmate from Washington University. This was part of a longer journey that began the day after they had graduated from college, when they travelled to New York and on to Liverpool; in all they travelled 15,044 miles by bicycle, 'the longest continuous land journey ever made around the world' as reported in their book <cite>Across Asia on a bicycle</cite> (1895). Sachtleben documented his travels with photographs and diaries, the latter of which he numbered sequentially. The diary of notebook 'No. 10' covers a portion of their journey through the Armenian area of Turkey from April 12 to May 9 (there is a 2-page reading list at the end). During this time they rode from Ankara (Angora in the diary) to Sivas, where they stayed for ten days while Allen had a bout of typhoid fever, and the first half of a ten-day excursion to Merzifon (Mersovan in the diary), taken by Sachtleben to give Allen additional time to recover."));
@@ -1066,7 +1089,7 @@ public class CookbooksTest extends AbstractCookbookTest {
                             "-image",
                     canvas);
             final var imageContent = new ImageContent(pageDataList.get(1));
-            final var service = new ImageService3(LEVEL_ONE, pageDataList.get(2));
+            final var service = new ImageService3(pageDataList.get(2), LEVEL_ONE);
             final var width = Integer.valueOf(pageDataList.get(3));
             final var height = Integer.valueOf(pageDataList.get(4));
 
@@ -1127,7 +1150,7 @@ public class CookbooksTest extends AbstractCookbookTest {
                             "-image",
                     canvas);
             final var imageContent = new ImageContent(pageDataList.get(1));
-            final var service = new ImageService3(LEVEL_ONE, pageDataList.get(2));
+            final var service = new ImageService3(pageDataList.get(2), LEVEL_ONE);
             final var width = Integer.valueOf(pageDataList.get(3));
             final var height = Integer.valueOf(pageDataList.get(4));
 

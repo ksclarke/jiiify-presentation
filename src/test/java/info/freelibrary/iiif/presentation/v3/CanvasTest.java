@@ -228,9 +228,9 @@ public class CanvasTest extends AbstractCookbookTest {
     @Test
     public final void testPaintImageChoiceSerialization() throws IOException {
         final ImageContent image1 = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT)
-                .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
+                .setServices(new ImageService3(IMAGE_INFO_SERVICE_ID, ImageService3.Profile.LEVEL_ZERO));
         final ImageContent image2 = new ImageContent(IMAGE_2_ID).setWidthHeight(WIDTH, HEIGHT)
-                .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
+                .setServices(new ImageService3(IMAGE_INFO_SERVICE_ID, ImageService3.Profile.LEVEL_ZERO));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(true, image1, image2);
         assertEquals(normalizeIDs(getExpected("canvas-image-choice.json")), normalizeIDs(toJson(myCanvas)));
@@ -253,9 +253,9 @@ public class CanvasTest extends AbstractCookbookTest {
     @Test
     public final void testPaintImageMultiFragmentSelectorSerialization() throws IOException {
         final ImageContent image1 = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT)
-                .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
+                .setServices(new ImageService3(IMAGE_INFO_SERVICE_ID, ImageService3.Profile.LEVEL_ZERO));
         final ImageContent image2 = new ImageContent(IMAGE_2_ID).setWidthHeight(WIDTH, HEIGHT)
-                .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
+                .setServices(new ImageService3(IMAGE_INFO_SERVICE_ID, ImageService3.Profile.LEVEL_ZERO));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT * 2)
                 .paintWith(new MediaFragmentSelector(StringUtils.format(URI_FRAG_XYWH_TEMPLATE, 0, 0, WIDTH, HEIGHT)),
@@ -275,9 +275,9 @@ public class CanvasTest extends AbstractCookbookTest {
     @Test
     public final void testPaintImageMultiSerialization() throws IOException {
         final ImageContent image1 = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT)
-                .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
+                .setServices(new ImageService3(IMAGE_INFO_SERVICE_ID, ImageService3.Profile.LEVEL_ZERO));
         final ImageContent image2 = new ImageContent(IMAGE_2_ID).setWidthHeight(WIDTH, HEIGHT)
-                .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
+                .setServices(new ImageService3(IMAGE_INFO_SERVICE_ID, ImageService3.Profile.LEVEL_ZERO));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT * 2)
                 .paintWith(StringUtils.format(URI_FRAG_XYWH_TEMPLATE, 0, 0, WIDTH, HEIGHT), image1)
@@ -575,7 +575,7 @@ public class CanvasTest extends AbstractCookbookTest {
     @Test
     public final void testPaintImageSerialization() throws IOException {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT)
-                .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
+                .setServices(new ImageService3(IMAGE_INFO_SERVICE_ID, ImageService3.Profile.LEVEL_ZERO));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(image);
         assertEquals(normalizeIDs(getExpected("canvas-image.json")), normalizeIDs(toJson(myCanvas)));
@@ -1245,7 +1245,7 @@ public class CanvasTest extends AbstractCookbookTest {
     public final void testSerialization() throws IOException {
         final Target target = new Target(myCanvas.getID());
         final ImageContent imageContent = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT)
-                .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
+                .setServices(new ImageService3(IMAGE_INFO_SERVICE_ID, ImageService3.Profile.LEVEL_ZERO));
         final PaintingAnnotation pAnno =
                 new PaintingAnnotation(IMAGE_ANNO_ID, myCanvas).setBody(imageContent).setTarget(target);
 
@@ -1255,7 +1255,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT);
         myCanvas.setThumbnails(new ImageContent(IMAGE_THUMBNAIL_ID).setWidthHeight(THUMBNAIL_WH, THUMBNAIL_WH)
-                .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID)));
+                .setServices(new ImageService3(IMAGE_INFO_SERVICE_ID, ImageService3.Profile.LEVEL_ZERO)));
 
         myCanvas.setPaintingPages(new AnnotationPage<PaintingAnnotation>(IMAGE_PAGE_ID).addAnnotations(pAnno));
         myCanvas.setSupplementingPages(new AnnotationPage<SupplementingAnnotation>(TEXT_PAGE_ID).addAnnotations(sAnno));
@@ -1271,10 +1271,10 @@ public class CanvasTest extends AbstractCookbookTest {
     @Test
     public final void testSerialization2() throws IOException {
         final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT)
-                .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
+                .setServices(new ImageService3(IMAGE_INFO_SERVICE_ID, ImageService3.Profile.LEVEL_ZERO));
         final TextContent text = new TextContent(TEXT_ID);
         final ImageContent thumbnail = new ImageContent(IMAGE_THUMBNAIL_ID).setWidthHeight(THUMBNAIL_WH, THUMBNAIL_WH)
-                .setServices(new ImageService3(ImageService3.Profile.LEVEL_ZERO, IMAGE_INFO_SERVICE_ID));
+                .setServices(new ImageService3(IMAGE_INFO_SERVICE_ID, ImageService3.Profile.LEVEL_ZERO));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setThumbnails(thumbnail).paintWith(image).supplementWith(text);
         assertEquals(normalizeIDs(getExpected(FULL_CANVAS_FIXTURE)), normalizeIDs(toJson(myCanvas)));

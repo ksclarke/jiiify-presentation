@@ -4,10 +4,16 @@ package info.freelibrary.iiif.presentation.v3;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import info.freelibrary.iiif.presentation.v3.services.AuthCookieService;
+import info.freelibrary.iiif.presentation.v3.services.AuthTokenService1;
+import info.freelibrary.iiif.presentation.v3.services.ImageService;
+import info.freelibrary.iiif.presentation.v3.services.OtherService;
+import info.freelibrary.iiif.presentation.v3.services.PhysicalDimsService;
 import info.freelibrary.iiif.presentation.v3.utils.Labeled;
 
 /**
@@ -106,5 +112,32 @@ public interface Service {
          * @return The URI form of the profile
          */
         URI uri();
+
+        /**
+         * Gets the service profile from the supplied profile label.
+         *
+         * @param aLabel A profile label
+         * @return A profile wrapped in an optional if found; else, an empty optional
+         */
+        static Optional<Profile> fromLabel(final String aLabel) {
+            return findProfile(aLabel, ImageService.Profile::fromLabel)
+                    .or(() -> findProfile(aLabel, AuthCookieService.Profile::fromLabel))
+                    .or(() -> findProfile(aLabel, AuthTokenService1.Profile::fromLabel))
+                    .or(() -> findProfile(aLabel, PhysicalDimsService.Profile::fromLabel))
+                    .or(() -> findProfile(aLabel, OtherService.Profile::fromLabel));
+        }
+
+        /**
+         * Finds the profile for the supplied label.
+         *
+         * @param <T> The type of service profile
+         * @param aLabel A service profile label
+         * @param aProfileFinder A function to find the profile for the supplied label
+         * @return A profile wrapped in an Optional if found; else, an empty Optional
+         */
+        private static <T extends Service.Profile> Optional<Service.Profile> findProfile(final String aLabel,
+                final Function<String, Optional<T>> aProfileFinder) {
+            return aProfileFinder.apply(aLabel).map(Service.Profile.class::cast);
+        }
     }
 }

@@ -70,7 +70,7 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
      * @param aID The ID of the service
      * @param aType The type of the service
      */
-    protected AbstractImageService(final ImageService.Profile aProfile, final String aID, final String aType) {
+    protected AbstractImageService(final String aID, final String aType, final ImageService.Profile aProfile) {
         super(aID, aType, aProfile);
     }
 

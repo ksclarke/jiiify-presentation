@@ -5,7 +5,6 @@ import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.Eclipse;
 
-import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.CanvasResource;
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
@@ -15,7 +14,7 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 /**
  * An annotation used to associate a bookmark with the target.
  */
-public class BookmarkingAnnotation extends WebAnnotation implements Annotation<WebAnnotation> {
+public class BookmarkingAnnotation extends WebAnnotation {
 
     /** The logger for bookmarking annotations. */
     private static final Logger LOGGER = LoggerFactory.getLogger(BookmarkingAnnotation.class, MessageCodes.BUNDLE);

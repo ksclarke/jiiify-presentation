@@ -16,13 +16,13 @@ import info.freelibrary.iiif.presentation.v3.services.ImageService3.Profile;
 public class ImageService3Test {
 
     /** A test profile for level0. */
-    private static final Profile LEVEL_0 = (ImageService3.Profile) Profile.fromLabel("level0").get();
+    private static final Profile LEVEL_0 = Profile.fromLabel("level0").get();
 
     /** A test profile for level1. */
-    private static final Profile LEVEL_1 = (ImageService3.Profile) Profile.fromLabel("level1").get();
+    private static final Profile LEVEL_1 = Profile.fromLabel("level1").get();
 
     /** A test profile for level2. */
-    private static final Profile LEVEL_2 = (ImageService3.Profile) Profile.fromLabel("level2").get();
+    private static final Profile LEVEL_2 = Profile.fromLabel("level2").get();
 
     /** A test ID. */
     private String myID;
@@ -48,9 +48,9 @@ public class ImageService3Test {
      */
     @Test
     public void testGetProfile() {
-        assertEquals(LEVEL_0, new ImageService3(Profile.LEVEL_ZERO, myID).getProfile().get());
-        assertEquals(LEVEL_1, new ImageService3(Profile.LEVEL_ONE, myID).getProfile().get());
-        assertEquals(LEVEL_2, new ImageService3(Profile.LEVEL_TWO, myID).getProfile().get());
+        assertEquals(LEVEL_0, new ImageService3(myID, Profile.LEVEL_ZERO).getProfile().get());
+        assertEquals(LEVEL_1, new ImageService3(myID, Profile.LEVEL_ONE).getProfile().get());
+        assertEquals(LEVEL_2, new ImageService3(myID, Profile.LEVEL_TWO).getProfile().get());
     }
 
     /**

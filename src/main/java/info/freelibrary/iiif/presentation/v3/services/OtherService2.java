@@ -12,7 +12,7 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  * A generic service class for older service implementations that use @id and @type.
  */
 @JsonInclude(Include.NON_EMPTY)
-public final class OtherService2 extends AbstractOtherService<OtherService2> implements OtherService<OtherService2> {
+public final class OtherService2 extends AbstractOtherService<OtherService2> implements OtherService {
 
     /**
      * Creates a new unspecified service from the supplied ID.

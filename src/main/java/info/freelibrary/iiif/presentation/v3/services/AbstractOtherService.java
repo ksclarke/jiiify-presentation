@@ -13,7 +13,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import info.freelibrary.util.warnings.JDK;
 
-import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeDeserializer;
@@ -52,7 +51,7 @@ abstract class AbstractOtherService<T extends AbstractOtherService<T>> extends A
      * @param aType A service type
      * @param aProfile A service profile
      */
-    protected AbstractOtherService(final String aID, final String aType, final Service.Profile aProfile) {
+    protected AbstractOtherService(final String aID, final String aType, final OtherService.Profile aProfile) {
         super(aID, aType, aProfile);
     }
 

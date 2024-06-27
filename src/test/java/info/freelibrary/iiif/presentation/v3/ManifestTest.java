@@ -109,7 +109,7 @@ public class ManifestTest extends AbstractTest {
             metadata.add(new Metadata(kvPair[0], kvPair[1]));
         }
 
-        manifestThumbService = new ImageService3(Profile.LEVEL_TWO, MANIFEST_SERVER + ENCODED_MANIFEST_THUMBNAIL_ARK);
+        manifestThumbService = new ImageService3(MANIFEST_SERVER + ENCODED_MANIFEST_THUMBNAIL_ARK, Profile.LEVEL_TWO);
 
         myManifest = new Manifest(MANIFEST_URI, new Label(METADATA_PAIRS.get(0)[1]));
         myManifest.setMetadata(metadata);
@@ -132,7 +132,7 @@ public class ManifestTest extends AbstractTest {
 
         for (final String[] values : firstCanvas) {
             final String id = MANIFEST_SERVER + values[1] + MANIFEST_THUMBNAIL_PATH;
-            final ImageService3 service = new ImageService3(Profile.LEVEL_TWO, MANIFEST_SERVER + values[1]);
+            final ImageService3 service = new ImageService3(MANIFEST_SERVER + values[1], Profile.LEVEL_TWO);
             final ImageContent resource = new ImageContent(id).setServices(service);
 
             content1.setChoice(true).getBody()
@@ -154,7 +154,7 @@ public class ManifestTest extends AbstractTest {
 
         for (final String[] values : secondCanvas) {
             final String id = MANIFEST_SERVER + values[1] + MANIFEST_THUMBNAIL_PATH;
-            final ImageService3 service = new ImageService3(Profile.LEVEL_TWO, MANIFEST_SERVER + values[1]);
+            final ImageService3 service = new ImageService3(MANIFEST_SERVER + values[1], Profile.LEVEL_TWO);
             final ImageContent resource = new ImageContent(id).setServices(service);
 
             content2.setChoice(true).getBody()

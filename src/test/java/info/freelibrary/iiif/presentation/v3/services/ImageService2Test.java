@@ -18,20 +18,17 @@ public class ImageService2Test {
     /**
      * Expected LEVEL_0 profile.
      */
-    private static final Profile LEVEL_0 =
-            (ImageService2.Profile) Profile.fromLabel("http://iiif.io/api/image/2/level0.json").get();
+    private static final Profile LEVEL_0 = Profile.fromLabel("http://iiif.io/api/image/2/level0.json").get();
 
     /**
      * Expected LEVEL_1 profile.
      */
-    private static final Profile LEVEL_1 =
-            (ImageService2.Profile) Profile.fromLabel("http://iiif.io/api/image/2/level1.json").get();
+    private static final Profile LEVEL_1 = Profile.fromLabel("http://iiif.io/api/image/2/level1.json").get();
 
     /**
      * Expected LEVEL_2 profile.
      */
-    private static final Profile LEVEL_2 =
-            (ImageService2.Profile) Profile.fromLabel("http://iiif.io/api/image/2/level2.json").get();
+    private static final Profile LEVEL_2 = Profile.fromLabel("http://iiif.io/api/image/2/level2.json").get();
 
     /**
      * The ImageService2 ID.
@@ -59,9 +56,9 @@ public class ImageService2Test {
      */
     @Test
     public void testGetProfile() {
-        assertEquals(LEVEL_0, new ImageService2(ImageService2.Profile.LEVEL_ZERO, myID).getProfile().get());
-        assertEquals(LEVEL_1, new ImageService2(Profile.LEVEL_ONE, myID).getProfile().get());
-        assertEquals(LEVEL_2, new ImageService2(Profile.LEVEL_TWO, myID).getProfile().get());
+        assertEquals(LEVEL_0, new ImageService2(myID, ImageService2.Profile.LEVEL_ZERO).getProfile().get());
+        assertEquals(LEVEL_1, new ImageService2(myID, Profile.LEVEL_ONE).getProfile().get());
+        assertEquals(LEVEL_2, new ImageService2(myID, Profile.LEVEL_TWO).getProfile().get());
     }
 
     /**
