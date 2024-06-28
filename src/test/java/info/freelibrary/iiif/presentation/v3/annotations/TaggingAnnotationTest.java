@@ -38,7 +38,7 @@ public class TaggingAnnotationTest {
      * @throws IOException If there is trouble reading the test JSON annotation file
      */
     @Test
-    public final void testToString() throws JsonProcessingException, IOException {
+    public final void testToString() throws IOException {
         final String expected = StringUtils.read(JSON_FILE, StandardCharsets.UTF_8);
         final TaggingAnnotation tagging = new TaggingAnnotation(ANNO_ID, new Canvas(CANVAS_ID));
         final TextualBody body = new TextualBody();

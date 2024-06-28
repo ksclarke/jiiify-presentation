@@ -95,12 +95,4 @@ public class SpecificResourceTest extends AbstractTest {
         assertEquals(SELECTOR, new SpecificResource(myID, myOtherID, SELECTOR).getSelector());
     }
 
-    /**
-     * Tests String constructor.
-     */
-    @Test
-    public final void testSpecificResourceIdStringSourceStringSelector() {
-        new SpecificResource(myID, myOtherID, SELECTOR);
-    }
-
 }

@@ -3,7 +3,6 @@ package info.freelibrary.iiif.presentation.v3.properties;
 
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -67,7 +66,7 @@ public class ProviderTest extends AbstractTest {
         firstProvider.setHomepages(myHomepage).setLogos(myLogo).setSeeAlsoRefs(mySeeAlso);
         secondProvider.setHomepages(myHomepage).setLogos(myLogo).setSeeAlsoRefs(mySeeAlso);
 
-        assertTrue(firstProvider.equals(secondProvider));
+        assertEquals(firstProvider, secondProvider);
     }
 
     /**

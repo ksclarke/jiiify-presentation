@@ -43,19 +43,7 @@ public class AuthTokenService1Test {
      * Tests creating an authorized token service.
      */
     @Test
-    public final void testStringConstructor() throws JsonParsingException, JsonProcessingException, IOException {
-        final AuthTokenService1 service = new AuthTokenService1(myID);
-
-        assertEquals(myID, service.getID());
-        assertEquals(AuthTokenService1.Profile.TOKEN_SERVICE, service.getProfile().get());
-        assertEquals(expected(), found(service));
-    }
-
-    /**
-     * Tests creating an authorized token service.
-     */
-    @Test
-    public final void testURIConstructor() throws JsonParsingException, JsonProcessingException, IOException {
+    public final void testStringConstructor() throws JsonParsingException, IOException {
         final AuthTokenService1 service = new AuthTokenService1(myID);
 
         assertEquals(myID, service.getID());

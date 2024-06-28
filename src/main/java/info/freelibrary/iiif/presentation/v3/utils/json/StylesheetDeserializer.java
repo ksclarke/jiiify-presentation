@@ -4,7 +4,6 @@ package info.freelibrary.iiif.presentation.v3.utils.json;
 import java.io.IOException;
 import java.net.URI;
 
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -48,8 +47,7 @@ public class StylesheetDeserializer extends StdDeserializer<Stylesheet> {
     }
 
     @Override
-    public Stylesheet deserialize(final JsonParser aParser, final DeserializationContext aContext)
-            throws IOException, JacksonException {
+    public Stylesheet deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException {
         final JsonNode currentNode = JSON.getReader().readTree(aParser);
         final Stylesheet stylesheet;
 

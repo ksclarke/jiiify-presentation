@@ -9,7 +9,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.parser.Parser;
 
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
@@ -39,8 +38,7 @@ public class SvgDeserializer extends StdDeserializer<Document> {
     }
 
     @Override
-    public Document deserialize(final JsonParser aParser, final DeserializationContext aContext)
-            throws IOException, JacksonException {
+    public Document deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException {
         final String svg = aParser.getText();
         return svg == null ? null : Jsoup.parse(svg, EMPTY, Parser.xmlParser());
     }

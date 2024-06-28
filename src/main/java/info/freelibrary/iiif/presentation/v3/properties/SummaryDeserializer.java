@@ -4,7 +4,6 @@ package info.freelibrary.iiif.presentation.v3.properties;
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 
 /**
@@ -37,8 +36,7 @@ class SummaryDeserializer extends AbstractI18nStdDeserializer<Summary> {
      * Deserializes a Summary from its JSON structure.
      */
     @Override
-    public Summary deserialize(final JsonParser aParser, final DeserializationContext aContext)
-            throws IOException, JsonProcessingException {
+    public Summary deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException {
         return new Summary(getI18nStrings(aParser.getCodec().readTree(aParser)));
     }
 }

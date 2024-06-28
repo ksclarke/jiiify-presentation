@@ -2,12 +2,14 @@
 package info.freelibrary.iiif.presentation.v3.properties.behaviors;
 
 import info.freelibrary.util.IllegalArgumentI18nException;
+import info.freelibrary.util.warnings.Sonar;
 
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * An exception thrown when an invalid behavior is used.
  */
+@SuppressWarnings({ Sonar.INHERITANCE_TREE })
 public class InvalidBehaviorException extends IllegalArgumentI18nException {
 
     /** The exception's <code>serialVersionUID</code>. */

@@ -325,8 +325,7 @@ public final class I18nUtils {
     private static boolean hasNoAttribute(final StringBuilder aBuilder, final int aStart, final int aGtIndex) {
         for (int index = aGtIndex - 1; index >= aStart; index--) {
             switch (aBuilder.charAt(index)) {
-                case '\'':
-                case '"':
+                case '\'', '"':
                     return false;
                 case ' ':
                     continue;

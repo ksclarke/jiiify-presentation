@@ -26,7 +26,7 @@ public class MediaTypeKeySerializer extends JsonSerializer<Optional<MediaType>> 
     @Override
     public void serialize(final Optional<MediaType> aMediaType, final JsonGenerator aJsonGenerator,
             final SerializerProvider aProvider) throws IOException {
-        if (aMediaType != null && aMediaType.isPresent()) {
+        if (aMediaType.isPresent()) {
             aJsonGenerator.writeFieldName(JsonKeys.FORMAT);
         }
     }

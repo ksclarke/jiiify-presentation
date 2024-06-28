@@ -4,7 +4,7 @@ package info.freelibrary.iiif.presentation.v3.properties;
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.toJson;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -71,10 +71,7 @@ public class PartOfTest {
      */
     @Test
     public final void testEquals() throws IOException {
-        final PartOf partOf1 = PartOf.fromJSON(getTestFixture());
-        final PartOf partOf2 = PartOf.fromJSON(getTestFixture());
-
-        assertTrue(partOf1.equals(partOf2));
+        assertEquals(PartOf.fromJSON(getTestFixture()), PartOf.fromJSON(getTestFixture()));
     }
 
     /**
@@ -84,12 +81,16 @@ public class PartOfTest {
      *         partOf
      */
     @Test
-    public final void testFullPartOf() throws IOException {
+    public final void testFullPartOf() {
         myManifest.setPartOfs(new PartOf(TEST_URI_1, ResourceTypes.MANIFEST).setLabel(TEST_LABEL)
                 .setLanguages(ISO_639_2_NAHUATL, ISO_639_2_VIETNAMESE));
 
-        checkDeserialization(PART_OF_FULL_ONE);
-        checkSerialization(PART_OF_FULL_ONE);
+        try {
+            checkDeserialization(PART_OF_FULL_ONE);
+            checkSerialization(PART_OF_FULL_ONE);
+        } catch (final IOException details) {
+            fail(details.getMessage());
+        }
     }
 
     /**
@@ -121,25 +122,21 @@ public class PartOfTest {
     }
 
     /**
-     * Tests a partOf string ID constructor.
-     */
-    @Test
-    public final void testPartOfStringString() {
-        new PartOf(TEST_URI_1.toString(), ResourceTypes.MANIFEST);
-    }
-
-    /**
      * Tests a partOf URI ID constructor and partOf (de)serialization.
      *
      * @throws IOException If there is trouble reading or deserializing the partOf file or serializing the constructed
      *         partOf
      */
     @Test
-    public final void testPartOfURIString() throws IOException {
+    public final void testPartOfURIString() {
         myManifest.setPartOfs(new PartOf(TEST_URI_1, ResourceTypes.MANIFEST));
 
-        checkDeserialization(PART_OF_SIMPLE_ONE);
-        checkSerialization(PART_OF_SIMPLE_ONE);
+        try {
+            checkDeserialization(PART_OF_SIMPLE_ONE);
+            checkSerialization(PART_OF_SIMPLE_ONE);
+        } catch (final IOException details) {
+            fail(details.getMessage());
+        }
     }
 
     /**

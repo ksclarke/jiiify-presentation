@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -54,8 +53,7 @@ public class GeometryDeserializer extends StdDeserializer<Geometry> {
     }
 
     @Override
-    public Geometry deserialize(final JsonParser aParser, final DeserializationContext aContext)
-            throws IOException, JsonProcessingException {
+    public Geometry deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException {
         final JsonNode currentNode = aParser.getCodec().readTree(aParser);
         final String label = currentNode.get(JsonKeys.TYPE).asText();
         final Optional<Geometry.Type> type = Geometry.Type.fromLabel(label);

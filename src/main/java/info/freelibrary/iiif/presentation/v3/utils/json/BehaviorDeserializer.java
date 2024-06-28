@@ -8,7 +8,6 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -60,7 +59,7 @@ public class BehaviorDeserializer extends StdDeserializer<List<Behavior>> {
     @Override
     @SuppressWarnings({ PMD.PRESERVE_STACK_TRACE, PMD.UNUSED_ASSIGNMENT })
     public List<Behavior> deserialize(final JsonParser aParser, final DeserializationContext aContext)
-            throws IOException, JsonProcessingException {
+            throws IOException {
         final JsonNode currentNode = aParser.getCodec().readTree(aParser);
         final Object currentContext = aParser.getParsingContext().getCurrentValue();
         final List<JsonMappingException> errors = new ArrayList<>();

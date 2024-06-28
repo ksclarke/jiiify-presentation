@@ -4,7 +4,6 @@ package info.freelibrary.iiif.presentation.v3.properties;
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 
 /**
@@ -37,8 +36,7 @@ class LabelDeserializer extends AbstractI18nStdDeserializer<Label> {
      * Deserializes a Label from its JSON structure.
      */
     @Override
-    public Label deserialize(final JsonParser aParser, final DeserializationContext aContext)
-            throws IOException, JsonProcessingException {
+    public Label deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException {
         return new Label(getI18nStrings(aParser.getCodec().readTree(aParser)));
     }
 }

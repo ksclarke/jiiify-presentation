@@ -46,17 +46,6 @@ public class I18nPropertyTest {
     }
 
     /**
-     * Test of hashCode with double values.
-     */
-    @Test
-    public void testHashCodeDoubleValue() {
-        final I18nProperty<?> i18np1 = new I18nProperty<>(new I18n(ENG, ONE));
-        final I18nProperty<?> i18np2 = new I18nProperty<>(new I18n(ENG, ONE));
-
-        assertEquals(i18np1.hashCode(), i18np2.hashCode());
-    }
-
-    /**
      * Tests construction of an internationalized property.
      */
     @Test

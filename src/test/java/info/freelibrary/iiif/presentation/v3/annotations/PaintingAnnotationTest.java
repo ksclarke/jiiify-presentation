@@ -32,7 +32,7 @@ import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 /**
  * Tests {@link PaintingAnnotation}.
  */
-@SuppressWarnings({ MULTIPLE_STRING_LITERALS }) // TODO: refactor tests
+@SuppressWarnings({ MULTIPLE_STRING_LITERALS })
 public class PaintingAnnotationTest extends AbstractTest {
 
     /** A test annotation. */
@@ -95,17 +95,6 @@ public class PaintingAnnotationTest extends AbstractTest {
     @Test
     public void testPaintingAnnotationURICanvasSpecificResource() {
         final PaintingAnnotation anno = new PaintingAnnotation(myAnnoID, myCanvas, myFragmentSelector);
-
-        assertEquals(myAnnoID, anno.getID());
-        assertTrue(anno.getTarget().getSpecificResource().isPresent());
-    }
-
-    /**
-     * Tests constructing a painting annotation.
-     */
-    @Test
-    public void testPaintingAnnotationURICanvasString() {
-        final PaintingAnnotation anno = new PaintingAnnotation(myAnnoID, myCanvas, myFragmentSelector.toString());
 
         assertEquals(myAnnoID, anno.getID());
         assertTrue(anno.getTarget().getSpecificResource().isPresent());

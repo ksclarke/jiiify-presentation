@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.ListIterator;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
@@ -89,8 +88,7 @@ public class GeometrySerializer extends StdSerializer<Geometry> {
 
     @Override
     public void serializeWithType(final Geometry aGeometry, final JsonGenerator aJsonGenerator,
-            final SerializerProvider aProvider, final TypeSerializer aTypeSerializer)
-            throws IOException, JsonProcessingException {
+            final SerializerProvider aProvider, final TypeSerializer aTypeSerializer) throws IOException {
         // This serializes a source when type is called, like when processing a list of geometries
         serialize(aGeometry, aJsonGenerator, aProvider);
     }

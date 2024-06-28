@@ -4,7 +4,6 @@ package info.freelibrary.iiif.presentation.v3.properties;
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 
 /**
@@ -37,8 +36,7 @@ class ValueDeserializer extends AbstractI18nStdDeserializer<Value> {
      * Deserializes a value from its JSON structure.
      */
     @Override
-    public Value deserialize(final JsonParser aParser, final DeserializationContext aContext)
-            throws IOException, JsonProcessingException {
+    public Value deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException {
         return new Value(getI18nStrings(aParser.getCodec().readTree(aParser)));
     }
 }

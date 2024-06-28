@@ -50,7 +50,7 @@ public class WebAnnotationSerializer extends StdSerializer<WebAnnotation> {
     @Override
     @SuppressWarnings({ PMD.PRESERVE_STACK_TRACE })
     public void serialize(final WebAnnotation aWebAnnotation, final JsonGenerator aJsonGenerator,
-            final SerializerProvider aProvider) throws IOException, JsonProcessingException {
+            final SerializerProvider aProvider) throws IOException {
         final List<ContentResource> resources = aWebAnnotation.getBody();
         final String motivation = aWebAnnotation.getMotivation().toString();
         final Optional<TimeMode> timeMode = aWebAnnotation.getTimeMode();
@@ -94,8 +94,7 @@ public class WebAnnotationSerializer extends StdSerializer<WebAnnotation> {
 
     @Override
     public void serializeWithType(final WebAnnotation aWebAnnotation, final JsonGenerator aJsonGenerator,
-            final SerializerProvider aProvider, final TypeSerializer aTypeSerializer)
-            throws IOException, JsonProcessingException {
+            final SerializerProvider aProvider, final TypeSerializer aTypeSerializer) throws IOException {
         // This serializes a WebAnnotation when type is called, like when processing a List of WebAnnotation(s)
         serialize(aWebAnnotation, aJsonGenerator, aProvider);
     }
@@ -110,7 +109,7 @@ public class WebAnnotationSerializer extends StdSerializer<WebAnnotation> {
      * @throws JsonProcessingException If there is trouble parsing the source annotation
      */
     private void serializeResources(final List<ContentResource> aList, final boolean aChoice,
-            final JsonGenerator aJsonGenerator) throws IOException, JsonProcessingException {
+            final JsonGenerator aJsonGenerator) throws IOException {
         if (aList.size() == SINGLE_INSTANCE) {
             aJsonGenerator.writeObjectField(JsonKeys.BODY, aList.get(0));
         } else {

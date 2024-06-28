@@ -38,10 +38,6 @@ public final class UriUtils {
             if (aHttpsReq && !"https".equals(id.getScheme())) {
                 throw new InvalidIdentifierException(MessageCodes.JPA_127, aID);
             }
-
-            // if (ResourceTypes.CANVAS.equals(myType) && id.getRawFragment() != null) {
-            // throw new InvalidIdentifierException(MessageCodes.JPA_128, aID);
-            // }
         } catch (final NullPointerException | IllegalArgumentException details) {
             throw new InvalidIdentifierException(details);
         }

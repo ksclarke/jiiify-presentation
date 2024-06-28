@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.exc.InputCoercionException;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -86,7 +85,7 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
 
     @Override
     public WebAnnotation deserialize(final JsonParser aParser, final DeserializationContext aContext)
-            throws IOException, JacksonException {
+            throws IOException {
         final ThrowingBiFunction<String, JsonNode, String, InputCoercionException> check = (aKey, aNode) -> {
             // Check that required value exists in the WebAnnotation's JSON serialization and fail if it doesn't
             if (aNode == null) {
@@ -193,14 +192,12 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
                 } else if (aNode.isValueNode() && ResourceTypes.RDF_NIL.equals(aNode.asText())) {
                     resources.add(null);
                 } else if (aNode.isArray()) { // below added
-                    aNode.elements().forEachRemaining(node -> {
-                        resources.add(getResource(aTypeCheck.apply(JsonKeys.TYPE, node.get(JsonKeys.TYPE)), node));
-                    });
+                    aNode.elements().forEachRemaining(node -> resources
+                            .add(getResource(aTypeCheck.apply(JsonKeys.TYPE, node.get(JsonKeys.TYPE)), node)));
                 } // else warning?
             } else {
-                itemsNode.forEach(node -> {
-                    resources.add(getResource(aTypeCheck.apply(JsonKeys.TYPE, node.get(JsonKeys.TYPE)), node));
-                });
+                itemsNode.forEach(node -> resources
+                        .add(getResource(aTypeCheck.apply(JsonKeys.TYPE, node.get(JsonKeys.TYPE)), node)));
             }
         }
 
@@ -291,14 +288,14 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
         if (aTimeModeNode != null && aTimeModeNode.isValueNode()) {
             final Optional<TimeMode> timeMode = TimeMode.forLabel(aTimeModeNode.asText());
 
-            if (timeMode.isEmpty()) {
+            if (timeMode.isEmpty() && LOGGER.isWarnEnabled()) {
                 LOGGER.warn(MessageCodes.JPA_130, aTimeModeNode.asText());
             }
 
             return timeMode;
         }
 
-        if (aTimeModeNode != null) {
+        if (aTimeModeNode != null && LOGGER.isWarnEnabled()) {
             LOGGER.warn(MessageCodes.JPA_130, aTimeModeNode.toString());
         }
 

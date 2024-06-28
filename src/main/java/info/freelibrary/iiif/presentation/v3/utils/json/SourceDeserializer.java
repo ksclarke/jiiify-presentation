@@ -4,7 +4,6 @@ package info.freelibrary.iiif.presentation.v3.utils.json;
 import java.io.IOException;
 import java.util.List;
 
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -41,8 +40,7 @@ public class SourceDeserializer extends StdDeserializer<Source> {
     }
 
     @Override
-    public Source deserialize(final JsonParser aParser, final DeserializationContext aContext)
-            throws IOException, JacksonException {
+    public Source deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException {
         final JsonNode currentNode = JSON.getReader().readTree(aParser);
 
         if (!currentNode.isTextual()) {

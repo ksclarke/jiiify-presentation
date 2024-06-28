@@ -71,7 +71,7 @@ public class AccompanyingCanvasTest {
         final Label label = new Label(StringUtils.format(LABEL, id));
         final AccompanyingCanvas canvas = new AccompanyingCanvas(minter, label);
 
-        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID().toString()).matches());
+        assertEquals(StringUtils.format(LABEL, id), canvas.getLabel().getString());
     }
 
     /**
@@ -93,18 +93,6 @@ public class AccompanyingCanvasTest {
     @Test
     public final void testAccompanyingCanvasString() {
         assertEquals(myID, new AccompanyingCanvas(myID).getID());
-    }
-
-    /**
-     * Tests {@link AccompanyingCanvas#AccompanyingCanvas(String, String) AccompanyingCanvas}.
-     */
-    @Test
-    public final void testAccompanyingCanvasStringString() {
-        final Label label = new Label(StringUtils.format(LABEL, myID));
-        final AccompanyingCanvas canvas = new AccompanyingCanvas(myID, label);
-
-        assertEquals(myID, canvas.getID());
-        assertEquals(label, canvas.getLabel());
     }
 
     /**

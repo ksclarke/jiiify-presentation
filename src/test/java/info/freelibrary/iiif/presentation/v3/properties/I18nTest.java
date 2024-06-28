@@ -88,7 +88,11 @@ public class I18nTest {
      */
     @Test
     public final void testAllowedHTML() {
-        new I18n(I18n.DEFAULT_LANG, myTestHTML, true);
+        try {
+            new I18n(I18n.DEFAULT_LANG, myTestHTML, true);
+        } catch (final IllegalArgumentException details) {
+            fail(details.getMessage());
+        }
     }
 
     /**
@@ -141,7 +145,11 @@ public class I18nTest {
      */
     @Test
     public final void testHtmlLikeString() {
-        new I18n(I18n.DEFAULT_LANG, "If A<B then B>A", false);
+        try {
+            new I18n(I18n.DEFAULT_LANG, "If A<B then B>A", false);
+        } catch (final IllegalArgumentException details) {
+            fail(details.getMessage());
+        }
     }
 
     /**

@@ -160,15 +160,6 @@ public class KioskCookieService1Test {
     }
 
     /**
-     * Test method for {@link KioskCookieService1#setID(URI)}.
-     */
-    @Test
-    public final void testSetIDURI() {
-        final KioskCookieService1 cookieService = new KioskCookieService1(myID.substring(2));
-        assertEquals(myID, cookieService.setID(myID).getID());
-    }
-
-    /**
      * Test method for {@link KioskCookieService1#setServices(List)}.
      */
     @Test

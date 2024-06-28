@@ -4,7 +4,6 @@ package info.freelibrary.iiif.presentation.v3.utils.json;
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
@@ -28,7 +27,7 @@ public class MediaTypeSerializer extends StdSerializer<MediaType> {
 
     @Override
     public void serialize(final MediaType aMediaType, final JsonGenerator aJsonGenerator,
-            final SerializerProvider aProvider) throws IOException, JsonProcessingException {
+            final SerializerProvider aProvider) throws IOException {
         if (aMediaType != null) {
             aJsonGenerator.writeString(aMediaType.toString());
         }
@@ -36,8 +35,7 @@ public class MediaTypeSerializer extends StdSerializer<MediaType> {
 
     @Override
     public void serializeWithType(final MediaType aMediaType, final JsonGenerator aJsonGenerator,
-            final SerializerProvider aProvider, final TypeSerializer aTypeSerializer)
-            throws IOException, JsonProcessingException {
+            final SerializerProvider aProvider, final TypeSerializer aTypeSerializer) throws IOException {
         // This serializes a media type when type is called, like when processing a list of media types
         serialize(aMediaType, aJsonGenerator, aProvider);
     }

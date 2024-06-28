@@ -276,12 +276,12 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
     private AbstractLinkProperty<T> setLanguageProperty(final Object aObject) {
         final List<?> languageList;
 
-        if (aObject instanceof String) {
-            return setLanguages((String) aObject);
+        if (aObject instanceof final String string) {
+            return setLanguages(string);
         }
 
-        if (aObject instanceof String[]) {
-            return setLanguages((String[]) aObject);
+        if (aObject instanceof final String[] array) {
+            return setLanguages(array);
         }
 
         if (!(aObject instanceof List)) {

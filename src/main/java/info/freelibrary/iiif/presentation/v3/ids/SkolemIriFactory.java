@@ -5,6 +5,8 @@ import java.net.URI;
 import java.util.Optional;
 import java.util.UUID;
 
+import info.freelibrary.util.warnings.Sonar;
+
 /**
  * A factory that generates Skolem IRIs. If the well-known IRI base is set, the IRIs generated can be mapped back to
  * blank nodes, if needed. It's used by the TextualBody class, but can also be used like:
@@ -28,6 +30,7 @@ import java.util.UUID;
  * <a href="https://www.w3.org/TR/rdf11-concepts/#section-skolemization">Replacing Blank Nodes with IRIs</a>.
  * </p>
  */
+@SuppressWarnings({ Sonar.SINGLETON_USE })
 public final class SkolemIriFactory {
 
     /**
@@ -111,7 +114,7 @@ public final class SkolemIriFactory {
         if (aBase == null) {
             myWellKnownBase = aBase;
         } else {
-            myWellKnownBase = aBase.endsWith("/") ? aBase.substring(aBase.length() - 1, aBase.length()) : aBase;
+            myWellKnownBase = aBase.endsWith("/") ? aBase.substring(aBase.length() - 1) : aBase;
         }
 
         return this;

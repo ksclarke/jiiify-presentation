@@ -53,12 +53,27 @@ public class Property extends I18nProperty<Property> {
     }
 
     /**
+     * Tests if the supplied object equals this one.
+     *
+     * @return True if they are equal; else, false
+     */
+    @Override
+    public boolean equals(final Object aObject) {
+        return super.equals(aObject) && myName.equals(((Property) aObject).myName);
+    }
+
+    /**
      * Gets the name of this property.
      *
      * @return The property name
      */
     public String getName() {
         return myName;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(myName, getI18ns());
     }
 
     /**

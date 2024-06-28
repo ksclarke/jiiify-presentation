@@ -38,8 +38,7 @@ public class SeeAlsoTest extends AbstractTest {
      */
     @Test
     public void testGetFormatEmpty() {
-        final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.DATASET);
-        assertEquals(Optional.empty(), seeAlso.getFormat());
+        assertEquals(Optional.empty(), new SeeAlso(myID, ResourceTypes.DATASET).getFormat());
     }
 
     /**
@@ -47,8 +46,7 @@ public class SeeAlsoTest extends AbstractTest {
      */
     @Test
     public void testGetLabelEmpty() {
-        final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.DATASET);
-        assertEquals(Optional.empty(), seeAlso.getFormat());
+        assertEquals(Optional.empty(), new SeeAlso(myID, ResourceTypes.DATASET).getLabel());
     }
 
     /**

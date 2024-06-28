@@ -12,7 +12,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.parser.Parser;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -56,8 +55,7 @@ class SelectorDeserializer extends StdDeserializer<Selector> {
     }
 
     @Override
-    public Selector deserialize(final JsonParser aParser, final DeserializationContext aContext)
-            throws IOException, JsonProcessingException {
+    public Selector deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException {
         final JsonNode node = aParser.getCodec().readTree(aParser);
         final JsonNode typeNode = node.get(JsonKeys.TYPE);
 

@@ -14,7 +14,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.Before;
@@ -71,7 +70,7 @@ public class ManifestTest extends AbstractTest {
             new String[] { "Title", "Georgian NF Fragment 68a" }, //
             new String[] { "Extent", "1 f" }, //
             new String[] { "Overtext Language", "Georgian" }, //
-            new String[] { "Undertext Language(s)", "Christian Palestinian Aramaic" }).collect(Collectors.toList());
+            new String[] { "Undertext Language(s)", "Christian Palestinian Aramaic" }).toList();
 
     /** A test fixture. */
     private static final String SINAI_JSON = new File(TestUtils.TEST_DIR, "z1960050.json").getAbsolutePath();
@@ -212,7 +211,7 @@ public class ManifestTest extends AbstractTest {
 
         // Check that the last URI in the list is our required one and
         // that list has same pre-sort order minus the required context
-        assertEquals(myContexts.get(lastIndex), AbstractResource.PRESENTATION_CONTEXT_URI);
+        assertEquals(AbstractResource.PRESENTATION_CONTEXT_URI, myContexts.get(lastIndex));
         assertEquals(preSort, myContexts.subList(0, lastIndex));
     }
 
@@ -221,16 +220,6 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public void testConstructorStringLabel() {
-        myManifest = new Manifest(MANIFEST_URI, new Label(METADATA_PAIRS.get(0)[1]));
-        assertEquals(MANIFEST_URI, myManifest.getID());
-        assertEquals(METADATA_PAIRS.get(0)[1], myManifest.getLabel().getString());
-    }
-
-    /**
-     * Tests the manifest constructor.
-     */
-    @Test
-    public void testConstructorUriLabel() {
         myManifest = new Manifest(MANIFEST_URI, new Label(METADATA_PAIRS.get(0)[1]));
         assertEquals(MANIFEST_URI, myManifest.getID());
         assertEquals(METADATA_PAIRS.get(0)[1], myManifest.getLabel().getString());

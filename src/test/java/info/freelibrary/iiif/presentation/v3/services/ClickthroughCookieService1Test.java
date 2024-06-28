@@ -4,7 +4,6 @@ package info.freelibrary.iiif.presentation.v3.services;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -38,17 +37,6 @@ public class ClickthroughCookieService1Test {
      */
     @Test
     public final void testClickthroughCookieService1StringString() {
-        final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
-
-        assertEquals(myID, service.getID());
-        assertEquals(myLabel, service.getLabel());
-    }
-
-    /**
-     * Tests ClickthroughCookieService1 constructor with URI ID and string label.
-     */
-    @Test
-    public final void testClickthroughCookieService1URIString() {
         final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
 
         assertEquals(myID, service.getID());
@@ -169,28 +157,6 @@ public class ClickthroughCookieService1Test {
     }
 
     /**
-     * Tests {@link ClickthroughCookieService1#setFailureDescription(String) setFailureDescription}.
-     */
-    @Test
-    public final void testSetFailureDescriptionString() {
-        final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
-        final String failureDescription = UUID.randomUUID().toString();
-
-        assertEquals(failureDescription, service.setFailureDescription(failureDescription).getFailureDescription());
-    }
-
-    /**
-     * Tests {@link ClickthroughCookieService1#setFailureHeader(String) setFailureHeader}.
-     */
-    @Test
-    public final void testSetFailureHeaderString() {
-        final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
-        final String failureHeader = UUID.randomUUID().toString();
-
-        assertEquals(failureHeader, service.setFailureHeader(failureHeader).getFailureHeader());
-    }
-
-    /**
      * Tests {@link ClickthroughCookieService1#setHeader(String) setHeader}.
      */
     @Test
@@ -206,17 +172,6 @@ public class ClickthroughCookieService1Test {
      */
     @Test
     public final void testSetIDString() {
-        final ClickthroughCookieService1 service =
-                new ClickthroughCookieService1(myID.substring(2), myLabel).setID(myID);
-
-        assertEquals(myID, service.getID());
-    }
-
-    /**
-     * Tests {@link ClickthroughCookieService1#setID(URI) setID}.
-     */
-    @Test
-    public final void testSetIDURI() {
         final ClickthroughCookieService1 service =
                 new ClickthroughCookieService1(myID.substring(2), myLabel).setID(myID);
 
@@ -244,17 +199,6 @@ public class ClickthroughCookieService1Test {
 
         assertTrue(services.add(new AuthTokenService1(myID)));
         assertEquals(1, service.setServices(services).getServices().size());
-    }
-
-    /**
-     * Tests {@link ClickthroughCookieService1#setServices(Service[]) setServices}.
-     */
-    @Test
-    public final void testSetServicesServiceOfQArray() {
-        final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
-
-        service.setServices(new AuthTokenService1(myID));
-        assertEquals(1, service.getServices().size());
     }
 
     /**

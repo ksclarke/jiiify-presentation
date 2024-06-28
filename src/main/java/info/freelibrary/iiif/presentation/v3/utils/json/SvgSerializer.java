@@ -7,7 +7,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Document.OutputSettings;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
@@ -34,15 +33,14 @@ public class SvgSerializer extends StdSerializer<Document> {
         final String svg;
 
         output.prettyPrint(false).syntax(Document.OutputSettings.Syntax.xml);
-        svg = anSvgDocument.outerHtml().replaceAll("\"", "'"); // Our SVG is inside a JSON string
+        svg = anSvgDocument.outerHtml().replace('"', '\''); // Our SVG is inside a JSON string
 
         aJsonGenerator.writeString(svg);
     }
 
     @Override
     public void serializeWithType(final Document aSvgDocument, final JsonGenerator aJsonGenerator,
-            final SerializerProvider aProvider, final TypeSerializer aTypeSerializer)
-            throws IOException, JsonProcessingException {
+            final SerializerProvider aProvider, final TypeSerializer aTypeSerializer) throws IOException {
         // This handles serialization of lists, where types are used, by serializing each individually
         serialize(aSvgDocument, aJsonGenerator, aProvider);
     }

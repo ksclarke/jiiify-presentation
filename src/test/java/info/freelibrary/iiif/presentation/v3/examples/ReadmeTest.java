@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3.examples;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -25,9 +27,13 @@ public class ReadmeTest {
     public final void testReadmeExample() throws IOException {
         final Manifestor manifestor = new Manifestor();
         final Manifest manifest = manifestor.readManifest(new File(TestUtils.TEST_DIR, "z1960050.json"));
+        final File outputFile = File.createTempFile("z1960050", ".json");
 
         manifest.getMetadata().add(new Metadata("Contributor", "Your Name Here"));
-        manifestor.write(manifest, File.createTempFile("z1960050", ".json"));
+        manifestor.write(manifest, outputFile);
+
+        assertTrue(outputFile.exists());
+        outputFile.deleteOnExit();
     }
 
 }

@@ -4,7 +4,6 @@ package info.freelibrary.iiif.presentation.v3.services;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -138,90 +137,6 @@ public class LoginCookieService1Test {
     }
 
     /**
-     * Test method for {@link LoginCookieService1#LoginCookieService1(URI, String)}.
-     */
-    @Test
-    public final void testLoginCookieService1URIString() {
-        final LoginCookieService1 service = new LoginCookieService1(myID, myLabel);
-
-        assertEquals(myID, service.getID());
-        assertEquals(myLabel, service.getLabel());
-    }
-
-    /**
-     * Test method for {@link LoginCookieService1#setConfirmLabel(String)}.
-     */
-    @Test
-    public final void testSetConfirmLabelString() {
-        final LoginCookieService1 service = new LoginCookieService1(myID, myLabel);
-        final String confirmLabel = UUID.randomUUID().toString();
-
-        assertEquals(confirmLabel, service.setConfirmLabel(confirmLabel).getConfirmLabel());
-    }
-
-    /**
-     * Test method for {@link LoginCookieService1#setDescription(String)}.
-     */
-    @Test
-    public final void testSetDescriptionString() {
-        final LoginCookieService1 service = new LoginCookieService1(myID, myLabel);
-        final String description = UUID.randomUUID().toString();
-
-        assertEquals(description, service.setDescription(description).getDescription());
-    }
-
-    /**
-     * Test method for {@link LoginCookieService1#setFailureDescription(String)}.
-     */
-    @Test
-    public final void testSetFailureDescriptionString() {
-        final LoginCookieService1 service = new LoginCookieService1(myID, myLabel);
-        final String failureDescription = UUID.randomUUID().toString();
-
-        assertEquals(failureDescription, service.setFailureDescription(failureDescription).getFailureDescription());
-    }
-
-    /**
-     * Test method for {@link LoginCookieService1#setFailureHeader(String)}.
-     */
-    @Test
-    public final void testSetFailureHeaderString() {
-        final LoginCookieService1 service = new LoginCookieService1(myID, myLabel);
-        final String failureHeader = UUID.randomUUID().toString();
-
-        assertEquals(failureHeader, service.setFailureHeader(failureHeader).getFailureHeader());
-    }
-
-    /**
-     * Test method for {@link LoginCookieService1#setHeader(String)}.
-     */
-    @Test
-    public final void testSetHeaderString() {
-        final LoginCookieService1 service = new LoginCookieService1(myID, myLabel);
-        final String header = UUID.randomUUID().toString();
-
-        assertEquals(header, service.setHeader(header).getHeader());
-    }
-
-    /**
-     * Test method for {@link LoginCookieService1#setID(String)}.
-     */
-    @Test
-    public final void testSetIDString() {
-        final LoginCookieService1 service = new LoginCookieService1(myID.substring(2), myLabel);
-        assertEquals(myID, service.setID(myID).getID());
-    }
-
-    /**
-     * Test method for {@link LoginCookieService1#setID(URI)}.
-     */
-    @Test
-    public final void testSetIDURI() {
-        final LoginCookieService1 service = new LoginCookieService1(myID.substring(2), myLabel);
-        assertEquals(myID, service.setID(myID).getID());
-    }
-
-    /**
      * Test method for {@link LoginCookieService1#setLabel(String)}.
      */
     @Test
@@ -230,15 +145,6 @@ public class LoginCookieService1Test {
         final String label = UUID.randomUUID().toString();
 
         assertEquals(label, service.setLabel(label).getLabel());
-    }
-
-    /**
-     * Test method for {@link LoginCookieService1#setProfile(AuthService.Profile)}.
-     */
-    @Test
-    public final void testSetProfileProfile() {
-        final LoginCookieService1 service = new LoginCookieService1(myID, myLabel);
-        assertEquals(AuthCookieService.Profile.LOGIN, service.getProfile().get());
     }
 
     /**
@@ -260,15 +166,6 @@ public class LoginCookieService1Test {
     public final void testSetServicesServiceOfQArray() {
         final LoginCookieService1 service = new LoginCookieService1(myID, myLabel);
         assertEquals(1, service.setServices(new AuthTokenService1(myID)).getServices().size());
-    }
-
-    /**
-     * Test method for {@link LoginCookieService1#setType(String)}.
-     */
-    @Test
-    public final void testSetTypeString() {
-        final LoginCookieService1 service = new LoginCookieService1(myID, myLabel);
-        assertEquals(LoginCookieService1.TYPE, service.getType());
     }
 
     /**

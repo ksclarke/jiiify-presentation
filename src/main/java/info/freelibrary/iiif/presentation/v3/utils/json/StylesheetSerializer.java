@@ -6,7 +6,6 @@ import java.net.URI;
 import java.util.Optional;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
@@ -56,8 +55,7 @@ public class StylesheetSerializer extends StdSerializer<Stylesheet> {
 
     @Override
     public void serializeWithType(final Stylesheet aStylesheet, final JsonGenerator aJsonGenerator,
-            final SerializerProvider aProvider, final TypeSerializer aTypeSerializer)
-            throws IOException, JsonProcessingException {
+            final SerializerProvider aProvider, final TypeSerializer aTypeSerializer) throws IOException {
         // This serializes a source when type is called, like when processing a list of sources
         serialize(aStylesheet, aJsonGenerator, aProvider);
     }

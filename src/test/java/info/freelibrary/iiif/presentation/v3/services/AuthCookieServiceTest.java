@@ -43,7 +43,7 @@ public class AuthCookieServiceTest {
      * @throws JsonProcessingException If there is trouble processing the service's JSON
      */
     @Test
-    public final void testConfirmationLabel() throws JsonProcessingException {
+    public final void testConfirmationLabel() {
         final LoginCookieService1 service = new LoginCookieService1(myID, UUID.randomUUID().toString());
         final String confirmLabel = "This is a confirmation label";
 
@@ -58,7 +58,7 @@ public class AuthCookieServiceTest {
      * @throws JsonProcessingException If there is trouble processing the service's JSON
      */
     @Test
-    public final void testContext() throws JsonProcessingException {
+    public final void testContext() {
         final LoginCookieService1 service = new LoginCookieService1(myID, UUID.randomUUID().toString());
         final String context = JSON.valueToTree(service).get(JsonKeys.CONTEXT).asText();
 
@@ -71,7 +71,7 @@ public class AuthCookieServiceTest {
      * @throws JsonProcessingException If there is trouble processing the service's JSON
      */
     @Test
-    public final void testDescription() throws JsonProcessingException {
+    public final void testDescription() {
         final LoginCookieService1 service = new LoginCookieService1(myID, UUID.randomUUID().toString());
         final String description = "This is a description";
 
@@ -86,7 +86,7 @@ public class AuthCookieServiceTest {
      * @throws JsonProcessingException If there is trouble processing the service's JSON
      */
     @Test
-    public final void testFailureDescription() throws JsonProcessingException {
+    public final void testFailureDescription() {
         final LoginCookieService1 service = new LoginCookieService1(myID, myLabel);
         final String failureDescription = "This is a failure description";
 
@@ -101,7 +101,7 @@ public class AuthCookieServiceTest {
      * @throws JsonProcessingException If there is trouble processing the service's JSON
      */
     @Test
-    public final void testFailureHeader() throws JsonProcessingException {
+    public final void testFailureHeader() {
         final LoginCookieService1 service = new LoginCookieService1(myID, UUID.randomUUID().toString());
         final String failureHeader = "This is a failure header";
 
@@ -116,7 +116,7 @@ public class AuthCookieServiceTest {
      * @throws JsonProcessingException If there is trouble processing the service's JSON
      */
     @Test
-    public final void testHeader() throws JsonProcessingException {
+    public final void testHeader() {
         final LoginCookieService1 service = new LoginCookieService1(myID, UUID.randomUUID().toString());
         final String header = "This is a header";
 
@@ -131,7 +131,7 @@ public class AuthCookieServiceTest {
      * @throws JsonProcessingException If there is trouble processing the service's JSON
      */
     @Test
-    public final void testID() throws JsonProcessingException {
+    public final void testID() {
         final LoginCookieService1 service = new LoginCookieService1(myID, UUID.randomUUID().toString());
         final String newID = new StringBuilder(myID).reverse().toString();
 
@@ -147,7 +147,7 @@ public class AuthCookieServiceTest {
      * @throws JsonProcessingException If there is trouble processing the service's JSON
      */
     @Test
-    public final void testLabel() throws JsonProcessingException {
+    public final void testLabel() {
         final String label = "This is a test label";
         final LoginCookieService1 service = new LoginCookieService1(myID, label);
 
@@ -161,7 +161,7 @@ public class AuthCookieServiceTest {
      * @throws JsonProcessingException If there is trouble processing the service's JSON
      */
     @Test
-    public final void testProfile() throws JsonProcessingException {
+    public final void testProfile() {
         assertEquals(AuthCookieService.Profile.KIOSK, new KioskCookieService1(myID).getProfile().get());
     }
 

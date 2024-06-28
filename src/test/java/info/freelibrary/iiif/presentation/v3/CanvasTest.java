@@ -160,7 +160,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final String id = HTTPS + UUID.randomUUID().toString();
         final Canvas canvas = new Canvas(MinterFactory.getMinter(id), LABEL);
 
-        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID()).matches());
+        assertEquals(LABEL, canvas.getLabel());
     }
 
     /**

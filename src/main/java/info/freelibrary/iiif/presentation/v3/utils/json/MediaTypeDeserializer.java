@@ -7,7 +7,6 @@ import static info.freelibrary.util.Constants.SINGLE_INSTANCE;
 import java.io.IOException;
 import java.util.Optional;
 
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -52,8 +51,7 @@ public class MediaTypeDeserializer extends StdDeserializer<MediaType> {
 
     @Override
     @SuppressWarnings(JDK.DEPRECATION)
-    public MediaType deserialize(final JsonParser aParser, final DeserializationContext aContext)
-            throws IOException, JacksonException {
+    public MediaType deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException {
         final JsonNode node = aParser.getCodec().readTree(aParser);
         final String value = node.asText(EMPTY);
 
@@ -65,8 +63,12 @@ public class MediaTypeDeserializer extends StdDeserializer<MediaType> {
 
             if (parts.length > SINGLE_INSTANCE) {
                 mediaType = MediaType.fromExt(parts[1], parts[0]);
-            } else if ((mediaType = MediaType.fromExt(parts[0])).isEmpty()) {
-                LOGGER.warn(MessageCodes.JPA_133, value);
+            } else {
+                mediaType = MediaType.fromExt(parts[0]);
+
+                if (mediaType.isEmpty()) {
+                    LOGGER.warn(MessageCodes.JPA_133, value);
+                }
             }
         }
 

@@ -32,7 +32,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      * @param aI18nArray An array of internationalizations
      */
     I18nProperty(final I18n... aI18nArray) {
-        myI18ns = Arrays.stream(aI18nArray).filter(i18n -> i18n != null).collect(Collectors.toList());
+        myI18ns = Arrays.stream(aI18nArray).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
     /**
@@ -42,7 +42,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      * @param aI18nList A list of internationalizations
      */
     I18nProperty(final List<I18n> aI18nList) {
-        myI18ns = aI18nList.stream().filter(i18n -> i18n != null).collect(Collectors.toList());
+        myI18ns = aI18nList.stream().filter(Objects::nonNull).collect(Collectors.toList());
     }
 
     /**
@@ -52,7 +52,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      */
     @Override
     public boolean equals(final Object aObject) {
-        if (aObject != null && getClass().getName().equals(aObject.getClass().getName())) {
+        if (aObject != null && getClass() == aObject.getClass()) {
             return toMap().equals(((I18nProperty<?>) aObject).toMap());
         }
 
@@ -136,7 +136,7 @@ class I18nProperty<T extends I18nProperty<T>> {
         final StringBuilder builder;
 
         if (!hasStrings()) {
-            return null;
+            return "";
         }
 
         builder = new StringBuilder();

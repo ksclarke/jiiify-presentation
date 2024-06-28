@@ -113,7 +113,7 @@ public final class TestUtils {
      * @throws JsonProcessingException If there is a JSON processing problem
      * @throws IOException If there is trouble writing JSON to a StringWriter
      */
-    public static String toJson(final Object aObject) throws JsonProcessingException, IOException {
+    public static String toJson(final Object aObject) throws IOException {
         return toJson(null, aObject, false, false);
     }
 
@@ -126,8 +126,7 @@ public final class TestUtils {
      * @throws JsonProcessingException If there is a JSON processing problem
      * @throws IOException If there is trouble writing JSON to a StringWriter
      */
-    public static String toJson(final Object aObject, final boolean aIndent)
-            throws JsonProcessingException, IOException {
+    public static String toJson(final Object aObject, final boolean aIndent) throws IOException {
         return toJson(null, aObject, false, aIndent);
     }
 
@@ -141,8 +140,7 @@ public final class TestUtils {
      * @throws JsonProcessingException If there is a JSON processing problem
      * @throws IOException If there is trouble writing JSON to a StringWriter
      */
-    public static String toJson(final Object aObject, final boolean aList, final boolean aIndent)
-            throws JsonProcessingException, IOException {
+    public static String toJson(final Object aObject, final boolean aList, final boolean aIndent) throws IOException {
         return toJson(null, aObject, aList, aIndent);
     }
 
@@ -155,7 +153,7 @@ public final class TestUtils {
      * @throws JsonProcessingException If there is a JSON processing problem
      * @throws IOException If there is trouble writing JSON to a StringWriter
      */
-    public static String toJson(final String aName, final Object aObject) throws JsonProcessingException, IOException {
+    public static String toJson(final String aName, final Object aObject) throws IOException {
         return toJson(aName, aObject, false, false);
     }
 
@@ -186,7 +184,7 @@ public final class TestUtils {
      * @throws IOException If there is trouble writing JSON to a StringWriter
      */
     public static String toJson(final String aName, final Object aObject, final boolean aList, final boolean aIndent)
-            throws JsonProcessingException, IOException {
+            throws IOException {
         final StringWriter writer = new StringWriter();
 
         if (aList) {

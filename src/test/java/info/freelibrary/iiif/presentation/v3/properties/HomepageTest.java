@@ -4,7 +4,6 @@ package info.freelibrary.iiif.presentation.v3.properties;
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.toJson;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -76,10 +75,7 @@ public class HomepageTest {
      */
     @Test
     public final void testEquals() throws IOException {
-        final Homepage homepage1 = Homepage.fromJSON(getTestFixture());
-        final Homepage homepage2 = Homepage.fromJSON(getTestFixture());
-
-        assertTrue(homepage1.equals(homepage2));
+        assertEquals(Homepage.fromJSON(getTestFixture()), Homepage.fromJSON(getTestFixture()));
     }
 
     /**

@@ -3,7 +3,6 @@ package info.freelibrary.iiif.presentation.v3.utils.json;
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -51,8 +50,7 @@ public class AnnotationTargetDeserializer extends StdDeserializer<Target> {
     }
 
     @Override
-    public Target deserialize(final JsonParser aParser, final DeserializationContext aContext)
-            throws IOException, JacksonException {
+    public Target deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException {
         final JsonNode currentNode = aParser.getCodec().readTree(aParser);
         final JsonNode typeNode = currentNode.get(JsonKeys.TYPE);
         final JsonNode idNode = currentNode.get(JsonKeys.ID);

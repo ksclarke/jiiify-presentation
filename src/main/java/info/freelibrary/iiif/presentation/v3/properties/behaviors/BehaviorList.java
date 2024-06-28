@@ -80,21 +80,23 @@ public class BehaviorList extends ArrayList<Behavior> implements List<Behavior> 
     /**
      * Creates a new behavior list from the supplied behavior class.
      *
+     * @param <T> The type of behavior
      * @param aBehaviorClass A type of behavior
      */
-    public BehaviorList(final Class<? extends Behavior> aBehaviorClass) {
+    public <T extends Behavior> BehaviorList(final Class<T> aBehaviorClass) {
         myBehaviorClass = Objects.requireNonNull(aBehaviorClass);
     }
 
     /**
      * Creates a new behavior list from the supplied behavior class and array of behaviors.
      *
+     * @param <T> The type of behavior
      * @param aBehaviorClass A type of behavior
      * @param aBehaviorArray An array of behaviors
      * @throws InvalidBehaviorException If there is a disjoint in the supplied behavior list
      */
     @SuppressWarnings({ PMD.CONSTRUCTOR_CALLS_OVERRIDABLE_METHOD })
-    public BehaviorList(final Class<? extends Behavior> aBehaviorClass, final Behavior... aBehaviorArray) {
+    public <T extends Behavior> BehaviorList(final Class<T> aBehaviorClass, final Behavior... aBehaviorArray) {
         this(aBehaviorClass);
 
         addBehaviors(Arrays.asList(Objects.requireNonNull(aBehaviorArray)));
@@ -103,12 +105,13 @@ public class BehaviorList extends ArrayList<Behavior> implements List<Behavior> 
     /**
      * Creates a new behavior list from the supplied behavior class and a list of behaviors.
      *
+     * @param <T> The type of behavior
      * @param aBehaviorClass A type of behavior
      * @param aBehaviorList A list of behaviors
      * @throws InvalidBehaviorException If there is a disjoint in the supplied behavior list
      */
     @SuppressWarnings({ PMD.CONSTRUCTOR_CALLS_OVERRIDABLE_METHOD })
-    public BehaviorList(final Class<? extends Behavior> aBehaviorClass, final List<Behavior> aBehaviorList) {
+    public <T extends Behavior> BehaviorList(final Class<T> aBehaviorClass, final List<Behavior> aBehaviorList) {
         myBehaviorClass = Objects.requireNonNull(aBehaviorClass);
         addBehaviors(Objects.requireNonNull(aBehaviorList));
     }
@@ -153,6 +156,16 @@ public class BehaviorList extends ArrayList<Behavior> implements List<Behavior> 
         }
     }
 
+    @Override
+    public boolean equals(final Object aObject) {
+        if (aObject instanceof final BehaviorList behaviorList) {
+            return myBehaviorClass.equals(behaviorList.myBehaviorClass) &&
+                    behaviorList.toArray().equals(super.toArray());
+        }
+
+        return false;
+    }
+
     /**
      * Gets the list's behavior type.
      *
@@ -160,6 +173,11 @@ public class BehaviorList extends ArrayList<Behavior> implements List<Behavior> 
      */
     public Class<? extends Behavior> getBehaviorType() {
         return myBehaviorClass;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(myBehaviorClass, toArray());
     }
 
     /**

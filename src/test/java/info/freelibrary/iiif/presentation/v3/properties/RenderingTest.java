@@ -4,7 +4,6 @@ package info.freelibrary.iiif.presentation.v3.properties;
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.toJson;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -77,10 +76,7 @@ public class RenderingTest {
      */
     @Test
     public final void testEquals() throws IOException {
-        final Rendering rendering1 = Rendering.fromJSON(getTestFixture());
-        final Rendering rendering2 = Rendering.fromJSON(getTestFixture());
-
-        assertTrue(rendering1.equals(rendering2));
+        assertEquals(Rendering.fromJSON(getTestFixture()), Rendering.fromJSON(getTestFixture()));
     }
 
     /**

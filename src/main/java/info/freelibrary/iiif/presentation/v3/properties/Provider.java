@@ -88,14 +88,12 @@ public class Provider {
      */
     @Override
     public boolean equals(final Object aObject) {
-        if (aObject instanceof Provider) {
-            final Provider otherProvider = (Provider) aObject;
-
-            return Objects.equals(myID, otherProvider.myID) //
-                    && Objects.equals(myLabel, otherProvider.myLabel) //
-                    && Objects.equals(myHomepages, otherProvider.myHomepages) //
-                    && Objects.equals(myLogos, otherProvider.myLogos) //
-                    && Objects.equals(mySeeAlsoRefs, otherProvider.mySeeAlsoRefs);
+        if (aObject instanceof final Provider provider) {
+            return Objects.equals(myID, provider.myID) //
+                    && Objects.equals(myLabel, provider.myLabel) //
+                    && Objects.equals(myHomepages, provider.myHomepages) //
+                    && Objects.equals(myLogos, provider.myLogos) //
+                    && Objects.equals(mySeeAlsoRefs, provider.mySeeAlsoRefs);
         }
 
         return false;

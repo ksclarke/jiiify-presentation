@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.rules.TestName;
 
 import info.freelibrary.util.StringUtils;
+import info.freelibrary.util.warnings.Sonar;
 
 import info.freelibrary.iiif.presentation.v3.AnnotationPage;
 import info.freelibrary.iiif.presentation.v3.Collection;
@@ -21,6 +22,7 @@ import info.freelibrary.iiif.presentation.v3.Manifest;
 /**
  * Tests converting cookbook JSON files into manifests and back again.
  */
+@SuppressWarnings({ Sonar.PARAMETERIZE_TEST })
 public class RoundTripTest extends AbstractCookbookTest {
 
     /** A pattern from which to pull manifest from the test resources directory. */
@@ -860,7 +862,7 @@ public class RoundTripTest extends AbstractCookbookTest {
      * @throws IOException If there is trouble reading the manifest file
      */
     @Test
-    @Ignore
+    @Ignore("See ticket IIIF/cookbook-recipes#511")
     public final void test0434ChoiceAV() throws IOException {
         final String expected = getExpected("0434-choice-av/manifest");
         assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());

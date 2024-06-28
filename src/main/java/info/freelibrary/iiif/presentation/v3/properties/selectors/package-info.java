@@ -13,9 +13,16 @@ import info.freelibrary.iiif.presentation.v3.Canvas;
 /**
  * A package info class.
  */
-class Info {
+final class Info {
 
     /** Including this allows us to reference Canvas in the package Javadoc. */
     @SuppressWarnings({ Eclipse.UNUSED, PMD.UNUSED_PRIVATE_FIELD })
     private static final String REFERENCE = Canvas.class.getName();
+
+    /**
+     * Creates a new information object.
+     */
+    private Info() {
+        // This is intentionally left empty
+    }
 }

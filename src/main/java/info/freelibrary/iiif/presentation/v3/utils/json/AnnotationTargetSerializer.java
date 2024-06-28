@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Optional;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
@@ -30,7 +29,7 @@ public class AnnotationTargetSerializer extends StdSerializer<Target> {
 
     @Override
     public void serialize(final Target aTarget, final JsonGenerator aJsonGenerator, final SerializerProvider aProvider)
-            throws IOException, JsonProcessingException {
+            throws IOException {
         final Optional<SpecificResource> specificResource = aTarget.getSpecificResource();
 
         if (specificResource.isPresent()) {
@@ -42,8 +41,7 @@ public class AnnotationTargetSerializer extends StdSerializer<Target> {
 
     @Override
     public void serializeWithType(final Target aTarget, final JsonGenerator aJsonGenerator,
-            final SerializerProvider aProvider, final TypeSerializer aTypeSerializer)
-            throws IOException, JsonProcessingException {
+            final SerializerProvider aProvider, final TypeSerializer aTypeSerializer) throws IOException {
         // This serializes a target when type is called, like when processing a list of targets
         serialize(aTarget, aJsonGenerator, aProvider);
     }
