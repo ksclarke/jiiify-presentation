@@ -18,8 +18,6 @@ import info.freelibrary.iiif.presentation.v3.utils.Labeled;
 
 /**
  * An interface for service implementations.
- *
- * @param <T> A type of service
  */
 @JsonDeserialize(using = ServiceDeserializer.class)
 public interface Service {

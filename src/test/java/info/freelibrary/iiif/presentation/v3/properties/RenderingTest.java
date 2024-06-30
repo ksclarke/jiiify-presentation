@@ -210,7 +210,7 @@ public class RenderingTest {
         final String json =
                 JSON.getReader().readTree(StringUtils.read(aExpected)).get(JsonKeys.RENDERING).toPrettyString();
         final TypeReference<List<Rendering>> typeRef = new TypeReference<>() {};
-        final List<Homepage> expected = JSON.getReader(typeRef).readValue(json);
+        final List<Rendering> expected = JSON.getReader(typeRef).readValue(json);
         final List<Rendering> found = myManifest.getRenderings();
 
         // Check that the lists contain the same number of elements

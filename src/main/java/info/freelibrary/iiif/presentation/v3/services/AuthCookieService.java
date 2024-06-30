@@ -8,8 +8,6 @@ import info.freelibrary.iiif.presentation.v3.Service;
 
 /**
  * An interface for cookie service implementations.
- *
- * @param <T> A type of cookie service
  */
 public interface AuthCookieService extends Service {
 

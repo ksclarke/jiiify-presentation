@@ -10,8 +10,6 @@ import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 
 /**
  * An interface for other service implementations.
- *
- * @param <T> A type of other service
  */
 public interface OtherService extends Service {
 

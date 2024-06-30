@@ -12,8 +12,6 @@ import info.freelibrary.iiif.presentation.v3.services.image.Tile;
 
 /**
  * An interface for image service implementations.
- *
- * @param <T> A type of image service
  */
 public interface ImageService extends Service {
 

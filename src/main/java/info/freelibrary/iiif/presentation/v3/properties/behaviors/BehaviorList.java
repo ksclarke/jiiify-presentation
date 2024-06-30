@@ -160,7 +160,7 @@ public class BehaviorList extends ArrayList<Behavior> implements List<Behavior> 
     public boolean equals(final Object aObject) {
         if (aObject instanceof final BehaviorList behaviorList) {
             return myBehaviorClass.equals(behaviorList.myBehaviorClass) &&
-                    behaviorList.toArray().equals(super.toArray());
+                    Arrays.equals(behaviorList.toArray(), super.toArray());
         }
 
         return false;

@@ -35,15 +35,17 @@ public final class I18nUtils {
     /** An undefined I18n value. */
     public static final String UNDEFINED = "und";
 
+    // <[a-zA-Z0-9\\-]+\\s*\\/?\\s*>
+    // <[a-zA-Z0-9\-]+\s*(\/\s*)?>
     /** A regex pattern that will match any tag. */
-    private static final Pattern ANY_TAG_PATTERN = Pattern.compile("<[a-zA-Z0-9\\-]+\\s*\\/?\\s*>", Pattern.DOTALL);
+    private static final Pattern ANY_TAG_PATTERN = Pattern.compile("<[a-zA-Z0-9\\-]+\\s*(\\/\\s*)?>", Pattern.DOTALL);
 
     /** A regex pattern that will match CDATA sections. */
     private static final String CDATA_PATTERN = "<\\!\\[CDATA\\[.*\\]\\]\\>";
 
     /** A regex pattern that will match fragments. */
     private static final Pattern FRAGMENT_PATTERN =
-            Pattern.compile("^<[a-zA-Z0-9\\-]+.*>.*</[a-zA-Z0-9\\-]+>$", Pattern.DOTALL);
+            Pattern.compile("^<([a-zA-Z0-9\\-]+)(\\s[^>]*)?>.*?<\\/\\1>$", Pattern.DOTALL);
 
     /** A greater than symbol used for opening tag names. */
     private static final String GREATER_THAN = ">";

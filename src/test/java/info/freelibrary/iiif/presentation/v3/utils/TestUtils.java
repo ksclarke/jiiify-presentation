@@ -110,24 +110,10 @@ public final class TestUtils {
      *
      * @param aObject An object to convert into JSON
      * @return The supplied object's JSON representation
-     * @throws JsonProcessingException If there is a JSON processing problem
      * @throws IOException If there is trouble writing JSON to a StringWriter
      */
     public static String toJson(final Object aObject) throws IOException {
-        return toJson(null, aObject, false, false);
-    }
-
-    /**
-     * Returns an object as JSON.
-     *
-     * @param aObject An object to convert into JSON
-     * @param aIndent Whether the returned JSON should be pretty-printed
-     * @return The supplied object's JSON representation
-     * @throws JsonProcessingException If there is a JSON processing problem
-     * @throws IOException If there is trouble writing JSON to a StringWriter
-     */
-    public static String toJson(final Object aObject, final boolean aIndent) throws IOException {
-        return toJson(null, aObject, false, aIndent);
+        return toJson(null, aObject, false);
     }
 
     /**
@@ -135,13 +121,11 @@ public final class TestUtils {
      *
      * @param aObject An object to convert into JSON
      * @param aList Whether aObject should be interpreted as a list of objects to serialize
-     * @param aIndent Whether the returned JSON should be pretty-printed
      * @return The supplied object's JSON representation
-     * @throws JsonProcessingException If there is a JSON processing problem
      * @throws IOException If there is trouble writing JSON to a StringWriter
      */
-    public static String toJson(final Object aObject, final boolean aList, final boolean aIndent) throws IOException {
-        return toJson(null, aObject, aList, aIndent);
+    public static String toJson(final Object aObject, final boolean aList) throws IOException {
+        return toJson(null, aObject, aList);
     }
 
     /**
@@ -150,11 +134,10 @@ public final class TestUtils {
      * @param aName A name for the supplied object
      * @param aObject An object to convert into JSON
      * @return The supplied object's JSON representation
-     * @throws JsonProcessingException If there is a JSON processing problem
      * @throws IOException If there is trouble writing JSON to a StringWriter
      */
     public static String toJson(final String aName, final Object aObject) throws IOException {
-        return toJson(aName, aObject, false, false);
+        return toJson(aName, aObject, false);
     }
 
     /**
@@ -164,27 +147,9 @@ public final class TestUtils {
      * @param aObject An object to convert into JSON
      * @param aList Whether aObject should be interpreted as a list of objects to serialize
      * @return The supplied object's JSON representation
-     * @throws JsonProcessingException If there is a JSON processing problem
      * @throws IOException If there is trouble writing JSON to a StringWriter
      */
-    public static String toJson(final String aName, final Object aObject, final boolean aList)
-            throws JsonProcessingException, IOException {
-        return toJson(aName, aObject, aList, false);
-    }
-
-    /**
-     * Returns a named object as JSON.
-     *
-     * @param aName A name for the supplied object
-     * @param aObject An object to convert into JSON
-     * @param aList Whether aObject should be interpreted as a list of objects to serialize
-     * @param aIndent Whether the returned JSON should be pretty-printed
-     * @return The supplied object's JSON representation
-     * @throws JsonProcessingException If there is a JSON processing problem
-     * @throws IOException If there is trouble writing JSON to a StringWriter
-     */
-    public static String toJson(final String aName, final Object aObject, final boolean aList, final boolean aIndent)
-            throws IOException {
+    public static String toJson(final String aName, final Object aObject, final boolean aList) throws IOException {
         final StringWriter writer = new StringWriter();
 
         if (aList) {
