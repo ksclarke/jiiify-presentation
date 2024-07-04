@@ -1,53 +1,136 @@
 
 package info.freelibrary.iiif.presentation.v3.annotations;
 
-import static org.junit.Assert.assertEquals;
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.getRandom;
+import static org.junit.Assert.assertTrue;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
+import org.junit.Before;
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
-import info.freelibrary.util.StringUtils;
-
 import info.freelibrary.iiif.presentation.v3.Canvas;
-import info.freelibrary.iiif.presentation.v3.TextualBody;
-import info.freelibrary.iiif.presentation.v3.properties.MediaType;
+import info.freelibrary.iiif.presentation.v3.CanvasResource;
+import info.freelibrary.iiif.presentation.v3.Manifest;
+import info.freelibrary.iiif.presentation.v3.ids.Minter;
+import info.freelibrary.iiif.presentation.v3.ids.MinterFactory;
+import info.freelibrary.iiif.presentation.v3.properties.Label;
+import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 
 /**
- * Tests of {@code CommentingAnnotation}.
+ * Tests {@code CommentingAnnotation}.
  */
 public class CommentingAnnotationTest {
 
-    /** An annotation ID. */
-    private static final String ANNO_ID =
-            "https://iiif.io/api/cookbook/recipe/0266-full-canvas-annotation/canvas-1/annopage-2/anno-1";
+    /** A persistent ID to use in testing. */
+    private static final String ID = "https://example.com/asdf";
 
-    /** A canvas ID. */
-    private static final String CANVAS_ID = "https://iiif.io/api/cookbook/recipe/0266-full-canvas-annotation/canvas-1";
+    /** A pattern to use when testing IDs. */
+    private static final String ID_PATTERN = "https://example.com/asdf/annotations/anno-";
 
-    /** An annotation that can be used in testing. */
-    private static final File JSON_FILE = new File("src/test/resources/json/commenting-annotation.json");
+    /** A minter to use in testing. */
+    private Minter myMinter;
 
     /**
-     * Tests the {@code CommentingAnnotation#toString()}.
-     *
-     * @throws JsonProcessingException If there is trouble serializing a <code>CommentingAnnotation</code>
-     * @throws IOException If there is trouble reading the test JSON annotation file
+     * Sets up the test environment.
      */
-    @Test
-    public final void testToString() throws IOException {
-        final String expected = StringUtils.read(JSON_FILE, StandardCharsets.UTF_8);
-        final CommentingAnnotation commenting = new CommentingAnnotation(ANNO_ID, new Canvas(CANVAS_ID));
-        final TextualBody body = new TextualBody();
-
-        body.setLanguage("de").setFormat(MediaType.TEXT_PLAIN).setValue("Göttinger Marktplatz mit Gänseliesel Brunnen");
-        commenting.setBody(body);
-
-        assertEquals(expected, commenting.toString());
+    @Before
+    public final void setUp() {
+        myMinter = MinterFactory.getMinter(new Manifest(ID, new Label("A label")));
     }
 
+    /**
+     * Test method for {@link CommentingAnnotation#CommentingAnnotation(Minter)}.
+     */
+    @Test
+    public final void testCommentingAnnotationMinter() {
+        assertTrue(new CommentingAnnotation(myMinter).getID().startsWith(ID_PATTERN));
+    }
+
+    /**
+     * Test method for {@link CommentingAnnotation#CommentingAnnotation(Minter, CanvasResource)}.
+     */
+    @Test
+    public final void testCommentingAnnotationMinterCanvasResourceOfC() {
+        assertTrue(new CommentingAnnotation(myMinter, new Canvas(myMinter)).getID().startsWith(ID_PATTERN));
+    }
+
+    /**
+     * Test method for {@link CommentingAnnotation#CommentingAnnotation(Minter, CanvasResource, MediaFragmentSelector)}.
+     */
+    @Test
+    public final void testCommentingAnnotationMinterCanvasResourceOfCMediaFragmentSelector() {
+        assertTrue(new CommentingAnnotation(myMinter, new Canvas(myMinter), new MediaFragmentSelector(0, 0, 100, 100))
+                .getID().startsWith(ID_PATTERN));
+    }
+
+    /**
+     * Test method for {@link CommentingAnnotation#CommentingAnnotation(Minter, CanvasResource, String)}.
+     */
+    @Test
+    public final void testCommentingAnnotationMinterCanvasResourceOfCString() {
+        assertTrue(new CommentingAnnotation(myMinter, new Canvas(myMinter), "xywh=0,0,100,100").getID()
+                .startsWith(ID_PATTERN));
+    }
+
+    /**
+     * Test method for {@link CommentingAnnotation#CommentingAnnotation(String, CanvasResource)}.
+     */
+    @Test
+    public final void testCommentingAnnotationStringCanvasResourceOfC() {
+        assertTrue(new CommentingAnnotation(ID_PATTERN + getRandom(), new Canvas(myMinter)).getID()
+                .startsWith(ID_PATTERN));
+    }
+
+    /**
+     * Test method for {@link CommentingAnnotation#CommentingAnnotation(String, CanvasResource, MediaFragmentSelector)}.
+     */
+    @Test
+    public final void testCommentingAnnotationStringCanvasResourceOfCMediaFragmentSelector() {
+        assertTrue(new CommentingAnnotation(ID_PATTERN + getRandom(), new Canvas(myMinter),
+                new MediaFragmentSelector("xywh=0,0,200,200")).getID().startsWith(ID_PATTERN));
+    }
+
+    /**
+     * Test method for {@link CommentingAnnotation#CommentingAnnotation(String, CanvasResource, String)}.
+     */
+    @Test
+    public final void testCommentingAnnotationStringCanvasResourceOfCString() {
+        assertTrue(new CommentingAnnotation(ID_PATTERN + getRandom(), new Canvas(myMinter), "xywh=0,0,150,150").getID()
+                .startsWith(ID_PATTERN));
+    }
+
+    /**
+     * Test method for {@link CommentingAnnotation#CommentingAnnotation(String, Manifest)}.
+     */
+    @Test
+    public final void testCommentingAnnotationStringManifest() {
+        assertTrue(new CommentingAnnotation(ID_PATTERN + getRandom(),
+                new Manifest(ID_PATTERN + getRandom(), new Label("Label"))).getID().startsWith(ID_PATTERN));
+    }
+
+    /**
+     * Test method for {@link CommentingAnnotation#CommentingAnnotation(String, Target)}.
+     */
+    @Test
+    public final void testCommentingAnnotationStringTarget() {
+        assertTrue(new CommentingAnnotation(ID_PATTERN + getRandom(), new Target(new Canvas(myMinter))).getID()
+                .startsWith(ID_PATTERN));
+    }
+
+    /**
+     * Test method for {@link CommentingAnnotation#setMotivation(Motivation)}.
+     */
+    @Test
+    public final void testSetMotivationMotivation() {
+        assertTrue(new CommentingAnnotation(myMinter).setMotivation(Motivation.fromLabel(Purpose.COMMENTING)).getID()
+                .startsWith(ID_PATTERN));
+    }
+
+    /**
+     * Test method for {@link CommentingAnnotation#setMotivation(Motivation)}.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public final void testSetMotivationMotivationBad() {
+        assertTrue(new CommentingAnnotation(myMinter).setMotivation(Motivation.fromLabel(Purpose.ASSESSING)).getID()
+                .startsWith(ID_PATTERN));
+    }
 }

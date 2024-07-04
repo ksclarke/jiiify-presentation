@@ -14,6 +14,7 @@ import java.util.Base64;
 import java.util.Base64.Encoder;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.Assert;
 import org.junit.rules.TestName;
@@ -103,6 +104,22 @@ public final class TestUtils {
         } catch (final JsonProcessingException details) {
             throw new JsonParsingException(details);
         }
+    }
+
+    /**
+     * Creates an ID suffix.
+     *
+     * @return An ID suffix
+     */
+    public static String getRandom() {
+        final ThreadLocalRandom random = ThreadLocalRandom.current();
+        final StringBuilder buffer = new StringBuilder();
+
+        for (int index = 0; index < 4; index++) {
+            buffer.append(random.nextInt(10));
+        }
+
+        return buffer.toString();
     }
 
     /**

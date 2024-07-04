@@ -1,52 +1,136 @@
 
 package info.freelibrary.iiif.presentation.v3.annotations;
 
-import static org.junit.Assert.assertEquals;
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.getRandom;
+import static org.junit.Assert.assertTrue;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
+import org.junit.Before;
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
-import info.freelibrary.util.StringUtils;
-
 import info.freelibrary.iiif.presentation.v3.Canvas;
-import info.freelibrary.iiif.presentation.v3.TextualBody;
-import info.freelibrary.iiif.presentation.v3.properties.MediaType;
+import info.freelibrary.iiif.presentation.v3.CanvasResource;
+import info.freelibrary.iiif.presentation.v3.Manifest;
+import info.freelibrary.iiif.presentation.v3.ids.Minter;
+import info.freelibrary.iiif.presentation.v3.ids.MinterFactory;
+import info.freelibrary.iiif.presentation.v3.properties.Label;
+import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 
 /**
- * Tests of {@code TaggingAnnotation}.
+ * Tests {@code TaggingAnnotation}.
  */
 public class TaggingAnnotationTest {
 
-    /** An annotation ID. */
-    private static final String ANNO_ID = "https://iiif.io/api/cookbook/recipe/0021-tagging/annotation/p0002-tag";
+    /** A persistent ID to use in testing. */
+    private static final String ID = "https://example.com/asdf";
 
-    /** A canvas ID. */
-    private static final String CANVAS_ID = "https://iiif.io/api/cookbook/recipe/0021-tagging/canvas/p1";
+    /** A pattern to use when testing IDs. */
+    private static final String ID_PATTERN = "https://example.com/asdf/annotations/anno-";
 
-    /** An annotation that can be used in testing. */
-    private static final File JSON_FILE = new File("src/test/resources/json/tagging-annotation.json");
+    /** A minter to use in testing. */
+    private Minter myMinter;
 
     /**
-     * Tests the {@code TaggingAnnotation#toString()}.
-     *
-     * @throws JsonProcessingException If there is trouble serializing a <code>TaggingAnnotation</code>
-     * @throws IOException If there is trouble reading the test JSON annotation file
+     * Sets up the test environment.
      */
-    @Test
-    public final void testToString() throws IOException {
-        final String expected = StringUtils.read(JSON_FILE, StandardCharsets.UTF_8);
-        final TaggingAnnotation tagging = new TaggingAnnotation(ANNO_ID, new Canvas(CANVAS_ID));
-        final TextualBody body = new TextualBody();
-
-        body.setLanguage("de").setFormat(MediaType.TEXT_PLAIN).setValue("Gänseliesel-Brunnen");
-        tagging.setBody(body);
-
-        assertEquals(expected, tagging.toString());
+    @Before
+    public final void setUp() {
+        myMinter = MinterFactory.getMinter(new Manifest(ID, new Label("A label")));
     }
 
+    /**
+     * Test method for {@link TaggingAnnotation#setMotivation(Motivation)}.
+     */
+    @Test
+    public final void testSetMotivationMotivation() {
+        assertTrue(new TaggingAnnotation(myMinter).setMotivation(Motivation.fromLabel(Purpose.TAGGING)).getID()
+                .startsWith(ID_PATTERN));
+    }
+
+    /**
+     * Test method for {@link TaggingAnnotation#setMotivation(Motivation)}.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public final void testSetMotivationMotivationBad() {
+        assertTrue(new TaggingAnnotation(myMinter).setMotivation(Motivation.fromLabel(Purpose.ASSESSING)).getID()
+                .startsWith(ID_PATTERN));
+    }
+
+    /**
+     * Test method for {@link TaggingAnnotation#TaggingAnnotation(Minter)}.
+     */
+    @Test
+    public final void testTaggingAnnotationMinter() {
+        assertTrue(new TaggingAnnotation(myMinter).getID().startsWith(ID_PATTERN));
+    }
+
+    /**
+     * Test method for {@link TaggingAnnotation#TaggingAnnotation(Minter, CanvasResource)}.
+     */
+    @Test
+    public final void testTaggingAnnotationMinterCanvasResourceOfC() {
+        assertTrue(new TaggingAnnotation(myMinter, new Canvas(myMinter)).getID().startsWith(ID_PATTERN));
+    }
+
+    /**
+     * Test method for {@link TaggingAnnotation#TaggingAnnotation(Minter, CanvasResource, MediaFragmentSelector)}.
+     */
+    @Test
+    public final void testTaggingAnnotationMinterCanvasResourceOfCMediaFragmentSelector() {
+        assertTrue(new TaggingAnnotation(myMinter, new Canvas(myMinter), new MediaFragmentSelector(0, 0, 100, 100))
+                .getID().startsWith(ID_PATTERN));
+    }
+
+    /**
+     * Test method for {@link TaggingAnnotation#TaggingAnnotation(Minter, CanvasResource, String)}.
+     */
+    @Test
+    public final void testTaggingAnnotationMinterCanvasResourceOfCString() {
+        assertTrue(new TaggingAnnotation(myMinter, new Canvas(myMinter), "xywh=0,0,100,100").getID()
+                .startsWith(ID_PATTERN));
+    }
+
+    /**
+     * Test method for {@link TaggingAnnotation#TaggingAnnotation(String, CanvasResource)}.
+     */
+    @Test
+    public final void testTaggingAnnotationStringCanvasResourceOfC() {
+        assertTrue(
+                new TaggingAnnotation(ID_PATTERN + getRandom(), new Canvas(myMinter)).getID().startsWith(ID_PATTERN));
+    }
+
+    /**
+     * Test method for {@link TaggingAnnotation#TaggingAnnotation(String, CanvasResource, MediaFragmentSelector)}.
+     */
+    @Test
+    public final void testTaggingAnnotationStringCanvasResourceOfCMediaFragmentSelector() {
+        assertTrue(new TaggingAnnotation(ID_PATTERN + getRandom(), new Canvas(myMinter),
+                new MediaFragmentSelector("xywh=0,0,200,200")).getID().startsWith(ID_PATTERN));
+    }
+
+    /**
+     * Test method for {@link TaggingAnnotation#TaggingAnnotation(String, CanvasResource, String)}.
+     */
+    @Test
+    public final void testTaggingAnnotationStringCanvasResourceOfCString() {
+        assertTrue(new TaggingAnnotation(ID_PATTERN + getRandom(), new Canvas(myMinter), "xywh=0,0,150,150").getID()
+                .startsWith(ID_PATTERN));
+    }
+
+    /**
+     * Test method for {@link TaggingAnnotation#TaggingAnnotation(String, Manifest)}.
+     */
+    @Test
+    public final void testTaggingAnnotationStringManifest() {
+        assertTrue(new TaggingAnnotation(ID_PATTERN + getRandom(),
+                new Manifest(ID_PATTERN + getRandom(), new Label("Label"))).getID().startsWith(ID_PATTERN));
+    }
+
+    /**
+     * Test method for {@link TaggingAnnotation#TaggingAnnotation(String, Target)}.
+     */
+    @Test
+    public final void testTaggingAnnotationStringTarget() {
+        assertTrue(new TaggingAnnotation(ID_PATTERN + getRandom(), new Target(new Canvas(myMinter))).getID()
+                .startsWith(ID_PATTERN));
+    }
 }
