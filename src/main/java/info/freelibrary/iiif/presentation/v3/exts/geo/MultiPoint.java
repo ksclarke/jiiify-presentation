@@ -93,7 +93,7 @@ public class MultiPoint implements Geometry {
                     throw new NoSuchElementException();
                 }
 
-                return myPoints[myIndex--];
+                return myPoints[--myIndex];
             }
 
             @Override

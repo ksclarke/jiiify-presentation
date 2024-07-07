@@ -113,7 +113,7 @@ public class LineString implements Geometry {
                     throw new NoSuchElementException();
                 }
 
-                return myPoints[myIndex--];
+                return myPoints[--myIndex];
             }
 
             @Override
@@ -176,6 +176,6 @@ public class LineString implements Geometry {
         stream().forEach(point -> builder.append(point.toString()).append(", "));
         length = builder.length();
 
-        return builder.delete(length - 2, length - 1).append(']').toString();
+        return builder.delete(length - 2, length).append(']').toString();
     }
 }

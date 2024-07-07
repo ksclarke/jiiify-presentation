@@ -116,7 +116,7 @@
   <entry key="JPA-144">The supplementWith() method cannot be usd if the canvas doesn't have a minter set </entry>
   <entry key="JPA-145">Internationalizations must be submitted in an array that alternates between language codes and
     string values</entry>
-  <entry key="JPA-146"></entry>
+  <entry key="JPA-146">{} is not a valid navPlace type</entry>
   <entry key="JPA-147"></entry>
   <entry key="JPA-148"></entry>
 </properties>

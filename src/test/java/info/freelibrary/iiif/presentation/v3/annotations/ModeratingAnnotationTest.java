@@ -2,11 +2,13 @@
 package info.freelibrary.iiif.presentation.v3.annotations;
 
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.getRandom;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.Canvas;
 import info.freelibrary.iiif.presentation.v3.CanvasResource;
 import info.freelibrary.iiif.presentation.v3.Manifest;
@@ -128,9 +130,11 @@ public class ModeratingAnnotationTest {
     /**
      * Test method for {@link ModeratingAnnotation#setMotivation(Motivation)}.
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public final void testSetMotivationMotivationBad() {
-        assertTrue(new ModeratingAnnotation(myMinter).setMotivation(Motivation.fromLabel(Purpose.ASSESSING)).getID()
-                .startsWith(ID_PATTERN));
+        final Annotation<WebAnnotation> anno = new ModeratingAnnotation(myMinter);
+        final Motivation motivation = Motivation.fromLabel(Purpose.ASSESSING);
+
+        assertThrows(IllegalArgumentException.class, () -> anno.setMotivation(motivation));
     }
 }

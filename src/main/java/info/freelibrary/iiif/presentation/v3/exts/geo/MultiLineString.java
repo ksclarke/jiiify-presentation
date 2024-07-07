@@ -103,7 +103,7 @@ public class MultiLineString implements Geometry {
                     throw new NoSuchElementException();
                 }
 
-                return myLineStrings[myIndex--];
+                return myLineStrings[--myIndex];
             }
 
             @Override
@@ -147,13 +147,13 @@ public class MultiLineString implements Geometry {
      * @return A 3D array representation of a <code>MultiLineString</code>
      */
     public double[][][] toArray() {
-        final int total = stream().mapToInt(LineString::length).sum();
-        final double[][][] matrix = new double[size()][total][2];
+        final int countTotal = stream().mapToInt(LineString::length).sum() / size();
+        final double[][][] matrix = new double[size()][countTotal][2];
 
         for (int index = 0; index < size(); index++) {
             final LineString lineString = get(index);
 
-            for (int count = 0; count < total; count++) {
+            for (int count = 0; count < countTotal; count++) {
                 matrix[index][count][0] = lineString.getX(count);
                 matrix[index][count][1] = lineString.getY(count);
             }

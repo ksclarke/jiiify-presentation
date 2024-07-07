@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3.exts.geo;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
@@ -10,13 +12,14 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+import info.freelibrary.iiif.presentation.v3.ids.UriUtils;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
  * A spatially bounded thing.
  */
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(NON_EMPTY)
 public class NavPlaceFeature {
 
     /** The NavPlaceFeature's logger. */
@@ -47,7 +50,7 @@ public class NavPlaceFeature {
      * @param aID A feature ID
      */
     public NavPlaceFeature(final String aID) {
-        myID = aID;
+        myID = UriUtils.checkID(aID, true);
     }
 
     /**
@@ -76,8 +79,8 @@ public class NavPlaceFeature {
      * @return The navPlace feature ID
      */
     @JsonGetter(JsonKeys.ID)
-    public String getID() {
-        return myID;
+    public Optional<String> getID() {
+        return Optional.ofNullable(myID);
     }
 
     /**
@@ -160,7 +163,7 @@ public class NavPlaceFeature {
     @JsonSetter(JsonKeys.TYPE)
     private void setType(final String aType) {
         if (!JsonKeys.FEATURE.equals(aType)) {
-            throw new IllegalArgumentException(LOGGER.getMessage("{} is not a valid navPlace type", aType));
+            throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_146, aType));
         }
     }
 }

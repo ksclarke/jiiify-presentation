@@ -13,10 +13,11 @@ import java.util.stream.Stream;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import info.freelibrary.util.warnings.PMD;
+
 import info.freelibrary.iiif.presentation.v3.properties.Property;
 import info.freelibrary.iiif.presentation.v3.utils.json.PropertiesDeserializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.PropertiesSerializer;
-import info.freelibrary.util.warnings.PMD;
 
 /**
  * A wrapper for I18n properties.
@@ -87,7 +88,11 @@ public class Properties implements Iterable<Property> {
 
     @Override
     public boolean equals(final Object aObject) {
-        return aObject instanceof Properties && myProperties.equals(aObject);
+        if (aObject instanceof final Properties properties) {
+            return myProperties.equals(properties.myProperties);
+        }
+
+        return false;
     }
 
     /**

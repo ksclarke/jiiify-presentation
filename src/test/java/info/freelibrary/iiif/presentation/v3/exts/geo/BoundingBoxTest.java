@@ -2,24 +2,14 @@
 package info.freelibrary.iiif.presentation.v3.exts.geo;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Tests of {@code BoundingBox}.
  */
 public class BoundingBoxTest {
-
-    /**
-     * Sets up the testing environment.
-     * 
-     * @throws Exception
-     */
-    @Before
-    public void setUp() throws Exception {
-    }
 
     /**
      * Test method for {@link BoundingBox#BoundingBox(BoundingBox)}.
@@ -29,10 +19,10 @@ public class BoundingBoxTest {
         final BoundingBox box = new BoundingBox(0, 0, 10, 10);
         final BoundingBox testBox = new BoundingBox(box);
 
-        assertEquals(0, testBox.getWest());
-        assertEquals(0, testBox.getSouth());
-        assertEquals(10, testBox.getEast());
-        assertEquals(10, testBox.getNorth());
+        assertEquals(0, testBox.getWest(), 0.0001f);
+        assertEquals(0, testBox.getSouth(), 0.0001f);
+        assertEquals(10, testBox.getEast(), 0.0001f);
+        assertEquals(10, testBox.getNorth(), 0.0001f);
     }
 
     /**
@@ -40,7 +30,12 @@ public class BoundingBoxTest {
      */
     @Test
     public final void testBoundingBoxDoubleDoubleDoubleDouble() {
-        fail("Not yet implemented");
+        final BoundingBox testBox = new BoundingBox(0, 0, 10, 10);
+
+        assertEquals(0, testBox.getWest(), 0.0001f);
+        assertEquals(0, testBox.getSouth(), 0.0001f);
+        assertEquals(10, testBox.getEast(), 0.0001f);
+        assertEquals(10, testBox.getNorth(), 0.0001f);
     }
 
     /**
@@ -48,55 +43,14 @@ public class BoundingBoxTest {
      */
     @Test
     public final void testBoundingBoxDoubleDoubleDoubleDoubleDoubleDouble() {
-        fail("Not yet implemented");
-    }
+        final BoundingBox testBox = new BoundingBox(0, 0, 0, 10, 10, 10);
 
-    /**
-     * Test method for {@link BoundingBox#getEast()}.
-     */
-    @Test
-    public final void testGetEast() {
-        fail("Not yet implemented");
-    }
-
-    /**
-     * Test method for {@link BoundingBox#getMaxAltitude()}.
-     */
-    @Test
-    public final void testGetMaxAltitude() {
-        fail("Not yet implemented");
-    }
-
-    /**
-     * Test method for {@link BoundingBox#getMinAltitude()}.
-     */
-    @Test
-    public final void testGetMinAltitude() {
-        fail("Not yet implemented");
-    }
-
-    /**
-     * Test method for {@link BoundingBox#getNorth()}.
-     */
-    @Test
-    public final void testGetNorth() {
-        fail("Not yet implemented");
-    }
-
-    /**
-     * Test method for {@link BoundingBox#getSouth()}.
-     */
-    @Test
-    public final void testGetSouth() {
-        fail("Not yet implemented");
-    }
-
-    /**
-     * Test method for {@link BoundingBox#getWest()}.
-     */
-    @Test
-    public final void testGetWest() {
-        fail("Not yet implemented");
+        assertEquals(0, testBox.getWest(), 0.0001f);
+        assertEquals(0, testBox.getSouth(), 0.0001f);
+        assertEquals(0, testBox.getMinAltitude().getAsDouble(), 0.0001f);
+        assertEquals(10, testBox.getEast(), 0.0001f);
+        assertEquals(10, testBox.getNorth(), 0.0001f);
+        assertEquals(10, testBox.getMaxAltitude().getAsDouble(), 0.0001f);
     }
 
     /**
@@ -104,7 +58,7 @@ public class BoundingBoxTest {
      */
     @Test
     public final void testSetEast() {
-        fail("Not yet implemented");
+        assertEquals(15, new BoundingBox(0, 0, 10, 10).setEast(15).getEast(), 0.0001f);
     }
 
     /**
@@ -112,7 +66,16 @@ public class BoundingBoxTest {
      */
     @Test
     public final void testSetMaxAltitude() {
-        fail("Not yet implemented");
+        assertEquals(15, new BoundingBox(0, 0, 0, 10, 10, 10).setMaxAltitude(15).getMaxAltitude().getAsDouble(),
+                0.0001f);
+    }
+
+    /**
+     * Test method for {@link BoundingBox#setMaxAltitude(double)}.
+     */
+    @Test
+    public final void testSetMaxAltitudeEmpty() {
+        assertTrue(new BoundingBox(0, 0, 10, 10).getMaxAltitude().isEmpty());
     }
 
     /**
@@ -120,7 +83,15 @@ public class BoundingBoxTest {
      */
     @Test
     public final void testSetMinAltitude() {
-        fail("Not yet implemented");
+        assertEquals(5, new BoundingBox(0, 0, 0, 10, 10, 10).setMinAltitude(5).getMinAltitude().getAsDouble(), 0.0001f);
+    }
+
+    /**
+     * Test method for {@link BoundingBox#setMinAltitude(double)}.
+     */
+    @Test
+    public final void testSetMinAltitudeEmpty() {
+        assertTrue(new BoundingBox(0, 0, 10, 10).getMinAltitude().isEmpty());
     }
 
     /**
@@ -128,7 +99,7 @@ public class BoundingBoxTest {
      */
     @Test
     public final void testSetNorth() {
-        fail("Not yet implemented");
+        assertEquals(15, new BoundingBox(0, 0, 10, 10).setNorth(15).getNorth(), 0.0001f);
     }
 
     /**
@@ -136,7 +107,7 @@ public class BoundingBoxTest {
      */
     @Test
     public final void testSetSouth() {
-        fail("Not yet implemented");
+        assertEquals(5, new BoundingBox(0, 0, 10, 10).setSouth(5).getSouth(), 0.0001f);
     }
 
     /**
@@ -144,7 +115,7 @@ public class BoundingBoxTest {
      */
     @Test
     public final void testSetWest() {
-        fail("Not yet implemented");
+        assertEquals(5, new BoundingBox(0, 0, 10, 10).setWest(5).getWest(), 0.0001f);
     }
 
 }
