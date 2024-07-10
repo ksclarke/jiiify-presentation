@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.JDK;
+import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.exts.geo.Geometry;
 import info.freelibrary.iiif.presentation.v3.exts.geo.LineString;
@@ -55,7 +56,8 @@ public class GeometryDeserializer extends StdDeserializer<Geometry> {
     @Override
     public Geometry deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException {
         final JsonNode currentNode = aParser.getCodec().readTree(aParser);
-        final String label = currentNode.get(JsonKeys.TYPE).asText();
+        final JsonNode typeNode = currentNode.get(JsonKeys.TYPE);
+        final String label = typeNode != null ? typeNode.asText() : null;
         final Optional<Geometry.Type> type = Geometry.Type.fromLabel(label);
         final JsonNode coordinates = currentNode.get(JsonKeys.COORDINATES);
 
@@ -82,15 +84,15 @@ public class GeometryDeserializer extends StdDeserializer<Geometry> {
      * @return A list of <code>LineString</code>s
      * @throws JsonMappingException If there is trouble deserializing the supplied JSON node
      */
-    @SuppressWarnings({ JDK.DEPRECATION })
+    @SuppressWarnings({ JDK.DEPRECATION, PMD.CYCLOMATIC_COMPLEXITY })
     private List<LineString> getLineStrings(final JsonNode aNode, final JsonParser aParser, final Geometry.Type aType)
             throws JsonMappingException {
         final ArrayList<LineString> lineStrings = new ArrayList<>();
         final Iterator<JsonNode> iterator;
 
-        if (!aNode.isArray()) {
+        if (aNode == null || !aNode.isArray()) {
             throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_049, aType),
-                    aParser.getCurrentLocation());
+                    aParser.currentLocation());
         }
 
         iterator = aNode.elements();
@@ -102,7 +104,7 @@ public class GeometryDeserializer extends StdDeserializer<Geometry> {
 
             if (!array.isArray()) {
                 throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_120, aType),
-                        aParser.getCurrentLocation());
+                        aParser.currentLocation());
             }
 
             arrayIterator = array.elements();
@@ -114,7 +116,7 @@ public class GeometryDeserializer extends StdDeserializer<Geometry> {
 
                 if (!childArray.isArray()) {
                     throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_120, aType),
-                            aParser.getCurrentLocation());
+                            aParser.currentLocation());
                 }
 
                 xCoordinate = childArray.get(0).asDouble();
@@ -143,9 +145,8 @@ public class GeometryDeserializer extends StdDeserializer<Geometry> {
         final double xCoordinate;
         final double yCoordinate;
 
-        if (!aNode.isArray()) {
-            throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_137, aType),
-                    aParser.getCurrentLocation());
+        if (aNode == null || !aNode.isArray()) {
+            throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_137, aType));
         }
 
         xCoordinate = aNode.get(0).asDouble();
@@ -169,9 +170,9 @@ public class GeometryDeserializer extends StdDeserializer<Geometry> {
         final ArrayList<Point> points = new ArrayList<>();
         final Iterator<JsonNode> iterator;
 
-        if (!aNode.isArray()) {
+        if (aNode == null || !aNode.isArray()) {
             throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_049, aType),
-                    aParser.getCurrentLocation());
+                    aParser.currentLocation());
         }
 
         iterator = aNode.elements();
@@ -183,7 +184,7 @@ public class GeometryDeserializer extends StdDeserializer<Geometry> {
 
             if (!array.isArray()) {
                 throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_120, aType),
-                        aParser.getCurrentLocation());
+                        aParser.currentLocation());
             }
 
             xCoordinate = array.get(0).asDouble();

@@ -24,6 +24,7 @@ import info.freelibrary.iiif.presentation.v3.annotations.QuestioningAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotations.ReplyingAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotations.TaggingAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotations.Target;
+import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
@@ -33,7 +34,7 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  * @param <A> A class that implements {@code Annotation}
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = JsonKeys.MOTIVATION,
-        visible = true)
+        visible = true, defaultImpl = WebAnnotation.class)
 @JsonSubTypes({ //
     @Type(value = AssessingAnnotation.class, name = "assessing"),
     @Type(value = BookmarkingAnnotation.class, name = "bookmarking"),
@@ -79,7 +80,7 @@ public interface Annotation<A extends Annotation<A>> {
      *
      * @return The motivation
      */
-    Motivation getMotivation();
+    Optional<Motivation> getMotivation();
 
     /**
      * Gets the target of this annotation.

@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3.annotations;
 
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import info.freelibrary.iiif.presentation.v3.utils.Labeled;
@@ -30,6 +32,30 @@ public class Motivation implements Labeled {
     public Motivation(final String aValue) {
         // Normalize the supplied string if it is a motivation/purpose value
         myLabel = Purpose.fromLabel(aValue).map(Purpose::label).orElse(aValue);
+    }
+
+    @Override
+    public boolean equals(final Object aObject) {
+        if (aObject instanceof final Motivation motivation) {
+            return myLabel.equals(motivation.myLabel);
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(myLabel);
+    }
+
+    /**
+     * Gets whether the supplied {@code Purpose} is the same as this {@code Motivation}.
+     *
+     * @param aPurpose A purpose to compare to this motivation
+     * @return True if the purpose's and the motivation's values are the same
+     */
+    public boolean isSameAs(final Purpose aPurpose) {
+        return myLabel.equals(aPurpose.toString());
     }
 
     /**

@@ -149,8 +149,8 @@ abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> e
      * @return The annotation's motivation
      */
     @JsonGetter(JsonKeys.MOTIVATION)
-    public Motivation getMotivation() {
-        return myMotivation;
+    public Optional<Motivation> getMotivation() {
+        return Optional.of(myMotivation);
     }
 
     /**

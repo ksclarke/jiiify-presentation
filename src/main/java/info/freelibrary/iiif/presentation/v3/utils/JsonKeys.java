@@ -93,25 +93,25 @@ public final class JsonKeys {
     /** A constant for the homepage property. */
     public static final String HOMEPAGE = "homepage";
 
-    /** The constants for the older value property. */
+    /** The constant for the older value property. */
     public static final String I18N_VALUE = "@value";
 
     /** The name of the ID property. */
     public static final String ID = "id";
 
-    /** The constants for the images property. */
+    /** The constant for the images property. */
     public static final String IMAGE_CONTENT = "images";
 
-    /** The constants for the item property. */
+    /** The constant for the item property. */
     public static final String ITEM = "item";
 
-    /** The constants for the items property. */
+    /** The constant for the items property. */
     public static final String ITEMS = "items";
 
     /** A constant for the label property. */
     public static final String LABEL = "label";
 
-    /** The constants for the language property. */
+    /** The constant for the language property. */
     public static final String LANGUAGE = "language";
 
     /** The last AnnotationPage in an AnnotationCollection. */
@@ -120,13 +120,13 @@ public final class JsonKeys {
     /** A constant for the logo property. */
     public static final String LOGO = "logo";
 
-    /** The constants for the manifests property. */
+    /** The constant for the manifests property. */
     public static final String MANIFESTS = "manifests";
 
     /** A constant for the metadata property. */
     public static final String METADATA = "metadata";
 
-    /** The constants for the motivation property. */
+    /** The constant for the motivation property. */
     public static final String MOTIVATION = "motivation";
 
     /** The constant for the navDate property. */
@@ -138,19 +138,19 @@ public final class JsonKeys {
     /** The next AnnotationPage in an AnnotationCollection. */
     public static final String NEXT = "next";
 
-    /** The constants for the otherContent property. */
+    /** The constant for the otherContent property. */
     public static final String OTHER_CONTENT = "otherContent";
 
     /** A constant for the partOf property. */
     public static final String PART_OF = "partOf";
 
-    /** The constants for the physicalScale property. */
+    /** The constant for the physicalScale property. */
     public static final String PHYSICAL_SCALE = "physicalScale";
 
-    /** The constants for the physicalUnits property. */
+    /** The constant for the physicalUnits property. */
     public static final String PHYSICAL_UNITS = "physicalUnits";
 
-    /** The constants for the placeholderCanvas property. */
+    /** The constant for the placeholderCanvas property. */
     public static final String PLACEHOLDER_CANVAS = "placeholderCanvas";
 
     /** A constant for the profile property. */
@@ -171,10 +171,10 @@ public final class JsonKeys {
     /** A constant for the requiredStatement property. */
     public static final String REQUIRED_STATEMENT = "requiredStatement";
 
-    /** The constants for the resource property. */
+    /** The constant for the resource property. */
     public static final String RESOURCE = "resource";
 
-    /** The constants for the resources property. */
+    /** The constant for the resources property. */
     public static final String RESOURCES = "resources";
 
     /** A constant for the rights property. */
@@ -183,7 +183,7 @@ public final class JsonKeys {
     /** The constant for the seeAlso property. */
     public static final String SEE_ALSO = "seeAlso";
 
-    /** The constants for the selector property. */
+    /** The constant for the selector property. */
     public static final String SELECTOR = "selector";
 
     /** A constant for the service property. */
@@ -192,10 +192,10 @@ public final class JsonKeys {
     /** A constant for the services property. */
     public static final String SERVICES = "services";
 
-    /** The constants for the source property. */
+    /** The constant for the source property. */
     public static final String SOURCE = "source";
 
-    /** The constants for the start property. */
+    /** The constant for the start property. */
     public static final String START = "start";
 
     /** A constant for the structures property. */
@@ -210,10 +210,10 @@ public final class JsonKeys {
     /** The constant for the summary property. */
     public static final String SUMMARY = "summary";
 
-    /** The constants for the supplementary property. */
+    /** The constant for the supplementary property. */
     public static final String SUPPLEMENTARY = "supplementary";
 
-    /** The constants for the target property. */
+    /** The constant for the target property. */
     public static final String TARGET = "target";
 
     /** A property name for the pattern for indicating the level of text granularity for a supplementing annotation. */
@@ -234,7 +234,7 @@ public final class JsonKeys {
     /** A constant for the older type property. */
     public static final String V2_TYPE = "@type";
 
-    /** The constants for the value property. */
+    /** The constant for the value property. */
     public static final String VALUE = "value";
 
     /** The constant for the viewingDirection property. */

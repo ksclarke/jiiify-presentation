@@ -101,8 +101,9 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
         };
 
         final JsonNode node = aParser.getCodec().readTree(aParser);
+        final JsonNode motivationNode = node.get(JsonKeys.MOTIVATION);
+        final String motivation = motivationNode == null ? null : motivationNode.asText();
         final String id = sneaky(check).apply(JsonKeys.ID, node.get(JsonKeys.ID));
-        final String motivation = sneaky(check).apply(JsonKeys.MOTIVATION, node.get(JsonKeys.MOTIVATION));
         final WebAnnotation annotation = getAnnotation(id, motivation, node, aParser);
         final Optional<TimeMode> timeMode = getTimeMode(node.get(JsonKeys.TIMEMODE));
         final Optional<Label> label = getLabel(node.get(JsonKeys.LABEL));
@@ -169,7 +170,8 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
             };
         }
 
-        return new WebAnnotation(aID, getTarget(targetNode, aParser)).setMotivation(Motivation.fromLabel(aMotivation));
+        return aMotivation != null ? new WebAnnotation(aID, getTarget(targetNode, aParser)).setMotivation(
+                Motivation.fromLabel(aMotivation)) : new WebAnnotation(aID, getTarget(targetNode, aParser));
     }
 
     /**

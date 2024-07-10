@@ -69,6 +69,16 @@ public enum Purpose implements Labeled {
         myLabel = aLabel;
     }
 
+    /**
+     * Gets whether the value of this {@code Purpose} is the same as the supplied {@code Motivation}'s value.
+     *
+     * @param aMotivation A motivation to compare to this purpose
+     * @return True if the motivation and the purpose are the same
+     */
+    public boolean isSameAs(final Motivation aMotivation) {
+        return myLabel.equals(aMotivation.toString());
+    }
+
     @Override
     @JsonValue
     public String label() {

@@ -23,6 +23,7 @@ import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.ContentResource;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.annotations.Motivation;
 import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
@@ -52,7 +53,7 @@ public class WebAnnotationSerializer extends StdSerializer<WebAnnotation> {
     public void serialize(final WebAnnotation aWebAnnotation, final JsonGenerator aJsonGenerator,
             final SerializerProvider aProvider) throws IOException {
         final List<ContentResource> resources = aWebAnnotation.getBody();
-        final String motivation = aWebAnnotation.getMotivation().toString();
+        final Optional<Motivation> motivation = aWebAnnotation.getMotivation();
         final Optional<TimeMode> timeMode = aWebAnnotation.getTimeMode();
         final Optional<Label> label = aWebAnnotation.getLabel();
 
@@ -70,7 +71,11 @@ public class WebAnnotationSerializer extends StdSerializer<WebAnnotation> {
             aJsonGenerator.writeStartObject();
             aJsonGenerator.writeObjectField(JsonKeys.ID, sneaky(check).apply(JsonKeys.ID, aWebAnnotation.getID()));
             aJsonGenerator.writeObjectField(JsonKeys.TYPE, ResourceTypes.ANNOTATION);
-            aJsonGenerator.writeObjectField(JsonKeys.MOTIVATION, sneaky(check).apply(JsonKeys.MOTIVATION, motivation));
+
+            if (motivation.isPresent()) {
+                aJsonGenerator.writeObjectField(JsonKeys.MOTIVATION,
+                        sneaky(check).apply(JsonKeys.MOTIVATION, motivation.get().toString()));
+            }
 
             if (label.isPresent()) {
                 aJsonGenerator.writeObjectField(JsonKeys.LABEL, label.get());

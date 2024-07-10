@@ -189,8 +189,8 @@ public class WebAnnotation implements Annotation<WebAnnotation> {
      */
     @Override
     @JsonGetter(JsonKeys.MOTIVATION)
-    public Motivation getMotivation() {
-        return myMotivation;
+    public Optional<Motivation> getMotivation() {
+        return Optional.ofNullable(myMotivation);
     }
 
     /**
@@ -284,6 +284,11 @@ public class WebAnnotation implements Annotation<WebAnnotation> {
      */
     @Override
     public WebAnnotation setMotivation(final Motivation aMotivation) {
+        if (Purpose.PAINTING.toString().equalsIgnoreCase(aMotivation.toString()) ||
+                Purpose.SUPPLEMENTING.toString().equalsIgnoreCase(aMotivation.toString())) {
+            throw new IllegalArgumentException(aMotivation.toString());
+        }
+
         myMotivation = aMotivation;
         return this;
     }
