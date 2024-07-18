@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.assertOptEquals;
 import static org.junit.Assert.assertEquals;
 
 import java.util.UUID;
@@ -18,14 +19,10 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  */
 public class AuthCookieServiceTest {
 
-    /**
-     * A test ID.
-     */
+    /** A test ID. */
     private String myID;
 
-    /**
-     * A test label.
-     */
+    /** A test label. */
     private String myLabel;
 
     /**
@@ -91,7 +88,7 @@ public class AuthCookieServiceTest {
         final String failureDescription = "This is a failure description";
 
         service.setFailureDescription(failureDescription);
-        assertEquals(failureDescription, service.getFailureDescription());
+        assertOptEquals(failureDescription, service.getFailureDescription());
         assertEquals(failureDescription, JSON.valueToTree(service).get(JsonKeys.FAILURE_DESCRIPTION).asText());
     }
 
@@ -106,7 +103,7 @@ public class AuthCookieServiceTest {
         final String failureHeader = "This is a failure header";
 
         service.setFailureHeader(failureHeader);
-        assertEquals(failureHeader, service.getFailureHeader());
+        assertOptEquals(failureHeader, service.getFailureHeader());
         assertEquals(failureHeader, JSON.valueToTree(service).get(JsonKeys.FAILURE_HEADER).asText());
     }
 
@@ -136,9 +133,10 @@ public class AuthCookieServiceTest {
         final String newID = new StringBuilder(myID).reverse().toString();
 
         assertEquals(myID, JSON.valueToTree(service).get(JsonKeys.V2_ID).asText());
+
         service.setID(newID);
         assertEquals(newID, JSON.valueToTree(service).get(JsonKeys.V2_ID).asText());
-        assertEquals(newID, service.getID());
+        assertEquals(newID, service.getID().get());
     }
 
     /**

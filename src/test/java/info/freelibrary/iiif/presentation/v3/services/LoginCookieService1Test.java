@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.assertOptEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -8,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,14 +19,10 @@ import info.freelibrary.iiif.presentation.v3.Service;
  */
 public class LoginCookieService1Test {
 
-    /**
-     * A unique ID used in testing.
-     */
+    /** A unique ID used in testing. */
     private static String myID;
 
-    /**
-     * A unique string to use in testing.
-     */
+    /** A unique string to use in testing. */
     private static String myLabel;
 
     /**
@@ -68,7 +64,7 @@ public class LoginCookieService1Test {
         final LoginCookieService1 service = new LoginCookieService1(myID, myLabel);
         final String failureDescription = UUID.randomUUID().toString();
 
-        assertEquals(failureDescription, service.setFailureDescription(failureDescription).getFailureDescription());
+        assertOptEquals(failureDescription, service.setFailureDescription(failureDescription).getFailureDescription());
     }
 
     /**
@@ -79,7 +75,7 @@ public class LoginCookieService1Test {
         final LoginCookieService1 service = new LoginCookieService1(myID, myLabel);
         final String failureHeader = UUID.randomUUID().toString();
 
-        assertEquals(failureHeader, service.setFailureHeader(failureHeader).getFailureHeader());
+        assertOptEquals(failureHeader, service.setFailureHeader(failureHeader).getFailureHeader());
     }
 
     /**
@@ -98,7 +94,7 @@ public class LoginCookieService1Test {
      */
     @Test
     public final void testGetID() {
-        Assert.assertEquals(myID, new LoginCookieService1(myID, myLabel).getID());
+        assertOptEquals(myID, new LoginCookieService1(myID, myLabel).getID());
     }
 
     /**
@@ -114,7 +110,7 @@ public class LoginCookieService1Test {
      */
     @Test
     public final void testGetProfile() {
-        assertEquals(AuthCookieService.Profile.LOGIN, new LoginCookieService1(myID, myLabel).getProfile().get());
+        assertOptEquals(AuthCookieService.Profile.LOGIN, new LoginCookieService1(myID, myLabel).getProfile());
     }
 
     /**
@@ -122,7 +118,7 @@ public class LoginCookieService1Test {
      */
     @Test
     public final void testGetType() {
-        assertEquals(LoginCookieService1.TYPE, new LoginCookieService1(myID, myLabel).getType());
+        assertOptEquals(LoginCookieService1.TYPE, new LoginCookieService1(myID, myLabel).getType());
     }
 
     /**
@@ -132,7 +128,7 @@ public class LoginCookieService1Test {
     public final void testLoginCookieService1StringString() {
         final LoginCookieService1 service = new LoginCookieService1(myID, myLabel);
 
-        assertEquals(myID, service.getID());
+        assertOptEquals(myID, service.getID());
         assertEquals(myLabel, service.getLabel());
     }
 

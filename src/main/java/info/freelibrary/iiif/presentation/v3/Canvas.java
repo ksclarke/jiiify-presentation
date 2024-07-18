@@ -207,7 +207,7 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
 
     @Override
     public final Canvas supplementWith(final boolean aChoice, final List<ContentResource> aContentList) {
-        return super.supplement(this, aChoice, aContentList.toArray(new ContentResource[0]));
+        return super.supplement(this, aChoice, aContentList);
     }
 
     @Override
@@ -218,7 +218,7 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
 
     @Override
     public final Canvas supplementWith(final List<ContentResource> aContentList) {
-        return super.supplement(this, false, aContentList.toArray(new ContentResource[0]));
+        return super.supplement(this, false, aContentList);
     }
 
     @Override
@@ -231,7 +231,7 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     @Override
     public final Canvas supplementWith(final MediaFragmentSelector aCanvasRegion, final boolean aChoice,
             final List<ContentResource> aContentList) {
-        return super.supplement(this, aCanvasRegion, aChoice, aContentList.toArray(new ContentResource[0]));
+        return super.supplement(this, aCanvasRegion, aChoice, aContentList);
     }
 
     @Override
@@ -244,7 +244,7 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     @Override
     public final Canvas supplementWith(final MediaFragmentSelector aCanvasRegion,
             final List<ContentResource> aContentList) {
-        return super.supplement(this, aCanvasRegion, false, aContentList.toArray(new ContentResource[0]));
+        return super.supplement(this, aCanvasRegion, false, aContentList);
     }
 
     @Override
@@ -257,8 +257,7 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     @Override
     public final Canvas supplementWith(final String aCanvasRegion, final boolean aChoice,
             final List<ContentResource> aContentList) {
-        return super.supplement(this, new MediaFragmentSelector(aCanvasRegion), aChoice,
-                aContentList.toArray(new ContentResource[0]));
+        return super.supplement(this, new MediaFragmentSelector(aCanvasRegion), aChoice, aContentList);
     }
 
     @Override
@@ -269,8 +268,7 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
 
     @Override
     public final Canvas supplementWith(final String aCanvasRegion, final List<ContentResource> aContentList) {
-        return super.supplement(this, new MediaFragmentSelector(aCanvasRegion), false,
-                aContentList.toArray(new ContentResource[0]));
+        return super.supplement(this, new MediaFragmentSelector(aCanvasRegion), false, aContentList);
     }
 
     @Override

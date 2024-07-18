@@ -2,6 +2,7 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
   <entry key="message-class-name">info.freelibrary.iiif.presentation.v3.utils.MessageCodes</entry>
+  <entry key="JPA-000">There was an unexpected error</entry>
   <entry key="JPA-001">Property value cannot be null</entry>
   <entry key="JPA-002">Label cannot be null</entry>
   <entry key="JPA-003">ID value cannot be null</entry>
@@ -47,7 +48,6 @@
   <entry key="JPA-044">Unable to add metadata: {}</entry>
   <entry key="JPA-045">Unable to add required statement: {}</entry>
   <entry key="JPA-046">Unable to add rights URLs: {}</entry>
-  A '{}' geometry array should contain an array
   <entry key="JPA-047">Unable to add seeAlso: {}</entry>
   <entry key="JPA-048">Unable to add ServiceImage to ServiceProperty: {}</entry>
   <entry key="JPA-049">A '{}' geometry should contain a coordinates array</entry>
@@ -117,6 +117,6 @@
   <entry key="JPA-145">Internationalizations must be submitted in an array that alternates between language codes and
     string values</entry>
   <entry key="JPA-146">{} is not a valid navPlace type</entry>
-  <entry key="JPA-147"></entry>
-  <entry key="JPA-148"></entry>
+  <entry key="JPA-147">A physical dimensions service must contain scale and units</entry>
+  <entry key="JPA-148">Supplied Optional was unexpectedly empty</entry>
 </properties>

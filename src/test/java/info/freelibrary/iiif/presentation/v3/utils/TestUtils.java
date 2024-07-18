@@ -14,6 +14,7 @@ import java.util.Base64;
 import java.util.Base64.Encoder;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.Assert;
@@ -22,6 +23,8 @@ import org.junit.rules.TestName;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SequenceWriter;
 
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
@@ -43,6 +46,9 @@ public final class TestUtils {
 
     /** The JSON properties that are okay to collapse. */
     private static final List<String> COLLAPSIBLES = Arrays.asList(CONTEXT);
+
+    /** The logger for the test utilities. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestUtils.class, MessageCodes.BUNDLE);
 
     /**
      * Creates a new private test utilities class.
@@ -88,6 +94,22 @@ public final class TestUtils {
                 throw new AssertionError(details.getMessage());
             }
         }
+    }
+
+    /**
+     * A test utility to make working with {@code Optional}s easier.
+     *
+     * @param <T> A type of value
+     * @param aValue A value to test against
+     * @param anOptValue A value wrapped in an {@code Optional}
+     * @throws AssertionError The error thrown in the test fails
+     */
+    public static <T> void assertOptEquals(final T aValue, final Optional<T> anOptValue) throws AssertionError {
+        if (anOptValue.isEmpty()) {
+            throw new AssertionError(LOGGER.getMessage(MessageCodes.JPA_148));
+        }
+
+        Assert.assertEquals(aValue, anOptValue.get());
     }
 
     /**

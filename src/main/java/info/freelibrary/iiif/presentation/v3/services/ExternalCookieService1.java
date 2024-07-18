@@ -13,4 +13,5 @@ public class ExternalCookieService1 extends AbstractCookieService<ExternalCookie
     public ExternalCookieService1() {
         super(AuthCookieService.Profile.EXTERNAL);
     }
+
 }

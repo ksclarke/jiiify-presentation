@@ -46,6 +46,20 @@ public interface OtherService extends Service {
         }
 
         @Override
+        public boolean equals(final Object aObject) {
+            if (aObject instanceof final OtherService.Profile profile) {
+                return myLabel.equals(profile.myLabel);
+            }
+
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hashCode(myLabel);
+        }
+
+        @Override
         public String label() {
             return myLabel;
         }

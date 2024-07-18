@@ -89,6 +89,20 @@ class ServiceDeserializer extends StdDeserializer<Service> {
     }
 
     /**
+     * Checks that a required ID is found; else, a {@code JsonParseException} is thrown, wrapped in a
+     * {@code JsonProcessingException}.
+     *
+     * @param aID An optional ID
+     * @param aParser A JSON parser to extract parsing location from in case on an error
+     * @return An ID
+     * @throws JsonProcessingException If the expected ID cannot be found
+     */
+    private String checkID(final Optional<String> aID, final JsonParser aParser) throws JsonProcessingException {
+        return aID.orElseThrow(() -> new JsonParseException(aParser, LOGGER.getMessage(MessageCodes.JPA_111),
+                aParser.currentLocation()));
+    }
+
+    /**
      * Deserializes an image service's extra formats.
      *
      * @param aNode A JSON node
@@ -139,7 +153,6 @@ class ServiceDeserializer extends StdDeserializer<Service> {
      * @param aID A service ID
      * @return The GeoJSON service
      */
-    @SuppressWarnings(JDK.DEPRECATION)
     private Service deserializeGeoJsonService(final JsonNode aNode, final String aID) {
         final GeoJsonService service = new GeoJsonService(aID);
         final JsonNode typeNode = aNode.get(JsonKeys.TYPE);
@@ -229,17 +242,21 @@ class ServiceDeserializer extends StdDeserializer<Service> {
      *
      * @param aNode A JSON node
      * @param aID A service ID
+     * @param aParser A parser from which the current location can be extracted
      * @return The physical dims service
+     * @throws JsonParseException If there is trouble parsing the incoming JSON
      */
-    private Service deserializePhysicalDimsService(final JsonNode aNode, final String aID) {
+    private Service deserializePhysicalDimsService(final JsonNode aNode, final Optional<String> aID,
+            final JsonParser aParser) throws JsonParseException {
         final JsonNode scale = aNode.get(JsonKeys.PHYSICAL_SCALE);
         final JsonNode units = aNode.get(JsonKeys.PHYSICAL_UNITS);
 
         if (scale == null || units == null) {
-            return new PhysicalDimsService(aID);
+            throw new JsonParseException(aParser, LOGGER.getMessage(MessageCodes.JPA_147), aParser.currentLocation());
         }
 
-        return new PhysicalDimsService(aID).setDims(scale.asDouble(), units.textValue());
+        return aID.isPresent() ? new PhysicalDimsService(aID.get(), scale.asDouble(), units.textValue())
+                : new PhysicalDimsService(scale.asDouble(), units.textValue());
     }
 
     /**
@@ -261,7 +278,7 @@ class ServiceDeserializer extends StdDeserializer<Service> {
         } else if (aNode.isObject()) {
             final List<Service> services = getRelatedServices(aParser, aNode.get(JsonKeys.SERVICE));
             final JsonNode profileNode = aNode.get(JsonKeys.PROFILE);
-            final String id = getServiceID(aNode, aParser);
+            final Optional<String> id = getServiceID(aNode);
 
             if (profileNode != null) {
                 final Optional<Service.Profile> optProfile = Service.Profile.fromLabel(profileNode.asText());
@@ -270,35 +287,35 @@ class ServiceDeserializer extends StdDeserializer<Service> {
                     final Service.Profile serviceProfile = optProfile.get();
 
                     if (serviceProfile instanceof final ImageService3.Profile profile) {
-                        final ImageService imageService = new ImageService3(id, profile);
+                        final ImageService imageService = new ImageService3(checkID(id, aParser), profile);
                         service = deserializeImageService(aNode, imageService).setServices(services);
                     } else if (serviceProfile instanceof final ImageService2.Profile profile) {
-                        final ImageService imageService = new ImageService2(id, profile);
+                        final ImageService imageService = new ImageService2(checkID(id, aParser), profile);
                         service = deserializeImageService(aNode, imageService).setServices(services);
                     } else if (serviceProfile instanceof AuthCookieService.Profile) {
                         service = deserializeV1AuthCookieService(aParser, aNode, id).setServices(services);
                     } else if (serviceProfile instanceof AuthTokenService1.Profile) {
-                        service = new AuthTokenService1(id);
+                        service = new AuthTokenService1(checkID(id, aParser));
                     } else if (serviceProfile instanceof PhysicalDimsService.Profile) {
-                        service = deserializePhysicalDimsService(aNode, id).setServices(services);
+                        service = deserializePhysicalDimsService(aNode, id, aParser).setServices(services);
                     } else {
-                        service = deserializeOtherService(aNode, id).setServices(services);
+                        service = deserializeOtherService(aNode, checkID(id, aParser)).setServices(services);
                     }
                 } else {
-                    service = deserializeOtherService(aNode, id).setServices(services);
+                    service = deserializeOtherService(aNode, checkID(id, aParser)).setServices(services);
                 }
             } else {
                 final JsonNode contextNode = aNode.get(JsonKeys.CONTEXT);
 
                 if (contextNode != null && GeoJsonService.CONTEXT.equals(contextNode.asText())) {
-                    service = deserializeGeoJsonService(aNode, id).setServices(services);
+                    service = deserializeGeoJsonService(aNode, checkID(id, aParser)).setServices(services);
                 } else {
-                    service = deserializeOtherService(aNode, id).setServices(services);
+                    service = deserializeOtherService(aNode, checkID(id, aParser)).setServices(services);
                 }
             }
         } else {
             throw new JsonParseException(aParser, LOGGER.getMessage(MessageCodes.JPA_016, aNode.getClass().getName()),
-                    aParser.getCurrentLocation());
+                    aParser.currentLocation());
         }
 
         return service;
@@ -367,9 +384,8 @@ class ServiceDeserializer extends StdDeserializer<Service> {
      * @return The v1 auth cookie service
      * @throws JsonParseException If there is trouble parsing the JSON
      */
-    @SuppressWarnings(JDK.DEPRECATION)
-    private Service deserializeV1AuthCookieService(final JsonParser aParser, final JsonNode aNode, final String aID)
-            throws JsonParseException {
+    private Service deserializeV1AuthCookieService(final JsonParser aParser, final JsonNode aNode,
+            final Optional<String> aID) throws JsonParseException {
         final String profile = aNode.get(JsonKeys.PROFILE).asText(); // To get here, presence has been confirmed
         final JsonNode failureDescription = aNode.get(JsonKeys.FAILURE_DESCRIPTION);
         final JsonNode failureHeader = aNode.get(JsonKeys.FAILURE_HEADER);
@@ -383,13 +399,21 @@ class ServiceDeserializer extends StdDeserializer<Service> {
             // User mediated cookie services must have a label
             if (labelNode == null) {
                 throw new JsonParseException(aParser, LOGGER.getMessage(MessageCodes.JPA_124, profile),
-                        aParser.getCurrentLocation());
+                        aParser.currentLocation());
             }
 
             if (AuthCookieService.Profile.LOGIN.toString().equals(profile)) {
-                wrapper = new UserMediatedServiceWrapper(new LoginCookieService1(aID, labelNode.textValue()));
+                wrapper =
+                        new UserMediatedServiceWrapper(new LoginCookieService1(
+                                aID.orElseThrow(() -> new JsonParseException(aParser,
+                                        LOGGER.getMessage(MessageCodes.JPA_111), aParser.currentLocation())),
+                                labelNode.textValue()));
             } else {
-                wrapper = new UserMediatedServiceWrapper(new ClickthroughCookieService1(aID, labelNode.textValue()));
+                wrapper =
+                        new UserMediatedServiceWrapper(new ClickthroughCookieService1(
+                                aID.orElseThrow(() -> new JsonParseException(aParser,
+                                        LOGGER.getMessage(MessageCodes.JPA_111), aParser.currentLocation())),
+                                labelNode.textValue()));
             }
 
             wrapper.setConfirmLabel(aNode.get(JsonKeys.CONFIRM_LABEL)).setHeader(aNode.get(JsonKeys.HEADER));
@@ -397,10 +421,11 @@ class ServiceDeserializer extends StdDeserializer<Service> {
         } else if (AuthCookieService.Profile.EXTERNAL.toString().equals(profile)) {
             cookieService = new ExternalCookieService1();
         } else if (AuthCookieService.Profile.KIOSK.toString().equals(profile)) {
-            cookieService = new KioskCookieService1(aID);
+            cookieService = new KioskCookieService1(aID.orElseThrow(() -> new JsonParseException(aParser,
+                    LOGGER.getMessage(MessageCodes.JPA_111), aParser.currentLocation())));
         } else {
             throw new JsonParseException(aParser, LOGGER.getMessage(MessageCodes.JPA_123, "AbstractCookieService"),
-                    aParser.getCurrentLocation());
+                    aParser.currentLocation());
         }
 
         getValue(failureHeader).ifPresent(cookieService::setFailureHeader);
@@ -439,27 +464,23 @@ class ServiceDeserializer extends StdDeserializer<Service> {
      * Gets the ID associated with the service.
      *
      * @param aNode A JSON node
-     * @param aParser A JSON parser
      * @return The ID associated with the service
-     * @throws JsonParseException If the service was lacking an ID
      */
-    @SuppressWarnings(JDK.DEPRECATION)
-    private String getServiceID(final JsonNode aNode, final JsonParser aParser) throws JsonParseException {
+    private Optional<String> getServiceID(final JsonNode aNode) {
         final JsonNode idNode = aNode.get(JsonKeys.ID);
         final JsonNode v2IdNode;
 
         if (idNode != null) {
-            return idNode.textValue();
+            return Optional.ofNullable(idNode.textValue());
         }
 
         v2IdNode = aNode.get(JsonKeys.V2_ID);
 
         if (v2IdNode != null) {
-            return v2IdNode.textValue();
+            return Optional.ofNullable(v2IdNode.textValue());
         }
 
-        // Assumption: All "other" services are going to have an ID; could return optional here if ever disproven
-        throw new JsonParseException(aParser, LOGGER.getMessage(MessageCodes.JPA_111), aParser.getCurrentLocation());
+        return Optional.empty();
     }
 
     /**
@@ -468,7 +489,6 @@ class ServiceDeserializer extends StdDeserializer<Service> {
      * @param aNode A JSON node
      * @return An optional value
      */
-    @SuppressWarnings(JDK.DEPRECATION)
     private Optional<String> getValue(final JsonNode aNode) {
         if (aNode != null) {
             return Optional.ofNullable(aNode.asText(null));

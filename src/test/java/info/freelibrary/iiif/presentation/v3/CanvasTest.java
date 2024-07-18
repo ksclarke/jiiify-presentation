@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -234,6 +235,119 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(true, image1, image2);
         assertEquals(normalizeIDs(getExpected("canvas-image-choice.json")), normalizeIDs(toJson(myCanvas)));
+    }
+
+    /**
+     * Tests painting an image onto a canvas with spatial dimensions.
+     */
+    @Test
+    public final void testPaintImageContentListOnSpatialCanvas() {
+        myCanvas.setWidthHeight(WIDTH, HEIGHT)
+                .paintWith(List.of(new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT)));
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
+    }
+
+    /**
+     * Tests painting an image of unspecified size onto a canvas with spatial dimensions.
+     */
+    @Test
+    public final void testPaintImageContentListOnSpatialCanvasNoDims() {
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(List.of(new ImageContent(IMAGE_1_ID)));
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID());
+    }
+
+    /**
+     * Tests painting an image onto a spatial fragment of a canvas with spatial dimensions.
+     */
+    @Test
+    public final void testPaintImageContentListOnSpatialFragmentOfSpatialCanvas() {
+        final List<ContentResource> list = List.of(new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT));
+        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
+
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, list);
+
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(selector.toString(), getPaintingMediaFragment());
+    }
+
+    /**
+     * Tests painting an image of unspecified size onto a spatial fragment of a canvas with spatial dimensions.
+     */
+    @Test
+    public final void testPaintImageContentListOnSpatialFragmentOfSpatialCanvasNoDims() {
+        final ImageContent image = new ImageContent(IMAGE_1_ID);
+        // A fragment selector with a spatial part whose top-left point is in the middle of the canvas, and whose
+        // bottom-right point is at the bottom-right corner of the canvas.
+        final MediaFragmentSelector selector = new MediaFragmentSelector(WIDTH / 2, HEIGHT / 2, WIDTH / 2, HEIGHT / 2);
+
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, List.of(image));
+
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(selector.toString(), getPaintingMediaFragment());
+    }
+
+    /**
+     * Tests painting an image onto a spatial fragment of a canvas with spatiotemporal dimensions.
+     */
+    @Test
+    public final void testPaintImageContentListOnSpatialFragmentOfSpatiotemporalCanvas() {
+        final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
+
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, List.of(image));
+
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(selector.toString(), getPaintingMediaFragment().toString());
+    }
+
+    /**
+     * Tests painting an image onto a canvas with spatiotemporal dimensions.
+     */
+    @Test
+    public final void testPaintImageContentListOnSpatiotemporalCanvas() {
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION)
+                .paintWith(List.of(new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT)));
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
+    }
+
+    /**
+     * Tests painting an image of unspecified size onto a canvas with spatiotemporal dimensions.
+     */
+    @Test
+    public final void testPaintImageContentListOnSpatiotemporalCanvasNoDims() {
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION)
+                .paintWith(List.of(new ImageContent(IMAGE_1_ID)));
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID());
+    }
+
+    /**
+     * Tests painting an image onto a spatiotemporal fragment of a canvas with spatiotemporal dimensions.
+     */
+    @Test
+    public final void testPaintImageContentListOnSpatiotemporalFragmentOfSpatiotemporalCanvas() {
+        final List<ContentResource> list = List.of(new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT));
+        final MediaFragmentSelector selector =
+                new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0, WIDTH, HEIGHT);
+
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, list);
+
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(selector.toString(), getPaintingMediaFragment());
+    }
+
+    /**
+     * Tests painting an image onto a temporal fragment of a canvas with spatiotemporal dimensions.
+     */
+    @Test
+    public final void testPaintImageContentListOnTemporalFragmentOfSpatiotemporalCanvas() {
+        final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
+        // A time interval with a start time of 0 and an end time of DURATION has a duration of DURATION
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION));
+
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, List.of(image));
+
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
     /**
@@ -619,6 +733,118 @@ public class CanvasTest extends AbstractCookbookTest {
                 .paintWith(StringUtils.format(URI_FRAG_T_TEMPLATE, 0, DURATION), true, sound1, sound2)
                 .paintWith(StringUtils.format(URI_FRAG_T_TEMPLATE, DURATION, DURATION + DURATION), sound3);
         assertEquals(normalizeIDs(getExpected(MULTI_SOUND_CHOICE_FIXTURE)), normalizeIDs(toJson(myCanvas)));
+    }
+
+    /**
+     * Tests painting a sound onto a spatial fragment of a canvas with spatiotemporal dimensions.
+     */
+    @Test
+    public final void testPaintSoundContentListOnSpatialFragmentOfSpatiotemporalCanvas() {
+        final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
+
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, List.of(sound));
+
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(selector.toString(), getPaintingMediaFragment());
+    }
+
+    /**
+     * Tests painting a sound onto a canvas with spatiotemporal dimensions.
+     */
+    @Test
+    public final void testPaintSoundContentListOnSpatiotemporalCanvas() {
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION)
+                .paintWith(List.of(new SoundContent(SOUND_1_ID).setDuration(DURATION)));
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID());
+    }
+
+    /**
+     * Tests painting a sound of unspecified size onto a canvas with spatiotemporal dimensions.
+     */
+    @Test
+    public final void testPaintSoundContentListOnSpatiotemporalCanvasNoDims() {
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION)
+                .paintWith(List.of(new SoundContent(SOUND_1_ID)));
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID());
+    }
+
+    /**
+     * Tests painting a sound onto a spatiotemporal fragment of a canvas with spatiotemporal dimensions.
+     */
+    @Test
+    public final void testPaintSoundContentListOnSpatiotemporalFragmentOfSpatiotemporalCanvas() {
+        final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
+        final MediaFragmentSelector selector =
+                new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0, WIDTH, HEIGHT);
+
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, List.of(sound));
+
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(selector.toString(), getPaintingMediaFragment());
+    }
+
+    /**
+     * Tests painting a sound onto a canvas with temporal dimensions.
+     */
+    @Test
+    public final void testPaintSoundContentListOnTemporalCanvas() {
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(List.of(new SoundContent(SOUND_1_ID).setDuration(DURATION)));
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
+    }
+
+    /**
+     * Tests painting a sound of unspecified size onto a canvas with temporal dimensions.
+     */
+    @Test
+    public final void testPaintSoundContentListOnTemporalCanvasNoDims() {
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(List.of(new SoundContent(SOUND_1_ID)));
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID());
+    }
+
+    /**
+     * Tests painting a sound onto a temporal fragment of a canvas with spatiotemporal dimensions.
+     */
+    @Test
+    public final void testPaintSoundContentListOnTemporalFragmentOfSpatiotemporalCanvas() {
+        final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION));
+
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, List.of(sound));
+
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(selector.toString(), getPaintingMediaFragment());
+    }
+
+    /**
+     * Tests painting a sound onto a temporal fragment of a canvas with temporal dimensions.
+     */
+    @Test
+    public final void testPaintSoundContentListOnTemporalFragmentOfTemporalCanvas() {
+        final SoundContent sound = new SoundContent(SOUND_1_ID).setDuration(DURATION);
+        final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION));
+
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, List.of(sound));
+
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(selector.toString(), getPaintingMediaFragment());
+    }
+
+    /**
+     * Tests painting a sound of unspecified size onto a temporal fragment of a canvas with temporal dimensions.
+     */
+    @Test
+    public final void testPaintSoundContentListOnTemporalFragmentOfTemporalCanvasNoDims() {
+        final SoundContent sound = new SoundContent(SOUND_1_ID);
+        // A fragment selector that has a shorter duration than the canvas. The temporal part starts after the start of
+        // the canvas and ends before the end of the canvas.
+        final MediaFragmentSelector selector =
+                new MediaFragmentSelector(new StartTime(DURATION), new EndTime(1.5f * DURATION));
+
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, List.of(sound));
+
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
     /**
@@ -1512,6 +1738,153 @@ public class CanvasTest extends AbstractCookbookTest {
                 new MediaFragmentSelector(new StartTime(CANVAS_DURATION), new EndTime(CANVAS_DURATION + DURATION));
 
         myCanvas.setDuration(CANVAS_DURATION).supplementWith(selector, text);
+    }
+
+    /**
+     * Tests {@link Canvas#supplementWith(boolean, List)}.
+     */
+    @Test
+    public final void testSupplementWithChoiceContentResourceList() {
+        final List<AnnotationPage<SupplementingAnnotation>> supplementing;
+
+        myCanvas.supplementWith(true, List.of(new TextContent(TEXT_ID)));
+        supplementing = myCanvas.getSupplementingPages();
+
+        assertEquals(1, supplementing.size());
+        assertEquals(TEXT_ID, getSupplementingContentResourceID());
+    }
+
+    /**
+     * Tests {@link Canvas#supplementWith(boolean, ContentResource...)}.
+     */
+    @Test
+    public final void testSupplementWithChoiceContentResources() {
+        final List<AnnotationPage<SupplementingAnnotation>> supplementing;
+
+        myCanvas.supplementWith(true, new TextContent(TEXT_ID));
+        supplementing = myCanvas.getSupplementingPages();
+
+        assertEquals(1, supplementing.size());
+        assertEquals(TEXT_ID, getSupplementingContentResourceID());
+    }
+
+    /**
+     * Tests {@link Canvas#supplementWith(List)}.
+     */
+    @Test
+    public final void testSupplementWithContentResourceList() {
+        final List<AnnotationPage<SupplementingAnnotation>> supplementing;
+
+        myCanvas.supplementWith(List.of(new TextContent(TEXT_ID)));
+        supplementing = myCanvas.getSupplementingPages();
+
+        assertEquals(1, supplementing.size());
+        assertEquals(TEXT_ID, getSupplementingContentResourceID());
+    }
+
+    /**
+     * Tests {@link Canvas#supplementWith(String, List)}.
+     */
+    @Test
+    public final void testSupplementWithRegionChoiceContentResourceList() {
+        final List<AnnotationPage<SupplementingAnnotation>> supplementing;
+        final String region = StringUtils.format(URI_FRAG_XYWH_TEMPLATE, 0, 0, 100, 100);
+
+        myCanvas.setWidthHeight(200, 200).supplementWith(region, true, List.of(new TextContent(TEXT_ID)));
+        supplementing = myCanvas.getSupplementingPages();
+
+        assertEquals(1, supplementing.size());
+        assertEquals(TEXT_ID, getSupplementingContentResourceID());
+    }
+
+    /**
+     * Tests {@link Canvas#supplementWith(String, ContentResource...)}.
+     */
+    @Test
+    public final void testSupplementWithRegionChoiceContentResources() {
+        final List<AnnotationPage<SupplementingAnnotation>> supplementing;
+        final String region = StringUtils.format(URI_FRAG_XYWH_TEMPLATE, 0, 0, 100, 100);
+
+        myCanvas.setWidthHeight(200, 200).supplementWith(region, true, new TextContent(TEXT_ID));
+        supplementing = myCanvas.getSupplementingPages();
+
+        assertEquals(1, supplementing.size());
+        assertEquals(TEXT_ID, getSupplementingContentResourceID());
+    }
+
+    /**
+     * Tests {@link Canvas#supplementWith(String, List)}.
+     */
+    @Test
+    public final void testSupplementWithRegionContentResourceList() {
+        final List<AnnotationPage<SupplementingAnnotation>> supplementing;
+        final String region = StringUtils.format(URI_FRAG_XYWH_TEMPLATE, 0, 0, 100, 100);
+
+        myCanvas.setWidthHeight(200, 200).supplementWith(region, List.of(new TextContent(TEXT_ID)));
+        supplementing = myCanvas.getSupplementingPages();
+
+        assertEquals(1, supplementing.size());
+        assertEquals(TEXT_ID, getSupplementingContentResourceID());
+    }
+
+    /**
+     * Tests {@link Canvas#supplementWith(String, ContentResource...)}.
+     */
+    @Test
+    public final void testSupplementWithRegionContentResources() {
+        final List<AnnotationPage<SupplementingAnnotation>> supplementing;
+        final String region = StringUtils.format(URI_FRAG_XYWH_TEMPLATE, 0, 0, 100, 100);
+
+        myCanvas.setWidthHeight(200, 200).supplementWith(region, new TextContent(TEXT_ID));
+        supplementing = myCanvas.getSupplementingPages();
+
+        assertEquals(1, supplementing.size());
+        assertEquals(TEXT_ID, getSupplementingContentResourceID());
+    }
+
+    /**
+     * Tests {@link Canvas#supplementWith(MediaFragmentSelector, boolean, List)}.
+     */
+    @Test
+    public final void testSupplementWithSelectorChoiceContentResourceList() {
+        final List<AnnotationPage<SupplementingAnnotation>> supplementing;
+        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, 100, 100);
+
+        myCanvas.setWidthHeight(200, 200).supplementWith(selector, true, List.of(new TextContent(TEXT_ID)));
+        supplementing = myCanvas.getSupplementingPages();
+
+        assertEquals(1, supplementing.size());
+        assertEquals(TEXT_ID, getSupplementingContentResourceID());
+    }
+
+    /**
+     * Tests {@link Canvas#supplementWith(MediaFragmentSelector, boolean, List)}.
+     */
+    @Test
+    public final void testSupplementWithSelectorChoiceContentResources() {
+        final List<AnnotationPage<SupplementingAnnotation>> supplementing;
+        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, 100, 100);
+
+        myCanvas.setWidthHeight(200, 200).supplementWith(selector, true, new TextContent(TEXT_ID));
+        supplementing = myCanvas.getSupplementingPages();
+
+        assertEquals(1, supplementing.size());
+        assertEquals(TEXT_ID, getSupplementingContentResourceID());
+    }
+
+    /**
+     * Tests {@link Canvas#supplementWith(MediaFragmentSelector, List)}.
+     */
+    @Test
+    public final void testSupplementWithSelectorContentResourceList() {
+        final List<AnnotationPage<SupplementingAnnotation>> supplementing;
+        final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, 100, 100);
+
+        myCanvas.setWidthHeight(200, 200).supplementWith(selector, List.of(new TextContent(TEXT_ID)));
+        supplementing = myCanvas.getSupplementingPages();
+
+        assertEquals(1, supplementing.size());
+        assertEquals(TEXT_ID, getSupplementingContentResourceID());
     }
 
     /**

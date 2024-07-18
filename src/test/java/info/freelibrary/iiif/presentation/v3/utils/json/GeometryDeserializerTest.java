@@ -35,7 +35,7 @@ public class GeometryDeserializerTest {
      * @throws JsonProcessingException If there is an issue when parsing the JSON
      */
     @Test
-    public void testDeserializeLineString() throws JsonMappingException, JsonProcessingException {
+    public void testDeserializeLineString() throws JsonProcessingException {
         final LineString lineString = JSON.getReader(LineString.class).readValue("""
             {
                 "type": "LineString",
@@ -56,8 +56,7 @@ public class GeometryDeserializerTest {
      * @throws JsonProcessingException If there is an issue when parsing the JSON
      */
     @Test
-    public void testDeserializeLineStringWithNonArrayCoordinates()
-            throws JsonMappingException, JsonProcessingException {
+    public void testDeserializeLineStringWithNonArrayCoordinates() throws JsonProcessingException {
         check(LOGGER.getMessage(MessageCodes.JPA_049, Geometry.Type.LINESTRING), LineString.class, """
             { "type": "LineString", "coordinates": "invalid" }
             """);
@@ -70,7 +69,7 @@ public class GeometryDeserializerTest {
      * @throws JsonProcessingException If there is an issue when parsing the JSON
      */
     @Test
-    public void testDeserializeLineStringWithoutCoordinates() throws JsonMappingException, JsonProcessingException {
+    public void testDeserializeLineStringWithoutCoordinates() throws JsonProcessingException {
         check(LOGGER.getMessage(MessageCodes.JPA_049, Geometry.Type.LINESTRING), LineString.class, """
             { "type": "LineString" }
             """);
@@ -83,7 +82,7 @@ public class GeometryDeserializerTest {
      * @throws JsonProcessingException If there is an issue when parsing the JSON
      */
     @Test
-    public void testDeserializeMultiLineString() throws JsonMappingException, JsonProcessingException {
+    public void testDeserializeMultiLineString() throws JsonProcessingException {
         final MultiLineString multiLineString = JSON.getReader(MultiLineString.class).readValue("""
             {
                 "type": "MultiLineString",
@@ -110,8 +109,7 @@ public class GeometryDeserializerTest {
      * @throws JsonProcessingException If there is an issue when parsing the JSON
      */
     @Test
-    public void testDeserializeMultiLineStringWithNonArrayCoordinates()
-            throws JsonMappingException, JsonProcessingException {
+    public void testDeserializeMultiLineStringWithNonArrayCoordinates() throws JsonProcessingException {
         check(LOGGER.getMessage(MessageCodes.JPA_049, Geometry.Type.MULTILINESTRING), MultiLineString.class, """
             { "type": "MultiLineString", "coordinates": "invalid" }
             """);
@@ -124,8 +122,7 @@ public class GeometryDeserializerTest {
      * @throws JsonProcessingException If there is an issue when parsing the JSON
      */
     @Test
-    public void testDeserializeMultiLineStringWithoutCoordinates()
-            throws JsonMappingException, JsonProcessingException {
+    public void testDeserializeMultiLineStringWithoutCoordinates() throws JsonProcessingException {
         check(LOGGER.getMessage(MessageCodes.JPA_049, Geometry.Type.MULTILINESTRING), MultiLineString.class, """
             { "type": "MultiLineString" }
             """);
@@ -138,7 +135,7 @@ public class GeometryDeserializerTest {
      * @throws JsonProcessingException If there is an issue when parsing the JSON
      */
     @Test
-    public void testDeserializeMultiPoint() throws JsonMappingException, JsonProcessingException {
+    public void testDeserializeMultiPoint() throws JsonProcessingException {
         final MultiPoint multipoint = JSON.getReader(MultiPoint.class).readValue("""
             {
                 "type": "MultiPoint",
@@ -159,8 +156,7 @@ public class GeometryDeserializerTest {
      * @throws JsonProcessingException If there is an issue when parsing the JSON
      */
     @Test
-    public void testDeserializeMultiPointWithNonArrayCoordinates()
-            throws JsonMappingException, JsonProcessingException {
+    public void testDeserializeMultiPointWithNonArrayCoordinates() throws JsonProcessingException {
         check(LOGGER.getMessage(MessageCodes.JPA_049, Geometry.Type.MULTIPOINT), MultiPoint.class, """
             { "type": "MultiPoint", "coordinates": "invalid" }
             """);
@@ -173,7 +169,7 @@ public class GeometryDeserializerTest {
      * @throws JsonProcessingException If there is an issue when parsing the JSON
      */
     @Test
-    public void testDeserializeMultiPointWithoutCoordinates() throws JsonMappingException, JsonProcessingException {
+    public void testDeserializeMultiPointWithoutCoordinates() throws JsonProcessingException {
         check(LOGGER.getMessage(MessageCodes.JPA_049, Geometry.Type.MULTIPOINT), MultiPoint.class, """
             { "type": "MultiPoint" }
             """);
@@ -186,7 +182,7 @@ public class GeometryDeserializerTest {
      * @throws JsonProcessingException If there is an issue when parsing the JSON
      */
     @Test
-    public void testDeserializePoint() throws JsonMappingException, JsonProcessingException {
+    public void testDeserializePoint() throws JsonProcessingException {
         final Point point = JSON.getReader(Point.class).readValue("""
             { "type": "Point", "coordinates": [ 9.938, 51.533 ] }
             """);
@@ -201,7 +197,7 @@ public class GeometryDeserializerTest {
      * @throws JsonProcessingException If there is an issue when parsing the JSON
      */
     @Test
-    public void testDeserializePointWithNonArrayCoordinates() throws JsonMappingException, JsonProcessingException {
+    public void testDeserializePointWithNonArrayCoordinates() throws JsonProcessingException {
         check(LOGGER.getMessage(MessageCodes.JPA_137, Geometry.Type.POINT), Point.class, """
             { "type": "Point", "coordinates": "invalid" }
             """);
@@ -214,7 +210,7 @@ public class GeometryDeserializerTest {
      * @throws JsonProcessingException If there is an issue when parsing the JSON
      */
     @Test
-    public void testDeserializePointWithoutCoordinates() throws JsonMappingException, JsonProcessingException {
+    public void testDeserializePointWithoutCoordinates() throws JsonProcessingException {
         check(LOGGER.getMessage(MessageCodes.JPA_137, Geometry.Type.POINT), Point.class, """
             { "type": "Point" }
             """);
@@ -227,7 +223,7 @@ public class GeometryDeserializerTest {
      * @throws JsonProcessingException If there is an issue when parsing the JSON
      */
     @Test
-    public void testMissingType() throws JsonMappingException, JsonProcessingException {
+    public void testMissingType() throws JsonProcessingException {
         check(LOGGER.getMessage(MessageCodes.JPA_139), Point.class, "{}");
     }
 

@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.assertOptEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -45,7 +46,7 @@ public class KioskCookieService1Test {
         final String failureDescription = UUID.randomUUID().toString();
         final KioskCookieService1 service = new KioskCookieService1(myID).setFailureDescription(failureDescription);
 
-        assertEquals(failureDescription, service.getFailureDescription());
+        assertOptEquals(failureDescription, service.getFailureDescription());
     }
 
     /**
@@ -56,7 +57,7 @@ public class KioskCookieService1Test {
         final String failureHeader = UUID.randomUUID().toString();
         final KioskCookieService1 service = new KioskCookieService1(myID).setFailureHeader(failureHeader);
 
-        assertEquals(failureHeader, service.getFailureHeader());
+        assertOptEquals(failureHeader, service.getFailureHeader());
     }
 
     /**
@@ -64,7 +65,7 @@ public class KioskCookieService1Test {
      */
     @Test
     public final void testGetID() {
-        Assert.assertEquals(myID, new KioskCookieService1(myID).getID());
+        assertOptEquals(myID, new KioskCookieService1(myID).getID());
     }
 
     /**
@@ -72,7 +73,7 @@ public class KioskCookieService1Test {
      */
     @Test
     public final void testGetProfile() {
-        assertEquals(AuthCookieService.Profile.KIOSK, new KioskCookieService1(myID).getProfile().get());
+        assertOptEquals(AuthCookieService.Profile.KIOSK, new KioskCookieService1(myID).getProfile());
     }
 
     /**
@@ -99,7 +100,7 @@ public class KioskCookieService1Test {
      */
     @Test
     public final void testGetType() {
-        assertEquals(KioskCookieService1.TYPE, new KioskCookieService1(myID).getType());
+        assertOptEquals(KioskCookieService1.TYPE, new KioskCookieService1(myID).getType());
     }
 
     /**
@@ -107,7 +108,7 @@ public class KioskCookieService1Test {
      */
     @Test
     public final void testKioskCookieService1String() {
-        assertEquals(myID, new KioskCookieService1(myID).getID());
+        assertOptEquals(myID, new KioskCookieService1(myID).getID());
     }
 
     /**
@@ -126,7 +127,7 @@ public class KioskCookieService1Test {
      */
     @Test
     public final void testKioskCookieService1URI() {
-        assertEquals(myID, new KioskCookieService1(myID).getID());
+        assertOptEquals(myID, new KioskCookieService1(myID).getID());
     }
 
     /**
@@ -138,7 +139,7 @@ public class KioskCookieService1Test {
         final KioskCookieService1 cookieService = new KioskCookieService1(myID);
 
         cookieService.setFailureDescription(failureDescription);
-        assertEquals(failureDescription, cookieService.getFailureDescription());
+        assertOptEquals(failureDescription, cookieService.getFailureDescription());
     }
 
     /**
@@ -147,7 +148,8 @@ public class KioskCookieService1Test {
     @Test
     public final void testSetFailureHeaderString() {
         final String failureHeader = UUID.randomUUID().toString();
-        assertEquals(failureHeader, new KioskCookieService1(myID).setFailureHeader(failureHeader).getFailureHeader());
+        assertOptEquals(failureHeader,
+                new KioskCookieService1(myID).setFailureHeader(failureHeader).getFailureHeader());
     }
 
     /**
@@ -156,7 +158,7 @@ public class KioskCookieService1Test {
     @Test
     public final void testSetIDString() {
         final KioskCookieService1 cookieService = new KioskCookieService1(myID.substring(2));
-        assertEquals(myID, cookieService.setID(myID).getID());
+        assertOptEquals(myID, cookieService.setID(myID).getID());
     }
 
     /**

@@ -2,12 +2,15 @@
 package info.freelibrary.iiif.presentation.v3.services;
 
 import java.net.URI;
+import java.util.Objects;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import info.freelibrary.util.DoubleUtils;
 
 import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
@@ -30,10 +33,14 @@ public class PhysicalDimsService extends AbstractService<PhysicalDimsService> im
     /**
      * Creates a physical dimensions service.
      *
-     * @param aID A resource ID
+     * @param aScale A scale for the physical dimensions service
+     * @param aUnits A measure of units for the physical dimensions service
      */
-    public PhysicalDimsService(final String aID) {
-        super(aID, null, PhysicalDimsService.Profile.DIMS_SERVICE);
+    public PhysicalDimsService(final double aScale, final String aUnits) {
+        super(null, null, Profile.DIMS_SERVICE);
+
+        myPhysicalScale = DoubleUtils.requireValidPositive(aScale);
+        myPhysicalUnits = Objects.requireNonNull(aUnits);
     }
 
     /**
@@ -44,10 +51,10 @@ public class PhysicalDimsService extends AbstractService<PhysicalDimsService> im
      * @param aUnits A physical dimensions unit
      */
     public PhysicalDimsService(final String aID, final double aScale, final String aUnits) {
-        this(aID);
+        super(aID, null, Profile.DIMS_SERVICE);
 
-        myPhysicalScale = aScale;
-        myPhysicalUnits = aUnits;
+        myPhysicalScale = DoubleUtils.requireValidPositive(aScale);
+        myPhysicalUnits = Objects.requireNonNull(aUnits);
     }
 
     /**
@@ -77,8 +84,9 @@ public class PhysicalDimsService extends AbstractService<PhysicalDimsService> im
      */
     @JsonIgnore
     public PhysicalDimsService setDims(final double aPhysicalScale, final String aPhysicalUnits) {
-        myPhysicalScale = aPhysicalScale;
-        myPhysicalUnits = aPhysicalUnits;
+        myPhysicalScale = DoubleUtils.requireValidPositive(aPhysicalScale);
+        myPhysicalUnits = Objects.requireNonNull(aPhysicalUnits);
+
         return this;
     }
 
@@ -89,7 +97,7 @@ public class PhysicalDimsService extends AbstractService<PhysicalDimsService> im
      * @return The physical dimensions service
      */
     public PhysicalDimsService setPhysicalScale(final double aScale) {
-        myPhysicalScale = aScale;
+        myPhysicalScale = DoubleUtils.requireValidPositive(aScale);
         return this;
     }
 
@@ -100,7 +108,7 @@ public class PhysicalDimsService extends AbstractService<PhysicalDimsService> im
      * @return The physical dimensions service
      */
     public PhysicalDimsService setPhysicalUnits(final String aPhysicalUnits) {
-        myPhysicalUnits = aPhysicalUnits;
+        myPhysicalUnits = Objects.requireNonNull(aPhysicalUnits);
         return this;
     }
 

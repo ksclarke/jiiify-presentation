@@ -38,14 +38,14 @@ public class AuthTokenService1 extends AbstractService<AuthTokenService1> implem
 
     @Override
     @JsonGetter(JsonKeys.V2_ID)
-    public String getID() {
+    public Optional<String> getID() {
         return super.getID();
     }
 
     @Override
     @JsonGetter(JsonKeys.V2_TYPE)
-    public String getType() {
-        return AuthTokenService1.class.getSimpleName();
+    public Optional<String> getType() {
+        return Optional.of(AuthTokenService1.class.getSimpleName());
     }
 
     @Override

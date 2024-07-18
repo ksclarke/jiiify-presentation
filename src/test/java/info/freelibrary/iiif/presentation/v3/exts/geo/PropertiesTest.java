@@ -103,7 +103,7 @@ public class PropertiesTest {
 
         properties.add(my1stProperty);
         myProperties.add(my1stProperty);
-        assertTrue(myProperties.equals((Object) properties));
+        assertEquals(myProperties, Object.class.cast(properties));
     }
 
     /**
@@ -115,7 +115,7 @@ public class PropertiesTest {
 
         properties.add(my1stProperty);
         myProperties.add(my1stProperty);
-        assertTrue(myProperties.equals(properties));
+        assertEquals(myProperties, properties);
     }
 
     /**

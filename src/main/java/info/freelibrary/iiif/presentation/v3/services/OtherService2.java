@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
+import java.util.Optional;
+
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -56,13 +58,13 @@ public final class OtherService2 extends AbstractOtherService<OtherService2> imp
 
     @Override
     @JsonGetter(JsonKeys.V2_ID)
-    public String getID() {
+    public Optional<String> getID() {
         return super.getID();
     }
 
     @Override
     @JsonGetter(JsonKeys.V2_TYPE)
-    public String getType() {
+    public Optional<String> getType() {
         return super.getType();
     }
 

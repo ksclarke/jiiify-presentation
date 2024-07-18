@@ -55,13 +55,13 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
 
     @Override
     @JsonGetter(JsonKeys.ID)
-    public String getID() {
+    public Optional<String> getID() {
         return super.getID();
     }
 
     @Override
     @JsonGetter(JsonKeys.TYPE)
-    public String getType() {
+    public Optional<String> getType() {
         return super.getType();
     }
 

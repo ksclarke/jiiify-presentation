@@ -8,7 +8,6 @@ import org.junit.Test;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonMappingException;
 
 import info.freelibrary.iiif.presentation.v3.annotations.AssessingAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotations.BookmarkingAnnotation;
@@ -36,7 +35,7 @@ public class WebAnnotationDeserializerTest {
      * Test method for {@link WebAnnotationDeserializer#deserialize(JsonParser, DeserializationContext)}.
      */
     @Test
-    public void testDeserializeAssessingAnnotation() throws JsonMappingException, JsonProcessingException {
+    public void testDeserializeAssessingAnnotation() throws JsonProcessingException {
         final AssessingAnnotation annotation = JSON.getReader(AssessingAnnotation.class).readValue("""
             {
                 "id": "https://example.org/asdf/anno-1",
@@ -59,7 +58,7 @@ public class WebAnnotationDeserializerTest {
      * Test method for {@link WebAnnotationDeserializer#deserialize(JsonParser, DeserializationContext)}.
      */
     @Test
-    public void testDeserializeBookmarkingAnnotation() throws JsonMappingException, JsonProcessingException {
+    public void testDeserializeBookmarkingAnnotation() throws JsonProcessingException {
         final BookmarkingAnnotation annotation = JSON.getReader(BookmarkingAnnotation.class).readValue("""
             {
                 "id": "https://example.org/asdf/anno-1",
@@ -82,7 +81,7 @@ public class WebAnnotationDeserializerTest {
      * Test method for {@link WebAnnotationDeserializer#deserialize(JsonParser, DeserializationContext)}.
      */
     @Test
-    public void testDeserializeClassifyingAnnotation() throws JsonMappingException, JsonProcessingException {
+    public void testDeserializeClassifyingAnnotation() throws JsonProcessingException {
         final ClassifyingAnnotation annotation = JSON.getReader(ClassifyingAnnotation.class).readValue("""
             {
                 "id": "https://example.org/asdf/anno-1",
@@ -105,7 +104,7 @@ public class WebAnnotationDeserializerTest {
      * Test method for {@link WebAnnotationDeserializer#deserialize(JsonParser, DeserializationContext)}.
      */
     @Test
-    public void testDeserializeCommentingAnnotation() throws JsonMappingException, JsonProcessingException {
+    public void testDeserializeCommentingAnnotation() throws JsonProcessingException {
         final CommentingAnnotation annotation = JSON.getReader(CommentingAnnotation.class).readValue("""
             {
                 "id": "https://example.org/asdf/anno-1",
@@ -128,7 +127,7 @@ public class WebAnnotationDeserializerTest {
      * Test method for {@link WebAnnotationDeserializer#deserialize(JsonParser, DeserializationContext)}.
      */
     @Test
-    public void testDeserializeDescribingAnnotation() throws JsonMappingException, JsonProcessingException {
+    public void testDeserializeDescribingAnnotation() throws JsonProcessingException {
         final DescribingAnnotation annotation = JSON.getReader(DescribingAnnotation.class).readValue("""
             {
                 "id": "https://example.org/asdf/anno-1",
@@ -151,7 +150,7 @@ public class WebAnnotationDeserializerTest {
      * Test method for {@link WebAnnotationDeserializer#deserialize(JsonParser, DeserializationContext)}.
      */
     @Test
-    public void testDeserializeEditingAnnotation() throws JsonMappingException, JsonProcessingException {
+    public void testDeserializeEditingAnnotation() throws JsonProcessingException {
         final EditingAnnotation annotation = JSON.getReader(EditingAnnotation.class).readValue("""
             {
                 "id": "https://example.org/asdf/anno-1",
@@ -174,7 +173,7 @@ public class WebAnnotationDeserializerTest {
      * Test method for {@link WebAnnotationDeserializer#deserialize(JsonParser, DeserializationContext)}.
      */
     @Test
-    public void testDeserializeHighlightingAnnotation() throws JsonMappingException, JsonProcessingException {
+    public void testDeserializeHighlightingAnnotation() throws JsonProcessingException {
         final HighlightingAnnotation annotation = JSON.getReader(HighlightingAnnotation.class).readValue("""
             {
                 "id": "https://example.org/asdf/anno-1",
@@ -197,7 +196,7 @@ public class WebAnnotationDeserializerTest {
      * Test method for {@link WebAnnotationDeserializer#deserialize(JsonParser, DeserializationContext)}.
      */
     @Test
-    public void testDeserializeIdentifyingAnnotation() throws JsonMappingException, JsonProcessingException {
+    public void testDeserializeIdentifyingAnnotation() throws JsonProcessingException {
         final IdentifyingAnnotation annotation = JSON.getReader(IdentifyingAnnotation.class).readValue("""
             {
                 "id": "https://example.org/asdf/anno-1",
@@ -220,7 +219,7 @@ public class WebAnnotationDeserializerTest {
      * Test method for {@link WebAnnotationDeserializer#deserialize(JsonParser, DeserializationContext)}.
      */
     @Test
-    public void testDeserializeLinkingAnnotation() throws JsonMappingException, JsonProcessingException {
+    public void testDeserializeLinkingAnnotation() throws JsonProcessingException {
         final LinkingAnnotation annotation = JSON.getReader(LinkingAnnotation.class).readValue("""
             {
                 "id": "https://example.org/asdf/anno-1",
@@ -243,7 +242,7 @@ public class WebAnnotationDeserializerTest {
      * Test method for {@link WebAnnotationDeserializer#deserialize(JsonParser, DeserializationContext)}.
      */
     @Test
-    public void testDeserializeModeratingAnnotation() throws JsonMappingException, JsonProcessingException {
+    public void testDeserializeModeratingAnnotation() throws JsonProcessingException {
         final ModeratingAnnotation annotation = JSON.getReader(ModeratingAnnotation.class).readValue("""
             {
                 "id": "https://example.org/asdf/anno-1",
@@ -266,7 +265,7 @@ public class WebAnnotationDeserializerTest {
      * Test method for {@link WebAnnotationDeserializer#deserialize(JsonParser, DeserializationContext)}.
      */
     @Test
-    public void testDeserializeQuestioningAnnotation() throws JsonMappingException, JsonProcessingException {
+    public void testDeserializeQuestioningAnnotation() throws JsonProcessingException {
         final QuestioningAnnotation annotation = JSON.getReader(QuestioningAnnotation.class).readValue("""
             {
                 "id": "https://example.org/asdf/anno-1",
@@ -289,7 +288,7 @@ public class WebAnnotationDeserializerTest {
      * Test method for {@link WebAnnotationDeserializer#deserialize(JsonParser, DeserializationContext)}.
      */
     @Test
-    public void testDeserializeReplyingAnnotation() throws JsonMappingException, JsonProcessingException {
+    public void testDeserializeReplyingAnnotation() throws JsonProcessingException {
         final ReplyingAnnotation annotation = JSON.getReader(ReplyingAnnotation.class).readValue("""
             {
                 "id": "https://example.org/asdf/anno-1",
@@ -312,7 +311,7 @@ public class WebAnnotationDeserializerTest {
      * Test method for {@link WebAnnotationDeserializer#deserialize(JsonParser, DeserializationContext)}.
      */
     @Test
-    public void testDeserializeTaggingAnnotation() throws JsonMappingException, JsonProcessingException {
+    public void testDeserializeTaggingAnnotation() throws JsonProcessingException {
         final TaggingAnnotation annotation = JSON.getReader(TaggingAnnotation.class).readValue("""
             {
                 "id": "https://example.org/asdf/anno-1",
@@ -335,7 +334,7 @@ public class WebAnnotationDeserializerTest {
      * Test method for {@link WebAnnotationDeserializer#deserialize(JsonParser, DeserializationContext)}.
      */
     @Test
-    public void testDeserializeWebAnnotation() throws JsonMappingException, JsonProcessingException {
+    public void testDeserializeWebAnnotation() throws JsonProcessingException {
         final WebAnnotation annotation = JSON.getReader(WebAnnotation.class).readValue("""
             {
                 "@context": "http://www.w3.org/ns/anno.jsonld",

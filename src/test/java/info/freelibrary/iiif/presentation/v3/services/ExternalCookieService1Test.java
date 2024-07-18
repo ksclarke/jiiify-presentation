@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.assertOptEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -52,7 +53,7 @@ public class ExternalCookieService1Test {
      */
     @Test
     public final void testGetID() {
-        assertEquals(null, new ExternalCookieService1().getID());
+        assertTrue(new ExternalCookieService1().getID().isEmpty());
     }
 
     /**
@@ -60,7 +61,7 @@ public class ExternalCookieService1Test {
      */
     @Test
     public final void testGetProfile() {
-        assertEquals(AuthCookieService.Profile.EXTERNAL, new ExternalCookieService1().getProfile().get());
+        assertOptEquals(AuthCookieService.Profile.EXTERNAL, new ExternalCookieService1().getProfile());
     }
 
     /**
@@ -80,7 +81,7 @@ public class ExternalCookieService1Test {
         final ExternalCookieService1 cookieService =
                 new ExternalCookieService1().setFailureDescription(failureDescription);
 
-        assertEquals(failureDescription, cookieService.getFailureDescription());
+        assertOptEquals(failureDescription, cookieService.getFailureDescription());
     }
 
     /**
@@ -91,7 +92,7 @@ public class ExternalCookieService1Test {
         final String failureHeader = UUID.randomUUID().toString();
         final ExternalCookieService1 cookieService = new ExternalCookieService1().setFailureHeader(failureHeader);
 
-        assertEquals(failureHeader, cookieService.getFailureHeader());
+        assertOptEquals(failureHeader, cookieService.getFailureHeader());
     }
 
     /**
@@ -99,7 +100,7 @@ public class ExternalCookieService1Test {
      */
     @Test
     public final void testGetType() {
-        assertEquals(ExternalCookieService1.TYPE, new ExternalCookieService1().getType());
+        assertOptEquals(ExternalCookieService1.TYPE, new ExternalCookieService1().getType());
     }
 
     /**
@@ -107,7 +108,7 @@ public class ExternalCookieService1Test {
      */
     @Test
     public final void testSetIDString() {
-        assertEquals(myID, new ExternalCookieService1().setID(myID).getID());
+        assertOptEquals(myID, new ExternalCookieService1().setID(myID).getID());
     }
 
     /**
@@ -115,7 +116,7 @@ public class ExternalCookieService1Test {
      */
     @Test
     public final void testSetIDStringMissing() {
-        assertEquals(null, new ExternalCookieService1().getID());
+        assertTrue(new ExternalCookieService1().getID().isEmpty());
     }
 
     /**

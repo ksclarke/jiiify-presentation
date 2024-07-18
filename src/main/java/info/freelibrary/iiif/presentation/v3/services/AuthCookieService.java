@@ -16,14 +16,14 @@ public interface AuthCookieService extends Service {
      *
      * @return This service's failure description
      */
-    String getFailureDescription();
+    Optional<String> getFailureDescription();
 
     /**
      * Gets the auth cookie service failure header.
      *
      * @return The failure header
      */
-    String getFailureHeader();
+    Optional<String> getFailureHeader();
 
     /**
      * Sets the auth cookie service failure description.

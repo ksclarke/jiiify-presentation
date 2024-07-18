@@ -23,11 +23,11 @@ import info.freelibrary.iiif.presentation.v3.utils.Labeled;
 public interface Service {
 
     /**
-     * Gets the service ID.
+     * Gets the service ID. Most services require an ID, but not all do so this is optional.
      *
-     * @return The ID
+     * @return The service ID
      */
-    String getID();
+    Optional<String> getID();
 
     /**
      * Gets an optional service profile.
@@ -48,7 +48,7 @@ public interface Service {
      *
      * @return The service type
      */
-    String getType();
+    Optional<String> getType();
 
     /**
      * Sets the service ID.

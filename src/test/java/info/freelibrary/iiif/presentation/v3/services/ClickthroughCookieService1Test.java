@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.assertOptEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -8,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -39,7 +39,7 @@ public class ClickthroughCookieService1Test {
     public final void testClickthroughCookieService1StringString() {
         final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
 
-        assertEquals(myID, service.getID());
+        assertOptEquals(myID, service.getID());
         assertEquals(myLabel, service.getLabel());
     }
 
@@ -75,7 +75,7 @@ public class ClickthroughCookieService1Test {
         final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
         final String failureDescription = UUID.randomUUID().toString();
 
-        assertEquals(failureDescription, service.setFailureDescription(failureDescription).getFailureDescription());
+        assertOptEquals(failureDescription, service.setFailureDescription(failureDescription).getFailureDescription());
     }
 
     /**
@@ -86,7 +86,7 @@ public class ClickthroughCookieService1Test {
         final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
         final String failureHeader = UUID.randomUUID().toString();
 
-        assertEquals(failureHeader, service.setFailureHeader(failureHeader).getFailureHeader());
+        assertOptEquals(failureHeader, service.setFailureHeader(failureHeader).getFailureHeader());
     }
 
     /**
@@ -106,7 +106,7 @@ public class ClickthroughCookieService1Test {
      */
     @Test
     public final void testGetID() {
-        Assert.assertEquals(myID, new ClickthroughCookieService1(myID, myLabel).getID());
+        assertOptEquals(myID, new ClickthroughCookieService1(myID, myLabel).getID());
     }
 
     /**
@@ -123,7 +123,7 @@ public class ClickthroughCookieService1Test {
     @Test
     public final void testGetProfile() {
         final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
-        assertEquals(AuthCookieService.Profile.CLICKTHROUGH, service.getProfile().get());
+        assertOptEquals(AuthCookieService.Profile.CLICKTHROUGH, service.getProfile());
     }
 
     /**
@@ -131,7 +131,7 @@ public class ClickthroughCookieService1Test {
      */
     @Test
     public final void testGetType() {
-        assertEquals(ClickthroughCookieService1.TYPE, new ClickthroughCookieService1(myID, myLabel).getType());
+        assertOptEquals(ClickthroughCookieService1.TYPE, new ClickthroughCookieService1(myID, myLabel).getType());
     }
 
     /**
@@ -175,7 +175,7 @@ public class ClickthroughCookieService1Test {
         final ClickthroughCookieService1 service =
                 new ClickthroughCookieService1(myID.substring(2), myLabel).setID(myID);
 
-        assertEquals(myID, service.getID());
+        assertOptEquals(myID, service.getID());
     }
 
     /**
@@ -208,7 +208,7 @@ public class ClickthroughCookieService1Test {
     public final void testSetTypeString() {
         final ClickthroughCookieService1 service = new ClickthroughCookieService1(myID, myLabel);
 
-        assertEquals(AuthCookieService.class.getSimpleName(),
+        assertOptEquals(AuthCookieService.class.getSimpleName(),
                 service.setType(AuthCookieService.class.getSimpleName()).getType());
     }
 

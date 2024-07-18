@@ -46,7 +46,7 @@ public class AuthTokenService1Test {
     public final void testStringConstructor() throws JsonParsingException, IOException {
         final AuthTokenService1 service = new AuthTokenService1(myID);
 
-        assertEquals(myID, service.getID());
+        assertEquals(myID, service.getID().get());
         assertEquals(AuthTokenService1.Profile.TOKEN_SERVICE, service.getProfile().get());
         assertEquals(expected(), found(service));
     }

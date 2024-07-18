@@ -81,8 +81,8 @@ abstract class AbstractService<T extends AbstractService<T>> {
      * @return The service ID
      */
     @JsonSetter(JsonKeys.ID)
-    public String getID() {
-        return myID;
+    public Optional<String> getID() {
+        return Optional.ofNullable(myID);
     }
 
     /**
@@ -115,8 +115,8 @@ abstract class AbstractService<T extends AbstractService<T>> {
      * @return The service type
      */
     @JsonGetter(JsonKeys.TYPE)
-    public String getType() {
-        return myType;
+    public Optional<String> getType() {
+        return Optional.ofNullable(myType);
     }
 
     /**

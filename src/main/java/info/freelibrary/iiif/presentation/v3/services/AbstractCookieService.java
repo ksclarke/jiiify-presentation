@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
+import java.util.Optional;
+
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -35,10 +37,12 @@ abstract class AbstractCookieService<T extends AbstractCookieService<T>> extends
 
     /** The service's failure description. */
     @JsonProperty(JsonKeys.FAILURE_DESCRIPTION)
+    @JsonInclude(Include.NON_ABSENT)
     private String myFailureDescription;
 
     /** The failure header for the service's failure description. */
     @JsonProperty(JsonKeys.FAILURE_HEADER)
+    @JsonInclude(Include.NON_ABSENT)
     private String myFailureHeader;
 
     /**
@@ -75,8 +79,8 @@ abstract class AbstractCookieService<T extends AbstractCookieService<T>> extends
      *
      * @return The failure description for the cookie service
      */
-    public String getFailureDescription() {
-        return myFailureDescription;
+    public Optional<String> getFailureDescription() {
+        return Optional.ofNullable(myFailureDescription);
     }
 
     /**
@@ -84,8 +88,8 @@ abstract class AbstractCookieService<T extends AbstractCookieService<T>> extends
      *
      * @return The failure description header for the cookie service
      */
-    public String getFailureHeader() {
-        return myFailureHeader;
+    public Optional<String> getFailureHeader() {
+        return Optional.ofNullable(myFailureHeader);
     }
 
     /**
@@ -95,7 +99,7 @@ abstract class AbstractCookieService<T extends AbstractCookieService<T>> extends
      */
     @Override
     @JsonGetter(JsonKeys.V2_ID)
-    public String getID() {
+    public Optional<String> getID() {
         return super.getID();
     }
 
@@ -104,7 +108,7 @@ abstract class AbstractCookieService<T extends AbstractCookieService<T>> extends
      */
     @Override
     @JsonGetter(JsonKeys.V2_TYPE)
-    public String getType() {
+    public Optional<String> getType() {
         return super.getType();
     }
 

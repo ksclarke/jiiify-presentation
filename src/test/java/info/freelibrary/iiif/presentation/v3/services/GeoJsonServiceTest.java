@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
-import static org.junit.Assert.assertEquals;
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.assertOptEquals;
 
 import java.util.UUID;
 
@@ -31,7 +31,7 @@ public class GeoJsonServiceTest {
      */
     @Test
     public void test() {
-        assertEquals(myID, new GeoJsonService(myID).getID());
+        assertOptEquals(myID, new GeoJsonService(myID).getID());
     }
 
 }

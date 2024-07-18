@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.assertOptEquals;
 import static org.junit.Assert.assertEquals;
 
 import java.util.UUID;
@@ -48,7 +49,7 @@ public class ImageService2Test {
      */
     @Test
     public void testGetID() {
-        assertEquals(myID, new ImageService2(myID).getID());
+        assertOptEquals(myID, new ImageService2(myID).getID());
     }
 
     /**
@@ -56,9 +57,9 @@ public class ImageService2Test {
      */
     @Test
     public void testGetProfile() {
-        assertEquals(LEVEL_0, new ImageService2(myID, ImageService2.Profile.LEVEL_ZERO).getProfile().get());
-        assertEquals(LEVEL_1, new ImageService2(myID, Profile.LEVEL_ONE).getProfile().get());
-        assertEquals(LEVEL_2, new ImageService2(myID, Profile.LEVEL_TWO).getProfile().get());
+        assertOptEquals(LEVEL_0, new ImageService2(myID, ImageService2.Profile.LEVEL_ZERO).getProfile());
+        assertOptEquals(LEVEL_1, new ImageService2(myID, Profile.LEVEL_ONE).getProfile());
+        assertOptEquals(LEVEL_2, new ImageService2(myID, Profile.LEVEL_TWO).getProfile());
     }
 
     /**
@@ -93,9 +94,9 @@ public class ImageService2Test {
      */
     @Test
     public void testProfileFromString() {
-        assertEquals(LEVEL_0, Profile.fromLabel(LEVEL_0.toString()).get());
-        assertEquals(LEVEL_1, Profile.fromLabel(LEVEL_1.toString()).get());
-        assertEquals(LEVEL_2, Profile.fromLabel(LEVEL_2.toString()).get());
+        assertOptEquals(LEVEL_0, Profile.fromLabel(LEVEL_0.toString()));
+        assertOptEquals(LEVEL_1, Profile.fromLabel(LEVEL_1.toString()));
+        assertOptEquals(LEVEL_2, Profile.fromLabel(LEVEL_2.toString()));
     }
 
 }
