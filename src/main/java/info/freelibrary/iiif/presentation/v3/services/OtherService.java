@@ -5,6 +5,8 @@ import java.net.URI;
 import java.util.Objects;
 import java.util.Optional;
 
+import info.freelibrary.util.StringUtils;
+
 import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 
@@ -81,7 +83,7 @@ public interface OtherService extends Service {
          * @return An {@code ImageService.Profile} optional if found; or, an empty optional if not
          */
         public static Optional<Profile> fromLabel(final String aLabel) {
-            return Optional.ofNullable(new Profile(aLabel));
+            return StringUtils.trimToNull(aLabel) == null ? Optional.empty() : Optional.of(new Profile(aLabel));
         }
     }
 }

@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.StringUtils;
 import info.freelibrary.util.warnings.JDK;
 import info.freelibrary.util.warnings.PMD;
 import info.freelibrary.util.warnings.Sonar;
@@ -281,7 +282,14 @@ class ServiceDeserializer extends StdDeserializer<Service> {
             final Optional<String> id = getServiceID(aNode);
 
             if (profileNode != null) {
-                final Optional<Service.Profile> optProfile = Service.Profile.fromLabel(profileNode.asText());
+                final Optional<Service.Profile> optProfile;
+
+                if (profileNode.isArray()) {
+                    // Spec: "The first entry in the list must be a compliance level URI"
+                    optProfile = Service.Profile.fromLabel(profileNode.get(0).asText());
+                } else {
+                    optProfile = Service.Profile.fromLabel(profileNode.asText());
+                }
 
                 if (optProfile.isPresent()) {
                     final Service.Profile serviceProfile = optProfile.get();
@@ -491,7 +499,7 @@ class ServiceDeserializer extends StdDeserializer<Service> {
      */
     private Optional<String> getValue(final JsonNode aNode) {
         if (aNode != null) {
-            return Optional.ofNullable(aNode.asText(null));
+            return Optional.ofNullable(StringUtils.trimToNull(aNode.asText(null)));
         }
 
         return Optional.empty();

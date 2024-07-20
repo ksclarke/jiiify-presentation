@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -9,7 +10,6 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
@@ -32,7 +32,6 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 abstract class AbstractImageService<T extends AbstractImageService<T>> extends AbstractService<T> {
 
     /** The image service's formats. */
-    @JsonProperty(ImageAPI.EXTRA_FORMATS)
     private List<Format> myFormats;
 
     /** My height. */
@@ -42,15 +41,12 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
     private boolean myProtocolIsSet;
 
     /** The image service's qualities. */
-    @JsonProperty(ImageAPI.EXTRA_QUALITIES)
     private List<Quality> myQualities;
 
     /** The image service's sizes. */
-    @JsonProperty(ImageAPI.SIZES)
     private List<Size> mySizes;
 
     /** The image service's tiles. */
-    @JsonProperty(ImageAPI.TILES)
     private List<Tile> myTiles;
 
     /** My width. */
@@ -81,6 +77,10 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
      */
     @JsonGetter(ImageAPI.EXTRA_FORMATS)
     public List<Format> getExtraFormats() {
+        if (myFormats == null) {
+            myFormats = new ArrayList<>();
+        }
+
         return myFormats;
     }
 
@@ -91,6 +91,10 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
      */
     @JsonGetter(ImageAPI.EXTRA_QUALITIES)
     public List<Quality> getExtraQualities() {
+        if (myQualities == null) {
+            myQualities = new ArrayList<>();
+        }
+
         return myQualities;
     }
 
@@ -122,6 +126,10 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
      */
     @JsonGetter(ImageAPI.SIZES)
     public List<Size> getSizes() {
+        if (mySizes == null) {
+            mySizes = new ArrayList<>();
+        }
+
         return mySizes;
     }
 
@@ -132,6 +140,10 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
      */
     @JsonGetter(ImageAPI.TILES)
     public List<Tile> getTiles() {
+        if (myTiles == null) {
+            myTiles = new ArrayList<>();
+        }
+
         return myTiles;
     }
 
