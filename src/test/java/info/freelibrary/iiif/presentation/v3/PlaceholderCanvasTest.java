@@ -299,133 +299,145 @@ public class PlaceholderCanvasTest extends AbstractTest {
     /**
      * Tests {@link PlaceholderCanvas#supplementWith(boolean, List)}.
      */
+    @Test
     public final void testSupplementWithChoiceContentResourceList() {
         final Label label = new Label(StringUtils.format(LABEL, myID));
         final PlaceholderCanvas canvas = new PlaceholderCanvas(myMinter, label);
 
-        checkSupplementingPages(canvas.paintWith(true, List.of(new TextContent(myID))), true);
+        checkSupplementingPages(canvas.supplementWith(true, List.of(new TextContent(myID))), true);
     }
 
     /**
      * Tests {@link PlaceholderCanvas#supplementWith(boolean, ContentResource...)}.
      */
+    @Test
     public final void testSupplementWithChoiceContentResources() {
         final Label label = new Label(StringUtils.format(LABEL, myID));
         final PlaceholderCanvas canvas = new PlaceholderCanvas(myMinter, label);
 
-        checkSupplementingPages(canvas.paintWith(true, new TextContent(myID)), true);
+        checkSupplementingPages(canvas.supplementWith(true, new TextContent(myID)), true);
     }
 
     /**
      * Tests {@link PlaceholderCanvas#supplementWith(List)}.
      */
+    @Test
     public final void testSupplementWithContentResourceList() {
         final Label label = new Label(StringUtils.format(LABEL, myID));
         final PlaceholderCanvas canvas = new PlaceholderCanvas(myMinter, label);
 
-        checkSupplementingPages(canvas.paintWith(List.of(new TextContent(myID))), false);
+        checkSupplementingPages(canvas.supplementWith(List.of(new TextContent(myID))), false);
     }
 
     /**
      * Tests {@link PlaceholderCanvas#supplementWith(ContentResource...)}.
      */
+    @Test
     public final void testSupplementWithContentResources() {
         final Label label = new Label(StringUtils.format(LABEL, myID));
         final PlaceholderCanvas canvas = new PlaceholderCanvas(myMinter, label);
 
-        checkSupplementingPages(canvas.paintWith(new TextContent(myID)), false);
+        checkSupplementingPages(canvas.supplementWith(new TextContent(myID)), false);
     }
 
     /**
      * Tests {@link PlaceholderCanvas#supplementWith(String, boolean, List)}.
      */
+    @Test
     public final void testSupplementWithRegionChoiceContentResourceList() {
         final Label label = new Label(StringUtils.format(LABEL, myID));
         final PlaceholderCanvas canvas = new PlaceholderCanvas(myMinter, label);
 
         canvas.setWidthHeight(200, 200);
-        checkSupplementingPages(canvas.paintWith(SELECTOR, true, List.of(new TextContent(myID))), true);
+        checkSupplementingPages(canvas.supplementWith(SELECTOR, true, List.of(new TextContent(myID))), true);
     }
 
     /**
      * Tests {@link PlaceholderCanvas#supplementWith(String, boolean, ContentResource...)}.
      */
+    @Test
     public final void testSupplementWithRegionChoiceContentResources() {
         final Label label = new Label(StringUtils.format(LABEL, myID));
         final PlaceholderCanvas canvas = new PlaceholderCanvas(myMinter, label);
 
         canvas.setWidthHeight(200, 200);
-        checkSupplementingPages(canvas.paintWith(SELECTOR, true, new TextContent(myID)), true);
+        checkSupplementingPages(canvas.supplementWith(SELECTOR, true, new TextContent(myID)), true);
     }
 
     /**
      * Tests {@link PlaceholderCanvas#supplementWith(String, List)}.
      */
+    @Test
     public final void testSupplementWithRegionContentResourceList() {
         final Label label = new Label(StringUtils.format(LABEL, myID));
         final PlaceholderCanvas canvas = new PlaceholderCanvas(myMinter, label);
 
         canvas.setWidthHeight(200, 200);
-        checkSupplementingPages(canvas.paintWith(SELECTOR, List.of(new TextContent(myID))), false);
+        checkSupplementingPages(canvas.supplementWith(SELECTOR, List.of(new TextContent(myID))), false);
     }
 
     /**
      * Tests {@link PlaceholderCanvas#supplementWith(String, ContentResource...)}.
      */
+    @Test
     public final void testSupplementWithRegionContentResources() {
         final Label label = new Label(StringUtils.format(LABEL, myID));
         final PlaceholderCanvas canvas = new PlaceholderCanvas(myMinter, label);
 
         canvas.setWidthHeight(200, 200);
-        checkSupplementingPages(canvas.paintWith(SELECTOR, new TextContent(myID)), false);
+        checkSupplementingPages(canvas.supplementWith(SELECTOR, new TextContent(myID)), false);
     }
 
     /**
      * Tests {@link PlaceholderCanvas#supplementWith(MediaFragmentSelector, boolean, List)}.
      */
+    @Test
     public final void testSupplementWithSelectorChoiceContentResourceList() {
         final Label label = new Label(StringUtils.format(LABEL, myID));
         final PlaceholderCanvas canvas = new PlaceholderCanvas(myMinter, label);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, 100, 100);
 
         canvas.setWidthHeight(200, 200);
-        checkSupplementingPages(canvas.paintWith(selector, true, List.of(new TextContent(myID))), true);
+        checkSupplementingPages(canvas.supplementWith(selector, true, List.of(new TextContent(myID))), true);
     }
 
     /**
      * Tests {@link PlaceholderCanvas#supplementWith(MediaFragmentSelector, boolean, ContentResource...)}.
      */
+    @Test
     public final void testSupplementWithSelectorChoiceContentResources() {
         final Label label = new Label(StringUtils.format(LABEL, myID));
         final PlaceholderCanvas canvas = new PlaceholderCanvas(myMinter, label);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, 100, 100);
 
         canvas.setWidthHeight(200, 200);
-        checkSupplementingPages(canvas.paintWith(selector, true, new TextContent(myID)), true);
+        checkSupplementingPages(canvas.supplementWith(selector, true, new TextContent(myID)), true);
     }
 
     /**
      * Tests {@link PlaceholderCanvas#supplementWith(MediaFragmentSelector, List)}.
      */
+    @Test
     public final void testSupplementWithSelectorContentResourceList() {
         final Label label = new Label(StringUtils.format(LABEL, myID));
         final PlaceholderCanvas canvas = new PlaceholderCanvas(myMinter, label);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, 100, 100);
 
         canvas.setWidthHeight(200, 200);
-        checkSupplementingPages(canvas.paintWith(selector, List.of(new TextContent(myID))), false);
+        checkSupplementingPages(canvas.supplementWith(selector, List.of(new TextContent(myID))), false);
     }
 
     /**
      * Tests {@link PlaceholderCanvas#supplementWith(MediaFragmentSelector, ContentResource...)}.
      */
+    @Test
     public final void testSupplementWithSelectorContentResources() {
         final Label label = new Label(StringUtils.format(LABEL, myID));
         final PlaceholderCanvas canvas = new PlaceholderCanvas(myMinter, label);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, 100, 100);
 
         canvas.setWidthHeight(200, 200);
-        checkSupplementingPages(canvas.paintWith(selector, new TextContent(myID)), false);
+        checkSupplementingPages(canvas.supplementWith(selector, new TextContent(myID)), false);
     }
 
     /**
