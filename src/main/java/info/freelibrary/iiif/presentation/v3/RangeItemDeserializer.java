@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
@@ -56,9 +57,10 @@ public class RangeItemDeserializer extends StdDeserializer<Range.Item> {
         final TreeNode treeNode = aParser.getCodec().readTree(aParser);
 
         return switch (treeNode.get(JsonKeys.TYPE).toString().replace("\"", EMPTY)) {
-            case ResourceTypes.RANGE -> new Range.Item(Range.fromJSON(treeNode.toString()));
-            case ResourceTypes.CANVAS -> new Range.Item(Canvas.fromJSON(treeNode.toString()), true);
-            case ResourceTypes.SPECIFIC_RESOURCE -> new Range.Item(SpecificResource.fromJSON(treeNode.toString()));
+            case ResourceTypes.RANGE -> new Range.Item(JSON.readValue(treeNode.toString(), Range.class));
+            case ResourceTypes.CANVAS -> new Range.Item(JSON.readValue(treeNode.toString(), Canvas.class), true);
+            case ResourceTypes.SPECIFIC_RESOURCE ->
+                new Range.Item(JSON.readValue(treeNode.toString(), SpecificResource.class));
             default ->
                 throw new JsonParseException(aParser, LOGGER.getMessage(MessageCodes.JPA_041, treeNode.toString()));
         };

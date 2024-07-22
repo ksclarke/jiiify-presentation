@@ -5,12 +5,8 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.Eclipse;
-
-import info.freelibrary.iiif.presentation.v3.utils.JSON;
-import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * A containing resource that includes the resource that has the <code>partOf</code> property. For example, the
@@ -46,20 +42,5 @@ public class PartOf extends AbstractLinkProperty<PartOf> {
     @JsonInclude(Include.NON_EMPTY)
     public Optional<Label> getLabel() {
         return Optional.ofNullable(myLabel);
-    }
-
-    /**
-     * Returns a PartOf from its JSON representation.
-     *
-     * @param aJsonString A JSON serialization of a PartOf
-     * @throws JsonParsingException If the supplied JSON string cannot be successfully parsed
-     * @return This PartOf
-     */
-    static PartOf fromJSON(final String aJsonString) {
-        try {
-            return JSON.getReader(PartOf.class).readValue(aJsonString);
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details);
-        }
     }
 }

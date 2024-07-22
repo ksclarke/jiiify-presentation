@@ -5,13 +5,10 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.Eclipse;
 
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
-import info.freelibrary.iiif.presentation.v3.utils.JSON;
-import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * A link to a machine readable document that semantically describes the resource with the seeAlso property, such as an
@@ -49,20 +46,4 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> implements Localized<
     public Optional<Label> getLabel() {
         return Optional.ofNullable(myLabel);
     }
-
-    /**
-     * Returns a SeeAlso from its JSON representation.
-     *
-     * @param aJsonString A JSON serialization of a SeeAlso
-     * @return A SeeAlso
-     * @throws JsonParsingException If the supplied JSON couldn't be parsed into a SeeAlso object
-     */
-    static SeeAlso fromJSON(final String aJsonString) {
-        try {
-            return JSON.getReader(SeeAlso.class).readValue(aJsonString);
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details);
-        }
-    }
-
 }

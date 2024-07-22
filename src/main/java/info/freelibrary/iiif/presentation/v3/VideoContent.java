@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation.v3;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -9,16 +10,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
-import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * Video content that can be associated with an annotation or used as a thumbnail.
@@ -55,6 +53,24 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
      */
     private VideoContent() {
         super(ResourceTypes.VIDEO, ResourceBehavior.class);
+    }
+
+    @Override
+    public boolean equals(final Object aObject) {
+        if (this == aObject) {
+            return true;
+        }
+
+        if (aObject == null || getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        if (aObject instanceof final VideoContent other) {
+            return Objects.equals(myHeight, other.myHeight) && Objects.equals(myWidth, other.myWidth) &&
+                    Objects.equals(myDuration, other.myDuration) && super.equals(other);
+        }
+
+        return false;
     }
 
     /**
@@ -94,6 +110,11 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), myHeight, myWidth, myDuration);
+    }
+
+    @Override
     @JsonIgnore
     public VideoContent setBehaviors(final Behavior... aBehaviorArray) {
         return setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorArray));
@@ -102,11 +123,16 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
     public VideoContent setBehaviors(final List<Behavior> aBehaviorList) {
+        final VideoContent videoContent;
+
         if (aBehaviorList instanceof final BehaviorList behaviorList) {
             behaviorList.checkType(ResourceBehavior.class, getClass());
+            videoContent = super.setBehaviors(behaviorList);
+        } else {
+            videoContent = super.setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorList));
         }
 
-        return super.setBehaviors(aBehaviorList);
+        return videoContent;
     }
 
     /**
@@ -161,20 +187,4 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
         myWidth = aWidth;
         return this;
     }
-
-    /**
-     * Returns video content from its JSON representation.
-     *
-     * @param aJsonString A JSON serialization of video content
-     * @return The video content
-     * @throws JsonParsingException If the supplied JSON string cannot be parsed into a video content resource
-     */
-    static VideoContent fromJSON(final String aJsonString) {
-        try {
-            return JSON.getReader(VideoContent.class).readValue(aJsonString);
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details);
-        }
-    }
-
 }

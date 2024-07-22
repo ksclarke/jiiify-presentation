@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import info.freelibrary.util.ListUtils;
 import info.freelibrary.util.warnings.JDK;
 
 import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
@@ -73,6 +74,24 @@ abstract class AbstractContentResource<T extends AbstractContentResource<T>> ext
                 : MediaType.parse(aID).orElse(null);
     }
 
+    @Override
+    public boolean equals(final Object aObject) {
+        if (this == aObject) {
+            return true;
+        }
+
+        if (aObject == null || getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        if (aObject instanceof final AbstractContentResource<?> other) {
+            return Objects.equals(myFormat, other.myFormat) && ListUtils.equals(myAnnotations, other.myAnnotations) &&
+                    ListUtils.equals(myLanguages, other.myLanguages) && super.equals(other);
+        }
+
+        return false;
+    }
+
     /**
      * Gets the content resource's annotations.
      *
@@ -111,6 +130,11 @@ abstract class AbstractContentResource<T extends AbstractContentResource<T>> ext
         }
 
         return myLanguages;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), myFormat, myAnnotations, myLanguages);
     }
 
     /**

@@ -113,6 +113,24 @@ class NavigableResource<T extends NavigableResource<T>> extends AbstractResource
         return (T) this;
     }
 
+    @Override
+    public boolean equals(final Object aObject) {
+        if (this == aObject) {
+            return true;
+        }
+
+        if (aObject == null || getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        if (aObject instanceof final NavigableResource<?> other) {
+            return Objects.equals(myNavDate, other.myNavDate) && Objects.equals(myNavPlace, other.myNavPlace) &&
+                    super.equals(other);
+        }
+
+        return false;
+    }
+
     /**
      * Gets the primary context.
      *
@@ -156,6 +174,11 @@ class NavigableResource<T extends NavigableResource<T>> extends AbstractResource
     @JsonGetter(JsonKeys.NAV_PLACE)
     public NavPlace getNavPlace() {
         return myNavPlace;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), myNavDate, myNavPlace);
     }
 
     /**

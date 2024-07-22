@@ -13,6 +13,7 @@ import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.cookbooks.AbstractCookbookTest;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 
 /**
  * Tests built around examples/snippets in the v3 presentation specification.
@@ -33,7 +34,7 @@ public class SpecSnippetsTest extends AbstractCookbookTest {
     @Test
     public final void testSpecExample() throws IOException {
         final String expected = getExpected("spec-example");
-        final String found = Manifest.fromJSON(expected).toString();
+        final String found = JSON.readValue(expected, Manifest.class).toString();
 
         assertEquals(format(expected), format(found));
     }

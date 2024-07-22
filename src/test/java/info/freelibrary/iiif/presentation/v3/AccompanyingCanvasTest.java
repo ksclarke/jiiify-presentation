@@ -21,6 +21,7 @@ import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.ids.MinterFactory;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 
 /**
@@ -67,7 +68,7 @@ public class AccompanyingCanvasTest {
         final Minter minter = MinterFactory.getMinter(id);
         final AccompanyingCanvas canvas = new AccompanyingCanvas(minter);
 
-        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID().toString()).matches());
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID()).matches());
     }
 
     /**
@@ -93,7 +94,7 @@ public class AccompanyingCanvasTest {
         final Label label = new Label(StringUtils.format(LABEL, id));
         final AccompanyingCanvas canvas = new AccompanyingCanvas(minter, label);
 
-        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID().toString()).matches());
+        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID()).matches());
     }
 
     /**
@@ -132,7 +133,7 @@ public class AccompanyingCanvasTest {
     @Test
     public final void testCanvasFromString() throws IOException {
         final String json = getFixture(Canvas.class);
-        assertEquals(json, Canvas.fromJSON(json).toString());
+        assertEquals(json, JSON.readValue(json, Canvas.class).toString());
     }
 
     /**
@@ -142,10 +143,10 @@ public class AccompanyingCanvasTest {
      */
     @Test
     public final void testCollectionFromString() throws IOException {
-        final String json = getFixture(Collection.class);
-        final Collection collection = Collection.fromJSON(json);
+        final String expected = getFixture(Collection.class);
+        final String found = JSON.readValue(expected, Collection.class).toString();
 
-        assertEquals(json, collection.toString());
+        assertEquals(expected, found);
     }
 
     /**
@@ -155,10 +156,10 @@ public class AccompanyingCanvasTest {
      */
     @Test
     public final void testManifestFromString() throws IOException {
-        final String json = getFixture(Manifest.class);
-        final Manifest manifest = Manifest.fromJSON(json);
+        final String expected = getFixture(Manifest.class);
+        final String found = JSON.readValue(expected, Manifest.class).toString();
 
-        assertEquals(json, manifest.toString());
+        assertEquals(expected, found);
     }
 
     /**
@@ -313,9 +314,7 @@ public class AccompanyingCanvasTest {
     @Test
     public final void testRangeFromString() throws IOException {
         final String json = getFixture(Range.class);
-        final Range range = Range.fromJSON(json);
-
-        assertEquals(json, range.toString());
+        assertEquals(json, JSON.readValue(json, Range.class).toString());
     }
 
     /**

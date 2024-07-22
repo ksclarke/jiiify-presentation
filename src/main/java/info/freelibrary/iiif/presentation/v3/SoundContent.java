@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation.v3;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -9,16 +10,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
-import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * Sound content that can be associated with an annotation or used as a thumbnail.
@@ -51,6 +49,23 @@ public class SoundContent extends AbstractContentResource<SoundContent>
         super(ResourceTypes.SOUND, ResourceBehavior.class);
     }
 
+    @Override
+    public boolean equals(final Object aObject) {
+        if (this == aObject) {
+            return true;
+        }
+
+        if (aObject == null || getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        if (aObject instanceof final SoundContent other) {
+            return Objects.equals(myDuration, other.myDuration) && super.equals(other);
+        }
+
+        return false;
+    }
+
     /**
      * Gets the duration of the sound content.
      *
@@ -64,6 +79,11 @@ public class SoundContent extends AbstractContentResource<SoundContent>
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), myDuration);
+    }
+
+    @Override
     @JsonIgnore
     public SoundContent setBehaviors(final Behavior... aBehaviorArray) {
         return setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorArray));
@@ -72,11 +92,16 @@ public class SoundContent extends AbstractContentResource<SoundContent>
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
     public SoundContent setBehaviors(final List<Behavior> aBehaviorList) {
+        final SoundContent soundContent;
+
         if (aBehaviorList instanceof final BehaviorList behaviorList) {
             behaviorList.checkType(ResourceBehavior.class, getClass());
+            soundContent = super.setBehaviors(behaviorList);
+        } else {
+            soundContent = super.setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorList));
         }
 
-        return super.setBehaviors(aBehaviorList);
+        return soundContent;
     }
 
     /**
@@ -91,20 +116,4 @@ public class SoundContent extends AbstractContentResource<SoundContent>
         myDuration = convertToFinitePositiveFloat(aDuration);
         return this;
     }
-
-    /**
-     * Returns sound content from its JSON representation.
-     *
-     * @param aJsonString A JSON serialization of sound content
-     * @return The sound content
-     * @throws JsonParsingException If there is trouble parsing the JSON
-     */
-    static SoundContent fromJSON(final String aJsonString) {
-        try {
-            return JSON.getReader(SoundContent.class).readValue(aJsonString);
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details);
-        }
-    }
-
 }

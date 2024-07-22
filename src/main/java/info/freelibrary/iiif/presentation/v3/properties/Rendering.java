@@ -3,12 +3,8 @@ package info.freelibrary.iiif.presentation.v3.properties;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.Eclipse;
-
-import info.freelibrary.iiif.presentation.v3.utils.JSON;
-import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * A resource that is an alternative, non-IIIF representation of the resource that has the <code>rendering</code>
@@ -44,20 +40,5 @@ public class Rendering extends AbstractLinkProperty<Rendering> {
     @JsonInclude(Include.NON_EMPTY)
     public Label getLabel() {
         return myLabel;
-    }
-
-    /**
-     * Returns a rendering from its JSON representation.
-     *
-     * @param aJsonString A JSON serialization of a rendering
-     * @throws JsonParsingException If the supplied JSON string cannot be successfully parsed
-     * @return This rendering
-     */
-    static Rendering fromJSON(final String aJsonString) {
-        try {
-            return JSON.getReader(Rendering.class).readValue(aJsonString);
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details);
-        }
     }
 }

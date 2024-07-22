@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.annotations;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -54,6 +55,23 @@ public class Target {
         myURI = UriUtils.checkID(aURI, false);
     }
 
+    @Override
+    public boolean equals(final Object aObject) {
+        if (this == aObject) {
+            return true;
+        }
+
+        if (aObject == null || getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        if (aObject instanceof final Target other) {
+            return Objects.equals(mySpecificResource, other.mySpecificResource) && Objects.equals(myURI, other.myURI);
+        }
+
+        return false;
+    }
+
     /**
      * Gets the optional specific resources if there is one, else an empty optional.
      *
@@ -71,5 +89,10 @@ public class Target {
     public String getURI() {
         return mySpecificResource != null
                 ? StringUtils.format("{}#{}", mySpecificResource.getSource(), mySpecificResource.getSelector()) : myURI;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(mySpecificResource, myURI);
     }
 }

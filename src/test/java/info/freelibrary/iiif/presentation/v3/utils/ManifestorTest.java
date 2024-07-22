@@ -44,8 +44,9 @@ public class ManifestorTest {
     public final void testWriteFile() throws IOException {
         final File tmpJsonFile = new File(TMP_DIR, UUID.randomUUID().toString() + JSON_EXT);
         final String json = StringUtils.read(MANIFEST);
+        final Manifest manifest = JSON.readValue(json, Manifest.class);
 
-        new Manifestor().write(Manifest.fromJSON(json), tmpJsonFile);
+        new Manifestor().write(manifest, tmpJsonFile);
         assertEquals(format(json), format(StringUtils.read(tmpJsonFile)));
     }
 

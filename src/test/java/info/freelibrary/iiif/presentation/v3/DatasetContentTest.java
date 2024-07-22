@@ -1,62 +1,43 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import info.freelibrary.util.StringUtils;
-
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.InvalidBehaviorException;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
-import info.freelibrary.iiif.presentation.v3.utils.JSON;
 
 /**
- * Tests for {@link SoundContent}.
+ * Tests of {@code DatasetContent}.
  */
-public class SoundContentTest extends AbstractTest {
+public class DatasetContentTest {
 
-    /** The test ID. */
+    /** A test ID. */
     private String myID;
 
     /**
-     * Sets up test environment.
+     * Sets up testing environment.
      */
     @Before
-    public final void setUp() {
-        myID = "https://" + UUID.randomUUID().toString() + ".mp3";
+    public final void setup() {
+        myID = "https://" + UUID.randomUUID().toString();
     }
 
     /**
-     * Tests sound content test fixture.
-     *
-     * @throws IOException If there is trouble reading the test fixture.
-     */
-    @Test
-    public final void testFixture0003() throws IOException {
-        final String expected = format(StringUtils.read(new File("src/test/resources/fixtures/0002-mvm-audio.json")));
-        final String found = JSON.readValue(expected, Manifest.class).toString();
-
-        assertEquals(expected, format(found));
-    }
-
-    /**
-     * Tests {@link SoundContent#setBehaviors(Behavior...)}.
+     * Tests {@link DatasetContent#setBehaviors(Behavior...)}.
      */
     @Test
     public final void testSetBehaviorsBehaviorArray() {
-        final List<Behavior> behaviors = new SoundContent(myID).setBehaviors(ResourceBehavior.HIDDEN).getBehaviors();
+        final List<Behavior> behaviors = new DatasetContent(myID).setBehaviors(ResourceBehavior.HIDDEN).getBehaviors();
 
         assertEquals(1, behaviors.size());
         assertEquals(ResourceBehavior.HIDDEN, behaviors.get(0));
@@ -64,19 +45,19 @@ public class SoundContentTest extends AbstractTest {
     }
 
     /**
-     * Tests {@link SoundContent#setBehaviors(Behavior...)} with a bad behavior.
+     * Tests {@link DatasetContent#setBehaviors(Behavior...)} with a bad behavior.
      */
     @Test(expected = InvalidBehaviorException.class)
     public final void testSetBehaviorsBehaviorArrayInvalid() {
-        new SoundContent(myID).setBehaviors(CanvasBehavior.NON_PAGED);
+        new DatasetContent(myID).setBehaviors(CanvasBehavior.NON_PAGED);
     }
 
     /**
-     * Tests {@link SoundContent#setBehaviors(List)}.
+     * Tests {@link DatasetContent#setBehaviors(List)}.
      */
     @Test
     public final void testSetBehaviorsBehaviorList() {
-        final SoundContent content = new SoundContent(myID);
+        final DatasetContent content = new DatasetContent(myID);
         final List<Behavior> behaviors = content.setBehaviors(List.of(ResourceBehavior.HIDDEN)).getBehaviors();
 
         assertEquals(1, behaviors.size());
@@ -85,31 +66,23 @@ public class SoundContentTest extends AbstractTest {
     }
 
     /**
-     * Tests {@link SoundContent#setBehaviors(List)} with a bad behavior.
+     * Tests {@link DatasetContent#setBehaviors(List)} with a bad behavior.
      */
     @Test(expected = InvalidBehaviorException.class)
     public final void testSetBehaviorsBehaviorListInvalid() {
-        new SoundContent(myID).setBehaviors(List.of(CanvasBehavior.NON_PAGED));
+        new DatasetContent(myID).setBehaviors(List.of(CanvasBehavior.NON_PAGED));
     }
 
     /**
-     * Tests {@link SoundContent#setBehaviors(List)} with an explicit {@code BehaviorList}.
+     * Tests {@link DatasetContent#setBehaviors(List)} with an explicit {@code BehaviorList}.
      */
     @Test
     public final void testSetBehaviorsRealBehaviorList() {
-        final List<Behavior> behaviors = new SoundContent(myID)
+        final List<Behavior> behaviors = new DatasetContent(myID)
                 .setBehaviors(new BehaviorList(ResourceBehavior.class, ResourceBehavior.HIDDEN)).getBehaviors();
 
         assertEquals(1, behaviors.size());
         assertEquals(ResourceBehavior.HIDDEN, behaviors.get(0));
         assertTrue(behaviors instanceof BehaviorList);
-    }
-
-    /**
-     * Test method for {@link SoundContent#getDuration()}.
-     */
-    @Test
-    public final void testSetGetDuration() {
-        assertEquals(1.5f, new SoundContent(myID).setDuration(1.5f).getDuration(), 0);
     }
 }

@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +13,6 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -113,6 +111,24 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
         return this;
     }
 
+    @Override
+    public boolean equals(final Object aObject) {
+        if (this == aObject) {
+            return true;
+        }
+
+        if (aObject == null || getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        if (aObject instanceof final AnnotationPage<?> other) {
+            return Objects.equals(myAnnotations, other.myAnnotations) &&
+                    Objects.equals(myNextAnnotationPage, other.myNextAnnotationPage) && super.equals(other);
+        }
+
+        return false;
+    }
+
     /**
      * Gets the annotation page's annotations.
      *
@@ -140,6 +156,11 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
     @SuppressWarnings({ JDK.UNCHECKED })
     public <T extends Annotation<T>> Optional<AnnotationPage<T>> getNextPage() {
         return Optional.ofNullable((AnnotationPage<T>) myNextAnnotationPage);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), myAnnotations, myNextAnnotationPage);
     }
 
     /**
@@ -192,11 +213,16 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
     public AnnotationPage<A> setBehaviors(final List<Behavior> aBehaviorList) {
+        final AnnotationPage<A> page;
+
         if (aBehaviorList instanceof final BehaviorList behaviorList) {
             behaviorList.checkType(ResourceBehavior.class, getClass());
+            page = super.setBehaviors(behaviorList);
+        } else {
+            page = super.setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorList));
         }
 
-        return super.setBehaviors(aBehaviorList);
+        return page;
     }
 
     /**
@@ -280,21 +306,5 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
         }
 
         return this;
-    }
-
-    /**
-     * Returns an annotation from its JSON representation.
-     *
-     * @param <A> The type of annotation contained in this page
-     * @param aJsonString An annotation in JSON form
-     * @return The Annotation
-     * @throws JsonParsingException If there is trouble parsing the annotation page from the supplied JSON string
-     */
-    public static <A extends Annotation<A>> AnnotationPage<A> fromJSON(final String aJsonString) {
-        try {
-            return JSON.getReader(new TypeReference<AnnotationPage<A>>() {}).readValue(aJsonString);
-        } catch (final IOException details) {
-            throw new JsonParsingException(details);
-        }
     }
 }

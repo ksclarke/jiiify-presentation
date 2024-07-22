@@ -32,8 +32,8 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavi
 import info.freelibrary.iiif.presentation.v3.services.ImageService3;
 import info.freelibrary.iiif.presentation.v3.services.ImageService3.Profile;
 import info.freelibrary.iiif.presentation.v3.services.OtherService3;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
-import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * A manifest test.
@@ -226,29 +226,23 @@ public class ManifestTest extends AbstractTest {
     }
 
     /**
-     * Tests manifest creation fromJSON().
-     */
-    @Test
-    public void testFromJSON() throws IOException {
-        final String json = format(StringUtils.read(new File(SINAI_JSON)));
-        assertEquals(json, format(Manifest.fromJSON(json).toString()));
-    }
-
-    /**
-     * Test manifest creation using fromJSON() with a Collection.
-     */
-    @Test(expected = JsonParsingException.class)
-    public void testFromStringCollection() throws IOException {
-        Manifest.fromJSON(StringUtils.read(new File(TestUtils.TEST_DIR, "collection1.json")));
-    }
-
-    /**
      * Tests {@link Manifest#getContext() getContext} method.
      */
     @Test
     public void testGetPrimaryContext() {
         assertEquals(AbstractResource.PRESENTATION_CONTEXT_URI,
                 myManifest.addContexts(URI.create(myLoremIpsum.getUrl())).getContext());
+    }
+
+    /**
+     * Tests manifest creation.
+     */
+    @Test
+    public void testParsingManifest() throws IOException {
+        final String expected = format(StringUtils.read(new File(SINAI_JSON)));
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(expected, format(found));
     }
 
     /**

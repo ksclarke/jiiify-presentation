@@ -23,7 +23,9 @@ import info.freelibrary.iiif.presentation.v3.properties.NavDate;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CollectionBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.InvalidBehaviorException;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * Tests a collection.
@@ -64,27 +66,19 @@ public class CollectionTest {
      */
     @Test
     public void testFromJSON() throws IOException {
-        final String json = format(StringUtils.read(TEST_FILE1));
-        final Collection collection = Collection.fromJSON(json);
+        final String expected = format(StringUtils.read(TEST_FILE1));
+        final String found = JSON.readValue(expected, Collection.class).toString();
 
-        assertEquals(json, collection.toString());
+        assertEquals(expected, found);
     }
 
     /**
-     * Test collection doc creation fromJSON() with a Manifest.
+     * Test collection doc creation with a Manifest.
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = JsonParsingException.class)
     public void testFromManifest() throws IOException {
-        Collection.fromJSON(StringUtils.read(new File(TestUtils.TEST_DIR, "z1960050.json")));
-    }
-
-    /**
-     * Tests reading a collection document from a JSON string.
-     */
-    @Test
-    public void testFromString() throws IOException {
-        final String json = format(StringUtils.read(TEST_FILE1));
-        assertEquals(json, Collection.fromJSON(json).toString());
+        final String expected = StringUtils.read(new File(TestUtils.TEST_DIR, "z1960050.json"));
+        JSON.readValue(expected, Collection.class);
     }
 
     /**
@@ -119,19 +113,6 @@ public class CollectionTest {
 
         collection.setNavDate(navDate);
         assertEquals(navDate, collection.getNavDate());
-    }
-
-    /**
-     * Tests reading a collection.
-     *
-     * @throws IOException If there is trouble reading the test JSON file.
-     */
-    @Test
-    public void testReadingCollection() throws IOException {
-        final String expected = format(StringUtils.read(TEST_FILE1));
-        final Collection collection = Collection.fromJSON(expected);
-
-        assertEquals(expected, collection.toString());
     }
 
     /**

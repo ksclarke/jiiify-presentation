@@ -3,16 +3,12 @@ package info.freelibrary.iiif.presentation.v3;
 
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import info.freelibrary.util.warnings.Eclipse;
 import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
-import info.freelibrary.iiif.presentation.v3.utils.JSON;
-import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * A single canvas that provides additional content for use before the main content of the resource is rendered. It may
@@ -210,20 +206,4 @@ public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas> impleme
     protected Object getJsonContext() {
         return null;
     }
-
-    /**
-     * Returns a PlaceholderCanvas from its JSON representation.
-     *
-     * @param aJsonString A JSON serialization of a placeholder canvas
-     * @return The placeholder canvas
-     * @throws JsonParsingException If the supplied JSON string cannot be parsed into a placeholder canvas
-     */
-    static PlaceholderCanvas fromJSON(final String aJsonString) {
-        try {
-            return JSON.getReader(PlaceholderCanvas.class).readValue(aJsonString);
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details);
-        }
-    }
-
 }

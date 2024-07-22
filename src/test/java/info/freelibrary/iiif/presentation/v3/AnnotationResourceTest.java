@@ -11,6 +11,7 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -61,13 +62,13 @@ public class AnnotationResourceTest extends AbstractTest {
      * @throws IOException If the test fixtures cannot be read
      */
     @Test
-    public void testAnnotationPageToString() throws IOException {
+    public <A extends Annotation<A>> void testAnnotationPageToString() throws IOException {
         final ObjectReader reader = JSON.getReader();
         final ObjectNode node = (ObjectNode) reader.readTree(new FileReader(ANNOTATION_PAGE));
         final AnnotationPage<?> page;
 
         node.remove(JsonKeys.CONTEXT); // Confirm this isn't added if it isn't present
-        page = AnnotationPage.fromJSON(node.toString());
+        page = JSON.readValue(node.toString(), new TypeReference<AnnotationPage<A>>() {});
 
         assertEquals(node, reader.readTree(page.toString()));
     }
@@ -80,11 +81,11 @@ public class AnnotationResourceTest extends AbstractTest {
      */
     @Test
     public <A extends Annotation<A>> void testExternalAnnotationPageToString() throws IOException {
-        final String expectedJSON = StringUtils.read(ANNOTATION_PAGE);
-        final String foundJSON = AnnotationPage.fromJSON(expectedJSON).toString();
+        final String expected = StringUtils.read(ANNOTATION_PAGE);
+        final String found = JSON.readValue(expected, new TypeReference<AnnotationPage<A>>() {}).toString();
         final ObjectReader reader = JSON.getReader();
 
-        assertEquals(reader.readTree(expectedJSON), reader.readTree(foundJSON));
+        assertEquals(reader.readTree(expected), reader.readTree(found));
     }
 
     /**

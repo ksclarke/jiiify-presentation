@@ -81,40 +81,43 @@ public class RangeTest extends AbstractTest {
      */
     @Test
     public final void testFixture0024() throws IOException {
-        final String json = StringUtils.read(new File("src/test/resources/fixtures/0024-book-4-toc.json"));
-        assertEquals(format(json), Manifest.fromJSON(json).toString());
+        final String expected = StringUtils.read(new File("src/test/resources/fixtures/0024-book-4-toc.json"));
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(format(expected), found);
     }
 
     /**
-     * Tests the {@link Range#fromJSON(String) fromString} method.
+     * Tests reading using {@link JSON}.
      */
     @Test
     public void testFromStringCanvasArray() {
-        assertEquals(format(CANVAS_ITEMS_JSON), Range.fromJSON(CANVAS_ITEMS_JSON).toString());
+        assertEquals(format(CANVAS_ITEMS_JSON), JSON.readValue(CANVAS_ITEMS_JSON, Range.class).toString());
     }
 
     /**
-     * Tests the {@link Range#fromJSON(String) fromString} method.
+     * Tests reading using {@link JSON}.
      */
     @Test
     public void testFromStringCanvasRef() {
-        assertEquals(format(CANVAS_ITEM_JSON), Range.fromJSON(CANVAS_ITEM_JSON).toString());
+        assertEquals(format(CANVAS_ITEM_JSON), JSON.readValue(CANVAS_ITEM_JSON, Range.class).toString());
     }
 
     /**
-     * Tests the {@link Range#fromJSON(String) fromString} method.
+     * Tests reading using {@link JSON}.
      */
     @Test
     public void testFromStringRange() {
-        assertEquals(format(RANGE_ITEM_JSON), Range.fromJSON(RANGE_ITEM_JSON).toString());
+        assertEquals(format(RANGE_ITEM_JSON), JSON.readValue(RANGE_ITEM_JSON, Range.class).toString());
     }
 
     /**
-     * Tests the {@link Range#fromJSON(String) fromString} method.
+     * Tests reading using {@link JSON}.
      */
     @Test
     public void testFromStringSpecificResource() {
-        assertEquals(format(SPECIFIC_RESOURCE_ITEM_JSON), Range.fromJSON(SPECIFIC_RESOURCE_ITEM_JSON).toString());
+        assertEquals(format(SPECIFIC_RESOURCE_ITEM_JSON),
+                JSON.readValue(SPECIFIC_RESOURCE_ITEM_JSON, Range.class).toString());
     }
 
     /**

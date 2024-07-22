@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation.v3;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -9,16 +10,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
-import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * Image content that can be associated with an annotation or set as a thumbnail.
@@ -54,6 +52,24 @@ public class ImageContent extends AbstractContentResource<ImageContent>
         super(ResourceTypes.IMAGE, ResourceBehavior.class);
     }
 
+    @Override
+    public boolean equals(final Object aObject) {
+        if (this == aObject) {
+            return true;
+        }
+
+        if (aObject == null || getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        if (aObject instanceof final ImageContent other) {
+            return Objects.equals(myHeight, other.myHeight) && Objects.equals(myWidth, other.myWidth) &&
+                    super.equals(other);
+        }
+
+        return false;
+    }
+
     /**
      * Gets the image's height.
      *
@@ -79,6 +95,11 @@ public class ImageContent extends AbstractContentResource<ImageContent>
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), myHeight, myWidth);
+    }
+
+    @Override
     @JsonIgnore
     public ImageContent setBehaviors(final Behavior... aBehaviorArray) {
         return setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorArray));
@@ -87,11 +108,16 @@ public class ImageContent extends AbstractContentResource<ImageContent>
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
     public ImageContent setBehaviors(final List<Behavior> aBehaviorList) {
+        final ImageContent imageContent;
+
         if (aBehaviorList instanceof final BehaviorList behaviorList) {
             behaviorList.checkType(ResourceBehavior.class, getClass());
+            imageContent = super.setBehaviors(behaviorList);
+        } else {
+            imageContent = super.setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorList));
         }
 
-        return super.setBehaviors(aBehaviorList);
+        return imageContent;
     }
 
     /**
@@ -133,20 +159,4 @@ public class ImageContent extends AbstractContentResource<ImageContent>
         myWidth = aWidth;
         return this;
     }
-
-    /**
-     * Returns image content from its JSON representation.
-     *
-     * @param aJsonString A JSON serialization of an image content resource
-     * @return The image content
-     * @throws JsonParsingException If the image content cannot be deserialized from the supplied JSON
-     */
-    static ImageContent fromJSON(final String aJsonString) {
-        try {
-            return JSON.getReader(ImageContent.class).readValue(aJsonString);
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details);
-        }
-    }
-
 }

@@ -47,7 +47,8 @@ public class CanvasBehaviorTest {
      */
     @Test(expected = JsonParsingException.class)
     public final void testJsonDeserializationDisjoint() throws IOException {
-        Manifest.fromJSON(StringUtils.read(new File(TEST_MANIFEST), StandardCharsets.UTF_8));
+        final String json = StringUtils.read(new File(TEST_MANIFEST), StandardCharsets.UTF_8);
+        JSON.readValue(json, Manifest.class).toString();
     }
 
     /**

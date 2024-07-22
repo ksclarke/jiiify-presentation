@@ -5,15 +5,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.IllegalArgumentI18nException;
 import info.freelibrary.util.warnings.Eclipse;
 
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
-import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * A web page that is about the object represented by the resource that has the <code>homepage</code> property. The web
@@ -60,20 +57,4 @@ public class Homepage extends AbstractLinkProperty<Homepage> implements Localize
 
         return this;
     }
-
-    /**
-     * Returns a homepage from its JSON representation.
-     *
-     * @param aJsonString A homepage in JSON form
-     * @throws JsonParsingException If the supplied JSON string cannot be successfully parsed
-     * @return A homepage
-     */
-    static Homepage fromJSON(final String aJsonString) {
-        try {
-            return JSON.getReader(Homepage.class).readValue(aJsonString);
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details);
-        }
-    }
-
 }

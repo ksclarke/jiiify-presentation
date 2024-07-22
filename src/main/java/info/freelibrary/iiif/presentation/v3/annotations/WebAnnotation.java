@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import info.freelibrary.util.I18nRuntimeException;
+import info.freelibrary.util.ListUtils;
 import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.Annotation;
@@ -149,6 +150,26 @@ public class WebAnnotation implements Annotation<WebAnnotation> {
         return myBodyHasChoice;
     }
 
+    @Override
+    public boolean equals(final Object aObject) {
+        if (this == aObject) {
+            return true;
+        }
+
+        if (aObject == null || getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        if (aObject instanceof final WebAnnotation other) {
+            return myBodyHasChoice == other.myBodyHasChoice && Objects.equals(myID, other.myID) &&
+                    Objects.equals(myLabel, other.myLabel) && Objects.equals(myMotivation, other.myMotivation) &&
+                    ListUtils.equals(myResources, other.myResources) && Objects.equals(myTarget, other.myTarget) &&
+                    Objects.equals(myTimeMode, other.myTimeMode);
+        }
+
+        return false;
+    }
+
     /**
      * Gets the resources associated with this annotation.
      *
@@ -211,6 +232,11 @@ public class WebAnnotation implements Annotation<WebAnnotation> {
     @Override
     public Optional<TimeMode> getTimeMode() {
         return Optional.ofNullable(myTimeMode);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(myBodyHasChoice, myID, myLabel, myMotivation, myResources, myTarget, myTimeMode);
     }
 
     /**

@@ -76,7 +76,8 @@ public class RenderingTest {
      */
     @Test
     public final void testEquals() throws IOException {
-        assertEquals(Rendering.fromJSON(getTestFixture()), Rendering.fromJSON(getTestFixture()));
+        final String json = JSON.readValue(getTestFixture(), Rendering.class).toString();
+        assertEquals(json, json);
     }
 
     /**
@@ -101,8 +102,8 @@ public class RenderingTest {
      */
     @Test
     public final void testHashCode() throws IOException {
-        final Rendering rendering1 = Rendering.fromJSON(getTestFixture());
-        final Rendering rendering2 = Rendering.fromJSON(getTestFixture());
+        final Rendering rendering1 = JSON.readValue(getTestFixture(), Rendering.class);
+        final Rendering rendering2 = JSON.readValue(getTestFixture(), Rendering.class);
 
         assertEquals(rendering1.hashCode(), rendering2.hashCode());
     }
@@ -197,7 +198,7 @@ public class RenderingTest {
     @Test
     public final void testToFromString() throws IOException {
         final String json = getTestFixture();
-        assertEquals(format(json), format(Rendering.fromJSON(json).toString()));
+        assertEquals(format(json), format(JSON.readValue(json, Rendering.class).toString()));
     }
 
     /**

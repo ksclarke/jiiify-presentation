@@ -47,7 +47,8 @@ public class ManifestBehaviorTest {
      */
     @Test(expected = JsonParsingException.class)
     public final void testJsonDeserializationDisjoint() throws IOException {
-        Manifest.fromJSON(StringUtils.read(new File(TEST_MANIFEST)));
+        final String json = StringUtils.read(new File(TEST_MANIFEST));
+        JSON.readValue(json, Manifest.class);
     }
 
     /**

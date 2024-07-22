@@ -314,20 +314,4 @@ public class Provider {
 
         return this;
     }
-
-    /**
-     * Returns a provider from its JSON representation.
-     *
-     * @param aJsonString A provider in its JSON form
-     * @return A provider
-     * @throws JsonParsingException If the supplied JSON cannot be parsed into a Provider object
-     */
-    static Provider fromJSON(final String aJsonString) {
-        try {
-            return JSON.getReader(Provider.class).readValue(aJsonString);
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details);
-        }
-    }
-
 }

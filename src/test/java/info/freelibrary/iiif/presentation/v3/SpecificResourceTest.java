@@ -14,6 +14,7 @@ import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.properties.selectors.AudioContentSelector;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.Selector;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 
 /**
@@ -22,14 +23,14 @@ import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 public class SpecificResourceTest extends AbstractTest {
 
     /** A JSON test fixture. */
-    private static final String JSON;
+    private static final String EXPECTED;
 
     /** The audio content selector. */
     private static final Selector SELECTOR = new AudioContentSelector();
 
     static {
         try {
-            JSON = StringUtils.read(new File("src/test/resources/json/specificresource.json"));
+            EXPECTED = StringUtils.read(new File("src/test/resources/json/specificresource.json"));
         } catch (final IOException details) {
             throw new I18nRuntimeException(details);
         }
@@ -63,12 +64,12 @@ public class SpecificResourceTest extends AbstractTest {
     }
 
     /**
-     * Tests {@link SpecificResource#fromJSON(String) fromString} method.
+     * Tests reading using {@link JSON}.
      */
     @Test
     public final void testFromString() {
-        final String json = TestUtils.format(StringUtils.format(JSON, myID, myOtherID));
-        assertEquals(json, SpecificResource.fromJSON(json).toString());
+        final String json = TestUtils.format(StringUtils.format(EXPECTED, myID, myOtherID));
+        assertEquals(json, JSON.readValue(json, SpecificResource.class).toString());
     }
 
     /**
