@@ -57,7 +57,7 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
 
     @Override
     public boolean equals(final Object aObject) {
-        VideoContent other;
+        final VideoContent other;
 
         if (this == aObject) {
             return true;
