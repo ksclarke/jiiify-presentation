@@ -14,7 +14,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.ListUtils;
 import info.freelibrary.util.warnings.Eclipse;
@@ -28,11 +27,8 @@ import info.freelibrary.iiif.presentation.v3.properties.NavDate;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CollectionBehavior;
-import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
-import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.Labeled;
-import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * An ordered list of {@link Manifest}(s) available for viewing; these manifests may be nested in other collections.
@@ -77,6 +73,8 @@ public class Collection extends NavigableResource<Collection> implements Resourc
 
     @Override
     public boolean equals(final Object aObject) {
+        final Collection other;
+
         if (this == aObject) {
             return true;
         }
@@ -85,15 +83,13 @@ public class Collection extends NavigableResource<Collection> implements Resourc
             return false;
         }
 
-        if (aObject instanceof final Collection other) {
-            return Objects.equals(myAccompanyingCanvas, other.myAccompanyingCanvas) &&
-                    Objects.equals(myPlaceholderCanvas, other.myPlaceholderCanvas) &&
-                    Objects.equals(myViewingDirection, other.myViewingDirection) &&
-                    ListUtils.equals(myServiceDefinitions, other.myServiceDefinitions) &&
-                    ListUtils.equals(myItems, other.myItems) && super.equals(other);
-        }
+        other = (Collection) aObject;
 
-        return false;
+        return Objects.equals(myAccompanyingCanvas, other.myAccompanyingCanvas) &&
+                Objects.equals(myPlaceholderCanvas, other.myPlaceholderCanvas) &&
+                Objects.equals(myViewingDirection, other.myViewingDirection) &&
+                ListUtils.equals(myServiceDefinitions, other.myServiceDefinitions) &&
+                ListUtils.equals(myItems, other.myItems) && super.equals(other);
     }
 
     /**
@@ -200,7 +196,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
             behaviorList.checkType(CollectionBehavior.class, getClass());
             collection = super.setBehaviors(behaviorList);
         } else {
-            collection = super.setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorList));
+            collection = super.setBehaviors(new BehaviorList(CollectionBehavior.class, aBehaviorList));
         }
 
         return collection;
@@ -269,20 +265,6 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     public Collection setViewingDirection(final ViewingDirection aViewingDirection) {
         myViewingDirection = aViewingDirection;
         return this;
-    }
-
-    /**
-     * Returns a JsonNode of the Collection manifest.
-     *
-     * @return A JsonNode of the Collection manifest
-     */
-    @Override
-    public String toString() {
-        try {
-            return JSON.getWriter(Collection.class).writeValueAsString(this);
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details);
-        }
     }
 
     /**

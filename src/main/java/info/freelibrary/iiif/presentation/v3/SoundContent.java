@@ -51,6 +51,8 @@ public class SoundContent extends AbstractContentResource<SoundContent>
 
     @Override
     public boolean equals(final Object aObject) {
+        final SoundContent other;
+
         if (this == aObject) {
             return true;
         }
@@ -59,11 +61,9 @@ public class SoundContent extends AbstractContentResource<SoundContent>
             return false;
         }
 
-        if (aObject instanceof final SoundContent other) {
-            return Objects.equals(myDuration, other.myDuration) && super.equals(other);
-        }
+        other = (SoundContent) aObject;
 
-        return false;
+        return Objects.equals(myDuration, other.myDuration) && super.equals(other);
     }
 
     /**

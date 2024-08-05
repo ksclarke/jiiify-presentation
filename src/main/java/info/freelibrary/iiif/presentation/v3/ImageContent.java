@@ -54,6 +54,8 @@ public class ImageContent extends AbstractContentResource<ImageContent>
 
     @Override
     public boolean equals(final Object aObject) {
+        final ImageContent other;
+
         if (this == aObject) {
             return true;
         }
@@ -62,12 +64,10 @@ public class ImageContent extends AbstractContentResource<ImageContent>
             return false;
         }
 
-        if (aObject instanceof final ImageContent other) {
-            return Objects.equals(myHeight, other.myHeight) && Objects.equals(myWidth, other.myWidth) &&
-                    super.equals(other);
-        }
+        other = (ImageContent) aObject;
 
-        return false;
+        return Objects.equals(myHeight, other.myHeight) && Objects.equals(myWidth, other.myWidth) &&
+                super.equals(other);
     }
 
     /**

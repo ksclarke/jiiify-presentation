@@ -2,6 +2,8 @@
 package info.freelibrary.iiif.presentation.v3;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -9,6 +11,8 @@ import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import info.freelibrary.util.Constants;
 
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -23,6 +27,9 @@ import info.freelibrary.iiif.presentation.v3.services.ImageService3;
  * Image content test.
  */
 public class ImageContentTest {
+
+    /** A ID prefix for testing. */
+    private static final String HTTPS = "https://";
 
     /** A sample image format. */
     private static final String IMAGE_PNG = "image/png";
@@ -42,6 +49,80 @@ public class ImageContentTest {
     @Before
     public final void setup() {
         myID = "https://" + UUID.randomUUID().toString();
+    }
+
+    /**
+     * Tests {@link ImageContent#equals(Object) ImageContent}.
+     */
+    @Test
+    public final void testImageContentEqualsHashCode() {
+        final String id = UUID.randomUUID().toString();
+        final ImageContent test1 = new ImageContent(HTTPS + id);
+        final ImageContent test2 = new ImageContent(HTTPS + id);
+
+        assertEquals(test1.hashCode(), test2.hashCode());
+    }
+
+    /**
+     * Tests {@link ImageContent#equals(Object) ImageContent}.
+     */
+    @Test
+    public final void testImageContentEqualsHashCodeNot() {
+        final ImageContent test1 = new ImageContent(HTTPS + UUID.randomUUID().toString());
+        final ImageContent test2 = new ImageContent(HTTPS + UUID.randomUUID().toString());
+
+        assertNotEquals(test1.hashCode(), test2.hashCode());
+    }
+
+    /**
+     * Tests {@link ImageContent#equals(Object) ImageContent}.
+     */
+    @Test
+    public final void testImageContentEqualsNull() {
+        final ImageContent test = new ImageContent(HTTPS + UUID.randomUUID().toString());
+        assertFalse(test.equals(null));
+    }
+
+    /**
+     * Tests {@link ImageContent#equals(Object) ImageContent}.
+     */
+    @Test
+    public final void testImageContentEqualsSame() {
+        final String id = UUID.randomUUID().toString();
+        final ImageContent test1 = new ImageContent(HTTPS + id);
+        final ImageContent test2 = new ImageContent(HTTPS + id);
+
+        assertTrue(test1.equals(test2));
+    }
+
+    /**
+     * Tests {@link ImageContent#equals(Object) ImageContent}.
+     */
+    @Test
+    public final void testImageContentEqualsSameNot() {
+        final ImageContent test1 = new ImageContent(HTTPS + UUID.randomUUID().toString());
+        final ImageContent test2 = new ImageContent(HTTPS + UUID.randomUUID().toString());
+
+        assertFalse(test1.equals(test2));
+    }
+
+    /**
+     * Tests {@link ImageContent#equals(Object) ImageContent}.
+     */
+    @Test
+    public final void testImageContentEqualsSameObject() {
+        final ImageContent test = new ImageContent(HTTPS + UUID.randomUUID().toString());
+        assertTrue(test.equals(test));
+    }
+
+    /**
+     * Tests {@link ImageContent#equals(Object) ImageContent}.
+     */
+    @Test
+    @SuppressWarnings("unlikely-arg-type")
+    public final void testImageContentEqualsString() {
+        final ImageContent test = new ImageContent(HTTPS + UUID.randomUUID().toString());
+        assertFalse(test.equals(new String(Constants.EMPTY)));
     }
 
     /**

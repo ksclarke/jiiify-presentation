@@ -114,7 +114,10 @@ class NavigableResource<T extends NavigableResource<T>> extends AbstractResource
     }
 
     @Override
+    @SuppressWarnings(JDK.UNCHECKED)
     public boolean equals(final Object aObject) {
+        final NavigableResource<T> other;
+
         if (this == aObject) {
             return true;
         }
@@ -123,12 +126,10 @@ class NavigableResource<T extends NavigableResource<T>> extends AbstractResource
             return false;
         }
 
-        if (aObject instanceof final NavigableResource<?> other) {
-            return Objects.equals(myNavDate, other.myNavDate) && Objects.equals(myNavPlace, other.myNavPlace) &&
-                    super.equals(other);
-        }
+        other = (NavigableResource<T>) aObject;
 
-        return false;
+        return Objects.equals(myNavDate, other.myNavDate) && Objects.equals(myNavPlace, other.myNavPlace) &&
+                super.equals(other);
     }
 
     /**

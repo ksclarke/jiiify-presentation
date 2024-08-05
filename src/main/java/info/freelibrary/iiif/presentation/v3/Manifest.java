@@ -14,7 +14,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.ListUtils;
 import info.freelibrary.util.warnings.JDK;
@@ -27,9 +26,7 @@ import info.freelibrary.iiif.presentation.v3.properties.Start;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
-import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * The overall description of the structure and properties of the digital representation of an object. It carries
@@ -129,6 +126,8 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
 
     @Override
     public boolean equals(final Object aObject) {
+        final Manifest other;
+
         if (this == aObject) {
             return true;
         }
@@ -137,18 +136,15 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
             return false;
         }
 
-        if (aObject instanceof final Manifest other) {
-            return Objects.equals(myAccompanyingCanvas, other.myAccompanyingCanvas) &&
-                    Objects.equals(myPlaceholderCanvas, other.myPlaceholderCanvas) &&
-                    ListUtils.equals(myCanvases, other.myCanvases) &&
-                    ListUtils.equals(myAnnotations, other.myAnnotations) &&
-                    ListUtils.equals(myRanges, other.myRanges) &&
-                    ListUtils.equals(myServiceDefinitions, myServiceDefinitions) &&
-                    Objects.equals(myStart, other.myStart) &&
-                    Objects.equals(myViewingDirection, other.myViewingDirection) && super.equals(other);
-        }
+        other = (Manifest) aObject;
 
-        return false;
+        return Objects.equals(myAccompanyingCanvas, other.myAccompanyingCanvas) &&
+                Objects.equals(myPlaceholderCanvas, other.myPlaceholderCanvas) &&
+                ListUtils.equals(myCanvases, other.myCanvases) &&
+                ListUtils.equals(myAnnotations, other.myAnnotations) && ListUtils.equals(myRanges, other.myRanges) &&
+                ListUtils.equals(myServiceDefinitions, myServiceDefinitions) &&
+                Objects.equals(myStart, other.myStart) &&
+                Objects.equals(myViewingDirection, other.myViewingDirection) && super.equals(other);
     }
 
     /**
@@ -451,19 +447,5 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     public Manifest setViewingDirection(final ViewingDirection aViewingDirection) {
         myViewingDirection = aViewingDirection;
         return this;
-    }
-
-    /**
-     * Returns a string/JSON representation of the manifest.
-     *
-     * @return A string representation of the manifest
-     */
-    @Override
-    public String toString() {
-        try {
-            return JSON.getWriter(Manifest.class).writeValueAsString(this);
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details);
-        }
     }
 }

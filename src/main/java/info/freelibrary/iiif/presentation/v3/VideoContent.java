@@ -57,6 +57,8 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
 
     @Override
     public boolean equals(final Object aObject) {
+        VideoContent other;
+
         if (this == aObject) {
             return true;
         }
@@ -65,12 +67,10 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
             return false;
         }
 
-        if (aObject instanceof final VideoContent other) {
-            return Objects.equals(myHeight, other.myHeight) && Objects.equals(myWidth, other.myWidth) &&
-                    Objects.equals(myDuration, other.myDuration) && super.equals(other);
-        }
+        other = (VideoContent) aObject;
 
-        return false;
+        return Objects.equals(myHeight, other.myHeight) && Objects.equals(myWidth, other.myWidth) &&
+                Objects.equals(myDuration, other.myDuration) && super.equals(other);
     }
 
     /**

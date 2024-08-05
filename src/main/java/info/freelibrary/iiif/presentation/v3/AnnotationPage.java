@@ -12,7 +12,6 @@ import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -23,10 +22,8 @@ import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
-import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * A page of {@link Annotation}(s) that associates different content resources with their respective {@link Canvas}(es).
@@ -112,7 +109,10 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
     }
 
     @Override
+    @SuppressWarnings(JDK.UNCHECKED)
     public boolean equals(final Object aObject) {
+        final AnnotationPage<?> other;
+
         if (this == aObject) {
             return true;
         }
@@ -121,12 +121,10 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
             return false;
         }
 
-        if (aObject instanceof final AnnotationPage<?> other) {
-            return Objects.equals(myAnnotations, other.myAnnotations) &&
-                    Objects.equals(myNextAnnotationPage, other.myNextAnnotationPage) && super.equals(other);
-        }
+        other = (AnnotationPage<?>) aObject;
 
-        return false;
+        return Objects.equals(myAnnotations, other.myAnnotations) &&
+                Objects.equals(myNextAnnotationPage, other.myNextAnnotationPage) && super.equals(other);
     }
 
     /**
@@ -156,6 +154,15 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
     @SuppressWarnings({ JDK.UNCHECKED })
     public <T extends Annotation<T>> Optional<AnnotationPage<T>> getNextPage() {
         return Optional.ofNullable((AnnotationPage<T>) myNextAnnotationPage);
+    }
+
+    /**
+     * Gets whether this page has an external context.
+     * 
+     * @return True if the page has external context
+     */
+    public boolean hasExternalContext() {
+        return isExternal;
     }
 
     @Override
@@ -246,21 +253,6 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
     public <T extends Annotation<T>> AnnotationPage<A> setNextPage(final AnnotationPage<T> anAnnotationPage) {
         myNextAnnotationPage = anAnnotationPage;
         return this;
-    }
-
-    /**
-     * Gets a string representation of the annotation page.
-     *
-     * @return A string representation of the annotation page
-     * @throws JsonParsingException If the annotation page cannot be serialized to valid JSON
-     */
-    @Override
-    public String toString() {
-        try {
-            return JSON.getWriter(AnnotationPage.class).writeValueAsString(this);
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details);
-        }
     }
 
     /**

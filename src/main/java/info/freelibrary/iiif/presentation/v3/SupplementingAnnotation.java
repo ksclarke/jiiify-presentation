@@ -133,6 +133,8 @@ public class SupplementingAnnotation extends AbstractCanvasAnnotation<Supplement
 
     @Override
     public boolean equals(final Object aObject) {
+        final SupplementingAnnotation other;
+
         if (this == aObject) {
             return true;
         }
@@ -141,11 +143,9 @@ public class SupplementingAnnotation extends AbstractCanvasAnnotation<Supplement
             return false;
         }
 
-        if (aObject instanceof final SupplementingAnnotation other) {
-            return Objects.equals(myTextGranularity, other.myTextGranularity) && super.equals(other);
-        }
+        other = (SupplementingAnnotation) aObject;
 
-        return false;
+        return Objects.equals(myTextGranularity, other.myTextGranularity) && super.equals(other);
     }
 
     /**

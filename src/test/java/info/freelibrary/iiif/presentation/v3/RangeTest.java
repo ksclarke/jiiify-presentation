@@ -3,6 +3,8 @@ package info.freelibrary.iiif.presentation.v3;
 
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -18,6 +20,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
+import info.freelibrary.util.Constants;
 import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.StringUtils;
 
@@ -25,10 +28,12 @@ import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.ids.MinterFactory;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.NavDate;
+import info.freelibrary.iiif.presentation.v3.properties.Start;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.InvalidBehaviorException;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.RangeBehavior;
+import info.freelibrary.iiif.presentation.v3.properties.selectors.AudioContentSelector;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
@@ -72,6 +77,17 @@ public class RangeTest extends AbstractTest {
         } catch (final IOException details) {
             throw new I18nRuntimeException(details);
         }
+    }
+
+    /**
+     * Tests {@link Range#clearItems()}.
+     */
+    @Test
+    public void testClearItems() {
+        final Range range = JSON.readValue(CANVAS_ITEMS_JSON, Range.class);
+
+        assertEquals(2, range.getItems().size());
+        assertEquals(0, range.clearItems().getItems().size());
     }
 
     /**
@@ -147,12 +163,142 @@ public class RangeTest extends AbstractTest {
     }
 
     /**
+     * Tests {@link Range#getStart()}.
+     */
+    @Test
+    public void testGetStart() {
+        assertTrue(new Range(getURL()).getStart().isEmpty());
+    }
+
+    /**
      * Tests setting and getting a navDate on a range.
      */
     @Test
     public final void testNavDate() {
         final NavDate navDate = NavDate.now();
         assertEquals(navDate, getRange().setNavDate(navDate).getNavDate());
+    }
+
+    /**
+     * Tests {@link Range#equals(Object) Range}.
+     */
+    @Test
+    public final void testRangeEqualsHashCode() {
+        final String id = UUID.randomUUID().toString();
+        final Range test1 = new Range(HTTPS + id);
+        final Range test2 = new Range(HTTPS + id);
+
+        assertEquals(test1.hashCode(), test2.hashCode());
+    }
+
+    /**
+     * Tests {@link Range#equals(Object) Range}.
+     */
+    @Test
+    public final void testRangeEqualsHashCodeNot() {
+        final Range test1 = new Range(HTTPS + UUID.randomUUID().toString());
+        final Range test2 = new Range(HTTPS + UUID.randomUUID().toString());
+
+        assertNotEquals(test1.hashCode(), test2.hashCode());
+    }
+
+    /**
+     * Tests {@link Range#equals(Object) Range}.
+     */
+    @Test
+    public final void testRangeEqualsNull() {
+        final Range test = new Range(HTTPS + UUID.randomUUID().toString());
+        assertFalse(test.equals(null));
+    }
+
+    /**
+     * Tests {@link Range#equals(Object) Range}.
+     */
+    @Test
+    public final void testRangeEqualsSame() {
+        final String id = UUID.randomUUID().toString();
+        final Range test1 = new Range(HTTPS + id);
+        final Range test2 = new Range(HTTPS + id);
+
+        assertTrue(test1.equals(test2));
+    }
+
+    /**
+     * Tests {@link Range#equals(Object) Range}.
+     */
+    @Test
+    public final void testRangeEqualsSameNot() {
+        final Range test1 = new Range(HTTPS + UUID.randomUUID().toString());
+        final Range test2 = new Range(HTTPS + UUID.randomUUID().toString());
+
+        assertFalse(test1.equals(test2));
+    }
+
+    /**
+     * Tests {@link Range#equals(Object) Range}.
+     */
+    @Test
+    public final void testRangeEqualsSameObject() {
+        final Range test = new Range(HTTPS + UUID.randomUUID().toString());
+        assertTrue(test.equals(test));
+    }
+
+    /**
+     * Tests {@link Range#equals(Object) Range}.
+     */
+    @Test
+    @SuppressWarnings("unlikely-arg-type")
+    public final void testRangeEqualsString() {
+        final Range test = new Range(HTTPS + UUID.randomUUID().toString());
+        assertFalse(test.equals(new String(Constants.EMPTY)));
+    }
+
+    /**
+     * Tests the range item's constructor.
+     */
+    @Test
+    public void testRangeItemConstructorCanvas() {
+        final String id = getURL();
+        final Range.Item item = new Range.Item(new Canvas(id));
+
+        assertEquals(id, item.getID());
+        assertEquals(ResourceTypes.CANVAS, item.getType());
+    }
+
+    /**
+     * Tests the range item's constructor.
+     */
+    @Test
+    public void testRangeItemConstructorCanvasNotEmbedded() {
+        final String id = getURL();
+        assertEquals(id, new Range.Item(new Canvas(id), false).getID());
+    }
+
+    /**
+     * Tests the range item's constructor via specific resource.
+     */
+    @Test
+    public void testRangeItemConstructorRange() {
+        final String id = getURL();
+        final Range.Item item = new Range.Item(new Range(id));
+
+        assertEquals(id, item.getID());
+        assertEquals(ResourceTypes.RANGE, item.getType());
+    }
+
+    /**
+     * Tests the range item's constructor via specific resource.
+     */
+    @Test
+    public void testRangeItemConstructorSpecificResource() {
+        final String id = getURL();
+        final String source = getURL();
+        final SpecificResource resource = new SpecificResource(id, source, new AudioContentSelector());
+        final Range.Item item = new Range.Item(resource);
+
+        assertEquals(id, item.getID());
+        assertEquals(ResourceTypes.SPECIFIC_RESOURCE, item.getType());
+        assertEquals(source, resource.getSource().getID());
     }
 
     /**
@@ -204,8 +350,16 @@ public class RangeTest extends AbstractTest {
     @Test
     public final void testSetBehaviors() {
         final RangeBehavior[] behaviors = { RangeBehavior.AUTO_ADVANCE, RangeBehavior.INDIVIDUALS };
-
         assertEquals(2, getRange().setBehaviors(behaviors).getBehaviors().size());
+    }
+
+    /**
+     * Test setting range behaviors.
+     */
+    @Test
+    public final void testSetBehaviorsList() {
+        final RangeBehavior[] behaviors = { RangeBehavior.AUTO_ADVANCE, RangeBehavior.INDIVIDUALS };
+        assertEquals(2, getRange().setBehaviors(Arrays.asList(behaviors)).getBehaviors().size());
     }
 
     /**
@@ -214,6 +368,14 @@ public class RangeTest extends AbstractTest {
     @Test(expected = InvalidBehaviorException.class)
     public final void testSetDisallowedBehaviors() {
         getRange().setBehaviors(RangeBehavior.AUTO_ADVANCE, ManifestBehavior.AUTO_ADVANCE);
+    }
+
+    /**
+     * Tests {@link Range#setStart(Start)}.
+     */
+    @Test
+    public void testSetStart() {
+        assertTrue(new Range(getURL()).setStart(new Start(getURL())).getStart().isPresent());
     }
 
     /**

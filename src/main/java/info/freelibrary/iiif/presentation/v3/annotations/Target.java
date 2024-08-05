@@ -57,6 +57,8 @@ public class Target {
 
     @Override
     public boolean equals(final Object aObject) {
+        final Target other;
+
         if (this == aObject) {
             return true;
         }
@@ -65,11 +67,9 @@ public class Target {
             return false;
         }
 
-        if (aObject instanceof final Target other) {
-            return Objects.equals(mySpecificResource, other.mySpecificResource) && Objects.equals(myURI, other.myURI);
-        }
+        other = (Target) aObject;
 
-        return false;
+        return Objects.equals(mySpecificResource, other.mySpecificResource) && Objects.equals(myURI, other.myURI);
     }
 
     /**

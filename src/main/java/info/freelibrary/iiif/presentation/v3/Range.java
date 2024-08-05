@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import info.freelibrary.util.I18nRuntimeException;
@@ -26,10 +25,8 @@ import info.freelibrary.iiif.presentation.v3.properties.Start;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.RangeBehavior;
-import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * An ordered list of canvas displays; these canvases may be nested in other ranges. Ranges allow canvases, or parts
@@ -115,6 +112,8 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
 
     @Override
     public boolean equals(final Object aObject) {
+        final Range other;
+
         if (this == aObject) {
             return true;
         }
@@ -123,15 +122,13 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
             return false;
         }
 
-        if (aObject instanceof final Range other) {
-            return Objects.equals(myAccompanyingCanvas, other.myAccompanyingCanvas) &&
-                    Objects.equals(myPlaceholderCanvas, other.myPlaceholderCanvas) &&
-                    Objects.equals(myViewingDirection, other.myViewingDirection) &&
-                    ListUtils.equals(myItems, other.myItems) && Objects.equals(myStart, other.myStart) &&
-                    Objects.equals(mySupplementaryAnnotations, other.mySupplementaryAnnotations) && super.equals(other);
-        }
+        other = (Range) aObject;
 
-        return false;
+        return Objects.equals(myAccompanyingCanvas, other.myAccompanyingCanvas) &&
+                Objects.equals(myPlaceholderCanvas, other.myPlaceholderCanvas) &&
+                Objects.equals(myViewingDirection, other.myViewingDirection) &&
+                ListUtils.equals(myItems, other.myItems) && Objects.equals(myStart, other.myStart) &&
+                Objects.equals(mySupplementaryAnnotations, other.mySupplementaryAnnotations) && super.equals(other);
     }
 
     /**
@@ -296,20 +293,6 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     public Range setViewingDirection(final ViewingDirection aViewingDirection) {
         myViewingDirection = aViewingDirection;
         return this;
-    }
-
-    /**
-     * Gets a string representation of a range.
-     *
-     * @return A string representation of a range
-     */
-    @Override
-    public String toString() {
-        try {
-            return JSON.getWriter(Range.class).writeValueAsString(this);
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details);
-        }
     }
 
     /**

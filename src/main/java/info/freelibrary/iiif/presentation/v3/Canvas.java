@@ -80,6 +80,8 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
 
     @Override
     public boolean equals(final Object aObject) {
+        final Canvas other;
+
         if (this == aObject) {
             return true;
         }
@@ -88,12 +90,10 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
             return false;
         }
 
-        if (aObject instanceof final Canvas other) {
-            return Objects.equals(myAccompanyingCanvas, other.myAccompanyingCanvas) &&
-                    Objects.equals(myPlaceholderCanvas, other.myPlaceholderCanvas) && super.equals(other);
-        }
+        other = (Canvas) aObject;
 
-        return false;
+        return Objects.equals(myAccompanyingCanvas, other.myAccompanyingCanvas) &&
+                Objects.equals(myPlaceholderCanvas, other.myPlaceholderCanvas) && super.equals(other);
     }
 
     /**

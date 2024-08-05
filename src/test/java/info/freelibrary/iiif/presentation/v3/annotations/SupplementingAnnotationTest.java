@@ -3,16 +3,21 @@ package info.freelibrary.iiif.presentation.v3.annotations;
 
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.toJson;
+import static info.freelibrary.util.Constants.SLASH;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.junit.Test;
 
+import info.freelibrary.util.Constants;
 import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.AbstractTest;
@@ -21,6 +26,8 @@ import info.freelibrary.iiif.presentation.v3.SpecificResource;
 import info.freelibrary.iiif.presentation.v3.SupplementingAnnotation;
 import info.freelibrary.iiif.presentation.v3.TextContent;
 import info.freelibrary.iiif.presentation.v3.TextualBody;
+import info.freelibrary.iiif.presentation.v3.ids.Minter;
+import info.freelibrary.iiif.presentation.v3.ids.MinterFactory;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.TextGranularity;
 import info.freelibrary.iiif.presentation.v3.properties.TextGranularity.Level;
@@ -40,6 +47,9 @@ public class SupplementingAnnotationTest extends AbstractTest {
     /** A test annotation. */
     private static final File ANNOTATION = new File(TestUtils.TEST_DIR, "annotation-supplementing-full.json");
 
+    /** A ID prefix for testing. */
+    private static final String HTTPS = "https://";
+
     /** A test resource that includes a textGranularity property. */
     private static final File TEXT_GRANULARITY =
             new File(TestUtils.TEST_DIR, "annotation-supplementing-text-granularity.json");
@@ -53,6 +63,9 @@ public class SupplementingAnnotationTest extends AbstractTest {
 
     /** A test fragment selector. */
     private final MediaFragmentSelector myFragmentSelector = new MediaFragmentSelector("xywh=0,0,1,1");
+
+    /** A test minter that can be used in tests. */
+    private final Minter myMinter = MinterFactory.getMinter(HTTPS + UUID.randomUUID().toString());
 
     /** A test content ID. */
     private final String myTextContentID = "https://e03f1662-2a33-48a4-82ba-3a726cee15c9" + ".html";
@@ -115,6 +128,16 @@ public class SupplementingAnnotationTest extends AbstractTest {
     }
 
     /**
+     * Tests {@link SupplementingAnnotation#setMotivation(Motivation) SupplementingAnnotation}.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public final void testSetMotivationBad() {
+        final SupplementingAnnotation anno = new SupplementingAnnotation(myAnnoID, myCanvas);
+
+        anno.setMotivation(Motivation.fromLabel(Purpose.BOOKMARKING));
+    }
+
+    /**
      * Tests setting the target.
      */
     @Test
@@ -152,6 +175,133 @@ public class SupplementingAnnotationTest extends AbstractTest {
     }
 
     /**
+     * Tests {@link SupplementingAnnotation#equals(Object) SupplementingAnnotation}.
+     */
+    @Test
+    public final void testSupplementingAnnotationEqualsHashCode() {
+        final String id = HTTPS + UUID.randomUUID().toString();
+        final SupplementingAnnotation test1 = new SupplementingAnnotation(id, new Canvas(id));
+        final SupplementingAnnotation test2 = new SupplementingAnnotation(id, new Canvas(id));
+
+        assertEquals(test1.hashCode(), test2.hashCode());
+    }
+
+    /**
+     * Tests {@link SupplementingAnnotation#equals(Object) SupplementingAnnotation}.
+     */
+    @Test
+    public final void testSupplementingAnnotationEqualsHashCodeNot() {
+        final String id = HTTPS + UUID.randomUUID().toString();
+        final SupplementingAnnotation test1 = new SupplementingAnnotation(id, new Canvas(id));
+        final SupplementingAnnotation test2 = new SupplementingAnnotation(id + SLASH, new Canvas(id));
+
+        assertNotEquals(test1.hashCode(), test2.hashCode());
+    }
+
+    /**
+     * Tests {@link SupplementingAnnotation#equals(Object) SupplementingAnnotation}.
+     */
+    @Test
+    public final void testSupplementingAnnotationEqualsNull() {
+        final String id = HTTPS + UUID.randomUUID().toString();
+        final SupplementingAnnotation test = new SupplementingAnnotation(id, new Canvas(id));
+
+        assertFalse(test.equals(null));
+    }
+
+    /**
+     * Tests {@link SupplementingAnnotation#equals(Object) SupplementingAnnotation}.
+     */
+    @Test
+    public final void testSupplementingAnnotationEqualsSame() {
+        final String id = HTTPS + UUID.randomUUID().toString();
+        final SupplementingAnnotation test1 = new SupplementingAnnotation(id, new Canvas(id));
+        final SupplementingAnnotation test2 = new SupplementingAnnotation(id, new Canvas(id));
+
+        assertTrue(test1.equals(test2));
+    }
+
+    /**
+     * Tests {@link SupplementingAnnotation#equals(Object) SupplementingAnnotation}.
+     */
+    @Test
+    public final void testSupplementingAnnotationEqualsSameNot() {
+        final String id = HTTPS + UUID.randomUUID().toString();
+        final SupplementingAnnotation test1 = new SupplementingAnnotation(id + SLASH, new Canvas(id));
+        final SupplementingAnnotation test2 = new SupplementingAnnotation(id, new Canvas(id));
+
+        assertFalse(test1.equals(test2));
+    }
+
+    /**
+     * Tests {@link SupplementingAnnotation#equals(Object) SupplementingAnnotation}.
+     */
+    @Test
+    public final void testSupplementingAnnotationEqualsSameObject() {
+        final String id = HTTPS + UUID.randomUUID().toString();
+        final SupplementingAnnotation test = new SupplementingAnnotation(id, new Canvas(id));
+
+        assertTrue(test.equals(test));
+    }
+
+    /**
+     * Tests {@link SupplementingAnnotation#equals(Object) SupplementingAnnotation}.
+     */
+    @Test
+    @SuppressWarnings("unlikely-arg-type")
+    public final void testSupplementingAnnotationEqualsString() {
+        final String id = HTTPS + UUID.randomUUID().toString();
+        final SupplementingAnnotation test = new SupplementingAnnotation(id, new Canvas(id));
+
+        assertFalse(test.equals(new String(Constants.EMPTY)));
+    }
+
+    /**
+     * Tests constructing a supplementing annotation.
+     */
+    @Test
+    public void testSupplementingAnnotationIDCanvas() {
+        final SupplementingAnnotation anno = new SupplementingAnnotation(myAnnoID, myCanvas);
+
+        assertEquals(myAnnoID, anno.getID());
+        assertTrue(anno.getTarget().getURI() instanceof String);
+    }
+
+    /**
+     * Tests constructing a supplementing annotation.
+     */
+    @Test
+    public void testSupplementingAnnotationMinterCanvas() {
+        final SupplementingAnnotation anno = new SupplementingAnnotation(myMinter, myCanvas);
+
+        assertNotNull(anno.getID());
+        assertTrue(anno.getTarget().getURI() instanceof String);
+    }
+
+    /**
+     * Tests constructing a supplementing annotation.
+     */
+    @Test
+    public void testSupplementingAnnotationMinterCanvasSpecificResource() {
+        final SupplementingAnnotation anno = new SupplementingAnnotation(myMinter, myCanvas, myFragmentSelector);
+
+        assertNotNull(anno.getID());
+        assertTrue(anno.getTarget().getSpecificResource().isPresent());
+    }
+
+    /**
+     * Tests constructing a supplementing annotation.
+     */
+    @Test
+    public void testSupplementingAnnotationMinterCanvasString() {
+        final SupplementingAnnotation anno =
+                new SupplementingAnnotation(myMinter, myCanvas, myFragmentSelector.toString());
+
+        assertNotNull(anno.getID());
+        assertTrue(anno.getTarget().getSpecificResource().isPresent());
+    }
+
+    /**
      * Tests constructing a supplementing annotation.
      */
     @Test
@@ -173,17 +323,6 @@ public class SupplementingAnnotationTest extends AbstractTest {
 
         assertEquals(myAnnoID, anno.getID());
         assertTrue(anno.getTarget().getSpecificResource().isPresent());
-    }
-
-    /**
-     * Tests constructing a supplementing annotation.
-     */
-    @Test
-    public void testSupplementingAnnotationURICanvas() {
-        final SupplementingAnnotation anno = new SupplementingAnnotation(myAnnoID, myCanvas);
-
-        assertEquals(myAnnoID, anno.getID());
-        assertTrue(anno.getTarget().getURI() instanceof String);
     }
 
     /**

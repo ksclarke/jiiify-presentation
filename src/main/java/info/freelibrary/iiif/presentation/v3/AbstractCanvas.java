@@ -134,7 +134,10 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     }
 
     @Override
+    @SuppressWarnings(JDK.UNCHECKED)
     public boolean equals(final Object aObject) {
+        final AbstractCanvas<T> other;
+
         if (this == aObject) {
             return true;
         }
@@ -143,15 +146,13 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
             return false;
         }
 
-        if (aObject instanceof final AbstractCanvas<?> other) {
-            return Objects.equals(myDuration, other.myDuration) && Objects.equals(myHeight, other.myHeight) &&
-                    Objects.equals(myWidth, other.myWidth) &&
-                    Objects.equals(myOtherAnnotations, other.myOtherAnnotations) &&
-                    Objects.equals(myPaintingPageList, other.myPaintingPageList) &&
-                    Objects.equals(mySupplementingPageList, other.mySupplementingPageList) && super.equals(other);
-        }
+        other = (AbstractCanvas<T>) aObject;
 
-        return false;
+        return Objects.equals(myDuration, other.myDuration) && Objects.equals(myHeight, other.myHeight) &&
+                Objects.equals(myWidth, other.myWidth) &&
+                Objects.equals(myOtherAnnotations, other.myOtherAnnotations) &&
+                Objects.equals(myPaintingPageList, other.myPaintingPageList) &&
+                Objects.equals(mySupplementingPageList, other.mySupplementingPageList) && super.equals(other);
     }
 
     /**
@@ -315,8 +316,8 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      * @return The canvas
      */
     @JsonIgnore
-    @SuppressWarnings({ JDK.UNCHECKED })
-    public T setOtherAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
+    @SafeVarargs
+    public final T setOtherAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
         return setOtherAnnotations(Arrays.asList(aAnnotationArray));
     }
 

@@ -132,6 +132,8 @@ abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> e
 
     @Override
     public boolean equals(final Object aObject) {
+        final AbstractCanvasAnnotation<?> other;
+
         if (this == aObject) {
             return true;
         }
@@ -140,14 +142,12 @@ abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> e
             return false;
         }
 
-        if (aObject instanceof final AbstractCanvasAnnotation<?> other) {
-            return Objects.equals(myBodyHasChoice, other.myBodyHasChoice) &&
-                    Objects.equals(myMotivation, other.myMotivation) &&
-                    ListUtils.equals(myResources, other.myResources) && Objects.equals(myTarget, other.myTarget) &&
-                    Objects.equals(myTimeMode, other.myTimeMode) && super.equals(other);
-        }
+        other = (AbstractCanvasAnnotation<?>) aObject;
 
-        return false;
+        return Objects.equals(myBodyHasChoice, other.myBodyHasChoice) &&
+                Objects.equals(myMotivation, other.myMotivation) && ListUtils.equals(myResources, other.myResources) &&
+                Objects.equals(myTarget, other.myTarget) && Objects.equals(myTimeMode, other.myTimeMode) &&
+                super.equals(other);
     }
 
     /**

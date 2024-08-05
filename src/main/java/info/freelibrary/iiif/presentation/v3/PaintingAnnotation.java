@@ -125,6 +125,8 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
 
     @Override
     public boolean equals(final Object aObject) {
+        final PaintingAnnotation other;
+
         if (this == aObject) {
             return true;
         }
@@ -133,11 +135,9 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
             return false;
         }
 
-        if (aObject instanceof final PaintingAnnotation other) {
-            return Objects.equals(myStylesheet, other.myStylesheet) && super.equals(other);
-        }
+        other = (PaintingAnnotation) aObject;
 
-        return false;
+        return Objects.equals(myStylesheet, other.myStylesheet) && super.equals(other);
     }
 
     /**

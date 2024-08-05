@@ -47,6 +47,8 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
 
     @Override
     public boolean equals(final Object aObject) {
+        final AnnotationCollection other;
+
         if (this == aObject) {
             return true;
         }
@@ -55,13 +57,11 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
             return false;
         }
 
-        if (aObject instanceof final AnnotationCollection other) {
-            return Objects.equals(myFirstAnnotationPage, other.myFirstAnnotationPage) &&
-                    Objects.equals(myLastAnnotationPage, other.myLastAnnotationPage) &&
-                    Objects.equals(myViewingDirection, other.myViewingDirection);
-        }
+        other = (AnnotationCollection) aObject;
 
-        return false;
+        return Objects.equals(myFirstAnnotationPage, other.myFirstAnnotationPage) &&
+                Objects.equals(myLastAnnotationPage, other.myLastAnnotationPage) &&
+                Objects.equals(myViewingDirection, other.myViewingDirection) && super.equals(aObject);
     }
 
     /**

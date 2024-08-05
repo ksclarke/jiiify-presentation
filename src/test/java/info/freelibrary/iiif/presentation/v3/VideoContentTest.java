@@ -3,6 +3,8 @@ package info.freelibrary.iiif.presentation.v3;
 
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -13,6 +15,7 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 
+import info.freelibrary.util.Constants;
 import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
@@ -26,6 +29,9 @@ import info.freelibrary.iiif.presentation.v3.utils.JSON;
  * Tests video content.
  */
 public class VideoContentTest {
+
+    /** A ID prefix for testing. */
+    private static final String HTTPS = "https://";
 
     /** The test ID. */
     private String myID;
@@ -49,6 +55,80 @@ public class VideoContentTest {
         final String found = JSON.readValue(expected, Manifest.class).toString();
 
         assertEquals(expected, format(found));
+    }
+
+    /**
+     * Tests {@link NavigableResource#equals(Object) NavigableResource}.
+     */
+    @Test
+    public final void testNavigableResourceEqualsHashCode() {
+        final String id = UUID.randomUUID().toString();
+        final VideoContent test1 = new VideoContent(HTTPS + id);
+        final VideoContent test2 = new VideoContent(HTTPS + id);
+
+        assertEquals(test1.hashCode(), test2.hashCode());
+    }
+
+    /**
+     * Tests {@link NavigableResource#equals(Object) NavigableResource}.
+     */
+    @Test
+    public final void testNavigableResourceEqualsHashCodeNot() {
+        final VideoContent test1 = new VideoContent(HTTPS + UUID.randomUUID().toString());
+        final VideoContent test2 = new VideoContent(HTTPS + UUID.randomUUID().toString());
+
+        assertNotEquals(test1.hashCode(), test2.hashCode());
+    }
+
+    /**
+     * Tests {@link NavigableResource#equals(Object) NavigableResource}.
+     */
+    @Test
+    public final void testNavigableResourceEqualsNull() {
+        final VideoContent test = new VideoContent(HTTPS + UUID.randomUUID().toString());
+        assertFalse(test.equals(null));
+    }
+
+    /**
+     * Tests {@link NavigableResource#equals(Object) NavigableResource}.
+     */
+    @Test
+    public final void testNavigableResourceEqualsSame() {
+        final String id = UUID.randomUUID().toString();
+        final VideoContent test1 = new VideoContent(HTTPS + id);
+        final VideoContent test2 = new VideoContent(HTTPS + id);
+
+        assertTrue(test1.equals(test2));
+    }
+
+    /**
+     * Tests {@link NavigableResource#equals(Object) NavigableResource}.
+     */
+    @Test
+    public final void testNavigableResourceEqualsSameNot() {
+        final VideoContent test1 = new VideoContent(HTTPS + UUID.randomUUID().toString());
+        final VideoContent test2 = new VideoContent(HTTPS + UUID.randomUUID().toString());
+
+        assertFalse(test1.equals(test2));
+    }
+
+    /**
+     * Tests {@link NavigableResource#equals(Object) NavigableResource}.
+     */
+    @Test
+    public final void testNavigableResourceEqualsSameObject() {
+        final VideoContent test = new VideoContent(HTTPS + UUID.randomUUID().toString());
+        assertTrue(test.equals(test));
+    }
+
+    /**
+     * Tests {@link NavigableResource#equals(Object) NavigableResource}.
+     */
+    @Test
+    @SuppressWarnings("unlikely-arg-type")
+    public final void testNavigableResourceEqualsString() {
+        final VideoContent test = new VideoContent(HTTPS + UUID.randomUUID().toString());
+        assertFalse(test.equals(new String(Constants.EMPTY)));
     }
 
     /**

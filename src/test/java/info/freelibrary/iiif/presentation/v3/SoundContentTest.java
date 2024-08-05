@@ -3,6 +3,8 @@ package info.freelibrary.iiif.presentation.v3;
 
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -13,6 +15,7 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 
+import info.freelibrary.util.Constants;
 import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
@@ -26,6 +29,9 @@ import info.freelibrary.iiif.presentation.v3.utils.JSON;
  * Tests for {@link SoundContent}.
  */
 public class SoundContentTest extends AbstractTest {
+
+    /** A ID prefix for testing. */
+    private static final String HTTPS = "https://";
 
     /** The test ID. */
     private String myID;
@@ -111,5 +117,79 @@ public class SoundContentTest extends AbstractTest {
     @Test
     public final void testSetGetDuration() {
         assertEquals(1.5f, new SoundContent(myID).setDuration(1.5f).getDuration(), 0);
+    }
+
+    /**
+     * Tests {@link SoundContent#equals(Object) SoundContent}.
+     */
+    @Test
+    public final void testSoundContentEqualsHashCode() {
+        final String id = UUID.randomUUID().toString();
+        final SoundContent test1 = new SoundContent(HTTPS + id);
+        final SoundContent test2 = new SoundContent(HTTPS + id);
+
+        assertEquals(test1.hashCode(), test2.hashCode());
+    }
+
+    /**
+     * Tests {@link SoundContent#equals(Object) SoundContent}.
+     */
+    @Test
+    public final void testSoundContentEqualsHashCodeNot() {
+        final SoundContent test1 = new SoundContent(HTTPS + UUID.randomUUID().toString());
+        final SoundContent test2 = new SoundContent(HTTPS + UUID.randomUUID().toString());
+
+        assertNotEquals(test1.hashCode(), test2.hashCode());
+    }
+
+    /**
+     * Tests {@link SoundContent#equals(Object) SoundContent}.
+     */
+    @Test
+    public final void testSoundContentEqualsNull() {
+        final SoundContent test = new SoundContent(HTTPS + UUID.randomUUID().toString());
+        assertFalse(test.equals(null));
+    }
+
+    /**
+     * Tests {@link SoundContent#equals(Object) SoundContent}.
+     */
+    @Test
+    public final void testSoundContentEqualsSame() {
+        final String id = UUID.randomUUID().toString();
+        final SoundContent test1 = new SoundContent(HTTPS + id);
+        final SoundContent test2 = new SoundContent(HTTPS + id);
+
+        assertTrue(test1.equals(test2));
+    }
+
+    /**
+     * Tests {@link SoundContent#equals(Object) SoundContent}.
+     */
+    @Test
+    public final void testSoundContentEqualsSameNot() {
+        final SoundContent test1 = new SoundContent(HTTPS + UUID.randomUUID().toString());
+        final SoundContent test2 = new SoundContent(HTTPS + UUID.randomUUID().toString());
+
+        assertFalse(test1.equals(test2));
+    }
+
+    /**
+     * Tests {@link SoundContent#equals(Object) SoundContent}.
+     */
+    @Test
+    public final void testSoundContentEqualsSameObject() {
+        final SoundContent test = new SoundContent(HTTPS + UUID.randomUUID().toString());
+        assertTrue(test.equals(test));
+    }
+
+    /**
+     * Tests {@link SoundContent#equals(Object) SoundContent}.
+     */
+    @Test
+    @SuppressWarnings("unlikely-arg-type")
+    public final void testSoundContentEqualsString() {
+        final SoundContent test = new SoundContent(HTTPS + UUID.randomUUID().toString());
+        assertFalse(test.equals(new String(Constants.EMPTY)));
     }
 }
