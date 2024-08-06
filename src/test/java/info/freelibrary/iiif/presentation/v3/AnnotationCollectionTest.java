@@ -2,7 +2,6 @@
 package info.freelibrary.iiif.presentation.v3;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -66,8 +65,7 @@ public class AnnotationCollectionTest {
      */
     @Test
     public final void testAnnotationCollectionEqualsNull() {
-        final AnnotationCollection test = new AnnotationCollection(HTTPS + UUID.randomUUID().toString(), LABEL);
-        assertFalse(test.equals(null));
+        assertNotEquals(new AnnotationCollection(HTTPS + UUID.randomUUID().toString(), LABEL), null);
     }
 
     /**
@@ -79,7 +77,7 @@ public class AnnotationCollectionTest {
         final AnnotationCollection test1 = new AnnotationCollection(HTTPS + id, LABEL);
         final AnnotationCollection test2 = new AnnotationCollection(HTTPS + id, LABEL);
 
-        assertTrue(test1.equals(test2));
+        assertEquals(test1, test2);
     }
 
     /**
@@ -90,7 +88,7 @@ public class AnnotationCollectionTest {
         final AnnotationCollection test1 = new AnnotationCollection(HTTPS + UUID.randomUUID().toString(), LABEL);
         final AnnotationCollection test2 = new AnnotationCollection(HTTPS + UUID.randomUUID().toString(), LABEL);
 
-        assertFalse(test1.equals(test2));
+        assertNotEquals(test1, test2);
     }
 
     /**
@@ -99,7 +97,7 @@ public class AnnotationCollectionTest {
     @Test
     public final void testAnnotationCollectionEqualsSameObject() {
         final AnnotationCollection test = new AnnotationCollection(HTTPS + UUID.randomUUID().toString(), LABEL);
-        assertTrue(test.equals(test));
+        assertEquals(test, test);
     }
 
     /**
@@ -108,8 +106,8 @@ public class AnnotationCollectionTest {
     @Test
     @SuppressWarnings("unlikely-arg-type")
     public final void testAnnotationCollectionEqualsString() {
-        final AnnotationCollection test = new AnnotationCollection(HTTPS + UUID.randomUUID().toString(), LABEL);
-        assertFalse(test.equals(new String(Constants.EMPTY)));
+        assertNotEquals(new AnnotationCollection(HTTPS + UUID.randomUUID().toString(), LABEL),
+                new String(Constants.EMPTY));
     }
 
     /**

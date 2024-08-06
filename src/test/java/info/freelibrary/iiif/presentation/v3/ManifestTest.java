@@ -4,7 +4,6 @@ package info.freelibrary.iiif.presentation.v3;
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static info.freelibrary.util.Constants.SLASH;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -297,8 +296,7 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public final void testNavigableResourceEqualsNull() {
-        final Manifest test = new Manifest(HTTPS + UUID.randomUUID().toString(), new Label("_"));
-        assertFalse(test.equals(null));
+        assertNotEquals(new Manifest(HTTPS + UUID.randomUUID().toString(), new Label("_")), null);
     }
 
     /**
@@ -310,7 +308,7 @@ public class ManifestTest extends AbstractTest {
         final Manifest test1 = new Manifest(id, new Label(id));
         final Manifest test2 = new Manifest(id, new Label(id));
 
-        assertTrue(test1.equals(test2));
+        assertEquals(test1, test2);
     }
 
     /**
@@ -321,7 +319,7 @@ public class ManifestTest extends AbstractTest {
         final Manifest test1 = new Manifest(HTTPS + UUID.randomUUID().toString(), new Label("one"));
         final Manifest test2 = new Manifest(HTTPS + UUID.randomUUID().toString(), new Label("two"));
 
-        assertFalse(test1.equals(test2));
+        assertNotEquals(test1, test2);
     }
 
     /**
@@ -330,7 +328,7 @@ public class ManifestTest extends AbstractTest {
     @Test
     public final void testNavigableResourceEqualsSameObject() {
         final Manifest test = new Manifest(HTTPS + UUID.randomUUID().toString(), new Label("label"));
-        assertTrue(test.equals(test));
+        assertEquals(test, test);
     }
 
     /**
@@ -340,7 +338,7 @@ public class ManifestTest extends AbstractTest {
     @SuppressWarnings("unlikely-arg-type")
     public final void testNavigableResourceEqualsString() {
         final Manifest test = new Manifest(HTTPS + UUID.randomUUID().toString(), new Label("three"));
-        assertFalse(test.equals(new String(Constants.EMPTY)));
+        assertNotEquals(test, new String(Constants.EMPTY));
     }
 
     /**
@@ -381,7 +379,8 @@ public class ManifestTest extends AbstractTest {
     @Test
     public void testSetAnnotations() {
         final AnnotationPage<WebAnnotation> annotations = new AnnotationPage<>(myMinter, new Canvas(myMinter));
-        myManifest.setAnnotations(annotations.addAnnotations(new BookmarkingAnnotation(myMinter)));
+        assertEquals(1, myManifest.setAnnotations(annotations.addAnnotations(new BookmarkingAnnotation(myMinter)))
+                .getAnnotations().size());
     }
 
     /**
@@ -390,7 +389,9 @@ public class ManifestTest extends AbstractTest {
     @Test
     public void testSetAnnotationsList() {
         final AnnotationPage<WebAnnotation> annotations = new AnnotationPage<>(myMinter, new Canvas(myMinter));
-        myManifest.setAnnotations(List.of(annotations.addAnnotations(new BookmarkingAnnotation(myMinter))));
+        assertEquals(1,
+                myManifest.setAnnotations(List.of(annotations.addAnnotations(new BookmarkingAnnotation(myMinter))))
+                        .getAnnotations().size());
     }
 
     /**

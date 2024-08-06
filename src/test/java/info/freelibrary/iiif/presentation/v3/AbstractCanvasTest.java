@@ -2,7 +2,6 @@
 package info.freelibrary.iiif.presentation.v3;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -55,8 +54,7 @@ public class AbstractCanvasTest {
      */
     @Test
     public final void testAbstractCanvasEqualsNull() {
-        final AbstractCanvas<TestClass> test = new TestClass(HTTPS + UUID.randomUUID().toString());
-        assertFalse(test.equals(null));
+        assertNotEquals(new TestClass(HTTPS + UUID.randomUUID().toString()), null);
     }
 
     /**
@@ -65,10 +63,7 @@ public class AbstractCanvasTest {
     @Test
     public final void testAbstractCanvasEqualsSame() {
         final String id = UUID.randomUUID().toString();
-        final AbstractCanvas<TestClass> test1 = new TestClass(HTTPS + id);
-        final AbstractCanvas<TestClass> test2 = new TestClass(HTTPS + id);
-
-        assertTrue(test1.equals(test2));
+        assertEquals(new TestClass(HTTPS + id), new TestClass(HTTPS + id));
     }
 
     /**
@@ -79,7 +74,7 @@ public class AbstractCanvasTest {
         final AbstractCanvas<TestClass> test1 = new TestClass(HTTPS + UUID.randomUUID().toString());
         final AbstractCanvas<TestClass> test2 = new TestClass(HTTPS + UUID.randomUUID().toString());
 
-        assertFalse(test1.equals(test2));
+        assertNotEquals(test1, test2);
     }
 
     /**
@@ -88,7 +83,7 @@ public class AbstractCanvasTest {
     @Test
     public final void testAbstractCanvasEqualsSameObject() {
         final AbstractCanvas<TestClass> test = new TestClass(HTTPS + UUID.randomUUID().toString());
-        assertTrue(test.equals(test));
+        assertEquals(test, test);
     }
 
     /**
@@ -98,7 +93,7 @@ public class AbstractCanvasTest {
     @SuppressWarnings("unlikely-arg-type")
     public final void testAbstractCanvasEqualsString() {
         final AbstractCanvas<TestClass> test = new TestClass(HTTPS + UUID.randomUUID().toString());
-        assertFalse(test.equals(new String(Constants.EMPTY)));
+        assertNotEquals(test, new String(Constants.EMPTY));
     }
 
     /**
@@ -212,23 +207,23 @@ public class AbstractCanvasTest {
     /**
      * A test class.
      */
-    private static class TestClass extends AbstractCanvas<TestClass> {
+    private static final class TestClass extends AbstractCanvas<TestClass> {
 
         /**
          * Creates a new test object.
-         * 
+         *
          * @param aMinter A minter to use in testing
          */
-        public TestClass(final Minter aMinter) {
+        private TestClass(final Minter aMinter) {
             super(aMinter);
         }
 
         /**
          * Creates a new test object.
-         * 
+         *
          * @param aID An ID to use in testing
          */
-        public TestClass(final String aID) {
+        private TestClass(final String aID) {
             super(aID);
         }
 

@@ -206,7 +206,7 @@ public class SupplementingAnnotationTest extends AbstractTest {
         final String id = HTTPS + UUID.randomUUID().toString();
         final SupplementingAnnotation test = new SupplementingAnnotation(id, new Canvas(id));
 
-        assertFalse(test.equals(null));
+        assertNotEquals(test, null);
     }
 
     /**
@@ -218,7 +218,7 @@ public class SupplementingAnnotationTest extends AbstractTest {
         final SupplementingAnnotation test1 = new SupplementingAnnotation(id, new Canvas(id));
         final SupplementingAnnotation test2 = new SupplementingAnnotation(id, new Canvas(id));
 
-        assertTrue(test1.equals(test2));
+        assertEquals(test1, test2);
     }
 
     /**
@@ -230,7 +230,7 @@ public class SupplementingAnnotationTest extends AbstractTest {
         final SupplementingAnnotation test1 = new SupplementingAnnotation(id + SLASH, new Canvas(id));
         final SupplementingAnnotation test2 = new SupplementingAnnotation(id, new Canvas(id));
 
-        assertFalse(test1.equals(test2));
+        assertNotEquals(test1, test2);
     }
 
     /**
@@ -241,7 +241,7 @@ public class SupplementingAnnotationTest extends AbstractTest {
         final String id = HTTPS + UUID.randomUUID().toString();
         final SupplementingAnnotation test = new SupplementingAnnotation(id, new Canvas(id));
 
-        assertTrue(test.equals(test));
+        assertEquals(test, test);
     }
 
     /**
@@ -253,7 +253,7 @@ public class SupplementingAnnotationTest extends AbstractTest {
         final String id = HTTPS + UUID.randomUUID().toString();
         final SupplementingAnnotation test = new SupplementingAnnotation(id, new Canvas(id));
 
-        assertFalse(test.equals(new String(Constants.EMPTY)));
+        assertNotEquals(test, new String(Constants.EMPTY));
     }
 
     /**

@@ -2,11 +2,10 @@
 package info.freelibrary.iiif.presentation.v3;
 
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
+import static info.freelibrary.util.Constants.EMPTY;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +17,6 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 
-import info.freelibrary.util.Constants;
 import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.Collection.Item;
@@ -56,7 +54,7 @@ public class CollectionTest {
      */
     @Before
     public void setUp() {
-        myID = "https://" + UUID.randomUUID().toString();
+        myID = HTTPS + UUID.randomUUID().toString();
         myLabel = new Label("label-" + UUID.randomUUID().toString());
     }
 
@@ -90,7 +88,7 @@ public class CollectionTest {
     @Test
     public final void testCollectionEqualsNull() {
         final Collection test = new Collection(HTTPS + UUID.randomUUID().toString(), new Label("asdf"));
-        assertFalse(test.equals(null));
+        assertNotEquals(test, null);
     }
 
     /**
@@ -102,7 +100,7 @@ public class CollectionTest {
         final Collection test1 = new Collection(id, new Label(id));
         final Collection test2 = new Collection(id, new Label(id));
 
-        assertTrue(test1.equals(test2));
+        assertEquals(test1, test2);
     }
 
     /**
@@ -114,7 +112,7 @@ public class CollectionTest {
         final Collection test1 = new Collection(HTTPS + UUID.randomUUID().toString(), label);
         final Collection test2 = new Collection(HTTPS + UUID.randomUUID().toString(), label);
 
-        assertFalse(test1.equals(test2));
+        assertNotEquals(test1, test2);
     }
 
     /**
@@ -123,7 +121,7 @@ public class CollectionTest {
     @Test
     public final void testCollectionEqualsSameObject() {
         final Collection test = new Collection(HTTPS + UUID.randomUUID().toString(), new Label("pookie"));
-        assertTrue(test.equals(test));
+        assertEquals(test, test);
     }
 
     /**
@@ -133,7 +131,7 @@ public class CollectionTest {
     @SuppressWarnings("unlikely-arg-type")
     public final void testCollectionEqualsString() {
         final Collection test = new Collection(HTTPS + UUID.randomUUID().toString(), new Label("pokie"));
-        assertFalse(test.equals(new String(Constants.EMPTY)));
+        assertNotEquals(test, EMPTY);
     }
 
     /**

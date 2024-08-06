@@ -158,7 +158,7 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
 
     /**
      * Gets whether this page has an external context.
-     * 
+     *
      * @return True if the page has external context
      */
     public boolean hasExternalContext() {

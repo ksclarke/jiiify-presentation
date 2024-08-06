@@ -2,9 +2,7 @@
 package info.freelibrary.iiif.presentation.v3;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.UUID;
@@ -53,7 +51,7 @@ public class AbstractCanvasAnnotationTest {
     @Test
     public final void testAbstractCanvasAnnotationEqualsNull() {
         final AbstractCanvasAnnotation<TestClass> test = new TestClass(HTTPS + UUID.randomUUID().toString());
-        assertFalse(test.equals(null));
+        assertNotEquals(test, null);
     }
 
     /**
@@ -65,7 +63,7 @@ public class AbstractCanvasAnnotationTest {
         final AbstractCanvasAnnotation<TestClass> test1 = new TestClass(HTTPS + id);
         final AbstractCanvasAnnotation<TestClass> test2 = new TestClass(HTTPS + id);
 
-        assertTrue(test1.equals(test2));
+        assertEquals(test1, test2);
     }
 
     /**
@@ -76,7 +74,7 @@ public class AbstractCanvasAnnotationTest {
         final AbstractCanvasAnnotation<TestClass> test1 = new TestClass(HTTPS + UUID.randomUUID().toString());
         final AbstractCanvasAnnotation<TestClass> test2 = new TestClass(HTTPS + UUID.randomUUID().toString());
 
-        assertFalse(test1.equals(test2));
+        assertNotEquals(test1, test2);
     }
 
     /**
@@ -85,7 +83,7 @@ public class AbstractCanvasAnnotationTest {
     @Test
     public final void testAbstractCanvasAnnotationEqualsSameObject() {
         final AbstractCanvasAnnotation<TestClass> test = new TestClass(HTTPS + UUID.randomUUID().toString());
-        assertTrue(test.equals(test));
+        assertEquals(test, test);
     }
 
     /**
@@ -95,7 +93,7 @@ public class AbstractCanvasAnnotationTest {
     @SuppressWarnings("unlikely-arg-type")
     public final void testAbstractCanvasAnnotationEqualsString() {
         final AbstractCanvasAnnotation<TestClass> test = new TestClass(HTTPS + UUID.randomUUID().toString());
-        assertFalse(test.equals(new String(Constants.EMPTY)));
+        assertNotEquals(test, new String(Constants.EMPTY));
     }
 
     /**
@@ -119,14 +117,14 @@ public class AbstractCanvasAnnotationTest {
     /**
      * A test class.
      */
-    private static class TestClass extends AbstractCanvasAnnotation<TestClass> {
+    private static final class TestClass extends AbstractCanvasAnnotation<TestClass> {
 
         /**
          * Creates a new test object.
-         * 
+         *
          * @param aID An ID to use in testing
          */
-        public TestClass(final String aID) {
+        private TestClass(final String aID) {
             super();
             super.setID(aID);
         }

@@ -3,8 +3,8 @@ package info.freelibrary.iiif.presentation.v3;
 
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.toJson;
+import static info.freelibrary.util.Constants.EMPTY;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -17,7 +17,6 @@ import java.util.regex.Pattern;
 import org.junit.Before;
 import org.junit.Test;
 
-import info.freelibrary.util.Constants;
 import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.annotations.Target;
@@ -46,6 +45,9 @@ public class CanvasTest extends AbstractCookbookTest {
 
     /** A test file for the canvas image choice fixture. */
     private static final String CANVAS_IMAGE_CHOICE = "canvas-image-choice.json";
+
+    /** A test file for sound content on a canvas. */
+    private static final String CANVAS_SOUND = "canvas-sound.json";
 
     /** A test duration. */
     private static final double DURATION = 300;
@@ -176,8 +178,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test
     public final void testCanvasEqualsNull() {
-        final Canvas canvas = new Canvas(MinterFactory.getMinter(HTTPS + UUID.randomUUID().toString()));
-        assertFalse(canvas.equals(null));
+        assertNotEquals(new Canvas(MinterFactory.getMinter(HTTPS + UUID.randomUUID().toString())), null);
     }
 
     /**
@@ -189,7 +190,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final Canvas canvas1 = new Canvas(HTTPS + id);
         final Canvas canvas2 = new Canvas(HTTPS + id);
 
-        assertTrue(canvas1.equals(canvas2));
+        assertEquals(canvas1, canvas2);
     }
 
     /**
@@ -201,7 +202,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final Canvas canvas1 = new Canvas(minter);
         final Canvas canvas2 = new Canvas(minter);
 
-        assertFalse(canvas1.equals(canvas2));
+        assertNotEquals(canvas1, canvas2);
     }
 
     /**
@@ -210,7 +211,7 @@ public class CanvasTest extends AbstractCookbookTest {
     @Test
     public final void testCanvasEqualsSameObject() {
         final Canvas canvas = new Canvas(MinterFactory.getMinter(HTTPS + UUID.randomUUID().toString()));
-        assertTrue(canvas.equals(canvas));
+        assertEquals(canvas, canvas);
     }
 
     /**
@@ -219,8 +220,7 @@ public class CanvasTest extends AbstractCookbookTest {
     @Test
     @SuppressWarnings("unlikely-arg-type")
     public final void testCanvasEqualsString() {
-        final Canvas canvas = new Canvas(MinterFactory.getMinter(HTTPS + UUID.randomUUID().toString()));
-        assertFalse(canvas.equals(new String(Constants.EMPTY)));
+        assertNotEquals(new Canvas(MinterFactory.getMinter(HTTPS + UUID.randomUUID().toString())), EMPTY);
     }
 
     /**
@@ -1284,7 +1284,7 @@ public class CanvasTest extends AbstractCookbookTest {
     @Test
     public final void testPaintSoundSerialization() throws IOException {
         myCanvas.setDuration(CANVAS_DURATION).paintWith(new SoundContent(SOUND_1_ID).setDuration(DURATION));
-        assertEquals(normalizeIDs(getExpected("canvas-sound.json")), normalizeIDs(TestUtils.toJson(myCanvas)));
+        assertEquals(normalizeIDs(getExpected(CANVAS_SOUND)), normalizeIDs(TestUtils.toJson(myCanvas)));
     }
 
     /**
@@ -1295,7 +1295,7 @@ public class CanvasTest extends AbstractCookbookTest {
     @Test
     public final void testPaintSoundSerializationList() throws IOException {
         myCanvas.setDuration(CANVAS_DURATION).paintWith(List.of(new SoundContent(SOUND_1_ID).setDuration(DURATION)));
-        assertEquals(normalizeIDs(getExpected("canvas-sound.json")), normalizeIDs(TestUtils.toJson(myCanvas)));
+        assertEquals(normalizeIDs(getExpected(CANVAS_SOUND)), normalizeIDs(TestUtils.toJson(myCanvas)));
     }
 
     /**

@@ -2,9 +2,7 @@
 package info.freelibrary.iiif.presentation.v3.annotations;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.util.UUID;
 
@@ -49,7 +47,7 @@ public class TargetTest {
     @Test
     public final void testTargetEqualsNull() {
         final Target test = new Target(HTTPS + UUID.randomUUID().toString());
-        assertFalse(test.equals(null));
+        assertNotEquals(test, null);
     }
 
     /**
@@ -58,10 +56,7 @@ public class TargetTest {
     @Test
     public final void testTargetEqualsSame() {
         final String id = UUID.randomUUID().toString();
-        final Target test1 = new Target(HTTPS + id);
-        final Target test2 = new Target(HTTPS + id);
-
-        assertTrue(test1.equals(test2));
+        assertEquals(new Target(HTTPS + id), new Target(HTTPS + id));
     }
 
     /**
@@ -72,7 +67,7 @@ public class TargetTest {
         final Target test1 = new Target(HTTPS + UUID.randomUUID().toString());
         final Target test2 = new Target(HTTPS + UUID.randomUUID().toString());
 
-        assertFalse(test1.equals(test2));
+        assertNotEquals(test1, test2);
     }
 
     /**
@@ -81,7 +76,7 @@ public class TargetTest {
     @Test
     public final void testTargetEqualsSameObject() {
         final Target test = new Target(HTTPS + UUID.randomUUID().toString());
-        assertTrue(test.equals(test));
+        assertEquals(test, test);
     }
 
     /**
@@ -91,6 +86,6 @@ public class TargetTest {
     @SuppressWarnings("unlikely-arg-type")
     public final void testTargetEqualsString() {
         final Target test = new Target(HTTPS + UUID.randomUUID().toString());
-        assertFalse(test.equals(new String(Constants.EMPTY)));
+        assertNotEquals(test, new String(Constants.EMPTY));
     }
 }

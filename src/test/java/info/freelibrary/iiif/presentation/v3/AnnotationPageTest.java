@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static info.freelibrary.util.Constants.EMPTY;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -12,8 +13,6 @@ import java.util.UUID;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import info.freelibrary.util.Constants;
 
 import info.freelibrary.iiif.presentation.v3.annotations.BookmarkingAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
@@ -36,7 +35,7 @@ public class AnnotationPageTest {
      */
     @Before
     public void setUp() {
-        myID = "https://" + UUID.randomUUID().toString();
+        myID = HTTPS + UUID.randomUUID().toString();
     }
 
     /**
@@ -81,7 +80,7 @@ public class AnnotationPageTest {
     @Test
     public final void testAnnotationPageEqualsNull() {
         final AnnotationPage<WebAnnotation> test = new AnnotationPage<>(HTTPS + UUID.randomUUID().toString());
-        assertFalse(test.equals(null));
+        assertNotEquals(test, null);
     }
 
     /**
@@ -93,7 +92,7 @@ public class AnnotationPageTest {
         final AnnotationPage<WebAnnotation> test1 = new AnnotationPage<>(HTTPS + id);
         final AnnotationPage<WebAnnotation> test2 = new AnnotationPage<>(HTTPS + id);
 
-        assertTrue(test1.equals(test2));
+        assertEquals(test1, test2);
     }
 
     /**
@@ -104,7 +103,7 @@ public class AnnotationPageTest {
         final AnnotationPage<WebAnnotation> test1 = new AnnotationPage<>(HTTPS + UUID.randomUUID().toString());
         final AnnotationPage<WebAnnotation> test2 = new AnnotationPage<>(HTTPS + UUID.randomUUID().toString());
 
-        assertFalse(test1.equals(test2));
+        assertNotEquals(test1, test2);
     }
 
     /**
@@ -113,7 +112,7 @@ public class AnnotationPageTest {
     @Test
     public final void testAnnotationPageEqualsSameObject() {
         final AnnotationPage<WebAnnotation> test = new AnnotationPage<>(HTTPS + UUID.randomUUID().toString());
-        assertTrue(test.equals(test));
+        assertEquals(test, test);
     }
 
     /**
@@ -123,7 +122,7 @@ public class AnnotationPageTest {
     @SuppressWarnings("unlikely-arg-type")
     public final void testAnnotationPageEqualsString() {
         final AnnotationPage<WebAnnotation> test = new AnnotationPage<>(HTTPS + UUID.randomUUID().toString());
-        assertFalse(test.equals(new String(Constants.EMPTY)));
+        assertNotEquals(test, EMPTY);
     }
 
     /**

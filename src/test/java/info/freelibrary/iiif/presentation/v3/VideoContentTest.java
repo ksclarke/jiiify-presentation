@@ -2,8 +2,8 @@
 package info.freelibrary.iiif.presentation.v3;
 
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
+import static info.freelibrary.util.Constants.EMPTY;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -15,7 +15,6 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 
-import info.freelibrary.util.Constants;
 import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
@@ -41,7 +40,7 @@ public class VideoContentTest {
      */
     @Before
     public final void setup() {
-        myID = "https://" + UUID.randomUUID().toString() + ".mp4";
+        myID = HTTPS + UUID.randomUUID().toString() + ".mp4";
     }
 
     /**
@@ -86,7 +85,7 @@ public class VideoContentTest {
     @Test
     public final void testNavigableResourceEqualsNull() {
         final VideoContent test = new VideoContent(HTTPS + UUID.randomUUID().toString());
-        assertFalse(test.equals(null));
+        assertNotEquals(test, null);
     }
 
     /**
@@ -98,7 +97,7 @@ public class VideoContentTest {
         final VideoContent test1 = new VideoContent(HTTPS + id);
         final VideoContent test2 = new VideoContent(HTTPS + id);
 
-        assertTrue(test1.equals(test2));
+        assertEquals(test1, test2);
     }
 
     /**
@@ -109,7 +108,7 @@ public class VideoContentTest {
         final VideoContent test1 = new VideoContent(HTTPS + UUID.randomUUID().toString());
         final VideoContent test2 = new VideoContent(HTTPS + UUID.randomUUID().toString());
 
-        assertFalse(test1.equals(test2));
+        assertNotEquals(test1, test2);
     }
 
     /**
@@ -118,7 +117,7 @@ public class VideoContentTest {
     @Test
     public final void testNavigableResourceEqualsSameObject() {
         final VideoContent test = new VideoContent(HTTPS + UUID.randomUUID().toString());
-        assertTrue(test.equals(test));
+        assertEquals(test, test);
     }
 
     /**
@@ -127,8 +126,7 @@ public class VideoContentTest {
     @Test
     @SuppressWarnings("unlikely-arg-type")
     public final void testNavigableResourceEqualsString() {
-        final VideoContent test = new VideoContent(HTTPS + UUID.randomUUID().toString());
-        assertFalse(test.equals(new String(Constants.EMPTY)));
+        assertNotEquals(new VideoContent(HTTPS + UUID.randomUUID().toString()), EMPTY);
     }
 
     /**

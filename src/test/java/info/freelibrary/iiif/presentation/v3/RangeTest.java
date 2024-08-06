@@ -3,7 +3,6 @@ package info.freelibrary.iiif.presentation.v3;
 
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -208,7 +207,7 @@ public class RangeTest extends AbstractTest {
     @Test
     public final void testRangeEqualsNull() {
         final Range test = new Range(HTTPS + UUID.randomUUID().toString());
-        assertFalse(test.equals(null));
+        assertNotEquals(test, null);
     }
 
     /**
@@ -217,10 +216,7 @@ public class RangeTest extends AbstractTest {
     @Test
     public final void testRangeEqualsSame() {
         final String id = UUID.randomUUID().toString();
-        final Range test1 = new Range(HTTPS + id);
-        final Range test2 = new Range(HTTPS + id);
-
-        assertTrue(test1.equals(test2));
+        assertEquals(new Range(HTTPS + id), new Range(HTTPS + id));
     }
 
     /**
@@ -231,7 +227,7 @@ public class RangeTest extends AbstractTest {
         final Range test1 = new Range(HTTPS + UUID.randomUUID().toString());
         final Range test2 = new Range(HTTPS + UUID.randomUUID().toString());
 
-        assertFalse(test1.equals(test2));
+        assertNotEquals(test1, test2);
     }
 
     /**
@@ -240,7 +236,7 @@ public class RangeTest extends AbstractTest {
     @Test
     public final void testRangeEqualsSameObject() {
         final Range test = new Range(HTTPS + UUID.randomUUID().toString());
-        assertTrue(test.equals(test));
+        assertEquals(test, test);
     }
 
     /**
@@ -249,8 +245,7 @@ public class RangeTest extends AbstractTest {
     @Test
     @SuppressWarnings("unlikely-arg-type")
     public final void testRangeEqualsString() {
-        final Range test = new Range(HTTPS + UUID.randomUUID().toString());
-        assertFalse(test.equals(new String(Constants.EMPTY)));
+        assertNotEquals(new Range(HTTPS + UUID.randomUUID().toString()), new String(Constants.EMPTY));
     }
 
     /**

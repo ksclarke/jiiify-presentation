@@ -3,6 +3,7 @@ package info.freelibrary.iiif.presentation.v3.annotations;
 
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.toJson;
+import static info.freelibrary.util.Constants.EMPTY;
 import static info.freelibrary.util.Constants.SLASH;
 import static info.freelibrary.util.warnings.Checkstyle.MULTIPLE_STRING_LITERALS;
 import static org.junit.Assert.assertEquals;
@@ -19,7 +20,6 @@ import java.util.UUID;
 
 import org.junit.Test;
 
-import info.freelibrary.util.Constants;
 import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.AbstractTest;
@@ -50,6 +50,9 @@ public class PaintingAnnotationTest extends AbstractTest {
     /** A test ID prefix. */
     private static final String HTTPS = "https://";
 
+    /** A test region. */
+    private static final String REGION = "xywh=0,0,1,1";
+
     /** A test annotation ID. */
     private final String myAnnoID = "https://a8bb567c-fa5a-4a35-9b21-e1f9c6ba4648";
 
@@ -60,7 +63,7 @@ public class PaintingAnnotationTest extends AbstractTest {
     private final Canvas myCanvas = new Canvas(myCanvaID, new Label(myLoremIpsum.getWords(4)));
 
     /** A test fragment selector. */
-    private final MediaFragmentSelector myFragmentSelector = new MediaFragmentSelector("xywh=0,0,1,1");
+    private final MediaFragmentSelector myFragmentSelector = new MediaFragmentSelector(REGION);
 
     /** A test source resource ID. */
     private final String mySoundContentID = "https://bc7c572d-6bf5-48c9-8329-51a961f1019d" + ".mp3";
@@ -112,7 +115,7 @@ public class PaintingAnnotationTest extends AbstractTest {
         final String id = HTTPS + UUID.randomUUID().toString();
         final PaintingAnnotation test = new PaintingAnnotation(id, new Canvas(id));
 
-        assertFalse(test.equals(null));
+        assertNotEquals(test, null);
     }
 
     /**
@@ -124,7 +127,7 @@ public class PaintingAnnotationTest extends AbstractTest {
         final PaintingAnnotation test1 = new PaintingAnnotation(id, new Canvas(id));
         final PaintingAnnotation test2 = new PaintingAnnotation(id, new Canvas(id));
 
-        assertTrue(test1.equals(test2));
+        assertEquals(test1, test2);
     }
 
     /**
@@ -136,7 +139,7 @@ public class PaintingAnnotationTest extends AbstractTest {
         final PaintingAnnotation test1 = new PaintingAnnotation(id, new Canvas(id));
         final PaintingAnnotation test2 = new PaintingAnnotation(id + SLASH, new Canvas(id));
 
-        assertFalse(test1.equals(test2));
+        assertNotEquals(test1, test2);
     }
 
     /**
@@ -147,7 +150,7 @@ public class PaintingAnnotationTest extends AbstractTest {
         final String id = HTTPS + UUID.randomUUID().toString();
         final PaintingAnnotation test = new PaintingAnnotation(id, new Canvas(id));
 
-        assertTrue(test.equals(test));
+        assertEquals(test, test);
     }
 
     /**
@@ -159,7 +162,7 @@ public class PaintingAnnotationTest extends AbstractTest {
         final String id = HTTPS + UUID.randomUUID().toString();
         final PaintingAnnotation test = new PaintingAnnotation(id, new Canvas(id));
 
-        assertFalse(test.equals(new String(Constants.EMPTY)));
+        assertNotEquals(test, EMPTY);
     }
 
     /**
@@ -168,7 +171,7 @@ public class PaintingAnnotationTest extends AbstractTest {
     @Test
     public void testPaintingAnnotationRegion() {
         final Minter minter = MinterFactory.getMinter(HTTPS + UUID.randomUUID().toString());
-        final PaintingAnnotation test = new PaintingAnnotation(minter, new Canvas(minter), "xywh=0,0,1,1");
+        final PaintingAnnotation test = new PaintingAnnotation(minter, new Canvas(minter), REGION);
 
         assertEquals(new Motivation(Purpose.PAINTING), test.getMotivation().get());
         assertNotNull(test.getID());
