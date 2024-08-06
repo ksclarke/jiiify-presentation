@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.util.ListUtils;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.JDK;
@@ -129,6 +130,26 @@ abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> e
         return myBodyHasChoice;
     }
 
+    @Override
+    public boolean equals(final Object aObject) {
+        final AbstractCanvasAnnotation<?> other;
+
+        if (this == aObject) {
+            return true;
+        }
+
+        if (aObject == null || getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        other = (AbstractCanvasAnnotation<?>) aObject;
+
+        return Objects.equals(myBodyHasChoice, other.myBodyHasChoice) &&
+                Objects.equals(myMotivation, other.myMotivation) && ListUtils.equals(myResources, other.myResources) &&
+                Objects.equals(myTarget, other.myTarget) && Objects.equals(myTimeMode, other.myTimeMode) &&
+                super.equals(other);
+    }
+
     /**
      * Gets the content resources associated with this annotation.
      *
@@ -171,6 +192,11 @@ abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> e
         return Optional.ofNullable(myTimeMode);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), myBodyHasChoice, myMotivation, myResources, myTarget, myTimeMode);
+    }
+
     /**
      * Sets the annotation resource's behaviors. The supplied behaviors are checked for compatibility with the resource.
      *
@@ -193,11 +219,16 @@ abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> e
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
     public A setBehaviors(final List<Behavior> aBehaviorList) {
+        final A canvasAnno;
+
         if (aBehaviorList instanceof final BehaviorList behaviorList) {
             behaviorList.checkType(ResourceBehavior.class, getClass());
+            canvasAnno = super.setBehaviors(behaviorList);
+        } else {
+            canvasAnno = super.setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorList));
         }
 
-        return super.setBehaviors(aBehaviorList);
+        return canvasAnno;
     }
 
     /**

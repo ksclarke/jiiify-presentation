@@ -14,10 +14,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.ListUtils;
 import info.freelibrary.util.warnings.JDK;
 import info.freelibrary.util.warnings.PMD;
 
@@ -28,10 +26,7 @@ import info.freelibrary.iiif.presentation.v3.properties.Start;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
-import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * The overall description of the structure and properties of the digital representation of an object. It carries
@@ -42,9 +37,6 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 @SuppressWarnings({ PMD.EXCESSIVE_PUBLIC_COUNT, PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS, PMD.GOD_CLASS,
     PMD.TOO_MANY_METHODS })
 public class Manifest extends NavigableResource<Manifest> implements Resource<Manifest> {
-
-    /** The manifest's logger. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(Manifest.class, MessageCodes.BUNDLE);
 
     /** The manifest's accompanying canvas. */
     private AccompanyingCanvas myAccompanyingCanvas;
@@ -130,6 +122,29 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     public Manifest addRanges(final Range... aRangeArray) {
         Collections.addAll(getRanges(), aRangeArray);
         return this;
+    }
+
+    @Override
+    public boolean equals(final Object aObject) {
+        final Manifest other;
+
+        if (this == aObject) {
+            return true;
+        }
+
+        if (aObject == null || getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        other = (Manifest) aObject;
+
+        return Objects.equals(myAccompanyingCanvas, other.myAccompanyingCanvas) &&
+                Objects.equals(myPlaceholderCanvas, other.myPlaceholderCanvas) &&
+                ListUtils.equals(myCanvases, other.myCanvases) &&
+                ListUtils.equals(myAnnotations, other.myAnnotations) && ListUtils.equals(myRanges, other.myRanges) &&
+                ListUtils.equals(myServiceDefinitions, myServiceDefinitions) &&
+                Objects.equals(myStart, other.myStart) &&
+                Objects.equals(myViewingDirection, other.myViewingDirection) && super.equals(other);
     }
 
     /**
@@ -244,6 +259,12 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
         return myViewingDirection;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), myAccompanyingCanvas, myPlaceholderCanvas, myCanvases, myAnnotations,
+                myRanges, myServiceDefinitions, myStart, myViewingDirection);
+    }
+
     /**
      * Sets the manifest's accompanying canvas.
      *
@@ -295,11 +316,16 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
     public Manifest setBehaviors(final List<Behavior> aBehaviorList) {
+        final Manifest manifest;
+
         if (aBehaviorList instanceof final BehaviorList behaviorList) {
             behaviorList.checkType(ManifestBehavior.class, getClass());
+            manifest = super.setBehaviors(behaviorList);
+        } else {
+            manifest = super.setBehaviors(new BehaviorList(ManifestBehavior.class, aBehaviorList));
         }
 
-        return super.setBehaviors(aBehaviorList);
+        return manifest;
     }
 
     /**
@@ -421,43 +447,5 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     public Manifest setViewingDirection(final ViewingDirection aViewingDirection) {
         myViewingDirection = aViewingDirection;
         return this;
-    }
-
-    /**
-     * Returns a string/JSON representation of the manifest.
-     *
-     * @return A string representation of the manifest
-     */
-    @Override
-    public String toString() {
-        try {
-            return JSON.getWriter(Manifest.class).writeValueAsString(this);
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details);
-        }
-    }
-
-    /**
-     * Returns a manifest from its JSON representation.
-     *
-     * @param aJsonString A manifest in JSON form
-     * @return The manifest
-     * @throws JsonParsingException If there is trouble parsing the JSON manifest
-     */
-    public static Manifest fromJSON(final String aJsonString) {
-        try {
-            final Manifest manifest = JSON.getReader(Manifest.class).readValue(aJsonString);
-            final String type = manifest.getType();
-
-            // No error is thrown if a Collection is passed in instead of a Manifest, so we check for that
-            if (!ResourceTypes.MANIFEST.equals(type)) {
-                throw new JsonParsingException(LOGGER.getMessage(MessageCodes.JPA_119, ResourceTypes.MANIFEST, type));
-            }
-
-            return manifest;
-        } catch (final JsonProcessingException details) {
-            // JsonProcessingException wraps other runtime exceptions, too (e.g., IllegalArgumentException(s))
-            throw new JsonParsingException(details);
-        }
     }
 }

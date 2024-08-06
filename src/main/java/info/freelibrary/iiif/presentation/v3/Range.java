@@ -12,10 +12,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import info.freelibrary.util.I18nRuntimeException;
+import info.freelibrary.util.ListUtils;
 import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
@@ -25,10 +25,8 @@ import info.freelibrary.iiif.presentation.v3.properties.Start;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.RangeBehavior;
-import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * An ordered list of canvas displays; these canvases may be nested in other ranges. Ranges allow canvases, or parts
@@ -112,6 +110,27 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
         return this;
     }
 
+    @Override
+    public boolean equals(final Object aObject) {
+        final Range other;
+
+        if (this == aObject) {
+            return true;
+        }
+
+        if (aObject == null || getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        other = (Range) aObject;
+
+        return Objects.equals(myAccompanyingCanvas, other.myAccompanyingCanvas) &&
+                Objects.equals(myPlaceholderCanvas, other.myPlaceholderCanvas) &&
+                Objects.equals(myViewingDirection, other.myViewingDirection) &&
+                ListUtils.equals(myItems, other.myItems) && Objects.equals(myStart, other.myStart) &&
+                Objects.equals(mySupplementaryAnnotations, other.mySupplementaryAnnotations) && super.equals(other);
+    }
+
     /**
      * Gets the range's accompanying canvas.
      *
@@ -176,6 +195,12 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
         return myViewingDirection;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), myAccompanyingCanvas, myPlaceholderCanvas, myViewingDirection, myItems,
+                myStart, myViewingDirection);
+    }
+
     /**
      * Sets the range's accompanying canvas.
      *
@@ -197,11 +222,16 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
     public Range setBehaviors(final List<Behavior> aBehaviorList) {
+        final Range range;
+
         if (aBehaviorList instanceof final BehaviorList behaviorList) {
             behaviorList.checkType(RangeBehavior.class, getClass());
+            range = super.setBehaviors(behaviorList);
+        } else {
+            range = super.setBehaviors(new BehaviorList(RangeBehavior.class, aBehaviorList));
         }
 
-        return super.setBehaviors(aBehaviorList);
+        return range;
     }
 
     /**
@@ -266,20 +296,6 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     /**
-     * Gets a string representation of a range.
-     *
-     * @return A string representation of a range
-     */
-    @Override
-    public String toString() {
-        try {
-            return JSON.getWriter(Range.class).writeValueAsString(this);
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details);
-        }
-    }
-
-    /**
      * Gets the manifest context. The manifest can either have a single context or an array of contexts (Cf.
      * https://iiif.io/api/presentation/3.0/#46-linked-data-context-and-extensions)
      *
@@ -290,21 +306,6 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     @JsonInclude(Include.NON_NULL)
     protected Object getJsonContext() {
         return null;
-    }
-
-    /**
-     * Returns a range from its JSON representation.
-     *
-     * @param aJsonString A JSON serialization of a range
-     * @return The range
-     * @throws JsonParsingException If the JSON string cannot be deserialized
-     */
-    static Range fromJSON(final String aJsonString) {
-        try {
-            return JSON.getReader(Range.class).readValue(aJsonString);
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details);
-        }
     }
 
     /**

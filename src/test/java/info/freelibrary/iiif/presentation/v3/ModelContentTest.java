@@ -1,32 +1,25 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import info.freelibrary.util.StringUtils;
-
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.InvalidBehaviorException;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
-import info.freelibrary.iiif.presentation.v3.utils.JSON;
 
 /**
- * Tests canvas content on an annotation.
+ * Tests of {@link ModelContent}.
  */
-public class CanvasContentTest {
+public class ModelContentTest {
 
     /** A test ID. */
     private String myID;
@@ -40,35 +33,11 @@ public class CanvasContentTest {
     }
 
     /**
-     * Tests constructing new canvas content with an ID.
-     */
-    @Test
-    public final void testCanvasContentURI() {
-        assertEquals(myID, new CanvasContent(myID).getID());
-    }
-
-    /**
-     * Tests the deserialization and serialization of canvas content on a manifest.
-     *
-     * @throws IOException If there is trouble reading the test fixture
-     */
-    @Test
-    public final void testDeSerialization() throws IOException {
-        final String json = StringUtils.read(new File("src/test/resources/json/canvas-content.json"), UTF_8);
-        final Manifest manifest = JSON.readValue(json, Manifest.class);
-        final Canvas canvas = manifest.getCanvases().get(0);
-
-        assertEquals(1, canvas.getSupplementingPages().get(0).getAnnotations().size());
-        assertEquals(1, canvas.getPaintingPages().get(0).getAnnotations().size());
-        assertEquals(format(json), format(manifest.toString()));
-    }
-
-    /**
-     * Tests {@link CanvasContent#setBehaviors(Behavior...)}.
+     * Tests {@link ModelContent#setBehaviors(Behavior...)}.
      */
     @Test
     public final void testSetBehaviorsBehaviorArray() {
-        final List<Behavior> behaviors = new CanvasContent(myID).setBehaviors(ResourceBehavior.HIDDEN).getBehaviors();
+        final List<Behavior> behaviors = new ModelContent(myID).setBehaviors(ResourceBehavior.HIDDEN).getBehaviors();
 
         assertEquals(1, behaviors.size());
         assertEquals(ResourceBehavior.HIDDEN, behaviors.get(0));
@@ -76,19 +45,19 @@ public class CanvasContentTest {
     }
 
     /**
-     * Tests {@link CanvasContent#setBehaviors(Behavior...)} with a bad behavior.
+     * Tests {@link ModelContent#setBehaviors(Behavior...)} with a bad behavior.
      */
     @Test(expected = InvalidBehaviorException.class)
     public final void testSetBehaviorsBehaviorArrayInvalid() {
-        new CanvasContent(myID).setBehaviors(CanvasBehavior.NON_PAGED);
+        new ModelContent(myID).setBehaviors(CanvasBehavior.NON_PAGED);
     }
 
     /**
-     * Tests {@link CanvasContent#setBehaviors(List)}.
+     * Tests {@link ModelContent#setBehaviors(List)}.
      */
     @Test
     public final void testSetBehaviorsBehaviorList() {
-        final CanvasContent content = new CanvasContent(myID);
+        final ModelContent content = new ModelContent(myID);
         final List<Behavior> behaviors = content.setBehaviors(List.of(ResourceBehavior.HIDDEN)).getBehaviors();
 
         assertEquals(1, behaviors.size());
@@ -97,19 +66,19 @@ public class CanvasContentTest {
     }
 
     /**
-     * Tests {@link CanvasContent#setBehaviors(List)} with a bad behavior.
+     * Tests {@link ModelContent#setBehaviors(List)} with a bad behavior.
      */
     @Test(expected = InvalidBehaviorException.class)
     public final void testSetBehaviorsBehaviorListInvalid() {
-        new CanvasContent(myID).setBehaviors(List.of(CanvasBehavior.NON_PAGED));
+        new ModelContent(myID).setBehaviors(List.of(CanvasBehavior.NON_PAGED));
     }
 
     /**
-     * Tests {@link CanvasContent#setBehaviors(List)} with an explicit {@code BehaviorList}.
+     * Tests {@link ModelContent#setBehaviors(List)} with an explicit {@code BehaviorList}.
      */
     @Test
     public final void testSetBehaviorsRealBehaviorList() {
-        final List<Behavior> behaviors = new CanvasContent(myID)
+        final List<Behavior> behaviors = new ModelContent(myID)
                 .setBehaviors(new BehaviorList(ResourceBehavior.class, ResourceBehavior.HIDDEN)).getBehaviors();
 
         assertEquals(1, behaviors.size());

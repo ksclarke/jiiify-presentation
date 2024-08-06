@@ -19,6 +19,7 @@ import info.freelibrary.util.StringUtils;
 import info.freelibrary.iiif.presentation.v3.AbstractTest;
 import info.freelibrary.iiif.presentation.v3.ImageContent;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 
 /**
  * Tests for the provider property.
@@ -75,7 +76,7 @@ public class ProviderTest extends AbstractTest {
     @Test
     public final void testFromToString() throws IOException {
         final String testFixture = format(StringUtils.read(TEST_FIXTURE));
-        assertEquals(testFixture, Provider.fromJSON(testFixture).toString());
+        assertEquals(testFixture, JSON.readValue(testFixture, Provider.class).toString());
     }
 
     /**

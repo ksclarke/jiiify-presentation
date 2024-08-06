@@ -259,21 +259,6 @@ public class SpecificResource implements ContentResource {
     }
 
     /**
-     * Returns a SpecificResource from its JSON representation.
-     *
-     * @param aJsonString A JSON serialization of a specific resource
-     * @return The specific resource
-     * @throws JsonParsingException If the specific resource cannot be deserialized from the supplied JSON
-     */
-    public static SpecificResource fromJSON(final String aJsonString) {
-        try {
-            return JSON.getReader(SpecificResource.class).readValue(aJsonString);
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details);
-        }
-    }
-
-    /**
      * A SpecificResource's source. This may be represented by a single IRI or a combination of ID, type and
      * {@code PartOf}.
      */

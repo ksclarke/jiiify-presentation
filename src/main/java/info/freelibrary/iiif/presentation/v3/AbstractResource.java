@@ -19,6 +19,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import info.freelibrary.util.I18nRuntimeException;
+import info.freelibrary.util.ListUtils;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.JDK;
@@ -152,6 +153,32 @@ abstract class AbstractResource<T extends AbstractResource<T>> implements Resour
         myType = Objects.requireNonNull(aType);
         myID = UriUtils.checkID(aID, true);
         myLabel = Objects.requireNonNull(aLabel);
+    }
+
+    @Override
+    public boolean equals(final Object aObject) {
+        if (this == aObject) {
+            return true;
+        }
+
+        if (aObject == null || getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        if (aObject instanceof final AbstractResource<?> other) {
+            return Objects.equals(myType, other.myType) && Objects.equals(myBehaviorClass, other.myBehaviorClass) &&
+                    ListUtils.equals(myBehaviors, other.myBehaviors) &&
+                    ListUtils.equals(myHomepages, other.myHomepages) && Objects.equals(myID, other.myID) &&
+                    Objects.equals(myLabel, other.myLabel) && ListUtils.equals(myMetadata, other.myMetadata) &&
+                    ListUtils.equals(myPartOfs, other.myPartOfs) && ListUtils.equals(myProviders, other.myProviders) &&
+                    ListUtils.equals(myRenderings, other.myRenderings) &&
+                    Objects.equals(myRequiredStatement, other.myRequiredStatement) &&
+                    Objects.equals(myRights, other.myRights) && Objects.equals(mySeeAlsoRefs, other.mySeeAlsoRefs) &&
+                    ListUtils.equals(myServices, other.myServices) && Objects.equals(mySummary, other.mySummary) &&
+                    ListUtils.equals(myThumbnails, other.myThumbnails);
+        }
+
+        return false;
     }
 
     /**
@@ -345,6 +372,13 @@ abstract class AbstractResource<T extends AbstractResource<T>> implements Resour
     @JsonGetter(JsonKeys.TYPE)
     public String getType() {
         return myType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(myType, myBehaviorClass, myBehaviors, myHomepages, myID, myLabel, myMetadata, myPartOfs,
+                myProviders, myRenderings, myRequiredStatement, myRights, mySeeAlsoRefs, myServices, mySummary,
+                myThumbnails);
     }
 
     @Override

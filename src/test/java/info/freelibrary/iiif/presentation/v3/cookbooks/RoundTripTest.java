@@ -18,6 +18,7 @@ import info.freelibrary.util.warnings.Sonar;
 import info.freelibrary.iiif.presentation.v3.AnnotationPage;
 import info.freelibrary.iiif.presentation.v3.Collection;
 import info.freelibrary.iiif.presentation.v3.Manifest;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 
 /**
  * Tests converting cookbook JSON files into manifests and back again.
@@ -44,7 +45,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0001MvmImage() throws IOException {
         final String expected = getExpected("0001-mvm-image/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -55,7 +58,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0002MvmAudio() throws IOException {
         final String expected = getExpected("0002-mvm-audio/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -66,7 +71,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0003MvmVideo() throws IOException {
         final String expected = getExpected("0003-mvm-video/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -77,7 +84,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0004CanvasSize() throws IOException {
         final String expected = getExpected("0004-canvas-size/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -88,7 +97,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0005ImageService() throws IOException {
         final String expected = getExpected("0005-image-service/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -99,7 +110,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0006TextLanguage() throws IOException {
         final String expected = getExpected("0006-text-language/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -110,7 +123,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0007StringFormats() throws IOException {
         final String expected = getExpected("0007-string-formats/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -121,7 +136,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0008Rights() throws IOException {
         final String expected = getExpected("0008-rights/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -132,7 +149,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0009Book1() throws IOException {
         final String expected = getExpected("0009-book-1/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -143,7 +162,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0010Book2ViewingDirectionRtl() throws IOException {
         final String expected = getExpected("0010-book-2-viewing-direction/manifest-rtl");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -154,7 +175,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0010Book2ViewingDirectionTtb() throws IOException {
         final String expected = getExpected("0010-book-2-viewing-direction/manifest-ttb");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -165,7 +188,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0011Book3BehaviorContinuous() throws IOException {
         final String expected = getExpected("0011-book-3-behavior/manifest-continuous");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -176,7 +201,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0011Book3BehaviorIndividuals() throws IOException {
         final String expected = getExpected("0011-book-3-behavior/manifest-individuals");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -187,7 +214,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0013PlaceholderCanvas() throws IOException {
         final String expected = getExpected("0013-placeholderCanvas/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -198,7 +227,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0014AccompanyingCanvas() throws IOException {
         final String expected = getExpected("0014-accompanyingcanvas/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -209,7 +240,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0015Start() throws IOException {
         final String expected = getExpected("0015-start/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -220,7 +253,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0017TranscriptionAV() throws IOException {
         final String expected = getExpected("0017-transcription-av/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -231,7 +266,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0019HtmlInAnnotations() throws IOException {
         final String expected = getExpected("0019-html-in-annotations/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -242,7 +279,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0021Tagging() throws IOException {
         final String expected = getExpected("0021-tagging/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -254,7 +293,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0022LinkingWithHotspot() throws IOException {
         final String expected = getExpected("0022-linking-with-a-hotspot/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -265,7 +306,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0024Book4Toc() throws IOException {
         final String expected = getExpected("0024-book-4-toc/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -276,7 +319,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0026TocOpera() throws IOException {
         final String expected = getExpected("0026-toc-opera/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -287,7 +332,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0029MetadataAnywhere() throws IOException {
         final String expected = getExpected("0029-metadata-anywhere/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -298,7 +345,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0030MultiVolumeCollection() throws IOException {
         final String expected = getExpected("0030-multi-volume/collection");
-        assertEquals(myTestName, expected, Collection.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Collection.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -309,7 +358,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0030MultiVolumeV1() throws IOException {
         final String expected = getExpected("0030-multi-volume/manifest_v1");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -320,7 +371,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0030MultiVolumeV2() throws IOException {
         final String expected = getExpected("0030-multi-volume/manifest_v2");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -331,7 +384,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0031BoundMultiVolume() throws IOException {
         final String expected = getExpected("0031-bound-multivolume/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -342,7 +397,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0032CollectionDoc() throws IOException {
         final String expected = getExpected("0032-collection/collection");
-        assertEquals(myTestName, expected, Collection.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Collection.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -353,7 +410,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0032CollectionManifest1() throws IOException {
         final String expected = getExpected("0032-collection/manifest-01");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -364,7 +423,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0032CollectionManifest2() throws IOException {
         final String expected = getExpected("0032-collection/manifest-02");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -375,7 +436,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0033Choice() throws IOException {
         final String expected = getExpected("0033-choice/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -386,7 +449,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0035Foldouts() throws IOException {
         final String expected = getExpected("0035-foldouts/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -398,7 +463,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0036CompositionFromMultipleImages() throws IOException {
         final String expected = getExpected("0036-composition-from-multiple-images/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -410,7 +477,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0040ImageRotationService() throws IOException {
         final String expected = getExpected("0040-image-rotation-service/manifest-service");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -422,7 +491,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0040ImageRotationWithCSS() throws IOException {
         final String expected = getExpected("0040-image-rotation-service/manifest-css");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -433,7 +504,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0046Rendering() throws IOException {
         final String expected = getExpected("0046-rendering/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -444,7 +517,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0047Homepage() throws IOException {
         final String expected = getExpected("0047-homepage/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -455,7 +530,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0053SeeAlso() throws IOException {
         final String expected = getExpected("0053-seeAlso/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -466,7 +543,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0064OperaOneCanvas() throws IOException {
         final String expected = getExpected("0064-opera-one-canvas/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -477,7 +556,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0065OperaMultipleCanvases() throws IOException {
         final String expected = getExpected("0065-opera-multiple-canvases/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -488,7 +569,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0068NewspaperIssue1() throws IOException {
         final String expected = getExpected("0068-newspaper/newspaper_issue_1-manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -499,7 +582,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0068NewspaperIssue1Anno1() throws IOException {
         final String expected = getExpected("0068-newspaper/newspaper_issue_1-anno_p1");
-        assertEquals(myTestName, expected, AnnotationPage.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, AnnotationPage.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -510,7 +595,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0068NewspaperIssue1Anno2() throws IOException {
         final String expected = getExpected("0068-newspaper/newspaper_issue_1-anno_p2");
-        assertEquals(myTestName, expected, AnnotationPage.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, AnnotationPage.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -521,7 +608,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0068NewspaperIssue2() throws IOException {
         final String expected = getExpected("0068-newspaper/newspaper_issue_2-manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -532,7 +621,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0068NewspaperIssue2Anno1() throws IOException {
         final String expected = getExpected("0068-newspaper/newspaper_issue_2-anno_p1");
-        assertEquals(myTestName, expected, AnnotationPage.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, AnnotationPage.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -543,7 +634,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0068NewspaperIssue2Anno2() throws IOException {
         final String expected = getExpected("0068-newspaper/newspaper_issue_2-anno_p2");
-        assertEquals(myTestName, expected, AnnotationPage.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, AnnotationPage.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -555,7 +648,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0068NewspaperTitleCollection() throws IOException {
         final String expected = getExpected("0068-newspaper/newspaper_title-collection");
-        assertEquals(myTestName, expected, Collection.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Collection.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -567,7 +662,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0074MultipleLanguageCaptions() throws IOException {
         final String expected = getExpected("0074-multiple-language-captions/manifest");
-        assertEquals(myTestName, expected, updateDuration(Manifest.fromJSON(expected).toString()));
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, updateDuration(found));
     }
 
     /**
@@ -578,7 +675,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0117AddImageThumbnail() throws IOException {
         final String expected = getExpected("0117-add-image-thumbnail/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -589,7 +688,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0118Multivalue() throws IOException {
         final String expected = getExpected("0118-multivalue/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -601,7 +702,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0135AnnotatingPointInCanvas() throws IOException {
         final String expected = getExpected("0135-annotating-point-in-canvas/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -613,7 +716,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0139GeolocateCanvasFragment() throws IOException {
         final String expected = getExpected("0139-geolocate-canvas-fragment/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -624,7 +729,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0154GeoExtension() throws IOException {
         final String expected = getExpected("0154-geo-extension/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -635,7 +742,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0202StartCanvas() throws IOException {
         final String expected = getExpected("0202-start-canvas/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -646,7 +755,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0219UsingCaptionFile() throws IOException {
         final String expected = getExpected("0219-using-caption-file/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -657,7 +768,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0230NavDateCollection() throws IOException {
         final String expected = getExpected("0230-navdate/navdate-collection");
-        assertEquals(myTestName, expected, Collection.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Collection.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -668,7 +781,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0230NavDateMap1() throws IOException {
         final String expected = getExpected("0230-navdate/navdate_map_1-manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -679,7 +794,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0230NavDateMap2() throws IOException {
         final String expected = getExpected("0230-navdate/navdate_map_2-manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -691,7 +808,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0232ImageThumbnailCanvasAV() throws IOException {
         final String expected = getExpected("0232-image-thumbnail-canvas/manifest-av");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -703,7 +822,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0232ImageThumbnailCanvasImage() throws IOException {
         final String expected = getExpected("0232-image-thumbnail-canvas/manifest-image");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -714,7 +835,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0234Provider() throws IOException {
         final String expected = getExpected("0234-provider/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -725,7 +848,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0240NavPlaceOnCanvases() throws IOException {
         final String expected = getExpected("0240-navPlace-on-canvases/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -737,7 +862,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0258TaggingExternalResource() throws IOException {
         final String expected = getExpected("0258-tagging-external-resource/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -749,7 +876,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0261NonRectangularCommenting() throws IOException {
         final String expected = getExpected("0261-non-rectangular-commenting/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -761,7 +890,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0266FullCanvasAnnotation() throws IOException {
         final String expected = getExpected("0266-full-canvas-annotation/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -773,7 +904,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0269EmbeddedOrReferencedAnnotationsAnnoPage() throws IOException {
         final String expected = getExpected("0269-embedded-or-referenced-annotations/annotationpage");
-        assertEquals(myTestName, expected, AnnotationPage.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, AnnotationPage.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -785,7 +918,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0269EmbeddedOrReferencedAnnotationsManifest() throws IOException {
         final String expected = getExpected("0269-embedded-or-referenced-annotations/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -796,7 +931,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0283MissingImage() throws IOException {
         final String expected = getExpected("0283-missing-image/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -807,7 +944,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0299Region() throws IOException {
         final String expected = getExpected("0299-region/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -819,7 +958,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0306LinkingAnnotationsToManifestsAnnoPage() throws IOException {
         final String expected = getExpected("0306-linking-annotations-to-manifests/annotationpage");
-        assertEquals(myTestName, expected, AnnotationPage.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, AnnotationPage.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -830,7 +971,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0306LinkingAnnotationsToManifestsManifest() throws IOException {
         final String expected = getExpected("0306-linking-annotations-to-manifests/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -842,7 +985,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0326AnnotatingImageLayer() throws IOException {
         final String expected = getExpected("0326-annotating-image-layer/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -853,7 +998,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0377ImageInAnnotation() throws IOException {
         final String expected = getExpected("0377-image-in-annotation/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -865,7 +1012,9 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Ignore("See ticket IIIF/cookbook-recipes#511")
     public final void test0434ChoiceAV() throws IOException {
         final String expected = getExpected("0434-choice-av/manifest");
-        assertEquals(myTestName, expected, Manifest.fromJSON(expected).toString());
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
     }
 
     /**
@@ -879,5 +1028,4 @@ public class RoundTripTest extends AbstractCookbookTest {
     protected String getExpected(final String aManifestName) throws IOException {
         return updateDuration(StringUtils.read(new File(StringUtils.format(MANIFEST_PATTERN, aManifestName))));
     }
-
 }

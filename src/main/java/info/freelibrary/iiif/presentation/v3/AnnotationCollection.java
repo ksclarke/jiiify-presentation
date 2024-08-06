@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation.v3;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
@@ -44,6 +45,25 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
         super(ResourceTypes.ANNOTATION_COLLECTION, aID, aLabel, ResourceBehavior.class);
     }
 
+    @Override
+    public boolean equals(final Object aObject) {
+        final AnnotationCollection other;
+
+        if (this == aObject) {
+            return true;
+        }
+
+        if (aObject == null || getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        other = (AnnotationCollection) aObject;
+
+        return Objects.equals(myFirstAnnotationPage, other.myFirstAnnotationPage) &&
+                Objects.equals(myLastAnnotationPage, other.myLastAnnotationPage) &&
+                Objects.equals(myViewingDirection, other.myViewingDirection) && super.equals(aObject);
+    }
+
     /**
      * Gets the collection's first annotation page.
      *
@@ -77,6 +97,11 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), myFirstAnnotationPage, myLastAnnotationPage, this.myViewingDirection);
+    }
+
+    @Override
     @JsonIgnore
     public AnnotationCollection setBehaviors(final Behavior... aBehaviorArray) {
         return setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorArray));
@@ -85,11 +110,16 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
     public AnnotationCollection setBehaviors(final List<Behavior> aBehaviorList) {
+        final AnnotationCollection collection;
+
         if (aBehaviorList instanceof final BehaviorList behaviorList) {
             behaviorList.checkType(ResourceBehavior.class, getClass());
+            collection = super.setBehaviors(behaviorList);
+        } else {
+            collection = super.setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorList));
         }
 
-        return super.setBehaviors(aBehaviorList);
+        return collection;
     }
 
     /**

@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,8 +12,6 @@ import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -25,10 +22,8 @@ import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
-import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * A page of {@link Annotation}(s) that associates different content resources with their respective {@link Canvas}(es).
@@ -113,6 +108,25 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
         return this;
     }
 
+    @Override
+    @SuppressWarnings(JDK.UNCHECKED)
+    public boolean equals(final Object aObject) {
+        final AnnotationPage<?> other;
+
+        if (this == aObject) {
+            return true;
+        }
+
+        if (aObject == null || getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        other = (AnnotationPage<?>) aObject;
+
+        return Objects.equals(myAnnotations, other.myAnnotations) &&
+                Objects.equals(myNextAnnotationPage, other.myNextAnnotationPage) && super.equals(other);
+    }
+
     /**
      * Gets the annotation page's annotations.
      *
@@ -140,6 +154,20 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
     @SuppressWarnings({ JDK.UNCHECKED })
     public <T extends Annotation<T>> Optional<AnnotationPage<T>> getNextPage() {
         return Optional.ofNullable((AnnotationPage<T>) myNextAnnotationPage);
+    }
+
+    /**
+     * Gets whether this page has an external context.
+     *
+     * @return True if the page has external context
+     */
+    public boolean hasExternalContext() {
+        return isExternal;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), myAnnotations, myNextAnnotationPage);
     }
 
     /**
@@ -192,11 +220,16 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
     public AnnotationPage<A> setBehaviors(final List<Behavior> aBehaviorList) {
+        final AnnotationPage<A> page;
+
         if (aBehaviorList instanceof final BehaviorList behaviorList) {
             behaviorList.checkType(ResourceBehavior.class, getClass());
+            page = super.setBehaviors(behaviorList);
+        } else {
+            page = super.setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorList));
         }
 
-        return super.setBehaviors(aBehaviorList);
+        return page;
     }
 
     /**
@@ -220,21 +253,6 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
     public <T extends Annotation<T>> AnnotationPage<A> setNextPage(final AnnotationPage<T> anAnnotationPage) {
         myNextAnnotationPage = anAnnotationPage;
         return this;
-    }
-
-    /**
-     * Gets a string representation of the annotation page.
-     *
-     * @return A string representation of the annotation page
-     * @throws JsonParsingException If the annotation page cannot be serialized to valid JSON
-     */
-    @Override
-    public String toString() {
-        try {
-            return JSON.getWriter(AnnotationPage.class).writeValueAsString(this);
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details);
-        }
     }
 
     /**
@@ -280,21 +298,5 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
         }
 
         return this;
-    }
-
-    /**
-     * Returns an annotation from its JSON representation.
-     *
-     * @param <A> The type of annotation contained in this page
-     * @param aJsonString An annotation in JSON form
-     * @return The Annotation
-     * @throws JsonParsingException If there is trouble parsing the annotation page from the supplied JSON string
-     */
-    public static <A extends Annotation<A>> AnnotationPage<A> fromJSON(final String aJsonString) {
-        try {
-            return JSON.getReader(new TypeReference<AnnotationPage<A>>() {}).readValue(aJsonString);
-        } catch (final IOException details) {
-            throw new JsonParsingException(details);
-        }
     }
 }

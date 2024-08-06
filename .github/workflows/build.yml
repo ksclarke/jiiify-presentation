@@ -6,6 +6,7 @@ on:
     branches:
       - v2
       - v3
+      - develop
 
 jobs:
   build:

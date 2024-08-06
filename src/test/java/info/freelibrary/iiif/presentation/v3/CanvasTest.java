@@ -3,7 +3,9 @@ package info.freelibrary.iiif.presentation.v3;
 
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.toJson;
+import static info.freelibrary.util.Constants.EMPTY;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -40,6 +42,12 @@ public class CanvasTest extends AbstractCookbookTest {
 
     /** A test canvas duration. */
     private static final double CANVAS_DURATION = 3600;
+
+    /** A test file for the canvas image choice fixture. */
+    private static final String CANVAS_IMAGE_CHOICE = "canvas-image-choice.json";
+
+    /** A test file for sound content on a canvas. */
+    private static final String CANVAS_SOUND = "canvas-sound.json";
 
     /** A test duration. */
     private static final double DURATION = 300;
@@ -143,6 +151,79 @@ public class CanvasTest extends AbstractCookbookTest {
     }
 
     /**
+     * Tests {@link Canvas#equals(Object) Canvas}.
+     */
+    @Test
+    public final void testCanvasEqualsHashCode() {
+        final String id = UUID.randomUUID().toString();
+        final Canvas canvas1 = new Canvas(HTTPS + id);
+        final Canvas canvas2 = new Canvas(HTTPS + id);
+
+        assertEquals(canvas1.hashCode(), canvas2.hashCode());
+    }
+
+    /**
+     * Tests {@link Canvas#equals(Object) Canvas}.
+     */
+    @Test
+    public final void testCanvasEqualsHashCodeNot() {
+        final Canvas canvas1 = new Canvas(HTTPS + UUID.randomUUID().toString());
+        final Canvas canvas2 = new Canvas(HTTPS + UUID.randomUUID().toString());
+
+        assertNotEquals(canvas1.hashCode(), canvas2.hashCode());
+    }
+
+    /**
+     * Tests {@link Canvas#equals(Object) Canvas}.
+     */
+    @Test
+    public final void testCanvasEqualsNull() {
+        assertNotEquals(new Canvas(MinterFactory.getMinter(HTTPS + UUID.randomUUID().toString())), null);
+    }
+
+    /**
+     * Tests {@link Canvas#equals(Object) Canvas}.
+     */
+    @Test
+    public final void testCanvasEqualsSame() {
+        final String id = UUID.randomUUID().toString();
+        final Canvas canvas1 = new Canvas(HTTPS + id);
+        final Canvas canvas2 = new Canvas(HTTPS + id);
+
+        assertEquals(canvas1, canvas2);
+    }
+
+    /**
+     * Tests {@link Canvas#equals(Object) Canvas}.
+     */
+    @Test
+    public final void testCanvasEqualsSameNot() {
+        final Minter minter = MinterFactory.getMinter(HTTPS + UUID.randomUUID().toString());
+        final Canvas canvas1 = new Canvas(minter);
+        final Canvas canvas2 = new Canvas(minter);
+
+        assertNotEquals(canvas1, canvas2);
+    }
+
+    /**
+     * Tests {@link Canvas#equals(Object) Canvas}.
+     */
+    @Test
+    public final void testCanvasEqualsSameObject() {
+        final Canvas canvas = new Canvas(MinterFactory.getMinter(HTTPS + UUID.randomUUID().toString()));
+        assertEquals(canvas, canvas);
+    }
+
+    /**
+     * Tests {@link Canvas#equals(Object) Canvas}.
+     */
+    @Test
+    @SuppressWarnings("unlikely-arg-type")
+    public final void testCanvasEqualsString() {
+        assertNotEquals(new Canvas(MinterFactory.getMinter(HTTPS + UUID.randomUUID().toString())), EMPTY);
+    }
+
+    /**
      * Tests {@link Canvas#Canvas(Minter) Canvas}.
      */
     @Test
@@ -234,7 +315,24 @@ public class CanvasTest extends AbstractCookbookTest {
                 .setServices(new ImageService3(IMAGE_INFO_SERVICE_ID, ImageService3.Profile.LEVEL_ZERO));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(true, image1, image2);
-        assertEquals(normalizeIDs(getExpected("canvas-image-choice.json")), normalizeIDs(toJson(myCanvas)));
+        assertEquals(normalizeIDs(getExpected(CANVAS_IMAGE_CHOICE)), normalizeIDs(toJson(myCanvas)));
+    }
+
+    /**
+     * Tests serializing and deserializing a canvas painted with two images, each intended as a choice between alternate
+     * representations.
+     *
+     * @throws IOException If there is trouble reading the canvas file or serializing the constructed canvas
+     */
+    @Test
+    public final void testPaintImageChoiceSerializationList() throws IOException {
+        final ImageContent image1 = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT)
+                .setServices(new ImageService3(IMAGE_INFO_SERVICE_ID, ImageService3.Profile.LEVEL_ZERO));
+        final ImageContent image2 = new ImageContent(IMAGE_2_ID).setWidthHeight(WIDTH, HEIGHT)
+                .setServices(new ImageService3(IMAGE_INFO_SERVICE_ID, ImageService3.Profile.LEVEL_ZERO));
+
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(true, List.of(image1, image2));
+        assertEquals(normalizeIDs(getExpected(CANVAS_IMAGE_CHOICE)), normalizeIDs(toJson(myCanvas)));
     }
 
     /**
@@ -719,6 +817,29 @@ public class CanvasTest extends AbstractCookbookTest {
     /**
      * Tests serializing and deserializing a canvas painted with sound twice: first with two sounds each intended as a
      * choice between alternate representations, and then with another sound on a different fragment of the canvas
+     * specified by a {@link MediaFragmentSelector}.
+     *
+     * @throws IOException If there is trouble reading the canvas file or serializing the constructed canvas
+     */
+    @Test
+    public final void testPaintSoundChoiceMultiFragmentSelectorSerializationList() throws IOException {
+        final SoundContent sound1 = new SoundContent(SOUND_1_ID).setDuration(DURATION);
+        final SoundContent sound2 = new SoundContent(SOUND_2_ID).setDuration(DURATION);
+        final SoundContent sound3 = new SoundContent(SOUND_3_ID).setDuration(DURATION);
+
+        myCanvas.setDuration(CANVAS_DURATION)
+                .paintWith(new MediaFragmentSelector(StringUtils.format(URI_FRAG_T_TEMPLATE, 0, DURATION)), true,
+                        List.of(sound1, sound2))
+                .paintWith(
+                        new MediaFragmentSelector(
+                                StringUtils.format(URI_FRAG_T_TEMPLATE, DURATION, DURATION + DURATION)),
+                        List.of(sound3));
+        assertEquals(normalizeIDs(getExpected(MULTI_SOUND_CHOICE_FIXTURE)), normalizeIDs(toJson(myCanvas)));
+    }
+
+    /**
+     * Tests serializing and deserializing a canvas painted with sound twice: first with two sounds each intended as a
+     * choice between alternate representations, and then with another sound on a different fragment of the canvas
      * specified by a URI media fragment component.
      *
      * @throws IOException If there is trouble reading the canvas file or serializing the constructed canvas
@@ -732,6 +853,25 @@ public class CanvasTest extends AbstractCookbookTest {
         myCanvas.setDuration(CANVAS_DURATION)
                 .paintWith(StringUtils.format(URI_FRAG_T_TEMPLATE, 0, DURATION), true, sound1, sound2)
                 .paintWith(StringUtils.format(URI_FRAG_T_TEMPLATE, DURATION, DURATION + DURATION), sound3);
+        assertEquals(normalizeIDs(getExpected(MULTI_SOUND_CHOICE_FIXTURE)), normalizeIDs(toJson(myCanvas)));
+    }
+
+    /**
+     * Tests serializing and deserializing a canvas painted with sound twice: first with two sounds each intended as a
+     * choice between alternate representations, and then with another sound on a different fragment of the canvas
+     * specified by a URI media fragment component.
+     *
+     * @throws IOException If there is trouble reading the canvas file or serializing the constructed canvas
+     */
+    @Test
+    public final void testPaintSoundChoiceMultiSerializationList() throws IOException {
+        final SoundContent sound1 = new SoundContent(SOUND_1_ID).setDuration(DURATION);
+        final SoundContent sound2 = new SoundContent(SOUND_2_ID).setDuration(DURATION);
+        final SoundContent sound3 = new SoundContent(SOUND_3_ID).setDuration(DURATION);
+
+        myCanvas.setDuration(CANVAS_DURATION)
+                .paintWith(StringUtils.format(URI_FRAG_T_TEMPLATE, 0, DURATION), true, List.of(sound1, sound2))
+                .paintWith(StringUtils.format(URI_FRAG_T_TEMPLATE, DURATION, DURATION + DURATION), List.of(sound3));
         assertEquals(normalizeIDs(getExpected(MULTI_SOUND_CHOICE_FIXTURE)), normalizeIDs(toJson(myCanvas)));
     }
 
@@ -1144,7 +1284,18 @@ public class CanvasTest extends AbstractCookbookTest {
     @Test
     public final void testPaintSoundSerialization() throws IOException {
         myCanvas.setDuration(CANVAS_DURATION).paintWith(new SoundContent(SOUND_1_ID).setDuration(DURATION));
-        assertEquals(normalizeIDs(getExpected("canvas-sound.json")), normalizeIDs(TestUtils.toJson(myCanvas)));
+        assertEquals(normalizeIDs(getExpected(CANVAS_SOUND)), normalizeIDs(TestUtils.toJson(myCanvas)));
+    }
+
+    /**
+     * Tests serializing and deserializing a canvas painted with a sound.
+     *
+     * @throws IOException If there is trouble reading the canvas file or serializing the constructed canvas
+     */
+    @Test
+    public final void testPaintSoundSerializationList() throws IOException {
+        myCanvas.setDuration(CANVAS_DURATION).paintWith(List.of(new SoundContent(SOUND_1_ID).setDuration(DURATION)));
+        assertEquals(normalizeIDs(getExpected(CANVAS_SOUND)), normalizeIDs(TestUtils.toJson(myCanvas)));
     }
 
     /**
@@ -1261,6 +1412,16 @@ public class CanvasTest extends AbstractCookbookTest {
     }
 
     /**
+     * Tests painting a video of unspecified size onto a canvas with spatiotemporal dimensions.
+     */
+    @Test
+    public final void testPaintVideoOnSpatiotemporalCanvasNoDimsList() {
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION)
+                .paintWith(List.of(new VideoContent(VIDEO_1_ID)));
+        assertEquals(VIDEO_1_ID, getPaintingContentResourceID());
+    }
+
+    /**
      * Tests painting a video outside the spatial bounds of a canvas with spatiotemporal dimensions.
      */
     @Test(expected = ContentOutOfBoundsException.class)
@@ -1342,6 +1503,21 @@ public class CanvasTest extends AbstractCookbookTest {
                 new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, video);
+
+        assertEquals(VIDEO_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(selector.toString(), getPaintingMediaFragment());
+    }
+
+    /**
+     * Tests painting a video onto a temporal fragment of a canvas with spatiotemporal dimensions.
+     */
+    @Test
+    public final void testPaintVideoOnTemporalFragmentOfSpatiotemporalCanvasList() {
+        final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
+        final MediaFragmentSelector selector =
+                new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION));
+
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, List.of(video));
 
         assertEquals(VIDEO_1_ID, getPaintingContentResourceID().toString());
         assertEquals(selector.toString(), getPaintingMediaFragment());
@@ -1448,6 +1624,18 @@ public class CanvasTest extends AbstractCookbookTest {
                 new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION + 1));
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, video);
+    }
+
+    /**
+     * Tests painting a video onto a non-existent temporal fragment of a canvas with spatiotemporal dimensions.
+     */
+    @Test(expected = SelectorOutOfBoundsException.class)
+    public final void testPaintVideoOnUndefinedTemporalFragmentOfSpatiotemporalCanvasList() {
+        final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
+        final MediaFragmentSelector selector =
+                new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION + 1));
+
+        myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, List.of(video));
     }
 
     /**

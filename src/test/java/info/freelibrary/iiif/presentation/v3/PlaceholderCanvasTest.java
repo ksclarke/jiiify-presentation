@@ -22,6 +22,7 @@ import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.ids.MinterFactory;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 
 /**
@@ -67,7 +68,7 @@ public class PlaceholderCanvasTest extends AbstractTest {
     @Test
     public final void testCanvasFromString() throws IOException {
         final String json = getFixture(Canvas.class);
-        assertEquals(json, Canvas.fromJSON(json).toString());
+        assertEquals(json, JSON.readValue(json, Canvas.class).toString());
     }
 
     /**
@@ -77,10 +78,10 @@ public class PlaceholderCanvasTest extends AbstractTest {
      */
     @Test
     public final void testCollectionFromString() throws IOException {
-        final String json = getFixture(Collection.class);
-        final Collection collection = Collection.fromJSON(json);
+        final String expected = getFixture(Collection.class);
+        final String found = JSON.readValue(expected, Collection.class).toString();
 
-        assertEquals(json, collection.toString());
+        assertEquals(expected, found);
     }
 
     /**
@@ -90,8 +91,10 @@ public class PlaceholderCanvasTest extends AbstractTest {
      */
     @Test
     public final void testManifestFromString() throws IOException {
-        final String json = getFixture(Manifest.class);
-        assertEquals(json, Manifest.fromJSON(json).toString());
+        final String expected = getFixture(Manifest.class);
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(expected, found);
     }
 
     /**
@@ -291,9 +294,7 @@ public class PlaceholderCanvasTest extends AbstractTest {
     @Test
     public final void testRangeFromString() throws IOException {
         final String json = getFixture(Range.class);
-        final Range range = Range.fromJSON(json);
-
-        assertEquals(json, range.toString());
+        assertEquals(json, JSON.readValue(json, Range.class).toString());
     }
 
     /**

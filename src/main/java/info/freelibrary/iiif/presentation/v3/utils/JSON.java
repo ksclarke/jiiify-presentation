@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
@@ -18,9 +19,10 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * A (de)serialization configuration.
@@ -181,16 +183,6 @@ public final class JSON {
     }
 
     /**
-     * Gets a filter provider writer from the JSON mapper.
-     *
-     * @param aProvider A filter provider
-     * @return An object writer
-     */
-    public static ObjectWriter getWriter(final FilterProvider aProvider) {
-        return MAPPER.writer(aProvider);
-    }
-
-    /**
      * Gets a writer for the supplied Java type.
      *
      * @param aJavaType A Java type
@@ -209,6 +201,57 @@ public final class JSON {
      */
     public static <T> ObjectWriter getWriter(final TypeReference<T> aTypeRef) {
         return MAPPER.writerFor(aTypeRef);
+    }
+
+    /**
+     * Reads the supplied JSON string into an instance of the supplied class.
+     *
+     * @param <T> A class type
+     * @param aJsonStr A JSON string
+     * @param aClass A class to read the JSON into
+     * @return An instance of the supplied class
+     * @throws JsonParsingException If there is trouble parsing the JSON string into the supplied class
+     */
+    public static <T> T readValue(final String aJsonStr, final Class<T> aClass) {
+        try {
+            return MAPPER.readValue(aJsonStr, aClass);
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details);
+        }
+    }
+
+    /**
+     * Reads the supplied JSON string into an instance of the supplied Java type.
+     *
+     * @param <T> A class type
+     * @param aJsonStr A JSON string
+     * @param aJavaType A Java type that defines how the JSON is deserialized
+     * @return An instance of the supplied class
+     * @throws JsonParsingException If there is trouble parsing the JSON string into the supplied class
+     */
+    public static <T> T readValue(final String aJsonStr, final JavaType aJavaType) {
+        try {
+            return MAPPER.readValue(aJsonStr, aJavaType);
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details);
+        }
+    }
+
+    /**
+     * Reads the supplied JSON string into an instance of the supplied type reference.
+     *
+     * @param <T> A class type
+     * @param aJsonStr A JSON string
+     * @param aTypeRef A type reference used to construct the returned instance
+     * @return An instance of the supplied type reference
+     * @throws JsonParsingException If there is trouble parsing the JSON string into the supplied class
+     */
+    public static <T> T readValue(final String aJsonStr, final TypeReference<T> aTypeRef) {
+        try {
+            return MAPPER.readValue(aJsonStr, aTypeRef);
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details);
+        }
     }
 
     /**

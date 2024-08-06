@@ -6,16 +6,13 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
-import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * Text content that can be associated with an annotation or used as a thumbnail.
@@ -50,25 +47,15 @@ public class TextContent extends AbstractContentResource<TextContent>
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
     public TextContent setBehaviors(final List<Behavior> aBehaviorList) {
+        final TextContent textContent;
+
         if (aBehaviorList instanceof final BehaviorList behaviorList) {
             behaviorList.checkType(ResourceBehavior.class, getClass());
+            textContent = super.setBehaviors(behaviorList);
+        } else {
+            textContent = super.setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorList));
         }
 
-        return super.setBehaviors(aBehaviorList);
-    }
-
-    /**
-     * Returns text content from its JSON representation.
-     *
-     * @param aJsonString A JSON serialization of a text content resource
-     * @return The text content
-     * @throws JsonParsingException If the text content cannot be deserialized from the supplied JSON
-     */
-    static TextContent fromJSON(final String aJsonString) {
-        try {
-            return JSON.getReader(TextContent.class).readValue(aJsonString);
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details);
-        }
+        return textContent;
     }
 }

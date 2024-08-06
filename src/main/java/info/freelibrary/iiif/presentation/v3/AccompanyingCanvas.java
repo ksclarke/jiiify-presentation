@@ -3,16 +3,12 @@ package info.freelibrary.iiif.presentation.v3;
 
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import info.freelibrary.util.warnings.Eclipse;
 import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
-import info.freelibrary.iiif.presentation.v3.utils.JSON;
-import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * A single canvas that provides additional content that can be used while rendering the resource. Examples include: 1)
@@ -219,20 +215,4 @@ public class AccompanyingCanvas extends AbstractCanvas<AccompanyingCanvas>
     protected Object getJsonContext() {
         return null;
     }
-
-    /**
-     * Returns an AccompanyingCanvas from its JSON representation.
-     *
-     * @param aJsonString A JSON serialization of an accompanying canvas
-     * @throws JsonParsingException If there is trouble reading an accompanying canvas from the supplied string
-     * @return The accompanying canvas
-     */
-    static AccompanyingCanvas fromJSON(final String aJsonString) {
-        try {
-            return JSON.getReader(AccompanyingCanvas.class).readValue(aJsonString);
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details);
-        }
-    }
-
 }

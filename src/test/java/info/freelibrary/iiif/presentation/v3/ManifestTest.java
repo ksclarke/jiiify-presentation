@@ -2,7 +2,9 @@
 package info.freelibrary.iiif.presentation.v3;
 
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
+import static info.freelibrary.util.Constants.SLASH;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -21,19 +23,25 @@ import org.junit.Test;
 
 import com.opencsv.CSVReader;
 
+import info.freelibrary.util.Constants;
 import info.freelibrary.util.StringUtils;
 
+import info.freelibrary.iiif.presentation.v3.annotations.BookmarkingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
+import info.freelibrary.iiif.presentation.v3.ids.Minter;
+import info.freelibrary.iiif.presentation.v3.ids.MinterFactory;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.Metadata;
 import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.InvalidBehaviorException;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
+import info.freelibrary.iiif.presentation.v3.services.GeoJsonService;
 import info.freelibrary.iiif.presentation.v3.services.ImageService3;
 import info.freelibrary.iiif.presentation.v3.services.ImageService3.Profile;
 import info.freelibrary.iiif.presentation.v3.services.OtherService3;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
-import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * A manifest test.
@@ -86,6 +94,9 @@ public class ManifestTest extends AbstractTest {
 
     /** The test manifest. */
     private Manifest myManifest;
+
+    /** A minter to use in testing. */
+    private final Minter myMinter = MinterFactory.getMinter(HTTPS + UUID.randomUUID().toString());
 
     /**
      * Sets up the manifest testing environment.
@@ -169,6 +180,28 @@ public class ManifestTest extends AbstractTest {
     }
 
     /**
+     * Tests adding ranges.
+     */
+    @Test
+    public void testAddRanges() {
+        final Range range = new Range(HTTPS + UUID.randomUUID().toString());
+
+        myManifest.addRanges(range);
+        assertEquals(1, myManifest.getRanges().size());
+    }
+
+    /**
+     * Tests adding ranges.
+     */
+    @Test
+    public void testAddRangesList() {
+        final Range range = new Range(HTTPS + UUID.randomUUID().toString());
+
+        myManifest.addRanges(List.of(range));
+        assertEquals(1, myManifest.getRanges().size());
+    }
+
+    /**
      * Tests adding a context URI.
      */
     @Test
@@ -226,29 +259,97 @@ public class ManifestTest extends AbstractTest {
     }
 
     /**
-     * Tests manifest creation fromJSON().
-     */
-    @Test
-    public void testFromJSON() throws IOException {
-        final String json = format(StringUtils.read(new File(SINAI_JSON)));
-        assertEquals(json, format(Manifest.fromJSON(json).toString()));
-    }
-
-    /**
-     * Test manifest creation using fromJSON() with a Collection.
-     */
-    @Test(expected = JsonParsingException.class)
-    public void testFromStringCollection() throws IOException {
-        Manifest.fromJSON(StringUtils.read(new File(TestUtils.TEST_DIR, "collection1.json")));
-    }
-
-    /**
      * Tests {@link Manifest#getContext() getContext} method.
      */
     @Test
     public void testGetPrimaryContext() {
         assertEquals(AbstractResource.PRESENTATION_CONTEXT_URI,
                 myManifest.addContexts(URI.create(myLoremIpsum.getUrl())).getContext());
+    }
+
+    /**
+     * Tests {@link NavigableResource#equals(Object) NavigableResource}.
+     */
+    @Test
+    public final void testNavigableResourceEqualsHashCode() {
+        final String id = HTTPS + UUID.randomUUID().toString();
+        final Manifest test1 = new Manifest(id, new Label(id));
+        final Manifest test2 = new Manifest(id, new Label(id));
+
+        assertEquals(test1.hashCode(), test2.hashCode());
+    }
+
+    /**
+     * Tests {@link NavigableResource#equals(Object) NavigableResource}.
+     */
+    @Test
+    public final void testNavigableResourceEqualsHashCodeNot() {
+        final String id = HTTPS + UUID.randomUUID().toString();
+        final Manifest test1 = new Manifest(id, new Label(id));
+        final Manifest test2 = new Manifest(id + SLASH, new Label(id));
+
+        assertNotEquals(test1.hashCode(), test2.hashCode());
+    }
+
+    /**
+     * Tests {@link NavigableResource#equals(Object) NavigableResource}.
+     */
+    @Test
+    public final void testNavigableResourceEqualsNull() {
+        assertNotEquals(new Manifest(HTTPS + UUID.randomUUID().toString(), new Label("_")), null);
+    }
+
+    /**
+     * Tests {@link NavigableResource#equals(Object) NavigableResource}.
+     */
+    @Test
+    public final void testNavigableResourceEqualsSame() {
+        final String id = HTTPS + UUID.randomUUID().toString();
+        final Manifest test1 = new Manifest(id, new Label(id));
+        final Manifest test2 = new Manifest(id, new Label(id));
+
+        assertEquals(test1, test2);
+    }
+
+    /**
+     * Tests {@link NavigableResource#equals(Object) NavigableResource}.
+     */
+    @Test
+    public final void testNavigableResourceEqualsSameNot() {
+        final Manifest test1 = new Manifest(HTTPS + UUID.randomUUID().toString(), new Label("one"));
+        final Manifest test2 = new Manifest(HTTPS + UUID.randomUUID().toString(), new Label("two"));
+
+        assertNotEquals(test1, test2);
+    }
+
+    /**
+     * Tests {@link NavigableResource#equals(Object) NavigableResource}.
+     */
+    @Test
+    public final void testNavigableResourceEqualsSameObject() {
+        final Manifest test = new Manifest(HTTPS + UUID.randomUUID().toString(), new Label("label"));
+        assertEquals(test, test);
+    }
+
+    /**
+     * Tests {@link NavigableResource#equals(Object) NavigableResource}.
+     */
+    @Test
+    @SuppressWarnings("unlikely-arg-type")
+    public final void testNavigableResourceEqualsString() {
+        final Manifest test = new Manifest(HTTPS + UUID.randomUUID().toString(), new Label("three"));
+        assertNotEquals(test, new String(Constants.EMPTY));
+    }
+
+    /**
+     * Tests manifest creation.
+     */
+    @Test
+    public void testParsingManifest() throws IOException {
+        final String expected = format(StringUtils.read(new File(SINAI_JSON)));
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(expected, format(found));
     }
 
     /**
@@ -273,11 +374,41 @@ public class ManifestTest extends AbstractTest {
     }
 
     /**
-     * Test setting manifest behaviors.
+     * Tests setting annotations.
+     */
+    @Test
+    public void testSetAnnotations() {
+        final AnnotationPage<WebAnnotation> annotations = new AnnotationPage<>(myMinter, new Canvas(myMinter));
+        assertEquals(1, myManifest.setAnnotations(annotations.addAnnotations(new BookmarkingAnnotation(myMinter)))
+                .getAnnotations().size());
+    }
+
+    /**
+     * Tests setting annotations via list.
+     */
+    @Test
+    public void testSetAnnotationsList() {
+        final AnnotationPage<WebAnnotation> annotations = new AnnotationPage<>(myMinter, new Canvas(myMinter));
+        assertEquals(1,
+                myManifest.setAnnotations(List.of(annotations.addAnnotations(new BookmarkingAnnotation(myMinter))))
+                        .getAnnotations().size());
+    }
+
+    /**
+     * Tests setting manifest behaviors.
      */
     @Test
     public final void testSetBehaviors() {
         assertEquals(2, myManifest.setBehaviors(ManifestBehavior.INDIVIDUALS, ManifestBehavior.AUTO_ADVANCE)
+                .getBehaviors().size());
+    }
+
+    /**
+     * Test setting manifest behaviors via list.
+     */
+    @Test
+    public final void testSetBehaviorsList() {
+        assertEquals(2, myManifest.setBehaviors(List.of(ManifestBehavior.INDIVIDUALS, ManifestBehavior.AUTO_ADVANCE))
                 .getBehaviors().size());
     }
 
@@ -371,6 +502,24 @@ public class ManifestTest extends AbstractTest {
         assertEquals(2, ranges.size());
         assertEquals(rID1, ranges.get(0).getID());
         assertEquals(rID2, ranges.get(1).getID());
+    }
+
+    /**
+     * Tests setting service definitions.
+     */
+    @Test
+    public final void testSetServiceDefinitions() {
+        myManifest.setServiceDefinitions(new GeoJsonService(HTTPS + UUID.randomUUID().toString()));
+        assertEquals(1, myManifest.getServiceDefinitions().size());
+    }
+
+    /**
+     * Tests setting service definitions via list.
+     */
+    @Test
+    public final void testSetServiceDefinitionsList() {
+        myManifest.setServiceDefinitions(List.of(new GeoJsonService(HTTPS + UUID.randomUUID().toString())));
+        assertEquals(1, myManifest.getServiceDefinitions().size());
     }
 
     /**

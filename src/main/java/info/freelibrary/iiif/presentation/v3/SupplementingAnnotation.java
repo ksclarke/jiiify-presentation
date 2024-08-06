@@ -131,6 +131,23 @@ public class SupplementingAnnotation extends AbstractCanvasAnnotation<Supplement
         super();
     }
 
+    @Override
+    public boolean equals(final Object aObject) {
+        final SupplementingAnnotation other;
+
+        if (this == aObject) {
+            return true;
+        }
+
+        if (aObject == null || getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        other = (SupplementingAnnotation) aObject;
+
+        return Objects.equals(myTextGranularity, other.myTextGranularity) && super.equals(other);
+    }
+
     /**
      * Gets the supplementing annotation's text granularity if it exists.
      *
@@ -138,6 +155,11 @@ public class SupplementingAnnotation extends AbstractCanvasAnnotation<Supplement
      */
     public Optional<TextGranularity> getTextGranularity() {
         return Optional.ofNullable(myTextGranularity);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), myTextGranularity);
     }
 
     @Override

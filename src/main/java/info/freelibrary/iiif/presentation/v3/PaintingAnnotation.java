@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation.v3;
 
 import java.net.URI;
+import java.util.Objects;
 import java.util.Optional;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -122,6 +123,23 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
         super();
     }
 
+    @Override
+    public boolean equals(final Object aObject) {
+        final PaintingAnnotation other;
+
+        if (this == aObject) {
+            return true;
+        }
+
+        if (aObject == null || getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        other = (PaintingAnnotation) aObject;
+
+        return Objects.equals(myStylesheet, other.myStylesheet) && super.equals(other);
+    }
+
     /**
      * Gets the specific resource's CSS stylesheet.
      *
@@ -129,6 +147,11 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
      */
     public Optional<Stylesheet> getStylesheet() {
         return Optional.ofNullable(myStylesheet);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), myStylesheet);
     }
 
     @Override

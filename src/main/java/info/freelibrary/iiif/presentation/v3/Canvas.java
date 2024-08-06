@@ -2,13 +2,13 @@
 package info.freelibrary.iiif.presentation.v3;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.Eclipse;
 import info.freelibrary.util.warnings.PMD;
@@ -16,9 +16,7 @@ import info.freelibrary.util.warnings.PMD;
 import info.freelibrary.iiif.presentation.v3.ids.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
-import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * A view that acts as a central point for assembling the different content resources into a single display. The concept
@@ -80,6 +78,24 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
         super();
     }
 
+    @Override
+    public boolean equals(final Object aObject) {
+        final Canvas other;
+
+        if (this == aObject) {
+            return true;
+        }
+
+        if (aObject == null || getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        other = (Canvas) aObject;
+
+        return Objects.equals(myAccompanyingCanvas, other.myAccompanyingCanvas) &&
+                Objects.equals(myPlaceholderCanvas, other.myPlaceholderCanvas) && super.equals(other);
+    }
+
     /**
      * Gets canvas' accompanying canvas.
      *
@@ -109,6 +125,11 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     @JsonInclude(Include.NON_ABSENT)
     public Optional<PlaceholderCanvas> getPlaceholderCanvas() {
         return myPlaceholderCanvas;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), myPlaceholderCanvas, myAccompanyingCanvas);
     }
 
     @Override
@@ -275,20 +296,4 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     protected Object getJsonContext() {
         return null;
     }
-
-    /**
-     * Returns a Canvas from its JSON representation.
-     *
-     * @param aJsonString A canvas in JSON form
-     * @return The canvas
-     * @throws JsonParsingException If the supplied JSON string cannot be successfully parsed
-     */
-    static Canvas fromJSON(final String aJsonString) {
-        try {
-            return JSON.getReader(Canvas.class).readValue(aJsonString);
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details);
-        }
-    }
-
 }

@@ -35,8 +35,6 @@ public final class I18nUtils {
     /** An undefined I18n value. */
     public static final String UNDEFINED = "und";
 
-    // <[a-zA-Z0-9\\-]+\\s*\\/?\\s*>
-    // <[a-zA-Z0-9\-]+\s*(\/\s*)?>
     /** A regex pattern that will match any tag. */
     private static final Pattern ANY_TAG_PATTERN = Pattern.compile("<[a-zA-Z0-9\\-]+\\s*(\\/\\s*)?>", Pattern.DOTALL);
 

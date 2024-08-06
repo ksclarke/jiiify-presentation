@@ -4,12 +4,10 @@ package info.freelibrary.iiif.presentation.v3;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -17,10 +15,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import info.freelibrary.util.Constants;
@@ -44,7 +39,6 @@ import info.freelibrary.iiif.presentation.v3.properties.selectors.SelectorOutOfB
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * A virtual container that represents a page or view and has content resources associated with it or with parts of it.
@@ -67,9 +61,6 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
 
     /** A temporal constant. */
     private static final String TEMPORAL = "temporal";
-
-    /** A Jackson serialization filter name for width and height. */
-    private static final String WIDTH_HEIGHT_FILTER = "JPv3WidthHeightFilter";
 
     /** A zero (non-existent) duration. */
     private static final float ZERO_DURATION = 0.0f;
@@ -140,6 +131,28 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      */
     protected AbstractCanvas(final String aID, final Label aLabel) {
         super(ResourceTypes.CANVAS, aID, aLabel, CanvasBehavior.class);
+    }
+
+    @Override
+    @SuppressWarnings(JDK.UNCHECKED)
+    public boolean equals(final Object aObject) {
+        final AbstractCanvas<T> other;
+
+        if (this == aObject) {
+            return true;
+        }
+
+        if (aObject == null || getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        other = (AbstractCanvas<T>) aObject;
+
+        return Objects.equals(myDuration, other.myDuration) && Objects.equals(myHeight, other.myHeight) &&
+                Objects.equals(myWidth, other.myWidth) &&
+                Objects.equals(myOtherAnnotations, other.myOtherAnnotations) &&
+                Objects.equals(myPaintingPageList, other.myPaintingPageList) &&
+                Objects.equals(mySupplementingPageList, other.mySupplementingPageList) && super.equals(other);
     }
 
     /**
@@ -228,6 +241,12 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         return myWidth;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), myDuration, myHeight, myWidth, myOtherAnnotations, myPaintingPageList,
+                mySupplementingPageList);
+    }
+
     /**
      * Sets the canvas' behaviors.
      *
@@ -252,11 +271,16 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     @JsonSetter(JsonKeys.BEHAVIOR)
     @SuppressWarnings({ JDK.UNCHECKED })
     public T setBehaviors(final List<Behavior> aBehaviorList) {
+        final T canvas;
+
         if (aBehaviorList instanceof final BehaviorList behaviorList) {
             behaviorList.checkType(CanvasBehavior.class, getClass());
+            canvas = super.setBehaviors(behaviorList);
+        } else {
+            canvas = super.setBehaviors(new BehaviorList(CanvasBehavior.class, aBehaviorList));
         }
 
-        return super.setBehaviors(aBehaviorList);
+        return canvas;
     }
 
     /**
@@ -292,8 +316,8 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      * @return The canvas
      */
     @JsonIgnore
-    @SuppressWarnings({ JDK.UNCHECKED })
-    public T setOtherAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
+    @SafeVarargs
+    public final T setOtherAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
         return setOtherAnnotations(Arrays.asList(aAnnotationArray));
     }
 
@@ -404,37 +428,6 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         myHeight = aHeight;
 
         return (T) this;
-    }
-
-    /**
-     * Converts the canvas to its string/JSON representation.
-     *
-     * @return A string representation of the canvas
-     */
-    @Override
-    public String toString() {
-        final SimpleFilterProvider filterProvider = new SimpleFilterProvider();
-        final Set<String> filtered = new HashSet<>();
-
-        // Don't write duration if it's zero
-        if (myDuration == ZERO_DURATION) {
-            filtered.add(JsonKeys.DURATION);
-        }
-
-        // Don't write width and height if they're both zero
-        if (myHeight == 0 && myWidth == 0) {
-            filtered.add(JsonKeys.HEIGHT);
-            filtered.add(JsonKeys.WIDTH);
-        }
-
-        // These are the things we filter when we serialize to JSON
-        filterProvider.addFilter(WIDTH_HEIGHT_FILTER, SimpleBeanPropertyFilter.serializeAllExcept(filtered));
-
-        try {
-            return JSON.getWriter(filterProvider).writeValueAsString(this);
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details);
-        }
     }
 
     /**

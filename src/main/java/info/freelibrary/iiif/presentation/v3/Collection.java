@@ -14,11 +14,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.ListUtils;
 import info.freelibrary.util.warnings.Eclipse;
 import info.freelibrary.util.warnings.PMD;
 
@@ -30,11 +27,8 @@ import info.freelibrary.iiif.presentation.v3.properties.NavDate;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CollectionBehavior;
-import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.Labeled;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * An ordered list of {@link Manifest}(s) available for viewing; these manifests may be nested in other collections.
@@ -44,9 +38,6 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
  */
 @SuppressWarnings({ PMD.EXCESSIVE_PUBLIC_COUNT, PMD.EXCESSIVE_IMPORTS, PMD.GOD_CLASS, PMD.COUPLING_BETWEEN_OBJECTS })
 public class Collection extends NavigableResource<Collection> implements Resource<Collection> {
-
-    /** The logger used by the collection. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(Collection.class, MessageCodes.BUNDLE);
 
     /** The collection's accompanying canvas. */
     private AccompanyingCanvas myAccompanyingCanvas;
@@ -78,6 +69,27 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      */
     private Collection() {
         super(ResourceTypes.COLLECTION, CollectionBehavior.class);
+    }
+
+    @Override
+    public boolean equals(final Object aObject) {
+        final Collection other;
+
+        if (this == aObject) {
+            return true;
+        }
+
+        if (aObject == null || getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        other = (Collection) aObject;
+
+        return Objects.equals(myAccompanyingCanvas, other.myAccompanyingCanvas) &&
+                Objects.equals(myPlaceholderCanvas, other.myPlaceholderCanvas) &&
+                Objects.equals(myViewingDirection, other.myViewingDirection) &&
+                ListUtils.equals(myServiceDefinitions, other.myServiceDefinitions) &&
+                ListUtils.equals(myItems, other.myItems) && super.equals(other);
     }
 
     /**
@@ -151,6 +163,12 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         return myViewingDirection;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), myAccompanyingCanvas, myPlaceholderCanvas, myViewingDirection,
+                myServiceDefinitions, myItems);
+    }
+
     /**
      * Sets the collection's accompanying canvas.
      *
@@ -172,11 +190,16 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
     public Collection setBehaviors(final List<Behavior> aBehaviorList) {
+        final Collection collection;
+
         if (aBehaviorList instanceof final BehaviorList behaviorList) {
             behaviorList.checkType(CollectionBehavior.class, getClass());
+            collection = super.setBehaviors(behaviorList);
+        } else {
+            collection = super.setBehaviors(new BehaviorList(CollectionBehavior.class, aBehaviorList));
         }
 
-        return super.setBehaviors(aBehaviorList);
+        return collection;
     }
 
     /**
@@ -242,52 +265,6 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     public Collection setViewingDirection(final ViewingDirection aViewingDirection) {
         myViewingDirection = aViewingDirection;
         return this;
-    }
-
-    /**
-     * Returns a JsonNode of the Collection manifest.
-     *
-     * @return A JsonNode of the Collection manifest
-     */
-    @Override
-    public String toString() {
-        try {
-            return JSON.getWriter(Collection.class).writeValueAsString(this);
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details);
-        }
-    }
-
-    /**
-     * Returns a collection manifest from its JSON representation.
-     *
-     * @param aJsonString A collection manifest in JSON form
-     * @return The collection manifest
-     * @throws JsonParsingException If there is trouble parsing the JSON
-     */
-    @SuppressWarnings({ PMD.PRESERVE_STACK_TRACE })
-    public static Collection fromJSON(final String aJsonString) {
-        try {
-            return JSON.getReader(Collection.class).readValue(aJsonString);
-        } catch (final JsonProcessingException details) {
-            try {
-                final JsonNode jsonNode = JSON.getReader(JsonNode.class).readValue(aJsonString);
-                final JsonNode typeNode = jsonNode.get(JsonKeys.TYPE);
-
-                if (typeNode != null && typeNode.isTextual()) {
-                    final String type = typeNode.textValue();
-
-                    if (!ResourceTypes.COLLECTION.equals(type)) {
-                        throw new IllegalArgumentException(
-                                LOGGER.getMessage(MessageCodes.JPA_119, ResourceTypes.COLLECTION, type), details);
-                    }
-                }
-            } catch (final JsonProcessingException ignored) {
-                // This is intentionally ignored; this first exception is the one we care about
-            }
-
-            throw new JsonParsingException(details);
-        }
     }
 
     /**

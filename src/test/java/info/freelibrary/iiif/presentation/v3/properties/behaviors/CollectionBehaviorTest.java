@@ -49,7 +49,8 @@ public class CollectionBehaviorTest {
      */
     @Test(expected = JsonParsingException.class)
     public final void testJsonDeserializationDisjoint() throws IOException {
-        Collection.fromJSON(StringUtils.read(new File(TEST_MANIFEST), StandardCharsets.UTF_8));
+        final String json = StringUtils.read(new File(TEST_MANIFEST), StandardCharsets.UTF_8);
+        JSON.readValue(json, Collection.class);
     }
 
     /**

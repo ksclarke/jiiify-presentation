@@ -6,16 +6,13 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
-import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * Dataset content that can be associated with an annotation or set as a thumbnail.
@@ -50,25 +47,15 @@ public class DatasetContent extends AbstractContentResource<DatasetContent>
     @Override
     @JsonSetter(JsonKeys.BEHAVIOR)
     public DatasetContent setBehaviors(final List<Behavior> aBehaviorList) {
+        final DatasetContent datasetContent;
+
         if (aBehaviorList instanceof final BehaviorList behaviorList) {
             behaviorList.checkType(ResourceBehavior.class, getClass());
+            datasetContent = super.setBehaviors(behaviorList);
+        } else {
+            datasetContent = super.setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorList));
         }
 
-        return super.setBehaviors(aBehaviorList);
-    }
-
-    /**
-     * Returns dataset content from its JSON representation.
-     *
-     * @param aJsonString A JSON serialization of a dataset content resource
-     * @return The dataset content
-     * @throws JsonParsingException If the dataset content cannot be deserialized from the supplied JSON
-     */
-    static DatasetContent fromJSON(final String aJsonString) {
-        try {
-            return JSON.getReader(DatasetContent.class).readValue(aJsonString);
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details);
-        }
+        return datasetContent;
     }
 }
