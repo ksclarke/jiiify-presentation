@@ -2,7 +2,10 @@
 package info.freelibrary.iiif.presentation.v3.properties;
 
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
+import static info.freelibrary.util.Constants.EMPTY;
+import static info.freelibrary.util.Constants.SLASH;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,7 +60,23 @@ public class ProviderTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link Provider#equals(Object)}.
+     * Tests {@code Provider} constructor.
+     */
+    @Test
+    public final void testConstructorProviderFull() {
+        final Provider provider1 = new Provider(myID, myLabel, myHomepage, myLogo).setSeeAlsoRefs(mySeeAlso);
+        final Provider provider2 = new Provider(provider1);
+
+        assertEquals(myID, provider2.getID());
+        assertEquals(myLabel, provider2.getLabel());
+        assertEquals(1, provider2.getHomepages().size());
+        assertEquals(myHomepage, provider2.getHomepages().get(0));
+        assertEquals(1, provider2.getSeeAlsoRefs().size());
+        assertEquals(mySeeAlso, provider2.getSeeAlsoRefs().get(0));
+    }
+
+    /**
+     * for {@link Provider#equals(Object)}.
      */
     @Test
     public final void testEqualsObject() {
@@ -71,7 +90,7 @@ public class ProviderTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link Provider#toString()}.
+     * Tests method for {@link Provider#toString()}.
      */
     @Test
     public final void testFromToString() throws IOException {
@@ -80,7 +99,7 @@ public class ProviderTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link Provider#hashCode()}.
+     * Tests method for {@link Provider#hashCode()}.
      */
     @Test
     public final void testHashCode() {
@@ -94,7 +113,75 @@ public class ProviderTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link Provider#setHomepages(Homepage[])}.
+     * Tests {@link Provider#equals(Object)}.
+     */
+    @Test
+    public final void testProviderEqualsHashCode() {
+        final Provider provider = new Provider(myID, myLabel);
+        assertEquals(provider.hashCode(), provider.hashCode());
+    }
+
+    /**
+     * Tests {@link Provider#equals(Object)}.
+     */
+    @Test
+    public final void testProviderEqualsHashCodeNot() {
+        final Provider provider1 = new Provider(myID, myLabel);
+        final Provider provider2 = new Provider(provider1);
+
+        provider2.setID(myID + SLASH);
+        assertNotEquals(provider1.hashCode(), provider2.hashCode());
+    }
+
+    /**
+     * Tests {@link Provider#equals(Object)}.
+     */
+    @Test
+    public final void testProviderEqualsNull() {
+        assertNotEquals(new Provider(myID, myLabel), null);
+    }
+
+    /**
+     * Tests {@link Provider#equals(Object)}.
+     */
+    @Test
+    public final void testProviderEqualsSame() {
+        final Provider provider = new Provider(myID, myLabel);
+        assertEquals(provider, new Provider(provider));
+    }
+
+    /**
+     * Tests {@link Provider#equals(Object)}.
+     */
+    @Test
+    public final void testProviderEqualsSameNot() {
+        final Provider provider1 = new Provider(myID, myLabel);
+        final Provider provider2 = new Provider(provider1).setID(myID + SLASH);
+
+        assertNotEquals(provider1, provider2);
+    }
+
+    /**
+     * Tests {@link Provider#equals(Object)}.
+     */
+    @Test
+    public final void testProviderEqualsSameObject() {
+        final Provider provider = new Provider(myID, myLabel);
+        assertEquals(provider, provider);
+    }
+
+    /**
+     * Tests {@link Provider#equals(Object)}.
+     */
+    @Test
+    @SuppressWarnings("unlikely-arg-type")
+    public final void testProviderEqualsString() {
+        final Provider provider = new Provider(myID, myLabel);
+        assertNotEquals(provider, EMPTY);
+    }
+
+    /**
+     * Tests method for {@link Provider#setHomepages(Homepage[])}.
      */
     @Test
     public final void testSetGetHomepagesHomepageArray() {
@@ -105,7 +192,7 @@ public class ProviderTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link Provider#setHomepages(List)}.
+     * Tests method for {@link Provider#setHomepages(List)}.
      */
     @Test
     public final void testSetGetHomepagesListOfHomepage() {
@@ -117,7 +204,7 @@ public class ProviderTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link Provider#setID(URI)}.
+     * Tests method for {@link Provider#setID(URI)}.
      */
     @Test
     public final void testSetGetID() {
@@ -126,7 +213,7 @@ public class ProviderTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link Provider#setLabel(Label)}.
+     * Tests method for {@link Provider#setLabel(Label)}.
      */
     @Test
     public final void testSetGetLabelLabel() {
@@ -135,7 +222,7 @@ public class ProviderTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link Provider#setLogos(List)}.
+     * Tests method for {@link Provider#setLogos(List)}.
      */
     @Test
     public final void testSetLogosListOfLogo() {
@@ -147,7 +234,7 @@ public class ProviderTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link Provider#setLogos(Logo[])}.
+     * Tests method for {@link Provider#setLogos(Logo[])}.
      */
     @Test
     public final void testSetLogosLogoArray() {
@@ -158,7 +245,7 @@ public class ProviderTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link Provider#setSeeAlsoRefs(List)}.
+     * Tests method for {@link Provider#setSeeAlsoRefs(List)}.
      */
     @Test
     public final void testSetSeeAlsoRefsListOfSeeAlso() {
@@ -170,7 +257,7 @@ public class ProviderTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link Provider#setSeeAlsoRefs(SeeAlso[])}.
+     * Tests method for {@link Provider#setSeeAlsoRefs(SeeAlso[])}.
      */
     @Test
     public final void testSetSeeAlsoRefsSeeAlsoArray() {

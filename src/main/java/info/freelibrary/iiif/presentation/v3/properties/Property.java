@@ -59,6 +59,7 @@ public class Property extends I18nProperty<Property> {
      */
     @Override
     public boolean equals(final Object aObject) {
+        // Generic object checks are done in the super class before checking myName
         return super.equals(aObject) && myName.equals(((Property) aObject).myName);
     }
 

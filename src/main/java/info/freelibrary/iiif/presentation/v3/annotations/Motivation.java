@@ -36,11 +36,15 @@ public class Motivation implements Labeled {
 
     @Override
     public boolean equals(final Object aObject) {
-        if (aObject instanceof final Motivation motivation) {
-            return myLabel.equals(motivation.myLabel);
+        if (this == aObject) {
+            return true;
         }
 
-        return false;
+        if (aObject == null || getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        return Objects.equals(myLabel, ((Motivation) aObject).myLabel);
     }
 
     @Override

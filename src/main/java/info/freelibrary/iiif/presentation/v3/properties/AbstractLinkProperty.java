@@ -111,17 +111,22 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
     @Override
     @SuppressWarnings({ JDK.UNCHECKED })
     public boolean equals(final Object aObject) {
-        if (aObject instanceof AbstractLinkProperty) {
-            final T otherLink = (T) aObject;
+        final AbstractLinkProperty<T> other;
 
-            return Objects.equals(myID, otherLink.getID()) && Objects.equals(myType, otherLink.getType()) &&
-                    Objects.equals(Optional.ofNullable(myFormat), otherLink.getFormat()) &&
-                    Objects.equals(Optional.ofNullable(myProfile), otherLink.getProfile()) &&
-                    Objects.equals(myLabel, otherLink.myLabel) &&
-                    Objects.equals(getLanguages(), otherLink.getLanguages());
+        if (this == aObject) {
+            return true;
         }
 
-        return false;
+        if (aObject == null || getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        other = (AbstractLinkProperty<T>) aObject;
+
+        return Objects.equals(myID, other.getID()) && Objects.equals(myType, other.getType()) &&
+                Objects.equals(Optional.ofNullable(myFormat), other.getFormat()) &&
+                Objects.equals(Optional.ofNullable(myProfile), other.getProfile()) &&
+                Objects.equals(myLabel, other.myLabel) && Objects.equals(getLanguages(), other.getLanguages());
     }
 
     /**

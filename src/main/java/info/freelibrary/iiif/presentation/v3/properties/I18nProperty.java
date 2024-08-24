@@ -52,6 +52,10 @@ class I18nProperty<T extends I18nProperty<T>> {
      */
     @Override
     public boolean equals(final Object aObject) {
+        if (this == aObject) {
+            return true;
+        }
+
         if (aObject != null && getClass() == aObject.getClass()) {
             return toMap().equals(((I18nProperty<?>) aObject).toMap());
         }

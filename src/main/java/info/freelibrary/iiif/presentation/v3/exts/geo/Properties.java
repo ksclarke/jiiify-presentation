@@ -13,8 +13,6 @@ import java.util.stream.Stream;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import info.freelibrary.util.warnings.PMD;
-
 import info.freelibrary.iiif.presentation.v3.properties.Property;
 import info.freelibrary.iiif.presentation.v3.utils.json.PropertiesDeserializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.PropertiesSerializer;
@@ -34,6 +32,16 @@ public class Properties implements Iterable<Property> {
      */
     public Properties() {
         myProperties = new LinkedHashSet<>();
+    }
+
+    /**
+     * Creates a new Properties instance from the supplied one.
+     *
+     * @param aProperties A Properties to clone
+     */
+    public Properties(final Properties aProperties) {
+        this();
+        aProperties.stream().forEach(myProperties::add);
     }
 
     /**
@@ -88,22 +96,15 @@ public class Properties implements Iterable<Property> {
 
     @Override
     public boolean equals(final Object aObject) {
-        if (aObject instanceof final Properties properties) {
-            return myProperties.equals(properties.myProperties);
+        if (this == aObject) {
+            return true;
         }
 
-        return false;
-    }
+        if (aObject == null || getClass() != aObject.getClass()) {
+            return false;
+        }
 
-    /**
-     * Tests whether the supplied <code>Properties</code> are equal to these <code>Properties</code>.
-     *
-     * @param aProperties The properties to test
-     * @return True if the properties are equal to these; else, false
-     */
-    @SuppressWarnings({ PMD.SUSPICIOUS_EQUALS_METHOD_NAME })
-    public boolean equals(final Properties aProperties) {
-        return myProperties.equals(aProperties.myProperties);
+        return myProperties.equals(((Properties) aObject).myProperties);
     }
 
     @Override

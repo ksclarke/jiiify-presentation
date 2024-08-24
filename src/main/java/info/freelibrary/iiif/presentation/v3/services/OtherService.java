@@ -49,11 +49,15 @@ public interface OtherService extends Service {
 
         @Override
         public boolean equals(final Object aObject) {
-            if (aObject instanceof final OtherService.Profile profile) {
-                return myLabel.equals(profile.myLabel);
+            if (this == aObject) {
+                return true;
             }
 
-            return false;
+            if (aObject == null || getClass() != aObject.getClass()) {
+                return false;
+            }
+
+            return myLabel.equals(((OtherService.Profile) aObject).myLabel);
         }
 
         @Override

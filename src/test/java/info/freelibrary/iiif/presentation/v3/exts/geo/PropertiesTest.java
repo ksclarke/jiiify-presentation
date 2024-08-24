@@ -1,7 +1,9 @@
 
 package info.freelibrary.iiif.presentation.v3.exts.geo;
 
+import static info.freelibrary.util.Constants.EMPTY;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
@@ -16,6 +18,8 @@ import java.util.function.Predicate;
 import org.junit.Before;
 import org.junit.Test;
 
+import info.freelibrary.iiif.presentation.v3.annotations.Motivation;
+import info.freelibrary.iiif.presentation.v3.annotations.Purpose;
 import info.freelibrary.iiif.presentation.v3.properties.Property;
 
 /**
@@ -98,7 +102,7 @@ public class PropertiesTest {
      * Test method for {@link Properties#equals(Object)}.
      */
     @Test
-    public void testEqualsObject() {
+    public void testEquals() {
         final Properties properties = new Properties();
 
         properties.add(my1stProperty);
@@ -107,15 +111,11 @@ public class PropertiesTest {
     }
 
     /**
-     * Test method for {@link Properties#equals(Properties)}.
+     * Tests {@link Motivation#equals(Object)}.
      */
     @Test
-    public void testEqualsProperties() {
-        final Properties properties = new Properties();
-
-        properties.add(my1stProperty);
-        myProperties.add(my1stProperty);
-        assertEquals(myProperties, properties);
+    public final void testEqualsDifferentObject() {
+        assertNotEquals(new Motivation(Purpose.BOOKMARKING), EMPTY);
     }
 
     /**
@@ -170,6 +170,70 @@ public class PropertiesTest {
         }
 
         assertEquals(2, count);
+    }
+
+    /**
+     * Tests {@link Properties#equals(Object) Properties}.
+     */
+    @Test
+    public final void testPropertiesEqualsHashCode() {
+        final Properties properties = new Properties(myProperties);
+        assertEquals(myProperties.hashCode(), properties.hashCode());
+    }
+
+    /**
+     * Tests {@link Properties#equals(Object) Properties}.
+     */
+    @Test
+    public final void testPropertiesEqualsHashCodeNot() {
+        final Properties properties = new Properties(myProperties);
+
+        properties.add(my1stProperty);
+        assertNotEquals(myProperties.hashCode(), properties.hashCode());
+    }
+
+    /**
+     * Tests {@link Properties#equals(Object) Properties}.
+     */
+    @Test
+    public final void testPropertiesEqualsNull() {
+        assertNotEquals(myProperties, null);
+    }
+
+    /**
+     * Tests {@link Properties#equals(Object) Properties}.
+     */
+    @Test
+    public final void testPropertiesEqualsSame() {
+        assertEquals(myProperties, new Properties(myProperties));
+    }
+
+    /**
+     * Tests {@link Properties#equals(Object) Properties}.
+     */
+    @Test
+    public final void testPropertiesEqualsSameNot() {
+        final Properties properties = new Properties(myProperties);
+
+        properties.add(my1stProperty);
+        assertNotEquals(myProperties, properties);
+    }
+
+    /**
+     * Tests {@link Properties#equals(Object) Properties}.
+     */
+    @Test
+    public final void testPropertiesEqualsSameObject() {
+        assertEquals(myProperties, myProperties);
+    }
+
+    /**
+     * Tests {@link Properties#equals(Object) Properties}.
+     */
+    @Test
+    @SuppressWarnings("unlikely-arg-type")
+    public final void testPropertiesEqualsString() {
+        assertNotEquals(myProperties, EMPTY);
     }
 
     /**
@@ -248,5 +312,4 @@ public class PropertiesTest {
         myProperties.addAll(List.of(my1stProperty, my2ndProperty));
         assertEquals(2, myProperties.stream().count());
     }
-
 }

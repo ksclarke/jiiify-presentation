@@ -156,7 +156,10 @@ abstract class AbstractResource<T extends AbstractResource<T>> implements Resour
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public boolean equals(final Object aObject) {
+        final AbstractResource<T> other;
+
         if (this == aObject) {
             return true;
         }
@@ -165,20 +168,18 @@ abstract class AbstractResource<T extends AbstractResource<T>> implements Resour
             return false;
         }
 
-        if (aObject instanceof final AbstractResource<?> other) {
-            return Objects.equals(myType, other.myType) && Objects.equals(myBehaviorClass, other.myBehaviorClass) &&
-                    ListUtils.equals(myBehaviors, other.myBehaviors) &&
-                    ListUtils.equals(myHomepages, other.myHomepages) && Objects.equals(myID, other.myID) &&
-                    Objects.equals(myLabel, other.myLabel) && ListUtils.equals(myMetadata, other.myMetadata) &&
-                    ListUtils.equals(myPartOfs, other.myPartOfs) && ListUtils.equals(myProviders, other.myProviders) &&
-                    ListUtils.equals(myRenderings, other.myRenderings) &&
-                    Objects.equals(myRequiredStatement, other.myRequiredStatement) &&
-                    Objects.equals(myRights, other.myRights) && Objects.equals(mySeeAlsoRefs, other.mySeeAlsoRefs) &&
-                    ListUtils.equals(myServices, other.myServices) && Objects.equals(mySummary, other.mySummary) &&
-                    ListUtils.equals(myThumbnails, other.myThumbnails);
-        }
+        other = (AbstractResource<T>) aObject;
 
-        return false;
+        return Objects.equals(myType, other.myType) && Objects.equals(myBehaviorClass, other.myBehaviorClass) &&
+                ListUtils.equals(myBehaviors, other.myBehaviors) && ListUtils.equals(myHomepages, other.myHomepages) &&
+                Objects.equals(myID, other.myID) && Objects.equals(myLabel, other.myLabel) &&
+                ListUtils.equals(myMetadata, other.myMetadata) && ListUtils.equals(myPartOfs, other.myPartOfs) &&
+                ListUtils.equals(myProviders, other.myProviders) &&
+                ListUtils.equals(myRenderings, other.myRenderings) &&
+                Objects.equals(myRequiredStatement, other.myRequiredStatement) &&
+                Objects.equals(myRights, other.myRights) && Objects.equals(mySeeAlsoRefs, other.mySeeAlsoRefs) &&
+                ListUtils.equals(myServices, other.myServices) && Objects.equals(mySummary, other.mySummary) &&
+                ListUtils.equals(myThumbnails, other.myThumbnails);
     }
 
     /**
