@@ -2,7 +2,10 @@
 package info.freelibrary.iiif.presentation.v3.properties;
 
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
+import static info.freelibrary.util.Constants.EMPTY;
+import static info.freelibrary.util.Constants.SLASH;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.io.File;
 import java.io.IOException;
@@ -91,6 +94,74 @@ public class ProviderTest extends AbstractTest {
         secondProvider.setHomepages(myHomepage).setLogos(myLogo).setSeeAlsoRefs(mySeeAlso);
 
         assertEquals(firstProvider.hashCode(), secondProvider.hashCode());
+    }
+
+    /**
+     * Tests {@link Provider#equals(Object)}.
+     */
+    @Test
+    public final void testProviderEqualsHashCode() {
+        final Provider provider = new Provider(myID, myLabel);
+        assertEquals(provider.hashCode(), provider.hashCode());
+    }
+
+    /**
+     * Tests {@link Provider#equals(Object)}.
+     */
+    @Test
+    public final void testProviderEqualsHashCodeNot() {
+        final Provider provider1 = new Provider(myID, myLabel);
+        final Provider provider2 = new Provider(provider1);
+
+        provider2.setID(myID + SLASH);
+        assertNotEquals(provider1.hashCode(), provider2.hashCode());
+    }
+
+    /**
+     * Tests {@link Provider#equals(Object)}.
+     */
+    @Test
+    public final void testProviderEqualsNull() {
+        assertNotEquals(new Provider(myID, myLabel), null);
+    }
+
+    /**
+     * Tests {@link Provider#equals(Object)}.
+     */
+    @Test
+    public final void testProviderEqualsSame() {
+        final Provider provider = new Provider(myID, myLabel);
+        assertEquals(provider, new Provider(provider));
+    }
+
+    /**
+     * Tests {@link Provider#equals(Object)}.
+     */
+    @Test
+    public final void testProviderEqualsSameNot() {
+        final Provider provider1 = new Provider(myID, myLabel);
+        final Provider provider2 = new Provider(provider1).setID(myID + SLASH);
+
+        assertNotEquals(provider1, provider2);
+    }
+
+    /**
+     * Tests {@link Provider#equals(Object)}.
+     */
+    @Test
+    public final void testProviderEqualsSameObject() {
+        final Provider provider = new Provider(myID, myLabel);
+        assertEquals(provider, provider);
+    }
+
+    /**
+     * Tests {@link Provider#equals(Object)}.
+     */
+    @Test
+    @SuppressWarnings("unlikely-arg-type")
+    public final void testProviderEqualsString() {
+        final Provider provider = new Provider(myID, myLabel);
+        assertNotEquals(provider, EMPTY);
     }
 
     /**

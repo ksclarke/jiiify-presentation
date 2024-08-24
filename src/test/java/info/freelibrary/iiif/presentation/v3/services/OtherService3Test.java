@@ -2,10 +2,14 @@
 package info.freelibrary.iiif.presentation.v3.services;
 
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.assertOptEquals;
+import static info.freelibrary.util.Constants.EMPTY;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import org.junit.Test;
 
+import info.freelibrary.iiif.presentation.v3.Service;
+import info.freelibrary.iiif.presentation.v3.exts.geo.Properties;
 import info.freelibrary.iiif.presentation.v3.services.OtherService.Profile;
 
 /**
@@ -65,4 +69,66 @@ public class OtherService3Test {
         assertOptEquals(SERVICE_PROFILE, service.getProfile());
     }
 
+    /**
+     * Test method the {@link Service.Profile#equals(Object)}.
+     */
+    @Test
+    public void testOtherServiceProfileEquals() {
+        final OtherService3 service = new OtherService3(SERVICE_ID, SERVICE_TYPE, SERVICE_PROFILE);
+        final Service.Profile profile = service.getProfile().get();
+
+        assertEquals(profile, profile);
+    }
+
+    /**
+     * Tests {@link Service.Profile#equals(Object)}.
+     */
+    @Test
+    public final void testOtherServiceProfileEqualsHashCode() {
+        final OtherService3 service1 = new OtherService3(SERVICE_ID, SERVICE_TYPE, SERVICE_PROFILE);
+        final Service.Profile profile1 = service1.getProfile().get();
+
+        final OtherService3 service2 = new OtherService3(SERVICE_ID, SERVICE_TYPE, SERVICE_PROFILE);
+        final Service.Profile profile2 = service2.getProfile().get();
+
+        assertEquals(profile1.hashCode(), profile2.hashCode());
+    }
+
+    /**
+     * Tests {@link OtherService.Profile#equals(Object)}.
+     */
+    @Test
+    public final void testOtherServiceProfileEqualsSame() {
+        assertEquals(SERVICE_PROFILE, SERVICE_PROFILE);
+    }
+
+    /**
+     * Test method the {@link Service.Profile#equals(Object)}.
+     */
+    @Test
+    public void testOtherServiceProfileNotEqualsEmpty() {
+        final OtherService3 service = new OtherService3(SERVICE_ID, SERVICE_TYPE, SERVICE_PROFILE);
+        final Service.Profile profile = service.getProfile().get();
+
+        assertNotEquals(profile, EMPTY);
+    }
+
+    /**
+     * Test method the {@link Service.Profile#equals(Object)}.
+     */
+    @Test
+    public void testOtherServiceProfileNotEqualsNull() {
+        final OtherService3 service = new OtherService3(SERVICE_ID, SERVICE_TYPE, SERVICE_PROFILE);
+        final Service.Profile profile = service.getProfile().get();
+
+        assertNotEquals(profile, null);
+    }
+
+    /**
+     * Tests {@link Properties#equals(Object) Properties}.
+     */
+    @Test
+    public final void testPropertiesEqualsSameNot() {
+        assertNotEquals(SERVICE_PROFILE, Service.Profile.fromLabel("https://FAKE_PROFILE"));
+    }
 }

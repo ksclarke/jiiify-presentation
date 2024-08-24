@@ -158,12 +158,19 @@ public class BehaviorList extends ArrayList<Behavior> implements List<Behavior> 
 
     @Override
     public boolean equals(final Object aObject) {
-        if (aObject instanceof final BehaviorList behaviorList) {
-            return myBehaviorClass.equals(behaviorList.myBehaviorClass) &&
-                    Arrays.equals(behaviorList.toArray(), super.toArray());
+        final BehaviorList other;
+
+        if (this == aObject) {
+            return true;
         }
 
-        return false;
+        if (aObject == null || getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        other = (BehaviorList) aObject;
+
+        return myBehaviorClass.equals(other.myBehaviorClass) && Arrays.equals(other.toArray(), super.toArray());
     }
 
     /**
@@ -177,7 +184,7 @@ public class BehaviorList extends ArrayList<Behavior> implements List<Behavior> 
 
     @Override
     public int hashCode() {
-        return Objects.hash(myBehaviorClass, toArray());
+        return Objects.hash(myBehaviorClass, Arrays.hashCode(super.toArray()));
     }
 
     /**

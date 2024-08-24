@@ -48,6 +48,28 @@ public class Provider {
     private List<SeeAlso> mySeeAlsoRefs;
 
     /**
+     * Creates a new provider from the supplied one.
+     *
+     * @param aProvider A provider
+     */
+    public Provider(final Provider aProvider) {
+        myID = aProvider.myID;
+        myLabel = aProvider.myLabel;
+
+        if (aProvider.myLogos != null) {
+            myLogos = List.of(aProvider.myLogos.toArray(new ImageContent[] {}));
+        }
+
+        if (aProvider.myHomepages != null) {
+            myHomepages = List.of(aProvider.myHomepages.toArray(new Homepage[] {}));
+        }
+
+        if (aProvider.mySeeAlsoRefs != null) {
+            mySeeAlsoRefs = List.of(aProvider.mySeeAlsoRefs.toArray(new SeeAlso[] {}));
+        }
+    }
+
+    /**
      * Creates a new resource provider from the supplied ID and label.
      *
      * @param aID An ID
@@ -88,15 +110,21 @@ public class Provider {
      */
     @Override
     public boolean equals(final Object aObject) {
-        if (aObject instanceof final Provider provider) {
-            return Objects.equals(myID, provider.myID) //
-                    && Objects.equals(myLabel, provider.myLabel) //
-                    && Objects.equals(myHomepages, provider.myHomepages) //
-                    && Objects.equals(myLogos, provider.myLogos) //
-                    && Objects.equals(mySeeAlsoRefs, provider.mySeeAlsoRefs);
+        final Provider other;
+
+        if (this == aObject) {
+            return true;
         }
 
-        return false;
+        if (aObject == null || getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        other = (Provider) aObject;
+
+        return Objects.equals(myID, other.myID) && Objects.equals(myLabel, other.myLabel) &&
+                Objects.equals(myHomepages, other.myHomepages) && Objects.equals(myLogos, other.myLogos) &&
+                Objects.equals(mySeeAlsoRefs, other.mySeeAlsoRefs);
     }
 
     /**

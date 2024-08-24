@@ -152,6 +152,8 @@ public class WebAnnotation implements Annotation<WebAnnotation> {
 
     @Override
     public boolean equals(final Object aObject) {
+        final WebAnnotation other;
+
         if (this == aObject) {
             return true;
         }
@@ -160,14 +162,12 @@ public class WebAnnotation implements Annotation<WebAnnotation> {
             return false;
         }
 
-        if (aObject instanceof final WebAnnotation other) {
-            return myBodyHasChoice == other.myBodyHasChoice && Objects.equals(myID, other.myID) &&
-                    Objects.equals(myLabel, other.myLabel) && Objects.equals(myMotivation, other.myMotivation) &&
-                    ListUtils.equals(myResources, other.myResources) && Objects.equals(myTarget, other.myTarget) &&
-                    Objects.equals(myTimeMode, other.myTimeMode);
-        }
+        other = (WebAnnotation) aObject;
 
-        return false;
+        return myBodyHasChoice == other.myBodyHasChoice && Objects.equals(myID, other.myID) &&
+                Objects.equals(myLabel, other.myLabel) && Objects.equals(myMotivation, other.myMotivation) &&
+                ListUtils.equals(myResources, other.myResources) && Objects.equals(myTarget, other.myTarget) &&
+                Objects.equals(myTimeMode, other.myTimeMode);
     }
 
     /**

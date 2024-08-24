@@ -75,7 +75,10 @@ abstract class AbstractContentResource<T extends AbstractContentResource<T>> ext
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public boolean equals(final Object aObject) {
+        final AbstractContentResource<T> other;
+
         if (this == aObject) {
             return true;
         }
@@ -84,12 +87,10 @@ abstract class AbstractContentResource<T extends AbstractContentResource<T>> ext
             return false;
         }
 
-        if (aObject instanceof final AbstractContentResource<?> other) {
-            return Objects.equals(myFormat, other.myFormat) && ListUtils.equals(myAnnotations, other.myAnnotations) &&
-                    ListUtils.equals(myLanguages, other.myLanguages) && super.equals(other);
-        }
+        other = (AbstractContentResource<T>) aObject;
 
-        return false;
+        return Objects.equals(myFormat, other.myFormat) && ListUtils.equals(myAnnotations, other.myAnnotations) &&
+                ListUtils.equals(myLanguages, other.myLanguages) && super.equals(other);
     }
 
     /**
@@ -143,9 +144,10 @@ abstract class AbstractContentResource<T extends AbstractContentResource<T>> ext
      * @param aAnnotationArray An array of annotation pages
      * @return The content resource
      */
-    @SuppressWarnings({ JDK.UNCHECKED })
     @JsonIgnore
-    public T setAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
+    @SafeVarargs
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public final T setAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
         return setAnnotations(Arrays.asList(aAnnotationArray));
     }
 
