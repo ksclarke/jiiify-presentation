@@ -130,7 +130,7 @@ class RangeCanvas extends Canvas {
     }
 
     @Override
-    public Label getLabel() {
+    public Optional<Label> getLabel() {
         return mySourceCanvas.getLabel();
     }
 
@@ -140,18 +140,18 @@ class RangeCanvas extends Canvas {
     }
 
     @Override
-    public NavDate getNavDate() {
+    public Optional<NavDate> getNavDate() {
         return mySourceCanvas.getNavDate();
     }
 
     @Override
-    public NavPlace getNavPlace() {
+    public Optional<NavPlace> getNavPlace() {
         return mySourceCanvas.getNavPlace();
     }
 
     @Override
-    public List<AnnotationPage<WebAnnotation>> getOtherAnnotations() {
-        return mySourceCanvas.getOtherAnnotations();
+    public List<AnnotationPage<WebAnnotation>> getWebAnnotations() {
+        return mySourceCanvas.getWebAnnotations();
     }
 
     @Override
@@ -182,12 +182,12 @@ class RangeCanvas extends Canvas {
     }
 
     @Override
-    public RequiredStatement getRequiredStatement() {
+    public Optional<RequiredStatement> getRequiredStatement() {
         return mySourceCanvas.getRequiredStatement();
     }
 
     @Override
-    public String getRights() {
+    public Optional<String> getRights() {
         return mySourceCanvas.getRights();
     }
 
@@ -202,7 +202,7 @@ class RangeCanvas extends Canvas {
     }
 
     @Override
-    public Summary getSummary() {
+    public Optional<Summary> getSummary() {
         return mySourceCanvas.getSummary();
     }
 

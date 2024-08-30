@@ -191,8 +191,8 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
      * @return The viewing direction
      */
     @JsonGetter(JsonKeys.VIEWING_DIRECTION)
-    public ViewingDirection getViewingDirection() {
-        return myViewingDirection;
+    public Optional<ViewingDirection> getViewingDirection() {
+        return Optional.ofNullable(myViewingDirection);
     }
 
     @Override

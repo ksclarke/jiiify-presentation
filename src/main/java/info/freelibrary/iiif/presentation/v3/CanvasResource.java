@@ -58,7 +58,7 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      *
      * @return The canvas' non-painting annotation pages
      */
-    List<AnnotationPage<WebAnnotation>> getOtherAnnotations();
+    List<AnnotationPage<WebAnnotation>> getWebAnnotations();
 
     /**
      * Gets the canvas' annotation pages for painting annotations.
@@ -424,7 +424,7 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * @return The canvas
      */
     @SuppressWarnings(JDK.UNCHECKED)
-    T setOtherAnnotations(AnnotationPage<WebAnnotation>... aAnnotationArray);
+    T setWebAnnotations(AnnotationPage<WebAnnotation>... aAnnotationArray);
 
     /**
      * Sets the canvas annotation pages from a list.
@@ -432,7 +432,7 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
      * @param aAnnotationList A list of annotation pages
      * @return The canvas
      */
-    T setOtherAnnotations(List<AnnotationPage<WebAnnotation>> aAnnotationList);
+    T setWebAnnotations(List<AnnotationPage<WebAnnotation>> aAnnotationList);
 
     /**
      * Sets the canvas' annotation pages for painting annotations.

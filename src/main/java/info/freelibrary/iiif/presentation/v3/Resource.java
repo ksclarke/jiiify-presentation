@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation.v3;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -44,9 +45,9 @@ public interface Resource<T extends Resource<T>> {
     List<Homepage> getHomepages();
 
     /**
-     * Gets the resource ID.
+     * Gets the ID.
      *
-     * @return The resource's ID
+     * @return The ID
      */
     String getID();
 
@@ -55,7 +56,7 @@ public interface Resource<T extends Resource<T>> {
      *
      * @return The resource's label
      */
-    Label getLabel();
+    Optional<Label> getLabel();
 
     /**
      * Gets the resource metadata.
@@ -90,14 +91,14 @@ public interface Resource<T extends Resource<T>> {
      *
      * @return The required statement of the resource
      */
-    RequiredStatement getRequiredStatement();
+    Optional<RequiredStatement> getRequiredStatement();
 
     /**
      * Gets the resource's rights ID.
      *
      * @return The rights ID
      */
-    String getRights();
+    Optional<String> getRights();
 
     /**
      * Gets see also reference(s).
@@ -118,7 +119,7 @@ public interface Resource<T extends Resource<T>> {
      *
      * @return The resource's summary
      */
-    Summary getSummary();
+    Optional<Summary> getSummary();
 
     /**
      * Gets a list of resource thumbnails. A thumbnail can be any type of content resource, not just

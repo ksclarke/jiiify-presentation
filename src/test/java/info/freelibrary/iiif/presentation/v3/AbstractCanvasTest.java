@@ -134,27 +134,27 @@ public class AbstractCanvasTest {
     }
 
     /**
-     * Tests {@link AbstractCanvas#setOtherAnnotations(AnnotationPage)}.
+     * Tests {@link AbstractCanvas#setWebAnnotations(AnnotationPage)}.
      */
     @Test
-    public final void testSetOtherAnnotations() {
+    public final void testSetWebAnnotations() {
         final Minter minter = MinterFactory.getMinter(HTTPS + UUID.randomUUID().toString());
         final AnnotationPage<WebAnnotation> page = new AnnotationPage<>(minter, new Canvas(minter));
 
         page.addAnnotations(new BookmarkingAnnotation(minter));
-        assertEquals(1, new TestClass(minter).setOtherAnnotations(page).getOtherAnnotations().size());
+        assertEquals(1, new TestClass(minter).setWebAnnotations(page).getWebAnnotations().size());
     }
 
     /**
-     * Tests {@link AbstractCanvas#setOtherAnnotations(AnnotationPage)}.
+     * Tests {@link AbstractCanvas#setWebAnnotations(AnnotationPage)}.
      */
     @Test
-    public final void testSetOtherAnnotationsList() {
+    public final void testSetWebAnnotationsList() {
         final Minter minter = MinterFactory.getMinter(HTTPS + UUID.randomUUID().toString());
         final AnnotationPage<WebAnnotation> page = new AnnotationPage<>(minter, new Canvas(minter));
 
         page.addAnnotations(new BookmarkingAnnotation(minter));
-        assertEquals(1, new TestClass(minter).setOtherAnnotations(List.of(page)).getOtherAnnotations().size());
+        assertEquals(1, new TestClass(minter).setWebAnnotations(List.of(page)).getWebAnnotations().size());
     }
 
     /**

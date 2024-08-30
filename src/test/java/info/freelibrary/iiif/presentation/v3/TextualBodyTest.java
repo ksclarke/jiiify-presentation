@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.assertOptEquals;
+import static info.freelibrary.util.Constants.EMPTY;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
@@ -61,7 +63,7 @@ public class TextualBodyTest {
     @Test
     public final void testSetGetLanguage() {
         final String language = "fr";
-        assertEquals(language, new TextualBody().setLanguage(language).getLanguage());
+        assertOptEquals(language, new TextualBody().setLanguage(language).getLanguage());
     }
 
     /**
@@ -78,7 +80,7 @@ public class TextualBodyTest {
      */
     @Test
     public final void testTextualBody() {
-        assertEquals(null, new TextualBody().getID());
+        assertEquals(EMPTY, new TextualBody().getID());
     }
 
     /**
@@ -110,6 +112,6 @@ public class TextualBodyTest {
     @Test
     public final void testUnserializeID() {
         final TextualBody textualBody = new TextualBody(SkolemIriFactory.getFactory()).serializeID(false);
-        assertEquals(null, textualBody.getID());
+        assertEquals(EMPTY, textualBody.getID());
     }
 }

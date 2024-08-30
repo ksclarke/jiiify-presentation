@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.ids;
 
+import static info.freelibrary.util.Constants.EMPTY;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -68,7 +69,7 @@ public class SkolemIriFactoryTest {
      */
     @Test
     public final void testHasNonSerializableIDs() {
-        assertEquals(null, new TextualBody(SkolemIriFactory.getFactory().createSerializableIDs(false)).getID());
+        assertEquals(EMPTY, new TextualBody(SkolemIriFactory.getFactory().createSerializableIDs(false)).getID());
     }
 
     /**
@@ -76,7 +77,7 @@ public class SkolemIriFactoryTest {
      */
     @Test
     public final void testHasNonSerializableIDsDefault() {
-        assertEquals(null,
+        assertEquals(EMPTY,
                 new TextualBody(SkolemIriFactory.getFactory().createSerializableIDs(false).setWellKnownBase(null))
                         .getID());
     }
@@ -86,7 +87,7 @@ public class SkolemIriFactoryTest {
      */
     @Test
     public final void testHasSerializableIDs() {
-        assertNotEquals(null, new TextualBody(SkolemIriFactory.getFactory().createSerializableIDs(true)).getID());
+        assertNotEquals(EMPTY, new TextualBody(SkolemIriFactory.getFactory().createSerializableIDs(true)).getID());
     }
 
     /**

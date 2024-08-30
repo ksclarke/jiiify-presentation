@@ -4,7 +4,6 @@ package info.freelibrary.iiif.presentation.v3;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -80,50 +79,6 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
         super(ResourceTypes.MANIFEST, ManifestBehavior.class);
     }
 
-    /**
-     * Adds one or more canvases to the manifest.
-     *
-     * @param aCanvasArray An array of canvases to add to the manifest
-     * @return The manifest
-     */
-    public Manifest addCanvases(final Canvas... aCanvasArray) {
-        Collections.addAll(getCanvases(), aCanvasArray);
-        return this;
-    }
-
-    /**
-     * Adds one or more canvases to the manifest.
-     *
-     * @param aCanvasList A list of canvases to add to the manifest
-     * @return The manifest
-     */
-    public Manifest addCanvases(final List<Canvas> aCanvasList) {
-        getCanvases().addAll(aCanvasList);
-        return this;
-    }
-
-    /**
-     * Adds one or more ranges to the manifest.
-     *
-     * @param aRangeList A list of ranges to add to the manifest
-     * @return The manifest
-     */
-    public Manifest addRanges(final List<Range> aRangeList) {
-        getRanges().addAll(aRangeList);
-        return this;
-    }
-
-    /**
-     * Adds one or more ranges to the manifest.
-     *
-     * @param aRangeArray An array of ranges to add to the manifest
-     * @return The manifest
-     */
-    public Manifest addRanges(final Range... aRangeArray) {
-        Collections.addAll(getRanges(), aRangeArray);
-        return this;
-    }
-
     @Override
     public boolean equals(final Object aObject) {
         final Manifest other;
@@ -165,7 +120,6 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      */
     @JsonGetter(JsonKeys.ANNOTATIONS)
     @SuppressWarnings({ JDK.UNCHECKED })
-    // <AnnotationPage<? extends WebAnnotation>>
     public List<AnnotationPage<WebAnnotation>> getAnnotations() {
         if (myAnnotations == null) {
             myAnnotations = new ArrayList<>();
@@ -255,8 +209,8 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @return The viewing direction
      */
     @JsonGetter(JsonKeys.VIEWING_DIRECTION)
-    public ViewingDirection getViewingDirection() {
-        return myViewingDirection;
+    public Optional<ViewingDirection> getViewingDirection() {
+        return Optional.ofNullable(myViewingDirection);
     }
 
     @Override
@@ -280,13 +234,18 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     /**
      * Sets the manifest's annotation pages.
      *
-     * @param aPageList A list of annotation pages
+     * @param aPageArray An array of annotation pages
      * @return This manifest
      */
     @SafeVarargs
     @JsonIgnore
-    public final Manifest setAnnotations(final AnnotationPage<WebAnnotation>... aPageList) {
-        setAnnotations(List.of(aPageList));
+    public final Manifest setAnnotations(final AnnotationPage<WebAnnotation>... aPageArray) {
+        final List<AnnotationPage<WebAnnotation>> annotations = getAnnotations();
+
+        Objects.requireNonNull(aPageArray);
+        annotations.clear();
+        Arrays.stream(aPageArray).forEach(annotations::add);
+
         return this;
     }
 
@@ -336,8 +295,13 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      */
     @JsonGetter(JsonKeys.ITEMS)
     public Manifest setCanvases(final Canvas... aCanvasArray) {
-        getCanvases().clear();
-        return addCanvases(aCanvasArray);
+        final List<Canvas> canvases = getCanvases();
+
+        Objects.requireNonNull(aCanvasArray);
+        canvases.clear();
+        Arrays.stream(aCanvasArray).forEach(canvases::add);
+
+        return this;
     }
 
     /**
@@ -378,6 +342,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     public Manifest setRanges(final List<Range> aRangeList) {
         final List<Range> ranges = getRanges();
 
+        Objects.requireNonNull(aRangeList);
         ranges.clear();
         ranges.addAll(aRangeList);
 
@@ -392,8 +357,13 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      */
     @JsonSetter(JsonKeys.STRUCTURES)
     public Manifest setRanges(final Range... aRangeArray) {
-        getRanges().clear();
-        return addRanges(aRangeArray);
+        final List<Range> ranges = getRanges();
+
+        Objects.requireNonNull(aRangeArray);
+        ranges.clear();
+        Arrays.stream(aRangeArray).forEach(ranges::add);
+
+        return this;
     }
 
     /**
@@ -422,7 +392,13 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     @JsonIgnore
     @SafeVarargs
     public final Manifest setServiceDefinitions(final Service... aServiceArray) {
-        return setServiceDefinitions(Arrays.asList(aServiceArray));
+        final List<Service> serviceList = getServiceDefinitions();
+
+        Objects.requireNonNull(aServiceArray);
+        serviceList.clear();
+        Arrays.stream(aServiceArray).forEach(serviceList::add);
+
+        return this;
     }
 
     /**

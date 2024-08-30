@@ -75,7 +75,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     private Minter myMinter;
 
     /** The canvas' other canvases (other than painting or supplementing). */
-    private List<AnnotationPage<WebAnnotation>> myOtherAnnotations;
+    private List<AnnotationPage<WebAnnotation>> myWebAnnotations;
 
     /** The painting annotations on the canvas. */
     private List<AnnotationPage<PaintingAnnotation>> myPaintingPageList;
@@ -149,8 +149,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         other = (AbstractCanvas<T>) aObject;
 
         return Objects.equals(myDuration, other.myDuration) && Objects.equals(myHeight, other.myHeight) &&
-                Objects.equals(myWidth, other.myWidth) &&
-                Objects.equals(myOtherAnnotations, other.myOtherAnnotations) &&
+                Objects.equals(myWidth, other.myWidth) && Objects.equals(myWebAnnotations, other.myWebAnnotations) &&
                 Objects.equals(myPaintingPageList, other.myPaintingPageList) &&
                 Objects.equals(mySupplementingPageList, other.mySupplementingPageList) && super.equals(other);
     }
@@ -193,12 +192,12 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      * @return The canvas' non-painting annotation pages
      */
     @JsonIgnore
-    public List<AnnotationPage<WebAnnotation>> getOtherAnnotations() {
-        if (myOtherAnnotations == null) {
-            myOtherAnnotations = new ArrayList<>();
+    public List<AnnotationPage<WebAnnotation>> getWebAnnotations() {
+        if (myWebAnnotations == null) {
+            myWebAnnotations = new ArrayList<>();
         }
 
-        return myOtherAnnotations;
+        return myWebAnnotations;
     }
 
     /**
@@ -243,7 +242,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), myDuration, myHeight, myWidth, myOtherAnnotations, myPaintingPageList,
+        return Objects.hash(super.hashCode(), myDuration, myHeight, myWidth, myWebAnnotations, myPaintingPageList,
                 mySupplementingPageList);
     }
 
@@ -317,8 +316,8 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      */
     @JsonIgnore
     @SafeVarargs
-    public final T setOtherAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
-        return setOtherAnnotations(Arrays.asList(aAnnotationArray));
+    public final T setWebAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
+        return setWebAnnotations(Arrays.asList(aAnnotationArray));
     }
 
     /**
@@ -329,8 +328,8 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      */
     @JsonIgnore
     @SuppressWarnings({ JDK.UNCHECKED })
-    public T setOtherAnnotations(final List<AnnotationPage<WebAnnotation>> aAnnotationList) {
-        final List<AnnotationPage<WebAnnotation>> annotations = getOtherAnnotations();
+    public T setWebAnnotations(final List<AnnotationPage<WebAnnotation>> aAnnotationList) {
+        final List<AnnotationPage<WebAnnotation>> annotations = getWebAnnotations();
 
         Objects.requireNonNull(aAnnotationList);
         annotations.clear();
@@ -731,7 +730,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         final List<AnnotationPage<?>> annotations = new ArrayList<>();
 
         getSupplementingPages().forEach(annotations::add);
-        getOtherAnnotations().forEach(annotations::add);
+        getWebAnnotations().forEach(annotations::add);
 
         return annotations;
     }
@@ -908,7 +907,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     @JsonSetter(JsonKeys.ANNOTATIONS)
     private <A extends Annotation<A>> AbstractCanvas<T> setAnnotations(final Object aObject) {
         final List<AnnotationPage<SupplementingAnnotation>> supplementingPages = getSupplementingPages();
-        final List<AnnotationPage<WebAnnotation>> otherAnnotations = getOtherAnnotations();
+        final List<AnnotationPage<WebAnnotation>> otherAnnotations = getWebAnnotations();
         final List<AnnotationPage<A>> annotationList = getDeserializedPageList(aObject);
 
         supplementingPages.clear();

@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -163,8 +164,8 @@ class NavigableResource<T extends NavigableResource<T>> extends AbstractResource
      * @return The navigation date
      */
     @JsonGetter(JsonKeys.NAV_DATE)
-    public NavDate getNavDate() {
-        return myNavDate;
+    public Optional<NavDate> getNavDate() {
+        return Optional.ofNullable(myNavDate);
     }
 
     /**
@@ -173,8 +174,8 @@ class NavigableResource<T extends NavigableResource<T>> extends AbstractResource
      * @return The navigation place
      */
     @JsonGetter(JsonKeys.NAV_PLACE)
-    public NavPlace getNavPlace() {
-        return myNavPlace;
+    public Optional<NavPlace> getNavPlace() {
+        return Optional.ofNullable(myNavPlace);
     }
 
     @Override

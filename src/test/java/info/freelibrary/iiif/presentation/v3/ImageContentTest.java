@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.assertOptEquals;
 import static info.freelibrary.util.Constants.EMPTY;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -217,8 +218,7 @@ public class ImageContentTest {
     @Test
     public void testSetLabel() {
         final Label label = new Label("MY LABEL");
-
-        assertEquals(label, new ImageContent(IMAGE_URI).setLabel(label).getLabel());
+        assertOptEquals(label, new ImageContent(IMAGE_URI).setLabel(label).getLabel());
     }
 
     /**

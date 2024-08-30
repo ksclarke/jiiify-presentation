@@ -110,6 +110,7 @@ public class ManifestTest extends AbstractTest {
         final List<String[]> firstCanvas = reader1.readAll();
         final List<String[]> secondCanvas = reader2.readAll();
         final List<Metadata> metadata = new ArrayList<>();
+        final List<Canvas> canvases = new ArrayList<>();
         final ImageService3 manifestThumbService;
 
         reader1.close();
@@ -138,7 +139,7 @@ public class ManifestTest extends AbstractTest {
                 new AnnotationPage<>(MANIFEST_SERVER + MANIFEST_ID + "/pageanno/pageanno-2");
 
         canvas1.getPaintingPages().add(page1.addAnnotations(content1));
-        myManifest.addCanvases(canvas1);
+        canvases.add(canvas1);
 
         for (final String[] values : firstCanvas) {
             final String id = MANIFEST_SERVER + values[1] + MANIFEST_THUMBNAIL_PATH;
@@ -160,7 +161,7 @@ public class ManifestTest extends AbstractTest {
 
         content2 = new PaintingAnnotation(MANIFEST_SERVER + MANIFEST_ID + "/imageanno/imageanno-2", canvas2);
         canvas2.getPaintingPages().add(page2.addAnnotations(content2));
-        myManifest.addCanvases(canvas2);
+        canvases.add(canvas2);
 
         for (final String[] values : secondCanvas) {
             final String id = MANIFEST_SERVER + values[1] + MANIFEST_THUMBNAIL_PATH;
@@ -177,6 +178,7 @@ public class ManifestTest extends AbstractTest {
 
         myManifest.setRights("http://creativecommons.org/licenses/by/4.0/").setBehaviors(ManifestBehavior.PAGED)
                 .setRequiredStatement(reqStmt).setServices(otherService);
+        myManifest.setCanvases(canvases);
     }
 
     /**
@@ -186,7 +188,7 @@ public class ManifestTest extends AbstractTest {
     public void testAddRanges() {
         final Range range = new Range(HTTPS + UUID.randomUUID().toString());
 
-        myManifest.addRanges(range);
+        myManifest.setRanges(range);
         assertEquals(1, myManifest.getRanges().size());
     }
 
@@ -197,7 +199,7 @@ public class ManifestTest extends AbstractTest {
     public void testAddRangesList() {
         final Range range = new Range(HTTPS + UUID.randomUUID().toString());
 
-        myManifest.addRanges(List.of(range));
+        myManifest.setRanges(List.of(range));
         assertEquals(1, myManifest.getRanges().size());
     }
 
@@ -255,7 +257,8 @@ public class ManifestTest extends AbstractTest {
     public void testConstructorStringLabel() {
         myManifest = new Manifest(MANIFEST_URI, new Label(METADATA_PAIRS.get(0)[1]));
         assertEquals(MANIFEST_URI, myManifest.getID());
-        assertEquals(METADATA_PAIRS.get(0)[1], myManifest.getLabel().getString());
+        assertTrue(myManifest.getLabel().isPresent());
+        assertEquals(METADATA_PAIRS.get(0)[1], myManifest.getLabel().get().getString());
     }
 
     /**

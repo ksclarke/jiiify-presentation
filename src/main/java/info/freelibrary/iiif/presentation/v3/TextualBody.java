@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static info.freelibrary.util.Constants.EMPTY;
+
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
@@ -89,21 +91,21 @@ public class TextualBody implements ContentResource {
      * @return An optional media type form of format
      */
     @Override
-    @JsonInclude(Include.NON_EMPTY)
     @JsonSerialize(contentUsing = MediaTypeSerializer.class, keyUsing = MediaTypeKeySerializer.class)
     public Optional<MediaType> getFormat() {
         return Optional.ofNullable(myFormat);
     }
 
     /**
-     * Gets the ID of the TextualBody if it's serializable; else, it returns a null.
+     * Gets the ID of the TextualBody if it's serializable and has an ID; else, an empty string is returned. The empty
+     * string is ignored when the object is serialized to JSON.
      *
      * @return A serializable ID
      */
     @Override
     @JsonGetter(JsonKeys.ID)
     public String getID() {
-        return hasSerializableID ? myID : null;
+        return hasSerializableID && myID != null ? myID : EMPTY;
     }
 
     /**
@@ -112,8 +114,8 @@ public class TextualBody implements ContentResource {
      * @return This TextualBody
      */
     @JsonGetter(JsonKeys.LANGUAGE)
-    public String getLanguage() {
-        return myLocale == null ? null : myLocale.toLanguageTag();
+    public Optional<String> getLanguage() {
+        return myLocale == null ? Optional.empty() : Optional.ofNullable(myLocale.toLanguageTag());
     }
 
     /**
@@ -122,8 +124,8 @@ public class TextualBody implements ContentResource {
      * @return The purpose of the textual body
      */
     @JsonGetter(JsonKeys.PURPOSE)
-    public Purpose getPurpose() {
-        return myPurpose;
+    public Optional<Purpose> getPurpose() {
+        return Optional.ofNullable(myPurpose);
     }
 
     @Override
