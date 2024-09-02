@@ -291,9 +291,4 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     public final Canvas supplementWith(final String aCanvasRegion, final List<ContentResource> aContentList) {
         return super.supplement(this, new MediaFragmentSelector(aCanvasRegion), false, aContentList);
     }
-
-    @Override
-    protected Object getJsonContext() {
-        return null;
-    }
 }

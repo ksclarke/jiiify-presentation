@@ -134,30 +134,6 @@ public class AbstractCanvasTest {
     }
 
     /**
-     * Tests {@link AbstractCanvas#setWebAnnotations(AnnotationPage)}.
-     */
-    @Test
-    public final void testSetWebAnnotations() {
-        final Minter minter = MinterFactory.getMinter(HTTPS + UUID.randomUUID().toString());
-        final AnnotationPage<WebAnnotation> page = new AnnotationPage<>(minter, new Canvas(minter));
-
-        page.addAnnotations(new BookmarkingAnnotation(minter));
-        assertEquals(1, new TestClass(minter).setWebAnnotations(page).getWebAnnotations().size());
-    }
-
-    /**
-     * Tests {@link AbstractCanvas#setWebAnnotations(AnnotationPage)}.
-     */
-    @Test
-    public final void testSetWebAnnotationsList() {
-        final Minter minter = MinterFactory.getMinter(HTTPS + UUID.randomUUID().toString());
-        final AnnotationPage<WebAnnotation> page = new AnnotationPage<>(minter, new Canvas(minter));
-
-        page.addAnnotations(new BookmarkingAnnotation(minter));
-        assertEquals(1, new TestClass(minter).setWebAnnotations(List.of(page)).getWebAnnotations().size());
-    }
-
-    /**
      * Tests {@link AbstractCanvas#setPaintingPages()}.
      */
     @Test
@@ -205,6 +181,30 @@ public class AbstractCanvasTest {
     }
 
     /**
+     * Tests {@link AbstractCanvas#setWebAnnotations(AnnotationPage)}.
+     */
+    @Test
+    public final void testSetWebAnnotations() {
+        final Minter minter = MinterFactory.getMinter(HTTPS + UUID.randomUUID().toString());
+        final AnnotationPage<WebAnnotation> page = new AnnotationPage<>(minter, new Canvas(minter));
+
+        page.addAnnotations(new BookmarkingAnnotation(minter));
+        assertEquals(1, new TestClass(minter).setWebAnnotations(page).getWebAnnotations().size());
+    }
+
+    /**
+     * Tests {@link AbstractCanvas#setWebAnnotations(AnnotationPage)}.
+     */
+    @Test
+    public final void testSetWebAnnotationsList() {
+        final Minter minter = MinterFactory.getMinter(HTTPS + UUID.randomUUID().toString());
+        final AnnotationPage<WebAnnotation> page = new AnnotationPage<>(minter, new Canvas(minter));
+
+        page.addAnnotations(new BookmarkingAnnotation(minter));
+        assertEquals(1, new TestClass(minter).setWebAnnotations(List.of(page)).getWebAnnotations().size());
+    }
+
+    /**
      * A test class.
      */
     private static final class TestClass extends AbstractCanvas<TestClass> {
@@ -225,11 +225,6 @@ public class AbstractCanvasTest {
          */
         private TestClass(final String aID) {
             super(aID);
-        }
-
-        @Override
-        protected Object getJsonContext() {
-            return null;
         }
     }
 

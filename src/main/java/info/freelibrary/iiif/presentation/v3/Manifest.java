@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -70,6 +69,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      */
     public Manifest(final String aID, final Label aLabel) {
         super(ResourceTypes.MANIFEST, aID, aLabel, ManifestBehavior.class);
+        getContextList(); // Initializes the context list
     }
 
     /**
@@ -77,6 +77,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      */
     private Manifest() {
         super(ResourceTypes.MANIFEST, ManifestBehavior.class);
+        getContextList(); // Initializes the context list
     }
 
     @Override
@@ -140,17 +141,6 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
         }
 
         return myCanvases;
-    }
-
-    /**
-     * Gets the primary manifest context.
-     *
-     * @return The manifest context
-     */
-    @Override
-    @JsonIgnore
-    public URI getContext() {
-        return PRESENTATION_CONTEXT_URI;
     }
 
     /**

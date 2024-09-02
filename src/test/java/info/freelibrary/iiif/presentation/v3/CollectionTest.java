@@ -217,14 +217,6 @@ public class CollectionTest {
     }
 
     /**
-     * Tests {@link Collection#getContext()}.
-     */
-    @Test
-    public void testGetContext() {
-        assertEquals(Collection.PRESENTATION_CONTEXT_URI, new Collection(myID, myLabel).getContext());
-    }
-
-    /**
      * Tests setting a navDate.
      */
     @Test

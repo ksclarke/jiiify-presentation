@@ -296,19 +296,6 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     /**
-     * Gets the manifest context. The manifest can either have a single context or an array of contexts (Cf.
-     * https://iiif.io/api/presentation/3.0/#46-linked-data-context-and-extensions)
-     *
-     * @return The manifest context
-     */
-    @Override
-    @JsonGetter(JsonKeys.CONTEXT)
-    @JsonInclude(Include.NON_NULL)
-    protected Object getJsonContext() {
-        return null;
-    }
-
-    /**
      * A wrapper for the types of resources that can be put into a range's items: {@link Canvas}, {@link Range}, and
      * {@link SpecificResource}.
      */

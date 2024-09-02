@@ -10,10 +10,8 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -85,12 +83,6 @@ public class ManifestTest extends AbstractTest {
 
     /** A test width. */
     private static final int WIDTH = 6132;
-
-    /** A list of test contexts. */
-    private final List<URI> myContexts = Arrays.asList(URI.create(getURL()), URI.create(getURL()), URI.create(getURL()),
-            URI.create(getURL()), URI.create(getURL()), URI.create(getURL()), URI.create(getURL()),
-            URI.create(getURL()), URI.create(getURL()), URI.create(getURL()), URI.create(getURL()),
-            AbstractResource.PRESENTATION_CONTEXT_URI);
 
     /** The test manifest. */
     private Manifest myManifest;
@@ -204,53 +196,6 @@ public class ManifestTest extends AbstractTest {
     }
 
     /**
-     * Tests adding a context URI.
-     */
-    @Test
-    public void testAddUriContexts() {
-        assertEquals(1, myManifest.getContexts().size());
-        myManifest.addContexts(URI.create(myLoremIpsum.getUrl()), URI.create(myLoremIpsum.getUrl()));
-        assertEquals(3, myManifest.getContexts().size());
-    }
-
-    /**
-     * Tests clearing the contexts.
-     */
-    @Test
-    public void testClearContexts() {
-        assertEquals(1, myManifest.getContexts().size());
-        myManifest.addContexts(URI.create(myLoremIpsum.getUrl()), URI.create(myLoremIpsum.getUrl()));
-        assertEquals(3, myManifest.getContexts().size());
-        assertEquals(1, myManifest.clearContexts().getContexts().size());
-    }
-
-    /**
-     * Tests the comparator's sort.
-     */
-    @Test
-    public final void testComparatorSort() {
-        final int lastIndex = myContexts.size() - 1;
-        final List<URI> preSort = new ArrayList<>();
-
-        // Shuffle until our last list item isn't the required one
-        while (AbstractResource.PRESENTATION_CONTEXT_URI.equals(myContexts.get(lastIndex))) {
-            Collections.shuffle(myContexts);
-        }
-
-        // Remember the state of our list before the sort, minus the required Context
-        assertTrue(preSort.addAll(myContexts));
-        assertTrue(preSort.remove(AbstractResource.PRESENTATION_CONTEXT_URI));
-
-        // Sort list items
-        Collections.sort(myContexts, new NavigableResource.ContextListComparator<>());
-
-        // Check that the last URI in the list is our required one and
-        // that list has same pre-sort order minus the required context
-        assertEquals(AbstractResource.PRESENTATION_CONTEXT_URI, myContexts.get(lastIndex));
-        assertEquals(preSort, myContexts.subList(0, lastIndex));
-    }
-
-    /**
      * Tests the manifest constructor.
      */
     @Test
@@ -259,15 +204,6 @@ public class ManifestTest extends AbstractTest {
         assertEquals(MANIFEST_URI, myManifest.getID());
         assertTrue(myManifest.getLabel().isPresent());
         assertEquals(METADATA_PAIRS.get(0)[1], myManifest.getLabel().get().getString());
-    }
-
-    /**
-     * Tests {@link Manifest#getContext() getContext} method.
-     */
-    @Test
-    public void testGetPrimaryContext() {
-        assertEquals(AbstractResource.PRESENTATION_CONTEXT_URI,
-                myManifest.addContexts(URI.create(myLoremIpsum.getUrl())).getContext());
     }
 
     /**
@@ -353,27 +289,6 @@ public class ManifestTest extends AbstractTest {
         final String found = JSON.readValue(expected, Manifest.class).toString();
 
         assertEquals(expected, format(found));
-    }
-
-    /**
-     * Tests {@link Manifest#removeContext(URI) removeContext} method.
-     */
-    @Test
-    public void testRemoveContext() {
-        final URI uri = URI.create("https://asdf.example.com");
-
-        myManifest.addContexts(uri, URI.create("https://fdsa.example.com"));
-        assertTrue(myManifest.getContexts().contains(uri));
-        assertTrue(myManifest.removeContext(uri));
-        assertEquals(2, myManifest.getContexts().size());
-    }
-
-    /**
-     * Tests getting an exception on trying to remove the required context.
-     */
-    @Test(expected = UnsupportedOperationException.class)
-    public void testRemovePrimaryContext() {
-        myManifest.removeContext(AbstractResource.PRESENTATION_CONTEXT_URI);
     }
 
     /**

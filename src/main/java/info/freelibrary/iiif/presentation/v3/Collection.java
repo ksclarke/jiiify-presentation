@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -67,6 +66,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      */
     public Collection(final String aID, final Label aLabel) {
         super(ResourceTypes.COLLECTION, aID, aLabel, CollectionBehavior.class);
+        getContextList(); // Initializes the context list
     }
 
     /**
@@ -74,6 +74,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      */
     private Collection() {
         super(ResourceTypes.COLLECTION, CollectionBehavior.class);
+        getContextList(); // Initializes the context list
     }
 
     @Override
@@ -122,17 +123,6 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         }
 
         return myAnnotations;
-    }
-
-    /**
-     * Gets the primary collection context.
-     *
-     * @return The collection context
-     */
-    @Override
-    @JsonIgnore
-    public URI getContext() {
-        return PRESENTATION_CONTEXT_URI;
     }
 
     /**

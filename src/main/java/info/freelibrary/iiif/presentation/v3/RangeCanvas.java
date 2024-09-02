@@ -75,16 +75,6 @@ class RangeCanvas extends Canvas {
     }
 
     @Override
-    public Canvas addContexts(final URI... aContextArray) {
-        return mySourceCanvas.addContexts(aContextArray);
-    }
-
-    @Override
-    public Canvas clearContexts() {
-        return mySourceCanvas.clearContexts();
-    }
-
-    @Override
     public boolean equals(final Object aObject) {
         return mySourceCanvas.equals(aObject);
     }
@@ -97,11 +87,6 @@ class RangeCanvas extends Canvas {
     @Override
     public List<Behavior> getBehaviors() {
         return mySourceCanvas.getBehaviors();
-    }
-
-    @Override
-    public URI getContext() {
-        return mySourceCanvas.getContext();
     }
 
     @Override
@@ -147,11 +132,6 @@ class RangeCanvas extends Canvas {
     @Override
     public Optional<NavPlace> getNavPlace() {
         return mySourceCanvas.getNavPlace();
-    }
-
-    @Override
-    public List<AnnotationPage<WebAnnotation>> getWebAnnotations() {
-        return mySourceCanvas.getWebAnnotations();
     }
 
     @Override
@@ -222,6 +202,11 @@ class RangeCanvas extends Canvas {
     }
 
     @Override
+    public List<AnnotationPage<WebAnnotation>> getWebAnnotations() {
+        return mySourceCanvas.getWebAnnotations();
+    }
+
+    @Override
     public int getWidth() {
         return mySourceCanvas.getWidth();
     }
@@ -229,11 +214,6 @@ class RangeCanvas extends Canvas {
     @Override
     public int hashCode() {
         return mySourceCanvas.hashCode();
-    }
-
-    @Override
-    public boolean removeContext(final URI aContextURI) {
-        return mySourceCanvas.removeContext(aContextURI);
     }
 
     @Override
@@ -379,11 +359,6 @@ class RangeCanvas extends Canvas {
     @Override
     protected float convertToFinitePositiveFloat(final Number aNumber) {
         return mySourceCanvas.convertToFinitePositiveFloat(aNumber);
-    }
-
-    @Override
-    protected Object getJsonContext() {
-        return mySourceCanvas.getJsonContext();
     }
 
     @Override
