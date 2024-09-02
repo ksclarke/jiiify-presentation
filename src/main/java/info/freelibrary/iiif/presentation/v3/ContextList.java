@@ -3,6 +3,7 @@ package info.freelibrary.iiif.presentation.v3;
 
 import static info.freelibrary.util.Constants.SINGLE_INSTANCE;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,12 +13,11 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.PMD;
+import info.freelibrary.util.warnings.Sonar;
 
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
@@ -36,7 +36,7 @@ public class ContextList extends ArrayList<URI> implements List<URI> {
     private static final long serialVersionUID = -877433424933939199L;
 
     /** A simple sorter that only moves the required context to the first slot. */
-    private final Comparator<URI> myComparator;
+    private final ContextListComparator myComparator;
 
     /**
      * Creates a new list of contexts. It includes the IIIF Presentation context by default.
@@ -136,7 +136,7 @@ public class ContextList extends ArrayList<URI> implements List<URI> {
      *
      * @param aURI A context URI to add at the beginning of the list
      */
-    @SuppressWarnings(PMD.MISSING_OVERRIDE)
+    @SuppressWarnings({ PMD.MISSING_OVERRIDE, Sonar.OVERRIDE_REQUIRED })
     public void addFirst(final URI aURI) {
         if (!PRESENTATION_CONTEXT_URI.equals(aURI)) {
             super.add(1, aURI);
@@ -149,7 +149,7 @@ public class ContextList extends ArrayList<URI> implements List<URI> {
      *
      * @param aURI A context URI to add at the end of the list
      */
-    @SuppressWarnings(PMD.MISSING_OVERRIDE)
+    @SuppressWarnings({ PMD.MISSING_OVERRIDE, Sonar.OVERRIDE_REQUIRED })
     public void addLast(final URI aURI) {
         if (!PRESENTATION_CONTEXT_URI.equals(aURI)) {
             super.add(aURI); // Adding, by default, adds as the last item
@@ -227,10 +227,8 @@ public class ContextList extends ArrayList<URI> implements List<URI> {
     @Override
     public boolean removeAll(final Collection<?> aCollection) {
         if (aCollection.contains(PRESENTATION_CONTEXT_URI)) {
-            final Stream<?> stream = aCollection.stream().filter(uri -> !PRESENTATION_CONTEXT_URI.equals(uri));
-            final List<?> removables = stream.collect(Collectors.toList());
-
-            return super.removeAll(removables);
+            final List<?> list = aCollection.stream().filter(uri -> !PRESENTATION_CONTEXT_URI.equals(uri)).toList();
+            return super.removeAll(list);
         }
 
         return super.removeAll(aCollection);
@@ -243,7 +241,7 @@ public class ContextList extends ArrayList<URI> implements List<URI> {
      * @param aFilter A filter to use to remove URIs from the list
      * @return True if the URIs were removed
      */
-    @SuppressWarnings(PMD.MISSING_OVERRIDE)
+    @SuppressWarnings({ PMD.MISSING_OVERRIDE, Sonar.OVERRIDE_REQUIRED })
     public boolean removeIf(final Predicate<? super URI> aFilter) {
         final boolean result = super.removeIf(aFilter);
 
@@ -262,7 +260,7 @@ public class ContextList extends ArrayList<URI> implements List<URI> {
      * @return The context URI that was removed
      * @throws NoSuchElementException If the list only has the required IIIF Presentation context
      */
-    @SuppressWarnings(PMD.MISSING_OVERRIDE)
+    @SuppressWarnings({ PMD.MISSING_OVERRIDE, Sonar.OVERRIDE_REQUIRED })
     public URI removeLast() {
         if (size() == SINGLE_INSTANCE) {
             throw new NoSuchElementException(LOGGER.getMessage(MessageCodes.JPA_039, PRESENTATION_CONTEXT_URI));
@@ -345,7 +343,10 @@ public class ContextList extends ArrayList<URI> implements List<URI> {
      * Cf. https://iiif.io/api/presentation/3.0/#46-linked-data-context-and-extensions
      * </p>
      */
-    private static final class ContextListComparator implements Comparator<URI> {
+    private static final class ContextListComparator implements Comparator<URI>, Serializable {
+
+        /** The {@code serialVersionUID} for the {@code ContextListComparator}. */
+        private static final long serialVersionUID = 5516185678973318858L;
 
         @Override
         public int compare(final URI aFirstURI, final URI aSecondURI) {

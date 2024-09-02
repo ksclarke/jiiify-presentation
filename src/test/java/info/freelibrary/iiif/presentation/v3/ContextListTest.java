@@ -193,7 +193,12 @@ public class ContextListTest extends AbstractTest {
      */
     @Test
     public final void testRemoveIfPredicateOfQsuperURI() {
-        // fail("Not yet implemented");
+        final ContextList contexts = new ContextList(myContexts);
+        final URI kept = contexts.get(2);
+
+        contexts.removeIf(uri -> !uri.equals(kept));
+        assertEquals(2, contexts.size());
+        assertTrue(contexts.contains(kept));
     }
 
     /**
@@ -242,7 +247,13 @@ public class ContextListTest extends AbstractTest {
      */
     @Test
     public final void testReplaceAllUnaryOperatorOfURI() {
-        // fail("Not yet implemented");
+        final ContextList contexts = new ContextList(myContexts);
+        final URI uri = contexts.get(10);
+        final UnaryOperator<URI> uOp = u -> URI.create(u.toString().replace(uri.toString(), getURL()));
+
+        assertTrue(contexts.contains(uri));
+        contexts.replaceAll(uOp);
+        assertFalse(contexts.contains(uri));
     }
 
     /**

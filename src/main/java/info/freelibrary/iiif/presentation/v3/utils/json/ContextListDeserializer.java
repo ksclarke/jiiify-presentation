@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -41,22 +40,23 @@ public class ContextListDeserializer extends StdDeserializer<List<URI>> {
     }
 
     @Override
-    public List<URI> deserialize(final JsonParser aParser, final DeserializationContext aContext)
-            throws IOException, JacksonException {
+    public List<URI> deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException {
         final JsonNode currentNode = aParser.getCodec().readTree(aParser);
         final ContextList contexts = new ContextList();
 
         if (currentNode.isArray()) {
-            currentNode.forEach(uri -> {
-                if (!PRESENTATION_CONTEXT_URI.toString().equals(uri)) {
-                    contexts.add(URI.create(uri.textValue()));
+            currentNode.forEach(context -> {
+                final URI uri = URI.create(context.textValue());
+
+                if (!PRESENTATION_CONTEXT_URI.equals(uri)) {
+                    contexts.add(uri);
                 }
             });
         } else {
-            final String uri = currentNode.textValue();
+            final URI uri = URI.create(currentNode.textValue());
 
-            if (!PRESENTATION_CONTEXT_URI.toString().equals(uri)) {
-                contexts.add(URI.create(uri));
+            if (!PRESENTATION_CONTEXT_URI.equals(uri)) {
+                contexts.add(uri);
             }
         }
 
