@@ -16,6 +16,7 @@ import java.util.function.UnaryOperator;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.JDK;
 import info.freelibrary.util.warnings.PMD;
 import info.freelibrary.util.warnings.Sonar;
 
@@ -122,10 +123,9 @@ public class ContextList extends ArrayList<URI> implements List<URI> {
      * @return If all the supplied URIs were successfully added
      */
     @Override
+    @SuppressWarnings(JDK.UNCHECKED)
     public boolean addAll(final int aIndex, final Collection<? extends URI> aCollection) {
-        final List<? extends URI> uris =
-                aCollection.stream().filter(uri -> !PRESENTATION_CONTEXT_URI.equals(uri)).toList();
-        return super.addAll(aIndex, uris);
+        return super.addAll(aIndex, aCollection.stream().filter(uri -> !PRESENTATION_CONTEXT_URI.equals(uri)).toList());
     }
 
     /**

@@ -7,7 +7,6 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
@@ -168,7 +167,7 @@ public class ContextListTest extends AbstractTest {
      * Test method for {@link ContextList#addLast(URI)}.
      */
     @Test
-    public final void testAddLastDefaultURI() throws IOException {
+    public final void testAddLastDefaultURI() {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         final PrintStream current = new PrintStream(out, true, StandardCharsets.UTF_8);
         final PrintStream previous = System.out;
@@ -322,7 +321,7 @@ public class ContextListTest extends AbstractTest {
      */
     @Test
     public final void testRemoveDefContextObject() {
-        new ContextList().remove(ContextList.PRESENTATION_CONTEXT_URI);
+        assertFalse(new ContextList().remove(ContextList.PRESENTATION_CONTEXT_URI));
     }
 
     /**
