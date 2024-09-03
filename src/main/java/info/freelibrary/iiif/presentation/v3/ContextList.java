@@ -118,16 +118,14 @@ public class ContextList extends ArrayList<URI> implements List<URI> {
      * context list.
      *
      * @param aIndex An index position at which to add the URIs in the supplied collection
-     * @param aUriCollection A collection of URIs to add at the supplied index position
+     * @param aCollection A collection of URIs to add at the supplied index position
      * @return If all the supplied URIs were successfully added
      */
     @Override
-    public boolean addAll(final int aIndex, final Collection<? extends URI> aUriCollection) {
-        if (aUriCollection.contains(PRESENTATION_CONTEXT_URI)) {
-            aUriCollection.remove(PRESENTATION_CONTEXT_URI);
-        }
-
-        return super.addAll(aIndex, aUriCollection);
+    public boolean addAll(final int aIndex, final Collection<? extends URI> aCollection) {
+        final List<? extends URI> uris =
+                aCollection.stream().filter(uri -> !PRESENTATION_CONTEXT_URI.equals(uri)).toList();
+        return super.addAll(aIndex, uris);
     }
 
     /**
@@ -226,12 +224,7 @@ public class ContextList extends ArrayList<URI> implements List<URI> {
      */
     @Override
     public boolean removeAll(final Collection<?> aCollection) {
-        if (aCollection.contains(PRESENTATION_CONTEXT_URI)) {
-            final List<?> list = aCollection.stream().filter(uri -> !PRESENTATION_CONTEXT_URI.equals(uri)).toList();
-            return super.removeAll(list);
-        }
-
-        return super.removeAll(aCollection);
+        return super.removeAll(aCollection.stream().filter(uri -> !PRESENTATION_CONTEXT_URI.equals(uri)).toList());
     }
 
     /**

@@ -6,7 +6,12 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
@@ -16,10 +21,18 @@ import java.util.function.UnaryOperator;
 
 import org.junit.Test;
 
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+
 /**
  * Tests of {@link ContextList}.
  */
 public class ContextListTest extends AbstractTest {
+
+    /** A test logger. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(ContextListTest.class, MessageCodes.BUNDLE);
 
     /** A list of test contexts. */
     private final List<URI> myContexts = Arrays.asList(URI.create(getURL()), URI.create(getURL()), URI.create(getURL()),
@@ -43,6 +56,32 @@ public class ContextListTest extends AbstractTest {
      * Test method for {@link ContextList#addAll(int, Collection)}.
      */
     @Test
+    public final void testAddAllCollectionWithDefaultURI() {
+        final ContextList contexts = new ContextList();
+        final ContextList adds = new ContextList();
+
+        assertEquals(1, contexts.size());
+        contexts.addAll(0, adds);
+        assertEquals(1, contexts.size());
+    }
+
+    /**
+     * Test method for {@link ContextList#addAll(int, Collection)}.
+     */
+    @Test
+    public final void testAddAllCollectionWithoutDefaultURI() {
+        final ContextList contexts = new ContextList();
+        final List<URI> list = new ArrayList<>(List.of(URI.create(getURL()), URI.create(getURL())));
+
+        assertEquals(1, contexts.size());
+        contexts.addAll(0, list);
+        assertEquals(3, contexts.size());
+    }
+
+    /**
+     * Test method for {@link ContextList#addAll(int, Collection)}.
+     */
+    @Test
     public final void testAddAllIntCollectionOfQextendsURI() {
         final ContextList contexts = new ContextList(myContexts);
         final URI newURI1 = URI.create(getURL());
@@ -54,6 +93,30 @@ public class ContextListTest extends AbstractTest {
         contexts.addAll(8, List.of(newURI1, newURI2));
         assertEquals(14, contexts.size());
         assertEquals(newURI1, contexts.get(8));
+    }
+
+    /**
+     * Test method for {@link ContextList#add(URI)}.
+     */
+    @Test
+    public final void testAddFalse() {
+        final ContextList contexts = new ContextList();
+
+        assertEquals(1, contexts.size());
+        assertFalse(contexts.add(ContextList.PRESENTATION_CONTEXT_URI));
+    }
+
+    /**
+     * Test method for {@link ContextList#addFirst(URI)}.
+     */
+    @Test
+    public final void testAddFirstDefaultURI() {
+        final ContextList contexts = new ContextList();
+
+        assertEquals(1, contexts.size());
+        contexts.addFirst(ContextList.PRESENTATION_CONTEXT_URI);
+        assertEquals(1, contexts.size());
+        assertEquals(ContextList.PRESENTATION_CONTEXT_URI, contexts.get(0));
     }
 
     /**
@@ -80,10 +143,47 @@ public class ContextListTest extends AbstractTest {
         final URI uri = URI.create(getURL());
 
         assertEquals(1, contexts.size());
+        contexts.add(1, uri);
+        assertEquals(2, contexts.size());
+        assertEquals(uri, contexts.get(1));
+        assertEquals(ContextList.PRESENTATION_CONTEXT_URI, contexts.get(0));
+    }
+
+    /**
+     * Test method for {@link ContextList#add(int, URI)}.
+     */
+    @Test
+    public final void testAddIntUriZeroIndex() {
+        final ContextList contexts = new ContextList();
+        final URI uri = URI.create(getURL());
+
+        assertEquals(1, contexts.size());
         contexts.add(0, uri);
         assertEquals(2, contexts.size());
         assertEquals(uri, contexts.get(1));
         assertEquals(ContextList.PRESENTATION_CONTEXT_URI, contexts.get(0));
+    }
+
+    /**
+     * Test method for {@link ContextList#addLast(URI)}.
+     */
+    @Test
+    public final void testAddLastDefaultURI() throws IOException {
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        final PrintStream current = new PrintStream(out, true, StandardCharsets.UTF_8);
+        final PrintStream previous = System.out;
+        final ContextList contexts = new ContextList();
+
+        System.setOut(current);
+
+        assertEquals(1, contexts.size());
+        contexts.addLast(ContextList.PRESENTATION_CONTEXT_URI);
+        assertEquals(1, contexts.size());
+        assertEquals(ContextList.PRESENTATION_CONTEXT_URI, contexts.get(0));
+
+        System.setOut(previous);
+
+        assertTrue(out.toString().contains(LOGGER.getMessage(MessageCodes.JPA_149)));
     }
 
     /**
@@ -98,6 +198,19 @@ public class ContextListTest extends AbstractTest {
         contexts.addLast(uri);
         assertEquals(2, contexts.size());
         assertEquals(uri, contexts.get(1));
+        assertEquals(ContextList.PRESENTATION_CONTEXT_URI, contexts.get(0));
+    }
+
+    /**
+     * Test method for {@link ContextList#add(int, URI)}.
+     */
+    @Test
+    public final void testAddPresURI() {
+        final ContextList contexts = new ContextList();
+
+        assertEquals(1, contexts.size());
+        contexts.add(0, ContextList.PRESENTATION_CONTEXT_URI);
+        assertEquals(1, contexts.size());
         assertEquals(ContextList.PRESENTATION_CONTEXT_URI, contexts.get(0));
     }
 
@@ -154,11 +267,27 @@ public class ContextListTest extends AbstractTest {
      * Test method for {@link ContextList#equals(Object)}.
      */
     @Test
+    public final void testEqualsNull() {
+        assertNotEquals(new ContextList(myContexts), null);
+    }
+
+    /**
+     * Test method for {@link ContextList#equals(Object)}.
+     */
+    @Test
     public final void testEqualsObject() {
         final ContextList contexts1 = new ContextList(myContexts);
         final ContextList contexts2 = new ContextList(myContexts);
 
         assertEquals(contexts1, contexts2);
+    }
+
+    /**
+     * Test method for {@link ContextList#equals(Object)}.
+     */
+    @Test
+    public final void testEqualsString() {
+        assertNotEquals(new ContextList(myContexts), "asdf");
     }
 
     /**
@@ -186,6 +315,14 @@ public class ContextListTest extends AbstractTest {
         assertEquals(12, contexts.size());
         contexts.removeAll(list);
         assertEquals(9, contexts.size());
+    }
+
+    /**
+     * Test method for {@link ContextList#remove(Object)}.
+     */
+    @Test
+    public final void testRemoveDefContextObject() {
+        new ContextList().remove(ContextList.PRESENTATION_CONTEXT_URI);
     }
 
     /**
@@ -240,6 +377,14 @@ public class ContextListTest extends AbstractTest {
         assertTrue(contexts.contains(uri));
         contexts.remove(uri);
         assertFalse(contexts.contains(uri));
+    }
+
+    /**
+     * Test method for {@link ContextList#remove(int)}.
+     */
+    @Test(expected = IndexOutOfBoundsException.class)
+    public final void testRemoveZeroIndex() {
+        new ContextList().remove(0);
     }
 
     /**
