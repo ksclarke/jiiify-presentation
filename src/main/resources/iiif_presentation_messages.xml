@@ -119,4 +119,8 @@
   <entry key="JPA-146">{} is not a valid navPlace type</entry>
   <entry key="JPA-147">A physical dimensions service must contain scale and units</entry>
   <entry key="JPA-148">Supplied Optional was unexpectedly empty</entry>
+  <entry key="JPA-149">The IIIF Presentation context URI can only exist as the first context in the list</entry>
+  <entry key="JPA-150">Context '{}' was added at list position 1 because 0 is reserved for the default context</entry>
+  <entry key="JPA-151">The '{}' context cannot be set as the first context; this position is reserved for the default
+    IIIF Presentation context</entry>
 </properties>

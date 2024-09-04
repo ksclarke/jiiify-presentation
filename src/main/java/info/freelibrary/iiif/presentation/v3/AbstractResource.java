@@ -1,12 +1,12 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -14,7 +14,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
@@ -53,9 +52,6 @@ import info.freelibrary.iiif.presentation.v3.utils.json.BehaviorDeserializer;
     JsonKeys.RIGHTS, JsonKeys.REQUIRED_STATEMENT, JsonKeys.VIEWING_DIRECTION, JsonKeys.RENDERING, JsonKeys.SEE_ALSO,
     JsonKeys.ITEMS, JsonKeys.SERVICE, JsonKeys.STRUCTURES, JsonKeys.SERVICES, JsonKeys.NAV_DATE, JsonKeys.ANNOTATIONS })
 abstract class AbstractResource<T extends AbstractResource<T>> implements Resource<T> {
-
-    /** The IIIF Presentation context URI. */
-    protected static final URI PRESENTATION_CONTEXT_URI = URI.create("http://iiif.io/api/presentation/3/context.json");
 
     /** The logger used by abstract resources. */
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractResource.class, MessageCodes.BUNDLE);
@@ -229,9 +225,9 @@ abstract class AbstractResource<T extends AbstractResource<T>> implements Resour
      * @return The label
      */
     @Override
-    @JsonUnwrapped
-    public Label getLabel() {
-        return myLabel;
+    @JsonGetter(JsonKeys.LABEL)
+    public Optional<Label> getLabel() {
+        return Optional.ofNullable(myLabel);
     }
 
     /**
@@ -297,8 +293,8 @@ abstract class AbstractResource<T extends AbstractResource<T>> implements Resour
      */
     @Override
     @JsonGetter(JsonKeys.REQUIRED_STATEMENT)
-    public RequiredStatement getRequiredStatement() {
-        return myRequiredStatement;
+    public Optional<RequiredStatement> getRequiredStatement() {
+        return Optional.ofNullable(myRequiredStatement);
     }
 
     /**
@@ -308,8 +304,8 @@ abstract class AbstractResource<T extends AbstractResource<T>> implements Resour
      */
     @Override
     @JsonProperty
-    public String getRights() {
-        return myRights;
+    public Optional<String> getRights() {
+        return Optional.ofNullable(myRights);
     }
 
     /**
@@ -348,9 +344,9 @@ abstract class AbstractResource<T extends AbstractResource<T>> implements Resour
      * @return The summary
      */
     @Override
-    @JsonUnwrapped
-    public Summary getSummary() {
-        return mySummary;
+    @JsonGetter(JsonKeys.SUMMARY)
+    public Optional<Summary> getSummary() {
+        return Optional.ofNullable(mySummary);
     }
 
     /**
@@ -672,6 +668,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> implements Resour
      * @return The resource
      */
     @Override
+    @JsonSetter(JsonKeys.SUMMARY)
     @SuppressWarnings(JDK.UNCHECKED)
     public T setSummary(final Summary aSummary) {
         Objects.requireNonNull(aSummary);

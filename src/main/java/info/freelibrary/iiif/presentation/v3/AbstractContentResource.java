@@ -112,7 +112,6 @@ abstract class AbstractContentResource<T extends AbstractContentResource<T>> ext
      *
      * @return The media type format of the content resource
      */
-    @JsonInclude(Include.NON_EMPTY)
     @JsonSerialize(contentUsing = MediaTypeSerializer.class, keyUsing = MediaTypeKeySerializer.class)
     public Optional<MediaType> getFormat() {
         return Optional.ofNullable(myFormat);
@@ -189,7 +188,6 @@ abstract class AbstractContentResource<T extends AbstractContentResource<T>> ext
      * @return A form of language ready to be serialized
      */
     @JsonGetter(JsonKeys.LANGUAGE)
-    @JsonInclude(Include.NON_EMPTY)
     private Object getLanguage() {
         final List<String> languages = getLanguages();
         return languages.size() == SINGLE_INSTANCE ? languages.get(0) : languages;

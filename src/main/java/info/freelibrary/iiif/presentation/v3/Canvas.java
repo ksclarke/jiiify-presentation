@@ -27,10 +27,10 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Canvas> {
 
     /** The canvas' accompanying canvas. */
-    private Optional<AccompanyingCanvas> myAccompanyingCanvas;
+    private AccompanyingCanvas myAccompanyingCanvas;
 
     /** The canvas' placeholder canvas. */
-    private Optional<PlaceholderCanvas> myPlaceholderCanvas;
+    private PlaceholderCanvas myPlaceholderCanvas;
 
     /**
      * Creates a new canvas, using the supplied minter to create the canvas ID.
@@ -104,7 +104,7 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     @JsonGetter(JsonKeys.ACCOMPANYING_CANVAS)
     @JsonInclude(Include.NON_ABSENT)
     public Optional<AccompanyingCanvas> getAccompanyingCanvas() {
-        return myAccompanyingCanvas;
+        return Optional.ofNullable(myAccompanyingCanvas);
     }
 
     @Override
@@ -124,7 +124,7 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     @JsonGetter(JsonKeys.PLACEHOLDER_CANVAS)
     @JsonInclude(Include.NON_ABSENT)
     public Optional<PlaceholderCanvas> getPlaceholderCanvas() {
-        return myPlaceholderCanvas;
+        return Optional.ofNullable(myPlaceholderCanvas);
     }
 
     @Override
@@ -204,7 +204,7 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
      */
     @JsonSetter(JsonKeys.ACCOMPANYING_CANVAS)
     public Canvas setAccompanyingCanvas(final AccompanyingCanvas aCanvas) {
-        myAccompanyingCanvas = Optional.ofNullable(aCanvas);
+        myAccompanyingCanvas = aCanvas;
         return this;
     }
 
@@ -216,7 +216,7 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
      */
     @JsonSetter(JsonKeys.PLACEHOLDER_CANVAS)
     public Canvas setPlaceholderCanvas(final PlaceholderCanvas aCanvas) {
-        myPlaceholderCanvas = Optional.ofNullable(aCanvas);
+        myPlaceholderCanvas = aCanvas;
         return this;
     }
 
@@ -290,10 +290,5 @@ public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Can
     @Override
     public final Canvas supplementWith(final String aCanvasRegion, final List<ContentResource> aContentList) {
         return super.supplement(this, new MediaFragmentSelector(aCanvasRegion), false, aContentList);
-    }
-
-    @Override
-    protected Object getJsonContext() {
-        return null;
     }
 }

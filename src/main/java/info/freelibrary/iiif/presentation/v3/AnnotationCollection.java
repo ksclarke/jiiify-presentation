@@ -92,8 +92,8 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
      * @return The viewing direction
      */
     @JsonGetter(JsonKeys.VIEWING_DIRECTION)
-    public ViewingDirection getViewingDirection() {
-        return myViewingDirection;
+    public Optional<ViewingDirection> getViewingDirection() {
+        return Optional.ofNullable(myViewingDirection);
     }
 
     @Override

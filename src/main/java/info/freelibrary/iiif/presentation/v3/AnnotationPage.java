@@ -11,6 +11,8 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.Logger;
@@ -33,6 +35,7 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  * @param <A> The type of annotation encapsulated on the page
  */
 @SuppressWarnings({ PMD.GOD_CLASS, PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS })
+@JsonInclude(Include.NON_EMPTY)
 public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<AnnotationPage<A>>
         implements Resource<AnnotationPage<A>> {
 
@@ -256,13 +259,14 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
     }
 
     /**
-     * Gets the context when the annotation page is intended to be used outside of a manifest.
+     * Gets the context only when the annotation page is intended to be used outside of a manifest, as indicated by
+     * using {@code AnnotationPage#setExternalContext()}.
      *
      * @return The context URI
      */
     @JsonGetter(JsonKeys.CONTEXT)
-    private URI getExternalContext() {
-        return isExternal ? PRESENTATION_CONTEXT_URI : null;
+    private Optional<URI> getExternalContext() {
+        return isExternal ? Optional.of(ContextList.PRESENTATION_CONTEXT_URI) : Optional.empty();
     }
 
     /**
@@ -293,7 +297,7 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
      */
     @JsonSetter(JsonKeys.CONTEXT)
     private AnnotationPage<A> setExternalContext(final String aContextURI) {
-        if (PRESENTATION_CONTEXT_URI.toString().equalsIgnoreCase(aContextURI)) {
+        if (ContextList.PRESENTATION_CONTEXT_URI.toString().equalsIgnoreCase(aContextURI)) {
             setExternalContext();
         }
 

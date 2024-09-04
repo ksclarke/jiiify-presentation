@@ -191,8 +191,8 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
      * @return The viewing direction
      */
     @JsonGetter(JsonKeys.VIEWING_DIRECTION)
-    public ViewingDirection getViewingDirection() {
-        return myViewingDirection;
+    public Optional<ViewingDirection> getViewingDirection() {
+        return Optional.ofNullable(myViewingDirection);
     }
 
     @Override
@@ -293,19 +293,6 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     public Range setViewingDirection(final ViewingDirection aViewingDirection) {
         myViewingDirection = aViewingDirection;
         return this;
-    }
-
-    /**
-     * Gets the manifest context. The manifest can either have a single context or an array of contexts (Cf.
-     * https://iiif.io/api/presentation/3.0/#46-linked-data-context-and-extensions)
-     *
-     * @return The manifest context
-     */
-    @Override
-    @JsonGetter(JsonKeys.CONTEXT)
-    @JsonInclude(Include.NON_NULL)
-    protected Object getJsonContext() {
-        return null;
     }
 
     /**

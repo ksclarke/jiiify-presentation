@@ -5,6 +5,9 @@ import static info.freelibrary.util.Constants.EMPTY;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.junit.Test;
@@ -90,6 +93,54 @@ public class NavigableResourceTest {
     @SuppressWarnings("unlikely-arg-type")
     public final void testNavigableResourceEqualsString() {
         assertNotEquals(new TestClass(HTTPS + UUID.randomUUID().toString()), EMPTY);
+    }
+
+    /**
+     * Tests {@link NavigableResource#getContextList() NavigableResource}.
+     */
+    @Test
+    public final void testNavigableResourceGetContextList() {
+        final String id = UUID.randomUUID().toString();
+        final NavigableResource<TestClass> test = new TestClass(HTTPS + id);
+
+        assertEquals(1, test.getContextList().size()); // Uninitialized
+        assertEquals(1, test.getContextList().size()); // Should now be initialized
+    }
+
+    /**
+     * Tests {@link NavigableResource#getContexts() NavigableResource}.
+     */
+    @Test
+    public final void testNavigableResourceGetContexts() {
+        final String id = UUID.randomUUID().toString();
+        final NavigableResource<TestClass> test = new TestClass(HTTPS + id);
+
+        assertEquals(1, test.getContexts().size());
+    }
+
+    /**
+     * Tests {@link NavigableResource#setContexts(List) NavigableResource}.
+     */
+    @Test
+    public final void testNavigableResourceSetContextsWithContextList() {
+        final String id = UUID.randomUUID().toString();
+        final NavigableResource<TestClass> test = new TestClass(HTTPS + id);
+        final ContextList contexts = new ContextList();
+
+        assertEquals(contexts, test.setContexts(contexts).getContexts());
+    }
+
+    /**
+     * Tests {@link NavigableResource#setContexts(List) NavigableResource}.
+     */
+    @Test
+    public final void testNavigableResourceSetContextsWithURIList() {
+        final String id = UUID.randomUUID().toString();
+        final NavigableResource<TestClass> test = new TestClass(HTTPS + id);
+        final List<URI> contexts = new ArrayList<>();
+
+        contexts.add(URI.create(id));
+        assertEquals(2, test.setContexts(contexts).getContexts().size());
     }
 
     /**

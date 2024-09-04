@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.assertOptEquals;
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.toJson;
 import static info.freelibrary.util.Constants.EMPTY;
@@ -242,7 +243,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final String id = HTTPS + UUID.randomUUID().toString();
         final Canvas canvas = new Canvas(MinterFactory.getMinter(id), LABEL);
 
-        assertEquals(LABEL, canvas.getLabel());
+        assertOptEquals(LABEL, canvas.getLabel());
     }
 
     /**
@@ -264,7 +265,7 @@ public class CanvasTest extends AbstractCookbookTest {
         final Canvas canvas = new Canvas(IMAGE_CANVAS_ID, LABEL);
 
         assertEquals(IMAGE_CANVAS_ID, canvas.getID());
-        assertEquals(LABEL, canvas.getLabel());
+        assertOptEquals(LABEL, canvas.getLabel());
     }
 
     /**
@@ -297,8 +298,7 @@ public class CanvasTest extends AbstractCookbookTest {
     @Test
     public final void testNavDate() {
         final NavDate navDate = NavDate.now();
-
-        assertEquals(navDate, myCanvas.setNavDate(navDate).getNavDate());
+        assertOptEquals(navDate, myCanvas.setNavDate(navDate).getNavDate());
     }
 
     /**

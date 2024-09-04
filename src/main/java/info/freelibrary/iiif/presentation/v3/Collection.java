@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,8 +16,10 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.ListUtils;
 import info.freelibrary.util.warnings.Eclipse;
+import info.freelibrary.util.warnings.JDK;
 import info.freelibrary.util.warnings.PMD;
 
+import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.exts.geo.NavPlace;
 import info.freelibrary.iiif.presentation.v3.ids.UriUtils;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
@@ -42,6 +43,9 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     /** The collection's accompanying canvas. */
     private AccompanyingCanvas myAccompanyingCanvas;
 
+    /** The collection's annotations. */
+    private List<AnnotationPage<WebAnnotation>> myAnnotations;
+
     /** The collection's list of items. */
     private List<Item> myItems;
 
@@ -62,6 +66,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      */
     public Collection(final String aID, final Label aLabel) {
         super(ResourceTypes.COLLECTION, aID, aLabel, CollectionBehavior.class);
+        getContextList(); // Initializes the context list
     }
 
     /**
@@ -69,6 +74,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      */
     private Collection() {
         super(ResourceTypes.COLLECTION, CollectionBehavior.class);
+        getContextList(); // Initializes the context list
     }
 
     @Override
@@ -88,6 +94,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         return Objects.equals(myAccompanyingCanvas, other.myAccompanyingCanvas) &&
                 Objects.equals(myPlaceholderCanvas, other.myPlaceholderCanvas) &&
                 Objects.equals(myViewingDirection, other.myViewingDirection) &&
+                ListUtils.equals(myAnnotations, other.myAnnotations) &&
                 ListUtils.equals(myServiceDefinitions, other.myServiceDefinitions) &&
                 ListUtils.equals(myItems, other.myItems) && super.equals(other);
     }
@@ -104,14 +111,18 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     }
 
     /**
-     * Gets the primary collection context.
+     * Gets the collection's annotation pages.
      *
-     * @return The collection context
+     * @return This collection's annotation pages
      */
-    @Override
-    @JsonIgnore
-    public URI getContext() {
-        return PRESENTATION_CONTEXT_URI;
+    @JsonGetter(JsonKeys.ANNOTATIONS)
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public List<AnnotationPage<WebAnnotation>> getAnnotations() {
+        if (myAnnotations == null) {
+            myAnnotations = new ArrayList<>();
+        }
+
+        return myAnnotations;
     }
 
     /**
@@ -159,14 +170,14 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      * @return The viewing direction
      */
     @JsonGetter(JsonKeys.VIEWING_DIRECTION)
-    public ViewingDirection getViewingDirection() {
-        return myViewingDirection;
+    public Optional<ViewingDirection> getViewingDirection() {
+        return Optional.ofNullable(myViewingDirection);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), myAccompanyingCanvas, myPlaceholderCanvas, myViewingDirection,
-                myServiceDefinitions, myItems);
+        return Objects.hash(super.hashCode(), myAccompanyingCanvas, myPlaceholderCanvas, myAnnotations,
+                myViewingDirection, myServiceDefinitions, myItems);
     }
 
     /**
@@ -178,6 +189,41 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     @JsonSetter(JsonKeys.ACCOMPANYING_CANVAS)
     public Collection setAccompanyingCanvas(final AccompanyingCanvas aCanvas) {
         myAccompanyingCanvas = aCanvas;
+        return this;
+    }
+
+    /**
+     * Sets the collection's annotation pages.
+     *
+     * @param aPageArray An array of annotation pages
+     * @return This collection
+     */
+    @SafeVarargs
+    @JsonIgnore
+    public final Collection setAnnotations(final AnnotationPage<WebAnnotation>... aPageArray) {
+        final List<AnnotationPage<WebAnnotation>> annotations = getAnnotations();
+
+        Objects.requireNonNull(aPageArray);
+        annotations.clear();
+        Arrays.stream(aPageArray).forEach(annotations::add);
+
+        return this;
+    }
+
+    /**
+     * Sets the collection's annotation pages.
+     *
+     * @param aPageList A list of annotation pages
+     * @return This collection
+     */
+    @JsonSetter(JsonKeys.ANNOTATIONS)
+    public Collection setAnnotations(final List<AnnotationPage<WebAnnotation>> aPageList) {
+        final List<AnnotationPage<WebAnnotation>> annotations = getAnnotations();
+
+        Objects.requireNonNull(aPageList);
+        annotations.clear();
+        annotations.addAll(aPageList);
+
         return this;
     }
 
@@ -200,6 +246,18 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         }
 
         return collection;
+    }
+
+    /**
+     * Sets the items associated with this collection.
+     *
+     * @param anItemArray An array of manifests and/or collections
+     * @return This collection
+     */
+    @JsonIgnore
+    public Collection setItems(final Item... anItemArray) {
+        myItems = Arrays.asList(anItemArray);
+        return this;
     }
 
     /**
@@ -306,7 +364,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
             }
 
             myType = Item.Type.fromLabel(ResourceTypes.COLLECTION).orElseThrow();
-            myLabel = Objects.requireNonNull(aCollection.getLabel());
+            aCollection.getLabel().ifPresent(label -> myLabel = label);
             myID = aCollection.getID(); // ID rules should have been checked by Collection already
         }
 
@@ -324,7 +382,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
             }
 
             myType = Item.Type.fromLabel(ResourceTypes.MANIFEST).orElseThrow();
-            myLabel = Objects.requireNonNull(aManifest.getLabel());
+            aManifest.getLabel().ifPresent(label -> myLabel = label);
             myID = aManifest.getID(); // ID rules should have been checked by Manifest already
         }
 
@@ -352,8 +410,8 @@ public class Collection extends NavigableResource<Collection> implements Resourc
          * @return The item label
          */
         @JsonGetter(JsonKeys.LABEL)
-        public Label getLabel() {
-            return myLabel;
+        public Optional<Label> getLabel() {
+            return Optional.ofNullable(myLabel);
         }
 
         /**
@@ -362,8 +420,8 @@ public class Collection extends NavigableResource<Collection> implements Resourc
          * @return The navigation date
          */
         @JsonGetter(JsonKeys.NAV_DATE)
-        public NavDate getNavDate() {
-            return myNavDate;
+        public Optional<NavDate> getNavDate() {
+            return Optional.ofNullable(myNavDate);
         }
 
         /**
@@ -372,8 +430,8 @@ public class Collection extends NavigableResource<Collection> implements Resourc
          * @return The navigation place
          */
         @JsonGetter(JsonKeys.NAV_PLACE)
-        public NavPlace getNavPlace() {
-            return myNavPlace;
+        public Optional<NavPlace> getNavPlace() {
+            return Optional.ofNullable(myNavPlace);
         }
 
         /**

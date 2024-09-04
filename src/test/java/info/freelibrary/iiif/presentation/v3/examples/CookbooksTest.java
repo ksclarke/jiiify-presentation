@@ -301,7 +301,7 @@ public class CookbooksTest extends AbstractCookbookTest {
 
         imageContent.setWidthHeight(4032, 3024).setFormat(IMAGE_JPEG).setServices(service);
         canvas.setWidthHeight(4032, 3024).paintWith(imageContent);
-        manifest.addCanvases(canvas);
+        manifest.setCanvases(canvas);
 
         System.out.println(manifest);
 
@@ -376,7 +376,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         manifest.setRequiredStatement(new RequiredStatement(reqStmtLabel, reqStmt));
 
         imageContent.setWidthHeight(1114, 991).setFormat(IMAGE_JPEG).setServices(service);
-        manifest.addCanvases(canvas.setWidthHeight(1114, 991).paintWith(imageContent));
+        manifest.setCanvases(canvas.setWidthHeight(1114, 991).paintWith(imageContent));
 
         System.out.println(manifest);
 
@@ -421,7 +421,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         manifest.setRequiredStatement(reqStatement);
 
         imageContent.setWidthHeight(1114, 991).setFormat(IMAGE_JPEG).setServices(service);
-        manifest.addCanvases(canvas.setWidthHeight(1114, 991).paintWith(imageContent));
+        manifest.setCanvases(canvas.setWidthHeight(1114, 991).paintWith(imageContent));
 
         System.out.println(manifest);
 
@@ -470,7 +470,7 @@ public class CookbooksTest extends AbstractCookbookTest {
 
         imageContent.setWidthHeight(1114, 991).setFormat(IMAGE_JPEG).setServices(service);
         page.addAnnotations(annotation.setBody(imageContent).setTarget(new Target(canvas)));
-        manifest.addCanvases(canvas.setWidthHeight(1114, 991).setPaintingPages(page));
+        manifest.setCanvases(canvas.setWidthHeight(1114, 991).setPaintingPages(page));
 
         System.out.println(manifest);
 
@@ -503,7 +503,7 @@ public class CookbooksTest extends AbstractCookbookTest {
                 "<span>Glen Robson, IIIF Technical Coordinator. <a href=\"https://creativecommons.org/licenses/by-sa/3.0\">CC BY-SA 3.0</a> <img src=\"https://licensebuttons.net/l/by-sa/3.0/88x31.png\"/></span>")));
 
         imageContent.setWidthHeight(4032, 3024).setFormat(IMAGE_JPEG).setServices(service);
-        manifest.addCanvases(canvas.setWidthHeight(4032, 3024).paintWith(imageContent));
+        manifest.setCanvases(canvas.setWidthHeight(4032, 3024).paintWith(imageContent));
 
         System.out.println(manifest);
 
@@ -540,7 +540,7 @@ public class CookbooksTest extends AbstractCookbookTest {
 
         imageContent.setWidthHeight(4032, 3024).setFormat(IMAGE_JPEG).setServices(service);
         page.addAnnotations(annotation.setBody(imageContent).setTarget(new Target(canvas)));
-        manifest.addCanvases(canvas.setWidthHeight(4032, 3024).setPaintingPages(page));
+        manifest.setCanvases(canvas.setWidthHeight(4032, 3024).setPaintingPages(page));
 
         System.out.println(manifest);
 
@@ -571,7 +571,7 @@ public class CookbooksTest extends AbstractCookbookTest {
                 "<span>Glen Robson, IIIF Technical Coordinator. <a href=\"https://creativecommons.org/licenses/by-sa/3.0\">CC BY-SA 3.0</a> <a href=\"https://creativecommons.org/licenses/by-sa/3.0\" title=\"CC BY-SA 3.0\"><img src=\"https://licensebuttons.net/l/by-sa/3.0/88x31.png\"/></a></span>")));
 
         imageContent.setWidthHeight(4032, 3024).setFormat(IMAGE_JPEG).setServices(service);
-        manifest.addCanvases(canvas.setWidthHeight(4032, 3024).paintWith(imageContent));
+        manifest.setCanvases(canvas.setWidthHeight(4032, 3024).paintWith(imageContent));
 
         System.out.println(manifest);
 
@@ -606,7 +606,7 @@ public class CookbooksTest extends AbstractCookbookTest {
 
         imageContent.setWidthHeight(4032, 3024).setFormat(IMAGE_JPEG).setServices(service);
         page.addAnnotations(annotation.setBody(imageContent).setTarget(new Target(canvas)));
-        manifest.addCanvases(canvas.setWidthHeight(4032, 3024).setPaintingPages(page));
+        manifest.setCanvases(canvas.setWidthHeight(4032, 3024).setPaintingPages(page));
 
         System.out.println(manifest);
 
@@ -676,7 +676,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         imageContent5.setWidthHeight(3198, 4632).setFormat(IMAGE_JPEG).setServices(service5);
         canvas5.setWidthHeight(3198, 4632).paintWith(imageContent5);
 
-        manifest.addCanvases(canvas1, canvas2, canvas3, canvas4, canvas5);
+        manifest.setCanvases(canvas1, canvas2, canvas3, canvas4, canvas5);
 
         System.out.println(manifest);
 
@@ -730,7 +730,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         });
 
         manifest.setBehaviors(PAGED);
-        manifest.addCanvases(canvases);
+        manifest.setCanvases(canvases);
 
         System.out.println(manifest);
 
@@ -790,7 +790,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         }
 
         manifest.setBehaviors(PAGED);
-        manifest.addCanvases(canvases);
+        manifest.setCanvases(canvases);
 
         System.out.println(manifest);
 
@@ -847,7 +847,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         manifest.setSummary(new Summary("en",
                 "Playbill for \"Akiba gongen kaisen-banashi,\" \"Futatsu chōchō kuruwa nikki\" and \"Godairiki koi no fūjime\" performed at the Chikugo Theater in Osaka from the fifth month of Kaei 2 (May, 1849); main actors: Gadō Kataoka II, Ebizō Ichikawa VI, Kitō Sawamura II, Daigorō Mimasu IV and Karoku Nakamura I; on front cover: producer Mominosuke Ichikawa's crest."));
         manifest.setViewingDirection(RIGHT_TO_LEFT);
-        manifest.addCanvases(canvases);
+        manifest.setCanvases(canvases);
 
         System.out.println(manifest);
 
@@ -899,7 +899,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         manifest.setSummary(new Summary("en",
                 "William Lewis Sachtleben was an American long-distance cyclist who rode across Asia from Istanbul to Peking in 1891 to 1892 with Thomas Gaskell Allen Jr., his classmate from Washington University. This was part of a longer journey that began the day after they had graduated from college, when they travelled to New York and on to Liverpool; in all they travelled 15,044 miles by bicycle, 'the longest continuous land journey ever made around the world' as reported in their book <cite>Across Asia on a bicycle</cite> (1895). Sachtleben documented his travels with photographs and diaries, the latter of which he numbered sequentially. The diary of notebook 'No. 10' covers a portion of their journey through the Armenian area of Turkey from April 12 to May 9 (there is a 2-page reading list at the end). During this time they rode from Ankara (Angora in the diary) to Sivas, where they stayed for ten days while Allen had a bout of typhoid fever, and the first half of a ten-day excursion to Merzifon (Mersovan in the diary), taken by Sachtleben to give Allen additional time to recover."));
         manifest.setViewingDirection(TOP_TO_BOTTOM);
-        manifest.addCanvases(canvases);
+        manifest.setCanvases(canvases);
 
         System.out.println(manifest);
 
@@ -972,7 +972,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         imageContent5.setWidthHeight(3510, 4808).setFormat(IMAGE_JPEG).setServices(service5);
         canvas5.setWidthHeight(3510, 4808).paintWith(imageContent5);
 
-        manifest.addCanvases(canvas1, canvas2, canvas3, canvas4, canvas5);
+        manifest.setCanvases(canvas1, canvas2, canvas3, canvas4, canvas5);
 
         System.out.println(manifest);
 
@@ -1035,7 +1035,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         imageContent4.setWidthHeight(2268, 3135).setFormat(IMAGE_JPEG).setServices(service4);
         canvas4.setWidthHeight(2268, 3135).paintWith(imageContent4);
 
-        manifest.addCanvases(canvas1, canvas2, canvas3, canvas4);
+        manifest.setCanvases(canvas1, canvas2, canvas3, canvas4);
 
         System.out.println(manifest);
 
@@ -1101,7 +1101,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         manifest.setSummary(new Summary("en",
                 "Playbill for \"Akiba gongen kaisen-banashi,\" \"Futatsu chōchō kuruwa nikki\" and \"Godairiki koi no fūjime\" performed at the Chikugo Theater in Osaka from the fifth month of Kaei 2 (May, 1849); main actors: Gadō Kataoka II, Ebizō Ichikawa VI, Kitō Sawamura II, Daigorō Mimasu IV and Karoku Nakamura I; on front cover: producer Mominosuke Ichikawa's crest."));
         manifest.setViewingDirection(RIGHT_TO_LEFT);
-        manifest.addCanvases(canvases);
+        manifest.setCanvases(canvases);
 
         System.out.println(manifest);
 
@@ -1162,7 +1162,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         manifest.setSummary(new Summary("en",
                 "William Lewis Sachtleben was an American long-distance cyclist who rode across Asia from Istanbul to Peking in 1891 to 1892 with Thomas Gaskell Allen Jr., his classmate from Washington University. This was part of a longer journey that began the day after they had graduated from college, when they travelled to New York and on to Liverpool; in all they travelled 15,044 miles by bicycle, 'the longest continuous land journey ever made around the world' as reported in their book <cite>Across Asia on a bicycle</cite> (1895). Sachtleben documented his travels with photographs and diaries, the latter of which he numbered sequentially. The diary of notebook 'No. 10' covers a portion of their journey through the Armenian area of Turkey from April 12 to May 9 (there is a 2-page reading list at the end). During this time they rode from Ankara (Angora in the diary) to Sivas, where they stayed for ten days while Allen had a bout of typhoid fever, and the first half of a ten-day excursion to Merzifon (Mersovan in the diary), taken by Sachtleben to give Allen additional time to recover."));
         manifest.setViewingDirection(TOP_TO_BOTTOM);
-        manifest.addCanvases(canvases);
+        manifest.setCanvases(canvases);
 
         System.out.println(manifest);
 

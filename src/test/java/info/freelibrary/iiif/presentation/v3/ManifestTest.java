@@ -10,10 +10,8 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -86,12 +84,6 @@ public class ManifestTest extends AbstractTest {
     /** A test width. */
     private static final int WIDTH = 6132;
 
-    /** A list of test contexts. */
-    private final List<URI> myContexts = Arrays.asList(URI.create(getURL()), URI.create(getURL()), URI.create(getURL()),
-            URI.create(getURL()), URI.create(getURL()), URI.create(getURL()), URI.create(getURL()),
-            URI.create(getURL()), URI.create(getURL()), URI.create(getURL()), URI.create(getURL()),
-            AbstractResource.PRESENTATION_CONTEXT_URI);
-
     /** The test manifest. */
     private Manifest myManifest;
 
@@ -110,6 +102,7 @@ public class ManifestTest extends AbstractTest {
         final List<String[]> firstCanvas = reader1.readAll();
         final List<String[]> secondCanvas = reader2.readAll();
         final List<Metadata> metadata = new ArrayList<>();
+        final List<Canvas> canvases = new ArrayList<>();
         final ImageService3 manifestThumbService;
 
         reader1.close();
@@ -138,7 +131,7 @@ public class ManifestTest extends AbstractTest {
                 new AnnotationPage<>(MANIFEST_SERVER + MANIFEST_ID + "/pageanno/pageanno-2");
 
         canvas1.getPaintingPages().add(page1.addAnnotations(content1));
-        myManifest.addCanvases(canvas1);
+        canvases.add(canvas1);
 
         for (final String[] values : firstCanvas) {
             final String id = MANIFEST_SERVER + values[1] + MANIFEST_THUMBNAIL_PATH;
@@ -160,7 +153,7 @@ public class ManifestTest extends AbstractTest {
 
         content2 = new PaintingAnnotation(MANIFEST_SERVER + MANIFEST_ID + "/imageanno/imageanno-2", canvas2);
         canvas2.getPaintingPages().add(page2.addAnnotations(content2));
-        myManifest.addCanvases(canvas2);
+        canvases.add(canvas2);
 
         for (final String[] values : secondCanvas) {
             final String id = MANIFEST_SERVER + values[1] + MANIFEST_THUMBNAIL_PATH;
@@ -177,6 +170,7 @@ public class ManifestTest extends AbstractTest {
 
         myManifest.setRights("http://creativecommons.org/licenses/by/4.0/").setBehaviors(ManifestBehavior.PAGED)
                 .setRequiredStatement(reqStmt).setServices(otherService);
+        myManifest.setCanvases(canvases);
     }
 
     /**
@@ -186,7 +180,7 @@ public class ManifestTest extends AbstractTest {
     public void testAddRanges() {
         final Range range = new Range(HTTPS + UUID.randomUUID().toString());
 
-        myManifest.addRanges(range);
+        myManifest.setRanges(range);
         assertEquals(1, myManifest.getRanges().size());
     }
 
@@ -197,55 +191,8 @@ public class ManifestTest extends AbstractTest {
     public void testAddRangesList() {
         final Range range = new Range(HTTPS + UUID.randomUUID().toString());
 
-        myManifest.addRanges(List.of(range));
+        myManifest.setRanges(List.of(range));
         assertEquals(1, myManifest.getRanges().size());
-    }
-
-    /**
-     * Tests adding a context URI.
-     */
-    @Test
-    public void testAddUriContexts() {
-        assertEquals(1, myManifest.getContexts().size());
-        myManifest.addContexts(URI.create(myLoremIpsum.getUrl()), URI.create(myLoremIpsum.getUrl()));
-        assertEquals(3, myManifest.getContexts().size());
-    }
-
-    /**
-     * Tests clearing the contexts.
-     */
-    @Test
-    public void testClearContexts() {
-        assertEquals(1, myManifest.getContexts().size());
-        myManifest.addContexts(URI.create(myLoremIpsum.getUrl()), URI.create(myLoremIpsum.getUrl()));
-        assertEquals(3, myManifest.getContexts().size());
-        assertEquals(1, myManifest.clearContexts().getContexts().size());
-    }
-
-    /**
-     * Tests the comparator's sort.
-     */
-    @Test
-    public final void testComparatorSort() {
-        final int lastIndex = myContexts.size() - 1;
-        final List<URI> preSort = new ArrayList<>();
-
-        // Shuffle until our last list item isn't the required one
-        while (AbstractResource.PRESENTATION_CONTEXT_URI.equals(myContexts.get(lastIndex))) {
-            Collections.shuffle(myContexts);
-        }
-
-        // Remember the state of our list before the sort, minus the required Context
-        assertTrue(preSort.addAll(myContexts));
-        assertTrue(preSort.remove(AbstractResource.PRESENTATION_CONTEXT_URI));
-
-        // Sort list items
-        Collections.sort(myContexts, new NavigableResource.ContextListComparator<>());
-
-        // Check that the last URI in the list is our required one and
-        // that list has same pre-sort order minus the required context
-        assertEquals(AbstractResource.PRESENTATION_CONTEXT_URI, myContexts.get(lastIndex));
-        assertEquals(preSort, myContexts.subList(0, lastIndex));
     }
 
     /**
@@ -255,16 +202,8 @@ public class ManifestTest extends AbstractTest {
     public void testConstructorStringLabel() {
         myManifest = new Manifest(MANIFEST_URI, new Label(METADATA_PAIRS.get(0)[1]));
         assertEquals(MANIFEST_URI, myManifest.getID());
-        assertEquals(METADATA_PAIRS.get(0)[1], myManifest.getLabel().getString());
-    }
-
-    /**
-     * Tests {@link Manifest#getContext() getContext} method.
-     */
-    @Test
-    public void testGetPrimaryContext() {
-        assertEquals(AbstractResource.PRESENTATION_CONTEXT_URI,
-                myManifest.addContexts(URI.create(myLoremIpsum.getUrl())).getContext());
+        assertTrue(myManifest.getLabel().isPresent());
+        assertEquals(METADATA_PAIRS.get(0)[1], myManifest.getLabel().get().getString());
     }
 
     /**
@@ -350,27 +289,6 @@ public class ManifestTest extends AbstractTest {
         final String found = JSON.readValue(expected, Manifest.class).toString();
 
         assertEquals(expected, format(found));
-    }
-
-    /**
-     * Tests {@link Manifest#removeContext(URI) removeContext} method.
-     */
-    @Test
-    public void testRemoveContext() {
-        final URI uri = URI.create("https://asdf.example.com");
-
-        myManifest.addContexts(uri, URI.create("https://fdsa.example.com"));
-        assertTrue(myManifest.getContexts().contains(uri));
-        assertTrue(myManifest.removeContext(uri));
-        assertEquals(2, myManifest.getContexts().size());
-    }
-
-    /**
-     * Tests getting an exception on trying to remove the required context.
-     */
-    @Test(expected = UnsupportedOperationException.class)
-    public void testRemovePrimaryContext() {
-        myManifest.removeContext(AbstractResource.PRESENTATION_CONTEXT_URI);
     }
 
     /**

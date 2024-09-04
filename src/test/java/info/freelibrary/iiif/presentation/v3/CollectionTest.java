@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.assertOptEquals;
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static info.freelibrary.util.Constants.EMPTY;
 import static org.junit.Assert.assertEquals;
@@ -143,7 +144,7 @@ public class CollectionTest {
         final Collection.Item item = new Collection.Item(collection);
 
         assertEquals(myID, item.getID());
-        assertEquals(myLabel, item.getLabel());
+        assertOptEquals(myLabel, item.getLabel());
         assertEquals(1, item.getThumbnails().size());
     }
 
@@ -156,7 +157,7 @@ public class CollectionTest {
         final Collection.Item item = new Collection.Item(manifest);
 
         assertEquals(myID, item.getID());
-        assertEquals(myLabel, item.getLabel());
+        assertOptEquals(myLabel, item.getLabel());
         assertEquals(1, item.getThumbnails().size());
     }
 
@@ -171,7 +172,7 @@ public class CollectionTest {
         item.setThumbnails(new ImageContent(myID));
 
         assertEquals(myID, item.getID());
-        assertEquals(myLabel, item.getLabel());
+        assertOptEquals(myLabel, item.getLabel());
         assertEquals(1, item.getThumbnails().size());
     }
 
@@ -183,7 +184,7 @@ public class CollectionTest {
         final Collection.Item item = new Collection.Item(new Manifest(myID, myLabel));
 
         assertEquals(myID, item.getID());
-        assertEquals(myLabel, item.getLabel());
+        assertOptEquals(myLabel, item.getLabel());
     }
 
     /**
@@ -216,14 +217,6 @@ public class CollectionTest {
     }
 
     /**
-     * Tests {@link Collection#getContext()}.
-     */
-    @Test
-    public void testGetContext() {
-        assertEquals(Collection.PRESENTATION_CONTEXT_URI, new Collection(myID, myLabel).getContext());
-    }
-
-    /**
      * Tests setting a navDate.
      */
     @Test
@@ -232,7 +225,7 @@ public class CollectionTest {
         final NavDate navDate = NavDate.now();
 
         collection.setNavDate(navDate);
-        assertEquals(navDate, collection.getNavDate());
+        assertOptEquals(navDate, collection.getNavDate());
     }
 
     /**
@@ -245,7 +238,7 @@ public class CollectionTest {
         final NavDate navDate = new NavDate(zonedDateTime);
 
         collection.setNavDate(navDate);
-        assertEquals(navDate, collection.getNavDate());
+        assertOptEquals(navDate, collection.getNavDate());
     }
 
     /**
@@ -283,8 +276,9 @@ public class CollectionTest {
     public final void testSetNavPlace() {
         final Manifest manifest = new Manifest(myID, myLabel);
         final Collection.Item item = new Collection.Item(manifest);
+        final NavPlace navPlace = new NavPlace(myID);
 
-        assertEquals(myID, item.setNavPlace(new NavPlace(myID)).getNavPlace().getID());
+        assertOptEquals(navPlace, item.setNavPlace(navPlace).getNavPlace());
     }
 
     /**
@@ -312,7 +306,7 @@ public class CollectionTest {
      */
     @Test
     public final void testSetViewingDirection() {
-        assertEquals(ViewingDirection.TOP_TO_BOTTOM, new Collection(myID, myLabel)
+        assertOptEquals(ViewingDirection.TOP_TO_BOTTOM, new Collection(myID, myLabel)
                 .setViewingDirection(ViewingDirection.TOP_TO_BOTTOM).getViewingDirection());
     }
 

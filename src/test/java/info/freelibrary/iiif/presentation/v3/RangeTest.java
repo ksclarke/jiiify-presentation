@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.assertOptEquals;
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -158,7 +159,7 @@ public class RangeTest extends AbstractTest {
     @Test
     public void testGetSetViewingDirection() {
         final Range range = getRange().setViewingDirection(ViewingDirection.LEFT_TO_RIGHT);
-        assertEquals(ViewingDirection.LEFT_TO_RIGHT, range.getViewingDirection());
+        assertOptEquals(ViewingDirection.LEFT_TO_RIGHT, range.getViewingDirection());
     }
 
     /**
@@ -175,7 +176,7 @@ public class RangeTest extends AbstractTest {
     @Test
     public final void testNavDate() {
         final NavDate navDate = NavDate.now();
-        assertEquals(navDate, getRange().setNavDate(navDate).getNavDate());
+        assertOptEquals(navDate, getRange().setNavDate(navDate).getNavDate());
     }
 
     /**

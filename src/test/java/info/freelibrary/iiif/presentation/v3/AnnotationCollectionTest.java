@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.assertOptEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
@@ -159,7 +160,7 @@ public class AnnotationCollectionTest {
     public void testGetSetViewingDirection() {
         final AnnotationCollection annotationCollection =
                 new AnnotationCollection(ID, LABEL).setViewingDirection(ViewingDirection.LEFT_TO_RIGHT);
-        assertEquals(ViewingDirection.LEFT_TO_RIGHT, annotationCollection.getViewingDirection());
+        assertOptEquals(ViewingDirection.LEFT_TO_RIGHT, annotationCollection.getViewingDirection());
     }
 
     /**

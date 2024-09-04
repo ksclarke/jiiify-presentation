@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.assertOptEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -81,7 +82,8 @@ public class AccompanyingCanvasTest {
         final Label label = new Label(StringUtils.format(LABEL, id));
         final AccompanyingCanvas canvas = new AccompanyingCanvas(minter, label);
 
-        assertEquals(StringUtils.format(LABEL, id), canvas.getLabel().getString());
+        assertTrue(canvas.getLabel().isPresent());
+        assertOptEquals(label, canvas.getLabel());
     }
 
     /**
@@ -122,7 +124,7 @@ public class AccompanyingCanvasTest {
         final AccompanyingCanvas canvas = new AccompanyingCanvas(myID, label);
 
         assertEquals(myID, canvas.getID());
-        assertEquals(label, canvas.getLabel());
+        assertOptEquals(label, canvas.getLabel());
     }
 
     /**

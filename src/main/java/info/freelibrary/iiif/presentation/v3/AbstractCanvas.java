@@ -74,14 +74,14 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     /** The canvas' optional minter. */
     private Minter myMinter;
 
-    /** The canvas' other canvases (other than painting or supplementing). */
-    private List<AnnotationPage<WebAnnotation>> myOtherAnnotations;
-
     /** The painting annotations on the canvas. */
     private List<AnnotationPage<PaintingAnnotation>> myPaintingPageList;
 
     /** The supplementing annotations on the canvas. */
     private List<AnnotationPage<SupplementingAnnotation>> mySupplementingPageList;
+
+    /** The canvas' other canvases (other than painting or supplementing). */
+    private List<AnnotationPage<WebAnnotation>> myWebAnnotations;
 
     /** The canvas' width. */
     private int myWidth;
@@ -149,8 +149,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         other = (AbstractCanvas<T>) aObject;
 
         return Objects.equals(myDuration, other.myDuration) && Objects.equals(myHeight, other.myHeight) &&
-                Objects.equals(myWidth, other.myWidth) &&
-                Objects.equals(myOtherAnnotations, other.myOtherAnnotations) &&
+                Objects.equals(myWidth, other.myWidth) && Objects.equals(myWebAnnotations, other.myWebAnnotations) &&
                 Objects.equals(myPaintingPageList, other.myPaintingPageList) &&
                 Objects.equals(mySupplementingPageList, other.mySupplementingPageList) && super.equals(other);
     }
@@ -188,20 +187,6 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     }
 
     /**
-     * Gets the canvas' annotation pages that aren't related to painting.
-     *
-     * @return The canvas' non-painting annotation pages
-     */
-    @JsonIgnore
-    public List<AnnotationPage<WebAnnotation>> getOtherAnnotations() {
-        if (myOtherAnnotations == null) {
-            myOtherAnnotations = new ArrayList<>();
-        }
-
-        return myOtherAnnotations;
-    }
-
-    /**
      * Gets the canvas' annotation pages for painting annotations.
      *
      * @return The canvas' annotation pages for painting annotations
@@ -231,6 +216,20 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     }
 
     /**
+     * Gets the canvas' annotation pages that aren't related to painting.
+     *
+     * @return The canvas' non-painting annotation pages
+     */
+    @JsonIgnore
+    public List<AnnotationPage<WebAnnotation>> getWebAnnotations() {
+        if (myWebAnnotations == null) {
+            myWebAnnotations = new ArrayList<>();
+        }
+
+        return myWebAnnotations;
+    }
+
+    /**
      * Gets the width of the canvas.
      *
      * @return The width of the canvas
@@ -243,7 +242,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), myDuration, myHeight, myWidth, myOtherAnnotations, myPaintingPageList,
+        return Objects.hash(super.hashCode(), myDuration, myHeight, myWidth, myWebAnnotations, myPaintingPageList,
                 mySupplementingPageList);
     }
 
@@ -306,36 +305,6 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     @SuppressWarnings({ JDK.UNCHECKED })
     public T setMinter(final Minter aMinter) {
         myMinter = Objects.requireNonNull(aMinter);
-        return (T) this;
-    }
-
-    /**
-     * Sets the canvas' annotation pages from an array.
-     *
-     * @param aAnnotationArray An array of annotation pages
-     * @return The canvas
-     */
-    @JsonIgnore
-    @SafeVarargs
-    public final T setOtherAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
-        return setOtherAnnotations(Arrays.asList(aAnnotationArray));
-    }
-
-    /**
-     * Sets the canvas annotation pages from a list.
-     *
-     * @param aAnnotationList A list of annotation pages
-     * @return The canvas
-     */
-    @JsonIgnore
-    @SuppressWarnings({ JDK.UNCHECKED })
-    public T setOtherAnnotations(final List<AnnotationPage<WebAnnotation>> aAnnotationList) {
-        final List<AnnotationPage<WebAnnotation>> annotations = getOtherAnnotations();
-
-        Objects.requireNonNull(aAnnotationList);
-        annotations.clear();
-        annotations.addAll(aAnnotationList);
-
         return (T) this;
     }
 
@@ -410,6 +379,36 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     }
 
     /**
+     * Sets the canvas' annotation pages from an array.
+     *
+     * @param aAnnotationArray An array of annotation pages
+     * @return The canvas
+     */
+    @JsonIgnore
+    @SafeVarargs
+    public final T setWebAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
+        return setWebAnnotations(Arrays.asList(aAnnotationArray));
+    }
+
+    /**
+     * Sets the canvas annotation pages from a list.
+     *
+     * @param aAnnotationList A list of annotation pages
+     * @return The canvas
+     */
+    @JsonIgnore
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public T setWebAnnotations(final List<AnnotationPage<WebAnnotation>> aAnnotationList) {
+        final List<AnnotationPage<WebAnnotation>> annotations = getWebAnnotations();
+
+        Objects.requireNonNull(aAnnotationList);
+        annotations.clear();
+        annotations.addAll(aAnnotationList);
+
+        return (T) this;
+    }
+
+    /**
      * Sets the width and height of the canvas.
      *
      * @param aWidth A canvas width
@@ -429,17 +428,6 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
 
         return (T) this;
     }
-
-    /**
-     * Gets the manifest context. The manifest can either have a single context or an array of contexts (Cf.
-     * https://iiif.io/api/presentation/3.0/#46-linked-data-context-and-extensions)
-     *
-     * @return The manifest context
-     */
-    @Override
-    @JsonGetter(JsonKeys.CONTEXT)
-    @JsonInclude(Include.NON_NULL)
-    protected abstract Object getJsonContext();
 
     /**
      * Paints a canvas, that has been initialized with a minter, with the supplied content resources. If the canvas was
@@ -731,7 +719,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         final List<AnnotationPage<?>> annotations = new ArrayList<>();
 
         getSupplementingPages().forEach(annotations::add);
-        getOtherAnnotations().forEach(annotations::add);
+        getWebAnnotations().forEach(annotations::add);
 
         return annotations;
     }
@@ -908,7 +896,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     @JsonSetter(JsonKeys.ANNOTATIONS)
     private <A extends Annotation<A>> AbstractCanvas<T> setAnnotations(final Object aObject) {
         final List<AnnotationPage<SupplementingAnnotation>> supplementingPages = getSupplementingPages();
-        final List<AnnotationPage<WebAnnotation>> otherAnnotations = getOtherAnnotations();
+        final List<AnnotationPage<WebAnnotation>> otherAnnotations = getWebAnnotations();
         final List<AnnotationPage<A>> annotationList = getDeserializedPageList(aObject);
 
         supplementingPages.clear();

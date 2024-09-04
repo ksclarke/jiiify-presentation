@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.assertOptEquals;
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -283,7 +284,7 @@ public class PlaceholderCanvasTest extends AbstractTest {
         final PlaceholderCanvas canvas = new PlaceholderCanvas(myID, label);
 
         assertEquals(myID, canvas.getID());
-        assertEquals(label, canvas.getLabel());
+        assertOptEquals(label, canvas.getLabel());
     }
 
     /**
