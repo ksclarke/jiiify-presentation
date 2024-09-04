@@ -470,7 +470,7 @@ public class ContextListTest extends AbstractTest {
      */
     @Test
     public final void testSetIntUriStatusQuo() {
-        new ContextList(myContexts).set(0, PRESENTATION_CONTEXT_URI);
+        assertEquals(PRESENTATION_CONTEXT_URI, new ContextList(myContexts).set(0, PRESENTATION_CONTEXT_URI));
     }
 
     /**
