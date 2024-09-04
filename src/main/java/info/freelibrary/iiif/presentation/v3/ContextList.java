@@ -312,8 +312,11 @@ public class ContextList extends ArrayList<URI> implements List<URI> {
         if (PRESENTATION_CONTEXT_URI.equals(aURI)) {
             if (aIndex != 0) {
                 throw new IndexOutOfBoundsException(LOGGER.getMessage(MessageCodes.JPA_149));
-            } // else, just ignore -- this should be the current index of the default context
-        } else if (aIndex != 0) {
+            }
+
+            return aURI;
+        }
+        if (aIndex != 0) {
             return super.set(aIndex, aURI);
         }
 

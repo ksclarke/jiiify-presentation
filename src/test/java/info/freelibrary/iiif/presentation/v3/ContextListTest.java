@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static info.freelibrary.iiif.presentation.v3.ContextList.PRESENTATION_CONTEXT_URI;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -15,6 +16,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
@@ -338,6 +340,18 @@ public class ContextListTest extends AbstractTest {
     }
 
     /**
+     * Test method for {@link ContextList#removeIf(Predicate)}.
+     */
+    @Test
+    public final void testRemoveIfPredicateOfQsuperUriNoDefault() {
+        final ContextList contexts = new ContextList(myContexts);
+
+        contexts.removeIf(uri -> !uri.equals(PRESENTATION_CONTEXT_URI));
+        assertEquals(1, contexts.size());
+        assertTrue(contexts.contains(PRESENTATION_CONTEXT_URI));
+    }
+
+    /**
      * Test method for {@link ContextList#remove(int)}.
      */
     @Test
@@ -363,6 +377,14 @@ public class ContextListTest extends AbstractTest {
         assertTrue(contexts.contains(uri));
         contexts.removeLast();
         assertFalse(contexts.contains(uri));
+    }
+
+    /**
+     * Test method for {@link ContextList#removeLast()}.
+     */
+    @Test(expected = NoSuchElementException.class)
+    public final void testRemoveLastWhenEmpty() {
+        new ContextList().removeLast();
     }
 
     /**
@@ -425,6 +447,30 @@ public class ContextListTest extends AbstractTest {
         assertNotEquals(uri, contexts.get(1));
         contexts.set(1, uri);
         assertEquals(uri, contexts.get(1));
+    }
+
+    /**
+     * Test method for {@link ContextList#set(int, URI)}.
+     */
+    @Test(expected = IndexOutOfBoundsException.class)
+    public final void testSetIntURIException() {
+        new ContextList(myContexts).set(1, PRESENTATION_CONTEXT_URI);
+    }
+
+    /**
+     * Test method for {@link ContextList#set(int, URI)}.
+     */
+    @Test(expected = IndexOutOfBoundsException.class)
+    public final void testSetIntURIException2() {
+        new ContextList(myContexts).set(0, URI.create(getURL()));
+    }
+
+    /**
+     * Test method for {@link ContextList#set(int, URI)}.
+     */
+    @Test
+    public final void testSetIntUriStatusQuo() {
+        new ContextList(myContexts).set(0, PRESENTATION_CONTEXT_URI);
     }
 
     /**
