@@ -1,0 +1,79 @@
+{
+  "@context": [
+    "http://iiif.io/api/extension/navplace/context.json",
+    "http://iiif.io/api/presentation/3/context.json"
+  ],
+  "id": "https://iiif.io/api/cookbook/recipe/0318-navPlace-navDate/manifest-5.json",
+  "type": "Manifest",
+  "label": {
+    "en": [
+      "A View of Trajan's Forum, Rome, 1821"
+    ]
+  },
+  "navDate": "1821-01-01T00:00:00+00:00",
+  "navPlace": {
+    "id": "https://iiif.io/api/cookbook/recipe/0318-navPlace-navDate/feature-collection/5",
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "id": "https://iiif.io/api/cookbook/recipe/0318-navPlace-navDate/feature/5",
+        "type": "Feature",
+        "properties": {
+          "label": {
+            "en": [
+              "A View of Trajan's Forum, Rome, 1821"
+            ]
+          }
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            12.485869,
+            41.895419
+          ]
+        }
+      }
+    ]
+  },
+  "items": [
+    {
+      "id": "https://iiif.io/api/cookbook/recipe/0318-navPlace-navDate/canvas/5",
+      "type": "Canvas",
+      "height": 3005,
+      "width": 2048,
+      "label": {
+        "en": [
+          "A View of Trajan's Forum, Rome, 1821"
+        ]
+      },
+      "items": [
+        {
+          "id": "https://iiif.io/api/cookbook/recipe/0318-navPlace-navDate/anno-page/5",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://iiif.io/api/cookbook/recipe/0318-navPlace-navDate/anno/5",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://iiif.io/api/image/3.0/example/reference/71b9228e087f15c75b628214cd9f647d-A_View_of_Trajans_Forum_Rome/full/max/0/default.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "height": 3005,
+                "width": 2048,
+                "service": [
+                  {
+                    "id": "https://iiif.io/api/image/3.0/example/reference/71b9228e087f15c75b628214cd9f647d-A_View_of_Trajans_Forum_Rome",
+                    "profile": "level1",
+                    "type": "ImageService3"
+                  }
+                ]
+              },
+              "target": "https://iiif.io/api/cookbook/recipe/0318-navPlace-navDate/canvas/5"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
