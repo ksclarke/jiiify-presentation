@@ -7,16 +7,12 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
@@ -42,7 +38,7 @@ public class ContextListTest extends AbstractTest {
             ContextList.PRESENTATION_CONTEXT_URI);
 
     /**
-     * Test method for {@link ContextList#addAll(Collection)}.
+     * Tests {@link ContextList#addAll(Collection)}.
      */
     @Test
     public final void testAddAllCollectionOfQextendsURI() {
@@ -54,7 +50,7 @@ public class ContextListTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link ContextList#addAll(int, Collection)}.
+     * Tests {@link ContextList#addAll(int, Collection)}.
      */
     @Test
     public final void testAddAllCollectionWithDefaultURI() {
@@ -67,7 +63,7 @@ public class ContextListTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link ContextList#addAll(int, Collection)}.
+     * Tests {@link ContextList#addAll(int, Collection)}.
      */
     @Test
     public final void testAddAllCollectionWithoutDefaultURI() {
@@ -80,7 +76,7 @@ public class ContextListTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link ContextList#addAll(int, Collection)}.
+     * Tests {@link ContextList#addAll(int, Collection)}.
      */
     @Test
     public final void testAddAllIntCollectionOfQextendsURI() {
@@ -97,7 +93,7 @@ public class ContextListTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link ContextList#add(URI)}.
+     * Tests {@link ContextList#add(URI)}.
      */
     @Test
     public final void testAddFalse() {
@@ -108,35 +104,27 @@ public class ContextListTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link ContextList#addFirst(URI)}.
+     * Tests {@link ContextList#addFirst(URI)}.
      */
     @Test
-    public final void testAddFirstDefaultURI() {
-        final ContextList contexts = new ContextList();
-
-        assertEquals(1, contexts.size());
-        contexts.addFirst(ContextList.PRESENTATION_CONTEXT_URI);
-        assertEquals(1, contexts.size());
-        assertEquals(ContextList.PRESENTATION_CONTEXT_URI, contexts.get(0));
-    }
-
-    /**
-     * Test method for {@link ContextList#addFirst(URI)}.
-     */
-    @Test
-    public final void testAddFirstURI() {
-        final ContextList contexts = new ContextList();
+    public final void testAddFirst() {
+        final ContextList list = new ContextList();
         final URI uri = URI.create(getURL());
 
-        assertEquals(1, contexts.size());
-        contexts.addFirst(uri);
-        assertEquals(2, contexts.size());
-        assertEquals(ContextList.PRESENTATION_CONTEXT_URI, contexts.get(0));
-        assertEquals(uri, contexts.get(1));
+        list.addFirst(uri);
+        assertEquals(uri, list.get(0));
     }
 
     /**
-     * Test method for {@link ContextList#add(int, URI)}.
+     * Tests {@link ContextList#addFirst(URI)}.
+     */
+    @Test(expected = UnsupportedOperationException.class)
+    public final void testAddFirstDefaultURI() {
+        new ContextList().addFirst(PRESENTATION_CONTEXT_URI);
+    }
+
+    /**
+     * Tests {@link ContextList#add(int, URI)}.
      */
     @Test
     public final void testAddIntURI() {
@@ -147,11 +135,10 @@ public class ContextListTest extends AbstractTest {
         contexts.add(1, uri);
         assertEquals(2, contexts.size());
         assertEquals(uri, contexts.get(1));
-        assertEquals(ContextList.PRESENTATION_CONTEXT_URI, contexts.get(0));
     }
 
     /**
-     * Test method for {@link ContextList#add(int, URI)}.
+     * Tests {@link ContextList#add(int, URI)}.
      */
     @Test
     public final void testAddIntUriZeroIndex() {
@@ -161,49 +148,19 @@ public class ContextListTest extends AbstractTest {
         assertEquals(1, contexts.size());
         contexts.add(0, uri);
         assertEquals(2, contexts.size());
-        assertEquals(uri, contexts.get(1));
-        assertEquals(ContextList.PRESENTATION_CONTEXT_URI, contexts.get(0));
+        assertEquals(uri, contexts.get(0));
     }
 
     /**
-     * Test method for {@link ContextList#addLast(URI)}.
+     * Tests {@link ContextList#addLast(URI)}.
      */
-    @Test
-    public final void testAddLastDefaultURI() {
-        final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        final PrintStream current = new PrintStream(out, true, StandardCharsets.UTF_8);
-        final PrintStream previous = System.out;
-        final ContextList contexts = new ContextList();
-
-        System.setOut(current);
-
-        assertEquals(1, contexts.size());
-        contexts.addLast(ContextList.PRESENTATION_CONTEXT_URI);
-        assertEquals(1, contexts.size());
-        assertEquals(ContextList.PRESENTATION_CONTEXT_URI, contexts.get(0));
-
-        System.setOut(previous);
-
-        assertTrue(out.toString().contains(LOGGER.getMessage(MessageCodes.JPA_149)));
+    @Test(expected = UnsupportedOperationException.class)
+    public final void testAddLast() {
+        new ContextList().addLast(PRESENTATION_CONTEXT_URI);
     }
 
     /**
-     * Test method for {@link ContextList#addLast(URI)}.
-     */
-    @Test
-    public final void testAddLastURI() {
-        final ContextList contexts = new ContextList();
-        final URI uri = URI.create(getURL());
-
-        assertEquals(1, contexts.size());
-        contexts.addLast(uri);
-        assertEquals(2, contexts.size());
-        assertEquals(uri, contexts.get(1));
-        assertEquals(ContextList.PRESENTATION_CONTEXT_URI, contexts.get(0));
-    }
-
-    /**
-     * Test method for {@link ContextList#add(int, URI)}.
+     * Tests {@link ContextList#add(int, URI)}.
      */
     @Test
     public final void testAddPresURI() {
@@ -216,7 +173,7 @@ public class ContextListTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link ContextList#add(URI)}.
+     * Tests {@link ContextList#add(URI)}.
      */
     @Test
     public final void testAddURI() {
@@ -231,7 +188,7 @@ public class ContextListTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link ContextList#clear()}.
+     * Tests {@link ContextList#clear()}.
      */
     @Test
     public final void testClear() {
@@ -243,7 +200,7 @@ public class ContextListTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link ContextList#ContextList()}.
+     * Tests {@link ContextList#ContextList()}.
      */
     @Test
     public final void testContextList() {
@@ -254,18 +211,7 @@ public class ContextListTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link ContextList#ContextList(List)}.
-     */
-    @Test
-    public final void testContextListListOfURI() {
-        final ContextList contexts = new ContextList(myContexts);
-
-        assertEquals(12, contexts.size());
-        assertEquals(ContextList.PRESENTATION_CONTEXT_URI, contexts.get(0));
-    }
-
-    /**
-     * Test method for {@link ContextList#equals(Object)}.
+     * Tests {@link ContextList#equals(Object)}.
      */
     @Test
     public final void testEqualsNull() {
@@ -273,7 +219,7 @@ public class ContextListTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link ContextList#equals(Object)}.
+     * Tests {@link ContextList#equals(Object)}.
      */
     @Test
     public final void testEqualsObject() {
@@ -284,7 +230,7 @@ public class ContextListTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link ContextList#equals(Object)}.
+     * Tests {@link ContextList#equals(Object)}.
      */
     @Test
     public final void testEqualsString() {
@@ -292,7 +238,7 @@ public class ContextListTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link ContextList#hashCode()}.
+     * Tests {@link ContextList#hashCode()}.
      */
     @Test
     public final void testHashCode() {
@@ -303,14 +249,14 @@ public class ContextListTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link ContextList#removeAll(Collection)}.
+     * Tests {@link ContextList#removeAll(Collection)}.
      */
     @Test
     public final void testRemoveAllCollectionOfQ() {
         final ContextList contexts = new ContextList(myContexts);
-        final URI uri1 = contexts.get(5);
-        final URI uri2 = contexts.get(8);
-        final URI uri3 = contexts.get(11);
+        final URI uri1 = contexts.get(3);
+        final URI uri2 = contexts.get(5);
+        final URI uri3 = contexts.get(7);
         final List<URI> list = List.of(uri1, uri2, uri3);
 
         assertEquals(12, contexts.size());
@@ -319,7 +265,7 @@ public class ContextListTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link ContextList#remove(Object)}.
+     * Tests {@link ContextList#remove(Object)}.
      */
     @Test
     public final void testRemoveDefContextObject() {
@@ -327,7 +273,7 @@ public class ContextListTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link ContextList#removeIf(Predicate)}.
+     * Tests {@link ContextList#removeIf(Predicate)}.
      */
     @Test
     public final void testRemoveIfPredicateOfQsuperURI() {
@@ -340,7 +286,7 @@ public class ContextListTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link ContextList#removeIf(Predicate)}.
+     * Tests {@link ContextList#removeIf(Predicate)}.
      */
     @Test
     public final void testRemoveIfPredicateOfQsuperUriNoDefault() {
@@ -352,7 +298,7 @@ public class ContextListTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link ContextList#remove(int)}.
+     * Tests {@link ContextList#remove(int)}.
      */
     @Test
     public final void testRemoveInt() {
@@ -367,28 +313,23 @@ public class ContextListTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link ContextList#removeLast()}.
+     * Tests {@link ContextList#remove(int)}.
      */
-    @Test
+    @Test(expected = IndexOutOfBoundsException.class)
+    public final void testRemoveIntException() {
+        new ContextList().remove(0);
+    }
+
+    /**
+     * Tests {@link ContextList#removeLast()}.
+     */
+    @Test(expected = UnsupportedOperationException.class)
     public final void testRemoveLast() {
-        final ContextList contexts = new ContextList(myContexts);
-        final URI uri = contexts.get(contexts.size() - 1);
-
-        assertTrue(contexts.contains(uri));
-        contexts.removeLast();
-        assertFalse(contexts.contains(uri));
+        new ContextList(myContexts).removeLast();
     }
 
     /**
-     * Test method for {@link ContextList#removeLast()}.
-     */
-    @Test(expected = NoSuchElementException.class)
-    public final void testRemoveLastWhenEmpty() {
-        new ContextList().removeLast();
-    }
-
-    /**
-     * Test method for {@link ContextList#remove(Object)}.
+     * Tests {@link ContextList#remove(Object)}.
      */
     @Test
     public final void testRemoveObject() {
@@ -401,15 +342,7 @@ public class ContextListTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link ContextList#remove(int)}.
-     */
-    @Test(expected = IndexOutOfBoundsException.class)
-    public final void testRemoveZeroIndex() {
-        new ContextList().remove(0);
-    }
-
-    /**
-     * Test method for {@link ContextList#replaceAll(UnaryOperator)}.
+     * Tests {@link ContextList#replaceAll(UnaryOperator)}.
      */
     @Test
     public final void testReplaceAllUnaryOperatorOfURI() {
@@ -423,7 +356,7 @@ public class ContextListTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link ContextList#retainAll(Collection)}.
+     * Tests {@link ContextList#retainAll(Collection)}.
      */
     @Test
     public final void testRetainAllCollectionOfQ() {
@@ -437,7 +370,7 @@ public class ContextListTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link ContextList#set(int, URI)}.
+     * Tests {@link ContextList#set(int, URI)}.
      */
     @Test
     public final void testSetIntURI() {
@@ -450,31 +383,33 @@ public class ContextListTest extends AbstractTest {
     }
 
     /**
-     * Test method for {@link ContextList#set(int, URI)}.
+     * Tests {@link ContextList#set(int, URI)}.
+     */
+    @Test(expected = IndexOutOfBoundsException.class)
+    public final void testSetIntUriException() {
+        new ContextList(myContexts).set(5, PRESENTATION_CONTEXT_URI);
+    }
+
+    /**
+     * Tests {@link ContextList#set(int, URI)}.
      */
     @Test(expected = IndexOutOfBoundsException.class)
     public final void testSetIntURIException() {
-        new ContextList(myContexts).set(1, PRESENTATION_CONTEXT_URI);
+        final ContextList list = new ContextList(myContexts);
+        list.set(list.size() - 1, URI.create(getURL()));
     }
 
     /**
-     * Test method for {@link ContextList#set(int, URI)}.
-     */
-    @Test(expected = IndexOutOfBoundsException.class)
-    public final void testSetIntURIException2() {
-        new ContextList(myContexts).set(0, URI.create(getURL()));
-    }
-
-    /**
-     * Test method for {@link ContextList#set(int, URI)}.
+     * Tests {@link ContextList#set(int, URI)}.
      */
     @Test
-    public final void testSetIntUriStatusQuo() {
-        new ContextList(myContexts).set(0, PRESENTATION_CONTEXT_URI);
+    public final void testSetIntUriWithDefaultUri() {
+        final ContextList list = new ContextList(myContexts);
+        assertEquals(PRESENTATION_CONTEXT_URI, list.set(list.size() - 1, PRESENTATION_CONTEXT_URI));
     }
 
     /**
-     * Test method for {@link ContextList#sort(Comparator)}.
+     * Tests {@link ContextList#sort(Comparator)}.
      */
     @Test(expected = UnsupportedOperationException.class)
     public final void testSortComparatorOfQsuperURI() {

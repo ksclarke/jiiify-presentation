@@ -1,8 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import static info.freelibrary.util.Constants.SINGLE_INSTANCE;
-
 import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
@@ -10,7 +8,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
@@ -62,16 +59,15 @@ public class ContextList extends ArrayList<URI> implements List<URI> {
         super.addAll(aUriList);
 
         if (!super.contains(PRESENTATION_CONTEXT_URI)) {
-            super.add(0, PRESENTATION_CONTEXT_URI);
+            super.add(PRESENTATION_CONTEXT_URI);
         } else {
             super.sort(myComparator);
         }
     }
 
     /**
-     * Adds a new context URI at the supplied index position. If the supplied context is not the IIIF Presentation
-     * context and the supplied index position is zero, it will be added at position one instead. Only the default
-     * context lives at position zero.
+     * Adds a new context URI at the supplied index position. The IIIF Presentation context URI cannot be added, because
+     * it exists in the list already.
      *
      * @param aIndex An index position at which to add the supplied URI
      * @param aURI A URI to add at the supplied index position
@@ -79,12 +75,9 @@ public class ContextList extends ArrayList<URI> implements List<URI> {
     @Override
     public void add(final int aIndex, final URI aURI) {
         if (!PRESENTATION_CONTEXT_URI.equals(aURI)) {
-            if (aIndex == 0) {
-                super.add(1, aURI);
-                LOGGER.warn(MessageCodes.JPA_150, aURI);
-            } else {
-                super.add(aIndex, aURI);
-            }
+            super.add(aIndex, aURI);
+        } else {
+            LOGGER.warn(MessageCodes.JPA_150);
         }
     }
 
@@ -129,31 +122,29 @@ public class ContextList extends ArrayList<URI> implements List<URI> {
     }
 
     /**
-     * If the supplied URI is not the default IIIF Presentation context, it is added at index position one. The first
-     * index position (i.e., zero) is reserved for the default IIIF Presentation context.
+     * Adds a new context to the list.
      *
      * @param aURI A context URI to add at the beginning of the list
+     * @throws UnsupportedOperationException If the default IIIF Presentation context URI was passed
      */
-    @SuppressWarnings({ PMD.MISSING_OVERRIDE, Sonar.OVERRIDE_REQUIRED })
+    @SuppressWarnings({ PMD.MISSING_OVERRIDE, Sonar.OVERRIDE_REQUIRED }) // JDK 21, but releasing with 17
     public void addFirst(final URI aURI) {
-        if (!PRESENTATION_CONTEXT_URI.equals(aURI)) {
-            super.add(1, aURI);
-        } // Ignore if passing the default URI, because that already lives at index position zero
+        if (PRESENTATION_CONTEXT_URI.equals(aURI)) {
+            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_150));
+        }
+
+        super.add(0, aURI);
     }
 
     /**
-     * Adds the supplied context URI as the last in the list, unless the supplied context is the default IIIF
-     * Presentation context (in which case it's ignored -- the list already contains the default context).
+     * Unsupported operation. The last context URI is hard-coded.
      *
      * @param aURI A context URI to add at the end of the list
+     * @throws UnsupportedOperationException because the last context URI cannot be changed
      */
-    @SuppressWarnings({ PMD.MISSING_OVERRIDE, Sonar.OVERRIDE_REQUIRED })
+    @SuppressWarnings({ PMD.MISSING_OVERRIDE, Sonar.OVERRIDE_REQUIRED }) // JDK 21, but releasing with 17
     public void addLast(final URI aURI) {
-        if (!PRESENTATION_CONTEXT_URI.equals(aURI)) {
-            super.add(aURI); // Adding, by default, adds as the last item
-        } else {
-            LOGGER.warn(MessageCodes.JPA_149);
-        }
+        throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_150));
     }
 
     /**
@@ -162,7 +153,7 @@ public class ContextList extends ArrayList<URI> implements List<URI> {
     @Override
     public void clear() {
         super.clear();
-        super.add(0, PRESENTATION_CONTEXT_URI);
+        super.add(PRESENTATION_CONTEXT_URI);
     }
 
     @Override
@@ -193,10 +184,11 @@ public class ContextList extends ArrayList<URI> implements List<URI> {
      *
      * @param aIndex The index position of the URI to remove from the list
      * @return The URI removed from the list
+     * @throws IndexOutOfBoundsException If trying to remove the last context URI (which is required)
      */
     @Override
     public URI remove(final int aIndex) {
-        if (aIndex == 0) {
+        if (aIndex == size() - 1) {
             throw new IndexOutOfBoundsException(LOGGER.getMessage(MessageCodes.JPA_039, PRESENTATION_CONTEXT_URI));
         }
 
@@ -234,32 +226,27 @@ public class ContextList extends ArrayList<URI> implements List<URI> {
      * @param aFilter A filter to use to remove URIs from the list
      * @return True if the URIs were removed
      */
-    @SuppressWarnings({ PMD.MISSING_OVERRIDE, Sonar.OVERRIDE_REQUIRED })
+    @SuppressWarnings({ PMD.MISSING_OVERRIDE, Sonar.OVERRIDE_REQUIRED }) // JDK 21, but releasing with 17
     public boolean removeIf(final Predicate<? super URI> aFilter) {
         final boolean result = super.removeIf(aFilter);
 
         // If the filter removes our required default context, we add it back
-        if (!PRESENTATION_CONTEXT_URI.equals(get(0))) {
-            super.add(0, PRESENTATION_CONTEXT_URI);
+        if (!PRESENTATION_CONTEXT_URI.equals(get(size() - 1))) {
+            super.add(PRESENTATION_CONTEXT_URI);
         }
 
         return result;
     }
 
     /**
-     * Removes the last context URI, unless the last URI is the default context. In that case, a
-     * {@link NoSuchElementException} is thrown.
+     * Unsupported operation. The last context URI (the URI for the IIIF Presentation context) cannot be removed.
      *
      * @return The context URI that was removed
-     * @throws NoSuchElementException If the list only has the required IIIF Presentation context
+     * @throws UnsupportedOperationException because the last context URI cannot be removed
      */
-    @SuppressWarnings({ PMD.MISSING_OVERRIDE, Sonar.OVERRIDE_REQUIRED })
+    @SuppressWarnings({ PMD.MISSING_OVERRIDE, Sonar.OVERRIDE_REQUIRED }) // JDK 21, but releasing with 17
     public URI removeLast() {
-        if (size() == SINGLE_INSTANCE) {
-            throw new NoSuchElementException(LOGGER.getMessage(MessageCodes.JPA_039, PRESENTATION_CONTEXT_URI));
-        }
-
-        return remove(size() - 1);
+        throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_039, PRESENTATION_CONTEXT_URI));
     }
 
     /**
@@ -275,14 +262,12 @@ public class ContextList extends ArrayList<URI> implements List<URI> {
         super.removeAll(List.of(PRESENTATION_CONTEXT_URI));
 
         // Add back a single instance of our default context URI
-        if (!PRESENTATION_CONTEXT_URI.equals(get(0))) {
-            super.add(0, PRESENTATION_CONTEXT_URI);
-        }
+        super.add(PRESENTATION_CONTEXT_URI);
     }
 
     /**
-     * Retains the contexts in the supplied collection and the default context (if it's also not included in the
-     * supplied collection).
+     * Retains the contexts in the supplied collection and the default context (regardless of whether or not it exists
+     * in the supplied collection).
      *
      * @param aCollection A collection of URIs to retain, removing the rest
      * @return Whether the URIs were successfully retained
@@ -292,8 +277,8 @@ public class ContextList extends ArrayList<URI> implements List<URI> {
         final boolean result = super.retainAll(aCollection);
 
         // If we haven't added retained the required context, we add it back
-        if (!PRESENTATION_CONTEXT_URI.equals(get(0))) {
-            super.add(0, PRESENTATION_CONTEXT_URI);
+        if (!PRESENTATION_CONTEXT_URI.equals(get(size() - 1))) {
+            super.add(PRESENTATION_CONTEXT_URI);
         }
 
         return result;
@@ -306,21 +291,25 @@ public class ContextList extends ArrayList<URI> implements List<URI> {
      * @param aIndex An index position of the URI to set
      * @param aURI A URI to set at the supplied index position
      * @return The context URI that used to be at the supplied index position
+     * @throws IndexOutOfBoundsException If an invalid index position is used
      */
     @Override
     public URI set(final int aIndex, final URI aURI) {
-        if (PRESENTATION_CONTEXT_URI.equals(aURI)) {
-            if (aIndex != 0) {
-                throw new IndexOutOfBoundsException(LOGGER.getMessage(MessageCodes.JPA_149));
+        if (!PRESENTATION_CONTEXT_URI.equals(aURI)) {
+            if (aIndex != size() - 1) {
+                return super.set(aIndex, aURI);
             }
 
-            return aURI;
-        }
-        if (aIndex != 0) {
-            return super.set(aIndex, aURI);
+            throw new IndexOutOfBoundsException(LOGGER.getMessage(MessageCodes.JPA_149));
         }
 
-        throw new IndexOutOfBoundsException(LOGGER.getMessage(MessageCodes.JPA_151, aURI));
+        // We're trying to set the default IIIF Presentation context URI at the wrong index? It's supplied by default.
+        if (aIndex != size() - 1) {
+            throw new IndexOutOfBoundsException(LOGGER.getMessage(MessageCodes.JPA_150));
+        }
+
+        // We're setting the IIIF Presentation in the index position where it already lives
+        return PRESENTATION_CONTEXT_URI;
     }
 
     /**
@@ -350,9 +339,9 @@ public class ContextList extends ArrayList<URI> implements List<URI> {
 
             if (!PRESENTATION_CONTEXT_URI.equals(aFirstURI) || !PRESENTATION_CONTEXT_URI.equals(aSecondURI)) {
                 if (PRESENTATION_CONTEXT_URI.equals(aFirstURI)) {
-                    result = -1;
-                } else if (PRESENTATION_CONTEXT_URI.equals(aSecondURI)) {
                     result = 1;
+                } else if (PRESENTATION_CONTEXT_URI.equals(aSecondURI)) {
+                    result = -1;
                 }
             }
 

@@ -977,6 +977,84 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
+     * Tests the 0318 navPlace and navDate fixture (cf. https://iiif.io/api/cookbook/recipe/0318-navPlace-navDate/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0318NavPlaceNavDateCollection() throws IOException {
+        final String expected = getExpected("0318-navPlace-navDate/collection");
+        final String found = JSON.readValue(expected, Collection.class).toString();
+
+        assertEquals(myTestName, expected, found);
+    }
+
+    /**
+     * Tests the 0318 navPlace and navDate fixture (cf. https://iiif.io/api/cookbook/recipe/0318-navPlace-navDate/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0318NavPlaceNavDateManifest1() throws IOException {
+        final String expected = getExpected("0318-navPlace-navDate/manifest-1");
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
+    }
+
+    /**
+     * Tests the 0318 navPlace and navDate fixture (cf. https://iiif.io/api/cookbook/recipe/0318-navPlace-navDate/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0318NavPlaceNavDateManifest2() throws IOException {
+        final String expected = getExpected("0318-navPlace-navDate/manifest-2");
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
+    }
+
+    /**
+     * Tests the 0318 navPlace and navDate fixture (cf. https://iiif.io/api/cookbook/recipe/0318-navPlace-navDate/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0318NavPlaceNavDateManifest3() throws IOException {
+        final String expected = getExpected("0318-navPlace-navDate/manifest-3");
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
+    }
+
+    /**
+     * Tests the 0318 navPlace and navDate fixture (cf. https://iiif.io/api/cookbook/recipe/0318-navPlace-navDate/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0318NavPlaceNavDateManifest4() throws IOException {
+        final String expected = getExpected("0318-navPlace-navDate/manifest-4");
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
+    }
+
+    /**
+     * Tests the 0318 navPlace and navDate fixture (cf. https://iiif.io/api/cookbook/recipe/0318-navPlace-navDate/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0318NavPlaceNavDateManifest5() throws IOException {
+        final String expected = getExpected("0318-navPlace-navDate/manifest-5");
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
+    }
+
+    /**
      * Tests the 0326 annotating image layer fixture (cf.
      * https://iiif.io/api/cookbook/recipe/0326-annotating-image-layer/).
      *
@@ -985,6 +1063,20 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0326AnnotatingImageLayer() throws IOException {
         final String expected = getExpected("0326-annotating-image-layer/manifest");
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
+    }
+
+    /**
+     * Tests the 0346 multi-lingual annotation body fixture (cf.
+     * https://iiif.io/api/cookbook/recipe/0346-multilingual-annotation-body/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0346MultilingualAnnotationBody() throws IOException {
+        final String expected = getExpected("0346-multilingual-annotation-body/manifest");
         final String found = JSON.readValue(expected, Manifest.class).toString();
 
         assertEquals(myTestName, expected, found);
