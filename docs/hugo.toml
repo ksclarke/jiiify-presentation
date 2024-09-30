@@ -82,14 +82,9 @@ description = "A Java IIIF Presentation Library"
   [markup.highlight]
     # See a complete list of available styles at https://xyproto.github.io/splash/docs/all.html
     style = "tango"
-    # Uncomment if you want your chosen highlight style used for code blocks without a specified language
-    # guessSyntax = "true"
+    guessSyntax = "false"
 
 # Everything below this are Site Params
-
-# Comment out if you don't want the "print entire section" link enabled.
-#[outputs]
-#section = ["HTML", "print", "RSS"]
 
 [params]
 #privacy_policy = "https://policies.google.com/privacy"

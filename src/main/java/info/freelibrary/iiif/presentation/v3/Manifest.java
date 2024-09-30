@@ -287,7 +287,6 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     public Manifest setCanvases(final Canvas... aCanvasArray) {
         final List<Canvas> canvases = getCanvases();
 
-        Objects.requireNonNull(aCanvasArray);
         canvases.clear();
         Arrays.stream(aCanvasArray).forEach(canvases::add);
 

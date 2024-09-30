@@ -200,8 +200,7 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
           <links>
-            <link>
-              https://javadoc.io/doc/info.freelibrary/freelib-utils/${freelib.utils.version}/apidocs</link>
+            <link>https://javadoc.io/doc/info.freelibrary/freelib-utils/${freelib.utils.version}/apidocs</link>
           </links>
         </configuration>
       </plugin>
@@ -228,12 +227,12 @@
       </plugin>
 
       <plugin>
-        <artifactId>maven-resources-plugin</artifactId>
+        <groupId>net.revelc.code.formatter</groupId>
+        <artifactId>formatter-maven-plugin</artifactId>
       </plugin>
 
       <plugin>
-        <groupId>net.revelc.code.formatter</groupId>
-        <artifactId>formatter-maven-plugin</artifactId>
+        <artifactId>maven-resources-plugin</artifactId>
       </plugin>
 
       <plugin>
