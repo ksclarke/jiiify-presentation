@@ -1,0 +1,51 @@
+name: Maven PR Build
+
+# We require all commits go through PR on GitHub
+on:
+  pull_request:
+    branches:
+      - v2
+      - v3
+      - develop
+
+jobs:
+  build:
+    name: Maven PR Builder (JDK ${{ matrix.java }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ 17, 21 ]
+
+    steps:
+
+      - name: Check out code
+        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # v3.0.2
+        with:
+          fetch-depth: 0  # Unshallow checkout helps SonarCloud provide more info
+
+      - name: Install JDK ${{ matrix.java }}
+        uses: actions/setup-java@860f60056505705214d223b91ed7a30f173f6142 # v3.3.0
+        with:
+          cache: maven
+          distribution: 'adopt'
+          java-version: ${{ matrix.java }}
+
+      # If running locally in act, install Maven
+      - name: Set up Maven
+        uses: stCarolas/setup-maven@07fbbe97d97ef44336b7382563d66743297e442f # v4.5
+        with:
+          maven-version: 3.8.2
+
+      - name: Cache SonarCloud packages
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Build with Maven
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          mvn -B -ntp -Dorg.slf4j.simpleLogger.log.net.sourceforge.pmd=error -Psonar verify javadoc:javadoc

@@ -1,0 +1,21 @@
+name: PR Auto-Approver
+
+on:
+  pull_request:
+    branches:
+      - main
+      - v2
+      - v3
+      - develop
+
+jobs:
+  approve-pr:
+    name: PR Auto-Approver
+    runs-on: ubuntu-latest
+    env:
+      AUTO_PR_APPROVAL: ${{ secrets.AUTO_PR_APPROVAL }}
+    steps:
+    - uses: hmarr/auto-approve-action@f0939ea97e9205ef24d872e76833fa908a770363 # v4.0.0
+      if: env.AUTO_PR_APPROVAL != null
+      with:
+        github-token: "${{ secrets.GITHUB_TOKEN }}"

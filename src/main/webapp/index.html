@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<html data-theme="light">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+<title>JPv3 Sandbox</title>
+</head>
+
+<body>
+  <section class="section">
+    <div class="container">
+      <h1 class="title">JPv3 Sandbox</h1>
+      <pre id="editor" style="height: 10em; margin-top: 40px; margin-bottom: 20px; border: 2px solid #aaa;">
+var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0001-mvm-image/manifest",
+  new Label("en", "Single Image Example"));
+var canvas = new Canvas(MinterFactory.getMinter(manifest)).setWidthHeight(1200, 1800);
+var imageContent = new ImageContent("https://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png");
+
+canvas.paintWith(imageContent.setWidthHeight(1200, 1800));
+manifest.setCanvases(canvas);
+
+System.out.println(manifest);</pre>
+      <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.32.9/src-noconflict/ace.js" type="text/javascript"
+        charset="utf-8"></script>
+      <script>
+      var editor = ace.edit("editor");
+
+      editor.setTheme("ace/theme/tomorrow");
+      editor.getSession().setMode("ace/mode/java");
+      editor.setFontSize("1em");
+      editor.setOption("showLineNumbers", true);
+
+      function clearResults() {
+	      var replResults = document.getElementById("replResults");
+	      replResults.innerHTML = "";
+	    }
+
+      function runCode() {
+	      var code = editor.getValue();
+	      var xhr = new XMLHttpRequest();
+
+	      xhr.onreadystatechange = function() {
+		  	  if (xhr.readyState === XMLHttpRequest.DONE) {
+		        var replResults = document.getElementById("replResults");
+
+            if (xhr.status === 200 || xhr.status === 201) {
+              replResults.innerHTML = xhr.responseText.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            } else {
+              replResults.innerHTML = xhr.status;
+            }
+          }
+        };
+
+        xhr.open('POST', '/submit', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send("code=" + encodeURIComponent(code));
+      }
+
+      function resizeEditor() {
+        var lineCount = editor.session.getLength();
+
+        editor.container.style.height = (lineCount + 1) + "em";
+        editor.resize();
+      }
+
+      editor.getSession().on('change', function() {
+        resizeEditor();
+      });
+      </script>
+
+      <button onclick="runCode()" class="button is-success">Run Code</button>
+      <button onclick="clearResults()" class="button is-warning">Clear Results</button>
+
+      <div style="margin-bottom: 30px; margin-top:30px;">
+        <div style="font-weight: bold; padding-bottom: 20px;">Results should appear below</div>
+        When the results are displayed, there should either be a JSON manifest or a text message explaining what went
+        wrong while evaluating the submitted code.
+      </div>
+
+      <pre id="replResults" style="border: 2px solid #aaa"></pre>
+    </div>
+  </section>
+</body>
+
+</html>
