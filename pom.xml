@@ -134,6 +134,12 @@
                     <exclude>META-INF/versions/9/module-info.class</exclude>
                   </excludes>
                 </filter>
+                <filter>
+                  <artifact>info.freelibrary:jiiify-presentation-v3</artifact>
+                  <excludes>
+                    <exclude>info/freelibrary/iiif/presentation/v3/properties/MediaType.class</exclude>
+                  </excludes>
+                </filter>
               </filters>
               <transformers>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
