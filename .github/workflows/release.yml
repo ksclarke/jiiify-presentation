@@ -35,7 +35,10 @@ jobs:
 
       - name: Set release version
         shell: bash
-        run: TAG_NAME="${{ github.event.release.tag_name }}" && echo "RELEASE_VERSION=${TAG_NAME%-*}" >> $GITHUB_ENV
+        run: |
+          GITHUB_REF="${{ github.ref }}" &&
+          TAG_NAME="${GITHUB_REF#refs/tags/}" &&
+          echo "RELEASE_VERSION=${TAG_NAME#webrepl-}" >> $GITHUB_ENV
 
       - name: Release with Maven
         uses: samuelmeuli/action-maven-publish@201a45a3f311b2ee888f252ba9f4194257545709 # v1.4.0
