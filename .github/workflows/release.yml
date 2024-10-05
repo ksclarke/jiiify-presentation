@@ -48,4 +48,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mvn deploy -B -ntp -Drevision="${{ env.RELEASE_VERSION }}" -Prelease \
-            -Dgpg.keyname="${{ secrets.BUILD_KEY }}" -Dautorelease.artifact="${{ env.AUTORELEASE_ARTIFACT }}""
+            -Dgpg.keyname="${{ secrets.BUILD_KEY }}" -Dautorelease.artifact="${{ env.AUTORELEASE_ARTIFACT }}"
