@@ -11,9 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       AUTORELEASE_ARTIFACT: false
-      MAVEN_GPG_PASSPHRASE: ${{ secrets.BUILD_PASSPHRASE }}
-      NEXUS_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-      NEXUS_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+      MAVEN_GPG_PASSPHRASE: "${{ secrets.BUILD_PASSPHRASE }}"
+      NEXUS_USERNAME: "${{ secrets.SONATYPE_USERNAME }}"
+      NEXUS_PASSWORD: "${{ secrets.SONATYPE_PASSWORD }}"
     strategy:
       matrix:
         java: [ 21 ]
@@ -47,5 +47,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          mvn -B -ntp deploy -Drevision=${{ env.RELEASE_VERSION }} -Prelease \
-            -Dgpg.keyname=${{ secrets.BUILD_KEY }} -Dautorelease.artifact=${{ env.AUTORELEASE_ARTIFACT }}
+          mvn deploy -B -ntp -Drevision="${{ env.RELEASE_VERSION }}" -Prelease \
+            -Dgpg.keyname="${{ secrets.BUILD_KEY }}" -Dautorelease.artifact="${{ env.AUTORELEASE_ARTIFACT }}"
