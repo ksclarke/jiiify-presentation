@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       AUTORELEASE_ARTIFACT: false
+      MAVEN_GPG_PASSPHRASE: ${{ secrets.BUILD_PASSPHRASE }}
+      NEXUS_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+      NEXUS_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
     strategy:
       matrix:
         java: [ 21 ]
@@ -40,13 +43,9 @@ jobs:
           TAG_NAME="${GITHUB_REF#refs/tags/}" &&
           echo "RELEASE_VERSION=${TAG_NAME#webrepl-}" >> $GITHUB_ENV
 
-      - name: Release with Maven
-        uses: samuelmeuli/action-maven-publish@201a45a3f311b2ee888f252ba9f4194257545709 # v1.4.0
-        with:
-          gpg_private_key: ${{ secrets.BUILD_KEY }}
-          gpg_passphrase: ${{ secrets.BUILD_PASSPHRASE }}
-          nexus_username: ${{ secrets.SONATYPE_USERNAME }}
-          nexus_password: ${{ secrets.SONATYPE_PASSWORD }}
-          maven_profiles: "release"
-          maven_args: >
-            -Drevision=${{ env.RELEASE_VERSION }} -Dautorelease.artifact=${{ env.AUTORELEASE_ARTIFACT }} -ntp
+      - name: Build with Maven
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mvn -B -ntp deploy -Drevision=${{ env.RELEASE_VERSION }} -Prelease
+          -Dgpg.keyname="${{ secrets.BUILD_KEY }}" -Dautorelease.artifact=${{ env.AUTORELEASE_ARTIFACT }
