@@ -7,8 +7,12 @@ div {
   --bs-nav-link-color: white;
 }
 
-$primary: #4c543c !default;
-$secondary: #b6a284 !default;
-$dark: #443C54 !default;
-$info: #e4e3cd !default;
-$link-color: #4c543c !default;
+$base-color: #433D8B !default;
+
+$primary: $base-color !default;
+$dark: $base-color !default;
+$link-color: $base-color !default;
+
+$secondary: #C8A1E0 !default;
+$info: #F7EFE5 !default;
+

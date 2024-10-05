@@ -1,5 +1,5 @@
-baseURL = 'https://projects.freelibrary.info/jpv3'
-title = 'Jiiify Presentation (v3)'
+baseURL = 'https://projects.freelibrary.info/jiiify-presentation'
+title = 'Jiiify Presentation (JPv3)'
 theme = 'github.com/google/docsy'
 languageCode = 'en-us'
 
@@ -17,22 +17,13 @@ enableRobotsTXT = true
 # Will give values to .Lastmod etc.
 enableGitInfo = true
 
-# Comment out to enable taxonomies in Docsy
-# disableKinds = ["taxonomy", "taxonomyTerm"]
-
-# You can add your own taxonomies
 [taxonomies]
 tag = "tags"
 category = "categories"
 
 [params.taxonomy]
-# Set taxonomyCloud = [] to hide taxonomy clouds
 taxonomyCloud = ["tags", "categories"]
-
-# If used, must have same length as taxonomyCloud
 taxonomyCloudTitle = ["Tag Cloud", "Categories"]
-
-# Set taxonomyPageHeader = [] to hide taxonomies on the page headers
 taxonomyPageHeader = ["tags", "categories"]
 
 # Highlighting config
@@ -41,7 +32,6 @@ pygmentsUseClasses = false
 
 # Use the new Chroma Go highlighter in Hugo.
 pygmentsUseClassic = false
-#pygmentsOptions = "linenos=table"
 pygmentsStyle = "tango"
 
 # Configure how URLs look like per section.
@@ -57,9 +47,11 @@ anchor = "smart"
 # Language configuration
 
 [languages]
+
 [languages.en]
 languageName ="English"
 weight = 1
+
 [languages.en.params]
 title = "JPv3"
 description = "A Java IIIF Presentation Library"
@@ -87,6 +79,9 @@ description = "A Java IIIF Presentation Library"
 # Everything below this are Site Params
 
 [params]
+
+content = [ "docs", "blog", "contribute" ]
+
 #privacy_policy = "https://policies.google.com/privacy"
 
 # First one is picked as the Twitter card image if not set on page.
@@ -108,7 +103,7 @@ version = "0.0"
 
 # A link to latest version of the docs. Used in the "version-banner" partial to
 # point people to the main doc site.
-url_latest_version = "https://projects.freelibrary.info/jpv3"
+url_latest_version = "https://projects.freelibrary.info/jiiify-presentation"
 
 # Repository configuration (URLs for in-page links to opening issues and suggesting changes)
 github_repo = "https://github.com/ksclarke/jiiify-presentation"
