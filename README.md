@@ -14,7 +14,12 @@ Once they are installed correctly, the Web REPL's Docker container can be built 
 
 `mvn verify` 
 
-TODO: Say a little more here about running locally and deploying.
+To push the image to DockerHub:
+
+```
+mvn verify -Ddocker.registry.username="YOURS_HERE" -Ddocker.registry.password="YOURS_HERE" \
+  -Ddocker.registry.account="YOURS_HERE/"
+```
 
 ### Contact
 

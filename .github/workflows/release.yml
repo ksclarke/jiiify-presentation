@@ -7,10 +7,13 @@ on:
 
 jobs:
   release:
-    name: Maven Artifact Publisher (JDK 21)
+    name: Maven PR Builder (JDK ${{ matrix.java }})
     runs-on: ubuntu-latest
     env:
       AUTORELEASE_ARTIFACT: false
+    strategy:
+      matrix:
+        java: [ 21 ]
 
     steps:
 
@@ -22,7 +25,7 @@ jobs:
         with:
           cache: maven
           distribution: 'adopt'
-          java-version: 21
+          java-version: ${{ matrix.java }}
 
       - name: Login to Docker repository
         uses: docker/login-action@49ed152c8eca782a232dede0303416e8f356c37b # v2.0.0
