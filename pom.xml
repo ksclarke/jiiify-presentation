@@ -12,7 +12,7 @@
 
   <name>jsh4jpv3</name>
   <description>A JShell service to evaluate JPv3 scripts</description>
-  <url>http://projects.freelibrary.info/jsh4jpv3</url>
+  <url>http://projects.freelibrary.info/jiiify-presentation</url>
 
   <licenses>
     <license>
@@ -22,14 +22,14 @@
   </licenses>
 
   <scm>
-    <connection>scm:git:git@github.com:ksclarke/jsh4jpv3.git</connection>
-    <developerConnection>scm:git:git@github.com:ksclarke/jsh4jpv3.git</developerConnection>
-    <url>git@github.com:ksclarke/jsh4jpv3.git</url>
+    <connection>scm:git:git@github.com:ksclarke/jiiify-presentation.git</connection>
+    <developerConnection>scm:git:git@github.com:ksclarke/jiiify-presentation.git</developerConnection>
+    <url>git@github.com:ksclarke/jiiify-presentation.git</url>
   </scm>
 
   <issueManagement>
     <system>GitHub</system>
-    <url>https://github.com/ksclarke/jsh4jpv3/issues</url>
+    <url>https://github.com/ksclarke/jiiify-presentation/issues</url>
   </issueManagement>
 
   <developers>
@@ -39,13 +39,17 @@
       <email>ksclarke@ksclarke.io</email>
       <timezone>America/New_York</timezone>
     </developer>
-    <!-- Also https://github.com/ksclarke/jsh4jpv3/graphs/contributors -->
+    <!-- Also https://github.com/ksclarke/jiiify-presentation/graphs/contributors -->
   </developers>
 
   <properties>
     <!-- Dependency versions -->
     <microhttp.version>0.11</microhttp.version>
     <jpv3.version>0.0.0-SNAPSHOT</jpv3.version>
+
+    <!-- Configuring Sonar to use the right (i.e., webrepl) branch -->
+    <sonar.branch.target>webrepl</sonar.branch.target>
+    <sonar.projectKey>info.freelibrary:jiiify-presentation-v3</sonar.projectKey>
 
     <!-- Plugin related versions -->
     <docker.plugin.version>0.45.0</docker.plugin.version>
@@ -58,6 +62,7 @@
     <!-- The Docker registry user and password used for publishing images -->
     <docker.registry.username />
     <docker.registry.password />
+
     <!-- The Docker registry account, if supplied, must end with a slash (e.g. "account/") -->
     <docker.registry.account />
 
@@ -243,6 +248,8 @@
         <artifactId>docker-maven-plugin</artifactId>
         <version>${docker.plugin.version}</version>
         <configuration>
+          <logStdout>true</logStdout>
+          <verbose>true</verbose>
           <imagesMap>
             <image>
               <!-- Registry account, if supplied, must end in a slash (e.g. "account/") -->
