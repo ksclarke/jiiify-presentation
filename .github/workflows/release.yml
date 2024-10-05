@@ -1,16 +1,16 @@
 name: Maven Release
 
-# Performs a Maven release using JDK 17 when a new GitHub release has been published
+# Deploy the webrepl when a new tag is published
 on:
-  release:
-    types: [ published ]
+  push:
+    tags: [ 'webrepl-*' ]
 
 jobs:
   release:
-    name: Maven Artifact Publisher (JDK 17)
+    name: Maven Artifact Publisher (JDK 21)
     runs-on: ubuntu-latest
     env:
-      AUTORELEASE_ARTIFACT: ${{ secrets.AUTORELEASE_ARTIFACT }}
+      AUTORELEASE_ARTIFACT: false
 
     steps:
 
@@ -22,18 +22,13 @@ jobs:
         with:
           cache: maven
           distribution: 'adopt'
-          java-version: ${{ matrix.java }}
+          java-version: 21
 
-      # If running locally in act, install Maven
-      - name: Set up Maven if needed
-        if: ${{ env.ACT }}
-        uses: stCarolas/setup-maven@07fbbe97d97ef44336b7382563d66743297e442f # v4.5
+      - name: Login to Docker repository
+        uses: docker/login-action@49ed152c8eca782a232dede0303416e8f356c37b # v2.0.0
         with:
-          maven-version: 3.8.2
-
-      - name: Set autorelease config
-        if: env.AUTORELEASE_ARTIFACT == null
-        run: echo "AUTORELEASE_ARTIFACT=false" >> $GITHUB_ENV
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Set release version
         shell: bash
@@ -48,5 +43,4 @@ jobs:
           nexus_password: ${{ secrets.SONATYPE_PASSWORD }}
           maven_profiles: "release"
           maven_args: >
-            -Drevision=${{ env.RELEASE_VERSION }} -Dautorelease.artifact=${{ env.AUTORELEASE_ARTIFACT }}
-            -Dorg.slf4j.simpleLogger.log.net.sourceforge.pmd=error -ntp
+            -Drevision=${{ env.RELEASE_VERSION }} -Dautorelease.artifact=${{ env.AUTORELEASE_ARTIFACT }} -ntp
