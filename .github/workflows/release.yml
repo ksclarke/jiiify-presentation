@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       AUTORELEASE_ARTIFACT: false
-      MAVEN_GPG_PASSPHRASE: "${{ secrets.BUILD_PASSPHRASE }}"
       NEXUS_USERNAME: "${{ secrets.SONATYPE_USERNAME }}"
       NEXUS_PASSWORD: "${{ secrets.SONATYPE_PASSWORD }}"
     strategy:
@@ -30,6 +29,15 @@ jobs:
           distribution: 'adopt'
           java-version: ${{ matrix.java }}
 
+      - name: Import GPG key
+        run: |
+          echo "${{ secrets.BUILD_KEY }}" | gpg --batch --import
+          gpg --list-keys
+
+      - name: Set GPG passphrase for Maven
+        run: |
+          echo "MAVEN_GPG_PASSPHRASE=${{ secrets.BUILD_PASSPHRASE }}" >> $GITHUB_ENV
+
       - name: Login to Docker repository
         uses: docker/login-action@49ed152c8eca782a232dede0303416e8f356c37b # v2.0.0
         with:
@@ -46,6 +54,7 @@ jobs:
       - name: Build with Maven
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.BUILD_PASSPHRASE }}
         run: |
           mvn deploy -B -ntp -Drevision="${{ env.RELEASE_VERSION }}" -Prelease \
-            -Dgpg.keyname="${{ secrets.BUILD_KEY }}" -Dautorelease.artifact="${{ env.AUTORELEASE_ARTIFACT }}"
+            -Dautorelease.artifact="${{ env.AUTORELEASE_ARTIFACT }}"
