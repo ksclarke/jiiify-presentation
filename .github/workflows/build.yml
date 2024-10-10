@@ -10,9 +10,11 @@ jobs:
   build:
     name: Maven PR Builder (JDK ${{ matrix.java }})
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
-        java: [ 21 ]
+        java: [ "21" ]
+        maven: [ "3.8.2" ]
 
     steps:
 
@@ -27,6 +29,13 @@ jobs:
           cache: maven
           distribution: 'adopt'
           java-version: ${{ matrix.java }}
+
+      # If running locally in act, install Maven
+      - name: Set up Maven if needed
+        if: ${{ env.ACT }}
+        uses: stCarolas/setup-maven@07fbbe97d97ef44336b7382563d66743297e442f # v4.5
+        with:
+          maven-version: ${{ matrix.maven }}
 
       - name: Cache SonarCloud packages
         uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2

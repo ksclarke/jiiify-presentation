@@ -1,6 +1,6 @@
 name: Maven Release
 
-# Deploy the webrepl when a new tag is published
+# Deploy the webrepl when a new tag is pushed
 on:
   push:
     tags: [ 'webrepl-*' ]
@@ -9,13 +9,12 @@ jobs:
   release:
     name: Maven PR Builder (JDK ${{ matrix.java }})
     runs-on: ubuntu-latest
-    env:
-      AUTORELEASE_ARTIFACT: false
-      NEXUS_USERNAME: "${{ secrets.SONATYPE_USERNAME }}"
-      NEXUS_PASSWORD: "${{ secrets.SONATYPE_PASSWORD }}"
+
     strategy:
       matrix:
         java: [ 21 ]
+        maven: [ 3.8.2 ]
+        jdk: [ adopt ]
 
     steps:
 
@@ -26,17 +25,8 @@ jobs:
         uses: actions/setup-java@860f60056505705214d223b91ed7a30f173f6142 # v3.3.0
         with:
           cache: maven
-          distribution: 'adopt'
+          distribution: ${{ matrix.jdk }}
           java-version: ${{ matrix.java }}
-
-      - name: Import GPG key
-        run: |
-          echo "${{ secrets.BUILD_KEY }}" | gpg --batch --import
-          gpg --list-keys
-
-      - name: Set GPG passphrase for Maven
-        run: |
-          echo "MAVEN_GPG_PASSPHRASE=${{ secrets.BUILD_PASSPHRASE }}" >> $GITHUB_ENV
 
       - name: Login to Docker repository
         uses: docker/login-action@49ed152c8eca782a232dede0303416e8f356c37b # v2.0.0
@@ -51,10 +41,21 @@ jobs:
           TAG_NAME="${GITHUB_REF#refs/tags/}" &&
           echo "RELEASE_VERSION=${TAG_NAME#webrepl-}" >> $GITHUB_ENV
 
+      # If running locally in act, install Maven
+      - name: Set up Maven if needed
+        if: ${{ env.ACT }}
+        uses: stCarolas/setup-maven@07fbbe97d97ef44336b7382563d66743297e442f # v4.5
+        with:
+          maven-version: ${{ matrix.maven }}
+
       - name: Build with Maven
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.BUILD_PASSPHRASE }}
+          MAVEN_GPG_KEY: ${{ secrets.BUILD_KEY }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-          mvn deploy -B -ntp -Drevision="${{ env.RELEASE_VERSION }}" -Prelease \
-            -Dautorelease.artifact="${{ env.AUTORELEASE_ARTIFACT }}"
+          mvn deploy -B -ntp -Prelease -Drevision="${{ env.RELEASE_VERSION }}" \
+            -DskipNexusStagingDeployMojo="true" -Dautorelease.artifact="false" \
+            -Ddocker.registry.account="${{ secrets.DOCKER_ACCOUNT }}"

@@ -59,18 +59,15 @@
     <!-- Test dependency versions -->
     <junit.version>5.11.0</junit.version>
 
-    <!-- The Docker registry user and password used for publishing images -->
-    <docker.registry.username />
-    <docker.registry.password />
-
-    <!-- The Docker registry account, if supplied, must end with a slash (e.g. "account/") -->
-    <docker.registry.account />
-
     <!-- Skip the requirement that none of the dependencies are snapshot versions -->
     <enforcer.skip>true</enforcer.skip>
 
     <!-- The default logging level for the server. -->
     <logLevel>ERROR</logLevel>
+
+    <!-- The DockerHub account must be specified as a property for use in the POM -->
+    <!-- If supplied, the registry account must end with a slash (e.g. "account/") -->
+    <docker.registry.account/>
   </properties>
 
   <dependencies>
@@ -159,10 +156,7 @@
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
-          <links>
-            <link>
-              https://javadoc.io/doc/info.freelibrary/freelib-utils/${freelib.utils.version}/apidocs</link>
-          </links>
+          <skip>true</skip>
         </configuration>
       </plugin>
 
@@ -231,7 +225,6 @@
         </configuration>
       </plugin>
 
-
       <!-- Disable standard deploy; we publish a Docker image, not Jar file -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -253,8 +246,7 @@
           <imagesMap>
             <image>
               <!-- Registry account, if supplied, must end in a slash (e.g. "account/") -->
-              <!-- The %l at the end translates to "latest" if version ends in "-SNAPSHOT" -->
-              <name>${docker.registry.account}${project.artifactId}:%l</name>
+              <name>${docker.registry.account}${project.artifactId}:${revision}</name>
               <build>
                 <dockerFile>${project.basedir}/src/main/docker/Dockerfile</dockerFile>
                 <buildx>
@@ -338,13 +330,12 @@
               <images>
                 <image>
                   <!-- Registry account, if supplied, must end in a slash (e.g. "account/") -->
-                  <!-- The %l at the end translates to "latest" if version ends in "-SNAPSHOT" -->
-                  <name>${docker.registry.account}${project.artifactId}:%l</name>
+                  <name>${docker.registry.account}${project.artifactId}:${revision}</name>
                 </image>
               </images>
               <authConfig>
-                <username>${docker.registry.username}</username>
-                <password>${docker.registry.password}</password>
+                <username>${env.DOCKER_USERNAME}</username>
+                <password>${env.DOCKER_PASSWORD}</password>
               </authConfig>
             </configuration>
           </execution>
@@ -353,23 +344,10 @@
     </plugins>
   </build>
 
-  <repositories>
-    <repository>
-      <id>ossrh-snapshots</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
-
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>11.0.0</version>
+    <version>12.0.0</version>
   </parent>
 
 </project>
