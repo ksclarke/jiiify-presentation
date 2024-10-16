@@ -64,6 +64,10 @@
 
     <!-- The default logging level for the server. -->
     <logLevel>ERROR</logLevel>
+
+    <!-- The DockerHub account must be specified as a property for use in the POM -->
+    <!-- If supplied, the registry account must end with a slash (e.g. "account/") -->
+    <docker.registry.account/>
   </properties>
 
   <dependencies>
