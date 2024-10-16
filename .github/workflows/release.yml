@@ -55,7 +55,8 @@ jobs:
           MAVEN_GPG_KEY: ${{ secrets.BUILD_KEY }}
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_ACCOUNT: ${{ secrets.DOCKER_ACCOUNT }}
+          DOCKER_BUILDKIT: 1
+          BUILDX_BUILDER: freelibrary
         run: |
-          mvn deploy -B -ntp -Prelease -Drevision="${{ env.RELEASE_VERSION }}" \
-            -DskipNexusStagingDeployMojo="true" -Dautorelease.artifact="false" \
-            -Ddocker.registry.account="${{ secrets.DOCKER_ACCOUNT }}"
+          mvn -B -ntp deploy -Prelease -Drevision="${{ env.RELEASE_VERSION }}" -DskipNexusStagingDeployMojo="true"

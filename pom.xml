@@ -64,10 +64,6 @@
 
     <!-- The default logging level for the server. -->
     <logLevel>ERROR</logLevel>
-
-    <!-- The DockerHub account must be specified as a property for use in the POM -->
-    <!-- If supplied, the registry account must end with a slash (e.g. "account/") -->
-    <docker.registry.account/>
   </properties>
 
   <dependencies>
@@ -243,16 +239,22 @@
         <configuration>
           <logStdout>true</logStdout>
           <verbose>true</verbose>
-          <imagesMap>
+          <images>
             <image>
-              <!-- Registry account, if supplied, must end in a slash (e.g. "account/") -->
-              <name>${docker.registry.account}${project.artifactId}:${revision}</name>
+              <name>${env.DOCKER_ACCOUNT}/${project.artifactId}:${revision}</name>
               <build>
                 <dockerFile>${project.basedir}/src/main/docker/Dockerfile</dockerFile>
                 <buildx>
+                  <!-- Multi-arch builds, Cf. https://dmp.fabric8.io/#build-buildx -->
                   <platforms>
                     <platform>linux/amd64</platform>
+                    <platform>linux/arm64</platform>
+                    <platform>darwin/amd64</platform>
                   </platforms>
+                  <attestations>
+                    <sbom>true</sbom>
+                    <provenance>max</provenance>
+                  </attestations>
                 </buildx>
                 <assembly>
                   <inline>
@@ -285,7 +287,7 @@
                 </wait>
               </run>
             </image>
-          </imagesMap>
+          </images>
         </configuration>
         <executions>
 
@@ -327,12 +329,6 @@
               <goal>push</goal>
             </goals>
             <configuration>
-              <images>
-                <image>
-                  <!-- Registry account, if supplied, must end in a slash (e.g. "account/") -->
-                  <name>${docker.registry.account}${project.artifactId}:${revision}</name>
-                </image>
-              </images>
               <authConfig>
                 <username>${env.DOCKER_USERNAME}</username>
                 <password>${env.DOCKER_PASSWORD}</password>
