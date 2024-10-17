@@ -65,8 +65,9 @@
     <!-- The default logging level for the server. -->
     <logLevel>ERROR</logLevel>
 
-    <!-- The DockerHub account must be specified as in an environment property for use in the POM -->
-    <docker.image.name>${env.DOCKER_ACCOUNT}/${project.artifactId}:${revision}</docker.image.name>
+    <!-- Configure what our Docker image should be called (see `deploy` profile for more) -->
+    <docker.namespace></docker.namespace>
+    <docker.image.name>${docker.namespace}${project.artifactId}:${revision}</docker.image.name>
   </properties>
 
   <dependencies>
@@ -342,6 +343,22 @@
     </plugins>
   </build>
 
+  <profiles>
+    <!-- This profile is used when building on GitHub Actions -->
+    <profile>
+      <id>deploy</id>
+      <activation>
+        <property>
+          <name>env.DOCKER_ACCOUNT</name>
+        </property>
+      </activation>
+      <properties>
+        <docker.namespace>${env.DOCKER_ACCOUNT}/</docker.namespace>
+      </properties>
+    </profile>
+  </profiles>
+
+  <!-- We adopt a lot of configurations from our parent project -->
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
