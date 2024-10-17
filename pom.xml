@@ -252,8 +252,7 @@
                   <!-- Multi-arch builds, Cf. https://dmp.fabric8.io/#build-buildx -->
                   <platforms>
                     <platform>linux/amd64</platform>
-                    <platform>linux/arm64</platform>
-                    <platform>darwin/amd64</platform>
+                    <platform>linux/arm64/v8</platform>
                   </platforms>
                   <attestations>
                     <sbom>true</sbom>
