@@ -18,6 +18,12 @@ jobs:
 
     steps:
 
+      - name: Set up Docker-in-Docker
+        run: |
+          docker run --privileged -d --name dind-container -e DOCKER_TLS_CERTDIR='' -p 2375:2375 \
+            -v /home/runner/work:/home/runner/work \  # Mount our GitHub workspace into container
+            docker:20.10-dind
+      
       - name: Check out source code
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # v3.0.2
 
