@@ -1,5 +1,5 @@
 
-FROM eclipse-temurin:21.0.4_7-jdk-alpine
+FROM eclipse-temurin:21.0.5_11-jdk-alpine
 
 LABEL Maintainer="Kevin S. Clarke <ksclarke@ksclarke.io>"
 LABEL ContainerName="${project.name}" ContainerSourceCode="${project.url}"
