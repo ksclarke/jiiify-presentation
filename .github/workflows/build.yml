@@ -31,7 +31,7 @@ jobs:
 
       # If running locally in act, install Maven
       - name: Set up Maven if needed
-        # if: ${{ env.ACT }}
+        if: ${{ env.ACT }}
         uses: stCarolas/setup-maven@07fbbe97d97ef44336b7382563d66743297e442f # v4.5
         with:
           maven-version: ${{ matrix.maven }}
