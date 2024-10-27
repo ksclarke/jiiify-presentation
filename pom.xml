@@ -249,13 +249,12 @@
               <build>
                 <dockerFile>${project.basedir}/src/main/docker/Dockerfile</dockerFile>
                 <buildx>
-                  <!-- Multi-arch builds don't work on GA because containerd isn't supported (cf. reason number two on
-                  https://github.com/fabric8io/docker-maven-plugin/issues/1557#issuecomment-1325203489) -->
                   <platforms>
                     <platform>linux/amd64</platform>
                     <platform>linux/arm64/v8</platform>
                   </platforms>
-                  <!--
+                  <!-- Multi-arch builds don't work on GA because containerd isn't supported (cf. reason number two on
+                  https://github.com/fabric8io/docker-maven-plugin/issues/1557#issuecomment-1325203489)
                   <attestations>
                     <sbom>true</sbom>
                     <provenance>max</provenance>
@@ -328,7 +327,7 @@
           </execution>
 
           <!-- Deploys the application's Docker image -->
-          <!--
+          
           <execution>
             <id>docker-deploy</id>
             <phase>deploy</phase>
@@ -342,7 +341,7 @@
               </authConfig>
             </configuration>
           </execution>
-          -->
+          
         </executions>
       </plugin>
     </plugins>
