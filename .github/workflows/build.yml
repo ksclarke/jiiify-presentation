@@ -17,11 +17,20 @@ jobs:
         maven: [ "3.8.2" ]
 
     steps:
-
       - name: Check out code
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # v3.0.2
         with:
           fetch-depth: 0  # Unshallow checkout helps SonarCloud provide more info
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@49b3bc8e6bdd4a60e6116a5414239cba5943d3cf # v3.2.0
+        with:
+          platforms: all
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@c47758b77c9736f4b2ef4073d4d51994fabfe349 # v3.7.1
+        with:
+          buildkitd-flags: --debug
 
       - name: Install JDK ${{ matrix.java }}
         uses: actions/setup-java@860f60056505705214d223b91ed7a30f173f6142 # v3.3.0
@@ -48,4 +57,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          DOCKER_BUILDKIT: 1
         run: mvn -B -ntp -Psonar verify -Dsonar.branch.name="${{ github.ref }}"

@@ -65,9 +65,9 @@
     <!-- The default logging level for the server. -->
     <logLevel>ERROR</logLevel>
 
-    <!-- The DockerHub account must be specified as a property for use in the POM -->
-    <!-- If supplied, the registry account must end with a slash (e.g. "account/") -->
-    <docker.registry.account/>
+    <!-- Configure what our Docker image should be called (see `deploy` profile for more) -->
+    <docker.namespace></docker.namespace>
+    <docker.image.name>${docker.namespace}${project.artifactId}:${revision}</docker.image.name>
   </properties>
 
   <dependencies>
@@ -243,16 +243,23 @@
         <configuration>
           <logStdout>true</logStdout>
           <verbose>true</verbose>
-          <imagesMap>
+          <images>
             <image>
-              <!-- Registry account, if supplied, must end in a slash (e.g. "account/") -->
-              <name>${docker.registry.account}${project.artifactId}:${revision}</name>
+              <name>${docker.image.name}</name>
               <build>
                 <dockerFile>${project.basedir}/src/main/docker/Dockerfile</dockerFile>
                 <buildx>
                   <platforms>
                     <platform>linux/amd64</platform>
+                    <platform>linux/arm64/v8</platform>
                   </platforms>
+                  <!-- Multi-arch builds don't work on GA because containerd isn't supported (cf. reason number two on
+                  https://github.com/fabric8io/docker-maven-plugin/issues/1557#issuecomment-1325203489)
+                  <attestations>
+                    <sbom>true</sbom>
+                    <provenance>max</provenance>
+                  </attestations>
+                  -->
                 </buildx>
                 <assembly>
                   <inline>
@@ -285,7 +292,7 @@
                 </wait>
               </run>
             </image>
-          </imagesMap>
+          </images>
         </configuration>
         <executions>
 
@@ -320,6 +327,7 @@
           </execution>
 
           <!-- Deploys the application's Docker image -->
+          
           <execution>
             <id>docker-deploy</id>
             <phase>deploy</phase>
@@ -327,23 +335,34 @@
               <goal>push</goal>
             </goals>
             <configuration>
-              <images>
-                <image>
-                  <!-- Registry account, if supplied, must end in a slash (e.g. "account/") -->
-                  <name>${docker.registry.account}${project.artifactId}:${revision}</name>
-                </image>
-              </images>
               <authConfig>
                 <username>${env.DOCKER_USERNAME}</username>
                 <password>${env.DOCKER_PASSWORD}</password>
               </authConfig>
             </configuration>
           </execution>
+          
         </executions>
       </plugin>
     </plugins>
   </build>
 
+  <profiles>
+    <!-- This profile is used when building on GitHub Actions -->
+    <profile>
+      <id>deploy</id>
+      <activation>
+        <property>
+          <name>env.DOCKER_ACCOUNT</name>
+        </property>
+      </activation>
+      <properties>
+        <docker.namespace>${env.DOCKER_ACCOUNT}/</docker.namespace>
+      </properties>
+    </profile>
+  </profiles>
+
+  <!-- We adopt a lot of configurations from our parent project -->
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>

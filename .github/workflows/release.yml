@@ -10,6 +10,9 @@ jobs:
     name: Maven PR Builder (JDK ${{ matrix.java }})
     runs-on: ubuntu-latest
 
+    container:
+      image: ksclarke/act-multiplatform:latest
+
     strategy:
       matrix:
         java: [ 21 ]
@@ -17,9 +20,24 @@ jobs:
         jdk: [ adopt ]
 
     steps:
-
       - name: Check out source code
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # v3.0.2
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@49b3bc8e6bdd4a60e6116a5414239cba5943d3cf # v3.2.0
+        with:
+          platforms: all
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@c47758b77c9736f4b2ef4073d4d51994fabfe349 # v3.7.1
+        with:
+          buildkitd-flags: --debug
+
+      - name: Login to Docker repository
+        uses: docker/login-action@49ed152c8eca782a232dede0303416e8f356c37b # v2.0.0
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Install JDK ${{ matrix.java }}
         uses: actions/setup-java@860f60056505705214d223b91ed7a30f173f6142 # v3.3.0
@@ -27,12 +45,6 @@ jobs:
           cache: maven
           distribution: ${{ matrix.jdk }}
           java-version: ${{ matrix.java }}
-
-      - name: Login to Docker repository
-        uses: docker/login-action@49ed152c8eca782a232dede0303416e8f356c37b # v2.0.0
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Set release version
         shell: bash
@@ -55,7 +67,7 @@ jobs:
           MAVEN_GPG_KEY: ${{ secrets.BUILD_KEY }}
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_ACCOUNT: ${{ secrets.DOCKER_ACCOUNT }}
+          DOCKER_BUILDKIT: 1
         run: |
-          mvn deploy -B -ntp -Prelease -Drevision="${{ env.RELEASE_VERSION }}" \
-            -DskipNexusStagingDeployMojo="true" -Dautorelease.artifact="false" \
-            -Ddocker.registry.account="${{ secrets.DOCKER_ACCOUNT }}"
+          mvn -B -ntp deploy -Prelease -Drevision="${{ env.RELEASE_VERSION }}" -DskipNexusStagingDeployMojo="true"
