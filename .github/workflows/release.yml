@@ -10,9 +10,6 @@ jobs:
     name: Maven PR Builder (JDK ${{ matrix.java }})
     runs-on: ubuntu-latest
 
-    container:
-      image: ksclarke/act-multiplatform:latest
-
     strategy:
       matrix:
         java: [ 21 ]
