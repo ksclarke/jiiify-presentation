@@ -249,17 +249,17 @@
               <build>
                 <dockerFile>${project.basedir}/src/main/docker/Dockerfile</dockerFile>
                 <buildx>
-                  <!-- Multi-arch builds, Cf. https://dmp.fabric8.io/#build-buildx -->
+                  <!-- Multi-arch builds don't work on GA because containerd isn't supported (cf. reason number two on
+                  https://github.com/fabric8io/docker-maven-plugin/issues/1557#issuecomment-1325203489) -->
                   <platforms>
                     <platform>linux/amd64</platform>
                     <platform>linux/arm64/v8</platform>
                   </platforms>
-                  <!--
                   <attestations>
                     <sbom>true</sbom>
                     <provenance>max</provenance>
                   </attestations>
-                  -->
+                  <!-- Keeping the above in for now, though, because it doesn't do any harm if deploy is skipped -->
                 </buildx>
                 <assembly>
                   <inline>
