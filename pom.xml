@@ -254,10 +254,12 @@
                     <platform>linux/amd64</platform>
                     <platform>linux/arm64/v8</platform>
                   </platforms>
+                  <!--
                   <attestations>
                     <sbom>true</sbom>
                     <provenance>max</provenance>
                   </attestations>
+                  -->
                 </buildx>
                 <assembly>
                   <inline>
@@ -325,6 +327,7 @@
           </execution>
 
           <!-- Deploys the application's Docker image -->
+          <!--
           <execution>
             <id>docker-deploy</id>
             <phase>deploy</phase>
@@ -338,6 +341,7 @@
               </authConfig>
             </configuration>
           </execution>
+          -->
         </executions>
       </plugin>
     </plugins>

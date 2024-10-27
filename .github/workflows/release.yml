@@ -20,9 +20,6 @@ jobs:
         jdk: [ adopt ]
 
     steps:
-      - name: Verify build environment # Ensure build isn't using overlayfs driver
-        run: docker info -f '{{ .DriverStatus }}' | grep -q "\[\[driver-type io.containerd.snapshotter.v1\]\]"
-
       - name: Check out source code
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # v3.0.2
 

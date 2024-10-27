@@ -11,18 +11,12 @@ jobs:
     name: Maven PR Builder (JDK ${{ matrix.java }})
     runs-on: ubuntu-latest
 
-    container:
-      image: ksclarke/act-multiplatform:latest
-
     strategy:
       matrix:
         java: [ "21" ]
         maven: [ "3.8.2" ]
 
     steps:
-      - name: Verify build environment # Ensure build isn't using overlayfs driver
-        run: docker info -f '{{ .DriverStatus }}' # | grep -q "\[\[driver-type io.containerd.snapshotter.v1\]\]"
-
       - name: Check out code
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # v3.0.2
         with:
@@ -37,6 +31,7 @@ jobs:
 
       # If running locally in act, install Maven
       - name: Set up Maven if needed
+        # if: ${{ env.ACT }}
         uses: stCarolas/setup-maven@07fbbe97d97ef44336b7382563d66743297e442f # v4.5
         with:
           maven-version: ${{ matrix.maven }}
