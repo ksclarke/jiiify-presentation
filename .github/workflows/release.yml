@@ -65,4 +65,5 @@ jobs:
           DOCKER_ACCOUNT: ${{ secrets.DOCKER_ACCOUNT }}
           DOCKER_BUILDKIT: 1
         run: |
-          mvn -B -ntp deploy -Prelease -Drevision="${{ env.RELEASE_VERSION }}" -DskipNexusStagingDeployMojo="true"
+          mvn -B -ntp deploy -Prelease -Drevision="${{ env.RELEASE_VERSION }}" -DskipNexusStagingDeployMojo="true" \
+            -Ddocker.sbom=true -Ddocker.provenance=max

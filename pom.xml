@@ -70,7 +70,7 @@
     <docker.image.name>${docker.namespace}${project.artifactId}:${revision}</docker.image.name>
 
     <!-- Configuration for Docker attestations -->
-    <docker.attestations>false</docker.attestations>
+    <docker.sbom>false</docker.sbom>
     <docker.provenance>false</docker.provenance>
   </properties>
 
@@ -260,7 +260,7 @@
                   <!-- Multi-arch builds don't work on GA because containerd isn't supported (cf. reason number two on
                   https://github.com/fabric8io/docker-maven-plugin/issues/1557#issuecomment-1325203489) -->
                   <attestations>
-                    <sbom>${docker.attestations}</sbom><!-- true -->
+                    <sbom>${docker.sbom}</sbom><!-- true -->
                     <provenance>${docker.provenance}</provenance> <!-- max -->
                   </attestations>
                   <!-- -->
