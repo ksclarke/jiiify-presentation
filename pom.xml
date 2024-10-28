@@ -68,6 +68,10 @@
     <!-- Configure what our Docker image should be called (see `deploy` profile for more) -->
     <docker.namespace></docker.namespace>
     <docker.image.name>${docker.namespace}${project.artifactId}:${revision}</docker.image.name>
+
+    <!-- Configuration for Docker attestations -->
+    <docker.attestations>false</docker.attestations>
+    <docker.provenance>false</docker.provenance>
   </properties>
 
   <dependencies>
@@ -254,8 +258,13 @@
                     <platform>linux/arm64/v8</platform>
                   </platforms>
                   <attestations>
+<<<<<<< HEAD
                     <sbom>${docker.sbom}</sbom>
                     <provenance>${docker.provenance}</provenance>
+=======
+                    <sbom>${docker.attestations}</sbom><!-- true -->
+                    <provenance>${docker.provenance}</provenance> <!-- max -->
+>>>>>>> 6bc6dd4 (Try adding attestations (again))
                   </attestations>
                 </buildx>
                 <assembly>
