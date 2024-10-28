@@ -10,11 +10,15 @@ jobs:
     name: Maven PR Builder (JDK ${{ matrix.java }})
     runs-on: ubuntu-latest
 
+    env:
+      ARTIFACT_NAME: "jsh4jpv3"
+
     strategy:
       matrix:
         java: [ 21 ]
         maven: [ 3.8.2 ]
         jdk: [ adopt ]
+        cosign: [ v2.4.1 ]
 
     steps:
       - name: Check out source code
@@ -65,5 +69,38 @@ jobs:
           DOCKER_ACCOUNT: ${{ secrets.DOCKER_ACCOUNT }}
           DOCKER_BUILDKIT: 1
         run: |
-          mvn -B -ntp deploy -Prelease -Drevision="${{ env.RELEASE_VERSION }}" -DskipNexusStagingDeployMojo="true" \
-            -Ddocker.sbom=true -Ddocker.provenance=max
+          mvn -B -ntp deploy -Prelease -Drevision="${{ env.RELEASE_VERSION }}" -DskipNexusStagingDeployMojo="true"
+
+        # Install Syft
+        - name: Install Syft
+          run: |
+            curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+
+        # Generate SBOM using Syft
+        - name: Generate SBOM
+          run: |
+            syft ${{ secrets.DOCKER_ACCOUNT }}/${{ env.ARTIFACT_NAME }}:${{ env.RELEASE_VERSION }} -o json > sbom.json
+
+        # Install Cosign
+        - name: Install Cosign
+          env:
+            COSIGN_URL: "https://github.com/sigstore/cosign/releases/download"
+          run: |
+            curl -sSfL ${{ env.COSIGN_URL }}/${{ matrix.cosign }}/cosign-linux-amd64 -o /usr/local/bin/cosign
+            chmod +x /usr/local/bin/cosign
+
+        # Sign the Docker image with Cosign
+        - name: Sign Docker image with Cosign
+          env:
+            COSIGN_EXPERIMENTAL: "true"
+          run: |
+            cosign sign --key ${{ secrets.COSIGN_PRIVATE_KEY }} \
+              ${{ secrets.DOCKER_ACCOUNT }}/${{ env.ARTIFACT_NAME }}:${{ env.RELEASE_VERSION }}
+
+        # Attest the image with SBOM using Cosign
+        - name: Attest Docker image with Cosign
+          env:
+            COSIGN_EXPERIMENTAL: "true"
+          run: |
+            cosign attest --predicate sbom.json --type spdx \
+              ${{ secrets.DOCKER_ACCOUNT }}/${{ env.ARTIFACT_NAME }}:${{ env.RELEASE_VERSION }}
