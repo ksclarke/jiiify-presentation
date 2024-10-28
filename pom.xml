@@ -256,8 +256,8 @@
                   <!-- Multi-arch builds don't work on GA because containerd isn't supported (cf. reason number two on
                   https://github.com/fabric8io/docker-maven-plugin/issues/1557#issuecomment-1325203489) -->
                   <attestations>
-                    <sbom>true</sbom>
-                    <provenance>max</provenance>
+                    <sbom>false</sbom><!-- true -->
+                    <provenance>false</provenance> <!-- max -->
                   </attestations>
                   <!-- -->
                 </buildx>
