@@ -69,10 +69,9 @@
     <docker.namespace></docker.namespace>
     <docker.image.name>${docker.namespace}${project.artifactId}:${revision}</docker.image.name>
 
-    <!-- Multi-arch build attestations don't currently work on GitHub Actions because containerd isn't supported;
-         cf. reason #2 on https://github.com/fabric8io/docker-maven-plugin/issues/1557#issuecomment-1325203489 -->
-    <docker.sbom>false</docker.sbom> <!-- true -->
-    <docker.provenance>false</docker.provenance> <!-- max -->
+    <!-- Configuration for Docker attestations -->
+    <docker.sbom>false</docker.sbom>
+    <docker.provenance>false</docker.provenance>
   </properties>
 
   <dependencies>
@@ -258,6 +257,8 @@
                     <platform>linux/amd64</platform>
                     <platform>linux/arm64/v8</platform>
                   </platforms>
+                  <!-- Multi-arch builds don't work on GA because containerd isn't supported (cf. reason number two on
+                  https://github.com/fabric8io/docker-maven-plugin/issues/1557#issuecomment-1325203489) -->
                   <attestations>
                     <sbom>${docker.sbom}</sbom>
                     <provenance>${docker.provenance}</provenance>
