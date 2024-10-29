@@ -89,8 +89,8 @@ jobs:
         env:
           COSIGN_EXPERIMENTAL: "true"
         run: |
-            cosign sign --key ${{ secrets.COSIGN_PRIVATE_KEY }} \
-              ${{ secrets.DOCKER_ACCOUNT }}/${{ env.ARTIFACT_NAME }}:${{ env.RELEASE_VERSION }}
+          cosign sign --key ${{ secrets.COSIGN_PRIVATE_KEY }} \
+            ${{ secrets.DOCKER_ACCOUNT }}/${{ env.ARTIFACT_NAME }}:${{ env.RELEASE_VERSION }}
 
       - name: Attest Docker image with Cosign
         env:
