@@ -85,11 +85,16 @@ jobs:
           curl -sSfL ${{ env.COSIGN_URL }}/${{ matrix.cosign }}/cosign-linux-amd64 -o /usr/local/bin/cosign
           chmod +x /usr/local/bin/cosign
 
+      - name: Write Cosign Private Key to File
+        run: |
+          echo "${{ secrets.COSIGN_PRIVATE_KEY }}" > $RUNNER_TEMP/cosign.key
+          chmod 600 $RUNNER_TEMP/cosign.key
+
       - name: Sign Docker image with Cosign
         env:
           COSIGN_EXPERIMENTAL: "true"
         run: |
-          cosign sign --key ${{ secrets.COSIGN_PRIVATE_KEY }} \
+          cosign sign --key $RUNNER_TEMP/cosign.key \
             ${{ secrets.DOCKER_ACCOUNT }}/${{ env.ARTIFACT_NAME }}:${{ env.RELEASE_VERSION }}
 
       - name: Attest Docker image with Cosign
