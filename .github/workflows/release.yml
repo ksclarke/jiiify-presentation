@@ -95,7 +95,7 @@ jobs:
           COSIGN_EXPERIMENTAL: "true"
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
         run: |
-          cosign sign --key $RUNNER_TEMP/cosign.key \
+          cosign sign --yes --key $RUNNER_TEMP/cosign.key \
             ${{ secrets.DOCKER_ACCOUNT }}/${{ env.ARTIFACT_NAME }}:${{ env.RELEASE_VERSION }}
 
       - name: Attest Docker image with Cosign
