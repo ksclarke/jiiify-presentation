@@ -102,5 +102,5 @@ jobs:
         env:
           COSIGN_EXPERIMENTAL: "true"
         run: |
-          cosign attest --predicate sbom.json --type spdx \
+          cosign attest --yes --key $RUNNER_TEMP/cosign.key --predicate sbom.json --type spdx \
             ${{ secrets.DOCKER_ACCOUNT }}/${{ env.ARTIFACT_NAME }}:${{ env.RELEASE_VERSION }}
