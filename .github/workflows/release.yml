@@ -68,39 +68,41 @@ jobs:
           DOCKER_ACCOUNT: ${{ secrets.DOCKER_ACCOUNT }}
           DOCKER_BUILDKIT: 1
         run: |
-          mvn -B -ntp deploy -Prelease -Drevision="${{ env.RELEASE_VERSION }}" -DskipNexusStagingDeployMojo="true"
+          mvn -B -ntp deploy -Prelease -Drevision="${{ env.RELEASE_VERSION }}" -DskipNexusStagingDeployMojo="true" \
+          -Ddocker.sbom=true -Ddocker.provenance=true
 
-      - name: Install Syft
-        run: |
-          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+#      - name: Build and push Docker image with SBOM
+#        uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # v6.9.0
+#        with:
+#          tags: ${{ secrets.DOCKER_ACCOUNT }}/${{ env.ARTIFACT_NAME }}:${{ env.RELEASE_VERSION }}
+#          push: true
+#          sbom: true 
 
-      - name: Generate SBOM
-        run: |
-          syft ${{ secrets.DOCKER_ACCOUNT }}/${{ env.ARTIFACT_NAME }}:${{ env.RELEASE_VERSION }} -o json > sbom.json
+#      - name: Install Syft and generate SBOM
+#        run: |
+#          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+#          syft ${{ secrets.DOCKER_ACCOUNT }}/${{ env.ARTIFACT_NAME }}:${{ env.RELEASE_VERSION }} -o json > sbom.json
 
-      - name: Install Cosign
-        env:
-          COSIGN_URL: "https://github.com/sigstore/cosign/releases/download"
-        run: |
-          curl -sSfL ${{ env.COSIGN_URL }}/${{ matrix.cosign }}/cosign-linux-amd64 -o /usr/local/bin/cosign
-          chmod +x /usr/local/bin/cosign
+#      - name: Install Cosign and prepare private key
+#        env:
+#          COSIGN_URL: "https://github.com/sigstore/cosign/releases/download"
+#        run: |
+#          curl -sSfL ${{ env.COSIGN_URL }}/${{ matrix.cosign }}/cosign-linux-amd64 -o /usr/local/bin/cosign
+#          chmod +x /usr/local/bin/cosign
+#          echo "${{ secrets.COSIGN_PRIVATE_KEY }}" > $RUNNER_TEMP/cosign.key
+#          chmod 600 $RUNNER_TEMP/cosign.key
 
-      - name: Write Cosign Private Key to File
-        run: |
-          echo "${{ secrets.COSIGN_PRIVATE_KEY }}" > $RUNNER_TEMP/cosign.key
-          chmod 600 $RUNNER_TEMP/cosign.key
+#      - name: Sign Docker image with Cosign
+#        env:
+#          COSIGN_EXPERIMENTAL: "true"
+#          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+#        run: |
+#          cosign sign --yes --key $RUNNER_TEMP/cosign.key \
+#            ${{ secrets.DOCKER_ACCOUNT }}/${{ env.ARTIFACT_NAME }}:${{ env.RELEASE_VERSION }}
 
-      - name: Sign Docker image with Cosign
-        env:
-          COSIGN_EXPERIMENTAL: "true"
-          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
-        run: |
-          cosign sign --yes --key $RUNNER_TEMP/cosign.key \
-            ${{ secrets.DOCKER_ACCOUNT }}/${{ env.ARTIFACT_NAME }}:${{ env.RELEASE_VERSION }}
-
-      - name: Attest Docker image with Cosign
-        env:
-          COSIGN_EXPERIMENTAL: "true"
-        run: |
-          cosign attest --predicate sbom.json --type spdx \
-            ${{ secrets.DOCKER_ACCOUNT }}/${{ env.ARTIFACT_NAME }}:${{ env.RELEASE_VERSION }}
+#      - name: Attest Docker image with Cosign
+#        env:
+#          COSIGN_EXPERIMENTAL: "true"
+#        run: |
+#          cosign attest --verbose --yes --key $RUNNER_TEMP/cosign.key --predicate sbom.json --type spdx \
+#            ${{ secrets.DOCKER_ACCOUNT }}/${{ env.ARTIFACT_NAME }}:${{ env.RELEASE_VERSION }}
