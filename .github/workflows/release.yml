@@ -4,6 +4,9 @@ name: Maven Release
 on:
   push:
     tags: [ 'webrepl-*' ]
+  pull_request:
+    branches:
+      - webrepl
 
 jobs:
   release:
