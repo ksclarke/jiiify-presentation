@@ -64,7 +64,11 @@ jobs:
         run: |
           GITHUB_REF="${{ github.ref }}" &&
           TAG_NAME="${GITHUB_REF#refs/tags/}" &&
-          echo "RELEASE_VERSION=${TAG_NAME#webrepl-}" >> $GITHUB_ENV
+          if [[ $TAG_NAME == "refs/pull/"* ]]; then
+            echo "RELEASE_VERSION=latest" >> $GITHUB_ENV
+          else
+            echo "RELEASE_VERSION=${PULL_NAME#webrepl-}" >> $GITHUB_ENV
+          fi
 
       - name: Set up Maven if needed
         if: ${{ env.ACT }}
