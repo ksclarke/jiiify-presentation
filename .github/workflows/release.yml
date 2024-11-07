@@ -69,9 +69,9 @@ jobs:
           else
             echo "RELEASE_VERSION=${PULL_NAME#webrepl-}" >> $GITHUB_ENV
           fi &&
-          DOCKER_HOST=$(docker context inspect default --format '{{.Endpoints.docker.Host}}') &&
+          DOCKER_BIN="/opt/hostedtoolcache/docker-stable/27.3.1/x64/docker" &&
+          DOCKER_HOST=$(${DOCKER_BIN} context inspect default --format '{{.Endpoints.docker.Host}}') &&
           echo "${DOCKER_HOST}" &&
-          echo "$(ps docker)" &&
           echo "DOCKER_HOST=${DOCKER_HOST}" >> $GITHUB_ENV
 
       - name: Set up Maven if needed
