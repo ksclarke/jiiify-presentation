@@ -72,6 +72,7 @@ jobs:
           DOCKER_BIN="/opt/hostedtoolcache/docker-stable/27.3.1/x64/docker" &&
           DOCKER_HOST=$(${DOCKER_BIN} context inspect default --format '{{.Endpoints.docker.Host}}') &&
           echo "${DOCKER_HOST}" &&
+          echo "$(ps aux | grep docker)"
           echo "DOCKER_HOST=${DOCKER_HOST}" >> $GITHUB_ENV
 
       - name: Set up Maven if needed
