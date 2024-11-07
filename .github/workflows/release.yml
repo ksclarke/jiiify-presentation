@@ -69,9 +69,7 @@ jobs:
           else
             echo "RELEASE_VERSION=${PULL_NAME#webrepl-}" >> $GITHUB_ENV
           fi &&
-          DOCKER_HOST=$(docker context inspect default --format '{{.Endpoints.docker.Host}}') &&
-          echo "${DOCKER_HOST}" &&
-          echo "$(ps aux | grep '[d]ockerd' | grep -o -- '--host=[^ ]*')"
+          DOCKER_HOST="$(ps aux | grep '[d]ockerd' | grep -o -- '--host=[^ ]*' | sed 's/--host=//')"
           echo "DOCKER_HOST=${DOCKER_HOST}" >> $GITHUB_ENV
 
       - name: Set up Maven if needed
