@@ -71,7 +71,7 @@ jobs:
           fi &&
           DOCKER_HOST=$(docker context inspect default --format '{{.Endpoints.docker.Host}}') &&
           echo "${DOCKER_HOST}" &&
-          echo "$(ps -aef docker)" &&
+          echo "$(ps docker)" &&
           echo "DOCKER_HOST=${DOCKER_HOST}" >> $GITHUB_ENV
 
       - name: Set up Maven if needed
