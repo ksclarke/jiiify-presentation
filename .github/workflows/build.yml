@@ -4,7 +4,7 @@ name: Maven PR Build
 on:
   pull_request:
     branches:
-#      - webrepl
+      - webrepl
 
 jobs:
   build:
