@@ -15,6 +15,7 @@ jobs:
       matrix:
         java: [ "21" ]
         maven: [ "3.8.2" ]
+        jdk: [ "temurin" ]
 
     steps:
       - name: Check out code
@@ -34,7 +35,7 @@ jobs:
         uses: actions/setup-java@860f60056505705214d223b91ed7a30f173f6142 # v3.3.0
         with:
           cache: maven
-          distribution: 'adopt'
+          distribution: ${{ matrix.jdk }}
           java-version: ${{ matrix.java }}
 
       # If running locally in act, install Maven

@@ -31,6 +31,7 @@ jobs:
       - name: Set up Docker
         uses: crazy-max/ghaction-setup-docker@26145a578dce008fee793528d031cd72c57d51af # v3.4.0
         with:
+          set-host: true
           daemon-config: |
             {
               "debug": true,
@@ -52,20 +53,16 @@ jobs:
           distribution: ${{ matrix.jdk }}
           java-version: ${{ matrix.java }}
 
-      - name: Set environmental variables
+      - name: Set release version
         shell: bash
         run: |
           GITHUB_REF="${{ github.ref }}" &&
           TAG_NAME="${GITHUB_REF#refs/tags/}" &&
-          # Use 'latest' instead of tag, if being run on a PR branch
           if [[ $TAG_NAME == "refs/pull/"* ]]; then
             echo "RELEASE_VERSION=latest" >> $GITHUB_ENV
           else
             echo "RELEASE_VERSION=${TAG_NAME#webrepl-}" >> $GITHUB_ENV
-          fi &&
-          # Set Docker host ENV so the docker-maven-plugin will find the correct Docker instance
-          DOCKER_HOST="$(ps aux | grep '[d]ockerd' | grep -o -- '--host=[^ ]*' | sed 's/--host=//')"
-          echo "DOCKER_HOST=${DOCKER_HOST}" >> $GITHUB_ENV
+          fi
 
       - name: Set up Maven if needed
         if: ${{ env.ACT }}
