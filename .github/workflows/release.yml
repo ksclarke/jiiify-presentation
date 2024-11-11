@@ -10,9 +10,6 @@ jobs:
     name: Maven PR Builder (JDK ${{ matrix.java }})
     runs-on: ubuntu-latest
 
-    env:
-      ARTIFACT_NAME: "jsh4jpv3"
-
     strategy:
       matrix:
         java: [ "21" ]
@@ -58,11 +55,7 @@ jobs:
         run: |
           GITHUB_REF="${{ github.ref }}" &&
           TAG_NAME="${GITHUB_REF#refs/tags/}" &&
-          if [[ $TAG_NAME == "refs/pull/"* ]]; then
-            echo "RELEASE_VERSION=latest" >> $GITHUB_ENV
-          else
-            echo "RELEASE_VERSION=${TAG_NAME#webrepl-}" >> $GITHUB_ENV
-          fi
+          echo "RELEASE_VERSION=${TAG_NAME#webrepl-}" >> $GITHUB_ENV
 
       - name: Set up Maven if needed
         if: ${{ env.ACT }}
@@ -82,3 +75,26 @@ jobs:
         run: |
           mvn -B -ntp deploy -Prelease -Drevision="${{ env.RELEASE_VERSION }}" -DskipNexusStagingDeployMojo="true" \
           -Ddocker.sbom=true -Ddocker.provenance=true
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Set release version
+        shell: bash
+        run: |
+          GITHUB_REF="${{ github.ref }}" &&
+          TAG_NAME="${GITHUB_REF#refs/tags/}" &&
+          echo "ARTIFACT_NAME=${TAG_NAME%%-*}" >> $GITHUB_ENV &&
+          echo "RELEASE_VERSION=${TAG_NAME#webrepl-}" >> $GITHUB_ENV
+
+      - name: SSH to server and deploy
+        uses: appleboy/ssh-action@25ce8cbbcb08177468c7ff7ec5cbfa236f9341e1 # v1.1.0
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            docker-compose pull $ARTIFACT_NAME:$RELEASE_VERSION
+            docker-compose up -d $ARTIFACT_NAME
