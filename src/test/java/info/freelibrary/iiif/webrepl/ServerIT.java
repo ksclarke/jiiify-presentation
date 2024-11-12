@@ -1,5 +1,5 @@
 
-package info.freelibrary.jsh4jpv3;
+package info.freelibrary.iiif.webrepl;
 
 import static info.freelibrary.util.Constants.INADDR_ANY;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -24,8 +24,6 @@ import org.junit.jupiter.api.TestInstance;
 
 import info.freelibrary.util.StringUtils;
 import info.freelibrary.util.ThrowingConsumer;
-
-import info.freelibrary.jsh4jvp3.Status;
 
 /**
  * A test of the server's endpoints.

@@ -1,5 +1,5 @@
 
-package info.freelibrary.jsh4jvp3;
+package info.freelibrary.iiif.webrepl;
 
 import static info.freelibrary.util.Constants.EOL;
 
@@ -55,19 +55,28 @@ public class DiagConsumer implements Consumer<Diag> {
         int start = (int) aDiagnostic.getStartPosition();
         int end = (int) aDiagnostic.getEndPosition();
 
+        // Isolate and highlight the problem (with brackets)
         if (start == end) {
             myBuffer.insert(start, START).insert(start + START.length(), END);
         } else {
-            myBuffer.insert(start, START).insert(end, END);
+            myBuffer.insert(start, START).insert(end + START.length(), END);
         }
 
-        end = myBuffer.indexOf(TEMPLATE_START) + TEMPLATE_START.length() + 2;
-        start = myBuffer.length() - 4;
+        // If the code snippet includes the multi-line template, remove it
+        if (myBuffer.toString().contains(TEMPLATE_START)) {
+            end = myBuffer.indexOf(TEMPLATE_START) + TEMPLATE_START.length() + 2;
+            start = myBuffer.length() - 4;
 
-        myBuffer.delete(start, myBuffer.length()).delete(0, end);
+            myBuffer.delete(start, myBuffer.length()).delete(0, end);
+        }
+
+        // Add line numbers to what's returned
         code = StringUtils.addLineNumbers(myBuffer.toString());
 
+        // Zero out the output buffer
         myBuffer.setLength(0);
+
+        // Format the output and prepare to return it
         myBuffer.append(INTRO).append(EOLX2).append(code).append(EOLX2).append(HEADER).append(message).append(EOL);
     }
 
