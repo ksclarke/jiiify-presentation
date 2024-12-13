@@ -1,5 +1,5 @@
 
-package info.freelibrary.jsh4jvp3;
+package info.freelibrary.iiif.webrepl;
 
 /**
  * An encapsulation of HTTP response information.

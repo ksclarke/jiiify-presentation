@@ -1,9 +1,9 @@
 
-package info.freelibrary.jsh4jvp3;
+package info.freelibrary.iiif.webrepl;
 
-import static info.freelibrary.jsh4jvp3.Status.METHOD_NOT_ALLOWED;
-import static info.freelibrary.jsh4jvp3.Status.NOT_FOUND;
-import static info.freelibrary.jsh4jvp3.Status.OK;
+import static info.freelibrary.iiif.webrepl.Status.METHOD_NOT_ALLOWED;
+import static info.freelibrary.iiif.webrepl.Status.NOT_FOUND;
+import static info.freelibrary.iiif.webrepl.Status.OK;
 import static info.freelibrary.util.Constants.EMPTY;
 import static info.freelibrary.util.Constants.EOL;
 import static info.freelibrary.util.Constants.INADDR_ANY;
@@ -17,6 +17,7 @@ import java.io.PrintStream;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.CodeSource;
 import java.time.Duration;
 import java.util.List;
@@ -34,6 +35,7 @@ import org.microhttp.Response;
 import info.freelibrary.util.Env;
 import info.freelibrary.util.StringUtils;
 import info.freelibrary.util.warnings.PMD;
+import info.freelibrary.util.warnings.Sonar;
 
 import info.freelibrary.iiif.presentation.v3.Manifest;
 
@@ -61,11 +63,63 @@ public final class Server {
     /** The request timeout. */
     private static final long DEFAULT_REQ_TIMEOUT = 60L;
 
+    /** The server's event loop. **/
+    private final EventLoop myEventLoop;
+
+    /** The event loop handler. **/
+    private final Handler myHandler;
+
     /**
      * Creates a new server instance.
+     *
+     * @throws ClassNotFoundException If a handler cannot be instantiated
+     * @throws IOException If there is an error while the server is reading or writing
+     * @throws URISyntaxException If an invalid URI is passed to the server configuration
      */
-    private Server() {
-        // This is intentionally left empty
+    public Server() throws IOException, URISyntaxException, ClassNotFoundException {
+        myHandler = new JPv3Handler();
+        myEventLoop = new EventLoop(getOptions(), myHandler);
+        myEventLoop.start();
+    }
+
+    /**
+     * Returns the event loop handler.
+     *
+     * @return The event loop handler
+     */
+    public Handler getHandler() {
+        return myHandler;
+    }
+
+    /**
+     * Runs the server.
+     *
+     * @throws InterruptedException If the application's process is interrupted
+     */
+    public void run() throws InterruptedException {
+        myEventLoop.join();
+    }
+
+    /**
+     * Stops the server.
+     */
+    public void stop() {
+        myEventLoop.stop();
+    }
+
+    /**
+     * Gets the configuration of the event loop.
+     *
+     * @return An event loop configuration
+     */
+    Options getOptions() {
+        final int port = Env.get(Config.HTTP_PORT, DEFAULT_PORT);
+        final int reqSize = Env.get(Config.MAX_REQUEST_SIZE, DEFAULT_MAX_REQ_SIZE);
+        final int bufSize = Env.get(Config.READ_BUFFER_SIZE, DEFAULT_READ_BUF_SIZE);
+        final long timeout = (long) Env.get(Config.REQUEST_TIMEOUT, DEFAULT_REQ_TIMEOUT);
+
+        return Options.builder().withHost(INADDR_ANY).withPort(port).withMaxRequestSize(reqSize)
+                .withRequestTimeout(Duration.ofSeconds(timeout)).withReadBufferSize(bufSize).build();
     }
 
     /**
@@ -77,28 +131,10 @@ public final class Server {
      * @throws URISyntaxException If the Jar path cannot be converted into a URI
      * @throws ClassNotFoundException If the Jar file with the JPv3 classes cannot be found
      */
-    @SuppressWarnings({ "PMD.UncommentedMain" })
+    @SuppressWarnings({ "checkstyle:UncommentedMain" })
     public static void main(final String[] anArgsArray)
             throws IOException, InterruptedException, URISyntaxException, ClassNotFoundException {
-        final EventLoop eventLoop = new EventLoop(getOptions(), new JPv3Handler());
-
-        eventLoop.start();
-        eventLoop.join();
-    }
-
-    /**
-     * Gets the configuration of the event loop.
-     *
-     * @return An event loop configuration
-     */
-    private static Options getOptions() {
-        final int port = Env.get(Config.HTTP_PORT, DEFAULT_PORT);
-        final int reqSize = Env.get(Config.MAX_REQUEST_SIZE, DEFAULT_MAX_REQ_SIZE);
-        final int bufSize = Env.get(Config.READ_BUFFER_SIZE, DEFAULT_READ_BUF_SIZE);
-        final long timeout = (long) Env.get(Config.REQUEST_TIMEOUT, DEFAULT_REQ_TIMEOUT);
-
-        return Options.builder().withHost(INADDR_ANY).withPort(port).withMaxRequestSize(reqSize)
-                .withRequestTimeout(Duration.ofSeconds(timeout)).withReadBufferSize(bufSize).build();
+        new Server().run();
     }
 
     /**
@@ -140,6 +176,7 @@ public final class Server {
          * @throws ClassNotFoundException If the JPv3 classes cannot be found
          * @throws URISyntaxException If the Jar file's path couldn't be converted into a URI
          */
+        @SuppressWarnings({ Sonar.SYSTEM_OUT_ERR })
         JPv3Handler() throws IOException, ClassNotFoundException, URISyntaxException {
             myOutputStream = new ByteArrayOutputStream();
             myShell = JShell.builder().compilerOptions("--enable-preview", "--source", "21")
@@ -150,15 +187,15 @@ public final class Server {
 
             // Check that all the imports can be loaded successfully
             myShell.eval(getImports()).stream().filter(event -> !Snippet.Status.VALID.equals(event.status()))
-                    .map((Function<? super SnippetEvent, ? extends Status>) SnippetEvent::status)
-                    .forEach(System.err::println);
+                    .map((Function<? super SnippetEvent, Status>) SnippetEvent::status).forEach(System.err::println);
 
             // Load the JPv3 classes so the imports have something to load
             myShell.addToClasspath(getJarClasspath());
         }
 
         @Override
-        @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY, "PMD.SystemPrintln" })
+        @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY, PMD.SYSTEM_PRINTLN, Sonar.COGNITIVE_COMPLEXITY,
+            Sonar.SYSTEM_OUT_ERR })
         public void handle(final Request aRequest, final Consumer<Response> aCallback) {
             final String uri = aRequest.uri();
             final Response response;
@@ -188,11 +225,9 @@ public final class Server {
                                         final StringBuilder buffer = new StringBuilder(snippet.source());
 
                                         // Just check one at a time, and let the editor iterate
-                                        myShell.diagnostics(snippet).findFirst()
-                                                .ifPresentOrElse(new DiagConsumer(buffer), () -> {
-                                                    buffer.delete(0, buffer.length())
-                                                            .append("Parsing error, but diagnostics were not found");
-                                                });
+                                        myShell.diagnostics(snippet).findFirst().ifPresentOrElse(
+                                                new DiagConsumer(buffer), () -> buffer.delete(0, buffer.length())
+                                                        .append("Parsing error, but diagnostics were not found"));
 
                                         try {
                                             myOutputStream.write(buffer.toString().getBytes(UTF_8));
@@ -228,9 +263,7 @@ public final class Server {
                         response = getResponse(NOT_FOUND, TEXT_CONTENT_TYPE, EMPTY_BODY);
                     }
                 }
-                default -> {
-                    response = getResponse(METHOD_NOT_ALLOWED, TEXT_CONTENT_TYPE, EMPTY_BODY);
-                }
+                default -> response = getResponse(METHOD_NOT_ALLOWED, TEXT_CONTENT_TYPE, EMPTY_BODY);
             }
 
             aCallback.accept(response);
@@ -293,22 +326,17 @@ public final class Server {
          * @throws IOException If there is trouble reading the imports file
          */
         private String getImports(final String aSnippet) throws IOException {
-            File importsFile = new File("/etc/jshell/imports.jsh");
+            File importsFile = Path.of("/etc/jshell/imports.jsh").toFile();
 
             // Check to see if we're running from the Maven build
             if (!importsFile.exists()) {
-                importsFile = new File("src/main/docker/imports.jsh");
+                importsFile = Path.of("src/main/docker/imports.jsh").toFile();
             }
 
             try (BufferedReader reader = Files.newBufferedReader(importsFile.toPath())) {
                 return reader.lines().filter(line -> !line.isBlank()).filter(line -> {
                     final String className = line.substring(line.lastIndexOf('.') + 1, line.length() - 1);
-
-                    if (aSnippet == null || aSnippet.contains(className)) {
-                        return true;
-                    }
-
-                    return false;
+                    return aSnippet == null || aSnippet.contains(className);
                 }).collect(Collectors.joining(EOL)) + EOL;
             }
         }
@@ -338,7 +366,7 @@ public final class Server {
          * @param aBody A response body
          * @return The newly constructed response
          */
-        private Response getResponse(final info.freelibrary.jsh4jvp3.Status aEnum, final List<Header> aHeaderList,
+        private Response getResponse(final info.freelibrary.iiif.webrepl.Status aEnum, final List<Header> aHeaderList,
                 final byte[] aBody) {
             return new Response(aEnum.getCode(), aEnum.getMessage(), aHeaderList, aBody);
         }
