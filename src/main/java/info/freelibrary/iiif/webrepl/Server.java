@@ -86,7 +86,7 @@ public final class Server {
      * @throws IOException If there is an error while the server is reading or writing
      * @throws URISyntaxException If an invalid URI is passed to the server configuration
      */
-    Server(final Handler aHandler) throws IOException {
+    public Server(final Handler aHandler) throws IOException {
         myEventLoop = new EventLoop(getOptions(), aHandler);
         myEventLoop.start();
     }
@@ -140,7 +140,7 @@ public final class Server {
     /**
      * An event handler for code evaluation requests.
      */
-    private static class JPv3Handler implements Handler {
+    static class JPv3Handler implements Handler {
 
         /** The delimiter that indicates a submitted code block. */
         private static final String CODE_DELIM = "code=";
