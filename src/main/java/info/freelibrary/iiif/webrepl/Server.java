@@ -140,7 +140,7 @@ public final class Server {
     /**
      * An event handler for code evaluation requests.
      */
-    static class JPv3Handler implements Handler {
+    private static class JPv3Handler implements Handler {
 
         /** The delimiter that indicates a submitted code block. */
         private static final String CODE_DELIM = "code=";

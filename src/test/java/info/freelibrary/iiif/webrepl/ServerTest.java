@@ -26,7 +26,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import info.freelibrary.util.warnings.JDK;
-
 import info.freelibrary.iiif.webrepl.Server.JPv3Handler;
 
 /**
@@ -203,5 +202,4 @@ class ServerTest {
 
         server.stop();
     }
-
 }
