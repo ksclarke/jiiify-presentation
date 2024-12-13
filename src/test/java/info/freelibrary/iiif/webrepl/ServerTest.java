@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -17,9 +18,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.microhttp.Handler;
 import org.microhttp.Options;
 import org.microhttp.Request;
 import org.microhttp.Response;
@@ -28,49 +27,120 @@ import org.mockito.Mockito;
 
 import info.freelibrary.util.warnings.JDK;
 
+import info.freelibrary.iiif.webrepl.Server.JPv3Handler;
+
 /**
  * Tests of the {@link Server} class.
  */
 class ServerTest {
 
-    /** The server being tested. */
-    static Server myServer;
+    /** The GET method constant. */
+    private static final String GET = "GET";
+
+    /** The POST method constant. */
+    private static final String POST = "POST";
+
+    /** The test code passed to the consumer. */
+    private static final String TEST_CODE = "System.out.println(\"Hello, World!\");";
 
     /**
-     * Tests the server's response handler.
+     * Tests the server's POST response handler.
      */
     @Test
     @SuppressWarnings(JDK.UNCHECKED)
-    final void testHandlerGet() {
-        final Handler handler = myServer.getHandler();
+    void testHandlePostSubmitValidCode() throws URISyntaxException, ClassNotFoundException, IOException {
+        final JPv3Handler handler = new Server.JPv3Handler();
+        final Consumer<Response> mockConsumer = Mockito.mock(Consumer.class);
+        final byte[] code = ("code=" + TEST_CODE).getBytes();
+        final Request mockRequest = new Request(POST, "/submit", "HTTP/1.1", List.of(), code);
+        final ArgumentCaptor<Response> responseCaptor;
+        final Response response;
+
+        handler.handle(mockRequest, mockConsumer);
+
+        responseCaptor = ArgumentCaptor.forClass(Response.class);
+        verify(mockConsumer).accept(responseCaptor.capture());
+        response = responseCaptor.getValue();
+
+        assertEquals(201, response.status());
+        assertEquals("OK", response.reason());
+        assertEquals("text/plain", response.headers().get(0).value());
+        assertEquals("Hello, World!\n", new String(response.body()));
+    }
+
+    /**
+     * Tests the server's GET response handler.
+     */
+    @Test
+    @SuppressWarnings(JDK.UNCHECKED)
+    final void testHandlerBadMethod() throws URISyntaxException, ClassNotFoundException, IOException {
         final Request mockRequest = Mockito.mock(Request.class);
         final Consumer<Response> mockConsumer = Mockito.mock(Consumer.class);
         final ArgumentCaptor<Response> responseCaptor;
         final Response response;
 
-        when(mockRequest.uri()).thenReturn("http://0.0.0.0/editor");
-        when(mockRequest.method()).thenReturn("GET");
+        when(mockRequest.uri()).thenReturn("http://0.0.0.0/yada");
+        when(mockRequest.method()).thenReturn("DELETE");
         when(mockRequest.body()).thenReturn(new byte[] {});
 
-        handler.handle(mockRequest, mockConsumer);
+        new Server.JPv3Handler().handle(mockRequest, mockConsumer);
 
         // Capture the Response passed to the Consumer
         responseCaptor = ArgumentCaptor.forClass(Response.class);
         verify(mockConsumer).accept(responseCaptor.capture());
         response = responseCaptor.getValue();
 
-        System.out.println(response.status());
+        assertEquals(405, response.status());
     }
 
     /**
-     * Tests the retrieval of the server options.
+     * Tests the server's response handler.
      */
     @Test
-    final void testOptions() {
-        final Options opts = myServer.getOptions();
+    @SuppressWarnings(JDK.UNCHECKED)
+    final void testHandlerGet() throws URISyntaxException, ClassNotFoundException, IOException {
+        final Request mockRequest = Mockito.mock(Request.class);
+        final Consumer<Response> mockConsumer = Mockito.mock(Consumer.class);
+        final ArgumentCaptor<Response> responseCaptor;
+        final Response response;
 
-        assertEquals(INADDR_ANY, opts.host());
-        assertEquals(Integer.parseInt(System.getenv(Config.HTTP_PORT)), opts.port());
+        when(mockRequest.uri()).thenReturn("http://0.0.0.0/");
+        when(mockRequest.method()).thenReturn(GET);
+        when(mockRequest.body()).thenReturn(new byte[] {});
+
+        new Server.JPv3Handler().handle(mockRequest, mockConsumer);
+
+        // Capture the Response passed to the Consumer
+        responseCaptor = ArgumentCaptor.forClass(Response.class);
+        verify(mockConsumer).accept(responseCaptor.capture());
+        response = responseCaptor.getValue();
+
+        assertEquals(404, response.status());
+    }
+
+    /**
+     * Tests the server's GET response handler.
+     */
+    @Test
+    @SuppressWarnings(JDK.UNCHECKED)
+    final void testHandlerGetEditor() throws URISyntaxException, ClassNotFoundException, IOException {
+        final Request mockRequest = Mockito.mock(Request.class);
+        final Consumer<Response> mockConsumer = Mockito.mock(Consumer.class);
+        final ArgumentCaptor<Response> responseCaptor;
+        final Response response;
+
+        when(mockRequest.uri()).thenReturn("http://0.0.0.0/editor");
+        when(mockRequest.method()).thenReturn(GET);
+        when(mockRequest.body()).thenReturn(new byte[] {});
+
+        new Server.JPv3Handler().handle(mockRequest, mockConsumer);
+
+        // Capture the Response passed to the Consumer
+        responseCaptor = ArgumentCaptor.forClass(Response.class);
+        verify(mockConsumer).accept(responseCaptor.capture());
+        response = responseCaptor.getValue();
+
+        assertEquals(201, response.status());
     }
 
     /**
@@ -79,12 +149,13 @@ class ServerTest {
      * @throws InterruptedException If the server cannot be started
      */
     @Test
-    final void testServer() throws InterruptedException {
+    final void testServer() throws InterruptedException, ClassNotFoundException, URISyntaxException, IOException {
         final ExecutorService executor = Executors.newSingleThreadExecutor();
+        final Server server = new Server();
 
         final Runnable task = () -> {
             try {
-                myServer.run();
+                server.run();
             } catch (final InterruptedException details) {
                 Thread.currentThread().interrupt();
                 fail(details.getMessage(), details);
@@ -96,7 +167,7 @@ class ServerTest {
 
             future.get(2, TimeUnit.SECONDS);
         } catch (TimeoutException | ExecutionException | InterruptedException details) {
-            myServer.stop();
+            server.stop();
 
             if (!(details instanceof TimeoutException)) {
                 fail(details.getMessage());
@@ -107,7 +178,7 @@ class ServerTest {
 
             try {
                 if (!executor.awaitTermination(5, TimeUnit.SECONDS)) {
-                    myServer.stop();
+                    server.stop();
                 }
             } catch (final InterruptedException details) {
                 Thread.currentThread().interrupt();
@@ -116,16 +187,21 @@ class ServerTest {
     }
 
     /**
-     * Sets up a new test server.
+     * Tests the server constructor that takes a event loop handler.
      *
-     * @throws ClassNotFoundException If the handler class cannot be found
-     * @throws URISyntaxException If the setup uses an invalid URI
-     * @throws InterruptedException If the server gets interrupted in an unexpected way
-     * @throws IOException If there is trouble reading and writing from the server
+     * @throws ClassNotFoundException If the handler cannot be found
+     * @throws URISyntaxException If the handler uses an invalid URI
+     * @throws IOException If there is trouble reading or writing from the server
      */
-    @BeforeAll
-    static final void setUp() throws ClassNotFoundException, URISyntaxException, IOException {
-        myServer = new Server();
+    @Test
+    final void testServerWithHandler() throws ClassNotFoundException, URISyntaxException, IOException {
+        final Server server = new Server(new Server.JPv3Handler());
+        final Options opts = server.getOptions();
+
+        assertEquals(INADDR_ANY, opts.host());
+        assertEquals(Integer.parseInt(System.getenv(Config.HTTP_PORT)), opts.port());
+
+        server.stop();
     }
 
 }

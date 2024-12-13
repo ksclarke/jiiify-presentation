@@ -66,9 +66,6 @@ public final class Server {
     /** The server's event loop. **/
     private final EventLoop myEventLoop;
 
-    /** The event loop handler. **/
-    private final Handler myHandler;
-
     /**
      * Creates a new server instance.
      *
@@ -77,18 +74,21 @@ public final class Server {
      * @throws URISyntaxException If an invalid URI is passed to the server configuration
      */
     public Server() throws IOException, URISyntaxException, ClassNotFoundException {
-        myHandler = new JPv3Handler();
-        myEventLoop = new EventLoop(getOptions(), myHandler);
+        myEventLoop = new EventLoop(getOptions(), new Server.JPv3Handler());
         myEventLoop.start();
     }
 
     /**
-     * Returns the event loop handler.
+     * Creates a new server instance.
      *
-     * @return The event loop handler
+     * @param aHandler A handler that can handle server events
+     * @throws ClassNotFoundException If a handler cannot be instantiated
+     * @throws IOException If there is an error while the server is reading or writing
+     * @throws URISyntaxException If an invalid URI is passed to the server configuration
      */
-    public Handler getHandler() {
-        return myHandler;
+    Server(final Handler aHandler) throws IOException {
+        myEventLoop = new EventLoop(getOptions(), aHandler);
+        myEventLoop.start();
     }
 
     /**
@@ -140,7 +140,7 @@ public final class Server {
     /**
      * An event handler for code evaluation requests.
      */
-    private static class JPv3Handler implements Handler {
+    static class JPv3Handler implements Handler {
 
         /** The delimiter that indicates a submitted code block. */
         private static final String CODE_DELIM = "code=";
