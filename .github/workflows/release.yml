@@ -100,6 +100,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           passphrase: ${{ secrets.SSH_KEY_PASSPHRASE }}
+          envs: ARTIFACT_NAME,RELEASE_VERSION
           script: |
             docker-compose pull $ARTIFACT_NAME:$RELEASE_VERSION
             docker-compose up -d $ARTIFACT_NAME
