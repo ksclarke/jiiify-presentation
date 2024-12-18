@@ -90,7 +90,8 @@ jobs:
         run: |
           GITHUB_REF="${{ github.ref }}" &&
           TAG_NAME="${GITHUB_REF#refs/tags/}" &&
-          echo "ARTIFACT_NAME=${TAG_NAME%%-*}" >> $GITHUB_ENV &&
+          echo "REPO_OWNER=${{ github.repository_owner }}" >> GITHUB_ENV &&
+          echo "ARTIFACT_NAME=jpv3-${TAG_NAME%%-*}" >> $GITHUB_ENV &&
           echo "RELEASE_VERSION=${TAG_NAME#webrepl-}" >> $GITHUB_ENV
 
       - name: SSH to server and deploy
@@ -100,7 +101,9 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           passphrase: ${{ secrets.SSH_KEY_PASSPHRASE }}
-          envs: ARTIFACT_NAME,RELEASE_VERSION
+          envs: ARTIFACT_NAME,RELEASE_VERSION,REPO_OWNER
           script: |
-            docker-compose pull $ARTIFACT_NAME:$RELEASE_VERSION
-            docker-compose up -d $ARTIFACT_NAME
+            docker rm -f $(docker ps | grep ${ARTIFACT_NAME} | cut -d' ' -f1)
+            docker rmi $(docker ps | grep ${ARTIFACT_NAME} | tr -s ' ' | cut -d' ' -f2)
+            docker pull ${REPO_OWNER}/${ARTIFACT_NAME}:${RELEASE_VERSION}
+            docker run -d ${REPO_OWNER}/${ARTIFACT_NAME}:${RELEASE_VERSION}
