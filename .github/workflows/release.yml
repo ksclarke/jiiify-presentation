@@ -103,7 +103,7 @@ jobs:
           passphrase: ${{ secrets.SSH_KEY_PASSPHRASE }}
           envs: ARTIFACT_NAME,RELEASE_VERSION,REPO_OWNER
           script: |
-            docker rm -f $(docker ps | grep ${ARTIFACT_NAME} | cut -d' ' -f1)
-            docker rmi $(docker ps | grep ${ARTIFACT_NAME} | tr -s ' ' | cut -d' ' -f2)
+            docker rm -f $(docker ps | grep -s ${ARTIFACT_NAME} | cut -d' ' -f1) >/dev/null 2>&1
+            docker rmi $(docker ps | grep -s ${ARTIFACT_NAME} | tr -s ' ' | cut -d' ' -f2) >/dev/null 2>&1
             docker pull ${REPO_OWNER}/${ARTIFACT_NAME}:${RELEASE_VERSION}
             docker run -d ${REPO_OWNER}/${ARTIFACT_NAME}:${RELEASE_VERSION}
