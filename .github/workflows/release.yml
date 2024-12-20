@@ -26,6 +26,7 @@ jobs:
           platforms: all
 
       - name: Set up Docker
+        if: ${{ !env.ACT || env.ACT == '' }}
         uses: crazy-max/ghaction-setup-docker@26145a578dce008fee793528d031cd72c57d51af # v3.4.0
         with:
           set-host: true
@@ -90,7 +91,7 @@ jobs:
         run: |
           GITHUB_REF="${{ github.ref }}" &&
           TAG_NAME="${GITHUB_REF#refs/tags/}" &&
-          echo "REPO_OWNER=${{ github.repository_owner }}" >> GITHUB_ENV &&
+          echo "REPO_OWNER=${{ github.repository_owner }}" >> $GITHUB_ENV &&
           echo "ARTIFACT_NAME=jpv3-${TAG_NAME%%-*}" >> $GITHUB_ENV &&
           echo "RELEASE_VERSION=${TAG_NAME#webrepl-}" >> $GITHUB_ENV
 
@@ -103,7 +104,6 @@ jobs:
           passphrase: ${{ secrets.SSH_KEY_PASSPHRASE }}
           envs: ARTIFACT_NAME,RELEASE_VERSION,REPO_OWNER
           script: |
-            docker rm -f $(docker ps | grep -s ${ARTIFACT_NAME} | cut -d' ' -f1) >/dev/null 2>&1
-            docker rmi $(docker ps | grep -s ${ARTIFACT_NAME} | tr -s ' ' | cut -d' ' -f2) >/dev/null 2>&1
-            docker pull ${REPO_OWNER}/${ARTIFACT_NAME}:${RELEASE_VERSION}
-            docker run -d ${REPO_OWNER}/${ARTIFACT_NAME}:${RELEASE_VERSION}
+            docker rm -f $(docker ps | grep -s $ARTIFACT_NAME | cut -d' ' -f1) >/dev/null 2>&1
+            docker rmi $(docker ps | grep -s $ARTIFACT_NAME | tr -s ' ' | cut -d' ' -f2) >/dev/null 2>&1
+            docker run -d --name $ARTIFACT_NAME -p 8888:8888 $REPO_OWNER/$ARTIFACT_NAME:$RELEASE_VERSION
