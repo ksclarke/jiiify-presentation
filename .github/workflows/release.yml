@@ -106,5 +106,4 @@ jobs:
           script: |
             docker rm -f $(docker ps | grep -s $ARTIFACT_NAME | cut -d' ' -f1) >/dev/null 2>&1
             docker rmi $(docker ps | grep -s $ARTIFACT_NAME | tr -s ' ' | cut -d' ' -f2) >/dev/null 2>&1
-            echo "$ARTIFACT_NAME - $REPO_OWNER - $RELEASE_VERSION"
             docker run -d --name $ARTIFACT_NAME -p 8888:8888 $REPO_OWNER/$ARTIFACT_NAME:$RELEASE_VERSION
