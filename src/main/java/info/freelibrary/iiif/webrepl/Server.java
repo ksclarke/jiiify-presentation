@@ -329,7 +329,7 @@ public final class Server {
          * @return A list of Java imports
          * @throws IOException If there is trouble reading the imports file
          */
-        @SuppressWarnings(PMD.SYSTEM_PRINTLN)
+        @SuppressWarnings({ PMD.SYSTEM_PRINTLN, Sonar.SYSTEM_OUT_ERR })
         private String getImports(final String aSnippet) throws IOException {
             File importsFile = Path.of("/etc/jshell/imports.jsh").toFile();
 
