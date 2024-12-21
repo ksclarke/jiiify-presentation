@@ -329,6 +329,7 @@ public final class Server {
          * @return A list of Java imports
          * @throws IOException If there is trouble reading the imports file
          */
+        @SuppressWarnings({ PMD.SYSTEM_PRINTLN, Sonar.SYSTEM_OUT_ERR })
         private String getImports(final String aSnippet) throws IOException {
             File importsFile = Path.of("/etc/jshell/imports.jsh").toFile();
 
@@ -338,10 +339,13 @@ public final class Server {
             }
 
             try (BufferedReader reader = Files.newBufferedReader(importsFile.toPath())) {
-                return reader.lines().filter(line -> !line.isBlank()).filter(line -> {
+                final String imports = reader.lines().filter(line -> !line.isBlank()).filter(line -> {
                     final String className = line.substring(line.lastIndexOf('.') + 1, line.length() - 1);
                     return aSnippet == null || aSnippet.contains(className);
                 }).collect(Collectors.joining(EOL)) + EOL;
+
+                System.err.println(imports);
+                return imports;
             }
         }
 
