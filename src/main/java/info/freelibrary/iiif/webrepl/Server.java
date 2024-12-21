@@ -7,6 +7,7 @@ import static info.freelibrary.iiif.webrepl.Status.OK;
 import static info.freelibrary.util.Constants.EMPTY;
 import static info.freelibrary.util.Constants.EOL;
 import static info.freelibrary.util.Constants.INADDR_ANY;
+import static info.freelibrary.util.Constants.SPACE;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.BufferedReader;
@@ -200,12 +201,15 @@ public final class Server {
             final String uri = aRequest.uri();
             final Response response;
 
+            System.err.println(aRequest.method() + SPACE + uri);
+
             switch (aRequest.method()) {
                 case "POST" -> {
                     if (uri.endsWith("submit") || uri.endsWith("submit/")) {
                         final StringBuilder submission = new StringBuilder();
 
                         submission.append(decodeSubmission(aRequest.body()));
+                        System.err.println("body: " + submission.toString());
 
                         try {
                             myShell.eval(getCode(submission.toString().trim())).forEach(event -> {
