@@ -104,6 +104,10 @@ jobs:
           passphrase: ${{ secrets.SSH_KEY_PASSPHRASE }}
           envs: ARTIFACT_NAME,RELEASE_VERSION,REPO_OWNER
           script: |
-            docker rm -f $(docker ps | grep -s $ARTIFACT_NAME | cut -d' ' -f1) >/dev/null 2>&1
-            docker rmi $(docker ps | grep -s $ARTIFACT_NAME | tr -s ' ' | cut -d' ' -f2) >/dev/null 2>&1
-            docker run -d --name $ARTIFACT_NAME -p 8888:8888 $REPO_OWNER/$ARTIFACT_NAME:$RELEASE_VERSION
+            RUNNING_DOCKER_IMAGE="$(docker ps | grep -s $ARTIFACT_NAME)"
+            if [ -n "$RUNNING_DOCKER_IMAGE" ]; then
+              docker rm -f $(echo $RUNNING_DOCKER_IMAGE | cut -d' ' -f1) >/dev/null 2>&1
+              docker rmi $(echo $RUNNING_DOCKER_IMAGE | tr -s ' ' | cut -d' ' -f2 ) >/dev/null 2>&1
+            fi
+            docker rm -f "$ARTIFACT_NAME" >/dev/null 2>&1
+            docker run -d --name "$ARTIFACT_NAME" -p 8888:8888 "$REPO_OWNER/$ARTIFACT_NAME:$RELEASE_VERSION"
