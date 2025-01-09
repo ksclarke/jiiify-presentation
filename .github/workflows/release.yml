@@ -67,6 +67,19 @@ jobs:
         with:
           maven-version: ${{ matrix.maven }}
 
+      # The following two steps could be removed once the latest v3 is in Maven Central, but
+      # it might be nice to allow snapshots in the POM still as an option to support testing
+      - name: Download JPv3
+        env:
+          JPV3_URL: ksclarke.nyc3.digitaloceanspaces.com
+        run: |
+          curl -s --output-dir /tmp -O "https://${{ env.JPV3_URL }}/jiiify-presentation-v3-0.0.0-SNAPSHOT.jar"
+
+      - name: Install JPv3
+        run: |
+          mvn install:install-file -Dfile=/tmp/jiiify-presentation-v3-0.0.0-SNAPSHOT.jar -Dpackaging=jar \
+            -DgroupId=info.freelibrary -DartifactId=jiiify-presentation-v3 -Dversion=0.0.0-SNAPSHOT
+
       - name: Release with Maven
         env:
           MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
