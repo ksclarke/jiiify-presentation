@@ -160,9 +160,10 @@
                   </excludes>
                 </filter>
                 <filter>
-                  <artifact>info.freelibrary:jiiify-presentation-v3</artifact>
+                  <artifact>info.freelibrary:jpv3-webrepl</artifact>
                   <excludes>
                     <exclude>info/freelibrary/iiif/presentation/v3/properties/MediaType.class</exclude>
+                    <exclude>info/freelibrary/iiif/presentation/v3/utils/MessageCodes.class</exclude>
                   </excludes>
                 </filter>
               </filters>
