@@ -153,13 +153,13 @@ public final class Server {
         private static final byte[] EMPTY_BODY = {};
 
         /** The response headers that are returned. */
-        private static final List<Header> HTML_CONTENT_TYPE = List.of(new Header(CONTENT_TYPE, "text/html"));
+        private static final List<Header> HTML_CONTENT_TYPE = getHeaders(new Header(CONTENT_TYPE, "text/html"));
 
         /** A hard-coded snippet that will return the result of the supplied code snippet. */
         private static final String MAIN_METHOD = "Jpv3Snippet.main(new String[]{});";
 
         /** The response headers that are returned for plain text responses. */
-        private static final List<Header> TEXT_CONTENT_TYPE = List.of(new Header(CONTENT_TYPE, "text/plain"));
+        private static final List<Header> TEXT_CONTENT_TYPE = getHeaders(new Header(CONTENT_TYPE, "text/plain"));
 
         /** A cached {@code WebResource}. */
         private final byte[] myHTML;
@@ -201,10 +201,10 @@ public final class Server {
             final String uri = aRequest.uri();
             final Response response;
 
-            System.err.println(aRequest.method() + SPACE + uri);
-
             switch (aRequest.method()) {
                 case "POST" -> {
+                    System.err.println(aRequest.method() + SPACE + uri);
+
                     if (uri.endsWith("submit") || uri.endsWith("submit/")) {
                         final StringBuilder submission = new StringBuilder();
 
@@ -261,6 +261,8 @@ public final class Server {
                     }
                 }
                 case "GET" -> {
+                    System.err.println(aRequest.method() + SPACE + uri);
+
                     if (uri.endsWith("editor") || uri.endsWith("editor/")) {
                         response = getResponse(OK, HTML_CONTENT_TYPE, myHTML);
                     } else {
@@ -377,6 +379,19 @@ public final class Server {
         private Response getResponse(final info.freelibrary.iiif.webrepl.Status aEnum, final List<Header> aHeaderList,
                 final byte[] aBody) {
             return new Response(aEnum.getCode(), aEnum.getMessage(), aHeaderList, aBody);
+        }
+
+        /**
+         * Creates a list of Header(s) from the supplied differentiating header. The other headers added by this method
+         * are related to CORS support.
+         *
+         * @param aHeader A differentiating header
+         * @return A list of headers, including the supplied header
+         */
+        private static List<Header> getHeaders(final Header aHeader) {
+            return List.of(aHeader, new Header("Access-Control-Allow-Origin", "*"),
+                    new Header("Access-Control-Allow-Methods", "GET, POST, OPTIONS"),
+                    new Header("Access-Control-Allow-Headers", CONTENT_TYPE));
         }
     }
 }
