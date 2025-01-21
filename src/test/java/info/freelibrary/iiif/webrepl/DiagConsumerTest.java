@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import jdk.jshell.Diag;
 
 /**
- * Tests of {@link DiagConsumer}.
+ * Tests of {@link DiagnosticConsumer}.
  */
 class DiagConsumerTest {
 
@@ -35,8 +35,8 @@ class DiagConsumerTest {
     /** The test buffer. */
     private StringBuilder myBuffer;
 
-    /** The {@link DiagConsumer} being tested. */
-    private DiagConsumer myDiagConsumer;
+    /** The {@link DiagnosticConsumer} being tested. */
+    private DiagnosticConsumer myDiagConsumer;
 
     /**
      * Sets up the testing environment.
@@ -44,7 +44,7 @@ class DiagConsumerTest {
     @BeforeEach
     void setUp() {
         myBuffer = new StringBuilder();
-        myDiagConsumer = new DiagConsumer(myBuffer);
+        myDiagConsumer = new DiagnosticConsumer(myBuffer);
     }
 
     /**
