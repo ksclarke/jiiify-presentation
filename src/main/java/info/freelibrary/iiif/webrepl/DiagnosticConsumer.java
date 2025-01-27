@@ -13,7 +13,7 @@ import jdk.jshell.Diag;
 /**
  * A diagnostic consumer for handling rejected code snippets.
  */
-public class DiagConsumer implements Consumer<Diag> {
+public class DiagnosticConsumer implements Consumer<Diag> {
 
     /** A delimiter for the end of problematic code. */
     private static final String END = "]]";
@@ -42,7 +42,7 @@ public class DiagConsumer implements Consumer<Diag> {
      *
      * @param aBuffer An output buffer
      */
-    public DiagConsumer(final StringBuilder aBuffer) {
+    public DiagnosticConsumer(final StringBuilder aBuffer) {
         myBuffer = aBuffer;
     }
 
@@ -71,7 +71,7 @@ public class DiagConsumer implements Consumer<Diag> {
         }
 
         // Add line numbers to what's returned
-        code = StringUtils.addLineNumbers(myBuffer.toString());
+        code = StringUtils.addLineNumbers(myBuffer.toString().trim());
 
         // Zero out the output buffer
         myBuffer.setLength(0);

@@ -1,6 +1,6 @@
 ## webrepl
 
-A quick and dirty REPL for JPv3's IIIF Cookbook recipes.
+A quick and dirty, single-threaded REPL for JPv3's IIIF Cookbook recipes.
 
 ### How to Build
 

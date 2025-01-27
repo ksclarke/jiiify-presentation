@@ -46,7 +46,7 @@
     <!-- Dependency versions -->
     <microhttp.version>0.11</microhttp.version>
     <jpv3.version>0.0.0-SNAPSHOT</jpv3.version>
-    <freelib.utils.version>5.0.7</freelib.utils.version>
+    <freelib.utils.version>5.0.10</freelib.utils.version>
 
     <!-- Configuring Sonar to use the right (i.e., webrepl) branch -->
     <sonar.branch.target>webrepl</sonar.branch.target>
@@ -60,6 +60,8 @@
     <!-- Test dependency versions -->
     <junit.version>5.11.0</junit.version>
     <mockito.version>5.14.2</mockito.version>
+    <awaitility.version>4.2.2</awaitility.version>
+    <system.lambda.version>1.2.1</system.lambda.version>
 
     <!-- Skip the requirement that none of the dependencies are snapshot versions -->
     <enforcer.skip>true</enforcer.skip>
@@ -116,6 +118,18 @@
       <version>${mockito.version}</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.github.stefanbirkner</groupId>
+      <artifactId>system-lambda</artifactId>
+      <version>${system.lambda.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+    <groupId>org.awaitility</groupId>
+    <artifactId>awaitility</artifactId>
+    <version>${awaitility.version}</version>
+    <scope>test</scope>
+</dependency>
   </dependencies>
 
   <build>
@@ -169,7 +183,7 @@
               </filters>
               <transformers>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>info.freelibrary.iiif.webrepl.Server</mainClass>
+                  <mainClass>info.freelibrary.iiif.webrepl.WebRepl</mainClass>
                 </transformer>
               </transformers>
             </configuration>
@@ -241,7 +255,8 @@
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <argLine>${jacoco.agent.arg} -javaagent:${org.mockito:mockito-core:jar}</argLine>
+          <argLine>${jacoco.agent.arg} -javaagent:${org.mockito:mockito-core:jar}
+            --add-opens java.base/java.util=ALL-UNNAMED -Xshare:off</argLine>
           <environmentVariables>
             <HTTP_PORT>${test.http.port}</HTTP_PORT>
           </environmentVariables>
@@ -255,7 +270,8 @@
           <systemPropertyVariables>
             <server.port>${test.http.port}</server.port>
           </systemPropertyVariables>
-          <argLine>--add-opens java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED</argLine>
+          <argLine>--add-opens java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED
+            -Xshare:off</argLine>
         </configuration>
       </plugin>
 
@@ -396,7 +412,7 @@
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>12.0.0</version>
+    <version>12.0.3</version>
   </parent>
 
 </project>
