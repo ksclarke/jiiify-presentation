@@ -46,7 +46,7 @@
     <!-- Dependency versions -->
     <microhttp.version>0.11</microhttp.version>
     <jpv3.version>0.0.0-SNAPSHOT</jpv3.version>
-    <freelib.utils.version>5.0.9</freelib.utils.version>
+    <freelib.utils.version>5.0.10</freelib.utils.version>
 
     <!-- Configuring Sonar to use the right (i.e., webrepl) branch -->
     <sonar.branch.target>webrepl</sonar.branch.target>
@@ -412,7 +412,7 @@
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>12.0.2</version>
+    <version>12.0.3</version>
   </parent>
 
 </project>
