@@ -125,11 +125,11 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-    <groupId>org.awaitility</groupId>
-    <artifactId>awaitility</artifactId>
-    <version>${awaitility.version}</version>
-    <scope>test</scope>
-</dependency>
+      <groupId>org.awaitility</groupId>
+      <artifactId>awaitility</artifactId>
+      <version>${awaitility.version}</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -255,8 +255,8 @@
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <argLine>${jacoco.agent.arg} -javaagent:${org.mockito:mockito-core:jar}
-            --add-opens java.base/java.util=ALL-UNNAMED -Xshare:off</argLine>
+          <argLine>${jacoco.agent.arg} -javaagent:${org.mockito:mockito-core:jar} -Xshare:off
+            --add-opens java.base/java.util=ALL-UNNAMED</argLine>
           <environmentVariables>
             <HTTP_PORT>${test.http.port}</HTTP_PORT>
           </environmentVariables>

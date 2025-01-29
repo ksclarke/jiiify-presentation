@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.webrepl;
 
+import static info.freelibrary.util.Constants.EMPTY;
 import static info.freelibrary.util.Constants.EOL;
 
 import java.util.Locale;
@@ -70,14 +71,13 @@ public class DiagnosticConsumer implements Consumer<Diag> {
             myBuffer.delete(start, myBuffer.length()).delete(0, end);
         }
 
-        // Add line numbers to what's returned
-        code = StringUtils.addLineNumbers(myBuffer.toString().trim());
+        code = StringUtils.addLineNumbers(myBuffer.toString().stripTrailing().replaceAll("(?m)^\\s{3,4}", EMPTY));
 
         // Zero out the output buffer
         myBuffer.setLength(0);
 
         // Format the output and prepare to return it
-        myBuffer.append(INTRO).append(EOLX2).append(code).append(EOLX2).append(HEADER).append(message).append(EOL);
+        myBuffer.append(INTRO).append(EOLX2).append(code).append(EOLX2).append(HEADER).append(message);
     }
 
 }

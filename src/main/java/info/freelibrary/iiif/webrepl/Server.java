@@ -4,6 +4,9 @@ package info.freelibrary.iiif.webrepl;
 import static info.freelibrary.iiif.webrepl.Status.METHOD_NOT_ALLOWED;
 import static info.freelibrary.iiif.webrepl.Status.NOT_FOUND;
 import static info.freelibrary.iiif.webrepl.Status.OK;
+import static info.freelibrary.util.Constants.EMPTY;
+import static info.freelibrary.util.Constants.EOL;
+import static info.freelibrary.util.StringUtils.addLineNumbers;
 import static info.freelibrary.util.StringUtils.indent;
 
 import java.io.ByteArrayOutputStream;
@@ -166,6 +169,11 @@ public final class Server {
 
             // Just add a new line to distinguish between the startup import load and what follows
             System.err.println();
+
+            // Add the executable jar with JPv3's code to JShell's Classpath
+            myShell.addToClasspath(
+                    URLDecoder.decode(Server.class.getProtectionDomain().getCodeSource().getLocation().getPath(),
+                            StandardCharsets.UTF_8));
         }
 
         @Override
@@ -193,7 +201,7 @@ public final class Server {
             }
 
             // If submission wasn't valid, just return an empty string which will evaluate to nothing
-            return Constants.EMPTY;
+            return EMPTY;
         }
 
         /**
@@ -241,7 +249,7 @@ public final class Server {
         private Response handleGet(final Request aRequest) {
             final String uri = aRequest.uri();
 
-            System.err.println(aRequest.method() + Constants.SPACE + uri + Constants.EOL);
+            System.err.println(aRequest.method() + Constants.SPACE + uri + EOL);
 
             if (!EDITOR_PATTERN.matcher(uri).find()) {
                 return getResponse(NOT_FOUND, TEXT_CONTENT_TYPE, EMPTY_BODY);
@@ -272,7 +280,7 @@ public final class Server {
 
             body = decodeSubmission(aRequest.body()).trim();
 
-            System.err.println("Body: " + Constants.EOL + indent(StringUtils.addLineNumbers(body), 2));
+            System.err.println("Body: " + EOL + indent(addLineNumbers(body), 2));
 
             try {
                 myShell.eval(getCode(body)).forEach(event -> {
@@ -280,34 +288,31 @@ public final class Server {
 
                     switch (status) {
                         case VALID -> {
-                            // The submitted code is valid, so get its result to write out
                             final SnippetEvent output = myShell.eval(MAIN_METHOD).get(0);
-
-                            // Before returning the output though, log the VALID status
-                            System.err.println(Constants.EOL + STATUS_LABEL + status);
 
                             if (Status.VALID.equals(output.status())) {
                                 System.out.println(output.value());
                             }
+
+                            System.err.println(STATUS_LABEL + status + EOL);
                         }
                         case REJECTED, RECOVERABLE_DEFINED -> {
                             final Snippet snippet = event.snippet();
                             final StringBuilder buffer = new StringBuilder(snippet.source());
 
-                            // Just check one at a time, and let the editor iterate
+                            // The diagnostic consumer adds line numbers to the code in the output
                             myShell.diagnostics(snippet).findFirst().ifPresentOrElse(new DiagnosticConsumer(buffer),
-                                    () -> buffer.delete(0, buffer.length())
-                                            .append(new ParsingError(StringUtils.addLineNumbers(body))));
+                                    () -> buffer.delete(0, buffer.length()).append(new ParsingError(body)));
                             try {
-                                final String output = buffer.toString().trim();
+                                final String output = buffer.toString();
 
                                 // Write correctly formatted code to the user
                                 myOutputStream.write(output.getBytes(StandardCharsets.UTF_8));
 
-                                // Wrap the user's response in another format
-                                System.err.println("Error: ");
-                                System.err.println(indent(reformat(output), 2));
-                                System.err.println(Constants.EOL + STATUS_LABEL + status + Constants.EOL);
+                                // Wrap the user's response in another format for writing to StdErr
+                                System.err.println(EOL + "Error: ");
+                                System.err.println(indent(addLineNumbers(stripLineNumbers(output)), 2));
+                                System.err.println(EOL + STATUS_LABEL + status + EOL);
                             } catch (final IOException details) {
                                 System.err.println(details);
                             } finally {
@@ -348,14 +353,15 @@ public final class Server {
         }
 
         /**
-         * Strips line numbers from a user error message's code block so that they can be re-added across the whole
-         * message.
+         * Strips line numbers from the front of each line in a multi-line string. This is used when only part of a
+         * string has line numbers, but we want to number all the lines in the string. We strip the old line numbers,
+         * and then add new line numbers.
          *
-         * @param aMessage An error message that's being returned to the user
-         * @return An error message that has reformatted what was returned to the user
+         * @param aString A multi-line string from which to strip line numbers
+         * @return A multi-line string without line numbers
          */
-        private String reformat(final String aMessage) {
-            return StringUtils.addLineNumbers(aMessage.replaceAll("(?m)^\\d+\\s+(?=[A-Za-z])", Constants.EMPTY));
+        private String stripLineNumbers(final String aString) {
+            return aString.replaceAll("(?m)^\\d+\\s", "  ");
         }
 
         /**
