@@ -7,6 +7,9 @@ weight: 8
 This page provides a very simple sandbox where JPv3 code can be run. It's provided to test the code examples from the 
 cookbook recipes, but can also be used to test other simple JPv3 code snippets.
 
+If you’d like a larger textbox than the one below, you can alternatively open the <a
+href="https://jpv3.lisforge.net/editor" target="_blank" rel="noopener">editor</a> in full screen.
+
 {{% pageinfo %}}You do not need to include imports in your code because the JPv3 imports are 
 pre-configured.{{% /pageinfo %}}
 
@@ -56,7 +59,7 @@ System.out.println(manifest);</pre>
             }
         };
 
-        xhr.open('POST', 'http://localhost:8888/submit', true);
+        xhr.open('POST', 'https://jpv3.lisforge.net/submit', true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.send("code=" + encodeURIComponent(code));
     }
@@ -73,5 +76,4 @@ System.out.println(manifest);</pre>
 
 <div style="margin-bottom: 30px; margin-top:30px"><span style="font-weight: bold">Problems?</span> If you notice the sandbox isn't working, please <a 
 href="https://github.com/ksclarke/jiiify-presentation/issues">open a ticket</a> with the details about what's wrong. If 
-the problem is with the code itself, you should see an error message in the results box. You should be able to fix that
-yourself.</div>
+the problem is with the code itself, you should see an error message in the results box.</div>
