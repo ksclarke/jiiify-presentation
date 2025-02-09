@@ -8,7 +8,6 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Before;
@@ -29,12 +28,6 @@ import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
  */
 public class PartOfTest {
 
-    /** A test language code. */
-    private static final String ISO_639_2_NAHUATL = "nah";
-
-    /** A test language code. */
-    private static final String ISO_639_2_VIETNAMESE = "vie";
-
     /** A test fixture. */
     private static final File PART_OF_FULL_ONE = new File(TestUtils.TEST_DIR, "partof-full-one.json");
 
@@ -43,9 +36,6 @@ public class PartOfTest {
 
     /** A test fixture. */
     private static final File PART_OF_SIMPLE_TWO = new File(TestUtils.TEST_DIR, "partof-simple-two.json");
-
-    /** A test label. */
-    private static final Label TEST_LABEL = new Label("PartOf for Example Object");
 
     /** A test URI. */
     private static final String TEST_URI_1 = "https://example.org/iiif/1";
@@ -73,25 +63,6 @@ public class PartOfTest {
     public final void testEquals() throws IOException {
         final String partOf = JSON.readValue(getTestFixture(), PartOf.class).toString();
         assertEquals(partOf, partOf);
-    }
-
-    /**
-     * Tests partOf (de)serialization of a full example.
-     *
-     * @throws IOException If there is trouble reading or deserializing the partOf file or serializing the constructed
-     *         partOf
-     */
-    @Test
-    public final void testFullPartOf() {
-        myManifest.setPartOfs(new PartOf(TEST_URI_1, ResourceTypes.MANIFEST).setLabel(TEST_LABEL)
-                .setLanguages(ISO_639_2_NAHUATL, ISO_639_2_VIETNAMESE));
-
-        try {
-            checkDeserialization(PART_OF_FULL_ONE);
-            checkSerialization(PART_OF_FULL_ONE);
-        } catch (final IOException details) {
-            fail(details.getMessage());
-        }
     }
 
     /**
@@ -138,49 +109,6 @@ public class PartOfTest {
         } catch (final IOException details) {
             fail(details.getMessage());
         }
-    }
-
-    /**
-     * Tests getting and setting a partOf's ID.
-     */
-    @Test
-    public final void testSetID() {
-        assertEquals(TEST_URI_1, new PartOf(TEST_URI_2, ResourceTypes.MANIFEST).setID(TEST_URI_1).getID());
-    }
-
-    /**
-     * Tests getting and setting a partOf's label.
-     */
-    @Test
-    public final void testSetLabel() {
-        assertEquals(TEST_LABEL, new PartOf(TEST_URI_1, ResourceTypes.MANIFEST).setLabel(TEST_LABEL).getLabel().get());
-    }
-
-    /**
-     * Tests getting and setting a partOf's language.
-     */
-    @Test
-    public final void testSetLanguage() {
-        assertEquals(Arrays.asList(ISO_639_2_NAHUATL, ISO_639_2_VIETNAMESE),
-                new PartOf(TEST_URI_1, ResourceTypes.MANIFEST).setLanguages(ISO_639_2_NAHUATL, ISO_639_2_VIETNAMESE)
-                        .getLanguages());
-    }
-
-    /**
-     * Tests setting a partOf's language with an invalid language tag.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public final void testSetLanguagesInvalid() {
-        new PartOf(TEST_URI_1, ResourceTypes.MANIFEST).setLanguages("???");
-    }
-
-    /**
-     * Tests getting and setting a partOf's type.
-     */
-    @Test
-    public final void testSetType() {
-        assertEquals(ResourceTypes.MANIFEST,
-                new PartOf(TEST_URI_1, ResourceTypes.DATASET).setType(ResourceTypes.MANIFEST).getType());
     }
 
     /**

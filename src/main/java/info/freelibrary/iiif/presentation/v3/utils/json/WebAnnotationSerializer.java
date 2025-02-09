@@ -21,10 +21,11 @@ import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.PMD;
 
-import info.freelibrary.iiif.presentation.v3.ContentResource;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
-import info.freelibrary.iiif.presentation.v3.annotations.Motivation;
-import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.Motivation;
+import info.freelibrary.iiif.presentation.v3.annotation.WebAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.targets.Target;
+import info.freelibrary.iiif.presentation.v3.content.ContentResource;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
@@ -49,10 +50,11 @@ public class WebAnnotationSerializer extends StdSerializer<WebAnnotation> {
     }
 
     @Override
-    @SuppressWarnings({ PMD.PRESERVE_STACK_TRACE })
+    @SuppressWarnings({ PMD.PRESERVE_STACK_TRACE, PMD.CYCLOMATIC_COMPLEXITY })
     public void serialize(final WebAnnotation aWebAnnotation, final JsonGenerator aJsonGenerator,
             final SerializerProvider aProvider) throws IOException {
         final List<ContentResource> resources = aWebAnnotation.getBody();
+        final List<Target> targets = aWebAnnotation.getTargets();
         final Optional<Motivation> motivation = aWebAnnotation.getMotivation();
         final Optional<TimeMode> timeMode = aWebAnnotation.getTimeMode();
         final Optional<Label> label = aWebAnnotation.getLabel();
@@ -85,7 +87,18 @@ public class WebAnnotationSerializer extends StdSerializer<WebAnnotation> {
                 serializeResources(resources, aWebAnnotation.bodyHasChoice(), aJsonGenerator);
             }
 
-            aJsonGenerator.writeObjectField(JsonKeys.TARGET, aWebAnnotation.getTarget());
+            if (targets.size() == SINGLE_INSTANCE) {
+                aJsonGenerator.writeObjectField(JsonKeys.TARGET, targets.get(0));
+            } else if (targets.size() > SINGLE_INSTANCE) {
+                aJsonGenerator.writeFieldName(JsonKeys.TARGET);
+                aJsonGenerator.writeStartArray();
+
+                for (final Target target : targets) {
+                    aJsonGenerator.writeObject(target);
+                }
+
+                aJsonGenerator.writeEndArray();
+            }
 
             if (timeMode.isPresent()) {
                 aJsonGenerator.writeObjectField(JsonKeys.TIMEMODE, timeMode.get());

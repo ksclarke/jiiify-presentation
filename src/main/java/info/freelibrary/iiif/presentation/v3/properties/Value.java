@@ -8,6 +8,7 @@ import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.utils.I18nUtils;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.json.ValueDeserializer;
 
 /**
  * A human readable internationalized value.

@@ -18,8 +18,8 @@ import java.util.function.Predicate;
 import org.junit.Before;
 import org.junit.Test;
 
-import info.freelibrary.iiif.presentation.v3.annotations.Motivation;
-import info.freelibrary.iiif.presentation.v3.annotations.Purpose;
+import info.freelibrary.iiif.presentation.v3.annotation.Motivation;
+import info.freelibrary.iiif.presentation.v3.annotation.Purpose;
 import info.freelibrary.iiif.presentation.v3.properties.Property;
 
 /**

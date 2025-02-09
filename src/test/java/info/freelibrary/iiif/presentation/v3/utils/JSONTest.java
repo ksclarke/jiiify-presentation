@@ -22,12 +22,12 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.AnnotationPage;
-import info.freelibrary.iiif.presentation.v3.DatasetContent;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
-import info.freelibrary.iiif.presentation.v3.annotations.BookmarkingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.Purpose;
-import info.freelibrary.iiif.presentation.v3.annotations.Target;
-import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.BookmarkingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.Purpose;
+import info.freelibrary.iiif.presentation.v3.annotation.WebAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.targets.Target;
+import info.freelibrary.iiif.presentation.v3.content.DatasetContent;
 
 /**
  * Tests of the {@link JSON} utility class.

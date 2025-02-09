@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
-import info.freelibrary.iiif.presentation.v3.PaintingAnnotation.Stylesheet;
+import info.freelibrary.iiif.presentation.v3.annotation.PaintingAnnotation.Stylesheet;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**

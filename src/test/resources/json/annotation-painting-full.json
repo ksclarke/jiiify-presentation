@@ -15,7 +15,7 @@
       }
     ],
     "format": "audio/mpeg",
-    "duration": 3600
+    "duration": 3600.0
   },
   "target": "https://cc16ed46-cfbc-458a-9a7b-16364a5af377"
 }

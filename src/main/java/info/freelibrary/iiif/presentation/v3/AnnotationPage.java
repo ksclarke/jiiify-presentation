@@ -20,7 +20,7 @@ import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.JDK;
 import info.freelibrary.util.warnings.PMD;
 
-import info.freelibrary.iiif.presentation.v3.ids.Minter;
+import info.freelibrary.iiif.presentation.v3.id.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
@@ -50,6 +50,9 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
 
     /** The next annotation page in an {@link AnnotationCollection}. */
     private AnnotationPage<? extends Annotation<?>> myNextAnnotationPage;
+
+    /** The previous annotation page in an {@link AnnotationCollection}. */
+    private AnnotationPage<? extends Annotation<?>> myPreviousAnnotationPage;
 
     /**
      * Creates a new annotation page for a supplied {@link CanvasResource}.
@@ -155,8 +158,21 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
      * @return The optional annotation page that follows this one
      */
     @SuppressWarnings({ JDK.UNCHECKED })
+    @JsonGetter(JsonKeys.NEXT)
     public <T extends Annotation<T>> Optional<AnnotationPage<T>> getNextPage() {
         return Optional.ofNullable((AnnotationPage<T>) myNextAnnotationPage);
+    }
+
+    /**
+     * Gets the annotation page that should precede this one in an {@link AnnotationCollection}.
+     *
+     * @param <T> The type of annotation in the returned annotation page
+     * @return The optional annotation page that follows this one
+     */
+    @SuppressWarnings({ JDK.UNCHECKED })
+    @JsonGetter(JsonKeys.PREV)
+    public <T extends Annotation<T>> Optional<AnnotationPage<T>> getPrevPage() {
+        return Optional.ofNullable((AnnotationPage<T>) myPreviousAnnotationPage);
     }
 
     /**
@@ -221,7 +237,7 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
     }
 
     @Override
-    @JsonSetter(JsonKeys.BEHAVIOR)
+    @JsonIgnore
     public AnnotationPage<A> setBehaviors(final List<Behavior> aBehaviorList) {
         final AnnotationPage<A> page;
 
@@ -253,8 +269,22 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
      * @param <T> The type of annotation page set as the next one
      * @return This annotation page
      */
+    @JsonSetter(JsonKeys.NEXT)
     public <T extends Annotation<T>> AnnotationPage<A> setNextPage(final AnnotationPage<T> anAnnotationPage) {
         myNextAnnotationPage = anAnnotationPage;
+        return this;
+    }
+
+    /**
+     * Sets the annotation page that should precede this one in an {@link AnnotationCollection}.
+     *
+     * @param anAnnotationPage A previous annotation page
+     * @param <T> The type of annotation page set as the previous one
+     * @return This annotation page
+     */
+    @JsonSetter(JsonKeys.PREV)
+    public <T extends Annotation<T>> AnnotationPage<A> setPrevPage(final AnnotationPage<T> anAnnotationPage) {
+        myPreviousAnnotationPage = anAnnotationPage;
         return this;
     }
 

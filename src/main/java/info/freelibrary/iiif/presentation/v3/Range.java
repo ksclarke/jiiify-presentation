@@ -18,7 +18,8 @@ import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.ListUtils;
 import info.freelibrary.util.warnings.PMD;
 
-import info.freelibrary.iiif.presentation.v3.ids.Minter;
+import info.freelibrary.iiif.presentation.v3.annotation.targets.SpecificResource;
+import info.freelibrary.iiif.presentation.v3.id.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.Start;
@@ -27,6 +28,7 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.RangeBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.iiif.presentation.v3.utils.json.RangeItemDeserializer;
 
 /**
  * An ordered list of canvas displays; these canvases may be nested in other ranges. Ranges allow canvases, or parts
@@ -220,7 +222,7 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     @Override
-    @JsonSetter(JsonKeys.BEHAVIOR)
+    @JsonIgnore
     public Range setBehaviors(final List<Behavior> aBehaviorList) {
         final Range range;
 
@@ -415,15 +417,15 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
         @JsonIgnore
         public String getType() {
             if (mySpecificResource != null) {
-                return mySpecificResource.getType();
+                return mySpecificResource.getType().get();
             }
 
             if (myCanvas != null) {
-                return myCanvas.getType();
+                return myCanvas.getType().get();
             }
 
             if (myRange != null) {
-                return myRange.getType();
+                return myRange.getType().get();
             }
 
             throw new I18nRuntimeException(MessageCodes.BUNDLE, MessageCodes.JPA_040);

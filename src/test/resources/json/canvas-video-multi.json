@@ -8,7 +8,7 @@
   },
   "height": 360,
   "width": 480,
-  "duration": 3600,
+  "duration": 3600.0,
   "items": [
     {
       "id": "https://example.org/iiif/reel1/segment1/annotation/painting-page-1",
@@ -23,7 +23,7 @@
             "type": "Video",
             "height": 360,
             "width": 480,
-            "duration": 300,
+            "duration": 300.0,
             "format": "video/mp4"
           },
           "target": {
@@ -45,7 +45,7 @@
             "type": "Video",
             "height": 360,
             "width": 480,
-            "duration": 300,
+            "duration": 300.0,
             "format": "video/mp4"
           },
           "target": {

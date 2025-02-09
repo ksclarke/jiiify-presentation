@@ -12,7 +12,10 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import info.freelibrary.util.warnings.PMD;
 import info.freelibrary.util.warnings.Sonar;
 
-import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.PaintingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.SupplementingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.WebAnnotation;
+import info.freelibrary.iiif.presentation.v3.content.ContentResource;
 import info.freelibrary.iiif.presentation.v3.exts.geo.NavPlace;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
@@ -197,7 +200,7 @@ class RangeCanvas extends Canvas {
     }
 
     @Override
-    public String getType() {
+    public Optional<String> getType() {
         return mySourceCanvas.getType();
     }
 

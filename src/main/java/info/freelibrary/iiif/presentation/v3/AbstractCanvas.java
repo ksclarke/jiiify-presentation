@@ -25,10 +25,16 @@ import info.freelibrary.util.warnings.JDK;
 import info.freelibrary.util.warnings.PMD;
 import info.freelibrary.util.warnings.Sonar;
 
-import info.freelibrary.iiif.presentation.v3.annotations.Purpose;
-import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
-import info.freelibrary.iiif.presentation.v3.ids.Minter;
-import info.freelibrary.iiif.presentation.v3.ids.MintingException;
+import info.freelibrary.iiif.presentation.v3.annotation.AbstractCanvasAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.PaintingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.Purpose;
+import info.freelibrary.iiif.presentation.v3.annotation.SupplementingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.WebAnnotation;
+import info.freelibrary.iiif.presentation.v3.content.ContentResource;
+import info.freelibrary.iiif.presentation.v3.content.SpatialContentResource;
+import info.freelibrary.iiif.presentation.v3.content.TemporalContentResource;
+import info.freelibrary.iiif.presentation.v3.id.Minter;
+import info.freelibrary.iiif.presentation.v3.id.MintingException;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
@@ -267,7 +273,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      * @throws InvalidBehaviorException If the supplied behaviors are not valid for a canvas resource
      */
     @Override
-    @JsonSetter(JsonKeys.BEHAVIOR)
+    @JsonIgnore
     @SuppressWarnings({ JDK.UNCHECKED })
     public T setBehaviors(final List<Behavior> aBehaviorList) {
         final T canvas;

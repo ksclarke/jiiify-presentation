@@ -14,7 +14,7 @@ import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.StringUtils;
 
-import info.freelibrary.iiif.presentation.v3.PaintingAnnotation.Stylesheet;
+import info.freelibrary.iiif.presentation.v3.annotation.PaintingAnnotation.Stylesheet;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;

@@ -39,7 +39,7 @@
   <entry key="JPA-035">IIIF Image API URL does not have a dot before format: {}</entry>
   <entry key="JPA-036">IIIF Image API URL does not have the correct number of components: {}</entry>
   <entry key="JPA-037">Unexpected context URI: {}</entry>
-  <entry key="JPA-038">Motivation on {} must be: {}</entry>
+  <entry key="JPA-038">Motivation on {} must be: {}, not: {}</entry>
   <entry key="JPA-039">Cannot remove required context: {}</entry>
   <entry key="JPA-040">Range item does not have canvas, range, or specific resource!</entry>
   <entry key="JPA-041">Expected Canvas, Range, or SpecificResource... found: {}</entry>
@@ -121,5 +121,10 @@
   <entry key="JPA-148">Supplied Optional was unexpectedly empty</entry>
   <entry key="JPA-149">The last URI (i.e., the IIIF Presentation context) cannot be overwritten by another URI</entry>
   <entry key="JPA-150">The default context URI cannot be set or added; it exists in the ContextList by default</entry>
-  <entry key="JPA-151"></entry>
+  <entry key="JPA-151">No valid Behavior implementation found for '{}'</entry>
+  <entry key="JPA-152">Missing or invalid 'motivation' value(s)</entry>
+  <entry key="JPA-153">Annotation target's type is missing from incoming JSON</entry>
+  <entry key="JPA-154">PartOf being serialized ({}) lacks type</entry>
+  <entry key="JPA-154">Type cannot be set on an embedded resource</entry>
+  <entry key="JPA-155">A referenced resource must contain a type and ID</entry>
 </properties>

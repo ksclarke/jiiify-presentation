@@ -47,7 +47,7 @@
     <jackson.version>2.17.2</jackson.version>
     <jackson.databind.version>2.17.2</jackson.databind.version>
     <throwing.function.version>1.5.1</throwing.function.version>
-    <freelib.utils.version>5.0.5</freelib.utils.version>
+    <freelib.utils.version>5.0.10</freelib.utils.version>
     <jsoup.version>1.18.1</jsoup.version>
     <combinatorics.version>3.3.0</combinatorics.version>
     <media.fragments.uri.version>2.4</media.fragments.uri.version>
@@ -56,7 +56,7 @@
     <maven.shade.version>3.6.0</maven.shade.version>
 
     <!-- Test related versions -->
-    <magicfree.json.version>0.10.0</magicfree.json.version>
+    <magicfree.json.version>0.11.0</magicfree.json.version>
     <opencsv.version>4.6</opencsv.version>
     <lorem.version>2.1</lorem.version>
 

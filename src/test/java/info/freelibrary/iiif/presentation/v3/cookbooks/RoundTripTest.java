@@ -7,7 +7,6 @@ import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.assertEquals
 import java.io.File;
 import java.io.IOException;
 
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
@@ -15,6 +14,7 @@ import org.junit.rules.TestName;
 import info.freelibrary.util.StringUtils;
 import info.freelibrary.util.warnings.Sonar;
 
+import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.AnnotationPage;
 import info.freelibrary.iiif.presentation.v3.Collection;
 import info.freelibrary.iiif.presentation.v3.Manifest;
@@ -761,6 +761,19 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
+     * Tests the 0229 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0229-behavior-ranges/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0229BehaviorRanges() throws IOException {
+        final String expected = getExpected("0229-behavior-ranges/manifest");
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
+    }
+
+    /**
      * Tests the 0230 collection cookbook's collection doc (cf. https://iiif.io/api/cookbook/recipe/0230-navdate/).
      *
      * @throws IOException If there is trouble reading the collection file
@@ -977,6 +990,20 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
+     * Tests the 0309 annotation collection fixture (cf.
+     * https://iiif.io/api/cookbook/recipe/0309-annotation-collection/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0309AnnotationCollection() throws IOException {
+        final String expected = getExpected("0309-annotation-collection/manifest");
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
+    }
+
+    /**
      * Tests the 0318 navPlace and navDate fixture (cf. https://iiif.io/api/cookbook/recipe/0318-navPlace-navDate/).
      *
      * @throws IOException If there is trouble reading the manifest file
@@ -1101,10 +1128,49 @@ public class RoundTripTest extends AbstractCookbookTest {
      * @throws IOException If there is trouble reading the manifest file
      */
     @Test
-    @Ignore("See ticket IIIF/cookbook-recipes#511")
     public final void test0434ChoiceAV() throws IOException {
         final String expected = getExpected("0434-choice-av/manifest");
         final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
+    }
+
+    /**
+     * Tests the 0485 Content State fixture (cf. https://iiif.io/api/cookbook/recipe/0485-contentstate-canvas-region/).
+     *
+     * @throws IOException If there is trouble reading the annotation file
+     */
+    @Test
+    public final void test0485ContentstateCanvasRegion() throws IOException {
+        final String expected = getExpected("0485-contentstate-canvas-region/annotation");
+        final String found = JSON.readValue(expected, Annotation.class).toString();
+
+        assertEquals(myTestName, expected, found);
+    }
+
+    /**
+     * Tests the 0489 multimedia canvas fixture (cf. https://iiif.io/api/cookbook/recipe/0489-multimedia-canvas/).
+     *
+     * @throws IOException If there is trouble reading the annotation file
+     */
+    @Test
+    public final void test0489MultimediaCanvas() throws IOException {
+        final String expected = getExpected("0489-multimedia-canvas/manifest");
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
+    }
+
+    /**
+     * Tests the 0540 link for opening multiple canvases fixture (cf.
+     * https://iiif.io/api/cookbook/recipe/0540-link-for-opening-multiple-canvases/).
+     *
+     * @throws IOException If there is trouble reading the annotation file
+     */
+    // @Test
+    public final void test0540LinkForOpeningMultipleCanvases() throws IOException {
+        final String expected = getExpected("0540-link-for-opening-multiple-canvases/annotation");
+        final String found = JSON.readValue(expected, Annotation.class).toString();
 
         assertEquals(myTestName, expected, found);
     }

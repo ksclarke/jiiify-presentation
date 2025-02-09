@@ -49,6 +49,6 @@ public abstract class AbstractTest {
      * @return True if the supplied URI represents a specific resource with a MediaFragmentSelector
      */
     protected boolean isSpecificResourceURI(final String aURI) {
-        return aURI.contains(HASH);
+        return aURI != null && aURI.contains(HASH);
     }
 }

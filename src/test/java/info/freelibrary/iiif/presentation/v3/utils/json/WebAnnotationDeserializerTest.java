@@ -9,21 +9,21 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 
-import info.freelibrary.iiif.presentation.v3.annotations.AssessingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.BookmarkingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.ClassifyingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.CommentingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.DescribingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.EditingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.HighlightingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.IdentifyingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.LinkingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.ModeratingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.Purpose;
-import info.freelibrary.iiif.presentation.v3.annotations.QuestioningAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.ReplyingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.TaggingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.AssessingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.BookmarkingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.ClassifyingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.CommentingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.DescribingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.EditingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.HighlightingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.IdentifyingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.LinkingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.ModeratingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.Purpose;
+import info.freelibrary.iiif.presentation.v3.annotation.QuestioningAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.ReplyingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.TaggingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 
 /**

@@ -22,6 +22,7 @@ import info.freelibrary.iiif.presentation.v3.services.OtherService2;
 import info.freelibrary.iiif.presentation.v3.services.OtherService3;
 import info.freelibrary.iiif.presentation.v3.services.PhysicalDimsService;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
+import info.freelibrary.iiif.presentation.v3.utils.json.ServiceDeserializer;
 
 /**
  * Tests {@code ServiceDeserializer}.

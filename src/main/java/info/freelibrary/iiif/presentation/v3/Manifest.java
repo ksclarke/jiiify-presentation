@@ -17,7 +17,7 @@ import info.freelibrary.util.ListUtils;
 import info.freelibrary.util.warnings.JDK;
 import info.freelibrary.util.warnings.PMD;
 
-import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.Start;
@@ -263,7 +263,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     @Override
-    @JsonSetter(JsonKeys.BEHAVIOR)
+    @JsonIgnore
     public Manifest setBehaviors(final List<Behavior> aBehaviorList) {
         final Manifest manifest;
 
@@ -327,7 +327,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @param aRangeList A list of ranges to be set in the manifest
      * @return The manifest
      */
-    @JsonIgnore
+    @JsonSetter(JsonKeys.STRUCTURES)
     public Manifest setRanges(final List<Range> aRangeList) {
         final List<Range> ranges = getRanges();
 
@@ -344,7 +344,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @param aRangeArray An array of ranges to set in the manifest
      * @return The manifest
      */
-    @JsonSetter(JsonKeys.STRUCTURES)
+    @JsonIgnore
     public Manifest setRanges(final Range... aRangeArray) {
         final List<Range> ranges = getRanges();
 

@@ -15,6 +15,7 @@ import info.freelibrary.iiif.presentation.v3.services.ImageService;
 import info.freelibrary.iiif.presentation.v3.services.OtherService;
 import info.freelibrary.iiif.presentation.v3.services.PhysicalDimsService;
 import info.freelibrary.iiif.presentation.v3.utils.Labeled;
+import info.freelibrary.iiif.presentation.v3.utils.json.ServiceDeserializer;
 
 /**
  * An interface for service implementations.

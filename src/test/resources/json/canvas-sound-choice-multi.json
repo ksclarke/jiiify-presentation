@@ -6,7 +6,7 @@
       "p. 1"
     ]
   },
-  "duration": 3600,
+  "duration": 3600.0,
   "items": [
     {
       "id": "https://example.org/iiif/lp1/side1/track1/annotation/painting-page-1",
@@ -23,13 +23,13 @@
                 "id": "https://example.org/iiif/lp1/side1/track1.mp3",
                 "type": "Sound",
                 "format": "audio/mpeg",
-                "duration": 300
+                "duration": 300.0
               },
               {
                 "id": "https://example.org/iiif/lp1/side1/track1-alternate-mix.mp3",
                 "type": "Sound",
                 "format": "audio/mpeg",
-                "duration": 300
+                "duration": 300.0
               }
             ]
           },
@@ -51,7 +51,7 @@
             "id": "https://example.org/iiif/lp1/side1/track2.mp3",
             "type": "Sound",
             "format": "audio/mpeg",
-            "duration": 300
+            "duration": 300.0
           },
           "target": {
             "type": "SpecificResource",

@@ -5,6 +5,7 @@ import static com.pivovarit.function.ThrowingBiFunction.sneaky;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -20,35 +21,35 @@ import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.PMD;
 
-import info.freelibrary.iiif.presentation.v3.CanvasContent;
-import info.freelibrary.iiif.presentation.v3.ContentResource;
-import info.freelibrary.iiif.presentation.v3.DatasetContent;
-import info.freelibrary.iiif.presentation.v3.ImageContent;
-import info.freelibrary.iiif.presentation.v3.ModelContent;
-import info.freelibrary.iiif.presentation.v3.OtherContent;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
-import info.freelibrary.iiif.presentation.v3.SoundContent;
-import info.freelibrary.iiif.presentation.v3.SpecificResource;
-import info.freelibrary.iiif.presentation.v3.TextContent;
-import info.freelibrary.iiif.presentation.v3.TextualBody;
-import info.freelibrary.iiif.presentation.v3.VideoContent;
-import info.freelibrary.iiif.presentation.v3.annotations.AssessingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.BookmarkingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.ClassifyingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.CommentingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.DescribingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.EditingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.HighlightingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.IdentifyingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.LinkingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.ModeratingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.Motivation;
-import info.freelibrary.iiif.presentation.v3.annotations.Purpose;
-import info.freelibrary.iiif.presentation.v3.annotations.QuestioningAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.ReplyingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.TaggingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.Target;
-import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.AssessingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.BookmarkingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.ClassifyingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.CommentingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.DescribingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.EditingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.HighlightingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.IdentifyingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.LinkingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.ModeratingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.Motivation;
+import info.freelibrary.iiif.presentation.v3.annotation.Purpose;
+import info.freelibrary.iiif.presentation.v3.annotation.QuestioningAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.ReplyingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.TaggingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.WebAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.targets.SpecificResource;
+import info.freelibrary.iiif.presentation.v3.annotation.targets.Target;
+import info.freelibrary.iiif.presentation.v3.content.CanvasContent;
+import info.freelibrary.iiif.presentation.v3.content.ContentResource;
+import info.freelibrary.iiif.presentation.v3.content.DatasetContent;
+import info.freelibrary.iiif.presentation.v3.content.ImageContent;
+import info.freelibrary.iiif.presentation.v3.content.ModelContent;
+import info.freelibrary.iiif.presentation.v3.content.OtherContent;
+import info.freelibrary.iiif.presentation.v3.content.SoundContent;
+import info.freelibrary.iiif.presentation.v3.content.TextContent;
+import info.freelibrary.iiif.presentation.v3.content.TextualBody;
+import info.freelibrary.iiif.presentation.v3.content.VideoContent;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
@@ -149,29 +150,29 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
     private WebAnnotation getAnnotation(final String aID, final String aMotivation, final JsonNode aNode,
             final JsonParser aParser) throws InputCoercionException {
         final Optional<Purpose> purpose = Purpose.fromLabel(aMotivation);
-        final JsonNode targetNode = aNode.get(JsonKeys.TARGET);
+        final JsonNode targetsNode = aNode.get(JsonKeys.TARGET);
 
         if (purpose.isPresent()) {
             return switch (purpose.get()) {
-                case ASSESSING -> new AssessingAnnotation(aID, getTarget(targetNode, aParser));
-                case BOOKMARKING -> new BookmarkingAnnotation(aID, getTarget(targetNode, aParser));
-                case CLASSIFYING -> new ClassifyingAnnotation(aID, getTarget(targetNode, aParser));
-                case COMMENTING -> new CommentingAnnotation(aID, getTarget(targetNode, aParser));
-                case DESCRIBING -> new DescribingAnnotation(aID, getTarget(targetNode, aParser));
-                case EDITING -> new EditingAnnotation(aID, getTarget(targetNode, aParser));
-                case HIGHLIGHTING -> new HighlightingAnnotation(aID, getTarget(targetNode, aParser));
-                case IDENTIFYING -> new IdentifyingAnnotation(aID, getTarget(targetNode, aParser));
-                case LINKING -> new LinkingAnnotation(aID, getTarget(targetNode, aParser));
-                case MODERATING -> new ModeratingAnnotation(aID, getTarget(targetNode, aParser));
-                case QUESTIONING -> new QuestioningAnnotation(aID, getTarget(targetNode, aParser));
-                case REPLYING -> new ReplyingAnnotation(aID, getTarget(targetNode, aParser));
-                case TAGGING -> new TaggingAnnotation(aID, getTarget(targetNode, aParser));
+                case ASSESSING -> new AssessingAnnotation(aID, getTargets(targetsNode, aParser));
+                case BOOKMARKING -> new BookmarkingAnnotation(aID, getTargets(targetsNode, aParser));
+                case CLASSIFYING -> new ClassifyingAnnotation(aID, getTargets(targetsNode, aParser));
+                case COMMENTING -> new CommentingAnnotation(aID, getTargets(targetsNode, aParser));
+                case DESCRIBING -> new DescribingAnnotation(aID, getTargets(targetsNode, aParser));
+                case EDITING -> new EditingAnnotation(aID, getTargets(targetsNode, aParser));
+                case HIGHLIGHTING -> new HighlightingAnnotation(aID, getTargets(targetsNode, aParser));
+                case IDENTIFYING -> new IdentifyingAnnotation(aID, getTargets(targetsNode, aParser));
+                case LINKING -> new LinkingAnnotation(aID, getTargets(targetsNode, aParser));
+                case MODERATING -> new ModeratingAnnotation(aID, getTargets(targetsNode, aParser));
+                case QUESTIONING -> new QuestioningAnnotation(aID, getTargets(targetsNode, aParser));
+                case REPLYING -> new ReplyingAnnotation(aID, getTargets(targetsNode, aParser));
+                case TAGGING -> new TaggingAnnotation(aID, getTargets(targetsNode, aParser));
                 default -> throw new IllegalArgumentException(aMotivation);
             };
         }
 
-        return aMotivation != null ? new WebAnnotation(aID, getTarget(targetNode, aParser)).setMotivation(
-                Motivation.fromLabel(aMotivation)) : new WebAnnotation(aID, getTarget(targetNode, aParser));
+        return aMotivation != null ? new WebAnnotation(aID, getTargets(targetsNode, aParser)).setMotivation(
+                Motivation.fromLabel(aMotivation)) : new WebAnnotation(aID, getTargets(targetsNode, aParser));
     }
 
     /**
@@ -277,7 +278,45 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
         }
 
         // If our target is not a value node, it should be a specific resource
-        return new Target(JSON.convertValue(aNode, SpecificResource.class));
+        return JSON.convertValue(aNode, SpecificResource.class);
+    }
+
+    /**
+     * Gets an annotation target from the supplied incoming JSON.
+     *
+     * @param aNode A <code>JsonNode</code> that represents an annotation target
+     * @param aJsonParser A JSON parser
+     * @return A list of annotation targets
+     * @throws InputCoercionException If there is trouble parsing the incoming JSON
+     */
+    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY })
+    private List<Target> getTargets(final JsonNode aNode, final JsonParser aJsonParser) throws InputCoercionException {
+        final List<Target> targets = new ArrayList<>();
+
+        if (aNode != null) {
+            final JsonNode targetsNode = aNode.get(JsonKeys.TARGET);
+
+            // If the items node is empty, we expect to have to parse a single object or a string value
+            if (targetsNode == null) {
+                if (aNode.isObject() || !aNode.isArray()) {
+                    targets.add(getTarget(aNode, aJsonParser));
+                } else {
+                    final Iterator<JsonNode> iterator = aNode.elements();
+
+                    while (iterator.hasNext()) {
+                        targets.add(getTarget(iterator.next(), aJsonParser));
+                    }
+                }
+            } else {
+                final Iterator<JsonNode> iterator = targetsNode.elements();
+
+                while (iterator.hasNext()) {
+                    targets.add(getTarget(iterator.next(), aJsonParser));
+                }
+            }
+        }
+
+        return targets;
     }
 
     /**

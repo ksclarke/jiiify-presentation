@@ -135,7 +135,7 @@ public final class JsonKeys {
     /** The constant for the navPlace property. */
     public static final String NAV_PLACE = "navPlace";
 
-    /** The next AnnotationPage in an AnnotationCollection. */
+    /** The constant for the next AnnotationPage in an AnnotationCollection. */
     public static final String NEXT = "next";
 
     /** The constant for the otherContent property. */
@@ -152,6 +152,9 @@ public final class JsonKeys {
 
     /** The constant for the placeholderCanvas property. */
     public static final String PLACEHOLDER_CANVAS = "placeholderCanvas";
+
+    /** The constant for the previous AnnotationPage in an AnnotationCollection. */
+    public static final String PREV = "prev";
 
     /** A constant for the profile property. */
     public static final String PROFILE = "profile";
@@ -224,6 +227,9 @@ public final class JsonKeys {
 
     /** The constant for the timeMode property. */
     public static final String TIMEMODE = "timeMode";
+
+    /** The constant for the annotation count in an annotation collection. */
+    public static final String TOTAL = "total";
 
     /** A constant for the type property. */
     public static final String TYPE = "type";
