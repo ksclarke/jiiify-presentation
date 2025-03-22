@@ -37,7 +37,7 @@ public class PartOfSerializerTest {
     private static final Label LABEL = new Label("This is a manifest label");
 
     /** JSON serialization options. */
-    private static final JsonOptions myOpts = new JsonOptions().format(true);
+    private static final JsonOptions OPTS = new JsonOptions().format(true);
 
     /** A mapper to use in testing. */
     private ObjectMapper myMapper;
@@ -61,7 +61,7 @@ public class PartOfSerializerTest {
         final String found = myMapper.writeValueAsString(new PartOf(new Manifest(ID, LABEL)));
         final JsonObject object = Json.object().add(JsonKeys.ID, ID).add(JsonKeys.TYPE, ResourceTypes.MANIFEST);
         final JsonObject label = Json.object().add(I18n.DEFAULT_LANG, Json.array(LABEL.getString()));
-        final String expected = object.add(JsonKeys.LABEL, label).toString(myOpts);
+        final String expected = object.add(JsonKeys.LABEL, label).toString(OPTS);
 
         assertEquals(expected, found);
     }

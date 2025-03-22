@@ -27,6 +27,9 @@ public class PartOfDeserializer extends JsonDeserializer<PartOf> {
     /** A logger used by {@code PartOfDeserializer}. */
     private static final Logger LOGGER = LoggerFactory.getLogger(PartOfDeserializer.class, MessageCodes.BUNDLE);
 
+    /** The number of properties for a referenced resource. */
+    private static final int REFERENCED_RESOURCE_SIZE = 2;
+
     /** The package where all the project resources live. */
     private static final String RESOURCE_PKG = "info.freelibrary.iiif.presentation.v3.";
 
@@ -38,7 +41,7 @@ public class PartOfDeserializer extends JsonDeserializer<PartOf> {
         final Resource<?> resource;
 
         // Check to see if we have a referenced or an embedded resource
-        if (node.size() == 2) {
+        if (node.size() == REFERENCED_RESOURCE_SIZE) {
             final JsonNode idNode = node.get(JsonKeys.ID);
 
             if (idNode == null || typeNode == null) {

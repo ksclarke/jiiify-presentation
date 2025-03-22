@@ -713,7 +713,8 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
     @Override
     public String toString() {
         try {
-            return JSON.getWriter(this.getClass()).writeValueAsString(this);
+            final boolean useURIs = Boolean.parseBoolean(System.getenv(JSON.URI_LINKS));
+            return JSON.getWriter(this.getClass()).withAttribute(JSON.URI_LINKS, useURIs).writeValueAsString(this);
         } catch (final JsonProcessingException details) {
             throw new I18nRuntimeException(details);
         }

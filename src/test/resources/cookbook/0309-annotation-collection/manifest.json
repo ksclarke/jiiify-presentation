@@ -73,20 +73,11 @@
                 ]
               },
               "total": 8,
-              "first": {
-                "id": "https://iiif.io/api/cookbook/recipe/0309-annotation-collection/anno_p1.json",
-                "type": "AnnotationPage"
-              },
-              "last": {
-                "id": "https://iiif.io/api/cookbook/recipe/0309-annotation-collection/anno_p2.json",
-                "type": "AnnotationPage"
-              }
+              "first": "https://iiif.io/api/cookbook/recipe/0309-annotation-collection/anno_p1.json",
+              "last": "https://iiif.io/api/cookbook/recipe/0309-annotation-collection/anno_p2.json"
             }
           ],
-          "next": {
-            "id": "https://iiif.io/api/cookbook/recipe/0309-annotation-collection/anno_p2.json",
-            "type": "AnnotationPage"
-          }
+          "next": "https://iiif.io/api/cookbook/recipe/0309-annotation-collection/anno_p2.json"
         }
       ]
     },
@@ -140,20 +131,11 @@
                 ]
               },
               "total": 8,
-              "first": {
-                "id": "https://iiif.io/api/cookbook/recipe/0309-annotation-collection/anno_p1.json",
-                "type": "AnnotationPage"
-              },
-              "last": {
-                "id": "https://iiif.io/api/cookbook/recipe/0309-annotation-collection/anno_p2.json",
-                "type": "AnnotationPage"
-              }
+              "first": "https://iiif.io/api/cookbook/recipe/0309-annotation-collection/anno_p1.json",
+              "last": "https://iiif.io/api/cookbook/recipe/0309-annotation-collection/anno_p2.json"
             }
           ],
-          "prev": {
-            "id": "https://iiif.io/api/cookbook/recipe/0309-annotation-collection/anno_p1.json",
-            "type": "AnnotationPage"
-          }
+          "prev": "https://iiif.io/api/cookbook/recipe/0309-annotation-collection/anno_p1.json"
         }
       ]
     }

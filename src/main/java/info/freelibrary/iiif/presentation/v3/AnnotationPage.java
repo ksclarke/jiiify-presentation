@@ -13,7 +13,9 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -26,6 +28,7 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.iiif.presentation.v3.utils.json.AnnotationPageSerializer;
 
 /**
  * A page of {@link Annotation}(s) that associates different content resources with their respective {@link Canvas}(es).
@@ -49,9 +52,15 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
     private List<A> myAnnotations;
 
     /** The next annotation page in an {@link AnnotationCollection}. */
+    @JsonProperty(JsonKeys.NEXT)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonSerialize(using = AnnotationPageSerializer.class)
     private AnnotationPage<? extends Annotation<?>> myNextAnnotationPage;
 
     /** The previous annotation page in an {@link AnnotationCollection}. */
+    @JsonProperty(JsonKeys.PREV)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonSerialize(using = AnnotationPageSerializer.class)
     private AnnotationPage<? extends Annotation<?>> myPreviousAnnotationPage;
 
     /**
@@ -157,8 +166,8 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
      * @param <T> The type of annotation in the returned annotation page
      * @return The optional annotation page that follows this one
      */
+    @JsonIgnore
     @SuppressWarnings({ JDK.UNCHECKED })
-    @JsonGetter(JsonKeys.NEXT)
     public <T extends Annotation<T>> Optional<AnnotationPage<T>> getNextPage() {
         return Optional.ofNullable((AnnotationPage<T>) myNextAnnotationPage);
     }
@@ -169,8 +178,8 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
      * @param <T> The type of annotation in the returned annotation page
      * @return The optional annotation page that follows this one
      */
+    @JsonIgnore
     @SuppressWarnings({ JDK.UNCHECKED })
-    @JsonGetter(JsonKeys.PREV)
     public <T extends Annotation<T>> Optional<AnnotationPage<T>> getPrevPage() {
         return Optional.ofNullable((AnnotationPage<T>) myPreviousAnnotationPage);
     }
@@ -186,7 +195,7 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), myAnnotations, myNextAnnotationPage);
+        return Objects.hash(super.hashCode(), myAnnotations, myNextAnnotationPage, myPreviousAnnotationPage);
     }
 
     /**

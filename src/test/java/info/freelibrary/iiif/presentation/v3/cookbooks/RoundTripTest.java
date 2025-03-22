@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.cookbooks;
 
+import static com.github.stefanbirkner.systemlambda.SystemLambda.withEnvironmentVariable;
 import static info.freelibrary.iiif.presentation.v3.utils.CookbookUtils.checkCookbooks;
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.assertEquals;
 
@@ -990,17 +991,57 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
+     * Tests the 0309 annotation collection's first annotation fixture (cf.
+     * https://iiif.io/api/cookbook/recipe/0309-annotation-collection/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0309AnnotationCollectionAnno1() throws Exception {
+        // This recipe uses URI annotation page links instead of JSON objects
+        withEnvironmentVariable(JSON.URI_LINKS, Boolean.TRUE.toString()).execute(() -> {
+            final String expected = getExpected("0309-annotation-collection/anno_p1");
+            final String found = JSON.readValue(expected, AnnotationPage.class).toString();
+
+            assertEquals(myTestName, expected, found);
+            return null;
+        });
+    }
+
+    /**
+     * Tests the 0309 annotation collection's second annotation fixture (cf.
+     * https://iiif.io/api/cookbook/recipe/0309-annotation-collection/).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0309AnnotationCollectionAnno2() throws Exception {
+        // This recipe uses URI annotation page links instead of JSON objects
+        withEnvironmentVariable(JSON.URI_LINKS, Boolean.TRUE.toString()).execute(() -> {
+            final String expected = getExpected("0309-annotation-collection/anno_p2");
+            final String found = JSON.readValue(expected, AnnotationPage.class).toString();
+
+            assertEquals(myTestName, expected, found);
+            return null;
+        });
+    }
+
+    /**
      * Tests the 0309 annotation collection fixture (cf.
      * https://iiif.io/api/cookbook/recipe/0309-annotation-collection/).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
     @Test
-    public final void test0309AnnotationCollection() throws IOException {
-        final String expected = getExpected("0309-annotation-collection/manifest");
-        final String found = JSON.readValue(expected, Manifest.class).toString();
+    public final void test0309AnnotationCollectionManifest() throws Exception {
+        // This recipe uses URI annotation page links instead of JSON objects
+        withEnvironmentVariable(JSON.URI_LINKS, Boolean.TRUE.toString()).execute(() -> {
+            final String expected = getExpected("0309-annotation-collection/manifest");
+            final String found = JSON.readValue(expected, Manifest.class).toString();
 
-        assertEquals(myTestName, expected, found);
+            assertEquals(myTestName, expected, found);
+            return null;
+        });
     }
 
     /**

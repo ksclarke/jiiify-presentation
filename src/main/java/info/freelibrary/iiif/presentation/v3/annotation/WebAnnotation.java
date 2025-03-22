@@ -369,7 +369,8 @@ public class WebAnnotation implements Annotation<WebAnnotation> {
     @Override
     public String toString() {
         try {
-            return JSON.getWriter(WebAnnotation.class).writeValueAsString(this);
+            final boolean useURIs = Boolean.parseBoolean(System.getenv(JSON.URI_LINKS));
+            return JSON.getWriter(WebAnnotation.class).withAttribute(JSON.URI_LINKS, useURIs).writeValueAsString(this);
         } catch (final JsonProcessingException details) {
             throw new I18nRuntimeException(details);
         }

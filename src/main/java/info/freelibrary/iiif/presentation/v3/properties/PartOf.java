@@ -32,6 +32,9 @@ public class PartOf {
     /** The logger used by {@code PartOf}. */
     private static final Logger LOGGER = LoggerFactory.getLogger(PartOf.class, MessageCodes.BUNDLE);
 
+    /** Whether the resource should be serialized as object or URI string. */
+    private boolean isSerializedAsObject;
+
     /** The resource that this partOf embeds. */
     private Resource<?> myEmbeddedResource;
 
@@ -41,7 +44,7 @@ public class PartOf {
     /**
      * Creates a partOf that embeds a resource.
      *
-     * @param aCollection
+     * @param aResource A resource to embed in the {@code PartOf}
      */
     public PartOf(final Resource<?> aResource) {
         myEmbeddedResource = aResource;
@@ -54,10 +57,23 @@ public class PartOf {
      * @param aType A partOf type
      */
     public PartOf(final String aID, final String aType) {
+        this(aID, aType, true);
+    }
+
+    /**
+     * Creates a partOf using an ID and type. By indicating the resource is referenced, you set the serialization to be
+     * a single URI string. By indicating the resource is embedded, you set the serialization to be a JSON object.
+     *
+     * @param aID A partOf ID
+     * @param aType A partOf type
+     * @param aObject Whether the resource should be serialized as a JSON object or URI
+     */
+    public PartOf(final String aID, final String aType, final boolean aObject) {
         myReferencedResource = new String[2];
 
         myReferencedResource[0] = aID;
         myReferencedResource[1] = aType;
+        isSerializedAsObject = aObject;
     }
 
     @Override
@@ -114,6 +130,15 @@ public class PartOf {
     }
 
     /**
+     * Whether the resource is serialized as a URI or object. Embedded resources will always be serialized as objects.
+     *
+     * @return True if the resource is serialized as a URI; else, false
+     */
+    public boolean hasObject() {
+        return isSerializedAsObject || myEmbeddedResource != null;
+    }
+
+    /**
      * Sets the partOf resource's ID.
      *
      * @param aID A new ID for the partOf resource
@@ -154,7 +179,8 @@ public class PartOf {
     @Override
     public String toString() {
         try {
-            return JSON.getWriter(this.getClass()).writeValueAsString(this);
+            final boolean useURIs = Boolean.parseBoolean(System.getenv(JSON.URI_LINKS));
+            return JSON.getWriter(this.getClass()).withAttribute(JSON.URI_LINKS, useURIs).writeValueAsString(this);
         } catch (final JsonProcessingException details) {
             throw new I18nRuntimeException(details);
         }

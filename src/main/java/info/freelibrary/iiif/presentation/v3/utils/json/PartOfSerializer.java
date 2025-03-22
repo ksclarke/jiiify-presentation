@@ -45,20 +45,26 @@ public class PartOfSerializer extends StdSerializer<PartOf> {
     @Override
     public void serialize(final PartOf aPartOf, final JsonGenerator aJsonGenerator, final SerializerProvider aProvider)
             throws IOException {
+        final boolean useURIs = Boolean.TRUE.equals(aProvider.getAttribute(JSON.URI_LINKS));
+
         aPartOf.getEmbeddedResource().ifPresentOrElse((ThrowingConsumer<Resource<?>, IOException>) resource -> {
             // We want to serialize the embedded resource without contexts since it's embedded
             final ObjectWriter writer = JSON.copy().setFilterProvider(FILTER).writerFor(resource.getClass());
-            aJsonGenerator.writeRawValue(writer.writeValueAsString(resource));
+            aJsonGenerator.writeRawValue(writer.withAttribute(JSON.URI_LINKS, useURIs).writeValueAsString(resource));
         }, ThrowingRunnable.wrap(() -> {
             if (aPartOf.getType().isEmpty()) {
                 throw new JsonGenerationException(LOGGER.getMessage(MessageCodes.JPA_154, aPartOf.getID()),
                         aJsonGenerator);
             }
 
-            aJsonGenerator.writeStartObject();
-            aJsonGenerator.writeStringField(JsonKeys.ID, aPartOf.getID());
-            aJsonGenerator.writeStringField(JsonKeys.TYPE, aPartOf.getType().get());
-            aJsonGenerator.writeEndObject();
+            if (aPartOf.hasObject() || !useURIs) {
+                aJsonGenerator.writeStartObject();
+                aJsonGenerator.writeStringField(JsonKeys.ID, aPartOf.getID());
+                aJsonGenerator.writeStringField(JsonKeys.TYPE, aPartOf.getType().get());
+                aJsonGenerator.writeEndObject();
+            } else {
+                aJsonGenerator.writeString(aPartOf.getID());
+            }
         }));
     }
 

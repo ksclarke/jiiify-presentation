@@ -20,6 +20,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 
+import info.freelibrary.util.warnings.PMD;
+
 import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.utils.json.ContextFilterProvider;
@@ -30,7 +32,11 @@ import info.freelibrary.iiif.presentation.v3.utils.json.ServiceDeserializer;
 /**
  * A (de)serialization configuration.
  */
+@SuppressWarnings({ PMD.COUPLING_BETWEEN_OBJECTS })
 public final class JSON {
+
+    /** A constant indicating all referenced resources should use URIs instead of objects. */
+    public static final String URI_LINKS = "IIIF_URI_REFS";
 
     /** A mapper that converts objects into JSON and vice versa. */
     private static final ObjectMapper MAPPER = new ObjectMapper() //
