@@ -68,7 +68,7 @@ public class PartOfTest {
 
     /**
      * Tests equality between a PartOf and a null.
-     * 
+     *
      * @throws IOException If there is trouble reading the test resource
      */
     @Test
@@ -79,7 +79,7 @@ public class PartOfTest {
 
     /**
      * Tests equality between a PartOf and itself.
-     * 
+     *
      * @throws IOException If there is trouble reading the test resource
      */
     @Test
@@ -90,7 +90,7 @@ public class PartOfTest {
 
     /**
      * Tests equality between a PartOf and a String.
-     * 
+     *
      * @throws IOException If there is trouble reading the test resource
      */
     @Test

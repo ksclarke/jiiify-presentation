@@ -88,11 +88,7 @@ public class BehaviorDeserializer extends JsonDeserializer<List<Behavior>> imple
 
             if (type.isPresent()) {
                 myBehaviorType = getBehaviorType(type.get());
-            } else {
-                myBehaviorType = null;
             }
-        } else {
-            myBehaviorType = null;
         }
 
         jsonNode = ((ObjectMapper) aParser.getCodec()).readTree(aParser);
