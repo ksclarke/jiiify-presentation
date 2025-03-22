@@ -15,11 +15,11 @@ import info.freelibrary.iiif.presentation.v3.properties.PartOf;
  */
 abstract class AbstractTarget {
 
+    /** Whether the ID uses HTTPS. */
+    private boolean hasSecureID;
+
     /** The URI for the annotation target. */
     private String myID;
-
-    /** Whether the ID uses HTTPS. */
-    private boolean myIdIsSecure;
 
     /** A part of an annotation target. */
     private List<PartOf> myPartOfs;
@@ -39,7 +39,7 @@ abstract class AbstractTarget {
      */
     protected AbstractTarget(final String aID, final boolean aHttpsReq) {
         myID = UriUtils.checkID(aID, aHttpsReq);
-        myIdIsSecure = aHttpsReq;
+        hasSecureID = aHttpsReq;
     }
 
     /**
@@ -51,7 +51,7 @@ abstract class AbstractTarget {
      */
     protected AbstractTarget(final String aID, final boolean aHttpsReq, final List<PartOf> aPartOfList) {
         myID = UriUtils.checkID(aID, aHttpsReq);
-        myIdIsSecure = aHttpsReq;
+        hasSecureID = aHttpsReq;
         myPartOfs = new ArrayList<>();
         myPartOfs.addAll(aPartOfList);
     }
@@ -65,7 +65,7 @@ abstract class AbstractTarget {
      */
     protected AbstractTarget(final String aID, final boolean aHttpsReq, final PartOf... aPartOfArray) {
         myID = UriUtils.checkID(aID, aHttpsReq);
-        myIdIsSecure = aHttpsReq;
+        hasSecureID = aHttpsReq;
         myPartOfs = new ArrayList<>();
         myPartOfs.addAll(Arrays.asList(aPartOfArray));
     }
@@ -91,7 +91,7 @@ abstract class AbstractTarget {
         target = (AbstractTarget) aOther;
 
         return Objects.equals(myID, target.myID) && Objects.equals(myPartOfs, target.myPartOfs) &&
-                Objects.equals(myIdIsSecure, target.myIdIsSecure);
+                Objects.equals(hasSecureID, target.hasSecureID);
     }
 
     /**
@@ -120,7 +120,7 @@ abstract class AbstractTarget {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(myID, myIdIsSecure, myPartOfs);
+        return Objects.hash(myID, hasSecureID, myPartOfs);
     }
 
     /**
@@ -143,7 +143,7 @@ abstract class AbstractTarget {
      * @return The annotation target
      */
     protected AbstractTarget setID(final String aID) {
-        myID = UriUtils.checkID(aID, myIdIsSecure);
+        myID = UriUtils.checkID(aID, hasSecureID);
         return this;
     }
 

@@ -83,7 +83,17 @@ public class BehaviorDeserializer extends JsonDeserializer<List<Behavior>> imple
         final List<Behavior> behaviors;
         final JsonNode jsonNode;
 
-        myBehaviorType = getBehaviorType(parent instanceof Resource<?> ? ((Resource<?>) parent).getType().get() : null);
+        if (parent instanceof Resource<?>) {
+            final Optional<String> type = ((Resource<?>) parent).getType();
+
+            if (type.isPresent()) {
+                myBehaviorType = getBehaviorType(type.get());
+            } else {
+                myBehaviorType = null;
+            }
+        } else {
+            myBehaviorType = null;
+        }
 
         jsonNode = ((ObjectMapper) aParser.getCodec()).readTree(aParser);
         behaviors = new BehaviorList(myBehaviorType);
