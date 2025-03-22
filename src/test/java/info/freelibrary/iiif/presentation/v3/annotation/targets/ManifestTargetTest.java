@@ -3,12 +3,17 @@ package info.freelibrary.iiif.presentation.v3.annotation.targets;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.Test;
 
 import info.freelibrary.util.Constants;
+
+import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 
 /**
  * Tests of {@link _Target}.
@@ -87,5 +92,51 @@ public class ManifestTargetTest {
     public final void testTargetEqualsString() {
         final ManifestTarget test = new ManifestTarget(HTTPS + UUID.randomUUID().toString());
         assertNotEquals(test, new String(Constants.EMPTY));
+    }
+
+    /**
+     * Tests {@link _ManifestTarget#getType() ManifestTarget}.
+     */
+    @Test
+    public final void testTargetGetType() {
+        final Optional<String> type = new ManifestTarget(HTTPS + UUID.randomUUID().toString()).getType();
+
+        assertTrue(type.isPresent());
+        assertEquals(ResourceTypes.MANIFEST, type.get());
+    }
+
+    /**
+     * Tests {@link _ManifestTarget#setID(String) ManifestTarget}.
+     */
+    @Test
+    public final void testTargetSetID() {
+        final String id = UUID.randomUUID().toString();
+        final ManifestTarget test = new ManifestTarget(HTTPS + UUID.randomUUID().toString());
+
+        assertEquals(id, test.setID(id).getID());
+    }
+
+    /**
+     * Tests {@link _ManifestTarget#setType(String) ManifestTarget}.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public final void testTargetSetTypeBad() {
+        final ManifestTarget target = new ManifestTarget(HTTPS + UUID.randomUUID().toString());
+        target.setType("asdfasdf");
+    }
+
+    /**
+     * Tests {@link _ManifestTarget#setType(String) ManifestTarget}.
+     */
+    @Test
+    public final void testTargetSetTypeGood() {
+        final ManifestTarget target = new ManifestTarget(HTTPS + UUID.randomUUID().toString());
+        final Optional<String> type = target.setType(ResourceTypes.MANIFEST).getType();
+
+        if (type.isPresent()) {
+            assertEquals(ResourceTypes.MANIFEST, type.get());
+        } else {
+            fail();
+        }
     }
 }
