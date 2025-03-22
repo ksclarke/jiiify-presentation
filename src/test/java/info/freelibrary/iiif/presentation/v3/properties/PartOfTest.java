@@ -4,6 +4,7 @@ package info.freelibrary.iiif.presentation.v3.properties;
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.toJson;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.fail;
 
 import java.io.File;
@@ -60,9 +61,42 @@ public class PartOfTest {
      * @throws IOException If there is trouble reading the test fixture
      */
     @Test
-    public final void testEquals() throws IOException {
+    public final void testEqualsHappyPath() throws IOException {
         final String partOf = JSON.readValue(getTestFixture(), PartOf.class).toString();
         assertEquals(partOf, partOf);
+    }
+
+    /**
+     * Tests equality between a PartOf and a null.
+     * 
+     * @throws IOException If there is trouble reading the test resource
+     */
+    @Test
+    public final void testEqualsNull() throws IOException {
+        final PartOf partOf = JSON.readValue(getTestFixture(), PartOf.class);
+        assertNotEquals(partOf, null);
+    }
+
+    /**
+     * Tests equality between a PartOf and itself.
+     * 
+     * @throws IOException If there is trouble reading the test resource
+     */
+    @Test
+    public final void testEqualsSame() throws IOException {
+        final PartOf partOf = JSON.readValue(getTestFixture(), PartOf.class);
+        assertEquals(partOf, partOf);
+    }
+
+    /**
+     * Tests equality between a PartOf and a String.
+     * 
+     * @throws IOException If there is trouble reading the test resource
+     */
+    @Test
+    public final void testEqualsString() throws IOException {
+        final PartOf partOf = JSON.readValue(getTestFixture(), PartOf.class);
+        assertNotEquals(partOf, "partOf");
     }
 
     /**

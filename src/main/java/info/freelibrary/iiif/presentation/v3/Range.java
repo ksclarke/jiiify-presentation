@@ -416,16 +416,20 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
          */
         @JsonIgnore
         public String getType() {
+            final Optional<String> type;
+
             if (mySpecificResource != null) {
-                return mySpecificResource.getType().get();
+                type = mySpecificResource.getType();
+            } else if (myCanvas != null) {
+                type = myCanvas.getType();
+            } else if (myRange != null) {
+                type = myRange.getType();
+            } else {
+                type = Optional.empty();
             }
 
-            if (myCanvas != null) {
-                return myCanvas.getType().get();
-            }
-
-            if (myRange != null) {
-                return myRange.getType().get();
+            if (type.isPresent()) {
+                return type.get();
             }
 
             throw new I18nRuntimeException(MessageCodes.BUNDLE, MessageCodes.JPA_040);

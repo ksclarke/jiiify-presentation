@@ -335,6 +335,7 @@ class DefaultMinter implements Minter {
         /**
          * Creates a new NOID iterator with a randomized start and skip count.
          */
+        @SuppressWarnings({ "java:S2245" })
         NoidIterator() {
             final ThreadLocalRandom randomizer = ThreadLocalRandom.current();
 

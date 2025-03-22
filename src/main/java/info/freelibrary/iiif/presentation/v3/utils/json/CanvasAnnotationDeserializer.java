@@ -24,9 +24,9 @@ import info.freelibrary.util.warnings.PMD;
 import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.annotation.PaintingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.PaintingAnnotation.Stylesheet;
 import info.freelibrary.iiif.presentation.v3.annotation.Purpose;
 import info.freelibrary.iiif.presentation.v3.annotation.SupplementingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotation.PaintingAnnotation.Stylesheet;
 import info.freelibrary.iiif.presentation.v3.annotation.targets.SpecificResource;
 import info.freelibrary.iiif.presentation.v3.annotation.targets.Target;
 import info.freelibrary.iiif.presentation.v3.content.CanvasContent;
@@ -96,9 +96,17 @@ public class CanvasAnnotationDeserializer extends StdDeserializer<Annotation<?>>
         final String motivation = motivationNode == null ? null : motivationNode.asText();
         final String id = sneaky(check).apply(JsonKeys.ID, node.get(JsonKeys.ID));
         final Annotation<?> annotation = getAnnotation(id, motivation, node, aParser);
-        final Optional<TimeMode> timeMode = getTimeMode(node.get(JsonKeys.TIMEMODE));
-        final Optional<Label> label = getLabel(node.get(JsonKeys.LABEL));
-        final JsonNode bodyNode = node.get(JsonKeys.BODY);
+        final Optional<TimeMode> timeMode;
+        final Optional<Label> label;
+        final JsonNode bodyNode;
+
+        if (annotation == null) {
+            return null;
+        }
+
+        timeMode = getTimeMode(node.get(JsonKeys.TIMEMODE));
+        label = getLabel(node.get(JsonKeys.LABEL));
+        bodyNode = node.get(JsonKeys.BODY);
 
         annotation.setBody(getBody(bodyNode, sneaky(check)));
         annotation.setChoice(getChoice(bodyNode));
