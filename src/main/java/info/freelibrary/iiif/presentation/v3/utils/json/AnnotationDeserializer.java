@@ -7,9 +7,9 @@ import java.util.Optional;
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -43,10 +43,29 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  * what type of {@code Annotation} is being deserialized and hands off the job to the best deserializer for that class.
  */
 @SuppressWarnings({ PMD.EXCESSIVE_IMPORTS })
-public class AnnotationDeserializer extends JsonDeserializer<Annotation<?>> {
+public class AnnotationDeserializer extends StdDeserializer<Annotation<?>> {
 
     /** The deserializer's logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationDeserializer.class, MessageCodes.BUNDLE);
+
+    /** The {@code serialVersionUID} for the {@code AnnotationDeserializer} class. */
+    private static final long serialVersionUID = 431628099542258580L;
+
+    /**
+     * Creates a new annotation deserializer.
+     *
+     * @param aClass A class to be deserialized
+     */
+    public AnnotationDeserializer(final Class<?> aClass) {
+        super(aClass);
+    }
+
+    /**
+     * Creates a new annotation deserializer.
+     */
+    AnnotationDeserializer() {
+        this(Annotation.class);
+    }
 
     @Override
     public Annotation<?> deserialize(final JsonParser aParser, final DeserializationContext aContext)

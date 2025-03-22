@@ -6,9 +6,9 @@ import java.io.IOException;
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -22,7 +22,7 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 /**
  * Deserializes {@link PartOf} instances from JSON.
  */
-public class PartOfDeserializer extends JsonDeserializer<PartOf> {
+public class PartOfDeserializer extends StdDeserializer<PartOf> {
 
     /** A logger used by {@code PartOfDeserializer}. */
     private static final Logger LOGGER = LoggerFactory.getLogger(PartOfDeserializer.class, MessageCodes.BUNDLE);
@@ -32,6 +32,25 @@ public class PartOfDeserializer extends JsonDeserializer<PartOf> {
 
     /** The package where all the project resources live. */
     private static final String RESOURCE_PKG = "info.freelibrary.iiif.presentation.v3.";
+
+    /** The {@code serialVersionUID} for the {@code PartOfDeserializer} class. */
+    private static final long serialVersionUID = -3624675433120086670L;
+
+    /**
+     * Creates a new {@code PartOf} deserializer.
+     */
+    PartOfDeserializer() {
+        this(PartOf.class);
+    }
+
+    /**
+     * Creates a new {@code PartOf} deserializer.
+     *
+     * @param aClass A class to be deserialized
+     */
+    PartOfDeserializer(final Class<?> aClass) {
+        super(aClass);
+    }
 
     @Override
     public PartOf deserialize(final JsonParser aParser, final DeserializationContext aContext)

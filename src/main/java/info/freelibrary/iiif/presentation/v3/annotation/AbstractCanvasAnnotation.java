@@ -33,6 +33,8 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  * method for aligning information, and provides a standards based framework for distinguishing parts of resources and
  * parts of canvases. As annotations can be added later, it promotes a distributed system in which publishers can align
  * their content with the descriptions created by others.
+ *
+ * @param <A> The type of canvas annotation
  */
 @SuppressWarnings({ PMD.GOD_CLASS, PMD.EXCESSIVE_IMPORTS })
 public abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> extends AbstractResource<A> {

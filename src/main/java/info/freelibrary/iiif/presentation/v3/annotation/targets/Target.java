@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3.annotation.targets;
 
-import java.net.URISyntaxException;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -24,7 +23,6 @@ public sealed class Target extends AbstractTarget permits SpecificResource, Mani
      * doesn't need to be serialized with a type property.
      *
      * @param aID An annotation target ID
-     * @throws URISyntaxException If the supplied ID is not a valid URI
      */
     public Target(final String aID) {
         super(aID, false);

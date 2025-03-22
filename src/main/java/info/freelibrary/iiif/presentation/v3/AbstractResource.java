@@ -46,6 +46,8 @@ import info.freelibrary.iiif.presentation.v3.utils.json.ServiceDeserializer;
 
 /**
  * A resource that can be used as a base for more specific IIIF presentation resources.
+ *
+ * @param <T> The type of resource
  */
 @SuppressWarnings({ PMD.EXCESSIVE_IMPORTS, PMD.ABSTRACT_CLASS_WITHOUT_ABSTRACT_METHOD, PMD.GOD_CLASS,
     PMD.TOO_MANY_FIELDS, PMD.TOO_MANY_METHODS, PMD.COUPLING_BETWEEN_OBJECTS })

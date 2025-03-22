@@ -40,14 +40,14 @@ public class AnnotationTargetDeserializer extends StdDeserializer<Target> {
     private static final long serialVersionUID = -6033073058449033461L;
 
     /**
-     * Creates a new behaviors deserializer.
+     * Creates a new annotation target deserializer.
      */
     AnnotationTargetDeserializer() {
-        this(null);
+        this(Target.class);
     }
 
     /**
-     * Creates a new behaviors deserializer.
+     * Creates a new annotation target deserializer.
      *
      * @param aClass A class to be deserialized
      */

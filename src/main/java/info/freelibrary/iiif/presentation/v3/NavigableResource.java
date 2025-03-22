@@ -27,6 +27,8 @@ import info.freelibrary.iiif.presentation.v3.utils.json.ContextListSerializer;
 
 /**
  * A navigable resource.
+ *
+ * @param <T> The type of navigable resource
  */
 @JsonFilter(ContextFilterProvider.FILTER_NAME)
 public class NavigableResource<T extends NavigableResource<T>> extends AbstractResource<T> {
