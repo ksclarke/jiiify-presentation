@@ -58,6 +58,7 @@
     <!-- Test related versions -->
     <magicfree.json.version>0.10.2</magicfree.json.version>
     <system.lambda.version>1.2.1</system.lambda.version>
+    <mockito.version>5.16.1</mockito.version>
     <opencsv.version>4.6</opencsv.version>
     <lorem.version>2.1</lorem.version>
 
@@ -148,6 +149,12 @@
       <groupId>com.github.stefanbirkner</groupId>
       <artifactId>system-lambda</artifactId>
       <version>${system.lambda.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${mockito.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -246,7 +253,10 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <!-- Uses 'add-opens' argument for system-lambda functionality in unit tests -->
-          <argLine>${jacoco.agent.arg} --add-opens java.base/java.util=ALL-UNNAMED</argLine>
+          <argLine><![CDATA[
+            ${jacoco.agent.arg} --add-opens java.base/java.util=ALL-UNNAMED
+            -javaagent:"${settings.localRepository}/net/bytebuddy/byte-buddy-agent/1.15.11/byte-buddy-agent-1.15.11.jar"
+          ]]></argLine>
         </configuration>
       </plugin>
 

@@ -91,7 +91,7 @@ public class ManifestTargetTest {
     @SuppressWarnings("unlikely-arg-type")
     public final void testTargetEqualsString() {
         final ManifestTarget test = new ManifestTarget(HTTPS + UUID.randomUUID().toString());
-        assertNotEquals(test, new String(Constants.EMPTY));
+        assertNotEquals(test, Constants.EMPTY);
     }
 
     /**
