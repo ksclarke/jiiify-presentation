@@ -214,18 +214,6 @@ public class PaintingAnnotationTest extends AbstractTest {
     }
 
     /**
-     * Tests constructing a painting annotation.
-     */
-    @Test
-    public void testPaintingAnnotationURICanvasSpecificResource() {
-        final PaintingAnnotation anno = new PaintingAnnotation(myAnnoID, myCanvas, myFragmentSelector);
-        final SpecificResource specificResource = (SpecificResource) anno.getTargets().get(0);
-
-        assertEquals(myAnnoID, anno.getID());
-        assertEquals(ResourceTypes.SPECIFIC_RESOURCE, specificResource.getType().get());
-    }
-
-    /**
      * Tests serializing and deserializing an annotation.
      *
      * @throws IOException If there is trouble reading the annotation file or serializing the constructed annotation

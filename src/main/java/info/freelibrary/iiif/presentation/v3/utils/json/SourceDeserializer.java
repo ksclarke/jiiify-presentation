@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import info.freelibrary.util.warnings.PMD;
+import info.freelibrary.util.warnings.Sonar;
 
 import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.annotation.targets.SpecificResource.Source;
@@ -45,7 +46,7 @@ public class SourceDeserializer extends StdDeserializer<Source> {
     }
 
     @Override
-    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY, PMD.COGNITIVE_COMPLEXITY })
+    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY, PMD.COGNITIVE_COMPLEXITY, Sonar.COGNITIVE_COMPLEXITY })
     public Source deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException {
         final JsonNode currentNode = JSON.getReader().readTree(aParser);
 

@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.PMD;
+import info.freelibrary.util.warnings.Sonar;
 
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.annotation.targets.CanvasTarget;
@@ -56,7 +57,7 @@ public class AnnotationTargetDeserializer extends StdDeserializer<Target> {
     }
 
     @Override
-    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY })
+    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY, Sonar.COGNITIVE_COMPLEXITY })
     public Target deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException {
         final JsonNode currentNode = aParser.getCodec().readTree(aParser);
         final JsonNode typeNode = currentNode.get(JsonKeys.TYPE);

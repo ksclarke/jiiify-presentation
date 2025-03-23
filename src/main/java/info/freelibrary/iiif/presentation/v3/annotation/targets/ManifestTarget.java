@@ -68,13 +68,13 @@ public non-sealed class ManifestTarget extends Target {
     }
 
     @Override
-    public CanvasTarget setPartOfs(final List<PartOf> aPartOfList) {
-        return (CanvasTarget) super.setPartOfs(aPartOfList);
+    public ManifestTarget setPartOfs(final List<PartOf> aPartOfList) {
+        return (ManifestTarget) super.setPartOfs(aPartOfList);
     }
 
     @Override
-    public CanvasTarget setPartOfs(final PartOf... aPartOfArray) {
-        return (CanvasTarget) super.setPartOfs(aPartOfArray);
+    public ManifestTarget setPartOfs(final PartOf... aPartOfArray) {
+        return (ManifestTarget) super.setPartOfs(aPartOfArray);
     }
 
     @Override

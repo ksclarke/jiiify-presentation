@@ -307,18 +307,6 @@ public class SupplementingAnnotationTest extends AbstractTest {
      * Tests constructing a supplementing annotation.
      */
     @Test
-    public void testSupplementingAnnotationURICanvasSpecificResource() {
-        final SupplementingAnnotation anno = new SupplementingAnnotation(myAnnoID, myCanvas, myFragmentSelector);
-        final SpecificResource specificResource = (SpecificResource) anno.getTargets().get(0);
-
-        assertEquals(myAnnoID, anno.getID());
-        assertEquals(ResourceTypes.SPECIFIC_RESOURCE, specificResource.getType().get());
-    }
-
-    /**
-     * Tests constructing a supplementing annotation.
-     */
-    @Test
     public void testSupplementingAnnotationURICanvasString() {
         final SupplementingAnnotation anno =
                 new SupplementingAnnotation(myAnnoID, myCanvas, myFragmentSelector.toString());

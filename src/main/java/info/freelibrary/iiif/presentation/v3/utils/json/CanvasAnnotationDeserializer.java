@@ -20,6 +20,7 @@ import com.pivovarit.function.ThrowingBiFunction;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.PMD;
+import info.freelibrary.util.warnings.Sonar;
 
 import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
@@ -284,7 +285,7 @@ public class CanvasAnnotationDeserializer extends StdDeserializer<Annotation<?>>
      * @return A list of annotation targets
      * @throws InputCoercionException If there is trouble parsing the incoming JSON
      */
-    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY })
+    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY, Sonar.COGNITIVE_COMPLEXITY })
     private List<Target> getTargets(final JsonNode aNode, final JsonParser aJsonParser) throws InputCoercionException {
         final List<Target> targets = new ArrayList<>();
 

@@ -14,6 +14,7 @@ import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.ThrowingConsumer;
 import info.freelibrary.util.ThrowingRunnable;
 import info.freelibrary.util.warnings.PMD;
+import info.freelibrary.util.warnings.Sonar;
 
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.annotation.targets.CanvasTarget;
@@ -40,7 +41,7 @@ public class AnnotationTargetSerializer extends StdSerializer<Target> {
     }
 
     @Override
-    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY, "PMD.SwitchDensity" })
+    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY, "PMD.SwitchDensity", Sonar.COGNITIVE_COMPLEXITY })
     public void serialize(final Target aTarget, final JsonGenerator aJsonGenerator, final SerializerProvider aProvider)
             throws IOException {
         try {

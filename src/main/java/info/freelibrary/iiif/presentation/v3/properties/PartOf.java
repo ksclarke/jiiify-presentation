@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.JDK;
 
 import info.freelibrary.iiif.presentation.v3.Resource;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
@@ -46,7 +47,7 @@ public class PartOf {
      *
      * @param aResource A resource to embed in the {@code PartOf}
      */
-    public PartOf(final Resource<?> aResource) {
+    public <T extends Resource<T>> PartOf(final Resource<T> aResource) {
         myEmbeddedResource = aResource;
     }
 
@@ -102,8 +103,9 @@ public class PartOf {
      *
      * @return An optional embedded resource
      */
-    public Optional<Resource<?>> getEmbeddedResource() {
-        return Optional.ofNullable(myEmbeddedResource);
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public <T extends Resource<T>> Optional<Resource<T>> getEmbeddedResource() {
+        return Optional.ofNullable((Resource<T>) myEmbeddedResource);
     }
 
     /**
