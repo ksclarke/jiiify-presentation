@@ -45,6 +45,7 @@ public class PartOf {
     /**
      * Creates a partOf that embeds a resource.
      *
+     * @param <T> The type of resource being embedded in the partOf
      * @param aResource A resource to embed in the {@code PartOf}
      */
     public <T extends Resource<T>> PartOf(final Resource<T> aResource) {
@@ -101,6 +102,7 @@ public class PartOf {
     /**
      * Gets the full embedded resource, if there is one.
      *
+     * @param <T> The type of embedded resource being returned
      * @return An optional embedded resource
      */
     @SuppressWarnings({ JDK.UNCHECKED })
