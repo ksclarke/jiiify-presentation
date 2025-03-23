@@ -105,18 +105,18 @@ public non-sealed class SpecificResource extends Target implements ContentResour
     }
 
     @Override
-    public boolean equals(final Object object) {
+    public boolean equals(final Object aObject) {
         final SpecificResource other;
 
-        if (this == object) {
+        if (this == aObject) {
             return true;
         }
 
-        if (!(object instanceof SpecificResource)) {
+        if (!(aObject instanceof SpecificResource)) {
             return false;
         }
 
-        other = (SpecificResource) object;
+        other = (SpecificResource) aObject;
         return Objects.equals(getID(), other.getID()) && Objects.equals(myFormat, other.myFormat) &&
                 Objects.equals(mySelector, other.mySelector) && Objects.equals(mySource, other.mySource) &&
                 Objects.equals(myStyleClass, other.myStyleClass);

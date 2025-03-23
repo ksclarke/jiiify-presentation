@@ -40,7 +40,7 @@ public class AnnotationTargetSerializer extends StdSerializer<Target> {
     }
 
     @Override
-    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY })
+    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY, "PMD.SwitchDensity" })
     public void serialize(final Target aTarget, final JsonGenerator aJsonGenerator, final SerializerProvider aProvider)
             throws IOException {
         try {
