@@ -17,6 +17,7 @@ import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.annotation.targets.CanvasTarget;
+import info.freelibrary.iiif.presentation.v3.annotation.targets.ManifestTarget;
 import info.freelibrary.iiif.presentation.v3.annotation.targets.SpecificResource;
 import info.freelibrary.iiif.presentation.v3.annotation.targets.Target;
 import info.freelibrary.iiif.presentation.v3.properties.PartOf;
@@ -70,6 +71,29 @@ public class AnnotationTargetSerializer extends StdSerializer<Target> {
                         aJsonGenerator.writeEndObject();
                     }
                     case ResourceTypes.MANIFEST -> {
+                        final ManifestTarget manifestTarget = (ManifestTarget) aTarget;
+                        final List<PartOf> partOfList = manifestTarget.getPartOfs();
+
+                        aJsonGenerator.writeStartObject();
+
+                        if (manifestTarget.getID() != null) {
+                            aJsonGenerator.writeStringField(JsonKeys.ID, manifestTarget.getID());
+                        }
+
+                        aJsonGenerator.writeStringField(JsonKeys.TYPE, ResourceTypes.CANVAS);
+
+                        if (!partOfList.isEmpty()) {
+                            aJsonGenerator.writeFieldName(JsonKeys.PART_OF);
+                            aJsonGenerator.writeStartArray();
+
+                            for (final PartOf partOf : partOfList) {
+                                aJsonGenerator.writeObject(partOf);
+                            }
+
+                            aJsonGenerator.writeEndArray();
+                        }
+
+                        aJsonGenerator.writeEndObject();
                     }
                     case ResourceTypes.CANVAS -> {
                         final CanvasTarget canvasTarget = (CanvasTarget) aTarget;

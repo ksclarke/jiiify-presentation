@@ -33,6 +33,7 @@ public class MintingExceptionTest extends I18nObject {
     public void testConstructorWithCause() {
         final Throwable cause = new RuntimeException("Underlying issue");
         final MintingException exception = new MintingException(cause);
+
         assertEquals(cause, exception.getCause());
     }
 
@@ -44,8 +45,10 @@ public class MintingExceptionTest extends I18nObject {
     public void testConstructorWithCauseAndMessageKey() {
         final Throwable cause = new RuntimeException("Root");
         final MintingException exception = new MintingException(cause, MessageCodes.JPA_000);
+        final String message = exception.getMessage();
+
         assertEquals(cause, exception.getCause());
-        assertTrue(exception.getMessage().equals(getI18n(MessageCodes.JPA_000)));
+        assertEquals(getI18n(MessageCodes.JPA_000), message);
     }
 
     /**
@@ -56,9 +59,11 @@ public class MintingExceptionTest extends I18nObject {
     public void testConstructorWithCauseMessageKeyAndDetails() {
         final Throwable cause = new RuntimeException("Nested problem");
         final MintingException exception = new MintingException(cause, MessageCodes.JPA_100, (Object[]) TEST_DETAILS);
+        final String message = exception.getMessage();
+
         assertEquals(cause, exception.getCause());
-        assertNotNull(exception.getMessage());
-        assertTrue(exception.getMessage().equals(getI18n(MessageCodes.JPA_100, TEST_DETAILS[0])));
+        assertNotNull(message);
+        assertEquals(getI18n(MessageCodes.JPA_100, TEST_DETAILS[0]), message);
     }
 
     /**
@@ -78,7 +83,9 @@ public class MintingExceptionTest extends I18nObject {
     @Test
     public void testConstructorWithMessageKeyAndDetails() {
         final MintingException exception = new MintingException(MessageCodes.JPA_100, (Object[]) TEST_DETAILS);
-        assertNotNull(exception.getMessage());
-        assertTrue(exception.getMessage().equals(getI18n(MessageCodes.JPA_100, TEST_DETAILS[0])));
+        final String message = exception.getMessage();
+
+        assertNotNull(message);
+        assertEquals(getI18n(MessageCodes.JPA_100, TEST_DETAILS[0]), message);
     }
 }

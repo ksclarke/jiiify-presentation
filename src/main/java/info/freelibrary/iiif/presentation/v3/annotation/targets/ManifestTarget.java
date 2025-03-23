@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.annotation.targets;
 
+import java.util.List;
 import java.util.Optional;
 
 import info.freelibrary.iiif.presentation.v3.Manifest;
@@ -52,6 +53,11 @@ public non-sealed class ManifestTarget extends Target {
     }
 
     @Override
+    public List<PartOf> getPartOfs() {
+        return super.getPartOfs();
+    }
+
+    @Override
     public Optional<String> getType() {
         return Optional.of(ResourceTypes.MANIFEST);
     }
@@ -59,6 +65,16 @@ public non-sealed class ManifestTarget extends Target {
     @Override
     public ManifestTarget setID(final String aID) {
         return (ManifestTarget) super.setID(aID);
+    }
+
+    @Override
+    public CanvasTarget setPartOfs(final List<PartOf> aPartOfList) {
+        return (CanvasTarget) super.setPartOfs(aPartOfList);
+    }
+
+    @Override
+    public CanvasTarget setPartOfs(final PartOf... aPartOfArray) {
+        return (CanvasTarget) super.setPartOfs(aPartOfArray);
     }
 
     @Override

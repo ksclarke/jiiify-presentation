@@ -3,7 +3,6 @@ package info.freelibrary.iiif.presentation.v3.utils.json;
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -53,8 +52,7 @@ public class PartOfDeserializer extends StdDeserializer<PartOf> {
     }
 
     @Override
-    public PartOf deserialize(final JsonParser aParser, final DeserializationContext aContext)
-            throws IOException, JacksonException {
+    public PartOf deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException {
         final JsonNode node = (JsonNode) JSON.readTree(aParser);
         final JsonNode typeNode = node.get(JsonKeys.TYPE);
         final Resource<?> resource;

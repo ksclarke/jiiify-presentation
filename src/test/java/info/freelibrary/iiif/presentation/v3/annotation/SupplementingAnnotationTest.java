@@ -283,8 +283,7 @@ public class SupplementingAnnotationTest extends AbstractTest {
      */
     @Test
     public void testSupplementingAnnotationStringCanvasSpecificResource() {
-        final SupplementingAnnotation anno =
-                new SupplementingAnnotation(myAnnoID.toString(), myCanvas, myFragmentSelector);
+        final SupplementingAnnotation anno = new SupplementingAnnotation(myAnnoID, myCanvas, myFragmentSelector);
         final SpecificResource specificResource = (SpecificResource) anno.getTargets().get(0);
 
         assertEquals(myAnnoID, anno.getID());
@@ -296,8 +295,8 @@ public class SupplementingAnnotationTest extends AbstractTest {
      */
     @Test
     public void testSupplementingAnnotationStringCanvasString() {
-        final SupplementingAnnotation anno =
-                new SupplementingAnnotation(myAnnoID.toString(), myCanvas, myFragmentSelector.toString());
+        final String selector = myFragmentSelector.toString();
+        final SupplementingAnnotation anno = new SupplementingAnnotation(myAnnoID, myCanvas, selector);
         final SpecificResource specificResource = (SpecificResource) anno.getTargets().get(0);
 
         assertEquals(myAnnoID, anno.getID());

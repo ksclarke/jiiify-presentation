@@ -183,7 +183,7 @@ public class PaintingAnnotationTest extends AbstractTest {
      */
     @Test
     public void testPaintingAnnotationStringCanvasSpecificResource() {
-        final PaintingAnnotation anno = new PaintingAnnotation(myAnnoID.toString(), myCanvas, myFragmentSelector);
+        final PaintingAnnotation anno = new PaintingAnnotation(myAnnoID, myCanvas, myFragmentSelector);
         final SpecificResource specificResource = (SpecificResource) anno.getTargets().get(0);
 
         assertEquals(myAnnoID, anno.getID());
@@ -289,9 +289,7 @@ public class PaintingAnnotationTest extends AbstractTest {
     @Test
     public final void testStylesheetSetURI() {
         final String value = HTTPS + UUID.randomUUID().toString();
-        final Stylesheet stylesheet = new PaintingAnnotation.Stylesheet(value);
-
-        stylesheet.setURI(URI.create(value.toString()));
+        final Stylesheet stylesheet = new PaintingAnnotation.Stylesheet(value).setURI(URI.create(value));
 
         assertTrue(stylesheet.getURI().isPresent());
         assertFalse(stylesheet.getValue().isPresent());

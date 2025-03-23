@@ -38,7 +38,7 @@ public class TextualBodyTest {
     @Test
     public final void testGetSetID() {
         final String id = UUID.randomUUID().toString();
-        assertEquals(id, new TextualBody().setID(id).getID().toString());
+        assertEquals(id, new TextualBody().setID(id).getID());
     }
 
     /**

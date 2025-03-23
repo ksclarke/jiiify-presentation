@@ -4,7 +4,6 @@ package info.freelibrary.iiif.presentation.v3.utils.json;
 import java.io.IOException;
 import java.util.Optional;
 
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -69,7 +68,7 @@ public class AnnotationDeserializer extends StdDeserializer<Annotation<?>> {
 
     @Override
     public Annotation<?> deserialize(final JsonParser aParser, final DeserializationContext aContext)
-            throws IOException, JacksonException {
+            throws IOException {
         final JsonNode node = (JsonNode) JSON.readTree(aParser);
         final Optional<Purpose> purpose = getPurpose(node.get(JsonKeys.MOTIVATION));
 
@@ -123,9 +122,9 @@ public class AnnotationDeserializer extends StdDeserializer<Annotation<?>> {
 
         if (aMotivation.isArray() && aMotivation.size() > 0) {
             for (final JsonNode purposeNode : aMotivation) {
-                final Optional<Purpose> purpose;
+                final Optional<Purpose> purpose = Purpose.fromLabel(purposeNode.asText());
 
-                if ((purpose = Purpose.fromLabel(purposeNode.asText())).isPresent()) {
+                if (purpose.isPresent()) {
                     return purpose;
                 }
             }

@@ -104,6 +104,24 @@ public non-sealed class SpecificResource extends Target implements ContentResour
         super();
     }
 
+    @Override
+    public boolean equals(final Object object) {
+        final SpecificResource other;
+
+        if (this == object) {
+            return true;
+        }
+
+        if (!(object instanceof SpecificResource)) {
+            return false;
+        }
+
+        other = (SpecificResource) object;
+        return Objects.equals(getID(), other.getID()) && Objects.equals(myFormat, other.myFormat) &&
+                Objects.equals(mySelector, other.mySelector) && Objects.equals(mySource, other.mySource) &&
+                Objects.equals(myStyleClass, other.myStyleClass);
+    }
+
     /**
      * Gets the format of the specific resource.
      *
@@ -149,6 +167,11 @@ public non-sealed class SpecificResource extends Target implements ContentResour
     @Override
     public Optional<String> getType() {
         return Optional.of(ResourceTypes.SPECIFIC_RESOURCE);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getID(), myFormat, mySelector, mySource, myStyleClass);
     }
 
     /**
