@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -13,7 +14,9 @@ import org.junit.Test;
 
 import info.freelibrary.util.Constants;
 
+import info.freelibrary.iiif.presentation.v3.Canvas;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.properties.PartOf;
 
 /**
  * Tests of {@link _Target}.
@@ -22,6 +25,87 @@ public class CanvasTargetTest {
 
     /** A ID prefix for testing. */
     private static final String HTTPS = "https://";
+
+    /**
+     * Tests the {@code CanvasTarget} constructor.
+     */
+    @Test
+    public final void testCanvasTargetConstructorCanvas() {
+        final Canvas canvas = new Canvas(HTTPS + UUID.randomUUID().toString());
+        final CanvasTarget target = new CanvasTarget(canvas);
+
+        assertEquals(canvas.getID(), target.getID());
+    }
+
+    /**
+     * Tests the {@code CanvasTarget} constructor.
+     */
+    @Test
+    public final void testCanvasTargetConstructorCanvasPartOf() {
+        final Canvas canvas = new Canvas(HTTPS + UUID.randomUUID().toString());
+        final PartOf partOf = new PartOf(canvas.getID(), ResourceTypes.CANVAS);
+        final CanvasTarget target = new CanvasTarget(canvas, partOf);
+
+        assertEquals(canvas.getID(), target.getID());
+        assertEquals(1, target.getPartOfs().size());
+        assertEquals(canvas.getID(), target.getPartOfs().get(0).getID());
+    }
+
+    /**
+     * Tests the {@code CanvasTarget} constructor.
+     */
+    @Test
+    public final void testCanvasTargetConstructorStringPartOfArray() {
+        final String id = HTTPS + UUID.randomUUID().toString();
+        final PartOf partOf = new PartOf(id, ResourceTypes.CANVAS);
+        final CanvasTarget target = new CanvasTarget(id, partOf);
+
+        assertEquals(id, target.getID());
+        assertEquals(1, target.getPartOfs().size());
+        assertEquals(id, target.getPartOfs().get(0).getID());
+    }
+
+    /**
+     * Tests the {@code CanvasTarget} constructor.
+     */
+    @Test
+    public final void testCanvasTargetConstructorStringPartOfList() {
+        final String id = HTTPS + UUID.randomUUID().toString();
+        final PartOf partOf = new PartOf(id, ResourceTypes.CANVAS);
+        final CanvasTarget target = new CanvasTarget(id, List.of(partOf));
+
+        assertEquals(id, target.getID());
+        assertEquals(1, target.getPartOfs().size());
+        assertEquals(id, target.getPartOfs().get(0).getID());
+    }
+
+    /**
+     * Tests the {@code CanvasTarget} {@code PartOf} setter.
+     */
+    @Test
+    public final void testCanvasTargetSetPartOfArray() {
+        final String id = HTTPS + UUID.randomUUID().toString();
+        final PartOf partOf = new PartOf(id, ResourceTypes.CANVAS);
+        final CanvasTarget target = new CanvasTarget(id).setPartOfs(partOf);
+
+        assertEquals(id, target.getID());
+        assertEquals(1, target.getPartOfs().size());
+        assertEquals(id, target.getPartOfs().get(0).getID());
+    }
+
+    /**
+     * Tests the {@code CanvasTarget} {@code PartOf} setter.
+     */
+    @Test
+    public final void testCanvasTargetSetPartOfList() {
+        final String id = HTTPS + UUID.randomUUID().toString();
+        final PartOf partOf = new PartOf(id, ResourceTypes.CANVAS);
+        final CanvasTarget target = new CanvasTarget(id).setPartOfs(List.of(partOf));
+
+        assertEquals(id, target.getID());
+        assertEquals(1, target.getPartOfs().size());
+        assertEquals(id, target.getPartOfs().get(0).getID());
+    }
 
     /**
      * Tests {@link _CanvasTarget#equals(Object) CanvasTarget}.

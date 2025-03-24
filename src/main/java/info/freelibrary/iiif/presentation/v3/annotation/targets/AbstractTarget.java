@@ -154,9 +154,13 @@ abstract class AbstractTarget {
      * @return The target
      */
     protected AbstractTarget setPartOfs(final List<PartOf> aPartOfList) {
-        myPartOfs.clear();
-        myPartOfs.addAll(aPartOfList);
+        if (myPartOfs == null) {
+            myPartOfs = new ArrayList<>();
+        } else {
+            myPartOfs.clear();
+        }
 
+        myPartOfs.addAll(aPartOfList);
         return this;
     }
 
@@ -167,9 +171,13 @@ abstract class AbstractTarget {
      * @return The target
      */
     protected AbstractTarget setPartOfs(final PartOf... aPartOfArray) {
-        myPartOfs.clear();
-        myPartOfs.addAll(Arrays.asList(aPartOfArray));
+        if (myPartOfs == null) {
+            myPartOfs = new ArrayList<>();
+        } else {
+            myPartOfs.clear();
+        }
 
+        myPartOfs.addAll(Arrays.asList(aPartOfArray));
         return this;
     }
 

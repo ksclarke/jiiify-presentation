@@ -10,6 +10,9 @@ import org.junit.Test;
 
 import info.freelibrary.util.Constants;
 
+import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.properties.PartOf;
+
 /**
  * Tests of {@link _Target}.
  */
@@ -17,6 +20,28 @@ public class TargetTest {
 
     /** A ID prefix for testing. */
     private static final String HTTPS = "https://";
+
+    /**
+     * Tests the construction of a {@code Target} from a supplied ID and boolean flag.
+     */
+    @Test
+    public final void testTargetConstructorStringBoolean() {
+        final String id = HTTPS + UUID.randomUUID().toString();
+        assertEquals(id, new Target(id, true).getID());
+    }
+
+    /**
+     * Tests the construction of a {@code Target} from a supplied ID, boolean flag, and {@code PartOf} array.
+     */
+    @Test
+    public final void testTargetConstructorStringBooleanPartOf() {
+        final String id = HTTPS + UUID.randomUUID().toString();
+        final PartOf partOf = new PartOf(id, ResourceTypes.MANIFEST);
+        final Target target = new Target(id, true, partOf);
+
+        assertEquals(id, target.getID());
+        assertEquals(id, target.getPartOfs().get(0).getID());
+    }
 
     /**
      * Tests {@link _Target#equals(Object) Target}.
@@ -87,5 +112,24 @@ public class TargetTest {
     public final void testTargetEqualsString() {
         final Target test = new Target(HTTPS + UUID.randomUUID().toString());
         assertNotEquals(test, new String(Constants.EMPTY));
+    }
+
+    /**
+     * Tests setting the ID for a {@code Target}.
+     */
+    @Test
+    public final void testTargetSetID() {
+        final String id = HTTPS + UUID.randomUUID().toString();
+        final Target target = new Target(HTTPS + UUID.randomUUID().toString());
+
+        assertEquals(id, target.setID(id).getID());
+    }
+
+    /**
+     * Tests setting the type of a {@code Target}.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public final void testTargetSetType() {
+        new Target(HTTPS + UUID.randomUUID().toString()).setType(ResourceTypes.MANIFEST);
     }
 }
