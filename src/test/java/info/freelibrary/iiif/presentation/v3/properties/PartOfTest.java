@@ -5,11 +5,14 @@ import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.toJson;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -28,6 +31,9 @@ import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
  * A partOf test.
  */
 public class PartOfTest {
+
+    /** A constant for the HTTPS protocol. */
+    private static final String HTTPS = "https://";
 
     /** A test fixture. */
     private static final File PART_OF_FULL_ONE = new File(TestUtils.TEST_DIR, "partof-full-one.json");
@@ -78,6 +84,17 @@ public class PartOfTest {
     }
 
     /**
+     * Tests equality between a PartOf and a null.
+     *
+     * @throws IOException If there is trouble reading the test resource
+     */
+    @Test
+    public final void testEqualsReverseNull() throws IOException {
+        final PartOf partOf = JSON.readValue(getTestFixture(), PartOf.class);
+        assertNotEquals(null, partOf);
+    }
+
+    /**
      * Tests equality between a PartOf and itself.
      *
      * @throws IOException If there is trouble reading the test resource
@@ -100,6 +117,34 @@ public class PartOfTest {
     }
 
     /**
+     * Tests getType().
+     */
+    @Test
+    public final void testGetType() throws IOException {
+        final Optional<String> type = JSON.readValue(getTestFixture(), PartOf.class).getType();
+
+        if (type.isEmpty()) {
+            fail();
+        }
+
+        assertEquals(ResourceTypes.MANIFEST, type.get());
+    }
+
+    /**
+     * Tests getType().
+     */
+    @Test
+    public final void testGetTypeReference() throws IOException {
+        final Optional<String> type = new PartOf(TEST_URI_1, ResourceTypes.MANIFEST).getType();
+
+        if (type.isEmpty()) {
+            fail();
+        }
+
+        assertEquals(ResourceTypes.MANIFEST, type.get());
+    }
+
+    /**
      * Tests that hash codes are consistently the same for PartOfs that are equal.
      *
      * @throws IOException If there is trouble reading the test fixture
@@ -110,6 +155,14 @@ public class PartOfTest {
         final PartOf partOf2 = JSON.readValue(getTestFixture(), PartOf.class);
 
         assertEquals(partOf1.hashCode(), partOf2.hashCode());
+    }
+
+    /**
+     * Tests hasObject().
+     */
+    @Test
+    public final void testHasObject() {
+        assertTrue(new PartOf(TEST_URI_1, ResourceTypes.MANIFEST, true).hasObject());
     }
 
     /**
@@ -143,6 +196,44 @@ public class PartOfTest {
         } catch (final IOException details) {
             fail(details.getMessage());
         }
+    }
+
+    /**
+     * Tests the setID() method on {@code PartOf}.
+     */
+    @Test
+    public final void testSetID() throws IOException {
+        final String id = HTTPS + UUID.randomUUID().toString();
+        final PartOf partOf = JSON.readValue(getTestFixture(), PartOf.class);
+
+        assertEquals(id, partOf.setID(id).getID());
+    }
+
+    /**
+     * Tests the setID() method on {@code PartOf}.
+     */
+    @Test
+    public final void testSetIDOnReference() throws IOException {
+        final String id = HTTPS + UUID.randomUUID().toString();
+        final PartOf partOf = new PartOf(id.substring(0, id.length() - 2), ResourceTypes.MANIFEST);
+
+        assertEquals(id, partOf.setID(id).getID());
+    }
+
+    /**
+     * Tests the setType() method on {@code PartOf}.
+     */
+    @Test(expected = UnsupportedOperationException.class)
+    public final void testSetType() throws IOException {
+        JSON.readValue(getTestFixture(), PartOf.class).setType(ResourceTypes.MANIFEST);
+    }
+
+    /**
+     * Tests the setType() method on {@code PartOf}.
+     */
+    @Test
+    public final void testSetTypeOnReference() throws IOException {
+        new PartOf(HTTPS + UUID.randomUUID().toString(), ResourceTypes.COLLECTION).setType(ResourceTypes.MANIFEST);
     }
 
     /**
