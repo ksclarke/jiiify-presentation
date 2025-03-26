@@ -32,7 +32,7 @@ public class DefaultMinterTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultMinterTest.class, MessageCodes.BUNDLE);
 
     /** The maximum number of IDs minted. */
-    private static final int MAX_NOID_COUNT = 1500625;
+    private static final int MAX_NOID_COUNT = 1_500_625;
 
     /** The ID pattern string. */
     private static final String NOID_PATTERN = "[0-9a-z]{4}";
@@ -147,5 +147,13 @@ public class DefaultMinterTest {
         // Should have one less than the max because our manifest has one ID already in it
         assertEquals(MAX_NOID_COUNT - 1, counter);
         assertEquals(0, minter.remaining());
+    }
+
+    /**
+     * Tests size() of the minter.
+     */
+    @Test
+    public final void testSize() {
+        assertEquals(MAX_NOID_COUNT, myMinter.size());
     }
 }
