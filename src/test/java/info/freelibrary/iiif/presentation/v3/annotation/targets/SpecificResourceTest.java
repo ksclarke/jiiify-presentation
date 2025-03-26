@@ -85,11 +85,12 @@ public class SpecificResourceTest extends AbstractTest {
      * Tests the SpecificResource equals method.
      */
     @Test
-    public final void testEqualsFirstNull() {
+    public final void testEqualsID() {
         final String json = TestUtils.format(StringUtils.format(EXPECTED, myID, myOtherID));
-        final SpecificResource specificResource = JSON.readValue(json, SpecificResource.class);
+        final SpecificResource specificResource1 = JSON.readValue(json, SpecificResource.class);
+        final SpecificResource specificResource2 = JSON.readValue(json, SpecificResource.class);
 
-        assertNotEquals(null, specificResource);
+        assertNotEquals(specificResource1.setID(myOtherID), specificResource2);
     }
 
     /**
