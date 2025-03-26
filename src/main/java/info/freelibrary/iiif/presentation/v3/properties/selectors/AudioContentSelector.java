@@ -13,6 +13,26 @@ public class AudioContentSelector implements ContentSelector {
         // This is intentionally left empty
     }
 
+    @Override
+    public boolean equals(final Object aObject) {
+        if (this == aObject) {
+            return true;
+        }
+
+        if (aObject == null || getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        // All instances are considered equal b/c there are no fields
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        // Consistent hash based on class identity
+        return AudioContentSelector.class.hashCode();
+    }
+
     /**
      * Gets a string representation of the audio content selector.
      *
@@ -22,5 +42,4 @@ public class AudioContentSelector implements ContentSelector {
     public String toString() {
         return AudioContentSelector.class.getSimpleName();
     }
-
 }

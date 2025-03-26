@@ -2,9 +2,13 @@
 package info.freelibrary.iiif.presentation.v3.annotation.targets;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +18,7 @@ import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.AbstractTest;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.AudioContentSelector;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.Selector;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
@@ -66,6 +71,50 @@ public class SpecificResourceTest extends AbstractTest {
     }
 
     /**
+     * Tests the SpecificResource equals method.
+     */
+    @Test
+    public final void testEquals() {
+        final String json = TestUtils.format(StringUtils.format(EXPECTED, myID, myOtherID));
+        final SpecificResource specificResource = JSON.readValue(json, SpecificResource.class);
+
+        assertEquals(specificResource, specificResource);
+    }
+
+    /**
+     * Tests the SpecificResource equals method.
+     */
+    @Test
+    public final void testEqualsFirstNull() {
+        final String json = TestUtils.format(StringUtils.format(EXPECTED, myID, myOtherID));
+        final SpecificResource specificResource = JSON.readValue(json, SpecificResource.class);
+
+        assertNotEquals(null, specificResource);
+    }
+
+    /**
+     * Tests the SpecificResource equals method.
+     */
+    @Test
+    public final void testEqualsSecondNull() {
+        final String json = TestUtils.format(StringUtils.format(EXPECTED, myID, myOtherID));
+        final SpecificResource specificResource = JSON.readValue(json, SpecificResource.class);
+
+        assertNotEquals(specificResource, null);
+    }
+
+    /**
+     * Tests the SpecificResource equals method.
+     */
+    @Test
+    public final void testEqualsString() {
+        final String json = TestUtils.format(StringUtils.format(EXPECTED, myID, myOtherID));
+        final SpecificResource specificResource = JSON.readValue(json, SpecificResource.class);
+
+        assertNotEquals(specificResource, json);
+    }
+
+    /**
      * Tests reading using {@link JSON}.
      */
     @Test
@@ -75,11 +124,71 @@ public class SpecificResourceTest extends AbstractTest {
     }
 
     /**
+     * Tests the SpecificResource getFormat() method.
+     */
+    @Test
+    public final void testGetFormatEmpty() {
+        final String json = TestUtils.format(StringUtils.format(EXPECTED, myID, myOtherID));
+        final SpecificResource specificResource = JSON.readValue(json, SpecificResource.class);
+        final Optional<MediaType> format = specificResource.getFormat();
+
+        assertTrue(format.isEmpty());
+    }
+
+    /**
+     * Tests getting the selector.
+     */
+    @Test
+    public final void testGetSelector() {
+        final String json = TestUtils.format(StringUtils.format(EXPECTED, myID, myOtherID));
+        final SpecificResource specificResource = JSON.readValue(json, SpecificResource.class);
+
+        assertTrue(specificResource.getSelector().isPresent());
+        assertEquals(SELECTOR, specificResource.getSelector().get());
+    }
+
+    /**
      * Tests {@link SpecificResource#getType() getType} method.
      */
     @Test
     public final void testGetType() {
         assertEquals(ResourceTypes.SPECIFIC_RESOURCE, new SpecificResource(myID, myOtherID, SELECTOR).getType().get());
+    }
+
+    /**
+     * Test protected constructor.
+     */
+    @Test
+    public void testProtectedConstructorViaSubclass() {
+        final SpecificResource instance;
+
+        /**
+         * A subclass that can test the protected constructor.
+         */
+        class SpecificResourceTestSubclass extends SpecificResource {
+
+            /**
+             * Creates a new instance of the subclass.
+             */
+            SpecificResourceTestSubclass() {
+                super();
+            }
+        }
+
+        instance = new SpecificResourceTestSubclass();
+        assertNotNull(instance);
+    }
+
+    /**
+     * Tests setting the ID.
+     */
+    @Test
+    public final void testSetID() {
+        final String json = TestUtils.format(StringUtils.format(EXPECTED, myID, myOtherID));
+        final SpecificResource specificResource = JSON.readValue(json, SpecificResource.class);
+
+        specificResource.setID(myID);
+        assertEquals(myID, specificResource.getID());
     }
 
     /**
