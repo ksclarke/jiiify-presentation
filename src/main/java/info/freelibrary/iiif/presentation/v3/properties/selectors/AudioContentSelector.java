@@ -15,21 +15,11 @@ public class AudioContentSelector implements ContentSelector {
 
     @Override
     public boolean equals(final Object aObject) {
-        if (this == aObject) {
-            return true;
-        }
-
-        if (aObject == null || getClass() != aObject.getClass()) {
-            return false;
-        }
-
-        // All instances are considered equal b/c there are no fields
-        return true;
+        return aObject != null && getClass() == aObject.getClass();
     }
 
     @Override
     public int hashCode() {
-        // Consistent hash based on class identity
         return AudioContentSelector.class.hashCode();
     }
 

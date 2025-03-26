@@ -134,7 +134,7 @@ public class PartOfTest {
      * Tests getType().
      */
     @Test
-    public final void testGetTypeReference() throws IOException {
+    public final void testGetTypeReference() {
         final Optional<String> type = new PartOf(TEST_URI_1, ResourceTypes.MANIFEST).getType();
 
         if (type.isEmpty()) {
@@ -213,7 +213,7 @@ public class PartOfTest {
      * Tests the setID() method on {@code PartOf}.
      */
     @Test
-    public final void testSetIDOnReference() throws IOException {
+    public final void testSetIDOnReference() {
         final String id = HTTPS + UUID.randomUUID().toString();
         final PartOf partOf = new PartOf(id.substring(0, id.length() - 2), ResourceTypes.MANIFEST);
 
@@ -232,8 +232,11 @@ public class PartOfTest {
      * Tests the setType() method on {@code PartOf}.
      */
     @Test
-    public final void testSetTypeOnReference() throws IOException {
-        new PartOf(HTTPS + UUID.randomUUID().toString(), ResourceTypes.COLLECTION).setType(ResourceTypes.MANIFEST);
+    public final void testSetTypeOnReference() {
+        final PartOf partOf = new PartOf(HTTPS + UUID.randomUUID().toString(), ResourceTypes.COLLECTION);
+        final Optional<String> type = partOf.setType(ResourceTypes.MANIFEST).getType();
+
+        assertEquals(ResourceTypes.MANIFEST, type.get());
     }
 
     /**
