@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import info.freelibrary.util.StringUtils;
 
+import info.freelibrary.iiif.presentation.v3.annotation.PaintingAnnotation;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.InvalidBehaviorException;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;

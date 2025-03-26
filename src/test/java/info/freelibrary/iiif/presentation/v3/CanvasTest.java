@@ -20,10 +20,18 @@ import org.junit.Test;
 
 import info.freelibrary.util.StringUtils;
 
-import info.freelibrary.iiif.presentation.v3.annotations.Target;
+import info.freelibrary.iiif.presentation.v3.annotation.PaintingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.SupplementingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.targets.SpecificResource;
+import info.freelibrary.iiif.presentation.v3.annotation.targets.Target;
+import info.freelibrary.iiif.presentation.v3.content.ContentResource;
+import info.freelibrary.iiif.presentation.v3.content.ImageContent;
+import info.freelibrary.iiif.presentation.v3.content.SoundContent;
+import info.freelibrary.iiif.presentation.v3.content.TextContent;
+import info.freelibrary.iiif.presentation.v3.content.VideoContent;
 import info.freelibrary.iiif.presentation.v3.cookbooks.AbstractCookbookTest;
-import info.freelibrary.iiif.presentation.v3.ids.Minter;
-import info.freelibrary.iiif.presentation.v3.ids.MinterFactory;
+import info.freelibrary.iiif.presentation.v3.id.Minter;
+import info.freelibrary.iiif.presentation.v3.id.MinterFactory;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.NavDate;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
@@ -1661,11 +1669,11 @@ public class CanvasTest extends AbstractCookbookTest {
         final ImageContent imageContent = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT)
                 .setServices(new ImageService3(IMAGE_INFO_SERVICE_ID, ImageService3.Profile.LEVEL_ZERO));
         final PaintingAnnotation pAnno =
-                new PaintingAnnotation(IMAGE_ANNO_ID, myCanvas).setBody(imageContent).setTarget(target);
+                new PaintingAnnotation(IMAGE_ANNO_ID, myCanvas).setBody(imageContent).setTargets(target);
 
         final TextContent textContent = new TextContent(TEXT_ID);
         final SupplementingAnnotation sAnno =
-                new SupplementingAnnotation(TEXT_ANNO_ID, myCanvas).setBody(textContent).setTarget(target);
+                new SupplementingAnnotation(TEXT_ANNO_ID, myCanvas).setBody(textContent).setTargets(target);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT);
         myCanvas.setThumbnails(new ImageContent(IMAGE_THUMBNAIL_ID).setWidthHeight(THUMBNAIL_WH, THUMBNAIL_WH)
@@ -2098,8 +2106,10 @@ public class CanvasTest extends AbstractCookbookTest {
      * @return The value of the media fragment of the selector that targets myCanvas via a painting annotation.
      */
     private String getPaintingMediaFragment() {
-        return ((MediaFragmentSelector) myCanvas.getPaintingPages().get(0).getAnnotations().get(0).getTarget()
-                .getSpecificResource().get().getSelector()).toString();
+        final List<Target> targets = myCanvas.getPaintingPages().get(0).getAnnotations().get(0).getTargets();
+        final SpecificResource specificResource = (SpecificResource) targets.get(0);
+
+        return ((MediaFragmentSelector) specificResource.getSelector().get()).toString();
     }
 
     /**
@@ -2117,8 +2127,10 @@ public class CanvasTest extends AbstractCookbookTest {
      * @return The value of the media fragment of the selector that targets myCanvas via a supplementing annotation.
      */
     private String getSupplementingMediaFragment() {
-        return ((MediaFragmentSelector) myCanvas.getSupplementingPages().get(0).getAnnotations().get(0).getTarget()
-                .getSpecificResource().get().getSelector()).toString();
+        final List<Target> targets = myCanvas.getSupplementingPages().get(0).getAnnotations().get(0).getTargets();
+        final SpecificResource specificResource = (SpecificResource) targets.get(0);
+
+        return ((MediaFragmentSelector) specificResource.getSelector().get()).toString();
     }
 
 }

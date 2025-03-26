@@ -3,40 +3,52 @@ package info.freelibrary.iiif.presentation.v3.utils;
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 
+import info.freelibrary.util.warnings.PMD;
+
+import info.freelibrary.iiif.presentation.v3.Service;
+import info.freelibrary.iiif.presentation.v3.properties.MediaType;
+import info.freelibrary.iiif.presentation.v3.utils.json.ContextFilterProvider;
 import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
+import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeDeserializer;
+import info.freelibrary.iiif.presentation.v3.utils.json.ServiceDeserializer;
 
 /**
  * A (de)serialization configuration.
  */
+@SuppressWarnings({ PMD.COUPLING_BETWEEN_OBJECTS })
 public final class JSON {
 
-    /**
-     * A mapper that converts objects into JSON and vice versa.
-     */
-    private static final ObjectMapper MAPPER = new ObjectMapper().configure(SerializationFeature.INDENT_OUTPUT, true)
+    /** A constant indicating all referenced resources should use URIs instead of objects. */
+    public static final String URI_LINKS = "IIIF_URI_REFS";
+
+    /** A mapper that converts objects into JSON and vice versa. */
+    private static final ObjectMapper MAPPER = new ObjectMapper() //
+            .setFilterProvider(new ContextFilterProvider(true)) //
+            .configure(SerializationFeature.INDENT_OUTPUT, true)
             .configure(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT, true)
             .configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true)
             .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true)
-            .registerModules(new Jdk8Module(), new SimpleModule().addSerializer(float.class, new FloatSerializer()));
+            .registerModules(new Jdk8Module(), //
+                    new SimpleModule() //
+                            .addDeserializer(MediaType.class, new MediaTypeDeserializer()) //
+                            .addDeserializer(Service.class, new ServiceDeserializer()));
 
     static {
         MAPPER.getFactory().enable(JsonParser.Feature.INCLUDE_SOURCE_IN_LOCATION);
@@ -83,6 +95,15 @@ public final class JSON {
      */
     public static <T> T convertValue(final Object aObject, final TypeReference<T> aTypeRef) {
         return MAPPER.convertValue(aObject, aTypeRef);
+    }
+
+    /**
+     * Creates a copy of the internal {@link ObjectMapper}, maintaining the original configuration.
+     *
+     * @return A new {@code ObjectMapper}
+     */
+    public static ObjectMapper copy() {
+        return MAPPER.copy();
     }
 
     /**
@@ -204,6 +225,18 @@ public final class JSON {
     }
 
     /**
+     * Reads the tree from the supplied {@code JsonParser}.
+     *
+     * @param <T> A type of reference to write
+     * @param aParser A JSON parser
+     * @return An instance of the typed reference
+     * @throws IOException If there is trouble reading from the tree
+     */
+    public static <T> T readTree(final JsonParser aParser) throws IOException {
+        return MAPPER.readTree(aParser);
+    }
+
+    /**
      * Reads the supplied JSON string into an instance of the supplied class.
      *
      * @param <T> A class type
@@ -255,6 +288,19 @@ public final class JSON {
     }
 
     /**
+     * Converts a tree node to an object.
+     *
+     * @param <T> A type of class to deserialize
+     * @param aTreeNode A tree node to read
+     * @param aClass A class to construct from the JSON
+     * @return An instance of the supplied class
+     * @throws JsonProcessingException If the tree cannot be read successfully
+     */
+    public static <T> T treeToValue(final TreeNode aTreeNode, final Class<T> aClass) throws JsonProcessingException {
+        return MAPPER.treeToValue(aTreeNode, aClass);
+    }
+
+    /**
      * Converts an object to a tree node.
      *
      * @param <T> The type of tree node
@@ -266,22 +312,13 @@ public final class JSON {
     }
 
     /**
-     * A float serializer that serializes floats that are really integers as integers rather than floats. This avoids
-     * outputting decimal values when they carry no value.
+     * Writes a value to string.
+     *
+     * @param aObject An object to serialize
+     * @return A string representation of the supplied object
+     * @throws JsonProcessingException If there is trouble serializing the object
      */
-    private static final class FloatSerializer extends JsonSerializer<Float> {
-
-        @Override
-        public void serialize(final Float aFloat, final JsonGenerator aJsonGenerator,
-                final SerializerProvider aSerializerProvider) throws IOException {
-            final int intValue = aFloat.intValue();
-
-            // If our float is really an integer, write it as that to avoid the meaningless decimal output
-            if (intValue == aFloat) {
-                aJsonGenerator.writeNumber(intValue);
-            } else {
-                aJsonGenerator.writeNumber(aFloat);
-            }
-        }
+    public static String writeValueAsString(final Object aObject) throws JsonProcessingException {
+        return MAPPER.writerFor(aObject.getClass()).writeValueAsString(aObject);
     }
 }

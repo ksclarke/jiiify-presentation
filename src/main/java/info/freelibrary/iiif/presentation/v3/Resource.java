@@ -9,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.warnings.PMD;
 
+import info.freelibrary.iiif.presentation.v3.content.ContentResource;
+import info.freelibrary.iiif.presentation.v3.content.ImageContent;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -134,7 +136,7 @@ public interface Resource<T extends Resource<T>> {
      *
      * @return The resource's type
      */
-    String getType();
+    Optional<String> getType();
 
     /**
      * Sets the behaviors for this resource. Different types of resources allow different types of behaviors. For

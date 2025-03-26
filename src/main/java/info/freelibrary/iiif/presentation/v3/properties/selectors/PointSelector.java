@@ -19,17 +19,17 @@ public class PointSelector implements Selector {
     /**
      * The PointSelector's T coordinate property.
      */
-    protected static final String T_COORDINATE = "t";
+    public static final String T_COORDINATE = "t";
 
     /**
      * The PointSelector's X coordinate property.
      */
-    protected static final String X_COORDINATE = "x";
+    public static final String X_COORDINATE = "x";
 
     /**
      * The PointSelector's Y coordinate property.
      */
-    protected static final String Y_COORDINATE = "y";
+    public static final String Y_COORDINATE = "y";
 
     /**
      * A floating point giving the time of the point in seconds, relative to the duration of the target resource.

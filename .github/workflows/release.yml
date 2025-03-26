@@ -9,19 +9,21 @@ jobs:
   release:
     name: Maven Artifact Publisher (JDK 17)
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ 17 ]
     env:
       AUTORELEASE_ARTIFACT: ${{ secrets.AUTORELEASE_ARTIFACT }}
 
     steps:
-
       - name: Check out source code
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # v3.0.2
 
       - name: Install JDK ${{ matrix.java }}
-        uses: actions/setup-java@860f60056505705214d223b91ed7a30f173f6142 # v3.3.0
+        uses: actions/setup-java@3a4f6e1af504cf6a31855fa899c6aa5355ba6c12 # v4.7.0
         with:
           cache: maven
-          distribution: 'adopt'
+          distribution: 'temurin'
           java-version: ${{ matrix.java }}
 
       # If running locally in act, install Maven

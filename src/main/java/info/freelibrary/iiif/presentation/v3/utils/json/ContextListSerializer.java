@@ -46,7 +46,8 @@ public class ContextListSerializer extends StdSerializer<ContextList> {
             aJsonGenerator.writeString(aContextList.get(0).toString());
         } else {
             aJsonGenerator.writeStartArray();
-            aContextList.stream().map(URI::toString).forEach((ThrowingConsumer<String>) aJsonGenerator::writeString);
+            aContextList.stream().map(URI::toString)
+                    .forEach((ThrowingConsumer<String, IOException>) aJsonGenerator::writeString);
             aJsonGenerator.writeEndArray();
         }
     }

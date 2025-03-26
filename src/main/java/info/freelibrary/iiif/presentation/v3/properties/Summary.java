@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import info.freelibrary.iiif.presentation.v3.utils.I18nUtils;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.json.SummaryDeserializer;
 
 /**
  * A short textual summary intended to be conveyed to the user when the metadata entries for the resource are not being

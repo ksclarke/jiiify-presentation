@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -20,13 +21,17 @@ import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.NavDate;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.json.ContextFilterProvider;
 import info.freelibrary.iiif.presentation.v3.utils.json.ContextListDeserializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.ContextListSerializer;
 
 /**
  * A navigable resource.
+ *
+ * @param <T> The type of navigable resource
  */
-class NavigableResource<T extends NavigableResource<T>> extends AbstractResource<T> {
+@JsonFilter(ContextFilterProvider.FILTER_NAME)
+public class NavigableResource<T extends NavigableResource<T>> extends AbstractResource<T> {
 
     /** The resource's contexts. */
     @JsonProperty(JsonKeys.CONTEXT)

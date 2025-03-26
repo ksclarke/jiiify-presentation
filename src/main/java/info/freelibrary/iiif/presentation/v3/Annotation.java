@@ -5,53 +5,21 @@ import java.util.List;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import info.freelibrary.iiif.presentation.v3.annotations.AssessingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.BookmarkingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.ClassifyingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.CommentingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.DescribingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.EditingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.HighlightingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.IdentifyingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.LinkingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.ModeratingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.Motivation;
-import info.freelibrary.iiif.presentation.v3.annotations.QuestioningAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.ReplyingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.TaggingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.Target;
-import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.Motivation;
+import info.freelibrary.iiif.presentation.v3.annotation.targets.Target;
+import info.freelibrary.iiif.presentation.v3.content.ContentResource;
+import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
-import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.json.AnnotationDeserializer;
 
 /**
  * An interface that defines methods related to the Web Annotation Data Model as it's used by IIIF.
  *
  * @param <A> A class that implements {@code Annotation}
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = JsonKeys.MOTIVATION,
-        visible = true, defaultImpl = WebAnnotation.class)
-@JsonSubTypes({ //
-    @Type(value = AssessingAnnotation.class, name = "assessing"),
-    @Type(value = BookmarkingAnnotation.class, name = "bookmarking"),
-    @Type(value = ClassifyingAnnotation.class, name = "classifying"),
-    @Type(value = CommentingAnnotation.class, name = "commenting"),
-    @Type(value = DescribingAnnotation.class, name = "describing"),
-    @Type(value = EditingAnnotation.class, name = "editing"),
-    @Type(value = HighlightingAnnotation.class, name = "highlighting"),
-    @Type(value = IdentifyingAnnotation.class, name = "identifying"),
-    @Type(value = LinkingAnnotation.class, name = "linking"),
-    @Type(value = ModeratingAnnotation.class, name = "moderating"),
-    @Type(value = PaintingAnnotation.class, name = "painting"),
-    @Type(value = QuestioningAnnotation.class, name = "questioning"),
-    @Type(value = ReplyingAnnotation.class, name = "replying"),
-    @Type(value = SupplementingAnnotation.class, name = "supplementing"),
-    @Type(value = TaggingAnnotation.class, name = "tagging") //
-})
+@JsonDeserialize(using = AnnotationDeserializer.class)
 public interface Annotation<A extends Annotation<A>> {
 
     /**
@@ -76,6 +44,13 @@ public interface Annotation<A extends Annotation<A>> {
     String getID();
 
     /**
+     * Gets the annotation's label.
+     *
+     * @return The label
+     */
+    Optional<Label> getLabel();
+
+    /**
      * Gets the motivation of the annotation.
      *
      * @return The motivation
@@ -83,11 +58,11 @@ public interface Annotation<A extends Annotation<A>> {
     Optional<Motivation> getMotivation();
 
     /**
-     * Gets the target of this annotation.
+     * Gets the targets of this annotation.
      *
      * @return The target
      */
-    Target getTarget();
+    List<Target> getTargets();
 
     /**
      * Gets the optional time mode.
@@ -130,6 +105,14 @@ public interface Annotation<A extends Annotation<A>> {
     A setID(String aID);
 
     /**
+     * Sets the annotation label.
+     *
+     * @param aLabel A label
+     * @return The annotation
+     */
+    A setLabel(Label aLabel);
+
+    /**
      * Sets the annotation's motivation.
      *
      * @param aMotivation A motivation
@@ -138,12 +121,21 @@ public interface Annotation<A extends Annotation<A>> {
     A setMotivation(Motivation aMotivation);
 
     /**
-     * Sets the target of this annotation.
+     * Sets the targets of this annotation.
      *
-     * @param aTarget An annotation target
+     * @param aTargetList A list of targets
      * @return This annotation
      */
-    A setTarget(Target aTarget);
+    A setTargets(List<Target> aTargetList);
+
+    /**
+     * Sets the targets of this annotation.
+     *
+     * @param aTargetArray An array of targets
+     * @return This annotation
+     */
+    @JsonIgnore
+    A setTargets(Target... aTargetArray);
 
     /**
      * Sets the time mode.

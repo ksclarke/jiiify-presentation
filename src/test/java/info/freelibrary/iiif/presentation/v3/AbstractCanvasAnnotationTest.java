@@ -11,6 +11,8 @@ import org.junit.Test;
 
 import info.freelibrary.util.Constants;
 
+import info.freelibrary.iiif.presentation.v3.annotation.AbstractCanvasAnnotation;
+import info.freelibrary.iiif.presentation.v3.content.DatasetContent;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 

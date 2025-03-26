@@ -4,12 +4,15 @@ package info.freelibrary.iiif.presentation.v3.properties;
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.toJson;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,11 +32,8 @@ import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
  */
 public class PartOfTest {
 
-    /** A test language code. */
-    private static final String ISO_639_2_NAHUATL = "nah";
-
-    /** A test language code. */
-    private static final String ISO_639_2_VIETNAMESE = "vie";
+    /** A constant for the HTTPS protocol. */
+    private static final String HTTPS = "https://";
 
     /** A test fixture. */
     private static final File PART_OF_FULL_ONE = new File(TestUtils.TEST_DIR, "partof-full-one.json");
@@ -43,9 +43,6 @@ public class PartOfTest {
 
     /** A test fixture. */
     private static final File PART_OF_SIMPLE_TWO = new File(TestUtils.TEST_DIR, "partof-simple-two.json");
-
-    /** A test label. */
-    private static final Label TEST_LABEL = new Label("PartOf for Example Object");
 
     /** A test URI. */
     private static final String TEST_URI_1 = "https://example.org/iiif/1";
@@ -70,28 +67,81 @@ public class PartOfTest {
      * @throws IOException If there is trouble reading the test fixture
      */
     @Test
-    public final void testEquals() throws IOException {
+    public final void testEqualsHappyPath() throws IOException {
         final String partOf = JSON.readValue(getTestFixture(), PartOf.class).toString();
         assertEquals(partOf, partOf);
     }
 
     /**
-     * Tests partOf (de)serialization of a full example.
+     * Tests equality between a PartOf and a null.
      *
-     * @throws IOException If there is trouble reading or deserializing the partOf file or serializing the constructed
-     *         partOf
+     * @throws IOException If there is trouble reading the test resource
      */
     @Test
-    public final void testFullPartOf() {
-        myManifest.setPartOfs(new PartOf(TEST_URI_1, ResourceTypes.MANIFEST).setLabel(TEST_LABEL)
-                .setLanguages(ISO_639_2_NAHUATL, ISO_639_2_VIETNAMESE));
+    public final void testEqualsNull() throws IOException {
+        final PartOf partOf = JSON.readValue(getTestFixture(), PartOf.class);
+        assertNotEquals(partOf, null);
+    }
 
-        try {
-            checkDeserialization(PART_OF_FULL_ONE);
-            checkSerialization(PART_OF_FULL_ONE);
-        } catch (final IOException details) {
-            fail(details.getMessage());
+    /**
+     * Tests equality between a PartOf and a null.
+     *
+     * @throws IOException If there is trouble reading the test resource
+     */
+    @Test
+    public final void testEqualsReverseNull() throws IOException {
+        final PartOf partOf = JSON.readValue(getTestFixture(), PartOf.class);
+        assertNotEquals(null, partOf);
+    }
+
+    /**
+     * Tests equality between a PartOf and itself.
+     *
+     * @throws IOException If there is trouble reading the test resource
+     */
+    @Test
+    public final void testEqualsSame() throws IOException {
+        final PartOf partOf = JSON.readValue(getTestFixture(), PartOf.class);
+        assertEquals(partOf, partOf);
+    }
+
+    /**
+     * Tests equality between a PartOf and a String.
+     *
+     * @throws IOException If there is trouble reading the test resource
+     */
+    @Test
+    public final void testEqualsString() throws IOException {
+        final PartOf partOf = JSON.readValue(getTestFixture(), PartOf.class);
+        assertNotEquals(partOf, "partOf");
+    }
+
+    /**
+     * Tests getType().
+     */
+    @Test
+    public final void testGetType() throws IOException {
+        final Optional<String> type = JSON.readValue(getTestFixture(), PartOf.class).getType();
+
+        if (type.isEmpty()) {
+            fail();
         }
+
+        assertEquals(ResourceTypes.MANIFEST, type.get());
+    }
+
+    /**
+     * Tests getType().
+     */
+    @Test
+    public final void testGetTypeReference() {
+        final Optional<String> type = new PartOf(TEST_URI_1, ResourceTypes.MANIFEST).getType();
+
+        if (type.isEmpty()) {
+            fail();
+        }
+
+        assertEquals(ResourceTypes.MANIFEST, type.get());
     }
 
     /**
@@ -105,6 +155,14 @@ public class PartOfTest {
         final PartOf partOf2 = JSON.readValue(getTestFixture(), PartOf.class);
 
         assertEquals(partOf1.hashCode(), partOf2.hashCode());
+    }
+
+    /**
+     * Tests hasObject().
+     */
+    @Test
+    public final void testHasObject() {
+        assertTrue(new PartOf(TEST_URI_1, ResourceTypes.MANIFEST, true).hasObject());
     }
 
     /**
@@ -141,46 +199,44 @@ public class PartOfTest {
     }
 
     /**
-     * Tests getting and setting a partOf's ID.
+     * Tests the setID() method on {@code PartOf}.
      */
     @Test
-    public final void testSetID() {
-        assertEquals(TEST_URI_1, new PartOf(TEST_URI_2, ResourceTypes.MANIFEST).setID(TEST_URI_1).getID());
+    public final void testSetID() throws IOException {
+        final String id = HTTPS + UUID.randomUUID().toString();
+        final PartOf partOf = JSON.readValue(getTestFixture(), PartOf.class);
+
+        assertEquals(id, partOf.setID(id).getID());
     }
 
     /**
-     * Tests getting and setting a partOf's label.
+     * Tests the setID() method on {@code PartOf}.
      */
     @Test
-    public final void testSetLabel() {
-        assertEquals(TEST_LABEL, new PartOf(TEST_URI_1, ResourceTypes.MANIFEST).setLabel(TEST_LABEL).getLabel().get());
+    public final void testSetIDOnReference() {
+        final String id = HTTPS + UUID.randomUUID().toString();
+        final PartOf partOf = new PartOf(id.substring(0, id.length() - 2), ResourceTypes.MANIFEST);
+
+        assertEquals(id, partOf.setID(id).getID());
     }
 
     /**
-     * Tests getting and setting a partOf's language.
+     * Tests the setType() method on {@code PartOf}.
      */
-    @Test
-    public final void testSetLanguage() {
-        assertEquals(Arrays.asList(ISO_639_2_NAHUATL, ISO_639_2_VIETNAMESE),
-                new PartOf(TEST_URI_1, ResourceTypes.MANIFEST).setLanguages(ISO_639_2_NAHUATL, ISO_639_2_VIETNAMESE)
-                        .getLanguages());
+    @Test(expected = UnsupportedOperationException.class)
+    public final void testSetType() throws IOException {
+        JSON.readValue(getTestFixture(), PartOf.class).setType(ResourceTypes.MANIFEST);
     }
 
     /**
-     * Tests setting a partOf's language with an invalid language tag.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public final void testSetLanguagesInvalid() {
-        new PartOf(TEST_URI_1, ResourceTypes.MANIFEST).setLanguages("???");
-    }
-
-    /**
-     * Tests getting and setting a partOf's type.
+     * Tests the setType() method on {@code PartOf}.
      */
     @Test
-    public final void testSetType() {
-        assertEquals(ResourceTypes.MANIFEST,
-                new PartOf(TEST_URI_1, ResourceTypes.DATASET).setType(ResourceTypes.MANIFEST).getType());
+    public final void testSetTypeOnReference() {
+        final PartOf partOf = new PartOf(HTTPS + UUID.randomUUID().toString(), ResourceTypes.COLLECTION);
+        final Optional<String> type = partOf.setType(ResourceTypes.MANIFEST).getType();
+
+        assertEquals(ResourceTypes.MANIFEST, type.get());
     }
 
     /**

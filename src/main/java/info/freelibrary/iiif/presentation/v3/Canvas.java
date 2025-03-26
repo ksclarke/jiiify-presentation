@@ -13,7 +13,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.util.warnings.Eclipse;
 import info.freelibrary.util.warnings.PMD;
 
-import info.freelibrary.iiif.presentation.v3.ids.Minter;
+import info.freelibrary.iiif.presentation.v3.annotation.PaintingAnnotation;
+import info.freelibrary.iiif.presentation.v3.content.ContentResource;
+import info.freelibrary.iiif.presentation.v3.id.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;

@@ -24,7 +24,8 @@ import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.JDK;
 import info.freelibrary.util.warnings.PMD;
 
-import info.freelibrary.iiif.presentation.v3.ids.UriUtils;
+import info.freelibrary.iiif.presentation.v3.content.ContentResource;
+import info.freelibrary.iiif.presentation.v3.id.UriUtils;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Homepage;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -40,9 +41,13 @@ import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.json.BehaviorDeserializer;
+import info.freelibrary.iiif.presentation.v3.utils.json.ContentResourceDeserializer;
+import info.freelibrary.iiif.presentation.v3.utils.json.ServiceDeserializer;
 
 /**
  * A resource that can be used as a base for more specific IIIF presentation resources.
+ *
+ * @param <T> The type of resource
  */
 @SuppressWarnings({ PMD.EXCESSIVE_IMPORTS, PMD.ABSTRACT_CLASS_WITHOUT_ABSTRACT_METHOD, PMD.GOD_CLASS,
     PMD.TOO_MANY_FIELDS, PMD.TOO_MANY_METHODS, PMD.COUPLING_BETWEEN_OBJECTS })
@@ -51,7 +56,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.BehaviorDeserializer;
     JsonKeys.BEHAVIOR, JsonKeys.HOMEPAGE, JsonKeys.THUMBNAIL, JsonKeys.SUMMARY, JsonKeys.METADATA, JsonKeys.START,
     JsonKeys.RIGHTS, JsonKeys.REQUIRED_STATEMENT, JsonKeys.VIEWING_DIRECTION, JsonKeys.RENDERING, JsonKeys.SEE_ALSO,
     JsonKeys.ITEMS, JsonKeys.SERVICE, JsonKeys.STRUCTURES, JsonKeys.SERVICES, JsonKeys.NAV_DATE, JsonKeys.ANNOTATIONS })
-abstract class AbstractResource<T extends AbstractResource<T>> implements Resource<T> {
+public abstract class AbstractResource<T extends AbstractResource<T>> implements Resource<T> {
 
     /** The logger used by abstract resources. */
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractResource.class, MessageCodes.BUNDLE);
@@ -64,7 +69,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> implements Resour
     private final Class<? extends Behavior> myBehaviorClass;
 
     /** The resource's behaviors. */
-    @JsonProperty(JsonKeys.BEHAVIOR)
+    @JsonSetter(JsonKeys.BEHAVIOR)
     @JsonDeserialize(using = BehaviorDeserializer.class)
     private List<Behavior> myBehaviors;
 
@@ -367,8 +372,8 @@ abstract class AbstractResource<T extends AbstractResource<T>> implements Resour
      */
     @Override
     @JsonGetter(JsonKeys.TYPE)
-    public String getType() {
-        return myType;
+    public Optional<String> getType() {
+        return Optional.of(myType);
     }
 
     @Override
@@ -385,7 +390,7 @@ abstract class AbstractResource<T extends AbstractResource<T>> implements Resour
     }
 
     @Override
-    @JsonSetter(JsonKeys.BEHAVIOR)
+    @JsonIgnore
     @SuppressWarnings(JDK.UNCHECKED)
     public T setBehaviors(final List<Behavior> aBehaviorList) {
         myBehaviors = Objects.requireNonNull(aBehaviorList);
@@ -710,7 +715,8 @@ abstract class AbstractResource<T extends AbstractResource<T>> implements Resour
     @Override
     public String toString() {
         try {
-            return JSON.getWriter(getClass()).writeValueAsString(this);
+            final boolean useURIs = Boolean.parseBoolean(System.getenv(JSON.URI_LINKS));
+            return JSON.getWriter(this.getClass()).withAttribute(JSON.URI_LINKS, useURIs).writeValueAsString(this);
         } catch (final JsonProcessingException details) {
             throw new I18nRuntimeException(details);
         }

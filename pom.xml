@@ -47,7 +47,7 @@
     <jackson.version>2.17.2</jackson.version>
     <jackson.databind.version>2.17.2</jackson.databind.version>
     <throwing.function.version>1.5.1</throwing.function.version>
-    <freelib.utils.version>5.0.5</freelib.utils.version>
+    <freelib.utils.version>5.1.1</freelib.utils.version>
     <jsoup.version>1.18.1</jsoup.version>
     <combinatorics.version>3.3.0</combinatorics.version>
     <media.fragments.uri.version>2.4</media.fragments.uri.version>
@@ -56,7 +56,9 @@
     <maven.shade.version>3.6.0</maven.shade.version>
 
     <!-- Test related versions -->
-    <magicfree.json.version>0.10.0</magicfree.json.version>
+    <magicfree.json.version>0.10.2</magicfree.json.version>
+    <system.lambda.version>1.2.1</system.lambda.version>
+    <mockito.version>5.16.1</mockito.version>
     <opencsv.version>4.6</opencsv.version>
     <lorem.version>2.1</lorem.version>
 
@@ -143,6 +145,18 @@
       <version>${opencsv.version}</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.github.stefanbirkner</groupId>
+      <artifactId>system-lambda</artifactId>
+      <version>${system.lambda.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${mockito.version}</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -200,7 +214,7 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
           <links>
-            <link>https://javadoc.io/doc/info.freelibrary/freelib-utils/${freelib.utils.version}/apidocs</link>
+            <link>https://javadoc.io/doc/info.freelibrary/freelib-utils/${freelib.utils.version}/</link>
           </links>
         </configuration>
       </plugin>
@@ -238,7 +252,11 @@
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <argLine>${jacoco.agent.arg}</argLine>
+          <!-- Uses 'add-opens' argument for system-lambda functionality in unit tests -->
+          <argLine><![CDATA[
+            ${jacoco.agent.arg} --add-opens java.base/java.util=ALL-UNNAMED
+            -javaagent:"${settings.localRepository}/net/bytebuddy/byte-buddy-agent/1.15.11/byte-buddy-agent-1.15.11.jar"
+          ]]></argLine>
         </configuration>
       </plugin>
 
@@ -316,7 +334,7 @@
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>11.0.0</version>
+    <version>12.0.4</version>
   </parent>
 
 </project>

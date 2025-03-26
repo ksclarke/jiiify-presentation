@@ -13,10 +13,10 @@ import org.junit.Test;
 
 import info.freelibrary.util.Constants;
 
-import info.freelibrary.iiif.presentation.v3.annotations.BookmarkingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotations.WebAnnotation;
-import info.freelibrary.iiif.presentation.v3.ids.Minter;
-import info.freelibrary.iiif.presentation.v3.ids.MinterFactory;
+import info.freelibrary.iiif.presentation.v3.annotation.BookmarkingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.WebAnnotation;
+import info.freelibrary.iiif.presentation.v3.id.Minter;
+import info.freelibrary.iiif.presentation.v3.id.MinterFactory;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;

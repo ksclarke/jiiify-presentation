@@ -1,12 +1,24 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import info.freelibrary.util.warnings.Eclipse;
+import info.freelibrary.util.I18nRuntimeException;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.JDK;
+
+import info.freelibrary.iiif.presentation.v3.Resource;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.iiif.presentation.v3.utils.json.PartOfDeserializer;
+import info.freelibrary.iiif.presentation.v3.utils.json.PartOfSerializer;
 
 /**
  * A containing resource that includes the resource that has the <code>partOf</code> property. For example, the
@@ -14,33 +26,167 @@ import info.freelibrary.util.warnings.Eclipse;
  * discovery of further relevant information. Similarly, a Manifest can reference a containing Collection using
  * <code>partOf</code> to aid in navigation.
  */
-public class PartOf extends AbstractLinkProperty<PartOf> {
+@JsonSerialize(using = PartOfSerializer.class)
+@JsonDeserialize(using = PartOfDeserializer.class)
+public class PartOf {
+
+    /** The logger used by {@code PartOf}. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(PartOf.class, MessageCodes.BUNDLE);
+
+    /** Whether the resource should be serialized as object or URI string. */
+    private boolean isSerializedAsObject;
+
+    /** The resource that this partOf embeds. */
+    private Resource<?> myEmbeddedResource;
+
+    /** The resource that this partOf references. */
+    private String[] myReferencedResource;
 
     /**
-     * Creates a partOf reference.
+     * Creates a partOf that embeds a resource.
+     *
+     * @param <T> The type of resource being embedded in the partOf
+     * @param aResource A resource to embed in the {@code PartOf}
+     */
+    public <T extends Resource<T>> PartOf(final Resource<T> aResource) {
+        myEmbeddedResource = aResource;
+    }
+
+    /**
+     * Creates a partOf that references a resource.
      *
      * @param aID A partOf ID
      * @param aType A partOf type
      */
     public PartOf(final String aID, final String aType) {
-        super(aID, aType);
+        this(aID, aType, true);
     }
 
     /**
-     * Creates a new partOf for Jackson's deserialization.
-     */
-    @SuppressWarnings(Eclipse.UNUSED)
-    private PartOf() {
-        super();
-    }
-
-    /**
-     * Gets a descriptive label.
+     * Creates a partOf using an ID and type. By indicating the resource is referenced, you set the serialization to be
+     * a single URI string. By indicating the resource is embedded, you set the serialization to be a JSON object.
      *
-     * @return A descriptive label
+     * @param aID A partOf ID
+     * @param aType A partOf type
+     * @param aObject Whether the resource should be serialized as a JSON object or URI
      */
-    @JsonInclude(Include.NON_EMPTY)
-    public Optional<Label> getLabel() {
-        return Optional.ofNullable(myLabel);
+    public PartOf(final String aID, final String aType, final boolean aObject) {
+        myReferencedResource = new String[2];
+
+        myReferencedResource[0] = aID;
+        myReferencedResource[1] = aType;
+        isSerializedAsObject = aObject;
+    }
+
+    @Override
+    public boolean equals(final Object aObject) {
+        final PartOf aPartOf;
+
+        if (this == aObject) {
+            return true;
+        }
+
+        if (aObject == null || getClass() != aObject.getClass()) {
+            return false;
+        }
+
+        aPartOf = (PartOf) aObject;
+
+        if (myEmbeddedResource != null && aPartOf.myEmbeddedResource != null) {
+            return Objects.equals(myEmbeddedResource, aPartOf.myEmbeddedResource);
+        }
+
+        return Arrays.equals(myReferencedResource, aPartOf.myReferencedResource);
+    }
+
+    /**
+     * Gets the full embedded resource, if there is one.
+     *
+     * @param <T> The type of embedded resource being returned
+     * @return An optional embedded resource
+     */
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public <T extends Resource<T>> Optional<Resource<T>> getEmbeddedResource() {
+        return Optional.ofNullable((Resource<T>) myEmbeddedResource);
+    }
+
+    /**
+     * Gets the partOf resource's ID.
+     *
+     * @return The partOf's resource ID
+     */
+    public String getID() {
+        return myReferencedResource == null ? myEmbeddedResource.getID() : myReferencedResource[0];
+    }
+
+    /**
+     * Gets the partOf resource's type.
+     *
+     * @return The partOf resource's type
+     */
+    public Optional<String> getType() {
+        return myReferencedResource == null ? myEmbeddedResource.getType() : Optional.of(myReferencedResource[1]);
+    }
+
+    @Override
+    public int hashCode() {
+        return myEmbeddedResource != null ? Objects.hash(myEmbeddedResource) : Arrays.hashCode(myReferencedResource);
+    }
+
+    /**
+     * Whether the resource is serialized as a URI or object. Embedded resources will always be serialized as objects.
+     *
+     * @return True if the resource is serialized as a URI; else, false
+     */
+    public boolean hasObject() {
+        return isSerializedAsObject || myEmbeddedResource != null;
+    }
+
+    /**
+     * Sets the partOf resource's ID.
+     *
+     * @param aID A new ID for the partOf resource
+     * @return This partOf
+     */
+    public PartOf setID(final String aID) {
+        if (myReferencedResource == null) {
+            myEmbeddedResource.setID(aID);
+        } else {
+            myReferencedResource[0] = aID;
+        }
+
+        return this;
+    }
+
+    /**
+     * Sets the type on referenced resources. Type cannot be set on an embedded resource. Trying to do that will throw
+     * an {@link UnsupportedOperationException}.
+     *
+     * @param aType A new resource type
+     * @return This partOf
+     * @throws UnsupportedOperationException If you try to set a type on an embedded resource
+     */
+    public PartOf setType(final String aType) {
+        if (myReferencedResource == null) {
+            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_154));
+        }
+
+        myReferencedResource[1] = aType;
+        return this;
+    }
+
+    /**
+     * Gets a JSON string representation of this object.
+     *
+     * @return A JSON string representation
+     */
+    @Override
+    public String toString() {
+        try {
+            final boolean useURIs = Boolean.parseBoolean(System.getenv(JSON.URI_LINKS));
+            return JSON.getWriter(this.getClass()).withAttribute(JSON.URI_LINKS, useURIs).writeValueAsString(this);
+        } catch (final JsonProcessingException details) {
+            throw new I18nRuntimeException(details);
+        }
     }
 }

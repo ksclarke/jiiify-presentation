@@ -20,7 +20,7 @@ import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.JDK;
 
-import info.freelibrary.iiif.presentation.v3.ids.UriUtils;
+import info.freelibrary.iiif.presentation.v3.id.UriUtils;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
@@ -264,7 +264,8 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
     @Override
     public String toString() {
         try {
-            return JSON.getWriter(getClass()).writeValueAsString(this);
+            final boolean useURIs = Boolean.parseBoolean(System.getenv(JSON.URI_LINKS));
+            return JSON.getWriter(getClass()).withAttribute(JSON.URI_LINKS, useURIs).writeValueAsString(this);
         } catch (final JsonProcessingException details) {
             throw new JsonParsingException(details);
         }

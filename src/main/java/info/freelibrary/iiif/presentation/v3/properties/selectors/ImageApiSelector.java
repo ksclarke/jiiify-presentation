@@ -1,9 +1,12 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.selectors;
 
+import static info.freelibrary.util.Constants.SLASH;
+
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -16,94 +19,55 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public class ImageApiSelector implements Selector {
 
-    /**
-     * The Image API selector's default format.
-     */
+    /** The Image API selector's format. */
+    public static final String FORMAT = "format";
+
+    /** The Image API selector's quality. */
+    public static final String QUALITY = "quality";
+
+    /** The Image API selector's region. */
+    public static final String REGION = "region";
+
+    /** The Image API selector's rotation. */
+    public static final String ROTATION = "rotation";
+
+    /** The Image API selector's size. */
+    public static final String SIZE = "size";
+
+    /** The Image API selector's default format. */
     protected static final String DEFAULT_FORMAT = "jpg";
 
-    /**
-     * The Image API selector's default quality.
-     */
+    /** The Image API selector's default quality. */
     protected static final String DEFAULT_QUALITY = "default";
 
-    /**
-     * The Image API selector's full region.
-     */
+    /** The Image API selector's full region. */
     protected static final String DEFAULT_REGION = "full";
 
-    /**
-     * The Image API selector's default rotation.
-     */
+    /** The Image API selector's default rotation. */
     protected static final String DEFAULT_ROTATION = "0";
 
-    /**
-     * The Image API selector's max size.
-     */
+    /** The Image API selector's max size. */
     protected static final String DEFAULT_SIZE = "max";
 
-    /**
-     * The Image API selector's format.
-     */
-    protected static final String FORMAT = "format";
-
-    /**
-     * The Image API selector's quality.
-     */
-    protected static final String QUALITY = "quality";
-
-    /**
-     * The Image API selector's region.
-     */
-    protected static final String REGION = "region";
-
-    /**
-     * The Image API selector's rotation.
-     */
-    protected static final String ROTATION = "rotation";
-
-    /**
-     * The Image API selector's size.
-     */
-    protected static final String SIZE = "size";
-
-    /**
-     * The expected number of URL delimiters.
-     */
+    /** The expected number of URL delimiters. */
     private static final int EXPECTED_URL_DELIM_COUNT = 4;
 
-    /**
-     * The Image API selector's logger.
-     */
+    /** The Image API selector's logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageApiSelector.class, MessageCodes.BUNDLE);
 
-    /**
-     * The Image API selector's slash constant.
-     */
-    private static final String SLASH = "/";
-
-    /**
-     * The Image API selector's format.
-     */
+    /** The Image API selector's format. */
     private String myFormat;
 
-    /**
-     * The Image API selector's quality.
-     */
+    /** The Image API selector's quality. */
     private String myQuality;
 
-    /**
-     * The Image API selector's region.
-     */
+    /** The Image API selector's region. */
     private String myRegion;
 
-    /**
-     * The Image API selector's rotation.
-     */
+    /** The Image API selector's rotation. */
     private String myRotation;
 
-    /**
-     * The Image API selector's size.
-     */
+    /** The Image API selector's size. */
     private String mySize;
 
     /**
@@ -161,7 +125,7 @@ public class ImageApiSelector implements Selector {
      *
      * @return The image format
      */
-    @JsonInclude(JsonInclude.Include.NON_ABSENT)
+    @JsonInclude(Include.NON_ABSENT)
     public Optional<String> getFormat() {
         return Optional.ofNullable(myFormat);
     }
@@ -171,7 +135,7 @@ public class ImageApiSelector implements Selector {
      *
      * @return The requested image quality
      */
-    @JsonInclude(JsonInclude.Include.NON_ABSENT)
+    @JsonInclude(Include.NON_ABSENT)
     public Optional<String> getQuality() {
         return Optional.ofNullable(myQuality);
     }
@@ -181,7 +145,7 @@ public class ImageApiSelector implements Selector {
      *
      * @return The requested region
      */
-    @JsonInclude(JsonInclude.Include.NON_ABSENT)
+    @JsonInclude(Include.NON_ABSENT)
     public Optional<String> getRegion() {
         return Optional.ofNullable(myRegion);
     }
@@ -191,7 +155,7 @@ public class ImageApiSelector implements Selector {
      *
      * @return The requested rotation
      */
-    @JsonInclude(JsonInclude.Include.NON_ABSENT)
+    @JsonInclude(Include.NON_ABSENT)
     public Optional<String> getRotation() {
         return Optional.ofNullable(myRotation);
     }
@@ -201,7 +165,7 @@ public class ImageApiSelector implements Selector {
      *
      * @return The requested size
      */
-    @JsonInclude(JsonInclude.Include.NON_ABSENT)
+    @JsonInclude(Include.NON_ABSENT)
     public Optional<String> getSize() {
         return Optional.ofNullable(mySize);
     }

@@ -14,7 +14,7 @@ import info.freelibrary.util.warnings.Eclipse;
 import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
-import info.freelibrary.iiif.presentation.v3.ids.UriUtils;
+import info.freelibrary.iiif.presentation.v3.id.UriUtils;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.Selector;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 

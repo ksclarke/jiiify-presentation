@@ -18,18 +18,10 @@ import java.util.function.UnaryOperator;
 
 import org.junit.Test;
 
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-
 /**
  * Tests of {@link ContextList}.
  */
 public class ContextListTest extends AbstractTest {
-
-    /** A test logger. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(ContextListTest.class, MessageCodes.BUNDLE);
 
     /** A list of test contexts. */
     private final List<URI> myContexts = Arrays.asList(URI.create(getURL()), URI.create(getURL()), URI.create(getURL()),

@@ -2,20 +2,24 @@
 package info.freelibrary.iiif.presentation.v3.utils.json;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonStreamContext;
+import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.Resource;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
@@ -29,83 +33,144 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavi
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**
- * A deserializer for classes that implement the Behavior interface. It operates on a list so that the elements can be
- * compared to check for mutual exclusivity.
+ * Deserializes JSON into a list of behaviors.
  */
-public class BehaviorDeserializer extends StdDeserializer<List<Behavior>> {
+public class BehaviorDeserializer extends JsonDeserializer<List<Behavior>> implements ContextualDeserializer {
 
-    /** The deserializer's logger. */
+    /** A logger for the deserializer. */
     private static final Logger LOGGER = LoggerFactory.getLogger(BehaviorDeserializer.class, MessageCodes.BUNDLE);
 
-    /** The <code>serialVersionUID</code> for BehaviorDeserializer. */
-    private static final long serialVersionUID = -5899455864378427817L;
+    /** The behavior type of the list being deserialized. */
+    private Class<? extends Behavior> myBehaviorType;
 
     /**
-     * Creates a new behaviors deserializer.
+     * Creates a new default deserializer.
      */
-    BehaviorDeserializer() {
-        this(null);
+    public BehaviorDeserializer() {
+        myBehaviorType = ResourceBehavior.class;
     }
 
     /**
-     * Creates a new behaviors deserializer.
+     * Creates a parameterized deserializer.
      *
-     * @param aClass A class to be deserialized
+     * @param aBehaviorType A type of list behavior
      */
-    BehaviorDeserializer(final Class<?> aClass) {
-        super(aClass);
+    public BehaviorDeserializer(final Class<? extends Behavior> aBehaviorType) {
+        myBehaviorType = aBehaviorType;
     }
 
     @Override
-    @SuppressWarnings({ PMD.PRESERVE_STACK_TRACE, PMD.UNUSED_ASSIGNMENT })
+    public JsonDeserializer<?> createContextual(final DeserializationContext aContext, final BeanProperty aProperty)
+            throws JsonMappingException {
+        final JavaType listType = aProperty.getType();
+
+        if (listType.isCollectionLikeType()) {
+            final JavaType contentType = listType.getContentType();
+
+            if (Behavior.class.isAssignableFrom(contentType.getRawClass()) && contentType.getRawClass().isEnum()) {
+                return new BehaviorDeserializer(contentType.getRawClass().asSubclass(Behavior.class));
+            }
+        }
+
+        // If we cannot get the actual type, use the default deserializer
+        return this;
+    }
+
+    @Override
     public List<Behavior> deserialize(final JsonParser aParser, final DeserializationContext aContext)
             throws IOException {
-        final JsonNode currentNode = aParser.getCodec().readTree(aParser);
-        final Object currentContext = aParser.getParsingContext().getCurrentValue();
-        final List<JsonMappingException> errors = new ArrayList<>();
+        final Object parent = getBehaviorListParent(aParser);
+        final List<Behavior> behaviors;
+        final JsonNode jsonNode;
 
-        final Function<String, Optional<? extends Behavior>> getBehavior;
-        final BehaviorList behaviors = switch (((Resource<?>) currentContext).getType()) {
-            case ResourceTypes.CANVAS -> {
-                getBehavior = CanvasBehavior::fromLabel;
-                yield new BehaviorList(CanvasBehavior.class);
-            }
-            case ResourceTypes.COLLECTION -> {
-                getBehavior = CollectionBehavior::fromLabel;
-                yield new BehaviorList(CollectionBehavior.class);
-            }
-            case ResourceTypes.MANIFEST -> {
-                getBehavior = ManifestBehavior::fromLabel;
-                yield new BehaviorList(ManifestBehavior.class);
-            }
-            case ResourceTypes.RANGE -> {
-                getBehavior = RangeBehavior::fromLabel;
-                yield new BehaviorList(RangeBehavior.class);
-            }
-            default -> {
-                getBehavior = ResourceBehavior::fromLabel;
-                yield new BehaviorList(ResourceBehavior.class);
-            }
-        };
+        if (parent instanceof Resource<?>) {
+            final Optional<String> type = ((Resource<?>) parent).getType();
 
-        currentNode.forEach(childNode -> {
-            final String label = childNode.textValue();
-            final Optional<? extends Behavior> behavior = getBehavior.apply(label);
+            if (type.isPresent()) {
+                myBehaviorType = getBehaviorType(type.get());
+            }
+        }
 
-            if (behavior.isEmpty()) {
-                errors.add(new JsonMappingException(aParser,
-                        LOGGER.getMessage(MessageCodes.JPA_010, label, behaviors.getBehaviorType()),
-                        aParser.currentLocation()));
+        jsonNode = ((ObjectMapper) aParser.getCodec()).readTree(aParser);
+        behaviors = new BehaviorList(myBehaviorType);
+
+        try {
+            if (jsonNode.isArray()) {
+                for (final JsonNode behaviorNode : jsonNode) {
+                    behaviors.add(deserializeBehavior(aParser, behaviorNode));
+                }
             } else {
-                behaviors.add(behavior.get());
+                behaviors.add(deserializeBehavior(aParser, jsonNode));
             }
-        });
-
-        if (!errors.isEmpty()) {
-            errors.forEach(error -> LOGGER.error(error, error.getMessage()));
-            throw errors.get(0);
+        } catch (final NoSuchMethodException | InvocationTargetException | IllegalAccessException details) {
+            throw new JsonMappingException(aParser, details.getMessage(), details);
         }
 
         return behaviors;
+    }
+
+    /**
+     * Deserializes a single behavior node using reflection.
+     *
+     * @param aParser A JSON parser
+     * @param aJsonNode A JSON node representing a behavior
+     * @return A deserialized behavior
+     * @throws NoSuchMethodException If the 'fromLabel' method cannot be found
+     * @throws InvocationTargetException If the method could not be invoked
+     * @throws IllegalAccessException If the method isn't accessible
+     * @throws JsonMappingException If the deserialization wasn't successful
+     */
+    private Behavior deserializeBehavior(final JsonParser aParser, final JsonNode aJsonNode)
+            throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, JsonMappingException {
+        final Method fromLabelMethod = myBehaviorType.getMethod("fromLabel", String.class);
+        final Optional<?> behavior = (Optional<?>) fromLabelMethod.invoke(null, aJsonNode.asText());
+
+        if (behavior.isPresent()) {
+            return (Behavior) behavior.get();
+        }
+
+        throw new JsonMappingException(aParser, LOGGER.getMessage(MessageCodes.JPA_151, aJsonNode.asText()));
+    }
+
+    /**
+     * Gets the parent of the list of behaviors.
+     *
+     * @param aParser A JSON parser
+     * @return The parent of the list
+     */
+    private Object getBehaviorListParent(final JsonParser aParser) {
+        final JsonStreamContext parsingContext = aParser.getParsingContext();
+        final JsonStreamContext parentContext = parsingContext.getParent();
+
+        // Get the object that contains the List<Behavior> we're deserializing
+        if (parentContext != null && parentContext.getCurrentValue() != null) {
+            return parentContext.getCurrentValue();
+        }
+
+        return null;
+    }
+
+    /**
+     * Gets the behavior implementation class.
+     *
+     * @param aType A type of behavior
+     * @return A class that extends behavior
+     */
+    private Class<? extends Behavior> getBehaviorType(final String aType) {
+        final Class<? extends Behavior> behavior;
+
+        if (ResourceTypes.RANGE.equals(aType)) {
+            behavior = RangeBehavior.class;
+        } else if (ResourceTypes.MANIFEST.equals(aType)) {
+            behavior = ManifestBehavior.class;
+        } else if (ResourceTypes.COLLECTION.equals(aType)) {
+            behavior = CollectionBehavior.class;
+        } else if (ResourceTypes.CANVAS.equals(aType)) {
+            behavior = CanvasBehavior.class;
+        } else {
+            behavior = ResourceBehavior.class;
+        }
+
+        return behavior;
     }
 }

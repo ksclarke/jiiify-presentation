@@ -31,7 +31,7 @@ public class MediaFragmentSelector implements FragmentSelector {
     /**
      * The URI of the <a href="http://www.w3.org/TR/media-frags/">Media Fragments URI specification</a>.
      */
-    static final URI MEDIA_FRAGMENT_SPECIFICATION_URI = URI.create("http://www.w3.org/TR/media-frags/");
+    public static final URI MEDIA_FRAGMENT_SPECIFICATION_URI = URI.create("http://www.w3.org/TR/media-frags/");
 
     /**
      * The logger for the MediaFragmentSelector.
