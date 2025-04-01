@@ -3,10 +3,10 @@ package info.freelibrary.iiif.presentation.v3.properties;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import info.freelibrary.util.Labeled;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
-import info.freelibrary.iiif.presentation.v3.utils.Labeled;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 
 /**

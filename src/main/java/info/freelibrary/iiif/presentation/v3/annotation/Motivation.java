@@ -5,7 +5,7 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-import info.freelibrary.iiif.presentation.v3.utils.Labeled;
+import info.freelibrary.util.Labeled;
 
 /**
  * An annotation's motivation is either one of {@link Purpose}'s values or a user supplied string value.

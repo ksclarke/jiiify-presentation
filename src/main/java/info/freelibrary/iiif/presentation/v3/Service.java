@@ -9,12 +9,13 @@ import java.util.function.Function;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import info.freelibrary.util.Labeled;
+
 import info.freelibrary.iiif.presentation.v3.services.AuthCookieService;
 import info.freelibrary.iiif.presentation.v3.services.AuthTokenService1;
 import info.freelibrary.iiif.presentation.v3.services.ImageService;
 import info.freelibrary.iiif.presentation.v3.services.OtherService;
 import info.freelibrary.iiif.presentation.v3.services.PhysicalDimsService;
-import info.freelibrary.iiif.presentation.v3.utils.Labeled;
 import info.freelibrary.iiif.presentation.v3.utils.json.ServiceDeserializer;
 
 /**

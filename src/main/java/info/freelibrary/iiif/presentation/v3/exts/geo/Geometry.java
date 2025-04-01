@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import info.freelibrary.util.Labeled;
+import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.utils.json.GeometryDeserializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.GeometrySerializer;
@@ -16,6 +17,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.GeometrySerializer;
  */
 @JsonDeserialize(using = GeometryDeserializer.class)
 @JsonSerialize(using = GeometrySerializer.class)
+@SuppressWarnings({ PMD.IMPLICIT_FUNCTIONAL_INTERFACE })
 public interface Geometry {
 
     /**

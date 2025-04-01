@@ -1,8 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3.utils.json;
 
-import static com.pivovarit.function.ThrowingBiFunction.sneaky;
 import static info.freelibrary.util.Constants.SINGLE_INSTANCE;
+import static info.freelibrary.util.ThrowingBiFunction.unwrap;
 
 import java.io.IOException;
 import java.util.List;
@@ -15,10 +15,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.pivovarit.function.ThrowingBiFunction;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.ThrowingBiFunction;
 import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
@@ -74,12 +74,12 @@ public class PaintingAnnotationSerializer extends StdSerializer<PaintingAnnotati
         try {
             // Start writing our JSON output
             aJsonGenerator.writeStartObject();
-            aJsonGenerator.writeObjectField(JsonKeys.ID, sneaky(check).apply(JsonKeys.ID, aPaintingAnnotation.getID()));
+            aJsonGenerator.writeObjectField(JsonKeys.ID, unwrap(check).apply(JsonKeys.ID, aPaintingAnnotation.getID()));
             aJsonGenerator.writeObjectField(JsonKeys.TYPE, ResourceTypes.ANNOTATION);
 
             if (motivation.isPresent()) {
                 aJsonGenerator.writeObjectField(JsonKeys.MOTIVATION,
-                        sneaky(check).apply(JsonKeys.MOTIVATION, motivation.get().toString()));
+                        unwrap(check).apply(JsonKeys.MOTIVATION, motivation.get().toString()));
             }
 
             if (timeMode.isPresent()) {

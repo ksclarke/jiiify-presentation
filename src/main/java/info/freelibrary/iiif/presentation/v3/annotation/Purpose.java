@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-import info.freelibrary.iiif.presentation.v3.utils.Labeled;
+import info.freelibrary.util.Labeled;
 
 /**
  * A relationship that serves as an annotation's motivation or the purpose of an annotation's body.

@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.utils.json;
 
-import static com.pivovarit.function.ThrowingBiFunction.sneaky;
+import static info.freelibrary.util.ThrowingBiFunction.unwrap;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,10 +15,10 @@ import com.fasterxml.jackson.core.exc.InputCoercionException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.pivovarit.function.ThrowingBiFunction;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.ThrowingBiFunction;
 import info.freelibrary.util.warnings.PMD;
 import info.freelibrary.util.warnings.Sonar;
 
@@ -105,13 +105,13 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
         final JsonNode node = aParser.getCodec().readTree(aParser);
         final JsonNode motivationNode = node.get(JsonKeys.MOTIVATION);
         final String motivation = motivationNode == null ? null : motivationNode.asText();
-        final String id = sneaky(check).apply(JsonKeys.ID, node.get(JsonKeys.ID));
+        final String id = unwrap(check).apply(JsonKeys.ID, node.get(JsonKeys.ID));
         final WebAnnotation annotation = getAnnotation(id, motivation, node, aParser);
         final Optional<TimeMode> timeMode = getTimeMode(node.get(JsonKeys.TIMEMODE));
         final Optional<Label> label = getLabel(node.get(JsonKeys.LABEL));
         final JsonNode bodyNode = node.get(JsonKeys.BODY);
 
-        annotation.setBody(getBody(bodyNode, sneaky(check)));
+        annotation.setBody(getBody(bodyNode, unwrap(check)));
         annotation.setChoice(getChoice(bodyNode));
 
         if (timeMode.isPresent()) {

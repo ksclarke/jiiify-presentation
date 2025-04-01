@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.JDK;
+import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.utils.I18nUtils;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
@@ -21,6 +22,7 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  *
  * @param <T> The type of resource that's localized
  */
+@SuppressWarnings({ PMD.IMPLICIT_FUNCTIONAL_INTERFACE })
 public interface Localized<T> {
 
     /**

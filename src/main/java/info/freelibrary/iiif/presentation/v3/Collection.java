@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import info.freelibrary.util.Labeled;
 import info.freelibrary.util.ListUtils;
 import info.freelibrary.util.warnings.Eclipse;
 import info.freelibrary.util.warnings.JDK;
@@ -30,7 +31,6 @@ import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CollectionBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-import info.freelibrary.iiif.presentation.v3.utils.Labeled;
 
 /**
  * An ordered list of {@link Manifest}(s) available for viewing; these manifests may be nested in other collections.

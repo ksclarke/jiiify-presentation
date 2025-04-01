@@ -50,5 +50,4 @@ jobs:
           nexus_password: ${{ secrets.SONATYPE_PASSWORD }}
           maven_profiles: "release"
           maven_args: >
-            -Drevision=${{ env.RELEASE_VERSION }} -Dautorelease.artifact=${{ env.AUTORELEASE_ARTIFACT }}
-            -Dorg.slf4j.simpleLogger.log.net.sourceforge.pmd=error -ntp
+            -Drevision=${{ env.RELEASE_VERSION }} -Dautorelease.artifact=${{ env.AUTORELEASE_ARTIFACT }} -ntp
