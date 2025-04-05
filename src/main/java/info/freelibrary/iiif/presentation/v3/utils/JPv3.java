@@ -18,6 +18,7 @@ import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.ThrowingConsumer;
 import info.freelibrary.util.warnings.Checkstyle;
 import info.freelibrary.util.warnings.PMD;
+import info.freelibrary.util.warnings.Sonar;
 
 import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.AnnotationCollection;
@@ -72,18 +73,16 @@ public final class JPv3 {
      * @param anArgsArray An array of arguments
      * @throws IOException If the JSON file cannot be read
      */
-    @SuppressWarnings({ PMD.SYSTEM_PRINTLN, Checkstyle.UNCOMMENTED_MAIN, "UncommentedMain" })
+    @SuppressWarnings({ PMD.SYSTEM_PRINTLN, Checkstyle.UNCOMMENTED_MAIN, Sonar.SYSTEM_OUT_ERR })
     public static void main(final String[] anArgsArray) throws IOException {
         if (anArgsArray.length > 0) {
             final Path path = Path.of(anArgsArray[0]);
 
             if (Files.exists(path)) {
                 if (anArgsArray.length == SINGLE_INSTANCE) {
-                    findValue(path, JsonKeys.TYPE).ifPresentOrElse((ThrowingConsumer<String, IOException>) type -> {
-                        System.out.println(read(path, type));
-                    }, () -> {
-                        System.err.println(LOGGER.getMessage(MessageCodes.JPA_156));
-                    });
+                    findValue(path, JsonKeys.TYPE).ifPresentOrElse(
+                            (ThrowingConsumer<String, IOException>) type -> System.out.println(read(path, type)),
+                            () -> System.err.println(LOGGER.getMessage(MessageCodes.JPA_156)));
                 } else {
                     System.out.println(read(path, anArgsArray[1]));
                 }

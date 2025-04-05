@@ -6,6 +6,7 @@ import static com.github.stefanbirkner.systemlambda.SystemLambda.tapSystemOut;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.FileReader;
@@ -160,6 +161,11 @@ public class JPv3Test {
     public void testPrivateConstructor() throws Exception {
         final var constructor = JPv3.class.getDeclaredConstructor();
         constructor.setAccessible(true);
-        constructor.newInstance();
+
+        try {
+            constructor.newInstance();
+        } catch (final Exception details) {
+            fail(details.getMessage());
+        }
     }
 }
