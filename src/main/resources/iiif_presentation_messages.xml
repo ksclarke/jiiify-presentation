@@ -127,4 +127,8 @@
   <entry key="JPA-154">PartOf being serialized ({}) lacks type</entry>
   <entry key="JPA-154">Type cannot be set on an embedded resource</entry>
   <entry key="JPA-155">A referenced resource must contain a type and ID</entry>
+  <entry key="JPA-156">Supplied file isn't recongized as a supported IIIF type</entry>
+  <entry key="JPA-157">First argument must be a pre-existing IIIF Presentation file</entry>
+  <entry key="JPA-158">Please supply the path to the file you want to read</entry>
+  <entry key="JPA-159">Unsupported IIIF Presentation file type: {}</entry>
 </properties>

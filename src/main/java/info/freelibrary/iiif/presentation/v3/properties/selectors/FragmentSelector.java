@@ -5,11 +5,14 @@ import java.net.URI;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import info.freelibrary.util.warnings.PMD;
+
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
 /**
  * A fragment selector interface. Particular types of fragment selectors can implement this.
  */
+@SuppressWarnings({ PMD.IMPLICIT_FUNCTIONAL_INTERFACE })
 public interface FragmentSelector extends Selector {
 
     /**

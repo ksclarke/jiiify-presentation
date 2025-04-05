@@ -44,16 +44,16 @@
 
   <properties>
     <revision>0.0.0-SNAPSHOT</revision>
-    <jackson.version>2.17.2</jackson.version>
-    <jackson.databind.version>2.17.2</jackson.databind.version>
-    <throwing.function.version>1.5.1</throwing.function.version>
-    <freelib.utils.version>5.1.1</freelib.utils.version>
+    <jackson.version>2.18.3</jackson.version>
+    <jackson.databind.version>2.18.3</jackson.databind.version>
+    <freelib.utils.version>5.2.0</freelib.utils.version>
     <jsoup.version>1.18.1</jsoup.version>
     <combinatorics.version>3.3.0</combinatorics.version>
     <media.fragments.uri.version>2.4</media.fragments.uri.version>
 
     <!-- Build related versions -->
     <maven.shade.version>3.6.0</maven.shade.version>
+    <native.maven.plugin.version>0.10.6</native.maven.plugin.version>
 
     <!-- Test related versions -->
     <magicfree.json.version>0.10.2</magicfree.json.version>
@@ -96,11 +96,6 @@
       <version>${jackson.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.pivovarit</groupId>
-      <artifactId>throwing-function</artifactId>
-      <version>${throwing.function.version}</version>
-    </dependency>
-    <dependency>
       <groupId>org.jsoup</groupId>
       <artifactId>jsoup</artifactId>
       <version>${jsoup.version}</version>
@@ -120,7 +115,7 @@
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <scope>test</scope>
+      <!--<scope>test</scope>-->
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -253,10 +248,13 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <!-- Uses 'add-opens' argument for system-lambda functionality in unit tests -->
-          <argLine><![CDATA[
-            ${jacoco.agent.arg} --add-opens java.base/java.util=ALL-UNNAMED
-            -javaagent:"${settings.localRepository}/net/bytebuddy/byte-buddy-agent/1.15.11/byte-buddy-agent-1.15.11.jar"
-          ]]></argLine>
+          <argLine><![CDATA[ ${jacoco.agent.arg}
+            --add-opens java.base/java.util=ALL-UNNAMED
+            --add-opens=java.base/java.lang=ALL-UNNAMED
+            -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
+            ]]></argLine>
+          <forkCount>1</forkCount>
+          <reuseForks>false</reuseForks>
         </configuration>
       </plugin>
 
@@ -267,13 +265,97 @@
           <systemPropertyVariables>
             <jiiify.version>${project.version}</jiiify.version>
           </systemPropertyVariables>
-          <argLine>--add-opens java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED</argLine>
+          <argLine><![CDATA[
+            --add-opens java.base/sun.nio.ch=ALL-UNNAMED
+            --add-opens java.base/java.io=ALL-UNNAMED
+          ]]></argLine>
         </configuration>
       </plugin>
     </plugins>
   </build>
 
   <profiles>
+    <profile>
+      <id>native</id>
+      <dependencies>
+        <dependency>
+          <groupId>ch.qos.logback</groupId>
+          <artifactId>logback-classic</artifactId>
+          <scope>compile</scope>
+        </dependency>
+      </dependencies>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>3.5.0</version>
+            <executions>
+              <execution>
+                <id>run-with-agent</id>
+                <phase>process-classes</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <executable>java</executable>
+                  <arguments>
+                    <argument>-agentlib:native-image-agent=config-output-dir=target/native-image-config</argument>
+                    <argument>-cp</argument>
+                    <classpath />
+                    <argument>info.freelibrary.iiif.presentation.v3.utils.JPv3</argument>
+                    <argument>src/test/resources/cookbook/0001-mvm-image/manifest.json</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+              <execution>
+                <id>cp-native-image-config</id>
+                <phase>process-classes</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <executable>cp</executable>
+                  <arguments>
+                    <argument>target/native-image-config/reachability-metadata.json</argument>
+                    <argument>src/main/resources/META-INF/native-image/info.freelibrary/jiiify-presentation/</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.graalvm.buildtools</groupId>
+            <artifactId>native-maven-plugin</artifactId>
+            <version>${native.maven.plugin.version}</version>
+            <extensions>true</extensions>
+            <executions>
+              <execution>
+                <id>build-native</id>
+                <goals>
+                  <goal>compile-no-fork</goal>
+                </goals>
+                <phase>package</phase>
+              </execution>
+            </executions>
+            <configuration>
+              <mainClass>info.freelibrary.iiif.presentation.v3.utils.JPv3</mainClass>
+              <imageName>jpv3</imageName>
+              <buildArgs>
+                <buildArg>-O3</buildArg>
+                <buildArg>-march=native</buildArg>
+                <!--<buildArg>-/-gc=G1</buildArg>--><!-- Adds 20 MB for GC addition -->
+                <buildArg>--exact-reachability-metadata</buildArg>
+              </buildArgs>
+              <metadataRepository>
+                <enabled>true</enabled>
+              </metadataRepository>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
     <profile>
       <id>uber</id>
       <dependencies>
@@ -320,6 +402,9 @@
                       <resource>logback.xml</resource>
                       <file>src/test/resources/logback-uber.xml</file>
                     </transformer>
+                    <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                      <mainClass>info.freelibrary.iiif.presentation.v3.utils.JPv3</mainClass>
+                    </transformer>
                   </transformers>
                 </configuration>
               </execution>
@@ -334,7 +419,7 @@
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>12.0.4</version>
+    <version>12.0.6</version>
   </parent>
 
 </project>

@@ -1,8 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3.utils.json;
 
-import static com.pivovarit.function.ThrowingBiFunction.sneaky;
 import static info.freelibrary.util.Constants.SINGLE_INSTANCE;
+import static info.freelibrary.util.ThrowingBiFunction.unwrap;
 
 import java.io.IOException;
 import java.net.URI;
@@ -18,10 +18,10 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.pivovarit.function.ThrowingBiFunction;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.ThrowingBiFunction;
 import info.freelibrary.util.warnings.PMD;
 import info.freelibrary.util.warnings.Sonar;
 
@@ -97,7 +97,7 @@ public class ContentStateDeserializer extends StdDeserializer<ContentStateAnnota
         final JsonNode node = aParser.getCodec().readTree(aParser);
         final JsonNode contexts = node.get(JsonKeys.CONTEXT);
         final JsonNode motivationNode = node.get(JsonKeys.MOTIVATION);
-        final String id = sneaky(check).apply(JsonKeys.ID, node.get(JsonKeys.ID));
+        final String id = unwrap(check).applyThrows(JsonKeys.ID, node.get(JsonKeys.ID));
         final Optional<TimeMode> timeMode = getTimeMode(node.get(JsonKeys.TIMEMODE));
         final Optional<Label> label = getLabel(node.get(JsonKeys.LABEL));
         final JsonNode bodyNode = node.get(JsonKeys.BODY);
@@ -114,7 +114,7 @@ public class ContentStateDeserializer extends StdDeserializer<ContentStateAnnota
         }
 
         annotation = getAnnotation(id, motivation, node, aParser);
-        annotation.setBody(getBody(bodyNode, sneaky(check)));
+        annotation.setBody(getBody(bodyNode, unwrap(check)));
         annotation.setChoice(getChoice(bodyNode));
 
         if (contexts != null) {
@@ -207,7 +207,7 @@ public class ContentStateDeserializer extends StdDeserializer<ContentStateAnnota
      * @param aPartOfNode A partOf node from the incoming JSON
      * @return A newly parsed CanvasTarget
      */
-    @SuppressWarnings({ "PMD.UseDiamondOperator" })
+    @SuppressWarnings({ PMD.USE_DIAMOND_OPERATOR })
     private CanvasTarget getCanvasTarget(final JsonNode aIdNode, final JsonNode aPartOfNode) {
         if (aPartOfNode == null) {
             return new CanvasTarget(aIdNode.asText());
