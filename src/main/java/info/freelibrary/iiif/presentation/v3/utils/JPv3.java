@@ -73,7 +73,8 @@ public final class JPv3 {
      * @param anArgsArray An array of arguments
      * @throws IOException If the JSON file cannot be read
      */
-    @SuppressWarnings({ PMD.SYSTEM_PRINTLN, Checkstyle.UNCOMMENTED_MAIN, Sonar.SYSTEM_OUT_ERR })
+    @SuppressWarnings({ PMD.SYSTEM_PRINTLN, Checkstyle.UNCOMMENTED_MAIN, "checkstyle:UncommentedMain",
+        Sonar.SYSTEM_OUT_ERR })
     public static void main(final String[] anArgsArray) throws IOException {
         if (anArgsArray.length > 0) {
             final Path path = Path.of(anArgsArray[0]);
