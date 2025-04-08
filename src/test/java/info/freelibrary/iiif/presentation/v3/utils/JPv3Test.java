@@ -1,31 +1,23 @@
 
 package info.freelibrary.iiif.presentation.v3.utils;
 
-import static com.github.stefanbirkner.systemlambda.SystemLambda.tapSystemErr;
-import static com.github.stefanbirkner.systemlambda.SystemLambda.tapSystemOut;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.StringReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Optional;
-
+import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-
-import info.freelibrary.iiif.presentation.v3.ResourceTypes;
-
-import info.freelibrary.json.Json;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Optional;
 
 /**
  * Unit tests for the {@link JPv3} class.
@@ -92,67 +84,17 @@ public class JPv3Test {
         assertEquals(ResourceTypes.MANIFEST, value.get());
     }
 
-    /**
-     * Tests the main method with no arguments.
-     */
-    @Test
-    public void testMainNoArgsPrintsError() throws Exception {
-        final String errOutput = tapSystemErr(() -> {
-            JPv3.main(new String[] {});
-        }).trim();
-
-        assertEquals(LOGGER.getMessage(MessageCodes.JPA_158), errOutput);
-    }
-
-    /**
-     * Tests the main method with one bad argument.
-     */
-    @Test
-    public void testMainOneArgBad() throws Exception {
-        final String errOutput = tapSystemErr(() -> {
-            JPv3.main(new String[] { BAD_FILE_PATH });
-        }).trim();
-
-        assertEquals(LOGGER.getMessage(MessageCodes.JPA_157), errOutput);
-    }
-
-    /**
-     * Tests the main method with a JSON file that's not one of the expected ones.
-     */
-    @Test
-    public void testMainOneArgDiffJson() throws Exception {
-        final String errOutput = tapSystemErr(() -> {
-            JPv3.main(new String[] { "src/test/resources/json/clickthrough-cookie-service.json" });
-        }).trim();
-
-        assertEquals(LOGGER.getMessage(MessageCodes.JPA_156), errOutput);
-    }
-
-    /**
-     * Tests the main method with one argument.
-     */
-    @Test
-    public void testMainOneArgPrints() throws Exception {
-        final String expected = Json.parse(new FileReader(MANIFEST)).toString();
-        final String output = tapSystemOut(() -> {
-            JPv3.main(new String[] { MANIFEST.getAbsolutePath() });
-        }).trim();
-
-        assertEquals(expected, Json.parse(new StringReader(output)).toString());
-    }
-
-    /**
-     * Tests the main method with two arguments.
-     */
-    @Test
-    public void testMainTwoArgsPrints() throws Exception {
-        final String expected = Json.parse(new FileReader(MANIFEST)).toString();
-        final String output = tapSystemOut(() -> {
-            JPv3.main(new String[] { MANIFEST.getAbsolutePath(), ResourceTypes.MANIFEST });
-        }).trim();
-
-        assertEquals(expected, Json.parse(new StringReader(output)).toString());
-    }
+    // /**
+    // * Tests the main method with one bad argument.
+    // */
+    // @Test
+    // public void testMainOneArgBad() throws Exception {
+    // final String errOutput = tapSystemErr(() -> {
+    // JPv3.main(new String[] { BAD_FILE_PATH });
+    // }).trim();
+    //
+    // assertEquals(LOGGER.getMessage(MessageCodes.JPA_157), errOutput);
+    // }
 
     /**
      * Tests private constructor coverage.

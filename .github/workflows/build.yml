@@ -1,6 +1,6 @@
 name: Maven PR Build
 
-# We require all commits go through PR on GitHub
+# We require all commits to go through PR on GitHub
 on:
   pull_request:
     branches:
@@ -10,13 +10,41 @@ on:
 
 jobs:
   build:
-    name: Maven PR Builder (JDK ${{ matrix.java }})
-    runs-on: ubuntu-latest
+    name: Maven PR Builder (JDK ${{ matrix.java }}, ${{ matrix.os}})
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        java: [ "21" ]
-        maven: [ "3.8.6" ]
-        jdk: [ "temurin" ]
+        include:
+          - os: ubuntu-latest
+            java: "21"
+            graalvm: "24"
+            maven: "3.8.6"
+            suffix: "linux-x64"
+          - os: "macos-latest"
+            java: "21"
+            graalvm: "24"
+            maven: "3.8.6"
+            suffix: "macos-x64"
+          - os: "windows-latest"
+            java: "21"
+            graalvm: "24"
+            maven: "3.8.6"
+            suffix: "windows-x64"
+          - os: "ubuntu-latest"
+            java: "24"
+            graalvm: "24"
+            maven: "3.8.6"
+            suffix: "linux-x64"
+          - os: "macos-latest"
+            java: "24"
+            graalvm: "24"
+            maven: "3.8.6"
+            suffix: "macos-x64"
+          - os: "windows-latest"
+            java: "24"
+            graalvm: "24"
+            maven: "3.8.6"
+            suffix: "windows-x64"
 
     steps:
       - name: Check out code
@@ -24,12 +52,14 @@ jobs:
         with:
           fetch-depth: 0  # Unshallow checkout helps SonarCloud provide more info
 
-      - name: Install JDK ${{ matrix.java }}
-        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
+      - name: Install GraalVM
+        uses: graalvm/setup-graalvm@7a1da54cb7fdef4ea19f6ecdfa9ecf59dc5a48fe # v1.3.6
         with:
-          cache: maven
-          distribution: ${{ matrix.jdk }}
-          java-version: ${{ matrix.java }}
+          java-version: ${{ matrix.graalvm }}
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          components: 'native-image'
+          cache: 'maven'
 
       # If running locally in ACT, install Maven
       - name: Set up Maven
@@ -49,4 +79,55 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn -B -ntp -Psonar verify javadoc:javadoc
+          mvn -B -ntp -Psonar -Pnative -Pjava${{ matrix.java }} verify javadoc:javadoc
+
+      - name: Prepare binary artifact
+        shell: bash
+        run: |
+          mkdir -p dist
+          BIN="target/jpv3"
+          NAME=$(basename "$BIN")
+          OUT="${NAME}-${{ matrix.suffix }}"
+          cp "$BIN" "dist/${OUT}${{ runner.os == 'Windows' && '.exe' || '' }}"
+
+      - name: Upload binary artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: ${{ matrix.java == '24' }}
+        with:
+          name: ${{ matrix.suffix }}
+          path: dist/*
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+        with:
+          path: dist
+
+      - name: Flatten binary artifacts directory
+        run: |
+          mkdir bin_out
+          find dist -type f -maxdepth 2 -exec cp {} bin_out/ \;
+
+      - name: Compute timestamp
+        id: ts
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        with:
+          script: |
+            const pad = num => String(num).padStart(2, '0');
+            const date = new Date();
+            let ts = String(date.getUTCFullYear());
+            ts += pad(date.getUTCMonth() + 1) + pad(date.getUTCDate()) + '-';
+            ts += pad(date.getUTCHours()) + pad(date.getUTCMinutes()) + pad(date.getUTCSeconds()) + 'Z';
+            core.setOutput('timestamp', ts);
+
+      - name: Release binary artifacts
+        uses: softprops/action-gh-release@6cbd405e2c4e67a21c47fa9e383d020e4e28b836 # v2.3.3
+        with:
+          tag_name: jpv3-${{ steps.ts.outputs.timestamp }}
+          name: jpv3-${{ steps.ts.outputs.timestamp }}
+          files: bin_out/*
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

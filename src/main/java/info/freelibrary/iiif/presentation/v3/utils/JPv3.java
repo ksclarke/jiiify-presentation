@@ -1,45 +1,61 @@
 
 package info.freelibrary.iiif.presentation.v3.utils;
 
-import static info.freelibrary.util.Constants.SINGLE_INSTANCE;
-
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Optional;
-
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
-
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.ThrowingConsumer;
-import info.freelibrary.util.warnings.Checkstyle;
-import info.freelibrary.util.warnings.PMD;
-import info.freelibrary.util.warnings.Sonar;
-
 import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.AnnotationCollection;
 import info.freelibrary.iiif.presentation.v3.AnnotationPage;
 import info.freelibrary.iiif.presentation.v3.Collection;
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.utils.csv.Mapper;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.Checkstyle;
+import info.freelibrary.util.warnings.PMD;
+import picocli.CommandLine;
 
-/**
- * A jpv3 executable.
- */
-public final class JPv3 {
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Optional;
+import java.util.concurrent.Callable;
+
+/** A jpv3 executable. */
+@CommandLine.Command(name = "jpv3", mixinStandardHelpOptions = true, version = "jpv3 0.0.1-SNAPSHOT",
+        description = "A utility for working with JPv3 on the command line.", usageHelpWidth = 120)
+public final class JPv3 implements Callable<Integer> {
+
+    static {
+        // Simple way to disable logback, which we use for the library's tests
+        System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "off");
+    }
 
     /** The logger for the executable. */
     private static final Logger LOGGER = LoggerFactory.getLogger(JPv3.class, MessageCodes.BUNDLE);
 
-    /**
-     * Creates a new JPv3 instance.
-     */
-    private JPv3() {
-        // This is intentionally left empty
+    /** The input file. */
+    @CommandLine.Option(names = { "-i", "--input" }, description = "An input file to be processed")
+    private String myInputFile;
+
+    /** The output file. */
+    @CommandLine.Option(names = { "-o", "--output" }, description = "An output file to be written")
+    private String myOutputFile;
+
+    /** The output directory. */
+    @CommandLine.Option(names = { "-d", "--dir" }, description = "An output directory to be written")
+    private String myOutputDir;
+
+    /** The action to take. Only one is allowed for a given invocation. */
+    @CommandLine.ArgGroup(exclusive = true, multiplicity = "1")
+    private Action myAction;
+
+    /** Runs the application. */
+    @Override
+    public Integer call() throws Exception {
+        return new Mapper(Path.of(myInputFile)).result();
     }
 
     /**
@@ -55,9 +71,7 @@ public final class JPv3 {
 
         try (JsonParser parser = factory.createParser(aFilePath.toFile())) {
             while (!parser.isClosed()) {
-                final JsonToken token = parser.nextToken();
-
-                if (JsonToken.FIELD_NAME.equals(token) && aKey.equals(parser.currentName())) {
+                if (JsonToken.FIELD_NAME.equals(parser.nextToken()) && aKey.equals(parser.currentName())) {
                     parser.nextToken(); // Increment the parser to the property value token
                     return Optional.ofNullable(parser.getValueAsString());
                 }
@@ -73,26 +87,9 @@ public final class JPv3 {
      * @param anArgsArray An array of arguments
      * @throws IOException If the JSON file cannot be read
      */
-    @SuppressWarnings({ PMD.SYSTEM_PRINTLN, Checkstyle.UNCOMMENTED_MAIN, "checkstyle:UncommentedMain",
-        Sonar.SYSTEM_OUT_ERR })
+    @SuppressWarnings({ Checkstyle.UNCOMMENTED_MAIN, "UncommentedMain" })
     public static void main(final String[] anArgsArray) throws IOException {
-        if (anArgsArray.length > 0) {
-            final Path path = Path.of(anArgsArray[0]);
-
-            if (Files.exists(path)) {
-                if (anArgsArray.length == SINGLE_INSTANCE) {
-                    findValue(path, JsonKeys.TYPE).ifPresentOrElse(
-                            (ThrowingConsumer<String, IOException>) type -> System.out.println(read(path, type)),
-                            () -> System.err.println(LOGGER.getMessage(MessageCodes.JPA_156)));
-                } else {
-                    System.out.println(read(path, anArgsArray[1]));
-                }
-            } else {
-                System.err.println(LOGGER.getMessage(MessageCodes.JPA_157));
-            }
-        } else {
-            System.err.println(LOGGER.getMessage(MessageCodes.JPA_158));
-        }
+        System.exit(new CommandLine(new JPv3()).execute(anArgsArray));
     }
 
     /**
@@ -103,8 +100,9 @@ public final class JPv3 {
      * @return The contents of the supplied file
      * @throws IOException If there is trouble reading the JSON source file
      */
+    @SuppressWarnings(PMD.UNUSED_PRIVATE_METHOD)
     private static String read(final Path aPath, final String aType) throws IOException {
-        final String content = new String(Files.readAllBytes(aPath), StandardCharsets.UTF_8);
+        final String content = Files.readString(aPath);
         return switch (aType) {
             case ResourceTypes.MANIFEST -> JSON.readValue(content, Manifest.class).toString();
             case ResourceTypes.COLLECTION -> JSON.readValue(content, Collection.class).toString();
@@ -113,5 +111,22 @@ public final class JPv3 {
             case ResourceTypes.ANNOTATION_PAGE -> JSON.readValue(content, AnnotationPage.class).toString();
             default -> LOGGER.getMessage(LOGGER.getMessage(MessageCodes.JPA_159, aType));
         };
+    }
+
+    /** The action for the jpv3 program to take. */
+    static class Action {
+
+        /** Whether to create a local manifest or collection doc. */
+        @CommandLine.Option(names = { "-c", "--create" }, description = "Create a local manifest or collection doc")
+        private boolean myCreateFlag;
+
+        /** The HTTP request method to use. */
+        @CommandLine.Option(names = { "-X", "--request" }, arity = "1", description = "The method to use: PUT, POST")
+        private String myHttpMethod;
+
+        /** The JSONiq query to execute. */
+        @CommandLine.Option(names = { "-v", "--view" }, arity = "1", description = "The JSONiq query to execute")
+        private String myJSONiq;
+
     }
 }
