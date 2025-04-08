@@ -16,7 +16,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.AnnotationTargetSerializ
  */
 @JsonSerialize(using = AnnotationTargetSerializer.class)
 @JsonDeserialize(using = AnnotationTargetDeserializer.class)
-public sealed class Target extends AbstractTarget permits SpecificResource, ManifestTarget, CanvasTarget {
+public sealed class Target extends AbstractTarget permits SpecificResource, ManifestTarget, CanvasTarget, RangeTarget {
 
     /**
      * Creates a new target from the supplied ID, which must be a valid URI. A generic target is used when the target

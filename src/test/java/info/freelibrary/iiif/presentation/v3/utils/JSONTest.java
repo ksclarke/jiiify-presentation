@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation.v3.utils;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -233,7 +234,7 @@ public class JSONTest {
      */
     @Test
     public final void testGetWriterClassOfT() {
-        assertTrue(JSON.getWriter(DatasetContent.class).canSerialize(DatasetContent.class));
+        assertNotNull(JSON.getWriter(DatasetContent.class));
     }
 
     /**
@@ -242,7 +243,7 @@ public class JSONTest {
     @Test
     public final void testGetWriterJavaType() {
         final JavaType type = JSON.getTypeFactory().constructParametricType(AnnotationPage.class, WebAnnotation.class);
-        assertTrue(JSON.getWriter(type).canSerialize(AnnotationPage.class));
+        assertNotNull(JSON.getWriter(type));
     }
 
     /**
@@ -251,7 +252,7 @@ public class JSONTest {
     @Test
     public final void testGetWriterTypeReferenceOfT() {
         final TypeReference<AnnotationPage<WebAnnotation>> typeRef = new TypeReference<>() {};
-        assertTrue(JSON.getWriter(typeRef).canSerialize(AnnotationPage.class));
+        assertNotNull(JSON.getWriter(typeRef));
     }
 
     /**

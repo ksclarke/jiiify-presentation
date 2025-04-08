@@ -194,7 +194,7 @@ public class CanvasTargetTest {
      */
     @Test
     public final void testTargetSetID() {
-        final String id = UUID.randomUUID().toString();
+        final String id = HTTPS + UUID.randomUUID().toString();
         final CanvasTarget test = new CanvasTarget(HTTPS + UUID.randomUUID().toString());
 
         assertEquals(id, test.setID(id).getID());

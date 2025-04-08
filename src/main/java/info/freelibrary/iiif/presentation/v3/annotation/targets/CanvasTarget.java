@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import info.freelibrary.iiif.presentation.v3.CanvasResource;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
-import info.freelibrary.iiif.presentation.v3.id.UriUtils;
 import info.freelibrary.iiif.presentation.v3.properties.PartOf;
 
 /**
@@ -41,7 +40,7 @@ public non-sealed class CanvasTarget extends Target {
      * @param aID An ID of a canvas
      */
     public CanvasTarget(final String aID) {
-        super(UriUtils.checkID(aID, true));
+        super(aID, true);
     }
 
     /**
