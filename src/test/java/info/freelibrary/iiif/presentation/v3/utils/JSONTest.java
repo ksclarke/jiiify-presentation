@@ -26,8 +26,8 @@ import info.freelibrary.iiif.presentation.v3.AnnotationPage;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.annotation.BookmarkingAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotation.Purpose;
+import info.freelibrary.iiif.presentation.v3.annotation.Target;
 import info.freelibrary.iiif.presentation.v3.annotation.WebAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.Target;
 import info.freelibrary.iiif.presentation.v3.content.DatasetContent;
 
 /**

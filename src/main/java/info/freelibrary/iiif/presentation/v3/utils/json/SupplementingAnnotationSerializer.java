@@ -24,7 +24,7 @@ import info.freelibrary.util.warnings.PMD;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.annotation.Motivation;
 import info.freelibrary.iiif.presentation.v3.annotation.SupplementingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.Target;
+import info.freelibrary.iiif.presentation.v3.annotation.Target;
 import info.freelibrary.iiif.presentation.v3.content.ContentResource;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.TextGranularity;

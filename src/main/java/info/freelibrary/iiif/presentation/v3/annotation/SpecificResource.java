@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3.annotation.targets;
+package info.freelibrary.iiif.presentation.v3.annotation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import info.freelibrary.util.warnings.Eclipse;
 import info.freelibrary.util.warnings.JDK;
-import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.Service;
@@ -230,15 +229,6 @@ public non-sealed class SpecificResource extends Target implements ContentResour
         return this;
     }
 
-    @Override
-    public String toString() {
-        try {
-            return JSON.getWriter(SpecificResource.class).writeValueAsString(this);
-        } catch (final JsonProcessingException details) {
-            throw new JsonParsingException(details);
-        }
-    }
-
     /**
      * Sets the type for a specific resource.
      *
@@ -246,13 +236,21 @@ public non-sealed class SpecificResource extends Target implements ContentResour
      * @return This specific resource
      */
     @Override
-    @SuppressWarnings(PMD.UNUSED_FORMAL_PARAMETER) // This method is just used by Jackson's deserialization processes
-    protected SpecificResource setType(final String aType) {
+    public SpecificResource setType(final String aType) {
         if (!ResourceTypes.SPECIFIC_RESOURCE.equals(aType)) {
             throw new IllegalArgumentException(aType);
         }
 
         return this;
+    }
+
+    @Override
+    public String toString() {
+        try {
+            return JSON.getWriter(SpecificResource.class).writeValueAsString(this);
+        } catch (final JsonProcessingException details) {
+            throw new JsonParsingException(details);
+        }
     }
 
     /**

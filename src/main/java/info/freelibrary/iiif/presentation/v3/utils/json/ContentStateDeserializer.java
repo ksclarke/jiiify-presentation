@@ -28,9 +28,8 @@ import info.freelibrary.util.warnings.Sonar;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.annotation.ContentStateAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotation.Motivation;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.CanvasTarget;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.SpecificResource;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.Target;
+import info.freelibrary.iiif.presentation.v3.annotation.SpecificResource;
+import info.freelibrary.iiif.presentation.v3.annotation.Target;
 import info.freelibrary.iiif.presentation.v3.content.CanvasContent;
 import info.freelibrary.iiif.presentation.v3.content.ContentResource;
 import info.freelibrary.iiif.presentation.v3.content.DatasetContent;
@@ -208,17 +207,17 @@ public class ContentStateDeserializer extends StdDeserializer<ContentStateAnnota
      * @return A newly parsed CanvasTarget
      */
     @SuppressWarnings({ PMD.USE_DIAMOND_OPERATOR })
-    private CanvasTarget getCanvasTarget(final JsonNode aIdNode, final JsonNode aPartOfNode) {
+    private Target getCanvasTarget(final JsonNode aIdNode, final JsonNode aPartOfNode) {
         if (aPartOfNode == null) {
-            return new CanvasTarget(aIdNode.asText());
+            return new Target(aIdNode.asText());
         }
 
         if (aPartOfNode.isArray()) {
-            return new CanvasTarget(aIdNode.asText(),
+            return new Target(aIdNode.asText(), ResourceTypes.CANVAS,
                     JSON.convertValue(aPartOfNode, new TypeReference<List<PartOf>>() {}));
         }
 
-        return new CanvasTarget(aIdNode.asText(), JSON.convertValue(aPartOfNode, PartOf.class));
+        return new Target(aIdNode.asText(), ResourceTypes.CANVAS, JSON.convertValue(aPartOfNode, PartOf.class));
     }
 
     /**

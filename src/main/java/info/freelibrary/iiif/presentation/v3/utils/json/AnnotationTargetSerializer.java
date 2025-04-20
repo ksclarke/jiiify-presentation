@@ -17,10 +17,8 @@ import info.freelibrary.util.warnings.PMD;
 import info.freelibrary.util.warnings.Sonar;
 
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.CanvasTarget;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.ManifestTarget;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.SpecificResource;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.Target;
+import info.freelibrary.iiif.presentation.v3.annotation.SpecificResource;
+import info.freelibrary.iiif.presentation.v3.annotation.Target;
 import info.freelibrary.iiif.presentation.v3.properties.PartOf;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.Selector;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
@@ -72,13 +70,13 @@ public class AnnotationTargetSerializer extends StdSerializer<Target> {
                         aJsonGenerator.writeEndObject();
                     }
                     case ResourceTypes.MANIFEST -> {
-                        final ManifestTarget manifestTarget = (ManifestTarget) aTarget;
-                        final List<PartOf> partOfList = manifestTarget.getPartOfs();
+                        final Target target = aTarget;
+                        final List<PartOf> partOfList = target.getPartOfs();
 
                         aJsonGenerator.writeStartObject();
 
-                        if (manifestTarget.getID() != null) {
-                            aJsonGenerator.writeStringField(JsonKeys.ID, manifestTarget.getID());
+                        if (target.getID() != null) {
+                            aJsonGenerator.writeStringField(JsonKeys.ID, target.getID());
                         }
 
                         aJsonGenerator.writeStringField(JsonKeys.TYPE, ResourceTypes.CANVAS);
@@ -97,13 +95,13 @@ public class AnnotationTargetSerializer extends StdSerializer<Target> {
                         aJsonGenerator.writeEndObject();
                     }
                     case ResourceTypes.CANVAS -> {
-                        final CanvasTarget canvasTarget = (CanvasTarget) aTarget;
-                        final List<PartOf> partOfList = canvasTarget.getPartOfs();
+                        final Target target = aTarget;
+                        final List<PartOf> partOfList = target.getPartOfs();
 
                         aJsonGenerator.writeStartObject();
 
-                        if (canvasTarget.getID() != null) {
-                            aJsonGenerator.writeStringField(JsonKeys.ID, canvasTarget.getID());
+                        if (target.getID() != null) {
+                            aJsonGenerator.writeStringField(JsonKeys.ID, target.getID());
                         }
 
                         aJsonGenerator.writeStringField(JsonKeys.TYPE, ResourceTypes.CANVAS);

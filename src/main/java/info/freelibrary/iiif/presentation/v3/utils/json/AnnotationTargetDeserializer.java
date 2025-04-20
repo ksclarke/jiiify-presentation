@@ -18,10 +18,9 @@ import info.freelibrary.util.warnings.PMD;
 import info.freelibrary.util.warnings.Sonar;
 
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.CanvasTarget;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.SpecificResource;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.SpecificResource.Source;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.Target;
+import info.freelibrary.iiif.presentation.v3.annotation.SpecificResource;
+import info.freelibrary.iiif.presentation.v3.annotation.SpecificResource.Source;
+import info.freelibrary.iiif.presentation.v3.annotation.Target;
 import info.freelibrary.iiif.presentation.v3.properties.PartOf;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.Selector;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
@@ -110,12 +109,13 @@ public class AnnotationTargetDeserializer extends StdDeserializer<Target> {
                         partOfs.add(JSON.getReader(PartOf.class).readValue(partOfNode));
                     }
 
-                    target = new CanvasTarget(idNode.asText(), partOfs);
+                    target = new Target(idNode.asText(), typeNode.asText(), partOfs);
                 } else {
-                    target = new CanvasTarget(idNode.asText(), JSON.convertValue(partOfNode, PartOf.class));
+                    target = new Target(idNode.asText(), typeNode.asText(),
+                            JSON.convertValue(partOfNode, PartOf.class));
                 }
             } else {
-                target = new CanvasTarget(idNode.asText());
+                target = new Target(idNode.asText());
             }
         } else {
             throw new JsonMappingException(aParser,

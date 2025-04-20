@@ -1,9 +1,11 @@
 
-package info.freelibrary.iiif.presentation.v3.annotation.targets;
+package info.freelibrary.iiif.presentation.v3.annotation;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.Test;
@@ -27,7 +29,7 @@ public class TargetTest {
     @Test
     public final void testTargetConstructorStringBoolean() {
         final String id = HTTPS + UUID.randomUUID().toString();
-        assertEquals(id, new Target(id, true).getID());
+        assertEquals(id, new Target(id).getID());
     }
 
     /**
@@ -37,7 +39,7 @@ public class TargetTest {
     public final void testTargetConstructorStringBooleanPartOf() {
         final String id = HTTPS + UUID.randomUUID().toString();
         final PartOf partOf = new PartOf(id, ResourceTypes.MANIFEST);
-        final Target target = new Target(id, true, partOf);
+        final Target target = new Target(id, ResourceTypes.CANVAS, partOf);
 
         assertEquals(id, target.getID());
         assertEquals(id, target.getPartOfs().get(0).getID());
@@ -128,8 +130,12 @@ public class TargetTest {
     /**
      * Tests setting the type of a {@code Target}.
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public final void testTargetSetType() {
-        new Target(HTTPS + UUID.randomUUID().toString()).setType(ResourceTypes.MANIFEST);
+        final Target target = new Target(HTTPS + UUID.randomUUID().toString()).setType(ResourceTypes.MANIFEST);
+        final Optional<String> type = target.getType();
+
+        assertTrue(type.isPresent());
+        assertEquals(ResourceTypes.MANIFEST, type.get());
     }
 }

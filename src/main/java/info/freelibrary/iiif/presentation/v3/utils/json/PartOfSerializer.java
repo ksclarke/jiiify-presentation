@@ -57,7 +57,7 @@ public class PartOfSerializer extends StdSerializer<PartOf> {
                         aJsonGenerator);
             }
 
-            if (aPartOf.hasObject() || !useURIs) {
+            if (aPartOf.isObject() || !useURIs) {
                 aJsonGenerator.writeStartObject();
                 aJsonGenerator.writeStringField(JsonKeys.ID, aPartOf.getID());
                 aJsonGenerator.writeStringField(JsonKeys.TYPE, aPartOf.getType().get());

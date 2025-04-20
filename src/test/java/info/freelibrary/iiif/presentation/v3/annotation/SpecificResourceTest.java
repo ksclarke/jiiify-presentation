@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3.annotation.targets;
+package info.freelibrary.iiif.presentation.v3.annotation;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;

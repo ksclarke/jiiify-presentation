@@ -18,7 +18,7 @@ import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.ListUtils;
 import info.freelibrary.util.warnings.PMD;
 
-import info.freelibrary.iiif.presentation.v3.annotation.targets.SpecificResource;
+import info.freelibrary.iiif.presentation.v3.annotation.SpecificResource;
 import info.freelibrary.iiif.presentation.v3.id.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
