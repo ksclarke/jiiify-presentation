@@ -25,6 +25,8 @@ import info.freelibrary.util.ThrowingBiFunction;
 import info.freelibrary.util.warnings.PMD;
 import info.freelibrary.util.warnings.Sonar;
 
+import info.freelibrary.iiif.presentation.v3.Manifest;
+import info.freelibrary.iiif.presentation.v3.Range;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.annotation.ContentStateAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotation.Motivation;
@@ -200,27 +202,6 @@ public class ContentStateDeserializer extends StdDeserializer<ContentStateAnnota
     }
 
     /**
-     * Gets a CanvasTarget from a supplied JsonNode.
-     *
-     * @param aIdNode A JsonNode representing the CanvasTarget's ID
-     * @param aPartOfNode A partOf node from the incoming JSON
-     * @return A newly parsed CanvasTarget
-     */
-    @SuppressWarnings({ PMD.USE_DIAMOND_OPERATOR })
-    private Target getCanvasTarget(final JsonNode aIdNode, final JsonNode aPartOfNode) {
-        if (aPartOfNode == null) {
-            return new Target(aIdNode.asText());
-        }
-
-        if (aPartOfNode.isArray()) {
-            return new Target(aIdNode.asText(), ResourceTypes.CANVAS,
-                    JSON.convertValue(aPartOfNode, new TypeReference<List<PartOf>>() {}));
-        }
-
-        return new Target(aIdNode.asText(), ResourceTypes.CANVAS, JSON.convertValue(aPartOfNode, PartOf.class));
-    }
-
-    /**
      * Gets whether the incoming body node contains a choice between resources.
      *
      * @param aBodyNode A <code>JsonNode</code> representing an annotation body
@@ -279,6 +260,7 @@ public class ContentStateDeserializer extends StdDeserializer<ContentStateAnnota
      * @return The annotation's target
      * @throws JsonMappingException If there is trouble mapping the incoming JSON
      */
+    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY })
     private Target getTarget(final JsonNode aNode, final JsonParser aParser) throws JsonMappingException {
         final JsonNode typeNode;
 
@@ -293,18 +275,60 @@ public class ContentStateDeserializer extends StdDeserializer<ContentStateAnnota
         }
 
         if ((typeNode = aNode.get(JsonKeys.TYPE)) != null) {
+            final Iterator<String> fieldNames = aNode.fieldNames();
+
+            // Check to see if we have a fully embedded object
+            while (fieldNames.hasNext()) {
+                final String fieldName = fieldNames.next();
+
+                if (!JsonKeys.TYPE.equals(fieldName) && !JsonKeys.ID.equals(fieldName) &&
+                        JsonKeys.PART_OF.equals(fieldName) && !ResourceTypes.SPECIFIC_RESOURCE.equals(typeNode)) {
+                    return switch (typeNode.asText()) {
+                        // case ResourceTypes.CANVAS -> new Target(JSON.convertValue(aNode, CanvasResource.class),
+                        // false);
+                        case ResourceTypes.MANIFEST -> new Target(JSON.convertValue(aNode, Manifest.class), false);
+                        case ResourceTypes.RANGE -> new Target(JSON.convertValue(aNode, Range.class), false);
+                        default -> throw error(aParser, LOGGER.getMessage(MessageCodes.JPA_153));
+                    };
+                }
+            }
+
             final JsonNode idNode = aNode.get(JsonKeys.ID);
             final JsonNode partOfNode = aNode.get(JsonKeys.PART_OF);
 
             return switch (typeNode.asText()) {
                 case ResourceTypes.SPECIFIC_RESOURCE -> JSON.convertValue(aNode, SpecificResource.class);
-                case ResourceTypes.CANVAS -> getCanvasTarget(idNode, partOfNode);
+                case ResourceTypes.CANVAS -> getTarget(idNode, ResourceTypes.CANVAS, partOfNode);
+                case ResourceTypes.MANIFEST -> getTarget(idNode, ResourceTypes.MANIFEST, partOfNode);
+                case ResourceTypes.RANGE -> getTarget(idNode, ResourceTypes.RANGE, partOfNode);
                 default -> throw error(aParser, LOGGER.getMessage(MessageCodes.JPA_153));
             };
         }
 
         // If our target is not a value node, it should be a specific resource
         return JSON.convertValue(aNode, SpecificResource.class);
+    }
+
+    /**
+     * Gets a CanvasTarget from a supplied JsonNode.
+     *
+     * @param aIdNode A JsonNode representing the CanvasTarget's ID
+     * @param aType A target resource type
+     * @param aPartOfNode A partOf node from the incoming JSON
+     * @return A newly parsed CanvasTarget
+     */
+    @SuppressWarnings({ PMD.USE_DIAMOND_OPERATOR })
+    private Target getTarget(final JsonNode aIdNode, final String aType, final JsonNode aPartOfNode) {
+        if (aType == null) {
+            return new Target(aIdNode.asText());
+        }
+
+        if (aPartOfNode.isArray()) {
+            return new Target(aIdNode.asText(), aType,
+                    JSON.convertValue(aPartOfNode, new TypeReference<List<PartOf>>() {}));
+        }
+
+        return new Target(aIdNode.asText(), aType, JSON.convertValue(aPartOfNode, PartOf.class));
     }
 
     /**
