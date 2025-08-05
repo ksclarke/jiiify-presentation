@@ -37,7 +37,8 @@ public class SourceSerializer extends StdSerializer<Source> {
     }
 
     @Override
-    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY, Sonar.COGNITIVE_COMPLEXITY })
+    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY, Sonar.COGNITIVE_COMPLEXITY,
+        PMD.N_PATH_COMPLEXITY })
     public void serialize(final Source aSource, final JsonGenerator aJsonGenerator, final SerializerProvider aProvider)
             throws IOException {
         final List<PartOf> partOfs = aSource.getPartOfs();

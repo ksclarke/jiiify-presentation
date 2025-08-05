@@ -16,7 +16,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.ListUtils;
-import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.annotation.SpecificResource;
 import info.freelibrary.iiif.presentation.v3.id.Minter;
@@ -36,7 +35,6 @@ import info.freelibrary.iiif.presentation.v3.utils.json.RangeItemDeserializer;
  * chapters, verses, sections, non-content-bearing pages, the table of contents or similar. Equally, physical features
  * might be important such as quires or gatherings, sections that have been added later and so forth.
  */
-@SuppressWarnings({ PMD.EXCESSIVE_PUBLIC_COUNT, PMD.EXCESSIVE_IMPORTS, PMD.GOD_CLASS, PMD.COUPLING_BETWEEN_OBJECTS })
 public class Range extends NavigableResource<Range> implements Resource<Range> {
 
     /** The range's accompanying canvas. */

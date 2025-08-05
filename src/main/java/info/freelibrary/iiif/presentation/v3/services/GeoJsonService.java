@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
@@ -49,7 +48,6 @@ public class GeoJsonService extends AbstractService<GeoJsonService> implements S
      * @return The authorization service
      */
     @JsonSetter(JsonKeys.CONTEXT)
-    @SuppressWarnings(PMD.UNUSED_FORMAL_PARAMETER)
     private GeoJsonService setContext(final String aContext) {
         if (!CONTEXT.equals(aContext)) {
             final String message = LOGGER.getMessage(MessageCodes.JPA_126, aContext, getClass().getSimpleName());

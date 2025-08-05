@@ -11,8 +11,6 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.util.warnings.PMD;
-
 import info.freelibrary.iiif.presentation.v3.Resource;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
@@ -25,7 +23,6 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.HEIGHT, JsonKeys.WIDTH, JsonKeys.DURATION,
     JsonKeys.FORMAT, JsonKeys.LANGUAGE })
-@SuppressWarnings({ PMD.COUPLING_BETWEEN_OBJECTS })
 public class VideoContent extends AbstractContentResource<VideoContent> implements SpatialContentResource,
         TemporalContentResource, AnnotatedContentResource<VideoContent>, Resource<VideoContent> {
 

@@ -5,6 +5,7 @@ import static info.freelibrary.util.Constants.EMPTY;
 import static info.freelibrary.util.Constants.SINGLE_INSTANCE;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.util.Optional;
 
 import com.fasterxml.jackson.core.JsonParser;
@@ -15,8 +16,6 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import info.freelibrary.util.Constants;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.warnings.JDK;
-import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
@@ -24,13 +23,13 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 /**
  * A deserializer for {@code MediaType}(s).
  */
-@SuppressWarnings(PMD.EXCESSIVE_IMPORTS)
 public class MediaTypeDeserializer extends StdDeserializer<MediaType> {
 
     /** Logger for this deserializer. */
     private static final Logger LOGGER = LoggerFactory.getLogger(MediaTypeDeserializer.class, MessageCodes.BUNDLE);
 
     /** The <code>serialVersionUID</code> for this deserializer. */
+    @Serial
     private static final long serialVersionUID = -1902362571104671943L;
 
     /**
@@ -50,7 +49,6 @@ public class MediaTypeDeserializer extends StdDeserializer<MediaType> {
     }
 
     @Override
-    @SuppressWarnings(JDK.DEPRECATION)
     public MediaType deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException {
         final JsonNode node = aParser.getCodec().readTree(aParser);
         final String value = node.asText(EMPTY);

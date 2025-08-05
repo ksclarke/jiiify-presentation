@@ -78,7 +78,7 @@ public class ContentStateDeserializer extends StdDeserializer<ContentStateAnnota
     }
 
     @Override
-    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY, PMD.N_PATH_COMPLEXITY })
+    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY })
     public ContentStateAnnotation deserialize(final JsonParser aParser, final DeserializationContext aContext)
             throws IOException {
         final ThrowingBiFunction<String, JsonNode, String, JsonMappingException> check = (aKey, aNode) -> {
@@ -159,7 +159,6 @@ public class ContentStateDeserializer extends StdDeserializer<ContentStateAnnota
      * @throws JsonMappingException If there is trouble mapping the incoming JSON
      * @throws IllegalArgumentException If the found motivation is not one of the expected ones
      */
-    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY })
     private ContentStateAnnotation getAnnotation(final String aID, final String aMotivation, final JsonNode aNode,
             final JsonParser aParser) throws JsonMappingException {
         final JsonNode targetsNode = aNode.get(JsonKeys.TARGET);

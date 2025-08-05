@@ -5,8 +5,6 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import info.freelibrary.util.warnings.PMD;
-
 import info.freelibrary.iiif.presentation.v3.Resource;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.annotation.PaintingAnnotation;
@@ -19,7 +17,6 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavi
 /**
  * Canvas content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
  */
-@SuppressWarnings({ PMD.COUPLING_BETWEEN_OBJECTS })
 public class CanvasContent extends AbstractContentResource<CanvasContent>
         implements ContentResource, Resource<CanvasContent> {
 

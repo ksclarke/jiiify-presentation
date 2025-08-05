@@ -52,8 +52,7 @@ public class SupplementingAnnotationSerializer extends StdSerializer<Supplementi
     }
 
     @Override
-    @SuppressWarnings({ PMD.PRESERVE_STACK_TRACE, PMD.COGNITIVE_COMPLEXITY, PMD.N_PATH_COMPLEXITY,
-        PMD.CYCLOMATIC_COMPLEXITY })
+    @SuppressWarnings({ PMD.PRESERVE_STACK_TRACE, PMD.CYCLOMATIC_COMPLEXITY })
     public void serialize(final SupplementingAnnotation aSupplementingAnnotation, final JsonGenerator aJsonGenerator,
             final SerializerProvider aProvider) throws IOException {
         final List<ContentResource> resources = aSupplementingAnnotation.getBody();

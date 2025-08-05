@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
+<project xmlns="http://maven.apache.org/POM/4.0.0">
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>jiiify-presentation-v3</artifactId>
@@ -12,7 +8,7 @@
 
   <name>jiiify-presentation</name>
   <description>A Java Library for version 3 of the IIIF Presentation API</description>
-  <url>http://projects.freelibrary.info/jiiify-presentation-v3</url>
+  <url>https://projects.freelibrary.info/jiiify-presentation-v3</url>
 
   <licenses>
     <license>
@@ -111,7 +107,7 @@
       <version>${combinatorics.version}</version>
     </dependency>
 
-    <!-- Below dependencies are only used for testing -->
+    <!-- The dependencies below are only used for testing -->
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
@@ -176,7 +172,7 @@
     </testResources>
 
     <plugins>
-      <!-- Generate our MessageCodes class from the messages resource file -->
+      <!-- Generate our MessageCodes class from the *-messages.xml resource file -->
       <plugin>
         <groupId>info.freelibrary</groupId>
         <artifactId>freelib-maven-plugins</artifactId>
@@ -413,7 +409,7 @@
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>12.0.6</version>
+    <version>13.0.0</version>
   </parent>
 
 </project>

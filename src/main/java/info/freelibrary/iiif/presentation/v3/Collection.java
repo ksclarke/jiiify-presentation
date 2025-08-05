@@ -38,7 +38,7 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  * own descriptive information. They can also provide clients with a means to locate all of the manifests known to the
  * publishing institution.
  */
-@SuppressWarnings({ PMD.EXCESSIVE_PUBLIC_COUNT, PMD.EXCESSIVE_IMPORTS, PMD.GOD_CLASS, PMD.COUPLING_BETWEEN_OBJECTS })
+@SuppressWarnings({ PMD.COUPLING_BETWEEN_OBJECTS })
 public class Collection extends NavigableResource<Collection> implements Resource<Collection> {
 
     /** The collection's accompanying canvas. */

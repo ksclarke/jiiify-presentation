@@ -49,8 +49,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.ServiceDeserializer;
  *
  * @param <T> The type of resource
  */
-@SuppressWarnings({ PMD.EXCESSIVE_IMPORTS, PMD.ABSTRACT_CLASS_WITHOUT_ABSTRACT_METHOD, PMD.GOD_CLASS,
-    PMD.TOO_MANY_FIELDS, PMD.TOO_MANY_METHODS, PMD.COUPLING_BETWEEN_OBJECTS })
+@SuppressWarnings({ PMD.EXCESSIVE_IMPORTS, PMD.TOO_MANY_METHODS, PMD.COUPLING_BETWEEN_OBJECTS })
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({ JsonKeys.CONTEXT, JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.PROVIDER, JsonKeys.PART_OF,
     JsonKeys.BEHAVIOR, JsonKeys.HOMEPAGE, JsonKeys.THUMBNAIL, JsonKeys.SUMMARY, JsonKeys.METADATA, JsonKeys.START,

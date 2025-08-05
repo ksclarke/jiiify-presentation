@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.ListUtils;
-import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.CanvasResource;
@@ -33,7 +32,6 @@ import info.freelibrary.iiif.presentation.v3.utils.json.WebAnnotationSerializer;
  * A base class for the Web annotations found in the <code>annotations</code> package. May also serve as a base class
  * for other annotations too.
  */
-@SuppressWarnings(PMD.EXCESSIVE_IMPORTS)
 @JsonSerialize(using = WebAnnotationSerializer.class)
 @JsonDeserialize(using = WebAnnotationDeserializer.class)
 public class WebAnnotation implements Annotation<WebAnnotation> {

@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import info.freelibrary.util.ListUtils;
 import info.freelibrary.util.warnings.JDK;
-import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.AbstractResource;
 import info.freelibrary.iiif.presentation.v3.CanvasResource;
@@ -34,7 +33,6 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  *
  * @param <A> The type of canvas annotation
  */
-@SuppressWarnings({ PMD.GOD_CLASS, PMD.EXCESSIVE_IMPORTS })
 public abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> extends AbstractResource<A> {
 
     /** A boolean flag indicating whether the annotation body contains a choice. */

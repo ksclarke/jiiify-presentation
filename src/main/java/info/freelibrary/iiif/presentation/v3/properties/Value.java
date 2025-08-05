@@ -4,8 +4,6 @@ package info.freelibrary.iiif.presentation.v3.properties;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import info.freelibrary.util.warnings.PMD;
-
 import info.freelibrary.iiif.presentation.v3.utils.I18nUtils;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.json.ValueDeserializer;
@@ -14,7 +12,6 @@ import info.freelibrary.iiif.presentation.v3.utils.json.ValueDeserializer;
  * A human readable internationalized value.
  */
 @JsonDeserialize(using = ValueDeserializer.class)
-@SuppressWarnings({ PMD.AVOID_DUPLICATE_LITERALS })
 public class Value extends I18nProperty<Value> {
 
     /**

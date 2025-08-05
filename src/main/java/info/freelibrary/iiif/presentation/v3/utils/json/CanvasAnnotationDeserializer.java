@@ -145,7 +145,6 @@ public class CanvasAnnotationDeserializer extends StdDeserializer<Annotation<?>>
      * @throws InputCoercionException If there is trouble parsing the incoming JSON
      * @throws IllegalArgumentException If the found motivation is not one of the expected ones
      */
-    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY })
     private Annotation<?> getAnnotation(final String aID, final String aMotivation, final JsonNode aNode,
             final JsonParser aParser) throws InputCoercionException {
         final Optional<Purpose> purpose = Purpose.fromLabel(aMotivation);

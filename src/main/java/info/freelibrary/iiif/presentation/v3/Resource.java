@@ -7,8 +7,6 @@ import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import info.freelibrary.util.warnings.PMD;
-
 import info.freelibrary.iiif.presentation.v3.content.ContentResource;
 import info.freelibrary.iiif.presentation.v3.content.ImageContent;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
@@ -29,7 +27,6 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  *
  * @param <T> The class that implements {@code Resource}
  */
-@SuppressWarnings(PMD.EXCESSIVE_PUBLIC_COUNT)
 public interface Resource<T extends Resource<T>> {
 
     /**

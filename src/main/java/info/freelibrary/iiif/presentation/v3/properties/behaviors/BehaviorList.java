@@ -95,7 +95,6 @@ public class BehaviorList extends ArrayList<Behavior> implements List<Behavior> 
      * @param aBehaviorArray An array of behaviors
      * @throws InvalidBehaviorException If there is a disjoint in the supplied behavior list
      */
-    @SuppressWarnings({ PMD.CONSTRUCTOR_CALLS_OVERRIDABLE_METHOD })
     public <T extends Behavior> BehaviorList(final Class<T> aBehaviorClass, final Behavior... aBehaviorArray) {
         this(aBehaviorClass);
 
@@ -110,7 +109,6 @@ public class BehaviorList extends ArrayList<Behavior> implements List<Behavior> 
      * @param aBehaviorList A list of behaviors
      * @throws InvalidBehaviorException If there is a disjoint in the supplied behavior list
      */
-    @SuppressWarnings({ PMD.CONSTRUCTOR_CALLS_OVERRIDABLE_METHOD })
     public <T extends Behavior> BehaviorList(final Class<T> aBehaviorClass, final List<Behavior> aBehaviorList) {
         myBehaviorClass = Objects.requireNonNull(aBehaviorClass);
         addBehaviors(Objects.requireNonNull(aBehaviorList));

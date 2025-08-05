@@ -15,7 +15,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import info.freelibrary.util.ListUtils;
 import info.freelibrary.util.warnings.JDK;
-import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.annotation.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
@@ -32,8 +31,6 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  * information about the object or the intellectual work that it conveys. Each manifest describes how to present a
  * single object such as a book, a photograph, or a statue.
  */
-@SuppressWarnings({ PMD.EXCESSIVE_PUBLIC_COUNT, PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS, PMD.GOD_CLASS,
-    PMD.TOO_MANY_METHODS })
 public class Manifest extends NavigableResource<Manifest> implements Resource<Manifest> {
 
     /** The manifest's accompanying canvas. */

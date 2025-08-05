@@ -52,7 +52,7 @@ public class PaintingAnnotationSerializer extends StdSerializer<PaintingAnnotati
     }
 
     @Override
-    @SuppressWarnings({ PMD.PRESERVE_STACK_TRACE, PMD.CYCLOMATIC_COMPLEXITY, PMD.N_PATH_COMPLEXITY })
+    @SuppressWarnings({ PMD.PRESERVE_STACK_TRACE, PMD.CYCLOMATIC_COMPLEXITY })
     public void serialize(final PaintingAnnotation aPaintingAnnotation, final JsonGenerator aJsonGenerator,
             final SerializerProvider aProvider) throws IOException {
         final List<ContentResource> resources = aPaintingAnnotation.getBody();

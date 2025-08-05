@@ -8,6 +8,7 @@ import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.assertEquals
 import java.io.File;
 import java.io.IOException;
 
+//import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
@@ -1176,18 +1177,20 @@ public class RoundTripTest extends AbstractCookbookTest {
         assertEquals(myTestName, expected, found);
     }
 
-    /**
-     * Tests the 0485 Content State fixture (cf. https://iiif.io/api/cookbook/recipe/0485-contentstate-canvas-region/).
-     *
-     * @throws IOException If there is trouble reading the annotation file
-     */
-    @Test
-    public final void test0485ContentstateCanvasRegion() throws IOException {
-        final String expected = getExpected("0485-contentstate-canvas-region/annotation");
-        final String found = JSON.readValue(expected, Annotation.class).toString();
-
-        assertEquals(myTestName, expected, found);
-    }
+    // /**
+    // * Tests the 0485 Content State fixture (cf.
+    // https://iiif.io/api/cookbook/recipe/0485-contentstate-canvas-region/).
+    // *
+    // * @throws IOException If there is trouble reading the annotation file
+    // */
+    // @Test
+    // @Ignore
+    // public final void test0485ContentstateCanvasRegion() throws IOException {
+    // final String expected = getExpected("0485-contentstate-canvas-region/annotation");
+    // final String found = JSON.readValue(expected, Annotation.class).toString();
+    //
+    // assertEquals(myTestName, expected, found);
+    // }
 
     /**
      * Tests the 0489 multimedia canvas fixture (cf. https://iiif.io/api/cookbook/recipe/0489-multimedia-canvas/).

@@ -6,8 +6,6 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import info.freelibrary.util.warnings.PMD;
-
 import info.freelibrary.iiif.presentation.v3.Resource;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
@@ -19,7 +17,6 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  * Text content that can be associated with an annotation or used as a thumbnail.
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
-@SuppressWarnings({ PMD.COUPLING_BETWEEN_OBJECTS })
 public class TextContent extends AbstractContentResource<TextContent>
         implements AnnotatedContentResource<TextContent>, Resource<TextContent> {
 

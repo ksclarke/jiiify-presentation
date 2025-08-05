@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import info.freelibrary.util.warnings.Eclipse;
 import info.freelibrary.util.warnings.JDK;
-import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -28,7 +27,6 @@ import info.freelibrary.iiif.presentation.v3.utils.json.GreaterThanOneSerializer
 /**
  * A grouping of {@link AnnotationPage}(s) that should be managed together as a collection of {@link Annotation}(s).
  */
-@SuppressWarnings({ PMD.COUPLING_BETWEEN_OBJECTS })
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class AnnotationCollection extends AbstractResource<AnnotationCollection>
         implements Resource<AnnotationCollection> {

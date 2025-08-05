@@ -90,44 +90,44 @@ public class ManifestTest extends AbstractTest {
      * A test list of metadata pairs.
      */
     private static final List<String[]> METADATA_PAIRS = Stream.of( //
-            new String[]{"Title", "Georgian NF Fragment 68a"}, //
-            new String[]{"Extent", "1 f"}, //
-            new String[]{"Overtext Language", "Georgian"}, //
-            new String[]{"Undertext Language(s)", "Christian Palestinian Aramaic"}).toList();
+            new String[] { "Title", "Georgian NF Fragment 68a" }, //
+            new String[] { "Extent", "1 f" }, //
+            new String[] { "Overtext Language", "Georgian" }, //
+            new String[] { "Undertext Language(s)", "Christian Palestinian Aramaic" }).toList();
 
-    private static final String data1 = """
-        "GeoNF-frg68a_001r_K-64-001_KTK_pseudo_avgUV-MB780IR", "ark:%2F21198%2Fz1d79t3q"
-        "GeoNF-frg68a_001r_K-64-001_KTK_pseudo_avgUV-VIS", "ark:%2F21198%2Fz18g92cc"
-        "GeoNF-frg68a_001r_K-64-001_KTK_pseudo_WBUVB47-MB780IR", "ark:%2F21198%2Fz1w672gs"
-        "GeoNF-frg68a_001r_K-64-001_KTK_pseudo_WBUVB47-VIS", "ark:%2F21198%2Fz1rj5167"
-        "GeoNF-frg68a_001r_K-64-001_KTK_pseudo_WBUVG58-MB780IR", "ark:%2F21198%2Fz1ms48gh"
-        "GeoNF-frg68a_001r_K-64-001_KTK_pseudo_WBUVG58-VIS", "ark:%2F21198%2Fz1h13hqn"
-        "GeoNF-frg68a_001r_K-64-001_KTK_pseudo_WBUVO22-MB780IR", "ark:%2F21198%2Fz1c82s0b"
-        "GeoNF-frg68a_001r_K-64-001_KTK_pseudo_WBUVR25-MB780IR", "ark:%2F21198%2Fz13r18m5"
-        "GeoNF-frg68a_001r_K-64-001_KTK_pseudo_WBUVUVP-MB780IR", "ark:%2F21198%2Fz1ks7787"
-        "GeoNF-frg68a_001r_K-64-001_KTK_raking_RE870IR-RS870IR", "ark:%2F21198%2Fz1b85qvj"
-        "GeoNF-frg68a_001r_K-64-001_KTK_sharpie_avgUV-MB780IR", "ark:%2F21198%2Fz16h5052"
-        "GeoNF-frg68a_001r_K-64-001_KTK_sharpie_WBUVB47-MB780IR", "ark:%2F21198%2Fz1pk0xvb"
-        "GeoNF-frg68a_001r_K-64-001_KTK_sharpie_WBUVUVP-MB780IR", "ark:%2F21198%2Fz1d22dbh"
-        "GeoNF-frg68a_001r_K-64-001_KTK_txratio_TX940IR-MB940IR", "ark:%2F21198%2Fz14m9m97"
-    """;
+    /** A list of first canvas images. */
+    private static final List<String[]> FIRST_CANVAS = List.of(
+            new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_pseudo_avgUV-MB780IR", ENCODED_MANIFEST_THUMBNAIL_ARK },
+            new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_pseudo_avgUV-VIS", "ark:%2F21198%2Fz18g92cc" },
+            new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_pseudo_WBUVB47-MB780IR", "ark:%2F21198%2Fz1w672gs" },
+            new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_pseudo_WBUVB47-VIS", "ark:%2F21198%2Fz1rj5167" },
+            new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_pseudo_WBUVG58-MB780IR", "ark:%2F21198%2Fz1ms48gh" },
+            new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_pseudo_WBUVG58-VIS", "ark:%2F21198%2Fz1h13hqn" },
+            new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_pseudo_WBUVO22-MB780IR", "ark:%2F21198%2Fz1c82s0b" },
+            new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_pseudo_WBUVR25-MB780IR", "ark:%2F21198%2Fz13r18m5" },
+            new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_pseudo_WBUVUVP-MB780IR", "ark:%2F21198%2Fz1ks7787" },
+            new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_raking_RE870IR-RS870IR", "ark:%2F21198%2Fz1b85qvj" },
+            new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_sharpie_avgUV-MB780IR", "ark:%2F21198%2Fz16h5052" },
+            new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_sharpie_WBUVB47-MB780IR", "ark:%2F21198%2Fz1pk0xvb" },
+            new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_sharpie_WBUVUVP-MB780IR", "ark:%2F21198%2Fz1d22dbh" },
+            new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_txratio_TX940IR-MB940IR", "ark:%2F21198%2Fz14m9m97" });
 
-    private static final String data2 = """
-        "GeoNF-frg68a_001v_K-64-002_KTK_pseudo_avgUV-MB780IR", "ark:%2F21198%2Fz1w38c11"
-        "GeoNF-frg68a_001v_K-64-002_KTK_pseudo_avgUV-VIS", "ark:%2F21198%2Fz1rb7m99"
-        "GeoNF-frg68a_001v_K-64-002_KTK_pseudo_WBUVB47-MB780IR", "ark:%2F21198%2Fz1c542k0"
-        "GeoNF-frg68a_001v_K-64-002_KTK_pseudo_WBUVB47-VIS", "ark:%2F21198%2Fz17d39wq"
-        "GeoNF-frg68a_001v_K-64-002_KTK_pseudo_WBUVG58-MB780IR", "ark:%2F21198%2Fz13n2k3h"
-        "GeoNF-frg68a_001v_K-64-002_KTK_pseudo_WBUVG58-VIS", "ark:%2F21198%2Fz1zw22m6"
-        "GeoNF-frg68a_001v_K-64-002_KTK_pseudo_WBUVO22-MB780IR", "ark:%2F21198%2Fz1v419ws"
-        "GeoNF-frg68a_001v_K-64-002_KTK_pseudo_WBUVR25-MB780IR", "ark:%2F21198%2Fz1kk9th3"
-        "GeoNF-frg68a_001v_K-64-002_KTK_pseudo_WBUVUVP-MB780IR", "ark:%2F21198%2Fz12n5hzq"
-        "GeoNF-frg68a_001v_K-64-002_KTK_raking_RE870IR-RS870IR", "ark:%2F21198%2Fz1t448sv"
-        "GeoNF-frg68a_001v_K-64-002_KTK_sharpie_avgUV-MB780IR", "ark:%2F21198%2Fz1pc3j30"
-        "GeoNF-frg68a_001v_K-64-002_KTK_sharpie_WBUVB47-MB780IR", "ark:%2F21198%2Fz15d97j2"
-        "GeoNF-frg68a_001v_K-64-002_KTK_sharpie_WBUVUVP-MB780IR", "ark:%2F21198%2Fz1vx0z84"
-        "GeoNF-frg68a_001v_K-64-002_KTK_txratio_TX940IR-MB940IR", "ark:%2F21198%2Fz1mg8563"
-    """;
+    /** A list of second canvas images. */
+    private static final List<String[]> SECOND_CANVAS = List.of(
+            new String[] { "GeoNF-frg68a_001v_K-64-002_KTK_pseudo_avgUV-MB780IR", "ark:%2F21198%2Fz1w38c11" },
+            new String[] { "GeoNF-frg68a_001v_K-64-002_KTK_pseudo_avgUV-VIS", "ark:%2F21198%2Fz1rb7m99" },
+            new String[] { "GeoNF-frg68a_001v_K-64-002_KTK_pseudo_WBUVB47-MB780IR", "ark:%2F21198%2Fz1c542k0" },
+            new String[] { "GeoNF-frg68a_001v_K-64-002_KTK_pseudo_WBUVB47-VIS", "ark:%2F21198%2Fz17d39wq" },
+            new String[] { "GeoNF-frg68a_001v_K-64-002_KTK_pseudo_WBUVG58-MB780IR", "ark:%2F21198%2Fz13n2k3h" },
+            new String[] { "GeoNF-frg68a_001v_K-64-002_KTK_pseudo_WBUVG58-VIS", "ark:%2F21198%2Fz1zw22m6" },
+            new String[] { "GeoNF-frg68a_001v_K-64-002_KTK_pseudo_WBUVO22-MB780IR", "ark:%2F21198%2Fz1v419ws" },
+            new String[] { "GeoNF-frg68a_001v_K-64-002_KTK_pseudo_WBUVR25-MB780IR", "ark:%2F21198%2Fz1kk9th3" },
+            new String[] { "GeoNF-frg68a_001v_K-64-002_KTK_pseudo_WBUVUVP-MB780IR", "ark:%2F21198%2Fz12n5hzq" },
+            new String[] { "GeoNF-frg68a_001v_K-64-002_KTK_raking_RE870IR-RS870IR", "ark:%2F21198%2Fz1t448sv" },
+            new String[] { "GeoNF-frg68a_001v_K-64-002_KTK_sharpie_avgUV-MB780IR", "ark:%2F21198%2Fz1pc3j30" },
+            new String[] { "GeoNF-frg68a_001v_K-64-002_KTK_sharpie_WBUVB47-MB780IR", "ark:%2F21198%2Fz15d97j2" },
+            new String[] { "GeoNF-frg68a_001v_K-64-002_KTK_sharpie_WBUVUVP-MB780IR", "ark:%2F21198%2Fz1vx0z84" },
+            new String[] { "GeoNF-frg68a_001v_K-64-002_KTK_txratio_TX940IR-MB940IR", "ark:%2F21198%2Fz1mg8563" });
 
     /**
      * A test fixture.
@@ -160,18 +160,6 @@ public class ManifestTest extends AbstractTest {
         final List<Canvas> canvases = new ArrayList<>();
         final ImageService3 manifestThumbService;
 
-        final List<String[]> firstCanvas = Arrays.stream(data1.split("\\R"))
-            .filter(line -> !line.isBlank())
-            .map(line -> line.replaceAll("^\"|\"$", "")) // Remove leading/trailing quotes
-            .map(line -> line.split("\",\\s*\""))
-            .toList();
-
-        final List<String[]> secondCanvas = Arrays.stream(data1.split("\\R"))
-            .filter(line -> !line.isBlank())
-            .map(line -> line.replaceAll("^\"|\"$", "")) // Remove leading/trailing quotes
-            .map(line -> line.split("\",\\s*\""))
-            .toList();
-
         for (final String[] kvPair : METADATA_PAIRS) {
             metadata.add(new Metadata(kvPair[0], kvPair[1]));
         }
@@ -197,7 +185,7 @@ public class ManifestTest extends AbstractTest {
         canvas1.getPaintingPages().add(page1.addAnnotations(content1));
         canvases.add(canvas1);
 
-        for (final String[] values : firstCanvas) {
+        for (final String[] values : FIRST_CANVAS) {
             final String id = MANIFEST_SERVER + values[1] + MANIFEST_THUMBNAIL_PATH;
             final ImageService3 service = new ImageService3(MANIFEST_SERVER + values[1], Profile.LEVEL_TWO);
             final ImageContent resource = new ImageContent(id).setServices(service);
@@ -219,7 +207,7 @@ public class ManifestTest extends AbstractTest {
         canvas2.getPaintingPages().add(page2.addAnnotations(content2));
         canvases.add(canvas2);
 
-        for (final String[] values : secondCanvas) {
+        for (final String[] values : SECOND_CANVAS) {
             final String id = MANIFEST_SERVER + values[1] + MANIFEST_THUMBNAIL_PATH;
             final ImageService3 service = new ImageService3(MANIFEST_SERVER + values[1], Profile.LEVEL_TWO);
             final ImageContent resource = new ImageContent(id).setServices(service);
