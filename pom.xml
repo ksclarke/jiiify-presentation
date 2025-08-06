@@ -405,6 +405,13 @@
     </profile>
   </profiles>
 
+  <distributionManagement>
+    <snapshotRepository>
+      <id>github</id>
+      <url>https://maven.pkg.github.com/freelibrary/jiiify-presentation</url>
+    </snapshotRepository>
+  </distributionManagement>
+
   <!-- Pulls in standard FreeLibrary Project configuration options -->
   <parent>
     <artifactId>freelib-parent</artifactId>
