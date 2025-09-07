@@ -4,10 +4,8 @@ package info.freelibrary.iiif.presentation.v3.properties;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import info.freelibrary.util.Labeled;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
 
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import java.util.Optional;
 
 /**
  * The direction that a sequence of canvases should be displayed to the user.
@@ -25,9 +23,6 @@ public enum ViewingDirection implements Labeled {
 
     /** A top-to-bottom viewing direction. */
     TOP_TO_BOTTOM("top-to-bottom");
-
-    /** The viewing direction's logger. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(ViewingDirection.class, MessageCodes.BUNDLE);
 
     /** The viewing direction's value. */
     private final String myValue;
@@ -63,20 +58,19 @@ public enum ViewingDirection implements Labeled {
     }
 
     /**
-     * Creates a viewing direction from a supplied string; it may be empty if the supplied string doesn't correspond to
-     * a valid viewing direction value.
+     * Creates a viewing direction from a supplied string; if the supplied string isn't a valid viewing direction, an
+     * empty Optional is returned.
      *
      * @param aViewingDirection A viewing direction value
-     * @return The ViewingDirection for the supplied value
-     * @throws IllegalArgumentException If the supplied value isn't a valid viewing direction
+     * @return The ViewingDirection for the supplied value or an empty Optional
      */
-    public static ViewingDirection fromLabel(final String aViewingDirection) {
+    public static Optional<ViewingDirection> fromLabel(final String aViewingDirection) {
         for (final ViewingDirection direction : values()) {
             if (direction.toString().equalsIgnoreCase(aViewingDirection)) {
-                return direction;
+                return Optional.of(direction);
             }
         }
 
-        throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_016, aViewingDirection));
+        return Optional.empty();
     }
 }

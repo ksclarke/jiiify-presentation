@@ -1,22 +1,22 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
 import info.freelibrary.iiif.presentation.v3.utils.I18nUtils;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.json.LabelDeserializer;
 
+import java.util.List;
+import java.util.Optional;
+
 /**
- * A human readable label, name or title for the resource. This property is intended to be displayed as a short, textual
- * surrogate for the resource if a human needs to make a distinction between it and similar resources, for example
- * between pages or between a choice of images to display.
+ * A human-readable label, name or title for the resource. This property is intended to be displayed as a short, textual
+ * surrogate for the resource. It's useful, for instance, if a human needs to make a distinction between it and similar
+ * resources between pages or between a choice of images to display.
  */
 @JsonDeserialize(using = LabelDeserializer.class)
-public class Label extends I18nProperty<Label> {
+public class Label extends I18nProperty<Label> implements Comparable<Label> {
 
     /**
      * Creates a label from the supplied internationalizations.
@@ -92,9 +92,39 @@ public class Label extends I18nProperty<Label> {
     }
 
     @Override
+    public int compareTo(final Label aLabel) {
+        final Optional<String> thisLabel;
+        final Optional<String> otherLabel;
+
+        if (aLabel == null) {
+            return 1; // Non-null is greater than null
+        }
+
+        if (!this.hasValues() && !aLabel.hasValues()) {
+            return 0; // Both empty
+        }
+        if (!this.hasValues()) {
+            return -1;
+        }
+        if (!aLabel.hasValues()) {
+            return 1;
+        }
+
+        // Compare the first string values of each label
+        thisLabel = getFirstValue();
+        otherLabel = aLabel.getFirstValue();
+
+        // If either is empty, treat empty as less
+        if (thisLabel.isEmpty() && otherLabel.isEmpty()) {
+            return 0;
+        }
+
+        return thisLabel.map(string -> otherLabel.map(string::compareTo).orElse(1)).orElse(-1);
+    }
+
+    @Override
     @JsonGetter(JsonKeys.LABEL)
     protected Object toMap() {
         return super.toMap(); // This is needed to assign the Label getter annotation
     }
-
 }

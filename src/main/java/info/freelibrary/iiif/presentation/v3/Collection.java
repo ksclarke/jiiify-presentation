@@ -1,25 +1,12 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
-
-import info.freelibrary.util.Labeled;
-import info.freelibrary.util.ListUtils;
-import info.freelibrary.util.warnings.Eclipse;
-import info.freelibrary.util.warnings.JDK;
-import info.freelibrary.util.warnings.PMD;
-
 import info.freelibrary.iiif.presentation.v3.annotation.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.content.ContentResource;
 import info.freelibrary.iiif.presentation.v3.exts.geo.NavPlace;
@@ -31,32 +18,54 @@ import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CollectionBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.util.Labeled;
+import info.freelibrary.util.ListUtils;
+import info.freelibrary.util.warnings.Eclipse;
+import info.freelibrary.util.warnings.PMD;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * An ordered list of {@link Manifest}(s) available for viewing; these manifests may be nested in other collections.
- * Collections allow easy advertising and browsing of the manifests in a hierarchical structure, potentially with its
- * own descriptive information. They can also provide clients with a means to locate all of the manifests known to the
+ * Collections allow easy advertising and browsing of the manifests in a hierarchical structure, potentially with their
+ * own descriptive information. They can also provide clients with a means to locate all the manifests known to the
  * publishing institution.
  */
 @SuppressWarnings({ PMD.COUPLING_BETWEEN_OBJECTS })
 public class Collection extends NavigableResource<Collection> implements Resource<Collection> {
 
-    /** The collection's accompanying canvas. */
+    /**
+     * The collection's accompanying canvas.
+     */
     private AccompanyingCanvas myAccompanyingCanvas;
 
-    /** The collection's annotations. */
+    /**
+     * The collection's annotations.
+     */
     private List<AnnotationPage<WebAnnotation>> myAnnotations;
 
-    /** The collection's list of items. */
+    /**
+     * The collection's list of items.
+     */
     private List<Item> myItems;
 
-    /** The collection's placeholder canvas. */
+    /**
+     * The collection's placeholder canvas.
+     */
     private PlaceholderCanvas myPlaceholderCanvas;
 
-    /** The collection's service definitions. */
+    /**
+     * The collection's service definitions.
+     */
     private List<Service> myServiceDefinitions;
 
-    /** The collection's viewing direction. */
+    /**
+     * The collection's viewing direction.
+     */
     private ViewingDirection myViewingDirection;
 
     /**
@@ -112,12 +121,22 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     }
 
     /**
+     * Clears the collection's accompanying canvas.
+     *
+     * @return This collection after clearing the accompanying canvas
+     */
+    @SuppressWarnings(PMD.NULL_ASSIGNMENT)
+    public Collection clearAccompanyingCanvas() {
+        myAccompanyingCanvas = null;
+        return this;
+    }
+
+    /**
      * Gets the collection's annotation pages.
      *
      * @return This collection's annotation pages
      */
     @JsonGetter(JsonKeys.ANNOTATIONS)
-    @SuppressWarnings({ JDK.UNCHECKED })
     public List<AnnotationPage<WebAnnotation>> getAnnotations() {
         if (myAnnotations == null) {
             myAnnotations = new ArrayList<>();
@@ -152,6 +171,17 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     }
 
     /**
+     * Clears the collection's placeholder canvas.
+     *
+     * @return This collection after clearing the placeholder canvas
+     */
+    @SuppressWarnings(PMD.NULL_ASSIGNMENT)
+    public Collection clearPlaceholderCanvas() {
+        myPlaceholderCanvas = null;
+        return this;
+    }
+
+    /**
      * Gets the services referenced by different parts of the collection document.
      *
      * @return A list of services referenced by different parts of the collection document
@@ -173,6 +203,17 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     @JsonGetter(JsonKeys.VIEWING_DIRECTION)
     public Optional<ViewingDirection> getViewingDirection() {
         return Optional.ofNullable(myViewingDirection);
+    }
+
+    /**
+     * Clears the collection's viewing direction.
+     *
+     * @return This collection after clearing the viewing direction
+     */
+    @SuppressWarnings(PMD.NULL_ASSIGNMENT)
+    public Collection clearViewingDirection() {
+        myViewingDirection = null;
+        return this;
     }
 
     @Override
@@ -333,22 +374,34 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.THUMBNAIL, JsonKeys.NAV_DATE })
     public static class Item {
 
-        /** The collection item's ID. */
+        /**
+         * The collection item's ID.
+         */
         private String myID;
 
-        /** The collection item's label. */
+        /**
+         * The collection item's label.
+         */
         private Label myLabel;
 
-        /** The collection item's navDate. */
+        /**
+         * The collection item's navDate.
+         */
         private NavDate myNavDate;
 
-        /** The collection item's navPlace. */
+        /**
+         * The collection item's navPlace.
+         */
         private NavPlace myNavPlace;
 
-        /** The collection item's thumbnails. */
+        /**
+         * The collection item's thumbnails.
+         */
         private List<ContentResource> myThumbnails;
 
-        /** The collection item's type. */
+        /**
+         * The collection item's type.
+         */
         private Type myType;
 
         /**
@@ -416,6 +469,17 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         }
 
         /**
+         * Clears the label of the item.
+         *
+         * @return This item
+         */
+        @SuppressWarnings(PMD.NULL_ASSIGNMENT)
+        public Item clearLabel() {
+            myLabel = null;
+            return this;
+        }
+
+        /**
          * Gets a navigation date.
          *
          * @return The navigation date
@@ -423,6 +487,17 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         @JsonGetter(JsonKeys.NAV_DATE)
         public Optional<NavDate> getNavDate() {
             return Optional.ofNullable(myNavDate);
+        }
+
+        /**
+         * Clears the navigation date associated with this item.
+         *
+         * @return This item
+         */
+        @SuppressWarnings(PMD.NULL_ASSIGNMENT)
+        public Item clearNavDate() {
+            myNavDate = null;
+            return this;
         }
 
         /**
@@ -436,9 +511,20 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         }
 
         /**
+         * Clears the navigation place associated with this item.
+         *
+         * @return This item instance
+         */
+        @SuppressWarnings(PMD.NULL_ASSIGNMENT)
+        public Item clearNavPlace() {
+            myNavPlace = null;
+            return this;
+        }
+
+        /**
          * Gets a list of item thumbnails, initializing the list if this hasn't been done already.
          *
-         * @return The items's thumbnails
+         * @return The item thumbnails
          */
         @JsonGetter(JsonKeys.THUMBNAIL)
         public List<ContentResource> getThumbnails() {
@@ -521,7 +607,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
          * @return The item type
          */
         @JsonGetter(JsonKeys.TYPE)
-        private String getType() {
+        public String getType() {
             return myType.toString();
         }
 
@@ -530,11 +616,11 @@ public class Collection extends NavigableResource<Collection> implements Resourc
          *
          * @param aType A collection item type
          * @return The item
-         * @throws InvalidArgumentException If the programmer has supplied an invalid type
+         * @throws IllegalArgumentException If the programmer has supplied an invalid resource type
          */
         @JsonSetter(JsonKeys.TYPE)
-        private Item setType(final String aType) {
-            myType = Type.fromLabel(aType).orElseThrow();
+        public Item setType(final String aType) {
+            myType = Type.fromLabel(aType).orElseThrow(IllegalArgumentException::new);
             return this;
         }
 

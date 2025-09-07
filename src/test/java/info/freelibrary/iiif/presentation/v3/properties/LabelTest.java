@@ -1,26 +1,30 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import info.freelibrary.iiif.presentation.v3.AbstractTest;
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import org.junit.Before;
+import org.junit.Test;
+
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests a label.
  */
 public class LabelTest extends AbstractTest {
+
+    /** The logger for the Label tests. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(LabelTest.class, MessageCodes.BUNDLE);
 
     /** A test ID. */
     private static final String AAAA = "https://aaaa";
@@ -37,9 +41,7 @@ public class LabelTest extends AbstractTest {
     /** The test manifest. */
     private Manifest myManifest;
 
-    /**
-     * Sets up the testing environment.
-     */
+    /** Sets up the testing environment. */
     @Before
     public void setUp() {
         myManifest = new Manifest(AAAA, new Label("bbbb"));
@@ -83,7 +85,8 @@ public class LabelTest extends AbstractTest {
         final String labelText = myLoremIpsum.getWords(3, 6);
         final Label label = new Label(new I18n(ENG, labelText));
 
-        assertEquals(labelText, label.getString());
+        label.getFirstValue().ifPresentOrElse(value -> assertEquals(labelText, value), () -> {
+            throw new AssertionError(LOGGER.getMessage(MessageCodes.JPA_161, Label.class.getSimpleName()));
+        });
     }
-
 }

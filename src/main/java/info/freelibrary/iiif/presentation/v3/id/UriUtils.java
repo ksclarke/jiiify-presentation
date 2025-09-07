@@ -1,11 +1,10 @@
 
 package info.freelibrary.iiif.presentation.v3.id;
 
-import java.net.URI;
-
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.warnings.PMD;
 
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import java.net.URI;
 
 /**
  * Utilities related to using URIs as IDs.
@@ -34,7 +33,7 @@ public final class UriUtils {
         try {
             id = URI.create(aID);
 
-            // Spec says internal resources must start with HTTPS scheme
+            // Spec says internal resources must start with an HTTPS scheme
             if (aHttpsReq && !"https".equals(id.getScheme())) {
                 throw new InvalidIdentifierException(MessageCodes.JPA_127, aID);
             }

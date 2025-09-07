@@ -7,20 +7,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Stream;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import info.freelibrary.util.Constants;
-import info.freelibrary.util.StringUtils;
-
 import info.freelibrary.iiif.presentation.v3.annotation.BookmarkingAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotation.PaintingAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotation.WebAnnotation;
@@ -39,6 +25,19 @@ import info.freelibrary.iiif.presentation.v3.services.ImageService3.Profile;
 import info.freelibrary.iiif.presentation.v3.services.OtherService3;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
+import info.freelibrary.util.Constants;
+import info.freelibrary.util.StringUtils;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Stream;
 
 /**
  * A manifest test.
@@ -95,7 +94,7 @@ public class ManifestTest extends AbstractTest {
             new String[] { "Overtext Language", "Georgian" }, //
             new String[] { "Undertext Language(s)", "Christian Palestinian Aramaic" }).toList();
 
-    /** A list of first canvas images. */
+    /** A list of the first canvas images. */
     private static final List<String[]> FIRST_CANVAS = List.of(
             new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_pseudo_avgUV-MB780IR", ENCODED_MANIFEST_THUMBNAIL_ARK },
             new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_pseudo_avgUV-VIS", "ark:%2F21198%2Fz18g92cc" },
@@ -252,10 +251,15 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public void testConstructorStringLabel() {
+        final Optional<String> labelValue;
+
         myManifest = new Manifest(MANIFEST_URI, new Label(METADATA_PAIRS.getFirst()[1]));
         assertEquals(MANIFEST_URI, myManifest.getID());
         assertTrue(myManifest.getLabel().isPresent());
-        assertEquals(METADATA_PAIRS.getFirst()[1], myManifest.getLabel().get().getString());
+
+        labelValue = myManifest.getLabel().flatMap(label -> label.getFirstValue());
+        assertTrue("Expected label to have a first value", labelValue.isPresent());
+        assertEquals(METADATA_PAIRS.getFirst()[1], labelValue.get());
     }
 
     /**

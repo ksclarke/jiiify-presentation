@@ -2,26 +2,11 @@
 package info.freelibrary.iiif.presentation.v3.utils.json;
 
 import static info.freelibrary.util.ThrowingBiFunction.unwrap;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.BiFunction;
-
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.exc.InputCoercionException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.ThrowingBiFunction;
-import info.freelibrary.util.warnings.PMD;
-import info.freelibrary.util.warnings.Sonar;
-
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.annotation.AssessingAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotation.BookmarkingAnnotation;
@@ -56,6 +41,19 @@ import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.ThrowingBiFunction;
+import info.freelibrary.util.warnings.PMD;
+import info.freelibrary.util.warnings.Sonar;
+
+import java.io.IOException;
+import java.io.Serial;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.BiFunction;
 
 /**
  * A deserializer for {@code WebAnnotation}(s).
@@ -63,10 +61,15 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 @SuppressWarnings({ PMD.GOD_CLASS, PMD.EXCESSIVE_IMPORTS })
 public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
 
-    /** The deserializer's logger. */
+    /**
+     * The deserializer's logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(WebAnnotationDeserializer.class, MessageCodes.BUNDLE);
 
-    /** The <code>serialVersionUID</code> for the deserializer. */
+    /**
+     * The <code>serialVersionUID</code> for the deserializer.
+     */
+    @Serial
     private static final long serialVersionUID = -6905362570704679943L;
 
     /**

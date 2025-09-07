@@ -1,13 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -16,14 +9,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
-import info.freelibrary.util.I18nRuntimeException;
-import info.freelibrary.util.ListUtils;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.warnings.JDK;
-import info.freelibrary.util.warnings.PMD;
-
 import info.freelibrary.iiif.presentation.v3.content.ContentResource;
 import info.freelibrary.iiif.presentation.v3.id.UriUtils;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
@@ -43,6 +28,19 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.json.BehaviorDeserializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.ContentResourceDeserializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.ServiceDeserializer;
+import info.freelibrary.util.I18nRuntimeException;
+import info.freelibrary.util.ListUtils;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.JDK;
+import info.freelibrary.util.warnings.PMD;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * A resource that can be used as a base for more specific IIIF presentation resources.
@@ -57,60 +55,94 @@ import info.freelibrary.iiif.presentation.v3.utils.json.ServiceDeserializer;
     JsonKeys.ITEMS, JsonKeys.SERVICE, JsonKeys.STRUCTURES, JsonKeys.SERVICES, JsonKeys.NAV_DATE, JsonKeys.ANNOTATIONS })
 public abstract class AbstractResource<T extends AbstractResource<T>> implements Resource<T> {
 
-    /** The logger used by abstract resources. */
+    /**
+     * The logger used by abstract resources.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractResource.class, MessageCodes.BUNDLE);
 
-    /** The resource type. */
+    /**
+     * The resource type.
+     */
     @JsonProperty(JsonKeys.TYPE)
     protected String myType;
 
-    /** A class of behaviors supported by this resource. */
+    /**
+     * A class of behaviors supported by this resource.
+     */
     private final Class<? extends Behavior> myBehaviorClass;
 
-    /** The resource's behaviors. */
+    /**
+     * The resource's behaviors.
+     */
     @JsonSetter(JsonKeys.BEHAVIOR)
     @JsonDeserialize(using = BehaviorDeserializer.class)
     private List<Behavior> myBehaviors;
 
-    /** The resource's homepage. */
+    /**
+     * The resource's homepage.
+     */
     private List<Homepage> myHomepages;
 
-    /** The resource ID. */
+    /**
+     * The resource ID.
+     */
     @JsonProperty(JsonKeys.ID)
     private String myID;
 
-    /** The resource label. */
+    /**
+     * The resource label.
+     */
     private Label myLabel;
 
-    /** The resource's metadata. */
+    /**
+     * The resource's metadata.
+     */
     private List<Metadata> myMetadata;
 
-    /** The resource's partOfs. */
+    /**
+     * The resource's partOfs.
+     */
     private List<PartOf> myPartOfs;
 
-    /** The resource's providers. */
+    /**
+     * The resource's providers.
+     */
     private List<Provider> myProviders;
 
-    /** The resource renderings. */
+    /**
+     * The resource renderings.
+     */
     private List<Rendering> myRenderings;
 
-    /** The resource's requiredStatement. */
+    /**
+     * The resource's requiredStatement.
+     */
     private RequiredStatement myRequiredStatement;
 
-    /** The rights ID of the resource. */
+    /**
+     * The rights ID of the resource.
+     */
     private String myRights;
 
-    /** The resource's seeAlsos. */
+    /**
+     * The resource's seeAlsos.
+     */
     private List<SeeAlso> mySeeAlsoRefs;
 
-    /** The resource's services. */
+    /**
+     * The resource's services.
+     */
     @JsonDeserialize(contentUsing = ServiceDeserializer.class)
     private List<Service> myServices;
 
-    /** The resource summary. */
+    /**
+     * The resource summary.
+     */
     private Summary mySummary;
 
-    /** The resource's thumbnails. */
+    /**
+     * The resource's thumbnails.
+     */
     @JsonProperty(JsonKeys.THUMBNAIL)
     @JsonDeserialize(contentUsing = ContentResourceDeserializer.class)
     private List<ContentResource> myThumbnails;
@@ -156,7 +188,7 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
     }
 
     @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(JDK.UNCHECKED)
     public boolean equals(final Object aObject) {
         final AbstractResource<T> other;
 
@@ -302,6 +334,18 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
     }
 
     /**
+     * Clears the required statement by setting it to null.
+     *
+     * @return The current instance of the object.
+     */
+    @Override
+    @SuppressWarnings({ JDK.UNCHECKED, PMD.NULL_ASSIGNMENT })
+    public T clearRequiredStatement() {
+        myRequiredStatement = null;
+        return (T) this;
+    }
+
+    /**
      * Gets the rights.
      *
      * @return The rights
@@ -310,6 +354,18 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
     @JsonProperty
     public Optional<String> getRights() {
         return Optional.ofNullable(myRights);
+    }
+
+    /**
+     * Clears the current rights by setting the rights to null.
+     *
+     * @return This instance for method chaining.
+     */
+    @Override
+    @SuppressWarnings({ JDK.UNCHECKED, PMD.NULL_ASSIGNMENT })
+    public T clearRights() {
+        myRights = null;
+        return (T) this;
     }
 
     /**
@@ -351,6 +407,17 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
     @JsonGetter(JsonKeys.SUMMARY)
     public Optional<Summary> getSummary() {
         return Optional.ofNullable(mySummary);
+    }
+
+    /**
+     * Clears the current summary.
+     *
+     * @return The current resource.
+     */
+    @SuppressWarnings({ JDK.UNCHECKED, PMD.NULL_ASSIGNMENT })
+    public T clearSummary() {
+        mySummary = null;
+        return (T) this;
     }
 
     /**
@@ -404,7 +471,6 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
      */
     @Override
     @JsonSetter(JsonKeys.HOMEPAGE)
-    @SuppressWarnings(JDK.UNCHECKED)
     public T setHomepages(final Homepage... aHomepageArray) {
         return setHomepages(Arrays.asList(aHomepageArray));
     }
@@ -484,7 +550,6 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
      */
     @Override
     @JsonIgnore
-    @SuppressWarnings(JDK.UNCHECKED)
     public T setMetadata(final Metadata... aMetadataArray) {
         return setMetadata(Arrays.asList(aMetadataArray));
     }
@@ -516,7 +581,6 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
      */
     @Override
     @JsonIgnore
-    @SuppressWarnings(JDK.UNCHECKED)
     public T setPartOfs(final PartOf... aPartOfArray) {
         return setPartOfs(Arrays.asList(aPartOfArray));
     }
@@ -540,7 +604,6 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
      * @return The resource
      */
     @Override
-    @SuppressWarnings(JDK.UNCHECKED)
     public T setProviders(final Provider... aProviderArray) {
         return setProviders(Arrays.asList(aProviderArray));
     }
@@ -572,7 +635,6 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
      */
     @Override
     @JsonIgnore
-    @SuppressWarnings(JDK.UNCHECKED)
     public T setRenderings(final Rendering... aRenderingArray) {
         return setRenderings(Arrays.asList(aRenderingArray));
     }
@@ -660,7 +722,6 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
      */
     @Override
     @JsonIgnore
-    @SuppressWarnings(JDK.UNCHECKED)
     public T setServices(final Service... aServiceArray) {
         return setServices(Arrays.asList(aServiceArray));
     }

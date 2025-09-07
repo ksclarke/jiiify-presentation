@@ -2,27 +2,13 @@
 package info.freelibrary.iiif.presentation.v3.utils.json;
 
 import static info.freelibrary.util.ThrowingBiFunction.unwrap;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.BiFunction;
-
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.exc.InputCoercionException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.ThrowingBiFunction;
-import info.freelibrary.util.warnings.PMD;
-import info.freelibrary.util.warnings.Sonar;
-
 import info.freelibrary.iiif.presentation.v3.Annotation;
+import info.freelibrary.iiif.presentation.v3.Resource;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.annotation.PaintingAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotation.PaintingAnnotation.Stylesheet;
@@ -41,10 +27,24 @@ import info.freelibrary.iiif.presentation.v3.content.TextContent;
 import info.freelibrary.iiif.presentation.v3.content.TextualBody;
 import info.freelibrary.iiif.presentation.v3.content.VideoContent;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
+import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.ThrowingBiFunction;
+import info.freelibrary.util.warnings.PMD;
+import info.freelibrary.util.warnings.Sonar;
+
+import java.io.IOException;
+import java.io.Serial;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.BiFunction;
 
 /**
  * A deserializer for {@code PaintingAnnotation}(s) or {@code SupplementingAnnotation}(s).
@@ -52,11 +52,16 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 @SuppressWarnings({ PMD.GOD_CLASS, PMD.EXCESSIVE_IMPORTS })
 public class CanvasAnnotationDeserializer extends StdDeserializer<Annotation<?>> {
 
-    /** The deserializer's logger. */
+    /**
+     * The deserializer's logger.
+     */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(CanvasAnnotationDeserializer.class, MessageCodes.BUNDLE);
 
-    /** The <code>serialVersionUID</code> for the deserializer. */
+    /**
+     * The <code>serialVersionUID</code> for the deserializer.
+     */
+    @Serial
     private static final long serialVersionUID = -6105332570704674843L;
 
     /**
@@ -112,13 +117,8 @@ public class CanvasAnnotationDeserializer extends StdDeserializer<Annotation<?>>
         annotation.setBody(getBody(bodyNode, unwrap(check)));
         annotation.setChoice(getChoice(bodyNode));
 
-        if (timeMode.isPresent()) {
-            annotation.setTimeMode(timeMode.get());
-        }
-
-        if (label.isPresent()) {
-            annotation.setLabel(label.get());
-        }
+        timeMode.ifPresent(annotation::setTimeMode);
+        label.ifPresent(annotation::setLabel);
 
         return annotation;
     }
@@ -151,7 +151,7 @@ public class CanvasAnnotationDeserializer extends StdDeserializer<Annotation<?>>
         final JsonNode targetsNode = aNode.get(JsonKeys.TARGET);
 
         if (purpose.isPresent()) {
-            return switch (purpose.get()) {
+            final Resource<?> resource = switch (purpose.get()) {
                 case PAINTING -> {
                     final PaintingAnnotation anno = new PaintingAnnotation(aID, getTargets(targetsNode, aParser));
                     final JsonNode styleSheet = aNode.get(JsonKeys.STYLESHEET);
@@ -162,9 +162,23 @@ public class CanvasAnnotationDeserializer extends StdDeserializer<Annotation<?>>
 
                     yield anno;
                 }
-                case SUPPLEMENTING -> new SupplementingAnnotation(aID, getTargets(targetsNode, aParser));
+                case SUPPLEMENTING -> {
+                    final List<Target> targets = getTargets(targetsNode, aParser);
+                    final SupplementingAnnotation anno = new SupplementingAnnotation(aID, targets);
+
+                    yield anno;
+                }
                 default -> throw new IllegalArgumentException(aMotivation);
             };
+
+            // After object construction, then handle generic Resource fields
+            final List<SeeAlso> seeAlsoRefs = getSeeAlsoRefs(aNode);
+
+            if (!seeAlsoRefs.isEmpty()) {
+                resource.setSeeAlsoRefs(seeAlsoRefs);
+            }
+
+            return (Annotation<?>) resource;
         }
 
         return null;
@@ -218,6 +232,28 @@ public class CanvasAnnotationDeserializer extends StdDeserializer<Annotation<?>>
         }
 
         return false;
+    }
+
+    /**
+     * Add SeeAlso refs to the annotation if they exist.
+     *
+     * @param aNode The annotation's JSON node
+     * @return A list of SeeAlso refs
+     */
+    private List<SeeAlso> getSeeAlsoRefs(final JsonNode aNode) {
+        final List<SeeAlso> seeAlsoRefs = new ArrayList<>();
+
+        if (aNode != null) {
+            final JsonNode seeAlsoNode = aNode.get(JsonKeys.SEE_ALSO);
+
+            if (seeAlsoNode != null && seeAlsoNode.isArray()) {
+                for (final JsonNode seeAlsoItem : seeAlsoNode) {
+                    seeAlsoRefs.add(JSON.convertValue(seeAlsoItem, SeeAlso.class));
+                }
+            }
+        }
+
+        return seeAlsoRefs;
     }
 
     /**

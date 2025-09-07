@@ -104,7 +104,7 @@ public final class I18nUtils {
      */
     public static I18n[] cleanHTML(final I18n... aI18nArray) {
         for (final I18n i18n : aI18nArray) {
-            final List<String> strings = new ArrayList<>(i18n.getStrings());
+            final List<String> strings = new ArrayList<>(i18n.getValues());
 
             for (int index = 0; index < strings.size(); index++) {
                 if (i18n.allowsHTML()) {
@@ -115,7 +115,7 @@ public final class I18nUtils {
             }
 
             i18n.clear();
-            i18n.addStrings(strings);
+            i18n.addValues(strings);
         }
 
         return aI18nArray;
@@ -209,14 +209,14 @@ public final class I18nUtils {
      */
     public static I18n[] stripHTML(final I18n... aI18nArray) {
         for (final I18n i18n : aI18nArray) {
-            final List<String> strings = new ArrayList<>(i18n.getStrings());
+            final List<String> strings = new ArrayList<>(i18n.getValues());
 
             for (int index = 0; index < strings.size(); index++) {
                 strings.set(index, stripHTML(strings.get(index)));
             }
 
             i18n.clear();
-            i18n.addStrings(strings);
+            i18n.addValues(strings);
         }
 
         return aI18nArray;

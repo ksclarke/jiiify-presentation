@@ -4,23 +4,20 @@ package info.freelibrary.iiif.presentation.v3.cookbooks;
 import static com.github.stefanbirkner.systemlambda.SystemLambda.withEnvironmentVariable;
 import static info.freelibrary.iiif.presentation.v3.utils.CookbookUtils.checkCookbooks;
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.assertEquals;
-
-import java.io.File;
-import java.io.IOException;
-
-//import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TestName;
-
-import info.freelibrary.util.StringUtils;
-import info.freelibrary.util.warnings.Sonar;
-
 import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.AnnotationPage;
 import info.freelibrary.iiif.presentation.v3.Collection;
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
+import info.freelibrary.util.StringUtils;
+import info.freelibrary.util.warnings.Sonar;
+import org.junit.Ignore;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TestName;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Tests converting cookbook JSON files into manifests and back again.
@@ -28,19 +25,23 @@ import info.freelibrary.iiif.presentation.v3.utils.JSON;
 @SuppressWarnings({ Sonar.PARAMETERIZE_TEST })
 public class RoundTripTest extends AbstractCookbookTest {
 
-    /** A pattern from which to pull manifest from the test resources directory. */
+    /**
+     * A pattern from which to pull manifest from the test resources directory.
+     */
     private static final String MANIFEST_PATTERN = "src/test/resources/cookbook/{}.json";
 
     static {
         checkCookbooks(); // Check status of cookbooks and emit warnings if we're out of sync
     }
 
-    /** A variable for the name of the test being executed. */
+    /**
+     * A variable for the name of the test being executed.
+     */
     @Rule
     public TestName myTestName = new TestName();
 
     /**
-     * Tests the 0001 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0001-mvm-image/).
+     * Tests the 0001 cookbook manifest (cf. <a href="https://iiif.io/api/cookbook/recipe/0001-mvm-image/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -53,7 +54,7 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0002 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0002-mvm-audio/).
+     * Tests the 0002 cookbook manifest (cf. <a href="https://iiif.io/api/cookbook/recipe/0002-mvm-audio/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -66,7 +67,7 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0003 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0003-mvm-video/).
+     * Tests the 0003 cookbook manifest (cf. <a href="https://iiif.io/api/cookbook/recipe/0003-mvm-video/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -79,7 +80,7 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0004 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0004-canvas-size/).
+     * Tests the 0004 cookbook manifest (cf. <a href="https://iiif.io/api/cookbook/recipe/0004-canvas-size/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -92,7 +93,7 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0005 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0005-image-service/).
+     * Tests the 0005 cookbook manifest (cf. <a href="https://iiif.io/api/cookbook/recipe/0005-image-service/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -105,7 +106,7 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0006 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0006-text-language/).
+     * Tests the 0006 cookbook manifest (cf. <a href="https://iiif.io/api/cookbook/recipe/0006-text-language/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -118,7 +119,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0007 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0007-string-formats/).
+     * Tests the 0007 cookbook manifest (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0007-string-formats/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -131,7 +133,7 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0008 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0008-rights/).
+     * Tests the 0008 cookbook manifest (cf. <a href="https://iiif.io/api/cookbook/recipe/0008-rights/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -144,7 +146,7 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0009 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0009-book-1/).
+     * Tests the 0009 cookbook manifest (cf. <a href="https://iiif.io/api/cookbook/recipe/0009-book-1/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -157,7 +159,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0010 RTL cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0010-book-2-viewing-direction/).
+     * Tests the 0010 RTL cookbook manifest (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0010-book-2-viewing-direction/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -170,7 +173,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0010 TTB cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0010-book-2-viewing-direction/).
+     * Tests the 0010 TTB cookbook manifest (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0010-book-2-viewing-direction/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -183,7 +187,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0011 continuous cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0011-book-3-behavior/).
+     * Tests the 0011 continuous cookbook manifest (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0011-book-3-behavior/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -196,7 +201,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0011 individuals cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0011-book-3-behavior/).
+     * Tests the 0011 individuals cookbook manifest (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0011-book-3-behavior/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -209,7 +215,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0013 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0013-placeholderCanvas/).
+     * Tests the 0013 cookbook manifest (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0013-placeholderCanvas/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -222,7 +229,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0014 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0014-accompanyingcanvas/).
+     * Tests the 0014 cookbook manifest (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0014-accompanyingcanvas/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -235,7 +243,7 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0015 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0015-start/).
+     * Tests the 0015 cookbook manifest (cf. <a href="https://iiif.io/api/cookbook/recipe/0015-start/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -248,7 +256,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0017 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0017-transcription-av/).
+     * Tests the 0017 cookbook manifest (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0017-transcription-av/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -261,7 +270,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0019 HTML in annotations manifest (cf. https://iiif.io/api/cookbook/recipe/0019-html-in-annotations/).
+     * Tests the 0019 HTML in annotations manifest (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0019-html-in-annotations/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -274,7 +284,7 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0021 tagging manifest (cf. https://iiif.io/api/cookbook/recipe/0021-tagging/).
+     * Tests the 0021 tagging manifest (cf. <a href="https://iiif.io/api/cookbook/recipe/0021-tagging/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -288,7 +298,7 @@ public class RoundTripTest extends AbstractCookbookTest {
 
     /**
      * Tests the 0022 linking with hotspot manifest (cf.
-     * https://iiif.io/api/cookbook/recipe/0022-linking-with-a-hotspot/).
+     * <a href="https://iiif.io/api/cookbook/recipe/0022-linking-with-a-hotspot/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -301,7 +311,7 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0024 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0024-book-4-toc/).
+     * Tests the 0024 cookbook manifest (cf. <a href="https://iiif.io/api/cookbook/recipe/0024-book-4-toc/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -314,7 +324,7 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0026 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0026-toc-opera/).
+     * Tests the 0026 cookbook manifest (cf. <a href="https://iiif.io/api/cookbook/recipe/0026-toc-opera/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -327,7 +337,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0029 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0029-metadata-anywhere/).
+     * Tests the 0029 cookbook manifest (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0029-metadata-anywhere/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -340,7 +351,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0030 collection cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0030-multi-volume/).
+     * Tests the 0030 collection cookbook manifest (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0030-multi-volume/">...</a>).
      *
      * @throws IOException If there is trouble reading the collection file
      */
@@ -353,7 +365,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0030 v1 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0030-multi-volume/).
+     * Tests the 0030 v1 cookbook manifest (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0030-multi-volume/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -366,7 +379,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0030 v2 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0030-multi-volume/).
+     * Tests the 0030 v2 cookbook manifest (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0030-multi-volume/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -379,7 +393,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0031 bound multi-volume manifest (cf. https://iiif.io/api/cookbook/recipe/0031-bound-multivolume/).
+     * Tests the 0031 bound multi-volume manifest (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0031-bound-multivolume/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -392,7 +407,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0032 collection's collection doc (cf. https://iiif.io/api/cookbook/recipe/0032-collection/).
+     * Tests the 0032 collection's collection doc (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0032-collection/">...</a>).
      *
      * @throws IOException If there is trouble reading the collection document
      */
@@ -405,7 +421,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0032 collection's first manifest (cf. https://iiif.io/api/cookbook/recipe/0032-collection/).
+     * Tests the 0032 collection's first manifest (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0032-collection/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -418,7 +435,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0032 collection's second manifest (cf. https://iiif.io/api/cookbook/recipe/0032-collection/).
+     * Tests the 0032 collection's second manifest (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0032-collection/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -431,7 +449,7 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0033 choice manifest (cf. https://iiif.io/api/cookbook/recipe/0033-choice/).
+     * Tests the 0033 choice manifest (cf. <a href="https://iiif.io/api/cookbook/recipe/0033-choice/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -444,7 +462,7 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0035 fold-outs manifest (cf. https://iiif.io/api/cookbook/recipe/0035-foldouts/).
+     * Tests the 0035 fold-outs manifest (cf. <a href="https://iiif.io/api/cookbook/recipe/0035-foldouts/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -458,7 +476,7 @@ public class RoundTripTest extends AbstractCookbookTest {
 
     /**
      * Tests the 0036 composition from multiple images manifest (cf.
-     * https://iiif.io/api/cookbook/recipe/0036-composition-from-multiple-images/).
+     * <a href="https://iiif.io/api/cookbook/recipe/0036-composition-from-multiple-images/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -472,7 +490,7 @@ public class RoundTripTest extends AbstractCookbookTest {
 
     /**
      * Tests the 0040 image rotation service fixture (cf.
-     * https://iiif.io/api/cookbook/recipe/0040-image-rotation-service/).
+     * <a href="https://iiif.io/api/cookbook/recipe/0040-image-rotation-service/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -486,7 +504,7 @@ public class RoundTripTest extends AbstractCookbookTest {
 
     /**
      * Tests the 0040 image rotation with CSS fixture (cf.
-     * https://iiif.io/api/cookbook/recipe/0040-image-rotation-service/).
+     * <a href="https://iiif.io/api/cookbook/recipe/0040-image-rotation-service/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -499,7 +517,7 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0046 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0046-rendering/).
+     * Tests the 0046 cookbook manifest (cf. <a href="https://iiif.io/api/cookbook/recipe/0046-rendering/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -512,7 +530,7 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0047 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0047-homepage/).
+     * Tests the 0047 cookbook manifest (cf. <a href="https://iiif.io/api/cookbook/recipe/0047-homepage/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -525,7 +543,7 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0053 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0053-seeAlso/).
+     * Tests the 0053 cookbook manifest (cf. <a href="https://iiif.io/api/cookbook/recipe/0053-seeAlso/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -538,7 +556,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0064 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0064-opera-one-canvas/).
+     * Tests the 0064 cookbook manifest (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0064-opera-one-canvas/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -551,7 +570,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0065 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0065-opera-multiple-canvases/).
+     * Tests the 0065 cookbook manifest (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0065-opera-multiple-canvases/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -564,7 +584,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0068 issue 1 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0068-newspaper/).
+     * Tests the 0068 issue 1 cookbook manifest (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0068-newspaper/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -577,7 +598,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0068 issue 1, annotation 1 test fixtures (cf. https://iiif.io/api/cookbook/recipe/0068-newspaper/).
+     * Tests the 0068 issue 1, annotation 1 test fixtures (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0068-newspaper/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -590,7 +612,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0068 issue 1, annotation 2 test fixtures (cf. https://iiif.io/api/cookbook/recipe/0068-newspaper/).
+     * Tests the 0068 issue 1, annotation 2 test fixtures (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0068-newspaper/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -603,7 +626,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0068 issue 2 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0068-newspaper/).
+     * Tests the 0068 issue 2 cookbook manifest (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0068-newspaper/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -616,7 +640,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0068 issue 2, annotation 1 test fixtures (cf. https://iiif.io/api/cookbook/recipe/0068-newspaper/).
+     * Tests the 0068 issue 2, annotation 1 test fixtures (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0068-newspaper/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -629,7 +654,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0068 issue 2, annotation 2 test fixtures (cf. https://iiif.io/api/cookbook/recipe/0068-newspaper/).
+     * Tests the 0068 issue 2, annotation 2 test fixtures (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0068-newspaper/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -643,7 +669,7 @@ public class RoundTripTest extends AbstractCookbookTest {
 
     /**
      * Tests the 0068 title collection cookbook's collection doc (cf.
-     * https://iiif.io/api/cookbook/recipe/0068-newspaper/).
+     * <a href="https://iiif.io/api/cookbook/recipe/0068-newspaper/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -657,7 +683,7 @@ public class RoundTripTest extends AbstractCookbookTest {
 
     /**
      * Tests the 0074 multiple language caption cookbook's manifest doc (cf.
-     * https://iiif.io/api/cookbook/recipe/0074-multiple-language-captions/).
+     * <a href="https://iiif.io/api/cookbook/recipe/0074-multiple-language-captions/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -670,7 +696,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0117 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0117-add-image-thumbnail/).
+     * Tests the 0117 cookbook manifest (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0117-add-image-thumbnail/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -683,7 +710,7 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0118 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0118_multivalue/).
+     * Tests the 0118 cookbook manifest (cf. <a href="https://iiif.io/api/cookbook/recipe/0118_multivalue/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -697,7 +724,7 @@ public class RoundTripTest extends AbstractCookbookTest {
 
     /**
      * Tests the 0135 annotating point in canvas (cf.
-     * https://iiif.io/api/cookbook/recipe/0135-annotating-point-in-canvas/).
+     * <a href="https://iiif.io/api/cookbook/recipe/0135-annotating-point-in-canvas/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -711,7 +738,7 @@ public class RoundTripTest extends AbstractCookbookTest {
 
     /**
      * Tests the 0139 cookbook manifest fixture (cf.
-     * https://iiif.io/api/cookbook/recipe/0139-geolocate-canvas-fragment/).
+     * <a href="https://iiif.io/api/cookbook/recipe/0139-geolocate-canvas-fragment/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -724,7 +751,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0154 GeoJSON extension fixture (cf. https://iiif.io/api/cookbook/recipe/0154-geo-extension/).
+     * Tests the 0154 GeoJSON extension fixture (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0154-geo-extension/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -737,7 +765,7 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0202 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0202-start-canvas/).
+     * Tests the 0202 cookbook manifest (cf. <a href="https://iiif.io/api/cookbook/recipe/0202-start-canvas/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -750,7 +778,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0219 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0219-using-caption-file/).
+     * Tests the 0219 cookbook manifest (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0219-using-caption-file/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -763,7 +792,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0229 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0229-behavior-ranges/).
+     * Tests the 0229 cookbook manifest (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0229-behavior-ranges/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -776,7 +806,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0230 collection cookbook's collection doc (cf. https://iiif.io/api/cookbook/recipe/0230-navdate/).
+     * Tests the 0230 collection cookbook's collection doc (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0230-navdate/">...</a>).
      *
      * @throws IOException If there is trouble reading the collection file
      */
@@ -789,7 +820,7 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0230 map 1 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0230-navdate/).
+     * Tests the 0230 map 1 cookbook manifest (cf. <a href="https://iiif.io/api/cookbook/recipe/0230-navdate/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -802,7 +833,7 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0230 map 2 cookbook manifest (cf. https://iiif.io/api/cookbook/recipe/0230-navdate/).
+     * Tests the 0230 map 2 cookbook manifest (cf. <a href="https://iiif.io/api/cookbook/recipe/0230-navdate/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -816,7 +847,7 @@ public class RoundTripTest extends AbstractCookbookTest {
 
     /**
      * Tests the 0232 image thumbnail manifest fixture's AV structure (cf.
-     * https://iiif.io/api/cookbook/recipe/0232-image-thumbnail-canvas/).
+     * <a href="https://iiif.io/api/cookbook/recipe/0232-image-thumbnail-canvas/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -830,7 +861,7 @@ public class RoundTripTest extends AbstractCookbookTest {
 
     /**
      * Tests the 0232 image thumbnail manifest fixture's image structure (cf.
-     * https://iiif.io/api/cookbook/recipe/0232-image-thumbnail-canvas/).
+     * <a href="https://iiif.io/api/cookbook/recipe/0232-image-thumbnail-canvas/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -843,7 +874,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0234 provider manifest fixture (cf. https://iiif.io/api/cookbook/recipe/0234-provider/).
+     * Tests the 0234 provider manifest fixture (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0234-provider/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -856,7 +888,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0240 navPlace on canvases fixture (cf. https://iiif.io/api/cookbook/recipe/0240-navPlace-on-canvases/).
+     * Tests the 0240 navPlace on canvases fixture (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0240-navPlace-on-canvases/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -870,7 +903,7 @@ public class RoundTripTest extends AbstractCookbookTest {
 
     /**
      * Tests the 0258 tagging external resource fixture (cf.
-     * https://iiif.io/api/cookbook/recipe/0258-tagging-external-resource/).
+     * <a href="https://iiif.io/api/cookbook/recipe/0258-tagging-external-resource/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -884,7 +917,7 @@ public class RoundTripTest extends AbstractCookbookTest {
 
     /**
      * Tests the 0261 non-rectangular commenting fixture (cf.
-     * https://iiif.io/api/cookbook/recipe/0261-non-rectangular-commenting/).
+     * <a href="https://iiif.io/api/cookbook/recipe/0261-non-rectangular-commenting/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -898,7 +931,7 @@ public class RoundTripTest extends AbstractCookbookTest {
 
     /**
      * Tests the 0266 full canvas annotation fixture (cf.
-     * https://iiif.io/api/cookbook/recipe/0266-full-canvas-annotation/).
+     * <a href="https://iiif.io/api/cookbook/recipe/0266-full-canvas-annotation/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -912,7 +945,7 @@ public class RoundTripTest extends AbstractCookbookTest {
 
     /**
      * Tests the 0269 annotation page fixture (cf.
-     * https://iiif.io/api/cookbook/recipe/0269-embedded-or-referenced-annotations/).
+     * <a href="https://iiif.io/api/cookbook/recipe/0269-embedded-or-referenced-annotations/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -926,7 +959,7 @@ public class RoundTripTest extends AbstractCookbookTest {
 
     /**
      * Tests the 0269 manifest fixture (cf.
-     * https://iiif.io/api/cookbook/recipe/0269-embedded-or-referenced-annotations/).
+     * <a href="https://iiif.io/api/cookbook/recipe/0269-embedded-or-referenced-annotations/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -939,7 +972,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0283 missing image fixture (cf. https://iiif.io/api/cookbook/recipe/0283-missing-image/).
+     * Tests the 0283 missing image fixture (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0283-missing-image/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -952,7 +986,7 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0299 region manifest fixture (cf. https://iiif.io/api/cookbook/recipe/0299-region/).
+     * Tests the 0299 region manifest fixture (cf. <a href="https://iiif.io/api/cookbook/recipe/0299-region/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -966,7 +1000,7 @@ public class RoundTripTest extends AbstractCookbookTest {
 
     /**
      * Tests the 0306 annotation page fixture (cf.
-     * https://iiif.io/api/cookbook/recipe/0306-linking-annotations-to-manifests/).
+     * <a href="https://iiif.io/api/cookbook/recipe/0306-linking-annotations-to-manifests/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -979,7 +1013,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0306 manifest fixture (cf. https://iiif.io/api/cookbook/recipe/0306-linking-annotations-to-manifests/).
+     * Tests the 0306 manifest fixture (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0306-linking-annotations-to-manifests/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -993,7 +1028,7 @@ public class RoundTripTest extends AbstractCookbookTest {
 
     /**
      * Tests the 0309 annotation collection's first annotation fixture (cf.
-     * https://iiif.io/api/cookbook/recipe/0309-annotation-collection/).
+     * <a href="https://iiif.io/api/cookbook/recipe/0309-annotation-collection/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -1011,7 +1046,7 @@ public class RoundTripTest extends AbstractCookbookTest {
 
     /**
      * Tests the 0309 annotation collection's second annotation fixture (cf.
-     * https://iiif.io/api/cookbook/recipe/0309-annotation-collection/).
+     * <a href="https://iiif.io/api/cookbook/recipe/0309-annotation-collection/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -1029,7 +1064,7 @@ public class RoundTripTest extends AbstractCookbookTest {
 
     /**
      * Tests the 0309 annotation collection fixture (cf.
-     * https://iiif.io/api/cookbook/recipe/0309-annotation-collection/).
+     * <a href="https://iiif.io/api/cookbook/recipe/0309-annotation-collection/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -1046,7 +1081,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0318 navPlace and navDate fixture (cf. https://iiif.io/api/cookbook/recipe/0318-navPlace-navDate/).
+     * Tests the 0318 navPlace and navDate fixture (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0318-navPlace-navDate/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -1059,7 +1095,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0318 navPlace and navDate fixture (cf. https://iiif.io/api/cookbook/recipe/0318-navPlace-navDate/).
+     * Tests the 0318 navPlace and navDate fixture (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0318-navPlace-navDate/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -1072,7 +1109,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0318 navPlace and navDate fixture (cf. https://iiif.io/api/cookbook/recipe/0318-navPlace-navDate/).
+     * Tests the 0318 navPlace and navDate fixture (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0318-navPlace-navDate/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -1085,7 +1123,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0318 navPlace and navDate fixture (cf. https://iiif.io/api/cookbook/recipe/0318-navPlace-navDate/).
+     * Tests the 0318 navPlace and navDate fixture (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0318-navPlace-navDate/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -1098,7 +1137,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0318 navPlace and navDate fixture (cf. https://iiif.io/api/cookbook/recipe/0318-navPlace-navDate/).
+     * Tests the 0318 navPlace and navDate fixture (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0318-navPlace-navDate/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -1111,7 +1151,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0318 navPlace and navDate fixture (cf. https://iiif.io/api/cookbook/recipe/0318-navPlace-navDate/).
+     * Tests the 0318 navPlace and navDate fixture (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0318-navPlace-navDate/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -1125,7 +1166,7 @@ public class RoundTripTest extends AbstractCookbookTest {
 
     /**
      * Tests the 0326 annotating image layer fixture (cf.
-     * https://iiif.io/api/cookbook/recipe/0326-annotating-image-layer/).
+     * <a href="https://iiif.io/api/cookbook/recipe/0326-annotating-image-layer/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -1139,7 +1180,7 @@ public class RoundTripTest extends AbstractCookbookTest {
 
     /**
      * Tests the 0346 multi-lingual annotation body fixture (cf.
-     * https://iiif.io/api/cookbook/recipe/0346-multilingual-annotation-body/).
+     * <a href="https://iiif.io/api/cookbook/recipe/0346-multilingual-annotation-body/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -1152,7 +1193,8 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0377 image in annotation fixture (cf. https://iiif.io/api/cookbook/recipe/0377-image-in-annotation/).
+     * Tests the 0377 image in annotation fixture (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0377-image-in-annotation/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -1165,7 +1207,7 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests the 0434 A/V choice fixture (cf. https://iiif.io/api/cookbook/recipe/0434-choice-av/).
+     * Tests the 0434 A/V choice fixture (cf. <a href="https://iiif.io/api/cookbook/recipe/0434-choice-av/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
      */
@@ -1177,23 +1219,27 @@ public class RoundTripTest extends AbstractCookbookTest {
         assertEquals(myTestName, expected, found);
     }
 
-    // /**
-    // * Tests the 0485 Content State fixture (cf.
-    // https://iiif.io/api/cookbook/recipe/0485-contentstate-canvas-region/).
-    // *
-    // * @throws IOException If there is trouble reading the annotation file
-    // */
-    // @Test
-    // @Ignore
-    // public final void test0485ContentstateCanvasRegion() throws IOException {
-    // final String expected = getExpected("0485-contentstate-canvas-region/annotation");
-    // final String found = JSON.readValue(expected, Annotation.class).toString();
-    //
-    // assertEquals(myTestName, expected, found);
-    // }
+    /**
+     * Tests the 0485 Content State fixture (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0485-contentstate-canvas-region/">...</a>).
+     *
+     * @throws IOException If there is trouble reading the annotation file
+     */
+    @Test
+    @Ignore
+    public final void test0485ContentstateCanvasRegion() throws IOException {
+        final String expected = getExpected("0485-contentstate-canvas-region/annotation");
+        final String found = JSON.readValue(expected, Annotation.class).toString();
+
+        System.out.println(expected);
+        System.out.println(found);
+
+        assertEquals(myTestName, expected, found);
+    }
 
     /**
-     * Tests the 0489 multimedia canvas fixture (cf. https://iiif.io/api/cookbook/recipe/0489-multimedia-canvas/).
+     * Tests the 0489 multimedia canvas fixture (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0489-multimedia-canvas/">...</a>).
      *
      * @throws IOException If there is trouble reading the annotation file
      */
@@ -1207,7 +1253,7 @@ public class RoundTripTest extends AbstractCookbookTest {
 
     /**
      * Tests the 0540 link for opening multiple canvases fixture (cf.
-     * https://iiif.io/api/cookbook/recipe/0540-link-for-opening-multiple-canvases/).
+     * <a href="https://iiif.io/api/cookbook/recipe/0540-link-for-opening-multiple-canvases/">...</a>).
      *
      * @throws IOException If there is trouble reading the annotation file
      */

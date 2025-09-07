@@ -89,7 +89,7 @@ public class Motivation implements Labeled {
     }
 
     /**
-     * Creates a new motivation from the supplied string.
+     * Creates a new motivation from the supplied string. Any string will be accepted; so, only supply valid values.
      *
      * @param aLabel A motivation label
      * @return A motivation for an annotation

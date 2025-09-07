@@ -1,20 +1,9 @@
 
 package info.freelibrary.iiif.presentation.v3.annotation;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import info.freelibrary.util.I18nRuntimeException;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-
 import info.freelibrary.iiif.presentation.v3.CanvasResource;
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.Range;
@@ -25,6 +14,15 @@ import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.json.AnnotationTargetDeserializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.AnnotationTargetSerializer;
+import info.freelibrary.util.I18nRuntimeException;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * An annotation target. There are several types of extensions of this sealed class: {@code SpecificResource},
@@ -34,22 +32,34 @@ import info.freelibrary.iiif.presentation.v3.utils.json.AnnotationTargetSerializ
 @JsonDeserialize(using = AnnotationTargetDeserializer.class)
 public sealed class Target permits SpecificResource {
 
-    /** The target's logger. */
+    /**
+     * The target's logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(Target.class, MessageCodes.BUNDLE);
 
-    /** Whether the resource should be serialized as object or URI string. */
+    /**
+     * Whether the resource should be serialized as object or URI string.
+     */
     private boolean isSerializedAsObject;
 
-    /** An embedded resource. */
+    /**
+     * An embedded resource.
+     */
     private Resource<?> myEmbeddedResource;
 
-    /** The URI for the annotation target. */
+    /**
+     * The URI for the annotation target.
+     */
     private String myID;
 
-    /** A part of an annotation target. */
+    /**
+     * A part of an annotation target.
+     */
     private List<PartOf> myPartOfs;
 
-    /** The type of the resource that's a target. */
+    /**
+     * The type of the resource that's a target.
+     */
     private String myType;
 
     /**

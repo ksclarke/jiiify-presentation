@@ -1,16 +1,15 @@
 
 package info.freelibrary.iiif.presentation.v3.utils.json;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map.Entry;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-
 import info.freelibrary.iiif.presentation.v3.properties.I18n;
+
+import java.io.Serial;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * An abstract deserializer that our other deserializers can extend.
@@ -22,6 +21,7 @@ abstract class AbstractI18nStdDeserializer<T> extends StdDeserializer<T> {
     /**
      * The <code>serialVersionUID</code> for AbstractI18nStdDeserializer.
      */
+    @Serial
     private static final long serialVersionUID = 433758172553865194L;
 
     /**
@@ -47,24 +47,25 @@ abstract class AbstractI18nStdDeserializer<T> extends StdDeserializer<T> {
      * @return An array of I18n
      */
     protected I18n[] getI18nStrings(final JsonNode aPropertyNode) {
-        final Iterator<Entry<String, JsonNode>> iterator = aPropertyNode.fields();
+        final Iterator<String> iterator = aPropertyNode.fieldNames();
         final List<I18n> i18n = new ArrayList<>();
 
         while (iterator.hasNext()) {
-            final Entry<String, JsonNode> entry = iterator.next();
-            final JsonNode jsonNode = entry.getValue();
+            final String langTag = iterator.next();
+            final List<JsonNode> nodes = aPropertyNode.findValues(langTag);
 
-            if (jsonNode.isArray()) {
-                final ArrayNode arrayNode = (ArrayNode) jsonNode;
-                final List<String> langStrings = new ArrayList<>();
-                final String langTag = entry.getKey();
+            nodes.forEach(jsonNode -> {
+                if (jsonNode.isArray()) {
+                    final ArrayNode arrayNode = (ArrayNode) jsonNode;
+                    final List<String> langStrings = new ArrayList<>();
 
-                for (int index = 0; index < arrayNode.size(); index++) {
-                    langStrings.add(arrayNode.get(index).asText());
+                    for (int index = 0; index < arrayNode.size(); index++) {
+                        langStrings.add(arrayNode.get(index).asText());
+                    }
+
+                    i18n.add(new I18n(langTag, langStrings));
                 }
-
-                i18n.add(new I18n(langTag, langStrings));
-            }
+            });
         }
 
         return i18n.toArray(new I18n[0]);

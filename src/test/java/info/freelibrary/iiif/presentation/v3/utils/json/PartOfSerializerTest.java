@@ -4,6 +4,7 @@ package info.freelibrary.iiif.presentation.v3.utils.json;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -58,9 +59,11 @@ public class PartOfSerializerTest {
      */
     @Test
     public void testSerializePartOfWithEmbeddedResource() throws IOException {
+        final Optional<String> labelOpt = LABEL.getFirstValue();
+
         final String found = myMapper.writeValueAsString(new PartOf(new Manifest(ID, LABEL)));
         final JsonObject object = Json.object().add(JsonKeys.ID, ID).add(JsonKeys.TYPE, ResourceTypes.MANIFEST);
-        final JsonObject label = Json.object().add(I18n.DEFAULT_LANG, Json.array(LABEL.getString()));
+        final JsonObject label = Json.object().add(I18n.DEFAULT_LANG, Json.array(LABEL.getFirstValue().get()));
         final String expected = object.add(JsonKeys.LABEL, label).toString(OPTS);
 
         assertEquals(expected, found);

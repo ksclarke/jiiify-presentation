@@ -1,11 +1,11 @@
 
 package info.freelibrary.iiif.presentation.v3.id;
 
-import java.util.Locale;
-
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.I18nRuntimeException;
 
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import java.io.Serial;
+import java.util.Locale;
 
 /**
  * A runtime exception thrown if an invalid ID is created. The spec defines an ID as a URI that, for resources specific
@@ -15,7 +15,10 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public class InvalidIdentifierException extends I18nRuntimeException {
 
-    /** The <code>serialVersionUID</code> of the <code>InvalidIdentifierException</code> class. */
+    /**
+     * The <code>serialVersionUID</code> of the <code>InvalidIdentifierException</code> class.
+     */
+    @Serial
     private static final long serialVersionUID = -5050999111947549190L;
 
     /**

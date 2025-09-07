@@ -1,19 +1,11 @@
 
 package info.freelibrary.iiif.presentation.v3.utils.json;
 
-import java.io.IOException;
-import java.util.Optional;
-
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.warnings.PMD;
-
 import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.annotation.AssessingAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotation.BookmarkingAnnotation;
@@ -36,6 +28,13 @@ import info.freelibrary.iiif.presentation.v3.annotation.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.PMD;
+
+import java.io.IOException;
+import java.io.Serial;
+import java.util.Optional;
 
 /**
  * An annotation deserializer that can handle deserializing even if 'motivation' is an array. It basically determines
@@ -44,10 +43,15 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 @SuppressWarnings({ PMD.EXCESSIVE_IMPORTS })
 public class AnnotationDeserializer extends StdDeserializer<Annotation<?>> {
 
-    /** The deserializer's logger. */
+    /**
+     * The deserializer's logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationDeserializer.class, MessageCodes.BUNDLE);
 
-    /** The {@code serialVersionUID} for the {@code AnnotationDeserializer} class. */
+    /**
+     * The {@code serialVersionUID} for the {@code AnnotationDeserializer} class.
+     */
+    @Serial
     private static final long serialVersionUID = 431628099542258580L;
 
     /**
@@ -120,7 +124,7 @@ public class AnnotationDeserializer extends StdDeserializer<Annotation<?>> {
             return Optional.empty();
         }
 
-        if (aMotivation.isArray() && aMotivation.size() > 0) {
+        if (aMotivation.isArray() && !aMotivation.isEmpty()) {
             for (final JsonNode purposeNode : aMotivation) {
                 final Optional<Purpose> purpose = Purpose.fromLabel(purposeNode.asText());
 

@@ -3,11 +3,6 @@ package info.freelibrary.iiif.presentation.v3.utils.json;
 
 import static info.freelibrary.util.Constants.SINGLE_INSTANCE;
 import static info.freelibrary.util.ThrowingBiFunction.unwrap;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
-
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -15,33 +10,42 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-
+import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.annotation.Motivation;
+import info.freelibrary.iiif.presentation.v3.annotation.PaintingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.PaintingAnnotation.Stylesheet;
+import info.freelibrary.iiif.presentation.v3.annotation.Target;
+import info.freelibrary.iiif.presentation.v3.content.ContentResource;
+import info.freelibrary.iiif.presentation.v3.properties.Label;
+import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
+import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.ThrowingBiFunction;
 import info.freelibrary.util.warnings.PMD;
 
-import info.freelibrary.iiif.presentation.v3.ResourceTypes;
-import info.freelibrary.iiif.presentation.v3.annotation.Motivation;
-import info.freelibrary.iiif.presentation.v3.annotation.PaintingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotation.Target;
-import info.freelibrary.iiif.presentation.v3.annotation.PaintingAnnotation.Stylesheet;
-import info.freelibrary.iiif.presentation.v3.content.ContentResource;
-import info.freelibrary.iiif.presentation.v3.properties.Label;
-import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
-import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import java.io.IOException;
+import java.io.Serial;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * A serializer for {@code PaintingAnnotation}(s).
  */
 public class PaintingAnnotationSerializer extends StdSerializer<PaintingAnnotation> {
 
-    /** A logger for the serializer. */
+    /**
+     * A logger for the serializer.
+     */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(PaintingAnnotationSerializer.class, MessageCodes.BUNDLE);
 
-    /** The <code>serialVersionUID</code> for a <code>PaintingAnnotationSerializer</code>. */
+    /**
+     * The <code>serialVersionUID</code> for a <code>PaintingAnnotationSerializer</code>.
+     */
+    @Serial
     private static final long serialVersionUID = -5151418273140218531L;
 
     /**
@@ -52,7 +56,8 @@ public class PaintingAnnotationSerializer extends StdSerializer<PaintingAnnotati
     }
 
     @Override
-    @SuppressWarnings({ PMD.PRESERVE_STACK_TRACE, PMD.CYCLOMATIC_COMPLEXITY })
+    @SuppressWarnings({ PMD.PRESERVE_STACK_TRACE, PMD.CYCLOMATIC_COMPLEXITY, PMD.COGNITIVE_COMPLEXITY,
+        PMD.N_PATH_COMPLEXITY })
     public void serialize(final PaintingAnnotation aPaintingAnnotation, final JsonGenerator aJsonGenerator,
             final SerializerProvider aProvider) throws IOException {
         final List<ContentResource> resources = aPaintingAnnotation.getBody();
@@ -72,6 +77,8 @@ public class PaintingAnnotationSerializer extends StdSerializer<PaintingAnnotati
         };
 
         try {
+            final List<SeeAlso> seeAlsoRefs = aPaintingAnnotation.getSeeAlsoRefs();
+
             // Start writing our JSON output
             aJsonGenerator.writeStartObject();
             aJsonGenerator.writeObjectField(JsonKeys.ID, unwrap(check).apply(JsonKeys.ID, aPaintingAnnotation.getID()));
@@ -96,6 +103,16 @@ public class PaintingAnnotationSerializer extends StdSerializer<PaintingAnnotati
 
             if (!resources.isEmpty()) {
                 serializeResources(resources, aPaintingAnnotation.bodyHasChoice(), aJsonGenerator);
+            }
+
+            if (!seeAlsoRefs.isEmpty()) {
+                aJsonGenerator.writeArrayFieldStart(JsonKeys.SEE_ALSO);
+
+                for (final SeeAlso seeAlsoRef : seeAlsoRefs) {
+                    aJsonGenerator.writeObject(seeAlsoRef);
+                }
+
+                aJsonGenerator.writeEndArray();
             }
 
             if (targets.size() == SINGLE_INSTANCE) {

@@ -1,11 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,9 +8,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import info.freelibrary.util.warnings.JDK;
-
 import info.freelibrary.iiif.presentation.v3.exts.geo.NavPlace;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -24,6 +16,13 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.json.ContextFilterProvider;
 import info.freelibrary.iiif.presentation.v3.utils.json.ContextListDeserializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.ContextListSerializer;
+import info.freelibrary.util.warnings.JDK;
+import info.freelibrary.util.warnings.PMD;
+
+import java.net.URI;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * A navigable resource.
@@ -33,16 +32,22 @@ import info.freelibrary.iiif.presentation.v3.utils.json.ContextListSerializer;
 @JsonFilter(ContextFilterProvider.FILTER_NAME)
 public class NavigableResource<T extends NavigableResource<T>> extends AbstractResource<T> {
 
-    /** The resource's contexts. */
+    /**
+     * The resource's contexts.
+     */
     @JsonProperty(JsonKeys.CONTEXT)
     @JsonSerialize(using = ContextListSerializer.class)
     @JsonDeserialize(using = ContextListDeserializer.class)
     private ContextList myContexts;
 
-    /** The date of the navigable resource. */
+    /**
+     * The date of the navigable resource.
+     */
     private NavDate myNavDate;
 
-    /** The place of a navigable resource. */
+    /**
+     * The place of a navigable resource.
+     */
     private NavPlace myNavPlace;
 
     /**
@@ -119,6 +124,17 @@ public class NavigableResource<T extends NavigableResource<T>> extends AbstractR
     }
 
     /**
+     * Clears the navigation date of the resource.
+     *
+     * @return The current instance of the resource
+     */
+    @SuppressWarnings({ JDK.UNCHECKED, PMD.NULL_ASSIGNMENT })
+    public T clearNavDate() {
+        myNavDate = null;
+        return (T) this;
+    }
+
+    /**
      * Gets the navigation place.
      *
      * @return The navigation place
@@ -126,6 +142,17 @@ public class NavigableResource<T extends NavigableResource<T>> extends AbstractR
     @JsonGetter(JsonKeys.NAV_PLACE)
     public Optional<NavPlace> getNavPlace() {
         return Optional.ofNullable(myNavPlace);
+    }
+
+    /**
+     * Clears the navigation place of the resource.
+     *
+     * @return The current instance of the resource
+     */
+    @SuppressWarnings({ JDK.UNCHECKED, PMD.NULL_ASSIGNMENT })
+    public T clearNavPlace() {
+        myNavPlace = null;
+        return (T) this;
     }
 
     @Override

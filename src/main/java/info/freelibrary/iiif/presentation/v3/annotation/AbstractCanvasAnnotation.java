@@ -1,18 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.annotation;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import info.freelibrary.util.ListUtils;
-import info.freelibrary.util.warnings.JDK;
-
 import info.freelibrary.iiif.presentation.v3.AbstractResource;
 import info.freelibrary.iiif.presentation.v3.CanvasResource;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
@@ -24,10 +13,19 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.util.ListUtils;
+import info.freelibrary.util.warnings.JDK;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * A resource that associates content resources and commentary with a IIIF canvas. This provides a single, coherent
- * method for aligning information, and provides a standards based framework for distinguishing parts of resources and
+ * method for aligning information and provides a standards-based framework for distinguishing parts of resources and
  * parts of canvases. As annotations can be added later, it promotes a distributed system in which publishers can align
  * their content with the descriptions created by others.
  *
@@ -35,19 +33,29 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  */
 public abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotation<A>> extends AbstractResource<A> {
 
-    /** A boolean flag indicating whether the annotation body contains a choice. */
+    /**
+     * A boolean flag indicating whether the annotation body contains a choice.
+     */
     private boolean myBodyHasChoice;
 
-    /** The annotation's motivation. */
+    /**
+     * The annotation's motivation.
+     */
     private Motivation myMotivation;
 
-    /** The annotation's resources. */
+    /**
+     * The annotation's resources.
+     */
     private List<ContentResource> myResources;
 
-    /** The target of the annotation. */
+    /**
+     * The target of the annotation.
+     */
     private List<Target> myTargets;
 
-    /** The annotation's time mode. */
+    /**
+     * The annotation's time mode.
+     */
     private TimeMode myTimeMode;
 
     /**

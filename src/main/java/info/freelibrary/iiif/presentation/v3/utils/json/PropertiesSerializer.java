@@ -37,7 +37,7 @@ public class PropertiesSerializer extends StdSerializer<Properties> {
             for (final I18n i18n : property.getI18ns()) {
                 aJsonGenerator.writeArrayFieldStart(i18n.getLang());
 
-                for (final String value : i18n.getStrings().toArray(new String[] {})) {
+                for (final String value : i18n.getValues().toArray(new String[] {})) {
                     aJsonGenerator.writeString(value);
                 }
 

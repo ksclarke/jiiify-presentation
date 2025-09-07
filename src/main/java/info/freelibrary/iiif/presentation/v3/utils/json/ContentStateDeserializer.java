@@ -3,28 +3,13 @@ package info.freelibrary.iiif.presentation.v3.utils.json;
 
 import static info.freelibrary.util.Constants.SINGLE_INSTANCE;
 import static info.freelibrary.util.ThrowingBiFunction.unwrap;
-
-import java.io.IOException;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.BiFunction;
-
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.ThrowingBiFunction;
-import info.freelibrary.util.warnings.PMD;
-import info.freelibrary.util.warnings.Sonar;
-
+import info.freelibrary.iiif.presentation.v3.Canvas;
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.Range;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
@@ -48,6 +33,20 @@ import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.ThrowingBiFunction;
+import info.freelibrary.util.warnings.PMD;
+import info.freelibrary.util.warnings.Sonar;
+
+import java.io.IOException;
+import java.io.Serial;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.BiFunction;
 
 /**
  * A deserializer for {@code ContentState}(s).
@@ -55,10 +54,15 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 @SuppressWarnings({ PMD.GOD_CLASS, PMD.EXCESSIVE_IMPORTS })
 public class ContentStateDeserializer extends StdDeserializer<ContentStateAnnotation> {
 
-    /** The deserializer's logger. */
+    /**
+     * The deserializer's logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(ContentStateDeserializer.class, MessageCodes.BUNDLE);
 
-    /** The <code>serialVersionUID</code> for the deserializer. */
+    /**
+     * The <code>serialVersionUID</code> for the deserializer.
+     */
+    @Serial
     private static final long serialVersionUID = -6905362570704679943L;
 
     /**
@@ -78,11 +82,10 @@ public class ContentStateDeserializer extends StdDeserializer<ContentStateAnnota
     }
 
     @Override
-    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY })
     public ContentStateAnnotation deserialize(final JsonParser aParser, final DeserializationContext aContext)
             throws IOException {
         final ThrowingBiFunction<String, JsonNode, String, JsonMappingException> check = (aKey, aNode) -> {
-            // Check that required value exists in the ContentState's JSON serialization and fail if it doesn't
+            // Check that the required value exists in the ContentState's JSON serialization and fail if it doesn't
             if (aNode == null) {
                 throw error(aParser, LOGGER.getMessage(MessageCodes.JPA_012, aKey));
             }
@@ -126,13 +129,8 @@ public class ContentStateDeserializer extends StdDeserializer<ContentStateAnnota
             }
         }
 
-        if (timeMode.isPresent()) {
-            annotation.setTimeMode(timeMode.get());
-        }
-
-        if (label.isPresent()) {
-            annotation.setLabel(label.get());
-        }
+        timeMode.ifPresent(annotation::setTimeMode);
+        label.ifPresent(annotation::setLabel);
 
         return annotation;
     }
@@ -263,6 +261,8 @@ public class ContentStateDeserializer extends StdDeserializer<ContentStateAnnota
     private Target getTarget(final JsonNode aNode, final JsonParser aParser) throws JsonMappingException {
         final JsonNode typeNode;
 
+        // System.out.println("TARGET START");
+
         if (aNode == null) {
             final String message = LOGGER.getMessage(MessageCodes.JPA_132);
             throw new JsonMappingException(aParser, message, aParser.currentTokenLocation());
@@ -280,11 +280,10 @@ public class ContentStateDeserializer extends StdDeserializer<ContentStateAnnota
             while (fieldNames.hasNext()) {
                 final String fieldName = fieldNames.next();
 
-                if (!JsonKeys.TYPE.equals(fieldName) && !JsonKeys.ID.equals(fieldName) &&
-                        JsonKeys.PART_OF.equals(fieldName) && !ResourceTypes.SPECIFIC_RESOURCE.equals(typeNode)) {
+                if (JsonKeys.PART_OF.equals(fieldName) && !ResourceTypes.SPECIFIC_RESOURCE.equals(typeNode.asText())) {
+                    // System.out.println(aNode.toString());
                     return switch (typeNode.asText()) {
-                        // case ResourceTypes.CANVAS -> new Target(JSON.convertValue(aNode, CanvasResource.class),
-                        // false);
+                        case ResourceTypes.CANVAS -> new Target(JSON.convertValue(aNode, Canvas.class), false);
                         case ResourceTypes.MANIFEST -> new Target(JSON.convertValue(aNode, Manifest.class), false);
                         case ResourceTypes.RANGE -> new Target(JSON.convertValue(aNode, Range.class), false);
                         default -> throw error(aParser, LOGGER.getMessage(MessageCodes.JPA_153));
@@ -303,6 +302,8 @@ public class ContentStateDeserializer extends StdDeserializer<ContentStateAnnota
                 default -> throw error(aParser, LOGGER.getMessage(MessageCodes.JPA_153));
             };
         }
+
+        // System.out.println("TARGET END");
 
         // If our target is not a value node, it should be a specific resource
         return JSON.convertValue(aNode, SpecificResource.class);

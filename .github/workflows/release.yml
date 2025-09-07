@@ -47,4 +47,5 @@ jobs:
           MAVEN_GPG_PASSPHRASE: ${{ secrets.BUILD_PASSPHRASE }}
           MAVEN_GPG_KEY: ${{ secrets.BUILD_KEY }}
         run: |
-          mvn -V -B -ntp deploy -Prelease -DlogLevel=DEBUG -DtestLogLevel=DEBUG -Drevision=${{ env.RELEASE_VERSION }}
+          mvn -V -B -ntp deploy -Prelease -Drevision="${{ env.RELEASE_VERSION }}" \
+            -DlogLevel="DEBUG" -DtestLogLevel="DEBUG"

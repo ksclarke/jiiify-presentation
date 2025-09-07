@@ -3,6 +3,9 @@ package info.freelibrary.iiif.presentation.v3.properties;
 
 import static org.junit.Assert.assertEquals;
 
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,6 +13,9 @@ import org.junit.Test;
  * A test of metadata.
  */
 public class MetadataTest {
+
+    /** A logger for the Metadata tests. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(MetadataTest.class, MessageCodes.BUNDLE);
 
     /** A test label. */
     private static final String LABEL = "A test label";
@@ -48,10 +54,15 @@ public class MetadataTest {
      */
     @Test
     public void testMetadataStringString() {
-        final Metadata metadata = new Metadata(myLabel.getString(), myValue.getString());
+        final String first = myLabel.getFirstValue().orElseThrow(
+                () -> new AssertionError(LOGGER.getMessage(MessageCodes.JPA_161, Metadata.class.getSimpleName())));
+        final String second = myValue.getFirstValue().orElseThrow(
+                () -> new AssertionError(LOGGER.getMessage(MessageCodes.JPA_161, Metadata.class.getSimpleName())));
+        final Metadata metadata = new Metadata(first, second);
 
         assertEquals(myLabel, metadata.getLabel());
         assertEquals(myValue, metadata.getValue());
+
     }
 
     /**

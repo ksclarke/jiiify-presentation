@@ -1,11 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -13,10 +8,6 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
-import info.freelibrary.util.I18nRuntimeException;
-import info.freelibrary.util.ListUtils;
-
 import info.freelibrary.iiif.presentation.v3.annotation.SpecificResource;
 import info.freelibrary.iiif.presentation.v3.id.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
@@ -28,31 +19,51 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.RangeBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.json.RangeItemDeserializer;
+import info.freelibrary.util.I18nRuntimeException;
+import info.freelibrary.util.ListUtils;
+import info.freelibrary.util.warnings.PMD;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * An ordered list of canvas displays; these canvases may be nested in other ranges. Ranges allow canvases, or parts
  * thereof, to be grouped together in some way. This could be for textual reasons, such as to distinguish books,
- * chapters, verses, sections, non-content-bearing pages, the table of contents or similar. Equally, physical features
+ * chapters, verses, sections, non-content-bearing pages, the table of contents, or similar. Equally, physical features
  * might be important such as quires or gatherings, sections that have been added later and so forth.
  */
 public class Range extends NavigableResource<Range> implements Resource<Range> {
 
-    /** The range's accompanying canvas. */
+    /**
+     * The range's accompanying canvas.
+     */
     private AccompanyingCanvas myAccompanyingCanvas;
 
-    /** The range's items. */
+    /**
+     * The range's items.
+     */
     private final List<Item> myItems = new ArrayList<>();
 
-    /** The range's placeholder canvas. */
+    /**
+     * The range's placeholder canvas.
+     */
     private PlaceholderCanvas myPlaceholderCanvas;
 
-    /** The range's start. */
+    /**
+     * The range's start.
+     */
     private Start myStart;
 
-    /** The range's supplementary annotations. */
+    /**
+     * The range's supplementary annotations.
+     */
     private SupplementaryAnnotations mySupplementaryAnnotations;
 
-    /** The range's viewing directions. */
+    /**
+     * The range's viewing directions.
+     */
     private ViewingDirection myViewingDirection;
 
     /**
@@ -100,16 +111,6 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
         super(ResourceTypes.RANGE, RangeBehavior.class);
     }
 
-    /**
-     * Clears the currently set items from this range.
-     *
-     * @return The range
-     */
-    public Range clearItems() {
-        myItems.clear();
-        return this;
-    }
-
     @Override
     public boolean equals(final Object aObject) {
         final Range other;
@@ -143,6 +144,17 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     /**
+     * Clears the accompanying canvas associated with this range.
+     *
+     * @return This range instance after clearing the accompanying canvas
+     */
+    @SuppressWarnings(PMD.NULL_ASSIGNMENT)
+    public Range clearAccompanyingCanvas() {
+        myAccompanyingCanvas = null;
+        return this;
+    }
+
+    /**
      * Gets a list of the range's items.
      *
      * @return A list of range items
@@ -164,6 +176,17 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     /**
+     * Clears the placeholder canvas associated with this range.
+     *
+     * @return This range instance after clearing the placeholder canvas
+     */
+    @SuppressWarnings(PMD.NULL_ASSIGNMENT)
+    public Range clearPlaceholderCanvas() {
+        myPlaceholderCanvas = null;
+        return this;
+    }
+
+    /**
      * Gets the range's optional start.
      *
      * @return The optional start
@@ -172,6 +195,17 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     @JsonInclude(Include.NON_ABSENT)
     public Optional<Start> getStart() {
         return Optional.ofNullable(myStart);
+    }
+
+    /**
+     * Clears the optional start associated with this range.
+     *
+     * @return This range instance after clearing the optional start
+     */
+    @SuppressWarnings(PMD.NULL_ASSIGNMENT)
+    public Range clearStart() {
+        myStart = null;
+        return this;
     }
 
     /**
@@ -186,6 +220,17 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     }
 
     /**
+     * Clears the supplementary annotations associated with this range.
+     *
+     * @return This range instance after clearing the supplementary annotations
+     */
+    @SuppressWarnings(PMD.NULL_ASSIGNMENT)
+    public Range clearSupplementaryAnnotations() {
+        mySupplementaryAnnotations = null;
+        return this;
+    }
+
+    /**
      * Gets the range's viewing direction.
      *
      * @return The viewing direction
@@ -193,6 +238,17 @@ public class Range extends NavigableResource<Range> implements Resource<Range> {
     @JsonGetter(JsonKeys.VIEWING_DIRECTION)
     public Optional<ViewingDirection> getViewingDirection() {
         return Optional.ofNullable(myViewingDirection);
+    }
+
+    /**
+     * Clears the viewing direction associated with this range.
+     *
+     * @return This range instance after clearing the viewing direction
+     */
+    @SuppressWarnings(PMD.NULL_ASSIGNMENT)
+    public Range clearViewingDirection() {
+        myViewingDirection = null;
+        return this;
     }
 
     @Override
