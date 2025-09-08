@@ -162,7 +162,7 @@ public class PartOfTest {
      */
     @Test
     public final void testHasObject() {
-        assertTrue(new PartOf(TEST_URI_1, ResourceTypes.MANIFEST, true).hasObject());
+        assertTrue(new PartOf(TEST_URI_1, ResourceTypes.MANIFEST, true).isObject());
     }
 
     /**

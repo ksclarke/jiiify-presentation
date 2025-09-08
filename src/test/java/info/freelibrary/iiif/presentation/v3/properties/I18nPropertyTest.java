@@ -1,10 +1,11 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-
 import org.junit.Test;
+
+import java.util.Optional;
+
+import static org.junit.Assert.*;
 
 /**
  * A internationalized property test.
@@ -50,7 +51,10 @@ public class I18nPropertyTest {
      */
     @Test
     public void testI18nPropertyValueArray() {
-        assertEquals(ONE, new I18nProperty<Value>(new I18n(ENG, ONE), new I18n(FRE, TWO)).getString());
-    }
+        final I18nProperty<Value> property = new I18nProperty<>(new I18n(ENG, ONE), new I18n(FRE, TWO));
+        final Optional<String> firstValue = property.getFirstValue();
 
+        assertTrue("Expected first value to be present", firstValue.isPresent());
+        assertEquals(ONE, firstValue.get());
+    }
 }

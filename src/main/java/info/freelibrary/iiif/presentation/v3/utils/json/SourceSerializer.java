@@ -16,7 +16,7 @@ import info.freelibrary.util.warnings.PMD;
 import info.freelibrary.util.warnings.Sonar;
 
 import info.freelibrary.iiif.presentation.v3.Service;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.SpecificResource.Source;
+import info.freelibrary.iiif.presentation.v3.annotation.SpecificResource.Source;
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.properties.PartOf;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
@@ -37,7 +37,8 @@ public class SourceSerializer extends StdSerializer<Source> {
     }
 
     @Override
-    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY, Sonar.COGNITIVE_COMPLEXITY })
+    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY, Sonar.COGNITIVE_COMPLEXITY,
+        PMD.N_PATH_COMPLEXITY })
     public void serialize(final Source aSource, final JsonGenerator aJsonGenerator, final SerializerProvider aProvider)
             throws IOException {
         final List<PartOf> partOfs = aSource.getPartOfs();

@@ -26,8 +26,6 @@ import info.freelibrary.iiif.presentation.v3.AbstractTest;
 import info.freelibrary.iiif.presentation.v3.Canvas;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.annotation.PaintingAnnotation.Stylesheet;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.SpecificResource;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.Target;
 import info.freelibrary.iiif.presentation.v3.content.SoundContent;
 import info.freelibrary.iiif.presentation.v3.id.Minter;
 import info.freelibrary.iiif.presentation.v3.id.MinterFactory;

@@ -6,7 +6,6 @@
 package info.freelibrary.iiif.presentation.v3.properties.selectors;
 
 import info.freelibrary.util.warnings.Eclipse;
-import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.Canvas;
 
@@ -16,7 +15,7 @@ import info.freelibrary.iiif.presentation.v3.Canvas;
 final class Info {
 
     /** Including this allows us to reference Canvas in the package Javadoc. */
-    @SuppressWarnings({ Eclipse.UNUSED, PMD.UNUSED_PRIVATE_FIELD })
+    @SuppressWarnings({ Eclipse.UNUSED })
     private static final String REFERENCE = Canvas.class.getName();
 
     /**

@@ -136,9 +136,9 @@ public class PartOf {
     /**
      * Whether the resource is serialized as a URI or object. Embedded resources will always be serialized as objects.
      *
-     * @return True if the resource is serialized as a URI; else, false
+     * @return True if the resource is serialized as a JSON object; else, false
      */
-    public boolean hasObject() {
+    public boolean isObject() {
         return isSerializedAsObject || myEmbeddedResource != null;
     }
 

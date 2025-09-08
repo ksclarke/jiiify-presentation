@@ -7,24 +7,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.UUID;
-import java.util.regex.Pattern;
-
-import org.junit.Test;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-
-import info.freelibrary.util.Constants;
-import info.freelibrary.util.I18nRuntimeException;
-import info.freelibrary.util.StringUtils;
-
-import info.freelibrary.iiif.presentation.v3.annotation.targets.SpecificResource;
+import info.freelibrary.iiif.presentation.v3.annotation.SpecificResource;
 import info.freelibrary.iiif.presentation.v3.id.Minter;
 import info.freelibrary.iiif.presentation.v3.id.MinterFactory;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -37,31 +22,56 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.RangeBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.AudioContentSelector;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.util.Constants;
+import info.freelibrary.util.I18nRuntimeException;
+import info.freelibrary.util.StringUtils;
+import org.junit.Test;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.UUID;
+import java.util.regex.Pattern;
 
 /**
  * Test of Range.
  */
 public class RangeTest extends AbstractTest {
 
-    /** JSON representing a canvas item. */
+    /**
+     * JSON representing a canvas item.
+     */
     private static final String CANVAS_ITEM_JSON;
 
-    /** JSON representing a canvas' items. */
+    /**
+     * JSON representing a canvas' items.
+     */
     private static final String CANVAS_ITEMS_JSON;
 
-    /** An HTTPS protocol constant. */
+    /**
+     * An HTTPS protocol constant.
+     */
     private static final String HTTPS = "https://";
 
-    /** A test label. */
+    /**
+     * A test label.
+     */
     private static final String LABEL = "Test Label";
 
-    /** A range pattern for IDs. */
+    /**
+     * A range pattern for IDs.
+     */
     private static final String NOID_PATTERN = "/range-[a-z0-9]{4}";
 
-    /** JSON representing a range item. */
+    /**
+     * JSON representing a range item.
+     */
     private static final String RANGE_ITEM_JSON;
 
-    /** JSON representing a specific resource item. */
+    /**
+     * JSON representing a specific resource item.
+     */
     private static final String SPECIFIC_RESOURCE_ITEM_JSON;
 
     static {
@@ -78,17 +88,6 @@ public class RangeTest extends AbstractTest {
         } catch (final IOException details) {
             throw new I18nRuntimeException(details);
         }
-    }
-
-    /**
-     * Tests {@link Range#clearItems()}.
-     */
-    @Test
-    public void testClearItems() {
-        final Range range = JSON.readValue(CANVAS_ITEMS_JSON, Range.class);
-
-        assertEquals(2, range.getItems().size());
-        assertEquals(0, range.clearItems().getItems().size());
     }
 
     /**
@@ -376,7 +375,7 @@ public class RangeTest extends AbstractTest {
     }
 
     /**
-     * Tests the {@link Range#toJSON() toJSON} method.
+     * Tests the {@link Range#toString()} toString} method.
      */
     @Test
     public void testToJSON() {

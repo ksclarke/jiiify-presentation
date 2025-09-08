@@ -12,13 +12,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.Eclipse;
-import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.Canvas;
 import info.freelibrary.iiif.presentation.v3.CanvasResource;
 import info.freelibrary.iiif.presentation.v3.Resource;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.Target;
 import info.freelibrary.iiif.presentation.v3.id.Minter;
 import info.freelibrary.iiif.presentation.v3.id.UriUtils;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
@@ -33,7 +31,6 @@ import info.freelibrary.iiif.presentation.v3.utils.json.StylesheetSerializer;
  */
 @JsonSerialize(using = PaintingAnnotationSerializer.class)
 @JsonDeserialize(using = CanvasAnnotationDeserializer.class)
-@SuppressWarnings({ PMD.GOD_CLASS, PMD.EXCESSIVE_PUBLIC_COUNT, PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS })
 public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotation>
         implements Resource<PaintingAnnotation>, Annotation<PaintingAnnotation> {
 

@@ -11,43 +11,41 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [ 17 ]
-    env:
-      AUTORELEASE_ARTIFACT: ${{ secrets.AUTORELEASE_ARTIFACT }}
+        java: [ "17" ]
+        maven: [ "3.8.6" ]
+        jdk: [ "temurin" ]
 
     steps:
       - name: Check out source code
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # v3.0.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Install JDK ${{ matrix.java }}
-        uses: actions/setup-java@3a4f6e1af504cf6a31855fa899c6aa5355ba6c12 # v4.7.0
+        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
         with:
           cache: maven
-          distribution: 'temurin'
+          distribution: ${{ matrix.jdk }}
           java-version: ${{ matrix.java }}
+          server-id: central
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
 
-      # If running locally in act, install Maven
-      - name: Set up Maven if needed
+      # If running locally in ACT, install Maven in the container
+      - name: Set up Maven
+        uses: stCarolas/setup-maven@d6af6abeda15e98926a57b5aa970a96bb37f97d1 # v5
         if: ${{ env.ACT }}
-        uses: stCarolas/setup-maven@07fbbe97d97ef44336b7382563d66743297e442f # v4.5
         with:
-          maven-version: 3.8.2
-
-      - name: Set autorelease config
-        if: env.AUTORELEASE_ARTIFACT == null
-        run: echo "AUTORELEASE_ARTIFACT=false" >> $GITHUB_ENV
+          maven-version: ${{ matrix.maven }}
 
       - name: Set release version
         shell: bash
         run: TAG_NAME="${{ github.event.release.tag_name }}" && echo "RELEASE_VERSION=${TAG_NAME%-*}" >> $GITHUB_ENV
 
       - name: Release with Maven
-        uses: samuelmeuli/action-maven-publish@201a45a3f311b2ee888f252ba9f4194257545709 # v1.4.0
-        with:
-          gpg_private_key: ${{ secrets.BUILD_KEY }}
-          gpg_passphrase: ${{ secrets.BUILD_PASSPHRASE }}
-          nexus_username: ${{ secrets.SONATYPE_USERNAME }}
-          nexus_password: ${{ secrets.SONATYPE_PASSWORD }}
-          maven_profiles: "release"
-          maven_args: >
-            -Drevision=${{ env.RELEASE_VERSION }} -Dautorelease.artifact=${{ env.AUTORELEASE_ARTIFACT }} -ntp
+        env:
+          MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.BUILD_PASSPHRASE }}
+          MAVEN_GPG_KEY: ${{ secrets.BUILD_KEY }}
+        run: |
+          mvn -V -B -ntp deploy -Prelease -Drevision="${{ env.RELEASE_VERSION }}" \
+            -DlogLevel="DEBUG" -DtestLogLevel="DEBUG"

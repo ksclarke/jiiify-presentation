@@ -3,34 +3,20 @@ package info.freelibrary.iiif.presentation.v3.utils.json;
 
 import static info.freelibrary.util.Constants.SINGLE_INSTANCE;
 import static info.freelibrary.util.ThrowingBiFunction.unwrap;
-
-import java.io.IOException;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.BiFunction;
-
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.ThrowingBiFunction;
-import info.freelibrary.util.warnings.PMD;
-import info.freelibrary.util.warnings.Sonar;
-
+import info.freelibrary.iiif.presentation.v3.Canvas;
+import info.freelibrary.iiif.presentation.v3.Manifest;
+import info.freelibrary.iiif.presentation.v3.Range;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.annotation.ContentStateAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotation.Motivation;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.CanvasTarget;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.SpecificResource;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.Target;
+import info.freelibrary.iiif.presentation.v3.annotation.SpecificResource;
+import info.freelibrary.iiif.presentation.v3.annotation.Target;
 import info.freelibrary.iiif.presentation.v3.content.CanvasContent;
 import info.freelibrary.iiif.presentation.v3.content.ContentResource;
 import info.freelibrary.iiif.presentation.v3.content.DatasetContent;
@@ -47,6 +33,20 @@ import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.ThrowingBiFunction;
+import info.freelibrary.util.warnings.PMD;
+import info.freelibrary.util.warnings.Sonar;
+
+import java.io.IOException;
+import java.io.Serial;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.BiFunction;
 
 /**
  * A deserializer for {@code ContentState}(s).
@@ -54,10 +54,15 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 @SuppressWarnings({ PMD.GOD_CLASS, PMD.EXCESSIVE_IMPORTS })
 public class ContentStateDeserializer extends StdDeserializer<ContentStateAnnotation> {
 
-    /** The deserializer's logger. */
+    /**
+     * The deserializer's logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(ContentStateDeserializer.class, MessageCodes.BUNDLE);
 
-    /** The <code>serialVersionUID</code> for the deserializer. */
+    /**
+     * The <code>serialVersionUID</code> for the deserializer.
+     */
+    @Serial
     private static final long serialVersionUID = -6905362570704679943L;
 
     /**
@@ -77,11 +82,10 @@ public class ContentStateDeserializer extends StdDeserializer<ContentStateAnnota
     }
 
     @Override
-    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY, PMD.N_PATH_COMPLEXITY })
     public ContentStateAnnotation deserialize(final JsonParser aParser, final DeserializationContext aContext)
             throws IOException {
         final ThrowingBiFunction<String, JsonNode, String, JsonMappingException> check = (aKey, aNode) -> {
-            // Check that required value exists in the ContentState's JSON serialization and fail if it doesn't
+            // Check that the required value exists in the ContentState's JSON serialization and fail if it doesn't
             if (aNode == null) {
                 throw error(aParser, LOGGER.getMessage(MessageCodes.JPA_012, aKey));
             }
@@ -125,13 +129,8 @@ public class ContentStateDeserializer extends StdDeserializer<ContentStateAnnota
             }
         }
 
-        if (timeMode.isPresent()) {
-            annotation.setTimeMode(timeMode.get());
-        }
-
-        if (label.isPresent()) {
-            annotation.setLabel(label.get());
-        }
+        timeMode.ifPresent(annotation::setTimeMode);
+        label.ifPresent(annotation::setLabel);
 
         return annotation;
     }
@@ -158,7 +157,6 @@ public class ContentStateDeserializer extends StdDeserializer<ContentStateAnnota
      * @throws JsonMappingException If there is trouble mapping the incoming JSON
      * @throws IllegalArgumentException If the found motivation is not one of the expected ones
      */
-    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY })
     private ContentStateAnnotation getAnnotation(final String aID, final String aMotivation, final JsonNode aNode,
             final JsonParser aParser) throws JsonMappingException {
         final JsonNode targetsNode = aNode.get(JsonKeys.TARGET);
@@ -198,27 +196,6 @@ public class ContentStateDeserializer extends StdDeserializer<ContentStateAnnota
         }
 
         return resources;
-    }
-
-    /**
-     * Gets a CanvasTarget from a supplied JsonNode.
-     *
-     * @param aIdNode A JsonNode representing the CanvasTarget's ID
-     * @param aPartOfNode A partOf node from the incoming JSON
-     * @return A newly parsed CanvasTarget
-     */
-    @SuppressWarnings({ PMD.USE_DIAMOND_OPERATOR })
-    private CanvasTarget getCanvasTarget(final JsonNode aIdNode, final JsonNode aPartOfNode) {
-        if (aPartOfNode == null) {
-            return new CanvasTarget(aIdNode.asText());
-        }
-
-        if (aPartOfNode.isArray()) {
-            return new CanvasTarget(aIdNode.asText(),
-                    JSON.convertValue(aPartOfNode, new TypeReference<List<PartOf>>() {}));
-        }
-
-        return new CanvasTarget(aIdNode.asText(), JSON.convertValue(aPartOfNode, PartOf.class));
     }
 
     /**
@@ -280,8 +257,11 @@ public class ContentStateDeserializer extends StdDeserializer<ContentStateAnnota
      * @return The annotation's target
      * @throws JsonMappingException If there is trouble mapping the incoming JSON
      */
+    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY })
     private Target getTarget(final JsonNode aNode, final JsonParser aParser) throws JsonMappingException {
         final JsonNode typeNode;
+
+        // System.out.println("TARGET START");
 
         if (aNode == null) {
             final String message = LOGGER.getMessage(MessageCodes.JPA_132);
@@ -294,18 +274,61 @@ public class ContentStateDeserializer extends StdDeserializer<ContentStateAnnota
         }
 
         if ((typeNode = aNode.get(JsonKeys.TYPE)) != null) {
+            final Iterator<String> fieldNames = aNode.fieldNames();
+
+            // Check to see if we have a fully embedded object
+            while (fieldNames.hasNext()) {
+                final String fieldName = fieldNames.next();
+
+                if (JsonKeys.PART_OF.equals(fieldName) && !ResourceTypes.SPECIFIC_RESOURCE.equals(typeNode.asText())) {
+                    // System.out.println(aNode.toString());
+                    return switch (typeNode.asText()) {
+                        case ResourceTypes.CANVAS -> new Target(JSON.convertValue(aNode, Canvas.class), false);
+                        case ResourceTypes.MANIFEST -> new Target(JSON.convertValue(aNode, Manifest.class), false);
+                        case ResourceTypes.RANGE -> new Target(JSON.convertValue(aNode, Range.class), false);
+                        default -> throw error(aParser, LOGGER.getMessage(MessageCodes.JPA_153));
+                    };
+                }
+            }
+
             final JsonNode idNode = aNode.get(JsonKeys.ID);
             final JsonNode partOfNode = aNode.get(JsonKeys.PART_OF);
 
             return switch (typeNode.asText()) {
                 case ResourceTypes.SPECIFIC_RESOURCE -> JSON.convertValue(aNode, SpecificResource.class);
-                case ResourceTypes.CANVAS -> getCanvasTarget(idNode, partOfNode);
+                case ResourceTypes.CANVAS -> getTarget(idNode, ResourceTypes.CANVAS, partOfNode);
+                case ResourceTypes.MANIFEST -> getTarget(idNode, ResourceTypes.MANIFEST, partOfNode);
+                case ResourceTypes.RANGE -> getTarget(idNode, ResourceTypes.RANGE, partOfNode);
                 default -> throw error(aParser, LOGGER.getMessage(MessageCodes.JPA_153));
             };
         }
 
+        // System.out.println("TARGET END");
+
         // If our target is not a value node, it should be a specific resource
         return JSON.convertValue(aNode, SpecificResource.class);
+    }
+
+    /**
+     * Gets a CanvasTarget from a supplied JsonNode.
+     *
+     * @param aIdNode A JsonNode representing the CanvasTarget's ID
+     * @param aType A target resource type
+     * @param aPartOfNode A partOf node from the incoming JSON
+     * @return A newly parsed CanvasTarget
+     */
+    @SuppressWarnings({ PMD.USE_DIAMOND_OPERATOR })
+    private Target getTarget(final JsonNode aIdNode, final String aType, final JsonNode aPartOfNode) {
+        if (aType == null) {
+            return new Target(aIdNode.asText());
+        }
+
+        if (aPartOfNode.isArray()) {
+            return new Target(aIdNode.asText(), aType,
+                    JSON.convertValue(aPartOfNode, new TypeReference<List<PartOf>>() {}));
+        }
+
+        return new Target(aIdNode.asText(), aType, JSON.convertValue(aPartOfNode, PartOf.class));
     }
 
     /**

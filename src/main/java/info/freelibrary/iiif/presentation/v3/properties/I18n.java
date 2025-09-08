@@ -1,6 +1,14 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import info.freelibrary.iiif.presentation.v3.utils.I18nUtils;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
+import info.freelibrary.util.warnings.PMD;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -12,16 +20,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.function.Consumer;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.core.JsonProcessingException;
-
-import info.freelibrary.util.warnings.PMD;
-
-import info.freelibrary.iiif.presentation.v3.utils.I18nUtils;
-import info.freelibrary.iiif.presentation.v3.utils.JSON;
-import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 
 /**
  * An internationalization. String values without a corresponding language tag should use "none" (which is represented
@@ -63,21 +61,21 @@ public class I18n implements Iterable<String> {
      * mutable list is created from it.
      *
      * @param aLocale A locale
-     * @param aStringList A list of strings
+     * @param aValueList A list of string values
      * @param aHtmlValueAllowed Whether HTML markup is allowed in the list of strings
      * @throws IllegalArgumentException If the supplied locale has an invalid language tag or if HTML markup is included
      *         in the list of strings after being disallowed
      */
-    public I18n(final Locale aLocale, final List<String> aStringList, final boolean aHtmlValueAllowed) {
+    public I18n(final Locale aLocale, final List<String> aValueList, final boolean aHtmlValueAllowed) {
         myLocale = I18nUtils.checkLocale(aLocale);
         isAllowingHTML = aHtmlValueAllowed;
 
         if (!isAllowingHTML) {
-            myStrings = I18nUtils.stripHTML(aStringList);
-        } else if (IMMUTABLES.contains(aStringList.getClass().getName())) {
-            myStrings = new ArrayList<>(aStringList);
+            myStrings = I18nUtils.stripHTML(aValueList);
+        } else if (IMMUTABLES.contains(aValueList.getClass().getName())) {
+            myStrings = new ArrayList<>(aValueList);
         } else {
-            myStrings = aStringList;
+            myStrings = aValueList;
         }
     }
 
@@ -85,11 +83,11 @@ public class I18n implements Iterable<String> {
      * Creates an internationalization from the supplied locale and string value.
      *
      * @param aLocale A locale
-     * @param aString A non-HTML string
+     * @param aValue A non-HTML string value
      * @throws IllegalArgumentException If the supplied locale has an invalid language tag
      */
-    public I18n(final Locale aLocale, final String aString) {
-        this(aLocale, aString, true);
+    public I18n(final Locale aLocale, final String aValue) {
+        this(aLocale, aValue, true);
     }
 
     /**
@@ -97,32 +95,32 @@ public class I18n implements Iterable<String> {
      * contain HTML markup, the supplied boolean flag should be set to false.
      *
      * @param aLocale A locale
-     * @param aString A string
+     * @param aValue A string value
      * @param aHtmlValueAllowed Whether HTML markup is allowed in the string
-     * @throws IllegalArgumentException If the locale has an invalid language tag or if the string contains disallowed
+     * @throws IllegalArgumentException If the locale has an invalid language tag, or if the string contains disallowed
      *         HTML markup
      */
-    public I18n(final Locale aLocale, final String aString, final boolean aHtmlValueAllowed) {
-        this(aLocale, Arrays.asList(aString), aHtmlValueAllowed);
+    public I18n(final Locale aLocale, final String aValue, final boolean aHtmlValueAllowed) {
+        this(aLocale, Collections.singletonList(aValue), aHtmlValueAllowed);
     }
 
     /**
      * Creates an internationalization, using the default language tag, from the supplied string value.
      *
-     * @param aString An internationalized value
+     * @param aValue An internationalized value
      */
-    public I18n(final String aString) {
-        this(DEFAULT_LANG, aString);
+    public I18n(final String aValue) {
+        this(DEFAULT_LANG, aValue);
     }
 
     /**
      * Creates an internationalization, using the default language tag, from the supplied string value.
      *
-     * @param aString An internationalized value
+     * @param aValue An internationalized string value
      * @param aHtmlAllowed Whether the supplied value can contain HTML
      */
-    public I18n(final String aString, final boolean aHtmlAllowed) {
-        this(DEFAULT_LANG, aString, aHtmlAllowed);
+    public I18n(final String aValue, final boolean aHtmlAllowed) {
+        this(DEFAULT_LANG, aValue, aHtmlAllowed);
     }
 
     /**
@@ -130,11 +128,12 @@ public class I18n implements Iterable<String> {
      * immutable, a mutable list is created from it.
      *
      * @param aLangTag A language tag
-     * @param aStringList A list of non-HTML strings
-     * @throws IllegalArgumentException If the language tag isn't valid or if the list contains strings with HTML markup
+     * @param aValueList A list of non-HTML string values
+     * @throws IllegalArgumentException If the language tag isn't valid, or if the list contains strings with HTML
+     *         markup
      */
-    public I18n(final String aLangTag, final List<String> aStringList) {
-        this(Locale.forLanguageTag(aLangTag), aStringList, true);
+    public I18n(final String aLangTag, final List<String> aValueList) {
+        this(Locale.forLanguageTag(aLangTag), aValueList, true);
     }
 
     /**
@@ -143,23 +142,24 @@ public class I18n implements Iterable<String> {
      * immutable, a mutable list is created from it.
      *
      * @param aLangTag A language tag
-     * @param aStringList A list of non-HTML strings
+     * @param aValueList A list of non-HTML string values
      * @param aHtmlValueAllowed Whether HTML markup is allowed in the supplied list of strings
-     * @throws IllegalArgumentException If the language tag isn't valid or if the list contains strings with HTML markup
+     * @throws IllegalArgumentException If the language tag isn't valid, or if the list contains strings with HTML
+     *         markup
      */
-    public I18n(final String aLangTag, final List<String> aStringList, final boolean aHtmlValueAllowed) {
-        this(Locale.forLanguageTag(aLangTag), aStringList, aHtmlValueAllowed);
+    public I18n(final String aLangTag, final List<String> aValueList, final boolean aHtmlValueAllowed) {
+        this(Locale.forLanguageTag(aLangTag), aValueList, aHtmlValueAllowed);
     }
 
     /**
      * Creates an internationalization from the supplied language tag and string value.
      *
      * @param aLangTag A language tag
-     * @param aString A non-HTML string value
+     * @param aValue A non-HTML string value
      * @throws IllegalArgumentException If the supplied language tag isn't valid
      */
-    public I18n(final String aLangTag, final String aString) {
-        this(aLangTag, aString, true);
+    public I18n(final String aLangTag, final String aValue) {
+        this(aLangTag, aValue, true);
     }
 
     /**
@@ -167,33 +167,33 @@ public class I18n implements Iterable<String> {
      * allowed to contain HTML markup, the supplied boolean flag should be set to false.
      *
      * @param aLangTag A language tag
-     * @param aString A string value
-     * @param aHtmlValueAllowed Whether or not the string value can contain HTML markup
-     * @throws IllegalArgumentException If the supplied language tag isn't valid or if HTML markup has been disallowed
+     * @param aValue A string value
+     * @param aHtmlValueAllowed Whether the string value can contain HTML markup
+     * @throws IllegalArgumentException If the supplied language tag isn't valid, or if HTML markup has been disallowed,
      *         and that string contains it
      */
-    public I18n(final String aLangTag, final String aString, final boolean aHtmlValueAllowed) {
-        this(Locale.forLanguageTag(aLangTag), aString, aHtmlValueAllowed);
+    public I18n(final String aLangTag, final String aValue, final boolean aHtmlValueAllowed) {
+        this(Locale.forLanguageTag(aLangTag), aValue, aHtmlValueAllowed);
     }
 
     /**
      * Adds a new string to the internationalization value.
      *
-     * @param aString A new string to add to the internationalization value
+     * @param aValue A new string to add to the internationalization value
      * @return True if the new string was successfully added; else, false
      */
-    public boolean addString(final String aString) {
-        return myStrings.add(!allowsHTML() ? I18nUtils.stripHTML(aString) : aString);
+    public boolean addValue(final String aValue) {
+        return myStrings.add(!allowsHTML() ? I18nUtils.stripHTML(aValue) : aValue);
     }
 
     /**
-     * Adds all the strings in the supplied list to the internationalization.
+     * Adds all the string values in the supplied list to the internationalization.
      *
-     * @param aStringList A list of strings to add
-     * @return True if the new strings were successfully added; else, false
+     * @param aValueList A list of string values to add
+     * @return True if the new values were successfully added; else, false
      */
-    public boolean addStrings(final List<String> aStringList) {
-        return myStrings.addAll(!allowsHTML() ? I18nUtils.stripHTML(aStringList) : aStringList);
+    public boolean addValues(final List<String> aValueList) {
+        return myStrings.addAll(!allowsHTML() ? I18nUtils.stripHTML(aValueList) : aValueList);
     }
 
     /**
@@ -235,19 +235,19 @@ public class I18n implements Iterable<String> {
     }
 
     /**
-     * Gets an immutable list of strings from this internationalization. It's intended for viewing the string values.
+     * Gets an immutable list of string values from this internationalization. It's intended for viewing the values.
      *
-     * @return An immutable list of strings from this internationalization
+     * @return An immutable list of values from this internationalization
      */
     @JsonIgnore
-    public List<String> getStrings() {
+    public List<String> getValues() {
         return Collections.unmodifiableList(myStrings);
     }
 
     /**
-     * Gets an iterator for the internationalization's strings.
+     * Gets an iterator for the internationalization's string values.
      *
-     * @return An iterator for the internationalization's strings
+     * @return An iterator for the internationalization's string values
      */
     @Override
     public Iterator<String> iterator() {

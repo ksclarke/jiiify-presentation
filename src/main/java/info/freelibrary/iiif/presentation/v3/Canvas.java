@@ -25,7 +25,7 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  * of a canvas is borrowed from standards like PDF and HTML, or applications like Photoshop and Powerpoint, where the
  * display starts from a blank canvas and images, text and other resources are &quot;painted&quot; on to it.
  */
-@SuppressWarnings({ PMD.TOO_MANY_METHODS, PMD.EXCESSIVE_PUBLIC_COUNT, PMD.COUPLING_BETWEEN_OBJECTS, PMD.GOD_CLASS })
+@SuppressWarnings({ PMD.TOO_MANY_METHODS })
 public class Canvas extends AbstractCanvas<Canvas> implements CanvasResource<Canvas> {
 
     /** The canvas' accompanying canvas. */

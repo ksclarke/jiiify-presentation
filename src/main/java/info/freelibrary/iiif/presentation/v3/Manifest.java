@@ -1,22 +1,11 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
-
-import info.freelibrary.util.ListUtils;
-import info.freelibrary.util.warnings.JDK;
-import info.freelibrary.util.warnings.PMD;
-
 import info.freelibrary.iiif.presentation.v3.annotation.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -25,6 +14,14 @@ import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.util.ListUtils;
+import info.freelibrary.util.warnings.PMD;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * The overall description of the structure and properties of the digital representation of an object. It carries
@@ -32,32 +29,47 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  * information about the object or the intellectual work that it conveys. Each manifest describes how to present a
  * single object such as a book, a photograph, or a statue.
  */
-@SuppressWarnings({ PMD.EXCESSIVE_PUBLIC_COUNT, PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS, PMD.GOD_CLASS,
-    PMD.TOO_MANY_METHODS })
+@SuppressWarnings(PMD.TOO_MANY_METHODS)
 public class Manifest extends NavigableResource<Manifest> implements Resource<Manifest> {
 
-    /** The manifest's accompanying canvas. */
+    /**
+     * The manifest's accompanying canvas.
+     */
     private AccompanyingCanvas myAccompanyingCanvas;
 
-    /** The manifest's annotations. */
+    /**
+     * The manifest's annotations.
+     */
     private List<AnnotationPage<WebAnnotation>> myAnnotations;
 
-    /** The manifest's canvases. */
+    /**
+     * The manifest's canvases.
+     */
     private List<Canvas> myCanvases;
 
-    /** The manifest's placeholder canvas. */
+    /**
+     * The manifest's placeholder canvas.
+     */
     private PlaceholderCanvas myPlaceholderCanvas;
 
-    /** The manifest's ranges. */
+    /**
+     * The manifest's ranges.
+     */
     private List<Range> myRanges;
 
-    /** The manifest's service definitions. */
+    /**
+     * The manifest's service definitions.
+     */
     private List<Service> myServiceDefinitions;
 
-    /** The manifest's start. */
+    /**
+     * The manifest's start.
+     */
     private Start myStart;
 
-    /** The manifest's viewing direction. */
+    /**
+     * The manifest's viewing direction.
+     */
     private ViewingDirection myViewingDirection;
 
     /**
@@ -115,12 +127,23 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     /**
+     * Clears the accompanying canvas associated with the manifest.
+     *
+     * @return This manifest instance
+     */
+    @JsonIgnore
+    @SuppressWarnings(PMD.NULL_ASSIGNMENT)
+    public Manifest clearAccompanyingCanvas() {
+        myAccompanyingCanvas = null;
+        return this;
+    }
+
+    /**
      * Gets the manifest's annotation pages.
      *
      * @return This manifest's annotation pages
      */
     @JsonGetter(JsonKeys.ANNOTATIONS)
-    @SuppressWarnings({ JDK.UNCHECKED })
     public List<AnnotationPage<WebAnnotation>> getAnnotations() {
         if (myAnnotations == null) {
             myAnnotations = new ArrayList<>();
@@ -152,6 +175,17 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     @JsonInclude(Include.NON_ABSENT)
     public Optional<PlaceholderCanvas> getPlaceholderCanvas() {
         return Optional.ofNullable(myPlaceholderCanvas);
+    }
+
+    /**
+     * Clears the placeholder canvas associated with this manifest.
+     *
+     * @return This manifest instance
+     */
+    @SuppressWarnings(PMD.NULL_ASSIGNMENT)
+    public Manifest clearPlaceholderCanvas() {
+        myPlaceholderCanvas = null;
+        return this;
     }
 
     /**
@@ -194,6 +228,17 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     }
 
     /**
+     * Clears the start canvas associated with the manifest.
+     *
+     * @return This manifest instance
+     */
+    @SuppressWarnings(PMD.NULL_ASSIGNMENT)
+    public Manifest clearStart() {
+        myStart = null;
+        return this;
+    }
+
+    /**
      * Gets the viewing direction.
      *
      * @return The viewing direction
@@ -201,6 +246,17 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     @JsonGetter(JsonKeys.VIEWING_DIRECTION)
     public Optional<ViewingDirection> getViewingDirection() {
         return Optional.ofNullable(myViewingDirection);
+    }
+
+    /**
+     * Clears the viewing direction associated with the manifest.
+     *
+     * @return This manifest instance
+     */
+    @SuppressWarnings(PMD.NULL_ASSIGNMENT)
+    public Manifest clearViewingDirection() {
+        myViewingDirection = null;
+        return this;
     }
 
     @Override
@@ -379,13 +435,12 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
      * @return The manifest
      */
     @JsonIgnore
-    @SafeVarargs
     public final Manifest setServiceDefinitions(final Service... aServiceArray) {
         final List<Service> serviceList = getServiceDefinitions();
 
         Objects.requireNonNull(aServiceArray);
         serviceList.clear();
-        Arrays.stream(aServiceArray).forEach(serviceList::add);
+        serviceList.addAll(List.of(aServiceArray));
 
         return this;
     }

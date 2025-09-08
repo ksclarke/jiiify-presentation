@@ -2,27 +2,56 @@
 package info.freelibrary.iiif.presentation.v3.properties;
 
 import static org.junit.Assert.assertEquals;
-
-import java.util.Optional;
-
-import org.junit.Before;
-import org.junit.Test;
-
+import static org.junit.Assert.fail;
 import info.freelibrary.iiif.presentation.v3.AbstractTest;
+import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TestName;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Optional;
 
 /**
  * A seeAlso test.
  */
 public class SeeAlsoTest extends AbstractTest {
 
-    /** A test format. */
+    /**
+     * A logger for the SeeAlso tests.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(SeeAlsoTest.class, MessageCodes.BUNDLE);
+
+    /**
+     * A test format.
+     */
     private static final String JPEG_FORMAT = "image/jpeg";
 
-    /** A test mime-type. */
-    private static final MediaType MIME_TYPE = MediaType.fromString(JPEG_FORMAT).get();
+    /**
+     * A test mime-type.
+     */
+    private static final MediaType MIME_TYPE = MediaType.fromString(JPEG_FORMAT)
+            .orElseThrow(() -> new AssertionError(LOGGER.getMessage(MessageCodes.JPA_162, JsonKeys.FORMAT)));
 
-    /** A test ID. */
+    /**
+     * A dynamically assigned test name.
+     */
+    @Rule
+    public TestName myTestName = new TestName();
+
+    /**
+     * A test ID.
+     */
     private String myID;
 
     /**
@@ -85,8 +114,9 @@ public class SeeAlsoTest extends AbstractTest {
      */
     @Test
     public void testSetGetFormat() {
-        final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.DATASET);
-        assertEquals(MediaType.IMAGE_JPEG, seeAlso.setFormat(MIME_TYPE).getFormat().get());
+        new SeeAlso(myID, ResourceTypes.DATASET).setFormat(MIME_TYPE).getFormat().ifPresentOrElse(format -> {
+            assertEquals(MIME_TYPE, format);
+        }, () -> fail(LOGGER.getMessage(MessageCodes.JPA_162, JsonKeys.FORMAT)));
     }
 
     /**
@@ -94,10 +124,13 @@ public class SeeAlsoTest extends AbstractTest {
      */
     @Test
     public void testSetGetFormatMediaType() {
-        final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.DATASET);
-        final MediaType mediaType = MediaType.fromString(JPEG_FORMAT).get();
+        final MediaType mediaType = MediaType.fromString(JPEG_FORMAT).orElseThrow(() -> {
+            return new AssertionError(LOGGER.getMessage(MessageCodes.JPA_162, MediaType.class.getSimpleName()));
+        });
 
-        assertEquals(MediaType.IMAGE_JPEG, seeAlso.setFormat(mediaType).getFormat().get());
+        new SeeAlso(myID, ResourceTypes.DATASET).setFormat(mediaType).getFormat().ifPresentOrElse(format -> {
+            assertEquals(MediaType.IMAGE_JPEG, format);
+        }, () -> fail(LOGGER.getMessage(MessageCodes.JPA_162, JsonKeys.FORMAT)));
     }
 
     /**
@@ -116,10 +149,11 @@ public class SeeAlsoTest extends AbstractTest {
      */
     @Test
     public void testSetGetProfile() {
-        final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.TEXT);
         final String url = myLoremIpsum.getUrl();
 
-        assertEquals(url, seeAlso.setProfile(url).getProfile().get());
+        new SeeAlso(myID, ResourceTypes.TEXT).setProfile(url).getProfile().ifPresentOrElse(profile -> {
+            assertEquals(url, profile);
+        }, () -> fail(LOGGER.getMessage(MessageCodes.JPA_162, JsonKeys.PROFILE)));
     }
 
     /**
@@ -127,10 +161,23 @@ public class SeeAlsoTest extends AbstractTest {
      */
     @Test
     public void testSetGetProfileURI() {
-        final SeeAlso seeAlso = new SeeAlso(myID, ResourceTypes.TEXT);
         final String uri = myLoremIpsum.getUrl();
 
-        assertEquals(uri, seeAlso.setProfile(uri).getProfile().get());
+        new SeeAlso(myID, ResourceTypes.TEXT).setProfile(uri).getProfile().ifPresentOrElse(profile -> {
+            assertEquals(uri, profile);
+        }, () -> fail(LOGGER.getMessage(MessageCodes.JPA_162, JsonKeys.PROFILE)));
     }
 
+    /**
+     * Tests reading and writing a seeAlso as a part of a manifest.
+     *
+     * @throws IOException If there is trouble reading the test fixture
+     */
+    @Test
+    public void testReadingWriting() throws IOException {
+        final String json = Files.readString(Path.of("src/test/resources/json/seeAlso.json"));
+        final Manifest manifest = JSON.readValue(json, Manifest.class);
+
+        TestUtils.assertEquals(myTestName, json, manifest.toString());
+    }
 }

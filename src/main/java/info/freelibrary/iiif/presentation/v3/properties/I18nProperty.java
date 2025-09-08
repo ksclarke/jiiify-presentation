@@ -1,19 +1,19 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import static info.freelibrary.util.Constants.EQUALS;
-import static info.freelibrary.util.Constants.VERTICAL_BAR;
+import com.fasterxml.jackson.annotation.JsonValue;
+import info.freelibrary.util.warnings.JDK;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.annotation.JsonValue;
-
-import info.freelibrary.util.warnings.JDK;
+import static info.freelibrary.util.Constants.EQUALS;
+import static info.freelibrary.util.Constants.VERTICAL_BAR;
 
 /**
  * A base class for label, summary, attribution, property, and metadata's label and value fields.
@@ -73,16 +73,34 @@ class I18nProperty<T extends I18nProperty<T>> {
     }
 
     /**
-     * Returns the first string value (regardless of language). If there isn't one it returns a null;
+     * Returns the first string value (regardless of language). If there isn't one it returns an empty Optional;
      *
      * @return A string value for the property
      */
-    public String getString() {
-        if (hasStrings()) {
-            return myI18ns.get(0).getStrings().get(0);
+    public Optional<String> getFirstValue() {
+        if (hasValues()) {
+            return Optional.of(myI18ns.get(0).getValues().get(0));
         }
 
-        return null;
+        return Optional.empty();
+    }
+
+    /**
+     * Gets the default value (a value whose language is 'none').
+     *
+     * @return The default value or an empty Optional
+     */
+    public Optional<String> getDefaultValue() {
+        if (hasValues()) {
+            final Optional<I18n> i18nOpt =
+                    myI18ns.stream().filter(i18n -> I18n.DEFAULT_LANG.equals(i18n.getLang())).findFirst();
+
+            if (i18nOpt.isPresent()) {
+                return Optional.of(i18nOpt.get().getValues().get(0));
+            }
+        }
+
+        return Optional.empty();
     }
 
     /**
@@ -100,7 +118,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      *
      * @return True if the property has internationalizations; else, false
      */
-    public boolean hasStrings() {
+    public boolean hasValues() {
         return !myI18ns.isEmpty();
     }
 
@@ -139,14 +157,14 @@ class I18nProperty<T extends I18nProperty<T>> {
     public String toString() {
         final StringBuilder builder;
 
-        if (!hasStrings()) {
+        if (!hasValues()) {
             return "";
         }
 
         builder = new StringBuilder();
 
         for (final I18n i18n : myI18ns) {
-            final String[] strings = i18n.getStrings().toArray(new String[] {});
+            final String[] strings = i18n.getValues().toArray(new String[] {});
 
             builder.append(i18n.getLang()).append(EQUALS).append(String.join(VERTICAL_BAR, strings))
                     .append(System.lineSeparator());
@@ -164,14 +182,14 @@ class I18nProperty<T extends I18nProperty<T>> {
     protected Object toMap() {
         final Map<String, Object> map;
 
-        if (!hasStrings()) {
+        if (!hasValues()) {
             return null;
         }
 
         map = new LinkedHashMap<>(); // maintains insertion order
 
         for (final I18n i18n : myI18ns) {
-            map.put(i18n.getLang(), i18n.getStrings());
+            map.put(i18n.getLang(), i18n.getValues());
         }
 
         return map;

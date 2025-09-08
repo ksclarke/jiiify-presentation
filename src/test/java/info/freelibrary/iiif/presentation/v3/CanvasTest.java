@@ -21,9 +21,9 @@ import org.junit.Test;
 import info.freelibrary.util.StringUtils;
 
 import info.freelibrary.iiif.presentation.v3.annotation.PaintingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.SpecificResource;
 import info.freelibrary.iiif.presentation.v3.annotation.SupplementingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.SpecificResource;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.Target;
+import info.freelibrary.iiif.presentation.v3.annotation.Target;
 import info.freelibrary.iiif.presentation.v3.content.ContentResource;
 import info.freelibrary.iiif.presentation.v3.content.ImageContent;
 import info.freelibrary.iiif.presentation.v3.content.SoundContent;

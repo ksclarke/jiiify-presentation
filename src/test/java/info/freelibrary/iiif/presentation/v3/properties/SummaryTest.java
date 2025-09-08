@@ -2,7 +2,9 @@
 package info.freelibrary.iiif.presentation.v3.properties;
 
 import static org.junit.Assert.assertEquals;
-
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
 import org.junit.Test;
 
 /**
@@ -10,10 +12,19 @@ import org.junit.Test;
  */
 public class SummaryTest {
 
-    /** A test summary language. */
+    /**
+     * The logger for the Summary tests.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(SummaryTest.class, MessageCodes.BUNDLE);
+
+    /**
+     * A test summary language.
+     */
     private static final String LANG = "none";
 
-    /** A test summary value. */
+    /**
+     * A test summary value.
+     */
     private static final String VALUE = "asdf";
 
     /**
@@ -21,9 +32,9 @@ public class SummaryTest {
      */
     @Test
     public void testStringConstructor() {
-        final Summary summary = new Summary(VALUE);
-
-        assertEquals(VALUE, summary.getString());
+        new Summary(VALUE).getFirstValue().ifPresentOrElse(value -> assertEquals(VALUE, value), () -> {
+            throw new AssertionError(LOGGER.getMessage(MessageCodes.JPA_162, Summary.class.getSimpleName()));
+        });
     }
 
     /**
@@ -31,9 +42,9 @@ public class SummaryTest {
      */
     @Test
     public void testValueConstructor() {
-        final Summary summary = new Summary(new I18n(LANG, VALUE));
-
-        assertEquals(VALUE, summary.getString());
+        new Summary(new I18n(LANG, VALUE)).getFirstValue().ifPresentOrElse(value -> assertEquals(VALUE, value), () -> {
+            throw new AssertionError(LOGGER.getMessage(MessageCodes.JPA_162, Summary.class.getSimpleName()));
+        });
     }
 
 }

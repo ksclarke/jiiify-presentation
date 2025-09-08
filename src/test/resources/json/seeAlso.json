@@ -1,0 +1,56 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://b1dbe4a0-443c-479f-bf0a-25c352df0d8f.iiif.library.ucla.edu/ark%3A%2F21198%2Fzz00000001/manifest",
+  "items": [
+    {
+      "duration": 1985.024,
+      "id": "https://b1dbe4a0-443c-479f-bf0a-25c352df0d8f.iiif.library.ucla.edu/ark%3A%2F21198%2Fzz00000001/manifest/canvas-wh66",
+      "items": [
+        {
+          "id": "https://b1dbe4a0-443c-479f-bf0a-25c352df0d8f.iiif.library.ucla.edu/ark%3A%2F21198%2Fzz00000001/manifest/canvas-wh66/anno-page-93hg",
+          "items": [
+            {
+              "body": {
+                "format": "audio/mp4",
+                "id": "https://wowza.library.ucla.edu/iiif_av_public/audio/indiana/mahler-symphony-3/CD1/medium/128Kbps.mp4",
+                "type": "Sound"
+              },
+              "id": "https://b1dbe4a0-443c-479f-bf0a-25c352df0d8f.iiif.library.ucla.edu/ark%3A%2F21198%2Fzz00000001/manifest/annotations/anno-1mwr",
+              "motivation": "painting",
+              "seeAlso": [
+                {
+                  "format": "application/octet-stream",
+                  "id": "https://prod-uclalibrary-resources.s3-us-west-2.amazonaws.com/waveform.dat",
+                  "profile": "http://waveform.prototyping.bbc.co.uk",
+                  "type": "Dataset"
+                }
+              ],
+              "target": "https://b1dbe4a0-443c-479f-bf0a-25c352df0d8f.iiif.library.ucla.edu/ark%3A%2F21198%2Fzz00000001/manifest/canvas-wh66",
+              "type": "Annotation"
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "label": {
+        "none": [
+          "Test Audio 1"
+        ]
+      },
+      "thumbnail": [
+        {
+          "format": "image/svg+xml",
+          "id": "https://prod-uclalibrary-resources.s3-us-west-2.amazonaws.com/audio_icon.svg",
+          "type": "Image"
+        }
+      ],
+      "type": "Canvas"
+    }
+  ],
+  "label": {
+    "none": [
+      "Test Audio 1"
+    ]
+  },
+  "type": "Manifest"
+}

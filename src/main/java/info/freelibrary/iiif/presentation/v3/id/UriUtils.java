@@ -1,11 +1,10 @@
 
 package info.freelibrary.iiif.presentation.v3.id;
 
-import java.net.URI;
-
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.warnings.PMD;
 
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import java.net.URI;
 
 /**
  * Utilities related to using URIs as IDs.
@@ -27,14 +26,14 @@ public final class UriUtils {
      * @return The checked ID
      * @throws InvalidIdentifierException If the supplied identifier doesn't conform to IIIF's rules
      */
-    @SuppressWarnings({ PMD.AVOID_CATCHING_GENERIC_EXCEPTION, PMD.AVOID_CATCHING_NPE })
+    @SuppressWarnings({ PMD.AVOID_CATCHING_GENERIC_EXCEPTION })
     public static String checkID(final String aID, final boolean aHttpsReq) {
         final URI id;
 
         try {
             id = URI.create(aID);
 
-            // Spec says internal resources must start with HTTPS scheme
+            // Spec says internal resources must start with an HTTPS scheme
             if (aHttpsReq && !"https".equals(id.getScheme())) {
                 throw new InvalidIdentifierException(MessageCodes.JPA_127, aID);
             }

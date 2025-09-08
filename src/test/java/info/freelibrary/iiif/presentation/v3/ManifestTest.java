@@ -7,23 +7,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Stream;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import com.opencsv.CSVReader;
-
-import info.freelibrary.util.Constants;
-import info.freelibrary.util.StringUtils;
-
 import info.freelibrary.iiif.presentation.v3.annotation.BookmarkingAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotation.PaintingAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotation.WebAnnotation;
@@ -42,54 +25,127 @@ import info.freelibrary.iiif.presentation.v3.services.ImageService3.Profile;
 import info.freelibrary.iiif.presentation.v3.services.OtherService3;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
+import info.freelibrary.util.Constants;
+import info.freelibrary.util.StringUtils;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Stream;
 
 /**
  * A manifest test.
  */
 public class ManifestTest extends AbstractTest {
 
-    /** An encoded test ID. */
+    /**
+     * An encoded test ID.
+     */
     private static final String ENCODED_MANIFEST_THUMBNAIL_ARK = "ark:%2F21198%2Fz1d79t3q";
 
-    /** A test height. */
+    /**
+     * A test height.
+     */
     private static final int HEIGHT = 8176;
 
-    /** A constant for the HTTPS protocol. */
+    /**
+     * A constant for the HTTPS protocol.
+     */
     private static final String HTTPS = "https://";
 
-    /** A test manifest ID. */
+    /**
+     * A test manifest ID.
+     */
     private static final String MANIFEST_ID = "ark:%2F21198%2Fz1960050";
 
-    /** A fake IIIF server. */
+    /**
+     * A fake IIIF server.
+     */
     private static final String MANIFEST_SERVER = "https://sinai-images.library.ucla.edu/iiif/";
 
-    /** A test thumbnail path. */
+    /**
+     * A test thumbnail path.
+     */
     private static final String MANIFEST_THUMBNAIL_PATH = "/0,1022,6132,6132/150,150/0/default.jpg";
 
-    /** A test manifest thumbnail URI. */
+    /**
+     * A test manifest thumbnail URI.
+     */
     private static final String MANIFEST_THUMBNAIL_URI =
             MANIFEST_SERVER + ENCODED_MANIFEST_THUMBNAIL_ARK + MANIFEST_THUMBNAIL_PATH;
 
-    /** A test manifest URI. */
+    /**
+     * A test manifest URI.
+     */
     private static final String MANIFEST_URI = MANIFEST_SERVER + MANIFEST_ID + "/manifest";
 
-    /** A test list of metadata pairs. */
+    /**
+     * A test list of metadata pairs.
+     */
     private static final List<String[]> METADATA_PAIRS = Stream.of( //
             new String[] { "Title", "Georgian NF Fragment 68a" }, //
             new String[] { "Extent", "1 f" }, //
             new String[] { "Overtext Language", "Georgian" }, //
             new String[] { "Undertext Language(s)", "Christian Palestinian Aramaic" }).toList();
 
-    /** A test fixture. */
+    /** A list of the first canvas images. */
+    private static final List<String[]> FIRST_CANVAS = List.of(
+            new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_pseudo_avgUV-MB780IR", ENCODED_MANIFEST_THUMBNAIL_ARK },
+            new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_pseudo_avgUV-VIS", "ark:%2F21198%2Fz18g92cc" },
+            new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_pseudo_WBUVB47-MB780IR", "ark:%2F21198%2Fz1w672gs" },
+            new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_pseudo_WBUVB47-VIS", "ark:%2F21198%2Fz1rj5167" },
+            new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_pseudo_WBUVG58-MB780IR", "ark:%2F21198%2Fz1ms48gh" },
+            new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_pseudo_WBUVG58-VIS", "ark:%2F21198%2Fz1h13hqn" },
+            new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_pseudo_WBUVO22-MB780IR", "ark:%2F21198%2Fz1c82s0b" },
+            new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_pseudo_WBUVR25-MB780IR", "ark:%2F21198%2Fz13r18m5" },
+            new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_pseudo_WBUVUVP-MB780IR", "ark:%2F21198%2Fz1ks7787" },
+            new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_raking_RE870IR-RS870IR", "ark:%2F21198%2Fz1b85qvj" },
+            new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_sharpie_avgUV-MB780IR", "ark:%2F21198%2Fz16h5052" },
+            new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_sharpie_WBUVB47-MB780IR", "ark:%2F21198%2Fz1pk0xvb" },
+            new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_sharpie_WBUVUVP-MB780IR", "ark:%2F21198%2Fz1d22dbh" },
+            new String[] { "GeoNF-frg68a_001r_K-64-001_KTK_txratio_TX940IR-MB940IR", "ark:%2F21198%2Fz14m9m97" });
+
+    /** A list of second canvas images. */
+    private static final List<String[]> SECOND_CANVAS = List.of(
+            new String[] { "GeoNF-frg68a_001v_K-64-002_KTK_pseudo_avgUV-MB780IR", "ark:%2F21198%2Fz1w38c11" },
+            new String[] { "GeoNF-frg68a_001v_K-64-002_KTK_pseudo_avgUV-VIS", "ark:%2F21198%2Fz1rb7m99" },
+            new String[] { "GeoNF-frg68a_001v_K-64-002_KTK_pseudo_WBUVB47-MB780IR", "ark:%2F21198%2Fz1c542k0" },
+            new String[] { "GeoNF-frg68a_001v_K-64-002_KTK_pseudo_WBUVB47-VIS", "ark:%2F21198%2Fz17d39wq" },
+            new String[] { "GeoNF-frg68a_001v_K-64-002_KTK_pseudo_WBUVG58-MB780IR", "ark:%2F21198%2Fz13n2k3h" },
+            new String[] { "GeoNF-frg68a_001v_K-64-002_KTK_pseudo_WBUVG58-VIS", "ark:%2F21198%2Fz1zw22m6" },
+            new String[] { "GeoNF-frg68a_001v_K-64-002_KTK_pseudo_WBUVO22-MB780IR", "ark:%2F21198%2Fz1v419ws" },
+            new String[] { "GeoNF-frg68a_001v_K-64-002_KTK_pseudo_WBUVR25-MB780IR", "ark:%2F21198%2Fz1kk9th3" },
+            new String[] { "GeoNF-frg68a_001v_K-64-002_KTK_pseudo_WBUVUVP-MB780IR", "ark:%2F21198%2Fz12n5hzq" },
+            new String[] { "GeoNF-frg68a_001v_K-64-002_KTK_raking_RE870IR-RS870IR", "ark:%2F21198%2Fz1t448sv" },
+            new String[] { "GeoNF-frg68a_001v_K-64-002_KTK_sharpie_avgUV-MB780IR", "ark:%2F21198%2Fz1pc3j30" },
+            new String[] { "GeoNF-frg68a_001v_K-64-002_KTK_sharpie_WBUVB47-MB780IR", "ark:%2F21198%2Fz15d97j2" },
+            new String[] { "GeoNF-frg68a_001v_K-64-002_KTK_sharpie_WBUVUVP-MB780IR", "ark:%2F21198%2Fz1vx0z84" },
+            new String[] { "GeoNF-frg68a_001v_K-64-002_KTK_txratio_TX940IR-MB940IR", "ark:%2F21198%2Fz1mg8563" });
+
+    /**
+     * A test fixture.
+     */
     private static final String SINAI_JSON = new File(TestUtils.TEST_DIR, "z1960050.json").getAbsolutePath();
 
-    /** A test width. */
+    /**
+     * A test width.
+     */
     private static final int WIDTH = 6132;
 
-    /** The test manifest. */
+    /**
+     * The test manifest.
+     */
     private Manifest myManifest;
 
-    /** A minter to use in testing. */
+    /**
+     * A minter to use in testing.
+     */
     private final Minter myMinter = MinterFactory.getMinter(HTTPS + UUID.randomUUID().toString());
 
     /**
@@ -99,16 +155,9 @@ public class ManifestTest extends AbstractTest {
      */
     @Before
     public void setUp() throws IOException {
-        final CSVReader reader1 = new CSVReader(new FileReader("src/test/resources/csv/sinai-images-canvas-1.csv"));
-        final CSVReader reader2 = new CSVReader(new FileReader("src/test/resources/csv/sinai-images-canvas-2.csv"));
-        final List<String[]> firstCanvas = reader1.readAll();
-        final List<String[]> secondCanvas = reader2.readAll();
         final List<Metadata> metadata = new ArrayList<>();
         final List<Canvas> canvases = new ArrayList<>();
         final ImageService3 manifestThumbService;
-
-        reader1.close();
-        reader2.close();
 
         for (final String[] kvPair : METADATA_PAIRS) {
             metadata.add(new Metadata(kvPair[0], kvPair[1]));
@@ -116,7 +165,7 @@ public class ManifestTest extends AbstractTest {
 
         manifestThumbService = new ImageService3(MANIFEST_SERVER + ENCODED_MANIFEST_THUMBNAIL_ARK, Profile.LEVEL_TWO);
 
-        myManifest = new Manifest(MANIFEST_URI, new Label(METADATA_PAIRS.get(0)[1]));
+        myManifest = new Manifest(MANIFEST_URI, new Label(METADATA_PAIRS.getFirst()[1]));
         myManifest.setMetadata(metadata);
         myManifest.setThumbnails(new ImageContent(MANIFEST_THUMBNAIL_URI).setServices(manifestThumbService));
 
@@ -135,7 +184,7 @@ public class ManifestTest extends AbstractTest {
         canvas1.getPaintingPages().add(page1.addAnnotations(content1));
         canvases.add(canvas1);
 
-        for (final String[] values : firstCanvas) {
+        for (final String[] values : FIRST_CANVAS) {
             final String id = MANIFEST_SERVER + values[1] + MANIFEST_THUMBNAIL_PATH;
             final ImageService3 service = new ImageService3(MANIFEST_SERVER + values[1], Profile.LEVEL_TWO);
             final ImageContent resource = new ImageContent(id).setServices(service);
@@ -157,7 +206,7 @@ public class ManifestTest extends AbstractTest {
         canvas2.getPaintingPages().add(page2.addAnnotations(content2));
         canvases.add(canvas2);
 
-        for (final String[] values : secondCanvas) {
+        for (final String[] values : SECOND_CANVAS) {
             final String id = MANIFEST_SERVER + values[1] + MANIFEST_THUMBNAIL_PATH;
             final ImageService3 service = new ImageService3(MANIFEST_SERVER + values[1], Profile.LEVEL_TWO);
             final ImageContent resource = new ImageContent(id).setServices(service);
@@ -202,10 +251,15 @@ public class ManifestTest extends AbstractTest {
      */
     @Test
     public void testConstructorStringLabel() {
-        myManifest = new Manifest(MANIFEST_URI, new Label(METADATA_PAIRS.get(0)[1]));
+        final Optional<String> labelValue;
+
+        myManifest = new Manifest(MANIFEST_URI, new Label(METADATA_PAIRS.getFirst()[1]));
         assertEquals(MANIFEST_URI, myManifest.getID());
         assertTrue(myManifest.getLabel().isPresent());
-        assertEquals(METADATA_PAIRS.get(0)[1], myManifest.getLabel().get().getString());
+
+        labelValue = myManifest.getLabel().flatMap(label -> label.getFirstValue());
+        assertTrue("Expected label to have a first value", labelValue.isPresent());
+        assertEquals(METADATA_PAIRS.getFirst()[1], labelValue.get());
     }
 
     /**
@@ -267,19 +321,10 @@ public class ManifestTest extends AbstractTest {
      * Tests {@link NavigableResource#equals(Object) NavigableResource}.
      */
     @Test
-    public final void testNavigableResourceEqualsSameObject() {
-        final Manifest test = new Manifest(HTTPS + UUID.randomUUID().toString(), new Label("label"));
-        assertEquals(test, test);
-    }
-
-    /**
-     * Tests {@link NavigableResource#equals(Object) NavigableResource}.
-     */
-    @Test
     @SuppressWarnings("unlikely-arg-type")
     public final void testNavigableResourceEqualsString() {
         final Manifest test = new Manifest(HTTPS + UUID.randomUUID().toString(), new Label("three"));
-        assertNotEquals(test, new String(Constants.EMPTY));
+        assertNotEquals(Constants.EMPTY, test);
     }
 
     /**

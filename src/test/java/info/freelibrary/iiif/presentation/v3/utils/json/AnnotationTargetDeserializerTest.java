@@ -10,9 +10,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
-import info.freelibrary.iiif.presentation.v3.annotation.targets.CanvasTarget;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.SpecificResource;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.Target;
+import info.freelibrary.iiif.presentation.v3.annotation.SpecificResource;
+import info.freelibrary.iiif.presentation.v3.annotation.Target;
 
 /**
  * Unit tests for {@link AnnotationTargetDeserializer}.
@@ -39,10 +38,7 @@ public class AnnotationTargetDeserializerTest {
             }
             """;
 
-        final Target target = myMapper.readValue(json, Target.class);
-
-        assertTrue(target instanceof CanvasTarget);
-        assertEquals("https://example.org/canvas", target.getID());
+        assertEquals("https://example.org/canvas", myMapper.readValue(json, Target.class).getID());
     }
 
     /**

@@ -61,7 +61,7 @@ public class I18nTest {
     public final void testAddString() {
         final I18n i18n = new I18n(I18n.DEFAULT_LANG, myTestString);
 
-        if (!i18n.addString(myTestString)) {
+        if (!i18n.addValue(myTestString)) {
             fail(LOGGER.getMessage(MessageCodes.JPA_021, myTestString));
         }
 
@@ -76,7 +76,7 @@ public class I18nTest {
         final I18n i18n = new I18n(I18n.DEFAULT_LANG, myTestString);
         final List<String> strings = Arrays.asList(myTestString, myTestString);
 
-        if (!i18n.addStrings(strings)) {
+        if (!i18n.addValues(strings)) {
             fail(LOGGER.getMessage(MessageCodes.JPA_021, StringUtils.toString(strings.toArray(), ' ')));
         }
 
@@ -126,7 +126,7 @@ public class I18nTest {
         final List<String> strings = Arrays.asList(myTestString);
         final I18n i18n = new I18n(I18n.DEFAULT_LANG, strings);
 
-        assertEquals(strings, i18n.getStrings());
+        assertEquals(strings, i18n.getValues());
     }
 
     /**
@@ -137,7 +137,7 @@ public class I18nTest {
         final I18n i18n = new I18n(I18n.DEFAULT_LANG, myTestString);
         final List<String> strings = Arrays.asList(myTestString);
 
-        assertEquals(strings, i18n.getStrings());
+        assertEquals(strings, i18n.getValues());
     }
 
     /**
@@ -161,7 +161,7 @@ public class I18nTest {
         final List<String> strings = Arrays.asList(myTestString);
 
         assertEquals(AR_LATN, i18n.getLang());
-        assertEquals(strings, i18n.getStrings());
+        assertEquals(strings, i18n.getValues());
     }
 
     /**

@@ -176,7 +176,6 @@ public class ServiceDeserializer extends StdDeserializer<Service> {
      * @param aImageService An image service
      * @return The fleshed out service
      */
-    @SuppressWarnings(PMD.UNUSED_PRIVATE_METHOD)
     private Service deserializeImageService(final JsonNode aNode, final ImageService aImageService) {
         final JsonNode width;
         final JsonNode height;

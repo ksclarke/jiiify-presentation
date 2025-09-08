@@ -28,3 +28,6 @@ public/
 docs/resources/_gen
 docs/public/
 docs/.env
+
+# Ignores for JetBrains' IDEs
+jiiify-presentation-v3.iml

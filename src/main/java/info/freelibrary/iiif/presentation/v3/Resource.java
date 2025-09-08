@@ -1,14 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.util.List;
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
-
-import info.freelibrary.util.warnings.PMD;
-
 import info.freelibrary.iiif.presentation.v3.content.ContentResource;
 import info.freelibrary.iiif.presentation.v3.content.ImageContent;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
@@ -23,26 +17,28 @@ import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
+import java.util.List;
+import java.util.Optional;
+
 /**
  * An interface that defines methods relevant to all <a href="http://iiif.io/api/presentation/3/">IIIF Presentation</a>
  * resources.
  *
  * @param <T> The class that implements {@code Resource}
  */
-@SuppressWarnings(PMD.EXCESSIVE_PUBLIC_COUNT)
 public interface Resource<T extends Resource<T>> {
 
     /**
      * Gets the resource's behaviors in an unmodifiable list.
      *
-     * @return The resource's behaviors
+     * @return The resource behaviors
      */
     List<Behavior> getBehaviors();
 
     /**
      * Gets a list of resource homepages.
      *
-     * @return The resource's homepages
+     * @return The resource homepages
      */
     List<Homepage> getHomepages();
 
@@ -56,44 +52,51 @@ public interface Resource<T extends Resource<T>> {
     /**
      * Gets the resource label.
      *
-     * @return The resource's label
+     * @return The resource label
      */
     Optional<Label> getLabel();
 
     /**
      * Gets the resource metadata.
      *
-     * @return The resource's metadata
+     * @return The resource metadata
      */
     List<Metadata> getMetadata();
 
     /**
      * Gets a list of resource partOfs.
      *
-     * @return The resource's partOfs
+     * @return The resource partOfs
      */
     List<PartOf> getPartOfs();
 
     /**
      * Gets a list of resource providers.
      *
-     * @return The resource's providers
+     * @return The resource providers
      */
     List<Provider> getProviders();
 
     /**
      * Gets a list of resource renderings.
      *
-     * @return The resource's renderings
+     * @return The resource renderings
      */
     List<Rendering> getRenderings();
 
     /**
      * Gets the resource's required statement.
      *
-     * @return The required statement of the resource
+     * @return The required statement
      */
     Optional<RequiredStatement> getRequiredStatement();
+
+    /**
+     * Clears the required statement.
+     *
+     * @return The resource instance after the required statement is cleared
+     */
+    T clearRequiredStatement();
 
     /**
      * Gets the resource's rights ID.
@@ -101,6 +104,13 @@ public interface Resource<T extends Resource<T>> {
      * @return The rights ID
      */
     Optional<String> getRights();
+
+    /**
+     * Clears the rights information associated with the resource.
+     *
+     * @return The resource instance with the rights information cleared
+     */
+    T clearRights();
 
     /**
      * Gets see also reference(s).

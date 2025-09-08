@@ -15,7 +15,7 @@ import info.freelibrary.util.warnings.PMD;
 import info.freelibrary.util.warnings.Sonar;
 
 import info.freelibrary.iiif.presentation.v3.Service;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.SpecificResource.Source;
+import info.freelibrary.iiif.presentation.v3.annotation.SpecificResource.Source;
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.properties.PartOf;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;

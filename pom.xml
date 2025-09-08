@@ -1,425 +1,583 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+    <modelVersion>4.0.0</modelVersion>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <artifactId>jiiify-presentation-v3</artifactId>
+    <packaging>jar</packaging>
+    <version>${revision}</version>
 
-  <modelVersion>4.0.0</modelVersion>
+    <name>jiiify-presentation</name>
+    <description>A Java Library for version 3 of the IIIF Presentation API</description>
+    <url>https://projects.freelibrary.info/jiiify-presentation-v3</url>
 
-  <artifactId>jiiify-presentation-v3</artifactId>
-  <packaging>jar</packaging>
-  <version>${revision}</version>
+    <licenses>
+        <license>
+            <name>Mozilla Public License 2.0 (MPL-2.0)</name>
+            <url>https://opensource.org/licenses/MPL-2.0</url>
+        </license>
+    </licenses>
 
-  <name>jiiify-presentation</name>
-  <description>A Java Library for version 3 of the IIIF Presentation API</description>
-  <url>http://projects.freelibrary.info/jiiify-presentation-v3</url>
+    <scm>
+        <connection>scm:git:git@github.com:ksclarke/jiiify-presentation.git</connection>
+        <developerConnection>scm:git:git@github.com:ksclarke/jiiify-presentation.git</developerConnection>
+        <url>git@github.com:ksclarke/jiiify-presentation.git</url>
+    </scm>
 
-  <licenses>
-    <license>
-      <name>Mozilla Public License 2.0 (MPL-2.0)</name>
-      <url>https://opensource.org/licenses/MPL-2.0</url>
-    </license>
-  </licenses>
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/ksclarke/jiiify-presentation/issues</url>
+    </issueManagement>
 
-  <scm>
-    <connection>scm:git:git@github.com:ksclarke/jiiify-presentation.git</connection>
-    <developerConnection>scm:git:git@github.com:ksclarke/jiiify-presentation.git</developerConnection>
-    <url>git@github.com:ksclarke/jiiify-presentation.git</url>
-  </scm>
+    <developers>
+        <developer>
+            <id>ksclarke</id>
+            <name>Kevin S. Clarke</name>
+            <email>ksclarke@ksclarke.io</email>
+            <timezone>America/New_York</timezone>
+        </developer>
+        <!-- Also https://github.com/ksclarke/jiiify-presentation/graphs/contributors -->
+    </developers>
 
-  <issueManagement>
-    <system>GitHub</system>
-    <url>https://github.com/ksclarke/jiiify-presentation/issues</url>
-  </issueManagement>
+    <properties>
+        <revision>0.0.0-SNAPSHOT</revision>
 
-  <developers>
-    <developer>
-      <id>ksclarke</id>
-      <name>Kevin S. Clarke</name>
-      <email>ksclarke@ksclarke.io</email>
-      <timezone>America/New_York</timezone>
-    </developer>
-    <!-- Also https://github.com/ksclarke/jiiify-presentation/graphs/contributors -->
-  </developers>
+        <!-- Application dependencies -->
+        <jackson.version>2.19.2</jackson.version>
+        <jackson.databind.version>2.19.2</jackson.databind.version>
+        <freelib.utils.version>5.2.1</freelib.utils.version>
+        <jsoup.version>1.21.1</jsoup.version>
+        <combinatorics.version>3.4.0</combinatorics.version>
+        <media.fragments.uri.version>2.4</media.fragments.uri.version>
+        <picocli.version>4.7.7</picocli.version>
+        <mapdb.version>3.1.0</mapdb.version>
 
-  <properties>
-    <revision>0.0.0-SNAPSHOT</revision>
-    <jackson.version>2.18.3</jackson.version>
-    <jackson.databind.version>2.18.3</jackson.databind.version>
-    <freelib.utils.version>5.2.0</freelib.utils.version>
-    <jsoup.version>1.18.1</jsoup.version>
-    <combinatorics.version>3.3.0</combinatorics.version>
-    <media.fragments.uri.version>2.4</media.fragments.uri.version>
+        <!-- Build-related dependencies -->
+        <shade.plugin.version>3.6.0</shade.plugin.version>
+        <exec.plugin.version>3.5.0</exec.plugin.version>
+        <native.maven.plugin.version>0.10.6</native.maven.plugin.version>
 
-    <!-- Build related versions -->
-    <maven.shade.version>3.6.0</maven.shade.version>
-    <native.maven.plugin.version>0.10.6</native.maven.plugin.version>
+        <!-- Test-related dependencies -->
+        <magicfree.json.version>0.10.2</magicfree.json.version>
+        <system.lambda.version>1.2.1</system.lambda.version>
+        <mockito.version>5.16.1</mockito.version>
+        <opencsv.version>4.6</opencsv.version>
+        <lorem.version>2.1</lorem.version>
 
-    <!-- Test related versions -->
-    <magicfree.json.version>0.10.2</magicfree.json.version>
-    <system.lambda.version>1.2.1</system.lambda.version>
-    <mockito.version>5.16.1</mockito.version>
-    <opencsv.version>4.6</opencsv.version>
-    <lorem.version>2.1</lorem.version>
+        <!-- A property used by the build process -->
+        <tag.prefix>v3</tag.prefix>
 
-    <!-- A property used by the build process -->
-    <tag.prefix>v3</tag.prefix>
+        <!-- The log level to use when testing -->
+        <testLogLevel>WARN</testLogLevel>
 
-    <!-- The log level to use when testing -->
-    <testLogLevel>WARN</testLogLevel>
-  </properties>
+        <!-- Mockito configuration properties -->
+        <mockito.path>${settings.localRepository}/org/mockito/mockito-core/${mockito.version}</mockito.path>
+        <mockito.agent.arg>-javaagent:${mockito.path}/mockito-core-${mockito.version}.jar</mockito.agent.arg>
+    </properties>
 
-  <dependencies>
-    <dependency>
-      <groupId>info.freelibrary</groupId>
-      <artifactId>freelib-utils</artifactId>
-      <version>${freelib.utils.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-core</artifactId>
-      <version>${jackson.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-annotations</artifactId>
-      <version>${jackson.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>${jackson.databind.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.datatype</groupId>
-      <artifactId>jackson-datatype-jdk8</artifactId>
-      <version>${jackson.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jsoup</groupId>
-      <artifactId>jsoup</artifactId>
-      <version>${jsoup.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.github.tkurz</groupId>
-      <artifactId>media-fragments-uri</artifactId>
-      <version>${media.fragments.uri.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.github.dpaukov</groupId>
-      <artifactId>combinatoricslib3</artifactId>
-      <version>${combinatorics.version}</version>
-    </dependency>
+    <dependencies>
+        <dependency>
+            <groupId>info.freelibrary</groupId>
+            <artifactId>freelib-utils</artifactId>
+            <version>${freelib.utils.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.databind.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jdk8</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-csv</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>${jsoup.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.tkurz</groupId>
+            <artifactId>media-fragments-uri</artifactId>
+            <version>${media.fragments.uri.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.dpaukov</groupId>
+            <artifactId>combinatoricslib3</artifactId>
+            <version>${combinatorics.version}</version>
+        </dependency>
 
-    <!-- Below dependencies are only used for testing -->
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <!--<scope>test</scope>-->
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>info.freelibrary</groupId>
-      <artifactId>magicfree-json</artifactId>
-      <version>${magicfree.json.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.thedeanda</groupId>
-      <artifactId>lorem</artifactId>
-      <version>${lorem.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.opencsv</groupId>
-      <artifactId>opencsv</artifactId>
-      <version>${opencsv.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.github.stefanbirkner</groupId>
-      <artifactId>system-lambda</artifactId>
-      <version>${system.lambda.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <version>${mockito.version}</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+        <!-- The dependencies below are only used for testing -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>info.freelibrary</groupId>
+            <artifactId>magicfree-json</artifactId>
+            <version>${magicfree.json.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.thedeanda</groupId>
+            <artifactId>lorem</artifactId>
+            <version>${lorem.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.stefanbirkner</groupId>
+            <artifactId>system-lambda</artifactId>
+            <version>${system.lambda.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
-  <build>
-    <testResources>
-      <testResource>
-        <directory>src/test/resources</directory>
-        <includes>
-          <include>logback-test.xml</include>
-        </includes>
-        <filtering>true</filtering>
-      </testResource>
-      <testResource>
-        <directory>src/test/resources</directory>
-        <excludes>
-          <exclude>logback-test.xml</exclude>
-        </excludes>
-        <filtering>false</filtering>
-      </testResource>
+    <build>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <includes>
+                    <include>logback-test.xml</include>
+                </includes>
+                <filtering>true</filtering>
+            </testResource>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <excludes>
+                    <exclude>logback-test.xml</exclude>
+                </excludes>
+                <filtering>false</filtering>
+            </testResource>
 
-      <!-- We can also override the default logging configuration with a file in our root project directory -->
-      <testResource>
-        <directory>${project.basedir}</directory>
-        <includes>
-          <include>logback-test.xml</include>
-        </includes>
-        <filtering>true</filtering>
-      </testResource>
-    </testResources>
+            <!-- We can also override the default logging configuration with a file in our root project directory -->
+            <testResource>
+                <directory>${project.basedir}</directory>
+                <includes>
+                    <include>logback-test.xml</include>
+                </includes>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
 
-    <plugins>
-      <!-- Generate our MessageCodes class from the messages resource file -->
-      <plugin>
+        <plugins>
+            <!-- Generate our MessageCodes class from the *-messages.xml resource file -->
+            <plugin>
+                <groupId>info.freelibrary</groupId>
+                <artifactId>freelib-maven-plugins</artifactId>
+
+                <configuration>
+                    <generatedSourcesDirectory>${project.basedir}/src/main/generated</generatedSourcesDirectory>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <id>generate-media-types</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate-mediatype</goal>
+                        </goals>
+                        <configuration>
+                            <mediaTypePackage>info.freelibrary.iiif.presentation.v3.properties</mediaTypePackage>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <links>
+                        <link>https://javadoc.io/doc/info.freelibrary/freelib-utils/${freelib.utils.version}/</link>
+                    </links>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-pmd-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-enforcer-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>net.revelc.code.formatter</groupId>
+                <artifactId>formatter-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <!-- Uses 'add-opens' argument for system-lambda functionality in unit tests -->
+                    <argLine><![CDATA[ ${jacoco.agent.arg} ${mockito.agent.arg}
+                        --add-opens java.base/java.util=ALL-UNNAMED
+                        --add-opens=java.base/java.lang=ALL-UNNAMED
+                        --enable-native-access=ALL-UNNAMED
+                    ]]></argLine>
+                    <forkCount>1</forkCount>
+                    <reuseForks>false</reuseForks>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <configuration>
+                    <systemPropertyVariables>
+                        <jiiify.version>${project.version}</jiiify.version>
+                    </systemPropertyVariables>
+                    <argLine><![CDATA[
+                        --add-opens java.base/sun.nio.ch=ALL-UNNAMED
+                        --add-opens java.base/java.io=ALL-UNNAMED
+                        --enable-native-access=ALL-UNNAMED
+                    ]]></argLine>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Exclude the CSV utils from the main compilation process -->
+                            <excludes>
+                                <exclude>**/info/freelibrary/iiif/presentation/v3/utils/csv/**/*.java</exclude>
+                                <exclude>**/info/freelibrary/iiif/presentation/v3/utils/JPv3.java</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>default-testCompile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                        <configuration>
+                            <testExcludes>
+                                <!-- Exclude test sources associated with the excluded CSV utils -->
+                                <testExclude>**/info/freelibrary/iiif/presentation/v3/utils/csv/**/*.java</testExclude>
+                                <exclude>**/info/freelibrary/iiif/presentation/v3/utils/JPv3Test.java</exclude>
+                            </testExcludes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>native</id>
+
+            <properties>
+                <kotlin.version>2.2.10</kotlin.version>
+                <guava.version>33.4.8-jre</guava.version>
+
+                <native.config.dir>target/native-image-config</native.config.dir>
+                <native.meta.info>
+                    src/main/resources/META-INF/native-image/${project.groupId}/${project.artifactId}/
+                </native.meta.info>
+                <build.profile>native</build.profile>
+            </properties>
+
+            <dependencies>
+                <dependency>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                    <scope>compile</scope>
+                </dependency>
+                <dependency>
+                    <groupId>info.picocli</groupId>
+                    <artifactId>picocli</artifactId>
+                    <version>${picocli.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.mapdb</groupId>
+                    <artifactId>mapdb</artifactId>
+                    <version>${mapdb.version}</version>
+                    <exclusions>
+                        <!-- Exclude transitive Kotlin stdlib SNAPSHOT (replace with the stable version below) -->
+                        <exclusion>
+                            <groupId>org.jetbrains.kotlin</groupId>
+                            <artifactId>kotlin-stdlib</artifactId>
+                        </exclusion>
+                        <!-- Exclude transitive Guava SNAPSHOT (replace with the stable version below) -->
+                        <exclusion>
+                            <groupId>com.google.guava</groupId>
+                            <artifactId>guava</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>org.jetbrains.kotlin</groupId>
+                    <artifactId>kotlin-stdlib</artifactId>
+                    <version>${kotlin.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                    <version>${guava.version}</version>
+                </dependency>
+            </dependencies>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>default-compile</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>compile</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- Clear any inherited excludes for native -->
+                                    <excludes combine.self="override"/>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>default-testCompile</id>
+                                <phase>test-compile</phase>
+                                <goals>
+                                    <goal>testCompile</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- Clear any inherited excludes for native -->
+                                    <testExcludes combine.self="override"/>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>${exec.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>run-with-agent</id>
+                                <phase>process-classes</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>java</executable>
+                                    <arguments>
+                                        <!-- JVM agent goes here -->
+                                        <argument>
+                                            -agentlib:native-image-agent=config-output-dir=${native.config.dir}
+                                        </argument>
+
+                                        <!-- Build the classpath from project runtime deps and target/classes -->
+                                        <argument>-cp</argument>
+                                        <classpath/>
+
+                                        <!-- Main class and its arguments -->
+                                        <argument>info.freelibrary.iiif.presentation.v3.utils.JPv3</argument>
+                                        <argument>-c</argument>
+                                        <argument>-i</argument>
+                                        <argument>src/test/resources/csv/jbu-collection.csv</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>make-native-meta-dir</id>
+                                <phase>process-classes</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>mkdir</executable>
+                                    <arguments>
+                                        <argument>-p</argument>
+                                        <argument>${native.meta.info}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>cp-native-image-config</id>
+                                <phase>process-classes</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>cp</executable>
+                                    <arguments>
+                                        <argument>${native.config.dir}/reachability-metadata.json</argument>
+                                        <argument>${native.meta.info}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.graalvm.buildtools</groupId>
+                        <artifactId>native-maven-plugin</artifactId>
+                        <version>${native.maven.plugin.version}</version>
+                        <extensions>true</extensions>
+                        <executions>
+                            <execution>
+                                <id>build-native</id>
+                                <goals>
+                                    <goal>compile-no-fork</goal>
+                                </goals>
+                                <phase>package</phase>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <mainClass>info.freelibrary.iiif.presentation.v3.utils.JPv3</mainClass>
+                            <imageName>jpv3</imageName>
+                            <buildArgs>
+                                <buildArg>-O3</buildArg>
+                                <buildArg>-march=native</buildArg>
+                                <!--<buildArg>-/-gc=G1</buildArg>--><!-- Adds 20 MB for GC addition -->
+                                <buildArg>--exact-reachability-metadata</buildArg>
+                            </buildArgs>
+                            <metadataRepository>
+                                <enabled>true</enabled>
+                            </metadataRepository>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <includes>
+                                <include>**/info/freelibrary/iiif/presentation/v3/utils/csv/**/*Test.java</include>
+                            </includes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>uber</id>
+            <properties>
+                <shade.includer>org.apache.maven.plugins.shade.resource.IncludeResourceTransformer</shade.includer>
+                <shade.manifest>org.apache.maven.plugins.shade.resource.ManifestResourceTransformer</shade.manifest>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                    <scope>compile</scope>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-shade-plugin</artifactId>
+                        <version>${shade.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>uber-jar</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>shade</goal>
+                                </goals>
+                                <configuration>
+                                    <shadedArtifactAttached>true</shadedArtifactAttached>
+                                    <shadedClassifierName>uber</shadedClassifierName>
+                                    <filters>
+                                        <filter>
+                                            <artifact>*:*</artifact>
+                                            <excludes>
+                                                <exclude>module-info.class</exclude>
+                                                <exclude>META-INF/*.SF</exclude>
+                                                <exclude>META-INF/*.DSA</exclude>
+                                                <exclude>META-INF/*.RSA</exclude>
+                                                <exclude>META-INF/NOTICE</exclude>
+                                                <exclude>META-INF/LICENSE</exclude>
+                                                <exclude>META-INF/LICENSE.txt</exclude>
+                                                <exclude>META-INF/MANIFEST.MF</exclude>
+                                                <exclude>META-INF/versions/9/module-info.class</exclude>
+                                            </excludes>
+                                        </filter>
+                                    </filters>
+                                    <transformers>
+                                        <transformer implementation="${shade.includer}">
+                                            <resource>logback.xml</resource>
+                                            <file>src/test/resources/logback-uber.xml</file>
+                                        </transformer>
+                                        <transformer implementation="${shade.manifest}">
+                                            <mainClass>info.freelibrary.iiif.presentation.v3.utils.JPv3</mainClass>
+                                        </transformer>
+                                    </transformers>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/freelibrary/jiiify-presentation</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <!-- Pulls in standard FreeLibrary Project configuration options -->
+    <parent>
+        <artifactId>freelib-parent</artifactId>
         <groupId>info.freelibrary</groupId>
-        <artifactId>freelib-maven-plugins</artifactId>
-
-        <configuration>
-          <generatedSourcesDirectory>${project.basedir}/src/main/generated</generatedSourcesDirectory>
-        </configuration>
-
-        <executions>
-          <execution>
-            <id>generate-media-types</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>generate-mediatype</goal>
-            </goals>
-            <configuration>
-              <mediaTypePackage>info.freelibrary.iiif.presentation.v3.properties</mediaTypePackage>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <configuration>
-          <links>
-            <link>https://javadoc.io/doc/info.freelibrary/freelib-utils/${freelib.utils.version}/</link>
-          </links>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-      </plugin>
-
-      <plugin>
-        <artifactId>maven-pmd-plugin</artifactId>
-      </plugin>
-
-      <plugin>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-      </plugin>
-
-      <plugin>
-        <artifactId>maven-enforcer-plugin</artifactId>
-      </plugin>
-
-      <plugin>
-        <artifactId>maven-dependency-plugin</artifactId>
-      </plugin>
-
-      <plugin>
-        <groupId>net.revelc.code.formatter</groupId>
-        <artifactId>formatter-maven-plugin</artifactId>
-      </plugin>
-
-      <plugin>
-        <artifactId>maven-resources-plugin</artifactId>
-      </plugin>
-
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <!-- Uses 'add-opens' argument for system-lambda functionality in unit tests -->
-          <argLine><![CDATA[ ${jacoco.agent.arg}
-            --add-opens java.base/java.util=ALL-UNNAMED
-            --add-opens=java.base/java.lang=ALL-UNNAMED
-            -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
-            ]]></argLine>
-          <forkCount>1</forkCount>
-          <reuseForks>false</reuseForks>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-failsafe-plugin</artifactId>
-        <configuration>
-          <systemPropertyVariables>
-            <jiiify.version>${project.version}</jiiify.version>
-          </systemPropertyVariables>
-          <argLine><![CDATA[
-            --add-opens java.base/sun.nio.ch=ALL-UNNAMED
-            --add-opens java.base/java.io=ALL-UNNAMED
-          ]]></argLine>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
-
-  <profiles>
-    <profile>
-      <id>native</id>
-      <dependencies>
-        <dependency>
-          <groupId>ch.qos.logback</groupId>
-          <artifactId>logback-classic</artifactId>
-          <scope>compile</scope>
-        </dependency>
-      </dependencies>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <version>3.5.0</version>
-            <executions>
-              <execution>
-                <id>run-with-agent</id>
-                <phase>process-classes</phase>
-                <goals>
-                  <goal>exec</goal>
-                </goals>
-                <configuration>
-                  <executable>java</executable>
-                  <arguments>
-                    <argument>-agentlib:native-image-agent=config-output-dir=target/native-image-config</argument>
-                    <argument>-cp</argument>
-                    <classpath />
-                    <argument>info.freelibrary.iiif.presentation.v3.utils.JPv3</argument>
-                    <argument>src/test/resources/cookbook/0001-mvm-image/manifest.json</argument>
-                  </arguments>
-                </configuration>
-              </execution>
-              <execution>
-                <id>cp-native-image-config</id>
-                <phase>process-classes</phase>
-                <goals>
-                  <goal>exec</goal>
-                </goals>
-                <configuration>
-                  <executable>cp</executable>
-                  <arguments>
-                    <argument>target/native-image-config/reachability-metadata.json</argument>
-                    <argument>src/main/resources/META-INF/native-image/info.freelibrary/jiiify-presentation/</argument>
-                  </arguments>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.graalvm.buildtools</groupId>
-            <artifactId>native-maven-plugin</artifactId>
-            <version>${native.maven.plugin.version}</version>
-            <extensions>true</extensions>
-            <executions>
-              <execution>
-                <id>build-native</id>
-                <goals>
-                  <goal>compile-no-fork</goal>
-                </goals>
-                <phase>package</phase>
-              </execution>
-            </executions>
-            <configuration>
-              <mainClass>info.freelibrary.iiif.presentation.v3.utils.JPv3</mainClass>
-              <imageName>jpv3</imageName>
-              <buildArgs>
-                <buildArg>-O3</buildArg>
-                <buildArg>-march=native</buildArg>
-                <!--<buildArg>-/-gc=G1</buildArg>--><!-- Adds 20 MB for GC addition -->
-                <buildArg>--exact-reachability-metadata</buildArg>
-              </buildArgs>
-              <metadataRepository>
-                <enabled>true</enabled>
-              </metadataRepository>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-
-    <profile>
-      <id>uber</id>
-      <dependencies>
-        <dependency>
-          <groupId>ch.qos.logback</groupId>
-          <artifactId>logback-classic</artifactId>
-          <scope>compile</scope>
-        </dependency>
-      </dependencies>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-shade-plugin</artifactId>
-            <version>${maven.shade.version}</version>
-            <executions>
-              <execution>
-                <id>uber-jar</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>shade</goal>
-                </goals>
-                <configuration>
-                  <shadedArtifactAttached>true</shadedArtifactAttached>
-                  <shadedClassifierName>uber</shadedClassifierName>
-                  <filters>
-                    <filter>
-                      <artifact>*:*</artifact>
-                      <excludes>
-                        <exclude>module-info.class</exclude>
-                        <exclude>META-INF/*.SF</exclude>
-                        <exclude>META-INF/*.DSA</exclude>
-                        <exclude>META-INF/*.RSA</exclude>
-                        <exclude>META-INF/NOTICE</exclude>
-                        <exclude>META-INF/LICENSE</exclude>
-                        <exclude>META-INF/LICENSE.txt</exclude>
-                        <exclude>META-INF/MANIFEST.MF</exclude>
-                        <exclude>META-INF/versions/9/module-info.class</exclude>
-                      </excludes>
-                    </filter>
-                  </filters>
-                  <transformers>
-                    <transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
-                      <resource>logback.xml</resource>
-                      <file>src/test/resources/logback-uber.xml</file>
-                    </transformer>
-                    <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                      <mainClass>info.freelibrary.iiif.presentation.v3.utils.JPv3</mainClass>
-                    </transformer>
-                  </transformers>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
-
-  <!-- Pulls in standard FreeLibrary Project configuration options -->
-  <parent>
-    <artifactId>freelib-parent</artifactId>
-    <groupId>info.freelibrary</groupId>
-    <version>12.0.6</version>
-  </parent>
+        <version>13.0.0</version>
+    </parent>
 
 </project>

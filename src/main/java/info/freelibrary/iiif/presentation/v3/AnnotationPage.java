@@ -20,7 +20,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.JDK;
-import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.id.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
@@ -37,7 +36,6 @@ import info.freelibrary.iiif.presentation.v3.utils.json.AnnotationPageSerializer
  *
  * @param <A> The type of annotation encapsulated on the page
  */
-@SuppressWarnings({ PMD.GOD_CLASS, PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS })
 @JsonInclude(Include.NON_EMPTY)
 public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<AnnotationPage<A>>
         implements Resource<AnnotationPage<A>> {

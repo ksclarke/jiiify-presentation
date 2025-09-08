@@ -24,7 +24,7 @@ import info.freelibrary.util.warnings.PMD;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.annotation.Motivation;
 import info.freelibrary.iiif.presentation.v3.annotation.SupplementingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.Target;
+import info.freelibrary.iiif.presentation.v3.annotation.Target;
 import info.freelibrary.iiif.presentation.v3.content.ContentResource;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.TextGranularity;
@@ -52,8 +52,7 @@ public class SupplementingAnnotationSerializer extends StdSerializer<Supplementi
     }
 
     @Override
-    @SuppressWarnings({ PMD.PRESERVE_STACK_TRACE, PMD.COGNITIVE_COMPLEXITY, PMD.N_PATH_COMPLEXITY,
-        PMD.CYCLOMATIC_COMPLEXITY })
+    @SuppressWarnings({ PMD.PRESERVE_STACK_TRACE, PMD.CYCLOMATIC_COMPLEXITY })
     public void serialize(final SupplementingAnnotation aSupplementingAnnotation, final JsonGenerator aJsonGenerator,
             final SerializerProvider aProvider) throws IOException {
         final List<ContentResource> resources = aSupplementingAnnotation.getBody();

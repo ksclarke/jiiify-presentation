@@ -20,7 +20,7 @@ import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentS
  * resource. A placeholder canvas is likely to have different dimensions to those of the canvas(es) of the resource that
  * has the placeholderCanvas property.
  */
-@SuppressWarnings({ PMD.TOO_MANY_METHODS, PMD.EXCESSIVE_PUBLIC_COUNT, PMD.COUPLING_BETWEEN_OBJECTS, PMD.GOD_CLASS })
+@SuppressWarnings({ PMD.TOO_MANY_METHODS })
 public class PlaceholderCanvas extends AbstractCanvas<PlaceholderCanvas> implements CanvasResource<PlaceholderCanvas> {
 
     /**

@@ -1,37 +1,45 @@
 
 package info.freelibrary.iiif.presentation.v3.utils.json;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-
+import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.annotation.SpecificResource;
+import info.freelibrary.iiif.presentation.v3.annotation.Target;
+import info.freelibrary.iiif.presentation.v3.properties.PartOf;
+import info.freelibrary.iiif.presentation.v3.properties.selectors.Selector;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.I18nRuntimeException;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.ThrowingConsumer;
 import info.freelibrary.util.ThrowingRunnable;
 import info.freelibrary.util.warnings.PMD;
 import info.freelibrary.util.warnings.Sonar;
 
-import info.freelibrary.iiif.presentation.v3.ResourceTypes;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.CanvasTarget;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.ManifestTarget;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.SpecificResource;
-import info.freelibrary.iiif.presentation.v3.annotation.targets.Target;
-import info.freelibrary.iiif.presentation.v3.properties.PartOf;
-import info.freelibrary.iiif.presentation.v3.properties.selectors.Selector;
-import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import java.io.IOException;
+import java.io.Serial;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * A serializer for {@code Annotation.Target}(s).
  */
 public class AnnotationTargetSerializer extends StdSerializer<Target> {
 
-    /** The <code>serialVersionUID</code> for a <code>AnnotationTargetSerializer</code>. */
+    /**
+     * The {@code }serialVersionUID} for a {@code AnnotationTargetSerializer}.
+     */
+    @Serial
     private static final long serialVersionUID = -5745518273140398531L;
+
+    /**
+     * The logger for this class.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationTargetSerializer.class, MessageCodes.BUNDLE);
 
     /**
      * Creates a new <code>AnnotationTargetSerializer</code>.
@@ -72,13 +80,13 @@ public class AnnotationTargetSerializer extends StdSerializer<Target> {
                         aJsonGenerator.writeEndObject();
                     }
                     case ResourceTypes.MANIFEST -> {
-                        final ManifestTarget manifestTarget = (ManifestTarget) aTarget;
-                        final List<PartOf> partOfList = manifestTarget.getPartOfs();
+                        final Target target = aTarget;
+                        final List<PartOf> partOfList = target.getPartOfs();
 
                         aJsonGenerator.writeStartObject();
 
-                        if (manifestTarget.getID() != null) {
-                            aJsonGenerator.writeStringField(JsonKeys.ID, manifestTarget.getID());
+                        if (target.getID() != null) {
+                            aJsonGenerator.writeStringField(JsonKeys.ID, target.getID());
                         }
 
                         aJsonGenerator.writeStringField(JsonKeys.TYPE, ResourceTypes.CANVAS);
@@ -97,13 +105,14 @@ public class AnnotationTargetSerializer extends StdSerializer<Target> {
                         aJsonGenerator.writeEndObject();
                     }
                     case ResourceTypes.CANVAS -> {
-                        final CanvasTarget canvasTarget = (CanvasTarget) aTarget;
-                        final List<PartOf> partOfList = canvasTarget.getPartOfs();
+                        LOGGER.info("=========================================================");
+                        final Target target = aTarget;
+                        final List<PartOf> partOfList = target.getPartOfs();
 
                         aJsonGenerator.writeStartObject();
 
-                        if (canvasTarget.getID() != null) {
-                            aJsonGenerator.writeStringField(JsonKeys.ID, canvasTarget.getID());
+                        if (target.getID() != null) {
+                            aJsonGenerator.writeStringField(JsonKeys.ID, target.getID());
                         }
 
                         aJsonGenerator.writeStringField(JsonKeys.TYPE, ResourceTypes.CANVAS);
