@@ -11,12 +11,46 @@ on:
 jobs:
   build:
     name: Maven PR Builder (JDK ${{ matrix.java }})
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        java: [ "21" ]
-        maven: [ "3.8.6" ]
-        jdk: [ "temurin" ]
+        include:
+          - os: ubuntu-latest
+            java: "21"
+            graalvm: "24"
+            maven: "3.8.6"
+            jdk: "temurin"
+            suffix: "linux-x64"
+          - os: "macos-latest"
+            java: "21"
+            graalvm: "24"
+            maven: "3.8.6"
+            jdk: "temurin"
+            suffix: "macos-x64"
+          - os: "windows-latest"
+            java: "21"
+            graalvm: "24"
+            maven: "3.8.6"
+            jdk: "temurin"
+            suffix: "windows-x64"
+          - os: "ubuntu-latest"
+            java: "24"
+            graalvm: "24"
+            maven: "3.8.6"
+            jdk: "temurin"
+            suffix: "linux-x64"
+          - os: "macos-latest"
+            java: "24"
+            graalvm: "24"
+            maven: "3.8.6"
+            jdk: "temurin"
+            suffix: "macos-x64"
+          - os: "windows-latest"
+            java: "24"
+            graalvm: "24"
+            maven: "3.8.6"
+            jdk: "temurin"
+            suffix: "windows-x64"
 
     steps:
       - name: Check out code
@@ -30,6 +64,12 @@ jobs:
           cache: maven
           distribution: ${{ matrix.jdk }}
           java-version: ${{ matrix.java }}
+
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: ${{ matrix.graalvm }}
+          distribution: 'graalvm'
+          components: 'native-image'
 
       # If running locally in ACT, install Maven
       - name: Set up Maven
@@ -45,8 +85,45 @@ jobs:
           restore-keys: ${{ runner.os }}-sonar
 
       - name: Build with Maven
+        shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           mvn -B -ntp -Psonar verify javadoc:javadoc
+
+      - name: Prepare binary artifact
+        shell: bash
+        run: |
+          mkdir -p dist
+          BIN="target/jpv3"
+          test -f "$BIN" || { echo "Binary not found"; exit 1; }
+          NAME=$(basename "$BIN")
+          OUT="${NAME}-${{ matrix.suffix }}"
+          cp "$BIN" "dist/${OUT}${{ runner.os == 'Windows' && '.exe' || '' }}"
+
+      - name: Upload binary artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: ${{ matrix.suffix }}
+          path: dist/*
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+        with:
+          path: dist
+
+      - name: Flatten binary artifacts directory
+        run: |
+          mkdir bin_out
+          find dist -type f -maxdepth 2 -exec cp {} bin_out/ \;
+
+      - name: Release binary artifacts
+        uses: softprops/action-gh-release@6cbd405e2c4e67a21c47fa9e383d020e4e28b836 # v2.3.3
+        with:
+          files: bin_out/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
