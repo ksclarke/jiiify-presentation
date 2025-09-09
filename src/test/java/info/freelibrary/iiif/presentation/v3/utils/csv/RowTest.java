@@ -1,8 +1,10 @@
-
 package info.freelibrary.iiif.presentation.v3.utils.csv;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MappingIterator;
@@ -18,6 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -28,7 +31,7 @@ public class RowTest {
 
     /** Create a reusable configured mapper. */
     private static final ObjectMapper MAPPER =
-            new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT).registerModule(new Jdk8Module());
+        new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT).registerModule(new Jdk8Module());
 
     /** The CSV file to test with. */
     private static final Path CSV_FILE = Path.of("src/test/resources/csv/jbu-collection.csv");
@@ -81,4 +84,104 @@ public class RowTest {
 
         assertEquals(expected, MAPPER.readTree(MAPPER.writeValueAsString(rows)));
     }
+
+    /**
+     * Verifies that a freshly deserialized Row has empty Optionals/OptionalInts.
+     */
+    @Test
+    public void testGettersInitiallyEmpty() throws Exception {
+        final Row row = MAPPER.readValue("{}", Row.class);
+
+        assertFalse(row.getFileName().isPresent());
+        assertFalse(row.getObjectType().isPresent());
+        assertFalse(row.getTitle().isPresent());
+        assertFalse(row.getItemSequence().isPresent());
+        assertFalse(row.getItemID().isPresent());
+        assertFalse(row.getParentID().isPresent());
+        assertFalse(row.getTarget().isPresent());
+        assertFalse(row.getViewingHint().isPresent());
+        assertFalse(row.getTextDirection().isPresent());
+        assertFalse(row.getBucketeerState().isPresent());
+        assertFalse(row.getThumbnail().isPresent());
+        assertFalse(row.getMediaHeight().isPresent());
+        assertFalse(row.getMediaWidth().isPresent());
+        assertFalse(row.getAccessURL().isPresent());
+        assertFalse(row.getNotes().isPresent());
+    }
+
+    /**
+     * Verifies setters populate values and getters return the expected Optionals.
+     */
+    @Test
+    public void testSettersAndGettersReturnValues() throws Exception {
+        final Row row = MAPPER.readValue("{}", Row.class);
+        final URL url = new URL("https://example.org/iiif/access");
+
+        row.setFileName("image/file.jpg")
+           .setObjectType("Image")
+           .setTitle("A Title")
+           .setItemSequence("42")
+           .setItemID("ark:/12345/abc")
+           .setParentID("ark:/12345/parent")
+           .setTarget("Canvas/1")
+           .setViewingHint("paged")
+           .setTextDirection("ltr")
+           .setBucketeerState("uploaded")
+           .setThumbnail("thumb.jpg")
+           .setMediaHeight(1080)
+           .setMediaWidth(1920)
+           .setAccessURL(url)
+           .setNotes("Some notes");
+
+        assertEquals("image/file.jpg", row.getFileName().orElse(null));
+        assertEquals("Image", row.getObjectType().orElse(null));
+        assertEquals("A Title", row.getTitle().orElse(null));
+        assertEquals("42", row.getItemSequence().orElse(null));
+        assertEquals("ark:/12345/abc", row.getItemID().orElse(null));
+        assertEquals("ark:/12345/parent", row.getParentID().orElse(null));
+        assertEquals("Canvas/1", row.getTarget().orElse(null));
+        assertEquals("paged", row.getViewingHint().orElse(null));
+        assertEquals("ltr", row.getTextDirection().orElse(null));
+        assertEquals("uploaded", row.getBucketeerState().orElse(null));
+        assertEquals("thumb.jpg", row.getThumbnail().orElse(null));
+        assertTrue(row.getMediaHeight().isPresent());
+        assertEquals(1080, row.getMediaHeight().getAsInt());
+        assertTrue(row.getMediaWidth().isPresent());
+        assertEquals(1920, row.getMediaWidth().getAsInt());
+        assertTrue(row.getAccessURL().isPresent());
+        assertEquals(url, row.getAccessURL().get());
+        assertEquals("Some notes", row.getNotes().orElse(null));
+    }
+
+    /**
+     * Verifies that blank strings set via setters produce empty Optionals in getters.
+     */
+    @Test
+    public void testBlankValuesReturnEmptyOptionals() throws Exception {
+        final Row row = MAPPER.readValue("{}", Row.class);
+
+        row.setTitle("   ");
+        row.setFileName("\t");
+        row.setObjectType("");
+        row.setNotes("  ");
+
+        assertFalse(row.getTitle().isPresent());
+        assertFalse(row.getFileName().isPresent());
+        assertFalse(row.getObjectType().isPresent());
+        assertFalse(row.getNotes().isPresent());
+    }
+
+    /**
+     * Verifies that setter methods are fluent and return the same instance.
+     */
+    @Test
+    public void testSetterFluentChaining() throws Exception {
+        final Row row = MAPPER.readValue("{}", Row.class);
+
+        final Row chained =
+            row.setTitle("T").setItemID("ID").setParentID("PID").setMediaHeight(1).setMediaWidth(2);
+
+        assertSame(row, chained);
+    }
+
 }

@@ -85,10 +85,7 @@ jobs:
         shell: bash
         run: |
           mkdir -p dist
-          BIN="target/jpv3"
-          NAME=$(basename "$BIN")
-          OUT="${NAME}-${{ matrix.suffix }}"
-          cp "$BIN" "dist/${OUT}${{ runner.os == 'Windows' && '.exe' || '' }}"
+          cp "target/jpv3" "dist/jpv3-${{ matrix.suffix }}${{ runner.os == 'Windows' && '.exe' || '' }}"
 
       - name: Upload binary artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
