@@ -1,5 +1,6 @@
 package info.freelibrary.iiif.presentation.v3.utils.csv;
 
+import static info.freelibrary.util.Constants.MESSAGE_SLOT;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -20,6 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -85,12 +87,10 @@ public class RowTest {
         assertEquals(expected, MAPPER.readTree(MAPPER.writeValueAsString(rows)));
     }
 
-    /**
-     * Verifies that a freshly deserialized Row has empty Optionals/OptionalInts.
-     */
+    /** Verifies that a freshly deserialized Row has empty Optionals/OptionalInts. */
     @Test
     public void testGettersInitiallyEmpty() throws Exception {
-        final Row row = MAPPER.readValue("{}", Row.class);
+        final Row row = MAPPER.readValue(MESSAGE_SLOT, Row.class);
 
         assertFalse(row.getFileName().isPresent());
         assertFalse(row.getObjectType().isPresent());
@@ -109,61 +109,55 @@ public class RowTest {
         assertFalse(row.getNotes().isPresent());
     }
 
-    /**
-     * Verifies setters populate values and getters return the expected Optionals.
-     */
+    /** Verifies setters populate values and getters return the expected Optionals. */
     @Test
     public void testSettersAndGettersReturnValues() throws Exception {
-        final Row row = MAPPER.readValue("{}", Row.class);
-        final URL url = new URL("https://example.org/iiif/access");
+        final Row row = MAPPER.readValue(MESSAGE_SLOT, Row.class);
+        final URL url = URI.create("https://example.org/iiif/access").toURL();
+        final String fileName = "image/file.jpg";
+        final String pageObjType = "Page";
+        final String thumbnail = "thumb.jpg";
+        final String title = "A Title";
+        final String itemSeq = "42";
+        final String itemARK = "ark:/12345/abc";
+        final String parentARK = "ark:/12345/parent";
+        final String target = "Canvas/1";
+        final String viewingHint = "paged";
+        final String textDirection = "ltr";
+        final String bucketeerState = "uploaded";
+        final String notes = "Some notes";
 
-        row.setFileName("image/file.jpg")
-           .setObjectType("Image")
-           .setTitle("A Title")
-           .setItemSequence("42")
-           .setItemID("ark:/12345/abc")
-           .setParentID("ark:/12345/parent")
-           .setTarget("Canvas/1")
-           .setViewingHint("paged")
-           .setTextDirection("ltr")
-           .setBucketeerState("uploaded")
-           .setThumbnail("thumb.jpg")
-           .setMediaHeight(1080)
-           .setMediaWidth(1920)
-           .setAccessURL(url)
-           .setNotes("Some notes");
+        row.setFileName(fileName).setObjectType(pageObjType).setTitle(title).setItemSequence(itemSeq).setItemID(itemARK)
+           .setParentID(parentARK).setTarget(target).setViewingHint(viewingHint).setTextDirection(textDirection)
+           .setBucketeerState(bucketeerState).setThumbnail(thumbnail).setMediaHeight(1080).setMediaWidth(1920)
+           .setAccessURL(url).setNotes(notes);
 
-        assertEquals("image/file.jpg", row.getFileName().orElse(null));
-        assertEquals("Image", row.getObjectType().orElse(null));
-        assertEquals("A Title", row.getTitle().orElse(null));
-        assertEquals("42", row.getItemSequence().orElse(null));
-        assertEquals("ark:/12345/abc", row.getItemID().orElse(null));
-        assertEquals("ark:/12345/parent", row.getParentID().orElse(null));
-        assertEquals("Canvas/1", row.getTarget().orElse(null));
-        assertEquals("paged", row.getViewingHint().orElse(null));
-        assertEquals("ltr", row.getTextDirection().orElse(null));
-        assertEquals("uploaded", row.getBucketeerState().orElse(null));
-        assertEquals("thumb.jpg", row.getThumbnail().orElse(null));
+        assertEquals(fileName, row.getFileName().orElse(null));
+        assertEquals(pageObjType, row.getObjectType().orElse(null));
+        assertEquals(title, row.getTitle().orElse(null));
+        assertEquals(itemSeq, row.getItemSequence().orElse(null));
+        assertEquals(itemARK, row.getItemID().orElse(null));
+        assertEquals(parentARK, row.getParentID().orElse(null));
+        assertEquals(target, row.getTarget().orElse(null));
+        assertEquals(viewingHint, row.getViewingHint().orElse(null));
+        assertEquals(textDirection, row.getTextDirection().orElse(null));
+        assertEquals(bucketeerState, row.getBucketeerState().orElse(null));
+        assertEquals(thumbnail, row.getThumbnail().orElse(null));
         assertTrue(row.getMediaHeight().isPresent());
         assertEquals(1080, row.getMediaHeight().getAsInt());
         assertTrue(row.getMediaWidth().isPresent());
         assertEquals(1920, row.getMediaWidth().getAsInt());
         assertTrue(row.getAccessURL().isPresent());
         assertEquals(url, row.getAccessURL().get());
-        assertEquals("Some notes", row.getNotes().orElse(null));
+        assertEquals(notes, row.getNotes().orElse(null));
     }
 
-    /**
-     * Verifies that blank strings set via setters produce empty Optionals in getters.
-     */
+    /** Verifies that blank strings set via setters produce empty Optionals in getters. */
     @Test
     public void testBlankValuesReturnEmptyOptionals() throws Exception {
-        final Row row = MAPPER.readValue("{}", Row.class);
+        final Row row = MAPPER.readValue(MESSAGE_SLOT, Row.class);
 
-        row.setTitle("   ");
-        row.setFileName("\t");
-        row.setObjectType("");
-        row.setNotes("  ");
+        row.setTitle("   ").setFileName("\t").setObjectType("").setNotes("  ");
 
         assertFalse(row.getTitle().isPresent());
         assertFalse(row.getFileName().isPresent());
@@ -171,17 +165,11 @@ public class RowTest {
         assertFalse(row.getNotes().isPresent());
     }
 
-    /**
-     * Verifies that setter methods are fluent and return the same instance.
-     */
+    /** Verifies that setter methods are fluent and return the same instance. */
     @Test
     public void testSetterFluentChaining() throws Exception {
-        final Row row = MAPPER.readValue("{}", Row.class);
-
-        final Row chained =
-            row.setTitle("T").setItemID("ID").setParentID("PID").setMediaHeight(1).setMediaWidth(2);
-
-        assertSame(row, chained);
+        final Row row = MAPPER.readValue(MESSAGE_SLOT, Row.class);
+        assertSame(row, row.setTitle("T").setItemID("ID").setParentID("PID").setMediaHeight(1).setMediaWidth(2));
     }
 
 }
