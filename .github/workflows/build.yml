@@ -79,7 +79,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn -B -ntp -Psonar -Pnative -Pjava${{ matrix.java }} verify javadoc:javadoc
+          mvn -B -ntp -Pnative -Pjava${{ matrix.java }} verify javadoc:javadoc
 
       - name: Prepare binary artifact
         shell: bash
