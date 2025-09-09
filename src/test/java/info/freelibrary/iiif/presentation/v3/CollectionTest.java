@@ -163,7 +163,7 @@ public class CollectionTest {
     }
 
     /**
-     * Tests {@link Collection.Item#setThumbnails(ContentResource)}.
+     * Tests {@link Collection.Item#setThumbnails(info.freelibrary.iiif.presentation.v3.content.ContentResource...)}.
      */
     @Test
     public final void testCollectionItemSetThumbnails() {
@@ -194,7 +194,7 @@ public class CollectionTest {
     @Test
     public void testFromJSON() throws IOException {
         final String expected = format(StringUtils.read(TEST_FILE1));
-        final String found = JSON.readValue(expected, Collection.class).toString();
+        final String found = format(JSON.readValue(expected, Collection.class).toString());
 
         assertEquals(expected, found);
     }
@@ -283,7 +283,7 @@ public class CollectionTest {
     }
 
     /**
-     * Tests {@link Collection#setServiceDefinitions()}.
+     * Tests {@link Collection#setServiceDefinitions(Service...)}.
      */
     @Test
     public final void testSetServiceDefinitions() {
@@ -294,7 +294,7 @@ public class CollectionTest {
     }
 
     /**
-     * Tests {@link Collection#setServiceDefinitions()}.
+     * Tests {@link Collection#setServiceDefinitions(List)}.
      */
     @Test
     public final void testSetServiceDefinitionsList() {
@@ -303,7 +303,7 @@ public class CollectionTest {
     }
 
     /**
-     * Tests {@link Collection#setViewingDirection()}.
+     * Tests {@link Collection#setViewingDirection(ViewingDirection)}.
      */
     @Test
     public final void testSetViewingDirection() {

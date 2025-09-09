@@ -9,8 +9,8 @@ import static org.junit.Assert.assertNotEquals;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -196,7 +196,7 @@ public class ProviderTest extends AbstractTest {
      */
     @Test
     public final void testSetGetHomepagesListOfHomepage() {
-        final List<Homepage> list = Arrays.asList(myHomepage);
+        final List<Homepage> list = Collections.singletonList(myHomepage);
         final Provider provider = new Provider(myID, myLabel);
 
         assertEquals(0, provider.getHomepages().size());
@@ -204,7 +204,7 @@ public class ProviderTest extends AbstractTest {
     }
 
     /**
-     * Tests method for {@link Provider#setID(URI)}.
+     * Tests method for {@link Provider#setID(String)}.
      */
     @Test
     public final void testSetGetID() {
@@ -234,7 +234,7 @@ public class ProviderTest extends AbstractTest {
     }
 
     /**
-     * Tests method for {@link Provider#setLogos(Logo[])}.
+     * Tests method for {@link Provider#setLogos(ImageContent...)}.
      */
     @Test
     public final void testSetLogosLogoArray() {

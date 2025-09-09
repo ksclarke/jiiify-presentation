@@ -1,7 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -242,9 +241,16 @@ public class I18nTest {
      */
     @Test
     public final void testToString() {
-        final String expected = format("{\"none\":[\"one two\",\"three four\",\"five six\"]}");
         final List<String> strings = Arrays.asList("one two", "three four", "five six");
         final I18n i18n = new I18n(I18n.DEFAULT_LANG, strings);
+        final String expected = """
+            {
+              "none" : [
+                "one two",
+                "three four",
+                "five six"
+              ]
+            }""";
 
         assertEquals(expected, i18n.toString());
     }

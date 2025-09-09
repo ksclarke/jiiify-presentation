@@ -11,6 +11,7 @@ import info.freelibrary.iiif.presentation.v3.Collection;
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.utils.csv.Mapper;
+import info.freelibrary.iiif.presentation.v3.utils.csv.MappingException;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.Checkstyle;
@@ -22,6 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.concurrent.Callable;
+import java.util.stream.Stream;
 
 /** A jpv3 executable. */
 @CommandLine.Command(name = "jpv3", mixinStandardHelpOptions = true, version = "jpv3 0.0.1-SNAPSHOT",
@@ -38,15 +40,12 @@ public final class JPv3 implements Callable<Integer> {
 
     /** The input file. */
     @CommandLine.Option(names = { "-i", "--input" }, description = "An input file to be processed")
-    private String myInputFile;
+    private Path myInputFile;
 
     /** The output file. */
-    @CommandLine.Option(names = { "-o", "--output" }, description = "An output file to be written")
-    private String myOutputFile;
-
-    /** The output directory. */
-    @CommandLine.Option(names = { "-d", "--dir" }, description = "An output directory to be written")
-    private String myOutputDir;
+    @CommandLine.Option(names = { "-o", "--output" }, defaultValue = "./output.zip",
+            showDefaultValue = CommandLine.Help.Visibility.ALWAYS, description = "An output file to be written")
+    private Path myOutputFile;
 
     /** The action to take. Only one is allowed for a given invocation. */
     @CommandLine.ArgGroup(exclusive = true, multiplicity = "1")
@@ -55,7 +54,13 @@ public final class JPv3 implements Callable<Integer> {
     /** Runs the application. */
     @Override
     public Integer call() throws Exception {
-        return new Mapper(Path.of(myInputFile)).result();
+        try {
+            new Mapper(Stream.of(myInputFile), myOutputFile).map();
+            return 0;
+        } catch (final MappingException details) {
+            LOGGER.error(details, details.getMessage());
+            return -1;
+        }
     }
 
     /**

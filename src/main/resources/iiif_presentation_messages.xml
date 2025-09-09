@@ -63,9 +63,11 @@
     <entry key="JPA-059">Content resource '{}' has {} dimensions and canvas '{}' does not</entry>
     <entry key="JPA-060">Content resource '{}' has {} dimensions outside the bounds of canvas '{}'</entry>
     <entry key="JPA-061">Unknown URI fragment syntax specification: {}</entry>
-    <entry key="JPA-062">Unable to generate the media fragment's temporal component: start time must precede end time
+    <entry key="JPA-062">
+        Unable to generate the media fragment's temporal component: start time must precede end time
     </entry>
-    <entry key="JPA-063">Unable to generate the media fragment's temporal component: start time must be non-negative
+    <entry key="JPA-063">
+        Unable to generate the media fragment's temporal component: start time must be non-negative
     </entry>
     <entry key="JPA-064">Canvas fragment '{}' has {} dimensions and canvas '{}' does not</entry>
     <entry key="JPA-065">Canvas fragment '{}' has {} dimensions outside the bounds of canvas '{}'</entry>
@@ -116,8 +118,8 @@
     <entry key="JPA-142">Stylesheet on PaintingAnnotation must have a value or URI</entry>
     <entry key="JPA-143">The paintWith() method cannot be used if the canvas doesn't have a minter set</entry>
     <entry key="JPA-144">The supplementWith() method cannot be usd if the canvas doesn't have a minter set</entry>
-    <entry key="JPA-145">Internationalizations must be submitted in an array that alternates between language codes and
-        string values
+    <entry key="JPA-145">
+        Internationalizations must be submitted in an array that alternates between language codes and string values
     </entry>
     <entry key="JPA-146">{} is not a valid navPlace type</entry>
     <entry key="JPA-147">A physical dimensions service must contain scale and units</entry>
@@ -137,7 +139,19 @@
     <entry key="JPA-160">Type cannot be null</entry>
     <entry key="JPA-161">{} should have a first string value</entry>
     <entry key="JPA-162">Failed to get {} value</entry>
-    <entry key="JPA-163">Failed to set field name on CsvSchema.Column; Jackson version may have altered its internal
-        field layout.
+    <entry key="JPA-163">
+        Failed to set field name on CsvSchema.Column; Jackson version may have altered its internal field layout.
     </entry>
+    <entry key="JPA-164">Building top level Collection from CSV data: {}</entry>
+    <entry key="JPA-165">Adding child ID {} to parent ID '{}'</entry>
+    <entry key="JPA-166">Adding item ID '{}' to ObjectType '{}'</entry>
+    <entry key="JPA-167">Found {} collection(s) in CSV data</entry>
+    <entry key="JPA-168">Mapping collection ID: {}</entry>
+    <entry key="JPA-169">Found {} item(s) in collection ID '{}'</entry>
+    <entry key="JPA-170">Mapping child resource ID: {}</entry>
+    <entry key="JPA-171">An output ZIP file name is required</entry>
+    <entry key="JPA-172">Each CSV row is required to have an ObjectType</entry>
+    <entry key="JPA-173">Painted content is smaller than the canvas dimensions (w/h): {}/{} vs. {}/{}</entry>
+    <entry key="JPA-174"></entry>
+    <entry key="JPA-175"></entry>
 </properties>

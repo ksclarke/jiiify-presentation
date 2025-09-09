@@ -1,0 +1,301 @@
+{
+    "@context": "http://iiif.io/api/presentation/3/context.json",
+    "label": {
+        "none": [
+            "Kyōgetsubō | 狂月坊"
+        ]
+    },
+    "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1wq7d7z/manifest",
+    "type": "Manifest",
+    "thumbnail": [
+        {
+          "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1pw65h4/full/!200,200/0/default.jpg",
+          "type": "Image",
+          "format": "image/jpeg"
+        }
+      ],
+    "items": [
+        {
+            "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1wq7d7z/manifest/canvas-ygfh",
+            "type": "Canvas",
+            "label": {
+                "none": [
+                    "Page 1"
+                ]
+            },
+            "height": 5320,
+            "width": 4583,
+            "thumbnail": [
+                {
+                  "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1pw65h4/full/!200,200/0/default.jpg",
+                  "type": "Image",
+                  "format": "image/jpeg"
+                }
+              ],
+            "items": [
+                {
+                    "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1wq7d7z/manifest/canvas-ygfh/anno-page-jyef",
+                    "type": "AnnotationPage",
+                    "items": [
+                        {
+                            "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1wq7d7z/manifest/annotations/anno-5zp6",
+                            "type": "Annotation",
+                            "motivation": "painting",
+                            "body": {
+                                "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1pw65h4/full/600,/0/default.jpg",
+                                "type": "Image",
+                                "format": "image/jpeg",
+                                "service": [
+                                    {
+                                        "@id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1pw65h4",
+                                        "@type": "ImageService2",
+                                        "profile": "http://iiif.io/api/image/2/level2.json"
+                                    }
+                                ]
+                            },
+                            "target": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1wq7d7z/manifest/canvas-ygfh"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1wq7d7z/manifest/canvas-xfw5",
+            "type": "Canvas",
+            "label": {
+                "none": [
+                    "Page 2"
+                ]
+            },
+            "height": 5351,
+            "width": 8057,
+            "thumbnail": [
+                {
+                  "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1fg3cgq/full/!200,200/0/default.jpg",
+                  "type": "Image",
+                  "format": "image/jpeg"
+                }
+              ],
+            "items": [
+                {
+                    "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1wq7d7z/manifest/canvas-ygfh/anno-page-cgus",
+                    "type": "AnnotationPage",
+                    "items": [
+                        {
+                            "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1wq7d7z/manifest/annotations/anno-px3e",
+                            "type": "Annotation",
+                            "motivation": "painting",
+                            "body": {
+                                "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1fg3cgq/full/600,/0/default.jpg",
+                                "type": "Image",
+                                "format": "image/jpeg",
+                                "service": [
+                                    {
+                                        "@id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1fg3cgq",
+                                        "@type": "ImageService2",
+                                        "profile": "http://iiif.io/api/image/2/level2.json"
+                                    }
+                                ]
+                            },
+                            "target": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1wq7d7z/manifest/canvas-xfw5#xywh=3949,994,1091,1232"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1wq7d7z/manifest/canvas-5gmo",
+            "type": "Canvas",
+            "label": {
+                "none": [
+                    "Page 3"
+                ]
+            },
+            "height": 5351,
+            "width": 8057,
+            "thumbnail": [
+                {
+                  "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz19q2mqj/full/!200,200/0/default.jpg",
+                  "type": "Image",
+                  "format": "image/jpeg"
+                }
+              ],
+            "items": [
+                {
+                    "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1wq7d7z/manifest/canvas-ygfh/anno-page-vm8q",
+                    "type": "AnnotationPage",
+                    "items": [
+                        {
+                            "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1wq7d7z/manifest/annotations/anno-7q3d",
+                            "type": "Annotation",
+                            "motivation": "painting",
+                            "body": {
+                                "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1wq7d7z/manifest/annotations/anno-7q3d/body-px3e",
+                                "type": "Choice",
+                                "items": [
+                                    {
+                                        "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz19q2mqj/full/600,/0/default.jpg",
+                                        "type": "Image",
+                                        "format": "image/jpeg",
+                                        "height": 5351,
+                                        "width": 8057,
+                                        "thumbnail": [
+                                            {
+                                              "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz19q2mqj/full/!200,200/0/default.jpg",
+                                              "type": "Image",
+                                              "format": "image/jpeg"
+                                            }
+                                          ],
+                                        "label": {
+                                            "none": [
+                                                "Page 3 (Natural Light)"
+                                            ]
+                                        },
+                                        "service": [
+                                            {
+                                                "@id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz19q2mqj",
+                                                "@type": "ImageService2",
+                                                "profile": "http://iiif.io/api/image/2/level2.json"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz15z1w07/full/600,/0/default.jpg",
+                                        "type": "Image",
+                                        "format": "image/jpeg",
+                                        "height": 5351,
+                                        "width": 8057,
+                                        "thumbnail": [
+                                            {
+                                              "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz15z1w07/full/!200,200/0/default.jpg",
+                                              "type": "Image",
+                                              "format": "image/jpeg"
+                                            }
+                                          ],
+                                        "label": {
+                                            "none": [
+                                                "Page 3 (Illumination light)"
+                                            ]
+                                        },
+                                        "behavior": "hidden",
+                                        "service": [
+                                            {
+                                                "@id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz15z1w07",
+                                                "@type": "ImageService2",
+                                                "profile": "http://iiif.io/api/image/2/level2.json"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz126149n/full/600,/0/default.jpg",
+                                        "type": "Image",
+                                        "format": "image/jpeg",
+                                        "height": 5351,
+                                        "width": 8057,
+                                        "thumbnail": [
+                                            {
+                                              "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz126149n/full/!200,200/0/default.jpg",
+                                              "type": "Image",
+                                              "format": "image/jpeg"
+                                            }
+                                          ],
+                                        "label": {
+                                            "none": [
+                                                "Page 3 (Raking light)"
+                                            ]
+                                        },
+                                        "service": [
+                                            {
+                                                "@id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz126149n",
+                                                "@type": "ImageService2",
+                                                "profile": "http://iiif.io/api/image/2/level2.json"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            "target": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1wq7d7z/manifest/canvas-5gmo"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1wq7d7z/manifest/canvas-5e84",
+            "type": "Canvas",
+            "label": {
+                "none": [
+                    "Page 4"
+                ]
+            },
+            "height": 5351,
+            "width": 8057,
+            "thumbnail": [
+                {
+                  "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1p07trj/full/!200,200/0/default.jpg",
+                  "type": "Image",
+                  "format": "image/jpeg"
+                }
+              ],
+            "items": [
+                {
+                    "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1wq7d7z/manifest/canvas-ygfh/anno-page-dg7t",
+                    "type": "AnnotationPage",
+                    "items": [
+                        {
+                            "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1wq7d7z/manifest/annotations/anno-yzvq",
+                            "type": "Annotation",
+                            "motivation": "painting",
+                            "body": {
+                                "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1p07trj/full/600,/0/default.jpg",
+                                "type": "Image",
+                                "format": "image/jpeg",
+                                "height": 5346,
+                                "width": 8050,
+                                "label": {
+                                    "none": [
+                                        "Page 4, Layer 1"
+                                    ]
+                                },
+                                "service": [
+                                    {
+                                        "@id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1p07trj",
+                                        "@type": "ImageService2",
+                                        "profile": "http://iiif.io/api/image/2/level2.json"
+                                    }
+                                ]
+                            },
+                            "target": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1wq7d7z/manifest/canvas-5e84"
+                        },
+                        {
+                            "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1wq7d7z/manifest/annotations/anno-n4o4",
+                            "type": "Annotation",
+                            "motivation": "painting",
+                            "body": {
+                                "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1j77305/full/600,/0/default.jpg",
+                                "type": "Image",
+                                "format": "image/jpeg",
+                                "height": 5351,
+                                "width": 8057,
+                                "label": {
+                                    "none": [
+                                        "Page 4, Layer 2"
+                                    ]
+                                },
+                                "service": [
+                                    {
+                                        "@id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1j77305",
+                                        "@type": "ImageService2",
+                                        "profile": "http://iiif.io/api/image/2/level2.json"
+                                    }
+                                ]
+                            },
+                            "target": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1wq7d7z/manifest/canvas-5e84"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "viewingDirection": "right-to-left"
+}

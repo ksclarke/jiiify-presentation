@@ -4,10 +4,13 @@ package info.freelibrary.iiif.presentation.v3.utils.csv;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
+import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.warnings.PMD;
 
 import java.io.IOException;
@@ -17,6 +20,9 @@ import java.util.OptionalInt;
 
 /** A simple class to hold the CSV row data. */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonPropertyOrder({ Keys.FILE_NAME, Keys.OBJECT_TYPE, Keys.TITLE, Keys.ITEM_SEQUENCE, Keys.ITEM_ID, Keys.PARENT_ID,
+    Keys.TARGET, Keys.BEHAVIOR, Keys.VIEWING_DIRECTION, Keys.BUCKETEER_STATE, Keys.THUMBNAIL, Keys.MEDIA_HEIGHT,
+    Keys.MEDIA_WIDTH, Keys.ACCESS_URL, Keys.NOTES })
 @SuppressWarnings({ PMD.GOD_CLASS })
 public final class Row {
 
@@ -45,11 +51,11 @@ public final class Row {
     /** The item's IIIF target. */
     private String myTarget;
 
-    /** The item's viewing hint. */
-    private String myViewingHint;
+    /** The item's behavior. */
+    private String myBehavior;
 
-    /** The item's text direction. */
-    private String myTextDirection;
+    /** The item's viewing direction. */
+    private String myViewingDirection;
 
     /** The item's bucketeer state. */
     private String myBucketeerState;
@@ -79,7 +85,7 @@ public final class Row {
      *
      * @return An Optional containing the file name if set; otherwise, an empty Optional
      */
-    @JsonGetter("FileName")
+    @JsonGetter(Keys.FILE_NAME)
     public Optional<String> getFileName() {
         return myFileName == null || myFileName.isBlank() ? Optional.empty() : Optional.of(myFileName);
     }
@@ -90,8 +96,8 @@ public final class Row {
      * @param aFileName The file name to set
      * @return This Row instance for fluent chaining
      */
-    @JsonSetter("FileName")
-    @JsonAlias({ "File Name", "file-name", "File_Name", "FILE_NAME", "file.name", "file_name" })
+    @JsonSetter(Keys.FILE_NAME)
+    @JsonAlias({ "file name", "file-name", "file.name", "file_name" })
     public Row setFileName(final String aFileName) {
         myFileName = aFileName;
         return this;
@@ -102,7 +108,7 @@ public final class Row {
      *
      * @return An Optional containing the object type if set; otherwise, an empty Optional
      */
-    @JsonGetter("ObjectType")
+    @JsonGetter(Keys.OBJECT_TYPE)
     public Optional<String> getObjectType() {
         return myObjectType == null || myObjectType.isBlank() ? Optional.empty() : Optional.of(myObjectType);
     }
@@ -113,8 +119,8 @@ public final class Row {
      * @param aObjectType The object type to set
      * @return This Row instance for fluent chaining
      */
-    @JsonSetter("ObjectType")
-    @JsonAlias({ "Object Type", "obj-type", "Object_Type", "OBJECT_TYPE", "object.type", "object_type" })
+    @JsonSetter(Keys.OBJECT_TYPE)
+    @JsonAlias({ "object type", "object-type", "object.type", "object_type" })
     public Row setObjectType(final String aObjectType) {
         myObjectType = aObjectType;
         return this;
@@ -125,7 +131,7 @@ public final class Row {
      *
      * @return An Optional containing the title if set; otherwise, an empty Optional
      */
-    @JsonGetter("Title")
+    @JsonGetter(Keys.TITLE)
     public Optional<String> getTitle() {
         return myTitle == null || myTitle.isBlank() ? Optional.empty() : Optional.of(myTitle);
     }
@@ -136,8 +142,7 @@ public final class Row {
      * @param aTitle The title to set
      * @return This Row instance for fluent chaining
      */
-    @JsonSetter("Title")
-    @JsonAlias({ "title", "TITLE" })
+    @JsonSetter(Keys.TITLE)
     public Row setTitle(final String aTitle) {
         myTitle = aTitle;
         return this;
@@ -148,7 +153,7 @@ public final class Row {
      *
      * @return An Optional containing the item sequence if set; otherwise, an empty Optional
      */
-    @JsonGetter("ItemSequence")
+    @JsonGetter(Keys.ITEM_SEQUENCE)
     public Optional<String> getItemSequence() {
         return myItemSequence == null || myItemSequence.isBlank() ? Optional.empty() : Optional.of(myItemSequence);
     }
@@ -159,8 +164,8 @@ public final class Row {
      * @param aItemSequence The item sequence to set
      * @return This Row instance for fluent chaining
      */
-    @JsonSetter("ItemSequence")
-    @JsonAlias({ "Item Sequence", "item-sequence", "ITEM_SEQUENCE", "item.sequence", "item_sequence" })
+    @JsonSetter(Keys.ITEM_SEQUENCE)
+    @JsonAlias({ "item sequence", "item-sequence", "item.sequence", "item_sequence" })
     public Row setItemSequence(final String aItemSequence) {
         myItemSequence = aItemSequence;
         return this;
@@ -171,7 +176,7 @@ public final class Row {
      *
      * @return An Optional containing the item ID if set; otherwise, an empty Optional
      */
-    @JsonGetter("ItemID")
+    @JsonGetter(Keys.ITEM_ID)
     public Optional<String> getItemID() {
         return myItemID == null || myItemID.isBlank() ? Optional.empty() : Optional.of(myItemID);
     }
@@ -182,9 +187,8 @@ public final class Row {
      * @param aItemID The item ID to set
      * @return This Row instance for fluent chaining
      */
-    @JsonSetter("ItemID")
-    @JsonAlias({ "Item ARK", "Item ID", "item-ark", "item-id", "ITEM_ARK", "ITEM_ID", "item.ark", "item.id", "item_ark",
-        "item_id" })
+    @JsonSetter(Keys.ITEM_ID)
+    @JsonAlias({ "item ark", "item id", "item-ark", "item-id", "item.ark", "item.id", "item_ark", "item_id" })
     public Row setItemID(final String aItemID) {
         myItemID = aItemID;
         return this;
@@ -195,7 +199,7 @@ public final class Row {
      *
      * @return An Optional containing the parent ID if set; otherwise, an empty Optional
      */
-    @JsonGetter("ParentID")
+    @JsonGetter(Keys.PARENT_ID)
     public Optional<String> getParentID() {
         return myParentID == null || myParentID.isBlank() ? Optional.empty() : Optional.of(myParentID);
     }
@@ -206,9 +210,9 @@ public final class Row {
      * @param aParentID The parent ID to set
      * @return This Row instance for fluent chaining
      */
-    @JsonSetter("ParentID")
-    @JsonAlias({ "Parent ARK", "Parent ID", "parent-ark", "parent-id", "PARENT_ARK", "PARENT_ID", "parent.ark",
-        "parent.id", "parent_ark", "parent_id" })
+    @JsonSetter(Keys.PARENT_ID)
+    @JsonAlias({ "parent ark", "parent id", "parent-ark", "parent-id", "parent.ark", "parent.id", "parent_ark",
+        "parent_id" })
     public Row setParentID(final String aParentID) {
         myParentID = aParentID;
         return this;
@@ -219,7 +223,7 @@ public final class Row {
      *
      * @return An Optional containing the target if set; otherwise, an empty Optional
      */
-    @JsonGetter("Target")
+    @JsonGetter(Keys.TARGET)
     public Optional<String> getTarget() {
         return myTarget == null || myTarget.isBlank() ? Optional.empty() : Optional.of(myTarget);
     }
@@ -230,58 +234,58 @@ public final class Row {
      * @param aTarget The IIIF target to set
      * @return This Row instance for fluent chaining
      */
-    @JsonSetter("Target")
-    @JsonAlias({ "IIIF target", "iiif-target", "IIIF_TARGET", "iiif.target", "iiif_target", "target" })
+    @JsonSetter(Keys.TARGET)
+    @JsonAlias({ "iiif target", "iiif-target", "iiif.target", "iiif_target" })
     public Row setTarget(final String aTarget) {
         myTarget = aTarget;
         return this;
     }
 
     /**
-     * Gets the viewing hint associated with this item.
+     * Gets the behavior associated with this item.
      *
-     * @return An Optional containing the viewing hint; a null underlying value will cause a NullPointerException
+     * @return An Optional containing the behavior; a null underlying value will cause a NullPointerException
      */
-    @JsonGetter("ViewingHint")
-    public Optional<String> getViewingHint() {
-        return myViewingHint == null || myViewingHint.isBlank() ? Optional.empty() : Optional.of(myViewingHint);
+    @JsonGetter(Keys.BEHAVIOR)
+    public Optional<String> getBehavior() {
+        return myBehavior == null || myBehavior.isBlank() ? Optional.empty() : Optional.of(myBehavior);
     }
 
     /**
-     * Sets the viewing hint associated with this item.
+     * Sets the behavior associated with this item.
      *
-     * @param aViewingHint The viewing hint to set
+     * @param aBehavior The behavior to set
      * @return This Row instance for fluent chaining
      */
-    @JsonSetter("ViewingHint")
-    @JsonAlias({ "Viewing Hint", "viewing-hint", "VIEWING_HINT", "viewing.hint", "viewing_hint", "Viewing hint",
-        "viewingHint" })
-    public Row setViewingHint(final String aViewingHint) {
-        myViewingHint = aViewingHint;
+    @JsonSetter(Keys.BEHAVIOR)
+    @JsonAlias({ "viewing hint", "viewing-hint", "viewing.hint", "viewing_hint", "viewinghint" })
+    public Row setBehavior(final String aBehavior) {
+        myBehavior = aBehavior;
         return this;
     }
 
     /**
-     * Gets the text direction associated with this item (e.g., ltr, rtl).
+     * Gets the viewing direction associated with this item (e.g., ltr, rtl).
      *
-     * @return An Optional containing the text direction if set; otherwise, an empty Optional
+     * @return An Optional containing the viewing direction if set; otherwise, an empty Optional
      */
-    @JsonGetter("TextDirection")
-    public Optional<String> getTextDirection() {
-        return myTextDirection == null || myTextDirection.isBlank() ? Optional.empty() : Optional.of(myTextDirection);
+    @JsonGetter(Keys.VIEWING_DIRECTION)
+    public Optional<String> getViewingDirection() {
+        return myViewingDirection == null || myViewingDirection.isBlank() ? Optional.empty()
+                : Optional.of(myViewingDirection);
     }
 
     /**
-     * Sets the text direction associated with this item.
+     * Sets the viewing direction associated with this item.
      *
-     * @param aTextDirection The text direction to set (e.g., ltr, rtl)
+     * @param aViewingDirection The viewing direction to set (e.g., ltr, rtl)
      * @return This Row instance for fluent chaining
      */
-    @JsonSetter("TextDirection")
-    @JsonAlias({ "Text Direction", "text-direction", "TEXT_DIRECTION", "text.direction", "text_direction",
-        "Text direction", "textDirection" })
-    public Row setTextDirection(final String aTextDirection) {
-        myTextDirection = aTextDirection;
+    @JsonSetter(Keys.VIEWING_DIRECTION)
+    @JsonAlias({ "text direction", "text-direction", "text.direction", "text_direction", "viewing direction",
+        "viewing-direction", "viewing.direction", "viewing_direction" })
+    public Row setViewingDirection(final String aViewingDirection) {
+        myViewingDirection = aViewingDirection;
         return this;
     }
 
@@ -290,7 +294,7 @@ public final class Row {
      *
      * @return An Optional containing the bucketeer state if set; otherwise, an empty Optional
      */
-    @JsonGetter("BucketeerState")
+    @JsonGetter(Keys.BUCKETEER_STATE)
     public Optional<String> getBucketeerState() {
         return myBucketeerState == null || myBucketeerState.isBlank() ? Optional.empty()
                 : Optional.of(myBucketeerState);
@@ -302,9 +306,8 @@ public final class Row {
      * @param aBucketeerState The bucketeer state to set
      * @return This Row instance for fluent chaining
      */
-    @JsonSetter("BucketeerState")
-    @JsonAlias({ "Bucketeer State", "bucketeer-state", "BUCKETEER_STATE", "bucketeer.state", "bucketeer_state",
-        "Bucketeer state" })
+    @JsonSetter(Keys.BUCKETEER_STATE)
+    @JsonAlias({ "bucketeer state", "bucketeer-state", "bucketeer.state", "bucketeer_state" })
     public Row setBucketeerState(final String aBucketeerState) {
         myBucketeerState = aBucketeerState;
         return this;
@@ -315,7 +318,7 @@ public final class Row {
      *
      * @return An Optional containing the thumbnail (e.g., URI or path) if set; otherwise, an empty Optional
      */
-    @JsonGetter("Thumbnail")
+    @JsonGetter(Keys.THUMBNAIL)
     public Optional<String> getThumbnail() {
         return myThumbnail == null || myThumbnail.isBlank() ? Optional.empty() : Optional.of(myThumbnail);
     }
@@ -326,8 +329,7 @@ public final class Row {
      * @param aThumbnail The thumbnail reference to set (e.g., URI or path)
      * @return This Row instance for fluent chaining
      */
-    @JsonSetter("Thumbnail")
-    @JsonAlias({ "thumbnail", "THUMBNAIL" })
+    @JsonSetter(Keys.THUMBNAIL)
     public Row setThumbnail(final String aThumbnail) {
         myThumbnail = aThumbnail;
         return this;
@@ -338,7 +340,7 @@ public final class Row {
      *
      * @return An OptionalInt containing the media height if positive; otherwise, an empty OptionalInt
      */
-    @JsonGetter("MediaHeight")
+    @JsonGetter(Keys.MEDIA_HEIGHT)
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public OptionalInt getMediaHeight() {
         return myMediaHeight > 0 ? OptionalInt.of(myMediaHeight) : OptionalInt.empty();
@@ -350,8 +352,8 @@ public final class Row {
      * @param aMediaHeight The media height in pixels (non-negative)
      * @return This Row instance for fluent chaining
      */
-    @JsonSetter("MediaHeight")
-    @JsonAlias({ "Media Height", "media-height", "MEDIA_HEIGHT", "media.height", "media_height" })
+    @JsonSetter(Keys.MEDIA_HEIGHT)
+    @JsonAlias({ "media height", "media-height", "media.height", "media_height" })
     public Row setMediaHeight(final int aMediaHeight) {
         myMediaHeight = aMediaHeight;
         return this;
@@ -362,7 +364,7 @@ public final class Row {
      *
      * @return An OptionalInt containing the media width if positive; otherwise, an empty OptionalInt
      */
-    @JsonGetter("MediaWidth")
+    @JsonGetter(Keys.MEDIA_WIDTH)
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public OptionalInt getMediaWidth() {
         return myMediaWidth > 0 ? OptionalInt.of(myMediaWidth) : OptionalInt.empty();
@@ -374,8 +376,8 @@ public final class Row {
      * @param aMediaWidth The media width in pixels (non-negative)
      * @return This Row instance for fluent chaining
      */
-    @JsonSetter("MediaWidth")
-    @JsonAlias({ "Media Width", "media-width", "MEDIA_WIDTH", "media.width", "media_width" })
+    @JsonSetter(Keys.MEDIA_WIDTH)
+    @JsonAlias({ "media width", "media-width", "media.width", "media_width" })
     public Row setMediaWidth(final int aMediaWidth) {
         myMediaWidth = aMediaWidth;
         return this;
@@ -386,7 +388,7 @@ public final class Row {
      *
      * @return An Optional containing the access URL if set; otherwise, an empty Optional
      */
-    @JsonGetter("AccessURL")
+    @JsonGetter(Keys.ACCESS_URL)
     public Optional<URL> getAccessURL() {
         return Optional.ofNullable(myAccessURL);
     }
@@ -397,9 +399,9 @@ public final class Row {
      * @param aAccessURL The access URL to set
      * @return This Row instance for fluent chaining
      */
-    @JsonSetter("AccessURL")
-    @JsonAlias({ "Access URL", "access-url", "ACCESS_URL", "access.url", "access_url", "IIIF Access URL",
-        "iiif.access.url", "iiif_access_url", "IIIF_ACCESS_URL" })
+    @JsonSetter(Keys.ACCESS_URL)
+    @JsonAlias({ "access url", "access-url", "access.url", "access_url", "iiif access url", "iiif-access-url",
+        "iiif.access.url", "iiif_access_url" })
     public Row setAccessURL(final URL aAccessURL) {
         myAccessURL = aAccessURL;
         return this;
@@ -410,9 +412,9 @@ public final class Row {
      *
      * @return An Optional containing notes if set; otherwise, an empty Optional
      */
-    @JsonGetter("Notes")
+    @JsonGetter(Keys.NOTES)
     public Optional<String> getNotes() {
-        return myNotes == null || myNotes.isBlank() ? Optional.empty() : Optional.of(myNotes);
+        return myNotes == null || myNotes.isBlank() ? Optional.empty() : Optional.of(myNotes.trim());
     }
 
     /**
@@ -421,8 +423,7 @@ public final class Row {
      * @param aNotes Notes to set
      * @return This Row instance for fluent chaining
      */
-    @JsonSetter("Notes")
-    @JsonAlias({ "notes", "NOTES" })
+    @JsonSetter(Keys.NOTES)
     public Row setNotes(final String aNotes) {
         myNotes = aNotes;
         return this;
@@ -437,9 +438,9 @@ public final class Row {
     @Override
     public String toString() {
         try {
-            return MAPPER.writeValueAsString(this);
+            return JSON.writeValueAsString(this).trim();
         } catch (final IOException details) {
-            return super.toString();
+            throw new I18nRuntimeException(details);
         }
     }
 }

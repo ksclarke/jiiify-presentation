@@ -48,7 +48,8 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
      * @param aCanvas A canvas to target
      */
     public <C extends CanvasResource<C>> PaintingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas) {
-        this(aMinter.getAnnotationID(), aCanvas);
+        super(aMinter, aCanvas);
+        setMotivation(Motivation.fromLabel(Purpose.PAINTING));
     }
 
     /**
@@ -62,7 +63,7 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
      */
     public <C extends CanvasResource<C>> PaintingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
-        super(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
+        super(aMinter, aCanvas, aCanvasRegion);
         setMotivation(Motivation.fromLabel(Purpose.PAINTING));
     }
 
@@ -77,7 +78,7 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
      */
     public <C extends CanvasResource<C>> PaintingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
-        super(aMinter.getAnnotationID(), aCanvas, aCanvasRegion);
+        super(aMinter, aCanvas, aCanvasRegion);
         setMotivation(Motivation.fromLabel(Purpose.PAINTING));
     }
 

@@ -10,10 +10,16 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import info.freelibrary.json.Json;
+import info.freelibrary.json.JsonArray;
+import info.freelibrary.json.JsonObject;
+import info.freelibrary.json.JsonReader;
+import info.freelibrary.json.PrettyWriter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -291,7 +297,13 @@ public class PartOfTest {
      * @throws IOException If there is trouble reading the test fixture file
      */
     private String getTestFixture() throws IOException {
-        return JSON.getReader().readTree(StringUtils.read(PART_OF_FULL_ONE)).get(JsonKeys.PART_OF).get(0)
-                .toPrettyString();
+        try (JsonReader reader = new JsonReader(PART_OF_FULL_ONE)) {
+            final JsonObject jsonObject = Json.parse(reader).asObject();
+            final JsonArray array = jsonObject.getJsonArray(JsonKeys.PART_OF).orElseThrow();
+            final PrettyWriter output = new PrettyWriter(new StringWriter());
+
+            array.get(0).writeTo(output);
+            return output.toString();
+        }
     }
 }

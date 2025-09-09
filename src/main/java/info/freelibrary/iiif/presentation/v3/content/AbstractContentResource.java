@@ -38,7 +38,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeSerializer;
  */
 @JsonInclude(Include.NON_EMPTY)
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
-abstract class AbstractContentResource<T extends AbstractContentResource<T>> extends AbstractResource<T>
+public abstract class AbstractContentResource<T extends AbstractContentResource<T>> extends AbstractResource<T>
         implements Localized<T> {
 
     /** The content resource's media type. */

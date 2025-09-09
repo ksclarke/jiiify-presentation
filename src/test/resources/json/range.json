@@ -1,17 +1,17 @@
 {
-  "id": "https://example.org/range-1",
-  "type": "Range",
-  "label": {
-    "none": [
+  "id" : "https://example.org/range-1",
+  "type" : "Range",
+  "label" : {
+    "none" : [
       "My range label"
     ]
   },
-  "items": [
+  "items" : [
     {
-      "id": "https://example.org/range-2",
-      "type": "Range",
-      "label": {
-        "none": [
+      "id" : "https://example.org/range-2",
+      "type" : "Range",
+      "label" : {
+        "none" : [
           "My subrange label"
         ]
       }

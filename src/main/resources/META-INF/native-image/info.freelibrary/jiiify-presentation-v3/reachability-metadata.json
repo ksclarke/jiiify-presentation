@@ -7,6 +7,18 @@
       "type": "[Lcom.fasterxml.jackson.databind.ser.Serializers;"
     },
     {
+      "type": "[Linfo.freelibrary.iiif.presentation.v3.properties.Behavior;"
+    },
+    {
+      "type": "[Linfo.freelibrary.iiif.presentation.v3.properties.I18n;"
+    },
+    {
+      "type": "[Ljava.lang.Object;"
+    },
+    {
+      "type": "[Ljava.lang.String;"
+    },
+    {
       "type": "ch.qos.logback.classic.BasicConfigurator",
       "methods": [
         {
@@ -46,7 +58,423 @@
       ]
     },
     {
+      "type": "float"
+    },
+    {
       "type": "groovy.lang.Closure"
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.AbstractCanvas",
+      "allDeclaredFields": true,
+      "methods": [
+        {
+          "name": "getAnnotations",
+          "parameterTypes": []
+        },
+        {
+          "name": "getDuration",
+          "parameterTypes": []
+        },
+        {
+          "name": "getHeight",
+          "parameterTypes": []
+        },
+        {
+          "name": "getWidth",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.AbstractResource",
+      "allDeclaredFields": true,
+      "methods": [
+        {
+          "name": "getBehaviors",
+          "parameterTypes": []
+        },
+        {
+          "name": "getHomepages",
+          "parameterTypes": []
+        },
+        {
+          "name": "getID",
+          "parameterTypes": []
+        },
+        {
+          "name": "getLabel",
+          "parameterTypes": []
+        },
+        {
+          "name": "getMetadata",
+          "parameterTypes": []
+        },
+        {
+          "name": "getPartOfs",
+          "parameterTypes": []
+        },
+        {
+          "name": "getProviders",
+          "parameterTypes": []
+        },
+        {
+          "name": "getRenderings",
+          "parameterTypes": []
+        },
+        {
+          "name": "getRequiredStatement",
+          "parameterTypes": []
+        },
+        {
+          "name": "getRights",
+          "parameterTypes": []
+        },
+        {
+          "name": "getSeeAlsoRefs",
+          "parameterTypes": []
+        },
+        {
+          "name": "getServices",
+          "parameterTypes": []
+        },
+        {
+          "name": "getSummary",
+          "parameterTypes": []
+        },
+        {
+          "name": "getThumbnails",
+          "parameterTypes": []
+        },
+        {
+          "name": "getType",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.AnnotationPage",
+      "allDeclaredFields": true,
+      "methods": [
+        {
+          "name": "getAnnotations",
+          "parameterTypes": []
+        },
+        {
+          "name": "getExternalContext",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.Canvas",
+      "allDeclaredFields": true,
+      "methods": [
+        {
+          "name": "getAccompanyingCanvas",
+          "parameterTypes": []
+        },
+        {
+          "name": "getPaintingPages",
+          "parameterTypes": []
+        },
+        {
+          "name": "getPlaceholderCanvas",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.CanvasResource"
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.Collection",
+      "allDeclaredFields": true,
+      "methods": [
+        {
+          "name": "getAccompanyingCanvas",
+          "parameterTypes": []
+        },
+        {
+          "name": "getAnnotations",
+          "parameterTypes": []
+        },
+        {
+          "name": "getItems",
+          "parameterTypes": []
+        },
+        {
+          "name": "getPlaceholderCanvas",
+          "parameterTypes": []
+        },
+        {
+          "name": "getServiceDefinitions",
+          "parameterTypes": []
+        },
+        {
+          "name": "getViewingDirection",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.Collection$Item",
+      "allDeclaredFields": true,
+      "methods": [
+        {
+          "name": "getID",
+          "parameterTypes": []
+        },
+        {
+          "name": "getLabel",
+          "parameterTypes": []
+        },
+        {
+          "name": "getNavDate",
+          "parameterTypes": []
+        },
+        {
+          "name": "getNavPlace",
+          "parameterTypes": []
+        },
+        {
+          "name": "getThumbnails",
+          "parameterTypes": []
+        },
+        {
+          "name": "getType",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.Manifest",
+      "allDeclaredFields": true,
+      "methods": [
+        {
+          "name": "getAccompanyingCanvas",
+          "parameterTypes": []
+        },
+        {
+          "name": "getAnnotations",
+          "parameterTypes": []
+        },
+        {
+          "name": "getCanvases",
+          "parameterTypes": []
+        },
+        {
+          "name": "getPlaceholderCanvas",
+          "parameterTypes": []
+        },
+        {
+          "name": "getRanges",
+          "parameterTypes": []
+        },
+        {
+          "name": "getServiceDefinitions",
+          "parameterTypes": []
+        },
+        {
+          "name": "getStart",
+          "parameterTypes": []
+        },
+        {
+          "name": "getViewingDirection",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.NavigableResource",
+      "allDeclaredFields": true,
+      "methods": [
+        {
+          "name": "getNavDate",
+          "parameterTypes": []
+        },
+        {
+          "name": "getNavPlace",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.Resource"
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.Service"
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.Service$Profile"
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.content.AbstractContentResource",
+      "allDeclaredFields": true,
+      "methods": [
+        {
+          "name": "getAnnotations",
+          "parameterTypes": []
+        },
+        {
+          "name": "getFormat",
+          "parameterTypes": []
+        },
+        {
+          "name": "getLanguage",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.content.AnnotatedContentResource"
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.content.ContentResource"
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.content.ImageContent",
+      "allDeclaredFields": true,
+      "methods": [
+        {
+          "name": "getHeight",
+          "parameterTypes": []
+        },
+        {
+          "name": "getWidth",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.content.SpatialContentResource"
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.id.DefaultMinter",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "info.freelibrary.iiif.presentation.v3.Manifest"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.properties.I18nProperty",
+      "allDeclaredFields": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.properties.Label",
+      "allDeclaredFields": true,
+      "methods": [
+        {
+          "name": "toMap",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.properties.Localized"
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.properties.ViewingDirection",
+      "allDeclaredFields": true,
+      "methods": [
+        {
+          "name": "toString",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList",
+      "allDeclaredFields": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.services.AbstractImageService",
+      "allDeclaredFields": true,
+      "methods": [
+        {
+          "name": "getExtraFormats",
+          "parameterTypes": []
+        },
+        {
+          "name": "getExtraQualities",
+          "parameterTypes": []
+        },
+        {
+          "name": "getHeight",
+          "parameterTypes": []
+        },
+        {
+          "name": "getProtocol",
+          "parameterTypes": []
+        },
+        {
+          "name": "getSizes",
+          "parameterTypes": []
+        },
+        {
+          "name": "getTiles",
+          "parameterTypes": []
+        },
+        {
+          "name": "getWidth",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.services.AbstractService",
+      "allDeclaredFields": true,
+      "methods": [
+        {
+          "name": "getProfile",
+          "parameterTypes": []
+        },
+        {
+          "name": "getServices",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.services.ImageService"
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.services.ImageService$Profile"
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.services.ImageService2",
+      "allDeclaredFields": true,
+      "methods": [
+        {
+          "name": "getID",
+          "parameterTypes": []
+        },
+        {
+          "name": "getType",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.services.ImageService2$Profile",
+      "allDeclaredFields": true,
+      "methods": [
+        {
+          "name": "label",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.services.image.Format",
+      "allDeclaredFields": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.services.image.Quality",
+      "allDeclaredFields": true
     },
     {
       "type": "info.freelibrary.iiif.presentation.v3.utils.JPv3",
@@ -72,6 +500,10 @@
         },
         {
           "name": "getAccessURL",
+          "parameterTypes": []
+        },
+        {
+          "name": "getBehavior",
           "parameterTypes": []
         },
         {
@@ -115,10 +547,6 @@
           "parameterTypes": []
         },
         {
-          "name": "getTextDirection",
-          "parameterTypes": []
-        },
-        {
           "name": "getThumbnail",
           "parameterTypes": []
         },
@@ -127,13 +555,19 @@
           "parameterTypes": []
         },
         {
-          "name": "getViewingHint",
+          "name": "getViewingDirection",
           "parameterTypes": []
         },
         {
           "name": "setAccessURL",
           "parameterTypes": [
             "java.net.URL"
+          ]
+        },
+        {
+          "name": "setBehavior",
+          "parameterTypes": [
+            "java.lang.String"
           ]
         },
         {
@@ -197,12 +631,6 @@
           ]
         },
         {
-          "name": "setTextDirection",
-          "parameterTypes": [
-            "java.lang.String"
-          ]
-        },
-        {
           "name": "setThumbnail",
           "parameterTypes": [
             "java.lang.String"
@@ -215,7 +643,7 @@
           ]
         },
         {
-          "name": "setViewingHint",
+          "name": "setViewingDirection",
           "parameterTypes": [
             "java.lang.String"
           ]
@@ -223,10 +651,71 @@
       ]
     },
     {
+      "type": "info.freelibrary.iiif.presentation.v3.utils.json.AnnotationPageSerializer",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.utils.json.AnnotationTargetSerializer",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.utils.json.ContextListSerializer",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeSerializer",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.utils.json.PaintingAnnotationSerializer",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "info.freelibrary.util.Labeled"
+    },
+    {
       "type": "java.io.Serializable"
     },
     {
+      "type": "java.lang.Cloneable"
+    },
+    {
+      "type": "java.lang.Comparable"
+    },
+    {
+      "type": "java.lang.Iterable"
+    },
+    {
       "type": "java.lang.Object",
+      "allDeclaredFields": true
+    },
+    {
+      "type": "java.net.URI",
       "allDeclaredFields": true
     },
     {
@@ -237,7 +726,16 @@
       "type": "java.nio.file.Path"
     },
     {
-      "type": "java.nio.file.Paths"
+      "type": "java.nio.file.Paths",
+      "methods": [
+        {
+          "name": "get",
+          "parameterTypes": [
+            "java.lang.String",
+            "java.lang.String[]"
+          ]
+        }
+      ]
     },
     {
       "type": "java.security.interfaces.RSAPrivateKey"
@@ -303,10 +801,43 @@
       "type": "java.time.ZonedDateTime"
     },
     {
+      "type": "java.util.AbstractCollection",
+      "allDeclaredFields": true
+    },
+    {
+      "type": "java.util.AbstractList",
+      "allDeclaredFields": true
+    },
+    {
+      "type": "java.util.ArrayList",
+      "allDeclaredFields": true
+    },
+    {
+      "type": "java.util.Collection"
+    },
+    {
+      "type": "java.util.Collections$UnmodifiableCollection",
+      "allDeclaredFields": true
+    },
+    {
+      "type": "java.util.Collections$UnmodifiableList",
+      "allDeclaredFields": true
+    },
+    {
+      "type": "java.util.Collections$UnmodifiableRandomAccessList",
+      "allDeclaredFields": true
+    },
+    {
       "type": "java.util.HashSet"
     },
     {
       "type": "java.util.LinkedHashSet"
+    },
+    {
+      "type": "java.util.List"
+    },
+    {
+      "type": "java.util.RandomAccess"
     },
     {
       "type": "net.jpountz.xxhash.StreamingXXHash32JNI$Factory",
@@ -347,22 +878,6 @@
     {
       "type": "picocli.CommandLine$AutoHelpMixin",
       "allDeclaredFields": true
-    },
-    {
-      "type": "sun.misc.Unsafe",
-      "fields": [
-        {
-          "name": "theUnsafe"
-        }
-      ],
-      "methods": [
-        {
-          "name": "invokeCleaner",
-          "parameterTypes": [
-            "java.nio.ByteBuffer"
-          ]
-        }
-      ]
     },
     {
       "type": "sun.reflect.ReflectionFactory",
@@ -555,6 +1070,21 @@
       "glob": "META-INF/services/org.slf4j.spi.SLF4JServiceProvider"
     },
     {
+      "glob": "freelib-utils_messages.xml"
+    },
+    {
+      "glob": "freelib-utils_messages_en.properties"
+    },
+    {
+      "glob": "freelib-utils_messages_en.xml"
+    },
+    {
+      "glob": "freelib-utils_messages_en_US.properties"
+    },
+    {
+      "glob": "freelib-utils_messages_en_US.xml"
+    },
+    {
       "glob": "iiif_presentation_messages.xml"
     },
     {
@@ -591,6 +1121,12 @@
   ],
   "bundles": [
     {
+      "name": "freelib-utils_messages",
+      "locales": [
+        "en-US"
+      ]
+    },
+    {
       "name": "iiif_presentation_messages",
       "locales": [
         "en-US"
@@ -598,6 +1134,9 @@
     }
   ],
   "serialization": [
+    {
+      "type": "java.lang.String"
+    },
     {
       "type": "java.util.HashSet"
     },

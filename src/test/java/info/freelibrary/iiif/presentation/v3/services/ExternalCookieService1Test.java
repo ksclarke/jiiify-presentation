@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation.v3.services;
 
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.assertOptEquals;
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -172,7 +173,7 @@ public class ExternalCookieService1Test {
         final AuthTokenService1 tokenService = new AuthTokenService1(myID);
         final ExternalCookieService1 cookieService = new ExternalCookieService1().setServices(tokenService);
 
-        assertEquals(StringUtils.format(json, myID), cookieService.toString());
+        assertEquals(format(StringUtils.format(json, myID)), cookieService.toString());
     }
 
 }

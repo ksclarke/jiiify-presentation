@@ -44,12 +44,10 @@
         <!-- Application dependencies -->
         <jackson.version>2.19.2</jackson.version>
         <jackson.databind.version>2.19.2</jackson.databind.version>
-        <freelib.utils.version>5.2.1</freelib.utils.version>
+        <freelib.utils.version>5.3.1</freelib.utils.version>
         <jsoup.version>1.21.1</jsoup.version>
         <combinatorics.version>3.4.0</combinatorics.version>
         <media.fragments.uri.version>2.4</media.fragments.uri.version>
-        <picocli.version>4.7.7</picocli.version>
-        <mapdb.version>3.1.0</mapdb.version>
 
         <!-- Build-related dependencies -->
         <shade.plugin.version>3.6.0</shade.plugin.version>
@@ -57,7 +55,7 @@
         <native.maven.plugin.version>0.10.6</native.maven.plugin.version>
 
         <!-- Test-related dependencies -->
-        <magicfree.json.version>0.10.2</magicfree.json.version>
+        <magicfree.json.version>0.11.0</magicfree.json.version>
         <system.lambda.version>1.2.1</system.lambda.version>
         <mockito.version>5.16.1</mockito.version>
         <opencsv.version>4.6</opencsv.version>
@@ -259,6 +257,9 @@
                     ]]></argLine>
                     <forkCount>1</forkCount>
                     <reuseForks>false</reuseForks>
+                    <environmentVariables>
+                        <JPV3_HOST>https://iiif.library.ucla.edu</JPV3_HOST>
+                    </environmentVariables>
                 </configuration>
             </plugin>
 
@@ -322,6 +323,8 @@
                 <!-- Transitive dependencies that are only used in the 'native' build -->
                 <kotlin.version>2.2.10</kotlin.version>
                 <guava.version>33.4.8-jre</guava.version>
+                <picocli.version>4.7.7</picocli.version>
+                <mapdb.version>3.1.0</mapdb.version>
 
                 <native.config.dir>target/native-image-config</native.config.dir>
                 <native.meta.info>
@@ -422,6 +425,8 @@
                                         <argument>
                                             -agentlib:native-image-agent=config-output-dir=${native.config.dir}
                                         </argument>
+                                        <!-- Allowances for the latest version of MapDB below -->
+                                        <argument>--enable-native-access=ALL-UNNAMED</argument>
 
                                         <!-- Build the classpath from project runtime deps and target/classes -->
                                         <argument>-cp</argument>
@@ -484,23 +489,16 @@
                             <mainClass>info.freelibrary.iiif.presentation.v3.utils.JPv3</mainClass>
                             <imageName>jpv3</imageName>
                             <buildArgs>
-                                <buildArg>-O3</buildArg>
-                                <buildArg>-march=${build.arch}</buildArg>
+                                <arg>-O3</arg>
+                                <arg>-march=${build.arch}</arg>
                                 <!--<buildArg>-/-gc=G1</buildArg>--><!-- Adds 20 MB for GC addition -->
-                                <buildArg>--exact-reachability-metadata</buildArg>
+                                <arg>--exact-reachability-metadata</arg>
+                                <arg>--enable-native-access=ALL-UNNAMED</arg>
+                                <arg>--enable-url-protocols=https</arg>
                             </buildArgs>
                             <metadataRepository>
                                 <enabled>true</enabled>
                             </metadataRepository>
-                        </configuration>
-                    </plugin>
-
-                    <plugin>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <includes>
-                                <include>**/info/freelibrary/iiif/presentation/v3/utils/csv/**/*Test.java</include>
-                            </includes>
                         </configuration>
                     </plugin>
                 </plugins>

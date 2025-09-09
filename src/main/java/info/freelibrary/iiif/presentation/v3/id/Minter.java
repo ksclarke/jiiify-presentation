@@ -16,6 +16,14 @@ public interface Minter {
     String getAnnotationID();
 
     /**
+     * Gets a new annotation body ID.
+     *
+     * @param anAnnotationID An annotation ID
+     * @return A new annotation body ID
+     */
+    String getAnnotationBodyID(String anAnnotationID);
+
+    /**
      * Gets a new annotation page ID from the supplied canvas.
      *
      * @param <C> A type of canvas resource (e.g. Canvas, AccompanyingCanvas, PlaceholderCanvas, etc.)

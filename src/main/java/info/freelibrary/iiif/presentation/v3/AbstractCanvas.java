@@ -1,14 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -17,14 +9,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-
-import info.freelibrary.util.Constants;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.warnings.JDK;
-import info.freelibrary.util.warnings.PMD;
-import info.freelibrary.util.warnings.Sonar;
-
 import info.freelibrary.iiif.presentation.v3.annotation.AbstractCanvasAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotation.PaintingAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotation.Purpose;
@@ -45,6 +29,20 @@ import info.freelibrary.iiif.presentation.v3.properties.selectors.SelectorOutOfB
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.util.Constants;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.JDK;
+import info.freelibrary.util.warnings.PMD;
+import info.freelibrary.util.warnings.Sonar;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * A virtual container that represents a page or view and has content resources associated with it or with parts of it.
@@ -260,7 +258,6 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      */
     @Override
     @JsonIgnore
-    @SuppressWarnings(JDK.UNCHECKED)
     public T setBehaviors(final Behavior... aBehaviorArray) {
         return setBehaviors(new BehaviorList(CanvasBehavior.class, aBehaviorArray));
     }
@@ -274,7 +271,6 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      */
     @Override
     @JsonIgnore
-    @SuppressWarnings({ JDK.UNCHECKED })
     public T setBehaviors(final List<Behavior> aBehaviorList) {
         final T canvas;
 
@@ -444,14 +440,12 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      * @param aChoice Whether the content resource are painted on the canvas as a choice
      * @param aContentArray An array of content resources
      * @return The canvas
-     * @throws ContentOutOfBoundsException If the painted content is out of bounds of the canvas
      * @throws MintingException If the canvas was created without a minter
      */
     @SuppressWarnings({ JDK.UNCHECKED })
     protected final <C extends CanvasResource<C>> T paint(final CanvasResource<C> aCanvas, final boolean aChoice,
             final ContentResource... aContentArray) {
-        final PaintingAnnotation annotation =
-                new PaintingAnnotation(getMinter(MessageCodes.JPA_143).getAnnotationID(), aCanvas);
+        final PaintingAnnotation annotation = new PaintingAnnotation(getMinter(MessageCodes.JPA_143), aCanvas);
         final AnnotationPage<PaintingAnnotation> page;
         final int pageCount;
 
@@ -674,27 +668,35 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      * @return <code>true</code> if the content resource fits within the bounds of the canvas
      * @throws ContentOutOfBoundsException If the content resource won't fit
      */
-    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY })
     boolean canFrame(final ContentResource aContent) {
         if (aContent instanceof final SpatialContentResource spatialPainting) {
-            // The canvas must have a width and height, which must not be smaller than that of the content
             if (myWidth == 0 || myHeight == 0) {
-                throw new ContentOutOfBoundsException(MessageCodes.JPA_059, aContent.getID(), SPATIAL, getID());
+                final ContentOutOfBoundsException err =
+                        new ContentOutOfBoundsException(MessageCodes.JPA_059, aContent.getID(), SPATIAL, getID());
+                LOGGER.warn(err.getMessage());
             }
 
             if (getWidth() < spatialPainting.getWidth() || getHeight() < spatialPainting.getHeight()) {
-                throw new ContentOutOfBoundsException(MessageCodes.JPA_060, aContent.getID(), SPATIAL, getID());
+                // Cookbook entry says content larger than the canvas will be scaled down to fit, so for now we just
+                // warn (cf. https://iiif.io/api/cookbook/recipe/0004-canvas-size/)
+                final ContentOutOfBoundsException err = new ContentOutOfBoundsException(MessageCodes.JPA_173,
+                        spatialPainting.getWidth(), spatialPainting.getHeight(), getWidth(), getHeight());
+                LOGGER.warn(err.getMessage());
             }
         }
 
         if (aContent instanceof final TemporalContentResource temporalPainting) {
-            // The canvas must have a duration, which must not be shorter than that of the content
             if (myDuration == ZERO_DURATION) {
-                throw new ContentOutOfBoundsException(MessageCodes.JPA_059, aContent.getID(), TEMPORAL, getID());
+                final ContentOutOfBoundsException err =
+                        new ContentOutOfBoundsException(MessageCodes.JPA_059, aContent.getID(), TEMPORAL, getID());
+                LOGGER.warn(err.getMessage());
             }
 
             if (getDuration() < temporalPainting.getDuration()) {
-                throw new ContentOutOfBoundsException(MessageCodes.JPA_060, aContent.getID(), TEMPORAL, getID());
+                // We'll assume duration is intended to work the same way as width and height
+                final ContentOutOfBoundsException err =
+                        new ContentOutOfBoundsException(MessageCodes.JPA_060, aContent.getID(), TEMPORAL, getID());
+                LOGGER.warn(err.getMessage());
             }
         }
 
@@ -724,8 +726,8 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     private List<AnnotationPage<?>> getAnnotations() {
         final List<AnnotationPage<?>> annotations = new ArrayList<>();
 
-        getSupplementingPages().forEach(annotations::add);
-        getWebAnnotations().forEach(annotations::add);
+        annotations.addAll(getSupplementingPages());
+        annotations.addAll(getWebAnnotations());
 
         return annotations;
     }
@@ -910,18 +912,10 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
         annotationList.forEach(page -> {
             // Check all the annotations on the page to make sure they are all supplementing annotations
             final List<A> annotations = page.getAnnotations();
+            final boolean supplementingAnnotations =
+                    annotations.stream().allMatch(SupplementingAnnotation.class::isInstance);
 
-            boolean supplementingAnnotations = true;
-
-            for (final A annotation : annotations) {
-                if (!(annotation instanceof SupplementingAnnotation)) {
-                    supplementingAnnotations = false;
-                }
-            }
-
-            // If all the annotations on a page are supplementing, we can put the page into supplementing pages list
             if (supplementingAnnotations) {
-                // The unchecked warning suppression on the method is for this
                 supplementingPages.add((AnnotationPage<SupplementingAnnotation>) page);
             } else {
                 otherAnnotations.add((AnnotationPage<WebAnnotation>) page);

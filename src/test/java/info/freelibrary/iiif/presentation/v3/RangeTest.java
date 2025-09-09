@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -81,10 +82,10 @@ public class RangeTest extends AbstractTest {
         final File rangeJsonFile = new File("src/test/resources/json/range.json");
 
         try {
-            RANGE_ITEM_JSON = StringUtils.read(rangeJsonFile, StandardCharsets.UTF_8);
-            CANVAS_ITEM_JSON = StringUtils.read(canvasRefJsonFile, StandardCharsets.UTF_8);
-            CANVAS_ITEMS_JSON = StringUtils.read(canvasArrayJsonFile, StandardCharsets.UTF_8);
-            SPECIFIC_RESOURCE_ITEM_JSON = StringUtils.read(specificResourceJsonFile, StandardCharsets.UTF_8);
+            RANGE_ITEM_JSON = format(StringUtils.read(rangeJsonFile, StandardCharsets.UTF_8));
+            CANVAS_ITEM_JSON = format(StringUtils.read(canvasRefJsonFile, StandardCharsets.UTF_8));
+            CANVAS_ITEMS_JSON = format(StringUtils.read(canvasArrayJsonFile, StandardCharsets.UTF_8));
+            SPECIFIC_RESOURCE_ITEM_JSON = format(StringUtils.read(specificResourceJsonFile, StandardCharsets.UTF_8));
         } catch (final IOException details) {
             throw new I18nRuntimeException(details);
         }
@@ -100,7 +101,7 @@ public class RangeTest extends AbstractTest {
         final String expected = StringUtils.read(new File("src/test/resources/fixtures/0024-book-4-toc.json"));
         final String found = JSON.readValue(expected, Manifest.class).toString();
 
-        assertEquals(format(expected), found);
+        assertEquals(format(expected), format(found));
     }
 
     /**
@@ -108,7 +109,7 @@ public class RangeTest extends AbstractTest {
      */
     @Test
     public void testFromStringCanvasArray() {
-        assertEquals(format(CANVAS_ITEMS_JSON), JSON.readValue(CANVAS_ITEMS_JSON, Range.class).toString());
+        assertEquals(CANVAS_ITEMS_JSON, JSON.readValue(CANVAS_ITEMS_JSON, Range.class).toString());
     }
 
     /**
@@ -116,7 +117,7 @@ public class RangeTest extends AbstractTest {
      */
     @Test
     public void testFromStringCanvasRef() {
-        assertEquals(format(CANVAS_ITEM_JSON), JSON.readValue(CANVAS_ITEM_JSON, Range.class).toString());
+        assertEquals(CANVAS_ITEM_JSON, JSON.readValue(CANVAS_ITEM_JSON, Range.class).toString());
     }
 
     /**
@@ -124,7 +125,7 @@ public class RangeTest extends AbstractTest {
      */
     @Test
     public void testFromStringRange() {
-        assertEquals(format(RANGE_ITEM_JSON), JSON.readValue(RANGE_ITEM_JSON, Range.class).toString());
+        assertEquals(RANGE_ITEM_JSON, JSON.readValue(RANGE_ITEM_JSON, Range.class).toString());
     }
 
     /**
@@ -132,8 +133,7 @@ public class RangeTest extends AbstractTest {
      */
     @Test
     public void testFromStringSpecificResource() {
-        assertEquals(format(SPECIFIC_RESOURCE_ITEM_JSON),
-                JSON.readValue(SPECIFIC_RESOURCE_ITEM_JSON, Range.class).toString());
+        assertEquals(SPECIFIC_RESOURCE_ITEM_JSON, JSON.readValue(SPECIFIC_RESOURCE_ITEM_JSON, Range.class).toString());
     }
 
     /**
@@ -379,8 +379,7 @@ public class RangeTest extends AbstractTest {
      */
     @Test
     public void testToJSON() {
-        assertEquals(format(RANGE_ITEM_JSON),
-                getRange().setItems(Arrays.asList(new Range.Item(getSubRange()))).toString());
+        assertEquals(RANGE_ITEM_JSON, getRange().setItems(List.of(new Range.Item(getSubRange()))).toString());
     }
 
     /**
@@ -388,8 +387,7 @@ public class RangeTest extends AbstractTest {
      */
     @Test
     public void testToString() {
-        assertEquals(format(RANGE_ITEM_JSON),
-                getRange().setItems(Arrays.asList(new Range.Item(getSubRange()))).toString());
+        assertEquals(RANGE_ITEM_JSON, getRange().setItems(List.of(new Range.Item(getSubRange()))).toString());
     }
 
     /**

@@ -1,19 +1,19 @@
 {
-  "id": "https://example.org/range-1",
-  "type": "Range",
-  "label": {
-    "none": [
+  "id" : "https://example.org/range-1",
+  "type" : "Range",
+  "label" : {
+    "none" : [
       "My Range Label"
     ]
   },
-  "items": [
+  "items" : [
     {
-      "id": "https://example.org/canvas-1",
-      "type": "Canvas"
+      "id" : "https://example.org/canvas-1",
+      "type" : "Canvas"
     },
     {
-      "id": "https://example.org/canvas-2",
-      "type": "Canvas"
+      "id" : "https://example.org/canvas-2",
+      "type" : "Canvas"
     }
   ]
 }
