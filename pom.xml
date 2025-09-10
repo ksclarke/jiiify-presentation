@@ -319,6 +319,7 @@
             <id>native</id>
 
             <properties>
+                <!-- Transitive dependencies that are only used in the 'native' build -->
                 <kotlin.version>2.2.10</kotlin.version>
                 <guava.version>33.4.8-jre</guava.version>
 
@@ -327,6 +328,9 @@
                     src/main/resources/META-INF/native-image/${project.groupId}/${project.artifactId}/
                 </native.meta.info>
                 <build.profile>native</build.profile>
+
+                <!-- Default is the most basic; other options: 'x86-64-v2' or 'armv8-a' or 'native' -->
+                <build.arch>compatibility</build.arch>
             </properties>
 
             <dependencies>
@@ -481,7 +485,7 @@
                             <imageName>jpv3</imageName>
                             <buildArgs>
                                 <buildArg>-O3</buildArg>
-                                <buildArg>-march=native</buildArg>
+                                <buildArg>-march=${build.arch}</buildArg>
                                 <!--<buildArg>-/-gc=G1</buildArg>--><!-- Adds 20 MB for GC addition -->
                                 <buildArg>--exact-reachability-metadata</buildArg>
                             </buildArgs>
