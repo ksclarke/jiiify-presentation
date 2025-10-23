@@ -35,6 +35,8 @@ import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeSerializer;
 
 /**
  * An abstract content resource class that specific content types can extend.
+ *
+ * @param <T> The concrete content resource type
  */
 @JsonInclude(Include.NON_EMPTY)
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
