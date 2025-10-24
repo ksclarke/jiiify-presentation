@@ -6,16 +6,22 @@ import static org.junit.Assert.assertTrue;
 
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
+import info.freelibrary.util.FileUtils;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.RegexFileFilter;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -50,17 +56,52 @@ public class MapperTest {
     @Rule
     public TestName myTestName = new TestName();
 
+    /** The ZIP file path to use in testing. */
+    private Path myZipFile;
+
+    /** Sets up the testing environment. */
+    @Before
+    public void setUp() {
+        myZipFile = Path.of("target", UUID.randomUUID() + "-output.zip");
+    }
+
     /** Tests that no exception is thrown when the Mapper is initialized. */
     @Test
     public void testMapperInit() throws Exception {
-        final Path output = Path.of("target", UUID.randomUUID() + "-output.zip");
-        final int result = new Mapper(Stream.of(CSV_FILE), output).map();
+        final int result = new Mapper(Stream.of(CSV_FILE), myZipFile).map();
 
-        // Check the exit code result
         assertEquals(0, result);
+        testZipFiles(myZipFile);
+        assertTrue(Files.exists(myZipFile));
+        Files.delete(myZipFile);
+    }
 
-        // Check the outputs in the ZIP file
-        try (FileSystem fileSystem = FileSystems.newFileSystem(output, (ClassLoader) null)) {
+    /**
+     * Tests the functionality of the Mapper class when initializing with multiple input files. This method verifies the
+     * Mapper processes all specified files correctly, generates the expected outputs, and writes them into a ZIP file.
+     *
+     * @throws Exception if any error occurs during file processing, Mapper execution, or file system operations.
+     */
+    @Test
+    public void testMapperInitFiles() throws Exception {
+        final File dir = new File("src/test/resources/csv");
+        final File[] files = FileUtils.listFiles(dir, new RegexFileFilter(".*-2-.*"));
+        final int result = new Mapper(Arrays.stream(files).map(File::toPath), myZipFile).map();
+
+        assertEquals(0, result);
+        testZipFiles(myZipFile);
+        assertTrue(Files.exists(myZipFile));
+        Files.delete(myZipFile);
+    }
+
+    /**
+     * Validates the contents of the specified ZIP file by comparing its data against predefined fixtures.
+     *
+     * @param aZipFile the path to the ZIP file to be tested
+     * @throws IOException if an I/O error occurs while accessing the file system or reading files within the ZIP
+     */
+    private void testZipFiles(final Path aZipFile) throws IOException {
+        try (FileSystem fileSystem = FileSystems.newFileSystem(aZipFile, (ClassLoader) null)) {
             final String expectedCollection = Files.readString(COLLECTION_FIXTURE);
             final String foundCollection = Files.readString(fileSystem.getPath(COLLECTION_DOC));
             final String expectedManifest = Files.readString(MANIFEST_FIXTURE);
@@ -70,9 +111,6 @@ public class MapperTest {
             TestUtils.assertEquals(myTestName, replaceIDs(expectedCollection), replaceIDs(foundCollection));
             TestUtils.assertEquals(myTestName, replaceIDs(expectedManifest), replaceIDs(foundManifest));
         }
-
-        assertTrue(Files.exists(output));
-        Files.delete(output);
     }
 
     /**

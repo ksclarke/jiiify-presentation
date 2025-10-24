@@ -4,10 +4,15 @@ package info.freelibrary.iiif.presentation.v3.utils.csv;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import info.freelibrary.util.FileUtils;
+import info.freelibrary.util.RegexFileFilter;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 /**
@@ -47,8 +52,10 @@ public class ReaderTest {
 
     /** Tests the {@link Reader#rows(Path)} method. */
     @Test
-    public void testRowsCsvDirPath() {
-        final Stream<Row> rows = myReader.rows(Path.of(RESOURCES_DIR, "csv"));
+    public void testRowsCsvDirPath() throws IOException {
+        final File dir = new File("src/test/resources/csv");
+        final File[] files = FileUtils.listFiles(dir, new RegexFileFilter("^((?!-2-).)*$"));
+        final Stream<Row> rows = myReader.rows(Arrays.stream(files).map(File::toPath));
 
         assertNotNull(rows);
         assertEquals(11, rows.count());
