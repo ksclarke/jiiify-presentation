@@ -58,7 +58,6 @@ jobs:
           java-version: ${{ matrix.graalvm }}
           distribution: 'graalvm'
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          components: 'native-image'
           cache: 'maven'
 
       # If running locally in ACT, install Maven
