@@ -68,10 +68,8 @@ public class MapperTest {
     /** Tests that no exception is thrown when the Mapper is initialized. */
     @Test
     public void testMapperInit() throws Exception {
-        final Path output = Path.of("target", UUID.randomUUID() + "-output.zip");
-        final int result = new Mapper(Stream.of(CSV_FILE), output).map();
+        final int result = new Mapper(Stream.of(CSV_FILE), myZipFile).map();
 
-        // Check the exit code result
         assertEquals(0, result);
         testZipFiles(myZipFile);
         assertTrue(Files.exists(myZipFile));
