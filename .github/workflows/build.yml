@@ -124,6 +124,7 @@ jobs:
           tag_name: jpv3-${{ steps.ts.outputs.timestamp }}
           name: jpv3-${{ steps.ts.outputs.timestamp }}
           files: bin_out/*
-          prerelease: true
+          draft: true
+          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
