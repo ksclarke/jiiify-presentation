@@ -97,7 +97,15 @@
                   }
                 ]
               },
-              "target": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1wq7d7z/manifest/canvas-xfw5#xywh=3949,994,1091,1232"
+              "target" : {
+                "type" : "SpecificResource",
+                "source" : "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1wq7d7z/manifest/canvas-xfw5",
+                "selector" : {
+                  "type" : "FragmentSelector",
+                  "conformsTo" : "http://www.w3.org/TR/media-frags/",
+                  "value" : "xywh=3949,994,1091,1232"
+                }
+              }
             }
           ]
         }

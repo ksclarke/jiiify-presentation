@@ -273,6 +273,7 @@ public class Mapper {
             final Canvas canvas = myBuilder.build(canvasRow, aMinter);
             final int canvasWidth = canvasRow.getMediaWidth().orElse(0);
             final int canvasHeight = canvasRow.getMediaHeight().orElse(0);
+            final String target = canvasRow.getTarget().orElse(null);
             final AtomicInteger width = new AtomicInteger(canvasWidth);
             final AtomicInteger height = new AtomicInteger(canvasHeight);
             final Set<String> children = myParents.get(canvasID);
@@ -285,7 +286,11 @@ public class Mapper {
 
                     imageContent.setServices(imageService);
 
-                    canvas.paintWith(imageContent);
+                    if (target != null) {
+                        canvas.paintWith(target, imageContent);
+                    } else {
+                        canvas.paintWith(imageContent);
+                    }
                 }));
             } else {
                 final List<ContentResource> choiceResources = new ArrayList<>();
@@ -313,11 +318,19 @@ public class Mapper {
                 }));
 
                 if (!choiceResources.isEmpty()) {
-                    canvas.paintWith(true, choiceResources);
+                    if (target != null) {
+                        canvas.paintWith(target, true, choiceResources);
+                    } else {
+                        canvas.paintWith(true, choiceResources);
+                    }
                 }
 
                 layerResources.forEach(layerResource -> {
-                    canvas.paintWith(false, layerResource);
+                    if (target != null) {
+                        canvas.paintWith(target, false, layerResource);
+                    } else {
+                        canvas.paintWith(false, layerResource);
+                    }
                 });
             }
 

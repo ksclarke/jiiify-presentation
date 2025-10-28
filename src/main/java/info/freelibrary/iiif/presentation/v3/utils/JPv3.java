@@ -39,7 +39,7 @@ public final class JPv3 implements Callable<Integer> {
     private static final Logger LOGGER = LoggerFactory.getLogger(JPv3.class, MessageCodes.BUNDLE);
 
     /** The input file. */
-    @CommandLine.Option(names = { "-i", "--input" }, description = "An input file to be processed")
+    @CommandLine.Option(names = { "-i", "--input" }, description = "An input file to be processed", required = true)
     private Path myInputFile;
 
     /** The output file. */

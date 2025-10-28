@@ -391,6 +391,32 @@
       "allDeclaredFields": true
     },
     {
+      "type": "info.freelibrary.iiif.presentation.v3.properties.selectors.FragmentSelector",
+      "methods": [
+        {
+          "name": "getType",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector",
+      "allDeclaredFields": true,
+      "methods": [
+        {
+          "name": "getConformsTo",
+          "parameterTypes": []
+        },
+        {
+          "name": "toString",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.properties.selectors.Selector"
+    },
+    {
       "type": "info.freelibrary.iiif.presentation.v3.services.AbstractImageService",
       "allDeclaredFields": true,
       "methods": [
@@ -688,6 +714,15 @@
     },
     {
       "type": "info.freelibrary.iiif.presentation.v3.utils.json.PaintingAnnotationSerializer",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.utils.json.SourceSerializer",
       "methods": [
         {
           "name": "<init>",

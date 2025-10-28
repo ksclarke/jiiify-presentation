@@ -495,6 +495,7 @@
                                 <arg>--exact-reachability-metadata</arg>
                                 <arg>--enable-native-access=ALL-UNNAMED</arg>
                                 <arg>--enable-url-protocols=https</arg>
+                                <arg>-H:-ReduceImplicitExceptionStackTraceInformation</arg>
                             </buildArgs>
                             <metadataRepository>
                                 <enabled>true</enabled>
