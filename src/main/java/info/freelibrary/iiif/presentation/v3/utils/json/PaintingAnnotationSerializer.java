@@ -3,6 +3,7 @@ package info.freelibrary.iiif.presentation.v3.utils.json;
 
 import static info.freelibrary.util.Constants.SINGLE_INSTANCE;
 import static info.freelibrary.util.ThrowingBiFunction.unwrap;
+
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -61,6 +62,7 @@ public class PaintingAnnotationSerializer extends StdSerializer<PaintingAnnotati
     public void serialize(final PaintingAnnotation aPaintingAnnotation, final JsonGenerator aJsonGenerator,
             final SerializerProvider aProvider) throws IOException {
         final List<ContentResource> resources = aPaintingAnnotation.getBody();
+        final Optional<String> bodyID = aPaintingAnnotation.getBodyID();
         final List<Target> targets = aPaintingAnnotation.getTargets();
         final Optional<Motivation> motivation = aPaintingAnnotation.getMotivation();
         final Optional<TimeMode> timeMode = aPaintingAnnotation.getTimeMode();
@@ -102,7 +104,7 @@ public class PaintingAnnotationSerializer extends StdSerializer<PaintingAnnotati
             }
 
             if (!resources.isEmpty()) {
-                serializeResources(resources, aPaintingAnnotation.bodyHasChoice(), aJsonGenerator);
+                serializeResources(resources, aPaintingAnnotation.bodyHasChoice(), bodyID, aJsonGenerator);
             }
 
             if (!seeAlsoRefs.isEmpty()) {
@@ -146,12 +148,14 @@ public class PaintingAnnotationSerializer extends StdSerializer<PaintingAnnotati
      *
      * @param aList A list of annotation resources
      * @param aChoice True if the list is a choice between resources; else false
+     * @param aBodyID An optional body ID
      * @param aJsonGenerator A JSON generator
      * @throws IOException If there is trouble writing to the generator
      * @throws JsonProcessingException If there is trouble parsing the source annotation
      */
+    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY })
     private void serializeResources(final List<ContentResource> aList, final boolean aChoice,
-            final JsonGenerator aJsonGenerator) throws IOException {
+            final Optional<String> aBodyID, final JsonGenerator aJsonGenerator) throws IOException {
         if (aList.size() == SINGLE_INSTANCE) {
             aJsonGenerator.writeObjectField(JsonKeys.BODY, aList.get(0));
         } else {
@@ -159,6 +163,11 @@ public class PaintingAnnotationSerializer extends StdSerializer<PaintingAnnotati
 
             if (aChoice) {
                 aJsonGenerator.writeStartObject();
+
+                if (aBodyID.isPresent()) {
+                    aJsonGenerator.writeObjectField(JsonKeys.ID, aBodyID.get());
+                }
+
                 aJsonGenerator.writeObjectField(JsonKeys.TYPE, ResourceTypes.CHOICE);
                 aJsonGenerator.writeArrayFieldStart(JsonKeys.ITEMS);
             } else {

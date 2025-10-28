@@ -5,9 +5,11 @@
   "profile" : "http://iiif.io/api/auth/1/kiosk",
   "failureHeader" : "Failure Header",
   "failureDescription" : "Failure description",
-  "service" : [ {
-    "@id" : "{}",
-    "@type" : "AuthTokenService1",
-    "profile" : "http://iiif.io/api/auth/1/token"
-  } ]
+  "service" : [
+    {
+      "@id" : "{}",
+      "@type" : "AuthTokenService1",
+      "profile" : "http://iiif.io/api/auth/1/token"
+    }
+  ]
 }

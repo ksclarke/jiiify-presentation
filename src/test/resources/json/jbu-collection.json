@@ -4,16 +4,16 @@
     "Title": "Japanese Books at UCLA",
     "ItemID": "ark:/21198/z11g7wqv",
     "Thumbnail": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1pw65h4",
-    "Notes": "https://github.com/UCLALibrary/eureka/blob/master/in_progress/dawn-eureka/yanai/yanai-collection.csv"
+    "Notes": "https://github.com/UCLALibrary/eureka/blob/master/yanai/yanai-collection.csv"
   },
   {
     "ObjectType": "Work",
     "Title": "Kyōgetsubō | 狂月坊",
     "ItemID": "ark:/21198/z1wq7d7z",
     "ParentID": "ark:/21198/z11g7wqv",
-    "TextDirection": "right-to-left",
+    "ViewingDirection": "right-to-left",
     "Thumbnail": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1pw65h4",
-    "Notes": "https://github.com/UCLALibrary/eureka/blob/addc07f5a234c0e264bf6c649665013b8e8c1886/in_progress/dawn-eureka/yanai/batch1/yanai-single-works.csv#L4"
+    "Notes": "https://github.com/UCLALibrary/eureka/blob/master/yanai/batch1/yanai-single-works.csv#L4"
   },
   {
     "FileName": "Masters/othermasters/dl_jpn_yanai/batch1/singlevol/D0007825284/D0007825284_001.tif",
@@ -26,7 +26,7 @@
     "MediaHeight": 5320,
     "MediaWidth": 4583,
     "AccessURL": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1pw65h4",
-    "Notes": "https://github.com/UCLALibrary/eureka/blob/master/in_progress/dawn-eureka/yanai/batch1/pages/yanai-single-pages.csv"
+    "Notes": "https://github.com/UCLALibrary/eureka/blob/master/yanai/batch1/pages/yanai-single-pages.csv"
   },
   {
     "FileName": "Masters/othermasters/dl_jpn_yanai/batch1/singlevol/D0007825284/D0007825284_002.tif",
@@ -67,7 +67,7 @@
     "ItemSequence": "2",
     "ItemID": "ark:/21198/z15z1w07",
     "ParentID": "ark:/21198/z1rz6njp",
-    "ViewingHint": "hidden",
+    "Behavior": "hidden",
     "BucketeerState": "succeeded",
     "MediaHeight": 5351,
     "MediaWidth": 8057,

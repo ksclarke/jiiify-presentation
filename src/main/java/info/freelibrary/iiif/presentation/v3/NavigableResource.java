@@ -32,22 +32,16 @@ import java.util.Optional;
 @JsonFilter(ContextFilterProvider.FILTER_NAME)
 public class NavigableResource<T extends NavigableResource<T>> extends AbstractResource<T> {
 
-    /**
-     * The resource's contexts.
-     */
+    /** The resource's contexts. */
     @JsonProperty(JsonKeys.CONTEXT)
     @JsonSerialize(using = ContextListSerializer.class)
     @JsonDeserialize(using = ContextListDeserializer.class)
     private ContextList myContexts;
 
-    /**
-     * The date of the navigable resource.
-     */
+    /** The date of the navigable resource. */
     private NavDate myNavDate;
 
-    /**
-     * The place of a navigable resource.
-     */
+    /** The place of a navigable resource. */
     private NavPlace myNavPlace;
 
     /**

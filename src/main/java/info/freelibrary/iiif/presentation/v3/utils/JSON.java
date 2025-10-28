@@ -7,6 +7,8 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.core.util.DefaultIndenter;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -20,6 +22,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 
+import info.freelibrary.util.Constants;
 import info.freelibrary.util.warnings.PMD;
 
 import info.freelibrary.iiif.presentation.v3.Service;
@@ -51,6 +54,13 @@ public final class JSON {
                             .addDeserializer(Service.class, new ServiceDeserializer()));
 
     static {
+        final DefaultPrettyPrinter printer = new DefaultPrettyPrinter();
+        final DefaultIndenter indenter = new DefaultIndenter(Constants.DOUBLE_SPACE, Constants.LF);
+
+        printer.indentObjectsWith(indenter);
+        printer.indentArraysWith(indenter);
+
+        MAPPER.setDefaultPrettyPrinter(printer);
         MAPPER.getFactory().enable(JsonParser.Feature.INCLUDE_SOURCE_IN_LOCATION);
     }
 
@@ -227,13 +237,23 @@ public final class JSON {
     /**
      * Reads the tree from the supplied {@code JsonParser}.
      *
-     * @param <T> A type of reference to write
      * @param aParser A JSON parser
      * @return An instance of the typed reference
      * @throws IOException If there is trouble reading from the tree
      */
-    public static <T> T readTree(final JsonParser aParser) throws IOException {
+    public static TreeNode readTree(final JsonParser aParser) throws IOException {
         return MAPPER.readTree(aParser);
+    }
+
+    /**
+     * Reads the provided JSON string and returns its tree representation.
+     *
+     * @param aJsonString The JSON string to parse
+     * @return The tree representation of the JSON string
+     * @throws IOException If an error occurs during parsing
+     */
+    public static JsonNode readTree(final String aJsonString) throws IOException {
+        return MAPPER.readTree(aJsonString);
     }
 
     /**

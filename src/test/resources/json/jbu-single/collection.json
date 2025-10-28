@@ -1,0 +1,35 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://iiif.library.ucla.edu/collections/ark%3A%2F21198%2Fz11g7wqv",
+  "type": "Collection",
+  "label": {
+    "none" : [
+      "Japanese Books at UCLA"
+    ]
+  },
+  "thumbnail": [
+    {
+      "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1pw65h4/full/!200,200/0/default.jpg",
+      "type": "Image",
+      "format": "image/jpeg"
+    }
+  ],
+  "items": [
+    {
+      "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1wq7d7z/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Kyōgetsubō | 狂月坊"
+        ]
+      },
+      "thumbnail": [
+        {
+          "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1pw65h4/full/!200,200/0/default.jpg",
+          "type": "Image",
+          "format": "image/jpeg"
+        }
+      ]
+    }
+  ]
+}

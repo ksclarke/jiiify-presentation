@@ -288,9 +288,8 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     public final Manifest setAnnotations(final AnnotationPage<WebAnnotation>... aPageArray) {
         final List<AnnotationPage<WebAnnotation>> annotations = getAnnotations();
 
-        Objects.requireNonNull(aPageArray);
         annotations.clear();
-        Arrays.stream(aPageArray).forEach(annotations::add);
+        annotations.addAll(List.of(Objects.requireNonNull(aPageArray)));
 
         return this;
     }
@@ -344,7 +343,7 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
         final List<Canvas> canvases = getCanvases();
 
         canvases.clear();
-        Arrays.stream(aCanvasArray).forEach(canvases::add);
+        canvases.addAll(Arrays.asList(aCanvasArray));
 
         return this;
     }
@@ -404,9 +403,8 @@ public class Manifest extends NavigableResource<Manifest> implements Resource<Ma
     public Manifest setRanges(final Range... aRangeArray) {
         final List<Range> ranges = getRanges();
 
-        Objects.requireNonNull(aRangeArray);
         ranges.clear();
-        Arrays.stream(aRangeArray).forEach(ranges::add);
+        ranges.addAll(List.of(aRangeArray));
 
         return this;
     }

@@ -3,7 +3,11 @@
     {
       "id": "https://example.org/iiif/1",
       "type": "Manifest",
-      "label": { "none": [ "PartOf for Example Object" ] }
+      "label": {
+        "none": [
+          "PartOf for Example Object"
+        ]
+      }
     }
   ]
 }

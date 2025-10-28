@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation.v3.services;
 
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.assertOptEquals;
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -217,7 +218,7 @@ public class KioskCookieService1Test {
         cookieService.setFailureHeader("Failure Header");
         cookieService.setFailureDescription("Failure description");
 
-        assertEquals(StringUtils.format(json, myID, myID), cookieService.setServices(tokenService).toString());
+        assertEquals(format(StringUtils.format(json, myID, myID)), cookieService.setServices(tokenService).toString());
     }
 
 }

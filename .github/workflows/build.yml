@@ -58,7 +58,6 @@ jobs:
           java-version: ${{ matrix.graalvm }}
           distribution: 'graalvm'
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          components: 'native-image'
           cache: 'maven'
 
       # If running locally in ACT, install Maven
@@ -125,6 +124,7 @@ jobs:
           tag_name: jpv3-${{ steps.ts.outputs.timestamp }}
           name: jpv3-${{ steps.ts.outputs.timestamp }}
           files: bin_out/*
-          prerelease: true
+          draft: true
+          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

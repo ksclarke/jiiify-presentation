@@ -1,25 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3.id;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
-
-import org.paukov.combinatorics3.Generator;
-
-import info.freelibrary.util.I18nRuntimeException;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.Stopwatch;
-import info.freelibrary.util.StringUtils;
-import info.freelibrary.util.warnings.PMD;
-
 import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.AnnotationPage;
 import info.freelibrary.iiif.presentation.v3.Canvas;
@@ -29,6 +10,23 @@ import info.freelibrary.iiif.presentation.v3.Range;
 import info.freelibrary.iiif.presentation.v3.annotation.PaintingAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotation.SupplementingAnnotation;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.util.I18nRuntimeException;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.Stopwatch;
+import info.freelibrary.util.StringUtils;
+import info.freelibrary.util.warnings.PMD;
+import org.paukov.combinatorics3.Generator;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 /**
  * Mints intra-manifest IDs using predictable ID templates.
@@ -58,6 +56,9 @@ class DefaultMinter implements Minter {
 
     /** A template for supplying page IDs. */
     private static final String PAGE_ID_TEMPLATE = "{}/anno-page-{}";
+
+    /** A template for supplying body IDs. */
+    private static final String BODY_ID_TEMPLATE = "{}/body-{}";
 
     /** A template for supplying range IDs. */
     private static final String RANGE_ID_TEMPLATE = "{}/range-{}";
@@ -172,6 +173,25 @@ class DefaultMinter implements Minter {
         try {
             final String id = StringUtils.format(CANVAS_ID_TEMPLATE, myManifestID, myIterator.next());
             return myExistingIDs.contains(id) ? getCanvasID() : increment(id);
+        } catch (final NoSuchElementException details) {
+            throw new MintingException(details, MessageCodes.JPA_105, myManifestID, Canvas.class.getSimpleName());
+        }
+    }
+
+    /**
+     * Generates a unique annotation body ID based on the supplied annotation ID. If the generated ID already exists,
+     * the method recursively attempts to generate a new unique ID. It throws a MintingException if the ID generation
+     * process encounters an issue.
+     *
+     * @param anAnnotationID The annotation ID used as a base for generating the annotation body ID
+     * @return A unique annotation body ID
+     * @throws MintingException If the ID generation process encounters an issue
+     */
+    @Override
+    public String getAnnotationBodyID(final String anAnnotationID) {
+        try {
+            final String id = StringUtils.format(BODY_ID_TEMPLATE, anAnnotationID, myIterator.next());
+            return myExistingIDs.contains(id) ? getAnnotationBodyID(anAnnotationID) : increment(id);
         } catch (final NoSuchElementException details) {
             throw new MintingException(details, MessageCodes.JPA_105, myManifestID, Canvas.class.getSimpleName());
         }

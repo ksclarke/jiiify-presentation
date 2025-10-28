@@ -1,30 +1,28 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Optional;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import info.freelibrary.util.I18nRuntimeException;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.warnings.JDK;
-
 import info.freelibrary.iiif.presentation.v3.Resource;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.json.PartOfDeserializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.PartOfSerializer;
+import info.freelibrary.util.I18nRuntimeException;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.JDK;
+
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * A containing resource that includes the resource that has the <code>partOf</code> property. For example, the
- * <code>partOf</code> property on a Canvas can be used to reference an external Manifest in order to enable the
- * discovery of further relevant information. Similarly, a Manifest can reference a containing Collection using
- * <code>partOf</code> to aid in navigation.
+ * <code>partOf</code> property on a Canvas can be used to reference an external Manifest to enable the discovery of
+ * further relevant information. Similarly, a Manifest can reference a containing Collection using <code>partOf</code>
+ * to aid in navigation.
  */
 @JsonSerialize(using = PartOfSerializer.class)
 @JsonDeserialize(using = PartOfDeserializer.class)
@@ -33,7 +31,7 @@ public class PartOf {
     /** The logger used by {@code PartOf}. */
     private static final Logger LOGGER = LoggerFactory.getLogger(PartOf.class, MessageCodes.BUNDLE);
 
-    /** Whether the resource should be serialized as object or URI string. */
+    /** Whether the resource should be serialized as an object or a URI string. */
     private boolean isSerializedAsObject;
 
     /** The resource that this partOf embeds. */
@@ -100,7 +98,7 @@ public class PartOf {
     }
 
     /**
-     * Gets the full embedded resource, if there is one.
+     * Gets the full embedded resource (if there is one).
      *
      * @param <T> The type of embedded resource being returned
      * @return An optional embedded resource

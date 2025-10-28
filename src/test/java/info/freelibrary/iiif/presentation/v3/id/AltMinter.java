@@ -31,6 +31,11 @@ public final class AltMinter implements Minter {
     }
 
     @Override
+    public String getAnnotationBodyID(final String aAnnotationID) {
+        return AltMinter.class.getSimpleName();
+    }
+
+    @Override
     public String getCanvasID() {
         return AltMinter.class.getSimpleName();
     }

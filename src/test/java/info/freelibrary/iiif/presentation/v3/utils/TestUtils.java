@@ -6,6 +6,17 @@ import static info.freelibrary.iiif.presentation.v3.utils.JsonKeys.CONTEXT;
 import static info.freelibrary.iiif.presentation.v3.utils.JsonKeys.MOTIVATION;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import com.fasterxml.jackson.databind.SequenceWriter;
+import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
+import info.freelibrary.json.Json;
+import info.freelibrary.json.JsonOptions;
+import info.freelibrary.json.JsonValue;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.StringUtils;
+import org.junit.Assert;
+import org.junit.rules.TestName;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.file.Files;
@@ -18,22 +29,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
-
-import org.junit.Assert;
-import org.junit.rules.TestName;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.SequenceWriter;
-
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.StringUtils;
-
-import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
-
-import info.freelibrary.json.Json;
-import info.freelibrary.json.JsonOptions;
-import info.freelibrary.json.JsonValue;
 
 /**
  * Utilities for running tests.
@@ -73,7 +68,7 @@ public final class TestUtils {
         final JsonValue expected = Json.parse(anExpectedResult);
         final JsonValue actual = Json.parse(anActualResult);
 
-        // This double equality check can be problematic, since the first equals is looser than the assertEquals --
+        // This double equality check can be problematic, since the first equals() is looser than the assertEquals --
         // `equals` will normalize duration floats, but `assertEquals` will not; so, the wrong error may be displayed
         if (!expected.equals(actual, config)) {
             try {
@@ -81,14 +76,15 @@ public final class TestUtils {
             } catch (final AssertionError details) {
                 final Encoder encoder = Base64.getEncoder();
                 final String diffLink = StringUtils.format(
-                        "<a href=\"https://jsondiff.com/#left=data:base64,{}&right=data:base64,{}\">{}</a>",
+                        "<p><a href=\"https://jsondiff.com/#left=data:base64,{}&right=data:base64,{}\">{}</a></p>",
                         new String(encoder.encode(expected.toString(config).getBytes()), UTF_8),
                         new String(encoder.encode(actual.toString(config).getBytes()), UTF_8), aName.getMethodName());
 
                 try {
-                    // Write file of HTML links pointing to a better diffs display than what JUnit outputs
+                    // Write an file of HTML links pointing to a better diffs display than what JUnit outputs
+                    // We don't append, so this is really only useful when we're running a single test
                     Files.write(DIFF_LINKS, Collections.singletonList(diffLink), StandardOpenOption.CREATE,
-                            StandardOpenOption.APPEND);
+                            StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
                 } catch (final IOException ioErrDetails) {
                     throw new RuntimeException(ioErrDetails);
                 }
@@ -120,12 +116,12 @@ public final class TestUtils {
      *
      * @param aJsonString A JSON string
      * @return A formatted JSON string
-     * @throws JsonParsingException if the format cannot be parsed from supplied JSON string
+     * @throws JsonParsingException If the format cannot be parsed from the supplied JSON string
      */
     public static String format(final String aJsonString) {
         try {
-            return JSON.getReader().readTree(aJsonString).toPrettyString();
-        } catch (final JsonProcessingException details) {
+            return JSON.getPrettyWriter().writeValueAsString(JSON.readTree(aJsonString));
+        } catch (final IOException details) {
             throw new JsonParsingException(details);
         }
     }

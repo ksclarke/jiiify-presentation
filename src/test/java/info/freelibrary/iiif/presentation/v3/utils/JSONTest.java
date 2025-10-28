@@ -40,8 +40,7 @@ public class JSONTest {
         {
           "id" : "{}",
           "type" : "Dataset"
-        }
-        """;
+        }""";
 
     /** An ID used in testing. */
     private String myID;
@@ -290,12 +289,13 @@ public class JSONTest {
      * Test method for {@link JSON#valueToTree(Object)}.
      */
     @Test
-    public final void testValueToTree() {
+    public final void testValueToTree() throws IOException {
         final JavaType type = JSON.getTypeFactory().constructType(DatasetContent.class);
-        final String json = StringUtils.format(TEST_JSON, myID).trim();
+        final String json = StringUtils.format(TEST_JSON, myID);
         final JsonNode root = JSON.valueToTree(JSON.readValue(json, type));
 
-        assertEquals(json, root.toPrettyString());
+        assertEquals(json, JSON.getPrettyWriter().writeValueAsString(root));
+
     }
 
 }

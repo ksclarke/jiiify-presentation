@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import info.freelibrary.iiif.presentation.v3.annotation.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.content.ContentResource;
 import info.freelibrary.iiif.presentation.v3.exts.geo.NavPlace;
@@ -17,7 +18,9 @@ import info.freelibrary.iiif.presentation.v3.properties.NavDate;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CollectionBehavior;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.Labeled;
 import info.freelibrary.util.ListUtils;
 import info.freelibrary.util.warnings.Eclipse;
@@ -245,9 +248,8 @@ public class Collection extends NavigableResource<Collection> implements Resourc
     public final Collection setAnnotations(final AnnotationPage<WebAnnotation>... aPageArray) {
         final List<AnnotationPage<WebAnnotation>> annotations = getAnnotations();
 
-        Objects.requireNonNull(aPageArray);
         annotations.clear();
-        Arrays.stream(aPageArray).forEach(annotations::add);
+        annotations.addAll(Arrays.asList(Objects.requireNonNull(aPageArray)));
 
         return this;
     }
@@ -350,7 +352,6 @@ public class Collection extends NavigableResource<Collection> implements Resourc
      * @return The collection document
      */
     @JsonIgnore
-    @SafeVarargs
     public final Collection setServiceDefinitions(final Service... aServiceArray) {
         return setServiceDefinitions(Arrays.asList(aServiceArray));
     }
@@ -419,7 +420,7 @@ public class Collection extends NavigableResource<Collection> implements Resourc
 
             myType = Item.Type.fromLabel(ResourceTypes.COLLECTION).orElseThrow();
             aCollection.getLabel().ifPresent(label -> myLabel = label);
-            myID = aCollection.getID(); // ID rules should have been checked by Collection already
+            myID = aCollection.getID(); // Collection should have checked ID rules already
         }
 
         /**
@@ -622,6 +623,21 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         public Item setType(final String aType) {
             myType = Type.fromLabel(aType).orElseThrow(IllegalArgumentException::new);
             return this;
+        }
+
+        /**
+         * Gets a JSON string representation of this object.
+         *
+         * @return A JSON string representation
+         */
+        @Override
+        public String toString() {
+            try {
+                final boolean useURIs = Boolean.parseBoolean(System.getenv(JSON.URI_LINKS));
+                return JSON.getWriter(this.getClass()).withAttribute(JSON.URI_LINKS, useURIs).writeValueAsString(this);
+            } catch (final JsonProcessingException details) {
+                throw new I18nRuntimeException(details);
+            }
         }
 
         /**

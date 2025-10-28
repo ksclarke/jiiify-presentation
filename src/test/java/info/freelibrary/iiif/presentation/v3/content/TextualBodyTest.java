@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation.v3.content;
 
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.assertOptEquals;
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static info.freelibrary.util.Constants.EMPTY;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -104,7 +105,7 @@ public class TextualBodyTest {
         final String expected = StringUtils.format(StringUtils.read(json), id);
 
         body.setLanguage("en").setPurpose(Purpose.DESCRIBING).setValue("This is a description.");
-        assertEquals(expected, body.toString());
+        assertEquals(format(expected), body.toString());
     }
 
     /**

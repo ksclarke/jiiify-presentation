@@ -31,6 +31,11 @@ public final class EnvAltMinter implements Minter {
     }
 
     @Override
+    public String getAnnotationBodyID(final String aAnnotationID) {
+        return EnvAltMinter.class.getSimpleName();
+    }
+
+    @Override
     public String getCanvasID() {
         return EnvAltMinter.class.getSimpleName();
     }
