@@ -34,7 +34,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0  # Unshallow checkout helps SonarCloud provide more info
-          ref: develop # Run on the 'develop' branch
+          ref: SERV-1319 # Run on the 'develop' branch eventually, but PR for testing
 
       - name: Install GraalVM
         uses: graalvm/setup-graalvm@7a1da54cb7fdef4ea19f6ecdfa9ecf59dc5a48fe # v1.3.6
