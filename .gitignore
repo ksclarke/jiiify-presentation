@@ -31,3 +31,6 @@ docs/.env
 
 # Ignores for JetBrains' IDEs
 jiiify-presentation-v3.iml
+
+# Output of native builds
+output.zip

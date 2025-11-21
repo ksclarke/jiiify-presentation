@@ -84,18 +84,6 @@ public class JPv3Test {
         assertEquals(ResourceTypes.MANIFEST, value.get());
     }
 
-    // /**
-    // * Tests the main method with one bad argument.
-    // */
-    // @Test
-    // public void testMainOneArgBad() throws Exception {
-    // final String errOutput = tapSystemErr(() -> {
-    // JPv3.main(new String[] { BAD_FILE_PATH });
-    // }).trim();
-    //
-    // assertEquals(LOGGER.getMessage(MessageCodes.JPA_157), errOutput);
-    // }
-
     /**
      * Tests private constructor coverage.
      */

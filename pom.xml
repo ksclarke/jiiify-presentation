@@ -50,14 +50,13 @@
         <media.fragments.uri.version>2.4</media.fragments.uri.version>
 
         <!-- Build-related dependencies -->
-        <shade.plugin.version>3.6.0</shade.plugin.version>
         <exec.plugin.version>3.5.0</exec.plugin.version>
         <native.maven.plugin.version>0.10.6</native.maven.plugin.version>
 
         <!-- Test-related dependencies -->
         <magicfree.json.version>0.11.0</magicfree.json.version>
         <system.lambda.version>1.2.1</system.lambda.version>
-        <mockito.version>5.16.1</mockito.version>
+        <mockito.version>5.20.0</mockito.version>
         <opencsv.version>4.6</opencsv.version>
         <lorem.version>2.1</lorem.version>
 
@@ -291,7 +290,7 @@
                         <configuration>
                             <!-- Exclude the CSV utils from the main compilation process -->
                             <excludes>
-                                <exclude>**/info/freelibrary/iiif/presentation/v3/utils/csv/**/*.java</exclude>
+                                <exclude>**/info/freelibrary/iiif/presentation/v3/utils/csv/*.java</exclude>
                                 <exclude>**/info/freelibrary/iiif/presentation/v3/utils/JPv3.java</exclude>
                             </excludes>
                         </configuration>
@@ -305,7 +304,7 @@
                         <configuration>
                             <testExcludes>
                                 <!-- Exclude test sources associated with the excluded CSV utils -->
-                                <testExclude>**/info/freelibrary/iiif/presentation/v3/utils/csv/**/*.java</testExclude>
+                                <testExclude>**/info/freelibrary/iiif/presentation/v3/utils/csv/*.java</testExclude>
                                 <exclude>**/info/freelibrary/iiif/presentation/v3/utils/JPv3Test.java</exclude>
                             </testExcludes>
                         </configuration>
@@ -419,6 +418,9 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
+                                    <environmentVariables>
+                                        <HOST_PWD>${env.PWD}</HOST_PWD>
+                                    </environmentVariables>
                                     <executable>java</executable>
                                     <arguments>
                                         <!-- JVM agent goes here -->
@@ -509,6 +511,8 @@
         <profile>
             <id>uber</id>
             <properties>
+                <shade.plugin.version>3.6.1</shade.plugin.version>
+
                 <shade.includer>org.apache.maven.plugins.shade.resource.IncludeResourceTransformer</shade.includer>
                 <shade.manifest>org.apache.maven.plugins.shade.resource.ManifestResourceTransformer</shade.manifest>
             </properties>
@@ -539,6 +543,7 @@
                                         <filter>
                                             <artifact>*:*</artifact>
                                             <excludes>
+                                                <exclude>logback.xml</exclude>
                                                 <exclude>module-info.class</exclude>
                                                 <exclude>META-INF/*.SF</exclude>
                                                 <exclude>META-INF/*.DSA</exclude>
@@ -548,6 +553,13 @@
                                                 <exclude>META-INF/LICENSE.txt</exclude>
                                                 <exclude>META-INF/MANIFEST.MF</exclude>
                                                 <exclude>META-INF/versions/9/module-info.class</exclude>
+                                            </excludes>
+                                        </filter>
+                                        <filter>
+                                            <artifact>com.fasterxml.jackson.dataformat:jackson-dataformat-csv</artifact>
+                                            <excludes>
+                                                <exclude>META-INF/services/com.fasterxml.jackson.core.ObjectCodec</exclude>
+                                                <exclude>META-INF/services/com.fasterxml.jackson.core.JsonFactory</exclude>
                                             </excludes>
                                         </filter>
                                     </filters>
@@ -580,7 +592,7 @@
     <parent>
         <artifactId>freelib-parent</artifactId>
         <groupId>info.freelibrary</groupId>
-        <version>13.0.0</version>
+        <version>13.0.2</version>
     </parent>
 
 </project>

@@ -12,13 +12,16 @@ import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.utils.csv.Mapper;
 import info.freelibrary.iiif.presentation.v3.utils.csv.MappingException;
+import info.freelibrary.util.Constants;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.StringUtils;
 import info.freelibrary.util.warnings.Checkstyle;
 import info.freelibrary.util.warnings.PMD;
 import picocli.CommandLine;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
@@ -29,11 +32,6 @@ import java.util.stream.Stream;
 @CommandLine.Command(name = "jpv3", mixinStandardHelpOptions = true, version = "jpv3 0.0.1-SNAPSHOT",
         description = "A utility for working with JPv3 on the command line.", usageHelpWidth = 120)
 public final class JPv3 implements Callable<Integer> {
-
-    static {
-        // Simple way to disable logback, which we use for the library's tests
-        System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "off");
-    }
 
     /** The logger for the executable. */
     private static final Logger LOGGER = LoggerFactory.getLogger(JPv3.class, MessageCodes.BUNDLE);
@@ -51,17 +49,24 @@ public final class JPv3 implements Callable<Integer> {
     @CommandLine.ArgGroup(exclusive = true, multiplicity = "1")
     private Action myAction;
 
-    /** Runs the application. */
-    @Override
-    public Integer call() throws Exception {
-        try {
-            new Mapper(Stream.of(myInputFile), myOutputFile).map();
-            return 0;
-        } catch (final MappingException details) {
-            LOGGER.error(details, details.getMessage());
-            return -1;
-        }
-    }
+    /** The authentication username. */
+    @CommandLine.Option(names = { "-U", "--username" }, description = "The username to use for authentication",
+            defaultValue = "${env:JPV3_USERNAME}")
+    private String myUsername;
+
+    /** The authentication password. */
+    @CommandLine.Option(names = { "-P", "--password" }, description = "The password to use for authentication",
+            defaultValue = "${env:JPV3_PASSWORD}")
+    private String myPassword;
+
+    /** The host to which the ZIP file is being uploaded. */
+    @CommandLine.Option(names = { "-H", "--host" }, description = "The host to which the ZIP file is being uploaded",
+            defaultValue = "${env:JPV3_HOST}")
+    private URL myHost;
+
+    /** The help flag. */
+    @CommandLine.Option(names = { "-h", "--help" }, usageHelp = true, description = "Display this help message")
+    private boolean myHelpFlag;
 
     /**
      * Quickly finds a JSON property value.
@@ -118,20 +123,40 @@ public final class JPv3 implements Callable<Integer> {
         };
     }
 
+    /** Runs the application. */
+    @Override
+    public Integer call() throws Exception {
+        // Make sure we have a username and password if we're uploading the resulting ZIP file
+        if (myAction.myUploadFlag && (StringUtils.trimToNull(myUsername) == null ||
+                StringUtils.trimToNull(myPassword) == null || myHost == null)) {
+            throw new CommandLine.ParameterException(new CommandLine(this),
+                    LOGGER.getMessage(MessageCodes.JPA_174, Constants.EOL));
+        }
+
+        try {
+            new Mapper(Stream.of(myInputFile), myOutputFile).map();
+            return 0;
+        } catch (final MappingException details) {
+            LOGGER.error(details, details.getMessage());
+            return -1;
+        }
+    }
+
     /** The action for the jpv3 program to take. */
     static class Action {
 
         /** Whether to create a local manifest or collection doc. */
-        @CommandLine.Option(names = { "-c", "--create" }, description = "Create a local manifest or collection doc")
+        @CommandLine.Option(names = { "-c", "--create" }, description = "Create a local zip with IIIF resources")
         private boolean myCreateFlag;
 
         /** The HTTP request method to use. */
-        @CommandLine.Option(names = { "-X", "--request" }, arity = "1", description = "The method to use: PUT, POST")
-        private String myHttpMethod;
+        @CommandLine.Option(names = { "-u", "--upload" }, description = "Create IIIF resources, then upload them")
+        private boolean myUploadFlag;
 
-        /** The JSONiq query to execute. */
-        @CommandLine.Option(names = { "-v", "--view" }, arity = "1", description = "The JSONiq query to execute")
-        private String myJSONiq;
+        /** The JSONiq query used to produce a view. */
+        @CommandLine.Option(names = { "-v", "--view" }, arity = "1", defaultValue = ".",
+                description = "The optional JSONiq query to use for the view")
+        private String myViewFilter;
 
     }
 }
