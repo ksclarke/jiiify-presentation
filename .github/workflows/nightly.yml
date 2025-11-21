@@ -1,0 +1,133 @@
+name: Maven PR Build
+
+# We require all commits to go through PR on GitHub
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 2 * * *'
+
+jobs:
+  build:
+    name: Maven PR Builder (JDK ${{ matrix.java }}, ${{ matrix.os}})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            java: "21"
+            graalvm: "24"
+            maven: "3.8.6"
+            suffix: "linux-x64"
+          - os: "macos-latest"
+            java: "21"
+            graalvm: "24"
+            maven: "3.8.6"
+            suffix: "macos-x64"
+          - os: "windows-latest"
+            java: "21"
+            graalvm: "24"
+            maven: "3.8.6"
+            suffix: "windows-x64"
+#          - os: "ubuntu-latest"
+#            java: "24"
+#            graalvm: "24"
+#            maven: "3.8.6"
+#            suffix: "linux-x64"
+#          - os: "macos-latest"
+#            java: "24"
+#            graalvm: "24"
+#            maven: "3.8.6"
+#            suffix: "macos-x64"
+#          - os: "windows-latest"
+#            java: "24"
+#            graalvm: "24"
+#            maven: "3.8.6"
+#            suffix: "windows-x64"
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0  # Unshallow checkout helps SonarCloud provide more info
+          ref: develop # Run on the 'develop' branch
+
+      - name: Install GraalVM
+        uses: graalvm/setup-graalvm@7a1da54cb7fdef4ea19f6ecdfa9ecf59dc5a48fe # v1.3.6
+        with:
+          java-version: ${{ matrix.graalvm }}
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          cache: 'maven'
+
+      # If running locally in ACT, install Maven
+      - name: Set up Maven
+        uses: stCarolas/setup-maven@d6af6abeda15e98926a57b5aa970a96bb37f97d1 # v5
+        with:
+          maven-version: ${{ matrix.maven }}
+
+      - name: Cache SonarCloud packages
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Build with Maven
+        env:
+          MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.BUILD_PASSPHRASE }}
+          MAVEN_GPG_KEY: ${{ secrets.BUILD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          mvn -B -ntp -Prelease deploy javadoc:javadoc
+
+#      - name: Prepare binary artifact
+#        shell: bash
+#        run: |
+#          mkdir -p dist
+#          cp "target/jpv3" "dist/jpv3-${{ matrix.suffix }}${{ runner.os == 'Windows' && '.exe' || '' }}"
+#
+#      - name: Upload binary artifact
+#        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+#        if: ${{ matrix.java == '24' }}
+#        with:
+#          name: ${{ matrix.suffix }}
+#          path: dist/*
+#
+#  release:
+#    needs: build
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+#        with:
+#          path: dist
+#
+#      - name: Flatten binary artifacts directory
+#        run: |
+#          mkdir bin_out
+#          find dist -type f -maxdepth 2 -exec cp {} bin_out/ \;
+#
+#      - name: Compute timestamp
+#        id: ts
+#        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+#        with:
+#          script: |
+#            const pad = num => String(num).padStart(2, '0');
+#            const date = new Date();
+#            let ts = String(date.getUTCFullYear());
+#            ts += pad(date.getUTCMonth() + 1) + pad(date.getUTCDate()) + '-';
+#            ts += pad(date.getUTCHours()) + pad(date.getUTCMinutes()) + pad(date.getUTCSeconds()) + 'Z';
+#            core.setOutput('timestamp', ts);
+#
+#      - name: Release binary artifacts
+#        uses: softprops/action-gh-release@6cbd405e2c4e67a21c47fa9e383d020e4e28b836 # v2.3.3
+#        with:
+#          tag_name: jpv3-${{ steps.ts.outputs.timestamp }}
+#          name: jpv3-${{ steps.ts.outputs.timestamp }}
+#          files: bin_out/*
+#          draft: true
+#          prerelease: false
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

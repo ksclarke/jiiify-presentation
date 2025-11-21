@@ -1,11 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3.utils.json;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -13,14 +8,6 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.StringUtils;
-import info.freelibrary.util.warnings.JDK;
-import info.freelibrary.util.warnings.PMD;
-import info.freelibrary.util.warnings.Sonar;
-
 import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.services.AuthCookieService;
@@ -45,6 +32,16 @@ import info.freelibrary.iiif.presentation.v3.services.image.Tile;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.StringUtils;
+import info.freelibrary.util.warnings.PMD;
+import info.freelibrary.util.warnings.Sonar;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Deserializes services from JSON documents into {@link Service} implementations.
@@ -52,19 +49,13 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 @SuppressWarnings({ PMD.GOD_CLASS, PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS, Sonar.COGNITIVE_COMPLEXITY })
 public class ServiceDeserializer extends StdDeserializer<Service> {
 
-    /**
-     * The logger for the service deserializer.
-     */
+    /** The logger for the service deserializer. */
     private static final Logger LOGGER = LoggerFactory.getLogger(ServiceDeserializer.class, MessageCodes.BUNDLE);
 
-    /**
-     * The <code>serialVersionUID</code> for ServiceDeserializer.
-     */
+    /** The <code>serialVersionUID</code> for ServiceDeserializer. */
     private static final long serialVersionUID = 1840979246965623150L;
 
-    /**
-     * Creates a new metadata deserializer.
-     */
+    /** Creates a new metadata deserializer. */
     public ServiceDeserializer() {
         this(null);
     }
@@ -260,6 +251,39 @@ public class ServiceDeserializer extends StdDeserializer<Service> {
     }
 
     /**
+     * Creates a service from a supplied profile.
+     *
+     * @param aProfile A service profile
+     * @param aNode A JSON node to deserialize from, if needed to build the service
+     * @param aServiceList A list of services
+     * @param aID A service ID, if needed to build the service
+     * @param aParser A JSON parser, if needed to build the service's ID
+     * @return A newly constructed {@code Service}
+     * @throws JsonProcessingException If there is trouble parsing the JSON tree from the parser
+     */
+    private Service createServiceFromProfile(final Service.Profile aProfile, final JsonNode aNode,
+            final List<Service> aServiceList, final Optional<String> aID, final JsonParser aParser)
+            throws JsonProcessingException {
+        if (aProfile instanceof ImageService3.Profile) {
+            final ImageService imageService =
+                    new ImageService3(checkID(aID, aParser), (ImageService3.Profile) aProfile);
+            return deserializeImageService(aNode, imageService).setServices(aServiceList);
+        } else if (aProfile instanceof ImageService2.Profile) {
+            final ImageService imageService =
+                    new ImageService2(checkID(aID, aParser), (ImageService2.Profile) aProfile);
+            return deserializeImageService(aNode, imageService).setServices(aServiceList);
+        } else if (aProfile instanceof AuthCookieService.Profile) {
+            return deserializeV1AuthCookieService(aParser, aNode, aID).setServices(aServiceList);
+        } else if (aProfile instanceof AuthTokenService1.Profile) {
+            return new AuthTokenService1(checkID(aID, aParser));
+        } else if (aProfile instanceof PhysicalDimsService.Profile) {
+            return deserializePhysicalDimsService(aNode, aID, aParser).setServices(aServiceList);
+        } else {
+            return deserializeOtherService(aNode, checkID(aID, aParser)).setServices(aServiceList);
+        }
+    }
+
+    /**
      * Deserializes a services JSON node.
      *
      * @param aParser A JSON parser
@@ -268,64 +292,40 @@ public class ServiceDeserializer extends StdDeserializer<Service> {
      * @throws JsonProcessingException If there is trouble parsing the JSON
      * @throws JsonParseException If there is trouble parsing the JSON
      */
-    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY, PMD.COGNITIVE_COMPLEXITY, JDK.DEPRECATION })
     private Service deserializeServiceNode(final JsonParser aParser, final JsonNode aNode)
             throws JsonProcessingException {
-        final Service service;
-
         if (aNode.isTextual()) {
-            service = new OtherService3(aNode.textValue());
-        } else if (aNode.isObject()) {
-            final List<Service> services = getRelatedServices(aParser, aNode.get(JsonKeys.SERVICE));
-            final JsonNode profileNode = aNode.get(JsonKeys.PROFILE);
-            final Optional<String> id = getServiceID(aNode);
+            return new OtherService3(aNode.textValue());
+        }
 
-            if (profileNode != null) {
-                final Optional<Service.Profile> optProfile;
-
-                if (profileNode.isArray()) {
-                    // Spec: "The first entry in the list must be a compliance level URI"
-                    optProfile = Service.Profile.fromLabel(profileNode.get(0).asText());
-                } else {
-                    optProfile = Service.Profile.fromLabel(profileNode.asText());
-                }
-
-                if (optProfile.isPresent()) {
-                    final Service.Profile serviceProfile = optProfile.get();
-
-                    if (serviceProfile instanceof final ImageService3.Profile profile) {
-                        final ImageService imageService = new ImageService3(checkID(id, aParser), profile);
-                        service = deserializeImageService(aNode, imageService).setServices(services);
-                    } else if (serviceProfile instanceof final ImageService2.Profile profile) {
-                        final ImageService imageService = new ImageService2(checkID(id, aParser), profile);
-                        service = deserializeImageService(aNode, imageService).setServices(services);
-                    } else if (serviceProfile instanceof AuthCookieService.Profile) {
-                        service = deserializeV1AuthCookieService(aParser, aNode, id).setServices(services);
-                    } else if (serviceProfile instanceof AuthTokenService1.Profile) {
-                        service = new AuthTokenService1(checkID(id, aParser));
-                    } else if (serviceProfile instanceof PhysicalDimsService.Profile) {
-                        service = deserializePhysicalDimsService(aNode, id, aParser).setServices(services);
-                    } else {
-                        service = deserializeOtherService(aNode, checkID(id, aParser)).setServices(services);
-                    }
-                } else {
-                    service = deserializeOtherService(aNode, checkID(id, aParser)).setServices(services);
-                }
-            } else {
-                final JsonNode contextNode = aNode.get(JsonKeys.CONTEXT);
-
-                if (contextNode != null && GeoJsonService.CONTEXT.equals(contextNode.asText())) {
-                    service = deserializeGeoJsonService(aNode, checkID(id, aParser)).setServices(services);
-                } else {
-                    service = deserializeOtherService(aNode, checkID(id, aParser)).setServices(services);
-                }
-            }
-        } else {
+        if (!aNode.isObject()) {
             throw new JsonParseException(aParser, LOGGER.getMessage(MessageCodes.JPA_016, aNode.getClass().getName()),
                     aParser.currentLocation());
         }
 
-        return service;
+        final List<Service> services = getRelatedServices(aParser, aNode.get(JsonKeys.SERVICE));
+        final JsonNode profileNode = aNode.get(JsonKeys.PROFILE);
+        final Optional<String> id = getServiceID(aNode);
+
+        if (profileNode != null) {
+            final Optional<Service.Profile> optProfile =
+                    profileNode.isArray() ? Service.Profile.fromLabel(profileNode.get(0).asText())
+                            : Service.Profile.fromLabel(profileNode.asText());
+
+            if (optProfile.isPresent()) {
+                return createServiceFromProfile(optProfile.get(), aNode, services, id, aParser);
+            } else {
+                return deserializeOtherService(aNode, checkID(id, aParser)).setServices(services);
+            }
+        }
+
+        final JsonNode contextNode = aNode.get(JsonKeys.CONTEXT);
+
+        if (contextNode != null && GeoJsonService.CONTEXT.equals(contextNode.asText())) {
+            return deserializeGeoJsonService(aNode, checkID(id, aParser)).setServices(services);
+        }
+
+        return deserializeOtherService(aNode, checkID(id, aParser)).setServices(services);
     }
 
     /**
