@@ -7,12 +7,14 @@ package info.freelibrary.iiif.presentation.v3.utils.csv;
  * This constants class centralizes canonical column keys expected in input CSV files so that parsing and serialization
  * logic can reference a single source of truth. Keeping these keys here reduces duplication and prevents subtle typos
  * from breaking field bindings.
+ * </p>
  * <p>
  * Notes:
  * <ul>
  * <li>These keys represent the normalized (preferred) header names.</li>
  * <li>Input may still be accepted under alternate names via deserialization aliases.</li>
  * </ul>
+ * </p>
  */
 public final class Keys {
 
