@@ -30,6 +30,11 @@ import java.nio.charset.StandardCharsets;
 /** A IIIF builder for CSV-based deserialization. */
 public class Builder {
 
+    /** Creates a new builder. */
+    public Builder() {
+        // This is intentionally empty
+    }
+
     /**
      * Builds a resource based on the information provided in the given row and minter.
      *

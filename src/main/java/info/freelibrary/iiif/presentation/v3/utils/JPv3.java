@@ -49,17 +49,17 @@ public final class JPv3 implements Callable<Integer> {
     @CommandLine.ArgGroup(exclusive = true, multiplicity = "1")
     private Action myAction;
 
-    /** The authentication username. */
+    /** The authentication username. This is only needed for uploads. */
     @CommandLine.Option(names = { "-U", "--username" }, description = "The username to use for authentication",
             defaultValue = "${env:JPV3_USERNAME}")
     private String myUsername;
 
-    /** The authentication password. */
+    /** The authentication password. This is only needed for uploads. */
     @CommandLine.Option(names = { "-P", "--password" }, description = "The password to use for authentication",
             defaultValue = "${env:JPV3_PASSWORD}")
     private String myPassword;
 
-    /** The host to which the ZIP file is being uploaded. */
+    /** The host to which the ZIP file is being uploaded. This is only needed for uploads. */
     @CommandLine.Option(names = { "-H", "--host" }, description = "The host to which the ZIP file is being uploaded",
             defaultValue = "${env:JPV3_HOST}")
     private URL myHost;
@@ -67,6 +67,11 @@ public final class JPv3 implements Callable<Integer> {
     /** The help flag. */
     @CommandLine.Option(names = { "-h", "--help" }, usageHelp = true, description = "Display this help message")
     private boolean myHelpFlag;
+
+    /** Creates a new JPv3 instance. */
+    public void JPv3() {
+        // This is intentionally empty
+    }
 
     /**
      * Quickly finds a JSON property value.
