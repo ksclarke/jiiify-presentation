@@ -69,7 +69,7 @@ public final class JPv3 implements Callable<Integer> {
     private boolean myHelpFlag;
 
     /** Creates a new JPv3 instance. */
-    public void JPv3() {
+    public JPv3() {
         // This is intentionally empty
     }
 
