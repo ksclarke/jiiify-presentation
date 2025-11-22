@@ -152,6 +152,11 @@
     <entry key="JPA-171">An output ZIP file name is required</entry>
     <entry key="JPA-172">Each CSV row is required to have an ObjectType</entry>
     <entry key="JPA-173">Painted content is smaller than the canvas dimensions (w/h): {}/{} vs. {}/{}</entry>
-    <entry key="JPA-174"></entry>
-    <entry key="JPA-175"></entry>
+    <entry key="JPA-174">The -U, -P, and -H options are required when -u is used{}</entry>
+    <entry key="JPA-175">Create a local zip with IIIF resources</entry>
+    <entry key="JPA-176"></entry>
+    <entry key="JPA-177"></entry>
+    <entry key="JPA-178"></entry>
+    <entry key="JPA-179"></entry>
+    <entry key="JPA-180"></entry>
 </properties>

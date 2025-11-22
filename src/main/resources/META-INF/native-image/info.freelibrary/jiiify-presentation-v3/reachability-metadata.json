@@ -19,7 +19,7 @@
       "type": "[Ljava.lang.String;"
     },
     {
-      "type": "ch.qos.logback.classic.BasicConfigurator",
+      "type": "ch.qos.logback.classic.encoder.PatternLayoutEncoder",
       "methods": [
         {
           "name": "<init>",
@@ -28,11 +28,17 @@
       ]
     },
     {
-      "type": "ch.qos.logback.classic.joran.SerializedModelConfigurator",
+      "type": "ch.qos.logback.classic.filter.ThresholdFilter",
       "methods": [
         {
           "name": "<init>",
           "parameterTypes": []
+        },
+        {
+          "name": "setLevel",
+          "parameterTypes": [
+            "java.lang.String"
+          ]
         }
       ]
     },
@@ -49,7 +55,87 @@
       ]
     },
     {
+      "type": "ch.qos.logback.core.ConsoleAppender",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "ch.qos.logback.core.OutputStreamAppender",
+      "methods": [
+        {
+          "name": "setEncoder",
+          "parameterTypes": [
+            "ch.qos.logback.core.encoder.Encoder"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "ch.qos.logback.core.UnsynchronizedAppenderBase",
+      "methods": [
+        {
+          "name": "addFilter",
+          "parameterTypes": [
+            "ch.qos.logback.core.filter.Filter"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "ch.qos.logback.core.encoder.Encoder"
+    },
+    {
+      "type": "ch.qos.logback.core.encoder.LayoutWrappingEncoder",
+      "methods": [
+        {
+          "name": "setParent",
+          "parameterTypes": [
+            "ch.qos.logback.core.spi.ContextAware"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "ch.qos.logback.core.filter.Filter"
+    },
+    {
+      "type": "ch.qos.logback.core.pattern.PatternLayoutEncoderBase",
+      "methods": [
+        {
+          "name": "setPattern",
+          "parameterTypes": [
+            "java.lang.String"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "ch.qos.logback.core.spi.ContextAware"
+    },
+    {
+      "type": "ch.qos.logback.core.status.NopStatusListener",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
       "type": "com.fasterxml.jackson.databind.ext.Java7SupportImpl",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl",
       "methods": [
         {
           "name": "<init>",
@@ -1102,6 +1188,9 @@
       "glob": "META-INF/services/java.time.zone.ZoneRulesProvider"
     },
     {
+      "glob": "META-INF/services/javax.xml.parsers.SAXParserFactory"
+    },
+    {
       "glob": "META-INF/services/org.slf4j.spi.SLF4JServiceProvider"
     },
     {
@@ -1138,13 +1227,7 @@
       "glob": "linux/amd64/liblz4-java.so"
     },
     {
-      "glob": "logback-test.scmo"
-    },
-    {
       "glob": "logback-test.xml"
-    },
-    {
-      "glob": "logback.scmo"
     },
     {
       "glob": "logback.xml"
@@ -1152,6 +1235,10 @@
     {
       "module": "java.base",
       "glob": "jdk/internal/icu/impl/data/icudt76b/nfkc.nrm"
+    },
+    {
+      "module": "java.xml",
+      "glob": "jdk/xml/internal/jdkcatalog/JDKCatalog.xml"
     }
   ],
   "bundles": [

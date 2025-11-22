@@ -14,14 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.spi.FileTypeDetector;
 
 /**
- * Very small file type detector that recognizes:
- * <ul>
- * <li>ZIP archives (application/zip)</li>
- * <li>CSV files (text/csv)</li>
- * <li>Everything else (null -- let the JDK fall back to other detectors)</li>
- * </ul>
- * <p>
- * Could add support for manifests, collection docs, etc. if there are standard-ish media types.
+ * A small file type detector that recognizes ZIP archives, CSV files, and other file types.
  */
 class JPv3FileTypeDetector extends FileTypeDetector {
 

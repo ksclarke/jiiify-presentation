@@ -8,6 +8,7 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.json.LabelDeserializer;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -89,6 +90,20 @@ public class Label extends I18nProperty<Label> implements Comparable<Label> {
     @Override
     public Label setI18ns(final List<I18n> aI18nList) {
         return super.setI18ns(I18nUtils.validateI18ns(false, aI18nList.toArray(new I18n[0])));
+    }
+
+    @Override
+    public boolean equals(final Object aObj) {
+        if (aObj instanceof Label) {
+            return compareTo((Label) aObj) == 0;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode());
     }
 
     @Override

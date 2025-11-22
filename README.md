@@ -1,8 +1,12 @@
 # jiiify-presentation (JPv3) <br>[![IIIF Presentation 3.0](https://img.shields.io/badge/IIIF%20Presentation-3.0-brightgreen)](https://iiif.io/api/presentation/3.0/) [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip) [![Maven PR Build](https://github.com/ksclarke/jiiify-presentation/actions/workflows/build.yml/badge.svg)](https://github.com/ksclarke/jiiify-presentation/actions/workflows/build.yml) [![Maven](https://img.shields.io/maven-metadata/v/https/repo1.maven.org/maven2/info/freelibrary/jiiify-presentation-v3/maven-metadata.xml.svg?colorB=brightgreen)](https://search.maven.org/artifact/info.freelibrary/jiiify-presentation-v3) [![Javadocs](http://javadoc.io/badge2/info.freelibrary/jiiify-presentation-v3/latest/javadoc.svg)](https://javadoc.io/doc/info.freelibrary/jiiify-presentation-v3/latest/index.html)
 
-Jiiify Presentation is a [IIIF Presentation](http://iiif.io/api/presentation) library for Java. It does not contain a manifest server. While it could be used to write such a server, it's purpose is just to provide a way to work with IIIF manifests.
+Jiiify Presentation is a [IIIF Presentation](http://iiif.io/api/presentation) library for Java. It does not contain a
+manifest server. While it could be used to write such a server, it's purpose is just to provide a way to work with IIIF
+manifests.
 
-*Warning:* The API for v3 is still being actively developed. There will be breaking changes in the `main` branch before the library reaches version 1.0.0. After the stable release, the project will use [semantic versioning](https://semver.org/) to represent the types of ongoing changes being made.
+*Warning:* The API for v3 is still being actively developed. There will be breaking changes in the `main` branch before
+the library reaches version 1.0.0. After the stable release, the project will use
+[semantic versioning](https://semver.org/) to represent the types of ongoing changes being made.
 
 ### Prerequisites
 
@@ -11,15 +15,16 @@ Jiiify Presentation is a [IIIF Presentation](http://iiif.io/api/presentation) li
 
 ### Getting Started
 
-A very simple Java example of using jiiify-presentation follows:
+A basic example of using jiiify-presentation:
 
-    final Manifestor manifestor = new Manifestor();
-    final Manifest manifest = manifestor.readManifest(new File("src/test/resources/json/z1960050.json"));
+    var manifestor = new Manifestor();
+    var manifest = manifestor.readManifest(new File("src/test/resources/json/z1960050.json"));
 
-    manifest.getMetadata().add(new Metadata("Contributor", "Your Name Here"));
+    manifest.getMetadata().add(new Metadata("Contributor", "Your Name"));
     manifestor.write(manifest, File.createTempFile("z1960050", ".json"));
 
-To learn more about how to use the library, consult the project's [Javadocs](https://javadoc.io/doc/info.freelibrary/jiiify-presentation-v3/latest/index.html).
+To learn more about how to use the library, consult the
+project's [Javadocs](https://javadoc.io/doc/info.freelibrary/jiiify-presentation-v3/latest/index.html).
 
 ### Building the Project
 
@@ -29,14 +34,23 @@ To check the project out and build it, type:
     cd jiiify-presentation
     git fetch origin
     git checkout -b v3 origin/v3
-    mvn install
+    mvn verify
+
+_Note:_ If you build the project with one of the custom profiles defined in the POM, please remember to run `mvn clean`
+before building again with a different profile (including the default profile).
 
 To build the Javadocs, from the command line, run: `mvn javadoc:javadoc`
 
 ### Spec/Cookbook Compliance
 
-Jiiify Presentation (JP) uses the IIIF Presentation [cookbooks](https://iiif.io/api/cookbook/index.html) as an indicator of v3 support. Consult the JP [documentation](docs/cookbook-status.md) to see which cookbooks are fully supported, partially supported, or not yet supported. Not all cookbooks have been completely fleshed out yet so this list will be frequently updated until they are all completed.
+Jiiify Presentation (JP) uses the IIIF Presentation [cookbooks](https://iiif.io/api/cookbook/index.html) as an
+indicator of v3 support. Consult the JP [documentation](docs/cookbook-status.md) to see which cookbooks are fully
+supported, partially supported, or not yet supported. Not all cookbooks have been completely fleshed out yet so this
+list will be frequently updated until they are all completed.
 
 ### Contact
 
-If you encounter a problem, please feel free to open a ticket in the project's [issues queue](https://github.com/ksclarke/jiiify-presentation/issues "GitHub Issues Queue"). If you have a question, feel free to use the project's [discussion board](https://github.com/ksclarke/jiiify-presentation/discussions). Please specify which branch or version of jiiify-presentation you're using.
+If you encounter a problem, please feel free to open a ticket in the project's
+[issues queue](https://github.com/ksclarke/jiiify-presentation/issues "GitHub Issues Queue"). If you have a question,
+feel free to use the project's [discussion board](https://github.com/ksclarke/jiiify-presentation/discussions). Please
+specify which branch or version of jiiify-presentation you're using.

@@ -44,13 +44,12 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.ThrowingBiFunction;
+import info.freelibrary.util.ThrowingConsumer;
 import info.freelibrary.util.warnings.PMD;
-import info.freelibrary.util.warnings.Sonar;
 
 import java.io.IOException;
 import java.io.Serial;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -61,20 +60,14 @@ import java.util.function.BiFunction;
 @SuppressWarnings({ PMD.GOD_CLASS, PMD.EXCESSIVE_IMPORTS })
 public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
 
-    /**
-     * The deserializer's logger.
-     */
+    /** The deserializer's logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(WebAnnotationDeserializer.class, MessageCodes.BUNDLE);
 
-    /**
-     * The <code>serialVersionUID</code> for the deserializer.
-     */
+    /** The <code>serialVersionUID</code> for the deserializer. */
     @Serial
     private static final long serialVersionUID = -6905362570704679943L;
 
-    /**
-     * Creates a new <code>WebAnnotationDeserializer</code>.
-     */
+    /** Creates a new <code>WebAnnotationDeserializer</code>. */
     public WebAnnotationDeserializer() {
         super(WebAnnotation.class);
     }
@@ -92,7 +85,7 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
     public WebAnnotation deserialize(final JsonParser aParser, final DeserializationContext aContext)
             throws IOException {
         final ThrowingBiFunction<String, JsonNode, String, InputCoercionException> check = (aKey, aNode) -> {
-            // Check that required value exists in the WebAnnotation's JSON serialization and fail if it doesn't
+            // Check that the required value exists in the WebAnnotation's JSON serialization and fail if it doesn't
             if (aNode == null) {
                 throw error(aParser, LOGGER.getMessage(MessageCodes.JPA_012, aKey));
             }
@@ -188,24 +181,41 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
      */
     private List<ContentResource> getBody(final JsonNode aNode, final BiFunction<String, JsonNode, String> aTypeCheck) {
         final List<ContentResource> resources = new ArrayList<>();
+        final JsonNode itemsNode;
 
-        if (aNode != null) {
-            final JsonNode itemsNode = aNode.get(JsonKeys.ITEMS);
+        if (aNode == null) {
+            return resources;
+        }
 
-            // If the items node is empty, we expect to have to parse a single object or a string value
-            if (itemsNode == null) {
-                if (aNode.isObject()) {
-                    resources.add(getResource(aTypeCheck.apply(JsonKeys.TYPE, aNode.get(JsonKeys.TYPE)), aNode));
-                } else if (aNode.isValueNode() && ResourceTypes.RDF_NIL.equals(aNode.asText())) {
-                    resources.add(null);
-                } else if (aNode.isArray()) { // below added
-                    aNode.elements().forEachRemaining(node -> resources
-                            .add(getResource(aTypeCheck.apply(JsonKeys.TYPE, node.get(JsonKeys.TYPE)), node)));
-                } // else warning?
-            } else {
-                itemsNode.forEach(node -> resources
-                        .add(getResource(aTypeCheck.apply(JsonKeys.TYPE, node.get(JsonKeys.TYPE)), node)));
-            }
+        if (aNode.isTextual()) {
+            resources.add(getResource(aTypeCheck.apply(JsonKeys.TYPE, aNode), aNode));
+            return resources;
+        }
+
+        itemsNode = aNode.get(JsonKeys.ITEMS);
+
+        if (itemsNode != null) {
+            itemsNode.forEach(
+                    node -> resources.add(getResource(aTypeCheck.apply(JsonKeys.TYPE, node.get(JsonKeys.TYPE)), node)));
+
+            return resources;
+        }
+
+        if (aNode.isObject()) {
+            resources.add(getResource(aTypeCheck.apply(JsonKeys.TYPE, aNode.get(JsonKeys.TYPE)), aNode));
+            return resources;
+        }
+
+        if (aNode.isValueNode() && ResourceTypes.RDF_NIL.equals(aNode.asText())) {
+            resources.add(null);
+            return resources;
+        }
+
+        if (aNode.isArray()) {
+            aNode.elements().forEachRemaining(
+                    node -> resources.add(getResource(aTypeCheck.apply(JsonKeys.TYPE, node.get(JsonKeys.TYPE)), node)));
+
+            return resources;
         }
 
         return resources;
@@ -293,31 +303,36 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
      * @return A list of annotation targets
      * @throws InputCoercionException If there is trouble parsing the incoming JSON
      */
-    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY, Sonar.COGNITIVE_COMPLEXITY })
     private List<Target> getTargets(final JsonNode aNode, final JsonParser aJsonParser) throws InputCoercionException {
         final List<Target> targets = new ArrayList<>();
+        final JsonNode targetsNode;
 
-        if (aNode != null) {
-            final JsonNode targetsNode = aNode.get(JsonKeys.TARGET);
+        if (aNode == null) {
+            return targets;
+        }
 
-            // If the items node is empty, we expect to have to parse a single object or a string value
-            if (targetsNode == null) {
-                if (aNode.isObject() || !aNode.isArray()) {
-                    targets.add(getTarget(aNode, aJsonParser));
-                } else {
-                    final Iterator<JsonNode> iterator = aNode.elements();
+        if (aNode.isTextual()) {
+            targets.add(new Target(aNode.asText()));
+            return targets;
+        }
 
-                    while (iterator.hasNext()) {
-                        targets.add(getTarget(iterator.next(), aJsonParser));
-                    }
-                }
-            } else {
-                final Iterator<JsonNode> iterator = targetsNode.elements();
+        targetsNode = aNode.get(JsonKeys.TARGET);
 
-                while (iterator.hasNext()) {
-                    targets.add(getTarget(iterator.next(), aJsonParser));
-                }
-            }
+        // If targetsNode exists, parse elements from it
+        if (targetsNode != null) {
+            targetsNode.forEach(ThrowingConsumer.sneaky(node -> targets.add(getTarget(node, aJsonParser))));
+            return targets;
+        }
+
+        // If aNode is a single object (not an array), parse as one target
+        if (aNode.isObject()) {
+            targets.add(getTarget(aNode, aJsonParser));
+            return targets;
+        }
+
+        if (aNode.isArray()) {
+            aNode.forEach(ThrowingConsumer.sneaky(node -> targets.add(getTarget(node, aJsonParser))));
+            return targets;
         }
 
         return targets;
