@@ -589,11 +589,11 @@
       "allDeclaredFields": true
     },
     {
-      "type": "info.freelibrary.iiif.presentation.v3.utils.JPv3",
+      "type": "info.freelibrary.iiif.presentation.v3.utils.cmd.JPv3",
       "allDeclaredFields": true
     },
     {
-      "type": "info.freelibrary.iiif.presentation.v3.utils.JPv3$Action",
+      "type": "info.freelibrary.iiif.presentation.v3.utils.cmd.JPv3$Action",
       "allDeclaredFields": true,
       "methods": [
         {

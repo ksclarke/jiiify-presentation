@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3.utils;
+package info.freelibrary.iiif.presentation.v3.utils.cmd;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -7,6 +7,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import org.junit.Rule;
@@ -20,7 +22,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 /**
- * Unit tests for the {@link JPv3} class.
+ * Unit tests for the {@link info.freelibrary.iiif.presentation.v3.utils.cmd.JPv3} class.
  */
 public class JPv3Test {
 

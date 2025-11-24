@@ -209,6 +209,9 @@
             <plugin>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
+                    <excludePackageNames>
+                        info.freelibrary.iiif.presentation.v3.utils.csv:info.freelibrary.iiif.presentation.v3.utils.cmd
+                    </excludePackageNames>
                     <links>
                         <link>https://javadoc.io/doc/info.freelibrary/freelib-utils/${freelib.utils.version}/</link>
                     </links>
@@ -291,7 +294,7 @@
                             <!-- Exclude the CSV utils from the main compilation process -->
                             <excludes>
                                 <exclude>**/info/freelibrary/iiif/presentation/v3/utils/csv/*.java</exclude>
-                                <exclude>**/info/freelibrary/iiif/presentation/v3/utils/JPv3.java</exclude>
+                                <exclude>**/info/freelibrary/iiif/presentation/v3/utils/cmd/*.java</exclude>
                             </excludes>
                         </configuration>
                     </execution>
@@ -305,7 +308,7 @@
                             <testExcludes>
                                 <!-- Exclude test sources associated with the excluded CSV utils -->
                                 <testExclude>**/info/freelibrary/iiif/presentation/v3/utils/csv/*.java</testExclude>
-                                <exclude>**/info/freelibrary/iiif/presentation/v3/utils/JPv3Test.java</exclude>
+                                <testExclude>**/info/freelibrary/iiif/presentation/v3/utils/cmd/*.java</testExclude>
                             </testExcludes>
                         </configuration>
                     </execution>
@@ -435,7 +438,7 @@
                                         <classpath/>
 
                                         <!-- Main class and its arguments -->
-                                        <argument>info.freelibrary.iiif.presentation.v3.utils.JPv3</argument>
+                                        <argument>info.freelibrary.iiif.presentation.v3.utils.cmd.JPv3</argument>
                                         <argument>-c</argument>
                                         <argument>-i</argument>
                                         <argument>src/test/resources/csv/jbu-collection.csv</argument>
@@ -488,7 +491,7 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <mainClass>info.freelibrary.iiif.presentation.v3.utils.JPv3</mainClass>
+                            <mainClass>info.freelibrary.iiif.presentation.v3.utils.cmd.JPv3</mainClass>
                             <imageName>jpv3</imageName>
                             <buildArgs>
                                 <arg>-O3</arg>
@@ -558,8 +561,10 @@
                                         <filter>
                                             <artifact>com.fasterxml.jackson.dataformat:jackson-dataformat-csv</artifact>
                                             <excludes>
-                                                <exclude>META-INF/services/com.fasterxml.jackson.core.ObjectCodec</exclude>
-                                                <exclude>META-INF/services/com.fasterxml.jackson.core.JsonFactory</exclude>
+                                                <exclude>META-INF/services/com.fasterxml.jackson.core.ObjectCodec
+                                                </exclude>
+                                                <exclude>META-INF/services/com.fasterxml.jackson.core.JsonFactory
+                                                </exclude>
                                             </excludes>
                                         </filter>
                                     </filters>
@@ -569,7 +574,7 @@
                                             <file>src/test/resources/logback-uber.xml</file>
                                         </transformer>
                                         <transformer implementation="${shade.manifest}">
-                                            <mainClass>info.freelibrary.iiif.presentation.v3.utils.JPv3</mainClass>
+                                            <mainClass>info.freelibrary.iiif.presentation.v3.utils.cmd.JPv3</mainClass>
                                         </transformer>
                                     </transformers>
                                 </configuration>
