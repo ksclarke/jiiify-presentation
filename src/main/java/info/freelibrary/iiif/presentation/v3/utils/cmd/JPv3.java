@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3.utils;
+package info.freelibrary.iiif.presentation.v3.utils.cmd;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
@@ -10,6 +10,8 @@ import info.freelibrary.iiif.presentation.v3.AnnotationPage;
 import info.freelibrary.iiif.presentation.v3.Collection;
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.utils.JSON;
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.csv.Mapper;
 import info.freelibrary.iiif.presentation.v3.utils.csv.MappingException;
 import info.freelibrary.util.Constants;
