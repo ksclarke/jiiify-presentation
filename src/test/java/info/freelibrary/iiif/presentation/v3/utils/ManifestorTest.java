@@ -3,12 +3,16 @@ package info.freelibrary.iiif.presentation.v3.utils;
 
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
+import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
 import org.junit.Test;
 
 import info.freelibrary.util.StringUtils;
@@ -21,6 +25,9 @@ import info.freelibrary.iiif.presentation.v3.Manifest;
  */
 public class ManifestorTest {
 
+    /** A logger used by Manifestor. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(ManifestorTest.class, MessageCodes.BUNDLE);
+
     /** A collection test fixture. */
     private static final File COLLECTION = new File(TestUtils.TEST_DIR, "collection1.json");
 
@@ -32,6 +39,16 @@ public class ManifestorTest {
 
     /** A location to use as a temporary directory. */
     private static final File TMP_DIR = new File(System.getProperty("java.io.tmpdir"));
+
+    /**
+     * Tests reading a collection file.
+     *
+     * @throws IOException If there is trouble reading the collection doc file
+     */
+    @Test
+    public final void testReadCollectionString() throws IOException {
+        testCollection(new Manifestor().readCollection(StringUtils.read(COLLECTION)));
+    }
 
     /**
      * Tests reading a manifest file.
@@ -47,6 +64,16 @@ public class ManifestorTest {
     @Test
     public final void testReadCollectionCharset() throws IOException {
         testCollection(new Manifestor().readCollection(COLLECTION, StandardCharsets.UTF_8));
+    }
+
+    /**
+     * Tests reading a manifest file.
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void testReadManifestString() throws IOException {
+        testManifest(new Manifestor().readManifest(StringUtils.read(MANIFEST)));
     }
 
     /**
@@ -115,6 +142,48 @@ public class ManifestorTest {
 
         new Manifestor().write(manifest, tmpJsonFile, StandardCharsets.UTF_8);
         assertEquals(format(json), format(StringUtils.read(tmpJsonFile)));
+    }
+
+    /**
+     * Tests the ability of the Manifestor class to determine the resource type of a resource file. This test validates
+     * the behavior of the getResourceType() method when provided with specific resource files. The test ensures the
+     * correct resource type (e.g., Manifest or Collection) is returned for the given input files. If the expected type
+     * is not returned, the test will fail with an appropriate error message.
+     *
+     * @throws IOException If there is an issue reading the resource file
+     */
+    @Test
+    public final void testGetResourceTypeFile() throws IOException {
+        final Manifestor manifestor = new Manifestor();
+
+        manifestor.getResourceType(MANIFEST).ifPresentOrElse(type -> {
+            assertEquals(ResourceTypes.MANIFEST, type);
+        }, () -> fail(LOGGER.getMessage(MessageCodes.JPA_176)));
+
+        manifestor.getResourceType(COLLECTION).ifPresentOrElse(type -> {
+            assertEquals(ResourceTypes.COLLECTION, type);
+        }, () -> fail(LOGGER.getMessage(MessageCodes.JPA_176)));
+    }
+
+    /**
+     * Tests the ability of the Manifestor class to determine the resource type of a resource in the string input. This
+     * test validates the behavior of the getResourceType() method when provided with specific resource strings. The
+     * test ensures the correct resource type (e.g., Manifest or Collection) is returned for a given input string. If
+     * the expected type is not returned, the test will fail with an appropriate error message.
+     *
+     * @throws IOException If there is an issue reading the resource string
+     */
+    @Test
+    public final void testGetResourceTypeString() throws IOException {
+        final Manifestor manifestor = new Manifestor();
+
+        manifestor.getResourceType(StringUtils.read(MANIFEST)).ifPresentOrElse(type -> {
+            assertEquals(ResourceTypes.MANIFEST, type);
+        }, () -> fail(LOGGER.getMessage(MessageCodes.JPA_176)));
+
+        manifestor.getResourceType(StringUtils.read(COLLECTION)).ifPresentOrElse(type -> {
+            assertEquals(ResourceTypes.COLLECTION, type);
+        }, () -> fail(LOGGER.getMessage(MessageCodes.JPA_176)));
     }
 
     /**

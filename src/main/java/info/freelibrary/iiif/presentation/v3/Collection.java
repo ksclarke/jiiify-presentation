@@ -5,9 +5,11 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import info.freelibrary.iiif.presentation.v3.annotation.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.content.ContentResource;
 import info.freelibrary.iiif.presentation.v3.exts.geo.NavPlace;
@@ -20,6 +22,7 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CollectionBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.json.ContentResourceDeserializer;
 import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.Labeled;
 import info.freelibrary.util.ListUtils;
@@ -38,7 +41,7 @@ import java.util.Optional;
  * own descriptive information. They can also provide clients with a means to locate all the manifests known to the
  * publishing institution.
  */
-@SuppressWarnings({ PMD.COUPLING_BETWEEN_OBJECTS })
+@SuppressWarnings({ PMD.COUPLING_BETWEEN_OBJECTS, PMD.EXCESSIVE_IMPORTS })
 public class Collection extends NavigableResource<Collection> implements Resource<Collection> {
 
     /**
@@ -398,6 +401,8 @@ public class Collection extends NavigableResource<Collection> implements Resourc
         /**
          * The collection item's thumbnails.
          */
+        @JsonProperty(JsonKeys.THUMBNAIL)
+        @JsonDeserialize(contentUsing = ContentResourceDeserializer.class)
         private List<ContentResource> myThumbnails;
 
         /**

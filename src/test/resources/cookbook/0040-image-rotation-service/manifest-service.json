@@ -46,7 +46,7 @@
                 },
                 "selector": {
                   "type": "ImageApiSelector",
-                  "rotation": "90"
+                  "rotation": "270"
                 }
               },
               "target": "https://iiif.io/api/cookbook/recipe/0040-image-rotation-service/canvas/p1"
