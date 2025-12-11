@@ -1,9 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3.utils.csv;
 
-import static info.freelibrary.iiif.presentation.v3.ResourceTypes.IMAGE;
-import static info.freelibrary.iiif.presentation.v3.ResourceTypes.IMAGE_SERVICE_2;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
@@ -38,6 +35,9 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
+
+import static info.freelibrary.iiif.presentation.v3.ResourceTypes.IMAGE;
+import static info.freelibrary.iiif.presentation.v3.ResourceTypes.IMAGE_SERVICE_2;
 
 /**
  * A mapper for reading CSV data and mapping it into a local database.
@@ -108,8 +108,6 @@ public class Mapper {
         reader.rows(aCsvFile).forEach(ThrowingConsumer.sneaky(row -> {
             final String rowID = row.getItemID().orElse(UUID.randomUUID().toString());
             final String rowValue = myMapper.writeValueAsString(row);
-
-            LOGGER.warn("Reading row: " + rowValue);
 
             // Create the main data index, which uses ID as the index's key
             myCsvData.put(rowID, rowValue);
