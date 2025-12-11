@@ -214,12 +214,20 @@ public final class JPv3 implements Callable<Integer> {
             return myCreateFlag;
         }
 
-        /** Whether to upload a local manifest or collection doc. */
+        /**
+         * Whether to upload a local manifest or collection doc.
+         *
+         * @return Whether to upload a local manifest or collection doc
+         */
         private boolean isUpload() {
             return myUploadFlag;
         }
 
-        /** Whether to view a newly created ZIP file of manifests and collection documents. */
+        /**
+         * Whether to view a newly created ZIP file of manifests and collection documents.
+         *
+         * @return Whether to view a newly created ZIP file of manifests and collection documents
+         */
         private boolean isView() {
             return !isCreate() && !isUpload();
         }
