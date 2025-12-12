@@ -213,7 +213,7 @@
                         info.freelibrary.iiif.presentation.v3.utils.csv:info.freelibrary.iiif.presentation.v3.utils.cmd
                     </excludePackageNames>
                     <links>
-                        <link>https://javadoc.io/doc/info.freelibrary/freelib-utils/${freelib.utils.version}/</link>
+                        <link>https://javadoc.io/doc/info.freelibrary/freelib-utils/</link>
                     </links>
                 </configuration>
             </plugin>
