@@ -41,8 +41,8 @@ import static info.freelibrary.util.Constants.COLON;
 
 /** A jpv3 executable. */
 @CommandLine.Command(name = "jpv3", mixinStandardHelpOptions = true, version = "jpv3 0.0.1-SNAPSHOT",
-        description = "A utility for working with JPv3 on the command line.", usageHelpWidth = 120)
-@SuppressWarnings({PMD.EXCESSIVE_IMPORTS})
+        description = "\nA tool for working with IIIF manifests and collection documents", usageHelpWidth = 120)
+@SuppressWarnings({ PMD.EXCESSIVE_IMPORTS })
 public final class JPv3 implements Callable<Integer> {
 
     /** The logger for the executable. */
@@ -142,7 +142,7 @@ public final class JPv3 implements Callable<Integer> {
 
     /** Runs the application. */
     @Override
-    @SuppressWarnings({PMD.CYCLOMATIC_COMPLEXITY})
+    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY })
     public Integer call() throws Exception {
         // Make sure we have a username and password if we're uploading the resulting ZIP file
         if (myAction.myUploadFlag && (StringUtils.trimToNull(myUsername) == null ||
@@ -162,8 +162,7 @@ public final class JPv3 implements Callable<Integer> {
                     final HttpRequest request = HttpRequest.newBuilder().uri(myHost)
                             .header(HTTP.Header.CONTENT_TYPE, MediaType.APPLICATION_ZIP.toString())
                             .header(HTTP.Header.AUTHORIZATION, basicAuth)
-                            .POST(HttpRequest.BodyPublishers.ofFile(myOutputFile))
-                            .build();
+                            .POST(HttpRequest.BodyPublishers.ofFile(myOutputFile)).build();
                     final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
                     final int statusCode = response.statusCode();
 
