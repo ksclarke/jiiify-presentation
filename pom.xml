@@ -44,7 +44,7 @@
         <!-- Application dependencies -->
         <jackson.version>2.19.2</jackson.version>
         <jackson.databind.version>2.19.2</jackson.databind.version>
-        <freelib.utils.version>5.3.1</freelib.utils.version>
+        <freelib.utils.version>5.3.2</freelib.utils.version>
         <jsoup.version>1.21.1</jsoup.version>
         <combinatorics.version>3.4.0</combinatorics.version>
         <media.fragments.uri.version>2.4</media.fragments.uri.version>
@@ -211,10 +211,10 @@
                 <configuration>
                     <excludePackageNames>
                         info.freelibrary.iiif.presentation.v3.utils.csv:info.freelibrary.iiif.presentation.v3.utils.cmd
-                    </excludePackageNames>
+                    </excludePackageNames><!--
                     <links>
-                        <link>https://javadoc.io/doc/info.freelibrary/freelib-utils/${freelib.utils.version}/</link>
-                    </links>
+                        <link>https://javadoc.io/doc/info.freelibrary/freelib-utils/</link>
+                    </links>-->
                 </configuration>
             </plugin>
 
@@ -380,6 +380,25 @@
 
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <executions combine.self="override">
+                            <execution>
+                                <id>enforce</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <configuration>
+                                    <rules combine.self="override">
+                                        <requireJavaVersion>
+                                            <version>[24,)</version>
+                                        </requireJavaVersion>
+                                    </rules>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-compiler-plugin</artifactId>
@@ -597,7 +616,7 @@
     <parent>
         <artifactId>freelib-parent</artifactId>
         <groupId>info.freelibrary</groupId>
-        <version>13.0.2</version>
+        <version>13.0.3</version>
     </parent>
 
 </project>

@@ -10,11 +10,13 @@ import info.freelibrary.iiif.presentation.v3.AnnotationPage;
 import info.freelibrary.iiif.presentation.v3.Collection;
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.csv.Mapper;
 import info.freelibrary.iiif.presentation.v3.utils.csv.MappingException;
 import info.freelibrary.util.Constants;
+import info.freelibrary.util.HTTP;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.StringUtils;
@@ -23,16 +25,24 @@ import info.freelibrary.util.warnings.PMD;
 import picocli.CommandLine;
 
 import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Base64;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.stream.Stream;
 
+import static info.freelibrary.util.Constants.COLON;
+
 /** A jpv3 executable. */
 @CommandLine.Command(name = "jpv3", mixinStandardHelpOptions = true, version = "jpv3 0.0.1-SNAPSHOT",
-        description = "A utility for working with JPv3 on the command line.", usageHelpWidth = 120)
+        description = "\nA tool for working with IIIF manifests and collection documents", usageHelpWidth = 120)
+@SuppressWarnings({ PMD.EXCESSIVE_IMPORTS })
 public final class JPv3 implements Callable<Integer> {
 
     /** The logger for the executable. */
@@ -64,7 +74,7 @@ public final class JPv3 implements Callable<Integer> {
     /** The host to which the ZIP file is being uploaded. This is only needed for uploads. */
     @CommandLine.Option(names = { "-H", "--host" }, description = "The host to which the ZIP file is being uploaded",
             defaultValue = "${env:JPV3_HOST}")
-    private URL myHost;
+    private URI myHost;
 
     /** The help flag. */
     @CommandLine.Option(names = { "-h", "--help" }, usageHelp = true, description = "Display this help message")
@@ -88,7 +98,7 @@ public final class JPv3 implements Callable<Integer> {
 
         try (JsonParser parser = factory.createParser(aFilePath.toFile())) {
             while (!parser.isClosed()) {
-                if (JsonToken.FIELD_NAME.equals(parser.nextToken()) && aKey.equals(parser.currentName())) {
+                if (JsonToken.FIELD_NAME == parser.nextToken() && aKey.equals(parser.currentName())) {
                     parser.nextToken(); // Increment the parser to the property value token
                     return Optional.ofNullable(parser.getValueAsString());
                 }
@@ -132,6 +142,7 @@ public final class JPv3 implements Callable<Integer> {
 
     /** Runs the application. */
     @Override
+    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY })
     public Integer call() throws Exception {
         // Make sure we have a username and password if we're uploading the resulting ZIP file
         if (myAction.myUploadFlag && (StringUtils.trimToNull(myUsername) == null ||
@@ -141,8 +152,36 @@ public final class JPv3 implements Callable<Integer> {
         }
 
         try {
-            new Mapper(Stream.of(myInputFile), myOutputFile).map();
-            return 0;
+            final int result = new Mapper(Stream.of(myInputFile), myOutputFile).map();
+
+            if (result == 0 && myAction.isUpload()) {
+                try (HttpClient client = HttpClient.newHttpClient()) {
+                    final byte[] credentials = (myUsername + COLON + myPassword).getBytes(StandardCharsets.UTF_8);
+                    final String basicAuth = "Basic " + Base64.getEncoder().encodeToString(credentials);
+
+                    final HttpRequest request = HttpRequest.newBuilder().uri(myHost)
+                            .header(HTTP.Header.CONTENT_TYPE, MediaType.APPLICATION_ZIP.toString())
+                            .header(HTTP.Header.AUTHORIZATION, basicAuth)
+                            .POST(HttpRequest.BodyPublishers.ofFile(myOutputFile)).build();
+                    final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                    final int statusCode = response.statusCode();
+
+                    if (statusCode != 200 && statusCode != 201) {
+                        LOGGER.error(LOGGER.getMessage(MessageCodes.JPA_177, statusCode, response.body()));
+                        return statusCode;
+                    }
+                }
+
+                return 0;
+            } else if (result == 0 && myAction.isCreate()) {
+                LOGGER.info(LOGGER.getMessage(MessageCodes.JPA_178, myOutputFile.toAbsolutePath()));
+                return 0;
+            } else if (result == 0 && myAction.isView()) {
+                LOGGER.info(LOGGER.getMessage(MessageCodes.JPA_179));
+                return 0;
+            } else {
+                return result;
+            }
         } catch (final MappingException details) {
             LOGGER.error(details, details.getMessage());
             return -1;
@@ -165,5 +204,31 @@ public final class JPv3 implements Callable<Integer> {
                 description = "The optional JSONiq query to use for the view")
         private String myViewFilter;
 
+        /**
+         * Whether to create a local manifest or collection doc.
+         *
+         * @return Whether to create a local manifest or collection doc
+         */
+        public boolean isCreate() {
+            return myCreateFlag;
+        }
+
+        /**
+         * Whether to upload a local manifest or collection doc.
+         *
+         * @return Whether to upload a local manifest or collection doc
+         */
+        private boolean isUpload() {
+            return myUploadFlag;
+        }
+
+        /**
+         * Whether to view a newly created ZIP file of manifests and collection documents.
+         *
+         * @return Whether to view a newly created ZIP file of manifests and collection documents
+         */
+        private boolean isView() {
+            return !isCreate() && !isUpload();
+        }
     }
 }
