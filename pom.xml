@@ -211,10 +211,10 @@
                 <configuration>
                     <excludePackageNames>
                         info.freelibrary.iiif.presentation.v3.utils.csv:info.freelibrary.iiif.presentation.v3.utils.cmd
-                    </excludePackageNames><!--
+                    </excludePackageNames>
                     <links>
-                        <link>https://javadoc.io/doc/info.freelibrary/freelib-utils/</link>
-                    </links>-->
+                        <link>https://javadoc.io/doc/info.freelibrary/freelib-utils/${freelib.utils.version}/</link>
+                    </links>
                 </configuration>
             </plugin>
 

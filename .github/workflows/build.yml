@@ -92,7 +92,7 @@ jobs:
               out_name="jpv3.exe"
               ;;
             macOS)
-              out_name="jpv3-mac"
+              out_name="jpv3.mac"
               ;;
           esac
           cp "target/jpv3" "dist/$out_name"
@@ -137,5 +137,10 @@ jobs:
           files: bin_out/*
           draft: true
           prerelease: false
+          body: |
+            Binaries:
+            - jpv3 (Linux)
+            - jpv3.mac (MacOS)
+            - jpv3.exe (Windows)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
