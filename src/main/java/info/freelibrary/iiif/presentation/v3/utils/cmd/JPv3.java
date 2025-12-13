@@ -142,7 +142,7 @@ public final class JPv3 implements Callable<Integer> {
 
     /** Runs the application. */
     @Override
-    @SuppressWarnings({PMD.CYCLOMATIC_COMPLEXITY})
+    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY })
     public Integer call() throws Exception {
         // Make sure we have a username and password if we're uploading the resulting ZIP file
         if (myAction.myUploadFlag && (StringUtils.trimToNull(myUsername) == null ||
@@ -162,8 +162,7 @@ public final class JPv3 implements Callable<Integer> {
                     final HttpRequest request = HttpRequest.newBuilder().uri(myHost)
                             .header(HTTP.Header.CONTENT_TYPE, MediaType.APPLICATION_ZIP.toString())
                             .header(HTTP.Header.AUTHORIZATION, basicAuth)
-                            .POST(HttpRequest.BodyPublishers.ofFile(myOutputFile))
-                            .build();
+                            .POST(HttpRequest.BodyPublishers.ofFile(myOutputFile)).build();
                     final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
                     final int statusCode = response.statusCode();
 
