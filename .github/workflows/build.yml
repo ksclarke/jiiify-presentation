@@ -138,9 +138,11 @@ jobs:
           draft: true
           prerelease: false
           body: |
+            This is an experimental release of a JPv3 command line tool. It's a WIP and not ready for production use.
+
             Binaries:
             - jpv3 (Linux)
-            - jpv3.mac (MacOS)
             - jpv3.exe (Windows)
+            - jpv3.mac (MacOS)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
