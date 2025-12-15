@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3.utils.cmd;
 
+import static info.freelibrary.util.Constants.COLON;
+
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -37,11 +39,10 @@ import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.stream.Stream;
 
-import static info.freelibrary.util.Constants.COLON;
-
 /** A jpv3 executable. */
 @CommandLine.Command(name = "jpv3", mixinStandardHelpOptions = true, version = "jpv3 0.0.1-SNAPSHOT",
-        description = "\nA tool for working with IIIF manifests and collection documents", usageHelpWidth = 120)
+        description = { "", "A tool for working with IIIF manifests and collection documents:", "" },
+        usageHelpWidth = 120)
 @SuppressWarnings({ PMD.EXCESSIVE_IMPORTS })
 public final class JPv3 implements Callable<Integer> {
 
@@ -172,6 +173,7 @@ public final class JPv3 implements Callable<Integer> {
                     }
                 }
 
+                LOGGER.info(LOGGER.getMessage(MessageCodes.JPA_180, myOutputFile.toAbsolutePath()));
                 return 0;
             } else if (result == 0 && myAction.isCreate()) {
                 LOGGER.info(LOGGER.getMessage(MessageCodes.JPA_178, myOutputFile.toAbsolutePath()));

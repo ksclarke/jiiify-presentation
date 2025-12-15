@@ -158,5 +158,5 @@
     <entry key="JPA-177">Failed to upload ZIP file: [{}] {}</entry>
     <entry key="JPA-178">ZIP file with manifests/collection docs created at: {}</entry>
     <entry key="JPA-179">This feature is not yet implemented. Check back later.</entry>
-    <entry key="JPA-180"></entry>
+    <entry key="JPA-180">Zip file uploaded successfully: {}</entry>
 </properties>

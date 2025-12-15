@@ -441,7 +441,9 @@
                                 </goals>
                                 <configuration>
                                     <environmentVariables>
-                                        <HOST_PWD>${env.PWD}</HOST_PWD>
+                                        <JPV3_HOST>https://posttestserver.dev/p/v8zzhmbm3fcvgjlg/post</JPV3_HOST>
+                                        <JPV3_PASSWORD>nimda</JPV3_PASSWORD>
+                                        <JPV3_USERNAME>admin</JPV3_USERNAME>
                                     </environmentVariables>
                                     <executable>java</executable>
                                     <arguments>
@@ -458,7 +460,7 @@
 
                                         <!-- Main class and its arguments -->
                                         <argument>info.freelibrary.iiif.presentation.v3.utils.cmd.JPv3</argument>
-                                        <argument>-c</argument>
+                                        <argument>-u</argument>
                                         <argument>-i</argument>
                                         <argument>src/test/resources/csv/jbu-collection.csv</argument>
                                     </arguments>
