@@ -65,7 +65,7 @@ public class JPv3Test {
     }
 
     /**
-     * Tests behavior when file does not exist.
+     * Tests behavior when a file does not exist.
      */
     @Test(expected = IOException.class)
     public void testFindValueNonExistentFile() throws IOException {

@@ -81,6 +81,14 @@ public final class JPv3 implements Callable<Integer> {
     @CommandLine.Option(names = { "-h", "--help" }, usageHelp = true, description = "Display this help message")
     private boolean myHelpFlag;
 
+    /** The version flag. */
+    @CommandLine.Option(names = { "-v", "--version" }, versionHelp = true, description = "Print application version")
+    private boolean myVersion;
+
+    /** The verbosity flag. */
+    @CommandLine.Option(names = { "-V", "--verbose" }, description = "Increase logging verbosity")
+    private boolean myLogsAreVerbose;
+
     /** Creates a new JPv3 instance. */
     public JPv3() {
         // This is intentionally empty
@@ -201,10 +209,10 @@ public final class JPv3 implements Callable<Integer> {
         @CommandLine.Option(names = { "-u", "--upload" }, description = "Create IIIF resources, then upload them")
         private boolean myUploadFlag;
 
-        /** The JSONiq query used to produce a view. */
-        @CommandLine.Option(names = { "-v", "--view" }, arity = "1", defaultValue = ".",
+        /** The JSONiq query used to produce a view of a record or collection. */
+        @CommandLine.Option(names = { "-q", "--query" }, arity = "1", defaultValue = ".",
                 description = "The optional JSONiq query to use for the view")
-        private String myViewFilter;
+        private String myQueryFilter;
 
         /**
          * Whether to create a local manifest or collection doc.

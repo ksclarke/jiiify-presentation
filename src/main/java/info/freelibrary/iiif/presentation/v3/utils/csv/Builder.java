@@ -26,6 +26,7 @@ import info.freelibrary.util.warnings.PMD;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 /** A IIIF builder for CSV-based deserialization. */
 public class Builder {
@@ -49,8 +50,9 @@ public class Builder {
         final String id = aRow.getItemID().orElseThrow(() -> new MappingException(MessageCodes.JPA_002));
         final Label label = new Label(aRow.getTitle().orElseThrow(() -> new MappingException(MessageCodes.JPA_003)));
         final String objType = aRow.getObjectType().orElseThrow(() -> new MappingException(MessageCodes.JPA_160));
+        final Optional<String> iiifResourceType = Optional.ofNullable(aRow.getResourceType().orElse(null));
 
-        return switch (objType) {
+        return switch (iiifResourceType.orElse(objType)) {
             case Keys.COLLECTION -> {
                 final String validID = checkID(id, ResourceTypes.COLLECTION);
                 final Collection collection = new Collection(validID, label);

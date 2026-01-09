@@ -65,6 +65,22 @@ public class MapperTest {
         myZipFile = Path.of("target", UUID.randomUUID() + "-output.zip");
     }
 
+    /**
+     * Tests mapping the multipart examples.
+     *
+     * @throws Exception If there is an exception while running the test
+     */
+    @Test
+    public void testMultiPartMappingAccion() throws Exception {
+        try (Stream<Path> fileStream = Files.list(Path.of("src/test/resources/csv/multi-part/")).filter(path -> {
+            final String name = path.getFileName().toString();
+            return name.endsWith(".csv") && (name.startsWith("accion-") || name.startsWith("lat-"));
+        })) {
+            final int result = new Mapper(fileStream, myZipFile).map();
+            System.out.println(result);
+        }
+    }
+
     /** Tests that no exception is thrown when the Mapper is initialized. */
     @Test
     public void testMapperInit() throws Exception {

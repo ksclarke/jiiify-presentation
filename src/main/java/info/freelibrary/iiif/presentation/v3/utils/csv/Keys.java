@@ -16,6 +16,9 @@ package info.freelibrary.iiif.presentation.v3.utils.csv;
  */
 public final class Keys {
 
+    /** A constant for other alternative titles. **/
+    public static final String ALT_TITLE_OTHER = "AltTitle.other";
+
     /** A constant for the choice structure. */
     public static final String CHOICE = "Choice";
 
@@ -33,6 +36,9 @@ public final class Keys {
 
     /** Column name for the item's IIIF access URL (e.g., base image service). */
     public static final String ACCESS_URL = "AccessURL";
+
+    /** Column name for the item's IIIF manifest URL. */
+    public static final String IIIF_MANIFEST_URL = "IIIF Manifest URL";
 
     /** Column name for the item's Bucketeer (ingest) state or status. */
     public static final String BUCKETEER_STATE = "BucketeerState";
@@ -61,6 +67,9 @@ public final class Keys {
     /** Column name for the logical object type (e.g., Collection, Work, Page, Layer, Choice). */
     public static final String OBJECT_TYPE = "ObjectType";
 
+    /** Column name for the IIIF resource type (Collection, Work). */
+    public static final String RESOURCE_TYPE = "ResourceType";
+
     /** Column name for the identifier of the item's parent object. */
     public static final String PARENT_ID = "ParentID";
 
@@ -75,6 +84,114 @@ public final class Keys {
 
     /** Column name for the IIIF viewing hint to influence client presentation. */
     public static final String BEHAVIOR = "Behavior";
+
+    /** Column name for the item's IDEP publication status. */
+    public static final String IDEP_PUBLISHED = "Published in IDEP";
+
+    /** Column name for the item's representative image. */
+    public static final String REPRESENTATIVE_IMAGE = "Representative image";
+
+    /** Column name for the item's masthead image. */
+    public static final String MASTHEAD = "Masthead";
+
+    /** Column name for the item's visibility. */
+    public static final String VISIBILITY = "Visibility";
+
+    /** Column name for the item's creation date. */
+    public static final String CREATED_DATE = "Date.created";
+
+    /** Column name for the item's normalized date. */
+    public static final String NORMALIZED_DATE = "Date.normalized";
+
+    /** Column name for the item's format extent. */
+    public static final String FORMAT_EXTENT = "Format.extent";
+
+    /** Column name for the item's format medium. */
+    public static final String FORMAT_MEDIUM = "Format.medium";
+
+    /** Column name for the item's summary. */
+    public static final String SUMMARY = "Summary";
+
+    /** Column name for the item's genre. */
+    public static final String GENRE = "Genre";
+
+    /** Column name for the item's subject. */
+    public static final String SUBJECT = "Subject";
+
+    /** Column name for the item's subject topic. */
+    public static final String SUBJECT_TOPIC = "Subject topic";
+
+    /** Column name for the item's subject name. */
+    public static final String SUBJECT_NAME = "Name.subject";
+
+    /** Column name for the item's subject geographic. */
+    public static final String SUBJECT_GEO = "Subject geographic";
+
+    /** Column name for the item's subject temporal. */
+    public static final String SUBJECT_TEMPORAL = "Subject temporal";
+
+    /** Column name for the item's language. */
+    public static final String LANGUAGE = "Language";
+
+    /** Column name for the item's local identifier. */
+    public static final String LOCAL_ID = "Local identifier";
+
+    /** Column name for the item's OPAC url. */
+    public static final String OPAC_URL = "Opac url";
+
+    /** Column name for the item's place of origin. */
+    public static final String PLACE_OF_ORIGIN = "Place of origin";
+
+    /** Column name for the item's repository. */
+    public static final String REPOSITORY = "Repository";
+
+    /** Column name for the item's program. */
+    public static final String PROGRAM = "Program";
+
+    /** Column name for the item's type of resource. */
+    public static final String TYPE_OF_RESOURCE = "Type.typeOfResource";
+
+    /** Column name for the item's copyright status. */
+    public static final String COPYRIGHT_STATUS = "Rights.copyrightStatus";
+
+    /** Column name for the item's copyright holder. */
+    public static final String COPYRIGHT_HOLDER = "Rights.rightsHolderContact";
+
+    /** Column name for the item's descriptive note. */
+    public static final String DESCRIPTIVE_NOTE = "Description.note";
+
+    /** Column name for the item's contents note. */
+    public static final String CONTENTS_NOTE = "Contents note";
+
+    /** Column name for the item's note. */
+    public static final String NOTE = "Note";
+
+    /** Column name for the item's director. */
+    public static final String DIRECTOR = "Director";
+
+    /** Column name for the item's editor. */
+    public static final String EDITOR = "Editor";
+
+    /** Column name for the item's creator. */
+    public static final String CREATOR = "Creator";
+
+    /** Column name for the item's producer. */
+    public static final String PRODUCER = "Producer";
+
+    /** Column name for the item's publisher. */
+    public static final String PUBLISHER = "Publisher.publisherName";
+
+    /** Column name for the item's head of information. */
+    public static final String HEAD_OF_INFORMATION = "Creator.headofinformation";
+
+    /** Column name for the item's administrator. */
+    public static final String ADMINISTRATOR = "Creator.administrator";
+
+    /** Column name for the item's proprietor. */
+    public static final String PROPRIETOR = "Creator.proprietor";
+
+    /** Column name for the item's contributor. */
+    public static final String CONTRIBUTOR = "Contributor";
 
     /**
      * Private constructor to prevent instantiation of the utility class. This ensures that the class can only be used

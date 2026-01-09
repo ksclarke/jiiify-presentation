@@ -20,10 +20,11 @@ import java.util.OptionalInt;
 
 /** A simple class to hold the CSV row data. */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-@JsonPropertyOrder({ Keys.FILE_NAME, Keys.OBJECT_TYPE, Keys.TITLE, Keys.ITEM_SEQUENCE, Keys.ITEM_ID, Keys.PARENT_ID,
-    Keys.TARGET, Keys.BEHAVIOR, Keys.VIEWING_DIRECTION, Keys.BUCKETEER_STATE, Keys.THUMBNAIL, Keys.MEDIA_HEIGHT,
-    Keys.MEDIA_WIDTH, Keys.ACCESS_URL, Keys.NOTES })
-@SuppressWarnings({ PMD.GOD_CLASS })
+@JsonPropertyOrder({ Keys.FILE_NAME, Keys.OBJECT_TYPE, Keys.RESOURCE_TYPE, Keys.TITLE, Keys.ITEM_SEQUENCE, Keys.ITEM_ID,
+    Keys.PARENT_ID, Keys.TARGET, Keys.BEHAVIOR, Keys.VIEWING_DIRECTION, Keys.BUCKETEER_STATE, Keys.THUMBNAIL,
+    Keys.MEDIA_HEIGHT, Keys.MEDIA_WIDTH, Keys.ACCESS_URL, Keys.NOTES })
+@SuppressWarnings({ PMD.GOD_CLASS, PMD.CYCLOMATIC_COMPLEXITY, PMD.EXCESSIVE_PUBLIC_COUNT, PMD.TOO_MANY_FIELDS,
+    PMD.TOO_MANY_METHODS })
 public final class Row {
 
     /** Create a reusable configured mapper. */
@@ -35,6 +36,9 @@ public final class Row {
 
     /** The item's object type. */
     private String myObjectType;
+
+    /** The item's IIIF resource type. */
+    private String myResourceType;
 
     /** The item's title. */
     private String myTitle;
@@ -72,8 +76,122 @@ public final class Row {
     /** The item's IIIF access URL. */
     private URL myAccessURL;
 
+    /** The item's IIIF manifest URL. */
+    private URL myManifestURL;
+
+    /** The item's representative image. */
+    private String myRepresentativeImage;
+
+    /** The item's masthead image. */
+    private String myMasthead;
+
     /** The item's notes. */
     private String myNotes;
+
+    /** The item's alternative title. */
+    private String myAltTitleOther;
+
+    /** The item's IDEP publication status. */
+    private String myIdepPubStatus;
+
+    /** The item's visibility. */
+    private String myVisibility;
+
+    /** The item's date created. */
+    private String myDateCreated;
+
+    /** The item's date normalized. */
+    private String myDateNormalized;
+
+    /** The item's format extent. */
+    private String myFormatExtent;
+
+    /** The item's format medium. */
+    private String myFormatMedium;
+
+    /** The item's genre. */
+    private String myGenre;
+
+    /** The item's subject. */
+    private String mySubject;
+
+    /** The item's subject geographic. */
+    private String mySubjectGeo;
+
+    /** The item's subject temporal. */
+    private String mySubjectTemporal;
+
+    /** The item's subject topic. */
+    private String mySubjectTopic;
+
+    /** The item's subject name. */
+    private String mySubjectName;
+
+    /** The item's language. */
+    private String myLanguage;
+
+    /** The item's local ID. */
+    private String myLocalID;
+
+    /** The item's OPAC URL. */
+    private String myOpacURL;
+
+    /** The item's place of origin. */
+    private String myPlaceOfOrigin;
+
+    /** The item's repository. */
+    private String myRepository;
+
+    /** The item's program. */
+    private String myProgram;
+
+    /** The item's type of resource. */
+    private String myTypeOfResource;
+
+    /** The item's copyright status. */
+    private String myCopyrightStatus;
+
+    /** The item's copyright holder. */
+    private String myCopyrightHolder;
+
+    /** The item's director. */
+    private String myDirector;
+
+    /** The item's editor. */
+    private String myEditor;
+
+    /** The item's creator. */
+    private String myCreator;
+
+    /** The item's producer. */
+    private String myProducer;
+
+    /** The item's head of information. */
+    private String myHeadOfInfo;
+
+    /** The item's administrator. */
+    private String myAdministrator;
+
+    /** The item's proprietor. */
+    private String myProprietor;
+
+    /** The item's contributor. */
+    private String myContributor;
+
+    /** The item's publisher. */
+    private String myPublisher;
+
+    /** The item's descriptive note. */
+    private String myDescriptiveNote;
+
+    /** The item's contents note. */
+    private String myContentsNote;
+
+    /** The item's note. */
+    private String myNote;
+
+    /** The item's summary note. */
+    private String mySummary;
 
     /** Creates a new Row. */
     private Row() {
@@ -123,6 +241,852 @@ public final class Row {
     @JsonAlias({ "object type", "object-type", "object.type", "object_type" })
     public Row setObjectType(final String aObjectType) {
         myObjectType = aObjectType;
+        return this;
+    }
+
+    /**
+     * Gets the optional IIIF resource type.
+     *
+     * @return An Optional containing the resource type if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.RESOURCE_TYPE)
+    public Optional<String> getResourceType() {
+        return myResourceType == null || myResourceType.isBlank() ? Optional.empty() : Optional.of(myResourceType);
+    }
+
+    /**
+     * Sets the optional IIIF resource type.
+     *
+     * @param aResourceType The resource type to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.RESOURCE_TYPE)
+    @JsonAlias({ "iiif object type", "iiif-object-type", "iiif.object.type", "iiif_object_type" })
+    public Row setResourceType(final String aResourceType) {
+        myResourceType = aResourceType;
+        return this;
+    }
+
+    /**
+     * Gets the optional representative image.
+     *
+     * @return An Optional containing the representative image if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.REPRESENTATIVE_IMAGE)
+    public Optional<String> getRepresentativeImage() {
+        return myRepresentativeImage == null || myRepresentativeImage.isBlank() ? Optional.empty()
+                : Optional.of(myRepresentativeImage);
+    }
+
+    /**
+     * Sets the optional representative image.
+     *
+     * @param aRepresentativeImage The representative image to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.REPRESENTATIVE_IMAGE)
+    public Row setRepresentativeImage(final String aRepresentativeImage) {
+        myRepresentativeImage = aRepresentativeImage;
+        return this;
+    }
+
+    /**
+     * Gets the optional masthead.
+     *
+     * @return An Optional containing the masthead if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.MASTHEAD)
+    public Optional<String> getMasthead() {
+        return myMasthead == null || myMasthead.isBlank() ? Optional.empty() : Optional.of(myMasthead);
+    }
+
+    /**
+     * Sets the optional representative image.
+     *
+     * @param aMasthead The masthead to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.MASTHEAD)
+    public Row setMasthead(final String aMasthead) {
+        myMasthead = aMasthead;
+        return this;
+    }
+
+    /**
+     * Gets the optional descriptive note.
+     *
+     * @return An Optional containing the descriptive note if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.DESCRIPTIVE_NOTE)
+    public Optional<String> getDescriptiveNote() {
+        return myDescriptiveNote == null || myDescriptiveNote.isBlank() ? Optional.empty()
+                : Optional.of(myDescriptiveNote);
+    }
+
+    /**
+     * Sets the optional descriptive note.
+     *
+     * @param aDescriptiveNote The descriptive note to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.DESCRIPTIVE_NOTE)
+    public Row setDescriptiveNote(final String aDescriptiveNote) {
+        myDescriptiveNote = aDescriptiveNote;
+        return this;
+    }
+
+    /**
+     * Gets the optional contents note.
+     *
+     * @return An Optional containing the contents note if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.CONTENTS_NOTE)
+    public Optional<String> getContentsNote() {
+        return myContentsNote == null || myContentsNote.isBlank() ? Optional.empty() : Optional.of(myContentsNote);
+    }
+
+    /**
+     * Sets the optional contents note.
+     *
+     * @param aContentsNote The contents note to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.CONTENTS_NOTE)
+    public Row setContentsNote(final String aContentsNote) {
+        myContentsNote = aContentsNote;
+        return this;
+    }
+
+    /**
+     * Gets the optional note.
+     *
+     * @return An Optional containing the note if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.NOTE)
+    public Optional<String> getNote() {
+        return myNote == null || myNote.isBlank() ? Optional.empty() : Optional.of(myNote);
+    }
+
+    /**
+     * Sets the optional note.
+     *
+     * @param aNote The note to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.NOTE)
+    public Row setNote(final String aNote) {
+        myNote = aNote;
+        return this;
+    }
+
+    /**
+     * Gets the optional alternative title.
+     *
+     * @return An Optional containing the alternative title if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.ALT_TITLE_OTHER)
+    public Optional<String> getAltTitleOther() {
+        return myAltTitleOther == null || myAltTitleOther.isBlank() ? Optional.empty() : Optional.of(myAltTitleOther);
+    }
+
+    /**
+     * Sets the optional alternative title.
+     *
+     * @param aAltTitleOther The alternative title to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.ALT_TITLE_OTHER)
+    @JsonAlias({ "alt-title-other", "alt.title.other", "alt_title_other" })
+    public Row setAltTitleOther(final String aAltTitleOther) {
+        myAltTitleOther = aAltTitleOther;
+        return this;
+    }
+
+    /**
+     * Gets the optional IDEP publication status.
+     *
+     * @return An Optional containing the IDEP publication status if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.IDEP_PUBLISHED)
+    public Optional<String> getIdepPubStatus() {
+        return myIdepPubStatus == null || myIdepPubStatus.isBlank() ? Optional.empty() : Optional.of(myIdepPubStatus);
+    }
+
+    /**
+     * Sets the optional IDEP publication status.
+     *
+     * @param aIdepPubStatus The IDEP publication status to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.IDEP_PUBLISHED)
+    public Row setIdepPubStatus(final String aIdepPubStatus) {
+        myIdepPubStatus = aIdepPubStatus;
+        return this;
+    }
+
+    /**
+     * Gets the optional visibility.
+     *
+     * @return An Optional containing the visibility if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.VISIBILITY)
+    public Optional<String> getVisibility() {
+        return myVisibility == null || myVisibility.isBlank() ? Optional.empty() : Optional.of(myVisibility);
+    }
+
+    /**
+     * Sets the optional visibility.
+     *
+     * @param aVisibility The visibility to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.VISIBILITY)
+    public Row setVisibility(final String aVisibility) {
+        myVisibility = aVisibility;
+        return this;
+    }
+
+    /**
+     * Gets the optional date created.
+     *
+     * @return An Optional containing the date created if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.CREATED_DATE)
+    public Optional<String> getDateCreated() {
+        return myDateCreated == null || myDateCreated.isBlank() ? Optional.empty() : Optional.of(myDateCreated);
+    }
+
+    /**
+     * Sets the optional date created.
+     *
+     * @param aDateCreated The date created to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.CREATED_DATE)
+    public Row setDateCreated(final String aDateCreated) {
+        myDateCreated = aDateCreated;
+        return this;
+    }
+
+    /**
+     * Gets the optional date normalized.
+     *
+     * @return An Optional containing the date normalized if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.NORMALIZED_DATE)
+    public Optional<String> getDateNormalized() {
+        return myDateNormalized == null || myDateNormalized.isBlank() ? Optional.empty()
+                : Optional.of(myDateNormalized);
+    }
+
+    /**
+     * Sets the optional date normalized.
+     *
+     * @param aDateNormalized The date normalized to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.NORMALIZED_DATE)
+    public Row setDateNormalized(final String aDateNormalized) {
+        myDateNormalized = aDateNormalized;
+        return this;
+    }
+
+    /**
+     * Gets the optional copyright status.
+     *
+     * @return An Optional containing the copyright status if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.COPYRIGHT_STATUS)
+    public Optional<String> getCopyrightStatus() {
+        return myCopyrightStatus == null || myCopyrightStatus.isBlank() ? Optional.empty()
+                : Optional.of(myCopyrightStatus);
+    }
+
+    /**
+     * Sets the optional copyright status.
+     *
+     * @param aCopyrightStatus The copyright status to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.COPYRIGHT_STATUS)
+    public Row setCopyrightStatus(final String aCopyrightStatus) {
+        myCopyrightStatus = aCopyrightStatus;
+        return this;
+    }
+
+    /**
+     * Gets the optional copyright holder.
+     *
+     * @return An Optional containing the copyright holder if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.COPYRIGHT_HOLDER)
+    public Optional<String> getCopyrightHolder() {
+        return myCopyrightHolder == null || myCopyrightHolder.isBlank() ? Optional.empty()
+                : Optional.of(myCopyrightHolder);
+    }
+
+    /**
+     * Sets the optional copyright status.
+     *
+     * @param aCopyrightHolder The copyright holder to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.COPYRIGHT_HOLDER)
+    public Row setCopyrightHolder(final String aCopyrightHolder) {
+        myCopyrightHolder = aCopyrightHolder;
+        return this;
+    }
+
+    /**
+     * Gets the optional format extent.
+     *
+     * @return An Optional containing the format extent if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.FORMAT_EXTENT)
+    public Optional<String> getFormatExtent() {
+        return myFormatExtent == null || myFormatExtent.isBlank() ? Optional.empty() : Optional.of(myFormatExtent);
+    }
+
+    /**
+     * Sets the optional format extent.
+     *
+     * @param aFormatExtent The format extent to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.FORMAT_EXTENT)
+    public Row setFormatExtent(final String aFormatExtent) {
+        myFormatExtent = aFormatExtent;
+        return this;
+    }
+
+    /**
+     * Gets the optional format medium.
+     *
+     * @return An Optional containing the format medium if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.FORMAT_MEDIUM)
+    public Optional<String> getFormatMedium() {
+        return myFormatMedium == null || myFormatMedium.isBlank() ? Optional.empty() : Optional.of(myFormatMedium);
+    }
+
+    /**
+     * Sets the optional format medium.
+     *
+     * @param aFormatMedium The format medium to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.FORMAT_MEDIUM)
+    public Row setFormatMedium(final String aFormatMedium) {
+        myFormatMedium = aFormatMedium;
+        return this;
+    }
+
+    /**
+     * Gets the optional repository.
+     *
+     * @return An Optional containing the repository if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.REPOSITORY)
+    public Optional<String> getRepository() {
+        return myRepository == null || myRepository.isBlank() ? Optional.empty() : Optional.of(myRepository);
+    }
+
+    /**
+     * Sets the optional repository.
+     *
+     * @param aRepository The repository to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.REPOSITORY)
+    public Row setRepository(final String aRepository) {
+        myRepository = aRepository;
+        return this;
+    }
+
+    /**
+     * Gets the optional program.
+     *
+     * @return An Optional containing the program if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.PROGRAM)
+    public Optional<String> getProgram() {
+        return myProgram == null || myProgram.isBlank() ? Optional.empty() : Optional.of(myProgram);
+    }
+
+    /**
+     * Sets the optional program.
+     *
+     * @param aProgram The program to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.PROGRAM)
+    public Row setProgram(final String aProgram) {
+        myProgram = aProgram;
+        return this;
+    }
+
+    /**
+     * Gets the optional editor.
+     *
+     * @return An Optional containing the editor if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.EDITOR)
+    public Optional<String> getEditor() {
+        return myEditor == null || myEditor.isBlank() ? Optional.empty() : Optional.of(myEditor);
+    }
+
+    /**
+     * Sets the optional editor.
+     *
+     * @param aEditor The editor to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.EDITOR)
+    public Row setEditor(final String aEditor) {
+        myEditor = aEditor;
+        return this;
+    }
+
+    /**
+     * Gets the optional publisher.
+     *
+     * @return An Optional containing the publisher if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.PUBLISHER)
+    public Optional<String> getPublisher() {
+        return myPublisher == null || myPublisher.isBlank() ? Optional.empty() : Optional.of(myPublisher);
+    }
+
+    /**
+     * Sets the optional publisher.
+     *
+     * @param aPublisher The publisher to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.PUBLISHER)
+    public Row setPublisher(final String aPublisher) {
+        myPublisher = aPublisher;
+        return this;
+    }
+
+    /**
+     * Gets the optional creator.
+     *
+     * @return An Optional containing the creator if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.CREATOR)
+    public Optional<String> getCreator() {
+        return myCreator == null || myCreator.isBlank() ? Optional.empty() : Optional.of(myCreator);
+    }
+
+    /**
+     * Sets the optional creator.
+     *
+     * @param aCreator The creator to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.CREATOR)
+    @JsonAlias({ "Name.creator" })
+    public Row setCreator(final String aCreator) {
+        myCreator = aCreator;
+        return this;
+    }
+
+    /**
+     * Gets the optional producer.
+     *
+     * @return An Optional containing the producer if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.PRODUCER)
+    public Optional<String> getProducer() {
+        return myProducer == null || myProducer.isBlank() ? Optional.empty() : Optional.of(myProducer);
+    }
+
+    /**
+     * Sets the optional producer.
+     *
+     * @param aProducer The producer to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.PRODUCER)
+    public Row setProducer(final String aProducer) {
+        myProducer = aProducer;
+        return this;
+    }
+
+    /**
+     * Gets the optional head of information.
+     *
+     * @return An Optional containing the head of information if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.HEAD_OF_INFORMATION)
+    public Optional<String> getHeadOfInformation() {
+        return myHeadOfInfo == null || myHeadOfInfo.isBlank() ? Optional.empty() : Optional.of(myHeadOfInfo);
+    }
+
+    /**
+     * Sets the optional head of information.
+     *
+     * @param aHeadOfInfo The head of information to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.HEAD_OF_INFORMATION)
+    public Row setHeadOfInformation(final String aHeadOfInfo) {
+        myHeadOfInfo = aHeadOfInfo;
+        return this;
+    }
+
+    /**
+     * Gets the optional director.
+     *
+     * @return An Optional containing the director if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.DIRECTOR)
+    public Optional<String> getDirector() {
+        return myDirector == null || myDirector.isBlank() ? Optional.empty() : Optional.of(myDirector);
+    }
+
+    /**
+     * Sets the optional director.
+     *
+     * @param aDirector The director to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.DIRECTOR)
+    public Row setDirector(final String aDirector) {
+        myDirector = aDirector;
+        return this;
+    }
+
+    /**
+     * Gets the optional administrator.
+     *
+     * @return An Optional containing the administrator if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.ADMINISTRATOR)
+    public Optional<String> getAdministrator() {
+        return myAdministrator == null || myAdministrator.isBlank() ? Optional.empty() : Optional.of(myAdministrator);
+    }
+
+    /**
+     * Sets the optional administrator.
+     *
+     * @param aAdministrator The administrator to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.ADMINISTRATOR)
+    public Row setAdministrator(final String aAdministrator) {
+        myAdministrator = aAdministrator;
+        return this;
+    }
+
+    /**
+     * Gets the optional proprietor.
+     *
+     * @return An Optional containing the proprietor if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.PROPRIETOR)
+    public Optional<String> getProprietor() {
+        return myProprietor == null || myProprietor.isBlank() ? Optional.empty() : Optional.of(myProprietor);
+    }
+
+    /**
+     * Sets the optional proprietor.
+     *
+     * @param aProprietor The proprietor to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.PROPRIETOR)
+    public Row setProprietor(final String aProprietor) {
+        myProprietor = aProprietor;
+        return this;
+    }
+
+    /**
+     * Gets the optional contributor.
+     *
+     * @return An Optional containing the contributor if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.CONTRIBUTOR)
+    public Optional<String> getContributor() {
+        return myContributor == null || myContributor.isBlank() ? Optional.empty() : Optional.of(myContributor);
+    }
+
+    /**
+     * Sets the optional contributor.
+     *
+     * @param aContributor The contributor to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.CONTRIBUTOR)
+    public Row setContributor(final String aContributor) {
+        myContributor = aContributor;
+        return this;
+    }
+
+    /**
+     * Gets the optional resource type.
+     *
+     * @return An Optional containing the resource type if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.TYPE_OF_RESOURCE)
+    public Optional<String> getTypeOfResource() {
+        return myTypeOfResource == null || myTypeOfResource.isBlank() ? Optional.empty()
+                : Optional.of(myTypeOfResource);
+    }
+
+    /**
+     * Sets the optional resource type.
+     *
+     * @param aResourceType The resource type to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.TYPE_OF_RESOURCE)
+    public Row setTypeOfResource(final String aResourceType) {
+        myTypeOfResource = aResourceType;
+        return this;
+    }
+
+    /**
+     * Gets the optional local ID.
+     *
+     * @return An Optional containing the local ID if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.LOCAL_ID)
+    public Optional<String> getLocalID() {
+        return myLocalID == null || myLocalID.isBlank() ? Optional.empty() : Optional.of(myLocalID);
+    }
+
+    /**
+     * Sets the optional local ID.
+     *
+     * @param aLocalID The local ID to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.LOCAL_ID)
+    public Row setLocalID(final String aLocalID) {
+        myLocalID = aLocalID;
+        return this;
+    }
+
+    /**
+     * Gets the optional OPAC URL.
+     *
+     * @return An Optional containing the OPAC URL if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.OPAC_URL)
+    public Optional<String> getOpacURL() {
+        return myOpacURL == null || myOpacURL.isBlank() ? Optional.empty() : Optional.of(myOpacURL);
+    }
+
+    /**
+     * Sets the optional OPAC URL.
+     *
+     * @param aOpacURL The OPAC URL to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.OPAC_URL)
+    public Row setOpacURL(final String aOpacURL) {
+        myOpacURL = aOpacURL;
+        return this;
+    }
+
+    /**
+     * Gets the optional place of origin.
+     *
+     * @return An Optional containing the place of origin if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.PLACE_OF_ORIGIN)
+    public Optional<String> getPlaceOfOrigin() {
+        return myPlaceOfOrigin == null || myPlaceOfOrigin.isBlank() ? Optional.empty() : Optional.of(myPlaceOfOrigin);
+    }
+
+    /**
+     * Sets the optional place of origin.
+     *
+     * @param aPlaceOfOrigin The place of origin to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.PLACE_OF_ORIGIN)
+    public Row setPlaceOfOrigin(final String aPlaceOfOrigin) {
+        myPlaceOfOrigin = aPlaceOfOrigin;
+        return this;
+    }
+
+    /**
+     * Gets the optional genre.
+     *
+     * @return An Optional containing the genre if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.GENRE)
+    public Optional<String> getGenre() {
+        return myGenre == null || myGenre.isBlank() ? Optional.empty() : Optional.of(myGenre);
+    }
+
+    /**
+     * Sets the optional genre.
+     *
+     * @param aGenre The genre to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.GENRE)
+    public Row setGenre(final String aGenre) {
+        myGenre = aGenre;
+        return this;
+    }
+
+    /**
+     * Gets the optional subject.
+     *
+     * @return An Optional containing the subject if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.SUBJECT)
+    public Optional<String> getSubject() {
+        return mySubject == null || mySubject.isBlank() ? Optional.empty() : Optional.of(mySubject);
+    }
+
+    /**
+     * Sets the optional subject.
+     *
+     * @param aSubject The subject to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.SUBJECT)
+    public Row setSubject(final String aSubject) {
+        mySubject = aSubject;
+        return this;
+    }
+
+    /**
+     * Gets the optional subject name.
+     *
+     * @return An Optional containing the subject name if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.SUBJECT_NAME)
+    public Optional<String> getSubjectName() {
+        return mySubjectName == null || mySubjectName.isBlank() ? Optional.empty() : Optional.of(mySubjectName);
+    }
+
+    /**
+     * Sets the optional subject name.
+     *
+     * @param aSubjectName The subject name to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.SUBJECT_NAME)
+    public Row setSubjectName(final String aSubjectName) {
+        mySubjectName = aSubjectName;
+        return this;
+    }
+
+    /**
+     * Gets the optional subject geographic.
+     *
+     * @return An Optional containing the subject geographic if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.SUBJECT_GEO)
+    public Optional<String> getSubjectGeo() {
+        return mySubjectGeo == null || mySubjectGeo.isBlank() ? Optional.empty() : Optional.of(mySubjectGeo);
+    }
+
+    /**
+     * Sets the optional subject geographic.
+     *
+     * @param aSubjectGeo The subject geographic to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.SUBJECT_GEO)
+    public Row setSubjectGeo(final String aSubjectGeo) {
+        mySubjectGeo = aSubjectGeo;
+        return this;
+    }
+
+    /**
+     * Gets the optional subject temporal.
+     *
+     * @return An Optional containing the subject temporal if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.SUBJECT_TEMPORAL)
+    public Optional<String> getSubjectTemporal() {
+        return mySubjectTemporal == null || mySubjectTemporal.isBlank() ? Optional.empty()
+                : Optional.of(mySubjectTemporal);
+    }
+
+    /**
+     * Sets the optional subject temporal.
+     *
+     * @param aSubjectTemporal The subject temporal to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.SUBJECT_TEMPORAL)
+    public Row setSubjectTemporal(final String aSubjectTemporal) {
+        mySubjectTemporal = aSubjectTemporal;
+        return this;
+    }
+
+    /**
+     * Gets the optional subject topic.
+     *
+     * @return An Optional containing the subject topic if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.SUBJECT_TOPIC)
+    public Optional<String> getSubjectTopic() {
+        return mySubjectTopic == null || mySubjectTopic.isBlank() ? Optional.empty() : Optional.of(mySubjectTopic);
+    }
+
+    /**
+     * Sets the optional subject topic.
+     *
+     * @param aSubjectTopic The subject topic to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.SUBJECT_TOPIC)
+    public Row setSubjectTopic(final String aSubjectTopic) {
+        mySubjectTopic = aSubjectTopic;
+        return this;
+    }
+
+    /**
+     * Gets the optional language.
+     *
+     * @return An Optional containing the language if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.LANGUAGE)
+    public Optional<String> getLanguage() {
+        return myLanguage == null || myLanguage.isBlank() ? Optional.empty() : Optional.of(myLanguage);
+    }
+
+    /**
+     * Sets the optional language.
+     *
+     * @param aLanguage The language to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.LANGUAGE)
+    public Row setLanguage(final String aLanguage) {
+        myLanguage = aLanguage;
+        return this;
+    }
+
+    /**
+     * Gets the summary.
+     *
+     * @return An Optional containing the summary if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.SUMMARY)
+    public Optional<String> getSummary() {
+        return mySummary == null || mySummary.isBlank() ? Optional.empty() : Optional.of(mySummary);
+    }
+
+    /**
+     * Sets the summary.
+     *
+     * @param aSummary The summary to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.SUMMARY)
+    public Row setSummary(final String aSummary) {
+        mySummary = aSummary;
         return this;
     }
 
@@ -404,6 +1368,28 @@ public final class Row {
         "iiif.access.url", "iiif_access_url" })
     public Row setAccessURL(final URL aAccessURL) {
         myAccessURL = aAccessURL;
+        return this;
+    }
+
+    /**
+     * Gets the IIIF manifest URL for this item.
+     *
+     * @return An Optional containing the manifest URL if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.IIIF_MANIFEST_URL)
+    public Optional<URL> getManifestURL() {
+        return Optional.ofNullable(myManifestURL);
+    }
+
+    /**
+     * Sets the IIIF manifest URL for this item.
+     *
+     * @param aManifestURL The manifest URL to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.IIIF_MANIFEST_URL)
+    public Row setManifestURL(final URL aManifestURL) {
+        myManifestURL = aManifestURL;
         return this;
     }
 

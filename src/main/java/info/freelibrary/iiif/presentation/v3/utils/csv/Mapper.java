@@ -1,5 +1,7 @@
-
 package info.freelibrary.iiif.presentation.v3.utils.csv;
+
+import static info.freelibrary.iiif.presentation.v3.ResourceTypes.IMAGE;
+import static info.freelibrary.iiif.presentation.v3.ResourceTypes.IMAGE_SERVICE_2;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,18 +33,17 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
-
-import static info.freelibrary.iiif.presentation.v3.ResourceTypes.IMAGE;
-import static info.freelibrary.iiif.presentation.v3.ResourceTypes.IMAGE_SERVICE_2;
 
 /**
  * A mapper for reading CSV data and mapping it into a local database.
  */
-@SuppressWarnings({ PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS })
+@SuppressWarnings({PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS})
 public class Mapper {
 
     /** The logger for this class. */
@@ -86,7 +87,7 @@ public class Mapper {
      * @throws MappingException If there is trouble mapping the CSV data
      * @throws IOException If there is trouble reading the CSV file
      */
-    @SuppressWarnings({ JDK.UNCHECKED }) // Warnings for the Serializer.JAVA
+    @SuppressWarnings({JDK.UNCHECKED}) // Warnings for the Serializer.JAVA
     public Mapper(final Stream<Path> aCsvFile, final Path aOutputFile) throws MappingException, IOException {
         final Reader reader = new Reader();
 
@@ -115,9 +116,10 @@ public class Mapper {
             // Create an index that supports child lookup by parent ID
             row.getParentID().ifPresent(parentID -> {
                 final Set<String> idSet = myParents.compute(parentID,
-                        (key, existing) -> Objects.requireNonNullElseGet(existing, LinkedHashSet::new));
+                  (key, existing) -> Objects.requireNonNullElseGet(existing, LinkedHashSet::new));
 
-                LOGGER.debug(MessageCodes.JPA_165, rowID, parentID);
+                LOGGER.debug(MessageCodes.JPA_165, rowID, row.getObjectType().isPresent() ? row.getObjectType().get() :
+                  "UNKNOWN", parentID);
 
                 idSet.add(rowID);
                 myParents.put(parentID, idSet);
@@ -129,7 +131,7 @@ public class Mapper {
             // Create an index that supports lookup by object type
             row.getObjectType().ifPresent(objectType -> {
                 final Set<String> idSet = myObjTypes.compute(objectType,
-                        (key, existing) -> Objects.requireNonNullElseGet(existing, LinkedHashSet::new));
+                  (key, existing) -> Objects.requireNonNullElseGet(existing, LinkedHashSet::new));
 
                 LOGGER.debug(MessageCodes.JPA_166, rowID, objectType);
 
@@ -150,7 +152,7 @@ public class Mapper {
      */
     public int map() throws MappingException, IOException {
         final List<String> collections = myObjTypes.getOrDefault(Keys.COLLECTION, Set.of()).stream()
-                .filter(id -> !myChildren.contains(id)).toList();
+          .filter(id -> !myChildren.contains(id)).toList();
         final int result;
 
         // Check to see if our CSV data has any collections, our highest level in the hierarchy
@@ -166,6 +168,49 @@ public class Mapper {
     }
 
     /**
+     * Determines if the provided row represents a collection by checking its object type or resource type against a
+     * defined collection key.
+     *
+     * @param aRow The row to evaluate, containing potential object and resource type data
+     * @return {@code true} if the row represents a collection, otherwise {@code false}
+     */
+    protected boolean isCollection(final Row aRow) {
+        final Optional<String> objectType = aRow.getObjectType();
+        final Optional<String> resourceType;
+
+        if (objectType.isPresent() && objectType.get().equalsIgnoreCase(Keys.COLLECTION)) {
+            return true;
+        }
+
+        resourceType = aRow.getResourceType();
+        return resourceType.isPresent() && resourceType.get().equalsIgnoreCase(Keys.COLLECTION);
+    }
+
+    /**
+     * Determines if the provided row represents a manifest by checking its object type against a defined manifest key.
+     *
+     * @param aRow The row to evaluate, containing potential object type data
+     * @return {@code true} if the row represents a manifest, otherwise {@code false}
+     */
+    protected boolean isManifest(final Row aRow) {
+        final AtomicBoolean isManifest = new AtomicBoolean(false);
+
+        aRow.getObjectType().ifPresent(objectType -> {
+            if (objectType.equalsIgnoreCase(Keys.WORK)) {
+                isManifest.set(true);
+
+                aRow.getResourceType().ifPresent(resourceType -> {
+                    if (resourceType.equalsIgnoreCase(Keys.COLLECTION)) {
+                        isManifest.set(false);
+                    }
+                });
+            }
+        });
+
+        return isManifest.get();
+    }
+
+    /**
      * Maps the CSV data for collections.
      *
      * @param aCollectionList A set of collection IDs
@@ -178,6 +223,7 @@ public class Mapper {
 
         // Descend through the CSV data, starting at the collections
         for (final String collectionID : aCollectionList) {
+            System.out.println(collectionID);
             final Row collectionRow = myMapper.readValue(myCsvData.get(collectionID), Row.class);
             LOGGER.debug(MessageCodes.JPA_168, collectionID);
 
@@ -194,14 +240,20 @@ public class Mapper {
                         final Row childRow = myMapper.readValue(myCsvData.get(childID), Row.class);
                         LOGGER.debug(MessageCodes.JPA_170, childID);
 
+                        // Check that there is an object type for the child row
                         final String objectType = childRow.getObjectType().orElseThrow(() -> {
                             return new MappingException(MessageCodes.JPA_172);
                         });
 
-                        if (Keys.COLLECTION.equals(objectType)) {
+                        if (isCollection(childRow)) {
                             final Collection childCollection = myBuilder.build(childRow);
+
+                            // Add the child collection to its parent and write it to the ZIP file too
                             collection.getItems().add(new Collection.Item(childCollection));
-                        } else if (Keys.WORK.equals(objectType)) {
+                            mapCollections(List.of(childRow.getItemID().orElseThrow()));
+
+                            // myZipWriter.writeFile(childCollectionID + JSON_EXT, childCollection.toString());
+                        } else if (isManifest(childRow)) {
                             final List<Manifest> manifests = mapManifests(List.of(childID));
                             final List<Collection.Item> items = collection.getItems();
 
@@ -262,7 +314,7 @@ public class Mapper {
      * @param aMinter A minter used for generating unique identifiers for the canvas objects
      * @return A list of canvases associated with the specified manifest
      */
-    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY })
+    @SuppressWarnings({PMD.COGNITIVE_COMPLEXITY})
     protected List<Canvas> mapCanvases(final String aManifestID, final Minter aMinter) {
         final List<Canvas> canvases = new ArrayList<>();
 
@@ -305,10 +357,10 @@ public class Mapper {
                     paintedRow.getObjectType().ifPresent(ThrowingConsumer.sneaky(objectType -> {
                         switch (objectType) {
                             case Keys.CHOICE -> {
-                                choiceResources.add((ContentResource) myBuilder.build(paintedRow, aMinter));
+                                choiceResources.add(myBuilder.build(paintedRow, aMinter));
                             }
                             case Keys.LAYER -> {
-                                layerResources.add((ContentResource) myBuilder.build(paintedRow, aMinter));
+                                layerResources.add(myBuilder.build(paintedRow, aMinter));
                             }
                             default -> throw new MappingException();
                         }
@@ -333,7 +385,7 @@ public class Mapper {
             }
 
             // Only set width and height if the canvas doesn't have pre-existing dimensions
-            if (canvasWidth == 0 && canvasHeight == 0) {
+            if (canvasWidth == 0 && canvasHeight == 0 && width.get() > 0 && height.get() > 0) {
                 canvas.setWidthHeight(width.get(), height.get());
             }
 
