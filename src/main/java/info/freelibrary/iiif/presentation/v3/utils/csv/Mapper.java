@@ -1,3 +1,4 @@
+
 package info.freelibrary.iiif.presentation.v3.utils.csv;
 
 import static info.freelibrary.iiif.presentation.v3.ResourceTypes.IMAGE;
@@ -43,7 +44,7 @@ import java.util.stream.Stream;
 /**
  * A mapper for reading CSV data and mapping it into a local database.
  */
-@SuppressWarnings({PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS})
+@SuppressWarnings({ PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS })
 public class Mapper {
 
     /** The logger for this class. */
@@ -87,7 +88,7 @@ public class Mapper {
      * @throws MappingException If there is trouble mapping the CSV data
      * @throws IOException If there is trouble reading the CSV file
      */
-    @SuppressWarnings({JDK.UNCHECKED}) // Warnings for the Serializer.JAVA
+    @SuppressWarnings({ JDK.UNCHECKED }) // Warnings for the Serializer.JAVA
     public Mapper(final Stream<Path> aCsvFile, final Path aOutputFile) throws MappingException, IOException {
         final Reader reader = new Reader();
 
@@ -116,10 +117,10 @@ public class Mapper {
             // Create an index that supports child lookup by parent ID
             row.getParentID().ifPresent(parentID -> {
                 final Set<String> idSet = myParents.compute(parentID,
-                  (key, existing) -> Objects.requireNonNullElseGet(existing, LinkedHashSet::new));
+                        (key, existing) -> Objects.requireNonNullElseGet(existing, LinkedHashSet::new));
 
-                LOGGER.debug(MessageCodes.JPA_165, rowID, row.getObjectType().isPresent() ? row.getObjectType().get() :
-                  "UNKNOWN", parentID);
+                LOGGER.debug(MessageCodes.JPA_165, rowID,
+                        row.getObjectType().isPresent() ? row.getObjectType().get() : "UNKNOWN", parentID);
 
                 idSet.add(rowID);
                 myParents.put(parentID, idSet);
@@ -131,7 +132,7 @@ public class Mapper {
             // Create an index that supports lookup by object type
             row.getObjectType().ifPresent(objectType -> {
                 final Set<String> idSet = myObjTypes.compute(objectType,
-                  (key, existing) -> Objects.requireNonNullElseGet(existing, LinkedHashSet::new));
+                        (key, existing) -> Objects.requireNonNullElseGet(existing, LinkedHashSet::new));
 
                 LOGGER.debug(MessageCodes.JPA_166, rowID, objectType);
 
@@ -152,7 +153,7 @@ public class Mapper {
      */
     public int map() throws MappingException, IOException {
         final List<String> collections = myObjTypes.getOrDefault(Keys.COLLECTION, Set.of()).stream()
-          .filter(id -> !myChildren.contains(id)).toList();
+                .filter(id -> !myChildren.contains(id)).toList();
         final int result;
 
         // Check to see if our CSV data has any collections, our highest level in the hierarchy
@@ -218,12 +219,12 @@ public class Mapper {
      * @throws MappingException If there is trouble mapping the CSV data
      * @throws IOException If there is trouble reading the CSV file
      */
+    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY })
     protected Path mapCollections(final List<String> aCollectionList) throws MappingException, IOException {
         LOGGER.debug(MessageCodes.JPA_167, aCollectionList.size());
 
         // Descend through the CSV data, starting at the collections
         for (final String collectionID : aCollectionList) {
-            System.out.println(collectionID);
             final Row collectionRow = myMapper.readValue(myCsvData.get(collectionID), Row.class);
             LOGGER.debug(MessageCodes.JPA_168, collectionID);
 
@@ -241,7 +242,7 @@ public class Mapper {
                         LOGGER.debug(MessageCodes.JPA_170, childID);
 
                         // Check that there is an object type for the child row
-                        final String objectType = childRow.getObjectType().orElseThrow(() -> {
+                        childRow.getObjectType().orElseThrow(() -> {
                             return new MappingException(MessageCodes.JPA_172);
                         });
 
@@ -314,7 +315,7 @@ public class Mapper {
      * @param aMinter A minter used for generating unique identifiers for the canvas objects
      * @return A list of canvases associated with the specified manifest
      */
-    @SuppressWarnings({PMD.COGNITIVE_COMPLEXITY})
+    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY })
     protected List<Canvas> mapCanvases(final String aManifestID, final Minter aMinter) {
         final List<Canvas> canvases = new ArrayList<>();
 
