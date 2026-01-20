@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3.utils.cmd;
+package info.freelibrary.iiif.presentation.v3.utils.cmdline;
 
 import static info.freelibrary.util.Constants.COLON;
 
@@ -238,7 +238,7 @@ public final class JPv3 implements Callable<Integer> {
          * @return Whether to view a newly created ZIP file of manifests and collection documents
          */
         private boolean isView() {
-            return !isCreate() && !isUpload();
+            return !myCreateFlag && !myUploadFlag;
         }
     }
 }

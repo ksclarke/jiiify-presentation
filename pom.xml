@@ -210,7 +210,7 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
                     <excludePackageNames>
-                        info.freelibrary.iiif.presentation.v3.utils.csv:info.freelibrary.iiif.presentation.v3.utils.cmd
+                        info.freelibrary.iiif.presentation.v3.utils.csv:info.freelibrary.iiif.presentation.v3.utils.cmdline
                     </excludePackageNames>
                     <links>
                         <link>https://javadoc.io/doc/info.freelibrary/freelib-utils/${freelib.utils.version}/</link>
@@ -248,22 +248,7 @@
                 <artifactId>maven-resources-plugin</artifactId>
             </plugin>
 
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <!-- Uses 'add-opens' argument for system-lambda functionality in unit tests -->
-                    <argLine><![CDATA[ ${jacoco.agent.arg} ${mockito.agent.arg}
-                        --add-opens java.base/java.util=ALL-UNNAMED
-                        --add-opens=java.base/java.lang=ALL-UNNAMED
-                        --enable-native-access=ALL-UNNAMED
-                    ]]></argLine>
-                    <forkCount>1</forkCount>
-                    <reuseForks>false</reuseForks>
-                    <environmentVariables>
-                        <JPV3_HOST>https://iiif.library.ucla.edu</JPV3_HOST>
-                    </environmentVariables>
-                </configuration>
-            </plugin>
+
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -294,7 +279,7 @@
                             <!-- Exclude the CSV utils from the main compilation process -->
                             <excludes>
                                 <exclude>**/info/freelibrary/iiif/presentation/v3/utils/csv/*.java</exclude>
-                                <exclude>**/info/freelibrary/iiif/presentation/v3/utils/cmd/*.java</exclude>
+                                <exclude>**/info/freelibrary/iiif/presentation/v3/utils/cmdline/*.java</exclude>
                             </excludes>
                         </configuration>
                     </execution>
@@ -308,7 +293,7 @@
                             <testExcludes>
                                 <!-- Exclude test sources associated with the excluded CSV utils -->
                                 <testExclude>**/info/freelibrary/iiif/presentation/v3/utils/csv/*.java</testExclude>
-                                <testExclude>**/info/freelibrary/iiif/presentation/v3/utils/cmd/*.java</testExclude>
+                                <testExclude>**/info/freelibrary/iiif/presentation/v3/utils/cmdline/*.java</testExclude>
                             </testExcludes>
                         </configuration>
                     </execution>
@@ -328,11 +313,11 @@
                 <picocli.version>4.7.7</picocli.version>
                 <mapdb.version>3.1.0</mapdb.version>
 
-                <native.config.dir>target/native-image-config</native.config.dir>
-                <native.meta.info>
-                    src/main/resources/META-INF/native-image/${project.groupId}/${project.artifactId}/
-                </native.meta.info>
+                <graalvm.agent.arg>
+                    ${project.basedir}/target/classes/META-INF/native-image/${project.groupId}/${project.artifactId}/
+                </graalvm.agent.arg>
                 <build.profile>native</build.profile>
+                <native.image.agent>true</native.image.agent>
 
                 <!-- Default is the most basic; other options: 'x86-64-v2' or 'armv8-a' or 'native' -->
                 <build.arch>compatibility</build.arch>
@@ -412,6 +397,16 @@
                                 <configuration>
                                     <!-- Clear any inherited excludes for native -->
                                     <excludes combine.self="override"/>
+                                    <annotationProcessorPaths>
+                                        <path>
+                                            <groupId>info.picocli</groupId>
+                                            <artifactId>picocli-codegen</artifactId>
+                                            <version>${picocli.version}</version>
+                                        </path>
+                                    </annotationProcessorPaths>
+                                    <compilerArgs>
+                                        <arg>-Aproject=${project.groupId}/${project.artifactId}</arg>
+                                    </compilerArgs>
                                 </configuration>
                             </execution>
                             <execution>
@@ -420,79 +415,6 @@
                                 <goals>
                                     <goal>testCompile</goal>
                                 </goals>
-                                <configuration>
-                                    <!-- Clear any inherited excludes for native -->
-                                    <testExcludes combine.self="override"/>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>${exec.plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <id>run-with-agent</id>
-                                <phase>process-classes</phase>
-                                <goals>
-                                    <goal>exec</goal>
-                                </goals>
-                                <configuration>
-                                    <environmentVariables>
-                                        <JPV3_HOST>https://posttestserver.dev/p/v8zzhmbm3fcvgjlg/post</JPV3_HOST>
-                                        <JPV3_PASSWORD>nimda</JPV3_PASSWORD>
-                                        <JPV3_USERNAME>admin</JPV3_USERNAME>
-                                    </environmentVariables>
-                                    <executable>java</executable>
-                                    <arguments>
-                                        <!-- JVM agent goes here -->
-                                        <argument>
-                                            -agentlib:native-image-agent=config-output-dir=${native.config.dir}
-                                        </argument>
-                                        <!-- Allowances for the latest version of MapDB below -->
-                                        <argument>--enable-native-access=ALL-UNNAMED</argument>
-
-                                        <!-- Build the classpath from project runtime deps and target/classes -->
-                                        <argument>-cp</argument>
-                                        <classpath/>
-
-                                        <!-- Main class and its arguments -->
-                                        <argument>info.freelibrary.iiif.presentation.v3.utils.cmd.JPv3</argument>
-                                        <argument>-u</argument>
-                                        <argument>-i</argument>
-                                        <argument>src/test/resources/csv/jbu-collection.csv</argument>
-                                    </arguments>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>make-native-meta-dir</id>
-                                <phase>process-classes</phase>
-                                <goals>
-                                    <goal>exec</goal>
-                                </goals>
-                                <configuration>
-                                    <executable>mkdir</executable>
-                                    <arguments>
-                                        <argument>-p</argument>
-                                        <argument>${native.meta.info}</argument>
-                                    </arguments>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>cp-native-image-config</id>
-                                <phase>process-classes</phase>
-                                <goals>
-                                    <goal>exec</goal>
-                                </goals>
-                                <configuration>
-                                    <executable>cp</executable>
-                                    <arguments>
-                                        <argument>${native.config.dir}/reachability-metadata.json</argument>
-                                        <argument>${native.meta.info}</argument>
-                                    </arguments>
-                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -512,7 +434,8 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <mainClass>info.freelibrary.iiif.presentation.v3.utils.cmd.JPv3</mainClass>
+                            <agent>true</agent>
+                            <mainClass>info.freelibrary.iiif.presentation.v3.utils.cmdline.JPv3</mainClass>
                             <imageName>jpv3</imageName>
                             <buildArgs>
                                 <arg>-O3</arg>
@@ -521,11 +444,32 @@
                                 <arg>--exact-reachability-metadata</arg>
                                 <arg>--enable-native-access=ALL-UNNAMED</arg>
                                 <arg>--enable-url-protocols=https</arg>
-                                <arg>-H:-ReduceImplicitExceptionStackTraceInformation</arg>
+                                <!--<arg>-H:-ReduceImplicitExceptionStackTraceInformation</arg>-->
                             </buildArgs>
                             <metadataRepository>
                                 <enabled>true</enabled>
                             </metadataRepository>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <native.image.agent>true</native.image.agent>
+                            </systemPropertyVariables>
+                            <!-- Uses 'add-opens' argument for system-lambda functionality in unit tests -->
+                            <argLine><![CDATA[ ${jacoco.agent.arg} ${mockito.agent.arg}
+                              -agentlib:native-image-agent=config-output-dir=${graalvm.agent.arg}
+                              --add-opens java.base/java.util=ALL-UNNAMED
+                              --add-opens=java.base/java.lang=ALL-UNNAMED
+                              --enable-native-access=ALL-UNNAMED
+                            ]]></argLine>
+                            <forkCount>1</forkCount>
+                            <reuseForks>false</reuseForks>
+                            <environmentVariables>
+                                <JPV3_HOST>https://iiif.library.ucla.edu</JPV3_HOST>
+                            </environmentVariables>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -595,7 +539,7 @@
                                             <file>src/test/resources/logback-uber.xml</file>
                                         </transformer>
                                         <transformer implementation="${shade.manifest}">
-                                            <mainClass>info.freelibrary.iiif.presentation.v3.utils.cmd.JPv3</mainClass>
+                                            <mainClass>info.freelibrary.iiif.presentation.v3.utils.cmdline.JPv3</mainClass>
                                         </transformer>
                                     </transformers>
                                 </configuration>

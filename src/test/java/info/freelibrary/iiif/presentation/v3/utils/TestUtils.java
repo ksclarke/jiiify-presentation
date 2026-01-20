@@ -81,7 +81,7 @@ public final class TestUtils {
                         new String(encoder.encode(actual.toString(config).getBytes()), UTF_8), aName.getMethodName());
 
                 try {
-                    // Write an file of HTML links pointing to a better diffs display than what JUnit outputs
+                    // Write a file of HTML links pointing to a better diffs display than what JUnit outputs
                     // We don't append, so this is really only useful when we're running a single test
                     Files.write(DIFF_LINKS, Collections.singletonList(diffLink), StandardOpenOption.CREATE,
                             StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);

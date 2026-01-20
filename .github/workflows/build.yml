@@ -92,14 +92,27 @@ jobs:
               out_name="jpv3.exe"
               ;;
             macOS)
-              out_name="jpv3.mac"
+              out_name="jpv3"
               ;;
           esac
           cp "target/jpv3" "dist/$out_name"
+          chmod +x "dist/$out_name" || true
+          
+          # Only create a Homebrew-friendly tarball for macOS
+          if [ "${{ runner.os }}" = "macOS" ]; then
+            tar -C dist -czf "dist/jpv3-${{ matrix.suffix }}.tar.gz" "$out_name"
+          fi
 
-      - name: Upload binary artifact
+      - name: Upload macOS Homebrew archive
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        if: ${{ matrix.java == '24' }}
+        if: ${{ matrix.java == '24' && runner.os == 'macOS' }}
+        with:
+          name: ${{ matrix.suffix }}
+          path: dist/*.tar.gz
+
+      - name: Upload binary artifact (non-macOS)
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: ${{ matrix.java == '24' && runner.os != 'macOS' }}
         with:
           name: ${{ matrix.suffix }}
           path: dist/*

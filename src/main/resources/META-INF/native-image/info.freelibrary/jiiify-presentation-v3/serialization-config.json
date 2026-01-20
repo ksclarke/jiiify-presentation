@@ -1,0 +1,5 @@
+[
+  { "name": "java.util.LinkedHashSet" },
+  { "name": "java.util.HashSet" },
+  { "name": "java.lang.String" }
+]

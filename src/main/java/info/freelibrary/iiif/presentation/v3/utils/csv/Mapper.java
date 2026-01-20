@@ -119,7 +119,7 @@ public class Mapper {
                 final Set<String> idSet = myParents.compute(parentID,
                         (key, existing) -> Objects.requireNonNullElseGet(existing, LinkedHashSet::new));
 
-                LOGGER.debug(MessageCodes.JPA_165, rowID,
+                LOGGER.trace(MessageCodes.JPA_165, rowID,
                         row.getObjectType().isPresent() ? row.getObjectType().get() : "UNKNOWN", parentID);
 
                 idSet.add(rowID);
@@ -134,7 +134,7 @@ public class Mapper {
                 final Set<String> idSet = myObjTypes.compute(objectType,
                         (key, existing) -> Objects.requireNonNullElseGet(existing, LinkedHashSet::new));
 
-                LOGGER.debug(MessageCodes.JPA_166, rowID, objectType);
+                LOGGER.trace(MessageCodes.JPA_166, rowID, objectType);
 
                 idSet.add(rowID);
                 myObjTypes.put(objectType, idSet);
@@ -179,12 +179,13 @@ public class Mapper {
         final Optional<String> objectType = aRow.getObjectType();
         final Optional<String> resourceType;
 
-        if (objectType.isPresent() && objectType.get().equalsIgnoreCase(Keys.COLLECTION)) {
+        if (objectType.isPresent() && Keys.COLLECTION.equalsIgnoreCase(objectType.get())) {
             return true;
         }
 
+        // We include IIIF Collections (which may be considered a "work" in another context: e.g., a periodical issue).
         resourceType = aRow.getResourceType();
-        return resourceType.isPresent() && resourceType.get().equalsIgnoreCase(Keys.COLLECTION);
+        return resourceType.isPresent() && Keys.COLLECTION.equalsIgnoreCase(resourceType.get());
     }
 
     /**
@@ -197,11 +198,12 @@ public class Mapper {
         final AtomicBoolean isManifest = new AtomicBoolean(false);
 
         aRow.getObjectType().ifPresent(objectType -> {
-            if (objectType.equalsIgnoreCase(Keys.WORK)) {
+            if (Keys.WORK.equalsIgnoreCase(objectType)) {
                 isManifest.set(true);
 
+                // We allow for the work designation to be overridden by a resource type of "collection".
                 aRow.getResourceType().ifPresent(resourceType -> {
-                    if (resourceType.equalsIgnoreCase(Keys.COLLECTION)) {
+                    if (Keys.COLLECTION.equalsIgnoreCase(resourceType)) {
                         isManifest.set(false);
                     }
                 });
@@ -242,25 +244,19 @@ public class Mapper {
                         LOGGER.debug(MessageCodes.JPA_170, childID);
 
                         // Check that there is an object type for the child row
-                        childRow.getObjectType().orElseThrow(() -> {
-                            return new MappingException(MessageCodes.JPA_172);
-                        });
+                        childRow.getObjectType().orElseThrow(() -> new MappingException(MessageCodes.JPA_172));
 
                         if (isCollection(childRow)) {
                             final Collection childCollection = myBuilder.build(childRow);
 
-                            // Add the child collection to its parent and write it to the ZIP file too
+                            // Add the child collection to its parent and fully map it, too
                             collection.getItems().add(new Collection.Item(childCollection));
                             mapCollections(List.of(childRow.getItemID().orElseThrow()));
-
-                            // myZipWriter.writeFile(childCollectionID + JSON_EXT, childCollection.toString());
                         } else if (isManifest(childRow)) {
                             final List<Manifest> manifests = mapManifests(List.of(childID));
                             final List<Collection.Item> items = collection.getItems();
 
-                            manifests.forEach(manifest -> {
-                                items.add(new Collection.Item(manifest));
-                            });
+                            manifests.forEach(manifest -> items.add(new Collection.Item(manifest)));
                         }
                     }
                 } catch (final JsonProcessingException details) {
@@ -357,12 +353,8 @@ public class Mapper {
 
                     paintedRow.getObjectType().ifPresent(ThrowingConsumer.sneaky(objectType -> {
                         switch (objectType) {
-                            case Keys.CHOICE -> {
-                                choiceResources.add(myBuilder.build(paintedRow, aMinter));
-                            }
-                            case Keys.LAYER -> {
-                                layerResources.add(myBuilder.build(paintedRow, aMinter));
-                            }
+                            case Keys.CHOICE -> choiceResources.add(myBuilder.build(paintedRow, aMinter));
+                            case Keys.LAYER -> layerResources.add(myBuilder.build(paintedRow, aMinter));
                             default -> throw new MappingException();
                         }
                     }));
@@ -418,7 +410,7 @@ public class Mapper {
      */
     private DB createDatabase(final Path aCsvFile) throws IOException {
         final long dbSize = aCsvFile.toFile().length() * 2; // Ballpark db size, based on CSV file
-        final long allocationSize = 256 * 1024 * 1024;
+        final long allocationSize = 64 * 1024 * 1024; // Was 256 * 1024 * 1024 before
         final DBMaker.Maker maker = DBMaker.tempFileDB();
 
         // We don't use cleanerHackEnable() because it accesses Unsafe Java code and newer JDKs warn about it

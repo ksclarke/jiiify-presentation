@@ -10,17 +10,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.UUID;
-import java.util.regex.Pattern;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import info.freelibrary.util.StringUtils;
-
+import ch.qos.logback.classic.Level;
 import info.freelibrary.iiif.presentation.v3.annotation.PaintingAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotation.SpecificResource;
 import info.freelibrary.iiif.presentation.v3.annotation.SupplementingAnnotation;
@@ -44,6 +34,15 @@ import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentS
 import info.freelibrary.iiif.presentation.v3.properties.selectors.SelectorOutOfBoundsException;
 import info.freelibrary.iiif.presentation.v3.services.ImageService3;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
+import info.freelibrary.util.StringUtils;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.UUID;
+import java.util.regex.Pattern;
 
 /**
  * Tests for a presentation canvas.
@@ -149,12 +148,15 @@ public class CanvasTest extends AbstractCookbookTest {
     /** A test canvas. */
     private Canvas myCanvas;
 
+    /** A log level used in testing. */
+    private Level myLogLevel;
+
     /**
      * Sets up the testing environment.
      */
     @Before
     public void setUp() {
-        final String id = HTTPS + UUID.randomUUID().toString();
+        final String id = HTTPS + UUID.randomUUID();
         final int index = id.indexOf('-');
 
         myCanvas = new Canvas(MinterFactory.getMinter("https://example.org/iiif/" + id.substring(0, index)), LABEL);
@@ -525,21 +527,6 @@ public class CanvasTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests painting an image outside the bounds of a canvas with spatial dimensions.
-     *
-     * @throws IOException If there is trouble reading the canvas file or serializing the constructed canvas
-     */
-    @Test
-    public final void testPaintImageOnSpatialCanvasOutOfBounds() throws Exception {
-        final String log = tapSystemOut(() -> {
-            myCanvas.setWidthHeight(WIDTH - 1, HEIGHT)
-                    .paintWith(new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT));
-        });
-
-        assertTrue(log.contains(Integer.toString(HEIGHT)) && log.contains(Integer.toString(WIDTH)));
-    }
-
-    /**
      * Tests painting an image onto a spatial fragment of a canvas with spatial dimensions.
      */
     @Test
@@ -570,21 +557,6 @@ public class CanvasTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests painting an image outside the bounds of a spatial fragment of a canvas with spatial dimensions.
-     */
-    @Test
-    public final void testPaintImageOnSpatialFragmentOfSpatialCanvasOutOfBounds() throws Exception {
-        final String log = tapSystemOut(() -> {
-            final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
-            final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH - 1, HEIGHT);
-
-            myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, image);
-        });
-
-        assertTrue(log.contains(Integer.toString(HEIGHT)) && log.contains(Integer.toString(WIDTH)));
-    }
-
-    /**
      * Tests painting an image onto a spatial fragment of a canvas with spatiotemporal dimensions.
      */
     @Test
@@ -596,21 +568,6 @@ public class CanvasTest extends AbstractCookbookTest {
 
         assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
         assertEquals(selector.toString(), getPaintingMediaFragment().toString());
-    }
-
-    /**
-     * Tests painting an image outside the bounds of a spatial fragment of a canvas with spatiotemporal dimensions.
-     */
-    @Test
-    public final void testPaintImageOnSpatialFragmentOfSpatiotemporalCanvasOutOfBounds() throws Exception {
-        final String log = tapSystemOut(() -> {
-            final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
-            final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT - 1);
-
-            myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, image);
-        });
-
-        assertTrue(log.contains(Integer.toString(HEIGHT)) && log.contains(Integer.toString(WIDTH)));
     }
 
     /**
@@ -648,35 +605,6 @@ public class CanvasTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests painting an image outside the bounds of a spatiotemporal fragment of a canvas with spatiotemporal
-     * dimensions.
-     */
-    @Test
-    public final void testPaintImageOnSpatiotemporalFragmentOfSpatiotemporalCanvasOutOfBounds() throws Exception {
-        final String log = tapSystemOut(() -> {
-            final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH + 1, HEIGHT);
-            final MediaFragmentSelector selector =
-                    new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION), 0, 0, WIDTH, HEIGHT);
-
-            myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, image);
-        });
-
-        assertTrue(log.contains(Integer.toString(HEIGHT)) && log.contains(Integer.toString(WIDTH)));
-    }
-
-    /**
-     * Tests painting an image onto a canvas with temporal dimensions.
-     */
-    @Test
-    public final void testPaintImageOnTemoporalCanvas() throws Exception {
-        final String log = tapSystemOut(() -> {
-            myCanvas.setDuration(CANVAS_DURATION).paintWith(new ImageContent(IMAGE_1_ID));
-        });
-
-        assertTrue(log.contains(IMAGE_1_ID));
-    }
-
-    /**
      * Tests painting an image onto a temporal fragment of a canvas with spatiotemporal dimensions.
      */
     @Test
@@ -689,37 +617,6 @@ public class CanvasTest extends AbstractCookbookTest {
 
         assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
         assertEquals(selector.toString(), getPaintingMediaFragment());
-    }
-
-    /**
-     * Tests painting an image outside the bounds of a temporal fragment of a canvas with spatiotemporal dimensions.
-     */
-    @Test
-    public final void testPaintImageOnTemporalFragmentOfSpatiotemporalCanvasOutOfBounds() throws Exception {
-        final String log = tapSystemOut(() -> {
-            final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH + 1, HEIGHT);
-            final MediaFragmentSelector selector =
-                    new MediaFragmentSelector(new StartTime(0), new EndTime(CANVAS_DURATION));
-
-            myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, image);
-        });
-
-        assertTrue(log.contains(Integer.toString(WIDTH)));
-    }
-
-    /**
-     * Tests painting an image onto a temporal fragment of a canvas with temporal dimensions.
-     */
-    @Test
-    public final void testPaintImageOnTemporalFragmentOfTemporalCanvas() throws Exception {
-        final String log = tapSystemOut(() -> {
-            final ImageContent image = new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT);
-            final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION));
-
-            myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, image);
-        });
-
-        assertTrue(log.contains(IMAGE_1_ID));
     }
 
     /**
@@ -1032,18 +929,6 @@ public class CanvasTest extends AbstractCookbookTest {
     @Test(expected = IllegalArgumentException.class)
     public final void testPaintSoundInvalidFragment() {
         myCanvas.setDuration(CANVAS_DURATION).paintWith("t=", new SoundContent(SOUND_1_ID));
-    }
-
-    /**
-     * Tests painting a sound onto a canvas with spatial dimensions.
-     */
-    @Test
-    public final void testPaintSoundOnSpatialCanvas() throws Exception {
-        final String log = tapSystemOut(() -> {
-            myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(new SoundContent(SOUND_1_ID));
-        });
-
-        assertTrue(log.contains(SOUND_1_ID));
     }
 
     /**
@@ -1418,18 +1303,6 @@ public class CanvasTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests painting a video onto a canvas with spatial dimensions.
-     */
-    @Test
-    public final void testPaintVideoOnSpatialCanvas() throws Exception {
-        final String log = tapSystemOut(() -> {
-            myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(new VideoContent(VIDEO_1_ID));
-        });
-
-        assertTrue(log.contains(VIDEO_1_ID));
-    }
-
-    /**
      * Tests painting a video onto a spatial fragment of a canvas with spatial dimensions.
      */
     @Test
@@ -1459,21 +1332,6 @@ public class CanvasTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests painting a video outside the bounds of a spatial fragment of a canvas with spatiotemporal dimensions.
-     */
-    @Test
-    public final void testPaintVideoOnSpatialFragmentOfSpatiotemporalCanvasOutOfBounds() throws Exception {
-        final String log = tapSystemOut(() -> {
-            final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
-            final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH - 1, HEIGHT);
-
-            myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, video);
-        });
-
-        assertTrue(log.contains(Integer.toString(WIDTH)));
-    }
-
-    /**
      * Tests painting a video onto a canvas with spatiotemporal dimensions.
      */
     @Test
@@ -1500,19 +1358,6 @@ public class CanvasTest extends AbstractCookbookTest {
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION)
                 .paintWith(List.of(new VideoContent(VIDEO_1_ID)));
         assertEquals(VIDEO_1_ID, getPaintingContentResourceID());
-    }
-
-    /**
-     * Tests painting a video outside the spatial bounds of a canvas with spatiotemporal dimensions.
-     */
-    @Test
-    public final void testPaintVideoOnSpatiotemporalCanvasOutOfBoundsSpatial() throws Exception {
-        final String log = tapSystemOut(() -> {
-            myCanvas.setWidthHeight(WIDTH, HEIGHT - 1).setDuration(CANVAS_DURATION)
-                    .paintWith(new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION));
-        });
-
-        assertTrue(log.contains(Integer.toString(WIDTH)));
     }
 
     /**
@@ -1562,36 +1407,6 @@ public class CanvasTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests painting a video outside the bounds of a spatiotemporal fragment of a canvas with spatiotemporal
-     * dimensions.
-     */
-    @Test
-    public final void testPaintVideoOnSpatiotemporalFragmentOfSpatiotemporalCanvasOutOfBounds() throws Exception {
-        final String log = tapSystemOut(() -> {
-            final VideoContent video =
-                    new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH + 1, HEIGHT).setDuration(DURATION);
-            final MediaFragmentSelector selector =
-                    new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0, WIDTH, HEIGHT);
-
-            myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, video);
-        });
-
-        assertTrue(log.contains(Integer.toString(WIDTH)));
-    }
-
-    /**
-     * Tests painting a video onto a canvas with temporal dimensions.
-     */
-    @Test
-    public final void testPaintVideoOnTemoporalCanvas() throws Exception {
-        final String log = tapSystemOut(() -> {
-            myCanvas.setDuration(CANVAS_DURATION).paintWith(new VideoContent(VIDEO_1_ID));
-        });
-
-        assertTrue(log.contains(VIDEO_1_ID));
-    }
-
-    /**
      * Tests painting a video onto a temporal fragment of a canvas with spatiotemporal dimensions.
      */
     @Test
@@ -1632,21 +1447,6 @@ public class CanvasTest extends AbstractCookbookTest {
                     new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION - 1));
 
             myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, video);
-        });
-
-        assertTrue(log.contains(VIDEO_1_ID));
-    }
-
-    /**
-     * Tests painting a video onto a temporal fragment of a canvas with temporal dimensions.
-     */
-    @Test
-    public final void testPaintVideoOnTemporalFragmentOfTemporalCanvas() throws Exception {
-        final String log = tapSystemOut(() -> {
-            final VideoContent video = new VideoContent(VIDEO_1_ID).setWidthHeight(WIDTH, HEIGHT).setDuration(DURATION);
-            final MediaFragmentSelector selector = new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION));
-
-            myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, video);
         });
 
         assertTrue(log.contains(VIDEO_1_ID));

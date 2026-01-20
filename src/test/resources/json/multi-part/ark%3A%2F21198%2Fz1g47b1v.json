@@ -1,0 +1,86 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://iiif.library.ucla.edu/collections/ark%3A%2F21198%2Fz1g47b1v",
+  "type": "Collection",
+  "label": {
+    "none": [
+      "Revista Acción"
+    ]
+  },
+  "behavior": [
+    "multi-part"
+  ],
+  "thumbnail" : [
+    {
+      "id" : "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1sn2wv9/full/!200,200/0/default.jpg",
+      "type" : "Image",
+      "format" : "image/jpeg"
+    }
+  ],
+  "items": [
+    {
+      "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "1958-05-19"
+        ]
+      },
+      "thumbnail" : [
+        {
+          "id" : "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1sn2wv9/full/!200,200/0/default.jpg",
+          "type" : "Image",
+          "format" : "image/jpeg"
+        }
+      ]
+    },
+    {
+      "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz16m5tg2/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "1958-05-26"
+        ]
+      },
+      "thumbnail" : [
+        {
+          "id" : "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1vh88qk/full/!200,200/0/default.jpg",
+          "type" : "Image",
+          "format" : "image/jpeg"
+        }
+      ]
+    },
+    {
+      "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1np4r43/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "1958-06-02"
+        ]
+      },
+      "thumbnail" : [
+        {
+          "id" : "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1225fmj/full/!200,200/0/default.jpg",
+          "type" : "Image",
+          "format" : "image/jpeg"
+        }
+      ]
+    },
+    {
+      "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1fx9x4m/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "1958-06-09"
+        ]
+      },
+      "thumbnail" : [
+        {
+          "id" : "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz19c9j83/full/!200,200/0/default.jpg",
+          "type" : "Image",
+          "format" : "image/jpeg"
+        }
+      ]
+    }
+  ]
+}

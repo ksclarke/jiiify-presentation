@@ -1,5 +1,5 @@
 
-package info.freelibrary.iiif.presentation.v3.utils.cmd;
+package info.freelibrary.iiif.presentation.v3.utils.cmdline;
 
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.util.warnings.Checkstyle;

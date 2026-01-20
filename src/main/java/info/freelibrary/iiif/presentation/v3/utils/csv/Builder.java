@@ -13,6 +13,7 @@ import info.freelibrary.iiif.presentation.v3.id.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
+import info.freelibrary.iiif.presentation.v3.properties.behaviors.CollectionBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
 import info.freelibrary.iiif.presentation.v3.services.ImageService;
 import info.freelibrary.iiif.presentation.v3.services.ImageService2;
@@ -57,8 +58,7 @@ public class Builder {
                 final String validID = checkID(id, ResourceTypes.COLLECTION);
                 final Collection collection = new Collection(validID, label);
 
-                aRow.getBehavior().flatMap(ManifestBehavior::fromLabel).ifPresent(collection::setBehaviors);
-
+                aRow.getBehavior().flatMap(CollectionBehavior::fromLabel).ifPresent(collection::setBehaviors);
                 aRow.getViewingDirection().flatMap(ViewingDirection::fromLabel)
                         .ifPresent(collection::setViewingDirection);
 
@@ -69,7 +69,6 @@ public class Builder {
                 final Manifest manifest = new Manifest(validID, label);
 
                 aRow.getBehavior().flatMap(ManifestBehavior::fromLabel).ifPresent(manifest::setBehaviors);
-
                 aRow.getViewingDirection().flatMap(ViewingDirection::fromLabel)
                         .ifPresent(manifest::setViewingDirection);
 
