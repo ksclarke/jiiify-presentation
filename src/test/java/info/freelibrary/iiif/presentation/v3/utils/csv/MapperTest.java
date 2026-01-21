@@ -4,12 +4,10 @@ package info.freelibrary.iiif.presentation.v3.utils.csv;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 import info.freelibrary.util.FileUtils;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.RegexFileFilter;
+import info.freelibrary.util.ThrowingConsumer;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -17,6 +15,8 @@ import org.junit.rules.TestName;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -24,12 +24,10 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.UUID;
 import java.util.stream.Stream;
+import java.util.zip.ZipFile;
 
 /** Tests the Mapper class. */
 public class MapperTest {
-
-    /** The logger for the Mapper class. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(MapperTest.class, MessageCodes.BUNDLE);
 
     /** A collection document name used in testing. */
     private static final String COLLECTION_DOC = "ark%3A%2F21198%2Fz11g7wqv.json";
@@ -52,6 +50,12 @@ public class MapperTest {
     /** A placeholder ID. */
     private static final String REPLACE_ID = "\"PLACEHOLDER_ID\"";
 
+    /** A directory containing multipart CSV files. */
+    private static final Path MULTIPART_DIR = Path.of("src/test/resources/csv/multi-part");
+
+    /** A directory containing JSON files corresponding to multipart CSV files. */
+    private static final String EXPECTED_RESULTS = "src/test/resources/json/multi-part";
+
     /** The test's name. */
     @Rule
     public TestName myTestName = new TestName();
@@ -63,6 +67,41 @@ public class MapperTest {
     @Before
     public void setUp() {
         myZipFile = Path.of("target", UUID.randomUUID() + "-output.zip");
+    }
+
+    /**
+     * Tests mapping the multipart examples.
+     *
+     * @throws Exception If there is an exception while running the test
+     */
+    @Test
+    @SuppressWarnings({ "JvmTaintAnalysis" }) // Suppresses Qodana taint warnings (we control the input here)
+    public void testMultiPartMappingAccion() throws Exception {
+        try (Stream<Path> fileStream = Files.list(MULTIPART_DIR).filter(path -> {
+            final String name = path.getFileName().toString();
+
+            // Only load the smaller CSV for this test
+            return name.endsWith(".csv") && (name.startsWith("accion-") || name.startsWith("lat-"));
+        })) {
+            assertEquals(0, new Mapper(fileStream, myZipFile).map());
+            assertTrue(Files.exists(myZipFile));
+
+            // Check that the ZIP file contains the expected JSON files
+            try (ZipFile zipFile = new ZipFile(myZipFile.toFile())) {
+                zipFile.stream().filter(entry -> !entry.isDirectory()).forEach(ThrowingConsumer.sneaky(entry -> {
+                    try (InputStream inStream = zipFile.getInputStream(entry)) {
+                        final String found = new String(inStream.readAllBytes(), StandardCharsets.UTF_8);
+                        final String expected = Files.readString(Path.of(EXPECTED_RESULTS, entry.getName()));
+                        final String entryName = entry.getName();
+
+                        // We can't test this issue/collection because we're not loading its large CSVs
+                        if (!"ark%3A%2F21198%2Fz1bc6271.json".equals(entryName)) {
+                            TestUtils.assertEquals(myTestName, replaceIDs(expected), replaceIDs(found));
+                        }
+                    }
+                }));
+            }
+        }
     }
 
     /** Tests that no exception is thrown when the Mapper is initialized. */

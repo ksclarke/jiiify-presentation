@@ -143,7 +143,7 @@
         Failed to set field name on CsvSchema.Column; Jackson version may have altered its internal field layout.
     </entry>
     <entry key="JPA-164">Building top level Collection from CSV data: {}</entry>
-    <entry key="JPA-165">Adding child ID {} to parent ID '{}'</entry>
+    <entry key="JPA-165">Adding child ID {} ({}) to parent ID '{}'</entry>
     <entry key="JPA-166">Adding item ID '{}' to ObjectType '{}'</entry>
     <entry key="JPA-167">Found {} collection(s) in CSV data</entry>
     <entry key="JPA-168">Mapping collection ID: {}</entry>
@@ -159,4 +159,5 @@
     <entry key="JPA-178">ZIP file with manifests/collection docs created at: {}</entry>
     <entry key="JPA-179">This feature is not yet implemented. Check back later.</entry>
     <entry key="JPA-180">Zip file uploaded successfully: {}</entry>
+    <entry key="JPA-181">Adding {}'s object type ({}) to object type index</entry>
 </properties>

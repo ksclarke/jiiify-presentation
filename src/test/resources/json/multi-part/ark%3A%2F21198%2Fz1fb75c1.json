@@ -1,0 +1,51 @@
+{
+  "@context" : "http://iiif.io/api/presentation/3/context.json",
+  "id" : "https://iiif.library.ucla.edu/collections/ark%3A%2F21198%2Fz1fb75c1",
+  "type" : "Collection",
+  "label" : {
+    "none" : [
+      "Latin American and Caribbean Periodicals"
+    ]
+  },
+  "thumbnail" : [
+    {
+      "id" : "https://iiif.library.ucla.edu/collections/ark%3A%2F21198%2Fz1fb75c1/full/!200,200/0/default.jpg",
+      "type" : "Image",
+      "format" : "image/jpeg"
+    }
+  ],
+  "items" : [
+    {
+      "id" : "https://iiif.library.ucla.edu/collections/ark%3A%2F21198%2Fz1g47b1v",
+      "type" : "Collection",
+      "label" : {
+        "none" : [
+          "Revista Acción"
+        ]
+      },
+      "thumbnail" : [
+        {
+          "id" : "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1sn2wv9/full/!200,200/0/default.jpg",
+          "type" : "Image",
+          "format" : "image/jpeg"
+        }
+      ]
+    },
+    {
+      "id" : "https://iiif.library.ucla.edu/collections/ark%3A%2F21198%2Fz1bc6271",
+      "type" : "Collection",
+      "label" : {
+        "none" : [
+          "Revista Bohemia"
+        ]
+      },
+      "thumbnail" : [
+        {
+          "id" : "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz11s0s7s%2FizDQlFPfJ/full/!200,200/0/default.jpg",
+          "type" : "Image",
+          "format" : "image/jpeg"
+        }
+      ]
+    }
+  ]
+}

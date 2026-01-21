@@ -5,6 +5,7 @@ import static info.freelibrary.util.Constants.MESSAGE_SLOT;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
@@ -23,6 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
@@ -37,9 +39,6 @@ public class RowTest {
 
     /** The JSON file to test with. */
     private static final Path JSON_FILE = Path.of("src/test/resources/json/jbu-collection.json");
-
-    /** The current working directory. */
-    private static final String CURRENT_DIR = System.getProperty("user.dir");
 
     /** An iterator for the CSV file's rows. */
     private MappingIterator<Row> myIterator;
@@ -72,6 +71,15 @@ public class RowTest {
         myIterator.close();
     }
 
+    /** Verifies the private no-arg constructor can be invoked reflectively (for native-image agent coverage). */
+    @Test
+    public void testPrivateNoArgConstructorReflectiveInstantiation() throws Exception {
+        final Constructor<Row> ctor = Row.class.getDeclaredConstructor();
+        ctor.setAccessible(true);
+
+        assertNotNull(ctor.newInstance());
+    }
+
     /**
      * Tests the Row's toString() method.
      *
@@ -80,7 +88,7 @@ public class RowTest {
     @Test
     public void testToString() throws IOException {
         final JsonNode node = JSON.readTree(StringUtils.read(JSON_FILE.toFile()));
-        final List<Row> rows = JSON.convertValue(node, new TypeReference<List<Row>>() {});
+        final List<Row> rows = JSON.convertValue(node, new TypeReference<>() {});
         final String expected = """
             {
               "ObjectType" : "Collection",

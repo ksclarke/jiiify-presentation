@@ -1,6 +1,9 @@
 
 package info.freelibrary.iiif.presentation.v3.utils.csv;
 
+import static info.freelibrary.iiif.presentation.v3.ResourceTypes.IMAGE;
+import static info.freelibrary.iiif.presentation.v3.ResourceTypes.IMAGE_SERVICE_2;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
@@ -31,13 +34,12 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
-
-import static info.freelibrary.iiif.presentation.v3.ResourceTypes.IMAGE;
-import static info.freelibrary.iiif.presentation.v3.ResourceTypes.IMAGE_SERVICE_2;
 
 /**
  * A mapper for reading CSV data and mapping it into a local database.
@@ -117,7 +119,8 @@ public class Mapper {
                 final Set<String> idSet = myParents.compute(parentID,
                         (key, existing) -> Objects.requireNonNullElseGet(existing, LinkedHashSet::new));
 
-                LOGGER.debug(MessageCodes.JPA_165, rowID, parentID);
+                LOGGER.trace(MessageCodes.JPA_165, rowID,
+                        row.getObjectType().isPresent() ? row.getObjectType().get() : "UNKNOWN", parentID);
 
                 idSet.add(rowID);
                 myParents.put(parentID, idSet);
@@ -131,7 +134,7 @@ public class Mapper {
                 final Set<String> idSet = myObjTypes.compute(objectType,
                         (key, existing) -> Objects.requireNonNullElseGet(existing, LinkedHashSet::new));
 
-                LOGGER.debug(MessageCodes.JPA_166, rowID, objectType);
+                LOGGER.trace(MessageCodes.JPA_166, rowID, objectType);
 
                 idSet.add(rowID);
                 myObjTypes.put(objectType, idSet);
@@ -166,6 +169,51 @@ public class Mapper {
     }
 
     /**
+     * Determines if the provided row represents a collection by checking its object type or resource type against a
+     * defined collection key.
+     *
+     * @param aRow The row to evaluate, containing potential object and resource type data
+     * @return {@code true} if the row represents a collection, otherwise {@code false}
+     */
+    protected boolean isCollection(final Row aRow) {
+        final Optional<String> objectType = aRow.getObjectType();
+        final Optional<String> resourceType;
+
+        if (objectType.isPresent() && Keys.COLLECTION.equalsIgnoreCase(objectType.get())) {
+            return true;
+        }
+
+        // We include IIIF Collections (which may be considered a "work" in another context: e.g., a periodical issue).
+        resourceType = aRow.getResourceType();
+        return resourceType.isPresent() && Keys.COLLECTION.equalsIgnoreCase(resourceType.get());
+    }
+
+    /**
+     * Determines if the provided row represents a manifest by checking its object type against a defined manifest key.
+     *
+     * @param aRow The row to evaluate, containing potential object type data
+     * @return {@code true} if the row represents a manifest, otherwise {@code false}
+     */
+    protected boolean isManifest(final Row aRow) {
+        final AtomicBoolean isManifest = new AtomicBoolean(false);
+
+        aRow.getObjectType().ifPresent(objectType -> {
+            if (Keys.WORK.equalsIgnoreCase(objectType)) {
+                isManifest.set(true);
+
+                // We allow for the work designation to be overridden by a resource type of "collection".
+                aRow.getResourceType().ifPresent(resourceType -> {
+                    if (Keys.COLLECTION.equalsIgnoreCase(resourceType)) {
+                        isManifest.set(false);
+                    }
+                });
+            }
+        });
+
+        return isManifest.get();
+    }
+
+    /**
      * Maps the CSV data for collections.
      *
      * @param aCollectionList A set of collection IDs
@@ -173,6 +221,7 @@ public class Mapper {
      * @throws MappingException If there is trouble mapping the CSV data
      * @throws IOException If there is trouble reading the CSV file
      */
+    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY })
     protected Path mapCollections(final List<String> aCollectionList) throws MappingException, IOException {
         LOGGER.debug(MessageCodes.JPA_167, aCollectionList.size());
 
@@ -194,20 +243,20 @@ public class Mapper {
                         final Row childRow = myMapper.readValue(myCsvData.get(childID), Row.class);
                         LOGGER.debug(MessageCodes.JPA_170, childID);
 
-                        final String objectType = childRow.getObjectType().orElseThrow(() -> {
-                            return new MappingException(MessageCodes.JPA_172);
-                        });
+                        // Check that there is an object type for the child row
+                        childRow.getObjectType().orElseThrow(() -> new MappingException(MessageCodes.JPA_172));
 
-                        if (Keys.COLLECTION.equals(objectType)) {
+                        if (isCollection(childRow)) {
                             final Collection childCollection = myBuilder.build(childRow);
+
+                            // Add the child collection to its parent and fully map it, too
                             collection.getItems().add(new Collection.Item(childCollection));
-                        } else if (Keys.WORK.equals(objectType)) {
+                            mapCollections(List.of(childRow.getItemID().orElseThrow()));
+                        } else if (isManifest(childRow)) {
                             final List<Manifest> manifests = mapManifests(List.of(childID));
                             final List<Collection.Item> items = collection.getItems();
 
-                            manifests.forEach(manifest -> {
-                                items.add(new Collection.Item(manifest));
-                            });
+                            manifests.forEach(manifest -> items.add(new Collection.Item(manifest)));
                         }
                     }
                 } catch (final JsonProcessingException details) {
@@ -304,12 +353,8 @@ public class Mapper {
 
                     paintedRow.getObjectType().ifPresent(ThrowingConsumer.sneaky(objectType -> {
                         switch (objectType) {
-                            case Keys.CHOICE -> {
-                                choiceResources.add((ContentResource) myBuilder.build(paintedRow, aMinter));
-                            }
-                            case Keys.LAYER -> {
-                                layerResources.add((ContentResource) myBuilder.build(paintedRow, aMinter));
-                            }
+                            case Keys.CHOICE -> choiceResources.add(myBuilder.build(paintedRow, aMinter));
+                            case Keys.LAYER -> layerResources.add(myBuilder.build(paintedRow, aMinter));
                             default -> throw new MappingException();
                         }
                     }));
@@ -333,7 +378,7 @@ public class Mapper {
             }
 
             // Only set width and height if the canvas doesn't have pre-existing dimensions
-            if (canvasWidth == 0 && canvasHeight == 0) {
+            if (canvasWidth == 0 && canvasHeight == 0 && width.get() > 0 && height.get() > 0) {
                 canvas.setWidthHeight(width.get(), height.get());
             }
 
@@ -365,7 +410,7 @@ public class Mapper {
      */
     private DB createDatabase(final Path aCsvFile) throws IOException {
         final long dbSize = aCsvFile.toFile().length() * 2; // Ballpark db size, based on CSV file
-        final long allocationSize = 256 * 1024 * 1024;
+        final long allocationSize = 64 * 1024 * 1024; // Was 256 * 1024 * 1024 before
         final DBMaker.Maker maker = DBMaker.tempFileDB();
 
         // We don't use cleanerHackEnable() because it accesses Unsafe Java code and newer JDKs warn about it

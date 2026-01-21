@@ -697,15 +697,16 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
             if (myWidth == 0 || myHeight == 0) {
                 final ContentOutOfBoundsException err =
                         new ContentOutOfBoundsException(MessageCodes.JPA_059, aContent.getID(), SPATIAL, getID());
-                LOGGER.warn(err.getMessage());
+                LOGGER.trace(err.getMessage());
             }
 
             if (getWidth() < spatialPainting.getWidth() || getHeight() < spatialPainting.getHeight()) {
-                // Cookbook entry says content larger than the canvas will be scaled down to fit, so for now we just
-                // warn (cf. https://iiif.io/api/cookbook/recipe/0004-canvas-size/)
+                // Cookbook entry says content larger than the canvas will be scaled down to fit, so now we just
+                // trace the occurrence (cf. https://iiif.io/api/cookbook/recipe/0004-canvas-size/)
                 final ContentOutOfBoundsException err = new ContentOutOfBoundsException(MessageCodes.JPA_173,
                         spatialPainting.getWidth(), spatialPainting.getHeight(), getWidth(), getHeight());
-                LOGGER.warn(err.getMessage());
+                LOGGER.trace(err.getMessage());
+
             }
         }
 
@@ -713,7 +714,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
             if (myDuration == ZERO_DURATION) {
                 final ContentOutOfBoundsException err =
                         new ContentOutOfBoundsException(MessageCodes.JPA_059, aContent.getID(), TEMPORAL, getID());
-                LOGGER.warn(err.getMessage());
+                LOGGER.trace(err.getMessage());
             }
 
             if (getDuration() < temporalPainting.getDuration()) {

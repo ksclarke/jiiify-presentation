@@ -1,0 +1,682 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest",
+  "type": "Manifest",
+  "label": {
+    "none": [
+      "1958-05-19"
+    ]
+  },
+  "behavior": [
+    "individuals"
+  ],
+  "thumbnail": [
+    {
+      "format": "image/jpeg",
+      "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1sn2wv9",
+      "type": "Image"
+    }
+  ],
+  "items": [
+    {
+      "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-5kmy",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "Page 1"
+        ]
+      },
+      "height": 1423,
+      "width": 1066,
+      "thumbnail": [
+        {
+          "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1sn2wv9/full/!200,200/0/default.jpg",
+          "type": "Image",
+          "format": "image/jpeg"
+        }
+      ],
+      "items": [
+        {
+          "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-5kmy/anno-page-1nyd",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/annotations/anno-wqdy",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1sn2wv9/full/600,/0/default.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "service": [
+                  {
+                    "@id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1sn2wv9",
+                    "@type": "ImageService2",
+                    "profile": "http://iiif.io/api/image/2/level2.json"
+                  }
+                ]
+              },
+              "target": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-5kmy"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-xv5w",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "Page 2"
+        ]
+      },
+      "height": 1405,
+      "width": 2046,
+      "thumbnail": [
+        {
+          "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1p00vh5/full/!200,200/0/default.jpg",
+          "type": "Image",
+          "format": "image/jpeg"
+        }
+      ],
+      "items": [
+        {
+          "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-xv5w/anno-page-kqeg",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/annotations/anno-f76e",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1p00vh5/full/600,/0/default.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "service": [
+                  {
+                    "@id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1p00vh5",
+                    "@type": "ImageService2",
+                    "profile": "http://iiif.io/api/image/2/level2.json"
+                  }
+                ]
+              },
+              "target": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-xv5w"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-uzxw",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "Page 3"
+        ]
+      },
+      "height": 1337,
+      "width": 2029,
+      "thumbnail": [
+        {
+          "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1j703st/full/!200,200/0/default.jpg",
+          "type": "Image",
+          "format": "image/jpeg"
+        }
+      ],
+      "items": [
+        {
+          "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-uzxw/anno-page-tgxw",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/annotations/anno-2eh4",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1j703st/full/600,/0/default.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "service": [
+                  {
+                    "@id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1j703st",
+                    "@type": "ImageService2",
+                    "profile": "http://iiif.io/api/image/2/level2.json"
+                  }
+                ]
+              },
+              "target": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-uzxw"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-ba72",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "Page 4"
+        ]
+      },
+      "height": 1410,
+      "width": 2062,
+      "thumbnail": [
+        {
+          "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1df9c1h/full/!200,200/0/default.jpg",
+          "type": "Image",
+          "format": "image/jpeg"
+        }
+      ],
+      "items": [
+        {
+          "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-ba72/anno-page-ch8d",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/annotations/anno-sc3n",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1df9c1h/full/600,/0/default.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "service": [
+                  {
+                    "@id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1df9c1h",
+                    "@type": "ImageService2",
+                    "profile": "http://iiif.io/api/image/2/level2.json"
+                  }
+                ]
+              },
+              "target": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-ba72"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-pv3p",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "Page 5"
+        ]
+      },
+      "height": 1405,
+      "width": 2041,
+      "thumbnail": [
+        {
+          "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz18p8mcp/full/!200,200/0/default.jpg",
+          "type": "Image",
+          "format": "image/jpeg"
+        }
+      ],
+      "items": [
+        {
+          "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-pv3p/anno-page-maxf",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/annotations/anno-yvj0",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz18p8mcp/full/600,/0/default.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "service": [
+                  {
+                    "@id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz18p8mcp",
+                    "@type": "ImageService2",
+                    "profile": "http://iiif.io/api/image/2/level2.json"
+                  }
+                ]
+              },
+              "target": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-pv3p"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-5tsi",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "Page 6"
+        ]
+      },
+      "height": 1355,
+      "width": 2072,
+      "thumbnail": [
+        {
+          "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz14x7vnz/full/!200,200/0/default.jpg",
+          "type": "Image",
+          "format": "image/jpeg"
+        }
+      ],
+      "items": [
+        {
+          "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-5tsi/anno-page-yjnk",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/annotations/anno-7tx4",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz14x7vnz/full/600,/0/default.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "service": [
+                  {
+                    "@id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz14x7vnz",
+                    "@type": "ImageService2",
+                    "profile": "http://iiif.io/api/image/2/level2.json"
+                  }
+                ]
+              },
+              "target": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-5tsi"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-ywh1",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "Page 7"
+        ]
+      },
+      "height": 1386,
+      "width": 2067,
+      "thumbnail": [
+        {
+          "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz11573xx/full/!200,200/0/default.jpg",
+          "type": "Image",
+          "format": "image/jpeg"
+        }
+      ],
+      "items": [
+        {
+          "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-ywh1/anno-page-840n",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/annotations/anno-7atd",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz11573xx/full/600,/0/default.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "service": [
+                  {
+                    "@id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz11573xx",
+                    "@type": "ImageService2",
+                    "profile": "http://iiif.io/api/image/2/level2.json"
+                  }
+                ]
+              },
+              "target": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-ywh1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-5fos",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "Page 8"
+        ]
+      },
+      "height": 1337,
+      "width": 2070,
+      "thumbnail": [
+        {
+          "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1wd6mfn/full/!200,200/0/default.jpg",
+          "type": "Image",
+          "format": "image/jpeg"
+        }
+      ],
+      "items": [
+        {
+          "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-5fos/anno-page-q6uk",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/annotations/anno-izjf",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1wd6mfn/full/600,/0/default.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "service": [
+                  {
+                    "@id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1wd6mfn",
+                    "@type": "ImageService2",
+                    "profile": "http://iiif.io/api/image/2/level2.json"
+                  }
+                ]
+              },
+              "target": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-5fos"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-dzr1",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "Page 9"
+        ]
+      },
+      "height": 1358,
+      "width": 2055,
+      "thumbnail": [
+        {
+          "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1rr4k36/full/!200,200/0/default.jpg",
+          "type": "Image",
+          "format": "image/jpeg"
+        }
+      ],
+      "items": [
+        {
+          "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-dzr1/anno-page-y6cs",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/annotations/anno-v9jm",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1rr4k36/full/600,/0/default.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "service": [
+                  {
+                    "@id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1rr4k36",
+                    "@type": "ImageService2",
+                    "profile": "http://iiif.io/api/image/2/level2.json"
+                  }
+                ]
+              },
+              "target": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-dzr1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-j73c",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "Page 10"
+        ]
+      },
+      "height": 1329,
+      "width": 1995,
+      "thumbnail": [
+        {
+          "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1n03td7/full/!200,200/0/default.jpg",
+          "type": "Image",
+          "format": "image/jpeg"
+        }
+      ],
+      "items": [
+        {
+          "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-j73c/anno-page-zf2n",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/annotations/anno-rx33",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1n03td7/full/600,/0/default.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "service": [
+                  {
+                    "@id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1n03td7",
+                    "@type": "ImageService2",
+                    "profile": "http://iiif.io/api/image/2/level2.json"
+                  }
+                ]
+              },
+              "target": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-j73c"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-vwfy",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "Page 11"
+        ]
+      },
+      "height": 1298,
+      "width": 2020,
+      "thumbnail": [
+        {
+          "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1h732m0/full/!200,200/0/default.jpg",
+          "type": "Image",
+          "format": "image/jpeg"
+        }
+      ],
+      "items": [
+        {
+          "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-vwfy/anno-page-36qh",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/annotations/anno-mbjb",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1h732m0/full/600,/0/default.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "service": [
+                  {
+                    "@id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1h732m0",
+                    "@type": "ImageService2",
+                    "profile": "http://iiif.io/api/image/2/level2.json"
+                  }
+                ]
+              },
+              "target": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-vwfy"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-iopo",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "Page 12"
+        ]
+      },
+      "height": 1386,
+      "width": 2029,
+      "thumbnail": [
+        {
+          "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1cg29xq/full/!200,200/0/default.jpg",
+          "type": "Image",
+          "format": "image/jpeg"
+        }
+      ],
+      "items": [
+        {
+          "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-iopo/anno-page-o7pp",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/annotations/anno-msh5",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1cg29xq/full/600,/0/default.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "service": [
+                  {
+                    "@id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1cg29xq",
+                    "@type": "ImageService2",
+                    "profile": "http://iiif.io/api/image/2/level2.json"
+                  }
+                ]
+              },
+              "target": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-iopo"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-fgwm",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "Page 13"
+        ]
+      },
+      "height": 1395,
+      "width": 2120,
+      "thumbnail": [
+        {
+          "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz17q1k89/full/!200,200/0/default.jpg",
+          "type": "Image",
+          "format": "image/jpeg"
+        }
+      ],
+      "items": [
+        {
+          "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-fgwm/anno-page-mdvk",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/annotations/anno-tjaz",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz17q1k89/full/600,/0/default.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "service": [
+                  {
+                    "@id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz17q1k89",
+                    "@type": "ImageService2",
+                    "profile": "http://iiif.io/api/image/2/level2.json"
+                  }
+                ]
+              },
+              "target": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-fgwm"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-h6m2",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "Page 14"
+        ]
+      },
+      "height": 1405,
+      "width": 2031,
+      "thumbnail": [
+        {
+          "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz13z0th4/full/!200,200/0/default.jpg",
+          "type": "Image",
+          "format": "image/jpeg"
+        }
+      ],
+      "items": [
+        {
+          "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-h6m2/anno-page-isge",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/annotations/anno-147z",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz13z0th4/full/600,/0/default.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "service": [
+                  {
+                    "@id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz13z0th4",
+                    "@type": "ImageService2",
+                    "profile": "http://iiif.io/api/image/2/level2.json"
+                  }
+                ]
+              },
+              "target": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-h6m2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-4sna",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "Page 15"
+        ]
+      },
+      "height": 1389,
+      "width": 1070,
+      "thumbnail": [
+        {
+          "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz10602tj/full/!200,200/0/default.jpg",
+          "type": "Image",
+          "format": "image/jpeg"
+        }
+      ],
+      "items": [
+        {
+          "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-4sna/anno-page-njxs",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/annotations/anno-vnqo",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz10602tj/full/600,/0/default.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "service": [
+                  {
+                    "@id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz10602tj",
+                    "@type": "ImageService2",
+                    "profile": "http://iiif.io/api/image/2/level2.json"
+                  }
+                ]
+              },
+              "target": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1bc6k77/manifest/canvas-4sna"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
