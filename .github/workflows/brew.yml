@@ -1,0 +1,91 @@
+name: Update Homebrew Tap
+
+on:
+  workflow_run:
+    workflows: ["Maven PR Build"]
+    types: [completed]
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  update_tap:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download release metadata artifact (tag.txt)
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+        with:
+          name: release-meta
+          path: release_meta
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download macOS tarball artifact
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+        with:
+          name: macos-x64
+          path: dist
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compute sha256 + derive release URL
+        id: meta
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="$(cat release_meta/tag.txt)"
+          tarball="$(ls -1 dist/*.tar.gz | head -n 1)"
+          sha="$(shasum -a 256 "$tarball" | awk '{print $1}')"
+          asset_name="$(basename "$tarball")"
+
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "sha256=$sha" >> "$GITHUB_OUTPUT"
+          echo "asset_name=$asset_name" >> "$GITHUB_OUTPUT"
+
+      - name: Check out Homebrew tap repo
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          repository: freelibrary/homebrew-tap
+          token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+          path: homebrew-tap
+
+      - name: Update Formula/jpv3.rb
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          TAP_DIR="homebrew-tap"
+          FORMULA_PATH="${TAP_DIR}/Formula/jpv3.rb"
+
+          tag="${{ steps.meta.outputs.tag }}"
+          sha="${{ steps.meta.outputs.sha256 }}"
+          asset="${{ steps.meta.outputs.asset_name }}"
+          url="https://github.com/${{ github.repository }}/releases/download/${tag}/${asset}"
+
+          mkdir -p "${TAP_DIR}/Formula"
+
+          cat > "${FORMULA_PATH}" <<EOF
+          class Jpv3 < Formula
+            desc "JPv3 command line tool"
+            homepage "https://github.com/${{ github.repository }}"
+            version "${tag}"
+
+            on_macos do
+              url "${url}"
+              sha256 "${sha}"
+
+              def install
+                bin.install "jpv3"
+              end
+            end
+          end
+          EOF
+
+          cd "${TAP_DIR}"
+          git config user.name "freelibrary-bot"
+          git config user.email "noreply@github.com"
+          git add "Formula/jpv3.rb"
+          git commit -m "jpv3: ${tag}" || echo "No changes to commit"
+          git push

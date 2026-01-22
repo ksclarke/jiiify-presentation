@@ -142,6 +142,20 @@ jobs:
             ts += pad(date.getUTCHours()) + pad(date.getUTCMinutes()) + pad(date.getUTCSeconds()) + 'Z';
             core.setOutput('timestamp', ts);
 
+      - name: Write release metadata (tag)
+        shell: bash
+        run: |
+            set -euo pipefail
+            tag="jpv3-${{ steps.ts.outputs.timestamp }}"
+            mkdir -p release_meta
+            printf "%s" "$tag" > release_meta/tag.txt
+
+      - name: Upload release metadata artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: release-meta
+          path: release_meta/tag.txt
+
       - name: Release binary artifacts
         uses: softprops/action-gh-release@6cbd405e2c4e67a21c47fa9e383d020e4e28b836 # v2.3.3
         with:
@@ -156,6 +170,6 @@ jobs:
             Binaries:
             - jpv3 (Linux)
             - jpv3.exe (Windows)
-            - jpv3.mac (MacOS)
+            - jpv3-macos-x64.tar.gz (MacOS)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
