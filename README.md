@@ -54,4 +54,4 @@ If you encounter a problem, please feel free to open a ticket in the project's
 [issues queue](https://github.com/ksclarke/jiiify-presentation/issues "GitHub Issues Queue"). If you have a question,
 feel free to use the project's [discussion board](https://github.com/ksclarke/jiiify-presentation/discussions). Please
 specify which branch or version of jiiify-presentation you're using.
- 
+
