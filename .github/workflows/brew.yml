@@ -1,9 +1,8 @@
 name: Update Homebrew Tap
 
 on:
-  workflow_run:
-    workflows: ["Maven PR Build"]
-    types: [completed]
+  push:
+    branches: [develop]
 
 permissions:
   actions: read
