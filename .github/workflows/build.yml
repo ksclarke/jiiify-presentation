@@ -73,103 +73,19 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-      - name: Build with Maven
+      - name: Build with Maven as a native build
+        if: ${{ github.base_ref == 'develop' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           mvn -B -ntp -Pnative -Pjava${{ matrix.java }} verify javadoc:javadoc
 
-      - name: Prepare binary artifact
-        shell: bash
-        run: |
-          mkdir -p dist
-          case "${{ runner.os }}" in
-            Linux)
-              out_name="jpv3"
-              ;;
-            Windows)
-              out_name="jpv3.exe"
-              ;;
-            macOS)
-              out_name="jpv3"
-              ;;
-          esac
-          cp "target/jpv3" "dist/$out_name"
-          chmod +x "dist/$out_name" || true
-          
-          # Only create a Homebrew-friendly tarball for macOS
-          if [ "${{ runner.os }}" = "macOS" ]; then
-            tar -C dist -czf "dist/jpv3-${{ matrix.suffix }}.tar.gz" "$out_name"
-          fi
-
-      - name: Upload macOS Homebrew archive
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        if: ${{ matrix.java == '24' && runner.os == 'macOS' }}
-        with:
-          name: ${{ matrix.suffix }}
-          path: dist/*.tar.gz
-
-      - name: Upload binary artifact (non-macOS)
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        if: ${{ matrix.java == '24' && runner.os != 'macOS' }}
-        with:
-          name: ${{ matrix.suffix }}
-          path: dist/*
-
-  release:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
-        with:
-          path: dist
-
-      - name: Flatten binary artifacts directory
-        run: |
-          mkdir bin_out
-          find dist -type f -maxdepth 2 -exec cp {} bin_out/ \;
-
-      - name: Compute timestamp
-        id: ts
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
-        with:
-          script: |
-            const pad = num => String(num).padStart(2, '0');
-            const date = new Date();
-            let ts = String(date.getUTCFullYear());
-            ts += pad(date.getUTCMonth() + 1) + pad(date.getUTCDate()) + '-';
-            ts += pad(date.getUTCHours()) + pad(date.getUTCMinutes()) + pad(date.getUTCSeconds()) + 'Z';
-            core.setOutput('timestamp', ts);
-
-      - name: Write release metadata (tag)
-        shell: bash
-        run: |
-            set -euo pipefail
-            tag="jpv3-${{ steps.ts.outputs.timestamp }}"
-            mkdir -p release_meta
-            printf "%s" "$tag" > release_meta/tag.txt
-
-      - name: Upload release metadata artifact
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        with:
-          name: release-meta
-          path: release_meta/tag.txt
-
-      - name: Release binary artifacts
-        uses: softprops/action-gh-release@6cbd405e2c4e67a21c47fa9e383d020e4e28b836 # v2.3.3
-        with:
-          tag_name: jpv3-${{ steps.ts.outputs.timestamp }}
-          name: jpv3-${{ steps.ts.outputs.timestamp }}
-          files: bin_out/*
-          draft: true
-          prerelease: false
-          body: |
-            This is an experimental release of a JPv3 command line tool. It's a WIP and not ready for production use.
-
-            Binaries:
-            - jpv3 (Linux)
-            - jpv3.exe (Windows)
-            - jpv3-macos-x64.tar.gz (MacOS)
+      - name: Build with Maven as a Java build
+        if: ${{ github.base_ref != 'develop' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          mvn -B -ntp -Pjava${{ matrix.java }} verify javadoc:javadoc
+
