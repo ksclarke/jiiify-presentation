@@ -138,9 +138,9 @@ jobs:
           tag_name: jpv3-${{ steps.ts.outputs.timestamp }}
           name: jpv3-${{ steps.ts.outputs.timestamp }}
           files: bin_out/*
-          prerelease: false
+          prerelease: true
           body: |
-            This is an experimental release of a JPv3 command line tool. It's a WIP and not ready for production use.
+            This is a pre-release of the JPv3 CLI. It is not ready for production use.
           
             Binaries:
             - jpv3 (Linux)
@@ -149,7 +149,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  update_homebrew_tap:
+  brew_update:
     needs: release
     runs-on: ubuntu-latest
     permissions:
