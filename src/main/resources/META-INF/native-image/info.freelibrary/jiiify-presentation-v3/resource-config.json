@@ -1,0 +1,8 @@
+{
+  "resources": {
+    "includes": [
+      { "pattern": "iiif_presentation_messages\\.xml" },
+      { "pattern": "iiif_presentation_messages_.*\\.xml" }
+    ]
+  }
+}

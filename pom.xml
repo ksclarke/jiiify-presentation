@@ -299,6 +299,23 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <!-- Uses 'add-opens' argument for system-lambda functionality in unit tests -->
+                    <argLine><![CDATA[ ${jacoco.agent.arg} ${mockito.agent.arg}
+                        --add-opens java.base/java.util=ALL-UNNAMED
+                        --add-opens=java.base/java.lang=ALL-UNNAMED
+                        --enable-native-access=ALL-UNNAMED
+                    ]]></argLine>
+                    <forkCount>1</forkCount>
+                    <reuseForks>false</reuseForks>
+                    <environmentVariables>
+                        <JPV3_HOST>https://iiif.library.ucla.edu</JPV3_HOST>
+                    </environmentVariables>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -312,6 +329,7 @@
                 <guava.version>33.4.8-jre</guava.version>
                 <picocli.version>4.7.7</picocli.version>
                 <mapdb.version>3.1.0</mapdb.version>
+                <jsonpath.version>0.6.2</jsonpath.version>
 
                 <graalvm.agent.arg>
                     ${project.basedir}/target/classes/META-INF/native-image/${project.groupId}/${project.artifactId}/
@@ -361,6 +379,11 @@
                     <artifactId>guava</artifactId>
                     <version>${guava.version}</version>
                 </dependency>
+                <dependency>
+                    <groupId>io.github.vishwakarma</groupId>
+                    <artifactId>zjsonpatch</artifactId>
+                    <version>${jsonpath.version}</version>
+                </dependency>
             </dependencies>
 
             <build>
@@ -368,7 +391,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-enforcer-plugin</artifactId>
-                        <executions combine.self="override">
+                        <executions>
                             <execution>
                                 <id>enforce</id>
                                 <goals>
@@ -444,7 +467,6 @@
                                 <arg>--exact-reachability-metadata</arg>
                                 <arg>--enable-native-access=ALL-UNNAMED</arg>
                                 <arg>--enable-url-protocols=https</arg>
-                                <!--<arg>-H:-ReduceImplicitExceptionStackTraceInformation</arg>-->
                             </buildArgs>
                             <metadataRepository>
                                 <enabled>true</enabled>
@@ -458,18 +480,12 @@
                             <systemPropertyVariables>
                                 <native.image.agent>true</native.image.agent>
                             </systemPropertyVariables>
-                            <!-- Uses 'add-opens' argument for system-lambda functionality in unit tests -->
                             <argLine><![CDATA[ ${jacoco.agent.arg} ${mockito.agent.arg}
                               -agentlib:native-image-agent=config-output-dir=${graalvm.agent.arg}
                               --add-opens java.base/java.util=ALL-UNNAMED
                               --add-opens=java.base/java.lang=ALL-UNNAMED
                               --enable-native-access=ALL-UNNAMED
                             ]]></argLine>
-                            <forkCount>1</forkCount>
-                            <reuseForks>false</reuseForks>
-                            <environmentVariables>
-                                <JPV3_HOST>https://iiif.library.ucla.edu</JPV3_HOST>
-                            </environmentVariables>
                         </configuration>
                     </plugin>
                 </plugins>
