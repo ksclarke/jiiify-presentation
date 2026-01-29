@@ -146,6 +146,15 @@ jobs:
             - jpv3 (Linux)
             - jpv3.exe (Windows)
             - jpv3-macos-x64.tar.gz (MacOS)
+            
+            Homebrew:
+              There is a tap for Mac users: https://github.com/freelibrary/homebrew-tap
+            
+              Once you have Homebrew installed locally, run:
+                - brew tap freelibrary/homebrew-tap
+                - brew install jpv3
+            
+              And you will have the latest version of the CLI installed.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
