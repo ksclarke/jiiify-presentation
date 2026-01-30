@@ -1,17 +1,17 @@
 name: Maven Release
 
-# Performs a Maven release using JDK 17 when a new GitHub release has been published
+# Performs a Maven release using JDK 21 when a new GitHub release has been published
 on:
   release:
     types: [ published ]
 
 jobs:
   release:
-    name: Maven Artifact Publisher (JDK 17)
+    name: Maven Artifact Publisher (JDK 21)
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [ "17" ]
+        java: [ "21" ]
         maven: [ "3.8.6" ]
         jdk: [ "temurin" ]
 
