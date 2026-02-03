@@ -16,18 +16,18 @@ jobs:
       matrix:
         include:
           - os: "ubuntu-latest"
-            java: "24"
-            graalvm: "24"
+            java: "25"
+            graalvm: "25"
             maven: "3.8.6"
             suffix: "linux-x64"
           - os: "macos-latest"
-            java: "24"
-            graalvm: "24"
+            java: "25"
+            graalvm: "25"
             maven: "3.8.6"
             suffix: "macos-x64"
           - os: "windows-latest"
-            java: "24"
-            graalvm: "24"
+            java: "25"
+            graalvm: "25"
             maven: "3.8.6"
             suffix: "windows-x64"
 
@@ -146,6 +146,15 @@ jobs:
             - jpv3 (Linux)
             - jpv3.exe (Windows)
             - jpv3-macos-x64.tar.gz (MacOS)
+            
+            Homebrew:
+              There is a tap for Mac users: https://github.com/freelibrary/homebrew-tap
+            
+              Once you have Homebrew installed locally, run:
+                - brew tap freelibrary/homebrew-tap
+                - brew install jpv3
+            
+              And you will have the latest version of the CLI installed.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

@@ -50,11 +50,12 @@ public final class JPv3 implements Callable<Integer> {
     private static final Logger LOGGER = LoggerFactory.getLogger(JPv3.class, MessageCodes.BUNDLE);
 
     /** The input file. */
-    @CommandLine.Option(names = { "-i", "--input" }, description = "An input file to be processed", required = true)
+    @CommandLine.Option(names = { "-i", "--input" }, description = "An input file or directory to be processed",
+            paramLabel = "[myInput]", required = true)
     private Path myInputFile;
 
     /** The output file. */
-    @CommandLine.Option(names = { "-o", "--output" }, defaultValue = "./output.zip",
+    @CommandLine.Option(names = { "-o", "--output" }, defaultValue = "./output.zip", paramLabel = "[myOutput]",
             showDefaultValue = CommandLine.Help.Visibility.ALWAYS, description = "An output file to be written")
     private Path myOutputFile;
 
@@ -64,17 +65,17 @@ public final class JPv3 implements Callable<Integer> {
 
     /** The authentication username. This is only needed for uploads. */
     @CommandLine.Option(names = { "-U", "--username" }, description = "The username to use for authentication",
-            defaultValue = "${env:JPV3_USERNAME}")
+            paramLabel = "[myUsername]", defaultValue = "${env:JPV3_USERNAME}")
     private String myUsername;
 
     /** The authentication password. This is only needed for uploads. */
     @CommandLine.Option(names = { "-P", "--password" }, description = "The password to use for authentication",
-            defaultValue = "${env:JPV3_PASSWORD}")
+            paramLabel = "[myPassword]", defaultValue = "${env:JPV3_PASSWORD}")
     private String myPassword;
 
     /** The host to which the ZIP file is being uploaded. This is only needed for uploads. */
     @CommandLine.Option(names = { "-H", "--host" }, description = "The host to which the ZIP file is being uploaded",
-            defaultValue = "${env:JPV3_HOST}")
+            paramLabel = "[myHost]", defaultValue = "${env:JPV3_HOST}")
     private URI myHost;
 
     /** The help flag. */
@@ -151,10 +152,10 @@ public final class JPv3 implements Callable<Integer> {
 
     /** Runs the application. */
     @Override
-    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY })
+    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY, PMD.COGNITIVE_COMPLEXITY })
     public Integer call() throws Exception {
         // Make sure we have a username and password if we're uploading the resulting ZIP file
-        if (myAction.myUploadFlag && (StringUtils.trimToNull(myUsername) == null ||
+        if ((myAction.myUploadFlag || myAction.myPatchFlag) && (StringUtils.trimToNull(myUsername) == null ||
                 StringUtils.trimToNull(myPassword) == null || myHost == null)) {
             throw new CommandLine.ParameterException(new CommandLine(this),
                     LOGGER.getMessage(MessageCodes.JPA_174, Constants.EOL));
@@ -163,17 +164,26 @@ public final class JPv3 implements Callable<Integer> {
         try {
             final int result = new Mapper(Stream.of(myInputFile), myOutputFile).map();
 
-            if (result == 0 && myAction.isUpload()) {
+            if (result == 0 && (myAction.isUpload() || myAction.isPatch())) {
                 try (HttpClient client = HttpClient.newHttpClient()) {
                     final byte[] credentials = (myUsername + COLON + myPassword).getBytes(StandardCharsets.UTF_8);
                     final String basicAuth = "Basic " + Base64.getEncoder().encodeToString(credentials);
-
-                    final HttpRequest request = HttpRequest.newBuilder().uri(myHost)
+                    final HttpRequest.BodyPublisher bodyPublisher = HttpRequest.BodyPublishers.ofFile(myOutputFile);
+                    final HttpRequest.Builder builder = HttpRequest.newBuilder().uri(myHost)
                             .header(HTTP.Header.CONTENT_TYPE, MediaType.APPLICATION_ZIP.toString())
-                            .header(HTTP.Header.AUTHORIZATION, basicAuth)
-                            .POST(HttpRequest.BodyPublishers.ofFile(myOutputFile)).build();
-                    final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                    final int statusCode = response.statusCode();
+                            .header(HTTP.Header.AUTHORIZATION, basicAuth);
+                    final HttpResponse<String> response;
+                    final HttpRequest request;
+                    final int statusCode;
+
+                    if (myAction.isPatch()) {
+                        request = builder.method(HTTP.Method.PATCH, bodyPublisher).build();
+                    } else {
+                        request = builder.POST(bodyPublisher).build();
+                    }
+
+                    response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                    statusCode = response.statusCode();
 
                     if (statusCode != 200 && statusCode != 201) {
                         LOGGER.error(LOGGER.getMessage(MessageCodes.JPA_177, statusCode, response.body()));
@@ -205,14 +215,18 @@ public final class JPv3 implements Callable<Integer> {
         @CommandLine.Option(names = { "-c", "--create" }, description = "Create a local zip with IIIF resources")
         private boolean myCreateFlag;
 
-        /** The HTTP request method to use. */
+        /** Indicating an upload of new manifests and collections should be made. */
         @CommandLine.Option(names = { "-u", "--upload" }, description = "Create IIIF resources, then upload them")
         private boolean myUploadFlag;
 
+        /** Indicating a JSON patch should be made before uploading. */
+        @CommandLine.Option(names = { "-p", "--patch" }, description = "Update IIIF resources already on the server")
+        private boolean myPatchFlag;
+
         /** The JSONiq query used to produce a view of a record or collection. */
-        @CommandLine.Option(names = { "-q", "--query" }, arity = "1", defaultValue = ".",
-                description = "The optional JSONiq query to use for the view")
-        private String myQueryFilter;
+        @CommandLine.Option(names = { "-q", "--query" }, arity = "1", defaultValue = ".", paramLabel = "[myQuery]",
+                description = "The optional JSONiq query to use when viewing IIIF resources")
+        private String myQuery;
 
         /**
          * Whether to create a local manifest or collection doc.
@@ -233,12 +247,21 @@ public final class JPv3 implements Callable<Integer> {
         }
 
         /**
+         * Whether to patch a local manifest or collection doc while uploading it.
+         *
+         * @return Whether to patch a local manifest or collection doc
+         */
+        private boolean isPatch() {
+            return myPatchFlag;
+        }
+
+        /**
          * Whether to view a newly created ZIP file of manifests and collection documents.
          *
          * @return Whether to view a newly created ZIP file of manifests and collection documents
          */
         private boolean isView() {
-            return !myCreateFlag && !myUploadFlag;
+            return !myCreateFlag && !myUploadFlag && !myPatchFlag;
         }
     }
 }

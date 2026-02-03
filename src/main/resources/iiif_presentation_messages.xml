@@ -152,7 +152,7 @@
     <entry key="JPA-171">An output ZIP file name is required</entry>
     <entry key="JPA-172">Each CSV row is required to have an ObjectType</entry>
     <entry key="JPA-173">Painted content is smaller than the canvas dimensions (w/h): {}/{} vs. {}/{}</entry>
-    <entry key="JPA-174">The -U, -P, and -H options are required when -u is used{}</entry>
+    <entry key="JPA-174">The -U, -P, and -H options are required when -u or -p is used{}</entry>
     <entry key="JPA-175">Create a local zip with IIIF resources</entry>
     <entry key="JPA-176">Required resource type could not be found</entry>
     <entry key="JPA-177">Failed to upload ZIP file: [{}] {}</entry>
@@ -160,4 +160,5 @@
     <entry key="JPA-179">This feature is not yet implemented. Check back later.</entry>
     <entry key="JPA-180">Zip file uploaded successfully: {}</entry>
     <entry key="JPA-181">Adding {}'s object type ({}) to object type index</entry>
+    <entry key="JPA-182">Zip file must be a local file: {}</entry>
 </properties>
