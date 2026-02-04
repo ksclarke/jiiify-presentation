@@ -5,6 +5,11 @@ on:
     branches:
       - develop
 
+env:
+  TARGET_VERSION: 25
+  JDK_VERSION: 25
+  MAVEN_VERSION: 3.8.6
+
 permissions:
   contents: read
 
@@ -16,19 +21,19 @@ jobs:
       matrix:
         include:
           - os: "ubuntu-latest"
-            java: "25"
-            graalvm: "25"
-            maven: "3.8.6"
+            java: ${{ env.TARGET_VERSION }}
+            graalvm: ${{ env.JDK_VERSION }}
+            maven: ${{ env.MAVEN_VERSION }}
             suffix: "linux-x64"
           - os: "macos-latest"
-            java: "25"
-            graalvm: "25"
-            maven: "3.8.6"
+            java: ${{ env.TARGET_VERSION }}
+            graalvm: ${{ env.JDK_VERSION }}
+            maven: ${{ env.MAVEN_VERSION }}
             suffix: "macos-x64"
           - os: "windows-latest"
-            java: "25"
-            graalvm: "25"
-            maven: "3.8.6"
+            java: ${{ env.TARGET_VERSION }}
+            graalvm: ${{ env.JDK_VERSION }}
+            maven: ${{ env.MAVEN_VERSION }}
             suffix: "windows-x64"
 
     steps:
@@ -53,6 +58,7 @@ jobs:
       - name: Prepare binary artifact
         shell: bash
         run: |
+          set -euo pipefail
           mkdir -p dist
           case "${{ runner.os }}" in
             Linux)
@@ -75,14 +81,14 @@ jobs:
 
       - name: Upload macOS Homebrew archive
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        if: ${{ matrix.java == '24' && runner.os == 'macOS' }}
+        if: ${{ runner.os == 'macOS' }}
         with:
           name: ${{ matrix.suffix }}
           path: dist/*.tar.gz
 
       - name: Upload binary artifact (non-macOS)
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        if: ${{ matrix.java == '24' && runner.os != 'macOS' }}
+        if: ${{ runner.os != 'macOS' }}
         with:
           name: ${{ matrix.suffix }}
           path: dist/*
