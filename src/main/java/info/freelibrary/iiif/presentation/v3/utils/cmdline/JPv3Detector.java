@@ -16,7 +16,7 @@ import java.nio.file.spi.FileTypeDetector;
 /**
  * A small file type detector that recognizes ZIP archives, CSV files, and other file types.
  */
-class JPv3FileTypeDetector extends FileTypeDetector {
+class JPv3Detector extends FileTypeDetector {
 
     /** The ZIP magic number. */
     private static final int ZIP_MAGIC = 0x504B0304;

@@ -51,7 +51,7 @@
 
         <!-- Build-related dependencies -->
         <exec.plugin.version>3.5.0</exec.plugin.version>
-        <native.maven.plugin.version>0.10.6</native.maven.plugin.version>
+        <native.maven.plugin.version>0.11.4</native.maven.plugin.version>
 
         <!-- Test-related dependencies -->
         <magicfree.json.version>0.11.0</magicfree.json.version>
@@ -578,7 +578,7 @@
     <parent>
         <artifactId>freelib-parent</artifactId>
         <groupId>info.freelibrary</groupId>
-        <version>13.0.3</version>
+        <version>14.0.2</version>
     </parent>
 
 </project>
