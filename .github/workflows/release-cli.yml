@@ -8,33 +8,48 @@ on:
 env:
   TARGET_VERSION: 25
   JDK_VERSION: 25
-  MAVEN_VERSION: 3.8.6
 
 permissions:
   contents: read
 
 jobs:
+  generate-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - id: set-matrix
+        run: |
+          MATRIX='{
+            "include": [
+              {
+                "os": "ubuntu-latest",
+                "java": "${{ env.TARGET_VERSION }}",
+                "graalvm": "${{ env.JDK_VERSION }}",
+                "suffix": "linux-x64"
+              },
+              {
+                "os": "macos-latest",
+                "java": "${{ env.TARGET_VERSION }}",
+                "graalvm": "${{ env.JDK_VERSION }}",
+                "suffix": "macos-x64"
+              },
+              {
+                "os": "windows-latest",
+                "java": "${{ env.TARGET_VERSION }}",
+                "graalvm": "${{ env.JDK_VERSION }}",
+                "suffix": "windows-x64"
+              }
+            ]
+          }'
+          echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
+
   build:
     name: Maven PR Builder (JDK ${{ matrix.java }}, ${{ matrix.os}})
+    needs: generate-matrix
     runs-on: ${{ matrix.os }}
     strategy:
-      matrix:
-        include:
-          - os: "ubuntu-latest"
-            java: ${{ env.TARGET_VERSION }}
-            graalvm: ${{ env.JDK_VERSION }}
-            maven: ${{ env.MAVEN_VERSION }}
-            suffix: "linux-x64"
-          - os: "macos-latest"
-            java: ${{ env.TARGET_VERSION }}
-            graalvm: ${{ env.JDK_VERSION }}
-            maven: ${{ env.MAVEN_VERSION }}
-            suffix: "macos-x64"
-          - os: "windows-latest"
-            java: ${{ env.TARGET_VERSION }}
-            graalvm: ${{ env.JDK_VERSION }}
-            maven: ${{ env.MAVEN_VERSION }}
-            suffix: "windows-x64"
+      matrix: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
 
     steps:
       - name: Check out code
