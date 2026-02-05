@@ -42,7 +42,11 @@ jobs:
               }
             ]
           }'
-          echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
+          {
+            echo 'matrix<<EOF'
+            echo "$MATRIX"
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
 
   build:
     name: Maven PR Builder (JDK ${{ matrix.java }}, ${{ matrix.os}})
