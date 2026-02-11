@@ -83,13 +83,13 @@ public class Mapper {
     /**
      * Creates a new CSV mapper.
      *
-     * @param aCsvFile A CSV to read in and map
+     * @param aCsvStream A CSV to read in and map
      * @param aOutputFile A file to write the mapped data to
      * @throws MappingException If there is trouble mapping the CSV data
      * @throws IOException If there is trouble reading the CSV file
      */
     @SuppressWarnings({ JDK.UNCHECKED }) // Warnings for the Serializer.JAVA
-    public Mapper(final Stream<Path> aCsvFile, final Path aOutputFile) throws MappingException, IOException {
+    public Mapper(final Stream<Path> aCsvStream, final Path aOutputFile) throws MappingException, IOException {
         final Reader reader = new Reader();
 
         // Auto-close the database via the db's config options, but also provide a manual close() method below
@@ -107,7 +107,7 @@ public class Mapper {
         myChildren = myDatabase.hashSet("children", Serializer.STRING).createOrOpen();
 
         // Read the source file(s) and populate the database's indices
-        reader.rows(aCsvFile).forEach(ThrowingConsumer.sneaky(row -> {
+        reader.rows(aCsvStream).forEach(ThrowingConsumer.sneaky(row -> {
             final String rowID = row.getItemID().orElse(UUID.randomUUID().toString());
             final String rowValue = myMapper.writeValueAsString(row);
 
@@ -406,9 +406,8 @@ public class Mapper {
      *
      * @param aCsvFile A CSV file with the data we need
      * @return A data map for the CSV file
-     * @throws IOException If there is trouble creating the data map
      */
-    private DB createDatabase(final Path aCsvFile) throws IOException {
+    private DB createDatabase(final Path aCsvFile) {
         final long dbSize = aCsvFile.toFile().length() * 2; // Ballpark db size, based on CSV file
         final long allocationSize = 64 * 1024 * 1024; // Was 256 * 1024 * 1024 before
         final DBMaker.Maker maker = DBMaker.tempFileDB();
