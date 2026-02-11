@@ -63,6 +63,18 @@ public class ReaderTest {
         rows.close();
     }
 
+    /** Tests the {@link Reader#rows(Path)} method with a nested directory path. */
+    @Test
+    public void testRowsCsvNestedDirPath() throws IOException {
+        final Path path = Path.of("src/test/resources/csv/nested");
+        final Stream<Row> rows = myReader.rows(path);
+
+        assertNotNull(rows);
+        assertEquals(11, rows.count());
+
+        rows.close();
+    }
+
     /** Tests the {@link Reader#rows(Path)} method. */
     @Test
     public void testRowsZipFilePath() {
