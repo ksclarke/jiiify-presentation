@@ -532,6 +532,19 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
+     * Tests the 0045-css cookbook manifest (cf. <a href="https://iiif.io/api/cookbook/recipe/0045-css/">...</a>).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0045CSS() throws IOException {
+        final String expected = getExpected("0045-css/manifest");
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
+    }
+
+    /**
      * Tests the 0046 cookbook manifest (cf. <a href="https://iiif.io/api/cookbook/recipe/0046-rendering/">...</a>).
      *
      * @throws IOException If there is trouble reading the manifest file
