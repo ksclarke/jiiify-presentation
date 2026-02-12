@@ -161,4 +161,6 @@
     <entry key="JPA-180">Zip file uploaded successfully: {}</entry>
     <entry key="JPA-181">Adding {}'s object type ({}) to object type index</entry>
     <entry key="JPA-182">Zip file must be a local file: {}</entry>
+    <entry key="JPA-183">No CSV data was mapped to IIIF Presentation API resources</entry>
+    <entry key="JPA-184">Could not delete empty CSV ZIP archive: {}</entry>
 </properties>

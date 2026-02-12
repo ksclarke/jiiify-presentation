@@ -21,6 +21,9 @@ public class ZipWriter {
     /** The ZIP output stream. */
     private final ZipOutputStream myOutputStream;
 
+    /** The count of entries added to the ZIP archive. */
+    private int myEntryCount = 0;
+
     /**
      * Constructs a new {@code ZipWriter} instance that creates and writes to a ZIP file at the specified path.
      *
@@ -41,18 +44,21 @@ public class ZipWriter {
     public void writeFile(final String aFileName, final String aFileContent) throws IOException {
         try (InputStream inStream = new ByteArrayInputStream(aFileContent.getBytes(UTF_8))) {
             final ZipEntry entry = new ZipEntry(URLEncoder.encode(aFileName, UTF_8));
-            final byte[] buffer = new byte[8192];
-
-            int length;
 
             myOutputStream.putNextEntry(entry);
-
-            while ((length = inStream.read(buffer)) > 0) {
-                myOutputStream.write(buffer, 0, length);
-            }
-
+            inStream.transferTo(myOutputStream);
             myOutputStream.closeEntry();
+            myEntryCount++;
         }
+    }
+
+    /**
+     * Returns the number of entries added to the ZIP archive by this {@code ZipWriter} instance.
+     *
+     * @return The number of entries added to the ZIP archive
+     */
+    public int getEntryCount() {
+        return myEntryCount;
     }
 
     /**
