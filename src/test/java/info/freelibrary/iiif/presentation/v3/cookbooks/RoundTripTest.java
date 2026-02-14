@@ -4,6 +4,7 @@ package info.freelibrary.iiif.presentation.v3.cookbooks;
 import static com.github.stefanbirkner.systemlambda.SystemLambda.withEnvironmentVariable;
 import static info.freelibrary.iiif.presentation.v3.utils.CookbookUtils.checkCookbooks;
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.assertEquals;
+
 import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.AnnotationPage;
 import info.freelibrary.iiif.presentation.v3.Collection;
@@ -331,6 +332,20 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0026TocOpera() throws IOException {
         final String expected = getExpected("0026-toc-opera/manifest");
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
+    }
+
+    /**
+     * Tests the 0027 alternative page order (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0027-alternative-page-order/">...</a>).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0027AlternativePageOrder() throws IOException {
+        final String expected = getExpected("0027-alternative-page-order/manifest");
         final String found = JSON.readValue(expected, Manifest.class).toString();
 
         assertEquals(myTestName, expected, found);
