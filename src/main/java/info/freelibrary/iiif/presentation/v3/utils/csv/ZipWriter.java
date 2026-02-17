@@ -22,7 +22,7 @@ public class ZipWriter {
     private final ZipOutputStream myOutputStream;
 
     /** The count of entries added to the ZIP archive. */
-    private int myEntryCount = 0;
+    private int myEntryCount;
 
     /**
      * Constructs a new {@code ZipWriter} instance that creates and writes to a ZIP file at the specified path.

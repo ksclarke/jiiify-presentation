@@ -51,11 +51,11 @@ public final class JPv3 implements Callable<Integer> {
 
     /** The input file. */
     @CommandLine.Option(names = { "-i", "--input" }, description = "An input file or directory to be processed",
-            paramLabel = "[myInput]", required = true)
+            paramLabel = "INPUT", required = true)
     private Path myInputFile;
 
     /** The output file. */
-    @CommandLine.Option(names = { "-o", "--output" }, defaultValue = "./output.zip", paramLabel = "[myOutput]",
+    @CommandLine.Option(names = { "-o", "--output" }, defaultValue = "./output.zip", paramLabel = "OUTPUT",
             showDefaultValue = CommandLine.Help.Visibility.ALWAYS, description = "An output file to be written")
     private Path myOutputFile;
 
@@ -65,17 +65,17 @@ public final class JPv3 implements Callable<Integer> {
 
     /** The authentication username. This is only needed for uploads. */
     @CommandLine.Option(names = { "-U", "--username" }, description = "The username to use for authentication",
-            paramLabel = "[myUsername]", defaultValue = "${env:JPV3_USERNAME}")
+            paramLabel = "USERNAME", defaultValue = "${env:JPV3_USERNAME}")
     private String myUsername;
 
     /** The authentication password. This is only needed for uploads. */
     @CommandLine.Option(names = { "-P", "--password" }, description = "The password to use for authentication",
-            paramLabel = "[myPassword]", defaultValue = "${env:JPV3_PASSWORD}")
+            paramLabel = "PASSWORD", defaultValue = "${env:JPV3_PASSWORD}")
     private String myPassword;
 
     /** The host to which the ZIP file is being uploaded. This is only needed for uploads. */
     @CommandLine.Option(names = { "-H", "--host" }, description = "The host to which the ZIP file is being uploaded",
-            paramLabel = "[myHost]", defaultValue = "${env:JPV3_HOST}")
+            paramLabel = "HOST", defaultValue = "${env:JPV3_HOST}")
     private URI myHost;
 
     /** The help flag. */
@@ -224,7 +224,7 @@ public final class JPv3 implements Callable<Integer> {
         private boolean myPatchFlag;
 
         /** The JSONiq query used to produce a view of a record or collection. */
-        @CommandLine.Option(names = { "-q", "--query" }, arity = "1", defaultValue = ".", paramLabel = "[myQuery]",
+        @CommandLine.Option(names = { "-q", "--query" }, arity = "1", defaultValue = ".", paramLabel = "QUERY",
                 description = "The optional JSONiq query to use when viewing IIIF resources")
         private String myQuery;
 
