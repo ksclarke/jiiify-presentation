@@ -161,7 +161,7 @@ public class Mapper {
             result = mapCollections(collections).toFile().exists() ? 0 : -1;
         } else {
             final List<String> works = myObjTypes.getOrDefault(Keys.WORK, Set.of()).stream().toList();
-            result = works.size(); // FIXME: placeholder to return an int
+            result = !works.isEmpty() ? 0 : -1;
         }
 
         close();
@@ -393,11 +393,23 @@ public class Mapper {
      *
      * @throws IOException If there is trouble closing the database
      */
+    @SuppressWarnings({ PMD.USE_TRY_WITH_RESOURCES })
     public void close() throws IOException {
-        myZipWriter.close();
+        try {
+            myZipWriter.close();
+        } finally {
+            // Deletes the output file if empty and logs warning
+            if (myZipWriter.getEntryCount() == 0) {
+                if (!myOutputFile.toFile().delete()) {
+                    LOGGER.warn(MessageCodes.JPA_184, myOutputFile);
+                }
 
-        if (!myDatabase.isClosed()) {
-            myDatabase.close();
+                LOGGER.warn(MessageCodes.JPA_183);
+            }
+
+            if (!myDatabase.isClosed()) {
+                myDatabase.close();
+            }
         }
     }
 
