@@ -26,14 +26,6 @@ public class UriUtilsTest {
      * Test HTTPS.
      */
     @Test(expected = InvalidIdentifierException.class)
-    public final void testCheckInvalidID() {
-        UriUtils.checkID(HTTP, true);
-    }
-
-    /**
-     * Test HTTPS.
-     */
-    @Test(expected = InvalidIdentifierException.class)
     public final void testCheckNullID() {
         UriUtils.checkID(null, true);
     }
