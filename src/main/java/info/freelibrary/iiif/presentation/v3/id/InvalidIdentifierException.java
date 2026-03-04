@@ -15,9 +15,7 @@ import java.util.Locale;
  */
 public class InvalidIdentifierException extends I18nRuntimeException {
 
-    /**
-     * The <code>serialVersionUID</code> of the <code>InvalidIdentifierException</code> class.
-     */
+    /** The <code>serialVersionUID</code> of the <code>InvalidIdentifierException</code> class. */
     @Serial
     private static final long serialVersionUID = -5050999111947549190L;
 
@@ -68,7 +66,7 @@ public class InvalidIdentifierException extends I18nRuntimeException {
      * @param aCause An underlying cause
      */
     public InvalidIdentifierException(final Throwable aCause) {
-        super(aCause);
+        super(aCause, MessageCodes.BUNDLE, MessageCodes.JPA_185);
     }
 
     /**
