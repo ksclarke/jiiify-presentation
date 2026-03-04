@@ -7,8 +7,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.annotation.Source;
 import info.freelibrary.iiif.presentation.v3.annotation.SpecificResource;
-import info.freelibrary.iiif.presentation.v3.annotation.SpecificResource.Source;
 import info.freelibrary.iiif.presentation.v3.annotation.Target;
 import info.freelibrary.iiif.presentation.v3.properties.PartOf;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.Selector;
@@ -21,6 +21,7 @@ import info.freelibrary.util.warnings.PMD;
 import info.freelibrary.util.warnings.Sonar;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -35,6 +36,7 @@ public class AnnotationTargetDeserializer extends StdDeserializer<Target> {
             LoggerFactory.getLogger(AnnotationTargetDeserializer.class, MessageCodes.BUNDLE);
 
     /** The <code>serialVersionUID</code> for the <code>AnnotationTargetDeserializer</code>. */
+    @Serial
     private static final long serialVersionUID = -6033073058449033461L;
 
     /**

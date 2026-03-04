@@ -3,17 +3,11 @@ package info.freelibrary.iiif.presentation.v3.utils.json;
 
 import static info.freelibrary.util.Constants.EMPTY;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.content.ContentResource;
 import info.freelibrary.iiif.presentation.v3.content.DatasetContent;
@@ -25,6 +19,11 @@ import info.freelibrary.iiif.presentation.v3.content.VideoContent;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+
+import java.io.IOException;
+import java.io.Serial;
 
 /**
  * Deserializes a Thumbnail.
@@ -40,6 +39,7 @@ public class ContentResourceDeserializer extends StdDeserializer<ContentResource
     /**
      * The <code>serialVersionUID</code> of ContentResourceDeserializer.
      */
+    @Serial
     private static final long serialVersionUID = 8526573955323691490L;
 
     /**

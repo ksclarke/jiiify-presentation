@@ -1,29 +1,17 @@
 
 package info.freelibrary.iiif.presentation.v3.annotation;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.OptionalInt;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import info.freelibrary.util.warnings.Eclipse;
-import info.freelibrary.util.warnings.JDK;
-
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
-import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.content.ContentResource;
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
-import info.freelibrary.iiif.presentation.v3.properties.PartOf;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.Selector;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
-import info.freelibrary.iiif.presentation.v3.utils.json.SourceDeserializer;
-import info.freelibrary.iiif.presentation.v3.utils.json.SourceSerializer;
+import info.freelibrary.util.warnings.Eclipse;
+
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * A specific resource that can reference a particular region, time frame, or other aspect of another resource.
@@ -250,197 +238,6 @@ public non-sealed class SpecificResource extends Target implements ContentResour
             return JSON.getWriter(SpecificResource.class).writeValueAsString(this);
         } catch (final JsonProcessingException details) {
             throw new JsonParsingException(details);
-        }
-    }
-
-    /**
-     * A SpecificResource's source. This may be represented by a single IRI or a combination of ID, type and
-     * {@code PartOf}.
-     */
-    @JsonSerialize(using = SourceSerializer.class)
-    @JsonDeserialize(using = SourceDeserializer.class)
-    public static class Source {
-
-        /** The source's format. */
-        private MediaType myFormat;
-
-        /** The source's height. */
-        private int myHeight;
-
-        /** The source's ID. */
-        private String myID;
-
-        /** A list of partOf(s). */
-        private List<PartOf> myPartOfs;
-
-        /** The source's services. */
-        private List<Service> myServices;
-
-        /** The source's type. The {@code ResourceTypes} class can be used for pre-configured values. */
-        private String myType;
-
-        /** The source's width. */
-        private int myWidth;
-
-        /**
-         * Creates a SpecificResource source from the supplied Internationalized Resource Identifier (IRI).
-         *
-         * @param aID An IRI representing the source
-         */
-        public Source(final String aID) {
-            myID = Objects.requireNonNull(aID);
-        }
-
-        /**
-         * Gets the source's format.
-         *
-         * @return The source's format
-         */
-        public Optional<MediaType> getFormat() {
-            return Optional.ofNullable(myFormat);
-        }
-
-        /**
-         * Gets the source's height.
-         *
-         * @return The soruce's height
-         */
-        public OptionalInt getHeight() {
-            return myHeight == 0 ? OptionalInt.empty() : OptionalInt.of(myHeight);
-        }
-
-        /**
-         * Gets the source ID.
-         *
-         * @return The source ID
-         */
-        public String getID() {
-            return myID;
-        }
-
-        /**
-         * Gets a part of the source.
-         *
-         * @return A list of partOf relationships
-         */
-        public List<PartOf> getPartOfs() {
-            if (myPartOfs == null) {
-                myPartOfs = new ArrayList<>();
-            }
-
-            return myPartOfs;
-        }
-
-        /**
-         * Gets the source's services.
-         *
-         * @return A list of services
-         */
-        public List<Service> getServices() {
-            if (myServices == null) {
-                myServices = new ArrayList<>();
-            }
-
-            return myServices;
-        }
-
-        /**
-         * Gets the source type.
-         *
-         * @return The source type
-         */
-        public Optional<String> getType() {
-            return Optional.ofNullable(myType);
-        }
-
-        /**
-         * Gets the source's width.
-         *
-         * @return The source's width
-         */
-        public OptionalInt getWidth() {
-            return myWidth == 0 ? OptionalInt.empty() : OptionalInt.of(myWidth);
-        }
-
-        /**
-         * Sets the source's format.
-         *
-         * @param aFormat A resource's format
-         * @return The source
-         */
-        @SuppressWarnings({ JDK.UNCHECKED })
-        public Source setFormat(final MediaType aFormat) {
-            myFormat = Objects.requireNonNull(aFormat);
-            return this;
-        }
-
-        /**
-         * Sets the source ID.
-         *
-         * @param aID The source ID
-         * @return The source
-         */
-        public Source setID(final String aID) {
-            myID = Objects.requireNonNull(aID);
-            return this;
-        }
-
-        /**
-         * Sets the source's partOfs. The supplied list is ignored if it is empty.
-         *
-         * @param aPartOfList A list of partOfs
-         * @return The source
-         */
-        public Source setPartOfs(final List<PartOf> aPartOfList) {
-            if (!Objects.requireNonNull(aPartOfList).isEmpty()) {
-                final List<PartOf> partOfs = getPartOfs();
-
-                partOfs.clear();
-                partOfs.addAll(aPartOfList);
-            }
-
-            return this;
-        }
-
-        /**
-         * Sets the source's services. The supplied list is ignored if it is empty.
-         *
-         * @param aServiceList A list of services
-         * @return The source
-         */
-        public Source setServices(final List<Service> aServiceList) {
-            if (!Objects.requireNonNull(aServiceList).isEmpty()) {
-                final List<Service> services = getServices();
-
-                services.clear();
-                services.addAll(aServiceList);
-            }
-
-            return this;
-        }
-
-        /**
-         * Sets the source's type.
-         *
-         * @param aType A source type
-         * @return The source
-         */
-        public Source setType(final String aType) {
-            myType = Objects.requireNonNull(aType);
-            return this;
-        }
-
-        /**
-         * Sets the source's width and height.
-         *
-         * @param aWidth A width for the source
-         * @param aHeight A height for the source
-         * @return The source
-         */
-        public Source setWidthHeight(final int aWidth, final int aHeight) {
-            myWidth = aWidth;
-            myHeight = aHeight;
-            return this;
         }
     }
 }

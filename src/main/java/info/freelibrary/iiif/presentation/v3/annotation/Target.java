@@ -38,7 +38,7 @@ public sealed class Target permits SpecificResource {
     private static final Logger LOGGER = LoggerFactory.getLogger(Target.class, MessageCodes.BUNDLE);
 
     /**
-     * Whether the resource should be serialized as object or URI string.
+     * Whether the resource should be serialized as an object or URI string.
      */
     private boolean isSerializedAsObject;
 
