@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation.v3.utils.json;
 
 import static info.freelibrary.util.ThrowingBiFunction.unwrap;
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.exc.InputCoercionException;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -148,9 +149,10 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
             final JsonParser aParser) throws InputCoercionException {
         final Optional<Purpose> purpose = Purpose.fromLabel(aMotivation);
         final JsonNode targetsNode = aNode.get(JsonKeys.TARGET);
+        final JsonNode stylesheetNode = aNode.get(JsonKeys.STYLESHEET);
 
         if (purpose.isPresent()) {
-            return switch (purpose.get()) {
+            final WebAnnotation annotation = switch (purpose.get()) {
                 case ASSESSING -> new AssessingAnnotation(aID, getTargets(targetsNode, aParser));
                 case BOOKMARKING -> new BookmarkingAnnotation(aID, getTargets(targetsNode, aParser));
                 case CLASSIFYING -> new ClassifyingAnnotation(aID, getTargets(targetsNode, aParser));
@@ -166,6 +168,12 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
                 case TAGGING -> new TaggingAnnotation(aID, getTargets(targetsNode, aParser));
                 default -> throw new IllegalArgumentException(aMotivation);
             };
+
+            if (stylesheetNode != null) {
+                annotation.setStylesheet(stylesheetNode.asText());
+            }
+
+            return annotation;
         }
 
         return aMotivation != null ? new WebAnnotation(aID, getTargets(targetsNode, aParser)).setMotivation(

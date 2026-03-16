@@ -62,7 +62,7 @@ public class NavigableResource<T extends NavigableResource<T>> extends AbstractR
      * @param aBehaviorClass A behavior class for this resource
      */
     protected NavigableResource(final String aType, final String aID, final Class<? extends Behavior> aBehaviorClass) {
-        super(aType, aID, aBehaviorClass);
+        super(aType, aID, true, aBehaviorClass);
     }
 
     /**
@@ -75,7 +75,7 @@ public class NavigableResource<T extends NavigableResource<T>> extends AbstractR
      */
     protected NavigableResource(final String aType, final String aID, final Label aLabel,
             final Class<? extends Behavior> aBehaviorClass) {
-        super(aType, aID, aLabel, aBehaviorClass);
+        super(aType, aID, true, aLabel, aBehaviorClass);
     }
 
     @Override

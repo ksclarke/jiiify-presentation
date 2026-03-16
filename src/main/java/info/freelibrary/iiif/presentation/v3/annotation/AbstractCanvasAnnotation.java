@@ -42,24 +42,16 @@ public abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotatio
     /** The annotation's body optional ID. */
     private String myBodyID;
 
-    /**
-     * The annotation's motivation.
-     */
+    /** The annotation's motivation. */
     private Motivation myMotivation;
 
-    /**
-     * The annotation's resources.
-     */
+    /** The annotation's resources. */
     private List<ContentResource> myResources;
 
-    /**
-     * The target of the annotation.
-     */
+    /** The target of the annotation. */
     private List<Target> myTargets;
 
-    /**
-     * The annotation's time mode.
-     */
+    /** The annotation's time mode. */
     private TimeMode myTimeMode;
 
     /**
@@ -74,86 +66,93 @@ public abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotatio
      * Creates an annotation resource.
      *
      * @param aID An annotation ID
+     * @param aHttpsID Whether the ID should be an HTTPS ID
      * @param aCanvas A canvas to target
      * @param <C> A type of canvas resource
      */
-    protected <C extends CanvasResource<C>> AbstractCanvasAnnotation(final String aID,
+    protected <C extends CanvasResource<C>> AbstractCanvasAnnotation(final String aID, final boolean aHttpsID,
             final CanvasResource<C> aCanvas) {
-        this(aID, (Minter) null, aCanvas);
+        this(aID, aHttpsID, null, aCanvas);
     }
 
     /**
      * Creates an annotation resource.
      *
      * @param aMinter An annotation ID minter
+     * @param aHttpsID Whether the ID should be an HTTPS ID
      * @param aCanvas A canvas to target
      * @param <C> A type of canvas resource
      */
-    protected <C extends CanvasResource<C>> AbstractCanvasAnnotation(final Minter aMinter,
+    protected <C extends CanvasResource<C>> AbstractCanvasAnnotation(final Minter aMinter, final boolean aHttpsID,
             final CanvasResource<C> aCanvas) {
-        this(aMinter.getAnnotationID(), aMinter, aCanvas);
+        this(aMinter.getAnnotationID(), aHttpsID, aMinter, aCanvas);
     }
 
     /**
      * Creates an annotation resource.
      *
      * @param aID An annotation ID
+     * @param aHttpsID Whether the ID should be an HTTPS ID
      * @param aCanvas A canvas to target
      * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to target
      * @param <C> A type of canvas resource
      */
-    protected <C extends CanvasResource<C>> AbstractCanvasAnnotation(final String aID, final CanvasResource<C> aCanvas,
-            final MediaFragmentSelector aCanvasRegion) {
-        this(aID, (Minter) null, aCanvas, aCanvasRegion);
-    }
-
-    /**
-     * Creates an annotation resource.
-     *
-     * @param aMinter An annotation ID minter
-     * @param aCanvas A canvas to target
-     * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to target
-     * @param <C> A type of canvas resource
-     */
-    protected <C extends CanvasResource<C>> AbstractCanvasAnnotation(final Minter aMinter,
+    protected <C extends CanvasResource<C>> AbstractCanvasAnnotation(final String aID, final boolean aHttpsID,
             final CanvasResource<C> aCanvas, final MediaFragmentSelector aCanvasRegion) {
-        this(aMinter.getAnnotationID(), aMinter, aCanvas, aCanvasRegion);
+        this(aID, aHttpsID, null, aCanvas, aCanvasRegion);
+    }
+
+    /**
+     * Creates an annotation resource.
+     *
+     * @param aMinter An annotation ID minter
+     * @param aHttpsID Whether the ID should be an HTTPS ID
+     * @param aCanvas A canvas to target
+     * @param aCanvasRegion A {@link MediaFragmentSelector} specifying the region of the canvas to target
+     * @param <C> A type of canvas resource
+     */
+    protected <C extends CanvasResource<C>> AbstractCanvasAnnotation(final Minter aMinter, final boolean aHttpsID,
+            final CanvasResource<C> aCanvas, final MediaFragmentSelector aCanvasRegion) {
+        this(aMinter.getAnnotationID(), aHttpsID, aMinter, aCanvas, aCanvasRegion);
     }
 
     /**
      * Creates an annotation resource.
      *
      * @param aID An annotation ID
+     * @param aHttpsID Whether the ID should be an HTTPS ID
      * @param aCanvas A canvas to target
      * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to target
      * @param <C> A type of canvas resource
      */
-    protected <C extends CanvasResource<C>> AbstractCanvasAnnotation(final String aID, final CanvasResource<C> aCanvas,
-            final String aCanvasRegion) {
-        this(aID, (Minter) null, aCanvas, new MediaFragmentSelector(aCanvasRegion));
+    protected <C extends CanvasResource<C>> AbstractCanvasAnnotation(final String aID, final boolean aHttpsID,
+            final CanvasResource<C> aCanvas, final String aCanvasRegion) {
+        this(aID, aHttpsID, null, aCanvas, new MediaFragmentSelector(aCanvasRegion));
     }
 
     /**
      * Creates an annotation resource.
      *
      * @param aMinter An annotation ID
+     * @param aHttpsID Whether the ID should be an HTTPS ID
      * @param aCanvas A canvas to target
      * @param aCanvasRegion A URI media fragment component specifying the region of the canvas to target
      * @param <C> A type of canvas resource
      */
-    protected <C extends CanvasResource<C>> AbstractCanvasAnnotation(final Minter aMinter,
+    protected <C extends CanvasResource<C>> AbstractCanvasAnnotation(final Minter aMinter, final boolean aHttpsID,
             final CanvasResource<C> aCanvas, final String aCanvasRegion) {
-        this(aMinter.getAnnotationID(), aMinter, aCanvas, new MediaFragmentSelector(aCanvasRegion));
+        this(aMinter.getAnnotationID(), aHttpsID, aMinter, aCanvas, new MediaFragmentSelector(aCanvasRegion));
     }
 
     /**
      * Creates a new canvas annotation from a list of targets.
      *
      * @param aID An annotation ID
+     * @param aHttpsID Whether the ID should be an HTTPS ID
      * @param aTargetList An annotation target list
      */
-    protected AbstractCanvasAnnotation(final String aID, final List<Target> aTargetList) {
-        super(ResourceTypes.ANNOTATION, aID, ResourceBehavior.class);
+    protected AbstractCanvasAnnotation(final String aID, final boolean aHttpsID, final List<Target> aTargetList) {
+        super(ResourceTypes.ANNOTATION, aID, aHttpsID, ResourceBehavior.class);
         myTargets = new ArrayList<>();
         myTargets.addAll(aTargetList);
     }
@@ -162,10 +161,11 @@ public abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotatio
      * Creates a new canvas annotation from an array of targets.
      *
      * @param aID An annotation ID
+     * @param aHttpsID Whether the ID should be an HTTPS ID
      * @param aTargetArray An array of annotation targets
      */
-    protected AbstractCanvasAnnotation(final String aID, final Target... aTargetArray) {
-        super(ResourceTypes.ANNOTATION, aID, ResourceBehavior.class);
+    protected AbstractCanvasAnnotation(final String aID, final boolean aHttpsID, final Target... aTargetArray) {
+        super(ResourceTypes.ANNOTATION, aID, aHttpsID, ResourceBehavior.class);
         myTargets = new ArrayList<>();
         myTargets.addAll(Arrays.asList(aTargetArray));
     }
@@ -175,12 +175,13 @@ public abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotatio
      *
      * @param <C> A type of canvas resource
      * @param aID An annotation ID
+     * @param aHttpsID Whether the ID should be an HTTPS ID
      * @param aMinter An annotation ID minter
      * @param aCanvas A canvas to target
      */
-    private <C extends CanvasResource<C>> AbstractCanvasAnnotation(final String aID, final Minter aMinter,
-            final CanvasResource<C> aCanvas) {
-        super(ResourceTypes.ANNOTATION, aID, ResourceBehavior.class);
+    private <C extends CanvasResource<C>> AbstractCanvasAnnotation(final String aID, final boolean aHttpsID,
+            final Minter aMinter, final CanvasResource<C> aCanvas) {
+        super(ResourceTypes.ANNOTATION, aID, aHttpsID, ResourceBehavior.class);
 
         if (aMinter != null) {
             myBodyID = aMinter.getAnnotationBodyID(aID);
@@ -195,20 +196,21 @@ public abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotatio
      *
      * @param <C> The type of CanvasResource that extends CanvasResource&lt;C&gt;
      * @param aID The unique identifier for this annotation
+     * @param aHttpsID Whether the ID should be an HTTPS ID
      * @param aMinter The minter used to generate annotation body IDs; may be null
      * @param aCanvas The canvas resource associated with this annotation
      * @param aCanvasRegion The media fragment selector that specifies the region of the canvas
      */
-    private <C extends CanvasResource<C>> AbstractCanvasAnnotation(final String aID, final Minter aMinter,
-            final CanvasResource<C> aCanvas, final MediaFragmentSelector aCanvasRegion) {
-        super(ResourceTypes.ANNOTATION, aID, ResourceBehavior.class);
+    private <C extends CanvasResource<C>> AbstractCanvasAnnotation(final String aID, final boolean aHttpsID,
+            final Minter aMinter, final CanvasResource<C> aCanvas, final MediaFragmentSelector aCanvasRegion) {
+        super(ResourceTypes.ANNOTATION, aID, aHttpsID, ResourceBehavior.class);
 
         if (aMinter != null) {
             myBodyID = aMinter.getAnnotationBodyID(aID);
         }
 
         myTargets = new ArrayList<>(1);
-        myTargets.add(new SpecificResource(UriUtils.checkID(aCanvas.getID(), true), aCanvasRegion));
+        myTargets.add(new SpecificResource(UriUtils.checkID(aCanvas.getID(), aHttpsID), aCanvasRegion));
     }
 
     /**
@@ -254,12 +256,51 @@ public abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotatio
     }
 
     /**
+     * Sets an array of content resources for this annotation.
+     *
+     * @param aResourceArray An array of content resources
+     * @return This annotation
+     */
+    @JsonIgnore
+    @SuppressWarnings(JDK.UNCHECKED)
+    public A setBody(final ContentResource... aResourceArray) {
+        final List<ContentResource> resources = getBody();
+
+        resources.clear();
+        resources.addAll(Arrays.asList(aResourceArray));
+
+        return (A) this;
+    }
+
+    /**
+     * Sets a list of content resources for this annotation.
+     *
+     * @param aResourceList A list of content resources
+     * @return This annotation
+     */
+    public A setBody(final List<ContentResource> aResourceList) {
+        return setBody(aResourceList.toArray(new ContentResource[0]));
+    }
+
+    /**
      * Gets the annotation body's optional ID.
      *
      * @return The annotation body's optional ID
      */
     public Optional<String> getBodyID() {
         return Optional.ofNullable(myBodyID);
+    }
+
+    /**
+     * Sets the annotation body's optional ID.
+     *
+     * @param aBodyID An optional annotation body ID.
+     * @return The annotation
+     */
+    @SuppressWarnings(JDK.UNCHECKED)
+    public A setBodyID(final String aBodyID) {
+        myBodyID = aBodyID;
+        return (A) this;
     }
 
     /**
@@ -272,6 +313,18 @@ public abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotatio
     }
 
     /**
+     * Sets the motivation of the annotation.
+     *
+     * @param aMotivation A motivation
+     * @return The annotation
+     */
+    @SuppressWarnings(JDK.UNCHECKED)
+    protected A setMotivation(final Motivation aMotivation) {
+        myMotivation = aMotivation;
+        return (A) this;
+    }
+
+    /**
      * Gets the annotation's target.
      *
      * @return The annotation's target
@@ -281,12 +334,51 @@ public abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotatio
     }
 
     /**
+     * Sets the target(s) of the annotation.
+     *
+     * @param aTargetList A list of targets
+     * @return The annotation
+     */
+    @SuppressWarnings(JDK.UNCHECKED)
+    public A setTargets(final List<Target> aTargetList) {
+        myTargets.clear();
+        myTargets.addAll(aTargetList);
+        return (A) this;
+    }
+
+    /**
+     * Sets the target(s) of the annotation.
+     *
+     * @param aTargetArray An array of targets
+     * @return The annotation
+     */
+    @JsonIgnore
+    @SuppressWarnings(JDK.UNCHECKED)
+    public A setTargets(final Target... aTargetArray) {
+        myTargets.clear();
+        myTargets.addAll(Arrays.asList(aTargetArray));
+        return (A) this;
+    }
+
+    /**
      * Gets the annotation's time mode.
      *
      * @return The annotation's optional time mode
      */
     public Optional<TimeMode> getTimeMode() {
         return Optional.ofNullable(myTimeMode);
+    }
+
+    /**
+     * Sets the time mode of the annotation.
+     *
+     * @param aTimeMode A time mode
+     * @return The annotation
+     */
+    @SuppressWarnings(JDK.UNCHECKED)
+    public A setTimeMode(final TimeMode aTimeMode) {
+        myTimeMode = aTimeMode;
+        return (A) this;
     }
 
     @Override
@@ -326,45 +418,6 @@ public abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotatio
     }
 
     /**
-     * Sets an array of content resources for this annotation.
-     *
-     * @param aResourceArray An array of content resources
-     * @return This annotation
-     */
-    @JsonIgnore
-    @SuppressWarnings(JDK.UNCHECKED)
-    public A setBody(final ContentResource... aResourceArray) {
-        final List<ContentResource> resources = getBody();
-
-        resources.clear();
-        resources.addAll(Arrays.asList(aResourceArray));
-
-        return (A) this;
-    }
-
-    /**
-     * Sets a list of content resources for this annotation.
-     *
-     * @param aResourceList A list of content resources
-     * @return This annotation
-     */
-    public A setBody(final List<ContentResource> aResourceList) {
-        return setBody(aResourceList.toArray(new ContentResource[0]));
-    }
-
-    /**
-     * Sets the annotation body's optional ID.
-     *
-     * @param aBodyID An optional annotation body ID.
-     * @return The annotation
-     */
-    @SuppressWarnings(JDK.UNCHECKED)
-    public A setBodyID(final String aBodyID) {
-        myBodyID = aBodyID;
-        return (A) this;
-    }
-
-    /**
      * Sets whether there is a choice between resources or just individual resources on the annotation.
      *
      * @param aChoice A flag indicating whether the annotation contains a choice between resources
@@ -373,57 +426,6 @@ public abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotatio
     @SuppressWarnings(JDK.UNCHECKED)
     public A setChoice(final boolean aChoice) {
         myBodyHasChoice = aChoice;
-        return (A) this;
-    }
-
-    /**
-     * Sets the target(s) of the annotation.
-     *
-     * @param aTargetList A list of targets
-     * @return The annotation
-     */
-    @SuppressWarnings(JDK.UNCHECKED)
-    public A setTargets(final List<Target> aTargetList) {
-        myTargets.clear();
-        myTargets.addAll(aTargetList);
-        return (A) this;
-    }
-
-    /**
-     * Sets the target(s) of the annotation.
-     *
-     * @param aTargetArray An array of targets
-     * @return The annotation
-     */
-    @JsonIgnore
-    @SuppressWarnings(JDK.UNCHECKED)
-    public A setTargets(final Target... aTargetArray) {
-        myTargets.clear();
-        myTargets.addAll(Arrays.asList(aTargetArray));
-        return (A) this;
-    }
-
-    /**
-     * Sets the time mode of the annotation.
-     *
-     * @param aTimeMode A time mode
-     * @return The annotation
-     */
-    @SuppressWarnings(JDK.UNCHECKED)
-    public A setTimeMode(final TimeMode aTimeMode) {
-        myTimeMode = aTimeMode;
-        return (A) this;
-    }
-
-    /**
-     * Sets the motivation of the annotation.
-     *
-     * @param aMotivation A motivation
-     * @return The annotation
-     */
-    @SuppressWarnings(JDK.UNCHECKED)
-    protected A setMotivation(final Motivation aMotivation) {
-        myMotivation = aMotivation;
         return (A) this;
     }
 

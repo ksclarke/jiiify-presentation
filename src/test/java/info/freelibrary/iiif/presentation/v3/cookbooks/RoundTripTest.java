@@ -26,18 +26,14 @@ import java.io.IOException;
 @SuppressWarnings({ Sonar.PARAMETERIZE_TEST })
 public class RoundTripTest extends AbstractCookbookTest {
 
-    /**
-     * A pattern from which to pull manifest from the test resources directory.
-     */
+    /** A pattern from which to pull manifest from the test resources directory. */
     private static final String MANIFEST_PATTERN = "src/test/resources/cookbook/{}.json";
 
     static {
-        checkCookbooks(); // Check status of cookbooks and emit warnings if we're out of sync
+        checkCookbooks(); // Check the status of cookbooks and emit warnings if we're out of sync
     }
 
-    /**
-     * A variable for the name of the test being executed.
-     */
+    /** A variable for the name of the test being executed. */
     @Rule
     public TestName myTestName = new TestName();
 
@@ -526,6 +522,19 @@ public class RoundTripTest extends AbstractCookbookTest {
     @Test
     public final void test0040ImageRotationWithCSS() throws IOException {
         final String expected = getExpected("0040-image-rotation-service/manifest-css");
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
+    }
+
+    /**
+     * Tests the 0045-css cookbook manifest (cf. <a href="https://iiif.io/api/cookbook/recipe/0045-css/">...</a>).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0045CSS() throws IOException {
+        final String expected = getExpected("0045-css/manifest");
         final String found = JSON.readValue(expected, Manifest.class).toString();
 
         assertEquals(myTestName, expected, found);

@@ -1,30 +1,27 @@
 
 package info.freelibrary.iiif.presentation.v3.annotation;
 
-import java.net.URI;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.warnings.Eclipse;
-
 import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.Canvas;
 import info.freelibrary.iiif.presentation.v3.CanvasResource;
 import info.freelibrary.iiif.presentation.v3.Resource;
 import info.freelibrary.iiif.presentation.v3.id.Minter;
-import info.freelibrary.iiif.presentation.v3.id.UriUtils;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.json.CanvasAnnotationDeserializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.PaintingAnnotationSerializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.StylesheetDeserializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.StylesheetSerializer;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.Eclipse;
+
+import java.net.URI;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * An annotation used for painting content resources onto a {@link Canvas}.
@@ -48,7 +45,7 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
      * @param aCanvas A canvas to target
      */
     public <C extends CanvasResource<C>> PaintingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas) {
-        super(aMinter, aCanvas);
+        super(aMinter, true, aCanvas);
         setMotivation(Motivation.fromLabel(Purpose.PAINTING));
     }
 
@@ -63,7 +60,7 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
      */
     public <C extends CanvasResource<C>> PaintingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
-        super(aMinter, aCanvas, aCanvasRegion);
+        super(aMinter, true, aCanvas, aCanvasRegion);
         setMotivation(Motivation.fromLabel(Purpose.PAINTING));
     }
 
@@ -78,7 +75,7 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
      */
     public <C extends CanvasResource<C>> PaintingAnnotation(final Minter aMinter, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
-        super(aMinter, aCanvas, aCanvasRegion);
+        super(aMinter, true, aCanvas, aCanvasRegion);
         setMotivation(Motivation.fromLabel(Purpose.PAINTING));
     }
 
@@ -90,7 +87,7 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
      * @param aCanvas A canvas to target
      */
     public <C extends CanvasResource<C>> PaintingAnnotation(final String aID, final CanvasResource<C> aCanvas) {
-        super(aID, aCanvas);
+        super(aID, true, aCanvas);
         setMotivation(Motivation.fromLabel(Purpose.PAINTING));
     }
 
@@ -104,7 +101,7 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
      */
     public <C extends CanvasResource<C>> PaintingAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion) {
-        super(aID, aCanvas, aCanvasRegion);
+        super(aID, true, aCanvas, aCanvasRegion);
         setMotivation(Motivation.fromLabel(Purpose.PAINTING));
     }
 
@@ -118,7 +115,7 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
      */
     public <C extends CanvasResource<C>> PaintingAnnotation(final String aID, final CanvasResource<C> aCanvas,
             final String aCanvasRegion) {
-        super(aID, aCanvas, aCanvasRegion);
+        super(aID, true, aCanvas, aCanvasRegion);
         setMotivation(Motivation.fromLabel(Purpose.PAINTING));
     }
 
@@ -129,7 +126,7 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
      * @param aTargetList An annotation target list
      */
     public PaintingAnnotation(final String aID, final List<Target> aTargetList) {
-        super(UriUtils.checkID(aID, false), aTargetList);
+        super(aID, false, aTargetList);
         setMotivation(Motivation.fromLabel(Purpose.PAINTING));
     }
 
@@ -140,7 +137,7 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
      * @param aTargetArray An array of annotation targets
      */
     public PaintingAnnotation(final String aID, final Target... aTargetArray) {
-        super(UriUtils.checkID(aID, false), aTargetArray);
+        super(aID, false, aTargetArray);
         setMotivation(Motivation.fromLabel(Purpose.PAINTING));
     }
 

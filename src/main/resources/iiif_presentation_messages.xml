@@ -57,7 +57,7 @@
     <entry key="JPA-053">Type set on service image must be: {}</entry>
     <entry key="JPA-054">Supplied behavior ('{}') conflicts with an existing behavior: {}</entry>
     <entry key="JPA-055">Supplied behavior ('{}') conflicts with another supplied behavior: {}</entry>
-    <entry key="JPA-056">Expected Image, Sound, Video, Text, Model, or Dataset... found: {}</entry>
+    <entry key="JPA-056">Expected Image, Sound, Video, Text, Model, Canvas, or Dataset... found: {}</entry>
     <entry key="JPA-057">Method setBehaviors() shouldn't be called without checkBehaviors()</entry>
     <entry key="JPA-058">Method addBehaviors() shouldn't be called without checkBehaviors()</entry>
     <entry key="JPA-059">Content resource '{}' has {} dimensions and canvas '{}' does not</entry>

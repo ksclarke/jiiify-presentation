@@ -1,20 +1,10 @@
 
 package info.freelibrary.iiif.presentation.v3.annotation;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import info.freelibrary.util.I18nRuntimeException;
-import info.freelibrary.util.ListUtils;
-
 import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.CanvasResource;
 import info.freelibrary.iiif.presentation.v3.Manifest;
@@ -27,6 +17,14 @@ import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.json.WebAnnotationDeserializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.WebAnnotationSerializer;
+import info.freelibrary.util.I18nRuntimeException;
+import info.freelibrary.util.ListUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * A base class for the Web annotations found in the <code>annotations</code> package. May also serve as a base class
@@ -56,6 +54,9 @@ public class WebAnnotation implements Annotation<WebAnnotation> {
 
     /** The annotation's time mode. */
     private TimeMode myTimeMode;
+
+    /** The annotation's stylesheet. */
+    private String myStylesheet;
 
     /**
      * Creates a new Web annotation.
@@ -370,5 +371,25 @@ public class WebAnnotation implements Annotation<WebAnnotation> {
         } catch (final JsonProcessingException details) {
             throw new I18nRuntimeException(details);
         }
+    }
+
+    /**
+     * Retrieves the stylesheet associated with this annotation.
+     *
+     * @return The stylesheet as an optional string
+     */
+    public Optional<String> getStylesheet() {
+        return Optional.ofNullable(myStylesheet);
+    }
+
+    /**
+     * Sets the stylesheet associated with the annotation.
+     *
+     * @param aStylesheet The stylesheet to associate with the annotation
+     * @return The annotation
+     */
+    public WebAnnotation setStylesheet(final String aStylesheet) {
+        myStylesheet = aStylesheet;
+        return this;
     }
 }

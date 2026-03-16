@@ -55,94 +55,60 @@ import java.util.Optional;
     JsonKeys.ITEMS, JsonKeys.SERVICE, JsonKeys.STRUCTURES, JsonKeys.SERVICES, JsonKeys.NAV_DATE, JsonKeys.ANNOTATIONS })
 public abstract class AbstractResource<T extends AbstractResource<T>> implements Resource<T> {
 
-    /**
-     * The logger used by abstract resources.
-     */
+    /** The logger used by abstract resources. */
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractResource.class, MessageCodes.BUNDLE);
 
-    /**
-     * The resource type.
-     */
+    /** The resource type. */
     @JsonProperty(JsonKeys.TYPE)
     protected String myType;
 
-    /**
-     * A class of behaviors supported by this resource.
-     */
+    /** A class of behaviors supported by this resource. */
     private final Class<? extends Behavior> myBehaviorClass;
 
-    /**
-     * The resource's behaviors.
-     */
+    /** The resource's behaviors. */
     @JsonSetter(JsonKeys.BEHAVIOR)
     @JsonDeserialize(using = BehaviorDeserializer.class)
     private List<Behavior> myBehaviors;
 
-    /**
-     * The resource's homepage.
-     */
+    /** The resource's homepage. */
     private List<Homepage> myHomepages;
 
-    /**
-     * The resource ID.
-     */
+    /** The resource ID. */
     @JsonProperty(JsonKeys.ID)
     private String myID;
 
-    /**
-     * The resource label.
-     */
+    /** The resource label. */
     private Label myLabel;
 
-    /**
-     * The resource's metadata.
-     */
+    /** The resource's metadata. */
     private List<Metadata> myMetadata;
 
-    /**
-     * The resource's partOfs.
-     */
+    /** The resource's partOfs. */
     private List<PartOf> myPartOfs;
 
-    /**
-     * The resource's providers.
-     */
+    /** The resource's providers. */
     private List<Provider> myProviders;
 
-    /**
-     * The resource renderings.
-     */
+    /** The resource renderings. */
     private List<Rendering> myRenderings;
 
-    /**
-     * The resource's requiredStatement.
-     */
+    /** The resource's requiredStatement. */
     private RequiredStatement myRequiredStatement;
 
-    /**
-     * The rights ID of the resource.
-     */
+    /** The rights ID of the resource. */
     private String myRights;
 
-    /**
-     * The resource's seeAlsos.
-     */
+    /** The resource's seeAlso(s). */
     private List<SeeAlso> mySeeAlsoRefs;
 
-    /**
-     * The resource's services.
-     */
+    /** The resource's services. */
     @JsonDeserialize(contentUsing = ServiceDeserializer.class)
     private List<Service> myServices;
 
-    /**
-     * The resource summary.
-     */
+    /** The resource summary. */
     private Summary mySummary;
 
-    /**
-     * The resource's thumbnails.
-     */
+    /** The resource's thumbnails. */
     @JsonProperty(JsonKeys.THUMBNAIL)
     @JsonDeserialize(contentUsing = ContentResourceDeserializer.class)
     private List<ContentResource> myThumbnails;
@@ -163,12 +129,14 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
      *
      * @param aType A resource type
      * @param aID An ID
+     * @param aHttpsID Whether the ID should be an HTTPS ID
      * @param aBehaviorClass A behavior class for this resource
      */
-    protected AbstractResource(final String aType, final String aID, final Class<? extends Behavior> aBehaviorClass) {
+    protected AbstractResource(final String aType, final String aID, final boolean aHttpsID,
+            final Class<? extends Behavior> aBehaviorClass) {
         myBehaviorClass = Objects.requireNonNull(aBehaviorClass);
         myType = Objects.requireNonNull(aType);
-        myID = UriUtils.checkID(aID, true);
+        myID = UriUtils.checkID(aID, aHttpsID);
     }
 
     /**
@@ -176,14 +144,15 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
      *
      * @param aType A type of resource
      * @param aID An ID
+     * @param aHttpsID Whether the ID should be an HTTPS ID
      * @param aLabel A label for the resource
      * @param aBehaviorClass A behavior class for this resource
      */
-    protected AbstractResource(final String aType, final String aID, final Label aLabel,
+    protected AbstractResource(final String aType, final String aID, final boolean aHttpsID, final Label aLabel,
             final Class<? extends Behavior> aBehaviorClass) {
         myBehaviorClass = Objects.requireNonNull(aBehaviorClass);
         myType = Objects.requireNonNull(aType);
-        myID = UriUtils.checkID(aID, true);
+        myID = UriUtils.checkID(aID, aHttpsID);
         myLabel = Objects.requireNonNull(aLabel);
     }
 
@@ -229,6 +198,20 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
         return myBehaviors;
     }
 
+    @Override
+    @JsonIgnore
+    public T setBehaviors(final Behavior... aBehaviorArray) {
+        return setBehaviors(Arrays.asList(aBehaviorArray));
+    }
+
+    @Override
+    @JsonIgnore
+    @SuppressWarnings(JDK.UNCHECKED)
+    public T setBehaviors(final List<Behavior> aBehaviorList) {
+        myBehaviors = Objects.requireNonNull(aBehaviorList);
+        return (T) this;
+    }
+
     /**
      * Gets a list of resource homepages, initializing the list if this hasn't been done already.
      *
@@ -242,225 +225,6 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
         }
 
         return myHomepages;
-    }
-
-    /**
-     * Gets the ID.
-     *
-     * @return The ID
-     */
-    @Override
-    @JsonGetter(JsonKeys.ID)
-    public String getID() {
-        return myID;
-    }
-
-    /**
-     * Gets the label.
-     *
-     * @return The label
-     */
-    @Override
-    @JsonGetter(JsonKeys.LABEL)
-    public Optional<Label> getLabel() {
-        return Optional.ofNullable(myLabel);
-    }
-
-    /**
-     * Gets the metadata.
-     *
-     * @return The metadata
-     */
-    @Override
-    @JsonGetter(JsonKeys.METADATA)
-    public List<Metadata> getMetadata() {
-        if (myMetadata == null) {
-            myMetadata = new ArrayList<>();
-        }
-
-        return myMetadata;
-    }
-
-    /**
-     * Gets a list of resource partOfs, initializing the list if this hasn't been done already.
-     *
-     * @return The resource's partOfs
-     */
-    @Override
-    @JsonGetter(JsonKeys.PART_OF)
-    public List<PartOf> getPartOfs() {
-        if (myPartOfs == null) {
-            myPartOfs = new ArrayList<>();
-        }
-
-        return myPartOfs;
-    }
-
-    /**
-     * Gets a list of resource providers, initializing the list if this hasn't been done already.
-     *
-     * @return The resource's providers
-     */
-    @Override
-    @JsonGetter(JsonKeys.PROVIDER)
-    public List<Provider> getProviders() {
-        return getResourceProviders();
-    }
-
-    /**
-     * Gets a list of resource renderings, initializing the list if this hasn't been done already.
-     *
-     * @return The resource's renderings
-     */
-    @Override
-    @JsonGetter(JsonKeys.RENDERING)
-    public List<Rendering> getRenderings() {
-        if (myRenderings == null) {
-            myRenderings = new ArrayList<>();
-        }
-
-        return myRenderings;
-    }
-
-    /**
-     * Gets the required statement.
-     *
-     * @return The required statement
-     */
-    @Override
-    @JsonGetter(JsonKeys.REQUIRED_STATEMENT)
-    public Optional<RequiredStatement> getRequiredStatement() {
-        return Optional.ofNullable(myRequiredStatement);
-    }
-
-    /**
-     * Clears the required statement by setting it to null.
-     *
-     * @return The current instance of the object.
-     */
-    @Override
-    @SuppressWarnings({ JDK.UNCHECKED, PMD.NULL_ASSIGNMENT })
-    public T clearRequiredStatement() {
-        myRequiredStatement = null;
-        return (T) this;
-    }
-
-    /**
-     * Gets the rights.
-     *
-     * @return The rights
-     */
-    @Override
-    @JsonProperty
-    public Optional<String> getRights() {
-        return Optional.ofNullable(myRights);
-    }
-
-    /**
-     * Clears the current rights by setting the rights to null.
-     *
-     * @return This instance for method chaining.
-     */
-    @Override
-    @SuppressWarnings({ JDK.UNCHECKED, PMD.NULL_ASSIGNMENT })
-    public T clearRights() {
-        myRights = null;
-        return (T) this;
-    }
-
-    /**
-     * Gets see also reference(s).
-     *
-     * @return The see also reference(s)
-     */
-    @Override
-    @JsonGetter(JsonKeys.SEE_ALSO)
-    public List<SeeAlso> getSeeAlsoRefs() {
-        if (mySeeAlsoRefs == null) {
-            mySeeAlsoRefs = new ArrayList<>();
-        }
-
-        return mySeeAlsoRefs;
-    }
-
-    /**
-     * Gets a list of resource services, initializing the list if this hasn't been done already.
-     *
-     * @return The resource's services
-     */
-    @Override
-    @JsonGetter(JsonKeys.SERVICE)
-    public List<Service> getServices() {
-        if (myServices == null) {
-            myServices = new ArrayList<>();
-        }
-
-        return myServices;
-    }
-
-    /**
-     * Gets the summary.
-     *
-     * @return The summary
-     */
-    @Override
-    @JsonGetter(JsonKeys.SUMMARY)
-    public Optional<Summary> getSummary() {
-        return Optional.ofNullable(mySummary);
-    }
-
-    /**
-     * Clears the current summary.
-     *
-     * @return The current resource.
-     */
-    @SuppressWarnings({ JDK.UNCHECKED, PMD.NULL_ASSIGNMENT })
-    public T clearSummary() {
-        mySummary = null;
-        return (T) this;
-    }
-
-    /**
-     * Gets a list of resource thumbnails, initializing the list if this hasn't been done already.
-     *
-     * @return The resource's thumbnails
-     */
-    @Override
-    @JsonGetter(JsonKeys.THUMBNAIL)
-    public List<ContentResource> getThumbnails() {
-        return getResourceThumbnails();
-    }
-
-    /**
-     * Gets the type.
-     *
-     * @return The type
-     */
-    @Override
-    @JsonGetter(JsonKeys.TYPE)
-    public Optional<String> getType() {
-        return Optional.of(myType);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(myType, myBehaviorClass, myBehaviors, myHomepages, myID, myLabel, myMetadata, myPartOfs,
-                myProviders, myRenderings, myRequiredStatement, myRights, mySeeAlsoRefs, myServices, mySummary,
-                myThumbnails);
-    }
-
-    @Override
-    @JsonIgnore
-    public T setBehaviors(final Behavior... aBehaviorArray) {
-        return setBehaviors(Arrays.asList(aBehaviorArray));
-    }
-
-    @Override
-    @JsonIgnore
-    @SuppressWarnings(JDK.UNCHECKED)
-    public T setBehaviors(final List<Behavior> aBehaviorList) {
-        myBehaviors = Objects.requireNonNull(aBehaviorList);
-        return (T) this;
     }
 
     /**
@@ -495,6 +259,17 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
     }
 
     /**
+     * Gets the ID.
+     *
+     * @return The ID
+     */
+    @Override
+    @JsonGetter(JsonKeys.ID)
+    public String getID() {
+        return myID;
+    }
+
+    /**
      * Sets the resource ID.
      *
      * @param aID An ID
@@ -506,6 +281,17 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
     public T setID(final String aID) {
         myID = UriUtils.checkID(aID, true);
         return (T) this;
+    }
+
+    /**
+     * Gets the label.
+     *
+     * @return The label
+     */
+    @Override
+    @JsonGetter(JsonKeys.LABEL)
+    public Optional<Label> getLabel() {
+        return Optional.ofNullable(myLabel);
     }
 
     /**
@@ -521,6 +307,21 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
         Objects.requireNonNull(aLabel);
         myLabel = aLabel;
         return (T) this;
+    }
+
+    /**
+     * Gets the metadata.
+     *
+     * @return The metadata
+     */
+    @Override
+    @JsonGetter(JsonKeys.METADATA)
+    public List<Metadata> getMetadata() {
+        if (myMetadata == null) {
+            myMetadata = new ArrayList<>();
+        }
+
+        return myMetadata;
     }
 
     /**
@@ -555,6 +356,21 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
     }
 
     /**
+     * Gets a list of resource partOfs, initializing the list if this hasn't been done already.
+     *
+     * @return The resource's partOfs
+     */
+    @Override
+    @JsonGetter(JsonKeys.PART_OF)
+    public List<PartOf> getPartOfs() {
+        if (myPartOfs == null) {
+            myPartOfs = new ArrayList<>();
+        }
+
+        return myPartOfs;
+    }
+
+    /**
      * Sets the resource's partOfs.
      *
      * @param aPartOfList A list of partOfs
@@ -586,6 +402,17 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
     }
 
     /**
+     * Gets a list of resource providers, initializing the list if this hasn't been done already.
+     *
+     * @return The resource's providers
+     */
+    @Override
+    @JsonGetter(JsonKeys.PROVIDER)
+    public List<Provider> getProviders() {
+        return getResourceProviders();
+    }
+
+    /**
      * Sets the resource's providers.
      *
      * @param aProviderList A list of providers
@@ -606,6 +433,21 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
     @Override
     public T setProviders(final Provider... aProviderArray) {
         return setProviders(Arrays.asList(aProviderArray));
+    }
+
+    /**
+     * Gets a list of resource renderings, initializing the list if this hasn't been done already.
+     *
+     * @return The resource's renderings
+     */
+    @Override
+    @JsonGetter(JsonKeys.RENDERING)
+    public List<Rendering> getRenderings() {
+        if (myRenderings == null) {
+            myRenderings = new ArrayList<>();
+        }
+
+        return myRenderings;
     }
 
     /**
@@ -640,6 +482,17 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
     }
 
     /**
+     * Gets the required statement.
+     *
+     * @return The required statement
+     */
+    @Override
+    @JsonGetter(JsonKeys.REQUIRED_STATEMENT)
+    public Optional<RequiredStatement> getRequiredStatement() {
+        return Optional.ofNullable(myRequiredStatement);
+    }
+
+    /**
      * Sets the resource's required statement.
      *
      * @param aStatement A required statement
@@ -654,6 +507,29 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
     }
 
     /**
+     * Clears the required statement by setting it to null.
+     *
+     * @return The current instance of the object.
+     */
+    @Override
+    @SuppressWarnings({ JDK.UNCHECKED, PMD.NULL_ASSIGNMENT })
+    public T clearRequiredStatement() {
+        myRequiredStatement = null;
+        return (T) this;
+    }
+
+    /**
+     * Gets the rights.
+     *
+     * @return The rights
+     */
+    @Override
+    @JsonProperty
+    public Optional<String> getRights() {
+        return Optional.ofNullable(myRights);
+    }
+
+    /**
      * Sets the resource's rights URI.
      *
      * @param aRights A rights URI
@@ -665,6 +541,33 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
     public T setRights(final String aRights) {
         myRights = UriUtils.checkID(aRights, false);
         return (T) this;
+    }
+
+    /**
+     * Clears the current rights by setting the rights to null.
+     *
+     * @return This instance for method chaining.
+     */
+    @Override
+    @SuppressWarnings({ JDK.UNCHECKED, PMD.NULL_ASSIGNMENT })
+    public T clearRights() {
+        myRights = null;
+        return (T) this;
+    }
+
+    /**
+     * Gets see also reference(s).
+     *
+     * @return The see also reference(s)
+     */
+    @Override
+    @JsonGetter(JsonKeys.SEE_ALSO)
+    public List<SeeAlso> getSeeAlsoRefs() {
+        if (mySeeAlsoRefs == null) {
+            mySeeAlsoRefs = new ArrayList<>();
+        }
+
+        return mySeeAlsoRefs;
     }
 
     /**
@@ -693,6 +596,21 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
     public T setSeeAlsoRefs(final SeeAlso... aSeeAlsoArray) {
         Collections.addAll(getSeeAlsoRefs(), aSeeAlsoArray);
         return (T) this;
+    }
+
+    /**
+     * Gets a list of resource services, initializing the list if this hasn't been done already.
+     *
+     * @return The resource's services
+     */
+    @Override
+    @JsonGetter(JsonKeys.SERVICE)
+    public List<Service> getServices() {
+        if (myServices == null) {
+            myServices = new ArrayList<>();
+        }
+
+        return myServices;
     }
 
     /**
@@ -727,6 +645,17 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
     }
 
     /**
+     * Gets the summary.
+     *
+     * @return The summary
+     */
+    @Override
+    @JsonGetter(JsonKeys.SUMMARY)
+    public Optional<Summary> getSummary() {
+        return Optional.ofNullable(mySummary);
+    }
+
+    /**
      * Sets the resource summary.
      *
      * @param aSummary The resource summary
@@ -739,6 +668,28 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
         Objects.requireNonNull(aSummary);
         mySummary = aSummary;
         return (T) this;
+    }
+
+    /**
+     * Clears the current summary.
+     *
+     * @return The current resource.
+     */
+    @SuppressWarnings({ JDK.UNCHECKED, PMD.NULL_ASSIGNMENT })
+    public T clearSummary() {
+        mySummary = null;
+        return (T) this;
+    }
+
+    /**
+     * Gets a list of resource thumbnails, initializing the list if this hasn't been done already.
+     *
+     * @return The resource's thumbnails
+     */
+    @Override
+    @JsonGetter(JsonKeys.THUMBNAIL)
+    public List<ContentResource> getThumbnails() {
+        return getResourceThumbnails();
     }
 
     /**
@@ -765,6 +716,24 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
     @SuppressWarnings(JDK.UNCHECKED)
     public T setThumbnails(final List<ContentResource> aThumbnailList) {
         return (T) setResourceThumbnails(aThumbnailList);
+    }
+
+    /**
+     * Gets the type.
+     *
+     * @return The type
+     */
+    @Override
+    @JsonGetter(JsonKeys.TYPE)
+    public Optional<String> getType() {
+        return Optional.of(myType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(myType, myBehaviorClass, myBehaviors, myHomepages, myID, myLabel, myMetadata, myPartOfs,
+                myProviders, myRenderings, myRequiredStatement, myRights, mySeeAlsoRefs, myServices, mySummary,
+                myThumbnails);
     }
 
     /**
@@ -814,20 +783,6 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
     }
 
     /**
-     * Gets a list of resource thumbnails, initializing the list if this hasn't been done already.
-     *
-     * @return The resource's thumbnails
-     */
-    @JsonIgnore
-    private List<ContentResource> getResourceThumbnails() {
-        if (myThumbnails == null) {
-            myThumbnails = new ArrayList<>();
-        }
-
-        return myThumbnails;
-    }
-
-    /**
      * Sets the resource's provider.
      *
      * @param aProviderList A list of providers
@@ -842,6 +797,20 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
         providers.addAll(aProviderList);
 
         return this;
+    }
+
+    /**
+     * Gets a list of resource thumbnails, initializing the list if this hasn't been done already.
+     *
+     * @return The resource's thumbnails
+     */
+    @JsonIgnore
+    private List<ContentResource> getResourceThumbnails() {
+        if (myThumbnails == null) {
+            myThumbnails = new ArrayList<>();
+        }
+
+        return myThumbnails;
     }
 
     /**

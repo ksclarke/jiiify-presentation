@@ -3,10 +3,6 @@ package info.freelibrary.iiif.presentation.v3.content;
 
 import static info.freelibrary.util.Constants.EMPTY;
 
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -16,10 +12,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import info.freelibrary.util.I18nRuntimeException;
-import info.freelibrary.util.warnings.PMD;
-
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.annotation.Purpose;
 import info.freelibrary.iiif.presentation.v3.id.SkolemIriFactory;
@@ -30,18 +22,22 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeDeserializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeKeySerializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeSerializer;
+import info.freelibrary.util.I18nRuntimeException;
+import info.freelibrary.util.warnings.PMD;
+
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
- * Text that can be embedded in the body of an annotation. This is different from TextContent which is external text
- * which is referenced in an annotation's body.
+ * Text that can be embedded in the body of an annotation. This is different from {@code TextContent}, which is external
+ * text referenced in an annotation's body.
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.VALUE, JsonKeys.LANGUAGE, JsonKeys.FORMAT })
 @JsonInclude(Include.NON_EMPTY)
 public class TextualBody implements ContentResource {
 
-    /**
-     * The TextualBody uses serializable IDs.
-     */
+    /** The TextualBody uses serializable IDs. */
     private boolean hasSerializableID;
 
     /**
@@ -79,7 +75,7 @@ public class TextualBody implements ContentResource {
     /**
      * Creates a new textual body for an annotation, supplying an ID factory for ID creation.
      *
-     * @param aFactory A SkolemIriFactory that can create IDs
+     * @param aFactory A {@code SkolemIriFactory} that can create IDs
      */
     public TextualBody(final SkolemIriFactory aFactory) {
         hasSerializableID = aFactory.createsSerializableIDs();
@@ -116,7 +112,7 @@ public class TextualBody implements ContentResource {
      */
     @JsonGetter(JsonKeys.LANGUAGE)
     public Optional<String> getLanguage() {
-        return myLocale == null ? Optional.empty() : Optional.ofNullable(myLocale.toLanguageTag());
+        return myLocale == null ? Optional.empty() : Optional.of(myLocale.toLanguageTag());
     }
 
     /**

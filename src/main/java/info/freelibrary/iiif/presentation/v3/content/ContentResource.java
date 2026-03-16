@@ -1,13 +1,12 @@
 
 package info.freelibrary.iiif.presentation.v3.content;
 
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonSetter;
-
 import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+
+import java.util.Optional;
 
 /**
  * An interface that defines web resources that can be referenced by or embedded in an {@link Annotation}. Examples of

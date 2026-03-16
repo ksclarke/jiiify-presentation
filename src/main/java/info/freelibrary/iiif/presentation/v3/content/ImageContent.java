@@ -1,22 +1,21 @@
 
 package info.freelibrary.iiif.presentation.v3.content;
 
-import java.util.List;
-import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
-
 import info.freelibrary.iiif.presentation.v3.Resource;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Image content that can be associated with an annotation or set as a thumbnail.
@@ -41,7 +40,7 @@ public class ImageContent extends AbstractContentResource<ImageContent>
      * @param aURI An image content ID
      */
     public ImageContent(final String aURI) {
-        super(ResourceTypes.IMAGE, aURI, ResourceBehavior.class, MEDIA_TYPE_CLASS);
+        super(ResourceTypes.IMAGE, aURI, false, ResourceBehavior.class, MEDIA_TYPE_CLASS);
     }
 
     /**

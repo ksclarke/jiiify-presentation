@@ -1,22 +1,21 @@
 
 package info.freelibrary.iiif.presentation.v3.content;
 
-import java.util.List;
-import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
-
 import info.freelibrary.iiif.presentation.v3.Resource;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Video content that can be associated with an annotation or used as a thumbnail.
@@ -44,7 +43,7 @@ public class VideoContent extends AbstractContentResource<VideoContent> implemen
      * @param aURI An video content resource ID
      */
     public VideoContent(final String aURI) {
-        super(ResourceTypes.VIDEO, aURI, ResourceBehavior.class, MEDIA_TYPE_CLASS);
+        super(ResourceTypes.VIDEO, aURI, false, ResourceBehavior.class, MEDIA_TYPE_CLASS);
     }
 
     /**
