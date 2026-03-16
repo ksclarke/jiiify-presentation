@@ -1,17 +1,16 @@
 
 package info.freelibrary.iiif.presentation.v3.content;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import info.freelibrary.iiif.presentation.v3.Resource;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+
+import java.util.List;
 
 /**
  * Dataset content that can be associated with an annotation or set as a thumbnail.
@@ -26,7 +25,7 @@ public class DatasetContent extends AbstractContentResource<DatasetContent>
      * @param aID A dataset content ID
      */
     public DatasetContent(final String aID) {
-        super(ResourceTypes.DATASET, aID, ResourceBehavior.class, null);
+        super(ResourceTypes.DATASET, aID, false, ResourceBehavior.class, null);
     }
 
     /**

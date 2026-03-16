@@ -1,20 +1,12 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import info.freelibrary.util.warnings.Eclipse;
-import info.freelibrary.util.warnings.JDK;
-
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
@@ -23,6 +15,12 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavi
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.json.AnnotationPageSerializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.GreaterThanOneSerializer;
+import info.freelibrary.util.warnings.Eclipse;
+import info.freelibrary.util.warnings.JDK;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * A grouping of {@link AnnotationPage}(s) that should be managed together as a collection of {@link Annotation}(s).
@@ -56,7 +54,7 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
      * @param aLabel A descriptive label for the collection
      */
     public AnnotationCollection(final String aID, final Label aLabel) {
-        super(ResourceTypes.ANNOTATION_COLLECTION, aID, aLabel, ResourceBehavior.class);
+        super(ResourceTypes.ANNOTATION_COLLECTION, aID, true, aLabel, ResourceBehavior.class);
     }
 
     /**

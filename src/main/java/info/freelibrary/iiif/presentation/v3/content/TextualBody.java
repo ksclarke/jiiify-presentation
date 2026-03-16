@@ -30,8 +30,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * Text that can be embedded in the body of an annotation. This is different from {@code TextContent}, which is
- * external text referenced in an annotation's body.
+ * Text that can be embedded in the body of an annotation. This is different from {@code TextContent}, which is external
+ * text referenced in an annotation's body.
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.VALUE, JsonKeys.LANGUAGE, JsonKeys.FORMAT })
 @JsonInclude(Include.NON_EMPTY)

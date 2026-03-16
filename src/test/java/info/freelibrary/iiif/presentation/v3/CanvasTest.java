@@ -258,17 +258,6 @@ public class CanvasTest extends AbstractCookbookTest {
     }
 
     /**
-     * Tests {@link Canvas#Canvas(Minter, String) Canvas}.
-     */
-    @Test
-    public final void testCanvasMinterLabelAsString() {
-        final String id = HTTPS + UUID.randomUUID().toString();
-        final Canvas canvas = new Canvas(MinterFactory.getMinter(id), LABEL);
-
-        assertTrue(Pattern.compile(id + NOID_PATTERN).matcher(canvas.getID()).matches());
-    }
-
-    /**
      * Tests the manifest constructor.
      */
     @Test

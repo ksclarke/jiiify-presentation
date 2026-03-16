@@ -26,19 +26,15 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * A serializer for {@code Annotation.Target}(s).
+ * A serializer for annotation {@code Target}(s).
  */
 public class AnnotationTargetSerializer extends StdSerializer<Target> {
 
-    /**
-     * The {@code }serialVersionUID} for a {@code AnnotationTargetSerializer}.
-     */
+    /** The {@code }serialVersionUID} for a {@code AnnotationTargetSerializer}. */
     @Serial
     private static final long serialVersionUID = -5745518273140398531L;
 
-    /**
-     * The logger for this class.
-     */
+    /** The logger for this class. */
     private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationTargetSerializer.class, MessageCodes.BUNDLE);
 
     /**
@@ -52,6 +48,7 @@ public class AnnotationTargetSerializer extends StdSerializer<Target> {
     @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY, PMD.SWITCH_DENSITY, Sonar.COGNITIVE_COMPLEXITY })
     public void serialize(final Target aTarget, final JsonGenerator aJsonGenerator, final SerializerProvider aProvider)
             throws IOException {
+        // Serializes target by type or ID; wraps exceptions as IO
         try {
             aTarget.getType().ifPresentOrElse((ThrowingConsumer<String, IOException>) type -> {
                 switch (type) {

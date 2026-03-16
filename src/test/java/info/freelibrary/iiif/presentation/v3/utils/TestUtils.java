@@ -3,6 +3,7 @@ package info.freelibrary.iiif.presentation.v3.utils;
 
 import static info.freelibrary.iiif.presentation.v3.utils.JsonKeys.BODY;
 import static info.freelibrary.iiif.presentation.v3.utils.JsonKeys.CONTEXT;
+import static info.freelibrary.iiif.presentation.v3.utils.JsonKeys.LANGUAGE;
 import static info.freelibrary.iiif.presentation.v3.utils.JsonKeys.MOTIVATION;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -42,7 +43,7 @@ public final class TestUtils {
     public static final String TEST_DIR = "src/test/resources/json";
 
     /** The JSON properties that are okay to collapse. */
-    private static final List<String> COLLAPSIBLES = Arrays.asList(CONTEXT, BODY, MOTIVATION);
+    private static final List<String> COLLAPSIBLES = Arrays.asList(CONTEXT, BODY, MOTIVATION, LANGUAGE);
 
     /** The logger for the test utilities. */
     private static final Logger LOGGER = LoggerFactory.getLogger(TestUtils.class, MessageCodes.BUNDLE);

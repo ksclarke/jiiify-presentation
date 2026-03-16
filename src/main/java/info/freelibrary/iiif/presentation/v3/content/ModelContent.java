@@ -1,17 +1,16 @@
 
 package info.freelibrary.iiif.presentation.v3.content;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import info.freelibrary.iiif.presentation.v3.Resource;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+
+import java.util.List;
 
 /**
  * Model content that can be associated with an annotation or used as a thumbnail.
@@ -29,7 +28,7 @@ public class ModelContent extends AbstractContentResource<ModelContent>
      * @param aID An model content ID
      */
     public ModelContent(final String aID) {
-        super(ResourceTypes.MODEL, aID, ResourceBehavior.class, MEDIA_TYPE_CLASS);
+        super(ResourceTypes.MODEL, aID, false, ResourceBehavior.class, MEDIA_TYPE_CLASS);
     }
 
     /**

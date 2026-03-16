@@ -4,10 +4,6 @@ package info.freelibrary.iiif.presentation.v3.utils.json;
 import static info.freelibrary.util.Constants.SINGLE_INSTANCE;
 import static info.freelibrary.util.ThrowingBiFunction.unwrap;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
-
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -15,12 +11,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.ThrowingBiFunction;
-import info.freelibrary.util.warnings.PMD;
-
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.annotation.Motivation;
 import info.freelibrary.iiif.presentation.v3.annotation.Target;
@@ -30,6 +20,15 @@ import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.ThrowingBiFunction;
+import info.freelibrary.util.warnings.PMD;
+
+import java.io.IOException;
+import java.io.Serial;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * A serializer for {@code WebAnnotation}(s).
@@ -40,6 +39,7 @@ public class WebAnnotationSerializer extends StdSerializer<WebAnnotation> {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebAnnotationSerializer.class, MessageCodes.BUNDLE);
 
     /** The <code>serialVersionUID</code> for a <code>WebAnnotationSerializer</code>. */
+    @Serial
     private static final long serialVersionUID = -5755418273140298532L;
 
     /**
@@ -58,6 +58,7 @@ public class WebAnnotationSerializer extends StdSerializer<WebAnnotation> {
         final Optional<Motivation> motivation = aWebAnnotation.getMotivation();
         final Optional<TimeMode> timeMode = aWebAnnotation.getTimeMode();
         final Optional<Label> label = aWebAnnotation.getLabel();
+        final Optional<String> stylesheet = aWebAnnotation.getStylesheet();
 
         // Check that required values exist in the WebAnnotation and fail if they don't
         final ThrowingBiFunction<String, String, String, JsonGenerationException> check = (aKey, aValue) -> {
@@ -77,6 +78,10 @@ public class WebAnnotationSerializer extends StdSerializer<WebAnnotation> {
             if (motivation.isPresent()) {
                 aJsonGenerator.writeObjectField(JsonKeys.MOTIVATION,
                         unwrap(check).apply(JsonKeys.MOTIVATION, motivation.get().toString()));
+            }
+
+            if (stylesheet.isPresent()) {
+                aJsonGenerator.writeObjectField(JsonKeys.STYLESHEET, stylesheet.get());
             }
 
             if (label.isPresent()) {

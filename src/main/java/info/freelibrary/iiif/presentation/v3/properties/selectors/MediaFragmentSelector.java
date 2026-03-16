@@ -1,12 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.selectors;
 
-import java.io.StringReader;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.tkurz.media.fragments.FragmentParser;
 import com.github.tkurz.media.fragments.ParseException;
@@ -15,12 +9,16 @@ import com.github.tkurz.media.fragments.spatial.SpatialFragment;
 import com.github.tkurz.media.fragments.temporal.Clocktime;
 import com.github.tkurz.media.fragments.temporal.NPTFragment;
 import com.github.tkurz.media.fragments.temporal.TemporalFragment;
-
+import info.freelibrary.iiif.presentation.v3.Canvas;
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
-import info.freelibrary.iiif.presentation.v3.Canvas;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import java.io.StringReader;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * A media fragment selector selects a region of interest in a resource with spatial and/or temporal dimensions
@@ -28,49 +26,31 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
  */
 public class MediaFragmentSelector implements FragmentSelector {
 
-    /**
-     * The URI of the <a href="http://www.w3.org/TR/media-frags/">Media Fragments URI specification</a>.
-     */
+    /** The URI of the <a href="http://www.w3.org/TR/media-frags/">Media Fragments URI specification</a>. */
     public static final URI MEDIA_FRAGMENT_SPECIFICATION_URI = URI.create("http://www.w3.org/TR/media-frags/");
 
-    /**
-     * The logger for the MediaFragmentSelector.
-     */
+    /** The logger for the MediaFragmentSelector. */
     private static final Logger LOGGER = LoggerFactory.getLogger(MediaFragmentSelector.class, MessageCodes.BUNDLE);
 
-    /**
-     * The selector's end.
-     */
+    /** The selector's end. */
     private float myEnd;
 
-    /**
-     * The selector's height.
-     */
+    /** The selector's height. */
     private int myHeight;
 
-    /**
-     * The selector's media fragment.
-     */
+    /** The selector's media fragment. */
     private final MediaFragment myMediaFragment;
 
-    /**
-     * The selector's start.
-     */
+    /** The selector's start. */
     private float myStart;
 
-    /**
-     * The selector's width.
-     */
+    /** The selector's width. */
     private int myWidth;
 
-    /**
-     * The selector's x-coordinate.
-     */
+    /** The selector's x-coordinate. */
     private int myX;
 
-    /**
-     * The selector's y-coordinate.
-     */
+    /** The selector's y-coordinate. */
     private int myY;
 
     /**
@@ -183,7 +163,6 @@ public class MediaFragmentSelector implements FragmentSelector {
     public MediaFragmentSelector(final String aFragment) {
         try {
             final String fragmentValue = aFragment.charAt(0) == '#' ? aFragment.substring(1) : aFragment;
-
             myMediaFragment = new FragmentParser(new StringReader(fragmentValue)).run(MediaFragment.Type.FRAGMENT);
         } catch (final ParseException details) {
             throw new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_042, aFragment, details));
@@ -191,13 +170,11 @@ public class MediaFragmentSelector implements FragmentSelector {
 
         if (myMediaFragment.hasSpatialFragment()) {
             final SpatialFragment sf = myMediaFragment.getSpatialFragment();
-
             setXYWidthHeight((int) sf.getX(), (int) sf.getY(), (int) sf.getWidth(), (int) sf.getHeight());
         }
 
         if (myMediaFragment.hasTemporalFragment()) {
             final TemporalFragment<?> tf = myMediaFragment.getTemporalFragment();
-
             setStartEnd((float) tf.getStart().getValue(), (float) tf.getEnd().getValue());
         }
     }

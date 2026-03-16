@@ -72,6 +72,7 @@
                 "styleClass": "author2highlight",
                 "selector": {
                   "type": "FragmentSelector",
+                  "conformsTo": "http://www.w3.org/TR/media-frags/",
                   "value": "xywh=700,1250,1850,1150"
                 }
               }
@@ -99,6 +100,7 @@
                 "styleClass": "author2highlight",
                 "selector": {
                   "type": "FragmentSelector",
+                  "conformsTo": "http://www.w3.org/TR/media-frags/",
                   "value": "xywh=170,160,2200,1000"
                 }
               }

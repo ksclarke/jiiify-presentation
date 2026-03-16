@@ -3,24 +3,11 @@ package info.freelibrary.iiif.presentation.v3.utils.json;
 
 import static info.freelibrary.util.Constants.EMPTY;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Optional;
-
-import org.jsoup.Jsoup;
-import org.jsoup.parser.Parser;
-
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.warnings.PMD;
-
 import info.freelibrary.iiif.presentation.v3.properties.selectors.AudioContentSelector;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.ImageApiSelector;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
@@ -30,20 +17,26 @@ import info.freelibrary.iiif.presentation.v3.properties.selectors.SvgSelector;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.VisualContentSelector;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.PMD;
+import org.jsoup.Jsoup;
+import org.jsoup.parser.Parser;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Optional;
 
 /**
  * A deserializer for classes that implement the Selector interface.
  */
 public class SelectorDeserializer extends StdDeserializer<Selector> {
 
-    /**
-     * The SelectorDeserializer's logger.
-     */
+    /** The SelectorDeserializer's logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(SelectorDeserializer.class, MessageCodes.BUNDLE);
 
-    /**
-     * The <code>serialVersionUID</code> for SelectorDeserializer.
-     */
+    /** The <code>serialVersionUID</code> for SelectorDeserializer. */
     private static final long serialVersionUID = 505267696639975498L;
 
     /**

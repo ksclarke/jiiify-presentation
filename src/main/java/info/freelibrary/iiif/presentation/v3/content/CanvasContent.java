@@ -1,18 +1,16 @@
 
 package info.freelibrary.iiif.presentation.v3.content;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import info.freelibrary.iiif.presentation.v3.Resource;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.annotation.PaintingAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotation.SupplementingAnnotation;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
-import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
+
+import java.util.List;
 
 /**
  * Canvas content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
@@ -26,8 +24,8 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
      * @param aID A canvas content resource ID
      */
     public CanvasContent(final String aID) {
-        super(ResourceTypes.CANVAS, aID, ResourceBehavior.class, null);
-        myFormat = MediaType.APPLICATION_JSON;
+        super(ResourceTypes.CANVAS, aID, true, ResourceBehavior.class, null);
+        // myFormat = MediaType.APPLICATION_JSON;
     }
 
     /**
@@ -35,7 +33,7 @@ public class CanvasContent extends AbstractContentResource<CanvasContent>
      */
     private CanvasContent() {
         super(ResourceTypes.CANVAS, ResourceBehavior.class);
-        myFormat = MediaType.APPLICATION_JSON;
+        // myFormat = MediaType.APPLICATION_JSON;
     }
 
     @Override

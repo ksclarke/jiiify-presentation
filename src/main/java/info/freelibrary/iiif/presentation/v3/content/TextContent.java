@@ -1,22 +1,24 @@
 
 package info.freelibrary.iiif.presentation.v3.content;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import info.freelibrary.iiif.presentation.v3.Resource;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.json.TextContentSerializer;
+
+import java.util.List;
 
 /**
  * Text content that can be associated with an annotation or used as a thumbnail.
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
+@JsonSerialize(using = TextContentSerializer.class)
 public class TextContent extends AbstractContentResource<TextContent>
         implements AnnotatedContentResource<TextContent>, Resource<TextContent> {
 
@@ -26,7 +28,7 @@ public class TextContent extends AbstractContentResource<TextContent>
      * @param aID An text content resource ID
      */
     public TextContent(final String aID) {
-        super(ResourceTypes.TEXT, aID, ResourceBehavior.class, null);
+        super(ResourceTypes.TEXT, aID, false, ResourceBehavior.class, null);
     }
 
     /**

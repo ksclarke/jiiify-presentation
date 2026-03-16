@@ -61,11 +61,7 @@
           "id": "https://example.org/iiif/book1/page1/annotation/supplementing-1",
           "type": "Annotation",
           "motivation": "supplementing",
-          "body": {
-            "id": "https://example.org/iiif/book1/page1/ocr.xml",
-            "type": "Text",
-            "format": "application/xml"
-          },
+          "body": "https://example.org/iiif/book1/page1/ocr.xml",
           "target": "https://example.org/iiif/book1/page1/canvas-1"
         }
       ]

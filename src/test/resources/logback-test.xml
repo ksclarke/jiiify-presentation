@@ -28,7 +28,7 @@
   <logger name="info.freelibrary.json" level="WARN" additivity="false">
     <appender-ref ref="STDOUT" />
   </logger>
-  <logger name="info.freelibrary.iiif.presentation.v3.utils.CookbookUtils" level="WARN" additivity="false">
+  <logger name="info.freelibrary.iiif.presentation.v3.utils.CookbookUtils" level="ERROR" additivity="false">
     <appender-ref ref="FILE"/>
   </logger>
 

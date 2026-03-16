@@ -4,6 +4,7 @@ package info.freelibrary.iiif.presentation.v3.annotation;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.content.ContentResource;
+import info.freelibrary.iiif.presentation.v3.content.TextContent;
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.Selector;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
@@ -25,7 +26,7 @@ public non-sealed class SpecificResource extends Target implements ContentResour
     private Selector mySelector;
 
     /** The specific resource's source. */
-    private Source mySource;
+    private ContentResource mySource;
 
     /** The specific resource's styleClass. */
     private String myStyleClass;
@@ -35,7 +36,7 @@ public non-sealed class SpecificResource extends Target implements ContentResour
      *
      * @param aSource A source
      */
-    public SpecificResource(final Source aSource) {
+    public SpecificResource(final ContentResource aSource) {
         mySource = aSource;
     }
 
@@ -45,7 +46,7 @@ public non-sealed class SpecificResource extends Target implements ContentResour
      * @param aSource A source
      * @param aSelector A selector
      */
-    public SpecificResource(final Source aSource, final Selector aSelector) {
+    public SpecificResource(final ContentResource aSource, final Selector aSelector) {
         mySource = aSource;
         mySelector = aSelector;
     }
@@ -57,7 +58,7 @@ public non-sealed class SpecificResource extends Target implements ContentResour
      * @param aSelector A selector
      */
     public SpecificResource(final String aSource, final Selector aSelector) {
-        this(new Source(aSource), aSelector);
+        this(new TextContent(aSource), aSelector);
     }
 
     /**
@@ -67,7 +68,7 @@ public non-sealed class SpecificResource extends Target implements ContentResour
      * @param aSource A source
      * @param aSelector A selector
      */
-    public SpecificResource(final String aID, final Source aSource, final Selector aSelector) {
+    public SpecificResource(final String aID, final ContentResource aSource, final Selector aSelector) {
         this(aSource, aSelector);
         super.setID(aID);
     }
@@ -80,7 +81,7 @@ public non-sealed class SpecificResource extends Target implements ContentResour
      * @param aSelector A selector
      */
     public SpecificResource(final String aID, final String aSource, final Selector aSelector) {
-        this(aID, new Source(aSource), aSelector);
+        this(aID, new TextContent(aSource), aSelector);
     }
 
     /**
@@ -133,7 +134,7 @@ public non-sealed class SpecificResource extends Target implements ContentResour
      *
      * @return The specific resource's source
      */
-    public Source getSource() {
+    public ContentResource getSource() {
         return mySource;
     }
 
@@ -201,7 +202,7 @@ public non-sealed class SpecificResource extends Target implements ContentResour
      * @param aSource A source
      * @return This specific resource
      */
-    public SpecificResource setSource(final Source aSource) {
+    public SpecificResource setSource(final ContentResource aSource) {
         mySource = Objects.requireNonNull(aSource);
         return this;
     }

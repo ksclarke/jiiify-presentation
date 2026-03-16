@@ -3,12 +3,6 @@ package info.freelibrary.iiif.presentation.v3.content;
 
 import static info.freelibrary.util.Constants.SINGLE_INSTANCE;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -18,10 +12,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import info.freelibrary.util.ListUtils;
-import info.freelibrary.util.warnings.JDK;
-
 import info.freelibrary.iiif.presentation.v3.AbstractResource;
 import info.freelibrary.iiif.presentation.v3.AnnotationPage;
 import info.freelibrary.iiif.presentation.v3.annotation.WebAnnotation;
@@ -32,6 +22,14 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeDeserializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeKeySerializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeSerializer;
+import info.freelibrary.util.ListUtils;
+import info.freelibrary.util.warnings.JDK;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * An abstract content resource class that specific content types can extend.
@@ -67,12 +65,13 @@ public abstract class AbstractContentResource<T extends AbstractContentResource<
      *
      * @param aType The type of resource
      * @param aID The resource ID
+     * @param aHttpsID Whether the resource ID should be HTTPS
      * @param aBehaviorClass A class of behavior for this resource
      * @param aMediaTypeHint An optional hint as to the class of media type should be used
      */
-    protected AbstractContentResource(final String aType, final String aID,
+    protected AbstractContentResource(final String aType, final String aID, final boolean aHttpsID,
             final Class<? extends Behavior> aBehaviorClass, final String aMediaTypeHint) {
-        super(aType, aID, aBehaviorClass);
+        super(aType, aID, aHttpsID, aBehaviorClass);
 
         myFormat = aMediaTypeHint != null ? MediaType.parse(aID, aMediaTypeHint).orElse(null)
                 : MediaType.parse(aID).orElse(null);
@@ -149,7 +148,6 @@ public abstract class AbstractContentResource<T extends AbstractContentResource<
      */
     @JsonIgnore
     @SafeVarargs
-    @SuppressWarnings({ JDK.UNCHECKED })
     public final T setAnnotations(final AnnotationPage<WebAnnotation>... aAnnotationArray) {
         return setAnnotations(Arrays.asList(aAnnotationArray));
     }
@@ -194,7 +192,7 @@ public abstract class AbstractContentResource<T extends AbstractContentResource<
     @JsonGetter(JsonKeys.LANGUAGE)
     private Object getLanguage() {
         final List<String> languages = getLanguages();
-        return languages.size() == SINGLE_INSTANCE ? languages.get(0) : languages;
+        return languages.size() == SINGLE_INSTANCE ? languages.getFirst() : languages;
     }
 
     /**
