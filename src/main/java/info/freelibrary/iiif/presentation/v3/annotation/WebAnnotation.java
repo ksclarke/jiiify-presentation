@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.CanvasResource;
+import info.freelibrary.iiif.presentation.v3.ContextList;
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.content.ContentResource;
 import info.freelibrary.iiif.presentation.v3.id.UriUtils;
@@ -20,6 +21,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.WebAnnotationSerializer;
 import info.freelibrary.util.I18nRuntimeException;
 import info.freelibrary.util.ListUtils;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -57,6 +59,9 @@ public class WebAnnotation implements Annotation<WebAnnotation> {
 
     /** The annotation's stylesheet. */
     private String myStylesheet;
+
+    /** The context list for freestanding annotations. */
+    private ContextList myContexts;
 
     /**
      * Creates a new Web annotation.
@@ -390,6 +395,35 @@ public class WebAnnotation implements Annotation<WebAnnotation> {
      */
     public WebAnnotation setStylesheet(final String aStylesheet) {
         myStylesheet = aStylesheet;
+        return this;
+    }
+
+    /**
+     * Gets the resource's contexts.
+     *
+     * @return The contexts
+     */
+    public List<URI> getContexts() {
+        if (myContexts == null) {
+            myContexts = new ContextList();
+        }
+
+        return myContexts;
+    }
+
+    /**
+     * Sets the contexts for Web annotations used independently.
+     *
+     * @param aContextList A list of contexts
+     * @return This Web annotation
+     */
+    public WebAnnotation setContexts(final List<URI> aContextList) {
+        if (aContextList instanceof final ContextList contextList) {
+            myContexts = contextList;
+        } else {
+            myContexts = new ContextList(aContextList);
+        }
+
         return this;
     }
 }

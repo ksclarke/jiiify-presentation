@@ -13,6 +13,7 @@ import info.freelibrary.iiif.presentation.v3.annotation.AssessingAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotation.BookmarkingAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotation.ClassifyingAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotation.CommentingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.ContentStateAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotation.DescribingAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotation.EditingAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotation.HighlightingAnnotation;
@@ -42,6 +43,7 @@ import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.util.Constants;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.ThrowingBiFunction;
@@ -50,6 +52,7 @@ import info.freelibrary.util.warnings.PMD;
 
 import java.io.IOException;
 import java.io.Serial;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -83,6 +86,7 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
     }
 
     @Override
+    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY, PMD.AVOID_DEEPLY_NESTED_IF_STMTS })
     public WebAnnotation deserialize(final JsonParser aParser, final DeserializationContext aContext)
             throws IOException {
         final ThrowingBiFunction<String, JsonNode, String, InputCoercionException> check = (aKey, aNode) -> {
@@ -101,29 +105,51 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
 
         final JsonNode node = aParser.getCodec().readTree(aParser);
         final JsonNode motivationNode = node.get(JsonKeys.MOTIVATION);
-        final String motivation = motivationNode == null ? null : motivationNode.asText();
         final String id = unwrap(check).apply(JsonKeys.ID, node.get(JsonKeys.ID));
-        final WebAnnotation annotation = getAnnotation(id, motivation, node, aParser);
         final Optional<TimeMode> timeMode = getTimeMode(node.get(JsonKeys.TIMEMODE));
         final Optional<Label> label = getLabel(node.get(JsonKeys.LABEL));
+        final JsonNode contexts = node.get(JsonKeys.CONTEXT);
         final JsonNode bodyNode = node.get(JsonKeys.BODY);
+        final WebAnnotation annotation;
+        final String motivation;
 
+        // We can read an array of motivations, but just take the first one.
+        if (motivationNode != null && motivationNode.isArray()) {
+            motivation = motivationNode.get(0).asText();
+        } else if (motivationNode != null && motivationNode.isTextual()) {
+            motivation = motivationNode.asText();
+        } else {
+            motivation = null;
+        }
+
+        annotation = getAnnotation(id, motivation, node, aParser);
         annotation.setBody(getBody(bodyNode, unwrap(check)));
         annotation.setChoice(getChoice(bodyNode));
 
-        if (timeMode.isPresent()) {
-            annotation.setTimeMode(timeMode.get());
-        }
+        annotation.getMotivation().ifPresent(purpose -> {
+            if (purpose.isSameAs(Purpose.CONTENT_STATE)) {
+                final ContentStateAnnotation contentStateAnnotation = (ContentStateAnnotation) annotation;
 
-        if (label.isPresent()) {
-            annotation.setLabel(label.get());
-        }
+                if (contexts != null) {
+                    if (contexts.size() == Constants.SINGLE_INSTANCE) {
+                        contentStateAnnotation.getContexts().add(URI.create(node.get(0).asText()));
+                    } else {
+                        contexts.forEach(context -> {
+                            contentStateAnnotation.getContexts().add(URI.create(context.asText()));
+                        });
+                    }
+                }
+            }
+        });
+
+        timeMode.ifPresent(annotation::setTimeMode);
+        label.ifPresent(annotation::setLabel);
 
         return annotation;
     }
 
     /**
-     * Assists with keeping error throwing code in the main flow of things concise.
+     * Assists with keeping error-throwing code in the main flow of things concise.
      *
      * @param aParser A JSON parser
      * @param aMessage An error message
@@ -166,6 +192,7 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
                 case QUESTIONING -> new QuestioningAnnotation(aID, getTargets(targetsNode, aParser));
                 case REPLYING -> new ReplyingAnnotation(aID, getTargets(targetsNode, aParser));
                 case TAGGING -> new TaggingAnnotation(aID, getTargets(targetsNode, aParser));
+                case CONTENT_STATE -> new ContentStateAnnotation(aID, getTargets(targetsNode, aParser));
                 default -> throw new IllegalArgumentException(aMotivation);
             };
 
@@ -238,10 +265,7 @@ public class WebAnnotationDeserializer extends StdDeserializer<WebAnnotation> {
     private boolean getChoice(final JsonNode aBodyNode) {
         if (aBodyNode != null) {
             final JsonNode choiceNode = aBodyNode.get(JsonKeys.TYPE);
-
-            if (choiceNode != null && choiceNode.isValueNode() && ResourceTypes.CHOICE.equals(choiceNode.asText())) {
-                return true;
-            }
+            return choiceNode != null && choiceNode.isValueNode() && ResourceTypes.CHOICE.equals(choiceNode.asText());
         }
 
         return false;

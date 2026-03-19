@@ -393,7 +393,6 @@ public class Mapper {
      *
      * @throws IOException If there is trouble closing the database
      */
-    @SuppressWarnings({ PMD.USE_TRY_WITH_RESOURCES })
     public void close() throws IOException {
         try {
             myZipWriter.close();

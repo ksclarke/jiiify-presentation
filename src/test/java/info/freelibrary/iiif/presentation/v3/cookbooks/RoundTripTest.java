@@ -12,7 +12,6 @@ import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.util.StringUtils;
 import info.freelibrary.util.warnings.Sonar;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
@@ -1250,13 +1249,9 @@ public class RoundTripTest extends AbstractCookbookTest {
      * @throws IOException If there is trouble reading the annotation file
      */
     @Test
-    @Ignore
     public final void test0485ContentstateCanvasRegion() throws IOException {
         final String expected = getExpected("0485-contentstate-canvas-region/annotation");
         final String found = JSON.readValue(expected, Annotation.class).toString();
-
-        System.out.println(expected);
-        System.out.println(found);
 
         assertEquals(myTestName, expected, found);
     }

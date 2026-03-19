@@ -1,23 +1,24 @@
 
 package info.freelibrary.iiif.presentation.v3.annotation;
 
-import java.util.List;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.warnings.Eclipse;
-
 import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.CanvasResource;
 import info.freelibrary.iiif.presentation.v3.Manifest;
+import info.freelibrary.iiif.presentation.v3.content.ContentResource;
 import info.freelibrary.iiif.presentation.v3.id.Minter;
+import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.json.WebAnnotationDeserializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.WebAnnotationSerializer;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.Eclipse;
+
+import java.net.URI;
+import java.util.List;
 
 /**
  * An annotation used to associate a reply with the target.
@@ -159,6 +160,51 @@ public class ReplyingAnnotation extends WebAnnotation implements Annotation<WebA
     @SuppressWarnings(Eclipse.UNUSED)
     private ReplyingAnnotation() {
         super();
+    }
+
+    @Override
+    public ReplyingAnnotation setBody(final ContentResource... aBody) {
+        return (ReplyingAnnotation) super.setBody(aBody);
+    }
+
+    @Override
+    public ReplyingAnnotation setBody(final List<ContentResource> aResourceList) {
+        return (ReplyingAnnotation) super.setBody(aResourceList);
+    }
+
+    @Override
+    public ReplyingAnnotation setChoice(final boolean aChoice) {
+        return (ReplyingAnnotation) super.setChoice(aChoice);
+    }
+
+    @Override
+    public ReplyingAnnotation setID(final String aID) {
+        return (ReplyingAnnotation) super.setID(aID);
+    }
+
+    @Override
+    public ReplyingAnnotation setLabel(final Label aLabel) {
+        return (ReplyingAnnotation) super.setLabel(aLabel);
+    }
+
+    @Override
+    public ReplyingAnnotation setTargets(final Target... aTargetArray) {
+        return (ReplyingAnnotation) super.setTargets(aTargetArray);
+    }
+
+    @Override
+    public ReplyingAnnotation setTargets(final List<Target> aTargetList) {
+        return (ReplyingAnnotation) super.setTargets(aTargetList);
+    }
+
+    @Override
+    public ReplyingAnnotation setStylesheet(final String aStylesheet) {
+        return (ReplyingAnnotation) super.setStylesheet(aStylesheet);
+    }
+
+    @Override
+    public ReplyingAnnotation setContexts(final List<URI> aContextList) {
+        return (ReplyingAnnotation) super.setContexts(aContextList);
     }
 
     @Override

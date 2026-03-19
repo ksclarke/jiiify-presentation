@@ -1,23 +1,24 @@
 
 package info.freelibrary.iiif.presentation.v3.annotation;
 
-import java.util.List;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.warnings.Eclipse;
-
 import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.CanvasResource;
 import info.freelibrary.iiif.presentation.v3.Manifest;
+import info.freelibrary.iiif.presentation.v3.content.ContentResource;
 import info.freelibrary.iiif.presentation.v3.id.Minter;
+import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.json.WebAnnotationDeserializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.WebAnnotationSerializer;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.Eclipse;
+
+import java.net.URI;
+import java.util.List;
 
 /**
  * An annotation used to associate a highlight with the target.
@@ -159,6 +160,51 @@ public class HighlightingAnnotation extends WebAnnotation implements Annotation<
     @SuppressWarnings(Eclipse.UNUSED)
     private HighlightingAnnotation() {
         super();
+    }
+
+    @Override
+    public HighlightingAnnotation setBody(final ContentResource... aBody) {
+        return (HighlightingAnnotation) super.setBody(aBody);
+    }
+
+    @Override
+    public HighlightingAnnotation setBody(final List<ContentResource> aResourceList) {
+        return (HighlightingAnnotation) super.setBody(aResourceList);
+    }
+
+    @Override
+    public HighlightingAnnotation setChoice(final boolean aChoice) {
+        return (HighlightingAnnotation) super.setChoice(aChoice);
+    }
+
+    @Override
+    public HighlightingAnnotation setID(final String aID) {
+        return (HighlightingAnnotation) super.setID(aID);
+    }
+
+    @Override
+    public HighlightingAnnotation setLabel(final Label aLabel) {
+        return (HighlightingAnnotation) super.setLabel(aLabel);
+    }
+
+    @Override
+    public HighlightingAnnotation setTargets(final Target... aTargetArray) {
+        return (HighlightingAnnotation) super.setTargets(aTargetArray);
+    }
+
+    @Override
+    public HighlightingAnnotation setTargets(final List<Target> aTargetList) {
+        return (HighlightingAnnotation) super.setTargets(aTargetList);
+    }
+
+    @Override
+    public HighlightingAnnotation setStylesheet(final String aStylesheet) {
+        return (HighlightingAnnotation) super.setStylesheet(aStylesheet);
+    }
+
+    @Override
+    public HighlightingAnnotation setContexts(final List<URI> aContextList) {
+        return (HighlightingAnnotation) super.setContexts(aContextList);
     }
 
     @Override

@@ -3,6 +3,7 @@ package info.freelibrary.iiif.presentation.v3.utils.json;
 
 import static info.freelibrary.util.Constants.SINGLE_INSTANCE;
 import static info.freelibrary.util.ThrowingBiFunction.unwrap;
+import static info.freelibrary.util.ThrowingConsumer.sneaky;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -12,7 +13,8 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
-import info.freelibrary.iiif.presentation.v3.annotation.Motivation;
+import info.freelibrary.iiif.presentation.v3.annotation.ContentStateAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.Purpose;
 import info.freelibrary.iiif.presentation.v3.annotation.Target;
 import info.freelibrary.iiif.presentation.v3.annotation.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.content.ContentResource;
@@ -27,6 +29,7 @@ import info.freelibrary.util.warnings.PMD;
 
 import java.io.IOException;
 import java.io.Serial;
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,7 +58,6 @@ public class WebAnnotationSerializer extends StdSerializer<WebAnnotation> {
             final SerializerProvider aProvider) throws IOException {
         final List<ContentResource> resources = aWebAnnotation.getBody();
         final List<Target> targets = aWebAnnotation.getTargets();
-        final Optional<Motivation> motivation = aWebAnnotation.getMotivation();
         final Optional<TimeMode> timeMode = aWebAnnotation.getTimeMode();
         final Optional<Label> label = aWebAnnotation.getLabel();
         final Optional<String> stylesheet = aWebAnnotation.getStylesheet();
@@ -72,13 +74,24 @@ public class WebAnnotationSerializer extends StdSerializer<WebAnnotation> {
         try {
             // Start writing our JSON output
             aJsonGenerator.writeStartObject();
+
+            aWebAnnotation.getMotivation().ifPresent(sneaky(motivation -> {
+                if (motivation.isSameAs(Purpose.CONTENT_STATE)) {
+                    final ContentStateAnnotation annotation = (ContentStateAnnotation) aWebAnnotation;
+                    final String[] uris = annotation.getContexts().stream().map(URI::toString).toArray(String[]::new);
+
+                    aJsonGenerator.writeFieldName(JsonKeys.CONTEXT);
+                    aJsonGenerator.writeArray(uris, 0, uris.length);
+                }
+            }));
+
             aJsonGenerator.writeObjectField(JsonKeys.ID, unwrap(check).apply(JsonKeys.ID, aWebAnnotation.getID()));
             aJsonGenerator.writeObjectField(JsonKeys.TYPE, ResourceTypes.ANNOTATION);
 
-            if (motivation.isPresent()) {
+            aWebAnnotation.getMotivation().ifPresent(sneaky(motivation -> {
                 aJsonGenerator.writeObjectField(JsonKeys.MOTIVATION,
-                        unwrap(check).apply(JsonKeys.MOTIVATION, motivation.get().toString()));
-            }
+                        unwrap(check).apply(JsonKeys.MOTIVATION, motivation.toString()));
+            }));
 
             if (stylesheet.isPresent()) {
                 aJsonGenerator.writeObjectField(JsonKeys.STYLESHEET, stylesheet.get());

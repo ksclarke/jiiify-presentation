@@ -1,23 +1,24 @@
 
 package info.freelibrary.iiif.presentation.v3.annotation;
 
-import java.util.List;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.warnings.Eclipse;
-
 import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.CanvasResource;
 import info.freelibrary.iiif.presentation.v3.Manifest;
+import info.freelibrary.iiif.presentation.v3.content.ContentResource;
 import info.freelibrary.iiif.presentation.v3.id.Minter;
+import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.json.WebAnnotationDeserializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.WebAnnotationSerializer;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.Eclipse;
+
+import java.net.URI;
+import java.util.List;
 
 /**
  * An annotation used to associate a question with the target.
@@ -159,6 +160,51 @@ public class QuestioningAnnotation extends WebAnnotation implements Annotation<W
     @SuppressWarnings(Eclipse.UNUSED)
     private QuestioningAnnotation() {
         super();
+    }
+
+    @Override
+    public QuestioningAnnotation setBody(final ContentResource... aBody) {
+        return (QuestioningAnnotation) super.setBody(aBody);
+    }
+
+    @Override
+    public QuestioningAnnotation setBody(final List<ContentResource> aResourceList) {
+        return (QuestioningAnnotation) super.setBody(aResourceList);
+    }
+
+    @Override
+    public QuestioningAnnotation setChoice(final boolean aChoice) {
+        return (QuestioningAnnotation) super.setChoice(aChoice);
+    }
+
+    @Override
+    public QuestioningAnnotation setID(final String aID) {
+        return (QuestioningAnnotation) super.setID(aID);
+    }
+
+    @Override
+    public QuestioningAnnotation setLabel(final Label aLabel) {
+        return (QuestioningAnnotation) super.setLabel(aLabel);
+    }
+
+    @Override
+    public QuestioningAnnotation setTargets(final Target... aTargetArray) {
+        return (QuestioningAnnotation) super.setTargets(aTargetArray);
+    }
+
+    @Override
+    public QuestioningAnnotation setTargets(final List<Target> aTargetList) {
+        return (QuestioningAnnotation) super.setTargets(aTargetList);
+    }
+
+    @Override
+    public QuestioningAnnotation setStylesheet(final String aStylesheet) {
+        return (QuestioningAnnotation) super.setStylesheet(aStylesheet);
+    }
+
+    @Override
+    public QuestioningAnnotation setContexts(final List<URI> aContextList) {
+        return (QuestioningAnnotation) super.setContexts(aContextList);
     }
 
     @Override
