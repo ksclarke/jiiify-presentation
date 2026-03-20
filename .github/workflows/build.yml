@@ -38,19 +38,19 @@ jobs:
             graalvm: "25"
             maven: "3.8.6"
             suffix: "linux-x64"
-            build_args: ""
+            build_args: "-Dplaceholder=true"
           - os: "macos-latest"
             java: "25"
             graalvm: "25"
             maven: "3.8.6"
             suffix: "macos-x64"
-            build_args: ""
+            build_args: "-Dplaceholder=true"
           - os: "windows-latest"
             java: "25"
             graalvm: "25"
             maven: "3.8.6"
             suffix: "windows-x64"
-            build_args: ""
+            build_args: "-Dplaceholder=true"
 
     steps:
       - name: Check out code
@@ -85,7 +85,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn -B -ntp -Pnative -Pjava${{ matrix.java }} verify javadoc:javadoc ${{ matrix.build_args }}
+          mvn -B -ntp -Pnative -Pjava${{ matrix.java }} "${{ matrix.build_args }}" verify javadoc:javadoc
 
       - name: Build with Maven as a Java build
         if: ${{ github.base_ref != 'develop' }}
@@ -93,5 +93,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn -B -ntp -Pjava${{ matrix.java }} verify javadoc:javadoc ${{ matrix.build_args }}
+          mvn -B -ntp -Pjava${{ matrix.java }} "${{ matrix.build_args }}" verify javadoc:javadoc
 
