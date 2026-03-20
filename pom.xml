@@ -226,6 +226,12 @@
 
             <plugin>
                 <artifactId>maven-pmd-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>**/info/freelibrary/iiif/presentation/v3/utils/csv/*.java</exclude>
+                        <exclude>**/info/freelibrary/iiif/presentation/v3/utils/cmdline/*.java</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
 
             <plugin>
@@ -401,13 +407,14 @@
                                 <configuration>
                                     <rules combine.self="override">
                                         <requireJavaVersion>
-                                            <version>[24,)</version>
+                                            <version>[25,)</version>
                                         </requireJavaVersion>
                                     </rules>
                                 </configuration>
                             </execution>
                         </executions>
                     </plugin>
+
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-compiler-plugin</artifactId>
@@ -487,6 +494,13 @@
                               --add-opens=java.base/java.lang=ALL-UNNAMED
                               --enable-native-access=ALL-UNNAMED
                             ]]></argLine>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <artifactId>maven-pmd-plugin</artifactId>
+                        <configuration>
+                            <excludes combine.self="override"/>
                         </configuration>
                     </plugin>
                 </plugins>

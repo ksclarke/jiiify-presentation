@@ -11,10 +11,7 @@ import info.freelibrary.iiif.presentation.v3.annotation.Target;
 import info.freelibrary.iiif.presentation.v3.properties.PartOf;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.Selector;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.I18nRuntimeException;
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.ThrowingConsumer;
 import info.freelibrary.util.ThrowingRunnable;
 import info.freelibrary.util.warnings.PMD;
@@ -33,9 +30,6 @@ public class AnnotationTargetSerializer extends StdSerializer<Target> {
     /** The {@code }serialVersionUID} for a {@code AnnotationTargetSerializer}. */
     @Serial
     private static final long serialVersionUID = -5745518273140398531L;
-
-    /** The logger for this class. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationTargetSerializer.class, MessageCodes.BUNDLE);
 
     /**
      * Creates a new <code>AnnotationTargetSerializer</code>.
@@ -102,7 +96,6 @@ public class AnnotationTargetSerializer extends StdSerializer<Target> {
                         aJsonGenerator.writeEndObject();
                     }
                     case ResourceTypes.CANVAS -> {
-                        LOGGER.info("=========================================================");
                         final Target target = aTarget;
                         final List<PartOf> partOfList = target.getPartOfs();
 

@@ -145,7 +145,7 @@ public class AnnotationTargetDeserializer extends StdDeserializer<Target> {
                     final List<PartOf> partOfs = new ArrayList<>();
 
                     while (iterator.hasNext()) {
-                        partOfs.add(JSON.getReader(PartOf.class).readValue(partOfNode));
+                        partOfs.add(JSON.getReader(PartOf.class).readValue(iterator.next()));
                     }
 
                     target = new Target(idNode.asText(), typeNode.asText(), partOfs);

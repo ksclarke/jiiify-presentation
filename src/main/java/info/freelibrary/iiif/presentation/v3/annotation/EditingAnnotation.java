@@ -1,30 +1,30 @@
 
 package info.freelibrary.iiif.presentation.v3.annotation;
 
-import java.util.List;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.warnings.Eclipse;
-
-import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.CanvasResource;
 import info.freelibrary.iiif.presentation.v3.Manifest;
+import info.freelibrary.iiif.presentation.v3.content.ContentResource;
 import info.freelibrary.iiif.presentation.v3.id.Minter;
+import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.json.WebAnnotationDeserializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.WebAnnotationSerializer;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.Eclipse;
+
+import java.net.URI;
+import java.util.List;
 
 /**
  * An annotation used to associate an edit with the target.
  */
 @JsonSerialize(using = WebAnnotationSerializer.class)
 @JsonDeserialize(using = WebAnnotationDeserializer.class)
-public class EditingAnnotation extends WebAnnotation implements Annotation<WebAnnotation> {
+public class EditingAnnotation extends WebAnnotation {
 
     /** The logger for editing annotations. */
     private static final Logger LOGGER = LoggerFactory.getLogger(EditingAnnotation.class, MessageCodes.BUNDLE);
@@ -154,11 +154,56 @@ public class EditingAnnotation extends WebAnnotation implements Annotation<WebAn
     }
 
     /**
-     * Creates a editing annotation. This is used by Jackson's deserialization processes.
+     * Creates an editing annotation. This is used by Jackson's deserialization processes.
      */
     @SuppressWarnings(Eclipse.UNUSED)
     private EditingAnnotation() {
         super();
+    }
+
+    @Override
+    public EditingAnnotation setBody(final ContentResource... aBody) {
+        return (EditingAnnotation) super.setBody(aBody);
+    }
+
+    @Override
+    public EditingAnnotation setBody(final List<ContentResource> aResourceList) {
+        return (EditingAnnotation) super.setBody(aResourceList);
+    }
+
+    @Override
+    public EditingAnnotation setChoice(final boolean aChoice) {
+        return (EditingAnnotation) super.setChoice(aChoice);
+    }
+
+    @Override
+    public EditingAnnotation setID(final String aID) {
+        return (EditingAnnotation) super.setID(aID);
+    }
+
+    @Override
+    public EditingAnnotation setLabel(final Label aLabel) {
+        return (EditingAnnotation) super.setLabel(aLabel);
+    }
+
+    @Override
+    public EditingAnnotation setTargets(final Target... aTargetArray) {
+        return (EditingAnnotation) super.setTargets(aTargetArray);
+    }
+
+    @Override
+    public EditingAnnotation setTargets(final List<Target> aTargetList) {
+        return (EditingAnnotation) super.setTargets(aTargetList);
+    }
+
+    @Override
+    public EditingAnnotation setStylesheet(final String aStylesheet) {
+        return (EditingAnnotation) super.setStylesheet(aStylesheet);
+    }
+
+    @Override
+    public EditingAnnotation setContexts(final List<URI> aContextList) {
+        return (EditingAnnotation) super.setContexts(aContextList);
     }
 
     @Override

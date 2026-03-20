@@ -1,23 +1,24 @@
 
 package info.freelibrary.iiif.presentation.v3.annotation;
 
-import java.util.List;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.warnings.Eclipse;
-
 import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.CanvasResource;
 import info.freelibrary.iiif.presentation.v3.Manifest;
+import info.freelibrary.iiif.presentation.v3.content.ContentResource;
 import info.freelibrary.iiif.presentation.v3.id.Minter;
+import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.json.WebAnnotationDeserializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.WebAnnotationSerializer;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.Eclipse;
+
+import java.net.URI;
+import java.util.List;
 
 /**
  * An annotation used to identify a target.
@@ -159,6 +160,51 @@ public class IdentifyingAnnotation extends WebAnnotation implements Annotation<W
     @SuppressWarnings(Eclipse.UNUSED)
     private IdentifyingAnnotation() {
         super();
+    }
+
+    @Override
+    public IdentifyingAnnotation setBody(final ContentResource... aBody) {
+        return (IdentifyingAnnotation) super.setBody(aBody);
+    }
+
+    @Override
+    public IdentifyingAnnotation setBody(final List<ContentResource> aResourceList) {
+        return (IdentifyingAnnotation) super.setBody(aResourceList);
+    }
+
+    @Override
+    public IdentifyingAnnotation setChoice(final boolean aChoice) {
+        return (IdentifyingAnnotation) super.setChoice(aChoice);
+    }
+
+    @Override
+    public IdentifyingAnnotation setID(final String aID) {
+        return (IdentifyingAnnotation) super.setID(aID);
+    }
+
+    @Override
+    public IdentifyingAnnotation setLabel(final Label aLabel) {
+        return (IdentifyingAnnotation) super.setLabel(aLabel);
+    }
+
+    @Override
+    public IdentifyingAnnotation setTargets(final Target... aTargetArray) {
+        return (IdentifyingAnnotation) super.setTargets(aTargetArray);
+    }
+
+    @Override
+    public IdentifyingAnnotation setTargets(final List<Target> aTargetList) {
+        return (IdentifyingAnnotation) super.setTargets(aTargetList);
+    }
+
+    @Override
+    public IdentifyingAnnotation setStylesheet(final String aStylesheet) {
+        return (IdentifyingAnnotation) super.setStylesheet(aStylesheet);
+    }
+
+    @Override
+    public IdentifyingAnnotation setContexts(final List<URI> aContextList) {
+        return (IdentifyingAnnotation) super.setContexts(aContextList);
     }
 
     @Override
