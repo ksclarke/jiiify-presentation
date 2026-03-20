@@ -20,31 +20,37 @@ jobs:
             graalvm: "25"
             maven: "3.8.6"
             suffix: "linux-x64"
+            build_args: "-Dpmd.skip=true"
           - os: "macos-latest"
             java: "21"
             graalvm: "25"
             maven: "3.8.6"
             suffix: "macos-x64"
+            build_args: "-Dpmd.skip=true"
           - os: "windows-latest"
             java: "21"
             graalvm: "25"
             maven: "3.8.6"
             suffix: "windows-x64"
+            build_args: "-Dpmd.skip=true"
           - os: "ubuntu-latest"
             java: "25"
             graalvm: "25"
             maven: "3.8.6"
             suffix: "linux-x64"
+            build_args: ""
           - os: "macos-latest"
             java: "25"
             graalvm: "25"
             maven: "3.8.6"
             suffix: "macos-x64"
+            build_args: ""
           - os: "windows-latest"
             java: "25"
             graalvm: "25"
             maven: "3.8.6"
             suffix: "windows-x64"
+            build_args: ""
 
     steps:
       - name: Check out code
@@ -79,7 +85,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn -B -ntp -Pnative -Pjava${{ matrix.java }} verify javadoc:javadoc
+          mvn -B -ntp -Pnative -Pjava${{ matrix.java }} verify javadoc:javadoc ${{ matrix.build_args }}
 
       - name: Build with Maven as a Java build
         if: ${{ github.base_ref != 'develop' }}
@@ -87,5 +93,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn -B -ntp -Pjava${{ matrix.java }} verify javadoc:javadoc
+          mvn -B -ntp -Pjava${{ matrix.java }} verify javadoc:javadoc ${{ matrix.build_args }}
 
