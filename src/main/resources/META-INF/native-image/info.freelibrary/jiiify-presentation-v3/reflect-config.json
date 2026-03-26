@@ -103,6 +103,28 @@
     "allDeclaredConstructors": true
   },
   {
+    "name": "info.freelibrary.iiif.presentation.v3.utils.json.TextContentSerializer",
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector",
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "info.freelibrary.iiif.presentation.v3.properties.selectors.FragmentSelector",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "info.freelibrary.iiif.presentation.v3.properties.selectors.Selector",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
     "name": "picocli.CommandLine$AutoHelpMixin",
     "allDeclaredFields": true,
     "allDeclaredMethods": true

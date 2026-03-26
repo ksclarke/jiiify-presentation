@@ -446,6 +446,9 @@
                                 <goals>
                                     <goal>testCompile</goal>
                                 </goals>
+                                <configuration>
+                                    <testExcludes combine.self="override"/>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -475,6 +478,7 @@
                                 <arg>--exact-reachability-metadata</arg>
                                 <arg>--enable-native-access=ALL-UNNAMED</arg>
                                 <arg>--enable-url-protocols=https</arg>
+                                <arg>-H:-ReduceImplicitExceptionStackTraceInformation</arg>
                             </buildArgs>
                             <metadataRepository>
                                 <enabled>true</enabled>
