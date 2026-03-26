@@ -95,7 +95,7 @@ public final class JPv3 implements Callable<Integer> {
 
     /** Runs the application. */
     @Override
-    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY, PMD.COGNITIVE_COMPLEXITY, PMD.N_PATH_COMPLEXITY })
+    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY, PMD.COGNITIVE_COMPLEXITY })
     public Integer call() throws Exception {
         // Make sure we have a username and password if we're uploading the resulting ZIP file
         if ((myAction.myUploadFlag || myAction.myPatchFlag) &&
