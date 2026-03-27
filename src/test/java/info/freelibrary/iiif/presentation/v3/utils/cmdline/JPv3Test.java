@@ -47,7 +47,7 @@ public class JPv3Test {
         final String json = "{\"label\":\"Example\"}";
         Files.writeString(jsonFile, json);
 
-        final Optional<String> value = JPv3.findValue(jsonFile, JsonKeys.TYPE);
+        final Optional<String> value = JPv3Utils.findValue(jsonFile, JsonKeys.TYPE);
         assertFalse(value.isPresent());
     }
 
@@ -59,7 +59,7 @@ public class JPv3Test {
         final Path jsonFile = myFolder.newFile("empty.json").toPath();
         Files.writeString(jsonFile, "");
 
-        final Optional<String> value = JPv3.findValue(jsonFile, JsonKeys.TYPE);
+        final Optional<String> value = JPv3Utils.findValue(jsonFile, JsonKeys.TYPE);
         assertFalse(value.isPresent());
     }
 
@@ -68,7 +68,7 @@ public class JPv3Test {
      */
     @Test(expected = IOException.class)
     public void testFindValueNonExistentFile() throws IOException {
-        JPv3.findValue(Path.of(BAD_FILE_PATH), JsonKeys.TYPE);
+        JPv3Utils.findValue(Path.of(BAD_FILE_PATH), JsonKeys.TYPE);
     }
 
     /**
@@ -80,7 +80,7 @@ public class JPv3Test {
         final String json = "{\"type\":\"Manifest\"}";
         Files.writeString(jsonFile, json);
 
-        final Optional<String> value = JPv3.findValue(jsonFile, JsonKeys.TYPE);
+        final Optional<String> value = JPv3Utils.findValue(jsonFile, JsonKeys.TYPE);
         assertTrue(value.isPresent());
         assertEquals(ResourceTypes.MANIFEST, value.get());
     }

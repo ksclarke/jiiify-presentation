@@ -4,6 +4,7 @@ package info.freelibrary.iiif.presentation.v3.utils.csv;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.ByteArrayInputStream;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
@@ -16,10 +17,13 @@ import java.util.zip.ZipOutputStream;
  * The ZipWriter class provides functionality to create and write to ZIP files. It allows adding files with specified
  * content to a ZIP archive and managing the lifecycle of the underlying output stream.
  */
-public class ZipWriter {
+public class ZipWriter implements Closeable {
 
     /** The ZIP output stream. */
     private final ZipOutputStream myOutputStream;
+
+    /** The writer's output file. */
+    private final Path myOutputPath;
 
     /** The count of entries added to the ZIP archive. */
     private int myEntryCount;
@@ -32,6 +36,7 @@ public class ZipWriter {
      */
     public ZipWriter(final Path aZipFile) throws IOException {
         myOutputStream = new ZipOutputStream(Files.newOutputStream(aZipFile));
+        myOutputPath = aZipFile;
     }
 
     /**
@@ -67,7 +72,17 @@ public class ZipWriter {
      *
      * @throws IOException If an I/O error occurs while closing the output stream
      */
+    @Override
     public void close() throws IOException {
         myOutputStream.close();
+    }
+
+    /**
+     * Gets the output path of the ZIP file.
+     *
+     * @return The output file path
+     */
+    public Path getOutputPath() {
+        return myOutputPath;
     }
 }

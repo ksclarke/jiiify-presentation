@@ -2,7 +2,8 @@
   "resources": {
     "includes": [
       { "pattern": "iiif_presentation_messages\\.xml" },
-      { "pattern": "iiif_presentation_messages_.*\\.xml" }
+      { "pattern": "iiif_presentation_messages_.*\\.xml" },
+      { "pattern": "logback\\.xml" }
     ]
   }
 }

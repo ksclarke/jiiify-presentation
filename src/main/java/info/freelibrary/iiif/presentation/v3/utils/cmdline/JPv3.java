@@ -3,17 +3,7 @@ package info.freelibrary.iiif.presentation.v3.utils.cmdline;
 
 import static info.freelibrary.util.Constants.COLON;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
-import info.freelibrary.iiif.presentation.v3.Annotation;
-import info.freelibrary.iiif.presentation.v3.AnnotationCollection;
-import info.freelibrary.iiif.presentation.v3.AnnotationPage;
-import info.freelibrary.iiif.presentation.v3.Collection;
-import info.freelibrary.iiif.presentation.v3.Manifest;
-import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
-import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.csv.Mapper;
 import info.freelibrary.iiif.presentation.v3.utils.csv.MappingException;
@@ -32,10 +22,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
-import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.stream.Stream;
 
@@ -43,7 +31,6 @@ import java.util.stream.Stream;
 @CommandLine.Command(name = "jpv3", mixinStandardHelpOptions = true, version = "jpv3 0.0.1-SNAPSHOT",
         description = { "", "A tool for working with IIIF manifests and collection documents:", "" },
         usageHelpWidth = 120)
-@SuppressWarnings({ PMD.EXCESSIVE_IMPORTS })
 public final class JPv3 implements Callable<Integer> {
 
     /** The logger for the executable. */
@@ -73,9 +60,9 @@ public final class JPv3 implements Callable<Integer> {
             paramLabel = "PASSWORD", defaultValue = "${env:JPV3_PASSWORD}")
     private String myPassword;
 
-    /** The host to which the ZIP file is being uploaded. This is only needed for uploads. */
-    @CommandLine.Option(names = { "-H", "--host" }, description = "The host to which the ZIP file is being uploaded",
-            paramLabel = "HOST", defaultValue = "${env:JPV3_HOST}")
+    /** The IIIF manifests and collection documents server. */
+    @CommandLine.Option(names = { "-H", "--host" }, description = "The IIIF manifests and collection documents server",
+            paramLabel = "HOST", defaultValue = "${env:JPV3_HOST}", required = true)
     private URI myHost;
 
     /** The help flag. */
@@ -91,31 +78,8 @@ public final class JPv3 implements Callable<Integer> {
     private boolean myLogsAreVerbose;
 
     /** Creates a new JPv3 instance. */
-    public JPv3() {
+    private JPv3() {
         // This is intentionally empty
-    }
-
-    /**
-     * Quickly finds a JSON property value.
-     *
-     * @param aFilePath A path to a JSON file
-     * @param aKey A JSON property key
-     * @return The optional property value, which will be empty if no value was found
-     * @throws IOException If there is trouble parsing the JSON in the supplied file
-     */
-    public static Optional<String> findValue(final Path aFilePath, final String aKey) throws IOException {
-        final JsonFactory factory = new JsonFactory();
-
-        try (JsonParser parser = factory.createParser(aFilePath.toFile())) {
-            while (!parser.isClosed()) {
-                if (JsonToken.FIELD_NAME == parser.nextToken() && aKey.equals(parser.currentName())) {
-                    parser.nextToken(); // Increment the parser to the property value token
-                    return Optional.ofNullable(parser.getValueAsString());
-                }
-            }
-        }
-
-        return Optional.empty();
     }
 
     /**
@@ -129,34 +93,13 @@ public final class JPv3 implements Callable<Integer> {
         System.exit(new CommandLine(new JPv3()).execute(anArgsArray));
     }
 
-    /**
-     * Reads a particular IIIF Presentation JSON file of the supplied type.
-     *
-     * @param aPath A path to a JSON IIIF Presentation file
-     * @param aType A type of IIIF Presentation file
-     * @return The contents of the supplied file
-     * @throws IOException If there is trouble reading the JSON source file
-     */
-    @SuppressWarnings(PMD.UNUSED_PRIVATE_METHOD)
-    private static String read(final Path aPath, final String aType) throws IOException {
-        final String content = Files.readString(aPath);
-        return switch (aType) {
-            case ResourceTypes.MANIFEST -> JSON.readValue(content, Manifest.class).toString();
-            case ResourceTypes.COLLECTION -> JSON.readValue(content, Collection.class).toString();
-            case ResourceTypes.ANNOTATION -> JSON.readValue(content, Annotation.class).toString();
-            case ResourceTypes.ANNOTATION_COLLECTION -> JSON.readValue(content, AnnotationCollection.class).toString();
-            case ResourceTypes.ANNOTATION_PAGE -> JSON.readValue(content, AnnotationPage.class).toString();
-            default -> LOGGER.getMessage(LOGGER.getMessage(MessageCodes.JPA_159, aType));
-        };
-    }
-
     /** Runs the application. */
     @Override
     @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY, PMD.COGNITIVE_COMPLEXITY })
     public Integer call() throws Exception {
         // Make sure we have a username and password if we're uploading the resulting ZIP file
-        if ((myAction.myUploadFlag || myAction.myPatchFlag) && (StringUtils.trimToNull(myUsername) == null ||
-                StringUtils.trimToNull(myPassword) == null || myHost == null)) {
+        if ((myAction.myUploadFlag || myAction.myPatchFlag) &&
+                (StringUtils.trimToNull(myUsername) == null || StringUtils.trimToNull(myPassword) == null)) {
             throw new CommandLine.ParameterException(new CommandLine(this),
                     LOGGER.getMessage(MessageCodes.JPA_174, Constants.EOL));
         }

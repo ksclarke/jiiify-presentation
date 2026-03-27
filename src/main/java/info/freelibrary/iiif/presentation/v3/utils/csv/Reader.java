@@ -3,6 +3,7 @@ package info.freelibrary.iiif.presentation.v3.utils.csv;
 
 import static info.freelibrary.util.Constants.SLASH;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectReader;
@@ -52,6 +53,7 @@ public class Reader {
 
         builder.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES);
         builder.enable(CsvParser.Feature.TRIM_SPACES);
+        builder.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
         myReader = builder.build().readerFor(Row.class).with(schema);
     }
