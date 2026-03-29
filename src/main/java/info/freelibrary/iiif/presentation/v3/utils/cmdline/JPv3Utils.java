@@ -1,6 +1,9 @@
 
 package info.freelibrary.iiif.presentation.v3.utils.cmdline;
 
+import static org.slf4j.Logger.ROOT_LOGGER_NAME;
+
+import ch.qos.logback.classic.Level;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -25,6 +28,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.spi.FileTypeDetector;
+import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -40,6 +44,28 @@ public final class JPv3Utils {
      */
     private JPv3Utils() {
         // This is intentionally left empty
+    }
+
+    /**
+     * Sets the default log level for the supplied logger's root logger.
+     *
+     * @param aLogger The logger on which to set the supplied level
+     * @param aLogLevel The desired log level
+     */
+    public static void setLogLevel(final Logger aLogger, final String aLogLevel) {
+        final ch.qos.logback.classic.Logger logger = (ch.qos.logback.classic.Logger) aLogger.getLoggerImpl();
+        final ch.qos.logback.classic.Logger rootLogger = logger.getLoggerContext().getLogger(ROOT_LOGGER_NAME);
+        final Level currentLevel = rootLogger.getLevel();
+        final Level newLevel;
+
+        if (aLogLevel.isBlank()) {
+            newLevel = Level.DEBUG;
+        } else {
+            newLevel = Level.toLevel(aLogLevel.trim().toUpperCase(Locale.ENGLISH), Level.DEBUG);
+        }
+
+        rootLogger.setLevel(newLevel);
+        LOGGER.debug(MessageCodes.JPA_186, currentLevel, rootLogger.getEffectiveLevel());
     }
 
     /**

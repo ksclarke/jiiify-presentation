@@ -164,4 +164,5 @@
     <entry key="JPA-183">CSV data could not be mapped to IIIF Presentation API resources</entry>
     <entry key="JPA-184">Could not delete empty CSV ZIP archive: {}</entry>
     <entry key="JPA-185">Exception thrown while checking resource identifier</entry>
+    <entry key="JPA-186">Changing the default log level from '{}' to '{}'</entry>
 </properties>

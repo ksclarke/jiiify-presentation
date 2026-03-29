@@ -3,14 +3,18 @@
   <timestamp key="byDay" datePattern="yyyy-MM-dd" />
 
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-      <level>ERROR</level>
-    </filter>
     <encoder>
       <pattern>[%level] %logger{45}:%X{line} | %msg%n</pattern>
     </encoder>
   </appender>
 
+  <!-- INFO -->
+  <logger name="info.freelibrary.iiif.presentation.v3.utils.cmdline" level="INFO" />
+
+  <!-- WARN -->
+  <logger name="info.freelibrary.util.I18nRuntimeException" level="WARN" />
+
+  <!-- ERROR -->
   <root level="ERROR">
     <appender-ref ref="STDOUT" />
   </root>

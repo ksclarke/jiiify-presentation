@@ -74,8 +74,9 @@ public final class JPv3 implements Callable<Integer> {
     private boolean myVersion;
 
     /** The verbosity flag. */
-    @CommandLine.Option(names = { "-V", "--verbose" }, description = "Increase logging verbosity")
-    private boolean myLogsAreVerbose;
+    @CommandLine.Option(names = { "-V", "--verbose" }, arity = "0..1", paramLabel = "LEVEL",
+            description = "Increase logging verbosity; optionally provide a log level such as WARN, INFO, or DEBUG")
+    private String myLogLevel;
 
     /** Creates a new JPv3 instance. */
     private JPv3() {
@@ -97,6 +98,11 @@ public final class JPv3 implements Callable<Integer> {
     @Override
     @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY, PMD.COGNITIVE_COMPLEXITY })
     public Integer call() throws Exception {
+        // Check to see if we're setting a more verbose log level
+        if (myLogLevel != null) {
+            JPv3Utils.setLogLevel(LOGGER, myLogLevel);
+        }
+
         // Make sure we have a username and password if we're uploading the resulting ZIP file
         if ((myAction.myUploadFlag || myAction.myPatchFlag) &&
                 (StringUtils.trimToNull(myUsername) == null || StringUtils.trimToNull(myPassword) == null)) {
@@ -105,9 +111,15 @@ public final class JPv3 implements Callable<Integer> {
         }
 
         try {
+            // Map the CSV file(s) to JSON manifests and collection documents
             final int result = new Mapper(Stream.of(myInputFile), myOutputFile).map();
 
-            if (result == 0 && (myAction.isUpload() || myAction.isPatch())) {
+            // If the mapping was unsuccessful, we can bail here; nothing else needs to happen
+            if (result != 0) {
+                return result;
+            }
+
+            if (myAction.isUpload() || myAction.isPatch()) {
                 try (HttpClient client = HttpClient.newHttpClient()) {
                     final byte[] credentials = (myUsername + COLON + myPassword).getBytes(StandardCharsets.UTF_8);
                     final String basicAuth = "Basic " + Base64.getEncoder().encodeToString(credentials);
@@ -128,7 +140,7 @@ public final class JPv3 implements Callable<Integer> {
                     response = client.send(request, HttpResponse.BodyHandlers.ofString());
                     statusCode = response.statusCode();
 
-                    if (statusCode != 200 && statusCode != 201) {
+                    if (statusCode != HTTP.OK && statusCode != HTTP.CREATED) {
                         LOGGER.error(LOGGER.getMessage(MessageCodes.JPA_177, statusCode, response.body()));
                         return statusCode;
                     }
@@ -136,15 +148,15 @@ public final class JPv3 implements Callable<Integer> {
 
                 LOGGER.info(LOGGER.getMessage(MessageCodes.JPA_180, myOutputFile.toAbsolutePath()));
                 return 0;
-            } else if (result == 0 && myAction.isCreate()) {
+            } else if (myAction.isCreate()) {
                 LOGGER.info(LOGGER.getMessage(MessageCodes.JPA_178, myOutputFile.toAbsolutePath()));
                 return 0;
-            } else if (result == 0 && myAction.isView()) {
+            } else if (myAction.isView()) {
                 LOGGER.info(LOGGER.getMessage(MessageCodes.JPA_179));
                 return 0;
-            } else {
-                return result;
             }
+
+            return result;
         } catch (final MappingException details) {
             LOGGER.error(details, details.getMessage());
             return -1;
