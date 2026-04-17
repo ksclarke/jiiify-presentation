@@ -34,7 +34,7 @@
     <entry key="JPA-030">Image contents should always have a set of keys over which to iterate</entry>
     <entry key="JPA-031">'{}' is required to be an implementation of '{}'</entry>
     <entry key="JPA-032">Supplied HTML text must have a single root element: {}</entry>
-    <entry key="JPA-033">Stripping disallowed HTML markup in following string: {}</entry>
+    <entry key="JPA-033">Stripping disallowed HTML markup in the following string: {}</entry>
     <entry key="JPA-034">Supplied entry was a {} entry not a {} entry</entry>
     <entry key="JPA-035">IIIF Image API URL does not have a dot before format: {}</entry>
     <entry key="JPA-036">IIIF Image API URL does not have the correct number of components: {}</entry>
@@ -46,7 +46,7 @@
     <entry key="JPA-042">Error while parsing media fragment '{}': {}</entry>
     <entry key="JPA-043">I18n couldn't be added to I18nProperty: {}</entry>
     <entry key="JPA-044">Unable to add metadata: {}</entry>
-    <entry key="JPA-045">Unable to add required statement: {}</entry>
+    <entry key="JPA-045">Unable to add the required statement: {}</entry>
     <entry key="JPA-046">Unable to add rights URLs: {}</entry>
     <entry key="JPA-047">Unable to add seeAlso: {}</entry>
     <entry key="JPA-048">Unable to add ServiceImage to ServiceProperty: {}</entry>
@@ -106,9 +106,9 @@
     <entry key="JPA-130">Unexpected annotation timeMode was ignored during deserialization: {}</entry>
     <entry key="JPA-131">Unable to parse SpecificResource's incoming JSON structure: {}</entry>
     <entry key="JPA-132">Annotation target is missing from incoming JSON</entry>
-    <entry key="JPA-133">Unexpected format (i.e. MediaType) value: {}</entry>
-    <entry key="JPA-134">Cookbook test fixture needs updating:{} {}</entry>
-    <entry key="JPA-135">New cookbook test fixture to download:{} {}</entry>
+    <entry key="JPA-133">Unexpected format (i.e., MediaType) value: {}</entry>
+    <entry key="JPA-134">Cookbook test fixture needs updating: {} {}</entry>
+    <entry key="JPA-135">New cookbook test fixture to download: {} {}</entry>
     <entry key="JPA-136">Test fixtures are not the same: {}{}{}{}</entry>
     <entry key="JPA-137">A '{}' must have an array of coordinates</entry>
     <entry key="JPA-138">Geometry JSON has an unsupported type: {}</entry>
@@ -132,7 +132,7 @@
     <entry key="JPA-154">PartOf being serialized ({}) lacks type</entry>
     <entry key="JPA-154">Type cannot be set on an embedded resource</entry>
     <entry key="JPA-155">A referenced resource must contain a type and ID</entry>
-    <entry key="JPA-156">Supplied file isn't recongized as a supported IIIF type</entry>
+    <entry key="JPA-156">Supplied file isn't recognized as a supported IIIF type</entry>
     <entry key="JPA-157">First argument must be a pre-existing IIIF Presentation file</entry>
     <entry key="JPA-158">Please supply the path to the file you want to read</entry>
     <entry key="JPA-159">Unsupported IIIF Presentation file type: {}</entry>
@@ -165,4 +165,6 @@
     <entry key="JPA-184">Could not delete empty CSV ZIP archive: {}</entry>
     <entry key="JPA-185">Exception thrown while checking resource identifier</entry>
     <entry key="JPA-186">Changing the default log level from '{}' to '{}'</entry>
+    <entry key="JPA-187">Failed to process ZIP archive: {}</entry>
+    <entry key="JPA-188">Failed to copy: {} -> {}</entry>
 </properties>
