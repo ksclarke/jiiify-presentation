@@ -46,16 +46,16 @@ public class CsvSourcesTest {
 
         // Each Path.of is a new test; each List.of are the expected results for that test
         myResults = Map.of(Path.of(StringUtils.format("{}/csv/multi-part", TEST_DIR)),
-                List.of(StringUtils.format("{}/csv/multi-part/lat-multi-works.csv", TEST_DIR),
-                        StringUtils.format("{}/csv/multi-part/accion-issues.csv", TEST_DIR),
-                        StringUtils.format("{}/csv/multi-part/bohemia-pages.csv", TEST_DIR),
+                List.of(StringUtils.format("{}/csv/multi-part/accion-issues.csv", TEST_DIR),
+                        StringUtils.format("{}/csv/multi-part/accion-pages.csv", TEST_DIR),
                         StringUtils.format("{}/csv/multi-part/bohemia-issues.csv", TEST_DIR),
+                        StringUtils.format("{}/csv/multi-part/bohemia-pages.csv", TEST_DIR),
                         StringUtils.format("{}/csv/multi-part/lat-collection.csv", TEST_DIR),
-                        StringUtils.format("{}/csv/multi-part/accion-pages.csv", TEST_DIR)),
+                        StringUtils.format("{}/csv/multi-part/lat-multi-works.csv", TEST_DIR)),
                 Path.of(StringUtils.format("{}/zip/layers-choice.zip", TEST_DIR)),
-                List.of(StringUtils.format("{}/layers.csv", myTmpDir), StringUtils.format("{}/works.csv", myTmpDir),
-                        StringUtils.format("{}/pages.csv", myTmpDir),
-                        StringUtils.format("{}/collection.csv", myTmpDir)));
+                List.of(StringUtils.format("{}/collection.csv", myTmpDir),
+                        StringUtils.format("{}/layers.csv", myTmpDir), StringUtils.format("{}/pages.csv", myTmpDir),
+                        StringUtils.format("{}/works.csv", myTmpDir)));
     }
 
     /**

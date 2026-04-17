@@ -9,7 +9,6 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.cmdline.JPv3Utils;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.warnings.PMD;
 import org.jspecify.annotations.NonNull;
 
 import java.io.IOException;
@@ -48,7 +47,7 @@ public class CsvSources implements Iterable<Path> {
      * @param aServer A IIIF manifest and collection document server
      */
     public CsvSources(final Stream<Path> aCsvStream, final String aServer) {
-        myPaths = gather(aCsvStream).toList();
+        myPaths = gather(aCsvStream).sorted().toList(); // Sort for easier testing (predictability)
         myServer = aServer;
     }
 
@@ -105,7 +104,6 @@ public class CsvSources implements Iterable<Path> {
      * @return A {@code Stream<Path>} containing all collected CSV file paths, including any paths from nested
      *         directories or ZIP archives. If an error occurs during processing, an empty stream is returned.
      */
-    @SuppressWarnings({ PMD.SYSTEM_PRINTLN })
     private Stream<Path> gather(final Path aPath) {
         if (!aPath.endsWith(CSV_EXT)) {
             try {
