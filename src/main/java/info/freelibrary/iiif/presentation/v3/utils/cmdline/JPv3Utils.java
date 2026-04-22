@@ -36,6 +36,12 @@ import java.util.Optional;
  */
 public final class JPv3Utils {
 
+    /** The file extension for CSV files. */
+    public static final String CSV_EXT = info.freelibrary.util.Constants.DOT_CHAR + MediaType.TEXT_CSV.getExt();
+
+    /** The file extension for ZIP files. */
+    public static final String ZIP_EXT = info.freelibrary.util.Constants.DOT_CHAR + MediaType.APPLICATION_ZIP.getExt();
+
     /** A logger for the JPv3Utils class. */
     private static final Logger LOGGER = LoggerFactory.getLogger(JPv3Utils.class, MessageCodes.BUNDLE);
 
@@ -44,6 +50,32 @@ public final class JPv3Utils {
      */
     private JPv3Utils() {
         // This is intentionally left empty
+    }
+
+    /**
+     * Closes an {@link AutoCloseable} quietly.
+     *
+     * @param aCloseable An {@link AutoCloseable} to close
+     */
+    @SuppressWarnings({ PMD.AVOID_CATCHING_GENERIC_EXCEPTION })
+    public static void closeQuietly(final AutoCloseable aCloseable) {
+        if (aCloseable != null) {
+            try {
+                aCloseable.close();
+            } catch (final Exception ignored) {
+                // This is intentionally ignored
+            }
+        }
+    }
+
+    /**
+     * Checks if a path represents a CSV file.
+     *
+     * @param aPath A path to check
+     * @return True if the path is a CSV file; else, false
+     */
+    public static boolean isCSV(final Path aPath) {
+        return (aPath.getFileName() != null ? aPath.getFileName().toString() : aPath.toString()).endsWith(CSV_EXT);
     }
 
     /**
