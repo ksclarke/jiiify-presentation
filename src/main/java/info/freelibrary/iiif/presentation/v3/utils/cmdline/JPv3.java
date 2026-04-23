@@ -1,4 +1,3 @@
-
 package info.freelibrary.iiif.presentation.v3.utils.cmdline;
 
 import static info.freelibrary.util.Constants.COLON;
@@ -30,21 +29,21 @@ import java.util.stream.Stream;
 
 /** A jpv3 executable. */
 @CommandLine.Command(name = "jpv3", mixinStandardHelpOptions = true, version = "jpv3 0.0.1-SNAPSHOT",
-        description = { "", "A tool for working with IIIF manifests and collection documents:", "" },
-        usageHelpWidth = 120)
+  description = {"", "A tool for working with IIIF manifests and collection documents:", ""},
+  usageHelpWidth = 120)
 public final class JPv3 implements Callable<Integer> {
 
     /** The logger for the executable. */
     private static final Logger LOGGER = LoggerFactory.getLogger(JPv3.class, MessageCodes.BUNDLE);
 
     /** The input file. */
-    @CommandLine.Option(names = { "-i", "--input" }, description = "An input file or directory to be processed",
-            paramLabel = "INPUT", required = true)
+    @CommandLine.Option(names = {"-i", "--input"}, description = "An input file or directory to be processed",
+      paramLabel = "INPUT", required = true)
     private Path myInputFile;
 
     /** The output file. */
-    @CommandLine.Option(names = { "-o", "--output" }, defaultValue = "./output.zip", paramLabel = "OUTPUT",
-            showDefaultValue = CommandLine.Help.Visibility.ALWAYS, description = "An output file to be written")
+    @CommandLine.Option(names = {"-o", "--output"}, defaultValue = "./output.zip", paramLabel = "OUTPUT",
+      showDefaultValue = CommandLine.Help.Visibility.ALWAYS, description = "An output file to be written")
     private Path myOutputFile;
 
     /** The action to take. Only one is allowed for a given invocation. */
@@ -52,31 +51,31 @@ public final class JPv3 implements Callable<Integer> {
     private Action myAction;
 
     /** The authentication username. This is only needed for uploads. */
-    @CommandLine.Option(names = { "-U", "--username" }, description = "The username to use for authentication",
-            paramLabel = "USERNAME", defaultValue = "${env:JPV3_USERNAME}")
+    @CommandLine.Option(names = {"-U", "--username"}, description = "The username to use for authentication",
+      paramLabel = "USERNAME", defaultValue = "${env:JPV3_USERNAME}")
     private String myUsername;
 
     /** The authentication password. This is only needed for uploads. */
-    @CommandLine.Option(names = { "-P", "--password" }, description = "The password to use for authentication",
-            paramLabel = "PASSWORD", defaultValue = "${env:JPV3_PASSWORD}")
+    @CommandLine.Option(names = {"-P", "--password"}, description = "The password to use for authentication",
+      paramLabel = "PASSWORD", defaultValue = "${env:JPV3_PASSWORD}")
     private String myPassword;
 
     /** The IIIF manifests and collection documents server. */
-    @CommandLine.Option(names = { "-H", "--host" }, description = "The IIIF manifests and collection documents server",
-            paramLabel = "HOST", defaultValue = "${env:JPV3_HOST}", required = true)
+    @CommandLine.Option(names = {"-H", "--host"}, description = "The IIIF manifests and collection documents server",
+      paramLabel = "HOST", defaultValue = "${env:JPV3_HOST}")
     private URI myHost;
 
     /** The help flag. */
-    @CommandLine.Option(names = { "-h", "--help" }, usageHelp = true, description = "Display this help message")
+    @CommandLine.Option(names = {"-h", "--help"}, usageHelp = true, description = "Display this help message")
     private boolean myHelpFlag;
 
     /** The version flag. */
-    @CommandLine.Option(names = { "-v", "--version" }, versionHelp = true, description = "Print application version")
+    @CommandLine.Option(names = {"-v", "--version"}, versionHelp = true, description = "Print application version")
     private boolean myVersion;
 
     /** The verbosity flag. */
-    @CommandLine.Option(names = { "-V", "--verbose" }, arity = "0..1", paramLabel = "LEVEL",
-            description = "Increase logging verbosity; optionally provide a log level such as WARN, INFO, or DEBUG")
+    @CommandLine.Option(names = {"-V", "--verbose"}, arity = "0..1", paramLabel = "LEVEL",
+      description = "Increase logging verbosity; optionally provide a log level such as WARN, INFO, or DEBUG")
     private String myLogLevel;
 
     /** Creates a new JPv3 instance. */
@@ -90,14 +89,14 @@ public final class JPv3 implements Callable<Integer> {
      * @param anArgsArray An array of arguments
      * @throws IOException If the JSON file cannot be read
      */
-    @SuppressWarnings({ Checkstyle.UNCOMMENTED_MAIN, "UncommentedMain" })
+    @SuppressWarnings({Checkstyle.UNCOMMENTED_MAIN, "UncommentedMain"})
     public static void main(final String[] anArgsArray) throws IOException {
         System.exit(new CommandLine(new JPv3()).execute(anArgsArray));
     }
 
     /** Runs the application. */
     @Override
-    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY, PMD.COGNITIVE_COMPLEXITY })
+    @SuppressWarnings({PMD.CYCLOMATIC_COMPLEXITY, PMD.COGNITIVE_COMPLEXITY})
     public Integer call() throws Exception {
         // Check to see if we're setting a more verbose log level
         if (myLogLevel != null) {
@@ -105,10 +104,12 @@ public final class JPv3 implements Callable<Integer> {
         }
 
         // Make sure we have a username and password if we're uploading the resulting ZIP file
-        if ((myAction.myUploadFlag || myAction.myPatchFlag) &&
-                (StringUtils.trimToNull(myUsername) == null || StringUtils.trimToNull(myPassword) == null)) {
+        if ((myAction.myUploadFlag || myAction.myPatchFlag)
+            && (StringUtils.trimToNull(myUsername) == null ||
+                StringUtils.trimToNull(myPassword) == null ||
+                myHost == null)) {
             throw new CommandLine.ParameterException(new CommandLine(this),
-                    LOGGER.getMessage(MessageCodes.JPA_174, Constants.EOL));
+              LOGGER.getMessage(MessageCodes.JPA_174, Constants.EOL));
         }
 
         try {
@@ -129,8 +130,8 @@ public final class JPv3 implements Callable<Integer> {
                     final String basicAuth = "Basic " + Base64.getEncoder().encodeToString(credentials);
                     final HttpRequest.BodyPublisher bodyPublisher = HttpRequest.BodyPublishers.ofFile(myOutputFile);
                     final HttpRequest.Builder builder = HttpRequest.newBuilder().uri(myHost)
-                            .header(HTTP.Header.CONTENT_TYPE, MediaType.APPLICATION_ZIP.toString())
-                            .header(HTTP.Header.AUTHORIZATION, basicAuth);
+                      .header(HTTP.Header.CONTENT_TYPE, MediaType.APPLICATION_ZIP.toString())
+                      .header(HTTP.Header.AUTHORIZATION, basicAuth);
                     final HttpResponse<String> response;
                     final HttpRequest request;
                     final int statusCode;
@@ -173,20 +174,20 @@ public final class JPv3 implements Callable<Integer> {
     static class Action {
 
         /** Whether to create a local manifest or collection doc. */
-        @CommandLine.Option(names = { "-c", "--create" }, description = "Create a local zip with IIIF resources")
+        @CommandLine.Option(names = {"-c", "--create"}, description = "Create a local zip with IIIF resources")
         private boolean myCreateFlag;
 
         /** Indicating an upload of new manifests and collections should be made. */
-        @CommandLine.Option(names = { "-u", "--upload" }, description = "Create IIIF resources, then upload them")
+        @CommandLine.Option(names = {"-u", "--upload"}, description = "Create IIIF resources, then upload them")
         private boolean myUploadFlag;
 
         /** Indicating a JSON patch should be made before uploading. */
-        @CommandLine.Option(names = { "-p", "--patch" }, description = "Update IIIF resources already on the server")
+        @CommandLine.Option(names = {"-p", "--patch"}, description = "Update IIIF resources already on the server")
         private boolean myPatchFlag;
 
         /** The JSONiq query used to produce a view of a record or collection. */
-        @CommandLine.Option(names = { "-q", "--query" }, arity = "1", defaultValue = ".", paramLabel = "QUERY",
-                description = "The optional JSONiq query to use when viewing IIIF resources")
+        @CommandLine.Option(names = {"-q", "--query"}, arity = "1", defaultValue = ".", paramLabel = "QUERY",
+          description = "The optional JSONiq query to use when viewing IIIF resources")
         private String myQuery;
 
         /**
