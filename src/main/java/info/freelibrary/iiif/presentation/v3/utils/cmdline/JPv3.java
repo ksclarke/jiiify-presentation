@@ -107,7 +107,7 @@ public final class JPv3 implements Callable<Integer> {
         if ((myAction.myUploadFlag || myAction.myPatchFlag) && (StringUtils.trimToNull(myUsername) == null ||
                 StringUtils.trimToNull(myPassword) == null || myHost == null)) {
             throw new CommandLine.ParameterException(new CommandLine(this),
-                    LOGGER.getMessage(MessageCodes.JPA_174, Constants.EOL));
+              LOGGER.getMessage(MessageCodes.JPA_174, Constants.EOL));
         }
 
         try {
@@ -128,8 +128,8 @@ public final class JPv3 implements Callable<Integer> {
                     final String basicAuth = "Basic " + Base64.getEncoder().encodeToString(credentials);
                     final HttpRequest.BodyPublisher bodyPublisher = HttpRequest.BodyPublishers.ofFile(myOutputFile);
                     final HttpRequest.Builder builder = HttpRequest.newBuilder().uri(myHost)
-                            .header(HTTP.Header.CONTENT_TYPE, MediaType.APPLICATION_ZIP.toString())
-                            .header(HTTP.Header.AUTHORIZATION, basicAuth);
+                      .header(HTTP.Header.CONTENT_TYPE, MediaType.APPLICATION_ZIP.toString())
+                      .header(HTTP.Header.AUTHORIZATION, basicAuth);
                     final HttpResponse<String> response;
                     final HttpRequest request;
                     final int statusCode;
