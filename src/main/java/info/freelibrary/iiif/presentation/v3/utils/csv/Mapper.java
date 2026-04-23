@@ -4,6 +4,7 @@ package info.freelibrary.iiif.presentation.v3.utils.csv;
 import static info.freelibrary.iiif.presentation.v3.ResourceTypes.IMAGE;
 import static info.freelibrary.iiif.presentation.v3.ResourceTypes.IMAGE_SERVICE_2;
 import static info.freelibrary.util.ThrowingConsumer.sneaky;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,6 +29,7 @@ import org.mapdb.HTreeMap;
 import org.mapdb.Serializer;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -264,7 +266,7 @@ public class Mapper {
                 }
             }
 
-            myZipWriter.writeFile(collectionID + JSON_EXT, collection.toString());
+            myZipWriter.writeFile(URLEncoder.encode(collectionID, UTF_8) + JSON_EXT, collection.toString());
         }
 
         return myOutputFile;
@@ -294,7 +296,7 @@ public class Mapper {
                 manifest.setCanvases(canvases);
                 manifests.add(manifest);
 
-                myZipWriter.writeFile(manifestID + JSON_EXT, manifest.toString());
+                myZipWriter.writeFile(URLEncoder.encode(manifestID, UTF_8) + JSON_EXT, manifest.toString());
             } catch (final JsonProcessingException details) {
                 throw new MappingException(details);
             }

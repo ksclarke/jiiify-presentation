@@ -1,12 +1,20 @@
 
 package info.freelibrary.iiif.presentation.v3.utils.cmdline;
 
+import static info.freelibrary.util.Constants.EMPTY;
+import static info.freelibrary.util.Constants.SLASH;
+import static info.freelibrary.util.ThrowingConsumer.sneaky;
 import static org.slf4j.Logger.ROOT_LOGGER_NAME;
 
 import ch.qos.logback.classic.Level;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.MappingIterator;
+import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.AnnotationCollection;
 import info.freelibrary.iiif.presentation.v3.AnnotationPage;
@@ -16,24 +24,38 @@ import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.iiif.presentation.v3.utils.csv.CsvSources;
+import info.freelibrary.iiif.presentation.v3.utils.csv.Keys;
+import info.freelibrary.iiif.presentation.v3.utils.csv.ZipWriter;
+import info.freelibrary.util.IllegalArgumentI18nException;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.StringUtils;
 import info.freelibrary.util.warnings.Checkstyle;
 import info.freelibrary.util.warnings.PMD;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.spi.FileTypeDetector;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Utility class for working with IIIF Presentation JSON files.
  */
+@SuppressWarnings({ PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS })
 public final class JPv3Utils {
 
     /** The file extension for CSV files. */
@@ -124,6 +146,95 @@ public final class JPv3Utils {
     }
 
     /**
+     * Outputs a ZIP file containing the supplied source files with an additional column for the manifest or collection
+     * doc location.
+     *
+     * @param aSourceFile A location of source file(s)
+     * @param aOutputFile An output ZIP file
+     * @param aHost A host URI for the IIIF Presentation files
+     * @throws IOException If there is trouble writing the ZIP file
+     * @return An exit code (0 for success)
+     */
+    public static int outputZipFile(final Path aSourceFile, final Path aOutputFile, final URI aHost)
+            throws IOException {
+        final CsvSources csvSources = new CsvSources(Stream.of(aSourceFile), aHost);
+        final Optional<Path> tmpDirOpt = csvSources.getTempDir();
+
+        try (ZipWriter zipWriter = new ZipWriter(aOutputFile)) {
+            csvSources.forEach(sneaky(path -> {
+                final String contents = StringUtils.read(path.toFile());
+                final String csvPath = path.toString();
+                final String csvData = updateCSV(contents, aHost.toString());
+
+                if (tmpDirOpt.isPresent()) {
+                    final String tmpDirPath = tmpDirOpt.get().toString();
+
+                    if (csvPath.startsWith(tmpDirPath)) {
+                        zipWriter.writeFile(csvPath.substring(tmpDirPath.length() + 1), csvData);
+                    } else {
+                        zipWriter.writeFile(csvPath, csvData);
+                    }
+                } else {
+                    zipWriter.writeFile(csvPath, csvData);
+                }
+            }));
+        }
+
+        return 0;
+    }
+
+    /**
+     * Updates a CSV file with the IIIF Presentation URL for each manifest or collection.
+     *
+     * @param aCsvString A CSV file's contents
+     * @param aHost A host URI for the IIIF Presentation files
+     * @return The updated CSV file's contents
+     * @throws IOException If there is trouble updating the CSV file
+     * @throws IllegalArgumentI18nException If the object type isn't recognized
+     */
+    public static String updateCSV(final String aCsvString, final String aHost) throws IOException {
+        final CsvSchema.Builder columns = CsvSchema.builder().setUseHeader(true);
+        final String server = aHost.endsWith(SLASH) ? aHost : aHost + SLASH;
+        final List<Map<String, String>> modifiedRows = new ArrayList<>();
+        final CsvSchema schema = CsvSchema.emptySchema().withHeader();
+        final CsvMapper csvMapper = new CsvMapper();
+        final TypeReference<Map<String, String>> typeRef = new TypeReference<>() {};
+        final ObjectReader reader = csvMapper.readerFor(typeRef).with(schema);
+        final String idKey = "Item ARK"; // Need to handle this better in the future
+
+        try (MappingIterator<Map<String, String>> originalRows = reader.readValues(aCsvString)) {
+            while (originalRows.hasNext()) {
+                final Map<String, String> row = new HashMap<>(originalRows.next());
+                final String objectType = Objects.toString(row.get("Object Type"), "<EMPTY>");
+                final String id = row.get(idKey);
+                final String url;
+
+                if (id == null) {
+                    throw new IllegalArgumentI18nException(MessageCodes.BUNDLE, MessageCodes.JPA_012, idKey);
+                }
+
+                // We're going to make assumptions about the manifest server's endpoints here
+                if (ResourceTypes.COLLECTION.equals(objectType)) {
+                    url = server + "collections/" + URLEncoder.encode(id, StandardCharsets.UTF_8);
+                    row.put(Keys.IIIF_MANIFEST_URL, url);
+                } else if (Keys.WORK.equals(objectType)) {
+                    url = server + URLEncoder.encode(id, StandardCharsets.UTF_8) + "/manifest";
+                    row.put(Keys.IIIF_MANIFEST_URL, url);
+                } else {
+                    row.put(Keys.IIIF_MANIFEST_URL, EMPTY);
+                }
+
+                modifiedRows.add(row);
+            }
+        }
+
+        readHeaders(aCsvString).forEach(columns::addColumn);
+        columns.addColumn(Keys.IIIF_MANIFEST_URL);
+
+        return csvMapper.writerFor(modifiedRows.getClass()).with(columns.build()).writeValueAsString(modifiedRows);
+    }
+
+    /**
      * Reads a particular IIIF Presentation JSON file of the supplied type.
      *
      * @param aPath A path to a JSON IIIF Presentation file
@@ -141,6 +252,32 @@ public final class JPv3Utils {
             case ResourceTypes.ANNOTATION_PAGE -> JSON.readValue(content, AnnotationPage.class).toString();
             default -> LOGGER.getMessage(LOGGER.getMessage(MessageCodes.JPA_159, aType));
         };
+    }
+
+    /**
+     * Reads the headers from a CSV string.
+     *
+     * @param aCsvString A string of CSV data
+     * @return A list of CSV headers
+     * @throws IOException If there is trouble reading the CSV string
+     */
+    public static List<String> readHeaders(final String aCsvString) throws IOException {
+        final CsvSchema schema = CsvSchema.emptySchema().withHeader().withColumnReordering(true);
+        final TypeReference<Map<String, String>> rowType = new TypeReference<>() {};
+        final ObjectReader objectReader = new CsvMapper().readerFor(rowType).with(schema);
+
+        try (MappingIterator<Map<String, String>> headerReader = objectReader.readValues(aCsvString)) {
+            final List<String> headers;
+
+            if (headerReader.hasNext()) {
+                final CsvSchema actualSchema = (CsvSchema) headerReader.getParser().getSchema();
+                headers = actualSchema.getColumnNames();
+            } else {
+                headers = List.of();
+            }
+
+            return headers;
+        }
     }
 
     /**

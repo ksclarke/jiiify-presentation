@@ -8,6 +8,7 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.csv.Mapper;
 import info.freelibrary.iiif.presentation.v3.utils.csv.MappingException;
 import info.freelibrary.util.Constants;
+import info.freelibrary.util.FileUtils;
 import info.freelibrary.util.HTTP;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -120,6 +121,9 @@ public final class JPv3 implements Callable<Integer> {
             }
 
             if (myAction.isUpload() || myAction.isPatch()) {
+                final String csvZipFileName = FileUtils.stripExt(myOutputFile.getFileName().toString()) + ".zip";
+                final Path csvZipFile = Path.of(myOutputFile.getParent().toString(), csvZipFileName);
+
                 try (HttpClient client = HttpClient.newHttpClient()) {
                     final byte[] credentials = (myUsername + COLON + myPassword).getBytes(StandardCharsets.UTF_8);
                     final String basicAuth = "Basic " + Base64.getEncoder().encodeToString(credentials);
@@ -144,10 +148,12 @@ public final class JPv3 implements Callable<Integer> {
                         LOGGER.error(LOGGER.getMessage(MessageCodes.JPA_177, statusCode, response.body()));
                         return statusCode;
                     }
+
+                    LOGGER.info(LOGGER.getMessage(MessageCodes.JPA_180, myOutputFile.toAbsolutePath()));
                 }
 
-                LOGGER.info(LOGGER.getMessage(MessageCodes.JPA_180, myOutputFile.toAbsolutePath()));
-                return 0;
+                LOGGER.info(LOGGER.getMessage(MessageCodes.JPA_189, csvZipFile));
+                return JPv3Utils.outputZipFile(myInputFile, csvZipFile, myHost);
             } else if (myAction.isCreate()) {
                 LOGGER.info(LOGGER.getMessage(MessageCodes.JPA_178, myOutputFile.toAbsolutePath()));
                 return 0;

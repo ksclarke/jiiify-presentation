@@ -85,9 +85,6 @@ public final class Keys {
     /** Column name for the IIIF viewing hint to influence client presentation. */
     public static final String BEHAVIOR = "Behavior";
 
-    /** Column name for the item's IDEP publication status. */
-    public static final String IDEP_PUBLISHED = "Published in IDEP";
-
     /** Column name for the item's representative image. */
     public static final String REPRESENTATIVE_IMAGE = "Representative image";
 
@@ -96,12 +93,6 @@ public final class Keys {
 
     /** Column name for the item's visibility. */
     public static final String VISIBILITY = "Visibility";
-
-    /** Column name for the item's creation date. */
-    public static final String CREATED_DATE = "Date.created";
-
-    /** Column name for the item's normalized date. */
-    public static final String NORMALIZED_DATE = "Date.normalized";
 
     /** Column name for the item's format extent. */
     public static final String FORMAT_EXTENT = "Format.extent";
@@ -133,12 +124,6 @@ public final class Keys {
     /** Column name for the item's language. */
     public static final String LANGUAGE = "Language";
 
-    /** Column name for the item's local identifier. */
-    public static final String LOCAL_ID = "Local identifier";
-
-    /** Column name for the item's OPAC url. */
-    public static final String OPAC_URL = "Opac url";
-
     /** Column name for the item's place of origin. */
     public static final String PLACE_OF_ORIGIN = "Place of origin";
 
@@ -163,35 +148,20 @@ public final class Keys {
     /** Column name for the item's contents note. */
     public static final String CONTENTS_NOTE = "Contents note";
 
-    /** Column name for the item's note. */
-    public static final String NOTE = "Note";
-
-    /** Column name for the item's director. */
-    public static final String DIRECTOR = "Director";
-
     /** Column name for the item's editor. */
     public static final String EDITOR = "Editor";
 
     /** Column name for the item's creator. */
     public static final String CREATOR = "Creator";
 
-    /** Column name for the item's producer. */
-    public static final String PRODUCER = "Producer";
-
     /** Column name for the item's publisher. */
     public static final String PUBLISHER = "Publisher.publisherName";
 
-    /** Column name for the item's head of information. */
-    public static final String HEAD_OF_INFORMATION = "Creator.headofinformation";
+    /** Column name for the item's local rights statement. */
+    public static final String RIGHTS_STATEMENT_LOCAL = "Rights.statementLocal";
 
-    /** Column name for the item's administrator. */
-    public static final String ADMINISTRATOR = "Creator.administrator";
-
-    /** Column name for the item's proprietor. */
-    public static final String PROPRIETOR = "Creator.proprietor";
-
-    /** Column name for the item's contributor. */
-    public static final String CONTRIBUTOR = "Contributor";
+    /** Column name for the item's rights contact information. */
+    public static final String RIGHTS_CONTACT = "Rights.servicesContact";
 
     /**
      * Private constructor to prevent instantiation of the utility class. This ensures that the class can only be used
