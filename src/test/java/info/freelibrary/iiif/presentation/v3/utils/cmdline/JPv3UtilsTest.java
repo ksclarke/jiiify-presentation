@@ -46,11 +46,10 @@ public class JPv3UtilsTest {
         final Path source = Path.of("src/test/resources/zip/nested.zip");
         final Path target = Path.of(TARGET, "nested.zip");
         final List<String> expected = List.of("nested/collection/jbu-2-collection.csv",
-            "nested/layers/jbu-2-layers.csv", "nested/pages/jbu-2-pages.csv", "nested/works/jbu-2-works.csv").stream()
-          .map(Path::of).map(Path::toString).collect(Collectors.toList());
+            "nested/layers/jbu-2-layers.csv", "nested/pages/jbu-2-pages.csv", "nested/works/jbu-2-works.csv");
 
         JPv3Utils.outputZipFile(source, target, HOST);
-        checkZipEntries(target, expected);
+        checkZipEntries(target, expected.stream().map(Path::of).map(Path::toString).collect(Collectors.toList()));
     }
 
     /**
