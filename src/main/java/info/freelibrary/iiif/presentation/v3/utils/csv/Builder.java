@@ -27,6 +27,7 @@ import info.freelibrary.util.ThrowingFunction;
 import info.freelibrary.util.warnings.JDK;
 import info.freelibrary.util.warnings.PMD;
 
+import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
@@ -34,9 +35,32 @@ import java.util.Optional;
 /** A IIIF builder for CSV-based deserialization. */
 public class Builder {
 
+    /** The server to which the built resources will be published. */
+    private URI myServer;
+
     /** Creates a new builder. */
     public Builder() {
-        // This is intentionally empty
+        // This is intentionally left empty
+    }
+
+    /**
+     * Sets the server to which the built resources will be published.
+     *
+     * @param aServer The server URI
+     * @return This builder instance for method chaining
+     */
+    public Builder setServer(final URI aServer) {
+        myServer = aServer;
+        return this;
+    }
+
+    /**
+     * Gets the server to which the built resources will be published.
+     *
+     * @return The server URI
+     */
+    public URI getServer() {
+        return myServer;
     }
 
     /**
@@ -128,10 +152,11 @@ public class Builder {
      * @return The modified or original ID string, depending on the logic
      * @throws MappingException If an error occurs during processing
      */
+    @SuppressWarnings({ "PMD.CyclomaticComplexity" })
     public String checkID(final String aID, final String aResourceType) throws MappingException {
         // If the ID starts with a "https://", we assume it's already formatted correctly; else, we do it
         if (!aID.startsWith("https://")) {
-            final String host = Env.get(Configs.JPV3_HOST, "https://localhost:9999");
+            final String host = myServer != null ? myServer.toString() : "https://localhost:9999";
             final String urlTemplate;
 
             switch (aResourceType) {
