@@ -35,8 +35,7 @@ import java.util.Optional;
  * @param <A> The type of annotation encapsulated on the page
  */
 @JsonInclude(Include.NON_EMPTY)
-public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<AnnotationPage<A>>
-        implements Resource<AnnotationPage<A>> {
+public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<AnnotationPage<A>> {
 
     /** The logger used by the AnnotationPage. */
     private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationPage.class, MessageCodes.BUNDLE);

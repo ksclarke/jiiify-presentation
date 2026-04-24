@@ -4,7 +4,6 @@ package info.freelibrary.iiif.presentation.v3.content;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import info.freelibrary.iiif.presentation.v3.Resource;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
@@ -19,8 +18,7 @@ import java.util.List;
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
 @JsonSerialize(using = TextContentSerializer.class)
-public class TextContent extends AbstractContentResource<TextContent>
-        implements AnnotatedContentResource<TextContent>, Resource<TextContent> {
+public class TextContent extends AbstractContentResource<TextContent> implements AnnotatedContentResource<TextContent> {
 
     /**
      * Creates a text content resource.

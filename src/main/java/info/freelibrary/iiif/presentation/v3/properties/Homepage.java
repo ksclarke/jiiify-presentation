@@ -5,12 +5,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
-
-import info.freelibrary.util.IllegalArgumentI18nException;
-import info.freelibrary.util.warnings.Eclipse;
-
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.util.IllegalArgumentI18nException;
+import info.freelibrary.util.warnings.Eclipse;
 
 /**
  * A web page that is about the object represented by the resource that has the <code>homepage</code> property. The web
@@ -19,7 +17,7 @@ import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
  */
 @JsonInclude(Include.NON_EMPTY)
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
-public class Homepage extends AbstractLinkProperty<Homepage> implements Localized<Homepage> {
+public class Homepage extends AbstractLinkProperty<Homepage> {
 
     /**
      * Creates a IIIF presentation homepage.

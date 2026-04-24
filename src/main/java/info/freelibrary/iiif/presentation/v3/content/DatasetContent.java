@@ -3,7 +3,6 @@ package info.freelibrary.iiif.presentation.v3.content;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import info.freelibrary.iiif.presentation.v3.Resource;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
@@ -17,7 +16,7 @@ import java.util.List;
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
 public class DatasetContent extends AbstractContentResource<DatasetContent>
-        implements AnnotatedContentResource<DatasetContent>, Resource<DatasetContent> {
+        implements AnnotatedContentResource<DatasetContent> {
 
     /**
      * Creates a dataset content resource from the supplied ID.

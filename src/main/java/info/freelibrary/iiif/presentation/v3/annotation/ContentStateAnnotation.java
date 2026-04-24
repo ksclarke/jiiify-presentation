@@ -3,7 +3,6 @@ package info.freelibrary.iiif.presentation.v3.annotation;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.CanvasResource;
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
@@ -23,7 +22,7 @@ import java.util.List;
  */
 @JsonSerialize(using = WebAnnotationSerializer.class)
 @JsonDeserialize(using = WebAnnotationDeserializer.class)
-public class ContentStateAnnotation extends WebAnnotation implements Annotation<WebAnnotation> {
+public class ContentStateAnnotation extends WebAnnotation {
 
     /** The Content State annotation's logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(ContentStateAnnotation.class, MessageCodes.BUNDLE);

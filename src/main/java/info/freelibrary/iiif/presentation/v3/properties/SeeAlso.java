@@ -14,7 +14,7 @@ import java.util.Optional;
  * provide a longer description of the resource. The profile and format properties of the document should be given to
  * help the client to make the appropriate use of the document.
  */
-public class SeeAlso extends AbstractLinkProperty<SeeAlso> implements Localized<SeeAlso> {
+public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
 
     /**
      * Creates a new see also value from the supplied string ID and string type. Constant values for type can be found

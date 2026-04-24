@@ -52,7 +52,7 @@
 
         <!-- Build-related dependencies -->
         <exec.plugin.version>3.5.0</exec.plugin.version>
-        <native.maven.plugin.version>0.11.4</native.maven.plugin.version>
+        <native.maven.plugin.version>1.1.0</native.maven.plugin.version>
 
         <!-- Test-related dependencies -->
         <magicfree.json.version>0.11.0</magicfree.json.version>
@@ -254,8 +254,6 @@
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
             </plugin>
-
-
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -472,10 +470,11 @@
                             <mainClass>info.freelibrary.iiif.presentation.v3.utils.cmdline.JPv3</mainClass>
                             <imageName>jpv3</imageName>
                             <buildArgs>
-                                <arg>-O3</arg>
+                                <!--<arg>-Os</arg>--><!-- small size for containers -->
+                                <arg>-O3</arg><!-- optimized -->
                                 <arg>-march=${build.arch}</arg>
                                 <!--<buildArg>-/-gc=G1</buildArg>--><!-- Adds 20 MB for GC addition -->
-                                <arg>--exact-reachability-metadata</arg>
+                                <!--<arg>-\-exact-reachability-metadata</arg>-->
                                 <arg>--enable-native-access=ALL-UNNAMED</arg>
                                 <arg>--enable-url-protocols=https</arg>
                                 <arg>-H:-ReduceImplicitExceptionStackTraceInformation</arg>
@@ -597,7 +596,7 @@
     <parent>
         <artifactId>freelib-parent</artifactId>
         <groupId>info.freelibrary</groupId>
-        <version>14.0.2</version>
+        <version>14.0.4</version>
     </parent>
 
 </project>

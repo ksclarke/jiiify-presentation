@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.Canvas;
 import info.freelibrary.iiif.presentation.v3.CanvasResource;
-import info.freelibrary.iiif.presentation.v3.Resource;
 import info.freelibrary.iiif.presentation.v3.id.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
@@ -29,7 +28,7 @@ import java.util.Optional;
 @JsonSerialize(using = PaintingAnnotationSerializer.class)
 @JsonDeserialize(using = CanvasAnnotationDeserializer.class)
 public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotation>
-        implements Resource<PaintingAnnotation>, Annotation<PaintingAnnotation> {
+        implements Annotation<PaintingAnnotation> {
 
     /** The logger for painting annotations. */
     private static final Logger LOGGER = LoggerFactory.getLogger(PaintingAnnotation.class, MessageCodes.BUNDLE);

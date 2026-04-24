@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import info.freelibrary.iiif.presentation.v3.Resource;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
@@ -23,7 +22,7 @@ import java.util.Objects;
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.DURATION,
     JsonKeys.LANGUAGE })
 public class SoundContent extends AbstractContentResource<SoundContent>
-        implements TemporalContentResource, AnnotatedContentResource<SoundContent>, Resource<SoundContent> {
+        implements TemporalContentResource, AnnotatedContentResource<SoundContent> {
 
     /** The class of media type this content represents. */
     private static final String MEDIA_TYPE_CLASS = "audio";

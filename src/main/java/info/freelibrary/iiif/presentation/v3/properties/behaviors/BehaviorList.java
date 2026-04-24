@@ -17,6 +17,10 @@ import static info.freelibrary.iiif.presentation.v3.properties.behaviors.Behavio
 import static info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorConstants.TOGETHER;
 import static info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorConstants.UNORDERED;
 
+import info.freelibrary.iiif.presentation.v3.properties.Behavior;
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.util.warnings.PMD;
+
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,17 +30,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import info.freelibrary.util.warnings.PMD;
-
-import info.freelibrary.iiif.presentation.v3.properties.Behavior;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-
 /**
  * An implementation of <code>List&lt;Behavior&gt;</code> that checks for disjointed behaviors. This ensures that
  * behaviors in the list are valid together and, also, valid for the resource with which they're being associated.
  */
 @SuppressWarnings({ PMD.TOO_MANY_STATIC_IMPORTS })
-public class BehaviorList extends ArrayList<Behavior> implements List<Behavior> {
+public class BehaviorList extends ArrayList<Behavior> {
 
     /**
      * A map of behavior disjoints.

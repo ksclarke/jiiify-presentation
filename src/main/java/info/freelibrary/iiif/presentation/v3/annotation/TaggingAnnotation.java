@@ -3,7 +3,6 @@ package info.freelibrary.iiif.presentation.v3.annotation;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.CanvasResource;
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.content.ContentResource;
@@ -25,7 +24,7 @@ import java.util.List;
  */
 @JsonSerialize(using = WebAnnotationSerializer.class)
 @JsonDeserialize(using = WebAnnotationDeserializer.class)
-public class TaggingAnnotation extends WebAnnotation implements Annotation<WebAnnotation> {
+public class TaggingAnnotation extends WebAnnotation {
 
     /** The logger for tagging annotations. */
     private static final Logger LOGGER = LoggerFactory.getLogger(TaggingAnnotation.class, MessageCodes.BUNDLE);

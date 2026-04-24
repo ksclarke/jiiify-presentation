@@ -29,9 +29,8 @@ import java.util.concurrent.Callable;
 import java.util.stream.Stream;
 
 /** A jpv3 executable. */
-@CommandLine.Command(name = "jpv3", mixinStandardHelpOptions = true, version = "jpv3 0.0.1-SNAPSHOT",
-        description = { "", "A tool for working with IIIF manifests and collection documents:", "" },
-        usageHelpWidth = 120)
+@CommandLine.Command(name = "jpv3", version = "jpv3 0.0.1-SNAPSHOT", usageHelpWidth = 120,
+        description = { "", "A tool for working with IIIF manifests and collection documents:", "" })
 public final class JPv3 implements Callable<Integer> {
 
     /** The logger for the executable. */
@@ -121,10 +120,10 @@ public final class JPv3 implements Callable<Integer> {
             }
 
             if (myAction.isUpload() || myAction.isPatch()) {
-                final String csvZipFileName = FileUtils.stripExt(myOutputFile.getFileName().toString()) + ".zip";
+                final String csvZipFileName = FileUtils.stripExt(myOutputFile.getFileName().toString()) + "-csv.zip";
                 final Path csvZipFile = Path.of(myOutputFile.getParent().toString(), csvZipFileName);
 
-                try (HttpClient client = HttpClient.newHttpClient()) {
+                try (HttpClient client = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NORMAL).build()) {
                     final byte[] credentials = (myUsername + COLON + myPassword).getBytes(StandardCharsets.UTF_8);
                     final String basicAuth = "Basic " + Base64.getEncoder().encodeToString(credentials);
                     final HttpRequest.BodyPublisher bodyPublisher = HttpRequest.BodyPublishers.ofFile(myOutputFile);

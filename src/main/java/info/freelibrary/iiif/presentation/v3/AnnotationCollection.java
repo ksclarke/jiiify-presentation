@@ -26,8 +26,7 @@ import java.util.Optional;
  * A grouping of {@link AnnotationPage}(s) that should be managed together as a collection of {@link Annotation}(s).
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class AnnotationCollection extends AbstractResource<AnnotationCollection>
-        implements Resource<AnnotationCollection> {
+public class AnnotationCollection extends AbstractResource<AnnotationCollection> {
 
     /** The collection's first AnnotationPage. */
     @JsonProperty(JsonKeys.FIRST)

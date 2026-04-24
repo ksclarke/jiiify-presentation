@@ -75,6 +75,7 @@
   </rule>
 
   <rule ref="category/java/design.xml">
+    <exclude name="PublicMemberInNonPublicType" />
     <exclude name="LawOfDemeter" />
     <exclude name="LoosePackageCoupling" />
     <exclude name="SimplifyBooleanReturns" />
