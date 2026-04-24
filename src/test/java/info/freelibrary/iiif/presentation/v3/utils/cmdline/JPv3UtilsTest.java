@@ -1,4 +1,3 @@
-
 package info.freelibrary.iiif.presentation.v3.utils.cmdline;
 
 import static org.junit.Assert.assertEquals;
