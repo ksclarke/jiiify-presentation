@@ -7,6 +7,20 @@
       "1958-06-09"
     ]
   },
+  "metadata" : [
+    {
+      "label" : {
+        "none" : [
+          "Repository"
+        ]
+      },
+      "value" : {
+        "none" : [
+          "Instituto de Historia de Cuba"
+        ]
+      }
+    }
+  ],
   "behavior": [
     "individuals"
   ],

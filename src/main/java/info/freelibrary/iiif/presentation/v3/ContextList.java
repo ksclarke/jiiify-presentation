@@ -1,6 +1,13 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.JDK;
+import info.freelibrary.util.warnings.PMD;
+import info.freelibrary.util.warnings.Sonar;
+
 import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
@@ -11,18 +18,10 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.warnings.JDK;
-import info.freelibrary.util.warnings.PMD;
-import info.freelibrary.util.warnings.Sonar;
-
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-
 /**
  * A list of context URIs.
  */
-public class ContextList extends ArrayList<URI> implements List<URI> {
+public class ContextList extends ArrayList<URI> {
 
     /** The IIIF Presentation context URI. */
     public static final URI PRESENTATION_CONTEXT_URI = URI.create("http://iiif.io/api/presentation/3/context.json");

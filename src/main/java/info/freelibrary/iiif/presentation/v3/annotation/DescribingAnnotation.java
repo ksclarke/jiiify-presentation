@@ -1,16 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3.annotation;
 
-import java.util.List;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.warnings.Eclipse;
-
-import info.freelibrary.iiif.presentation.v3.Annotation;
 import info.freelibrary.iiif.presentation.v3.CanvasResource;
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.id.Minter;
@@ -18,13 +10,18 @@ import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentS
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.json.WebAnnotationDeserializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.WebAnnotationSerializer;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.Eclipse;
+
+import java.util.List;
 
 /**
  * An annotation used to associate a description with the target.
  */
 @JsonSerialize(using = WebAnnotationSerializer.class)
 @JsonDeserialize(using = WebAnnotationDeserializer.class)
-public class DescribingAnnotation extends WebAnnotation implements Annotation<WebAnnotation> {
+public class DescribingAnnotation extends WebAnnotation {
 
     /** The logger for describing annotations. */
     private static final Logger LOGGER = LoggerFactory.getLogger(DescribingAnnotation.class, MessageCodes.BUNDLE);

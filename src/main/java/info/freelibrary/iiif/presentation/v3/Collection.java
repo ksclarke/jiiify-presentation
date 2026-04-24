@@ -42,7 +42,7 @@ import java.util.Optional;
  * publishing institution.
  */
 @SuppressWarnings({ PMD.COUPLING_BETWEEN_OBJECTS, PMD.EXCESSIVE_IMPORTS })
-public class Collection extends NavigableResource<Collection> implements Resource<Collection> {
+public class Collection extends NavigableResource<Collection> {
 
     /**
      * The collection's accompanying canvas.

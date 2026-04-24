@@ -12,6 +12,7 @@ import info.freelibrary.util.LoggerFactory;
 import org.jspecify.annotations.NonNull;
 
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -40,15 +41,18 @@ public class CsvSources implements Iterable<Path> {
     /** The CSV file paths. */
     private final List<Path> myPaths;
 
+    /** The temporary directory for CSV processing. */
+    private Path myTmpDir;
+
     /**
      * Creates a new CSV iterator from the supplied stream, updating the data with the supplied IIIF server URL.
      *
      * @param aCsvStream A stream of CSV files and data
      * @param aServer A IIIF manifest and collection document server
      */
-    public CsvSources(final Stream<Path> aCsvStream, final String aServer) {
+    public CsvSources(final Stream<Path> aCsvStream, final URI aServer) {
         myPaths = gather(aCsvStream).sorted().toList(); // Sort for easier testing (predictability)
-        myServer = aServer;
+        myServer = aServer.toString();
     }
 
     @Override
@@ -68,6 +72,15 @@ public class CsvSources implements Iterable<Path> {
      */
     public int size() {
         return myPaths.size();
+    }
+
+    /**
+     * Gets the temporary directory used for CSV processing. This is only needed if the CSV files are compressed (ZIP).
+     *
+     * @return The temporary directory used for CSV processing
+     */
+    public Optional<Path> getTempDir() {
+        return Optional.of(myTmpDir);
     }
 
     @Override
@@ -119,10 +132,10 @@ public class CsvSources implements Iterable<Path> {
                     List<Path> files;
 
                     try (FileSystem fileSystem = FileSystems.newFileSystem(aPath, (ClassLoader) null)) {
-                        final Path parent = Files.createTempDirectory(UUID.randomUUID().toString());
+                        myTmpDir = Files.createTempDirectory(UUID.randomUUID().toString());
                         try (Stream<Path> walk = Files.walk(fileSystem.getPath(SLASH))) {
                             files = walk.filter(Files::isRegularFile).filter(JPv3Utils::isCSV)
-                                    .map(path -> copyFromZip(path, parent)).flatMap(Optional::stream)
+                                    .map(path -> copyFromZip(path, myTmpDir)).flatMap(Optional::stream)
                                     .flatMap(this::gather).toList();
                         }
                     } catch (final IOException details) {

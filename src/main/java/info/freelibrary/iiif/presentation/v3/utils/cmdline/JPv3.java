@@ -8,6 +8,7 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.csv.Mapper;
 import info.freelibrary.iiif.presentation.v3.utils.csv.MappingException;
 import info.freelibrary.util.Constants;
+import info.freelibrary.util.FileUtils;
 import info.freelibrary.util.HTTP;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
@@ -28,9 +29,8 @@ import java.util.concurrent.Callable;
 import java.util.stream.Stream;
 
 /** A jpv3 executable. */
-@CommandLine.Command(name = "jpv3", mixinStandardHelpOptions = true, version = "jpv3 0.0.1-SNAPSHOT",
-        description = { "", "A tool for working with IIIF manifests and collection documents:", "" },
-        usageHelpWidth = 120)
+@CommandLine.Command(name = "jpv3", version = "jpv3 0.0.1-SNAPSHOT", usageHelpWidth = 120,
+        description = { "", "A tool for working with IIIF manifests and collection documents:", "" })
 public final class JPv3 implements Callable<Integer> {
 
     /** The logger for the executable. */
@@ -62,7 +62,7 @@ public final class JPv3 implements Callable<Integer> {
 
     /** The IIIF manifests and collection documents server. */
     @CommandLine.Option(names = { "-H", "--host" }, description = "The IIIF manifests and collection documents server",
-            paramLabel = "HOST", defaultValue = "${env:JPV3_HOST}", required = true)
+            paramLabel = "HOST", defaultValue = "${env:JPV3_HOST}")
     private URI myHost;
 
     /** The help flag. */
@@ -104,8 +104,8 @@ public final class JPv3 implements Callable<Integer> {
         }
 
         // Make sure we have a username and password if we're uploading the resulting ZIP file
-        if ((myAction.myUploadFlag || myAction.myPatchFlag) &&
-                (StringUtils.trimToNull(myUsername) == null || StringUtils.trimToNull(myPassword) == null)) {
+        if ((myAction.myUploadFlag || myAction.myPatchFlag) && (StringUtils.trimToNull(myUsername) == null ||
+                StringUtils.trimToNull(myPassword) == null || myHost == null)) {
             throw new CommandLine.ParameterException(new CommandLine(this),
                     LOGGER.getMessage(MessageCodes.JPA_174, Constants.EOL));
         }
@@ -120,7 +120,10 @@ public final class JPv3 implements Callable<Integer> {
             }
 
             if (myAction.isUpload() || myAction.isPatch()) {
-                try (HttpClient client = HttpClient.newHttpClient()) {
+                final String csvZipFileName = FileUtils.stripExt(myOutputFile.getFileName().toString()) + "-csv.zip";
+                final Path csvZipFile = Path.of(myOutputFile.getParent().toString(), csvZipFileName);
+
+                try (HttpClient client = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NORMAL).build()) {
                     final byte[] credentials = (myUsername + COLON + myPassword).getBytes(StandardCharsets.UTF_8);
                     final String basicAuth = "Basic " + Base64.getEncoder().encodeToString(credentials);
                     final HttpRequest.BodyPublisher bodyPublisher = HttpRequest.BodyPublishers.ofFile(myOutputFile);
@@ -144,10 +147,12 @@ public final class JPv3 implements Callable<Integer> {
                         LOGGER.error(LOGGER.getMessage(MessageCodes.JPA_177, statusCode, response.body()));
                         return statusCode;
                     }
+
+                    LOGGER.info(LOGGER.getMessage(MessageCodes.JPA_180, myOutputFile.toAbsolutePath()));
                 }
 
-                LOGGER.info(LOGGER.getMessage(MessageCodes.JPA_180, myOutputFile.toAbsolutePath()));
-                return 0;
+                LOGGER.info(LOGGER.getMessage(MessageCodes.JPA_189, csvZipFile));
+                return JPv3Utils.outputZipFile(myInputFile, csvZipFile, myHost);
             } else if (myAction.isCreate()) {
                 LOGGER.info(LOGGER.getMessage(MessageCodes.JPA_178, myOutputFile.toAbsolutePath()));
                 return 0;

@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3.utils.csv;
 
+import static info.freelibrary.iiif.presentation.v3.utils.cmdline.JPv3Utils.CSV_EXT;
+import static info.freelibrary.iiif.presentation.v3.utils.cmdline.JPv3Utils.ZIP_EXT;
 import static info.freelibrary.util.Constants.SLASH;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -10,12 +12,10 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
-import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-import info.freelibrary.util.Constants;
+import info.freelibrary.iiif.presentation.v3.utils.cmdline.JPv3Utils;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.warnings.PMD;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -31,17 +31,10 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /** The reader class provides functionality to read CSV files. */
-// @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
 public class Reader {
 
     /** The logger for this class. */
     private static final Logger LOGGER = LoggerFactory.getLogger(Reader.class, MessageCodes.BUNDLE);
-
-    /** The file extension for CSV files. */
-    private static final String CSV_EXT = Constants.DOT_CHAR + MediaType.TEXT_CSV.getExt();
-
-    /** The file extension for ZIP files. */
-    private static final String ZIP_EXT = Constants.DOT_CHAR + MediaType.APPLICATION_ZIP.getExt();
 
     /** A preconfigured reader for CSV files. */
     private final ObjectReader myReader;
@@ -56,22 +49,6 @@ public class Reader {
         builder.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
         myReader = builder.build().readerFor(Row.class).with(schema);
-    }
-
-    /**
-     * Closes an {@link AutoCloseable} quietly.
-     *
-     * @param aCloseable An {@link AutoCloseable} to close
-     */
-    @SuppressWarnings({ PMD.AVOID_CATCHING_GENERIC_EXCEPTION })
-    private static void closeQuietly(final AutoCloseable aCloseable) {
-        if (aCloseable != null) {
-            try {
-                aCloseable.close();
-            } catch (final Exception ignored) {
-                // This is intentionally ignored
-            }
-        }
     }
 
     /**
@@ -103,7 +80,7 @@ public class Reader {
                     final List<Path> files;
 
                     try (Stream<Path> paths = Files.walk(aPath)) {
-                        files = paths.filter(Files::isRegularFile).filter(this::isCSV).toList();
+                        files = paths.filter(Files::isRegularFile).filter(JPv3Utils::isCSV).toList();
                     } // Closes the walk stream, but we can still stream from our 'files' list
 
                     return files.stream().flatMap(this::rows);
@@ -113,12 +90,12 @@ public class Reader {
 
                     try {
                         final Stream<Path> paths = Files.walk(fileSystem.getPath(SLASH)).filter(Files::isRegularFile);
-                        return paths.filter(this::isCSV).flatMap(this::rows).onClose(() -> {
-                            closeQuietly(paths);
-                            closeQuietly(fileSystem);
+                        return paths.filter(JPv3Utils::isCSV).flatMap(this::rows).onClose(() -> {
+                            JPv3Utils.closeQuietly(paths);
+                            JPv3Utils.closeQuietly(fileSystem);
                         });
                     } catch (final IOException details) {
-                        closeQuietly(fileSystem);
+                        JPv3Utils.closeQuietly(fileSystem);
 
                         LOGGER.error(details, details.getMessage());
                         return Stream.empty();
@@ -140,21 +117,11 @@ public class Reader {
 
             // Ensure we close the iterator (which closes the underlying buffered reader) when the stream closes
             return stream.onClose(() -> {
-                closeQuietly(iterator);
+                JPv3Utils.closeQuietly(iterator);
             });
         } catch (IOException details) {
             LOGGER.error(details, details.getMessage());
             return Stream.empty();
         }
-    }
-
-    /**
-     * Checks if a path represents a CSV file.
-     *
-     * @param aPath A path to check
-     * @return True if the path is a CSV file; else, false
-     */
-    private boolean isCSV(final Path aPath) {
-        return (aPath.getFileName() != null ? aPath.getFileName().toString() : aPath.toString()).endsWith(CSV_EXT);
     }
 }

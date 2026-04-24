@@ -1,0 +1,379 @@
+{
+  "reflection": [
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.AbstractCanvas",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.AbstractResource",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.AnnotationPage",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.Canvas",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.CanvasResource",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.content.AbstractContentResource",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.content.AnnotatedContentResource",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.content.ContentResource",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.content.ImageContent",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.content.SpatialContentResource",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.properties.Behavior",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.properties.Localized",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.utils.cmdline.JPv3",
+      "allDeclaredFields": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.utils.cmdline.JPv3$Action",
+      "allDeclaredFields": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.utils.csv.Row",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.utils.json.AnnotationPageSerializer",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeSerializer",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.utils.json.TextContentSerializer",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector",
+      "allDeclaredConstructors": true,
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.properties.selectors.FragmentSelector",
+      "allDeclaredConstructors": true,
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.properties.selectors.Selector",
+      "allDeclaredConstructors": true,
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
+    },
+    {
+      "type": "net.jpountz.xxhash.XXHash32JavaSafe",
+      "allDeclaredFields": true
+    },
+    {
+      "type": "net.jpountz.xxhash.StreamingXXHash32JavaSafe$Factory",
+      "allDeclaredFields": true
+    },
+    {
+      "type": "net.jpountz.xxhash.XXHash64JavaSafe",
+      "allDeclaredFields": true
+    },
+    {
+      "type": "net.jpountz.xxhash.StreamingXXHash64JavaSafe$Factory",
+      "allDeclaredFields": true
+    },
+    {
+      "type": "java.lang.Cloneable",
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "java.util.AbstractCollection",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "java.util.AbstractList",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "java.util.ArrayList",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "java.lang.Iterable",
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "java.util.Collection",
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "java.util.Collections$UnmodifiableCollection",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "java.util.Collections$UnmodifiableList",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "java.util.Collections$UnmodifiableRandomAccessList",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "java.util.List",
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "java.util.RandomAccess",
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "java.lang.Comparable",
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "java.net.URI",
+      "allDeclaredFields": true
+    },
+    {
+      "type": "java.net.URL",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "java.io.Serializable",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.id.DefaultMinter",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.AbstractResource",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.Collection",
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.Collection$Item",
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.NavigableResource",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.Manifest",
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.Resource",
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.properties.behaviors.CollectionBehavior",
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.properties.ViewingDirection",
+      "allDeclaredMethods": true,
+      "allDeclaredFields": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.properties.I18nProperty",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.properties.Label",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.Service",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.Service$Profile",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.services.AbstractImageService",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.services.AbstractService",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.services.image.Format",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.services.image.Quality",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.services.ImageService",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.services.ImageService$Profile",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.services.ImageService2",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.services.ImageService2$Profile",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.services.ImageService3",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.services.ImageService3$Profile",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.util.Labeled",
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.utils.json.AnnotationTargetSerializer",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.utils.json.ContextListSerializer",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.utils.json.PaintingAnnotationSerializer",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "ch.qos.logback.core.status.NopStatusListener",
+      "allDeclaredConstructors": true
+    }
+  ],
+  "resources": [
+    {"glob": "iiif_presentation_messages.xml"},
+    {"glob": "iiif_presentation_messages_*.xml"},
+    {"glob": "logback.xml"},
+    {"glob": "META-INF/services/java.net.spi.InetAddressResolverProvider"},
+    {"glob": "freelib-utils_messages.xml"},
+    {"glob": "freelib-utils_messages_*.xml"}
+  ],
+  "serialization": [
+    {"type": "java.util.LinkedHashSet"},
+    {"type": "java.util.HashSet"},
+    {"type": "java.lang.String"}
+  ]
+}

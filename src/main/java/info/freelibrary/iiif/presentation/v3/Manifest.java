@@ -30,7 +30,7 @@ import java.util.Optional;
  * single object such as a book, a photograph, or a statue.
  */
 @SuppressWarnings(PMD.TOO_MANY_METHODS)
-public class Manifest extends NavigableResource<Manifest> implements Resource<Manifest> {
+public class Manifest extends NavigableResource<Manifest> {
 
     /**
      * The manifest's accompanying canvas.

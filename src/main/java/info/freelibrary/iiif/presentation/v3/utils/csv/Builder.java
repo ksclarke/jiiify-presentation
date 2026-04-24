@@ -12,6 +12,8 @@ import info.freelibrary.iiif.presentation.v3.content.VideoContent;
 import info.freelibrary.iiif.presentation.v3.id.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
+import info.freelibrary.iiif.presentation.v3.properties.Metadata;
+import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.ViewingDirection;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CollectionBehavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavior;
@@ -178,6 +180,18 @@ public class Builder {
 
         aRow.getTitle().ifPresent(title -> {
             aResource.setLabel(new Label(title));
+        });
+
+        aRow.getRepository().ifPresent(repository -> {
+            aResource.getMetadata().add(new Metadata(Keys.REPOSITORY, repository));
+        });
+
+        aRow.getLocalRights().ifPresent(attribution -> {
+            aResource.setRequiredStatement(new RequiredStatement("Attribution", attribution));
+        });
+
+        aRow.getRightsContact().ifPresent(rightsContact -> {
+            aResource.getMetadata().add(new Metadata("Rights contact", rightsContact));
         });
 
         return aResource;

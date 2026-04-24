@@ -34,7 +34,7 @@ import java.util.Optional;
  * chapters, verses, sections, non-content-bearing pages, the table of contents, or similar. Equally, physical features
  * might be important such as quires or gatherings, sections that have been added later and so forth.
  */
-public class Range extends NavigableResource<Range> implements Resource<Range> {
+public class Range extends NavigableResource<Range> {
 
     /**
      * The range's accompanying canvas.

@@ -3,7 +3,6 @@ package info.freelibrary.iiif.presentation.v3.content;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import info.freelibrary.iiif.presentation.v3.Resource;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
@@ -17,7 +16,7 @@ import java.util.List;
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
 public class ModelContent extends AbstractContentResource<ModelContent>
-        implements AnnotatedContentResource<ModelContent>, Resource<ModelContent> {
+        implements AnnotatedContentResource<ModelContent> {
 
     /** The class of media type this content represents. */
     private static final String MEDIA_TYPE_CLASS = "model";

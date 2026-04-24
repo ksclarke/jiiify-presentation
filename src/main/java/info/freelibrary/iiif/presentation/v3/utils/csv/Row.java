@@ -163,6 +163,12 @@ public final class Row {
     /** The item's summary note. */
     private String mySummary;
 
+    /** The item's local rights statement. */
+    private String myLocalRightsStatement;
+
+    /** The item's rights contact information. */
+    private String myRightsContact;
+
     /** Creates a new Row. */
     private Row() {
         // This is intentionally left empty
@@ -328,28 +334,6 @@ public final class Row {
     }
 
     /**
-     * Gets the optional note.
-     *
-     * @return An Optional containing the note if set; otherwise, an empty Optional
-     */
-    @JsonGetter(Keys.NOTE)
-    public Optional<String> getNote() {
-        return myNote == null || myNote.isBlank() ? Optional.empty() : Optional.of(myNote);
-    }
-
-    /**
-     * Sets the optional note.
-     *
-     * @param aNote The note to set
-     * @return This Row instance for fluent chaining
-     */
-    @JsonSetter(Keys.NOTE)
-    public Row setNote(final String aNote) {
-        myNote = aNote;
-        return this;
-    }
-
-    /**
      * Gets the optional alternative title.
      *
      * @return An Optional containing the alternative title if set; otherwise, an empty Optional
@@ -501,8 +485,54 @@ public final class Row {
      * @return This Row instance for fluent chaining
      */
     @JsonSetter(Keys.REPOSITORY)
+    @JsonAlias({ "Name.repository" })
     public Row setRepository(final String aRepository) {
         myRepository = aRepository;
+        return this;
+    }
+
+    /**
+     * Gets the optional local rights statement.
+     *
+     * @return An Optional containing local rights statement if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.RIGHTS_STATEMENT_LOCAL)
+    public Optional<String> getLocalRights() {
+        return myLocalRightsStatement == null || myLocalRightsStatement.isBlank() ? Optional.empty()
+                : Optional.of(myLocalRightsStatement);
+    }
+
+    /**
+     * Sets the optional local rights statement.
+     *
+     * @param aLocalRightsStatement The local rights statement to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.RIGHTS_STATEMENT_LOCAL)
+    public Row setLocalRights(final String aLocalRightsStatement) {
+        myLocalRightsStatement = aLocalRightsStatement;
+        return this;
+    }
+
+    /**
+     * Gets the optional rights contact.
+     *
+     * @return An Optional containing rights contact if set; otherwise, an empty Optional
+     */
+    @JsonGetter(Keys.RIGHTS_CONTACT)
+    public Optional<String> getRightsContact() {
+        return myRightsContact == null || myRightsContact.isBlank() ? Optional.empty() : Optional.of(myRightsContact);
+    }
+
+    /**
+     * Sets the optional rights contact.
+     *
+     * @param aRightsContact The rights contact to set
+     * @return This Row instance for fluent chaining
+     */
+    @JsonSetter(Keys.RIGHTS_CONTACT)
+    public Row setRightsContact(final String aRightsContact) {
+        myRightsContact = aRightsContact;
         return this;
     }
 
@@ -592,28 +622,6 @@ public final class Row {
     @JsonAlias({ "Name.creator" })
     public Row setCreator(final String aCreator) {
         myCreator = aCreator;
-        return this;
-    }
-
-    /**
-     * Gets the optional director.
-     *
-     * @return An Optional containing the director if set; otherwise, an empty Optional
-     */
-    @JsonGetter(Keys.DIRECTOR)
-    public Optional<String> getDirector() {
-        return myDirector == null || myDirector.isBlank() ? Optional.empty() : Optional.of(myDirector);
-    }
-
-    /**
-     * Sets the optional director.
-     *
-     * @param aDirector The director to set
-     * @return This Row instance for fluent chaining
-     */
-    @JsonSetter(Keys.DIRECTOR)
-    public Row setDirector(final String aDirector) {
-        myDirector = aDirector;
         return this;
     }
 

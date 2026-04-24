@@ -1,13 +1,13 @@
 
 package info.freelibrary.iiif.presentation.v3.utils.csv;
 
+import static info.freelibrary.util.ThrowingConsumer.sneaky;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 import info.freelibrary.util.FileUtils;
 import info.freelibrary.util.RegexFileFilter;
-import info.freelibrary.util.ThrowingConsumer;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -88,7 +88,7 @@ public class MapperTest {
 
             // Check that the ZIP file contains the expected JSON files
             try (ZipFile zipFile = new ZipFile(myZipFile.toFile())) {
-                zipFile.stream().filter(entry -> !entry.isDirectory()).forEach(ThrowingConsumer.sneaky(entry -> {
+                zipFile.stream().filter(entry -> !entry.isDirectory()).forEach(sneaky(entry -> {
                     try (InputStream inStream = zipFile.getInputStream(entry)) {
                         final String found = new String(inStream.readAllBytes(), StandardCharsets.UTF_8);
                         final String expected = Files.readString(Path.of(EXPECTED_RESULTS, entry.getName()));

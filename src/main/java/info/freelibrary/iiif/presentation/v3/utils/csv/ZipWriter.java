@@ -7,7 +7,6 @@ import java.io.ByteArrayInputStream;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.zip.ZipEntry;
@@ -48,7 +47,7 @@ public class ZipWriter implements Closeable {
      */
     public void writeFile(final String aFileName, final String aFileContent) throws IOException {
         try (InputStream inStream = new ByteArrayInputStream(aFileContent.getBytes(UTF_8))) {
-            final ZipEntry entry = new ZipEntry(URLEncoder.encode(aFileName, UTF_8));
+            final ZipEntry entry = new ZipEntry(aFileName);
 
             myOutputStream.putNextEntry(entry);
             inStream.transferTo(myOutputStream);

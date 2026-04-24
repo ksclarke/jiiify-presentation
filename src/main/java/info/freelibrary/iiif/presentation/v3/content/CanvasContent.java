@@ -2,7 +2,6 @@
 package info.freelibrary.iiif.presentation.v3.content;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import info.freelibrary.iiif.presentation.v3.Resource;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.annotation.PaintingAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotation.SupplementingAnnotation;
@@ -15,8 +14,7 @@ import java.util.List;
 /**
  * Canvas content that can be associated with a {@link PaintingAnnotation} or {@link SupplementingAnnotation}.
  */
-public class CanvasContent extends AbstractContentResource<CanvasContent>
-        implements ContentResource, Resource<CanvasContent> {
+public class CanvasContent extends AbstractContentResource<CanvasContent> implements ContentResource {
 
     /**
      * Creates a canvas content resource from the supplied ID.
