@@ -16,6 +16,7 @@ import org.junit.rules.TestName;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
@@ -56,6 +57,9 @@ public class MapperTest {
     /** A directory containing JSON files corresponding to multipart CSV files. */
     private static final String EXPECTED_RESULTS = "src/test/resources/json/multi-part";
 
+    /** The server to test with. */
+    private static final URI SERVER = URI.create("https://iiif.library.ucla.edu");
+
     /** The test's name. */
     @Rule
     public TestName myTestName = new TestName();
@@ -83,7 +87,7 @@ public class MapperTest {
             // Only load the smaller CSV for this test
             return name.endsWith(".csv") && (name.startsWith("accion-") || name.startsWith("lat-"));
         })) {
-            assertEquals(0, new Mapper(fileStream, myZipFile).map());
+            assertEquals(0, new Mapper(fileStream, myZipFile).map(SERVER));
             assertTrue(Files.exists(myZipFile));
 
             // Check that the ZIP file contains the expected JSON files
@@ -107,7 +111,7 @@ public class MapperTest {
     /** Tests that no exception is thrown when the Mapper is initialized. */
     @Test
     public void testMapperInit() throws Exception {
-        final int result = new Mapper(Stream.of(CSV_FILE), myZipFile).map();
+        final int result = new Mapper(Stream.of(CSV_FILE), myZipFile).map(SERVER);
 
         assertEquals(0, result);
         testZipFiles(myZipFile);
@@ -125,7 +129,7 @@ public class MapperTest {
     public void testMapperInitFiles() throws Exception {
         final File dir = new File("src/test/resources/csv");
         final File[] files = FileUtils.listFiles(dir, new RegexFileFilter(".*-2-.*"));
-        final int result = new Mapper(Arrays.stream(files).map(File::toPath), myZipFile).map();
+        final int result = new Mapper(Arrays.stream(files).map(File::toPath), myZipFile).map(SERVER);
 
         assertEquals(0, result);
         testZipFiles(myZipFile);
@@ -159,6 +163,6 @@ public class MapperTest {
      * @return The ID with replacements applied
      */
     private String replaceIDs(final String aID) {
-        return aID.replaceAll(REPLACED_ID, REPLACE_ID);
+        return aID.replaceAll(REPLACED_ID, REPLACE_ID).replaceAll("\"(https://localhost:9999/[^\"]*)\"", REPLACE_ID);
     }
 }

@@ -112,7 +112,7 @@ public final class JPv3 implements Callable<Integer> {
 
         try {
             // Map the CSV file(s) to JSON manifests and collection documents
-            final int result = new Mapper(Stream.of(myInputFile), myOutputFile).map();
+            final int result = new Mapper(Stream.of(myInputFile), myOutputFile).map(myHost);
 
             // If the mapping was unsuccessful, we can bail here; nothing else needs to happen
             if (result != 0) {

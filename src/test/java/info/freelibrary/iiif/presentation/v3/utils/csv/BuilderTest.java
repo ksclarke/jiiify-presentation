@@ -8,6 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.net.URI;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
@@ -19,6 +20,9 @@ public class BuilderTest {
 
     /** The CSV file to test with. */
     private static final Path CSV_FILE = Path.of("src/test/resources/csv/jbu-collection.csv");
+
+    /** The server to test with. We're not sending anything, so okay to use production. */
+    private static final URI SERVER = URI.create("https://iiif.library.ucla.edu");
 
     /** The CSV data to test. */
     private Stream<Row> myRows;
@@ -52,7 +56,7 @@ public class BuilderTest {
      */
     @Test
     public void testBuild() throws MappingException {
-        final Collection collection = new Builder().build(myRows.findFirst().orElseThrow());
+        final Collection collection = new Builder().setServer(SERVER).build(myRows.findFirst().orElseThrow());
         final String expected = """
             {
               "@context" : "http://iiif.io/api/presentation/3/context.json",

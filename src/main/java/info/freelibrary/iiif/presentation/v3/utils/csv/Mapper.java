@@ -29,6 +29,7 @@ import org.mapdb.HTreeMap;
 import org.mapdb.Serializer;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -149,21 +150,24 @@ public class Mapper {
     /**
      * Gets the result of the mapping.
      *
+     * @param aServer The server to which the mapped data will be published
      * @return The result of the mapping
      * @throws MappingException If there is trouble mapping the CSV data
      * @throws IOException If there is trouble reading the CSV file
      */
-    public int map() throws MappingException, IOException {
+    public int map(final URI aServer) throws MappingException, IOException {
         final List<String> collections = myObjTypes.getOrDefault(Keys.COLLECTION, Set.of()).stream()
                 .filter(id -> !myChildren.contains(id)).toList();
         final int result;
+
+        myBuilder.setServer(aServer);
 
         // Check to see if our CSV data has any collections, our highest level in the hierarchy
         if (!collections.isEmpty()) {
             result = mapCollections(collections).toFile().exists() ? 0 : -1;
         } else {
             final List<String> works = myObjTypes.getOrDefault(Keys.WORK, Set.of()).stream().toList();
-            result = !works.isEmpty() ? 0 : -1;
+            result = !works.isEmpty() ? 0 : -1; // FIXME
         }
 
         close();
