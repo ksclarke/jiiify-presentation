@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation.v3.utils.cmdline;
 
 import static info.freelibrary.util.Constants.EMPTY;
+import static info.freelibrary.util.Constants.PERIOD;
 import static info.freelibrary.util.Constants.SLASH;
 import static info.freelibrary.util.ThrowingConsumer.sneaky;
 import static org.slf4j.Logger.ROOT_LOGGER_NAME;
@@ -97,7 +98,8 @@ public final class JPv3Utils {
      * @return True if the path is a CSV file; else, false
      */
     public static boolean isCSV(final Path aPath) {
-        return (aPath.getFileName() != null ? aPath.getFileName().toString() : aPath.toString()).endsWith(CSV_EXT);
+        final String path = aPath.toString(); // Throw NPE instead of handling nulls
+        return path.endsWith(CSV_EXT) && !path.startsWith(PERIOD);
     }
 
     /**
