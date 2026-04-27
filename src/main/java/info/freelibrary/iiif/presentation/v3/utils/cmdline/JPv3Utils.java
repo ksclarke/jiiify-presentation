@@ -98,9 +98,14 @@ public final class JPv3Utils {
      * @return True if the path is a CSV file; else, false
      */
     public static boolean isCSV(final Path aPath) {
-        final String path = aPath.toString(); // Throw NPE instead of handling nulls
-        final Path fileName = aPath.getFileName();
-        return path.endsWith(CSV_EXT) && fileName != null && !fileName.toString().startsWith(PERIOD);
+        final Path fileName = aPath.getFileName(); // Throw NPE instead of handling nulls
+
+        if (fileName != null) {
+            final String name = fileName.toString();
+            return name.endsWith(CSV_EXT) && !name.startsWith(PERIOD);
+        }
+    
+        return false;
     }
 
     /**
