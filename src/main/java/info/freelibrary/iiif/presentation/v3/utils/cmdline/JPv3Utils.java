@@ -56,7 +56,7 @@ import java.util.stream.Stream;
 /**
  * Utility class for working with IIIF Presentation JSON files.
  */
-@SuppressWarnings({ PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS })
+@SuppressWarnings({ PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS, PMD.TOO_MANY_STATIC_IMPORTS })
 public final class JPv3Utils {
 
     /** The file extension for CSV files. */
