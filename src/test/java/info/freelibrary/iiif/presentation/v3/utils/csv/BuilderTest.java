@@ -56,7 +56,8 @@ public class BuilderTest {
      */
     @Test
     public void testBuild() throws MappingException {
-        final Collection collection = new Builder().setServer(SERVER).build(myRows.findFirst().orElseThrow());
+        final Builder builder = new Builder().setServer(SERVER).setImageServer(SERVER);
+        final Collection collection = builder.build(myRows.findFirst().orElseThrow());
         final String expected = """
             {
               "@context" : "http://iiif.io/api/presentation/3/context.json",

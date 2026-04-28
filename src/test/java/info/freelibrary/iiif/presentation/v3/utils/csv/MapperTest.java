@@ -46,7 +46,7 @@ public class MapperTest {
     private static final Path CSV_FILE = Path.of("src/test/resources/csv/jbu-collection.csv");
 
     /** A regex to replace the ID with a placeholder. */
-    private static final String REPLACED_ID = "\"(https://iiif\\.library\\.ucla\\.edu/[^\"]*)\"";
+    private static final String REPLACED_ID = "\"(https://iiif\\.library\\.ucla\\.edu(?:/iiif/2)?/[^\"]*)\"";
 
     /** A placeholder ID. */
     private static final String REPLACE_ID = "\"PLACEHOLDER_ID\"";
@@ -59,6 +59,9 @@ public class MapperTest {
 
     /** The server to test with. */
     private static final URI SERVER = URI.create("https://iiif.library.ucla.edu");
+
+    /** The IIIF image server to test with. */
+    private static final URI IIIF_SERVER = URI.create("https://iiif.library.ucla.edu/iiif/2");
 
     /** The test's name. */
     @Rule
@@ -87,7 +90,7 @@ public class MapperTest {
             // Only load the smaller CSV for this test
             return name.endsWith(".csv") && (name.startsWith("accion-") || name.startsWith("lat-"));
         })) {
-            assertEquals(0, new Mapper(fileStream, myZipFile).map(SERVER));
+            assertEquals(0, new Mapper(fileStream, myZipFile).map(SERVER, IIIF_SERVER));
             assertTrue(Files.exists(myZipFile));
 
             // Check that the ZIP file contains the expected JSON files
@@ -111,7 +114,7 @@ public class MapperTest {
     /** Tests that no exception is thrown when the Mapper is initialized. */
     @Test
     public void testMapperInit() throws Exception {
-        final int result = new Mapper(Stream.of(CSV_FILE), myZipFile).map(SERVER);
+        final int result = new Mapper(Stream.of(CSV_FILE), myZipFile).map(SERVER, IIIF_SERVER);
 
         assertEquals(0, result);
         testZipFiles(myZipFile);
@@ -129,7 +132,7 @@ public class MapperTest {
     public void testMapperInitFiles() throws Exception {
         final File dir = new File("src/test/resources/csv");
         final File[] files = FileUtils.listFiles(dir, new RegexFileFilter(".*-2-.*"));
-        final int result = new Mapper(Arrays.stream(files).map(File::toPath), myZipFile).map(SERVER);
+        final int result = new Mapper(Arrays.stream(files).map(File::toPath), myZipFile).map(SERVER, IIIF_SERVER);
 
         assertEquals(0, result);
         testZipFiles(myZipFile);
@@ -163,6 +166,6 @@ public class MapperTest {
      * @return The ID with replacements applied
      */
     private String replaceIDs(final String aID) {
-        return aID.replaceAll(REPLACED_ID, REPLACE_ID).replaceAll("\"(https://localhost:9999/[^\"]*)\"", REPLACE_ID);
+        return aID.replaceAll(REPLACED_ID, REPLACE_ID);
     }
 }

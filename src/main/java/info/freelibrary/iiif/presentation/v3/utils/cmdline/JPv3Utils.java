@@ -104,7 +104,7 @@ public final class JPv3Utils {
             final String name = fileName.toString();
             return name.endsWith(CSV_EXT) && !name.startsWith(PERIOD);
         }
-    
+
         return false;
     }
 

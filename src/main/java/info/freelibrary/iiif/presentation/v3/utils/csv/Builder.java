@@ -1,6 +1,9 @@
 
 package info.freelibrary.iiif.presentation.v3.utils.csv;
 
+import static info.freelibrary.util.Constants.SLASH;
+import static info.freelibrary.util.ThrowingFunction.sneaky;
+
 import info.freelibrary.iiif.presentation.v3.Canvas;
 import info.freelibrary.iiif.presentation.v3.Collection;
 import info.freelibrary.iiif.presentation.v3.Manifest;
@@ -20,10 +23,8 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.ManifestBehavi
 import info.freelibrary.iiif.presentation.v3.services.ImageService;
 import info.freelibrary.iiif.presentation.v3.services.ImageService2;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
-import info.freelibrary.util.Constants;
 import info.freelibrary.util.Env;
 import info.freelibrary.util.StringUtils;
-import info.freelibrary.util.ThrowingFunction;
 import info.freelibrary.util.warnings.JDK;
 import info.freelibrary.util.warnings.PMD;
 
@@ -35,12 +36,27 @@ import java.util.Optional;
 /** A IIIF builder for CSV-based deserialization. */
 public class Builder {
 
+    /** The default thumbnail pattern. */
+    private static final String DEFAULT_THUMBNAIL_PATTERN = "{}/full/!200,200/0/default.jpg";
+
     /** The server to which the built resources will be published. */
     private URI myServer;
+
+    /** The server from which the image resources are available. */
+    private URI myImageServer;
 
     /** Creates a new builder. */
     public Builder() {
         // This is intentionally left empty
+    }
+
+    /**
+     * Gets the server to which the built resources will be published.
+     *
+     * @return The server URI
+     */
+    public URI getServer() {
+        return myServer;
     }
 
     /**
@@ -55,12 +71,23 @@ public class Builder {
     }
 
     /**
-     * Gets the server to which the built resources will be published.
+     * Gets the IIIF image server from which images are served.
      *
-     * @return The server URI
+     * @return The image server URI
      */
-    public URI getServer() {
-        return myServer;
+    public URI getImageServer() {
+        return myImageServer;
+    }
+
+    /**
+     * Sets the IIIF image server from which images are served.
+     *
+     * @param aImageServer The image server URI
+     * @return This builder instance for method chaining
+     */
+    public Builder setImageServer(final URI aImageServer) {
+        myImageServer = aImageServer;
+        return this;
     }
 
     /**
@@ -77,7 +104,7 @@ public class Builder {
         final String id = aRow.getItemID().orElseThrow(() -> new MappingException(MessageCodes.JPA_002));
         final Label label = new Label(aRow.getTitle().orElseThrow(() -> new MappingException(MessageCodes.JPA_003)));
         final String objType = aRow.getObjectType().orElseThrow(() -> new MappingException(MessageCodes.JPA_160));
-        final Optional<String> iiifResourceType = Optional.ofNullable(aRow.getResourceType().orElse(null));
+        final Optional<String> iiifResourceType = aRow.getResourceType();
 
         return switch (iiifResourceType.orElse(objType)) {
             case Keys.COLLECTION -> {
@@ -157,6 +184,7 @@ public class Builder {
         // If the ID starts with a "https://", we assume it's already formatted correctly; else, we do it
         if (!aID.startsWith("https://")) {
             final String host = myServer != null ? myServer.toString() : "https://localhost:9999";
+            final String imageHost = myImageServer != null ? myImageServer.toString() : "https://localhost:8888";
             final String urlTemplate;
 
             switch (aResourceType) {
@@ -166,16 +194,18 @@ public class Builder {
                 case ResourceTypes.MANIFEST:
                     urlTemplate = Env.get(Configs.JPV3_MANIFEST_PATH, "{}/{}/manifest");
                     return StringUtils.format(urlTemplate, host, URLEncoder.encode(aID, StandardCharsets.UTF_8));
-                case ResourceTypes.CANVAS, ResourceTypes.IMAGE_SERVICE_2, ResourceTypes.IMAGE_SERVICE_3:
-                    return host + Constants.SLASH + URLEncoder.encode(aID, StandardCharsets.UTF_8);
+                case ResourceTypes.CANVAS:
+                    return host + SLASH + URLEncoder.encode(aID, StandardCharsets.UTF_8);
                 case ResourceTypes.IMAGE:
                     urlTemplate = Env.get(Configs.JPV3_IMAGE_PATTERN, "{}/{}/full/600,/0/default.jpg");
-                    return StringUtils.format(urlTemplate, host, URLEncoder.encode(aID, StandardCharsets.UTF_8));
+                    return StringUtils.format(urlTemplate, imageHost, URLEncoder.encode(aID, StandardCharsets.UTF_8));
+                case Keys.THUMBNAIL, ResourceTypes.IMAGE_SERVICE_2, ResourceTypes.IMAGE_SERVICE_3:
+                    return imageHost + SLASH + URLEncoder.encode(aID, StandardCharsets.UTF_8);
                 default:
                     break;
             }
 
-            if (aID.contains(Constants.SLASH)) {
+            if (aID.contains(SLASH)) {
                 return host + URLEncoder.encode(aID, StandardCharsets.UTF_8);
             }
 
@@ -196,10 +226,12 @@ public class Builder {
      */
     private <R extends Resource<R>> R addProperties(final R aResource, final Row aRow) throws MappingException {
         // Add a thumbnail, using ImageContent as the default thumbnail type
-        if (aRow.getObjectType().filter(Keys.LAYER::equals).isEmpty()) {
-            aResource.getType()
-                    .flatMap(type -> aRow.getThumbnail().or(aRow::getItemID)
-                            .map(ThrowingFunction.sneaky(id -> checkID(id, type))).map(this::constructThumbnail))
+        if (aRow.getObjectType().filter(type -> !type.isBlank() && !Keys.LAYER.equals(type)).isPresent()) {
+            final boolean isCollectionOrWork = aRow.getObjectType()
+                    .filter(type -> Keys.COLLECTION.equals(type) || Keys.WORK.equals(type)).isPresent();
+
+            aRow.getThumbnail().or(() -> isCollectionOrWork ? Optional.empty() : aRow.getItemID())
+                    .map(sneaky(id -> checkID(id, Keys.THUMBNAIL))).map(this::constructThumbnail)
                     .ifPresent(aResource.getThumbnails()::add);
         }
 
@@ -236,7 +268,7 @@ public class Builder {
             case MediaType.VIDEO_H264, MediaType.VIDEO_MP4, MediaType.VIDEO_MPEG -> new VideoContent(aThumbnail);
             default -> new ImageContent(aThumbnail);
         }).orElseGet(() -> {
-            final String tnPattern = Env.get(Configs.JPV3_THUMBNAIL_PATTERN, "{}/full/!200,200/0/default.jpg");
+            final String tnPattern = Env.get(Configs.JPV3_THUMBNAIL_PATTERN, DEFAULT_THUMBNAIL_PATTERN);
             return new ImageContent(StringUtils.format(tnPattern, aThumbnail));
         });
     }
