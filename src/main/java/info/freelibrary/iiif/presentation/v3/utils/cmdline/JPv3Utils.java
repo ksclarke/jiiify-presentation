@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation.v3.utils.cmdline;
 
 import static info.freelibrary.util.Constants.EMPTY;
+import static info.freelibrary.util.Constants.PERIOD;
 import static info.freelibrary.util.Constants.SLASH;
 import static info.freelibrary.util.ThrowingConsumer.sneaky;
 import static org.slf4j.Logger.ROOT_LOGGER_NAME;
@@ -55,7 +56,7 @@ import java.util.stream.Stream;
 /**
  * Utility class for working with IIIF Presentation JSON files.
  */
-@SuppressWarnings({ PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS })
+@SuppressWarnings({ PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS, PMD.TOO_MANY_STATIC_IMPORTS })
 public final class JPv3Utils {
 
     /** The file extension for CSV files. */
@@ -97,7 +98,14 @@ public final class JPv3Utils {
      * @return True if the path is a CSV file; else, false
      */
     public static boolean isCSV(final Path aPath) {
-        return (aPath.getFileName() != null ? aPath.getFileName().toString() : aPath.toString()).endsWith(CSV_EXT);
+        final Path fileName = aPath.getFileName(); // Throw NPE instead of handling nulls
+
+        if (fileName != null) {
+            final String name = fileName.toString();
+            return name.endsWith(CSV_EXT) && !name.startsWith(PERIOD);
+        }
+    
+        return false;
     }
 
     /**
