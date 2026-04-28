@@ -151,16 +151,17 @@ public class Mapper {
      * Gets the result of the mapping.
      *
      * @param aServer The server to which the mapped data will be published
+     * @param aImageServer The image server from which images are served
      * @return The result of the mapping
      * @throws MappingException If there is trouble mapping the CSV data
      * @throws IOException If there is trouble reading the CSV file
      */
-    public int map(final URI aServer) throws MappingException, IOException {
+    public int map(final URI aServer, final URI aImageServer) throws MappingException, IOException {
         final List<String> collections = myObjTypes.getOrDefault(Keys.COLLECTION, Set.of()).stream()
                 .filter(id -> !myChildren.contains(id)).toList();
         final int result;
 
-        myBuilder.setServer(aServer);
+        myBuilder.setServer(aServer).setImageServer(aImageServer);
 
         // Check to see if our CSV data has any collections, our highest level in the hierarchy
         if (!collections.isEmpty()) {

@@ -62,8 +62,13 @@ public final class JPv3 implements Callable<Integer> {
 
     /** The IIIF manifests and collection documents server. */
     @CommandLine.Option(names = { "-H", "--host" }, description = "The IIIF manifests and collection documents server",
-            paramLabel = "HOST", defaultValue = "${env:JPV3_HOST}")
+            paramLabel = "HOST", defaultValue = "${env:JPV3_HOST}", required = true)
     private URI myHost;
+
+    /** The IIIF images server. */
+    @CommandLine.Option(names = { "-I", "--iiif" }, description = "The URL of the server that has the IIIF images",
+            paramLabel = "IIIF_SERVER", defaultValue = "${env:JPV3_IIIF_SERVER}", required = true)
+    private URI myImageServer;
 
     /** The help flag. */
     @CommandLine.Option(names = { "-h", "--help" }, usageHelp = true, description = "Display this help message")
@@ -104,15 +109,15 @@ public final class JPv3 implements Callable<Integer> {
         }
 
         // Make sure we have a username and password if we're uploading the resulting ZIP file
-        if ((myAction.myUploadFlag || myAction.myPatchFlag) && (StringUtils.trimToNull(myUsername) == null ||
-                StringUtils.trimToNull(myPassword) == null || myHost == null)) {
+        if ((myAction.myUploadFlag || myAction.myPatchFlag) &&
+                (StringUtils.trimToNull(myUsername) == null || StringUtils.trimToNull(myPassword) == null)) {
             throw new CommandLine.ParameterException(new CommandLine(this),
-              LOGGER.getMessage(MessageCodes.JPA_174, Constants.EOL));
+                    LOGGER.getMessage(MessageCodes.JPA_174, Constants.EOL));
         }
 
         try {
             // Map the CSV file(s) to JSON manifests and collection documents
-            final int result = new Mapper(Stream.of(myInputFile), myOutputFile).map(myHost);
+            final int result = new Mapper(Stream.of(myInputFile), myOutputFile).map(myHost, myImageServer);
 
             // If the mapping was unsuccessful, we can bail here; nothing else needs to happen
             if (result != 0) {
@@ -128,8 +133,8 @@ public final class JPv3 implements Callable<Integer> {
                     final String basicAuth = "Basic " + Base64.getEncoder().encodeToString(credentials);
                     final HttpRequest.BodyPublisher bodyPublisher = HttpRequest.BodyPublishers.ofFile(myOutputFile);
                     final HttpRequest.Builder builder = HttpRequest.newBuilder().uri(myHost)
-                      .header(HTTP.Header.CONTENT_TYPE, MediaType.APPLICATION_ZIP.toString())
-                      .header(HTTP.Header.AUTHORIZATION, basicAuth);
+                            .header(HTTP.Header.CONTENT_TYPE, MediaType.APPLICATION_ZIP.toString())
+                            .header(HTTP.Header.AUTHORIZATION, basicAuth);
                     final HttpResponse<String> response;
                     final HttpRequest request;
                     final int statusCode;

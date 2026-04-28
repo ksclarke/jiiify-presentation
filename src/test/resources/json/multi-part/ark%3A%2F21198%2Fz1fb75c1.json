@@ -7,13 +7,6 @@
       "Latin American and Caribbean Periodicals"
     ]
   },
-  "thumbnail" : [
-    {
-      "id" : "https://iiif.library.ucla.edu/collections/ark%3A%2F21198%2Fz1fb75c1/full/!200,200/0/default.jpg",
-      "type" : "Image",
-      "format" : "image/jpeg"
-    }
-  ],
   "items" : [
     {
       "id" : "https://iiif.library.ucla.edu/collections/ark%3A%2F21198%2Fz1g47b1v",

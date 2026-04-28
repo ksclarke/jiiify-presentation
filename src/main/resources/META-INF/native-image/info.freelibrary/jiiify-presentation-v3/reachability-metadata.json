@@ -126,93 +126,6 @@
       "allDeclaredFields": true
     },
     {
-      "type": "net.jpountz.xxhash.XXHash32JavaSafe",
-      "allDeclaredFields": true
-    },
-    {
-      "type": "net.jpountz.xxhash.StreamingXXHash32JavaSafe$Factory",
-      "allDeclaredFields": true
-    },
-    {
-      "type": "net.jpountz.xxhash.XXHash64JavaSafe",
-      "allDeclaredFields": true
-    },
-    {
-      "type": "net.jpountz.xxhash.StreamingXXHash64JavaSafe$Factory",
-      "allDeclaredFields": true
-    },
-    {
-      "type": "java.lang.Cloneable",
-      "allDeclaredMethods": true
-    },
-    {
-      "type": "java.util.AbstractCollection",
-      "allDeclaredFields": true,
-      "allDeclaredMethods": true
-    },
-    {
-      "type": "java.util.AbstractList",
-      "allDeclaredFields": true,
-      "allDeclaredMethods": true
-    },
-    {
-      "type": "java.util.ArrayList",
-      "allDeclaredFields": true,
-      "allDeclaredMethods": true
-    },
-    {
-      "type": "java.lang.Iterable",
-      "allDeclaredMethods": true
-    },
-    {
-      "type": "java.util.Collection",
-      "allDeclaredMethods": true
-    },
-    {
-      "type": "java.util.Collections$UnmodifiableCollection",
-      "allDeclaredFields": true,
-      "allDeclaredMethods": true
-    },
-    {
-      "type": "java.util.Collections$UnmodifiableList",
-      "allDeclaredFields": true,
-      "allDeclaredMethods": true
-    },
-    {
-      "type": "java.util.Collections$UnmodifiableRandomAccessList",
-      "allDeclaredFields": true,
-      "allDeclaredMethods": true,
-      "allDeclaredConstructors": true
-    },
-    {
-      "type": "java.util.List",
-      "allDeclaredMethods": true
-    },
-    {
-      "type": "java.util.RandomAccess",
-      "allDeclaredMethods": true
-    },
-    {
-      "type": "java.lang.Comparable",
-      "allDeclaredMethods": true
-    },
-    {
-      "type": "java.net.URI",
-      "allDeclaredFields": true
-    },
-    {
-      "type": "java.net.URL",
-      "allDeclaredFields": true,
-      "allDeclaredMethods": true,
-      "allDeclaredConstructors": true
-    },
-    {
-      "type": "java.io.Serializable",
-      "allDeclaredFields": true,
-      "allDeclaredMethods": true,
-      "allDeclaredConstructors": true
-    },
-    {
       "type": "info.freelibrary.iiif.presentation.v3.id.DefaultMinter",
       "allDeclaredConstructors": true
     },
@@ -359,8 +272,95 @@
       "allDeclaredConstructors": true
     },
     {
+      "type": "java.lang.Cloneable",
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "java.util.AbstractCollection",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "java.util.AbstractList",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "java.util.ArrayList",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "java.lang.Iterable",
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "java.util.Collection",
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "java.util.Collections$UnmodifiableCollection",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "java.util.Collections$UnmodifiableList",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "java.util.Collections$UnmodifiableRandomAccessList",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "java.util.List",
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "java.util.RandomAccess",
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "java.lang.Comparable",
+      "allDeclaredMethods": true
+    },
+    {
+      "type": "java.net.URI",
+      "allDeclaredFields": true
+    },
+    {
+      "type": "java.net.URL",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "java.io.Serializable",
+      "allDeclaredFields": true,
+      "allDeclaredMethods": true,
+      "allDeclaredConstructors": true
+    },
+    {
       "type": "ch.qos.logback.core.status.NopStatusListener",
       "allDeclaredConstructors": true
+    },
+    {
+      "type": "net.jpountz.xxhash.XXHash32JavaSafe",
+      "allDeclaredFields": true
+    },
+    {
+      "type": "net.jpountz.xxhash.StreamingXXHash32JavaSafe$Factory",
+      "allDeclaredFields": true
+    },
+    {
+      "type": "net.jpountz.xxhash.XXHash64JavaSafe",
+      "allDeclaredFields": true
+    },
+    {
+      "type": "net.jpountz.xxhash.StreamingXXHash64JavaSafe$Factory",
+      "allDeclaredFields": true
     }
   ],
   "resources": [

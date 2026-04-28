@@ -246,10 +246,11 @@
                 <artifactId>maven-dependency-plugin</artifactId>
             </plugin>
 
-            <plugin>
+            <!-- The rules need to be updated to fit some IDEA changes -->
+            <!--<plugin>
                 <groupId>net.revelc.code.formatter</groupId>
                 <artifactId>formatter-maven-plugin</artifactId>
-            </plugin>
+            </plugin>-->
 
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -471,13 +472,13 @@
                             <imageName>jpv3</imageName>
                             <buildArgs>
                                 <!--<arg>-Os</arg>--><!-- small size for containers -->
-                                <arg>-O3</arg><!-- optimized -->
+                                <arg>-O3</arg><!-- optimized for desktop -->
                                 <arg>-march=${build.arch}</arg>
                                 <!--<buildArg>-/-gc=G1</buildArg>--><!-- Adds 20 MB for GC addition -->
                                 <!--<arg>-\-exact-reachability-metadata</arg>-->
                                 <arg>--enable-native-access=ALL-UNNAMED</arg>
                                 <arg>--enable-url-protocols=https</arg>
-                                <arg>-H:-ReduceImplicitExceptionStackTraceInformation</arg>
+                                <arg>-H:-ReduceImplicitExceptionStackTraceInformation</arg><!-- For debugging -->
                             </buildArgs>
                             <metadataRepository>
                                 <enabled>true</enabled>
@@ -492,7 +493,7 @@
                                 <native.image.agent>true</native.image.agent>
                             </systemPropertyVariables>
                             <argLine><![CDATA[ ${jacoco.agent.arg} ${mockito.agent.arg}
-                              -agentlib:native-image-agent=config-output-dir=${graalvm.agent.arg}
+                              -agentlib:native-image-agent=config-merge-dir=${graalvm.agent.arg}
                               --add-opens java.base/java.util=ALL-UNNAMED
                               --add-opens=java.base/java.lang=ALL-UNNAMED
                               --enable-native-access=ALL-UNNAMED

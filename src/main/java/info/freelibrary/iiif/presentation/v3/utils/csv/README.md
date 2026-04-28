@@ -1,4 +1,4 @@
-# jpv3 cli
+# JPV3 CLI
 ***
 
 The JPv3 CLI is an experimental tool for working with IIIF Presentation 3 documents. It may, in the future, be spun 
@@ -14,8 +14,16 @@ quick overview, not a comprehensive guide.
 
 ### Getting Started
 
-The first thing one might want to do is process a directory of CSV files into a ZIP file of IIIF Presentation 
-manifests and collection documents. This can be done with the following command:
+Before running the program, there are two environment variables that need to be set:
+* `JPV3_HOST`
+* `JPV3_IIIF_SERVER`
+
+For UCLA users testing the application, the values for these should be `https://test.ingest.iiif.library.ucla.edu` and
+`https://iiif.library.ucla.edu/iiif/2`. Both variables are required to create manifest and image links in the generated 
+manifests and collection documents.
+
+Once these variables are set, the next step would be to locally process a directory or ZIP file of CSVs. This can be 
+done with the following command:
 ```bash
 jpv3 -c -i /path/to/csv/file_or_directory
 ```
@@ -28,19 +36,17 @@ To send a ZIP file of manifests and collection documents to a remote IIIF manife
 ```bash
 jpv3 -u -i /path/to/csv/file_or_directory
 ```
-For this to work though, you need to have three environmental settings set:
-* `JPV3_HOST`
+For this to work though, you need to have two additional environmental variables set:
 * `JPV3_USERNAME`
 * `JPV3_PASSWORD`
-
-For UCLA's test IIIF manifest server, the `JPV3_HOST` setting should be set to:
-`https://test.ingest.iiif.library.ucla.edu`. 
 
 The username and password are the same as those used with the `festerize` command line tool (except, there the names 
 are `FESTERIZE_USERNAME` and `FESTERIZE_PASSWORD` instead of `JPV3_USERNAME` and `JPV3_PASSWORD`).
 
 For UCLA's production IIIF manifest server, the `JPV3_HOST` setting should be set to:
-`https://ingest.iiif.library.ucla.edu`. The username and password are the same as those used with test IIIF manifest server.
+`https://ingest.iiif.library.ucla.edu`. The username and password are the same as those used with test IIIF manifest 
+server. It is also possible to pass these values on the command line with the `-U` and `-P` flags. Consult the help 
+output of the application for more information.
 
 Once a ZIP file has been uploaded, its contents should be able to be seen by accessing the manifest's or collection 
 document's IIIF URL (e.g. https://test.ingest.iiif.library.ucla.edu/collections/ark%3A%2F21198%2Fz11g7wqv or
@@ -51,5 +57,5 @@ welcome.
 
 ### Contact
 
-If you have any questions or comments, please contact [Kevin S. Clarke](mailto:ksclarke@library.ucla.edu) for 
-assistance. Slack also works well if you're on the UCLA or IIIF Slack channels. My username on there is `ksclarke`.
+If you have any questions or comments, please contact [Kevin S. Clarke](mailto:my.github@kevinclarke.info) for 
+assistance. Slack also works well if you're on the UCLA or IIIF Slack channels. His username on there is `ksclarke`.
