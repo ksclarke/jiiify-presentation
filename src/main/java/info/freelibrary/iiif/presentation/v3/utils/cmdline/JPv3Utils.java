@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.utils.cmdline;
 
+import static info.freelibrary.iiif.presentation.v3.utils.cmdline.JPv3.ENDPOINT_PREFIX;
 import static info.freelibrary.util.Constants.EMPTY;
 import static info.freelibrary.util.Constants.PERIOD;
 import static info.freelibrary.util.Constants.SLASH;
@@ -39,6 +40,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -109,6 +111,32 @@ public final class JPv3Utils {
     }
 
     /**
+     * Updates the host of a URI with an `ingest` endpoint prefix, if necessary.
+     *
+     * @param aURI A URI to update with the endpoint prefix
+     * @return The updated URI
+     * @throws IllegalArgumentI18nException If the URI doesn't have a host
+     */
+    public static URI updateHost(final URI aURI) {
+        final String host = aURI.getHost();
+        final String ingestHost;
+
+        if (host == null) {
+            throw new IllegalArgumentI18nException(MessageCodes.BUNDLE, MessageCodes.JPA_190, aURI);
+        }
+
+        // Add an `ingest` endpoint prefix to the front of the host if it doesn't already have one
+        ingestHost = !host.contains(ENDPOINT_PREFIX + PERIOD) ? ENDPOINT_PREFIX + PERIOD + host : host;
+
+        try {
+            return new URI(aURI.getScheme(), aURI.getUserInfo(), ingestHost, aURI.getPort(), aURI.getPath(),
+                    aURI.getQuery(), aURI.getFragment());
+        } catch (final URISyntaxException details) {
+            throw new IllegalArgumentI18nException(details, details.getMessage());
+        }
+    }
+
+    /**
      * Sets the default log level for the supplied logger's root logger.
      *
      * @param aLogger The logger on which to set the supplied level
@@ -160,8 +188,8 @@ public final class JPv3Utils {
      * @param aSourceFile A location of source file(s)
      * @param aOutputFile An output ZIP file
      * @param aHost A host URI for the IIIF Presentation files
-     * @throws IOException If there is trouble writing the ZIP file
      * @return An exit code (0 for success)
+     * @throws IOException If there is trouble writing the ZIP file
      */
     public static int outputZipFile(final Path aSourceFile, final Path aOutputFile, final URI aHost)
             throws IOException {

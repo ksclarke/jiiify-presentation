@@ -247,10 +247,10 @@
             </plugin>
 
             <!-- The rules need to be updated to fit some IDEA changes -->
-            <!--<plugin>
+            <plugin>
                 <groupId>net.revelc.code.formatter</groupId>
                 <artifactId>formatter-maven-plugin</artifactId>
-            </plugin>-->
+            </plugin>
 
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
