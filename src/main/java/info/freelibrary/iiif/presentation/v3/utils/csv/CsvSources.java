@@ -80,7 +80,7 @@ public class CsvSources implements Iterable<Path> {
      * @return The temporary directory used for CSV processing
      */
     public Optional<Path> getTempDir() {
-        return Optional.of(myTmpDir);
+        return Optional.ofNullable(myTmpDir);
     }
 
     @Override

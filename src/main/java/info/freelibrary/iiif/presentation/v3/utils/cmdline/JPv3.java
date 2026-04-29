@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation.v3.utils.cmdline;
 
 import static info.freelibrary.util.Constants.COLON;
+import static info.freelibrary.util.Constants.EMPTY;
 
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
@@ -30,8 +31,11 @@ import java.util.stream.Stream;
 
 /** A jpv3 executable. */
 @CommandLine.Command(name = "jpv3", version = "jpv3 0.0.1-SNAPSHOT", usageHelpWidth = 120,
-        description = { "", "A tool for working with IIIF manifests and collection documents:", "" })
+        description = { EMPTY, "A tool for working with IIIF manifests and collection documents:", EMPTY })
 public final class JPv3 implements Callable<Integer> {
+
+    /** The expected prefix for the IIIF manifests and collection documents server. */
+    public static final String ENDPOINT_PREFIX = "ingest";
 
     /** The logger for the executable. */
     private static final Logger LOGGER = LoggerFactory.getLogger(JPv3.class, MessageCodes.BUNDLE);
@@ -128,11 +132,14 @@ public final class JPv3 implements Callable<Integer> {
                 final String csvZipFileName = FileUtils.stripExt(myOutputFile.getFileName().toString()) + "-csv.zip";
                 final Path csvZipFile = Path.of(myOutputFile.getParent().toString(), csvZipFileName);
 
+                // We make some assumptions about manifest server endpoints: the upload endpoint must contain `ingest`
+                final URI host = myHost.toString().contains(ENDPOINT_PREFIX) ? myHost : JPv3Utils.updateHost(myHost);
+
                 try (HttpClient client = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NORMAL).build()) {
                     final byte[] credentials = (myUsername + COLON + myPassword).getBytes(StandardCharsets.UTF_8);
                     final String basicAuth = "Basic " + Base64.getEncoder().encodeToString(credentials);
                     final HttpRequest.BodyPublisher bodyPublisher = HttpRequest.BodyPublishers.ofFile(myOutputFile);
-                    final HttpRequest.Builder builder = HttpRequest.newBuilder().uri(myHost)
+                    final HttpRequest.Builder builder = HttpRequest.newBuilder().uri(host)
                             .header(HTTP.Header.CONTENT_TYPE, MediaType.APPLICATION_ZIP.toString())
                             .header(HTTP.Header.AUTHORIZATION, basicAuth);
                     final HttpResponse<String> response;

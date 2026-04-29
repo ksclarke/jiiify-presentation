@@ -1,3 +1,4 @@
+
 package info.freelibrary.iiif.presentation.v3.utils.cmdline;
 
 import static org.junit.Assert.assertEquals;
@@ -46,10 +47,21 @@ public class JPv3UtilsTest {
         final Path source = Path.of("src/test/resources/zip/nested.zip");
         final Path target = Path.of(TARGET, "nested.zip");
         final List<String> expected = List.of("nested/collection/jbu-2-collection.csv",
-          "nested/layers/jbu-2-layers.csv", "nested/pages/jbu-2-pages.csv", "nested/works/jbu-2-works.csv");
+                "nested/layers/jbu-2-layers.csv", "nested/pages/jbu-2-pages.csv", "nested/works/jbu-2-works.csv");
 
         JPv3Utils.outputZipFile(source, target, HOST);
         checkZipEntries(target, expected.stream().map(Path::of).map(Path::toString).collect(Collectors.toList()));
+    }
+
+    /**
+     * Tests the updateHost method of JPv3Utils.
+     */
+    @Test
+    public void testUpdateHost() {
+        final URI host = JPv3Utils.updateHost(URI.create("https://iiif.library.ucla.edu"));
+
+        assertEquals(URI.create("https://ingest.iiif.library.ucla.edu"), host);
+        assertEquals(HOST, JPv3Utils.updateHost(HOST));
     }
 
     /**
@@ -62,8 +74,8 @@ public class JPv3UtilsTest {
         final String source = StringUtils.read(new File("src/test/resources/csv/jbu-collection.csv"));
         final List<String> actual = JPv3Utils.readHeaders(source);
         final List<String> expected = List.of("File Name", "Object Type", "Title", "Item Sequence", "Item ARK",
-          "Parent ARK", "IIIF target", "viewingHint", "Text direction", "Bucketeer state", "Thumbnail",
-          "media.height", "media.width", "IIIF Access URL", "NOTES");
+                "Parent ARK", "IIIF target", "viewingHint", "Text direction", "Bucketeer state", "Thumbnail",
+                "media.height", "media.width", "IIIF Access URL", "NOTES");
 
         assertEquals(expected, actual);
     }
