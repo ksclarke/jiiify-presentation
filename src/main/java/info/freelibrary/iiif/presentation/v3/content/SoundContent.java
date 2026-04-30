@@ -47,6 +47,11 @@ public class SoundContent extends AbstractContentResource<SoundContent>
     }
 
     @Override
+    public SoundContent copy() {
+        return new SoundContent(getID()).setDuration(getDuration());
+    }
+
+    @Override
     public boolean equals(final Object aObject) {
         final SoundContent other;
 

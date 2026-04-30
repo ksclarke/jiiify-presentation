@@ -38,6 +38,11 @@ public class ModelContent extends AbstractContentResource<ModelContent>
     }
 
     @Override
+    public ModelContent copy() {
+        return new ModelContent(getID());
+    }
+
+    @Override
     @JsonIgnore
     public ModelContent setBehaviors(final Behavior... aBehaviorArray) {
         return setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorArray));

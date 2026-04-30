@@ -40,6 +40,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
@@ -55,6 +56,12 @@ public class Mapper {
 
     /** File extension for IIIF (International Image Interoperability Framework) JSON files. */
     private static final String JSON_EXT = ".json";
+
+    /** A minimum number of thumbnails needed to generate a random index. */
+    private static final int THUMBNAIL_COUNT = 4;
+
+    /** Thread-local random number generator for generating unique indices. */
+    private final ThreadLocalRandom myIndexGenerator = ThreadLocalRandom.current();
 
     /** The data map for this class. */
     private final HTreeMap<String, String> myCsvData;
@@ -228,7 +235,7 @@ public class Mapper {
      * @throws MappingException If there is trouble mapping the CSV data
      * @throws IOException If there is trouble reading the CSV file
      */
-    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY })
+    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY, PMD.CYCLOMATIC_COMPLEXITY })
     protected Path mapCollections(final List<String> aCollectionList) throws MappingException, IOException {
         LOGGER.debug(MessageCodes.JPA_167, aCollectionList.size());
 
@@ -268,6 +275,19 @@ public class Mapper {
                     }
                 } catch (final JsonProcessingException details) {
                     throw new MappingException(details);
+                }
+            }
+
+            // If collection doesn't have a thumbnail, use one of its items'
+            if (collection.getThumbnails().isEmpty()) {
+                final List<Collection.Item> items = collection.getItems();
+                final int total = items.size();
+                final int max = Math.min(THUMBNAIL_COUNT, total);
+                final int index = total > 0 ? myIndexGenerator.nextInt(0, max) : -1;
+
+                if (index >= 0) {
+                    items.get(index).getThumbnails().stream().findFirst()
+                            .ifPresent(thumbnail -> collection.getThumbnails().add(thumbnail.copy()));
                 }
             }
 

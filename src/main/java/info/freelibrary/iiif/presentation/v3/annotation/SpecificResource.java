@@ -93,6 +93,11 @@ public non-sealed class SpecificResource extends Target implements ContentResour
     }
 
     @Override
+    public SpecificResource copy() {
+        return new SpecificResource(getID(), mySource, mySelector);
+    }
+
+    @Override
     public boolean equals(final Object aObject) {
         final SpecificResource other;
 
