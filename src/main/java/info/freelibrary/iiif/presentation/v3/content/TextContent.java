@@ -37,6 +37,11 @@ public class TextContent extends AbstractContentResource<TextContent> implements
     }
 
     @Override
+    public TextContent copy() {
+        return new TextContent(getID());
+    }
+
+    @Override
     @JsonIgnore
     public TextContent setBehaviors(final Behavior... aBehaviorArray) {
         return setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorArray));

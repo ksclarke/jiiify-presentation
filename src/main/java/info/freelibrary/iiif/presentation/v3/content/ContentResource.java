@@ -52,4 +52,10 @@ public interface ContentResource {
      */
     ContentResource setID(String aID);
 
+    /**
+     * Creates a copy of the content resource.
+     *
+     * @return A copy of the content resource
+     */
+    ContentResource copy();
 }

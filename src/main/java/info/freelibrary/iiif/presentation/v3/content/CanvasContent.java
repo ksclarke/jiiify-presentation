@@ -35,6 +35,11 @@ public class CanvasContent extends AbstractContentResource<CanvasContent> implem
     }
 
     @Override
+    public CanvasContent copy() {
+        return new CanvasContent(getID());
+    }
+
+    @Override
     @JsonIgnore
     public CanvasContent setBehaviors(final Behavior... aBehaviorArray) {
         return setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorArray));

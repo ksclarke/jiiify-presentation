@@ -35,6 +35,11 @@ public class DatasetContent extends AbstractContentResource<DatasetContent>
     }
 
     @Override
+    public DatasetContent copy() {
+        return new DatasetContent(getID());
+    }
+
+    @Override
     @JsonIgnore
     public DatasetContent setBehaviors(final Behavior... aBehaviorArray) {
         return setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorArray));

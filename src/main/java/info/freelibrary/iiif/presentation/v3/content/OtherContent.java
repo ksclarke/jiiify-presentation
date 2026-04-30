@@ -1,9 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3.content;
 
-import java.util.Map;
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -14,15 +11,16 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import info.freelibrary.util.warnings.PMD;
-
 import info.freelibrary.iiif.presentation.v3.id.UriUtils;
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeKeySerializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeSerializer;
+import info.freelibrary.util.warnings.PMD;
+
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * A content resource for other types of resources than those described by the
@@ -55,6 +53,11 @@ public class OtherContent implements ContentResource {
      */
     public OtherContent(final JsonNode aJsonNode) {
         myJsonNode = initializeObject(aJsonNode);
+    }
+
+    @Override
+    public OtherContent copy() {
+        return new OtherContent(myJsonNode);
     }
 
     @Override

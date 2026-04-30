@@ -82,6 +82,11 @@ public class TextualBody implements ContentResource {
         myID = aFactory.getSkolemIRI().toString();
     }
 
+    @Override
+    public TextualBody copy() {
+        return new TextualBody().setID(myID).setFormat(myFormat).setPurpose(myPurpose).setValue(myValue);
+    }
+
     /**
      * Gets TextualBody's format as a media type.
      *

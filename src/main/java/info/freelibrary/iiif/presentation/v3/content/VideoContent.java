@@ -53,6 +53,11 @@ public class VideoContent extends AbstractContentResource<VideoContent>
     }
 
     @Override
+    public VideoContent copy() {
+        return new VideoContent(getID()).setDuration(myDuration).setWidth(myWidth).setHeight(myHeight);
+    }
+
+    @Override
     public boolean equals(final Object aObject) {
         final VideoContent other;
 

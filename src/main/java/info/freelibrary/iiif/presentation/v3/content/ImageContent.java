@@ -50,6 +50,17 @@ public class ImageContent extends AbstractContentResource<ImageContent>
     }
 
     @Override
+    public ImageContent copy() {
+        final ImageContent imageContent = new ImageContent(getID());
+
+        imageContent.setHeight(getHeight());
+        imageContent.setWidth(getWidth());
+        getFormat().ifPresent(imageContent::setFormat);
+
+        return imageContent;
+    }
+
+    @Override
     public boolean equals(final Object aObject) {
         final ImageContent other;
 
