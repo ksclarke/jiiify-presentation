@@ -281,9 +281,7 @@ public class Mapper {
             // If collection doesn't have a thumbnail, use one of its items'
             if (collection.getThumbnails().isEmpty()) {
                 final List<Collection.Item> items = collection.getItems();
-                final int total = items.size();
-                final int max = Math.min(THUMBNAIL_COUNT, total);
-                final int index = total > 0 ? myIndexGenerator.nextInt(0, max) : -1;
+                final int index = getRandomIndex(items.size());
 
                 if (index >= 0) {
                     items.get(index).getThumbnails().stream().findFirst()
@@ -320,6 +318,16 @@ public class Mapper {
 
                 manifest.setCanvases(canvases);
                 manifests.add(manifest);
+
+                // Add a randomly pulled thumbnail if one doesn't already exist
+                if (manifest.getThumbnails().isEmpty()) {
+                    final int index = getRandomIndex(canvases.size());
+
+                    if (index >= 0) {
+                        canvases.get(index).getThumbnails().stream().findFirst()
+                                .ifPresent(thumbnail -> manifest.getThumbnails().add(thumbnail.copy()));
+                    }
+                }
 
                 myZipWriter.writeFile(URLEncoder.encode(manifestID, UTF_8) + JSON_EXT, manifest.toString());
             } catch (final JsonProcessingException details) {
@@ -438,6 +446,19 @@ public class Mapper {
                 myDatabase.close();
             }
         }
+    }
+
+    /**
+     * Gets a random index from 0 to a given size. We use a padded start (i.e., THUMBNAIL_COUNT) to skip the first few
+     * thumbnails because often the first few are the least interesting. If the padding is greater than the number of
+     * thumbnails, though, we use zero as the start.
+     *
+     * @param aSize The maximum size of the range to generate an index from
+     * @return A random index from 0 to a given size
+     */
+    private int getRandomIndex(final int aSize) {
+        return aSize > THUMBNAIL_COUNT ? myIndexGenerator.nextInt(THUMBNAIL_COUNT, aSize)
+                : aSize > 0 ? myIndexGenerator.nextInt(0, aSize) : -1;
     }
 
     /**
