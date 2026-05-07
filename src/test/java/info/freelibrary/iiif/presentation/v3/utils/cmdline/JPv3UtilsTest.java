@@ -32,10 +32,9 @@ public class JPv3UtilsTest {
     private static final String NESTED_ZIP = "nested{}.zip";
 
     /** A list of expected nested files. */
-    private static final List<String> EXPECTED_NESTED_FILES = Stream
-            .of("nested/collection/jbu-2-collection.csv", "nested/layers/jbu-2-layers.csv",
-                    "nested/pages/jbu-2-pages.csv", "nested/works/jbu-2-works.csv")
-            .map(Path::of).map(Path::toString).toList();
+    private static final List<String> EXPECTED_NESTED_FILES = Stream.of("nested/collection/jbu-2-collection.csv",
+        "nested/layers/jbu-2-layers.csv", "nested/pages/jbu-2-pages.csv", "nested/works/jbu-2-works.csv")
+        .map(Path::of).map(Path::toString).toList();
 
     /**
      * Tests the outputZipFile method of JPv3Utils.
@@ -57,8 +56,8 @@ public class JPv3UtilsTest {
     public void testOutputZipFileFlat() throws IOException {
         final Path source = Path.of("src/test/resources/zip/layers-choice.zip");
         final Path target = Path.of(TARGET, "layers-choice.zip");
-        final List<String> expected = List.of("layers-choice/collection.csv", "layers-choice/layers.csv",
-                "layers-choice/pages.csv", "layers-choice/works.csv");
+        final List<String> expected = Stream.of("layers-choice/collection.csv", "layers-choice/layers.csv",
+            "layers-choice/pages.csv", "layers-choice/works.csv").map(Path::of).map(Path::toString).toList();
 
         JPv3Utils.outputZipFile(source, target, HOST);
         checkZipEntries(target, expected);
@@ -97,8 +96,8 @@ public class JPv3UtilsTest {
         final String source = StringUtils.read(new File("src/test/resources/csv/jbu-collection.csv"));
         final List<String> actual = JPv3Utils.readHeaders(source);
         final List<String> expected = List.of("File Name", "Object Type", "Title", "Item Sequence", "Item ARK",
-                "Parent ARK", "IIIF target", "viewingHint", "Text direction", "Bucketeer state", "Thumbnail",
-                "media.height", "media.width", "IIIF Access URL", "NOTES");
+            "Parent ARK", "IIIF target", "viewingHint", "Text direction", "Bucketeer state", "Thumbnail",
+            "media.height", "media.width", "IIIF Access URL", "NOTES");
 
         assertEquals(expected, actual);
     }
