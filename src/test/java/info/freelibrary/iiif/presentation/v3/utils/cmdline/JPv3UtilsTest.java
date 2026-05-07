@@ -13,7 +13,7 @@ import java.net.URI;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -32,8 +32,10 @@ public class JPv3UtilsTest {
     private static final String NESTED_ZIP = "nested{}.zip";
 
     /** A list of expected nested files. */
-    private static final List<String> EXPECTED_NESTED_FILES = List.of("nested/collection/jbu-2-collection.csv",
-            "nested/layers/jbu-2-layers.csv", "nested/pages/jbu-2-pages.csv", "nested/works/jbu-2-works.csv");
+    private static final List<String> EXPECTED_NESTED_FILES = Stream
+            .of("nested/collection/jbu-2-collection.csv", "nested/layers/jbu-2-layers.csv",
+                    "nested/pages/jbu-2-pages.csv", "nested/works/jbu-2-works.csv")
+            .map(Path::of).map(Path::toString).toList();
 
     /**
      * Tests the outputZipFile method of JPv3Utils.
@@ -41,8 +43,8 @@ public class JPv3UtilsTest {
     @Test
     public void testOutputZipFileDirs() throws IOException {
         final Path source = Path.of("src/test/resources/csv/nested");
-        final Path target = Path.of(TARGET, StringUtils.format(NESTED_ZIP,
-            Constants.DASH + UUID.randomUUID().toString()));
+        final String zipFile = StringUtils.format(NESTED_ZIP, Constants.DASH + UUID.randomUUID().toString());
+        final Path target = Path.of(TARGET, zipFile);
 
         JPv3Utils.outputZipFile(source, target, HOST);
         checkZipEntries(target, EXPECTED_NESTED_FILES);
@@ -69,11 +71,9 @@ public class JPv3UtilsTest {
     public void testOutputZipFileNested() throws IOException {
         final Path source = Path.of("src/test/resources/zip/nested.zip");
         final Path target = Path.of(TARGET, StringUtils.format(NESTED_ZIP, Constants.EMPTY));
-        final List<String> expected = // Stream to handle OS-specific file separators correctly
-                EXPECTED_NESTED_FILES.stream().map(Path::of).map(Path::toString).collect(Collectors.toList());
 
         JPv3Utils.outputZipFile(source, target, HOST);
-        checkZipEntries(target, expected);
+        checkZipEntries(target, EXPECTED_NESTED_FILES);
     }
 
     /**
