@@ -29,14 +29,17 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.csv.CsvSources;
 import info.freelibrary.iiif.presentation.v3.utils.csv.Keys;
 import info.freelibrary.iiif.presentation.v3.utils.csv.ZipWriter;
+import info.freelibrary.util.FileUtils;
 import info.freelibrary.util.IllegalArgumentI18nException;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.StringUtils;
 import info.freelibrary.util.warnings.Checkstyle;
 import info.freelibrary.util.warnings.PMD;
+import org.jspecify.annotations.NonNull;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -202,21 +205,48 @@ public final class JPv3Utils {
                 final String csvPath = path.toString();
                 final String csvData = updateCSV(contents, aHost.toString());
 
+                // If tmpDirOpt is present, we're working with a ZIP file
                 if (tmpDirOpt.isPresent()) {
-                    final String tmpDirPath = tmpDirOpt.get().toString();
+                    final Path tmpDirPath = tmpDirOpt.get();
 
-                    if (csvPath.startsWith(tmpDirPath)) {
-                        zipWriter.writeFile(csvPath.substring(tmpDirPath.length() + 1), csvData);
+                    if (csvPath.startsWith(tmpDirPath.toString())) {
+                        final String parentPath = getPathParent(aOutputFile);
+                        final String filePath = getZipFilePath(path, tmpDirPath);
+
+                        zipWriter.writeFile(Path.of(parentPath, filePath).toString(), csvData);
                     } else {
-                        zipWriter.writeFile(csvPath, csvData);
+                        zipWriter.writeFile(stripParentPath(aSourceFile, csvPath), csvData);
                     }
                 } else {
-                    zipWriter.writeFile(csvPath, csvData);
+                    zipWriter.writeFile(stripParentPath(aSourceFile, csvPath), csvData);
                 }
             }));
         }
 
         return 0;
+    }
+
+    /**
+     * Gets the file path within the ZIP archive for a given file path and temporary directory path.
+     *
+     * @param aPath The file path
+     * @param aTmpDirPath The temporary directory path
+     * @return The file path within the ZIP archive
+     */
+    private static @NonNull String getZipFilePath(final Path aPath, final Path aTmpDirPath) {
+        final Path zipPath = aTmpDirPath.relativize(aPath);
+        final String filePath;
+
+        // Check if our ZIP file contained a nested structure or not; if nested, strip first directory
+        if (!zipPath.toString().contains(File.separator)) {
+            filePath = zipPath.toString();
+        } else {
+            // If the ZIP file contains a nested structure, we strip the first path component; this makes the
+            // assumption that nested ZIPs are always created with a parent directory. We could check this?
+            filePath = zipPath.subpath(1, zipPath.getNameCount()).toString();
+        }
+
+        return filePath;
     }
 
     /**
@@ -314,6 +344,45 @@ public final class JPv3Utils {
 
             return headers;
         }
+    }
+
+    /**
+     * Strips a supplied source path from another path.
+     *
+     * @param aSource The source path
+     * @param aPath The path to strip
+     * @return The stripped path
+     */
+    private static String stripParentPath(final Path aSource, final String aPath) {
+        final String sourcePath = aSource.toString();
+
+        if (aPath.startsWith(sourcePath)) {
+            return getPathParent(aSource) + File.separator + aPath.substring(sourcePath.length() + 1);
+        }
+
+        return aPath;
+    }
+
+    /**
+     * Retrieves the parent directory name or the current directory name of the given path.
+     *
+     * @param aPath The {@link Path} to process
+     * @return The name of the parent directory if the path is a file, or the name of the directory itself if the path
+     *         is a directory
+     */
+    private static String getPathParent(final Path aPath) {
+        if (aPath.toFile().isDirectory()) {
+            // Use directory name if the path is a directory
+            return aPath.getFileName().toString();
+        }
+
+        // Use ZIP file name if the path is a ZIP file
+        if (aPath.toString().endsWith(ZIP_EXT)) {
+            return FileUtils.stripExt(aPath.getFileName().toString());
+        }
+
+        // Else, get the parent directory name
+        return aPath.getParent().getFileName().toString();
     }
 
     /**

@@ -3,6 +3,7 @@ package info.freelibrary.iiif.presentation.v3.utils.cmdline;
 
 import static org.junit.Assert.assertEquals;
 
+import info.freelibrary.util.Constants;
 import info.freelibrary.util.StringUtils;
 import org.junit.Test;
 
@@ -11,7 +12,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.UUID;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -26,6 +28,27 @@ public class JPv3UtilsTest {
     /** A target directory for testing. */
     private static final String TARGET = "target";
 
+    /** A nested zip file name pattern. */
+    private static final String NESTED_ZIP = "nested{}.zip";
+
+    /** A list of expected nested files. */
+    private static final List<String> EXPECTED_NESTED_FILES = Stream.of("nested/collection/jbu-2-collection.csv",
+        "nested/layers/jbu-2-layers.csv", "nested/pages/jbu-2-pages.csv", "nested/works/jbu-2-works.csv")
+        .map(Path::of).map(Path::toString).toList();
+
+    /**
+     * Tests the outputZipFile method of JPv3Utils.
+     */
+    @Test
+    public void testOutputZipFileDirs() throws IOException {
+        final Path source = Path.of("src/test/resources/csv/nested");
+        final String zipFile = StringUtils.format(NESTED_ZIP, Constants.DASH + UUID.randomUUID().toString());
+        final Path target = Path.of(TARGET, zipFile);
+
+        JPv3Utils.outputZipFile(source, target, HOST);
+        checkZipEntries(target, EXPECTED_NESTED_FILES);
+    }
+
     /**
      * Tests the outputZipFile method of JPv3Utils.
      */
@@ -33,7 +56,8 @@ public class JPv3UtilsTest {
     public void testOutputZipFileFlat() throws IOException {
         final Path source = Path.of("src/test/resources/zip/layers-choice.zip");
         final Path target = Path.of(TARGET, "layers-choice.zip");
-        final List<String> expected = List.of("collection.csv", "layers.csv", "pages.csv", "works.csv");
+        final List<String> expected = Stream.of("layers-choice/collection.csv", "layers-choice/layers.csv",
+            "layers-choice/pages.csv", "layers-choice/works.csv").map(Path::of).map(Path::toString).toList();
 
         JPv3Utils.outputZipFile(source, target, HOST);
         checkZipEntries(target, expected);
@@ -45,12 +69,10 @@ public class JPv3UtilsTest {
     @Test
     public void testOutputZipFileNested() throws IOException {
         final Path source = Path.of("src/test/resources/zip/nested.zip");
-        final Path target = Path.of(TARGET, "nested.zip");
-        final List<String> expected = List.of("nested/collection/jbu-2-collection.csv",
-                "nested/layers/jbu-2-layers.csv", "nested/pages/jbu-2-pages.csv", "nested/works/jbu-2-works.csv");
+        final Path target = Path.of(TARGET, StringUtils.format(NESTED_ZIP, Constants.EMPTY));
 
         JPv3Utils.outputZipFile(source, target, HOST);
-        checkZipEntries(target, expected.stream().map(Path::of).map(Path::toString).collect(Collectors.toList()));
+        checkZipEntries(target, EXPECTED_NESTED_FILES);
     }
 
     /**
@@ -74,8 +96,8 @@ public class JPv3UtilsTest {
         final String source = StringUtils.read(new File("src/test/resources/csv/jbu-collection.csv"));
         final List<String> actual = JPv3Utils.readHeaders(source);
         final List<String> expected = List.of("File Name", "Object Type", "Title", "Item Sequence", "Item ARK",
-                "Parent ARK", "IIIF target", "viewingHint", "Text direction", "Bucketeer state", "Thumbnail",
-                "media.height", "media.width", "IIIF Access URL", "NOTES");
+            "Parent ARK", "IIIF target", "viewingHint", "Text direction", "Bucketeer state", "Thumbnail",
+            "media.height", "media.width", "IIIF Access URL", "NOTES");
 
         assertEquals(expected, actual);
     }
