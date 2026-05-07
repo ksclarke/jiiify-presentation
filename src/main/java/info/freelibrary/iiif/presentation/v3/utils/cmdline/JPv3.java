@@ -66,12 +66,12 @@ public final class JPv3 implements Callable<Integer> {
 
     /** The IIIF manifests and collection documents server. */
     @CommandLine.Option(names = { "-H", "--host" }, description = "The IIIF manifests and collection documents server",
-            paramLabel = "HOST", defaultValue = "${env:JPV3_HOST}", required = true)
+            paramLabel = "HOST_URL", defaultValue = "${env:JPV3_HOST}", required = true)
     private URI myHost;
 
     /** The IIIF images server. */
-    @CommandLine.Option(names = { "-I", "--iiif" }, description = "The URL of the server that has the IIIF images",
-            paramLabel = "IIIF_SERVER", defaultValue = "${env:JPV3_IIIF_SERVER}", required = true)
+    @CommandLine.Option(names = { "-I", "--images" }, description = "The URL of the server that has the IIIF images",
+            paramLabel = "IMAGE_SERVER_URL", defaultValue = "${env:JPV3_IMAGE_SERVER}", required = true)
     private URI myImageServer;
 
     /** The help flag. */

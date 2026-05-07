@@ -15,8 +15,8 @@ quick overview, not a comprehensive guide.
 ### Getting Started
 
 Before running the program, there are two environment variables that need to be set:
-* `JPV3_HOST`
-* `JPV3_IIIF_SERVER`
+* `JPV3_HOST` # This should be the URL of the IIIF manifest server
+* `JPV3_IMAGE_SERVER` # This should be the URL of the IIIF image server
 
 For UCLA users testing the application, the values for these should be `https://test.ingest.iiif.library.ucla.edu` and
 `https://iiif.library.ucla.edu/iiif/2`. Both variables are required to create manifest and image links in the generated 
