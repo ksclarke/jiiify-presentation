@@ -45,10 +45,9 @@ public final class JPv3 implements Callable<Integer> {
             paramLabel = "INPUT", required = true)
     private Path myInputFile;
 
-    /** The output file. */
-    @CommandLine.Option(names = { "-o", "--output" }, defaultValue = "./output.zip", paramLabel = "OUTPUT",
-            showDefaultValue = CommandLine.Help.Visibility.ALWAYS, description = "An output file to be written")
-    private Path myOutputFile;
+    /** The output file options group. */
+    @CommandLine.ArgGroup(exclusive = true, multiplicity = "0..1")
+    private final OutputOptions myOutputOpts = new OutputOptions();
 
     /** The action to take. Only one is allowed for a given invocation. */
     @CommandLine.ArgGroup(exclusive = true, multiplicity = "1")
@@ -120,17 +119,19 @@ public final class JPv3 implements Callable<Integer> {
         }
 
         try {
-            // Map the CSV file(s) to JSON manifests and collection documents
-            final int result = new Mapper(Stream.of(myInputFile), myOutputFile).map(myHost, myImageServer);
+            final Path outputFile = myOutputOpts.getOutputFile(myInputFile);
 
-            // If the mapping was unsuccessful, we can bail here; nothing else needs to happen
+            // Map the CSV file(s) to JSON manifests and collection documents
+            final int result = new Mapper(Stream.of(myInputFile), outputFile).map(myHost, myImageServer);
+
+            // If the mapping was unsuccessful, we can bail; nothing else needs to happen
             if (result != 0) {
                 return result;
             }
 
             if (myAction.isUpload() || myAction.isPatch()) {
-                final String csvZipFileName = FileUtils.stripExt(myOutputFile.getFileName().toString()) + "-csv.zip";
-                final Path csvZipFile = Path.of(myOutputFile.getParent().toString(), csvZipFileName);
+                final String csvZipFileName = FileUtils.stripExt(outputFile.getFileName().toString()) + "-csv.zip";
+                final Path csvZipFile = Path.of(EMPTY).resolve(csvZipFileName); // Puts file into current directory
 
                 // We make some assumptions about manifest server endpoints: the upload endpoint must contain `ingest`
                 final URI host = myHost.toString().contains(ENDPOINT_PREFIX) ? myHost : JPv3Utils.updateHost(myHost);
@@ -138,13 +139,11 @@ public final class JPv3 implements Callable<Integer> {
                 try (HttpClient client = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NORMAL).build()) {
                     final byte[] credentials = (myUsername + COLON + myPassword).getBytes(StandardCharsets.UTF_8);
                     final String basicAuth = "Basic " + Base64.getEncoder().encodeToString(credentials);
-                    final HttpRequest.BodyPublisher bodyPublisher = HttpRequest.BodyPublishers.ofFile(myOutputFile);
+                    final HttpRequest.BodyPublisher bodyPublisher = HttpRequest.BodyPublishers.ofFile(outputFile);
                     final HttpRequest.Builder builder = HttpRequest.newBuilder().uri(host)
                             .header(HTTP.Header.CONTENT_TYPE, MediaType.APPLICATION_ZIP.toString())
                             .header(HTTP.Header.AUTHORIZATION, basicAuth);
-                    final HttpResponse<String> response;
                     final HttpRequest request;
-                    final int statusCode;
 
                     if (myAction.isPatch()) {
                         request = builder.method(HTTP.Method.PATCH, bodyPublisher).build();
@@ -152,21 +151,21 @@ public final class JPv3 implements Callable<Integer> {
                         request = builder.POST(bodyPublisher).build();
                     }
 
-                    response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                    statusCode = response.statusCode();
+                    final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                    final int statusCode = response.statusCode();
 
                     if (statusCode != HTTP.OK && statusCode != HTTP.CREATED) {
                         LOGGER.error(LOGGER.getMessage(MessageCodes.JPA_177, statusCode, response.body()));
                         return statusCode;
                     }
 
-                    LOGGER.info(LOGGER.getMessage(MessageCodes.JPA_180, myOutputFile.toAbsolutePath()));
+                    LOGGER.info(LOGGER.getMessage(MessageCodes.JPA_180, outputFile));
                 }
 
                 LOGGER.info(LOGGER.getMessage(MessageCodes.JPA_189, csvZipFile));
                 return JPv3Utils.outputZipFile(myInputFile, csvZipFile, myHost);
             } else if (myAction.isCreate()) {
-                LOGGER.info(LOGGER.getMessage(MessageCodes.JPA_178, myOutputFile.toAbsolutePath()));
+                LOGGER.info(LOGGER.getMessage(MessageCodes.JPA_178, outputFile.toAbsolutePath()));
                 return 0;
             } else if (myAction.isView()) {
                 LOGGER.info(LOGGER.getMessage(MessageCodes.JPA_179));
@@ -180,8 +179,35 @@ public final class JPv3 implements Callable<Integer> {
         }
     }
 
+    /** The output options for the jpv3 program. */
+    private static final class OutputOptions {
+
+        /** The standard output file mechanism. */
+        @CommandLine.Option(names = { "-o", "--output" }, defaultValue = "./output.zip", paramLabel = "OUTPUT",
+                showDefaultValue = CommandLine.Help.Visibility.ALWAYS, description = "An output file to be written")
+        private Path myOutputFile;
+
+        /** A customized default output file name. */
+        @CommandLine.Option(names = { "-O" }, description = "Create an output file based on the input file name")
+        private boolean isCustomOutputFile;
+
+        /**
+         * Gets the output file path based on the input file and user options.
+         *
+         * @param aInputFile The input file path
+         * @return The output file path
+         */
+        private Path getOutputFile(final Path aInputFile) {
+            if (isCustomOutputFile) {
+                return JPv3Utils.getCustomOutputPath(aInputFile);
+            }
+
+            return myOutputFile;
+        }
+    }
+
     /** The action for the jpv3 program to take. */
-    static class Action {
+    private static final class Action {
 
         /** Whether to create a local manifest or collection doc. */
         @CommandLine.Option(names = { "-c", "--create" }, description = "Create a local zip with IIIF resources")

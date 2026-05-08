@@ -170,4 +170,5 @@
     <entry key="JPA-189">Updated CSV source file(s): {}</entry>
     <entry key="JPA-190">URI endpoint has no host: {}</entry>
     <entry key="JPA-191">Failed to create temporary directory for CSV processing</entry>
+    <entry key="JPA-192">Invalid path provided (must be directory, CSV, or ZIP file): {}</entry>
 </properties>

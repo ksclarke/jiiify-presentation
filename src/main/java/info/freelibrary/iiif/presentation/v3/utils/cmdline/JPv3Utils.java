@@ -162,6 +162,16 @@ public final class JPv3Utils {
     }
 
     /**
+     * Returns a custom output path based on the input file path.
+     *
+     * @param aInputFile The input file path
+     * @return The custom output path
+     */
+    public static Path getCustomOutputPath(final Path aInputFile) {
+        return Path.of(EMPTY).resolve("output-" + getPathParent(aInputFile) + ZIP_EXT);
+    }
+
+    /**
      * Quickly finds a JSON property value.
      *
      * @param aFilePath A path to a JSON file
@@ -357,18 +367,18 @@ public final class JPv3Utils {
         final String sourcePath = aSource.toString();
 
         if (aPath.startsWith(sourcePath)) {
-            return getPathParent(aSource) + File.separator + aPath.substring(sourcePath.length() + 1);
+            return Path.of(getPathParent(aSource)).resolve(aSource.relativize(Path.of(aPath))).toString();
         }
 
         return aPath;
     }
 
     /**
-     * Retrieves the parent directory name or the current directory name of the given path.
+     * Retrieves what will be used as the parent directory for a ZIP file or CSV file.
      *
      * @param aPath The {@link Path} to process
-     * @return The name of the parent directory if the path is a file, or the name of the directory itself if the path
-     *         is a directory
+     * @return The name of the parent directory
+     * @throws IllegalArgumentI18nException If the path is not a directory, ZIP file, or CSV file
      */
     private static String getPathParent(final Path aPath) {
         if (aPath.toFile().isDirectory()) {
@@ -377,12 +387,11 @@ public final class JPv3Utils {
         }
 
         // Use ZIP file name if the path is a ZIP file
-        if (aPath.toString().endsWith(ZIP_EXT)) {
+        if (aPath.toString().endsWith(ZIP_EXT) || aPath.toString().endsWith(CSV_EXT)) {
             return FileUtils.stripExt(aPath.getFileName().toString());
         }
 
-        // Else, get the parent directory name
-        return aPath.getParent().getFileName().toString();
+        throw new IllegalArgumentI18nException(MessageCodes.BUNDLE, MessageCodes.JPA_192, aPath);
     }
 
     /**
