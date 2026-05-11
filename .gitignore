@@ -33,4 +33,4 @@ docs/.env
 jiiify-presentation-v3.iml
 
 # Output of native builds
-outpu*.zip
+*.zip
