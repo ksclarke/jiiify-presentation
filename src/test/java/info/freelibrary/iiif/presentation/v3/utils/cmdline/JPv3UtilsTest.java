@@ -11,6 +11,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
@@ -98,14 +99,14 @@ public class JPv3UtilsTest {
     }
 
     /**
-     * Tests the updateHost method of JPv3Utils.
+     * Tests the checkHost method of JPv3Utils.
      */
     @Test
-    public void testUpdateHost() {
-        final URI host = JPv3Utils.updateHost(URI.create("https://iiif.library.ucla.edu"));
+    public void testCheckHost() throws URISyntaxException {
+        final URI host = JPv3Utils.formatHost(URI.create("https://iiif.library.ucla.edu"));
 
-        assertEquals(URI.create("https://ingest.iiif.library.ucla.edu"), host);
-        assertEquals(HOST, JPv3Utils.updateHost(HOST));
+        assertEquals(URI.create("https://ingest.iiif.library.ucla.edu/package"), host);
+        assertEquals(HOST.toString() + JPv3.INGEST_ENDPOINT_PATH, JPv3Utils.formatHost(HOST).toString());
     }
 
     /**
