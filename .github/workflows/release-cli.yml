@@ -73,7 +73,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           mvn -B -ntp -Pnative -Pjava${{ matrix.java }} verify javadoc:javadoc \
-            -Djpv3.username=${{ secrets.JPV3_USERNAME }} -Djpv3.password=${{ secrets.JPV3_PASSWORD }}
+            -Djpv3.username="${{ secrets.JPV3_USERNAME }}" -Djpv3.password="${{ secrets.JPV3_PASSWORD }}"
 
       - name: Prepare binary artifact
         shell: bash
