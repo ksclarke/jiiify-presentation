@@ -15,6 +15,9 @@ permissions:
 jobs:
   generate-matrix:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
