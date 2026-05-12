@@ -1,14 +1,14 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.selectors;
 
-import java.util.Optional;
-import java.util.OptionalInt;
-import java.util.concurrent.TimeUnit;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Optional;
+import java.util.OptionalInt;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A selector that selects an individual point in a target resource.
@@ -102,10 +102,30 @@ public class PointSelector implements Selector {
     }
 
     /**
+     * Creates a point selector for a temporal point (measured in seconds from the start of the target resource).
+     *
+     * @param aPointSelector A point selector to copy
+     */
+    public PointSelector(final PointSelector aPointSelector) {
+        aPointSelector.getX().ifPresent(this::setX);
+        aPointSelector.getY().ifPresent(this::setY);
+        aPointSelector.getSeconds().ifPresent(this::setSeconds);
+    }
+
+    /**
      * A PointSelector constructor for use by the SelectorDeserializer.
      */
     PointSelector() {
         // This is intentionally empty
+    }
+
+    /**
+     * Creates a copy of this point selector.
+     *
+     * @return A copy of this point selector
+     */
+    public PointSelector copy() {
+        return new PointSelector(this);
     }
 
     /**

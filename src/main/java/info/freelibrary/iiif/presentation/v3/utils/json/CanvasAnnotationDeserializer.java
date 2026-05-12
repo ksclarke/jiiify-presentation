@@ -370,7 +370,7 @@ public class CanvasAnnotationDeserializer extends StdDeserializer<Annotation<?>>
      */
     private Optional<TimeMode> getTimeMode(final JsonNode aTimeModeNode) {
         if (aTimeModeNode != null && aTimeModeNode.isValueNode()) {
-            final Optional<TimeMode> timeMode = TimeMode.forLabel(aTimeModeNode.asText());
+            final Optional<TimeMode> timeMode = TimeMode.fromLabel(aTimeModeNode.asText());
 
             if (timeMode.isEmpty() && LOGGER.isWarnEnabled()) {
                 LOGGER.warn(MessageCodes.JPA_130, aTimeModeNode.asText());

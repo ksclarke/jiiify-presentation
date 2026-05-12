@@ -1,22 +1,20 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
-
-import info.freelibrary.util.warnings.Eclipse;
-import info.freelibrary.util.warnings.PMD;
-
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.id.UriUtils;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.Selector;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.util.warnings.Eclipse;
+import info.freelibrary.util.warnings.PMD;
+
+import java.util.Optional;
 
 /**
  * A start represents a start canvas or Specific Resource with a canvas source. It may appear on a Manifest or a Range.
@@ -57,8 +55,21 @@ public class Start {
      */
     public Start(final String aID, final String aSource, final Selector aSelector) {
         this(aID);
+
         mySource = UriUtils.checkID(aSource, true);
         mySelector = aSelector;
+    }
+
+    /**
+     * Creates a Specific Resource start from the supplied start.
+     *
+     * @param aStart A start to copy
+     */
+    public Start(final Start aStart) {
+        this(aStart.getID());
+
+        aStart.getSource().ifPresent(source -> mySource = UriUtils.checkID(source, true));
+        aStart.getSelector().ifPresent(selector -> mySelector = selector.copy());
     }
 
     /**
@@ -67,6 +78,15 @@ public class Start {
     @SuppressWarnings(Eclipse.UNUSED)
     private Start() {
         // This is intentionally empty
+    }
+
+    /**
+     * Creates a copy of this start.
+     *
+     * @return A copy of this start
+     */
+    public Start copy() {
+        return new Start(this);
     }
 
     /**

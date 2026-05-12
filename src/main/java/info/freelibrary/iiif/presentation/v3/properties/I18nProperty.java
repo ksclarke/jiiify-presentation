@@ -1,9 +1,13 @@
-
 package info.freelibrary.iiif.presentation.v3.properties;
+
+import static info.freelibrary.util.Constants.EMPTY;
+import static info.freelibrary.util.Constants.EQUALS;
+import static info.freelibrary.util.Constants.VERTICAL_BAR;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import info.freelibrary.util.warnings.JDK;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -11,9 +15,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static info.freelibrary.util.Constants.EQUALS;
-import static info.freelibrary.util.Constants.VERTICAL_BAR;
 
 /**
  * A base class for label, summary, attribution, property, and metadata's label and value fields.
@@ -32,7 +33,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      * @param aI18nArray An array of internationalizations
      */
     I18nProperty(final I18n... aI18nArray) {
-        myI18ns = Arrays.stream(aI18nArray).filter(Objects::nonNull).collect(Collectors.toList());
+        myI18ns = Arrays.stream(aI18nArray).filter(Objects::nonNull).collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**
@@ -42,7 +43,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      * @param aI18nList A list of internationalizations
      */
     I18nProperty(final List<I18n> aI18nList) {
-        myI18ns = aI18nList.stream().filter(Objects::nonNull).collect(Collectors.toList());
+        myI18ns = aI18nList.stream().filter(Objects::nonNull).collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**
@@ -73,13 +74,39 @@ class I18nProperty<T extends I18nProperty<T>> {
     }
 
     /**
+     * Sets the internationalization(s) of the property, removing all other previous internationalizations.
+     *
+     * @param aI18nArray An array of I18n(s).
+     * @return This property
+     */
+    @SuppressWarnings({JDK.UNCHECKED})
+    public T setI18ns(final I18n... aI18nArray) {
+        myI18ns.clear();
+        Arrays.stream(aI18nArray).filter(Objects::isNull).forEach(myI18ns::add);
+        return (T) this;
+    }
+
+    /**
+     * Sets the internationalization(s) of the property, removing all other previous internationalizations.
+     *
+     * @param aI18nList A list of I18n(s).
+     * @return This property
+     */
+    @SuppressWarnings({JDK.UNCHECKED})
+    public T setI18ns(final List<I18n> aI18nList) {
+        myI18ns.clear();
+        aI18nList.stream().filter(Objects::isNull).forEach(myI18ns::add);
+        return (T) this;
+    }
+
+    /**
      * Returns the first string value (regardless of language). If there isn't one it returns an empty Optional;
      *
      * @return A string value for the property
      */
     public Optional<String> getFirstValue() {
         if (hasValues()) {
-            return Optional.of(myI18ns.get(0).getValues().get(0));
+            return Optional.of(myI18ns.getFirst().getValues().getFirst());
         }
 
         return Optional.empty();
@@ -93,10 +120,10 @@ class I18nProperty<T extends I18nProperty<T>> {
     public Optional<String> getDefaultValue() {
         if (hasValues()) {
             final Optional<I18n> i18nOpt =
-                    myI18ns.stream().filter(i18n -> I18n.DEFAULT_LANG.equals(i18n.getLang())).findFirst();
+              myI18ns.stream().filter(i18n -> I18n.DEFAULT_LANG.equals(i18n.getLang())).findFirst();
 
             if (i18nOpt.isPresent()) {
-                return Optional.of(i18nOpt.get().getValues().get(0));
+                return Optional.of(i18nOpt.get().getValues().getFirst());
             }
         }
 
@@ -123,32 +150,6 @@ class I18nProperty<T extends I18nProperty<T>> {
     }
 
     /**
-     * Sets the internationalization(s) of the property, removing all other previous internationalizations.
-     *
-     * @param aI18nArray An array of I18n(s).
-     * @return This property
-     */
-    @SuppressWarnings({ JDK.UNCHECKED })
-    public T setI18ns(final I18n... aI18nArray) {
-        myI18ns.clear();
-        Arrays.stream(aI18nArray).filter(Objects::isNull).forEach(myI18ns::add);
-        return (T) this;
-    }
-
-    /**
-     * Sets the internationalization(s) of the property, removing all other previous internationalizations.
-     *
-     * @param aI18nList A list of I18n(s).
-     * @return This property
-     */
-    @SuppressWarnings({ JDK.UNCHECKED })
-    public T setI18ns(final List<I18n> aI18nList) {
-        myI18ns.clear();
-        aI18nList.stream().filter(Objects::isNull).forEach(myI18ns::add);
-        return (T) this;
-    }
-
-    /**
      * Returns a string representation of this property.
      *
      * @return A string representation of this property
@@ -158,16 +159,16 @@ class I18nProperty<T extends I18nProperty<T>> {
         final StringBuilder builder;
 
         if (!hasValues()) {
-            return "";
+            return EMPTY;
         }
 
         builder = new StringBuilder();
 
         for (final I18n i18n : myI18ns) {
-            final String[] strings = i18n.getValues().toArray(new String[] {});
+            final String[] strings = i18n.getValues().toArray(new String[]{});
 
             builder.append(i18n.getLang()).append(EQUALS).append(String.join(VERTICAL_BAR, strings))
-                    .append(System.lineSeparator());
+              .append(System.lineSeparator());
         }
 
         return builder.toString();

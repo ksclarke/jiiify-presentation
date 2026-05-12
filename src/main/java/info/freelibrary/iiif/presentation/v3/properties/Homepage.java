@@ -1,4 +1,3 @@
-
 package info.freelibrary.iiif.presentation.v3.properties;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -8,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.util.IllegalArgumentI18nException;
-import info.freelibrary.util.warnings.Eclipse;
 
 /**
  * A web page that is about the object represented by the resource that has the <code>homepage</code> property. The web
@@ -16,7 +14,7 @@ import info.freelibrary.util.warnings.Eclipse;
  * management system or other cataloging system.
  */
 @JsonInclude(Include.NON_EMPTY)
-@JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
+@JsonPropertyOrder({JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.FORMAT, JsonKeys.LANGUAGE})
 public class Homepage extends AbstractLinkProperty<Homepage> {
 
     /**
@@ -30,11 +28,28 @@ public class Homepage extends AbstractLinkProperty<Homepage> {
     }
 
     /**
+     * Creates a homepage from an existing one.
+     *
+     * @param aHomepage A homepage to deep copy
+     */
+    public Homepage(final Homepage aHomepage) {
+        super(aHomepage);
+    }
+
+    /**
      * Creates a homepage for Jackson's deserialization process.
      */
-    @SuppressWarnings(Eclipse.UNUSED)
     private Homepage() {
         super(ResourceTypes.TEXT);
+    }
+
+    /**
+     * Creates a deep copy of this homepage.
+     *
+     * @return A deep copy of this homepage
+     */
+    public Homepage copy() {
+        return new Homepage(this);
     }
 
     /**

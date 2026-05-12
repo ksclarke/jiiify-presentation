@@ -21,6 +21,7 @@ import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.warnings.PMD;
 
+import java.io.Serial;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -71,6 +72,7 @@ public class BehaviorList extends ArrayList<Behavior> {
     );
 
     /** The behavior list's <code>serialVersionUID</code>. */
+    @Serial
     private static final long serialVersionUID = -877432424934929199L;
 
     /** The list's type of <code>Behavior</code>. */

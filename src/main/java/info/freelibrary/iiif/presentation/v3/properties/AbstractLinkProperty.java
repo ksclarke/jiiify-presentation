@@ -1,11 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -15,11 +10,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.warnings.JDK;
-
 import info.freelibrary.iiif.presentation.v3.id.UriUtils;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
@@ -28,12 +18,20 @@ import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeDeserializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeKeySerializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeSerializer;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.JDK;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * A linking class that specific linking properties can extend.
  */
 @JsonInclude(Include.NON_EMPTY)
-@JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.FORMAT, JsonKeys.PROFILE, JsonKeys.LANGUAGE })
+@JsonPropertyOrder({JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.FORMAT, JsonKeys.PROFILE, JsonKeys.LANGUAGE})
 abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implements Localized<T> {
 
     /** The linking property logger. */
@@ -74,7 +72,7 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
     /**
      * Creates an abstract link property with a supplied type.
      *
-     * @param aType The type of link property
+     * @param aType The type of property
      */
     protected AbstractLinkProperty(final String aType) {
         myType = Objects.requireNonNull(aType);
@@ -104,12 +102,38 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
     }
 
     /**
+     * Creates a new link property from another.
+     *
+     * @param aProperty The property to copy
+     */
+    protected AbstractLinkProperty(final AbstractLinkProperty<T> aProperty) {
+        myID = aProperty.myID; // String
+        myLabel = aProperty.myLabel.copy();
+
+        if (aProperty.myFormat != null) {
+            myFormat = aProperty.myFormat; // Immutable
+        }
+
+        if (aProperty.myProfile != null) {
+            myProfile = aProperty.myProfile; // String
+        }
+
+        if (aProperty.myLanguages != null) {
+            myLanguages = new ArrayList<>(aProperty.myLanguages); // Strings
+        }
+
+        if (myType != null) {
+            myType = aProperty.myType; // String
+        }
+    }
+
+    /**
      * Tests whether the supplied object is equal to this one.
      *
      * @return True if the objects are equal; else, false
      */
     @Override
-    @SuppressWarnings({ JDK.UNCHECKED })
+    @SuppressWarnings({JDK.UNCHECKED})
     public boolean equals(final Object aObject) {
         final AbstractLinkProperty<T> other;
 
@@ -124,9 +148,9 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
         other = (AbstractLinkProperty<T>) aObject;
 
         return Objects.equals(myID, other.getID()) && Objects.equals(myType, other.getType()) &&
-                Objects.equals(Optional.ofNullable(myFormat), other.getFormat()) &&
-                Objects.equals(Optional.ofNullable(myProfile), other.getProfile()) &&
-                Objects.equals(myLabel, other.myLabel) && Objects.equals(getLanguages(), other.getLanguages());
+               Objects.equals(Optional.ofNullable(myFormat), other.getFormat()) &&
+               Objects.equals(Optional.ofNullable(myProfile), other.getProfile()) &&
+               Objects.equals(myLabel, other.myLabel) && Objects.equals(getLanguages(), other.getLanguages());
     }
 
     /**
@@ -141,12 +165,37 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
     }
 
     /**
+     * Sets format.
+     *
+     * @param aFormat A resource's format
+     * @return The resource whose format is being set
+     */
+    @SuppressWarnings({JDK.UNCHECKED})
+    public T setFormat(final MediaType aFormat) {
+        myFormat = aFormat;
+        return (T) this;
+    }
+
+    /**
      * Gets the ID.
      *
      * @return An ID
      */
     public String getID() {
         return myID;
+    }
+
+    /**
+     * Sets the ID.
+     *
+     * @param aID An ID
+     * @return The resource whose ID is being set
+     */
+    @JsonSetter(JsonKeys.ID)
+    @SuppressWarnings({JDK.UNCHECKED})
+    public T setID(final String aID) {
+        myID = UriUtils.checkID(aID, false);
+        return (T) this;
     }
 
     /**
@@ -176,12 +225,37 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
     }
 
     /**
+     * Sets the profile.
+     *
+     * @param aProfile A profile
+     * @return The resource whose profile is being set
+     */
+    @JsonSetter(JsonKeys.PROFILE)
+    @SuppressWarnings({JDK.UNCHECKED})
+    public T setProfile(final String aProfile) {
+        myProfile = UriUtils.checkID(aProfile, false);
+        return (T) this;
+    }
+
+    /**
      * Gets the resource type.
      *
      * @return The resource type
      */
     public String getType() {
         return myType;
+    }
+
+    /**
+     * Sets the resource type.
+     *
+     * @param aType A resource type
+     * @return The resource whose type is being set
+     */
+    @SuppressWarnings({JDK.UNCHECKED})
+    public T setType(final String aType) {
+        myType = Objects.requireNonNull(aType);
+        return (T) this;
     }
 
     /**
@@ -195,64 +269,14 @@ abstract class AbstractLinkProperty<T extends AbstractLinkProperty<T>> implement
     }
 
     /**
-     * Sets format.
-     *
-     * @param aFormat A resource's format
-     * @return The resource whose format is being set
-     */
-    @SuppressWarnings({ JDK.UNCHECKED })
-    public T setFormat(final MediaType aFormat) {
-        myFormat = aFormat;
-        return (T) this;
-    }
-
-    /**
-     * Sets the ID.
-     *
-     * @param aID An ID
-     * @return The resource whose ID is being set
-     */
-    @JsonSetter(JsonKeys.ID)
-    @SuppressWarnings({ JDK.UNCHECKED })
-    public T setID(final String aID) {
-        myID = UriUtils.checkID(aID, false);
-        return (T) this;
-    }
-
-    /**
      * Sets the descriptive label.
      *
      * @param aLabel A descriptive label
      * @return The resource whose label is being set
      */
-    @SuppressWarnings({ JDK.UNCHECKED })
+    @SuppressWarnings({JDK.UNCHECKED})
     public T setLabel(final Label aLabel) {
         myLabel = Objects.requireNonNull(aLabel);
-        return (T) this;
-    }
-
-    /**
-     * Sets the profile.
-     *
-     * @param aProfile A profile
-     * @return The resource whose profile is being set
-     */
-    @JsonSetter(JsonKeys.PROFILE)
-    @SuppressWarnings({ JDK.UNCHECKED })
-    public T setProfile(final String aProfile) {
-        myProfile = UriUtils.checkID(aProfile, false);
-        return (T) this;
-    }
-
-    /**
-     * Sets the resource type.
-     *
-     * @param aType A resource type
-     * @return The resource whose type is being set
-     */
-    @SuppressWarnings({ JDK.UNCHECKED })
-    public T setType(final String aType) {
-        myType = Objects.requireNonNull(aType);
         return (T) this;
     }
 

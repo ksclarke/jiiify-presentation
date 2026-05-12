@@ -7,12 +7,12 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.StringUtils;
 
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import java.util.Optional;
 
 /**
  * A selector for <a href="https://iiif.io/api/image/">IIIF Image API</a>s.
@@ -78,6 +78,15 @@ public class ImageApiSelector implements Selector {
     }
 
     /**
+     * Creates an Image API selector.
+     *
+     * @param aSelector An Image API selector to copy
+     */
+    public ImageApiSelector(final ImageApiSelector aSelector) {
+        this(aSelector.myRegion, aSelector.mySize, aSelector.myRotation, aSelector.myQuality, aSelector.myFormat);
+    }
+
+    /**
      * Creates an Image API selector from the supplied API path.
      *
      * @param aUrlPath An Image API URL path
@@ -118,6 +127,15 @@ public class ImageApiSelector implements Selector {
         myRotation = aRotation;
         myQuality = aQuality;
         myFormat = aFormat;
+    }
+
+    /**
+     * Creates a copy of this Image API selector.
+     *
+     * @return A copy of this Image API selector
+     */
+    public ImageApiSelector copy() {
+        return new ImageApiSelector(this);
     }
 
     /**

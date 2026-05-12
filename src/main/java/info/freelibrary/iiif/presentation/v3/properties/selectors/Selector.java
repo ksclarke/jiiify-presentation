@@ -38,4 +38,11 @@ public interface Selector {
         return this;
     }
 
+    /**
+     * Creates a copy of the selector.
+     *
+     * @return A copy of the selector
+     */
+    public Selector copy();
+
 }

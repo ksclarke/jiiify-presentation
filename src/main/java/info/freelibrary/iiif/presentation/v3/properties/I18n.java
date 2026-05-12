@@ -177,6 +177,24 @@ public class I18n implements Iterable<String> {
     }
 
     /**
+     * Creates a copy of the internationalization.
+     *
+     * @param aI18n The internationalization to copy
+     */
+    public I18n(final I18n aI18n) {
+        this(aI18n.myLocale, new ArrayList<>(aI18n.myStrings), aI18n.isAllowingHTML);
+    }
+
+    /**
+     * Creates a deep copy of this internationalization.
+     *
+     * @return A deep copy of this internationalization
+     */
+    public I18n copy() {
+        return new I18n(this);
+    }
+
+    /**
      * Adds a new string to the internationalization value.
      *
      * @param aValue A new string to add to the internationalization value

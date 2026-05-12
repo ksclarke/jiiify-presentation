@@ -1,8 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import info.freelibrary.util.warnings.Eclipse;
-
 /**
  * Text that must be displayed when the resource is displayed or used. For example, the requiredStatement property could
  * be used to present copyright or ownership statements, an acknowledgement of the owning and/or publishing institution,
@@ -33,9 +31,27 @@ public class RequiredStatement extends Metadata {
     /**
      * Constructor for Jackson deserialization.
      */
-    @SuppressWarnings(Eclipse.UNUSED)
     private RequiredStatement() {
         super();
+    }
+
+    /**
+     * Creates a copy of the supplied required statement.
+     *
+     * @param aRequiredStatement A required statement to copy
+     */
+    public RequiredStatement(final RequiredStatement aRequiredStatement) {
+        super(aRequiredStatement.getLabel().copy(), aRequiredStatement.getValue().copy());
+    }
+
+    /**
+     * Creates a copy of this required statement.
+     *
+     * @return A copy of this required statement
+     */
+    @Override
+    public RequiredStatement copy() {
+        return new RequiredStatement(this);
     }
 
     /**

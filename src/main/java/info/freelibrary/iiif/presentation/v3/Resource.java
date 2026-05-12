@@ -348,4 +348,11 @@ public interface Resource<T extends Resource<T>> {
      */
     T setThumbnails(List<ContentResource> aThumbnailList);
 
+    /**
+     * Deep copies this resource.
+     *
+     * @return A copy of this resource
+     */
+    T copy();
+
 }

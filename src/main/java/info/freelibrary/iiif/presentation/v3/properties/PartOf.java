@@ -76,6 +76,36 @@ public class PartOf {
         isSerializedAsObject = aObject;
     }
 
+    /**
+     * Creates a partOf from another partOf.
+     *
+     * @param aPartOf A partOf to copy
+     */
+    public PartOf(final PartOf aPartOf) {
+        if (aPartOf.myEmbeddedResource != null) {
+            myEmbeddedResource = aPartOf.myEmbeddedResource.copy();
+        } else {
+            myReferencedResource = new String[2];
+
+            myReferencedResource[0] = aPartOf.myReferencedResource[0];
+            myReferencedResource[1] = aPartOf.myReferencedResource[1];
+            isSerializedAsObject = aPartOf.isSerializedAsObject;
+        }
+    }
+
+    /**
+     * Creates a copy of this partOf.
+     *
+     * @return A copy of this partOf
+     */
+    public PartOf copy() {
+        if (myEmbeddedResource != null) {
+            return new PartOf(myEmbeddedResource.copy());
+        } else {
+            return new PartOf(myReferencedResource[0], myReferencedResource[1], isSerializedAsObject);
+        }
+    }
+
     @Override
     public boolean equals(final Object aObject) {
         final PartOf aPartOf;

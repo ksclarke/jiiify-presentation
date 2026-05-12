@@ -78,6 +78,26 @@ public class NavigableResource<T extends NavigableResource<T>> extends AbstractR
         super(aType, aID, true, aLabel, aBehaviorClass);
     }
 
+    public T copy() {
+        this
+    }
+
+    /**
+     * Copies this navigable resource.
+     *
+     * @return A copy of this navigable resource
+     */
+    @SuppressWarnings(JDK.UNCHECKED)
+    protected T copyInternal(NavigableResource<T> aNavigableResource) {
+        super.copyInternal(aNavigableResource);
+
+        aNavigableResource.myNavDate = myNavDate;
+        aNavigableResource.myNavPlace = myNavPlace;
+        aNavigableResource.myContexts = myContexts == null ? null : myContexts.copy();
+
+        return (T) aNavigableResource;
+    }
+
     @Override
     @SuppressWarnings(JDK.UNCHECKED)
     public boolean equals(final Object aObject) {
