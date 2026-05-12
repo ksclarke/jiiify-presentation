@@ -15,9 +15,6 @@ permissions:
 jobs:
   generate-matrix:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
@@ -55,6 +52,9 @@ jobs:
     name: Maven PR Builder (JDK ${{ matrix.java }}, ${{ matrix.os}})
     needs: generate-matrix
     runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
     strategy:
       matrix: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
 
@@ -74,9 +74,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          JPV3_USERNAME: ${{ secrets.JPV3_USERNAME }}
+          JPV3_PASSWORD: ${{ secrets.JPV3_PASSWORD  }}
         run: |
           mvn -B -ntp -Pnative -Pjava${{ matrix.java }} verify javadoc:javadoc \
-            -Djpv3.username="${{ secrets.JPV3_USERNAME }}" -Djpv3.password="${{ secrets.JPV3_PASSWORD }}"
+            -Djpv3.username="$JPV3_USERNAME" -Djpv3.password="$JPV3_PASSWORD"
 
       - name: Prepare binary artifact
         shell: bash
@@ -96,7 +98,7 @@ jobs:
           esac
           cp "target/$out_name" "dist/$out_name"
           chmod +x "dist/$out_name" || true
-          
+
           # Only create a Homebrew-friendly tarball for macOS
           if [ "${{ runner.os }}" = "macOS" ]; then
             tar -C dist -czf "dist/jpv3-${{ matrix.suffix }}.tar.gz" "$out_name"
@@ -170,19 +172,19 @@ jobs:
           prerelease: true
           body: |
             This is a pre-release of the JPv3 CLI. It is not ready for production use.
-          
+
             Binaries:
             - jpv3 (Linux)
             - jpv3.exe (Windows)
             - jpv3-macos-x64.tar.gz (MacOS)
-            
+
             Homebrew:
               There is a tap for Mac users: https://github.com/freelibrary/homebrew-tap
-            
+
               Once you have Homebrew installed locally, run:
                 - brew tap freelibrary/homebrew-tap
                 - brew install jpv3
-            
+
               And you will have the latest version of the CLI installed.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -214,7 +216,7 @@ jobs:
           tarball="$(ls -1 dist/*.tar.gz | head -n 1)"
           sha="$(shasum -a 256 "$tarball" | awk '{print $1}')"
           asset_name="$(basename "$tarball")"
-        
+
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
           echo "sha256=$sha" >> "$GITHUB_OUTPUT"
           echo "asset_name=$asset_name" >> "$GITHUB_OUTPUT"
@@ -230,37 +232,37 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-        
+
           TAP_DIR="homebrew-tap"
           FORMULA_PATH="${TAP_DIR}/Formula/jpv3.rb"
-        
+
           tag="${{ steps.meta.outputs.tag }}"
           sha="${{ steps.meta.outputs.sha256 }}"
           asset="${{ steps.meta.outputs.asset_name }}"
           url="https://github.com/${{ github.repository }}/releases/download/${tag}/${asset}"
-        
+
           mkdir -p "${TAP_DIR}/Formula"
-        
+
           cat > "${FORMULA_PATH}" <<EOF
           class Jpv3 < Formula
             desc "JPv3 command line tool"
             homepage "https://github.com/${{ github.repository }}"
             version "${tag}"
-        
+
             on_macos do
               url "${url}"
               sha256 "${sha}"
-        
+
               def install
                 bin.install "jpv3"
               end
             end
           end
           EOF
-        
+
           cd "${TAP_DIR}"
           git config user.name "freelibrary-bot"
           git config user.email "noreply@github.com"
           git add "Formula/jpv3.rb"
           git commit -m "jpv3: ${tag}" || echo "No changes to commit"
-          git push 
+          git push
