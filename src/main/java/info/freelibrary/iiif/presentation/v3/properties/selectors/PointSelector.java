@@ -124,6 +124,7 @@ public class PointSelector implements Selector {
      *
      * @return A copy of this point selector
      */
+    @Override
     public PointSelector copy() {
         return new PointSelector(this);
     }

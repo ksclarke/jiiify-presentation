@@ -57,11 +57,41 @@ public class AnnotationCollection extends AbstractResource<AnnotationCollection>
     }
 
     /**
+     * Creates a new AnnotationCollection from the supplied one.
+     *
+     * @param aAnnotationCollection An existing AnnotationCollection
+     */
+    public AnnotationCollection(final AnnotationCollection aAnnotationCollection) {
+        this();
+
+        aAnnotationCollection.copyTo(this);
+
+        if (aAnnotationCollection.myFirstAnnotationPage != null) {
+            myFirstAnnotationPage = new AnnotationPage<>(aAnnotationCollection.myFirstAnnotationPage);
+        }
+
+        if (aAnnotationCollection.myLastAnnotationPage != null) {
+            myLastAnnotationPage = new AnnotationPage<>(aAnnotationCollection.myLastAnnotationPage);
+        }
+
+        if (aAnnotationCollection.myViewingDirection != null) {
+            myViewingDirection = aAnnotationCollection.myViewingDirection;
+        }
+
+        myTotal = aAnnotationCollection.myTotal;
+    }
+
+    /**
      * Creates a new {@code AnnotationCollection} for Jackson.
      */
     @SuppressWarnings(Eclipse.UNUSED)
     private AnnotationCollection() {
         super(ResourceTypes.ANNOTATION_COLLECTION, ResourceBehavior.class);
+    }
+
+    @Override
+    public AnnotationCollection copy() {
+        return new AnnotationCollection(this);
     }
 
     @Override

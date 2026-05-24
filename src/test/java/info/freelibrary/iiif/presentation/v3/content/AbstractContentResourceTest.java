@@ -6,12 +6,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
-import java.util.UUID;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import info.freelibrary.iiif.presentation.v3.AnnotationPage;
 import info.freelibrary.iiif.presentation.v3.Canvas;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
@@ -21,6 +15,11 @@ import info.freelibrary.iiif.presentation.v3.exts.geo.Properties;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Tests of {@code AbstractContentResource}.
@@ -121,7 +120,7 @@ public class AbstractContentResourceTest {
     }
 
     /**
-     * Test method for {@link AbstractContentResource#setAnnotations(AnnotationPage)}.
+     * Test method for {@link AbstractContentResource#setAnnotations(AnnotationPage...)}.
      */
     @Test
     public final void testSetAnnotationsAnnotationPageOfWebAnnotationArray() {
@@ -168,7 +167,7 @@ public class AbstractContentResourceTest {
      * @return A unique ID
      */
     private String getID() {
-        return "https://" + UUID.randomUUID().toString();
+        return "https://" + UUID.randomUUID();
     }
 
     /**
@@ -184,6 +183,25 @@ public class AbstractContentResourceTest {
          */
         private TestContentResource(final String aType, final Class<? extends Behavior> aBehaviorClass) {
             super(aType, aBehaviorClass);
+        }
+
+        /**
+         * Creates a new {@code TestContentResource} from an existing one.
+         *
+         * @param aResource An existing {@code TestContentResource}
+         */
+        private TestContentResource(final TestContentResource aResource) {
+            super(aResource.getType().isPresent() ? aResource.getType().get() : null, ResourceBehavior.class);
+            aResource.copyTo(this);
+        }
+
+        /**
+         * Creates a copy of this test object.
+         *
+         * @return A copy of this test object
+         */
+        public TestContentResource copy() {
+            return new TestContentResource(this);
         }
     }
 }

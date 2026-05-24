@@ -3,7 +3,7 @@ package info.freelibrary.iiif.presentation.v3.utils.csv;
 
 import static info.freelibrary.iiif.presentation.v3.ResourceTypes.IMAGE;
 import static info.freelibrary.iiif.presentation.v3.ResourceTypes.IMAGE_SERVICE_2;
-import static info.freelibrary.util.ThrowingConsumer.sneaky;
+import static info.freelibrary.util.ThrowingConsumer.uncheck;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -117,7 +117,7 @@ public class Mapper {
         myChildren = myDatabase.hashSet("children", Serializer.STRING).createOrOpen();
 
         // Read the source file(s) and populate the database's indices
-        reader.rows(aCsvStream).forEach(sneaky(row -> {
+        reader.rows(aCsvStream).forEach(uncheck(row -> {
             final String rowID = row.getItemID().orElse(UUID.randomUUID().toString());
             final String rowValue = myMapper.writeValueAsString(row);
 
@@ -350,7 +350,7 @@ public class Mapper {
     protected List<Canvas> mapCanvases(final String aManifestID, final Minter aMinter) {
         final List<Canvas> canvases = new ArrayList<>();
 
-        myParents.getOrDefault(aManifestID, Set.of()).forEach(sneaky(canvasID -> {
+        myParents.getOrDefault(aManifestID, Set.of()).forEach(uncheck(canvasID -> {
             final Row canvasRow = myMapper.readValue(myCsvData.get(canvasID), Row.class);
             final Canvas canvas = myBuilder.build(canvasRow, aMinter);
             final int canvasWidth = canvasRow.getMediaWidth().orElse(0);
@@ -362,7 +362,7 @@ public class Mapper {
 
             if (children == null || children.isEmpty()) {
                 // If we don't have any children, we're probably dealing with a single image we can paint directly
-                canvasRow.getFileName().ifPresent(sneaky(fileName -> {
+                canvasRow.getFileName().ifPresent(uncheck(fileName -> {
                     final ImageContent imageContent = new ImageContent(myBuilder.checkID(canvasID, IMAGE));
                     final ImageService imageService = new ImageService2(myBuilder.checkID(canvasID, IMAGE_SERVICE_2));
 
@@ -378,7 +378,7 @@ public class Mapper {
                 final List<ContentResource> choiceResources = new ArrayList<>();
                 final List<ContentResource> layerResources = new ArrayList<>();
 
-                children.forEach(sneaky(paintedID -> {
+                children.forEach(uncheck(paintedID -> {
                     final Row paintedRow = myMapper.readValue(myCsvData.get(paintedID), Row.class);
                     final int paintedWidth = paintedRow.getMediaWidth().orElse(0);
                     final int paintedHeight = paintedRow.getMediaHeight().orElse(0);
@@ -386,7 +386,7 @@ public class Mapper {
                     width.updateAndGet(w -> (canvasWidth == 0 && paintedWidth > w) ? paintedWidth : w);
                     height.updateAndGet(h -> (canvasHeight == 0 && paintedHeight > h) ? paintedHeight : h);
 
-                    paintedRow.getObjectType().ifPresent(sneaky(objectType -> {
+                    paintedRow.getObjectType().ifPresent(uncheck(objectType -> {
                         switch (objectType) {
                             case Keys.CHOICE -> choiceResources.add(myBuilder.build(paintedRow, aMinter));
                             case Keys.LAYER -> layerResources.add(myBuilder.build(paintedRow, aMinter));

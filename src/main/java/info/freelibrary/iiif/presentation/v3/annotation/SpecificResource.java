@@ -85,6 +85,26 @@ public non-sealed class SpecificResource extends Target implements ContentResour
     }
 
     /**
+     * Creates a new specific resource from the supplied specific resource.
+     *
+     * @param aSpecificResource A specific resource
+     */
+    public SpecificResource(final SpecificResource aSpecificResource) {
+        super(aSpecificResource);
+
+        if (aSpecificResource.mySource != null) {
+            mySource = aSpecificResource.mySource.copy();
+        }
+
+        if (aSpecificResource.mySelector != null) {
+            mySelector = aSpecificResource.mySelector.copy();
+        }
+
+        myStyleClass = aSpecificResource.myStyleClass;
+        myFormat = aSpecificResource.myFormat;
+    }
+
+    /**
      * Allows Jackson to create a new SpecificResource while deserializing JSON.
      */
     @SuppressWarnings(Eclipse.UNUSED)
@@ -94,7 +114,7 @@ public non-sealed class SpecificResource extends Target implements ContentResour
 
     @Override
     public SpecificResource copy() {
-        return new SpecificResource(getID(), mySource, mySelector);
+        return new SpecificResource(this);
     }
 
     @Override

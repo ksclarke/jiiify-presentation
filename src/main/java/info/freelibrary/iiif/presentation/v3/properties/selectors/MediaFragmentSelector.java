@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.selectors;
 
+import static info.freelibrary.util.Constants.AMPERSAND;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.tkurz.media.fragments.FragmentParser;
 import com.github.tkurz.media.fragments.ParseException;
@@ -13,6 +15,7 @@ import info.freelibrary.iiif.presentation.v3.Canvas;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.PMD;
 
 import java.io.StringReader;
 import java.net.URI;
@@ -24,6 +27,7 @@ import java.util.Objects;
  * A media fragment selector selects a region of interest in a resource with spatial and/or temporal dimensions
  * (typically a {@link Canvas}).
  */
+@SuppressWarnings({ PMD.GOD_CLASS })
 public class MediaFragmentSelector implements FragmentSelector {
 
     /** The URI of the <a href="http://www.w3.org/TR/media-frags/">Media Fragments URI specification</a>. */
@@ -193,6 +197,7 @@ public class MediaFragmentSelector implements FragmentSelector {
      *
      * @return A deep copy of this media fragment selector
      */
+    @Override
     public MediaFragmentSelector copy() {
         return new MediaFragmentSelector(this);
     }
@@ -436,12 +441,13 @@ public class MediaFragmentSelector implements FragmentSelector {
      *
      * @param aSelector A selector
      * @return The selector's media fragment string
+     * @throws IllegalArgumentException If the supplied selector is not spatial or temporal
      */
     private static String toFragmentString(final MediaFragmentSelector aSelector) {
         Objects.requireNonNull(aSelector);
 
         if (aSelector.isSpatial() && aSelector.isTemporal()) {
-            return String.join("&", toTemporalFragmentString(aSelector), toSpatialFragmentString(aSelector));
+            return String.join(AMPERSAND, toTemporalFragmentString(aSelector), toSpatialFragmentString(aSelector));
         }
 
         if (aSelector.isSpatial()) {

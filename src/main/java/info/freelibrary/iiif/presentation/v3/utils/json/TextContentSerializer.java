@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.utils.json;
 
-import static info.freelibrary.util.ThrowingConsumer.sneaky;
+import static info.freelibrary.util.ThrowingConsumer.uncheck;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -52,9 +52,9 @@ public class TextContentSerializer extends StdSerializer<TextContent> {
             aJsonGenerator.writeStartObject();
             aJsonGenerator.writeStringField(JsonKeys.ID, id);
 
-            typeOpt.ifPresent(sneaky(type -> aJsonGenerator.writeStringField(JsonKeys.TYPE, type)));
-            formatOpt.ifPresent(sneaky(format -> aJsonGenerator.writeStringField(JsonKeys.FORMAT, format.toString())));
-            labelOpt.ifPresent(sneaky(label -> aJsonGenerator.writeObjectField(JsonKeys.LABEL, label)));
+            typeOpt.ifPresent(uncheck(type -> aJsonGenerator.writeStringField(JsonKeys.TYPE, type)));
+            formatOpt.ifPresent(uncheck(format -> aJsonGenerator.writeStringField(JsonKeys.FORMAT, format.toString())));
+            labelOpt.ifPresent(uncheck(label -> aJsonGenerator.writeObjectField(JsonKeys.LABEL, label)));
 
             if (languages != null && !languages.isEmpty()) {
                 aJsonGenerator.writeArrayFieldStart(JsonKeys.LANGUAGE);

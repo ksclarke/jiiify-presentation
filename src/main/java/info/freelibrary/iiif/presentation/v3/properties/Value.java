@@ -32,7 +32,9 @@ public class Value extends I18nProperty<Value> {
      *
      * @param aI18nList A list of internationalizations for the value
      */
-    public Value(final List<I18n> aI18nList) { super(aI18nList); }
+    public Value(final List<I18n> aI18nList) {
+        super(aI18nList);
+    }
 
     /**
      * Creates a value using the 'none' language tag.

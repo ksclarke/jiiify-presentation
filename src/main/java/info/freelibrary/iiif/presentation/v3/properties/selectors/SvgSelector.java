@@ -50,6 +50,7 @@ public class SvgSelector implements Selector {
      *
      * @return A copy of this SVG selector
      */
+    @Override
     public SvgSelector copy() {
         return new SvgSelector(this);
     }

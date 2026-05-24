@@ -5,13 +5,12 @@ import static info.freelibrary.util.Constants.EMPTY;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import java.util.List;
-import java.util.UUID;
-
-import org.junit.Test;
-
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
+import org.junit.Test;
+
+import java.util.List;
+import java.util.UUID;
 
 /**
  * An abstract testing class for resources.
@@ -116,6 +115,15 @@ public class AbstractResourceTest {
         private TestClass(final String aID) {
             super("TestType", ResourceBehavior.class);
             super.setID(aID);
+        }
+
+        /**
+         * Creates a copy of this test object.
+         *
+         * @return A copy of this test object
+         */
+        public TestClass copy() {
+            return new TestClass(getID());
         }
     }
 }

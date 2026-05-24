@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.utils.csv;
 
-import static info.freelibrary.util.ThrowingConsumer.sneaky;
+import static info.freelibrary.util.ThrowingConsumer.uncheck;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -95,7 +95,7 @@ public class MapperTest {
 
             // Check that the ZIP file contains the expected JSON files
             try (ZipFile zipFile = new ZipFile(myZipFile.toFile())) {
-                zipFile.stream().filter(entry -> !entry.isDirectory()).forEach(sneaky(entry -> {
+                zipFile.stream().filter(entry -> !entry.isDirectory()).forEach(uncheck(entry -> {
                     try (InputStream inStream = zipFile.getInputStream(entry)) {
                         final String found = new String(inStream.readAllBytes(), StandardCharsets.UTF_8);
                         final String expected = Files.readString(Path.of(EXPECTED_RESULTS, entry.getName()));

@@ -27,6 +27,7 @@ public class AudioContentSelector implements ContentSelector {
      *
      * @return A copy of the audio content selector
      */
+    @Override
     public AudioContentSelector copy() {
         return new AudioContentSelector(this);
     }

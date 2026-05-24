@@ -171,7 +171,7 @@ public abstract class AbstractContentResource<T extends AbstractContentResource<
     }
 
     /**
-     * A non-public way to set format from a media type.
+     * A non-public way to set the format from a media type.
      *
      * @param aMediaType A media type
      * @return This content resource
@@ -185,7 +185,7 @@ public abstract class AbstractContentResource<T extends AbstractContentResource<
     }
 
     /**
-     * Used by Jackson't serialization processes.
+     * Used by Jackson's serialization processes.
      *
      * @return A form of language ready to be serialized
      */

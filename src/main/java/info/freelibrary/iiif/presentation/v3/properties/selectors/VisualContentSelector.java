@@ -27,6 +27,7 @@ public class VisualContentSelector implements ContentSelector {
      *
      * @return A copy of this visual content selector
      */
+    @Override
     public VisualContentSelector copy() {
         return new VisualContentSelector();
     }

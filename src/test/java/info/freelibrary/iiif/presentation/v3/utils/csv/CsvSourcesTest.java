@@ -2,7 +2,7 @@
 package info.freelibrary.iiif.presentation.v3.utils.csv;
 
 import static info.freelibrary.util.Constants.SLASH;
-import static info.freelibrary.util.ThrowingBiConsumer.sneaky;
+import static info.freelibrary.util.ThrowingBiConsumer.uncheck;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -69,7 +69,7 @@ public class CsvSourcesTest {
     /** Tests the forEach method. */
     @Test
     public void testForEach() {
-        myResults.forEach(sneaky((key, value) -> {
+        myResults.forEach(uncheck((key, value) -> {
             final URI host = URI.create("https://test.ingest.iiif.library.ucla.edu");
             final CsvSources sources = new CsvSources(Stream.of(key), host);
             final Iterator<String> result = value.iterator();

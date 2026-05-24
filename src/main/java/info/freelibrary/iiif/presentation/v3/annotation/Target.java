@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * An annotation target. There are several types of extensions of this sealed class: {@code SpecificResource},
@@ -163,10 +164,40 @@ public sealed class Target permits SpecificResource {
     }
 
     /**
+     * Creates a copy of the supplied target.
+     *
+     * @param aTarget The target to copy
+     */
+    public Target(final Target aTarget) {
+        this();
+
+        if (aTarget.myPartOfs != null) {
+            myPartOfs = aTarget.myPartOfs.stream().map(PartOf::copy).collect(Collectors.toCollection(ArrayList::new));
+        }
+
+        if (aTarget.myEmbeddedResource != null) {
+            myEmbeddedResource = aTarget.myEmbeddedResource.copy();
+        }
+
+        isSerializedAsObject = aTarget.isSerializedAsObject;
+        myType = aTarget.myType;
+        myID = aTarget.myID;
+    }
+
+    /**
      * Creates a new target for the JSON deserializer.
      */
     protected Target() {
         super();
+    }
+
+    /**
+     * Creates a copy of this target.
+     *
+     * @return A copy of this target
+     */
+    public Target copy() {
+        return new Target(this);
     }
 
     /**

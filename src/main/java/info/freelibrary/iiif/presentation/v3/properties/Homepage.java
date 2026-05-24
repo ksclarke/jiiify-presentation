@@ -1,3 +1,4 @@
+
 package info.freelibrary.iiif.presentation.v3.properties;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -14,7 +15,7 @@ import info.freelibrary.util.IllegalArgumentI18nException;
  * management system or other cataloging system.
  */
 @JsonInclude(Include.NON_EMPTY)
-@JsonPropertyOrder({JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.FORMAT, JsonKeys.LANGUAGE})
+@JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
 public class Homepage extends AbstractLinkProperty<Homepage> {
 
     /**

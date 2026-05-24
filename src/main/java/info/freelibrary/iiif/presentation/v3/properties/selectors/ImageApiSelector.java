@@ -3,8 +3,6 @@ package info.freelibrary.iiif.presentation.v3.properties.selectors;
 
 import static info.freelibrary.util.Constants.SLASH;
 
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
@@ -134,6 +132,7 @@ public class ImageApiSelector implements Selector {
      *
      * @return A copy of this Image API selector
      */
+    @Override
     public ImageApiSelector copy() {
         return new ImageApiSelector(this);
     }

@@ -24,6 +24,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * A resource that associates content resources and commentary with a IIIF canvas. This provides a single, coherent
@@ -60,6 +61,25 @@ public abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotatio
     protected AbstractCanvasAnnotation() {
         super(ResourceTypes.ANNOTATION, ResourceBehavior.class);
         myTargets = new ArrayList<>(1);
+    }
+
+    /**
+     * Creates a new canvas annotation from the supplied annotation.
+     *
+     * @param aAnnotation An annotation to copy
+     */
+    protected AbstractCanvasAnnotation(final AbstractCanvasAnnotation<A> aAnnotation) {
+        this();
+
+        aAnnotation.copyTo(this);
+
+        myBodyHasChoice = aAnnotation.myBodyHasChoice;
+        myBodyID = aAnnotation.myBodyID;
+        myMotivation = aAnnotation.myMotivation;
+        myResources = aAnnotation.myResources.stream().map(ContentResource::copy)
+                .collect(Collectors.toCollection(ArrayList::new));
+        myTargets = aAnnotation.myTargets.stream().map(Target::copy).collect(Collectors.toCollection(ArrayList::new));
+        myTimeMode = aAnnotation.myTimeMode;
     }
 
     /**

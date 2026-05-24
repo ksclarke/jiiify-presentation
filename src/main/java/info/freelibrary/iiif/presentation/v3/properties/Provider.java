@@ -71,12 +71,33 @@ public class Provider {
         getHomepages().add(Objects.requireNonNull(aHomepage));
     }
 
+    /**
+     * Creates a new resource provider from the supplied provider.
+     *
+     * @param aProvider A provider
+     */
     public Provider(final Provider aProvider) {
-        myID = aProvider.myID;
-        myLabel = aProvider.myLabel.copy();
-        myHomepages = aProvider.myHomepages.stream().map(Homepage::new).collect(Collectors.toList());
-        myLogos = aProvider.myLogos.stream().map(ImageContent::copy).collect(Collectors.toList());
-        mySeeAlsoRefs = aProvider.mySeeAlsoRefs.stream().map(SeeAlso::copy).collect(Collectors.toList());
+        this();
+
+        if (aProvider.myID != null) {
+            myID = aProvider.myID;
+        }
+
+        if (aProvider.myLabel != null) {
+            myLabel = aProvider.myLabel.copy();
+        }
+
+        if (aProvider.myHomepages != null) {
+            myHomepages = aProvider.myHomepages.stream().map(Homepage::new).collect(Collectors.toList());
+        }
+
+        if (aProvider.myLogos != null) {
+            myLogos = aProvider.myLogos.stream().map(ImageContent::copy).collect(Collectors.toList());
+        }
+
+        if (aProvider.mySeeAlsoRefs != null) {
+            mySeeAlsoRefs = aProvider.mySeeAlsoRefs.stream().map(SeeAlso::copy).collect(Collectors.toList());
+        }
     }
 
     /**

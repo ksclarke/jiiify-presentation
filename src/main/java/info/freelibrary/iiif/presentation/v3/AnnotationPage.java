@@ -26,11 +26,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * A page of {@link Annotation}(s) that associates different content resources with their respective {@link Canvas}(es).
- * An AnnotationPage may included in the items property of the Canvas (and whose target is that Canvas) or on a Manifest
- * (and whose target is that Manifest).
+ * An AnnotationPage may be included in the `items` property of the Canvas (and whose target is that Canvas) or on a
+ * Manifest (and whose target is that Manifest).
  *
  * @param <A> The type of annotation encapsulated on the page
  */
@@ -40,7 +41,7 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
     /** The logger used by the AnnotationPage. */
     private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationPage.class, MessageCodes.BUNDLE);
 
-    /** Whether the annotation page is intended to be used outside of a manifest. */
+    /** Whether the annotation page is intended to be used outside a manifest. */
     private boolean isExternal;
 
     /** The AnnotationPage's annotations. */
@@ -86,6 +87,45 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
     }
 
     /**
+     * Creates a new annotation page from an existing one. Note that because this is a copy, the linked annotation pages
+     * are also copied.
+     *
+     * @param aAnnotationPage The annotation page to copy
+     */
+    public AnnotationPage(final AnnotationPage<A> aAnnotationPage) {
+        this();
+
+        aAnnotationPage.copyTo(this);
+
+        if (aAnnotationPage.isExternal) {
+            isExternal = true;
+        }
+
+        if (aAnnotationPage.myNextAnnotationPage != null) {
+            myNextAnnotationPage = new AnnotationPage<>(aAnnotationPage.myNextAnnotationPage);
+        }
+
+        if (aAnnotationPage.myPreviousAnnotationPage != null) {
+            myPreviousAnnotationPage = new AnnotationPage<>(aAnnotationPage.myPreviousAnnotationPage);
+        }
+
+        if (aAnnotationPage.myAnnotations != null) {
+            myAnnotations = aAnnotationPage.myAnnotations.stream().map(Annotation::copy)
+                    .collect(Collectors.toCollection(ArrayList::new));
+        }
+    }
+
+    /**
+     * Creates a copy of this annotation page.
+     *
+     * @return A copy of this annotation page
+     */
+    @Override
+    public AnnotationPage<A> copy() {
+        return new AnnotationPage<>(this);
+    }
+
+    /**
      * Adds annotations to the annotation page.
      *
      * @param aAnnotationArray Annotations to be added to the annotation page
@@ -119,7 +159,6 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
     }
 
     @Override
-    @SuppressWarnings(JDK.UNCHECKED)
     public boolean equals(final Object aObject) {
         final AnnotationPage<?> other;
 
@@ -149,58 +188,10 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
         }
 
         if (!myAnnotations.isEmpty()) {
-            myAnnotations.get(0).getMotivation();
+            myAnnotations.getFirst().getMotivation();
         }
 
         return myAnnotations;
-    }
-
-    /**
-     * Gets the annotation page that should follow this one in an {@link AnnotationCollection}.
-     *
-     * @param <T> The type of annotation in the returned annotation page
-     * @return The optional annotation page that follows this one
-     */
-    @JsonIgnore
-    @SuppressWarnings({ JDK.UNCHECKED })
-    public <T extends Annotation<T>> Optional<AnnotationPage<T>> getNextPage() {
-        return Optional.ofNullable((AnnotationPage<T>) myNextAnnotationPage);
-    }
-
-    /**
-     * Gets the annotation page that should precede this one in an {@link AnnotationCollection}.
-     *
-     * @param <T> The type of annotation in the returned annotation page
-     * @return The optional annotation page that follows this one
-     */
-    @JsonIgnore
-    @SuppressWarnings({ JDK.UNCHECKED })
-    public <T extends Annotation<T>> Optional<AnnotationPage<T>> getPrevPage() {
-        return Optional.ofNullable((AnnotationPage<T>) myPreviousAnnotationPage);
-    }
-
-    /**
-     * Gets whether this page has an external context.
-     *
-     * @return True if the page has external context
-     */
-    public boolean hasExternalContext() {
-        return isExternal;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), myAnnotations, myNextAnnotationPage, myPreviousAnnotationPage);
-    }
-
-    /**
-     * Removes the external context from an annotation page so that it can be used inside a manifest.
-     *
-     * @return This annotation page
-     */
-    public AnnotationPage<A> removeExternalContext() {
-        isExternal = false;
-        return this;
     }
 
     /**
@@ -232,6 +223,80 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
         }
 
         return addAnnotations(aAnnotationList);
+    }
+
+    /**
+     * Gets the annotation page that should follow this one in an {@link AnnotationCollection}.
+     *
+     * @param <T> The type of annotation in the returned annotation page
+     * @return The optional annotation page that follows this one
+     */
+    @JsonIgnore
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public <T extends Annotation<T>> Optional<AnnotationPage<T>> getNextPage() {
+        return Optional.ofNullable((AnnotationPage<T>) myNextAnnotationPage);
+    }
+
+    /**
+     * Sets the annotation page that should follow this one in an {@link AnnotationCollection}.
+     *
+     * @param anAnnotationPage A next annotation page
+     * @param <T> The type of annotation page set as the next one
+     * @return This annotation page
+     */
+    @JsonSetter(JsonKeys.NEXT)
+    public <T extends Annotation<T>> AnnotationPage<A> setNextPage(final AnnotationPage<T> anAnnotationPage) {
+        myNextAnnotationPage = anAnnotationPage;
+        return this;
+    }
+
+    /**
+     * Gets the annotation page that should precede this one in an {@link AnnotationCollection}.
+     *
+     * @param <T> The type of annotation in the returned annotation page
+     * @return The optional annotation page that follows this one
+     */
+    @JsonIgnore
+    @SuppressWarnings({ JDK.UNCHECKED })
+    public <T extends Annotation<T>> Optional<AnnotationPage<T>> getPrevPage() {
+        return Optional.ofNullable((AnnotationPage<T>) myPreviousAnnotationPage);
+    }
+
+    /**
+     * Sets the annotation page that should precede this one in an {@link AnnotationCollection}.
+     *
+     * @param anAnnotationPage A previous annotation page
+     * @param <T> The type of annotation page set as the previous one
+     * @return This annotation page
+     */
+    @JsonSetter(JsonKeys.PREV)
+    public <T extends Annotation<T>> AnnotationPage<A> setPrevPage(final AnnotationPage<T> anAnnotationPage) {
+        myPreviousAnnotationPage = anAnnotationPage;
+        return this;
+    }
+
+    /**
+     * Gets whether this page has an external context.
+     *
+     * @return True if the page has external context
+     */
+    public boolean hasExternalContext() {
+        return isExternal;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), myAnnotations, myNextAnnotationPage, myPreviousAnnotationPage);
+    }
+
+    /**
+     * Removes the external context from an annotation page so that it can be used inside a manifest.
+     *
+     * @return This annotation page
+     */
+    public AnnotationPage<A> removeExternalContext() {
+        isExternal = false;
+        return this;
     }
 
     @Override
@@ -267,40 +332,29 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
     }
 
     /**
-     * Sets the annotation page that should follow this one in an {@link AnnotationCollection}.
-     *
-     * @param anAnnotationPage A next annotation page
-     * @param <T> The type of annotation page set as the next one
-     * @return This annotation page
-     */
-    @JsonSetter(JsonKeys.NEXT)
-    public <T extends Annotation<T>> AnnotationPage<A> setNextPage(final AnnotationPage<T> anAnnotationPage) {
-        myNextAnnotationPage = anAnnotationPage;
-        return this;
-    }
-
-    /**
-     * Sets the annotation page that should precede this one in an {@link AnnotationCollection}.
-     *
-     * @param anAnnotationPage A previous annotation page
-     * @param <T> The type of annotation page set as the previous one
-     * @return This annotation page
-     */
-    @JsonSetter(JsonKeys.PREV)
-    public <T extends Annotation<T>> AnnotationPage<A> setPrevPage(final AnnotationPage<T> anAnnotationPage) {
-        myPreviousAnnotationPage = anAnnotationPage;
-        return this;
-    }
-
-    /**
-     * Gets the context only when the annotation page is intended to be used outside of a manifest, as indicated by
-     * using {@code AnnotationPage#setExternalContext()}.
+     * Gets the context only when the annotation page is intended to be used outside a manifest, as indicated by using
+     * {@code AnnotationPage#setExternalContext()}.
      *
      * @return The context URI
      */
     @JsonGetter(JsonKeys.CONTEXT)
     private Optional<URI> getExternalContext() {
         return isExternal ? Optional.of(ContextList.PRESENTATION_CONTEXT_URI) : Optional.empty();
+    }
+
+    /**
+     * Allows Jackson to set the external context flag.
+     *
+     * @param aContextURI An annotation page context URI
+     * @return This annotation page
+     */
+    @JsonSetter(JsonKeys.CONTEXT)
+    private AnnotationPage<A> setExternalContext(final String aContextURI) {
+        if (ContextList.PRESENTATION_CONTEXT_URI.toString().equalsIgnoreCase(aContextURI)) {
+            setExternalContext();
+        }
+
+        return this;
     }
 
     /**
@@ -316,25 +370,10 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
             builder.append(annotation.getID()).append('|');
         }
 
-        if (builder.length() > 0) {
+        if (!builder.isEmpty()) {
             builder.deleteCharAt(builder.length() - 1);
         }
 
         return builder.toString();
-    }
-
-    /**
-     * Allows Jackson to set the external context flag.
-     *
-     * @param aContextURI A annotation page context URI
-     * @return This annotation page
-     */
-    @JsonSetter(JsonKeys.CONTEXT)
-    private AnnotationPage<A> setExternalContext(final String aContextURI) {
-        if (ContextList.PRESENTATION_CONTEXT_URI.toString().equalsIgnoreCase(aContextURI)) {
-            setExternalContext();
-        }
-
-        return this;
     }
 }

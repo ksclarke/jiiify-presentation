@@ -2,7 +2,7 @@
 package info.freelibrary.iiif.presentation.v3.utils.csv;
 
 import static info.freelibrary.util.Constants.SLASH;
-import static info.freelibrary.util.ThrowingFunction.sneaky;
+import static info.freelibrary.util.ThrowingFunction.uncheck;
 
 import info.freelibrary.iiif.presentation.v3.Canvas;
 import info.freelibrary.iiif.presentation.v3.Collection;
@@ -231,7 +231,7 @@ public class Builder {
                     .filter(type -> Keys.COLLECTION.equals(type) || Keys.WORK.equals(type)).isPresent();
 
             aRow.getThumbnail().or(() -> isCollectionOrWork ? Optional.empty() : aRow.getItemID())
-                    .map(sneaky(id -> checkID(id, Keys.THUMBNAIL))).map(this::constructThumbnail)
+                    .map(uncheck(id -> checkID(id, Keys.THUMBNAIL))).map(this::constructThumbnail)
                     .ifPresent(aResource.getThumbnails()::add);
         }
 

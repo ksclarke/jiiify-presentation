@@ -141,11 +141,36 @@ public class PaintingAnnotation extends AbstractCanvasAnnotation<PaintingAnnotat
     }
 
     /**
+     * Creates a copy of this painting annotation.
+     *
+     * @param aPaintingAnnotation A painting annotation to copy
+     */
+    public PaintingAnnotation(final PaintingAnnotation aPaintingAnnotation) {
+        super(aPaintingAnnotation);
+        setMotivation(Motivation.fromLabel(Purpose.PAINTING));
+
+        if (aPaintingAnnotation.myStylesheet != null) {
+            myStylesheet = aPaintingAnnotation.myStylesheet;
+        }
+    }
+
+    /**
      * Creates a painting annotation. This is used by Jackson's deserialization processes.
      */
     @SuppressWarnings(Eclipse.UNUSED)
     private PaintingAnnotation() {
         super();
+        setMotivation(Motivation.fromLabel(Purpose.PAINTING));
+    }
+
+    /**
+     * Creates a copy of this painting annotation.
+     *
+     * @return A copy of this painting annotation
+     */
+    @Override
+    public PaintingAnnotation copy() {
+        return new PaintingAnnotation(this);
     }
 
     @Override

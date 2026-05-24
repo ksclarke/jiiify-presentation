@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation.v3.utils.json;
 
 import static info.freelibrary.util.ThrowingBiFunction.unwrap;
+import static info.freelibrary.util.ThrowingConsumer.uncheck;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.exc.InputCoercionException;
@@ -36,7 +37,6 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.ThrowingBiFunction;
-import info.freelibrary.util.ThrowingConsumer;
 import info.freelibrary.util.warnings.PMD;
 
 import java.io.IOException;
@@ -340,7 +340,7 @@ public class CanvasAnnotationDeserializer extends StdDeserializer<Annotation<?>>
         targetsNode = aNode.get(JsonKeys.TARGET);
 
         if (targetsNode != null) {
-            targetsNode.forEach(ThrowingConsumer.sneaky(node -> targets.add(getTarget(node, aJsonParser))));
+            targetsNode.forEach(uncheck(node -> targets.add(getTarget(node, aJsonParser))));
             return targets;
         }
 
@@ -350,7 +350,7 @@ public class CanvasAnnotationDeserializer extends StdDeserializer<Annotation<?>>
         }
 
         if (aNode.isArray()) {
-            aNode.forEach(ThrowingConsumer.sneaky(node -> targets.add(getTarget(node, aJsonParser))));
+            aNode.forEach(uncheck(node -> targets.add(getTarget(node, aJsonParser))));
             return targets;
         }
 

@@ -67,7 +67,7 @@ public class Property extends I18nProperty<Property> {
      */
     public Property(final Property aProperty) {
         this(aProperty.myName,
-          (List<I18n>) aProperty.getI18ns().stream().map(I18n::new).collect(toCollection(ArrayList::new)));
+                (List<I18n>) aProperty.getI18ns().stream().map(I18n::new).collect(toCollection(ArrayList::new)));
     }
 
     /**

@@ -3,7 +3,7 @@ package info.freelibrary.iiif.presentation.v3.utils.json;
 
 import static info.freelibrary.util.Constants.SINGLE_INSTANCE;
 import static info.freelibrary.util.ThrowingBiFunction.unwrap;
-import static info.freelibrary.util.ThrowingConsumer.sneaky;
+import static info.freelibrary.util.ThrowingConsumer.uncheck;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -75,7 +75,7 @@ public class WebAnnotationSerializer extends StdSerializer<WebAnnotation> {
             // Start writing our JSON output
             aJsonGenerator.writeStartObject();
 
-            aWebAnnotation.getMotivation().ifPresent(sneaky(motivation -> {
+            aWebAnnotation.getMotivation().ifPresent(uncheck(motivation -> {
                 if (motivation.isSameAs(Purpose.CONTENT_STATE)) {
                     final ContentStateAnnotation annotation = (ContentStateAnnotation) aWebAnnotation;
                     final String[] uris = annotation.getContexts().stream().map(URI::toString).toArray(String[]::new);
@@ -88,7 +88,7 @@ public class WebAnnotationSerializer extends StdSerializer<WebAnnotation> {
             aJsonGenerator.writeObjectField(JsonKeys.ID, unwrap(check).apply(JsonKeys.ID, aWebAnnotation.getID()));
             aJsonGenerator.writeObjectField(JsonKeys.TYPE, ResourceTypes.ANNOTATION);
 
-            aWebAnnotation.getMotivation().ifPresent(sneaky(motivation -> {
+            aWebAnnotation.getMotivation().ifPresent(uncheck(motivation -> {
                 aJsonGenerator.writeObjectField(JsonKeys.MOTIVATION,
                         unwrap(check).apply(JsonKeys.MOTIVATION, motivation.toString()));
             }));

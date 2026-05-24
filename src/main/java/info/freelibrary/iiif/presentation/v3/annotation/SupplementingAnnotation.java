@@ -142,11 +142,36 @@ public class SupplementingAnnotation extends AbstractCanvasAnnotation<Supplement
     }
 
     /**
+     * Creates a copy of this supplementing annotation.
+     *
+     * @param aSupplementingAnnotation A supplementing annotation to copy
+     */
+    public SupplementingAnnotation(final SupplementingAnnotation aSupplementingAnnotation) {
+        super(aSupplementingAnnotation);
+        setMotivation(Motivation.fromLabel(Purpose.SUPPLEMENTING));
+
+        if (aSupplementingAnnotation.myTextGranularity != null) {
+            myTextGranularity = aSupplementingAnnotation.myTextGranularity;
+        }
+    }
+
+    /**
      * Creates a supplementing annotation. This is used by Jackson's deserialization processes.
      */
     @SuppressWarnings(Eclipse.UNUSED)
     private SupplementingAnnotation() {
         super();
+        setMotivation(Motivation.fromLabel(Purpose.SUPPLEMENTING));
+    }
+
+    /**
+     * Creates a copy of this supplementing annotation.
+     *
+     * @return A copy of this supplementing annotation
+     */
+    @Override
+    public SupplementingAnnotation copy() {
+        return new SupplementingAnnotation(this);
     }
 
     @Override

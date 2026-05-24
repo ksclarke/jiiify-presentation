@@ -1,3 +1,4 @@
+
 package info.freelibrary.iiif.presentation.v3;
 
 import static java.util.stream.Collectors.toCollection;
@@ -48,23 +49,24 @@ import java.util.Optional;
  *
  * @param <T> The type of resource
  */
-@SuppressWarnings({PMD.EXCESSIVE_IMPORTS, PMD.TOO_MANY_METHODS, PMD.COUPLING_BETWEEN_OBJECTS})
+@SuppressWarnings({ PMD.EXCESSIVE_IMPORTS, PMD.TOO_MANY_METHODS, PMD.COUPLING_BETWEEN_OBJECTS,
+    PMD.CYCLOMATIC_COMPLEXITY, PMD.EXCESSIVE_PUBLIC_COUNT })
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-@JsonPropertyOrder({JsonKeys.CONTEXT, JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.PROVIDER, JsonKeys.PART_OF,
-  JsonKeys.BEHAVIOR, JsonKeys.HOMEPAGE, JsonKeys.THUMBNAIL, JsonKeys.SUMMARY, JsonKeys.METADATA, JsonKeys.START,
-  JsonKeys.RIGHTS, JsonKeys.REQUIRED_STATEMENT, JsonKeys.VIEWING_DIRECTION, JsonKeys.RENDERING, JsonKeys.SEE_ALSO,
-  JsonKeys.ITEMS, JsonKeys.SERVICE, JsonKeys.STRUCTURES, JsonKeys.SERVICES, JsonKeys.NAV_DATE, JsonKeys.ANNOTATIONS})
+@JsonPropertyOrder({ JsonKeys.CONTEXT, JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.PROVIDER, JsonKeys.PART_OF,
+    JsonKeys.BEHAVIOR, JsonKeys.HOMEPAGE, JsonKeys.THUMBNAIL, JsonKeys.SUMMARY, JsonKeys.METADATA, JsonKeys.START,
+    JsonKeys.RIGHTS, JsonKeys.REQUIRED_STATEMENT, JsonKeys.VIEWING_DIRECTION, JsonKeys.RENDERING, JsonKeys.SEE_ALSO,
+    JsonKeys.ITEMS, JsonKeys.SERVICE, JsonKeys.STRUCTURES, JsonKeys.SERVICES, JsonKeys.NAV_DATE, JsonKeys.ANNOTATIONS })
 public abstract class AbstractResource<T extends AbstractResource<T>> implements Resource<T> {
 
     /** The logger used by abstract resources. */
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractResource.class, MessageCodes.BUNDLE);
 
-    /** A class of behaviors supported by this resource. */
-    private final Class<? extends Behavior> myBehaviorClass;
-
     /** The resource type. */
     @JsonProperty(JsonKeys.TYPE)
     protected String myType;
+
+    /** A class of behaviors supported by this resource. */
+    private final Class<? extends Behavior> myBehaviorClass;
 
     /** The resource's behaviors. */
     @JsonSetter(JsonKeys.BEHAVIOR)
@@ -134,7 +136,7 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
      * @param aBehaviorClass A behavior class for this resource
      */
     protected AbstractResource(final String aType, final String aID, final boolean aHttpsID,
-      final Class<? extends Behavior> aBehaviorClass) {
+            final Class<? extends Behavior> aBehaviorClass) {
         myBehaviorClass = Objects.requireNonNull(aBehaviorClass);
         myType = Objects.requireNonNull(aType);
         myID = UriUtils.checkID(aID, aHttpsID);
@@ -150,7 +152,7 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
      * @param aBehaviorClass A behavior class for this resource
      */
     protected AbstractResource(final String aType, final String aID, final boolean aHttpsID, final Label aLabel,
-      final Class<? extends Behavior> aBehaviorClass) {
+            final Class<? extends Behavior> aBehaviorClass) {
         myBehaviorClass = Objects.requireNonNull(aBehaviorClass);
         myType = Objects.requireNonNull(aType);
         myID = UriUtils.checkID(aID, aHttpsID);
@@ -163,26 +165,48 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
     /**
      * Copies this resource into the given source resource.
      *
-     * @param aSource The source resource to copy into
-     * @return The source resource
+     * @param aResource The source resource to copy into
      */
-    protected AbstractResource<T> copyInternal(final AbstractResource<T> aSource) {
-        aSource.myID = myID;
-        aSource.myType = myType;
-        aSource.myLabel = myLabel.copy();
-        aSource.myMetadata = myMetadata.stream().map(Metadata::copy).collect(toCollection(ArrayList::new));
+    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY, PMD.N_PATH_COMPLEXITY })
+    protected void copyTo(final AbstractResource<T> aResource) {
+        aResource.myID = myID;
+        aResource.myType = myType;
+
+        if (myLabel != null) {
+            aResource.myLabel = myLabel.copy();
+        }
+
+        if (myMetadata != null) {
+            aResource.myMetadata = myMetadata.stream().map(Metadata::new).collect(toCollection(ArrayList::new));
+        }
 
         // Behaviors are immutable
-        aSource.myBehaviors = new BehaviorList(myBehaviorClass);
-        aSource.myBehaviors.addAll(myBehaviors);
+        if (myBehaviorClass != null) {
+            aResource.myBehaviors = new BehaviorList(myBehaviorClass);
+        }
+        if (myBehaviors != null) {
+            aResource.myBehaviors.addAll(myBehaviors);
+        }
 
-        aSource.myHomepages = myHomepages.stream().map(Homepage::new).collect(toCollection(ArrayList::new));
-        aSource.myPartOfs = myPartOfs.stream().map(PartOf::copy).collect(toCollection(ArrayList::new));
-        aSource.myProviders = myProviders.stream().map(Provider::new).collect(toCollection(ArrayList::new));
-        aSource.myRenderings = myRenderings.stream().map(Rendering::new).collect(toCollection(ArrayList::new));
-        aSource.myRequiredStatement = myRequiredStatement.copy();
+        if (myHomepages != null) {
+            aResource.myHomepages = myHomepages.stream().map(Homepage::new).collect(toCollection(ArrayList::new));
+        }
 
-        return aSource;
+        if (myPartOfs != null) {
+            aResource.myPartOfs = myPartOfs.stream().map(PartOf::new).collect(toCollection(ArrayList::new));
+        }
+
+        if (myProviders != null) {
+            aResource.myProviders = myProviders.stream().map(Provider::new).collect(toCollection(ArrayList::new));
+        }
+
+        if (myRenderings != null) {
+            aResource.myRenderings = myRenderings.stream().map(Rendering::new).collect(toCollection(ArrayList::new));
+        }
+
+        if (myRequiredStatement != null) {
+            aResource.myRequiredStatement = myRequiredStatement.copy();
+        }
     }
 
     @Override
@@ -201,15 +225,15 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
         other = (AbstractResource<T>) aObject;
 
         return Objects.equals(myType, other.myType) && Objects.equals(myBehaviorClass, other.myBehaviorClass) &&
-               ListUtils.equals(myBehaviors, other.myBehaviors) && ListUtils.equals(myHomepages, other.myHomepages) &&
-               Objects.equals(myID, other.myID) && Objects.equals(myLabel, other.myLabel) &&
-               ListUtils.equals(myMetadata, other.myMetadata) && ListUtils.equals(myPartOfs, other.myPartOfs) &&
-               ListUtils.equals(myProviders, other.myProviders) &&
-               ListUtils.equals(myRenderings, other.myRenderings) &&
-               Objects.equals(myRequiredStatement, other.myRequiredStatement) &&
-               Objects.equals(myRights, other.myRights) && Objects.equals(mySeeAlsoRefs, other.mySeeAlsoRefs) &&
-               ListUtils.equals(myServices, other.myServices) && Objects.equals(mySummary, other.mySummary) &&
-               ListUtils.equals(myThumbnails, other.myThumbnails);
+                ListUtils.equals(myBehaviors, other.myBehaviors) && ListUtils.equals(myHomepages, other.myHomepages) &&
+                Objects.equals(myID, other.myID) && Objects.equals(myLabel, other.myLabel) &&
+                ListUtils.equals(myMetadata, other.myMetadata) && ListUtils.equals(myPartOfs, other.myPartOfs) &&
+                ListUtils.equals(myProviders, other.myProviders) &&
+                ListUtils.equals(myRenderings, other.myRenderings) &&
+                Objects.equals(myRequiredStatement, other.myRequiredStatement) &&
+                Objects.equals(myRights, other.myRights) && Objects.equals(mySeeAlsoRefs, other.mySeeAlsoRefs) &&
+                ListUtils.equals(myServices, other.myServices) && Objects.equals(mySummary, other.mySummary) &&
+                ListUtils.equals(myThumbnails, other.myThumbnails);
     }
 
     /**
@@ -433,7 +457,7 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
     /**
      * Gets a list of resource providers, initializing the list if this hasn't been done already.
      *
-     * @return The resource's providers
+     * @return The resource providers
      */
     @Override
     @JsonGetter(JsonKeys.PROVIDER)
@@ -541,7 +565,7 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
      * @return The current instance of the object.
      */
     @Override
-    @SuppressWarnings({JDK.UNCHECKED, PMD.NULL_ASSIGNMENT})
+    @SuppressWarnings({ JDK.UNCHECKED, PMD.NULL_ASSIGNMENT })
     public T clearRequiredStatement() {
         myRequiredStatement = null;
         return (T) this;
@@ -559,9 +583,9 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
     }
 
     /**
-     * Sets the resource's rights URI.
+     * Sets the resource's `rights` URI.
      *
-     * @param aRights A rights URI
+     * @param aRights A `rights` URI
      * @return The resource
      */
     @Override
@@ -578,7 +602,7 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
      * @return This instance for method chaining.
      */
     @Override
-    @SuppressWarnings({JDK.UNCHECKED, PMD.NULL_ASSIGNMENT})
+    @SuppressWarnings({ JDK.UNCHECKED, PMD.NULL_ASSIGNMENT })
     public T clearRights() {
         myRights = null;
         return (T) this;
@@ -704,7 +728,7 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
      *
      * @return The current resource.
      */
-    @SuppressWarnings({JDK.UNCHECKED, PMD.NULL_ASSIGNMENT})
+    @SuppressWarnings({ JDK.UNCHECKED, PMD.NULL_ASSIGNMENT })
     public T clearSummary() {
         mySummary = null;
         return (T) this;
@@ -724,7 +748,7 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
     /**
      * Sets the resource's thumbnails.
      *
-     * @param aThumbnailArray A thumbnails array
+     * @param aThumbnailArray A thumbnail array
      * @return The resource
      */
     @Override
@@ -737,7 +761,7 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
     /**
      * Sets the resource's thumbnails.
      *
-     * @param aThumbnailList A thumbnails list
+     * @param aThumbnailList A thumbnail list
      * @return The resource
      */
     @Override
@@ -761,8 +785,8 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
     @Override
     public int hashCode() {
         return Objects.hash(myType, myBehaviorClass, myBehaviors, myHomepages, myID, myLabel, myMetadata, myPartOfs,
-          myProviders, myRenderings, myRequiredStatement, myRights, mySeeAlsoRefs, myServices, mySummary,
-          myThumbnails);
+                myProviders, myRenderings, myRequiredStatement, myRights, mySeeAlsoRefs, myServices, mySummary,
+                myThumbnails);
     }
 
     /**
@@ -800,7 +824,7 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
     /**
      * Gets a list of resource providers, initializing the list if this hasn't been done already.
      *
-     * @return The resource's providers
+     * @return The resource providers
      */
     @JsonIgnore
     private List<Provider> getResourceProviders() {

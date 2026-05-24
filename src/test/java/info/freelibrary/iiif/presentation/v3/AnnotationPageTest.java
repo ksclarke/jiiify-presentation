@@ -7,24 +7,22 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
-import java.util.UUID;
-
+import info.freelibrary.iiif.presentation.v3.annotation.BookmarkingAnnotation;
+import info.freelibrary.iiif.presentation.v3.annotation.WebAnnotation;
+import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import info.freelibrary.iiif.presentation.v3.annotation.BookmarkingAnnotation;
-import info.freelibrary.iiif.presentation.v3.annotation.WebAnnotation;
-import info.freelibrary.iiif.presentation.v3.properties.Behavior;
-import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Tests of {@code AnnotationPage}.
  */
 public class AnnotationPageTest {
 
-    /** A ID prefix for testing. */
+    /** An ID prefix for testing. */
     private static final String HTTPS = "https://";
 
     /** An ID to use when creating pages. */
@@ -35,7 +33,7 @@ public class AnnotationPageTest {
      */
     @Before
     public void setUp() {
-        myID = HTTPS + UUID.randomUUID().toString();
+        myID = HTTPS + UUID.randomUUID();
     }
 
     /**
@@ -68,8 +66,8 @@ public class AnnotationPageTest {
      */
     @Test
     public final void testAnnotationPageEqualsHashCodeNot() {
-        final AnnotationPage<WebAnnotation> test1 = new AnnotationPage<>(HTTPS + UUID.randomUUID().toString());
-        final AnnotationPage<WebAnnotation> test2 = new AnnotationPage<>(HTTPS + UUID.randomUUID().toString());
+        final AnnotationPage<WebAnnotation> test1 = new AnnotationPage<>(HTTPS + UUID.randomUUID());
+        final AnnotationPage<WebAnnotation> test2 = new AnnotationPage<>(HTTPS + UUID.randomUUID());
 
         assertNotEquals(test1.hashCode(), test2.hashCode());
     }
@@ -79,8 +77,8 @@ public class AnnotationPageTest {
      */
     @Test
     public final void testAnnotationPageEqualsNull() {
-        final AnnotationPage<WebAnnotation> test = new AnnotationPage<>(HTTPS + UUID.randomUUID().toString());
-        assertNotEquals(test, null);
+        final AnnotationPage<WebAnnotation> test = new AnnotationPage<>(HTTPS + UUID.randomUUID());
+        assertNotEquals(null, test);
     }
 
     /**
@@ -100,8 +98,8 @@ public class AnnotationPageTest {
      */
     @Test
     public final void testAnnotationPageEqualsSameNot() {
-        final AnnotationPage<WebAnnotation> test1 = new AnnotationPage<>(HTTPS + UUID.randomUUID().toString());
-        final AnnotationPage<WebAnnotation> test2 = new AnnotationPage<>(HTTPS + UUID.randomUUID().toString());
+        final AnnotationPage<WebAnnotation> test1 = new AnnotationPage<>(HTTPS + UUID.randomUUID());
+        final AnnotationPage<WebAnnotation> test2 = new AnnotationPage<>(HTTPS + UUID.randomUUID());
 
         assertNotEquals(test1, test2);
     }
@@ -111,7 +109,7 @@ public class AnnotationPageTest {
      */
     @Test
     public final void testAnnotationPageEqualsSameObject() {
-        final AnnotationPage<WebAnnotation> test = new AnnotationPage<>(HTTPS + UUID.randomUUID().toString());
+        final AnnotationPage<WebAnnotation> test = new AnnotationPage<>(HTTPS + UUID.randomUUID());
         assertEquals(test, test);
     }
 
@@ -121,8 +119,8 @@ public class AnnotationPageTest {
     @Test
     @SuppressWarnings("unlikely-arg-type")
     public final void testAnnotationPageEqualsString() {
-        final AnnotationPage<WebAnnotation> test = new AnnotationPage<>(HTTPS + UUID.randomUUID().toString());
-        assertNotEquals(test, EMPTY);
+        final AnnotationPage<WebAnnotation> test = new AnnotationPage<>(HTTPS + UUID.randomUUID());
+        assertNotEquals(EMPTY, test);
     }
 
     /**
@@ -130,7 +128,7 @@ public class AnnotationPageTest {
      */
     @Test
     public void testRemoveExternalContext() {
-        final AnnotationPage<WebAnnotation> test = new AnnotationPage<>(HTTPS + UUID.randomUUID().toString());
+        final AnnotationPage<WebAnnotation> test = new AnnotationPage<>(HTTPS + UUID.randomUUID());
 
         assertFalse(test.hasExternalContext());
         test.setExternalContext();
@@ -144,11 +142,11 @@ public class AnnotationPageTest {
      */
     @Test
     public void testSetAnnotations() {
-        final AnnotationPage<WebAnnotation> test = new AnnotationPage<>(HTTPS + UUID.randomUUID().toString());
+        final AnnotationPage<WebAnnotation> test = new AnnotationPage<>(HTTPS + UUID.randomUUID());
 
         assertEquals(0, test.getAnnotations().size());
-        test.setAnnotations(new BookmarkingAnnotation(HTTPS + UUID.randomUUID().toString(), new Canvas(myID)));
-        test.setAnnotations(new BookmarkingAnnotation(HTTPS + UUID.randomUUID().toString(), new Canvas(myID)));
+        test.setAnnotations(new BookmarkingAnnotation(HTTPS + UUID.randomUUID(), new Canvas(myID)));
+        test.setAnnotations(new BookmarkingAnnotation(HTTPS + UUID.randomUUID(), new Canvas(myID)));
         assertEquals(1, test.getAnnotations().size());
     }
 
@@ -157,20 +155,20 @@ public class AnnotationPageTest {
      */
     @Test
     public void testSetAnnotationsList() {
-        final AnnotationPage<WebAnnotation> test = new AnnotationPage<>(HTTPS + UUID.randomUUID().toString());
+        final AnnotationPage<WebAnnotation> test = new AnnotationPage<>(HTTPS + UUID.randomUUID());
 
         assertEquals(0, test.getAnnotations().size());
-        test.setAnnotations(new BookmarkingAnnotation(HTTPS + UUID.randomUUID().toString(), new Canvas(myID)));
-        test.setAnnotations(List.of(new BookmarkingAnnotation(HTTPS + UUID.randomUUID().toString(), new Canvas(myID))));
+        test.setAnnotations(new BookmarkingAnnotation(HTTPS + UUID.randomUUID(), new Canvas(myID)));
+        test.setAnnotations(List.of(new BookmarkingAnnotation(HTTPS + UUID.randomUUID(), new Canvas(myID))));
         assertEquals(1, test.getAnnotations().size());
     }
 
     /**
-     * Tests {@link AnnotationPage#setBehaviors(Behavior)}.
+     * Tests {@link AnnotationPage#setBehaviors(List)}.
      */
     @Test
-    public void testSetBehaviorList() {
-        final AnnotationPage<WebAnnotation> test = new AnnotationPage<>(HTTPS + UUID.randomUUID().toString());
+    public void testSetBehaviorsList() {
+        final AnnotationPage<WebAnnotation> test = new AnnotationPage<>(HTTPS + UUID.randomUUID());
         assertEquals(1, test.setBehaviors(List.of(ResourceBehavior.HIDDEN)).getBehaviors().size());
     }
 
