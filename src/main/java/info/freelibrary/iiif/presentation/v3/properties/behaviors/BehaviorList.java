@@ -19,6 +19,8 @@ import static info.freelibrary.iiif.presentation.v3.properties.behaviors.Behavio
 
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.PMD;
 
 import java.io.Serial;
@@ -26,6 +28,7 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -35,12 +38,13 @@ import java.util.Set;
  * An implementation of <code>List&lt;Behavior&gt;</code> that checks for disjointed behaviors. This ensures that
  * behaviors in the list are valid together and, also, valid for the resource with which they're being associated.
  */
-@SuppressWarnings({ PMD.TOO_MANY_STATIC_IMPORTS })
-public class BehaviorList extends ArrayList<Behavior> {
+@SuppressWarnings({ PMD.TOO_MANY_STATIC_IMPORTS, PMD.EXCESSIVE_IMPORTS })
+public final class BehaviorList extends ArrayList<Behavior> {
 
-    /**
-     * A map of behavior disjoints.
-     */
+    /** The logger for the BehaviorList. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(BehaviorList.class, MessageCodes.BUNDLE);
+
+    /** A map of behavior disjoints. */
     private static final Map<String, Set<String>> DISJOINTS = Map.ofEntries( //
             //
             // Temporal behaviors
@@ -127,26 +131,38 @@ public class BehaviorList extends ArrayList<Behavior> {
 
     @Override
     public boolean addAll(final Collection<? extends Behavior> aCollection) {
-        return addBehaviors(aCollection);
+        final List<Behavior> collection = checkBehaviors(aCollection);
+        return !collection.isEmpty() && super.addAll(collection);
+
     }
 
     @Override
     public boolean addAll(final int aIndex, final Collection<? extends Behavior> aCollection) {
-        int index = aIndex;
+        final List<Behavior> collection = checkBehaviors(aCollection);
+        return !collection.isEmpty() && super.addAll(aIndex, collection);
 
-        for (final Behavior behavior : Objects.requireNonNull(aCollection)) {
-            super.add(index, check(Objects.requireNonNull(behavior)));
-            index += 1;
+    }
+
+    @Override
+    @SuppressWarnings({ PMD.AVOID_CATCHING_GENERIC_EXCEPTION })
+    public Behavior set(final int aIndex, final Behavior aBehavior) {
+        final Behavior previous = remove(aIndex);
+
+        try {
+            add(aIndex, aBehavior);
+        } catch (final RuntimeException details) {
+            super.add(aIndex, previous);
+            throw details;
         }
 
-        return true;
+        return previous;
     }
 
     /**
      * Checks that the supplied resource type is a match for the behaviors in this list.
      *
      * @param aBehaviorType A type of behavior that the list holds
-     * @param aResourceType The type of resource that contains the behaviors list
+     * @param aResourceType The type of resource that contains the behavior list
      * @throws InvalidBehaviorException If the behaviors in this list aren't the expected type
      */
     public void checkType(final Class<? extends Behavior> aBehaviorType, final Class<?> aResourceType) {
@@ -169,7 +185,7 @@ public class BehaviorList extends ArrayList<Behavior> {
 
         other = (BehaviorList) aObject;
 
-        return myBehaviorClass.equals(other.myBehaviorClass) && Arrays.equals(other.toArray(), super.toArray());
+        return myBehaviorClass.equals(other.myBehaviorClass) && super.equals(other);
     }
 
     /**
@@ -183,18 +199,25 @@ public class BehaviorList extends ArrayList<Behavior> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(myBehaviorClass, Arrays.hashCode(super.toArray()));
+        return Objects.hash(myBehaviorClass, super.hashCode());
     }
 
     /**
      * Adds a single behavior to this list.
      *
-     * @param aBehavior A behaviors
+     * @param aBehavior A behavior
      * @return True if behavior was added; else, false
      * @throws InvalidBehaviorException If the behavior cannot be added
      */
     private boolean addBehavior(final Behavior aBehavior) {
-        return super.add(check(Objects.requireNonNull(aBehavior)));
+        final Behavior behavior = Objects.requireNonNull(aBehavior);
+
+        if (contains(behavior)) {
+            LOGGER.warn(MessageCodes.JPA_195, behavior);
+            return false;
+        }
+
+        return super.add(check(behavior));
     }
 
     /**
@@ -205,13 +228,40 @@ public class BehaviorList extends ArrayList<Behavior> {
      * @throws InvalidBehaviorException If the behaviors cannot be added
      */
     private boolean addBehaviors(final Collection<? extends Behavior> aBehaviorCollection) {
+        boolean result = true;
+
         for (final Behavior behavior : aBehaviorCollection) {
             if (!addBehavior(behavior)) {
-                return false;
+                result = false;
             }
         }
 
-        return true;
+        return result;
+    }
+
+    /**
+     * Checks that the supplied behavior collection can be added to this list.
+     *
+     * @param aBehaviorCollection A collection of behaviors
+     * @return The checked behavior collection, excluding duplicates
+     * @throws InvalidBehaviorException If the behaviors cannot be added
+     */
+    private List<Behavior> checkBehaviors(final Collection<? extends Behavior> aBehaviorCollection) {
+        final Collection<? extends Behavior> collection = Objects.requireNonNull(aBehaviorCollection);
+        final BehaviorList copy = new BehaviorList(myBehaviorClass);
+        final List<Behavior> checked = new ArrayList<>();
+
+        for (final Behavior behavior : this) {
+            copy.addBehavior(behavior);
+        }
+
+        for (final Behavior behavior : collection) {
+            if (copy.addBehavior(behavior)) {
+                checked.add(behavior);
+            }
+        }
+
+        return checked;
     }
 
     /**
@@ -227,7 +277,7 @@ public class BehaviorList extends ArrayList<Behavior> {
 
         // Check that the supplied behavior is valid
         checkBehaviorValidity(myBehaviorClass, aBehavior);
-        disjoints = DISJOINTS.get(disjointsKey);
+        disjoints = DISJOINTS.getOrDefault(disjointsKey, Collections.emptySet());
 
         // Check the existing behaviors to see if we have any conflicts
         for (final Behavior existing : this) {

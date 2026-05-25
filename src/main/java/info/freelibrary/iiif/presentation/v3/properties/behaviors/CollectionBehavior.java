@@ -1,12 +1,11 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.behaviors;
 
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonValue;
-
 import info.freelibrary.iiif.presentation.v3.Collection;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
+
+import java.util.Optional;
 
 /**
  * The behaviors attributable to {@link Collection}s.
@@ -19,7 +18,7 @@ public enum CollectionBehavior implements Behavior {
     /** A continuous collection behavior. */
     CONTINUOUS(BehaviorConstants.CONTINUOUS),
 
-    /** A individuals collection behavior. */
+    /** An 'individuals' collection behavior. */
     INDIVIDUALS(BehaviorConstants.INDIVIDUALS),
 
     /** A multi-part collection behavior. */
@@ -77,16 +76,10 @@ public enum CollectionBehavior implements Behavior {
     /**
      * Returns an enumeration constant from a behavior label.
      *
-     * @param aBehavior A behavior value
+     * @param aLabel A behavior value
      * @return A collection behavior
      */
-    public static Optional<CollectionBehavior> fromLabel(final String aBehavior) {
-        for (final CollectionBehavior behavior : values()) {
-            if (behavior.toString().equalsIgnoreCase(aBehavior)) {
-                return Optional.of(behavior);
-            }
-        }
-
-        return Optional.empty();
+    public static Optional<CollectionBehavior> fromLabel(final String aLabel) {
+        return BehaviorLookup.fromLabel(CollectionBehavior.class, aLabel);
     }
 }

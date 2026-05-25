@@ -4,14 +4,13 @@ package info.freelibrary.iiif.presentation.v3.properties.behaviors;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
+import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import org.junit.Before;
 import org.junit.Test;
 
-import info.freelibrary.iiif.presentation.v3.properties.Behavior;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Tests of {@link BehaviorList}.
@@ -38,7 +37,7 @@ public class BehaviorListTest {
      * Test method for {@link BehaviorList#addAll(Collection)}.
      */
     @Test
-    public final void testAddAllCollectionOfQextendsBehavior() {
+    public final void testAddAllCollectionOfExtendsBehavior() {
         final BehaviorList behaviors = new BehaviorList(ManifestBehavior.class);
 
         behaviors.addAll(myList);
@@ -60,8 +59,17 @@ public class BehaviorListTest {
      * Test method for {@link BehaviorList#add(Behavior)}.
      */
     @Test
-    public final void testAddBehavior() {
+    public final void testAddBehaviorWithDuplicate() {
         myBehaviorList.add(ManifestBehavior.REPEAT);
+        assertEquals(2, myBehaviorList.size());
+    }
+
+    /**
+     * Test method for {@link BehaviorList#add(Behavior)}.
+     */
+    @Test
+    public final void testAddBehavior() {
+        myBehaviorList.add(ManifestBehavior.AUTO_ADVANCE);
         assertEquals(3, myBehaviorList.size());
     }
 
