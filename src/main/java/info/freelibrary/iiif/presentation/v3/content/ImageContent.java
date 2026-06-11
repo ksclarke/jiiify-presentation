@@ -13,6 +13,7 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,7 +23,7 @@ import java.util.Objects;
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.HEIGHT,
     JsonKeys.WIDTH, JsonKeys.LANGUAGE, JsonKeys.SERVICE })
 public class ImageContent extends AbstractContentResource<ImageContent>
-        implements SpatialContentResource, AnnotatedContentResource<ImageContent> {
+        implements SpatialContentResource<ImageContent>, AnnotatedContentResource<ImageContent> {
 
     /** The class of media type this content represents. */
     private static final String MEDIA_TYPE_CLASS = "image";
@@ -43,6 +44,23 @@ public class ImageContent extends AbstractContentResource<ImageContent>
     }
 
     /**
+     * Copy constructor for image content.
+     *
+     * @param aImageContent The image content to copy
+     */
+    public ImageContent(final ImageContent aImageContent) {
+        this(aImageContent.getID());
+
+        myHeight = aImageContent.getHeight();
+        myWidth = aImageContent.getWidth();
+        myLanguages = new ArrayList<>(aImageContent.getLanguages());
+        aImageContent.getFormat().ifPresent(format -> myFormat = format);
+        setBehaviors(aImageContent.getBehaviors());
+
+        super.copyTo(aImageContent);
+    }
+
+    /**
      * Constructs an image content resource for Jackson's deserialization process.
      */
     private ImageContent() {
@@ -51,13 +69,7 @@ public class ImageContent extends AbstractContentResource<ImageContent>
 
     @Override
     public ImageContent copy() {
-        final ImageContent imageContent = new ImageContent(getID());
-
-        imageContent.setHeight(getHeight());
-        imageContent.setWidth(getWidth());
-        getFormat().ifPresent(imageContent::setFormat);
-
-        return imageContent;
+        return new ImageContent(this);
     }
 
     @Override
@@ -109,13 +121,13 @@ public class ImageContent extends AbstractContentResource<ImageContent>
 
     @Override
     @JsonIgnore
-    public ImageContent setBehaviors(final Behavior... aBehaviorArray) {
+    public final ImageContent setBehaviors(final Behavior... aBehaviorArray) {
         return setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorArray));
     }
 
     @Override
     @JsonIgnore
-    public ImageContent setBehaviors(final List<Behavior> aBehaviorList) {
+    public final ImageContent setBehaviors(final List<Behavior> aBehaviorList) {
         final ImageContent imageContent;
 
         if (aBehaviorList instanceof final BehaviorList behaviorList) {

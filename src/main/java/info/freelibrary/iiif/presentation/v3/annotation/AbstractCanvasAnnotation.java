@@ -47,7 +47,7 @@ public abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotatio
     private Motivation myMotivation;
 
     /** The annotation's resources. */
-    private List<ContentResource> myResources;
+    private List<ContentResource<?>> myResources;
 
     /** The target of the annotation. */
     private List<Target> myTargets;
@@ -267,7 +267,7 @@ public abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotatio
      *
      * @return The content resources associated with this annotation
      */
-    public List<ContentResource> getBody() {
+    public List<ContentResource<?>> getBody() {
         if (myResources == null) {
             myResources = new ArrayList<>();
         }
@@ -283,8 +283,8 @@ public abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotatio
      */
     @JsonIgnore
     @SuppressWarnings(JDK.UNCHECKED)
-    public A setBody(final ContentResource... aResourceArray) {
-        final List<ContentResource> resources = getBody();
+    public A setBody(final ContentResource<?>... aResourceArray) {
+        final List<ContentResource<?>> resources = getBody();
 
         resources.clear();
         resources.addAll(Arrays.asList(aResourceArray));
@@ -298,7 +298,7 @@ public abstract class AbstractCanvasAnnotation<A extends AbstractCanvasAnnotatio
      * @param aResourceList A list of content resources
      * @return This annotation
      */
-    public A setBody(final List<ContentResource> aResourceList) {
+    public A setBody(final List<ContentResource<?>> aResourceList) {
         return setBody(aResourceList.toArray(new ContentResource[0]));
     }
 

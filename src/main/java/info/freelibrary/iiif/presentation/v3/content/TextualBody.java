@@ -82,9 +82,23 @@ public class TextualBody implements ContentResource {
         myID = aFactory.getSkolemIRI().toString();
     }
 
+    /**
+     * Copy constructor for a textual body.
+     *
+     * @param aTextualBody The textual body to copy
+     */
+    public TextualBody(final TextualBody aTextualBody) {
+        hasSerializableID = aTextualBody.hasSerializableID;
+        myID = aTextualBody.getID();
+        aTextualBody.getFormat().ifPresent(format -> myFormat = format);
+        aTextualBody.getPurpose().ifPresent(purpose -> myPurpose = purpose);
+        myValue = aTextualBody.getValue();
+        myLocale = aTextualBody.myLocale;
+    }
+
     @Override
     public TextualBody copy() {
-        return new TextualBody().setID(myID).setFormat(myFormat).setPurpose(myPurpose).setValue(myValue);
+        return new TextualBody(this);
     }
 
     /**

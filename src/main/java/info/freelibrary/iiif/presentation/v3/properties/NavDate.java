@@ -34,6 +34,15 @@ public class NavDate {
     }
 
     /**
+     * Creates a copy of the navigation date.
+     *
+     * @param aNavDate A navigation date to copy
+     */
+    public NavDate(final NavDate aNavDate) {
+        myZonedDateTime = aNavDate.myZonedDateTime;
+    }
+
+    /**
      * Creates a new navigation date from a string representation of a zoned date time.
      *
      * @param aZonedDateTime A string representation of a zoned date time
@@ -76,7 +85,7 @@ public class NavDate {
      *
      * @return A new <code>NavDate</code>
      */
-    public static final NavDate now() {
+    public static NavDate now() {
         final ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS);
         return new NavDate(now.format(DateTimeFormatter.ISO_INSTANT));
     }

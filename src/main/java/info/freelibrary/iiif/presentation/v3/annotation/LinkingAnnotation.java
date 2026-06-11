@@ -162,12 +162,12 @@ public class LinkingAnnotation extends WebAnnotation {
     }
 
     @Override
-    public LinkingAnnotation setBody(final ContentResource... aBody) {
+    public LinkingAnnotation setBody(final ContentResource<?>... aBody) {
         return (LinkingAnnotation) super.setBody(aBody);
     }
 
     @Override
-    public LinkingAnnotation setBody(final List<ContentResource> aResourceList) {
+    public LinkingAnnotation setBody(final List<ContentResource<?>> aResourceList) {
         return (LinkingAnnotation) super.setBody(aResourceList);
     }
 

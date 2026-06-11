@@ -29,7 +29,7 @@ import java.util.Optional;
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE })
 @JsonInclude(Include.NON_EMPTY)
-public class OtherContent implements ContentResource {
+public class OtherContent implements ContentResource<OtherContent> {
 
     /**
      * The ID for other content.

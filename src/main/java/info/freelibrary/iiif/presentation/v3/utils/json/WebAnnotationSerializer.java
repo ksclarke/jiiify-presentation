@@ -56,7 +56,7 @@ public class WebAnnotationSerializer extends StdSerializer<WebAnnotation> {
     @SuppressWarnings({ PMD.PRESERVE_STACK_TRACE, PMD.CYCLOMATIC_COMPLEXITY })
     public void serialize(final WebAnnotation aWebAnnotation, final JsonGenerator aJsonGenerator,
             final SerializerProvider aProvider) throws IOException {
-        final List<ContentResource> resources = aWebAnnotation.getBody();
+        final List<ContentResource<?>> resources = aWebAnnotation.getBody();
         final List<Target> targets = aWebAnnotation.getTargets();
         final Optional<TimeMode> timeMode = aWebAnnotation.getTimeMode();
         final Optional<Label> label = aWebAnnotation.getLabel();
@@ -106,7 +106,7 @@ public class WebAnnotationSerializer extends StdSerializer<WebAnnotation> {
             }
 
             if (targets.size() == SINGLE_INSTANCE) {
-                aJsonGenerator.writeObjectField(JsonKeys.TARGET, targets.get(0));
+                aJsonGenerator.writeObjectField(JsonKeys.TARGET, targets.getFirst());
             } else if (targets.size() > SINGLE_INSTANCE) {
                 aJsonGenerator.writeFieldName(JsonKeys.TARGET);
                 aJsonGenerator.writeStartArray();
@@ -144,10 +144,10 @@ public class WebAnnotationSerializer extends StdSerializer<WebAnnotation> {
      * @throws IOException If there is trouble writing to the generator
      * @throws JsonProcessingException If there is trouble parsing the source annotation
      */
-    private void serializeResources(final List<ContentResource> aList, final boolean aChoice,
+    private void serializeResources(final List<ContentResource<?>> aList, final boolean aChoice,
             final JsonGenerator aJsonGenerator) throws IOException {
         if (aList.size() == SINGLE_INSTANCE) {
-            aJsonGenerator.writeObjectField(JsonKeys.BODY, aList.get(0));
+            aJsonGenerator.writeObjectField(JsonKeys.BODY, aList.getFirst());
         } else {
             aJsonGenerator.writeFieldName(JsonKeys.BODY);
 
@@ -159,7 +159,7 @@ public class WebAnnotationSerializer extends StdSerializer<WebAnnotation> {
                 aJsonGenerator.writeStartArray();
             }
 
-            for (final ContentResource contentResource : aList) {
+            for (final ContentResource<?> contentResource : aList) {
                 if (contentResource == null) {
                     aJsonGenerator.writeString(ResourceTypes.RDF_NIL);
                 } else {

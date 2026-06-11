@@ -33,7 +33,7 @@ public interface Annotation<A extends Annotation<A>> {
      *
      * @return The resources associated with this annotation
      */
-    List<ContentResource> getBody();
+    List<ContentResource<?>> getBody();
 
     /**
      * Gets the annotation's ID.
@@ -77,7 +77,7 @@ public interface Annotation<A extends Annotation<A>> {
      * @return This annotation
      */
     @JsonIgnore
-    A setBody(ContentResource... aResourceArray);
+    A setBody(ContentResource<?>... aResourceArray);
 
     /**
      * Sets the annotation body's resources.
@@ -85,7 +85,7 @@ public interface Annotation<A extends Annotation<A>> {
      * @param aResourceList A list of resources
      * @return This annotation
      */
-    A setBody(List<ContentResource> aResourceList);
+    A setBody(List<ContentResource<?>> aResourceList);
 
     /**
      * Sets whether the annotation body contains a choice.

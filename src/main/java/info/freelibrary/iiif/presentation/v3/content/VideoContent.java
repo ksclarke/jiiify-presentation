@@ -13,6 +13,7 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,8 +22,8 @@ import java.util.Objects;
  */
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.HEIGHT, JsonKeys.WIDTH, JsonKeys.DURATION,
     JsonKeys.FORMAT, JsonKeys.LANGUAGE })
-public class VideoContent extends AbstractContentResource<VideoContent>
-        implements SpatialContentResource, TemporalContentResource, AnnotatedContentResource<VideoContent> {
+public class VideoContent extends AbstractContentResource<VideoContent> implements SpatialContentResource<VideoContent>,
+        TemporalContentResource<VideoContent>, AnnotatedContentResource<VideoContent> {
 
     /** The class of media type this content represents. */
     private static final String MEDIA_TYPE_CLASS = "video";
@@ -39,10 +40,28 @@ public class VideoContent extends AbstractContentResource<VideoContent>
     /**
      * Creates a video content resource.
      *
-     * @param aURI An video content resource ID
+     * @param aID A video content resource ID
      */
-    public VideoContent(final String aURI) {
-        super(ResourceTypes.VIDEO, aURI, false, ResourceBehavior.class, MEDIA_TYPE_CLASS);
+    public VideoContent(final String aID) {
+        super(ResourceTypes.VIDEO, aID, false, ResourceBehavior.class, MEDIA_TYPE_CLASS);
+    }
+
+    /**
+     * Creates a video content resource.
+     *
+     * @param aVideoContent A video content resource to copy
+     */
+    public VideoContent(final VideoContent aVideoContent) {
+        this(aVideoContent.getID());
+
+        myDuration = aVideoContent.myDuration;
+        myHeight = aVideoContent.myHeight;
+        myWidth = aVideoContent.myWidth;
+        myLanguages = new ArrayList<>(aVideoContent.getLanguages());
+        aVideoContent.getFormat().ifPresent(format -> myFormat = format);
+        setBehaviors(aVideoContent.getBehaviors());
+
+        super.copyTo(aVideoContent);
     }
 
     /**
@@ -54,7 +73,7 @@ public class VideoContent extends AbstractContentResource<VideoContent>
 
     @Override
     public VideoContent copy() {
-        return new VideoContent(getID()).setDuration(myDuration).setWidth(myWidth).setHeight(myHeight);
+        return new VideoContent(this);
     }
 
     @Override
@@ -88,56 +107,6 @@ public class VideoContent extends AbstractContentResource<VideoContent>
     }
 
     /**
-     * Gets the video's height.
-     *
-     * @return The video's height
-     */
-    @Override
-    @JsonGetter(JsonKeys.HEIGHT)
-    @JsonInclude(Include.NON_DEFAULT)
-    public int getHeight() {
-        return myHeight;
-    }
-
-    /**
-     * Gets the video's width.
-     *
-     * @return The video's width
-     */
-    @Override
-    @JsonGetter(JsonKeys.WIDTH)
-    @JsonInclude(Include.NON_DEFAULT)
-    public int getWidth() {
-        return myWidth;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), myHeight, myWidth, myDuration);
-    }
-
-    @Override
-    @JsonIgnore
-    public VideoContent setBehaviors(final Behavior... aBehaviorArray) {
-        return setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorArray));
-    }
-
-    @Override
-    @JsonIgnore
-    public VideoContent setBehaviors(final List<Behavior> aBehaviorList) {
-        final VideoContent videoContent;
-
-        if (aBehaviorList instanceof final BehaviorList behaviorList) {
-            behaviorList.checkType(ResourceBehavior.class, getClass());
-            videoContent = super.setBehaviors(behaviorList);
-        } else {
-            videoContent = super.setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorList));
-        }
-
-        return videoContent;
-    }
-
-    /**
      * Sets the duration of the video content. Duration must be positive and finite.
      *
      * @param aDuration A video content's duration
@@ -151,19 +120,15 @@ public class VideoContent extends AbstractContentResource<VideoContent>
     }
 
     /**
-     * Sets the width and height of the video.
+     * Gets the video's height.
      *
-     * @param aWidth A video width
-     * @param aHeight A video height
-     * @return This video content
+     * @return The video's height
      */
     @Override
-    @JsonIgnore
-    public VideoContent setWidthHeight(final int aWidth, final int aHeight) {
-        setWidth(aWidth);
-        setHeight(aHeight);
-
-        return this;
+    @JsonGetter(JsonKeys.HEIGHT)
+    @JsonInclude(Include.NON_DEFAULT)
+    public int getHeight() {
+        return myHeight;
     }
 
     /**
@@ -179,6 +144,18 @@ public class VideoContent extends AbstractContentResource<VideoContent>
     }
 
     /**
+     * Gets the video's width.
+     *
+     * @return The video's width
+     */
+    @Override
+    @JsonGetter(JsonKeys.WIDTH)
+    @JsonInclude(Include.NON_DEFAULT)
+    public int getWidth() {
+        return myWidth;
+    }
+
+    /**
      * Sets the video width.
      *
      * @param aWidth The video's width
@@ -187,6 +164,48 @@ public class VideoContent extends AbstractContentResource<VideoContent>
     @JsonSetter(JsonKeys.WIDTH)
     private VideoContent setWidth(final int aWidth) {
         myWidth = aWidth;
+        return this;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), myHeight, myWidth, myDuration);
+    }
+
+    @Override
+    @JsonIgnore
+    public final VideoContent setBehaviors(final Behavior... aBehaviorArray) {
+        return setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorArray));
+    }
+
+    @Override
+    @JsonIgnore
+    public final VideoContent setBehaviors(final List<Behavior> aBehaviorList) {
+        final VideoContent videoContent;
+
+        if (aBehaviorList instanceof final BehaviorList behaviorList) {
+            behaviorList.checkType(ResourceBehavior.class, getClass());
+            videoContent = super.setBehaviors(behaviorList);
+        } else {
+            videoContent = super.setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorList));
+        }
+
+        return videoContent;
+    }
+
+    /**
+     * Sets the width and height of the video.
+     *
+     * @param aWidth A video width
+     * @param aHeight A video height
+     * @return This video content
+     */
+    @Override
+    @JsonIgnore
+    public VideoContent setWidthHeight(final int aWidth, final int aHeight) {
+        setWidth(aWidth);
+        setHeight(aHeight);
+
         return this;
     }
 }

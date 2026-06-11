@@ -3,13 +3,11 @@ package info.freelibrary.iiif.presentation.v3.services;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
-
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-
 import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
 
 /**
  * An external service that provides <a href="http://geojson.org/">GeoJSON</a> information.
@@ -29,6 +27,26 @@ public class GeoJsonService extends AbstractService<GeoJsonService> implements S
      */
     public GeoJsonService(final String aID) {
         super(aID, null);
+    }
+
+    /**
+     * Creates a new GeoJSON service using the supplied one.
+     *
+     * @param aService A service to copy
+     */
+    public GeoJsonService(final GeoJsonService aService) {
+        super(aService.getID().orElseThrow(), null);
+        aService.copyTo(this);
+    }
+
+    /**
+     * Creates a copy of this service.
+     *
+     * @return A copy of this service
+     */
+    @Override
+    public GeoJsonService copy() {
+        return new GeoJsonService(this);
     }
 
     /**

@@ -1,18 +1,16 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
-import java.net.URI;
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
-
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.Eclipse;
 
-import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import java.net.URI;
+import java.util.Optional;
 
 /**
  * A service that will return information about a particular image via <a href="https://iiif.io/api/image/2/">IIIF Image
@@ -46,11 +44,32 @@ public class ImageService2 extends AbstractImageService<ImageService2> implement
     }
 
     /**
+     * Creates a new IIIF Image API 2 service from an existing one.
+     *
+     * @param aService An image service to copy
+     */
+    public ImageService2(final ImageService2 aService) {
+        super(aService.getID().orElseThrow(), ImageService2.class.getSimpleName(),
+                (ImageService.Profile) aService.getProfile().orElseThrow());
+        aService.copyTo(this);
+    }
+
+    /**
      * Creates a new IIIF Image API 2 service for Jackson's processing.
      */
     @SuppressWarnings(Eclipse.UNUSED)
     private ImageService2() {
         super();
+    }
+
+    /**
+     * Creates a copy of this service.
+     *
+     * @return A copy of this service
+     */
+    @Override
+    public ImageService2 copy() {
+        return new ImageService2(this);
     }
 
     @Override

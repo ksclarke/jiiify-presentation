@@ -1,15 +1,14 @@
 
 package info.freelibrary.iiif.presentation.v3.services.image;
 
-import java.util.Arrays;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
-
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+
+import java.util.Arrays;
 
 /**
  * An Image API tile.
@@ -42,6 +41,17 @@ public class Tile {
     /**
      * Creates a new Image API tile.
      *
+     * @param aTile A tile to copy
+     */
+    public Tile(final Tile aTile) {
+        myScaleFactors = Arrays.copyOf(aTile.myScaleFactors, aTile.myScaleFactors.length);
+        myHeight = aTile.myHeight;
+        myWidth = aTile.myWidth;
+    }
+
+    /**
+     * Creates a new Image API tile.
+     *
      * @param aWidth A tile width
      * @param aHeight A tile height
      * @param aScaleFactorArray A tile's scale factors
@@ -50,6 +60,15 @@ public class Tile {
         myScaleFactors = Arrays.copyOf(aScaleFactorArray, aScaleFactorArray.length);
         myHeight = aHeight;
         myWidth = aWidth;
+    }
+
+    /**
+     * Creates a copy of this tile.
+     *
+     * @return A copy of this tile
+     */
+    public Tile copy() {
+        return new Tile(this);
     }
 
     /**

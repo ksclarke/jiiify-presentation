@@ -1,18 +1,16 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
-import java.net.URI;
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
-
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.Eclipse;
 
-import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import java.net.URI;
+import java.util.Optional;
 
 /**
  * A service that will return information about a particular image via <a href="https://iiif.io/api/image/3/">IIIF Image
@@ -46,11 +44,32 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
     }
 
     /**
+     * Creates a new IIIF Image API 3 service from an existing one.
+     *
+     * @param aService An image service to copy
+     */
+    public ImageService3(final ImageService3 aService) {
+        super(aService.getID().orElseThrow(), ImageService3.class.getSimpleName(),
+                (ImageService.Profile) aService.getProfile().orElseThrow());
+        aService.copyTo(this);
+    }
+
+    /**
      * Creates a new IIIF Image API 3 service for Jackson's processing.
      */
     @SuppressWarnings(Eclipse.UNUSED)
     private ImageService3() {
         super();
+    }
+
+    /**
+     * Creates a copy of this service.
+     *
+     * @return A copy of this service
+     */
+    @Override
+    public ImageService3 copy() {
+        return new ImageService3(this);
     }
 
     @Override
@@ -60,15 +79,15 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
     }
 
     @Override
-    @JsonGetter(JsonKeys.TYPE)
-    public Optional<String> getType() {
-        return super.getType();
-    }
-
-    @Override
     @JsonSetter(JsonKeys.ID)
     public ImageService3 setID(final String aID) {
         return super.setID(aID);
+    }
+
+    @Override
+    @JsonGetter(JsonKeys.TYPE)
+    public Optional<String> getType() {
+        return super.getType();
     }
 
     @Override
@@ -117,21 +136,6 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
             myLabel = aLabel;
         }
 
-        @Override
-        public String label() {
-            return myLabel;
-        }
-
-        @Override
-        public String toString() {
-            return myLabel;
-        }
-
-        @Override
-        public URI uri() {
-            return URI.create(myLabel);
-        }
-
         /**
          * Creates an image service profile from the supplied label.
          *
@@ -146,6 +150,21 @@ public class ImageService3 extends AbstractImageService<ImageService3> implement
             }
 
             return Optional.empty();
+        }
+
+        @Override
+        public String label() {
+            return myLabel;
+        }
+
+        @Override
+        public String toString() {
+            return myLabel;
+        }
+
+        @Override
+        public URI uri() {
+            return URI.create(myLabel);
         }
     }
 

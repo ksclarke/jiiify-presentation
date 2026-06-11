@@ -49,4 +49,25 @@ public final class OtherService3 extends AbstractOtherService<OtherService3> imp
     public OtherService3(final String aID, final String aType, final OtherService.Profile aProfile) {
         super(aID, aType, aProfile);
     }
+
+    /**
+     * Creates a new service from the supplied service.
+     *
+     * @param aService A service
+     */
+    public OtherService3(final OtherService3 aService) {
+        super(aService.getID().orElseThrow(), aService.getType().orElseThrow(),
+                (OtherService.Profile) aService.getProfile().orElse(null));
+        aService.copyTo(this);
+    }
+
+    /**
+     * Creates a copy of this service.
+     *
+     * @return A copy of this service
+     */
+    @Override
+    public OtherService3 copy() {
+        return new OtherService3(this);
+    }
 }

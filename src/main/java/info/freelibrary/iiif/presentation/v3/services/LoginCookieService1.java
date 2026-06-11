@@ -17,4 +17,22 @@ public class LoginCookieService1 extends AbstractUserMediatedService<LoginCookie
     public LoginCookieService1(final String aID, final String aLabel) {
         super(AuthCookieService.Profile.LOGIN, aID, aLabel);
     }
+
+    /**
+     * Creates a new access cookie service using the login pattern.
+     *
+     * @param aService A service to copy
+     */
+    public LoginCookieService1(final LoginCookieService1 aService) {
+        super(AuthCookieService.Profile.LOGIN, aService.getID().orElseThrow(), aService.getLabel());
+        aService.copyTo(this);
+    }
+
+    /**
+     * Creates a new access cookie service using the login pattern.
+     */
+    @Override
+    public LoginCookieService1 copy() {
+        return new LoginCookieService1(this);
+    }
 }

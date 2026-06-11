@@ -162,12 +162,12 @@ public class HighlightingAnnotation extends WebAnnotation {
     }
 
     @Override
-    public HighlightingAnnotation setBody(final ContentResource... aBody) {
+    public HighlightingAnnotation setBody(final ContentResource<?>... aBody) {
         return (HighlightingAnnotation) super.setBody(aBody);
     }
 
     @Override
-    public HighlightingAnnotation setBody(final List<ContentResource> aResourceList) {
+    public HighlightingAnnotation setBody(final List<ContentResource<?>> aResourceList) {
         return (HighlightingAnnotation) super.setBody(aResourceList);
     }
 

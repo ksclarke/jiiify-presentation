@@ -119,6 +119,17 @@ public final class BehaviorList extends ArrayList<Behavior> {
         addBehaviors(Objects.requireNonNull(aBehaviorList));
     }
 
+    /**
+     * Copy constructor for a behavior list.
+     *
+     * @param <T> The type of behavior
+     * @param aBehaviorList The behavior list to copy
+     */
+    public <T extends Behavior> BehaviorList(final BehaviorList aBehaviorList) {
+        myBehaviorClass = aBehaviorList.getBehaviorType();
+        addBehaviors(aBehaviorList);
+    }
+
     @Override
     public boolean add(final Behavior aBehavior) {
         return addBehavior(aBehavior);

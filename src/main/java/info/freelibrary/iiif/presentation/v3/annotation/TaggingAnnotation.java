@@ -162,12 +162,12 @@ public class TaggingAnnotation extends WebAnnotation {
     }
 
     @Override
-    public TaggingAnnotation setBody(final ContentResource... aBody) {
+    public TaggingAnnotation setBody(final ContentResource<?>... aBody) {
         return (TaggingAnnotation) super.setBody(aBody);
     }
 
     @Override
-    public TaggingAnnotation setBody(final List<ContentResource> aResourceList) {
+    public TaggingAnnotation setBody(final List<ContentResource<?>> aResourceList) {
         return (TaggingAnnotation) super.setBody(aResourceList);
     }
 

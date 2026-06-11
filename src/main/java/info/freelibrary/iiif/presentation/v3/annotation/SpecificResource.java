@@ -17,7 +17,7 @@ import java.util.Optional;
 /**
  * A specific resource that can reference a particular region, time frame, or other aspect of another resource.
  */
-public non-sealed class SpecificResource extends Target implements ContentResource {
+public non-sealed class SpecificResource extends Target implements ContentResource<SpecificResource> {
 
     /** A format for this specific resource. */
     private MediaType myFormat;
@@ -26,7 +26,7 @@ public non-sealed class SpecificResource extends Target implements ContentResour
     private Selector mySelector;
 
     /** The specific resource's source. */
-    private ContentResource mySource;
+    private ContentResource<?> mySource;
 
     /** The specific resource's styleClass. */
     private String myStyleClass;
@@ -36,7 +36,7 @@ public non-sealed class SpecificResource extends Target implements ContentResour
      *
      * @param aSource A source
      */
-    public SpecificResource(final ContentResource aSource) {
+    public SpecificResource(final ContentResource<?> aSource) {
         mySource = aSource;
     }
 
@@ -46,7 +46,7 @@ public non-sealed class SpecificResource extends Target implements ContentResour
      * @param aSource A source
      * @param aSelector A selector
      */
-    public SpecificResource(final ContentResource aSource, final Selector aSelector) {
+    public SpecificResource(final ContentResource<?> aSource, final Selector aSelector) {
         mySource = aSource;
         mySelector = aSelector;
     }
@@ -68,7 +68,7 @@ public non-sealed class SpecificResource extends Target implements ContentResour
      * @param aSource A source
      * @param aSelector A selector
      */
-    public SpecificResource(final String aID, final ContentResource aSource, final Selector aSelector) {
+    public SpecificResource(final String aID, final ContentResource<?> aSource, final Selector aSelector) {
         this(aSource, aSelector);
         super.setID(aID);
     }
@@ -159,7 +159,7 @@ public non-sealed class SpecificResource extends Target implements ContentResour
      *
      * @return The specific resource's source
      */
-    public ContentResource getSource() {
+    public ContentResource<?> getSource() {
         return mySource;
     }
 
@@ -227,7 +227,7 @@ public non-sealed class SpecificResource extends Target implements ContentResour
      * @param aSource A source
      * @return This specific resource
      */
-    public SpecificResource setSource(final ContentResource aSource) {
+    public SpecificResource setSource(final ContentResource<?> aSource) {
         mySource = Objects.requireNonNull(aSource);
         return this;
     }

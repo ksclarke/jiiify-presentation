@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static java.util.stream.Collectors.toCollection;
+
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -85,11 +87,48 @@ public class Manifest extends NavigableResource<Manifest> {
     }
 
     /**
+     * Copy constructor for creating a new manifest from an existing one.
+     *
+     * @param aManifest The manifest to copy
+     */
+    public Manifest(final Manifest aManifest) {
+        super(aManifest);
+
+        aManifest.getViewingDirection().ifPresent(viewingDirection -> myViewingDirection = viewingDirection);
+        aManifest.getAccompanyingCanvas().ifPresent(canvas -> myAccompanyingCanvas = canvas.copy());
+        aManifest.getPlaceholderCanvas().ifPresent(canvas -> myPlaceholderCanvas = canvas.copy());
+        aManifest.getStart().ifPresent(start -> myStart = start.copy());
+
+        if (aManifest.myServiceDefinitions != null) {
+            myServiceDefinitions =
+                    aManifest.myServiceDefinitions.stream().map(Service::copy).collect(toCollection(ArrayList::new));
+        }
+
+        if (aManifest.myRanges != null) {
+            myRanges = aManifest.myRanges.stream().map(Range::copy).collect(toCollection(ArrayList::new));
+        }
+
+        if (aManifest.myCanvases != null) {
+            myCanvases = aManifest.myCanvases.stream().map(Canvas::copy).collect(toCollection(ArrayList::new));
+        }
+
+        if (aManifest.myAnnotations != null) {
+            myAnnotations =
+                    aManifest.myAnnotations.stream().map(AnnotationPage::copy).collect(toCollection(ArrayList::new));
+        }
+    }
+
+    /**
      * A private constructor used for Jackson's deserialization processes.
      */
     private Manifest() {
         super(ResourceTypes.MANIFEST, ManifestBehavior.class);
         getContextList(); // Initializes the context list
+    }
+
+    @Override
+    public Manifest copy() {
+        return new Manifest(this);
     }
 
     @Override

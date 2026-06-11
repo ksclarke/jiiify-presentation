@@ -162,12 +162,12 @@ public class ModeratingAnnotation extends WebAnnotation {
     }
 
     @Override
-    public ModeratingAnnotation setBody(final ContentResource... aBody) {
+    public ModeratingAnnotation setBody(final ContentResource<?>... aBody) {
         return (ModeratingAnnotation) super.setBody(aBody);
     }
 
     @Override
-    public ModeratingAnnotation setBody(final List<ContentResource> aResourceList) {
+    public ModeratingAnnotation setBody(final List<ContentResource<?>> aResourceList) {
         return (ModeratingAnnotation) super.setBody(aResourceList);
     }
 

@@ -1,10 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import static java.util.stream.Collectors.toCollection;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -12,15 +9,18 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
-
-import info.freelibrary.util.warnings.JDK;
-
 import info.freelibrary.iiif.presentation.v3.services.image.Format;
 import info.freelibrary.iiif.presentation.v3.services.image.ImageAPI;
 import info.freelibrary.iiif.presentation.v3.services.image.Quality;
 import info.freelibrary.iiif.presentation.v3.services.image.Size;
 import info.freelibrary.iiif.presentation.v3.services.image.Tile;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.util.warnings.JDK;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Abstract base class for image services.
@@ -291,5 +291,34 @@ abstract class AbstractImageService<T extends AbstractImageService<T>> extends A
     public T setWidth(final int aWidth) {
         myWidth = aWidth;
         return (T) this;
+    }
+
+    /**
+     * Copies the values of this image service to the supplied image service.
+     *
+     * @param aService The image service to copy to
+     */
+    protected void copyTo(final AbstractImageService<T> aService) {
+        aService.copyTo(this);
+
+        aService.myProtocolIsSet = myProtocolIsSet;
+        aService.myWidth = myWidth;
+        aService.myHeight = myHeight;
+
+        if (aService.myFormats != null) {
+            aService.myFormats = new ArrayList<>(myFormats); // Format(s) are immutable
+        }
+
+        if (aService.myQualities != null) {
+            aService.myQualities = new ArrayList<>(myQualities); // Quality(s) are immutable
+        }
+
+        if (aService.mySizes != null) {
+            aService.mySizes = mySizes.stream().map(Size::copy).collect(toCollection(ArrayList::new));
+        }
+
+        if (aService.myTiles != null) {
+            aService.myTiles = myTiles.stream().map(Tile::copy).collect(toCollection(ArrayList::new));
+        }
     }
 }

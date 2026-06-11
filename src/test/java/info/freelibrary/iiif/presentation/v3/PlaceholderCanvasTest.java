@@ -6,21 +6,9 @@ import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
-import java.util.regex.Pattern;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import info.freelibrary.util.StringUtils;
-
 import info.freelibrary.iiif.presentation.v3.annotation.PaintingAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotation.SupplementingAnnotation;
+import info.freelibrary.iiif.presentation.v3.content.ContentResource;
 import info.freelibrary.iiif.presentation.v3.content.ImageContent;
 import info.freelibrary.iiif.presentation.v3.content.TextContent;
 import info.freelibrary.iiif.presentation.v3.id.Minter;
@@ -29,6 +17,16 @@ import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
+import info.freelibrary.util.StringUtils;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
+import java.util.regex.Pattern;
 
 /**
  * Tests of {@link PlaceholderCanvas}.
@@ -247,7 +245,7 @@ public class PlaceholderCanvasTest extends AbstractTest {
     }
 
     /**
-     * Tests {@link PlaceholderCanvas#PlaceholderCanvas(URI) PlaceholderCanvas}.
+     * Tests {@link PlaceholderCanvas#PlaceholderCanvas(String) PlaceholderCanvas}.
      */
     @Test
     public final void testPlaceholderCanvasID() {
@@ -457,9 +455,9 @@ public class PlaceholderCanvasTest extends AbstractTest {
         final List<PaintingAnnotation> annotations;
 
         assertEquals(1, pages.size());
-        annotations = pages.get(0).getAnnotations();
+        annotations = pages.getFirst().getAnnotations();
         assertEquals(1, annotations.size());
-        assertEquals(aChoice, annotations.get(0).bodyHasChoice());
+        assertEquals(aChoice, annotations.getFirst().bodyHasChoice());
     }
 
     /**
@@ -473,9 +471,9 @@ public class PlaceholderCanvasTest extends AbstractTest {
         final List<SupplementingAnnotation> annotations;
 
         assertEquals(1, pages.size());
-        annotations = pages.get(0).getAnnotations();
+        annotations = pages.getFirst().getAnnotations();
         assertEquals(1, annotations.size());
-        assertEquals(aChoice, annotations.get(0).bodyHasChoice());
+        assertEquals(aChoice, annotations.getFirst().bodyHasChoice());
     }
 
     /**

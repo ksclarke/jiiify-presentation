@@ -50,7 +50,7 @@ public class WebAnnotation implements Annotation<WebAnnotation> {
     private Motivation myMotivation;
 
     /** The annotation's resources. */
-    private List<ContentResource> myResources;
+    private List<ContentResource<?>> myResources;
 
     /** The target of the annotation. */
     private List<Target> myTargets;
@@ -224,7 +224,7 @@ public class WebAnnotation implements Annotation<WebAnnotation> {
      * @return The resources associated with this annotation
      */
     @Override
-    public List<ContentResource> getBody() {
+    public List<ContentResource<?>> getBody() {
         if (myResources == null) {
             myResources = new ArrayList<>();
         }
@@ -295,8 +295,8 @@ public class WebAnnotation implements Annotation<WebAnnotation> {
      * @return The annotation
      */
     @Override
-    public WebAnnotation setBody(final ContentResource... aResourceArray) {
-        final List<ContentResource> resources = getBody();
+    public WebAnnotation setBody(final ContentResource<?>... aResourceArray) {
+        final List<ContentResource<?>> resources = getBody();
 
         resources.clear();
         resources.addAll(Arrays.asList(aResourceArray));
@@ -311,7 +311,7 @@ public class WebAnnotation implements Annotation<WebAnnotation> {
      * @return The annotation
      */
     @Override
-    public WebAnnotation setBody(final List<ContentResource> aResourceList) {
+    public WebAnnotation setBody(final List<ContentResource<?>> aResourceList) {
         return setBody(aResourceList.toArray(new ContentResource[0]));
     }
 

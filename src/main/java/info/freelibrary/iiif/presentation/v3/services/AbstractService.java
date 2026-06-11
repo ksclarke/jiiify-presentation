@@ -1,11 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import static java.util.stream.Collectors.toCollection;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,15 +9,19 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
-
-import info.freelibrary.util.warnings.JDK;
-import info.freelibrary.util.warnings.PMD;
-
 import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.id.UriUtils;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
+import info.freelibrary.util.warnings.JDK;
+import info.freelibrary.util.warnings.PMD;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * An abstract service class that specific services can extend.
@@ -187,5 +187,21 @@ abstract class AbstractService<T extends AbstractService<T>> {
         } catch (final JsonProcessingException details) {
             throw new JsonParsingException(details); // RuntimeException because this shouldn't fail
         }
+    }
+
+    /**
+     * Copies the immutable fields from this service to another service.
+     *
+     * @param aService The service to copy to
+     */
+    protected void copyTo(final AbstractService<T> aService) {
+        if (myServices != null) {
+            aService.myServices = myServices.stream().map(Service::copy).collect(toCollection(ArrayList::new));
+        }
+
+        // Copy the immutable fields
+        aService.myID = myID;
+        aService.myType = myType;
+        aService.myProfile = myProfile;
     }
 }

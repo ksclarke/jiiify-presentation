@@ -162,12 +162,12 @@ public class IdentifyingAnnotation extends WebAnnotation {
     }
 
     @Override
-    public IdentifyingAnnotation setBody(final ContentResource... aBody) {
+    public IdentifyingAnnotation setBody(final ContentResource<?>... aBody) {
         return (IdentifyingAnnotation) super.setBody(aBody);
     }
 
     @Override
-    public IdentifyingAnnotation setBody(final List<ContentResource> aResourceList) {
+    public IdentifyingAnnotation setBody(final List<ContentResource<?>> aResourceList) {
         return (IdentifyingAnnotation) super.setBody(aResourceList);
     }
 

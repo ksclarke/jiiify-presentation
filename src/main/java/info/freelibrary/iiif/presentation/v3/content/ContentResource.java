@@ -12,7 +12,7 @@ import java.util.Optional;
  * An interface that defines web resources that can be referenced by or embedded in an {@link Annotation}. Examples of
  * content resources include: {@link DatasetContent} and {@link ImageContent}).
  */
-public interface ContentResource {
+public interface ContentResource<T extends ContentResource<T>> {
 
     /**
      * Gets the media type format of the content resource.
@@ -42,7 +42,7 @@ public interface ContentResource {
      * @return The content resource
      */
     @JsonSetter(JsonKeys.FORMAT)
-    ContentResource setFormat(MediaType aMediaType);
+    T setFormat(MediaType aMediaType);
 
     /**
      * Sets the content resource ID.
@@ -50,12 +50,12 @@ public interface ContentResource {
      * @param aID A content resource's ID
      * @return The content resource
      */
-    ContentResource setID(String aID);
+    T setID(String aID);
 
     /**
      * Creates a copy of the content resource.
      *
      * @return A copy of the content resource
      */
-    ContentResource copy();
+    T copy();
 }

@@ -1,22 +1,20 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
-
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
-import info.freelibrary.util.Labeled;
-
 import info.freelibrary.iiif.presentation.v3.services.AuthCookieService;
 import info.freelibrary.iiif.presentation.v3.services.AuthTokenService1;
 import info.freelibrary.iiif.presentation.v3.services.ImageService;
 import info.freelibrary.iiif.presentation.v3.services.OtherService;
 import info.freelibrary.iiif.presentation.v3.services.PhysicalDimsService;
 import info.freelibrary.iiif.presentation.v3.utils.json.ServiceDeserializer;
+import info.freelibrary.util.Labeled;
+
+import java.net.URI;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * An interface for service implementations.
@@ -83,6 +81,13 @@ public interface Service {
      * @return The service
      */
     Service setType(String aType);
+
+    /**
+     * Copies this service.
+     *
+     * @return A copy of this service
+     */
+    Service copy();
 
     /**
      * An interface for {@link Service} profiles.

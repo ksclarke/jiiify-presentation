@@ -9,6 +9,7 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,6 +32,21 @@ public class ModelContent extends AbstractContentResource<ModelContent>
     }
 
     /**
+     * Creates a model content resource from another model content resource.
+     *
+     * @param aModelContent Another model content resource
+     */
+    public ModelContent(final ModelContent aModelContent) {
+        this(aModelContent.getID());
+
+        myLanguages = new ArrayList<>(aModelContent.getLanguages());
+        aModelContent.getFormat().ifPresent(format -> myFormat = format);
+        setBehaviors(aModelContent.getBehaviors());
+
+        super.copyTo(aModelContent);
+    }
+
+    /**
      * Creates a model content annotation. This is used by Jackson's deserialization processes.
      */
     private ModelContent() {
@@ -39,18 +55,18 @@ public class ModelContent extends AbstractContentResource<ModelContent>
 
     @Override
     public ModelContent copy() {
-        return new ModelContent(getID());
+        return new ModelContent(this);
     }
 
     @Override
     @JsonIgnore
-    public ModelContent setBehaviors(final Behavior... aBehaviorArray) {
+    public final ModelContent setBehaviors(final Behavior... aBehaviorArray) {
         return setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorArray));
     }
 
     @Override
     @JsonIgnore
-    public ModelContent setBehaviors(final List<Behavior> aBehaviorList) {
+    public final ModelContent setBehaviors(final List<Behavior> aBehaviorList) {
         final ModelContent modelContent;
 
         if (aBehaviorList instanceof final BehaviorList behaviorList) {
