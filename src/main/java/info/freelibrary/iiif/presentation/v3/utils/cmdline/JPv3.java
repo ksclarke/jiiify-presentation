@@ -37,6 +37,9 @@ public final class JPv3 implements Callable<Integer> {
     /** The expected prefix for the IIIF manifests and collection documents server. */
     public static final String ENDPOINT_PREFIX = "ingest";
 
+    /** The expected endpoint for the IIIF manifests and collection documents server. */
+    public static final String INGEST_ENDPOINT_PATH = "/package";
+
     /** The logger for the executable. */
     private static final Logger LOGGER = LoggerFactory.getLogger(JPv3.class, MessageCodes.BUNDLE);
 
@@ -131,16 +134,14 @@ public final class JPv3 implements Callable<Integer> {
 
             if (myAction.isUpload() || myAction.isPatch()) {
                 final String csvZipFileName = FileUtils.stripExt(outputFile.getFileName().toString()) + "-csv.zip";
-                final Path csvZipFile = Path.of(EMPTY).resolve(csvZipFileName); // Puts file into current directory
-
-                // We make some assumptions about manifest server endpoints: the upload endpoint must contain `ingest`
-                final URI host = myHost.toString().contains(ENDPOINT_PREFIX) ? myHost : JPv3Utils.updateHost(myHost);
+                final Path parent = outputFile.getParent() == null ? Path.of(EMPTY) : outputFile.getParent();
+                final Path csvZipFile = parent.resolve(csvZipFileName);
 
                 try (HttpClient client = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NORMAL).build()) {
                     final byte[] credentials = (myUsername + COLON + myPassword).getBytes(StandardCharsets.UTF_8);
                     final String basicAuth = "Basic " + Base64.getEncoder().encodeToString(credentials);
                     final HttpRequest.BodyPublisher bodyPublisher = HttpRequest.BodyPublishers.ofFile(outputFile);
-                    final HttpRequest.Builder builder = HttpRequest.newBuilder().uri(host)
+                    final HttpRequest.Builder builder = HttpRequest.newBuilder().uri(JPv3Utils.formatHost(myHost))
                             .header(HTTP.Header.CONTENT_TYPE, MediaType.APPLICATION_ZIP.toString())
                             .header(HTTP.Header.AUTHORIZATION, basicAuth);
                     final HttpRequest request;

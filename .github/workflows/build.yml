@@ -12,6 +12,9 @@ jobs:
   build:
     name: Maven PR Builder (JDK ${{ matrix.java }}, ${{ matrix.os}})
     runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
     strategy:
       matrix:
         include:
@@ -78,8 +81,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          JPV3_USERNAME: ${{ secrets.JPV3_USERNAME }}
+          JPV3_PASSWORD: ${{ secrets.JPV3_PASSWORD }}
         run: |
-          mvn -B -ntp -Pnative -Pjava${{ matrix.java }} verify javadoc:javadoc
+          mvn -B -ntp -Pnative -Pjava${{ matrix.java }} verify \
+            -Djpv3.username="$JPV3_USERNAME" -Djpv3.password="$JPV3_PASSWORD"
 
       - name: Build with Maven as a Java build
         if: ${{ github.base_ref != 'develop' }}
@@ -88,4 +94,3 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           mvn -B -ntp -Pjava${{ matrix.java }} verify javadoc:javadoc
-

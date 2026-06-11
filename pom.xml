@@ -311,7 +311,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <!-- Uses 'add-opens' argument for system-lambda functionality in unit tests -->
-                    <!--suppress UnresolvedMavenProperty -->
+                    <!--suppress UnresolvedMavenProperty warning for jacoco.agent.arg -->
                     <argLine><![CDATA[ ${jacoco.agent.arg} ${mockito.agent.arg}
                         --add-opens java.base/java.util=ALL-UNNAMED
                         --add-opens=java.base/java.lang=ALL-UNNAMED
@@ -342,6 +342,9 @@
                 <!-- Build plugin versions -->
                 <maven.clean.version>3.5.0</maven.clean.version>
                 <shade.plugin.version>3.6.2</shade.plugin.version>
+                <!-- Testing properties -->
+                <jpv3.username>test_user</jpv3.username>
+                <jpv3.password>test_pswd</jpv3.password>
 
                 <graalvm.agent.arg>
                     ${project.basedir}/target/classes/META-INF/native-image/${project.groupId}/${project.artifactId}/
@@ -515,13 +518,25 @@
                             <systemPropertyVariables>
                                 <native.image.agent>true</native.image.agent>
                             </systemPropertyVariables>
-                            <!--suppress UnresolvedMavenProperty -->
+                            <!--suppress UnresolvedMavenProperty warning for jacoco.agent.arg-->
                             <argLine><![CDATA[ ${jacoco.agent.arg} ${mockito.agent.arg}
                               -agentlib:native-image-agent=config-merge-dir=${graalvm.agent.arg}
                               --add-opens java.base/java.util=ALL-UNNAMED
                               --add-opens=java.base/java.lang=ALL-UNNAMED
                               --enable-native-access=ALL-UNNAMED
                             ]]></argLine>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <!-- This works for UCLA currently, need a container or mock for more generic testing -->
+                            <environmentVariables>
+                                <JPV3_USERNAME>${jpv3.username}</JPV3_USERNAME>
+                                <JPV3_PASSWORD>${jpv3.password}</JPV3_PASSWORD>
+                            </environmentVariables>
                         </configuration>
                     </plugin>
 
@@ -555,7 +570,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-shade-plugin</artifactId>
-                        <version>${shade.plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>uber-jar</id>

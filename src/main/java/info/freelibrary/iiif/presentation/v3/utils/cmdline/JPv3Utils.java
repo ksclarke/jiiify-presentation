@@ -118,25 +118,35 @@ public final class JPv3Utils {
      *
      * @param aURI A URI to update with the endpoint prefix
      * @return The updated URI
-     * @throws IllegalArgumentI18nException If the URI doesn't have a host
+     * @throws URISyntaxException If the URI doesn't have a host
      */
-    public static URI updateHost(final URI aURI) {
+    public static URI formatHost(final URI aURI) throws URISyntaxException {
         final String host = aURI.getHost();
-        final String ingestHost;
 
         if (host == null) {
-            throw new IllegalArgumentI18nException(MessageCodes.BUNDLE, MessageCodes.JPA_190, aURI);
+            throw new URISyntaxException(aURI.toString(), LOGGER.getMessage(MessageCodes.JPA_190));
         }
 
-        // Add an `ingest` endpoint prefix to the front of the host if it doesn't already have one
-        ingestHost = !host.contains(ENDPOINT_PREFIX + PERIOD) ? ENDPOINT_PREFIX + PERIOD + host : host;
+        final String ingestHost = host.contains(ENDPOINT_PREFIX + PERIOD) ? host : ENDPOINT_PREFIX + PERIOD + host;
 
-        try {
-            return new URI(aURI.getScheme(), aURI.getUserInfo(), ingestHost, aURI.getPort(), aURI.getPath(),
-                    aURI.getQuery(), aURI.getFragment());
-        } catch (final URISyntaxException details) {
-            throw new IllegalArgumentI18nException(details, details.getMessage());
+        return formatPath(new URI(aURI.getScheme(), aURI.getUserInfo(), ingestHost, aURI.getPort(), aURI.getPath(),
+                aURI.getQuery(), aURI.getFragment()));
+    }
+
+    /**
+     * Updates the URI path to include the `ingest` endpoint if it's not already present.
+     *
+     * @param aURI The URI to update
+     * @return The updated URI
+     * @throws URISyntaxException If the URI doesn't have a valid URI
+     */
+    public static URI formatPath(final URI aURI) throws URISyntaxException {
+        if (!JPv3.INGEST_ENDPOINT_PATH.equals(aURI.getPath())) {
+            return new URI(aURI.getScheme(), aURI.getUserInfo(), aURI.getHost(), aURI.getPort(),
+                    JPv3.INGEST_ENDPOINT_PATH, aURI.getQuery(), aURI.getFragment());
         }
+
+        return aURI;
     }
 
     /**

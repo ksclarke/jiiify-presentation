@@ -168,11 +168,13 @@
     <entry key="JPA-187">Failed to process ZIP archive: {}</entry>
     <entry key="JPA-188">Failed to copy: {} -> {}</entry>
     <entry key="JPA-189">Updated CSV source file(s): {}</entry>
-    <entry key="JPA-190">URI endpoint has no host: {}</entry>
+    <entry key="JPA-190">URI endpoint has no host</entry>
     <entry key="JPA-191">Failed to create temporary directory for CSV processing</entry>
     <entry key="JPA-192">Invalid path provided (must be directory, CSV, or ZIP file): {}</entry>
     <entry key="JPA-193">The required type property should not be missing</entry>
     <entry key="JPA-194">Expected behaviors list to be a BehaviorList</entry>
     <entry key="JPA-195">Ignoring addition of a duplicate behavior: {}</entry>
     <entry key="JPA-196">Did not find expected CSV in supplied ZIP file</entry>
+    <entry key="JPA-193">Environment property '{}' must be set for the integration tests</entry>
+    <entry key="JPA-194">Unexpected test output: {}</entry>
 </properties>

@@ -9,6 +9,9 @@ jobs:
   release:
     name: Maven Artifact Publisher (JDK 21)
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
     strategy:
       matrix:
         java: [ "21" ]
@@ -38,7 +41,7 @@ jobs:
 
       - name: Set release version
         shell: bash
-        run: TAG_NAME="${{ github.event.release.tag_name }}" && echo "RELEASE_VERSION=${TAG_NAME%-*}" >> $GITHUB_ENV
+        run: TAG_NAME="${{ github.event.release.tag_name }}" && echo "RELEASE_VERSION=${TAG_NAME%-*}" >> "$GITHUB_ENV"
 
       - name: Release with Maven
         env:
@@ -46,6 +49,9 @@ jobs:
           MAVEN_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.BUILD_PASSPHRASE }}
           MAVEN_GPG_KEY: ${{ secrets.BUILD_KEY }}
+          JPV3_USERNAME: ${{ secrets.JPV3_USERNAME }}
+          JPV3_PASSWORD: ${{ secrets.JPV3_PASSWORD }}
         run: |
           mvn -V -B -ntp deploy -Prelease -Drevision="${{ env.RELEASE_VERSION }}" \
-            -DlogLevel="DEBUG" -DtestLogLevel="DEBUG"
+            -DlogLevel="DEBUG" -DtestLogLevel="DEBUG" \
+            -Djpv3.username="$JPV3_USERNAME" -Djpv3.password="$JPV3_PASSWORD"
