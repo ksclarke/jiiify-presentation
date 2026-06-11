@@ -59,7 +59,7 @@ public class JPv3IT {
         final ProcessResult result = runJPv3(CREATE, INPUT, CSV_FILE, OUTPUT, fileName);
 
         assertEquals(result.output, 0, result.exitCode);
-        assertTrue(LOGGER.getMessage(MessageCodes.JPA_194, result.output),
+        assertTrue(LOGGER.getMessage(MessageCodes.JPA_198, result.output),
                 result.output.contains(LOGGER.getMessage(MessageCodes.JPA_178, new File(fileName).getAbsolutePath())));
     }
 
