@@ -175,6 +175,6 @@
     <entry key="JPA-194">Expected behaviors list to be a BehaviorList</entry>
     <entry key="JPA-195">Ignoring addition of a duplicate behavior: {}</entry>
     <entry key="JPA-196">Did not find expected CSV in supplied ZIP file</entry>
-    <entry key="JPA-193">Environment property '{}' must be set for the integration tests</entry>
-    <entry key="JPA-194">Unexpected test output: {}</entry>
+    <entry key="JPA-197">Environment property '{}' must be set for the integration tests</entry>
+    <entry key="JPA-198">Unexpected test output: {}</entry>
 </properties>
