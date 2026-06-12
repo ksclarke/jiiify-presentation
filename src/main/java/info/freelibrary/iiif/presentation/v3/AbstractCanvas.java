@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static java.util.stream.Collectors.toCollection;
+
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -135,6 +137,46 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      */
     protected AbstractCanvas(final String aID, final Label aLabel) {
         super(ResourceTypes.CANVAS, aID, aLabel, CanvasBehavior.class);
+    }
+
+    /**
+     * Creates a new canvas.
+     *
+     * @param aCanvas Another canvas to copy properties from
+     */
+    protected AbstractCanvas(final AbstractCanvas<T> aCanvas) {
+        super(aCanvas);
+        aCanvas.copyTo(this);
+    }
+
+    /**
+     * Copies the properties of another canvas to this one.
+     *
+     * @param aCanvas The canvas to copy from
+     */
+    protected void copyTo(final AbstractCanvas<T> aCanvas) {
+        super.copyTo(aCanvas);
+
+        aCanvas.myDuration = myDuration;
+        aCanvas.myHeight = myHeight;
+        aCanvas.myWidth = myWidth;
+
+        if (myWebAnnotations != null) {
+            aCanvas.myWebAnnotations =
+                    myWebAnnotations.stream().map(AnnotationPage::copy).collect(toCollection(ArrayList::new));
+        }
+
+        if (myPaintingPageList != null) {
+            aCanvas.myPaintingPageList =
+                    myPaintingPageList.stream().map(AnnotationPage::copy).collect(toCollection(ArrayList::new));
+        }
+
+        if (mySupplementingPageList != null) {
+            aCanvas.mySupplementingPageList =
+                    mySupplementingPageList.stream().map(AnnotationPage::copy).collect(toCollection(ArrayList::new));
+        }
+
+        aCanvas.myMinter = myMinter;
     }
 
     @Override
@@ -468,14 +510,14 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      */
     @SuppressWarnings({ JDK.UNCHECKED })
     protected final <C extends CanvasResource<C>> T paint(final CanvasResource<C> aCanvas, final boolean aChoice,
-            final ContentResource... aContentArray) {
+            final ContentResource<?>... aContentArray) {
         final PaintingAnnotation annotation = new PaintingAnnotation(getMinter(MessageCodes.JPA_143), aCanvas);
         final AnnotationPage<PaintingAnnotation> page;
         final int pageCount;
 
         annotation.setChoice(aChoice);
 
-        for (final ContentResource content : aContentArray) {
+        for (final ContentResource<?> content : aContentArray) {
             if (canFrame(content)) {
                 annotation.getBody().add(content);
             }
@@ -496,19 +538,19 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
     }
 
     /**
-     * Paints a canvas, that has been initialized with a minter, with the supplied content resources. If the canvas was
+     * Paints a canvas that has been initialized with a minter, with the supplied content resources. If the canvas was
      * not initialized with a minter, a {@code MintingException} is thrown.
      *
      * @param <C> A type of canvas
      * @param aCanvas A canvas
-     * @param aChoice Whether the content resource are painted on the canvas as a choice
+     * @param aChoice Whether the content resources are painted on the canvas as a choice
      * @param aContentList A list of content resources
      * @return The canvas
      * @throws ContentOutOfBoundsException If the painted content is out of bounds of the canvas
      * @throws MintingException If the canvas was created without a minter
      */
     protected final <C extends CanvasResource<C>> T paint(final CanvasResource<C> aCanvas, final boolean aChoice,
-            final List<ContentResource> aContentList) {
+            final List<ContentResource<?>> aContentList) {
         return paint(aCanvas, aChoice, aContentList.toArray(new ContentResource[0]));
     }
 
@@ -519,7 +561,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      * @param <C> A type of canvas
      * @param aCanvas A canvas
      * @param aCanvasRegion A canvas region
-     * @param aChoice Whether the content resource are painted on the canvas as a choice
+     * @param aChoice Whether the content resources are painted on the canvas as a choice
      * @param aContentArray An array of content resources
      * @return The canvas
      * @throws ContentOutOfBoundsException If the painted content is out of bounds of the canvas
@@ -528,14 +570,15 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      */
     @SuppressWarnings({ JDK.UNCHECKED })
     protected final <C extends CanvasResource<C>> T paint(final CanvasResource<C> aCanvas,
-            final MediaFragmentSelector aCanvasRegion, final boolean aChoice, final ContentResource... aContentArray) {
+            final MediaFragmentSelector aCanvasRegion, final boolean aChoice,
+            final ContentResource<?>... aContentArray) {
         final PaintingAnnotation anno = new PaintingAnnotation(getMinter(MessageCodes.JPA_143), aCanvas, aCanvasRegion);
         final AnnotationPage<PaintingAnnotation> page;
         final int pageCount;
 
         anno.setChoice(aChoice);
 
-        for (final ContentResource content : aContentArray) {
+        for (final ContentResource<?> content : aContentArray) {
             if (canFrame(content, aCanvasRegion)) {
                 anno.getBody().add(content);
             }
@@ -571,7 +614,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      */
     protected final <C extends CanvasResource<C>> T paint(final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion, final boolean aChoice,
-            final List<ContentResource> aContentList) {
+            final List<ContentResource<?>> aContentList) {
         return paint(aCanvas, aCanvasRegion, aChoice, aContentList.toArray(new ContentResource[0]));
     }
 
@@ -588,10 +631,10 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      */
     @SuppressWarnings({ JDK.UNCHECKED })
     protected final <C extends CanvasResource<C>> T supplement(final CanvasResource<C> aCanvas, final boolean aChoice,
-            final ContentResource... aContentArray) {
+            final ContentResource<?>... aContentArray) {
         final SupplementingAnnotation annotation =
                 new SupplementingAnnotation(getMinter(MessageCodes.JPA_144).getAnnotationID(), aCanvas);
-        final List<ContentResource> resources = new ArrayList<>();
+        final List<ContentResource<?>> resources = new ArrayList<>();
         final int pageCount = getSupplementingPages().size();
         final AnnotationPage<SupplementingAnnotation> page;
 
@@ -623,7 +666,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      * @throws MintingException If the canvas was created without a minter
      */
     protected final <C extends CanvasResource<C>> T supplement(final CanvasResource<C> aCanvas, final boolean aChoice,
-            final List<ContentResource> aContentList) {
+            final List<ContentResource<?>> aContentList) {
         return supplement(aCanvas, aChoice, aContentList.toArray(new ContentResource[0]));
     }
 
@@ -642,10 +685,11 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      */
     @SuppressWarnings({ JDK.UNCHECKED })
     protected final <C extends CanvasResource<C>> T supplement(final CanvasResource<C> aCanvas,
-            final MediaFragmentSelector aCanvasRegion, final boolean aChoice, final ContentResource... aContentArray) {
+            final MediaFragmentSelector aCanvasRegion, final boolean aChoice,
+            final ContentResource<?>... aContentArray) {
         final SupplementingAnnotation annotation =
                 new SupplementingAnnotation(getMinter(MessageCodes.JPA_144).getAnnotationID(), aCanvas, aCanvasRegion);
-        final List<ContentResource> resources = new ArrayList<>();
+        final List<ContentResource<?>> resources = new ArrayList<>();
         final int pageCount = getSupplementingPages().size();
         final AnnotationPage<SupplementingAnnotation> page;
 
@@ -681,7 +725,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      */
     protected final <C extends CanvasResource<C>> T supplement(final CanvasResource<C> aCanvas,
             final MediaFragmentSelector aCanvasRegion, final boolean aChoice,
-            final List<ContentResource> aContentList) {
+            final List<ContentResource<?>> aContentList) {
         return supplement(aCanvas, aCanvasRegion, aChoice, aContentList.toArray(new ContentResource[0]));
     }
 
@@ -690,14 +734,14 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      *
      * @param aContent A content resource
      * @return <code>true</code> if the content resource fits within the bounds of the canvas
-     * @throws ContentOutOfBoundsException If the content resource won't fit
+     * @throws ContentOutOfBoundsException If the content resource doesn't fit
      */
-    boolean canFrame(final ContentResource aContent) {
-        if (aContent instanceof final SpatialContentResource spatialPainting) {
+    boolean canFrame(final ContentResource<?> aContent) {
+        if (aContent instanceof final SpatialContentResource<?> spatialPainting) {
             if (myWidth == 0 || myHeight == 0) {
-                final ContentOutOfBoundsException err =
+                final ContentOutOfBoundsException details =
                         new ContentOutOfBoundsException(MessageCodes.JPA_059, aContent.getID(), SPATIAL, getID());
-                LOGGER.trace(err.getMessage());
+                LOGGER.trace(details.getMessage());
             }
 
             if (getWidth() < spatialPainting.getWidth() || getHeight() < spatialPainting.getHeight()) {
@@ -710,18 +754,18 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
             }
         }
 
-        if (aContent instanceof final TemporalContentResource temporalPainting) {
+        if (aContent instanceof final TemporalContentResource<?> temporalPainting) {
             if (myDuration == ZERO_DURATION) {
-                final ContentOutOfBoundsException err =
+                final ContentOutOfBoundsException details =
                         new ContentOutOfBoundsException(MessageCodes.JPA_059, aContent.getID(), TEMPORAL, getID());
-                LOGGER.trace(err.getMessage());
+                LOGGER.trace(details.getMessage());
             }
 
             if (getDuration() < temporalPainting.getDuration()) {
                 // We'll assume duration is intended to work the same way as width and height
-                final ContentOutOfBoundsException err =
+                final ContentOutOfBoundsException details =
                         new ContentOutOfBoundsException(MessageCodes.JPA_060, aContent.getID(), TEMPORAL, getID());
-                LOGGER.warn(err.getMessage());
+                LOGGER.warn(details.getMessage());
             }
         }
 
@@ -738,7 +782,7 @@ abstract class AbstractCanvas<T extends AbstractCanvas<T>> extends NavigableReso
      * @throws ContentOutOfBoundsException If the content resource won't fit
      * @throws SelectorOutOfBoundsException If the canvas fragment doesn't exist
      */
-    private boolean canFrame(final ContentResource aContent, final MediaFragmentSelector aCanvasRegion) {
+    private boolean canFrame(final ContentResource<?> aContent, final MediaFragmentSelector aCanvasRegion) {
         return getCanvasFragment(aCanvasRegion).canFrame(aContent);
     }
 

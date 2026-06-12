@@ -3,7 +3,7 @@ package info.freelibrary.iiif.presentation.v3.utils.csv;
 
 import static info.freelibrary.iiif.presentation.v3.ResourceTypes.IMAGE;
 import static info.freelibrary.iiif.presentation.v3.ResourceTypes.IMAGE_SERVICE_2;
-import static info.freelibrary.util.ThrowingConsumer.sneaky;
+import static info.freelibrary.util.ThrowingConsumer.uncheck;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -12,6 +12,7 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import info.freelibrary.iiif.presentation.v3.Canvas;
 import info.freelibrary.iiif.presentation.v3.Collection;
 import info.freelibrary.iiif.presentation.v3.Manifest;
+import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.content.ContentResource;
 import info.freelibrary.iiif.presentation.v3.content.ImageContent;
 import info.freelibrary.iiif.presentation.v3.id.Minter;
@@ -117,7 +118,7 @@ public class Mapper {
         myChildren = myDatabase.hashSet("children", Serializer.STRING).createOrOpen();
 
         // Read the source file(s) and populate the database's indices
-        reader.rows(aCsvStream).forEach(sneaky(row -> {
+        reader.rows(aCsvStream).forEach(uncheck(row -> {
             final String rowID = row.getItemID().orElse(UUID.randomUUID().toString());
             final String rowValue = myMapper.writeValueAsString(row);
 
@@ -312,23 +313,23 @@ public class Mapper {
         for (final String manifestID : aManifestList) {
             try {
                 final Row row = myMapper.readValue(myCsvData.get(manifestID), Row.class);
-                final Manifest manifest = myBuilder.build(row);
-                final Minter minter = MinterFactory.getMinter(manifest);
-                final List<Canvas> canvases = mapCanvases(manifestID, minter);
+                final String id = myBuilder.getID(manifestID, ResourceTypes.MANIFEST);
+                final Minter minter = MinterFactory.getMinter(id);
+                final Manifest manifest = myBuilder.build(row, minter);
+                final List<Canvas> canvases = manifest.getCanvases();
 
-                manifest.setCanvases(canvases);
-                manifests.add(manifest);
-
-                // Add a randomly pulled thumbnail if one doesn't already exist
-                if (manifest.getThumbnails().isEmpty()) {
-                    final int index = getRandomIndex(canvases.size());
-
-                    if (index >= 0) {
-                        canvases.get(index).getThumbnails().stream().findFirst()
-                                .ifPresent(thumbnail -> manifest.getThumbnails().add(thumbnail.copy()));
-                    }
+                // Simple manifests will have canvases already, but complex ones will need additional mapping
+                if (canvases.isEmpty()) {
+                    canvases.addAll(mapCanvases(manifestID, minter));
                 }
 
+                // Create a manifest-level thumbnail if it doesn't already exist
+                if (manifest.getThumbnails().isEmpty()) {
+                    getRandomCanvas(canvases).flatMap(canvas -> canvas.getThumbnails().stream().findFirst())
+                            .ifPresent(thumbnail -> manifest.getThumbnails().add(thumbnail.copy()));
+                }
+
+                manifests.add(manifest);
                 myZipWriter.writeFile(URLEncoder.encode(manifestID, UTF_8) + JSON_EXT, manifest.toString());
             } catch (final JsonProcessingException details) {
                 throw new MappingException(details);
@@ -350,7 +351,7 @@ public class Mapper {
     protected List<Canvas> mapCanvases(final String aManifestID, final Minter aMinter) {
         final List<Canvas> canvases = new ArrayList<>();
 
-        myParents.getOrDefault(aManifestID, Set.of()).forEach(sneaky(canvasID -> {
+        myParents.getOrDefault(aManifestID, Set.of()).forEach(uncheck(canvasID -> {
             final Row canvasRow = myMapper.readValue(myCsvData.get(canvasID), Row.class);
             final Canvas canvas = myBuilder.build(canvasRow, aMinter);
             final int canvasWidth = canvasRow.getMediaWidth().orElse(0);
@@ -362,9 +363,9 @@ public class Mapper {
 
             if (children == null || children.isEmpty()) {
                 // If we don't have any children, we're probably dealing with a single image we can paint directly
-                canvasRow.getFileName().ifPresent(sneaky(fileName -> {
-                    final ImageContent imageContent = new ImageContent(myBuilder.checkID(canvasID, IMAGE));
-                    final ImageService imageService = new ImageService2(myBuilder.checkID(canvasID, IMAGE_SERVICE_2));
+                canvasRow.getFileName().ifPresent(uncheck(fileName -> {
+                    final ImageContent imageContent = new ImageContent(myBuilder.getID(canvasID, IMAGE));
+                    final ImageService imageService = new ImageService2(myBuilder.getID(canvasID, IMAGE_SERVICE_2));
 
                     imageContent.setServices(imageService);
 
@@ -375,10 +376,10 @@ public class Mapper {
                     }
                 }));
             } else {
-                final List<ContentResource> choiceResources = new ArrayList<>();
-                final List<ContentResource> layerResources = new ArrayList<>();
+                final List<ContentResource<?>> choiceResources = new ArrayList<>();
+                final List<ContentResource<?>> layerResources = new ArrayList<>();
 
-                children.forEach(sneaky(paintedID -> {
+                children.forEach(uncheck(paintedID -> {
                     final Row paintedRow = myMapper.readValue(myCsvData.get(paintedID), Row.class);
                     final int paintedWidth = paintedRow.getMediaWidth().orElse(0);
                     final int paintedHeight = paintedRow.getMediaHeight().orElse(0);
@@ -386,7 +387,7 @@ public class Mapper {
                     width.updateAndGet(w -> (canvasWidth == 0 && paintedWidth > w) ? paintedWidth : w);
                     height.updateAndGet(h -> (canvasHeight == 0 && paintedHeight > h) ? paintedHeight : h);
 
-                    paintedRow.getObjectType().ifPresent(sneaky(objectType -> {
+                    paintedRow.getObjectType().ifPresent(uncheck(objectType -> {
                         switch (objectType) {
                             case Keys.CHOICE -> choiceResources.add(myBuilder.build(paintedRow, aMinter));
                             case Keys.LAYER -> layerResources.add(myBuilder.build(paintedRow, aMinter));
@@ -446,6 +447,19 @@ public class Mapper {
                 myDatabase.close();
             }
         }
+    }
+
+    /**
+     * Retrieves a random canvas from a given list of canvases. If the list is empty or no valid index can be generated,
+     * the method will return an empty {@code Optional}.
+     *
+     * @param aCanvases the list of canvases from which a random canvas will be selected
+     * @return an {@code Optional} containing a randomly selected {@code Canvas}, or an empty {@code Optional} if the
+     *         list is empty or no valid index is available
+     */
+    private Optional<Canvas> getRandomCanvas(final List<Canvas> aCanvases) {
+        final int index = getRandomIndex(aCanvases.size());
+        return index >= 0 ? Optional.of(aCanvases.get(index)) : Optional.empty();
     }
 
     /**

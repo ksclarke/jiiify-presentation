@@ -1,6 +1,10 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
+import static java.util.stream.Collectors.toCollection;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -19,6 +23,17 @@ public class Property extends I18nProperty<Property> {
      */
     public Property(final String aName, final I18n... aI18nArray) {
         super(aI18nArray);
+        myName = Objects.requireNonNull(aName);
+    }
+
+    /**
+     * Creates a new property from the supplied name and {@code I18n}s.
+     *
+     * @param aName A property name
+     * @param aI18nList A list of property values
+     */
+    public Property(final String aName, final List<I18n> aI18nList) {
+        super(aI18nList);
         myName = Objects.requireNonNull(aName);
     }
 
@@ -46,10 +61,29 @@ public class Property extends I18nProperty<Property> {
     }
 
     /**
+     * Creates a new property from another property.
+     *
+     * @param aProperty A property to deep copy
+     */
+    public Property(final Property aProperty) {
+        this(aProperty.myName,
+                (List<I18n>) aProperty.getI18ns().stream().map(I18n::new).collect(toCollection(ArrayList::new)));
+    }
+
+    /**
      * A private constructor just used by Jackson for its deserialization process.
      */
     private Property() {
         super();
+    }
+
+    /**
+     * Creates a copy of this property.
+     *
+     * @return A copy of this property
+     */
+    public Property copy() {
+        return new Property(this);
     }
 
     /**

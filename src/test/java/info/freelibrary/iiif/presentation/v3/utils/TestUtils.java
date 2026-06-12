@@ -42,6 +42,12 @@ public final class TestUtils {
     /** The directory path of test fixtures. */
     public static final String TEST_DIR = "src/test/resources/json";
 
+    /** A regex to replace the ID with a placeholder. */
+    private static final String REPLACED_ID = "\"(https://iiif\\.library\\.ucla\\.edu(?:/iiif/2)?/[^\"]*)\"";
+
+    /** A placeholder ID. */
+    private static final String REPLACE_ID = "\"PLACEHOLDER_ID\"";
+
     /** The JSON properties that are okay to collapse. */
     private static final List<String> COLLAPSIBLES = Arrays.asList(CONTEXT, BODY, MOTIVATION, LANGUAGE);
 
@@ -56,13 +62,23 @@ public final class TestUtils {
     }
 
     /**
+     * Swaps out an unpredictable ID pattern with a predictable placeholder.
+     *
+     * @param aJsonDoc The JSON document containing IDs to replace
+     * @return The ID with replacement applied
+     */
+    public static String replaceIDs(final String aJsonDoc) {
+        return aJsonDoc.replaceAll(REPLACED_ID, REPLACE_ID);
+    }
+
+    /**
      * Tests equality of two JSON strings.
      *
      * @param aName The name of the test being executed
      * @param anExpectedResult An expected JSON result
      * @param anActualResult An actual JSON result
      * @throws AssertionError If the two JSON strings are not equal
-     * @throws RuntimeException If the fixtures' diffs file could not be written
+     * @throws RuntimeException If the fixtures' diff file could not be written
      */
     public static void assertEquals(final TestName aName, final String anExpectedResult, final String anActualResult) {
         final JsonOptions config = new JsonOptions().ignoreOrder(true).setCollapsibleArrays(COLLAPSIBLES).format(true);

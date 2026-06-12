@@ -1,17 +1,9 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.net.URI;
-import java.util.List;
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
-import info.freelibrary.util.warnings.PMD;
-import info.freelibrary.util.warnings.Sonar;
-
 import info.freelibrary.iiif.presentation.v3.annotation.PaintingAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotation.SupplementingAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotation.WebAnnotation;
@@ -29,6 +21,12 @@ import info.freelibrary.iiif.presentation.v3.properties.RequiredStatement;
 import info.freelibrary.iiif.presentation.v3.properties.SeeAlso;
 import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.util.warnings.PMD;
+import info.freelibrary.util.warnings.Sonar;
+
+import java.net.URI;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * A wrapper for Canvas that helps supports the special serialization preference from the 0283-missing-image recipe.
@@ -77,9 +75,29 @@ class RangeCanvas extends Canvas {
         mySourceCanvas = aCanvas;
     }
 
+    /**
+     * Creates a new RangeCanvas.
+     *
+     * @param aCanvas A source canvas
+     */
+    RangeCanvas(final RangeCanvas aCanvas) {
+        super(aCanvas.getID());
+        mySourceCanvas = aCanvas.mySourceCanvas;
+    }
+
+    /**
+     * Creates a new RangeCanvas.
+     *
+     * @return A copy of this RangeCanvas
+     */
+    @Override
+    public RangeCanvas copy() {
+        return new RangeCanvas(this);
+    }
+
     @Override
     public boolean equals(final Object aObject) {
-        return mySourceCanvas.equals(aObject);
+        return mySourceCanvas.getClass().equals(aObject.getClass()) && mySourceCanvas.equals(aObject);
     }
 
     @Override
@@ -195,7 +213,7 @@ class RangeCanvas extends Canvas {
     }
 
     @Override
-    public List<ContentResource> getThumbnails() {
+    public List<ContentResource<?>> getThumbnails() {
         return mySourceCanvas.getThumbnails();
     }
 
@@ -340,12 +358,12 @@ class RangeCanvas extends Canvas {
     }
 
     @Override
-    public Canvas setThumbnails(final ContentResource... aThumbnailArray) {
+    public Canvas setThumbnails(final ContentResource<?>... aThumbnailArray) {
         return mySourceCanvas.setThumbnails(aThumbnailArray);
     }
 
     @Override
-    public Canvas setThumbnails(final List<ContentResource> aThumbnailList) {
+    public Canvas setThumbnails(final List<ContentResource<?>> aThumbnailList) {
         return mySourceCanvas.setThumbnails(aThumbnailList);
     }
 
@@ -365,7 +383,7 @@ class RangeCanvas extends Canvas {
     }
 
     @Override
-    boolean canFrame(final ContentResource aContent) {
+    boolean canFrame(final ContentResource<?> aContent) {
         return mySourceCanvas.canFrame(aContent);
     }
 }

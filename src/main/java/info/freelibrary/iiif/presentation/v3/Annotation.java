@@ -1,18 +1,17 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
-import java.util.List;
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
 import info.freelibrary.iiif.presentation.v3.annotation.Motivation;
 import info.freelibrary.iiif.presentation.v3.annotation.Target;
 import info.freelibrary.iiif.presentation.v3.content.ContentResource;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 import info.freelibrary.iiif.presentation.v3.utils.json.AnnotationDeserializer;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * An interface that defines methods related to the Web Annotation Data Model as it's used by IIIF.
@@ -34,7 +33,7 @@ public interface Annotation<A extends Annotation<A>> {
      *
      * @return The resources associated with this annotation
      */
-    List<ContentResource> getBody();
+    List<ContentResource<?>> getBody();
 
     /**
      * Gets the annotation's ID.
@@ -78,7 +77,7 @@ public interface Annotation<A extends Annotation<A>> {
      * @return This annotation
      */
     @JsonIgnore
-    A setBody(ContentResource... aResourceArray);
+    A setBody(ContentResource<?>... aResourceArray);
 
     /**
      * Sets the annotation body's resources.
@@ -86,7 +85,7 @@ public interface Annotation<A extends Annotation<A>> {
      * @param aResourceList A list of resources
      * @return This annotation
      */
-    A setBody(List<ContentResource> aResourceList);
+    A setBody(List<ContentResource<?>> aResourceList);
 
     /**
      * Sets whether the annotation body contains a choice.
@@ -144,4 +143,11 @@ public interface Annotation<A extends Annotation<A>> {
      * @return This annotation
      */
     A setTimeMode(TimeMode aTimeMode);
+
+    /**
+     * Creates a copy of this annotation.
+     *
+     * @return A copy of this annotation
+     */
+    A copy();
 }

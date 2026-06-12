@@ -139,7 +139,7 @@ public interface Resource<T extends Resource<T>> {
      *
      * @return The resource's thumbnails
      */
-    List<ContentResource> getThumbnails();
+    List<ContentResource<?>> getThumbnails();
 
     /**
      * Gets the resource type.
@@ -337,7 +337,7 @@ public interface Resource<T extends Resource<T>> {
      * @param aThumbnailArray The thumbnails to set for this resource
      * @return The resource
      */
-    T setThumbnails(ContentResource... aThumbnailArray);
+    T setThumbnails(ContentResource<?>... aThumbnailArray);
 
     /**
      * Sets the thumbnails for this resource. A thumbnail can be any type of content resource, not just
@@ -346,6 +346,13 @@ public interface Resource<T extends Resource<T>> {
      * @param aThumbnailList The thumbnails to set for this resource
      * @return The resource
      */
-    T setThumbnails(List<ContentResource> aThumbnailList);
+    T setThumbnails(List<ContentResource<?>> aThumbnailList);
+
+    /**
+     * Deep copies this resource.
+     *
+     * @return A copy of this resource
+     */
+    T copy();
 
 }

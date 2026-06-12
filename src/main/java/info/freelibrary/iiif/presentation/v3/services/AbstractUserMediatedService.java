@@ -4,10 +4,8 @@ package info.freelibrary.iiif.presentation.v3.services;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import info.freelibrary.util.warnings.JDK;
-
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.util.warnings.JDK;
 
 /**
  * A user mediated type of cookie service.
@@ -128,4 +126,17 @@ abstract class AbstractUserMediatedService<T extends AbstractUserMediatedService
         return (T) this;
     }
 
+    /**
+     * Copies the values of this user-mediated service to the supplied user-mediated service.
+     *
+     * @param aService The user mediated service to copy to
+     */
+    protected void copyTo(final AbstractUserMediatedService<T> aService) {
+        super.copyTo(aService);
+
+        aService.myConfirmLabel = myConfirmLabel;
+        aService.myDescription = myDescription;
+        aService.myHeader = myHeader;
+        aService.myLabel = myLabel;
+    }
 }

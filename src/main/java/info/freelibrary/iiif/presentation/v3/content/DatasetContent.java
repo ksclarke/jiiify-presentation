@@ -9,6 +9,7 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,6 +29,21 @@ public class DatasetContent extends AbstractContentResource<DatasetContent>
     }
 
     /**
+     * Creates a dataset content resource from another dataset content resource.
+     *
+     * @param aDatasetContent Another dataset content resource
+     */
+    public DatasetContent(final DatasetContent aDatasetContent) {
+        this(aDatasetContent.getID());
+
+        myLanguages = new ArrayList<>(aDatasetContent.getLanguages());
+        aDatasetContent.getFormat().ifPresent(format -> myFormat = format);
+        setBehaviors(aDatasetContent.getBehaviors());
+
+        super.copyTo(aDatasetContent);
+    }
+
+    /**
      * Creates a dataset content resource. This is used by Jackson for its deserialization processes.
      */
     private DatasetContent() {
@@ -36,18 +52,18 @@ public class DatasetContent extends AbstractContentResource<DatasetContent>
 
     @Override
     public DatasetContent copy() {
-        return new DatasetContent(getID());
+        return new DatasetContent(this);
     }
 
     @Override
     @JsonIgnore
-    public DatasetContent setBehaviors(final Behavior... aBehaviorArray) {
+    public final DatasetContent setBehaviors(final Behavior... aBehaviorArray) {
         return setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorArray));
     }
 
     @Override
     @JsonIgnore
-    public DatasetContent setBehaviors(final List<Behavior> aBehaviorList) {
+    public final DatasetContent setBehaviors(final List<Behavior> aBehaviorList) {
         final DatasetContent datasetContent;
 
         if (aBehaviorList instanceof final BehaviorList behaviorList) {

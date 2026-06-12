@@ -1,14 +1,16 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import java.util.List;
+import static java.util.stream.Collectors.toCollection;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
 import info.freelibrary.iiif.presentation.v3.utils.I18nUtils;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.json.SummaryDeserializer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A short textual summary intended to be conveyed to the user when the metadata entries for the resource are not being
@@ -63,6 +65,24 @@ public class Summary extends I18nProperty<Summary> {
      */
     public Summary(final String aLangTag, final String aValue) {
         this(new I18n(aLangTag, aValue, true));
+    }
+
+    /**
+     * Creates a summary from another summary.
+     *
+     * @param aSummary The summary to deep copy
+     */
+    public Summary(final Summary aSummary) {
+        super(aSummary.getI18ns().stream().map(I18n::new).collect(toCollection(ArrayList::new)));
+    }
+
+    /**
+     * Creates a copy of the summary.
+     *
+     * @return A copy of the summary
+     */
+    public Summary copy() {
+        return new Summary(this);
     }
 
     @Override

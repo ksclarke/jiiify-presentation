@@ -33,6 +33,16 @@ public class Size {
     }
 
     /**
+     * Creates a new Image API size.
+     *
+     * @param aSize A size to copy
+     */
+    public Size(final Size aSize) {
+        myHeight = aSize.myHeight;
+        myWidth = aSize.myWidth;
+    }
+
+    /**
      * Creates a new Image API size from the supplied width and height.
      *
      * @param aWidth A size width
@@ -41,6 +51,15 @@ public class Size {
     public Size(final int aWidth, final int aHeight) {
         myWidth = aWidth;
         myHeight = aHeight;
+    }
+
+    /**
+     * Copies this size.
+     *
+     * @return A copy of this size
+     */
+    public Size copy() {
+        return new Size(this);
     }
 
     /**

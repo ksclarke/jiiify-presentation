@@ -1,18 +1,16 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
-
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 
-import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import java.util.Objects;
 
 /**
  * A metadata property with a label and value.
@@ -54,10 +52,28 @@ public class Metadata {
     }
 
     /**
+     * Creates a metadata property from another metadata property.
+     *
+     * @param aMetadata A metadata property to deep copy
+     */
+    public Metadata(final Metadata aMetadata) {
+        this(aMetadata.myLabel.copy(), aMetadata.myValue.copy());
+    }
+
+    /**
      * Constructor for Jackson deserialization.
      */
     Metadata() {
         // This is intentionally empty
+    }
+
+    /**
+     * Creates a copy of this metadata.
+     *
+     * @return A copy of this metadata
+     */
+    public Metadata copy() {
+        return new Metadata(this);
     }
 
     /**

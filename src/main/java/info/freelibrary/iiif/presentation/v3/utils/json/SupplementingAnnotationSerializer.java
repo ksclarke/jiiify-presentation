@@ -4,10 +4,6 @@ package info.freelibrary.iiif.presentation.v3.utils.json;
 import static info.freelibrary.util.Constants.SINGLE_INSTANCE;
 import static info.freelibrary.util.ThrowingBiFunction.unwrap;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
-
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -15,12 +11,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.ThrowingBiFunction;
-import info.freelibrary.util.warnings.PMD;
-
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.annotation.Motivation;
 import info.freelibrary.iiif.presentation.v3.annotation.SupplementingAnnotation;
@@ -31,6 +21,15 @@ import info.freelibrary.iiif.presentation.v3.properties.TextGranularity;
 import info.freelibrary.iiif.presentation.v3.properties.TimeMode;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.ThrowingBiFunction;
+import info.freelibrary.util.warnings.PMD;
+
+import java.io.IOException;
+import java.io.Serial;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * A serializer for {@code SupplementingAnnotation}(s).
@@ -42,6 +41,7 @@ public class SupplementingAnnotationSerializer extends StdSerializer<Supplementi
             LoggerFactory.getLogger(SupplementingAnnotationSerializer.class, MessageCodes.BUNDLE);
 
     /** The <code>serialVersionUID</code> for a <code>SupplementingAnnotationSerializer</code>. */
+    @Serial
     private static final long serialVersionUID = -5151418273140218531L;
 
     /**
@@ -55,7 +55,7 @@ public class SupplementingAnnotationSerializer extends StdSerializer<Supplementi
     @SuppressWarnings({ PMD.PRESERVE_STACK_TRACE, PMD.CYCLOMATIC_COMPLEXITY })
     public void serialize(final SupplementingAnnotation aSupplementingAnnotation, final JsonGenerator aJsonGenerator,
             final SerializerProvider aProvider) throws IOException {
-        final List<ContentResource> resources = aSupplementingAnnotation.getBody();
+        final List<ContentResource<?>> resources = aSupplementingAnnotation.getBody();
         final List<Target> targets = aSupplementingAnnotation.getTargets();
         final Optional<Motivation> motivation = aSupplementingAnnotation.getMotivation();
         final Optional<TimeMode> timeMode = aSupplementingAnnotation.getTimeMode();
@@ -97,7 +97,7 @@ public class SupplementingAnnotationSerializer extends StdSerializer<Supplementi
             }
 
             if (targets.size() == SINGLE_INSTANCE) {
-                aJsonGenerator.writeObjectField(JsonKeys.TARGET, targets.get(0));
+                aJsonGenerator.writeObjectField(JsonKeys.TARGET, targets.getFirst());
             } else if (targets.size() > SINGLE_INSTANCE) {
                 aJsonGenerator.writeFieldName(JsonKeys.TARGET);
                 aJsonGenerator.writeStartArray();
@@ -136,10 +136,10 @@ public class SupplementingAnnotationSerializer extends StdSerializer<Supplementi
      * @throws IOException If there is trouble writing to the generator
      * @throws JsonProcessingException If there is trouble parsing the source annotation
      */
-    private void serializeResources(final List<ContentResource> aList, final boolean aChoice,
+    private void serializeResources(final List<ContentResource<?>> aList, final boolean aChoice,
             final JsonGenerator aJsonGenerator) throws IOException {
         if (aList.size() == SINGLE_INSTANCE) {
-            aJsonGenerator.writeObjectField(JsonKeys.BODY, aList.get(0));
+            aJsonGenerator.writeObjectField(JsonKeys.BODY, aList.getFirst());
         } else {
             aJsonGenerator.writeFieldName(JsonKeys.BODY);
 
@@ -151,7 +151,7 @@ public class SupplementingAnnotationSerializer extends StdSerializer<Supplementi
                 aJsonGenerator.writeStartArray();
             }
 
-            for (final ContentResource contentResource : aList) {
+            for (final ContentResource<?> contentResource : aList) {
                 if (contentResource == null) {
                     aJsonGenerator.writeString(ResourceTypes.RDF_NIL);
                 } else {

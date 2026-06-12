@@ -2,7 +2,7 @@
 package info.freelibrary.iiif.presentation.v3.utils.csv;
 
 import static info.freelibrary.util.Constants.SLASH;
-import static info.freelibrary.util.ThrowingFunction.sneaky;
+import static info.freelibrary.util.ThrowingConsumer.uncheck;
 
 import info.freelibrary.iiif.presentation.v3.Canvas;
 import info.freelibrary.iiif.presentation.v3.Collection;
@@ -11,6 +11,7 @@ import info.freelibrary.iiif.presentation.v3.Resource;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.content.ContentResource;
 import info.freelibrary.iiif.presentation.v3.content.ImageContent;
+import info.freelibrary.iiif.presentation.v3.content.SoundContent;
 import info.freelibrary.iiif.presentation.v3.content.VideoContent;
 import info.freelibrary.iiif.presentation.v3.id.Minter;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
@@ -25,6 +26,7 @@ import info.freelibrary.iiif.presentation.v3.services.ImageService2;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Env;
 import info.freelibrary.util.StringUtils;
+import info.freelibrary.util.ThrowingFunction;
 import info.freelibrary.util.warnings.JDK;
 import info.freelibrary.util.warnings.PMD;
 
@@ -34,6 +36,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 /** A IIIF builder for CSV-based deserialization. */
+@SuppressWarnings({ PMD.EXCESSIVE_IMPORTS })
 public class Builder {
 
     /** The default thumbnail pattern. */
@@ -108,7 +111,7 @@ public class Builder {
 
         return switch (iiifResourceType.orElse(objType)) {
             case Keys.COLLECTION -> {
-                final String validID = checkID(id, ResourceTypes.COLLECTION);
+                final String validID = getID(id, ResourceTypes.COLLECTION);
                 final Collection collection = new Collection(validID, label);
 
                 aRow.getBehavior().flatMap(CollectionBehavior::fromLabel).ifPresent(collection::setBehaviors);
@@ -118,12 +121,17 @@ public class Builder {
                 yield (R) addProperties(collection, aRow);
             }
             case Keys.WORK -> {
-                final String validID = checkID(id, ResourceTypes.MANIFEST);
+                final String validID = getID(id, ResourceTypes.MANIFEST);
                 final Manifest manifest = new Manifest(validID, label);
 
                 aRow.getBehavior().flatMap(ManifestBehavior::fromLabel).ifPresent(manifest::setBehaviors);
                 aRow.getViewingDirection().flatMap(ViewingDirection::fromLabel)
                         .ifPresent(manifest::setViewingDirection);
+
+                // If there is a file in the work's CSV row, it's a simple work with a single canvas
+                aRow.getFileName().ifPresent(uncheck(fileName -> {
+                    manifest.setCanvases(buildSingleCanvas(aMinter, aRow));
+                }));
 
                 yield (R) addProperties(manifest, aRow);
             }
@@ -140,8 +148,8 @@ public class Builder {
                 yield (R) addProperties(canvas, aRow);
             }
             case Keys.CHOICE, Keys.LAYER -> {
-                final ImageContent imageContent = new ImageContent(checkID(id, ResourceTypes.IMAGE));
-                final ImageService imageService = new ImageService2(checkID(id, ResourceTypes.IMAGE_SERVICE_2));
+                final ImageContent imageContent = new ImageContent(getID(id, ResourceTypes.IMAGE));
+                final ImageService imageService = new ImageService2(getID(id, ResourceTypes.IMAGE_SERVICE_2));
                 final int width = aRow.getMediaWidth().orElse(0);
                 final int height = aRow.getMediaHeight().orElse(0);
 
@@ -179,8 +187,8 @@ public class Builder {
      * @return The modified or original ID string, depending on the logic
      * @throws MappingException If an error occurs during processing
      */
-    @SuppressWarnings({ "PMD.CyclomaticComplexity" })
-    public String checkID(final String aID, final String aResourceType) throws MappingException {
+    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY })
+    public String getID(final String aID, final String aResourceType) throws MappingException {
         // If the ID starts with a "https://", we assume it's already formatted correctly; else, we do it
         if (!aID.startsWith("https://")) {
             final String host = myServer != null ? myServer.toString() : "https://localhost:9999";
@@ -216,6 +224,64 @@ public class Builder {
     }
 
     /**
+     * Builds a single canvas for a simple work.
+     *
+     * @param aMinter A canvas minter
+     * @param aRow A CSV row with canvas properties
+     * @return The newly built canvas
+     * @throws MappingException If the row does not contain a file name or item ID
+     */
+    private Canvas buildSingleCanvas(final Minter aMinter, final Row aRow) throws MappingException {
+        final String fileName = aRow.getFileName().orElseThrow(MappingException::new);
+        final String id = aRow.getItemID().orElseThrow(MappingException::new);
+        final Canvas canvas = new Canvas(aMinter);
+        final int width = aRow.getMediaWidth().orElse(0);
+        final int height = aRow.getMediaHeight().orElse(0);
+
+        if (width > 0 && height > 0) {
+            canvas.setWidthHeight(width, height);
+        }
+
+        MediaType.parse(fileName).map(ThrowingFunction.uncheck(mediaType -> switch (mediaType) {
+            case MediaType.IMAGE_GIF, MediaType.IMAGE_JPEG, MediaType.IMAGE_PNG, MediaType.IMAGE_TIFF -> {
+                final ImageService imageService = new ImageService2(getID(id, ResourceTypes.IMAGE_SERVICE_2));
+                final ImageContent imageContent = new ImageContent(getID(id, ResourceTypes.IMAGE));
+
+                if (width > 0 && height > 0) {
+                    imageContent.setWidthHeight(width, height);
+                }
+
+                yield imageContent.setServices(imageService);
+            }
+            case MediaType.AUDIO_MPEG, MediaType.AUDIO_OGG, MediaType.AUDIO_WAV -> {
+                final SoundContent soundContent = new SoundContent(getID(id, ResourceTypes.SOUND));
+
+                aRow.getFormatExtent().ifPresent(extent -> {
+                    soundContent.setDuration(Float.valueOf(extent));
+                });
+
+                yield soundContent;
+            }
+            case MediaType.VIDEO_H264, MediaType.VIDEO_MP4, MediaType.VIDEO_MPEG -> {
+                final VideoContent videoContent = new VideoContent(getID(id, ResourceTypes.VIDEO));
+
+                if (width > 0 && height > 0) {
+                    videoContent.setWidthHeight(width, height);
+                }
+
+                aRow.getFormatExtent().ifPresent(extent -> {
+                    videoContent.setDuration(Float.valueOf(extent));
+                });
+
+                yield videoContent;
+            }
+            default -> new ImageContent(getID(id, ResourceTypes.IMAGE));
+        })).ifPresent(canvas::paintWith);
+
+        return canvas;
+    }
+
+    /**
      * Adds resource properties to the supplied resource.
      *
      * @param aResource A resource
@@ -231,7 +297,7 @@ public class Builder {
                     .filter(type -> Keys.COLLECTION.equals(type) || Keys.WORK.equals(type)).isPresent();
 
             aRow.getThumbnail().or(() -> isCollectionOrWork ? Optional.empty() : aRow.getItemID())
-                    .map(sneaky(id -> checkID(id, Keys.THUMBNAIL))).map(this::constructThumbnail)
+                    .map(ThrowingFunction.uncheck(id -> getID(id, Keys.THUMBNAIL))).map(this::constructThumbnail)
                     .ifPresent(aResource.getThumbnails()::add);
         }
 
@@ -262,7 +328,7 @@ public class Builder {
      * @param aThumbnail The identifier or URL of the thumbnail to construct
      * @return A {@link ContentResource} representing the constructed thumbnail
      */
-    private ContentResource constructThumbnail(final String aThumbnail) {
+    private ContentResource<?> constructThumbnail(final String aThumbnail) {
         return MediaType.fromString(aThumbnail).map(thumbType -> switch (thumbType) {
             case MediaType.IMAGE_GIF, MediaType.IMAGE_JPEG, MediaType.IMAGE_PNG -> new ImageContent(aThumbnail);
             case MediaType.VIDEO_H264, MediaType.VIDEO_MP4, MediaType.VIDEO_MPEG -> new VideoContent(aThumbnail);

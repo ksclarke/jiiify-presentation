@@ -1,18 +1,15 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.selectors;
 
-import org.jsoup.nodes.Document;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import info.freelibrary.util.warnings.Eclipse;
-
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.json.SvgDeserializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.SvgSerializer;
+import info.freelibrary.util.warnings.Eclipse;
+import org.jsoup.nodes.Document;
 
 /**
  * A selector for SVG document. For now, it just uses JSoup's {@code Document} to represent the SVG.
@@ -32,11 +29,30 @@ public class SvgSelector implements Selector {
     }
 
     /**
+     * Creates a new SvgSelector from the supplied SVG selector.
+     *
+     * @param aSelector An SVG selector
+     */
+    public SvgSelector(final SvgSelector aSelector) {
+        mySvgDocument = aSelector.mySvgDocument.clone(); // Clone, here, is a deep copy
+    }
+
+    /**
      * Creates a new SvgSelector for Jackson's deserialization process.
      */
     @SuppressWarnings(Eclipse.UNUSED)
     private SvgSelector() {
         // This is intentionally left empty
+    }
+
+    /**
+     * Creates a copy of this SVG selector.
+     *
+     * @return A copy of this SVG selector
+     */
+    @Override
+    public SvgSelector copy() {
+        return new SvgSelector(this);
     }
 
     /**

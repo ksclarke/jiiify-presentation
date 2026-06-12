@@ -42,11 +42,11 @@
         <revision>0.0.0-SNAPSHOT</revision>
 
         <!-- Application dependencies -->
-        <jackson.version>2.21.1</jackson.version>
-        <jackson.databind.version>2.21.1</jackson.databind.version>
-        <jackson.annotations.version>2.21</jackson.annotations.version>
-        <freelib.utils.version>5.3.2</freelib.utils.version>
-        <jsoup.version>1.21.1</jsoup.version>
+        <jackson.version>2.22.0</jackson.version>
+        <jackson.databind.version>2.22.0</jackson.databind.version>
+        <jackson.annotations.version>2.22</jackson.annotations.version>
+        <freelib.utils.version>6.0.0</freelib.utils.version>
+        <jsoup.version>1.22.2</jsoup.version>
         <combinatorics.version>3.4.0</combinatorics.version>
         <media.fragments.uri.version>2.4</media.fragments.uri.version>
 
@@ -65,7 +65,8 @@
         <tag.prefix>v3</tag.prefix>
 
         <!-- The log level to use when testing -->
-        <testLogLevel>WARN</testLogLevel>
+        <!--suppress UnresolvedMavenProperty -->
+        <testLogLevel>${testLogLevel:-INFO}</testLogLevel>
 
         <!-- Mockito configuration properties -->
         <mockito.path>${settings.localRepository}/org/mockito/mockito-core/${mockito.version}</mockito.path>
@@ -338,6 +339,9 @@
                 <mapdb.version>3.1.0</mapdb.version>
                 <jsonpath.version>0.6.2</jsonpath.version>
 
+                <!-- Build plugin versions -->
+                <maven.clean.version>3.5.0</maven.clean.version>
+                <shade.plugin.version>3.6.2</shade.plugin.version>
                 <!-- Testing properties -->
                 <jpv3.username>test_user</jpv3.username>
                 <jpv3.password>test_pswd</jpv3.password>
@@ -402,6 +406,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-clean-plugin</artifactId>
+                        <version>${maven.clean.version}</version>
                         <configuration>
                             <filesets>
                                 <fileset>

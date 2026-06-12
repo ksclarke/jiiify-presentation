@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static java.util.stream.Collectors.toCollection;
+
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -105,10 +107,36 @@ public class Range extends NavigableResource<Range> {
     }
 
     /**
+     * Creates a new range from the supplied range.
+     *
+     * @param aRange A range
+     */
+    public Range(final Range aRange) {
+        super(aRange);
+
+        aRange.getViewingDirection().ifPresent(viewingDirection -> myViewingDirection = viewingDirection);
+        aRange.getAccompanyingCanvas().ifPresent(canvas -> myAccompanyingCanvas = canvas);
+        aRange.getPlaceholderCanvas().ifPresent(canvas -> myPlaceholderCanvas = canvas);
+        aRange.getSupplementaryAnnotations().ifPresent(annotations -> mySupplementaryAnnotations = annotations);
+        aRange.getStart().ifPresent(start -> myStart = start);
+        myItems.addAll(aRange.getItems().stream().map(Item::copy).collect(toCollection(ArrayList::new)));
+    }
+
+    /**
      * A default constructor that allows Jackson to create a new range during deserialization.
      */
     private Range() {
         super(ResourceTypes.RANGE, RangeBehavior.class);
+    }
+
+    /**
+     * Creates a copy of this range.
+     *
+     * @return A copy of this range
+     */
+    @Override
+    public Range copy() {
+        return new Range(this);
     }
 
     @Override
@@ -369,9 +397,28 @@ public class Range extends NavigableResource<Range> {
         private Range myRange;
 
         /**
-         * A item's specific resource.
+         * An item's specific resource.
          */
         private SpecificResource mySpecificResource;
+
+        /**
+         * Creates a new range item from another range item.
+         *
+         * @param aItem An item to copy
+         */
+        public Item(final Item aItem) {
+            if (aItem.myCanvas != null) {
+                myCanvas = aItem.myCanvas.copy();
+            }
+
+            if (aItem.myRange != null) {
+                myRange = aItem.myRange.copy();
+            }
+
+            if (aItem.mySpecificResource != null) {
+                mySpecificResource = aItem.mySpecificResource.copy();
+            }
+        }
 
         /**
          * Creates a new range item from a canvas. The range item represents a reference to the canvas rather than an
@@ -414,6 +461,16 @@ public class Range extends NavigableResource<Range> {
          */
         public Item(final SpecificResource aSpecificResource) {
             mySpecificResource = aSpecificResource;
+        }
+
+        /**
+         * Creates a new range item from a canvas and a specific resource. The range item represents a reference to the
+         * canvas or specific resource.
+         *
+         * @return A range item
+         */
+        public Item copy() {
+            return new Item(this);
         }
 
         /**

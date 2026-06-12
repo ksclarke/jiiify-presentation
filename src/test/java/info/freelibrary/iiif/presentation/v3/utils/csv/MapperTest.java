@@ -1,13 +1,20 @@
 
 package info.freelibrary.iiif.presentation.v3.utils.csv;
 
-import static info.freelibrary.util.ThrowingConsumer.sneaky;
+import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.replaceIDs;
+import static info.freelibrary.util.Constants.SLASH;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 import info.freelibrary.util.FileUtils;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.RegexFileFilter;
+import info.freelibrary.util.ThrowingConsumer;
+import info.freelibrary.util.ThrowingFunction;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -23,6 +30,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 import java.util.zip.ZipFile;
@@ -30,11 +38,17 @@ import java.util.zip.ZipFile;
 /** Tests the Mapper class. */
 public class MapperTest {
 
+    /** A test logger. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(MapperTest.class, MessageCodes.BUNDLE);
+
     /** A collection document name used in testing. */
     private static final String COLLECTION_DOC = "ark%3A%2F21198%2Fz11g7wqv.json";
 
-    /** A manifest name used in testing. */
+    /** A manifest for testing a more complex manifest. */
     private static final String MANIFEST = "ark%3A%2F21198%2Fz1wq7d7z.json";
+
+    /** A manifest for testing a simple manifest. */
+    private static final String SIMPLE_MANIFEST = "ark%3A%2F21198%2Fz1650fs5.json";
 
     /** A collection fixture for testing. */
     private static final Path COLLECTION_FIXTURE = Path.of("src/test/resources/json/jbu-single/collection.json");
@@ -42,14 +56,11 @@ public class MapperTest {
     /** A manifest fixture for testing. */
     private static final Path MANIFEST_FIXTURE = Path.of("src/test/resources/json/jbu-single/manifest.json");
 
+    /** A manifest fixture for testing. */
+    private static final Path SIMPLE_MANIFEST_FIXTURE = Path.of("src/test/resources/json/arce/" + SIMPLE_MANIFEST);
+
     /** A CSV file for testing. */
     private static final Path CSV_FILE = Path.of("src/test/resources/csv/jbu-collection.csv");
-
-    /** A regex to replace the ID with a placeholder. */
-    private static final String REPLACED_ID = "\"(https://iiif\\.library\\.ucla\\.edu(?:/iiif/2)?/[^\"]*)\"";
-
-    /** A placeholder ID. */
-    private static final String REPLACE_ID = "\"PLACEHOLDER_ID\"";
 
     /** A directory containing multipart CSV files. */
     private static final Path MULTIPART_DIR = Path.of("src/test/resources/csv/multi-part");
@@ -95,7 +106,7 @@ public class MapperTest {
 
             // Check that the ZIP file contains the expected JSON files
             try (ZipFile zipFile = new ZipFile(myZipFile.toFile())) {
-                zipFile.stream().filter(entry -> !entry.isDirectory()).forEach(sneaky(entry -> {
+                zipFile.stream().filter(entry -> !entry.isDirectory()).forEach(ThrowingConsumer.uncheck(entry -> {
                     try (InputStream inStream = zipFile.getInputStream(entry)) {
                         final String found = new String(inStream.readAllBytes(), StandardCharsets.UTF_8);
                         final String expected = Files.readString(Path.of(EXPECTED_RESULTS, entry.getName()));
@@ -109,6 +120,37 @@ public class MapperTest {
                 }));
             }
         }
+    }
+
+    /**
+     * Tests mapping a ZIP file with simple and complex works.
+     */
+    @Test
+    public void testMapperMixedZip() throws Exception {
+        final Path source = Path.of("src/test/resources/zip/arce-hcc.zip");
+        final int result = new Mapper(Stream.of(source), myZipFile).map(SERVER, IIIF_SERVER);
+
+        assertEquals(0, result);
+        assertTrue(Files.exists(myZipFile));
+
+        try (FileSystem fileSystem = FileSystems.newFileSystem(myZipFile, (ClassLoader) null)) {
+            final Path root = fileSystem.getPath(SLASH);
+            final Optional<String> content;
+
+            try (Stream<Path> paths = Files.list(root)) {
+                content = paths.filter(path -> SIMPLE_MANIFEST.equals(path.getFileName().toString()))
+                        .map(ThrowingFunction.uncheck(Files::readString)).findFirst();
+
+                content.ifPresentOrElse(ThrowingConsumer.uncheck((String manifest) -> {
+                    final String expected = replaceIDs(Files.readString(SIMPLE_MANIFEST_FIXTURE));
+                    final String found = replaceIDs(manifest);
+
+                    TestUtils.assertEquals(myTestName, expected, found);
+                }), () -> fail(LOGGER.getMessage(MessageCodes.JPA_196)));
+            }
+        }
+
+        Files.delete(myZipFile);
     }
 
     /** Tests that no exception is thrown when the Mapper is initialized. */
@@ -157,15 +199,5 @@ public class MapperTest {
             TestUtils.assertEquals(myTestName, replaceIDs(expectedCollection), replaceIDs(foundCollection));
             TestUtils.assertEquals(myTestName, replaceIDs(expectedManifest), replaceIDs(foundManifest));
         }
-    }
-
-    /**
-     * Tests that the Mapper throws an exception when the input stream is empty.
-     *
-     * @param aID The ID to replace
-     * @return The ID with replacements applied
-     */
-    private String replaceIDs(final String aID) {
-        return aID.replaceAll(REPLACED_ID, REPLACE_ID);
     }
 }

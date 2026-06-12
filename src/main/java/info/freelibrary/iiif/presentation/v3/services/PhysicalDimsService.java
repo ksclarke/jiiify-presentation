@@ -1,19 +1,17 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
-import java.net.URI;
-import java.util.Objects;
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import info.freelibrary.util.DoubleUtils;
-
 import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.util.DoubleUtils;
+
+import java.net.URI;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * A <a href="https://iiif.io/api/annex/services/#physical-dimensions">physical dimensions service</a> that provides
@@ -55,6 +53,29 @@ public class PhysicalDimsService extends AbstractService<PhysicalDimsService> im
 
         myPhysicalScale = DoubleUtils.requireValidPositive(aScale);
         myPhysicalUnits = Objects.requireNonNull(aUnits);
+    }
+
+    /**
+     * Creates a copy of this service.
+     *
+     * @param aService The service to copy
+     */
+    public PhysicalDimsService(final PhysicalDimsService aService) {
+        super(aService.getID().orElseThrow(), null, Profile.DIMS_SERVICE);
+        aService.copyTo(this);
+
+        myPhysicalScale = aService.getPhysicalScale();
+        myPhysicalUnits = aService.getPhysicalUnits();
+    }
+
+    /**
+     * Creates a copy of this service.
+     *
+     * @return A copy of this service
+     */
+    @Override
+    public PhysicalDimsService copy() {
+        return new PhysicalDimsService(this);
     }
 
     /**

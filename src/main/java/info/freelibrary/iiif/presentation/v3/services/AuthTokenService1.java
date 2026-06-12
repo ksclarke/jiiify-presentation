@@ -1,21 +1,19 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
-import java.net.URI;
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
-
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-
 import info.freelibrary.iiif.presentation.v3.Service;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+
+import java.net.URI;
+import java.util.Optional;
 
 /**
  * A version 1 authorization token service.
@@ -36,6 +34,21 @@ public class AuthTokenService1 extends AbstractService<AuthTokenService1> implem
         super(aID, AuthTokenService1.class.getSimpleName(), AuthTokenService1.Profile.TOKEN_SERVICE);
     }
 
+    /**
+     * Creates a new auth token service from an existing one.
+     *
+     * @param aService An auth token service
+     */
+    public AuthTokenService1(final AuthTokenService1 aService) {
+        this(aService.getID().orElseThrow(() -> new IllegalArgumentException(LOGGER.getMessage(MessageCodes.JPA_111))));
+        aService.copyTo(this);
+    }
+
+    @Override
+    public AuthTokenService1 copy() {
+        return new AuthTokenService1(this);
+    }
+
     @Override
     @JsonGetter(JsonKeys.V2_ID)
     public Optional<String> getID() {
@@ -43,15 +56,15 @@ public class AuthTokenService1 extends AbstractService<AuthTokenService1> implem
     }
 
     @Override
-    @JsonGetter(JsonKeys.V2_TYPE)
-    public Optional<String> getType() {
-        return Optional.of(AuthTokenService1.class.getSimpleName());
-    }
-
-    @Override
     @JsonSetter(JsonKeys.V2_ID)
     public AuthTokenService1 setID(final String aID) {
         return super.setID(aID);
+    }
+
+    @Override
+    @JsonGetter(JsonKeys.V2_TYPE)
+    public Optional<String> getType() {
+        return Optional.of(AuthTokenService1.class.getSimpleName());
     }
 
     @Override
@@ -86,21 +99,6 @@ public class AuthTokenService1 extends AbstractService<AuthTokenService1> implem
             myLabel = aLabel;
         }
 
-        @Override
-        public String label() {
-            return myLabel;
-        }
-
-        @Override
-        public String toString() {
-            return myLabel;
-        }
-
-        @Override
-        public URI uri() {
-            return URI.create(myLabel);
-        }
-
         /**
          * Creates an auth token service profile from the profile value's label.
          *
@@ -115,6 +113,21 @@ public class AuthTokenService1 extends AbstractService<AuthTokenService1> implem
             }
 
             return Optional.empty();
+        }
+
+        @Override
+        public String label() {
+            return myLabel;
+        }
+
+        @Override
+        public String toString() {
+            return myLabel;
+        }
+
+        @Override
+        public URI uri() {
+            return URI.create(myLabel);
         }
     }
 }

@@ -1,19 +1,18 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.behaviors;
 
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonValue;
-
 import info.freelibrary.iiif.presentation.v3.Canvas;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
+
+import java.util.Optional;
 
 /**
  * The behaviors attributable to {@link Canvas}es.
  */
 public enum CanvasBehavior implements Behavior {
 
-    /** A auto-advance behavior on a canvas. */
+    /** An auto-advance behavior on a canvas. */
     AUTO_ADVANCE(BehaviorConstants.AUTO_ADVANCE),
 
     /** A facing-pages behavior on a canvas. */
@@ -61,16 +60,10 @@ public enum CanvasBehavior implements Behavior {
     /**
      * Returns an enumeration constant from a behavior label.
      *
-     * @param aBehavior A behavior label
+     * @param aLabel A behavior label
      * @return A canvas behavior
      */
-    public static Optional<CanvasBehavior> fromLabel(final String aBehavior) {
-        for (final CanvasBehavior behavior : values()) {
-            if (behavior.toString().equalsIgnoreCase(aBehavior)) {
-                return Optional.of(behavior);
-            }
-        }
-
-        return Optional.empty();
+    public static Optional<CanvasBehavior> fromLabel(final String aLabel) {
+        return BehaviorLookup.fromLabel(CanvasBehavior.class, aLabel);
     }
 }

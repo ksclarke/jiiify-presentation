@@ -1,14 +1,13 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSetter;
-
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+
+import java.util.Optional;
 
 /**
  * A generic service class for older service implementations that use @id and @type.
@@ -29,7 +28,7 @@ public final class OtherService2 extends AbstractOtherService<OtherService2> imp
      * Creates a new unspecified service from the supplied ID and profile.
      *
      * @param aID A service ID
-     * @param aProfile An other service profile
+     * @param aProfile Another service profile
      */
     public OtherService2(final String aID, final OtherService.Profile aProfile) {
         super(aID, null, aProfile);
@@ -54,6 +53,27 @@ public final class OtherService2 extends AbstractOtherService<OtherService2> imp
      */
     public OtherService2(final String aID, final String aType, final OtherService.Profile aProfile) {
         super(aID, aType, aProfile);
+    }
+
+    /**
+     * Creates a new unspecified service from the supplied unspecified service.
+     *
+     * @param aService A service to copy
+     */
+    public OtherService2(final OtherService2 aService) {
+        super(aService.getID().orElseThrow(), aService.getType().orElseGet(null),
+                (OtherService.Profile) aService.getProfile().orElseThrow());
+        aService.copyTo(this);
+    }
+
+    /**
+     * Creates a copy of this service.
+     *
+     * @return A copy of this service
+     */
+    @Override
+    public OtherService2 copy() {
+        return new OtherService2(this);
     }
 
     @Override

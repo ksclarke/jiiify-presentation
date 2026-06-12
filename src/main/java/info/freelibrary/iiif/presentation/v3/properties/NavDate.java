@@ -1,13 +1,13 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
  * A date that clients may use for navigation purposes when presenting the resource to the user in a date-based user
@@ -34,12 +34,30 @@ public class NavDate {
     }
 
     /**
+     * Creates a copy of the navigation date.
+     *
+     * @param aNavDate A navigation date to copy
+     */
+    public NavDate(final NavDate aNavDate) {
+        myZonedDateTime = aNavDate.myZonedDateTime;
+    }
+
+    /**
      * Creates a new navigation date from a string representation of a zoned date time.
      *
      * @param aZonedDateTime A string representation of a zoned date time
      */
     private NavDate(final String aZonedDateTime) {
         myZonedDateTime = aZonedDateTime;
+    }
+
+    /**
+     * Creates a copy of the navigation date.
+     *
+     * @return A copy of the navigation date
+     */
+    public NavDate copy() {
+        return new NavDate(myZonedDateTime);
     }
 
     /**
@@ -67,7 +85,7 @@ public class NavDate {
      *
      * @return A new <code>NavDate</code>
      */
-    public static final NavDate now() {
+    public static NavDate now() {
         final ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS);
         return new NavDate(now.format(DateTimeFormatter.ISO_INSTANT));
     }

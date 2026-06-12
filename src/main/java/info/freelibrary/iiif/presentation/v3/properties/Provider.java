@@ -1,12 +1,6 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -14,16 +8,20 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
-
-import info.freelibrary.util.IllegalArgumentI18nException;
-import info.freelibrary.util.warnings.Eclipse;
-
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.content.ImageContent;
 import info.freelibrary.iiif.presentation.v3.id.UriUtils;
 import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
+import info.freelibrary.util.IllegalArgumentI18nException;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * An organization or person that contributed to providing the content of the resource.
@@ -46,28 +44,6 @@ public class Provider {
 
     /** The provider's seeAlso references. */
     private List<SeeAlso> mySeeAlsoRefs;
-
-    /**
-     * Creates a new provider from the supplied one.
-     *
-     * @param aProvider A provider
-     */
-    public Provider(final Provider aProvider) {
-        myID = aProvider.myID;
-        myLabel = aProvider.myLabel;
-
-        if (aProvider.myLogos != null) {
-            myLogos = List.of(aProvider.myLogos.toArray(new ImageContent[] {}));
-        }
-
-        if (aProvider.myHomepages != null) {
-            myHomepages = List.of(aProvider.myHomepages.toArray(new Homepage[] {}));
-        }
-
-        if (aProvider.mySeeAlsoRefs != null) {
-            mySeeAlsoRefs = List.of(aProvider.mySeeAlsoRefs.toArray(new SeeAlso[] {}));
-        }
-    }
 
     /**
      * Creates a new resource provider from the supplied ID and label.
@@ -96,11 +72,48 @@ public class Provider {
     }
 
     /**
+     * Creates a new resource provider from the supplied provider.
+     *
+     * @param aProvider A provider
+     */
+    public Provider(final Provider aProvider) {
+        this();
+
+        if (aProvider.myID != null) {
+            myID = aProvider.myID;
+        }
+
+        if (aProvider.myLabel != null) {
+            myLabel = aProvider.myLabel.copy();
+        }
+
+        if (aProvider.myHomepages != null) {
+            myHomepages = aProvider.myHomepages.stream().map(Homepage::new).collect(Collectors.toList());
+        }
+
+        if (aProvider.myLogos != null) {
+            myLogos = aProvider.myLogos.stream().map(ImageContent::copy).collect(Collectors.toList());
+        }
+
+        if (aProvider.mySeeAlsoRefs != null) {
+            mySeeAlsoRefs = aProvider.mySeeAlsoRefs.stream().map(SeeAlso::copy).collect(Collectors.toList());
+        }
+    }
+
+    /**
      * Creates a new provider for Jackson's deserialization process.
      */
-    @SuppressWarnings(Eclipse.UNUSED)
     private Provider() {
         // This is intentionally empty
+    }
+
+    /**
+     * Creates a copy of this provider.
+     *
+     * @return A copy of this provider
+     */
+    public Provider copy() {
+        return new Provider(this);
     }
 
     /**
@@ -268,7 +281,6 @@ public class Provider {
      * @return The provider
      */
     @JsonSetter(JsonKeys.LOGO)
-    @SafeVarargs
     public final Provider setLogos(final ImageContent... aLogoArray) {
         return setLogos(Arrays.asList(aLogoArray));
     }

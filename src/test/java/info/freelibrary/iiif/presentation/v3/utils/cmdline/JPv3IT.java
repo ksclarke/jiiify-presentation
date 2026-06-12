@@ -59,7 +59,7 @@ public class JPv3IT {
         final ProcessResult result = runJPv3(CREATE, INPUT, CSV_FILE, OUTPUT, fileName);
 
         assertEquals(result.output, 0, result.exitCode);
-        assertTrue(LOGGER.getMessage(MessageCodes.JPA_194, result.output),
+        assertTrue(LOGGER.getMessage(MessageCodes.JPA_198, result.output),
                 result.output.contains(LOGGER.getMessage(MessageCodes.JPA_178, new File(fileName).getAbsolutePath())));
     }
 
@@ -74,7 +74,7 @@ public class JPv3IT {
         final ProcessResult result = runJPv3(UPLOAD, INPUT, CSV_FILE, OUTPUT, fileName);
 
         assertEquals(result.output, 0, result.exitCode);
-        assertTrue(LOGGER.getMessage(MessageCodes.JPA_194, result.output),
+        assertTrue(LOGGER.getMessage(MessageCodes.JPA_198, result.output),
                 result.output.contains(LOGGER.getMessage(MessageCodes.JPA_180, fileName)));
     }
 
@@ -89,7 +89,7 @@ public class JPv3IT {
         final ProcessResult result = runJPv3(PATCH, INPUT, CSV_FILE, OUTPUT, fileName);
 
         assertEquals(result.output, 0, result.exitCode);
-        assertTrue(LOGGER.getMessage(MessageCodes.JPA_194, result.output),
+        assertTrue(LOGGER.getMessage(MessageCodes.JPA_198, result.output),
                 result.output.contains(LOGGER.getMessage(MessageCodes.JPA_180, fileName)));
     }
 
@@ -121,9 +121,9 @@ public class JPv3IT {
         environment.put(Configs.JPV3_HOST, "https://test.ingest.iiif.library.ucla.edu");
         environment.put(Configs.JPV3_IMAGE_SERVER, "https://iiif.library.ucla.edu/iiif/2");
         environment.put(Configs.JPV3_USERNAME,
-                Env.getOrFail(Configs.JPV3_USERNAME, LOGGER.getMessage(MessageCodes.JPA_193, Configs.JPV3_USERNAME)));
+                Env.getOrFail(Configs.JPV3_USERNAME, LOGGER.getMessage(MessageCodes.JPA_197, Configs.JPV3_USERNAME)));
         environment.put(Configs.JPV3_PASSWORD,
-                Env.getOrFail(Configs.JPV3_PASSWORD, LOGGER.getMessage(MessageCodes.JPA_193, Configs.JPV3_PASSWORD)));
+                Env.getOrFail(Configs.JPV3_PASSWORD, LOGGER.getMessage(MessageCodes.JPA_197, Configs.JPV3_PASSWORD)));
 
         return aProcessBuilder;
     }

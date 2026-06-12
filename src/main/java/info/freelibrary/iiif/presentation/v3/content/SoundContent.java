@@ -13,6 +13,7 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.BehaviorList;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,7 +23,7 @@ import java.util.Objects;
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.THUMBNAIL, JsonKeys.FORMAT, JsonKeys.DURATION,
     JsonKeys.LANGUAGE })
 public class SoundContent extends AbstractContentResource<SoundContent>
-        implements TemporalContentResource, AnnotatedContentResource<SoundContent> {
+        implements TemporalContentResource<SoundContent>, AnnotatedContentResource<SoundContent> {
 
     /** The class of media type this content represents. */
     private static final String MEDIA_TYPE_CLASS = "audio";
@@ -40,6 +41,22 @@ public class SoundContent extends AbstractContentResource<SoundContent>
     }
 
     /**
+     * Copy constructor for sound content.
+     *
+     * @param aSoundContent The sound content to copy
+     */
+    public SoundContent(final SoundContent aSoundContent) {
+        this(aSoundContent.getID());
+
+        myDuration = aSoundContent.getDuration();
+        myLanguages = new ArrayList<>(aSoundContent.getLanguages());
+        aSoundContent.getFormat().ifPresent(format -> myFormat = format);
+        setBehaviors(aSoundContent.getBehaviors());
+
+        super.copyTo(aSoundContent);
+    }
+
+    /**
      * Constructs a sound content resource for Jackson's deserialization process.
      */
     private SoundContent() {
@@ -48,7 +65,7 @@ public class SoundContent extends AbstractContentResource<SoundContent>
 
     @Override
     public SoundContent copy() {
-        return new SoundContent(getID()).setDuration(getDuration());
+        return new SoundContent(this);
     }
 
     @Override
@@ -87,13 +104,13 @@ public class SoundContent extends AbstractContentResource<SoundContent>
 
     @Override
     @JsonIgnore
-    public SoundContent setBehaviors(final Behavior... aBehaviorArray) {
+    public final SoundContent setBehaviors(final Behavior... aBehaviorArray) {
         return setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorArray));
     }
 
     @Override
     @JsonIgnore
-    public SoundContent setBehaviors(final List<Behavior> aBehaviorList) {
+    public final SoundContent setBehaviors(final List<Behavior> aBehaviorList) {
         final SoundContent soundContent;
 
         if (aBehaviorList instanceof final BehaviorList behaviorList) {

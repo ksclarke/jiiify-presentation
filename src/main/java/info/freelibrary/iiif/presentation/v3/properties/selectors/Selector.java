@@ -14,6 +14,7 @@ import info.freelibrary.iiif.presentation.v3.utils.json.SelectorDeserializer;
 
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.CONFORMS_TO, JsonKeys.VALUE })
 @JsonDeserialize(using = SelectorDeserializer.class)
+@FunctionalInterface
 public interface Selector {
 
     /**
@@ -37,5 +38,12 @@ public interface Selector {
     default Selector setType(final String aType) {
         return this;
     }
+
+    /**
+     * Creates a copy of the selector.
+     *
+     * @return A copy of the selector
+     */
+    Selector copy();
 
 }

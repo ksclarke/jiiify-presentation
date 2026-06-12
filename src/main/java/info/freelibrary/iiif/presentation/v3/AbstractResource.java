@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static java.util.stream.Collectors.toCollection;
+
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -47,7 +49,8 @@ import java.util.Optional;
  *
  * @param <T> The type of resource
  */
-@SuppressWarnings({ PMD.EXCESSIVE_IMPORTS, PMD.TOO_MANY_METHODS, PMD.COUPLING_BETWEEN_OBJECTS })
+@SuppressWarnings({ PMD.EXCESSIVE_IMPORTS, PMD.TOO_MANY_METHODS, PMD.COUPLING_BETWEEN_OBJECTS,
+    PMD.CYCLOMATIC_COMPLEXITY, PMD.EXCESSIVE_PUBLIC_COUNT })
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({ JsonKeys.CONTEXT, JsonKeys.ID, JsonKeys.TYPE, JsonKeys.LABEL, JsonKeys.PROVIDER, JsonKeys.PART_OF,
     JsonKeys.BEHAVIOR, JsonKeys.HOMEPAGE, JsonKeys.THUMBNAIL, JsonKeys.SUMMARY, JsonKeys.METADATA, JsonKeys.START,
@@ -95,7 +98,7 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
     /** The resource's requiredStatement. */
     private RequiredStatement myRequiredStatement;
 
-    /** The rights ID of the resource. */
+    /** The rights of the resource. */
     private String myRights;
 
     /** The resource's seeAlso(s). */
@@ -111,7 +114,7 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
     /** The resource's thumbnails. */
     @JsonProperty(JsonKeys.THUMBNAIL)
     @JsonDeserialize(contentUsing = ContentResourceDeserializer.class)
-    private List<ContentResource> myThumbnails;
+    private List<ContentResource<?>> myThumbnails;
 
     /**
      * Creates a new resource from the supplied type.
@@ -154,6 +157,56 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
         myType = Objects.requireNonNull(aType);
         myID = UriUtils.checkID(aID, aHttpsID);
         myLabel = Objects.requireNonNull(aLabel);
+    }
+
+    @Override
+    public abstract T copy();
+
+    /**
+     * Copies this resource into the given source resource.
+     *
+     * @param aResource The source resource to copy into
+     */
+    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY, PMD.N_PATH_COMPLEXITY })
+    protected void copyTo(final AbstractResource<T> aResource) {
+        aResource.myID = myID;
+        aResource.myType = myType;
+
+        if (myLabel != null) {
+            aResource.myLabel = myLabel.copy();
+        }
+
+        if (myMetadata != null) {
+            aResource.myMetadata = myMetadata.stream().map(Metadata::new).collect(toCollection(ArrayList::new));
+        }
+
+        // Behaviors are immutable
+        if (myBehaviorClass != null) {
+            aResource.myBehaviors = new BehaviorList(myBehaviorClass);
+        }
+        if (myBehaviors != null) {
+            aResource.myBehaviors.addAll(myBehaviors);
+        }
+
+        if (myHomepages != null) {
+            aResource.myHomepages = myHomepages.stream().map(Homepage::new).collect(toCollection(ArrayList::new));
+        }
+
+        if (myPartOfs != null) {
+            aResource.myPartOfs = myPartOfs.stream().map(PartOf::new).collect(toCollection(ArrayList::new));
+        }
+
+        if (myProviders != null) {
+            aResource.myProviders = myProviders.stream().map(Provider::new).collect(toCollection(ArrayList::new));
+        }
+
+        if (myRenderings != null) {
+            aResource.myRenderings = myRenderings.stream().map(Rendering::new).collect(toCollection(ArrayList::new));
+        }
+
+        if (myRequiredStatement != null) {
+            aResource.myRequiredStatement = myRequiredStatement.copy();
+        }
     }
 
     @Override
@@ -404,7 +457,7 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
     /**
      * Gets a list of resource providers, initializing the list if this hasn't been done already.
      *
-     * @return The resource's providers
+     * @return The resource providers
      */
     @Override
     @JsonGetter(JsonKeys.PROVIDER)
@@ -530,9 +583,9 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
     }
 
     /**
-     * Sets the resource's rights URI.
+     * Sets the resource's `rights` URI.
      *
-     * @param aRights A rights URI
+     * @param aRights A `rights` URI
      * @return The resource
      */
     @Override
@@ -688,33 +741,33 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
      */
     @Override
     @JsonGetter(JsonKeys.THUMBNAIL)
-    public List<ContentResource> getThumbnails() {
+    public List<ContentResource<?>> getThumbnails() {
         return getResourceThumbnails();
     }
 
     /**
      * Sets the resource's thumbnails.
      *
-     * @param aThumbnailArray A thumbnails array
+     * @param aThumbnailArray A thumbnail array
      * @return The resource
      */
     @Override
     @JsonSetter(JsonKeys.THUMBNAIL)
     @SuppressWarnings(JDK.UNCHECKED)
-    public T setThumbnails(final ContentResource... aThumbnailArray) {
+    public T setThumbnails(final ContentResource<?>... aThumbnailArray) {
         return (T) setResourceThumbnails(Arrays.asList(aThumbnailArray));
     }
 
     /**
      * Sets the resource's thumbnails.
      *
-     * @param aThumbnailList A thumbnails list
+     * @param aThumbnailList A thumbnail list
      * @return The resource
      */
     @Override
     @JsonIgnore
     @SuppressWarnings(JDK.UNCHECKED)
-    public T setThumbnails(final List<ContentResource> aThumbnailList) {
+    public T setThumbnails(final List<ContentResource<?>> aThumbnailList) {
         return (T) setResourceThumbnails(aThumbnailList);
     }
 
@@ -771,7 +824,7 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
     /**
      * Gets a list of resource providers, initializing the list if this hasn't been done already.
      *
-     * @return The resource's providers
+     * @return The resource providers
      */
     @JsonIgnore
     private List<Provider> getResourceProviders() {
@@ -805,7 +858,7 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
      * @return The resource's thumbnails
      */
     @JsonIgnore
-    private List<ContentResource> getResourceThumbnails() {
+    private List<ContentResource<?>> getResourceThumbnails() {
         if (myThumbnails == null) {
             myThumbnails = new ArrayList<>();
         }
@@ -820,8 +873,8 @@ public abstract class AbstractResource<T extends AbstractResource<T>> implements
      * @return This resource
      */
     @JsonIgnore
-    private AbstractResource<T> setResourceThumbnails(final List<ContentResource> aThumbnailList) {
-        final List<ContentResource> thumbnails = getResourceThumbnails();
+    private AbstractResource<T> setResourceThumbnails(final List<ContentResource<?>> aThumbnailList) {
+        final List<ContentResource<?>> thumbnails = getResourceThumbnails();
 
         Objects.requireNonNull(aThumbnailList);
         thumbnails.clear();

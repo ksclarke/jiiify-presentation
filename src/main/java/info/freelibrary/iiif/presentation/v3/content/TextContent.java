@@ -11,6 +11,7 @@ import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavi
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.json.TextContentSerializer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,6 +31,21 @@ public class TextContent extends AbstractContentResource<TextContent> implements
     }
 
     /**
+     * Copy constructor for text content.
+     *
+     * @param aTextContent The text content to copy
+     */
+    public TextContent(final TextContent aTextContent) {
+        this(aTextContent.getID());
+
+        myLanguages = new ArrayList<>(aTextContent.getLanguages());
+        aTextContent.getFormat().ifPresent(format -> myFormat = format);
+        setBehaviors(aTextContent.getBehaviors());
+
+        super.copyTo(aTextContent);
+    }
+
+    /**
      * Creates a text content resource.
      */
     private TextContent() {
@@ -38,18 +54,18 @@ public class TextContent extends AbstractContentResource<TextContent> implements
 
     @Override
     public TextContent copy() {
-        return new TextContent(getID());
+        return new TextContent(this);
     }
 
     @Override
     @JsonIgnore
-    public TextContent setBehaviors(final Behavior... aBehaviorArray) {
+    public final TextContent setBehaviors(final Behavior... aBehaviorArray) {
         return setBehaviors(new BehaviorList(ResourceBehavior.class, aBehaviorArray));
     }
 
     @Override
     @JsonIgnore
-    public TextContent setBehaviors(final List<Behavior> aBehaviorList) {
+    public final TextContent setBehaviors(final List<Behavior> aBehaviorList) {
         final TextContent textContent;
 
         if (aBehaviorList instanceof final BehaviorList behaviorList) {

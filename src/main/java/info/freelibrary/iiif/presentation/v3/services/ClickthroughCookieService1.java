@@ -17,4 +17,24 @@ public class ClickthroughCookieService1 extends AbstractUserMediatedService<Clic
     public ClickthroughCookieService1(final String aID, final String aLabel) {
         super(AuthCookieService.Profile.CLICKTHROUGH, aID, aLabel);
     }
+
+    /**
+     * Creates a new access cookie service using the click-through pattern.
+     *
+     * @param aService A service to copy
+     */
+    public ClickthroughCookieService1(final ClickthroughCookieService1 aService) {
+        super(AuthCookieService.Profile.CLICKTHROUGH, aService.getID().orElseThrow(), aService.getLabel());
+        aService.copyTo(this);
+    }
+
+    /**
+     * Creates a copy of this service.
+     *
+     * @return A copy of this service
+     */
+    @Override
+    public ClickthroughCookieService1 copy() {
+        return new ClickthroughCookieService1(this);
+    }
 }

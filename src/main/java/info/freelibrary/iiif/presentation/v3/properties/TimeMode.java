@@ -1,15 +1,16 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonValue;
+import info.freelibrary.util.Labeled;
+
+import java.util.Optional;
 
 /**
  * A mode associated with an Annotation that is to be applied to the rendering of any time-based media, or otherwise
  * could be considered to have a duration, used as a body resource of that Annotation.
  */
-public enum TimeMode {
+public enum TimeMode implements Labeled {
 
     /**
      * A loop time-mode.
@@ -41,6 +42,16 @@ public enum TimeMode {
     }
 
     /**
+     * Gets the label of the <code>TimeMode</code>.
+     *
+     * @return The label of the <code>TimeMode</code>
+     */
+    @Override
+    public String label() {
+        return myLabel;
+    }
+
+    /**
      * Gets a string representation of the <code>TimeMode</code>.
      *
      * @return A string representation of the <code>TimeMode</code>
@@ -57,7 +68,7 @@ public enum TimeMode {
      * @param aLabel A label
      * @return An empty optional or one containing the <code>TimeMode</code> corresponding to the supplied label
      */
-    public static Optional<TimeMode> forLabel(final String aLabel) {
+    public static Optional<TimeMode> fromLabel(final String aLabel) {
         for (final TimeMode timeMode : values()) {
             if (timeMode.myLabel.equalsIgnoreCase(aLabel)) {
                 return Optional.of(timeMode);
@@ -66,4 +77,5 @@ public enum TimeMode {
 
         return Optional.empty();
     }
+
 }

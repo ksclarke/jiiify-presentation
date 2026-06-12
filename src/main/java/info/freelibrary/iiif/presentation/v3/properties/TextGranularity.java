@@ -1,11 +1,10 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonValue;
-
 import info.freelibrary.util.Labeled;
+
+import java.util.Optional;
 
 /**
  * A pattern for indicating the level of text granularity for an annotation.

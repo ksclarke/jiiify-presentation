@@ -1,10 +1,11 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.behaviors;
 
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.IllegalArgumentI18nException;
 import info.freelibrary.util.warnings.Sonar;
 
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import java.io.Serial;
 
 /**
  * An exception thrown when an invalid behavior is used.
@@ -13,6 +14,7 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 public class InvalidBehaviorException extends IllegalArgumentI18nException {
 
     /** The exception's <code>serialVersionUID</code>. */
+    @Serial
     private static final long serialVersionUID = 8401613741524412126L;
 
     /**
@@ -36,5 +38,4 @@ public class InvalidBehaviorException extends IllegalArgumentI18nException {
             final Object... anAdditionalDetailsArray) {
         super(aCause, MessageCodes.BUNDLE, aMessageKey, anAdditionalDetailsArray);
     }
-
 }

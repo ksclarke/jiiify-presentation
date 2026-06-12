@@ -4,12 +4,10 @@ package info.freelibrary.iiif.presentation.v3;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
-
-import info.freelibrary.util.warnings.Eclipse;
-import info.freelibrary.util.warnings.PMD;
-
 import info.freelibrary.iiif.presentation.v3.id.UriUtils;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.util.warnings.Eclipse;
+import info.freelibrary.util.warnings.PMD;
 
 /**
  * A link from a range to an {@link AnnotationCollection} that contains or references supplementing annotations.
@@ -32,11 +30,29 @@ public class SupplementaryAnnotations {
     }
 
     /**
+     * Creates a new {@link SupplementaryAnnotations} that contains supplementary annotations from the supplied.
+     *
+     * @param aCollection A collection of supplementary annotations
+     */
+    public SupplementaryAnnotations(final SupplementaryAnnotations aCollection) {
+        myID = aCollection.getID();
+    }
+
+    /**
      * A private constructor for Jackson's deserialization.
      */
     @SuppressWarnings(Eclipse.UNUSED)
     private SupplementaryAnnotations() {
         // This intentionally left empty
+    }
+
+    /**
+     * Creates a copy of this {@link SupplementaryAnnotations}.
+     *
+     * @return A copy of this {@link SupplementaryAnnotations}
+     */
+    public SupplementaryAnnotations copy() {
+        return new SupplementaryAnnotations(this);
     }
 
     /**

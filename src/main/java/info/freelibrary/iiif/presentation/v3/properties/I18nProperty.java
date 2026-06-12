@@ -1,9 +1,14 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
+import static info.freelibrary.util.Constants.EMPTY;
+import static info.freelibrary.util.Constants.EQUALS;
+import static info.freelibrary.util.Constants.VERTICAL_BAR;
+
 import com.fasterxml.jackson.annotation.JsonValue;
 import info.freelibrary.util.warnings.JDK;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -11,9 +16,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static info.freelibrary.util.Constants.EQUALS;
-import static info.freelibrary.util.Constants.VERTICAL_BAR;
 
 /**
  * A base class for label, summary, attribution, property, and metadata's label and value fields.
@@ -32,7 +34,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      * @param aI18nArray An array of internationalizations
      */
     I18nProperty(final I18n... aI18nArray) {
-        myI18ns = Arrays.stream(aI18nArray).filter(Objects::nonNull).collect(Collectors.toList());
+        myI18ns = Arrays.stream(aI18nArray).filter(Objects::nonNull).collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**
@@ -42,7 +44,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      * @param aI18nList A list of internationalizations
      */
     I18nProperty(final List<I18n> aI18nList) {
-        myI18ns = aI18nList.stream().filter(Objects::nonNull).collect(Collectors.toList());
+        myI18ns = aI18nList.stream().filter(Objects::nonNull).collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**
@@ -73,56 +75,6 @@ class I18nProperty<T extends I18nProperty<T>> {
     }
 
     /**
-     * Returns the first string value (regardless of language). If there isn't one it returns an empty Optional;
-     *
-     * @return A string value for the property
-     */
-    public Optional<String> getFirstValue() {
-        if (hasValues()) {
-            return Optional.of(myI18ns.get(0).getValues().get(0));
-        }
-
-        return Optional.empty();
-    }
-
-    /**
-     * Gets the default value (a value whose language is 'none').
-     *
-     * @return The default value or an empty Optional
-     */
-    public Optional<String> getDefaultValue() {
-        if (hasValues()) {
-            final Optional<I18n> i18nOpt =
-                    myI18ns.stream().filter(i18n -> I18n.DEFAULT_LANG.equals(i18n.getLang())).findFirst();
-
-            if (i18nOpt.isPresent()) {
-                return Optional.of(i18nOpt.get().getValues().get(0));
-            }
-        }
-
-        return Optional.empty();
-    }
-
-    /**
-     * Returns a hash code for this property.
-     *
-     * @return A hash code
-     */
-    @Override
-    public int hashCode() {
-        return toMap().hashCode();
-    }
-
-    /**
-     * Returns whether the property has any internationalizations.
-     *
-     * @return True if the property has internationalizations; else, false
-     */
-    public boolean hasValues() {
-        return !myI18ns.isEmpty();
-    }
-
-    /**
      * Sets the internationalization(s) of the property, removing all other previous internationalizations.
      *
      * @param aI18nArray An array of I18n(s).
@@ -149,6 +101,56 @@ class I18nProperty<T extends I18nProperty<T>> {
     }
 
     /**
+     * Returns the first string value (regardless of language). If there isn't one it returns an empty Optional;
+     *
+     * @return A string value for the property
+     */
+    public Optional<String> getFirstValue() {
+        if (hasValues()) {
+            return Optional.of(myI18ns.getFirst().getValues().getFirst());
+        }
+
+        return Optional.empty();
+    }
+
+    /**
+     * Gets the default value (a value whose language is 'none').
+     *
+     * @return The default value or an empty Optional
+     */
+    public Optional<String> getDefaultValue() {
+        if (hasValues()) {
+            final Optional<I18n> i18nOpt =
+                    myI18ns.stream().filter(i18n -> I18n.DEFAULT_LANG.equals(i18n.getLang())).findFirst();
+
+            if (i18nOpt.isPresent()) {
+                return Optional.of(i18nOpt.get().getValues().getFirst());
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    /**
+     * Returns a hash code for this property.
+     *
+     * @return A hash code
+     */
+    @Override
+    public int hashCode() {
+        return toMap().hashCode();
+    }
+
+    /**
+     * Returns whether the property has any internationalizations.
+     *
+     * @return True if the property has internationalizations; else, false
+     */
+    public boolean hasValues() {
+        return !myI18ns.isEmpty();
+    }
+
+    /**
      * Returns a string representation of this property.
      *
      * @return A string representation of this property
@@ -158,7 +160,7 @@ class I18nProperty<T extends I18nProperty<T>> {
         final StringBuilder builder;
 
         if (!hasValues()) {
-            return "";
+            return EMPTY;
         }
 
         builder = new StringBuilder();

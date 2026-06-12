@@ -27,7 +27,7 @@ public class ReaderTest {
     /** The CSV file path. */
     private static final Path JBU_COLLECTION_CSV = Path.of(RESOURCES_DIR, "csv/jbu-collection.csv");
 
-    /** The ZIP file path. */
+    /** The JBU Collection ZIP file path. */
     private static final Path JBU_COLLECTION_ZIP = Path.of(RESOURCES_DIR, "zip/jbu-collection.zip");
 
     /** The reader to test. */

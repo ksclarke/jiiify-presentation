@@ -1,12 +1,11 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.behaviors;
 
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonValue;
-
 import info.freelibrary.iiif.presentation.v3.Range;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
+
+import java.util.Optional;
 
 /**
  * The behaviors attributable to {@link Range}s.
@@ -76,16 +75,10 @@ public enum RangeBehavior implements Behavior {
     /**
      * Returns an enumeration constant from a behavior label.
      *
-     * @param aBehavior A behavior label
-     * @return A range behavior
+     * @param aLabel A behavior label
+     * @return A 'range' behavior
      */
-    public static Optional<RangeBehavior> fromLabel(final String aBehavior) {
-        for (final RangeBehavior behavior : values()) {
-            if (behavior.toString().equalsIgnoreCase(aBehavior)) {
-                return Optional.of(behavior);
-            }
-        }
-
-        return Optional.empty();
+    public static Optional<RangeBehavior> fromLabel(final String aLabel) {
+        return BehaviorLookup.fromLabel(RangeBehavior.class, aLabel);
     }
 }

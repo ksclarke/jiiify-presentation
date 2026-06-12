@@ -1,21 +1,19 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
-
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.JDK;
 
-import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import java.util.Optional;
 
 /**
  * A version 1 authentication cookie service.
@@ -157,7 +155,6 @@ abstract class AbstractCookieService<T extends AbstractCookieService<T>> extends
      */
     @Override
     @JsonSetter(JsonKeys.V2_TYPE)
-    @SuppressWarnings({ JDK.UNCHECKED })
     public T setType(final String aType) {
         final String type = AuthCookieService.class.getSimpleName();
 
@@ -166,5 +163,17 @@ abstract class AbstractCookieService<T extends AbstractCookieService<T>> extends
         }
 
         return super.setType(type);
+    }
+
+    /**
+     * Copies the cookie service to another cookie service.
+     *
+     * @param aService A cookie service
+     */
+    protected void copyTo(final AbstractCookieService<T> aService) {
+        aService.copyTo(this);
+
+        aService.myFailureDescription = myFailureDescription;
+        aService.myFailureHeader = myFailureHeader;
     }
 }

@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * A base class for the Web annotations found in the <code>annotations</code> package. May also serve as a base class
@@ -49,7 +50,7 @@ public class WebAnnotation implements Annotation<WebAnnotation> {
     private Motivation myMotivation;
 
     /** The annotation's resources. */
-    private List<ContentResource> myResources;
+    private List<ContentResource<?>> myResources;
 
     /** The target of the annotation. */
     private List<Target> myTargets;
@@ -137,10 +138,54 @@ public class WebAnnotation implements Annotation<WebAnnotation> {
     }
 
     /**
+     * Creates a copy of a Web annotation.
+     *
+     * @param aWebAnnotation A Web annotation to copy
+     */
+    public WebAnnotation(final WebAnnotation aWebAnnotation) {
+        myID = aWebAnnotation.myID;
+
+        if (aWebAnnotation.myLabel != null) {
+            myLabel = aWebAnnotation.myLabel.copy();
+        }
+
+        myMotivation = aWebAnnotation.myMotivation;
+
+        if (aWebAnnotation.myResources != null) {
+            myResources = aWebAnnotation.myResources.stream().map(ContentResource::copy)
+                    .collect(Collectors.toCollection(ArrayList::new));
+        }
+
+        if (aWebAnnotation.myTargets != null) {
+            myTargets =
+                    aWebAnnotation.myTargets.stream().map(Target::new).collect(Collectors.toCollection(ArrayList::new));
+        }
+
+        myTimeMode = aWebAnnotation.myTimeMode;
+        myStylesheet = aWebAnnotation.myStylesheet;
+
+        if (aWebAnnotation.myContexts != null) {
+            myContexts = aWebAnnotation.myContexts.copy();
+        }
+
+        myBodyHasChoice = aWebAnnotation.myBodyHasChoice;
+    }
+
+    /**
      * Creates a new Web annotation for Jackson's deserialization purposes.
      */
     protected WebAnnotation() {
         super();
+    }
+
+    /**
+     * Creates a deep copy of the Web annotation.
+     *
+     * @return A deep copy of the Web annotation
+     */
+    @Override
+    public WebAnnotation copy() {
+        return new WebAnnotation(this);
     }
 
     /**
@@ -179,7 +224,7 @@ public class WebAnnotation implements Annotation<WebAnnotation> {
      * @return The resources associated with this annotation
      */
     @Override
-    public List<ContentResource> getBody() {
+    public List<ContentResource<?>> getBody() {
         if (myResources == null) {
             myResources = new ArrayList<>();
         }
@@ -250,8 +295,8 @@ public class WebAnnotation implements Annotation<WebAnnotation> {
      * @return The annotation
      */
     @Override
-    public WebAnnotation setBody(final ContentResource... aResourceArray) {
-        final List<ContentResource> resources = getBody();
+    public WebAnnotation setBody(final ContentResource<?>... aResourceArray) {
+        final List<ContentResource<?>> resources = getBody();
 
         resources.clear();
         resources.addAll(Arrays.asList(aResourceArray));
@@ -266,7 +311,7 @@ public class WebAnnotation implements Annotation<WebAnnotation> {
      * @return The annotation
      */
     @Override
-    public WebAnnotation setBody(final List<ContentResource> aResourceList) {
+    public WebAnnotation setBody(final List<ContentResource<?>> aResourceList) {
         return setBody(aResourceList.toArray(new ContentResource[0]));
     }
 

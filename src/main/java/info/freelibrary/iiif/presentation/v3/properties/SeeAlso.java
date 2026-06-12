@@ -4,7 +4,6 @@ package info.freelibrary.iiif.presentation.v3.properties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
-import info.freelibrary.util.warnings.Eclipse;
 
 import java.util.Optional;
 
@@ -30,9 +29,26 @@ public class SeeAlso extends AbstractLinkProperty<SeeAlso> {
     /**
      * Constructs the see also reference for Jackson's deserialization process.
      */
-    @SuppressWarnings(Eclipse.UNUSED)
     private SeeAlso() {
         super();
+    }
+
+    /**
+     * Creates a copy of the supplied see also reference.
+     *
+     * @param aSeeAlso A see also reference to copy
+     */
+    public SeeAlso(final SeeAlso aSeeAlso) {
+        super(aSeeAlso);
+    }
+
+    /**
+     * Creates a copy of this see also reference.
+     *
+     * @return A copy of this see also reference
+     */
+    public SeeAlso copy() {
+        return new SeeAlso(this);
     }
 
     /**

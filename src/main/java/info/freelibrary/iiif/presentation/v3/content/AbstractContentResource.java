@@ -39,16 +39,16 @@ import java.util.Optional;
 @JsonInclude(Include.NON_EMPTY)
 @JsonPropertyOrder({ JsonKeys.ID, JsonKeys.TYPE, JsonKeys.FORMAT, JsonKeys.LANGUAGE })
 public abstract class AbstractContentResource<T extends AbstractContentResource<T>> extends AbstractResource<T>
-        implements Localized<T> {
+        implements ContentResource<T>, Localized<T> {
 
     /** The content resource's media type. */
     protected MediaType myFormat;
 
+    /** The content resource's languages. */
+    protected List<String> myLanguages;
+
     /** The content resource's Web annotations. */
     private List<AnnotationPage<WebAnnotation>> myAnnotations;
-
-    /** The content resource's languages. */
-    private List<String> myLanguages;
 
     /**
      * Creates a content resource.
@@ -116,6 +116,7 @@ public abstract class AbstractContentResource<T extends AbstractContentResource<
      * @return The media type format of the content resource
      */
     @JsonSerialize(contentUsing = MediaTypeSerializer.class, keyUsing = MediaTypeKeySerializer.class)
+    @Override
     public Optional<MediaType> getFormat() {
         return Optional.ofNullable(myFormat);
     }
@@ -171,13 +172,14 @@ public abstract class AbstractContentResource<T extends AbstractContentResource<
     }
 
     /**
-     * A non-public way to set format from a media type.
+     * A non-public way to set the format from a media type.
      *
      * @param aMediaType A media type
      * @return This content resource
      */
     @JsonProperty(JsonKeys.FORMAT)
     @JsonDeserialize(using = MediaTypeDeserializer.class)
+    @Override
     @SuppressWarnings({ JDK.UNCHECKED })
     public T setFormat(final MediaType aMediaType) {
         myFormat = Objects.requireNonNull(aMediaType);
@@ -185,7 +187,7 @@ public abstract class AbstractContentResource<T extends AbstractContentResource<
     }
 
     /**
-     * Used by Jackson't serialization processes.
+     * Used by Jackson's serialization processes.
      *
      * @return A form of language ready to be serialized
      */

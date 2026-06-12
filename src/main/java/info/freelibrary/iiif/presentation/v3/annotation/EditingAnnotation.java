@@ -162,12 +162,12 @@ public class EditingAnnotation extends WebAnnotation {
     }
 
     @Override
-    public EditingAnnotation setBody(final ContentResource... aBody) {
+    public EditingAnnotation setBody(final ContentResource<?>... aBody) {
         return (EditingAnnotation) super.setBody(aBody);
     }
 
     @Override
-    public EditingAnnotation setBody(final List<ContentResource> aResourceList) {
+    public EditingAnnotation setBody(final List<ContentResource<?>> aResourceList) {
         return (EditingAnnotation) super.setBody(aResourceList);
     }
 

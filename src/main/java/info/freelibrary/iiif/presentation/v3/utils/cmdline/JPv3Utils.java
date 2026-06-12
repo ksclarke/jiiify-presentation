@@ -5,7 +5,7 @@ import static info.freelibrary.iiif.presentation.v3.utils.cmdline.JPv3.ENDPOINT_
 import static info.freelibrary.util.Constants.EMPTY;
 import static info.freelibrary.util.Constants.PERIOD;
 import static info.freelibrary.util.Constants.SLASH;
-import static info.freelibrary.util.ThrowingConsumer.sneaky;
+import static info.freelibrary.util.ThrowingConsumer.uncheck;
 import static org.slf4j.Logger.ROOT_LOGGER_NAME;
 
 import ch.qos.logback.classic.Level;
@@ -220,7 +220,7 @@ public final class JPv3Utils {
         final Optional<Path> tmpDirOpt = csvSources.getTempDir();
 
         try (ZipWriter zipWriter = new ZipWriter(aOutputFile)) {
-            csvSources.forEach(sneaky(path -> {
+            csvSources.forEach(uncheck(path -> {
                 final String contents = StringUtils.read(path.toFile());
                 final String csvPath = path.toString();
                 final String csvData = updateCSV(contents, aHost.toString());

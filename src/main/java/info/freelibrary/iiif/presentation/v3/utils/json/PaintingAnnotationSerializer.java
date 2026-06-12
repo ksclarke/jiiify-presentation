@@ -61,7 +61,7 @@ public class PaintingAnnotationSerializer extends StdSerializer<PaintingAnnotati
         PMD.N_PATH_COMPLEXITY })
     public void serialize(final PaintingAnnotation aPaintingAnnotation, final JsonGenerator aJsonGenerator,
             final SerializerProvider aProvider) throws IOException {
-        final List<ContentResource> resources = aPaintingAnnotation.getBody();
+        final List<ContentResource<?>> resources = aPaintingAnnotation.getBody();
         final Optional<String> bodyID = aPaintingAnnotation.getBodyID();
         final List<Target> targets = aPaintingAnnotation.getTargets();
         final Optional<Motivation> motivation = aPaintingAnnotation.getMotivation();
@@ -118,7 +118,7 @@ public class PaintingAnnotationSerializer extends StdSerializer<PaintingAnnotati
             }
 
             if (targets.size() == SINGLE_INSTANCE) {
-                aJsonGenerator.writeObjectField(JsonKeys.TARGET, targets.get(0));
+                aJsonGenerator.writeObjectField(JsonKeys.TARGET, targets.getFirst());
             } else if (targets.size() > SINGLE_INSTANCE) {
                 aJsonGenerator.writeFieldName(JsonKeys.TARGET);
                 aJsonGenerator.writeStartArray();
@@ -154,10 +154,10 @@ public class PaintingAnnotationSerializer extends StdSerializer<PaintingAnnotati
      * @throws JsonProcessingException If there is trouble parsing the source annotation
      */
     @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY })
-    private void serializeResources(final List<ContentResource> aList, final boolean aChoice,
+    private void serializeResources(final List<ContentResource<?>> aList, final boolean aChoice,
             final Optional<String> aBodyID, final JsonGenerator aJsonGenerator) throws IOException {
         if (aList.size() == SINGLE_INSTANCE) {
-            aJsonGenerator.writeObjectField(JsonKeys.BODY, aList.get(0));
+            aJsonGenerator.writeObjectField(JsonKeys.BODY, aList.getFirst());
         } else {
             aJsonGenerator.writeFieldName(JsonKeys.BODY);
 
@@ -174,7 +174,7 @@ public class PaintingAnnotationSerializer extends StdSerializer<PaintingAnnotati
                 aJsonGenerator.writeStartArray();
             }
 
-            for (final ContentResource contentResource : aList) {
+            for (final ContentResource<?> contentResource : aList) {
                 if (contentResource == null) {
                     aJsonGenerator.writeString(ResourceTypes.RDF_NIL);
                 } else {

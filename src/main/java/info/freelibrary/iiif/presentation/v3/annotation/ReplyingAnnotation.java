@@ -162,12 +162,12 @@ public class ReplyingAnnotation extends WebAnnotation {
     }
 
     @Override
-    public ReplyingAnnotation setBody(final ContentResource... aBody) {
+    public ReplyingAnnotation setBody(final ContentResource<?>... aBody) {
         return (ReplyingAnnotation) super.setBody(aBody);
     }
 
     @Override
-    public ReplyingAnnotation setBody(final List<ContentResource> aResourceList) {
+    public ReplyingAnnotation setBody(final List<ContentResource<?>> aResourceList) {
         return (ReplyingAnnotation) super.setBody(aResourceList);
     }
 

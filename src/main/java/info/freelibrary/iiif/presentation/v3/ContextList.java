@@ -4,7 +4,6 @@ package info.freelibrary.iiif.presentation.v3;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.warnings.JDK;
 import info.freelibrary.util.warnings.PMD;
 import info.freelibrary.util.warnings.Sonar;
 
@@ -65,6 +64,15 @@ public class ContextList extends ArrayList<URI> {
     }
 
     /**
+     * Creates a copy of this context list.
+     *
+     * @return A copy of this context list
+     */
+    public ContextList copy() {
+        return new ContextList(this);
+    }
+
+    /**
      * Adds a new context URI at the supplied index position. The IIIF Presentation context URI cannot be added, because
      * it exists in the list already.
      *
@@ -115,7 +123,6 @@ public class ContextList extends ArrayList<URI> {
      * @return If all the supplied URIs were successfully added
      */
     @Override
-    @SuppressWarnings(JDK.UNCHECKED)
     public boolean addAll(final int aIndex, final Collection<? extends URI> aCollection) {
         return super.addAll(aIndex, aCollection.stream().filter(uri -> !PRESENTATION_CONTEXT_URI.equals(uri)).toList());
     }

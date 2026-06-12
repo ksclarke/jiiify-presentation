@@ -179,8 +179,8 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test
     public final void testCanvasEqualsHashCodeNot() {
-        final Canvas canvas1 = new Canvas(HTTPS + UUID.randomUUID().toString());
-        final Canvas canvas2 = new Canvas(HTTPS + UUID.randomUUID().toString());
+        final Canvas canvas1 = new Canvas(HTTPS + UUID.randomUUID());
+        final Canvas canvas2 = new Canvas(HTTPS + UUID.randomUUID());
 
         assertNotEquals(canvas1.hashCode(), canvas2.hashCode());
     }
@@ -190,7 +190,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test
     public final void testCanvasEqualsNull() {
-        assertNotEquals(new Canvas(MinterFactory.getMinter(HTTPS + UUID.randomUUID().toString())), null);
+        assertNotEquals(null, new Canvas(MinterFactory.getMinter(HTTPS + UUID.randomUUID())));
     }
 
     /**
@@ -222,7 +222,7 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test
     public final void testCanvasEqualsSameObject() {
-        final Canvas canvas = new Canvas(MinterFactory.getMinter(HTTPS + UUID.randomUUID().toString()));
+        final Canvas canvas = new Canvas(MinterFactory.getMinter(HTTPS + UUID.randomUUID()));
         assertEquals(canvas, canvas);
     }
 
@@ -232,7 +232,7 @@ public class CanvasTest extends AbstractCookbookTest {
     @Test
     @SuppressWarnings("unlikely-arg-type")
     public final void testCanvasEqualsString() {
-        assertNotEquals(new Canvas(MinterFactory.getMinter(HTTPS + UUID.randomUUID().toString())), EMPTY);
+        assertNotEquals(EMPTY, new Canvas(MinterFactory.getMinter(HTTPS + UUID.randomUUID())));
     }
 
     /**
@@ -342,7 +342,7 @@ public class CanvasTest extends AbstractCookbookTest {
     public final void testPaintImageContentListOnSpatialCanvas() {
         myCanvas.setWidthHeight(WIDTH, HEIGHT)
                 .paintWith(List.of(new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT)));
-        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID());
     }
 
     /**
@@ -359,12 +359,12 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test
     public final void testPaintImageContentListOnSpatialFragmentOfSpatialCanvas() {
-        final List<ContentResource> list = List.of(new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT));
+        final List<ContentResource<?>> list = List.of(new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT));
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, list);
 
-        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID());
         assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
@@ -380,7 +380,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, List.of(image));
 
-        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID());
         assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
@@ -394,8 +394,8 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, List.of(image));
 
-        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
-        assertEquals(selector.toString(), getPaintingMediaFragment().toString());
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID());
+        assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
     /**
@@ -405,7 +405,7 @@ public class CanvasTest extends AbstractCookbookTest {
     public final void testPaintImageContentListOnSpatiotemporalCanvas() {
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION)
                 .paintWith(List.of(new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT)));
-        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID());
     }
 
     /**
@@ -423,13 +423,13 @@ public class CanvasTest extends AbstractCookbookTest {
      */
     @Test
     public final void testPaintImageContentListOnSpatiotemporalFragmentOfSpatiotemporalCanvas() {
-        final List<ContentResource> list = List.of(new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT));
+        final List<ContentResource<?>> list = List.of(new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT));
         final MediaFragmentSelector selector =
                 new MediaFragmentSelector(new StartTime(0), new EndTime(DURATION), 0, 0, WIDTH, HEIGHT);
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, list);
 
-        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID());
         assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
@@ -444,7 +444,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, List.of(image));
 
-        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID());
         assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
@@ -503,7 +503,7 @@ public class CanvasTest extends AbstractCookbookTest {
     @Test
     public final void testPaintImageOnSpatialCanvas() {
         myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT));
-        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID());
     }
 
     /**
@@ -525,7 +525,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, image);
 
-        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID());
         assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
@@ -541,7 +541,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).paintWith(selector, image);
 
-        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID());
         assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
@@ -555,8 +555,8 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, image);
 
-        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
-        assertEquals(selector.toString(), getPaintingMediaFragment().toString());
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID());
+        assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
     /**
@@ -566,7 +566,7 @@ public class CanvasTest extends AbstractCookbookTest {
     public final void testPaintImageOnSpatiotemporalCanvas() {
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION)
                 .paintWith(new ImageContent(IMAGE_1_ID).setWidthHeight(WIDTH, HEIGHT));
-        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID());
     }
 
     /**
@@ -589,7 +589,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, image);
 
-        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID());
         assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
@@ -604,7 +604,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, image);
 
-        assertEquals(IMAGE_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(IMAGE_1_ID, getPaintingContentResourceID());
         assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
@@ -810,7 +810,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, List.of(sound));
 
-        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID());
         assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
@@ -845,7 +845,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, List.of(sound));
 
-        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID());
         assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
@@ -855,7 +855,7 @@ public class CanvasTest extends AbstractCookbookTest {
     @Test
     public final void testPaintSoundContentListOnTemporalCanvas() {
         myCanvas.setDuration(CANVAS_DURATION).paintWith(List.of(new SoundContent(SOUND_1_ID).setDuration(DURATION)));
-        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID());
     }
 
     /**
@@ -877,7 +877,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, List.of(sound));
 
-        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID());
         assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
@@ -891,7 +891,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, List.of(sound));
 
-        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID());
         assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
@@ -908,7 +908,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, List.of(sound));
 
-        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID());
         assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
@@ -945,7 +945,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, sound);
 
-        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID());
         assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
@@ -994,7 +994,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, sound);
 
-        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID());
         assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
@@ -1021,7 +1021,7 @@ public class CanvasTest extends AbstractCookbookTest {
     @Test
     public final void testPaintSoundOnTemporalCanvas() {
         myCanvas.setDuration(CANVAS_DURATION).paintWith(new SoundContent(SOUND_1_ID).setDuration(DURATION));
-        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID());
     }
 
     /**
@@ -1055,7 +1055,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, sound);
 
-        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID());
         assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
@@ -1085,7 +1085,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, sound);
 
-        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID());
         assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
@@ -1102,7 +1102,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setDuration(CANVAS_DURATION).paintWith(selector, sound);
 
-        assertEquals(SOUND_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(SOUND_1_ID, getPaintingContentResourceID());
         assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
@@ -1316,7 +1316,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, video);
 
-        assertEquals(VIDEO_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(VIDEO_1_ID, getPaintingContentResourceID());
         assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
@@ -1373,7 +1373,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, video);
 
-        assertEquals(VIDEO_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(VIDEO_1_ID, getPaintingContentResourceID());
         assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
@@ -1391,7 +1391,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, video);
 
-        assertEquals(VIDEO_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(VIDEO_1_ID, getPaintingContentResourceID());
         assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
@@ -1406,7 +1406,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, video);
 
-        assertEquals(VIDEO_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(VIDEO_1_ID, getPaintingContentResourceID());
         assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
@@ -1421,7 +1421,7 @@ public class CanvasTest extends AbstractCookbookTest {
 
         myCanvas.setWidthHeight(WIDTH, HEIGHT).setDuration(CANVAS_DURATION).paintWith(selector, List.of(video));
 
-        assertEquals(VIDEO_1_ID, getPaintingContentResourceID().toString());
+        assertEquals(VIDEO_1_ID, getPaintingContentResourceID());
         assertEquals(selector.toString(), getPaintingMediaFragment());
     }
 
@@ -1663,6 +1663,7 @@ public class CanvasTest extends AbstractCookbookTest {
     /**
      * Tests supplementing a spatial fragment of a spatial canvas with text.
      */
+    @Test
     public final void testSupplementTextOnSpatialFragmentOfSpatialCanvas() {
         final TextContent text = new TextContent(TEXT_ID);
         final MediaFragmentSelector selector = new MediaFragmentSelector(0, 0, WIDTH, HEIGHT);
@@ -1994,8 +1995,8 @@ public class CanvasTest extends AbstractCookbookTest {
      * @return The value of the media fragment of the selector that targets myCanvas via a painting annotation.
      */
     private String getPaintingMediaFragment() {
-        final List<Target> targets = myCanvas.getPaintingPages().get(0).getAnnotations().get(0).getTargets();
-        final SpecificResource specificResource = (SpecificResource) targets.get(0);
+        final List<Target> targets = myCanvas.getPaintingPages().getFirst().getAnnotations().getFirst().getTargets();
+        final SpecificResource specificResource = (SpecificResource) targets.getFirst();
 
         return ((MediaFragmentSelector) specificResource.getSelector().get()).toString();
     }
@@ -2015,10 +2016,11 @@ public class CanvasTest extends AbstractCookbookTest {
      * @return The value of the media fragment of the selector that targets myCanvas via a supplementing annotation.
      */
     private String getSupplementingMediaFragment() {
-        final List<Target> targets = myCanvas.getSupplementingPages().get(0).getAnnotations().get(0).getTargets();
-        final SpecificResource specificResource = (SpecificResource) targets.get(0);
+        final List<Target> targets =
+                myCanvas.getSupplementingPages().getFirst().getAnnotations().getFirst().getTargets();
+        final SpecificResource specificResource = (SpecificResource) targets.getFirst();
 
-        return ((MediaFragmentSelector) specificResource.getSelector().get()).toString();
+        return (specificResource.getSelector().get()).toString();
     }
 
 }

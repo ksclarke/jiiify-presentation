@@ -1,0 +1,56 @@
+{
+  "@context" : "http://iiif.io/api/presentation/3/context.json",
+  "id" : "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1650fs5/manifest",
+  "type" : "Manifest",
+  "label" : {
+    "none" : [
+      "Archaeologist Kai Christian Bruhn documenting the Western sector of excavated research area"
+    ]
+  },
+  "metadata" : [
+    {
+      "label" : {
+        "none" : [
+          "Repository"
+        ]
+      },
+      "value" : {
+        "none" : [
+          "American Research Center in Egypt (ARCE)"
+        ]
+      }
+    }
+  ],
+  "items" : [
+    {
+      "id" : "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1650fs5/manifest/canvas-bw2n",
+      "type" : "Canvas",
+      "items" : [
+        {
+          "id" : "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1650fs5/manifest/canvas-bw2n/anno-page-97jn",
+          "type" : "AnnotationPage",
+          "items" : [
+            {
+              "id" : "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1650fs5/manifest/annotations/anno-v3a8",
+              "type" : "Annotation",
+              "motivation" : "painting",
+              "body" : {
+                "id" : "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1650fs5/full/600,/0/default.jpg",
+                "type" : "Image",
+                "format" : "image/jpeg",
+                "service" : [
+                  {
+                    "@id" : "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1650fs5",
+                    "@type" : "ImageService2",
+                    "profile" : "http://iiif.io/api/image/2/level2.json"
+                  }
+                ]
+              },
+              "target" : "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fz1650fs5/manifest/canvas-bw2n"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,12 +1,11 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.behaviors;
 
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonValue;
-
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
+
+import java.util.Optional;
 
 /**
  * The behaviors attributable to {@link Manifest}s.
@@ -19,7 +18,7 @@ public enum ManifestBehavior implements Behavior {
     /** A continuous manifest behavior. */
     CONTINUOUS(BehaviorConstants.CONTINUOUS),
 
-    /** An individuals manifest behavior. */
+    /** An 'individuals' manifest behavior. */
     INDIVIDUALS(BehaviorConstants.INDIVIDUALS),
 
     /** A no-auto-advance manifest behavior. */
@@ -73,16 +72,10 @@ public enum ManifestBehavior implements Behavior {
     /**
      * Returns an enumeration constant from a behavior label.
      *
-     * @param aBehavior A behavior
+     * @param aLabel A behavior
      * @return A manifest behavior
      */
-    public static Optional<ManifestBehavior> fromLabel(final String aBehavior) {
-        for (final ManifestBehavior behavior : values()) {
-            if (behavior.toString().equalsIgnoreCase(aBehavior)) {
-                return Optional.of(behavior);
-            }
-        }
-
-        return Optional.empty();
+    public static Optional<ManifestBehavior> fromLabel(final String aLabel) {
+        return BehaviorLookup.fromLabel(ManifestBehavior.class, aLabel);
     }
 }

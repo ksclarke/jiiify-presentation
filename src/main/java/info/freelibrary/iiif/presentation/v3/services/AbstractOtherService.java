@@ -1,23 +1,21 @@
 
 package info.freelibrary.iiif.presentation.v3.services;
 
-import java.util.Objects;
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import info.freelibrary.util.warnings.JDK;
-
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeDeserializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeKeySerializer;
 import info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeSerializer;
+import info.freelibrary.util.warnings.JDK;
+
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * An abstract class for other services.
@@ -76,5 +74,15 @@ abstract class AbstractOtherService<T extends AbstractOtherService<T>> extends A
     public T setFormat(final MediaType aFormat) {
         myFormat = Objects.requireNonNull(aFormat);
         return (T) this;
+    }
+
+    /**
+     * Copies the values of this other service to the supplied other service.
+     *
+     * @param aService The other service to copy to
+     */
+    protected void copyTo(final AbstractOtherService<T> aService) {
+        super.copyTo(aService);
+        aService.myFormat = myFormat;
     }
 }

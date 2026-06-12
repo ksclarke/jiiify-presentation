@@ -14,4 +14,23 @@ public class ExternalCookieService1 extends AbstractCookieService<ExternalCookie
         super(AuthCookieService.Profile.EXTERNAL);
     }
 
+    /**
+     * Creates a new access cookie service from the supplied one.
+     *
+     * @param aService A service to copy
+     */
+    public ExternalCookieService1(final ExternalCookieService1 aService) {
+        super(AuthCookieService.Profile.EXTERNAL);
+        aService.copyTo(this);
+    }
+
+    /**
+     * Creates a copy of this service.
+     *
+     * @return A copy of this service
+     */
+    @Override
+    public ExternalCookieService1 copy() {
+        return new ExternalCookieService1(this);
+    }
 }

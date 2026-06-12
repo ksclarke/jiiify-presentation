@@ -1,12 +1,15 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
+import static java.util.stream.Collectors.toCollection;
+
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import info.freelibrary.iiif.presentation.v3.utils.I18nUtils;
 import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
 import info.freelibrary.iiif.presentation.v3.utils.json.LabelDeserializer;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -69,6 +72,24 @@ public class Label extends I18nProperty<Label> implements Comparable<Label> {
     }
 
     /**
+     * Creates a label from another label.
+     *
+     * @param aLabel A label to deep copy
+     */
+    public Label(final Label aLabel) {
+        super(aLabel.getI18ns().stream().map(I18n::new).collect(toCollection(ArrayList::new)));
+    }
+
+    /**
+     * Creates a copy of the label.
+     *
+     * @return A copy of the label
+     */
+    public Label copy() {
+        return new Label(this);
+    }
+
+    /**
      * Sets the internationalizations of the label, removing all other previous internationalizations.
      *
      * @param aI18nArray An array of internationalizations
@@ -108,12 +129,10 @@ public class Label extends I18nProperty<Label> implements Comparable<Label> {
 
     @Override
     public int compareTo(final Label aLabel) {
+        Objects.requireNonNull(aLabel, "Can't compare a null label to a non-null label");
+
         final Optional<String> thisLabel;
         final Optional<String> otherLabel;
-
-        if (aLabel == null) {
-            return 1; // Non-null is greater than null
-        }
 
         if (!this.hasValues() && !aLabel.hasValues()) {
             return 0; // Both empty

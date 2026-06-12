@@ -4,8 +4,6 @@ package info.freelibrary.iiif.presentation.v3.properties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import info.freelibrary.util.warnings.Eclipse;
-
 /**
  * A resource that is an alternative, non-IIIF representation of the resource that has the <code>rendering</code>
  * property. Examples include a rendering of a book as a PDF or EPUB, a slide deck with images of a building, or a 3D
@@ -25,11 +23,28 @@ public class Rendering extends AbstractLinkProperty<Rendering> {
     }
 
     /**
+     * Creates a rendering from another rendering.
+     *
+     * @param aRendering A rendering to copy
+     */
+    public Rendering(final Rendering aRendering) {
+        super(aRendering);
+    }
+
+    /**
      * Constructs the rendering for Jackson's deserialization process.
      */
-    @SuppressWarnings(Eclipse.UNUSED)
     private Rendering() {
         super();
+    }
+
+    /**
+     * Creates a copy of this rendering.
+     *
+     * @return A copy of this rendering
+     */
+    public Rendering copy() {
+        return new Rendering(this);
     }
 
     /**

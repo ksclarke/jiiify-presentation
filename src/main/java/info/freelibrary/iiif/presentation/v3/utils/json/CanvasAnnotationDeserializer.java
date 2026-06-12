@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation.v3.utils.json;
 
 import static info.freelibrary.util.ThrowingBiFunction.unwrap;
+import static info.freelibrary.util.ThrowingConsumer.uncheck;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.exc.InputCoercionException;
@@ -36,7 +37,6 @@ import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.ThrowingBiFunction;
-import info.freelibrary.util.ThrowingConsumer;
 import info.freelibrary.util.warnings.PMD;
 
 import java.io.IOException;
@@ -189,8 +189,9 @@ public class CanvasAnnotationDeserializer extends StdDeserializer<Annotation<?>>
      * @param aTypeCheck A function that checks that the required value exists
      * @return A list of annotation resources
      */
-    private List<ContentResource> getBody(final JsonNode aNode, final BiFunction<String, JsonNode, String> aTypeCheck) {
-        final List<ContentResource> resources = new ArrayList<>();
+    private List<ContentResource<?>> getBody(final JsonNode aNode,
+            final BiFunction<String, JsonNode, String> aTypeCheck) {
+        final List<ContentResource<?>> resources = new ArrayList<>();
         final JsonNode itemsNode;
 
         if (aNode == null) {
@@ -234,10 +235,7 @@ public class CanvasAnnotationDeserializer extends StdDeserializer<Annotation<?>>
     private boolean getChoice(final JsonNode aBodyNode) {
         if (aBodyNode != null) {
             final JsonNode choiceNode = aBodyNode.get(JsonKeys.TYPE);
-
-            if (choiceNode != null && choiceNode.isValueNode() && ResourceTypes.CHOICE.equals(choiceNode.asText())) {
-                return true;
-            }
+            return choiceNode != null && choiceNode.isValueNode() && ResourceTypes.CHOICE.equals(choiceNode.asText());
         }
 
         return false;
@@ -283,7 +281,7 @@ public class CanvasAnnotationDeserializer extends StdDeserializer<Annotation<?>>
      * @return A new content resource to add to the annotation's body
      */
     @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY })
-    private ContentResource getResource(final String aType, final JsonNode aNode) {
+    private ContentResource<?> getResource(final String aType, final JsonNode aNode) {
         return switch (aType) {
             case ResourceTypes.SOUND -> JSON.convertValue(aNode, SoundContent.class);
             case ResourceTypes.VIDEO -> JSON.convertValue(aNode, VideoContent.class);
@@ -340,7 +338,7 @@ public class CanvasAnnotationDeserializer extends StdDeserializer<Annotation<?>>
         targetsNode = aNode.get(JsonKeys.TARGET);
 
         if (targetsNode != null) {
-            targetsNode.forEach(ThrowingConsumer.sneaky(node -> targets.add(getTarget(node, aJsonParser))));
+            targetsNode.forEach(uncheck(node -> targets.add(getTarget(node, aJsonParser))));
             return targets;
         }
 
@@ -350,7 +348,7 @@ public class CanvasAnnotationDeserializer extends StdDeserializer<Annotation<?>>
         }
 
         if (aNode.isArray()) {
-            aNode.forEach(ThrowingConsumer.sneaky(node -> targets.add(getTarget(node, aJsonParser))));
+            aNode.forEach(uncheck(node -> targets.add(getTarget(node, aJsonParser))));
             return targets;
         }
 
@@ -370,7 +368,7 @@ public class CanvasAnnotationDeserializer extends StdDeserializer<Annotation<?>>
      */
     private Optional<TimeMode> getTimeMode(final JsonNode aTimeModeNode) {
         if (aTimeModeNode != null && aTimeModeNode.isValueNode()) {
-            final Optional<TimeMode> timeMode = TimeMode.forLabel(aTimeModeNode.asText());
+            final Optional<TimeMode> timeMode = TimeMode.fromLabel(aTimeModeNode.asText());
 
             if (timeMode.isEmpty() && LOGGER.isWarnEnabled()) {
                 LOGGER.warn(MessageCodes.JPA_130, aTimeModeNode.asText());

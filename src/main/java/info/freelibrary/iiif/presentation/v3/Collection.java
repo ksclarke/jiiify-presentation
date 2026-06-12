@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3;
 
+import static java.util.stream.Collectors.toCollection;
+
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -86,11 +88,46 @@ public class Collection extends NavigableResource<Collection> {
     }
 
     /**
+     * Creates a copy of the supplied collection.
+     *
+     * @param aCollection The collection to copy
+     */
+    public Collection(final Collection aCollection) {
+        super(aCollection);
+
+        if (aCollection.myItems != null) {
+            myItems = aCollection.myItems.stream().map(Item::copy).collect(toCollection(ArrayList::new));
+        }
+
+        aCollection.getPlaceholderCanvas()
+                .ifPresent(canvas -> myPlaceholderCanvas = aCollection.myPlaceholderCanvas.copy());
+        aCollection.getPlaceholderCanvas()
+                .ifPresent(canvas -> myAccompanyingCanvas = aCollection.myAccompanyingCanvas.copy());
+
+        if (aCollection.myServiceDefinitions != null) {
+            myServiceDefinitions =
+                    aCollection.myServiceDefinitions.stream().map(Service::copy).collect(toCollection(ArrayList::new));
+        }
+
+        if (aCollection.myAnnotations != null) {
+            myAnnotations =
+                    aCollection.myAnnotations.stream().map(AnnotationPage::copy).collect(toCollection(ArrayList::new));
+        }
+
+        myViewingDirection = aCollection.myViewingDirection;
+    }
+
+    /**
      * Creates a new collection. This is used by Jackson's deserialization processes.
      */
     private Collection() {
         super(ResourceTypes.COLLECTION, CollectionBehavior.class);
         getContextList(); // Initializes the context list
+    }
+
+    @Override
+    public Collection copy() {
+        return new Collection(this);
     }
 
     @Override
@@ -403,7 +440,7 @@ public class Collection extends NavigableResource<Collection> {
          */
         @JsonProperty(JsonKeys.THUMBNAIL)
         @JsonDeserialize(contentUsing = ContentResourceDeserializer.class)
-        private List<ContentResource> myThumbnails;
+        private List<ContentResource<?>> myThumbnails;
 
         /**
          * The collection item's type.
@@ -411,12 +448,32 @@ public class Collection extends NavigableResource<Collection> {
         private Type myType;
 
         /**
+         * Creates a copy of the given item.
+         *
+         * @param aItem The item to copy
+         */
+        public Item(final Item aItem) {
+            aItem.getLabel().ifPresent(label -> myLabel = label.copy());
+            aItem.getNavDate().ifPresent(navDate -> myNavDate = navDate.copy());
+
+            // Immutable field content
+            myNavPlace = aItem.myNavPlace;
+            myType = aItem.myType;
+            myID = aItem.myID;
+
+            if (aItem.myThumbnails != null) {
+                myThumbnails =
+                        aItem.myThumbnails.stream().map(ContentResource::copy).collect(toCollection(ArrayList::new));
+            }
+        }
+
+        /**
          * Create a brief collection child from a full collection.
          *
          * @param aCollection A full collection
          */
         public Item(final Collection aCollection) {
-            final List<ContentResource> thumbnails = aCollection.getThumbnails();
+            final List<ContentResource<?>> thumbnails = aCollection.getThumbnails();
 
             if (!thumbnails.isEmpty()) {
                 myThumbnails = new ArrayList<>();
@@ -434,7 +491,7 @@ public class Collection extends NavigableResource<Collection> {
          * @param aManifest A full manifest
          */
         public Item(final Manifest aManifest) {
-            final List<ContentResource> thumbnails = aManifest.getThumbnails();
+            final List<ContentResource<?>> thumbnails = aManifest.getThumbnails();
 
             if (!thumbnails.isEmpty()) {
                 myThumbnails = new ArrayList<>();
@@ -443,7 +500,7 @@ public class Collection extends NavigableResource<Collection> {
 
             myType = Item.Type.fromLabel(ResourceTypes.MANIFEST).orElseThrow();
             aManifest.getLabel().ifPresent(label -> myLabel = label);
-            myID = aManifest.getID(); // ID rules should have been checked by Manifest already
+            myID = aManifest.getID(); // Manifest checked ID rules already
         }
 
         /**
@@ -452,6 +509,15 @@ public class Collection extends NavigableResource<Collection> {
         @SuppressWarnings(Eclipse.UNUSED)
         private Item() {
             // This is intentionally left empty
+        }
+
+        /**
+         * Creates a copy of this item.
+         *
+         * @return A copy of this item
+         */
+        public Item copy() {
+            return new Item(this);
         }
 
         /**
@@ -533,7 +599,7 @@ public class Collection extends NavigableResource<Collection> {
          * @return The item thumbnails
          */
         @JsonGetter(JsonKeys.THUMBNAIL)
-        public List<ContentResource> getThumbnails() {
+        public List<ContentResource<?>> getThumbnails() {
             if (myThumbnails == null) {
                 myThumbnails = new ArrayList<>();
             }
@@ -596,7 +662,7 @@ public class Collection extends NavigableResource<Collection> {
          * @return The resource
          */
         @JsonSetter(JsonKeys.THUMBNAIL)
-        public Item setThumbnails(final ContentResource... aThumbnailArray) {
+        public Item setThumbnails(final ContentResource<?>... aThumbnailArray) {
             if (myThumbnails == null) {
                 myThumbnails = new ArrayList<>();
             }

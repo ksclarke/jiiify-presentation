@@ -1,6 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.selectors;
 
+import static info.freelibrary.util.Constants.AMPERSAND;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.tkurz.media.fragments.FragmentParser;
 import com.github.tkurz.media.fragments.ParseException;
@@ -13,6 +15,7 @@ import info.freelibrary.iiif.presentation.v3.Canvas;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.PMD;
 
 import java.io.StringReader;
 import java.net.URI;
@@ -24,6 +27,7 @@ import java.util.Objects;
  * A media fragment selector selects a region of interest in a resource with spatial and/or temporal dimensions
  * (typically a {@link Canvas}).
  */
+@SuppressWarnings({ PMD.GOD_CLASS })
 public class MediaFragmentSelector implements FragmentSelector {
 
     /** The URI of the <a href="http://www.w3.org/TR/media-frags/">Media Fragments URI specification</a>. */
@@ -177,6 +181,25 @@ public class MediaFragmentSelector implements FragmentSelector {
             final TemporalFragment<?> tf = myMediaFragment.getTemporalFragment();
             setStartEnd((float) tf.getStart().getValue(), (float) tf.getEnd().getValue());
         }
+    }
+
+    /**
+     * Creates a media fragment selector from an existing one.
+     *
+     * @param aSelector The media fragment selector whose values are copied
+     */
+    public MediaFragmentSelector(final MediaFragmentSelector aSelector) {
+        this(toFragmentString(aSelector));
+    }
+
+    /**
+     * Creates a deep copy of this media fragment selector.
+     *
+     * @return A deep copy of this media fragment selector
+     */
+    @Override
+    public MediaFragmentSelector copy() {
+        return new MediaFragmentSelector(this);
     }
 
     @Override
@@ -339,7 +362,7 @@ public class MediaFragmentSelector implements FragmentSelector {
      * @param aX A x-coordinate
      * @param aY A y-coordinate
      * @param aWidth A width value
-     * @param aHeight a A height value
+     * @param aHeight A height value
      * @return The spatial fragment
      */
     private SpatialFragment createSpatialFragment(final int aX, final int aY, final int aWidth, final int aHeight) {
@@ -411,6 +434,69 @@ public class MediaFragmentSelector implements FragmentSelector {
         myHeight = aHeight;
 
         return this;
+    }
+
+    /**
+     * Creates a media fragment string from the supplied selector.
+     *
+     * @param aSelector A selector
+     * @return The selector's media fragment string
+     * @throws IllegalArgumentException If the supplied selector is not spatial or temporal
+     */
+    private static String toFragmentString(final MediaFragmentSelector aSelector) {
+        Objects.requireNonNull(aSelector);
+
+        if (aSelector.isSpatial() && aSelector.isTemporal()) {
+            return String.join(AMPERSAND, toTemporalFragmentString(aSelector), toSpatialFragmentString(aSelector));
+        }
+
+        if (aSelector.isSpatial()) {
+            return toSpatialFragmentString(aSelector);
+        }
+
+        if (aSelector.isTemporal()) {
+            return toTemporalFragmentString(aSelector);
+        }
+
+        throw new IllegalArgumentException();
+    }
+
+    /**
+     * Creates a spatial fragment string from the supplied selector.
+     *
+     * @param aSelector A selector
+     * @return The selector's spatial fragment string
+     */
+    private static String toSpatialFragmentString(final MediaFragmentSelector aSelector) {
+        return String.format("xywh=%d,%d,%d,%d", aSelector.myX, aSelector.myY, aSelector.myWidth, aSelector.myHeight);
+    }
+
+    /**
+     * Creates a temporal fragment string from the supplied selector.
+     *
+     * @param aSelector A selector
+     * @return The selector's temporal fragment string
+     */
+    private static String toTemporalFragmentString(final MediaFragmentSelector aSelector) {
+        if (aSelector.hasEnd()) {
+            return String.format("t=%s,%s", trimFloat(aSelector.myStart), trimFloat(aSelector.myEnd));
+        }
+
+        return String.format("t=%s", trimFloat(aSelector.myStart));
+    }
+
+    /**
+     * Trims an integral float value to an integer string.
+     *
+     * @param aValue A float value
+     * @return A string representation of the value
+     */
+    private static String trimFloat(final float aValue) {
+        if (aValue == (long) aValue) {
+            return Long.toString((long) aValue);
+        }
+
+        return Float.toString(aValue);
     }
 
     /**

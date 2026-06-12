@@ -162,12 +162,12 @@ public class QuestioningAnnotation extends WebAnnotation {
     }
 
     @Override
-    public QuestioningAnnotation setBody(final ContentResource... aBody) {
+    public QuestioningAnnotation setBody(final ContentResource<?>... aBody) {
         return (QuestioningAnnotation) super.setBody(aBody);
     }
 
     @Override
-    public QuestioningAnnotation setBody(final List<ContentResource> aResourceList) {
+    public QuestioningAnnotation setBody(final List<ContentResource<?>> aResourceList) {
         return (QuestioningAnnotation) super.setBody(aResourceList);
     }
 

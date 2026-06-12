@@ -4,17 +4,15 @@ package info.freelibrary.iiif.presentation.v3;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import java.util.List;
-import java.util.UUID;
-
-import org.junit.Test;
-
-import info.freelibrary.util.Constants;
-
 import info.freelibrary.iiif.presentation.v3.annotation.AbstractCanvasAnnotation;
 import info.freelibrary.iiif.presentation.v3.content.DatasetContent;
 import info.freelibrary.iiif.presentation.v3.properties.Behavior;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.ResourceBehavior;
+import info.freelibrary.util.Constants;
+import org.junit.Test;
+
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Tests of {@link AbstractCanvasAnnotation}.
@@ -129,6 +127,15 @@ public class AbstractCanvasAnnotationTest {
         private TestClass(final String aID) {
             super();
             super.setID(aID);
+        }
+
+        /**
+         * Creates a copy of this test object.
+         *
+         * @return A copy of this test object
+         */
+        public TestClass copy() {
+            return new TestClass(getID());
         }
     }
 }

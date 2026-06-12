@@ -14,6 +14,25 @@ public class VisualContentSelector implements ContentSelector {
     }
 
     /**
+     * Creates a copy of the supplied visual content selector.
+     *
+     * @param aSelector The visual content selector to copy
+     */
+    public VisualContentSelector(final VisualContentSelector aSelector) {
+        // This is intentionally left empty; there is nothing to copy
+    }
+
+    /**
+     * Creates a copy of this visual content selector.
+     *
+     * @return A copy of this visual content selector
+     */
+    @Override
+    public VisualContentSelector copy() {
+        return new VisualContentSelector();
+    }
+
+    /**
      * Gets a string representation of the visual content selector.
      *
      * @return A string representation of the visual content selector
