@@ -10,7 +10,7 @@
       "Castel Sant'Angelo, Rome"
     ]
   },
-  "navDate": "1776-01-01T00:00:00+00:00",
+  "navDate": "1776-01-01T00:00:00Z",
   "navPlace": {
     "id": "https://iiif.io/api/cookbook/recipe/0318-navPlace-navDate/feature-collection/1",
     "type": "FeatureCollection",

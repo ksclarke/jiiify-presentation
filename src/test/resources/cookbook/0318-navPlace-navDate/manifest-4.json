@@ -10,7 +10,7 @@
       "The Temple of Vesta, Rome, 1849"
     ]
   },
-  "navDate": "1849-01-01T00:00:00+00:00",
+  "navDate": "1849-01-01T00:00:00Z",
   "navPlace": {
     "id": "https://iiif.io/api/cookbook/recipe/0318-navPlace-navDate/feature-collection/4",
     "type": "FeatureCollection",

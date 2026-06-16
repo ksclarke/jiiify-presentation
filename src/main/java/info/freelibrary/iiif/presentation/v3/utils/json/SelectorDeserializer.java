@@ -24,6 +24,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.parser.Parser;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
@@ -37,6 +38,7 @@ public class SelectorDeserializer extends StdDeserializer<Selector> {
     private static final Logger LOGGER = LoggerFactory.getLogger(SelectorDeserializer.class, MessageCodes.BUNDLE);
 
     /** The <code>serialVersionUID</code> for SelectorDeserializer. */
+    @Serial
     private static final long serialVersionUID = 505267696639975498L;
 
     /**
@@ -172,12 +174,7 @@ public class SelectorDeserializer extends StdDeserializer<Selector> {
      */
     private SvgSelector deserializeSvgSelector(final JsonNode aNode) {
         final Optional<String> value = getText(aNode, JsonKeys.VALUE);
-
-        if (value.isEmpty()) {
-            return null;
-        }
-
-        return new SvgSelector(Jsoup.parse(value.get(), EMPTY, Parser.xmlParser()));
+        return value.map(node -> new SvgSelector(Jsoup.parse(node, EMPTY, Parser.xmlParser()))).orElse(null);
     }
 
     /**

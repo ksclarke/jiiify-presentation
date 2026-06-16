@@ -13,6 +13,7 @@
   <!-- Log file for the fixture files update check -->
   <appender name="FILE" class="ch.qos.logback.core.FileAppender">
     <file>target/fixtures-update.log</file>
+    <append>false</append> <!-- Clean slate for every run -->
     <encoder>
       <pattern>[%level] %logger{45}:%line -- %msg%n</pattern>
     </encoder>

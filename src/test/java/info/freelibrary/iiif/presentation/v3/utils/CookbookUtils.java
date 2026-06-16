@@ -1,3 +1,4 @@
+
 package info.freelibrary.iiif.presentation.v3.utils;
 
 import static info.freelibrary.util.Constants.EOL;
@@ -16,8 +17,7 @@ import org.jsoup.nodes.Element;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -123,20 +123,20 @@ public final class CookbookUtils {
      * @return A list of related JSON URLs
      * @throws CookbookRecipeException If a JSON URL cannot be scraped from the cookbook site
      */
-    private static List<String> getJsonURLs(final String aHref) {
+    private static Set<String> getJsonURLs(final String aHref) {
         final String baseURL = !aHref.endsWith(SLASH) ? aHref + SLASH : aHref;
-        final List<String> urlList = new ArrayList<>();
+        final Set<String> urls = new HashSet<>();
 
         try {
             final Stream<Element> links = Jsoup.connect(aHref).get().select(LINK).stream();
 
             links.distinct().map(link -> link.attr(HREF)).filter(url -> url.matches(RECIPE_RE)).forEach(path -> {
-                urlList.add(baseURL + path);
+                urls.add(baseURL + path); // Will return false if the URL is already in the set
             });
         } catch (final IOException details) {
             throw new CookbookRecipeException(details);
         }
 
-        return urlList;
+        return urls;
     }
 }

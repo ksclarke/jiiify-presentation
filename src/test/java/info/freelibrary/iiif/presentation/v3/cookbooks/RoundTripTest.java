@@ -1243,6 +1243,20 @@ public class RoundTripTest extends AbstractCookbookTest {
     }
 
     /**
+     * Tests the 0464 reuse manifest fixture (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0464-reuse-manifest/">...</a>).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0464ReuseManifest() throws IOException {
+        final String expected = getExpected("0464-reuse-manifest/manifest");
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
+    }
+
+    /**
      * Tests the 0485 Content State fixture (cf.
      * <a href="https://iiif.io/api/cookbook/recipe/0485-contentstate-canvas-region/">...</a>).
      *
@@ -1276,10 +1290,38 @@ public class RoundTripTest extends AbstractCookbookTest {
      *
      * @throws IOException If there is trouble reading the annotation file
      */
-    // @Test
+    @Test
     public final void test0540LinkForOpeningMultipleCanvases() throws IOException {
         final String expected = getExpected("0540-link-for-opening-multiple-canvases/annotation");
         final String found = JSON.readValue(expected, Annotation.class).toString();
+
+        assertEquals(myTestName, expected, found);
+    }
+
+    /**
+     * Tests the 0560 resources on a timeline fixture (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0560-resources-on-a-timeline/">...</a>).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0560ResourcesOnATimeline() throws IOException {
+        final String expected = getExpected("0560-resources-on-a-timeline/manifest");
+        final String found = JSON.readValue(expected, Manifest.class).toString();
+
+        assertEquals(myTestName, expected, found);
+    }
+
+    /**
+     * Tests the 0561 text of image fixture (cf.
+     * <a href="https://iiif.io/api/cookbook/recipe/0561-text-on-image/">...</a>).
+     *
+     * @throws IOException If there is trouble reading the manifest file
+     */
+    @Test
+    public final void test0561TextOnImage() throws IOException {
+        final String expected = getExpected("0561-text-on-image/manifest");
+        final String found = JSON.readValue(expected, Manifest.class).toString();
 
         assertEquals(myTestName, expected, found);
     }

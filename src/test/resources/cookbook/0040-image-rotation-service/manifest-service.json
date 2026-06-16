@@ -1,6 +1,6 @@
 {
   "@context": "http://iiif.io/api/presentation/3/context.json",
-  "id": "https://iiif.io/api/cookbook/recipe/0040-image-rotation-service/manifest-service.json ",
+  "id": "https://iiif.io/api/cookbook/recipe/0040-image-rotation-service/manifest-service.json",
   "type": "Manifest",
   "label": {
     "ca": [
@@ -46,7 +46,7 @@
                 },
                 "selector": {
                   "type": "ImageApiSelector",
-                  "rotation": "270"
+                  "rotation": "90"
                 }
               },
               "target": "https://iiif.io/api/cookbook/recipe/0040-image-rotation-service/canvas/p1"
