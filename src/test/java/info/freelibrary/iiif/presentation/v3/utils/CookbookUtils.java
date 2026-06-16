@@ -5,26 +5,23 @@ import static info.freelibrary.util.Constants.EOL;
 import static info.freelibrary.util.Constants.SLASH;
 import static info.freelibrary.util.Constants.SPACE;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.stream.Stream;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
-
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-
 import info.freelibrary.json.Json;
 import info.freelibrary.json.JsonObject;
 import info.freelibrary.json.JsonOptions;
 import info.freelibrary.json.JsonReader;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.stream.Stream;
 
 /**
  * Utilities related to the cookbook recipes.
@@ -77,7 +74,7 @@ public final class CookbookUtils {
         try {
             final Stream<Element> links = Jsoup.connect(COOKBOOK_URL).get().select(LINK).stream();
             final JsonOptions options = new JsonOptions().ignoreOrder(true);
-            final SortedSet<String> urlSet = new TreeSet<>(); // another de-duplication and final sort
+            final SortedSet<String> urlSet = new TreeSet<>(); // Another deduplication and final sort
 
             links.distinct().map(link -> link.attr(HREF)).filter(url -> url.matches(RECIPE_PAGE_RE)).forEach(url -> {
                 urlSet.addAll(getJsonURLs(url.replaceFirst("^/", BASE_COOKBOOK_URL + SLASH)));
@@ -126,20 +123,20 @@ public final class CookbookUtils {
      * @return A list of related JSON URLs
      * @throws CookbookRecipeException If a JSON URL cannot be scraped from the cookbook site
      */
-    private static List<String> getJsonURLs(final String aHref) {
+    private static Set<String> getJsonURLs(final String aHref) {
         final String baseURL = !aHref.endsWith(SLASH) ? aHref + SLASH : aHref;
-        final List<String> urlList = new ArrayList<>();
+        final Set<String> urls = new HashSet<>();
 
         try {
             final Stream<Element> links = Jsoup.connect(aHref).get().select(LINK).stream();
 
             links.distinct().map(link -> link.attr(HREF)).filter(url -> url.matches(RECIPE_RE)).forEach(path -> {
-                urlList.add(baseURL + path);
+                urls.add(baseURL + path); // Will return false if the URL is already in the set
             });
         } catch (final IOException details) {
             throw new CookbookRecipeException(details);
         }
 
-        return urlList;
+        return urls;
     }
 }

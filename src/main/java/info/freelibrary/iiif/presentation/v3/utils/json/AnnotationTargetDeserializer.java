@@ -81,7 +81,7 @@ public class AnnotationTargetDeserializer extends StdDeserializer<Target> {
             final JsonNode selectorNode = currentNode.get(JsonKeys.SELECTOR);
             final JsonNode styleClassNode = currentNode.get(JsonKeys.STYLE_CLASS);
             final SpecificResource specificResource;
-            final ContentResource source;
+            final ContentResource<?> source;
             final Selector selector;
 
             if (sourceNode == null) {

@@ -71,13 +71,12 @@ public class AnnotationTargetSerializer extends StdSerializer<Target> {
                         aJsonGenerator.writeEndObject();
                     }
                     case ResourceTypes.MANIFEST -> {
-                        final Target target = aTarget;
-                        final List<PartOf> partOfList = target.getPartOfs();
+                        final List<PartOf> partOfList = aTarget.getPartOfs();
 
                         aJsonGenerator.writeStartObject();
 
-                        if (target.getID() != null) {
-                            aJsonGenerator.writeStringField(JsonKeys.ID, target.getID());
+                        if (aTarget.getID() != null) {
+                            aJsonGenerator.writeStringField(JsonKeys.ID, aTarget.getID());
                         }
 
                         aJsonGenerator.writeStringField(JsonKeys.TYPE, ResourceTypes.CANVAS);

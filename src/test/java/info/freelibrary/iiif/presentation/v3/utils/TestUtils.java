@@ -1,6 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.utils;
 
+import static info.freelibrary.iiif.presentation.v3.properties.selectors.MediaFragmentSelector.MEDIA_FRAGMENT_SPECIFICATION_URI;
 import static info.freelibrary.iiif.presentation.v3.utils.JsonKeys.BODY;
 import static info.freelibrary.iiif.presentation.v3.utils.JsonKeys.CONTEXT;
 import static info.freelibrary.iiif.presentation.v3.utils.JsonKeys.LANGUAGE;
@@ -8,8 +9,10 @@ import static info.freelibrary.iiif.presentation.v3.utils.JsonKeys.MOTIVATION;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import com.fasterxml.jackson.databind.SequenceWriter;
+import info.freelibrary.iiif.presentation.v3.properties.selectors.FragmentSelector;
 import info.freelibrary.iiif.presentation.v3.utils.json.JsonParsingException;
 import info.freelibrary.json.Json;
+import info.freelibrary.json.JsonObject;
 import info.freelibrary.json.JsonOptions;
 import info.freelibrary.json.JsonValue;
 import info.freelibrary.util.Logger;
@@ -84,6 +87,8 @@ public final class TestUtils {
         final JsonOptions config = new JsonOptions().ignoreOrder(true).setCollapsibleArrays(COLLAPSIBLES).format(true);
         final JsonValue expected = Json.parse(anExpectedResult);
         final JsonValue actual = Json.parse(anActualResult);
+
+        addConformsToIfNeeded(expected); // jpv3 adds these by default, when appropriate; the upstream cookbooks don't
 
         // This double equality check can be problematic, since the first equals() is looser than the assertEquals --
         // `equals` will normalize duration floats, but `assertEquals` will not; so, the wrong error may be displayed
@@ -219,5 +224,63 @@ public final class TestUtils {
         }
 
         return aName != null ? "{\"" + aName + "\" : " + writer.toString() + "}" : writer.toString();
+    }
+
+    /**
+     * Adds the conformsTo property to a JSON object if it doesn't already exist.
+     *
+     * @param aJsonValue The JSON to add the conformsTo property to
+     */
+    private static void addConformsToIfNeeded(final JsonValue aJsonValue) {
+        if (!aJsonValue.isObject()) {
+            return;
+        }
+
+        aJsonValue.asObject().getJsonArray(JsonKeys.ITEMS).ifPresent(items -> items.forEach(TestUtils::processItem));
+    }
+
+    /**
+     * Processes a JSON item, looking for annotations.
+     *
+     * @param aItem An item to check for the presence of an annotation
+     */
+    private static void processItem(final JsonValue aItem) {
+        aItem.asObject().getJsonArray(JsonKeys.ANNOTATIONS)
+                .ifPresent(annotations -> annotations.forEach(TestUtils::processAnnotation));
+    }
+
+    /**
+     * Processes an annotation, looking for annotation items.
+     *
+     * @param aAnnotation An annotation to check for the presence of an annotation item
+     */
+    private static void processAnnotation(final JsonValue aAnnotation) {
+        aAnnotation.asObject().getJsonArray(JsonKeys.ITEMS)
+                .ifPresent(items -> items.forEach(TestUtils::processAnnotationItem));
+    }
+
+    /**
+     * Processes an annotation item, looking for a fragment selector.
+     *
+     * @param aAnnotationItem An annotation item to check for the presence of a fragment selector
+     */
+    private static void processAnnotationItem(final JsonValue aAnnotationItem) {
+        if (!aAnnotationItem.isObject()) {
+            return;
+        }
+
+        aAnnotationItem.asObject().get(JsonKeys.TARGET).filter(JsonValue::isObject).map(JsonValue::asObject)
+                .flatMap(target -> target.getJsonObject(JsonKeys.SELECTOR)).filter(TestUtils::isFragmentSelector)
+                .ifPresent(selector -> selector.set(JsonKeys.CONFORMS_TO, MEDIA_FRAGMENT_SPECIFICATION_URI.toString()));
+    }
+
+    /**
+     * Checks if a selector is a fragment selector.
+     *
+     * @param aSelector A selector to check
+     * @return True if the selector is a fragment selector, false otherwise
+     */
+    private static boolean isFragmentSelector(final JsonObject aSelector) {
+        return aSelector.getString(JsonKeys.TYPE).filter(FragmentSelector.class.getSimpleName()::equals).isPresent();
     }
 }
