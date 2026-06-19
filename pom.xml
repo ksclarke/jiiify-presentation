@@ -408,11 +408,24 @@
     </profile>
   </profiles>
 
+  <repositories>
+    <repository>
+      <id>github</id>
+      <url>https://maven.pkg.github.com/freelibrary/jiiify-presentation</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </repository>
+  </repositories>
+
   <!-- We adopt a lot of configurations from our parent project -->
   <parent>
     <artifactId>freelib-parent</artifactId>
     <groupId>info.freelibrary</groupId>
-    <version>12.0.3</version>
+    <version>14.0.4</version>
   </parent>
 
 </project>

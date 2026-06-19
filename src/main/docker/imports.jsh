@@ -6,14 +6,14 @@ import static info.freelibrary.iiif.presentation.v3.services.ImageService3.Profi
 
 import info.freelibrary.iiif.presentation.v3.AnnotationPage;
 import info.freelibrary.iiif.presentation.v3.Canvas;
-import info.freelibrary.iiif.presentation.v3.ImageContent;
 import info.freelibrary.iiif.presentation.v3.Manifest;
 import info.freelibrary.iiif.presentation.v3.PaintingAnnotation;
-import info.freelibrary.iiif.presentation.v3.SoundContent;
-import info.freelibrary.iiif.presentation.v3.VideoContent;
-import info.freelibrary.iiif.presentation.v3.annotations.Target;
-import info.freelibrary.iiif.presentation.v3.ids.Minter;
-import info.freelibrary.iiif.presentation.v3.ids.MinterFactory;
+import info.freelibrary.iiif.presentation.v3.annotation.Target;
+import info.freelibrary.iiif.presentation.v3.content.ImageContent;
+import info.freelibrary.iiif.presentation.v3.content.SoundContent;
+import info.freelibrary.iiif.presentation.v3.content.VideoContent;
+import info.freelibrary.iiif.presentation.v3.id.Minter;
+import info.freelibrary.iiif.presentation.v3.id.MinterFactory;
 import info.freelibrary.iiif.presentation.v3.properties.I18n;
 import info.freelibrary.iiif.presentation.v3.properties.Label;
 import info.freelibrary.iiif.presentation.v3.properties.Metadata;
