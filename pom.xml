@@ -57,6 +57,7 @@
         <!-- Test-related dependencies -->
         <magicfree.json.version>0.11.0</magicfree.json.version>
         <system.lambda.version>1.2.1</system.lambda.version>
+        <commonmark.version>0.28.0</commonmark.version>
         <mockito.version>5.20.0</mockito.version>
         <opencsv.version>4.6</opencsv.version>
         <lorem.version>2.1</lorem.version>
@@ -153,6 +154,12 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.commonmark</groupId>
+            <artifactId>commonmark</artifactId>
+            <version>${commonmark.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
