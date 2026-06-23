@@ -177,4 +177,7 @@
     <entry key="JPA-196">Did not find expected CSV in supplied ZIP file</entry>
     <entry key="JPA-197">Environment property '{}' must be set for the integration tests</entry>
     <entry key="JPA-198">Unexpected test output: {}</entry>
+    <entry key="JPA-199">Failed to parse example code from documentation: {}</entry>
+    <entry key="JPA-200">An annotation list must not be null</entry>
+    <entry key="JPA-201">A list of annotations must not contain null values</entry>
 </properties>

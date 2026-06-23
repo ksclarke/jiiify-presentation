@@ -8,23 +8,6 @@ import static info.freelibrary.iiif.presentation.v3.properties.behaviors.Manifes
 import static info.freelibrary.iiif.presentation.v3.services.ImageService3.Profile.LEVEL_ONE;
 import static org.junit.Assert.assertEquals;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import info.freelibrary.util.Logger;
-import info.freelibrary.util.LoggerFactory;
-import info.freelibrary.util.StringUtils;
-
 import info.freelibrary.iiif.presentation.v3.AnnotationPage;
 import info.freelibrary.iiif.presentation.v3.Canvas;
 import info.freelibrary.iiif.presentation.v3.Manifest;
@@ -43,6 +26,21 @@ import info.freelibrary.iiif.presentation.v3.properties.Summary;
 import info.freelibrary.iiif.presentation.v3.properties.Value;
 import info.freelibrary.iiif.presentation.v3.services.ImageService3;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.util.Logger;
+import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.StringUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Java tests creating the examples found in the cookbook recipes.
@@ -135,7 +133,7 @@ public class CookbooksTest extends AbstractCookbookTest {
 
         canvas.setWidthHeight(1200, 1800);
         imageContent.setWidthHeight(1200, 1800);
-        page.addAnnotations(annotation.setBody(imageContent).setTargets(new Target(canvas.getID())));
+        page.setAnnotations(annotation.setBody(imageContent).setTargets(new Target(canvas.getID())));
         manifest.setCanvases(canvas.setPaintingPages(page));
 
         System.out.println(manifest);
@@ -181,7 +179,7 @@ public class CookbooksTest extends AbstractCookbookTest {
 
         canvas.setDuration(1985.024);
         soundContent.setDuration(1985.024);
-        page.addAnnotations(annotation.setBody(soundContent).setTargets(new Target(canvas.getID())));
+        page.setAnnotations(annotation.setBody(soundContent).setTargets(new Target(canvas.getID())));
         manifest.setCanvases(canvas.setPaintingPages(page));
 
         System.out.println(manifest);
@@ -228,7 +226,7 @@ public class CookbooksTest extends AbstractCookbookTest {
 
         canvas.setDuration(572.034).setWidthHeight(480, 360);
         videoContent.setDuration(572.034).setWidthHeight(480, 360);
-        page.addAnnotations(annotation.setBody(videoContent).setTargets(new Target(canvas.getID())));
+        page.setAnnotations(annotation.setBody(videoContent).setTargets(new Target(canvas.getID())));
         manifest.setCanvases(canvas.setPaintingPages(page));
 
         System.out.println(manifest);
@@ -274,7 +272,7 @@ public class CookbooksTest extends AbstractCookbookTest {
 
         canvas.setWidthHeight(1920, 1080);
         imageContent.setWidthHeight(640, 360);
-        page.addAnnotations(annotation.setBody(imageContent).setTargets(new Target(canvas.getID())));
+        page.setAnnotations(annotation.setBody(imageContent).setTargets(new Target(canvas.getID())));
         manifest.setCanvases(canvas.setPaintingPages(page));
 
         System.out.println(manifest);
@@ -330,7 +328,7 @@ public class CookbooksTest extends AbstractCookbookTest {
                 LEVEL_ONE);
 
         imageContent.setWidthHeight(4032, 3024).setFormat(IMAGE_JPEG).setServices(service);
-        page.addAnnotations(annotation.setBody(imageContent).setTargets(new Target(canvas.getID())));
+        page.setAnnotations(annotation.setBody(imageContent).setTargets(new Target(canvas.getID())));
         manifest.setCanvases(canvas.setWidthHeight(4032, 3024).setPaintingPages(page));
 
         System.out.println(manifest);
@@ -469,7 +467,7 @@ public class CookbooksTest extends AbstractCookbookTest {
         manifest.setRequiredStatement(new RequiredStatement(reqStmtLabel, reqStmt));
 
         imageContent.setWidthHeight(1114, 991).setFormat(IMAGE_JPEG).setServices(service);
-        page.addAnnotations(annotation.setBody(imageContent).setTargets(new Target(canvas.getID())));
+        page.setAnnotations(annotation.setBody(imageContent).setTargets(new Target(canvas.getID())));
         manifest.setCanvases(canvas.setWidthHeight(1114, 991).setPaintingPages(page));
 
         System.out.println(manifest);
@@ -539,7 +537,7 @@ public class CookbooksTest extends AbstractCookbookTest {
                 "<span>Glen Robson, IIIF Technical Coordinator. <a href=\"https://creativecommons.org/licenses/by-sa/3.0\">CC BY-SA 3.0</a> <img src=\"https://licensebuttons.net/l/by-sa/3.0/88x31.png\"/></span>")));
 
         imageContent.setWidthHeight(4032, 3024).setFormat(IMAGE_JPEG).setServices(service);
-        page.addAnnotations(annotation.setBody(imageContent).setTargets(new Target(canvas.getID())));
+        page.setAnnotations(annotation.setBody(imageContent).setTargets(new Target(canvas.getID())));
         manifest.setCanvases(canvas.setWidthHeight(4032, 3024).setPaintingPages(page));
 
         System.out.println(manifest);
@@ -605,7 +603,7 @@ public class CookbooksTest extends AbstractCookbookTest {
                 "<span>Glen Robson, IIIF Technical Coordinator. <a href=\"https://creativecommons.org/licenses/by-sa/3.0\">CC BY-SA 3.0</a> <a href=\"https://creativecommons.org/licenses/by-sa/3.0\" title=\"CC BY-SA 3.0\"><img src=\"https://licensebuttons.net/l/by-sa/3.0/88x31.png\"/></a></span>")));
 
         imageContent.setWidthHeight(4032, 3024).setFormat(IMAGE_JPEG).setServices(service);
-        page.addAnnotations(annotation.setBody(imageContent).setTargets(new Target(canvas.getID())));
+        page.setAnnotations(annotation.setBody(imageContent).setTargets(new Target(canvas.getID())));
         manifest.setCanvases(canvas.setWidthHeight(4032, 3024).setPaintingPages(page));
 
         System.out.println(manifest);
@@ -785,7 +783,7 @@ public class CookbooksTest extends AbstractCookbookTest {
             final var height = Integer.valueOf(pageDataList.get(4));
 
             imageContent.setWidthHeight(width, height).setFormat(IMAGE_JPEG).setServices(service);
-            page.addAnnotations(annotation.setBody(imageContent).setTargets(new Target(canvas.getID())));
+            page.setAnnotations(annotation.setBody(imageContent).setTargets(new Target(canvas.getID())));
             canvases.add(canvas.setWidthHeight(width, height).setPaintingPages(page));
         }
 
@@ -1094,7 +1092,7 @@ public class CookbooksTest extends AbstractCookbookTest {
             final var height = Integer.valueOf(pageDataList.get(4));
 
             imageContent.setWidthHeight(width, height).setFormat(IMAGE_JPEG).setServices(service);
-            page.addAnnotations(annotation.setBody(imageContent).setTargets(new Target(canvas.getID())));
+            page.setAnnotations(annotation.setBody(imageContent).setTargets(new Target(canvas.getID())));
             canvases.add(canvas.setWidthHeight(width, height).setPaintingPages(page));
         }
 
@@ -1155,7 +1153,7 @@ public class CookbooksTest extends AbstractCookbookTest {
             final var height = Integer.valueOf(pageDataList.get(4));
 
             imageContent.setWidthHeight(width, height).setFormat(IMAGE_JPEG).setServices(service);
-            page.addAnnotations(annotation.setBody(imageContent).setTargets(new Target(canvas.getID())));
+            page.setAnnotations(annotation.setBody(imageContent).setTargets(new Target(canvas.getID())));
             canvases.add(canvas.setWidthHeight(width, height).setPaintingPages(page));
         }
 

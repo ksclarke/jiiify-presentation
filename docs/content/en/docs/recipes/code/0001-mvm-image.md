@@ -25,10 +25,8 @@ var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0001-mvm-image/
 var canvas = new Canvas(MinterFactory.getMinter(manifest));
 var imageContent = new ImageContent("https://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png");
 
-canvas.setWidthHeight(1200, 1800);
-imageContent.setWidthHeight(1200, 1800);
-canvas.paintWith(imageContent);
-manifest.setCanvases(canvas);
+canvas.paintWith(imageContent.setWidthHeight(1200, 1800));
+manifest.setCanvases(canvas.setWidthHeight(1200, 1800));
 
 System.out.println(manifest);
 ```
@@ -45,14 +43,10 @@ var canvas = new Canvas("https://iiif.io/api/cookbook/recipe/0001-mvm-image/canv
 var imageContent = new ImageContent("https://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png");
 var page = new AnnotationPage<PaintingAnnotation>("https://iiif.io/api/cookbook/recipe/0001-mvm-image/page/p1/1");
 var annotation = new PaintingAnnotation("https://iiif.io/api/cookbook/recipe/0001-mvm-image/annotation/p0001-image",
-  canvas);
+  canvas).setBody(imageContent.setWidthHeight(1200, 1800));
 
-canvas.setWidthHeight(1200, 1800);
-imageContent.setWidthHeight(1200, 1800);
-annotation.setBody(imageContent).setTarget(new Target(canvas));
-page.addAnnotations(annotation);
-canvas.setPaintingPages(page);
-manifest.setCanvases(canvas);
+canvas.setPaintingPages(page.setAnnotations(annotation));
+manifest.setCanvases(canvas.setWidthHeight(1200, 1800));
 
 System.out.println(manifest);
 ```

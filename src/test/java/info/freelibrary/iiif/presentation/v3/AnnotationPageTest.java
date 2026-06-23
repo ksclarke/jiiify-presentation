@@ -43,7 +43,7 @@ public class AnnotationPageTest {
     public void testAddAnnotations() {
         final AnnotationPage<WebAnnotation> page = new AnnotationPage<>(myID);
 
-        page.addAnnotations(new BookmarkingAnnotation(myID, new Canvas(myID)),
+        page.setAnnotations(new BookmarkingAnnotation(myID, new Canvas(myID)),
                 new WebAnnotation(myID, new Canvas(myID)));
 
         assertEquals(2, page.getAnnotations().size());

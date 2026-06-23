@@ -5,12 +5,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
-import java.util.UUID;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
@@ -19,9 +13,6 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-
-import info.freelibrary.util.StringUtils;
-
 import info.freelibrary.iiif.presentation.v3.AnnotationPage;
 import info.freelibrary.iiif.presentation.v3.ResourceTypes;
 import info.freelibrary.iiif.presentation.v3.annotation.BookmarkingAnnotation;
@@ -29,6 +20,12 @@ import info.freelibrary.iiif.presentation.v3.annotation.Purpose;
 import info.freelibrary.iiif.presentation.v3.annotation.Target;
 import info.freelibrary.iiif.presentation.v3.annotation.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.content.DatasetContent;
+import info.freelibrary.util.StringUtils;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.util.UUID;
 
 /**
  * Tests of the {@link JSON} utility class.
@@ -78,7 +75,7 @@ public class JSONTest {
         final ObjectNode annoNode = JSON.createObjectNode();
         final ObjectNode rootNode = JSON.createObjectNode();
 
-        page.addAnnotations(annotation);
+        page.setAnnotations(annotation);
 
         rootNode.put(JsonKeys.ID, myID);
         rootNode.put(JsonKeys.TYPE, ResourceTypes.ANNOTATION_PAGE);
@@ -102,7 +99,7 @@ public class JSONTest {
         final ObjectNode annoNode = JSON.createObjectNode();
         final ObjectNode rootNode = JSON.createObjectNode();
 
-        page.addAnnotations(annotation);
+        page.setAnnotations(annotation);
 
         rootNode.put(JsonKeys.ID, myID);
         rootNode.put(JsonKeys.TYPE, ResourceTypes.ANNOTATION_PAGE);
@@ -175,7 +172,7 @@ public class JSONTest {
         final ObjectNode annoNode = JSON.createObjectNode();
         final ObjectNode rootNode = JSON.createObjectNode();
 
-        page.addAnnotations(annotation);
+        page.setAnnotations(annotation);
 
         rootNode.put(JsonKeys.ID, myID);
         rootNode.put(JsonKeys.TYPE, ResourceTypes.ANNOTATION_PAGE);
@@ -199,7 +196,7 @@ public class JSONTest {
         final ObjectNode annoNode = JSON.createObjectNode();
         final ObjectNode rootNode = JSON.createObjectNode();
 
-        page.addAnnotations(annotation);
+        page.setAnnotations(annotation);
 
         rootNode.put(JsonKeys.ID, myID);
         rootNode.put(JsonKeys.TYPE, ResourceTypes.ANNOTATION_PAGE);

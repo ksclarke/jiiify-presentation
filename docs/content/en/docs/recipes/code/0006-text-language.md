@@ -28,8 +28,8 @@ var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0006-text-langu
 
 var canvas = new Canvas(MinterFactory.getMinter(manifest));
 var imageContent = new ImageContent("https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother/full/max/0/default.jpg");
-var service = new ImageService3(LEVEL_ONE, "https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother");
-
+var service = new ImageService3("https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother",
+  LEVEL_ONE);
 var creator = new Metadata(new Label(new I18n("en", "Creator"), new I18n("fr", "Auteur")),
   new Value("Whistler, James Abbott McNeill"));
 
@@ -49,7 +49,8 @@ manifest.setSummary(new Summary(summaryEN, summaryFR));
 manifest.setRequiredStatement(new RequiredStatement(reqStmtLabel, reqStmt));
 
 imageContent.setWidthHeight(1114, 991).setFormat(IMAGE_JPEG).setServices(service);
-manifest.addCanvases(canvas.setWidthHeight(1114, 991).paintWith(imageContent));
+canvas.setWidthHeight(1114, 991).paintWith(imageContent);
+manifest.setCanvases(canvas);
 
 System.out.println(manifest);
 ```
@@ -67,9 +68,11 @@ var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0006-text-langu
 
 var canvas = new Canvas("https://iiif.io/api/cookbook/recipe/0006-text-language/canvas/p1");
 var page = new AnnotationPage<PaintingAnnotation>("https://iiif.io/api/cookbook/recipe/0006-text-language/page/p1/1");
-var annotation = new PaintingAnnotation("https://iiif.io/api/cookbook/recipe/0006-text-language/annotation/p0001-image", canvas);
+var annotation = new PaintingAnnotation("https://iiif.io/api/cookbook/recipe/0006-text-language/annotation/p0001-image",
+  canvas);
 var imageContent = new ImageContent("https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother/full/max/0/default.jpg");
-var service = new ImageService3(LEVEL_ONE, "https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother");
+var service = new ImageService3("https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother",
+  LEVEL_ONE);
 
 var creatorLabel = new Label(new I18n("en", "Creator"), new I18n("fr", "Auteur"));
 var creator = new Metadata(creatorLabel, new Value("Whistler, James Abbott McNeill"));
@@ -90,8 +93,9 @@ manifest.setSummary(new Summary(summaryEN, summaryFR));
 manifest.setRequiredStatement(new RequiredStatement(reqStmtLabel, reqStmt));
 
 imageContent.setWidthHeight(1114, 991).setFormat(IMAGE_JPEG).setServices(service);
-page.addAnnotations(annotation.setBody(imageContent).setTarget(new Target(canvas)));
-manifest.addCanvases(canvas.setWidthHeight(1114, 991).setPaintingPages(page));
+page.setAnnotations(annotation.setBody(imageContent));
+canvas.setWidthHeight(1114, 991).setPaintingPages(page);
+manifest.setCanvases(canvas);
 
 System.out.println(manifest);
 ```
@@ -109,8 +113,8 @@ var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0006-text-langu
 
 var canvas = new Canvas(MinterFactory.getMinter(manifest));
 var imageContent = new ImageContent("https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother/full/max/0/default.jpg");
-var service = new ImageService3(LEVEL_ONE, "https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother");
-
+var service = new ImageService3("https://iiif.io/api/image/3.0/example/reference/329817fc8a251a01c393f517d8a17d87-Whistlers_Mother",
+  LEVEL_ONE);
 var creator = new Metadata(new Label("en", "Creator", "fr", "Auteur"),
   new Value("Whistler, James Abbott McNeill"));
 
@@ -128,7 +132,8 @@ manifest.setSummary(summary);
 manifest.setRequiredStatement(reqStatement);
 
 imageContent.setWidthHeight(1114, 991).setFormat(IMAGE_JPEG).setServices(service);
-manifest.addCanvases(canvas.setWidthHeight(1114, 991).paintWith(imageContent));
+canvas.setWidthHeight(1114, 991).paintWith(imageContent);
+manifest.setCanvases(canvas);
 
 System.out.println(manifest);
 ```

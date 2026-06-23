@@ -40,11 +40,12 @@ var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0002-mvm-audio/
 var canvas = new Canvas("https://iiif.io/api/cookbook/recipe/0002-mvm-audio/canvas");
 var soundContent = new SoundContent("https://fixtures.iiif.io/audio/indiana/mahler-symphony-3/CD1/medium/128Kbps.mp4");
 var page = new AnnotationPage<PaintingAnnotation>("https://iiif.io/api/cookbook/recipe/0002-mvm-audio/canvas/page");
-var annotation = new PaintingAnnotation("https://iiif.io/api/cookbook/recipe/0002-mvm-audio/canvas/page/annotation", canvas);
+var annotation = new PaintingAnnotation("https://iiif.io/api/cookbook/recipe/0002-mvm-audio/canvas/page/annotation",
+  canvas);
 
 canvas.setDuration(1985.024);
 soundContent.setDuration(1985.024);
-page.addAnnotations(annotation.setBody(soundContent).setTarget(new Target(canvas)));
+page.setAnnotations(annotation.setBody(soundContent));
 manifest.setCanvases(canvas.setPaintingPages(page));
 
 System.out.println(manifest);

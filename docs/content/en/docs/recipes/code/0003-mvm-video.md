@@ -41,12 +41,15 @@ var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0003-mvm-video/
 var canvas = new Canvas("https://iiif.io/api/cookbook/recipe/0003-mvm-video/canvas");
 var videoContent = new VideoContent("https://fixtures.iiif.io/video/indiana/lunchroom_manners/high/lunchroom_manners_1024kb.mp4");
 var page = new AnnotationPage<PaintingAnnotation>("https://iiif.io/api/cookbook/recipe/0003-mvm-video/canvas/page");
-var annotation = new PaintingAnnotation("https://iiif.io/api/cookbook/recipe/0003-mvm-video/canvas/page/annotation", canvas);
+var annotation = new PaintingAnnotation("https://iiif.io/api/cookbook/recipe/0003-mvm-video/canvas/page/annotation",
+  canvas);
 
 canvas.setDuration(572.034).setWidthHeight(480, 360);
 videoContent.setDuration(572.034).setWidthHeight(480, 360);
-page.addAnnotations(annotation.setBody(videoContent).setTarget(new Target(canvas)));
-manifest.setCanvases(canvas.setPaintingPages(page));
+annotation.setBody(videoContent);
+page.setAnnotations(annotation);
+canvas.setPaintingPages(page);
+manifest.setCanvases(canvas);
 
 System.out.println(manifest);
 ```
