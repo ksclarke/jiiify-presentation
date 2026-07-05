@@ -139,9 +139,6 @@ public final class Row {
     /** The item's copyright holder. */
     private String myCopyrightHolder;
 
-    /** The item's director. */
-    private String myDirector;
-
     /** The item's editor. */
     private String myEditor;
 
@@ -168,6 +165,19 @@ public final class Row {
 
     /** The item's rights contact information. */
     private String myRightsContact;
+
+    /**
+     * The item's IIIF resource type.
+     *
+     * @param aID The item's ID
+     * @param aObjectType The item's object type
+     * @param aResourceType The item's resource type
+     */
+    public Row(final String aID, final String aObjectType, final String aResourceType) {
+        myItemID = aID;
+        myObjectType = aObjectType;
+        myResourceType = aResourceType;
+    }
 
     /** Creates a new Row. */
     private Row() {

@@ -3,21 +3,34 @@ package info.freelibrary.iiif.presentation.v3.utils.cmdline;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+import com.fasterxml.jackson.databind.MappingIterator;
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.csv.Configs;
+import info.freelibrary.iiif.presentation.v3.utils.csv.Keys;
+import info.freelibrary.iiif.presentation.v3.utils.csv.Row;
 import info.freelibrary.util.Env;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import org.junit.Test;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 /**
  * Tests the JPv3 command line application.
@@ -55,7 +68,7 @@ public class JPv3IT {
      */
     @Test
     public void testCreate() throws Exception {
-        final String fileName = TARGET + UUID.randomUUID().toString() + JPv3Utils.ZIP_EXT;
+        final String fileName = TARGET + "create-" + UUID.randomUUID().toString() + JPv3Utils.ZIP_EXT;
         final ProcessResult result = runJPv3(CREATE, INPUT, CSV_FILE, OUTPUT, fileName);
 
         assertEquals(result.output, 0, result.exitCode);
@@ -70,12 +83,39 @@ public class JPv3IT {
      */
     @Test
     public void testUpload() throws Exception {
-        final String fileName = TARGET + UUID.randomUUID().toString() + JPv3Utils.ZIP_EXT;
-        final ProcessResult result = runJPv3(UPLOAD, INPUT, CSV_FILE, OUTPUT, fileName);
+        final String zipFileName = TARGET + "upload-" + UUID.randomUUID().toString() + JPv3Utils.ZIP_EXT;
+        final String csvFileName = zipFileName.replace(JPv3Utils.ZIP_EXT, "-csv" + JPv3Utils.ZIP_EXT);
+        final ProcessResult result = runJPv3(UPLOAD, INPUT, CSV_FILE, OUTPUT, zipFileName);
 
         assertEquals(result.output, 0, result.exitCode);
         assertTrue(LOGGER.getMessage(MessageCodes.JPA_198, result.output),
-                result.output.contains(LOGGER.getMessage(MessageCodes.JPA_180, fileName)));
+                result.output.contains(LOGGER.getMessage(MessageCodes.JPA_180, zipFileName)));
+
+        // Check the output CSV files to confirm they got IIIF Manifest URL(s)
+        readZipEntry(csvFileName, "jbu-collection.csv").ifPresentOrElse(contents -> {
+            try (MappingIterator<Map<String, String>> iterator = new CsvMapper().readerForMapOf(String.class)
+                    .with(CsvSchema.emptySchema().withHeader()).readValues(contents)) {
+                iterator.readAll().forEach(map -> {
+                    final String objectType = JPv3Utils.getObjectType(map);
+                    final Row row = new Row(null, objectType, null);
+
+                    if (JPv3Utils.isCollection(row)) {
+                        assertTrue(map.get(Keys.IIIF_MANIFEST_URL).contains("/collections/"));
+                    } else if (JPv3Utils.isManifest(row)) {
+                        assertTrue(map.get(Keys.IIIF_MANIFEST_URL).endsWith("/manifest"));
+                    } else if (Keys.PAGE.equals(objectType) || Keys.CHOICE.equals(objectType) ||
+                            Keys.LAYER.equals(objectType)) {
+                        // Skip row types which do not get their own manifest or collection doc
+                    } else {
+                        fail(LOGGER.getMessage(MessageCodes.JPA_202, row));
+                    }
+                });
+            } catch (IOException details) {
+                throw new UncheckedIOException(details);
+            }
+        }, () -> {
+            fail(LOGGER.getMessage(MessageCodes.JPA_203));
+        });
     }
 
     /**
@@ -85,12 +125,36 @@ public class JPv3IT {
      */
     @Test
     public void testPatch() throws Exception {
-        final String fileName = TARGET + UUID.randomUUID().toString() + JPv3Utils.ZIP_EXT;
+        final String fileName = TARGET + "patch-" + UUID.randomUUID().toString() + JPv3Utils.ZIP_EXT;
         final ProcessResult result = runJPv3(PATCH, INPUT, CSV_FILE, OUTPUT, fileName);
 
         assertEquals(result.output, 0, result.exitCode);
         assertTrue(LOGGER.getMessage(MessageCodes.JPA_198, result.output),
                 result.output.contains(LOGGER.getMessage(MessageCodes.JPA_180, fileName)));
+    }
+
+    /**
+     * Reads a zip entry as a string.
+     *
+     * @param aZipPath The path to the zip file
+     * @param aEntryName The name of the entry to read
+     * @return The contents of the zip entry as a string, or an empty optional if the entry does not exist
+     * @throws IOException If there is trouble reading the zip entry
+     */
+    private Optional<String> readZipEntry(final String aZipPath, final String aEntryName) throws IOException {
+        try (ZipFile zipFile = new ZipFile(aZipPath)) {
+            final ZipEntry entry = zipFile.getEntry(aEntryName);
+
+            if (entry == null) {
+                return Optional.empty();
+            }
+
+            try (InputStream inStream = zipFile.getInputStream(entry);
+                    ByteArrayOutputStream outStream = new ByteArrayOutputStream()) {
+                inStream.transferTo(outStream);
+                return Optional.of(outStream.toString(StandardCharsets.UTF_8));
+            }
+        }
     }
 
     /**

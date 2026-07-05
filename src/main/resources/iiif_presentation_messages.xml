@@ -180,4 +180,6 @@
     <entry key="JPA-199">Failed to parse example code from documentation: {}</entry>
     <entry key="JPA-200">An annotation list must not be null</entry>
     <entry key="JPA-201">A list of annotations must not contain null values</entry>
+    <entry key="JPA-202">Row is neither collection nor manifest: {}</entry>
+    <entry key="JPA-203">Didn't find the expected CSV content in the zip file</entry>
 </properties>
