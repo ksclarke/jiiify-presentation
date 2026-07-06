@@ -43,12 +43,15 @@ var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0004-canvas-siz
 var canvas = new Canvas("https://iiif.io/api/cookbook/recipe/0004-canvas-size/canvas/p1");
 var imageContent = new ImageContent("https://fixtures.iiif.io/video/indiana/donizetti-elixir/act1-thumbnail.png");
 var page = new AnnotationPage<PaintingAnnotation>("https://iiif.io/api/cookbook/recipe/0004-canvas-size/page/p1/1");
-var annotation = new PaintingAnnotation("https://iiif.io/api/cookbook/recipe/0004-canvas-size/annotation/p0001-image", canvas);
+var annotation = new PaintingAnnotation("https://iiif.io/api/cookbook/recipe/0004-canvas-size/annotation/p0001-image",
+  canvas);
 
 canvas.setWidthHeight(1920, 1080);
 imageContent.setWidthHeight(640, 360);
-page.addAnnotations(annotation.setBody(imageContent).setTarget(new Target(canvas)));
-manifest.setCanvases(canvas.setPaintingPages(page));
+annotation.setBody(imageContent);
+page.setAnnotations(annotation);
+canvas.setPaintingPages(page);
+manifest.setCanvases(canvas);
 
 System.out.println(manifest);
 ```

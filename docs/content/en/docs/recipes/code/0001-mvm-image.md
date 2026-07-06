@@ -22,18 +22,19 @@ create different IDs than are used in the cookbook recipe.
 ```java
 var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0001-mvm-image/manifest",
   new Label("en", "Single Image Example"));
-var canvas = new Canvas(MinterFactory.getMinter(manifest)).setWidthHeight(1200, 1800);
+var canvas = new Canvas(MinterFactory.getMinter(manifest));
 var imageContent = new ImageContent("https://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png");
 
 canvas.paintWith(imageContent.setWidthHeight(1200, 1800));
-manifest.setCanvases(canvas);
+manifest.setCanvases(canvas.setWidthHeight(1200, 1800));
 
 System.out.println(manifest);
 ```
 
 ### Method Two
 
-The second method will create a manifest with the same IDs that the cookbook recipe uses. It involves setting all the IDs manually, which involves a little more code.
+The second method will create a manifest with the same IDs that the cookbook recipe uses. It involves setting all the IDs manually, which involves a little more code,
+but may be necessary if specific IDs need to be used.
 
 ```java
 var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0001-mvm-image/manifest",
@@ -41,12 +42,11 @@ var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0001-mvm-image/
 var canvas = new Canvas("https://iiif.io/api/cookbook/recipe/0001-mvm-image/canvas/p1");
 var imageContent = new ImageContent("https://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png");
 var page = new AnnotationPage<PaintingAnnotation>("https://iiif.io/api/cookbook/recipe/0001-mvm-image/page/p1/1");
-var annotation = new PaintingAnnotation("https://iiif.io/api/cookbook/recipe/0001-mvm-image/annotation/p0001-image", canvas);
+var annotation = new PaintingAnnotation("https://iiif.io/api/cookbook/recipe/0001-mvm-image/annotation/p0001-image",
+  canvas).setBody(imageContent.setWidthHeight(1200, 1800));
 
-canvas.setWidthHeight(1200, 1800);
-imageContent.setWidthHeight(1200, 1800);
-page.addAnnotations(annotation.setBody(imageContent).setTarget(new Target(canvas)));
-manifest.setCanvases(canvas.setPaintingPages(page));
+canvas.setPaintingPages(page.setAnnotations(annotation));
+manifest.setCanvases(canvas.setWidthHeight(1200, 1800));
 
 System.out.println(manifest);
 ```

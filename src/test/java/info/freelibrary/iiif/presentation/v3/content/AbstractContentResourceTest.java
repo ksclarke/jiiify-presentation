@@ -129,8 +129,8 @@ public class AbstractContentResourceTest {
         final AnnotationPage<WebAnnotation> page1 = new AnnotationPage<>(getID());
         final AnnotationPage<WebAnnotation> page2 = new AnnotationPage<>(getID());
 
-        page1.addAnnotations(anno1);
-        page2.addAnnotations(anno2);
+        page1.setAnnotations(anno1);
+        page2.setAnnotations(anno2);
 
         assertEquals(0, myResource.getAnnotations().size());
         myResource.setAnnotations(page1, page2);
@@ -145,7 +145,7 @@ public class AbstractContentResourceTest {
         final BookmarkingAnnotation anno = new BookmarkingAnnotation(getID(), new Canvas(getID()));
         final AnnotationPage<WebAnnotation> page = new AnnotationPage<>(getID());
 
-        page.addAnnotations(anno);
+        page.setAnnotations(anno);
 
         assertEquals(0, myResource.getAnnotations().size());
         myResource.setAnnotations(List.of(page));

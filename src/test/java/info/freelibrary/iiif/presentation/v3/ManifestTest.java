@@ -181,7 +181,7 @@ public class ManifestTest extends AbstractTest {
         final AnnotationPage<PaintingAnnotation> page2 =
                 new AnnotationPage<>(MANIFEST_SERVER + MANIFEST_ID + "/pageanno/pageanno-2");
 
-        canvas1.getPaintingPages().add(page1.addAnnotations(content1));
+        canvas1.getPaintingPages().add(page1.setAnnotations(content1));
         canvases.add(canvas1);
 
         for (final String[] values : FIRST_CANVAS) {
@@ -203,7 +203,7 @@ public class ManifestTest extends AbstractTest {
         final RequiredStatement reqStmt;
 
         content2 = new PaintingAnnotation(MANIFEST_SERVER + MANIFEST_ID + "/imageanno/imageanno-2", canvas2);
-        canvas2.getPaintingPages().add(page2.addAnnotations(content2));
+        canvas2.getPaintingPages().add(page2.setAnnotations(content2));
         canvases.add(canvas2);
 
         for (final String[] values : SECOND_CANVAS) {
@@ -344,18 +344,18 @@ public class ManifestTest extends AbstractTest {
     @Test
     public void testSetAnnotations() {
         final AnnotationPage<WebAnnotation> annotations = new AnnotationPage<>(myMinter, new Canvas(myMinter));
-        assertEquals(1, myManifest.setAnnotations(annotations.addAnnotations(new BookmarkingAnnotation(myMinter)))
+        assertEquals(1, myManifest.setAnnotations(annotations.setAnnotations(new BookmarkingAnnotation(myMinter)))
                 .getAnnotations().size());
     }
 
     /**
-     * Tests setting annotations via list.
+     * Tests setting annotations via a list.
      */
     @Test
     public void testSetAnnotationsList() {
         final AnnotationPage<WebAnnotation> annotations = new AnnotationPage<>(myMinter, new Canvas(myMinter));
         assertEquals(1,
-                myManifest.setAnnotations(List.of(annotations.addAnnotations(new BookmarkingAnnotation(myMinter))))
+                myManifest.setAnnotations(List.of(annotations.setAnnotations(new BookmarkingAnnotation(myMinter))))
                         .getAnnotations().size());
     }
 

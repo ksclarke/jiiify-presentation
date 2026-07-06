@@ -1567,8 +1567,8 @@ public class CanvasTest extends AbstractCookbookTest {
         myCanvas.setThumbnails(new ImageContent(IMAGE_THUMBNAIL_ID).setWidthHeight(THUMBNAIL_WH, THUMBNAIL_WH)
                 .setServices(new ImageService3(IMAGE_INFO_SERVICE_ID, ImageService3.Profile.LEVEL_ZERO)));
 
-        myCanvas.setPaintingPages(new AnnotationPage<PaintingAnnotation>(IMAGE_PAGE_ID).addAnnotations(pAnno));
-        myCanvas.setSupplementingPages(new AnnotationPage<SupplementingAnnotation>(TEXT_PAGE_ID).addAnnotations(sAnno));
+        myCanvas.setPaintingPages(new AnnotationPage<PaintingAnnotation>(IMAGE_PAGE_ID).setAnnotations(pAnno));
+        myCanvas.setSupplementingPages(new AnnotationPage<SupplementingAnnotation>(TEXT_PAGE_ID).setAnnotations(sAnno));
 
         assertEquals(format(normalizeIDs(getExpected(FULL_CANVAS_FIXTURE))), format(normalizeIDs(toJson(myCanvas))));
     }

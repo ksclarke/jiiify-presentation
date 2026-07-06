@@ -5,13 +5,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
-import java.util.UUID;
-
-import org.junit.Test;
-
-import info.freelibrary.util.Constants;
-
 import info.freelibrary.iiif.presentation.v3.annotation.BookmarkingAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotation.PaintingAnnotation;
 import info.freelibrary.iiif.presentation.v3.annotation.SupplementingAnnotation;
@@ -19,6 +12,11 @@ import info.freelibrary.iiif.presentation.v3.annotation.WebAnnotation;
 import info.freelibrary.iiif.presentation.v3.id.Minter;
 import info.freelibrary.iiif.presentation.v3.id.MinterFactory;
 import info.freelibrary.iiif.presentation.v3.properties.behaviors.CanvasBehavior;
+import info.freelibrary.util.Constants;
+import org.junit.Test;
+
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Tests {@link AbstractCanvas}.
@@ -95,7 +93,7 @@ public class AbstractCanvasTest {
     @SuppressWarnings("unlikely-arg-type")
     public final void testAbstractCanvasEqualsString() {
         final AbstractCanvas<TestClass> test = new TestClass(HTTPS + UUID.randomUUID().toString());
-        assertNotEquals(test, new String(Constants.EMPTY));
+        assertNotEquals(test, Constants.EMPTY);
     }
 
     /**
@@ -116,7 +114,7 @@ public class AbstractCanvasTest {
     }
 
     /**
-     * Tests {@link AbstractCanvas#setBehaviors()}.
+     * Tests {@link AbstractCanvas#setBehaviors(List)}.
      */
     @Test
     public final void testSetBehaviorsList() {
@@ -136,7 +134,7 @@ public class AbstractCanvasTest {
     }
 
     /**
-     * Tests {@link AbstractCanvas#setPaintingPages()}.
+     * Tests {@link AbstractCanvas#setPaintingPages(List)}.
      */
     @Test
     public final void testSetPaintingPages() {
@@ -147,7 +145,7 @@ public class AbstractCanvasTest {
     }
 
     /**
-     * Tests {@link AbstractCanvas#setPaintingPages()}.
+     * Tests {@link AbstractCanvas#setPaintingPages(List)}.
      */
     @Test
     public final void testSetPaintingPagesList() {
@@ -159,7 +157,7 @@ public class AbstractCanvasTest {
     }
 
     /**
-     * Tests {@link AbstractCanvas#setSupplementingPages()}.
+     * Tests {@link AbstractCanvas#setSupplementingPages(List)}.
      */
     @Test
     public final void testSetSupplementingPages() {
@@ -171,7 +169,7 @@ public class AbstractCanvasTest {
     }
 
     /**
-     * Tests {@link AbstractCanvas#setSupplementingPages()}.
+     * Tests {@link AbstractCanvas#setSupplementingPages(List)}.
      */
     @Test
     public final void testSetSupplementingPagesList() {
@@ -183,26 +181,26 @@ public class AbstractCanvasTest {
     }
 
     /**
-     * Tests {@link AbstractCanvas#setWebAnnotations(AnnotationPage)}.
+     * Tests {@link AbstractCanvas#setWebAnnotations(List)}.
      */
     @Test
     public final void testSetWebAnnotations() {
         final Minter minter = MinterFactory.getMinter(HTTPS + UUID.randomUUID().toString());
         final AnnotationPage<WebAnnotation> page = new AnnotationPage<>(minter, new Canvas(minter));
 
-        page.addAnnotations(new BookmarkingAnnotation(minter));
+        page.setAnnotations(new BookmarkingAnnotation(minter));
         assertEquals(1, new TestClass(minter).setWebAnnotations(page).getWebAnnotations().size());
     }
 
     /**
-     * Tests {@link AbstractCanvas#setWebAnnotations(AnnotationPage)}.
+     * Tests {@link AbstractCanvas#setWebAnnotations(List)}.
      */
     @Test
     public final void testSetWebAnnotationsList() {
         final Minter minter = MinterFactory.getMinter(HTTPS + UUID.randomUUID().toString());
         final AnnotationPage<WebAnnotation> page = new AnnotationPage<>(minter, new Canvas(minter));
 
-        page.addAnnotations(new BookmarkingAnnotation(minter));
+        page.setAnnotations(new BookmarkingAnnotation(minter));
         assertEquals(1, new TestClass(minter).setWebAnnotations(List.of(page)).getWebAnnotations().size());
     }
 

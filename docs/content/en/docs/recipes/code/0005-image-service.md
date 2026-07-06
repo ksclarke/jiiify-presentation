@@ -30,11 +30,12 @@ var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0005-image-serv
   new Label("en", "Picture of Göttingen taken during the 2019 IIIF Conference"));
 var canvas = new Canvas(MinterFactory.getMinter(manifest), new Label("en", "Canvas with a single IIIF image"));
 var imageContent = new ImageContent("https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen/full/max/0/default.jpg");
-var service = new ImageService3(LEVEL_ONE, "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen");
+var service = new ImageService3("https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen",
+  LEVEL_ONE);
 
 imageContent.setWidthHeight(4032, 3024).setFormat(IMAGE_JPEG).setServices(service);
 canvas.setWidthHeight(4032, 3024).paintWith(imageContent);
-manifest.addCanvases(canvas);
+manifest.setCanvases(canvas);
 
 System.out.println(manifest);
 ```
@@ -50,13 +51,17 @@ var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0005-image-serv
   new Label("en", "Picture of Göttingen taken during the 2019 IIIF Conference"));
 var canvas = new Canvas(MinterFactory.getMinter(manifest), new Label("en", "Canvas with a single IIIF image"));
 var page = new AnnotationPage<PaintingAnnotation>("https://iiif.io/api/cookbook/recipe/0005-image-service/page/p1/1");
-var annotation = new PaintingAnnotation("https://iiif.io/api/cookbook/recipe/0005-image-service/annotation/p0001-image", canvas);
 var imageContent = new ImageContent("https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen/full/max/0/default.jpg");
-var service = new ImageService3(LEVEL_ONE, "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen");
+var service = new ImageService3("https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen",
+  LEVEL_ONE);
+var annotation = new PaintingAnnotation("https://iiif.io/api/cookbook/recipe/0005-image-service/annotation/p0001-image",
+  canvas);
 
 imageContent.setWidthHeight(4032, 3024).setFormat(IMAGE_JPEG).setServices(service);
-page.addAnnotations(annotation.setBody(imageContent).setTarget(new Target(canvas)));
-manifest.setCanvases(canvas.setWidthHeight(4032, 3024).setPaintingPages(page));
+annotation.setBody(imageContent);
+page.setAnnotations(annotation);
+canvas.setWidthHeight(4032, 3024).setPaintingPages(page);
+manifest.setCanvases(canvas);
 
 System.out.println(manifest);
 ```

@@ -1,8 +1,16 @@
 
 // Making fonts a little more readable for older eyes (like mine)
-.lead .mt-5 { font-weight: 500; text-shadow: black 1px 1px; }
-.display-1 { font-weight: 500; text-shadow: black 1px 1px; }
-.td-navbar .navbar-brand__name { font-weight: 700; margin-left: 10px; text-shadow: black 1px 1px; }
+.td-navbar .navbar-brand__name { font-weight: 700; color: white !important; text-shadow: black 1px 1px; }
+.td-navbar { background-color: #433D8B !important; }
+
+.navbar-nav .nav-link, .navbar-nav .nav-link.active {
+  color: #FFF;
+  &:hover, &:focus { color: #FFF; }
+}
+
+.td-search { background-color: #FFF; }
+.td-search.td-search--offline { border-radius: 5px; overflow: hidden; }
+.navbar-nav { margin-right: 20px;}
 
 // Tweak the color scheme and layout on Home and About pages
 .td-box--3 { background-color: white; }
@@ -20,12 +28,26 @@
 .td-sidebar-nav__section .ul-1 ul { padding-left: .75em; }
 .td-sidebar-nav > .td-sidebar-nav__section { padding-left: .75em; }
 .status { width: 28px; }
-.table { --bs-table-striped-bg: #fff; }
+.table { --bs-table-striped-bg: #FFF; }
 td:nth-child(3) { text-align: center !important; }
 td:nth-child(2) { text-align: left !important; padding-left: 1.5em !important; }
 
+.td-content > table,
+.td-box .td-content > table {
+    max-width: 98% !important;
+    width: 100%;
+    display: table !important;
+}
+
+// Code examples on cookbook pages
 .td-max-width-on-larger-screens {
-  @include media-breakpoint-up(lg) {
-    max-width: 95%;
-  }
+  max-width: 98%;
+}
+
+.td-footer {
+  background-color: #433D8B !important;
+}
+
+.taxo-categories {
+  margin-top: 15px;
 }

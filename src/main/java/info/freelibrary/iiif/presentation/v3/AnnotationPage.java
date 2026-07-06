@@ -22,7 +22,6 @@ import info.freelibrary.util.warnings.JDK;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -125,39 +124,6 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
         return new AnnotationPage<>(this);
     }
 
-    /**
-     * Adds annotations to the annotation page.
-     *
-     * @param aAnnotationArray Annotations to be added to the annotation page
-     * @return The annotation page
-     * @throws UnsupportedOperationException If the supplied annotations cannot be added to the page
-     */
-    @SafeVarargs
-    public final AnnotationPage<A> addAnnotations(final A... aAnnotationArray) {
-        if (!Collections.addAll(getAnnotations(), Objects.requireNonNull(aAnnotationArray))) {
-            final String details = getListIDs(Arrays.asList(aAnnotationArray));
-            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_050, details));
-        }
-
-        return this;
-    }
-
-    /**
-     * Adds annotations to the annotation page.
-     *
-     * @param aAnnotationList Annotations to be added to the annotation page
-     * @return The annotation page
-     * @throws UnsupportedOperationException If the supplied annotations cannot be added to the page
-     */
-    public final AnnotationPage<A> addAnnotations(final List<A> aAnnotationList) {
-        if (!getAnnotations().addAll(Objects.requireNonNull(aAnnotationList))) {
-            final String details = getListIDs(aAnnotationList);
-            throw new UnsupportedOperationException(LOGGER.getMessage(MessageCodes.JPA_050, details));
-        }
-
-        return this;
-    }
-
     @Override
     public boolean equals(final Object aObject) {
         final AnnotationPage<?> other;
@@ -187,10 +153,6 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
             myAnnotations = new ArrayList<>();
         }
 
-        if (!myAnnotations.isEmpty()) {
-            myAnnotations.getFirst().getMotivation();
-        }
-
         return myAnnotations;
     }
 
@@ -203,11 +165,7 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
     @JsonIgnore
     @SafeVarargs
     public final AnnotationPage<A> setAnnotations(final A... aAnnotationArray) {
-        if (myAnnotations != null) {
-            myAnnotations.clear();
-        }
-
-        return addAnnotations(aAnnotationArray);
+        return setAnnotations(new ArrayList<>(Arrays.asList(aAnnotationArray))); // we want a mutable list
     }
 
     /**
@@ -218,11 +176,14 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
      */
     @JsonSetter(JsonKeys.ITEMS)
     public final AnnotationPage<A> setAnnotations(final List<A> aAnnotationList) {
-        if (myAnnotations != null) {
-            myAnnotations.clear();
+        Objects.requireNonNull(aAnnotationList, LOGGER.getMessage(MessageCodes.JPA_200));
+
+        for (final A annotation : aAnnotationList) {
+            Objects.requireNonNull(annotation, LOGGER.getMessage(MessageCodes.JPA_201));
         }
 
-        return addAnnotations(aAnnotationList);
+        myAnnotations = aAnnotationList;
+        return this;
     }
 
     /**
@@ -355,25 +316,5 @@ public class AnnotationPage<A extends Annotation<A>> extends AbstractResource<An
         }
 
         return this;
-    }
-
-    /**
-     * Get the IDs of the annotations in the supplied list and return them as a single string.
-     *
-     * @param aAnnotationList A list of annotations
-     * @return A string containing the IDs
-     */
-    private String getListIDs(final List<A> aAnnotationList) {
-        final StringBuilder builder = new StringBuilder();
-
-        for (final A annotation : aAnnotationList) {
-            builder.append(annotation.getID()).append('|');
-        }
-
-        if (!builder.isEmpty()) {
-            builder.deleteCharAt(builder.length() - 1);
-        }
-
-        return builder.toString();
     }
 }

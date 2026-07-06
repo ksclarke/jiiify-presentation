@@ -20,6 +20,7 @@ import info.freelibrary.iiif.presentation.v3.id.MinterFactory;
 import info.freelibrary.iiif.presentation.v3.services.ImageService;
 import info.freelibrary.iiif.presentation.v3.services.ImageService2;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.iiif.presentation.v3.utils.cmdline.JPv3Utils;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.JDK;
@@ -42,7 +43,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
@@ -184,51 +184,6 @@ public class Mapper {
     }
 
     /**
-     * Determines if the provided row represents a collection by checking its object type or resource type against a
-     * defined collection key.
-     *
-     * @param aRow The row to evaluate, containing potential object and resource type data
-     * @return {@code true} if the row represents a collection, otherwise {@code false}
-     */
-    protected boolean isCollection(final Row aRow) {
-        final Optional<String> objectType = aRow.getObjectType();
-        final Optional<String> resourceType;
-
-        if (objectType.isPresent() && Keys.COLLECTION.equalsIgnoreCase(objectType.get())) {
-            return true;
-        }
-
-        // We include IIIF Collections (which may be considered a "work" in another context: e.g., a periodical issue).
-        resourceType = aRow.getResourceType();
-        return resourceType.isPresent() && Keys.COLLECTION.equalsIgnoreCase(resourceType.get());
-    }
-
-    /**
-     * Determines if the provided row represents a manifest by checking its object type against a defined manifest key.
-     *
-     * @param aRow The row to evaluate, containing potential object type data
-     * @return {@code true} if the row represents a manifest, otherwise {@code false}
-     */
-    protected boolean isManifest(final Row aRow) {
-        final AtomicBoolean isManifest = new AtomicBoolean(false);
-
-        aRow.getObjectType().ifPresent(objectType -> {
-            if (Keys.WORK.equalsIgnoreCase(objectType)) {
-                isManifest.set(true);
-
-                // We allow for the work designation to be overridden by a resource type of "collection".
-                aRow.getResourceType().ifPresent(resourceType -> {
-                    if (Keys.COLLECTION.equalsIgnoreCase(resourceType)) {
-                        isManifest.set(false);
-                    }
-                });
-            }
-        });
-
-        return isManifest.get();
-    }
-
-    /**
      * Maps the CSV data for collections.
      *
      * @param aCollectionList A set of collection IDs
@@ -261,13 +216,13 @@ public class Mapper {
                         // Check that there is an object type for the child row
                         childRow.getObjectType().orElseThrow(() -> new MappingException(MessageCodes.JPA_172));
 
-                        if (isCollection(childRow)) {
+                        if (JPv3Utils.isCollection(childRow)) {
                             final Collection childCollection = myBuilder.build(childRow);
 
                             // Add the child collection to its parent and fully map it, too
                             collection.getItems().add(new Collection.Item(childCollection));
                             mapCollections(List.of(childRow.getItemID().orElseThrow()));
-                        } else if (isManifest(childRow)) {
+                        } else if (JPv3Utils.isManifest(childRow)) {
                             final List<Manifest> manifests = mapManifests(List.of(childID));
                             final List<Collection.Item> items = collection.getItems();
 

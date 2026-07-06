@@ -4,17 +4,18 @@ description: A simple sandbox for testing out JPv3 code.
 weight: 8
 ---
 
-This page provides a very simple sandbox where JPv3 code can be run. It's provided to test the code examples from the cookbook recipes or any other simple JPv3 code 
-snippets.
+This page provides a very simple sandbox where JPv3 code can be run. It's provided to test the code examples from the 
+cookbook recipes, but can also be used to test other simple JPv3 code snippets.
 
-{{% pageinfo %}}You do not need to include Java imports in your code because this instance of JShell is pre-configured to have all the imports one would need to run 
-examples from this site.{{% /pageinfo %}}
+If you’d like a larger textbox than the one below, you can alternatively open the <a
+href="https://jpv3.lisforge.net/editor" target="_blank" rel="noopener">editor</a> in full screen.
 
-Warning: This sandbox is not very robust; it's just a quick and dirty solution to test small snippets of JPv3 code. If you notice the sandbox is broken, please [open a 
-ticket](https://github.com/ksclarke/jiiify-presentation/issues) on the project's GitHub page.
+{{% pageinfo %}}You do not need to include imports in your code because the JPv3 imports are 
+pre-configured.{{% /pageinfo %}}
 
 {{< rawhtml >}}
-<pre id="editor" style="height: 20em; margin-top: 40px; border: 2px solid #aaa;">
+<pre id="editor"
+  style="overflow-y: hidden; height: 11em; margin-top: 40px; margin-bottom: 20px; border: 1px solid #aaa">
 var manifest = new Manifest("https://iiif.io/api/cookbook/recipe/0001-mvm-image/manifest",
   new Label("en", "Single Image Example"));
 var canvas = new Canvas(MinterFactory.getMinter(manifest)).setWidthHeight(1200, 1800);
@@ -23,50 +24,56 @@ var imageContent = new ImageContent("https://iiif.io/api/presentation/2.1/exampl
 canvas.paintWith(imageContent.setWidthHeight(1200, 1800));
 manifest.setCanvases(canvas);
 
-System.out.println(manifest);
-</pre>
+System.out.println(manifest);</pre>
 {{< /rawhtml >}}
 
-<script src="https://cdn.jsdelivr.net/npm/ace-builds@1.32.9/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/ace-builds@1.32.9/src-noconflict/ace.js"
+        type="text/javascript"
+        charset="utf-8"></script>
 <script>
-    var editor = ace.edit("editor");
+    let editor = ace.edit("editor");
 
     editor.setTheme("ace/theme/tomorrow");
     editor.getSession().setMode("ace/mode/java");
-    editor.setFontSize("1em");
-    editor.setOption("showLineNumbers", false);
+    editor.setFontSize(".95em");
+    editor.setOption("showLineNumbers", true);
 
     function clearResults() {
-        var replResults = document.getElementById("replResults");
-        replResults.innerHTML = "";
+        document.getElementById("replResults").innerHTML = "";
     }
 
     function runCode() {
-        var code = editor.getValue();
-        var xhr = new XMLHttpRequest();
+        let code = editor.getValue();
+        let xhr = new XMLHttpRequest();
 
         xhr.onreadystatechange = function() {
             if (xhr.readyState === XMLHttpRequest.DONE) {
-                var replResults = document.getElementById("replResults");
+                let replResults = document.getElementById("replResults");
 
-                if (xhr.status === 200) {
+                if (xhr.status === 200 || xhr.status === 201) {
                     replResults.innerHTML = xhr.responseText.replace(/</g, "&lt;").replace(/>/g, "&gt;");
                 } else {
-                    replResults.innerHTML = xhr.status;
+                    replResults.innerHTML = xhr.status.toString();
                 }
             }
         };
 
-        xhr.open('POST', 'https://jsh4jpv3.lisforge.net/cgi-bin/jpv3.cgi', true);
+        xhr.open('POST', 'https://jpv3.lisforge.net/submit', true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.send("code=" + encodeURIComponent(code));
     }
+
+    editor.getSession().on('change', function() {
+        editor.container.style.height = editor.session.getLength() + "em";
+        editor.resize();
+    });
 </script>
 
 <button onclick="runCode()">Run Code</button> <button onclick="clearResults()">Clear Results</button>
 
-<div style="margin-bottom: 30px; margin-top:30px;"><div style="font-weight: bold; padding-bottom: 20px;">Results should appear below (approximately 15 seconds or so after 
-you click the button above)</div>If, on submission, you see <code style="font-weight: bold">jshell&gt;</code> prompt in the box below, JShell failed to parse the 
-submitted code, likely because of a syntax issue (e.g., a missing parenthesis).</div>
-
 <pre id="replResults" style="border: 2px solid #aaa"></pre>
+
+<div style="margin-bottom: 30px; margin-top:30px"><span style="font-weight: bold">Problems?</span> If you notice the sandbox isn't working, please <a 
+href="https://github.com/ksclarke/jiiify-presentation/issues">open a ticket</a> with the details about what's wrong. If 
+the problem is with the code itself, you should see an error message in the results box.</div>

@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation.v3.utils.cmdline;
 
 import static info.freelibrary.iiif.presentation.v3.utils.cmdline.JPv3.ENDPOINT_PREFIX;
+import static info.freelibrary.util.Constants.DOT_CHAR;
 import static info.freelibrary.util.Constants.EMPTY;
 import static info.freelibrary.util.Constants.PERIOD;
 import static info.freelibrary.util.Constants.SLASH;
@@ -28,6 +29,7 @@ import info.freelibrary.iiif.presentation.v3.utils.JSON;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.csv.CsvSources;
 import info.freelibrary.iiif.presentation.v3.utils.csv.Keys;
+import info.freelibrary.iiif.presentation.v3.utils.csv.Row;
 import info.freelibrary.iiif.presentation.v3.utils.csv.ZipWriter;
 import info.freelibrary.util.FileUtils;
 import info.freelibrary.util.IllegalArgumentI18nException;
@@ -54,21 +56,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
 /**
  * Utility class for working with IIIF Presentation JSON files.
  */
-@SuppressWarnings({ PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS, PMD.TOO_MANY_STATIC_IMPORTS })
+@SuppressWarnings({ PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS, PMD.TOO_MANY_STATIC_IMPORTS, PMD.GOD_CLASS })
 public final class JPv3Utils {
 
     /** The file extension for CSV files. */
-    public static final String CSV_EXT = info.freelibrary.util.Constants.DOT_CHAR + MediaType.TEXT_CSV.getExt();
+    public static final String CSV_EXT = DOT_CHAR + MediaType.TEXT_CSV.getExt();
 
     /** The file extension for ZIP files. */
-    public static final String ZIP_EXT = info.freelibrary.util.Constants.DOT_CHAR + MediaType.APPLICATION_ZIP.getExt();
+    public static final String ZIP_EXT = DOT_CHAR + MediaType.APPLICATION_ZIP.getExt();
 
     /** A logger for the JPv3Utils class. */
     private static final Logger LOGGER = LoggerFactory.getLogger(JPv3Utils.class, MessageCodes.BUNDLE);
@@ -128,7 +130,6 @@ public final class JPv3Utils {
         }
 
         final String ingestHost = host.contains(ENDPOINT_PREFIX + PERIOD) ? host : ENDPOINT_PREFIX + PERIOD + host;
-
         return formatPath(new URI(aURI.getScheme(), aURI.getUserInfo(), ingestHost, aURI.getPort(), aURI.getPath(),
                 aURI.getQuery(), aURI.getFragment()));
     }
@@ -247,6 +248,51 @@ public final class JPv3Utils {
     }
 
     /**
+     * Determines if the provided row represents a collection by checking its object type or resource type against a
+     * defined collection key.
+     *
+     * @param aRow The row to evaluate, containing potential object and resource type data
+     * @return {@code true} if the row represents a collection, otherwise {@code false}
+     */
+    public static boolean isCollection(final Row aRow) {
+        final Optional<String> objectType = aRow.getObjectType();
+        final Optional<String> resourceType;
+
+        if (objectType.isPresent() && Keys.COLLECTION.equalsIgnoreCase(objectType.get())) {
+            return true;
+        }
+
+        // We include IIIF Collections (which may be considered a "work" in another context: e.g., a periodical issue).
+        resourceType = aRow.getResourceType();
+        return resourceType.isPresent() && Keys.COLLECTION.equalsIgnoreCase(resourceType.get());
+    }
+
+    /**
+     * Determines if the provided row represents a manifest by checking its object type against a defined manifest key.
+     *
+     * @param aRow The row to evaluate, containing potential object type data
+     * @return {@code true} if the row represents a manifest, otherwise {@code false}
+     */
+    public static boolean isManifest(final Row aRow) {
+        final AtomicBoolean isManifest = new AtomicBoolean(false);
+
+        aRow.getObjectType().ifPresent(objectType -> {
+            if (Keys.WORK.equalsIgnoreCase(objectType)) {
+                isManifest.set(true);
+
+                // We allow for the work designation to be overridden by a resource type of "collection".
+                aRow.getResourceType().ifPresent(resourceType -> {
+                    if (Keys.COLLECTION.equalsIgnoreCase(resourceType)) {
+                        isManifest.set(false);
+                    }
+                });
+            }
+        });
+
+        return isManifest.get();
+    }
+
+    /**
      * Gets the file path within the ZIP archive for a given file path and temporary directory path.
      *
      * @param aPath The file path
@@ -291,8 +337,10 @@ public final class JPv3Utils {
         try (MappingIterator<Map<String, String>> originalRows = reader.readValues(aCsvString)) {
             while (originalRows.hasNext()) {
                 final Map<String, String> row = new HashMap<>(originalRows.next());
-                final String objectType = Objects.toString(row.get("Object Type"), "<EMPTY>");
                 final String id = row.get(idKey);
+                final String objectType = getObjectType(row);
+                final String resourceType = row.get(Keys.RESOURCE_TYPE);
+                final Row rowObject = new Row(id, objectType, resourceType);
                 final String url;
 
                 if (id == null) {
@@ -300,10 +348,10 @@ public final class JPv3Utils {
                 }
 
                 // We're going to make assumptions about the manifest server's endpoints here
-                if (ResourceTypes.COLLECTION.equals(objectType)) {
+                if (isCollection(rowObject)) {
                     url = server + "collections/" + URLEncoder.encode(id, StandardCharsets.UTF_8);
                     row.put(Keys.IIIF_MANIFEST_URL, url);
-                } else if (Keys.WORK.equals(objectType)) {
+                } else if (isManifest(rowObject)) {
                     url = server + URLEncoder.encode(id, StandardCharsets.UTF_8) + "/manifest";
                     row.put(Keys.IIIF_MANIFEST_URL, url);
                 } else {
@@ -318,6 +366,17 @@ public final class JPv3Utils {
         columns.addColumn(Keys.IIIF_MANIFEST_URL);
 
         return csvMapper.writerFor(modifiedRows.getClass()).with(columns.build()).writeValueAsString(modifiedRows);
+    }
+
+    /**
+     * Gets the object type from a row in map form.
+     *
+     * @param aRow A row of data
+     * @return The object type
+     */
+    public static String getObjectType(final Map<String, String> aRow) {
+        return aRow.get(Keys.OBJECT_TYPE) == null ? aRow.get(Keys.OBJECT_TYPE.replaceAll("(?<!^)([A-Z])", " $1"))
+                : aRow.get(Keys.OBJECT_TYPE); // A poor man's @JsonAlias
     }
 
     /**
@@ -374,13 +433,15 @@ public final class JPv3Utils {
      * @return The stripped path
      */
     private static String stripParentPath(final Path aSource, final String aPath) {
-        final String sourcePath = aSource.toString();
+        final Path target = Path.of(aPath);
 
-        if (aPath.startsWith(sourcePath)) {
-            return Path.of(getPathParent(aSource)).resolve(aSource.relativize(Path.of(aPath))).toString();
+        // If the two supplied arguments are the same, just return the file name (which is stripped of path)
+        if (aSource.equals(target)) {
+            return target.getFileName().toString();
         }
 
-        return aPath;
+        return aPath.startsWith(aSource.toString())
+                ? Path.of(getPathParent(aSource)).resolve(aSource.relativize(target)).toString() : aPath;
     }
 
     /**
