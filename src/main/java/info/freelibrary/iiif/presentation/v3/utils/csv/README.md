@@ -1,4 +1,4 @@
-# JPV3 CLI
+# JPv3 CLI
 ***
 
 The JPv3 CLI is an experimental tool for working with IIIF Presentation 3 documents. It may, in the future, be spun 
