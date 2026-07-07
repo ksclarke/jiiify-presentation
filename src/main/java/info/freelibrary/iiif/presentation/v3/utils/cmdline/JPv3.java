@@ -3,9 +3,11 @@ package info.freelibrary.iiif.presentation.v3.utils.cmdline;
 
 import static info.freelibrary.util.Constants.COLON;
 import static info.freelibrary.util.Constants.EMPTY;
+import static info.freelibrary.util.Constants.SPACE;
 
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.iiif.presentation.v3.utils.csv.Configs;
 import info.freelibrary.iiif.presentation.v3.utils.csv.Mapper;
 import info.freelibrary.iiif.presentation.v3.utils.csv.MappingException;
 import info.freelibrary.util.Constants;
@@ -30,8 +32,14 @@ import java.util.concurrent.Callable;
 import java.util.stream.Stream;
 
 /** A jpv3 executable. */
-@CommandLine.Command(name = "jpv3", version = "jpv3 0.0.1-SNAPSHOT", usageHelpWidth = 120,
-        description = { EMPTY, "A tool for working with IIIF manifests and collection documents:", EMPTY })
+@CommandLine.Command(name = Info.APP_NAME, version = Info.APP_NAME + SPACE + Info.APP_VERSION, usageHelpWidth = 120,
+        description = { EMPTY, "A tool for working with IIIF manifests and collection documents:", EMPTY },
+        footerHeading = "%n@|magenta Additional Options:|@ `username`, `password`, `host`, and `images` can also be " +
+                "set via environment variable, e.g.:%n",
+        footer = { JPv3.EXPORT + Configs.JPV3_USERNAME + "=\"username\"",
+            JPv3.EXPORT + Configs.JPV3_PASSWORD + "=\"password\"",
+            JPv3.EXPORT + Configs.JPV3_HOST + "=\"https://test.ingest.iiif.library.ucla.edu\"",
+            JPv3.EXPORT + Configs.JPV3_IMAGE_SERVER + "=\"https://iiif.library.ucla.edu/iiif/2\"%n" })
 public final class JPv3 implements Callable<Integer> {
 
     /** The expected prefix for the IIIF manifests and collection documents server. */
@@ -40,17 +48,20 @@ public final class JPv3 implements Callable<Integer> {
     /** The expected endpoint for the IIIF manifests and collection documents server. */
     public static final String INGEST_ENDPOINT_PATH = "/package";
 
+    /** A constant for exporting environmental variables. */
+    static final String EXPORT = "  export ";
+
     /** The logger for the executable. */
     private static final Logger LOGGER = LoggerFactory.getLogger(JPv3.class, MessageCodes.BUNDLE);
+
+    /** The output file options group. */
+    @CommandLine.ArgGroup(exclusive = true, multiplicity = "0..1")
+    private final OutputOptions myOutputOpts = new OutputOptions();
 
     /** The input file. */
     @CommandLine.Option(names = { "-i", "--input" }, description = "An input file or directory to be processed",
             paramLabel = "INPUT", required = true)
     private Path myInputFile;
-
-    /** The output file options group. */
-    @CommandLine.ArgGroup(exclusive = true, multiplicity = "0..1")
-    private final OutputOptions myOutputOpts = new OutputOptions();
 
     /** The action to take. Only one is allowed for a given invocation. */
     @CommandLine.ArgGroup(exclusive = true, multiplicity = "1")
@@ -58,22 +69,22 @@ public final class JPv3 implements Callable<Integer> {
 
     /** The authentication username. This is only needed for uploads. */
     @CommandLine.Option(names = { "-U", "--username" }, description = "The username to use for authentication",
-            paramLabel = "USERNAME", defaultValue = "${env:JPV3_USERNAME}")
+            paramLabel = Configs.JPV3_USERNAME, defaultValue = "${env:JPV3_USERNAME}")
     private String myUsername;
 
     /** The authentication password. This is only needed for uploads. */
     @CommandLine.Option(names = { "-P", "--password" }, description = "The password to use for authentication",
-            paramLabel = "PASSWORD", defaultValue = "${env:JPV3_PASSWORD}")
+            paramLabel = Configs.JPV3_PASSWORD, defaultValue = "${env:JPV3_PASSWORD}")
     private String myPassword;
 
     /** The IIIF manifests and collection documents server. */
     @CommandLine.Option(names = { "-H", "--host" }, description = "The IIIF manifests and collection documents server",
-            paramLabel = "HOST_URL", defaultValue = "${env:JPV3_HOST}", required = true)
+            paramLabel = Configs.JPV3_HOST, defaultValue = "${env:JPV3_HOST}", required = true)
     private URI myHost;
 
     /** The IIIF images server. */
     @CommandLine.Option(names = { "-I", "--images" }, description = "The URL of the server that has the IIIF images",
-            paramLabel = "IMAGE_SERVER_URL", defaultValue = "${env:JPV3_IMAGE_SERVER}", required = true)
+            paramLabel = Configs.JPV3_IMAGE_SERVER, defaultValue = "${env:JPV3_IMAGE_SERVER}", required = true)
     private URI myImageServer;
 
     /** The help flag. */
