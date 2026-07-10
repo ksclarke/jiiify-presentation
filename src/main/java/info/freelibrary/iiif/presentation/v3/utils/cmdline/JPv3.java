@@ -33,7 +33,7 @@ import java.util.stream.Stream;
 
 /** A jpv3 executable. */
 @CommandLine.Command(name = Info.APP_NAME, version = Info.APP_NAME + SPACE + Info.APP_VERSION, usageHelpWidth = 120,
-        description = { EMPTY, "A tool for working with IIIF manifests and collection documents:", EMPTY },
+        description = { EMPTY, "A command line tool for working with IIIF manifests and collection documents:", EMPTY },
         footerHeading = "%n@|magenta Additional Options:|@ `username`, `password`, `host`, and `images` can also be " +
                 "set via environment variable, e.g.:%n",
         footer = { JPv3.EXPORT + Configs.JPV3_USERNAME + "=\"username\"",
@@ -96,7 +96,7 @@ public final class JPv3 implements Callable<Integer> {
     private boolean myVersion;
 
     /** The verbosity flag. */
-    @CommandLine.Option(names = { "-V", "--verbose" }, arity = "0..1", paramLabel = "LEVEL",
+    @CommandLine.Option(names = { "-V", "--verbose" }, arity = "0..1", paramLabel = "LOG_LEVEL",
             description = "Increase logging verbosity; optionally provide a log level such as WARN, INFO, or DEBUG")
     private String myLogLevel;
 
@@ -106,14 +106,19 @@ public final class JPv3 implements Callable<Integer> {
     }
 
     /**
-     * Runs the jpv3 executable. This is just a toy at the moment. Expect it to fail.
+     * Entry point for the jpv3 command-line tool.
+     * <p>
+     * Currently in development. Some features may be incomplete.
      *
      * @param anArgsArray An array of arguments
      * @throws IOException If the JSON file cannot be read
      */
-    @SuppressWarnings({ Checkstyle.UNCOMMENTED_MAIN, "UncommentedMain" })
+    @SuppressWarnings({ Checkstyle.UNCOMMENTED_MAIN, PMD.SYSTEM_PRINTLN, "checkstyle:UncommentedMain" })
     public static void main(final String[] anArgsArray) throws IOException {
-        System.exit(new CommandLine(new JPv3()).execute(anArgsArray));
+        final CommandLine commandLine = new CommandLine(new JPv3());
+
+        System.out.println(); // Adds a line for readability
+        System.exit(commandLine.execute(anArgsArray));
     }
 
     /** Runs the application. */
@@ -200,7 +205,7 @@ public final class JPv3 implements Callable<Integer> {
         private Path myOutputFile;
 
         /** A customized default output file name. */
-        @CommandLine.Option(names = { "-O" }, description = "Create an output file based on the input file name")
+        @CommandLine.Option(names = { "-O" }, description = "Create output file(s) based on the input file name")
         private boolean isCustomOutputFile;
 
         /**
