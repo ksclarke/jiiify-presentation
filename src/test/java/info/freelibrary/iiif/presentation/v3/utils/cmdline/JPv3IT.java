@@ -49,17 +49,38 @@ public class JPv3IT {
     /** The command line argument for patching a JSON zip. */
     private static final String PATCH = "-p";
 
+    /** The command line argument for using test environment variables. */
+    private static final String TEST = "-t";
+
     /** The command line argument for the file to upload. */
     private static final String INPUT = "-i";
 
     /** The command line argument for the output file. */
     private static final String OUTPUT = "-o";
 
+    /** The OS name for Windows. */
+    private static final String WIN_OS = "win";
+
+    /** The Windows command line executable for JPv3. */
+    private static final String JPV3_EXE = "jpv3.exe";
+
+    /** The Linux command line executable for JPv3. */
+    private static final String JPV3 = "jpv3";
+
+    /** The image URL to use for testing. */
+    private static final String TEST_IMAGE_URL = "https://iiif.library.ucla.edu/iiif/2";
+
+    /** The manifest ingest URL to use for testing. */
+    private static final String TEST_MANIFEST_URL = "https://test.ingest.iiif.library.ucla.edu";
+
     /** The file to upload. */
     private static final String CSV_FILE = "src/test/resources/csv/jbu-collection.csv";
 
     /** The build's target directory. */
     private static final String TARGET = "target" + File.separator;
+
+    /** The operating system name. */
+    private static final String OS_NAME = "os.name";
 
     /**
      * Tests the command line application's 'create' functionality.
@@ -68,12 +89,12 @@ public class JPv3IT {
      */
     @Test
     public void testCreate() throws Exception {
-        final String fileName = TARGET + "create-" + UUID.randomUUID().toString() + JPv3Utils.ZIP_EXT;
+        final String fileName = TARGET + "create-" + UUID.randomUUID() + JPv3Utils.ZIP_EXT;
         final ProcessResult result = runJPv3(CREATE, INPUT, CSV_FILE, OUTPUT, fileName);
 
-        assertEquals(result.output, 0, result.exitCode);
-        assertTrue(LOGGER.getMessage(MessageCodes.JPA_198, result.output),
-                result.output.contains(LOGGER.getMessage(MessageCodes.JPA_178, new File(fileName).getAbsolutePath())));
+        assertEquals(result.aOutput, 0, result.aExitCode);
+        assertTrue(LOGGER.getMessage(MessageCodes.JPA_198, result.aOutput),
+                result.aOutput.contains(LOGGER.getMessage(MessageCodes.JPA_178, new File(fileName).getAbsolutePath())));
     }
 
     /**
@@ -83,13 +104,13 @@ public class JPv3IT {
      */
     @Test
     public void testUpload() throws Exception {
-        final String zipFileName = TARGET + "upload-" + UUID.randomUUID().toString() + JPv3Utils.ZIP_EXT;
+        final String zipFileName = TARGET + "upload-" + UUID.randomUUID() + JPv3Utils.ZIP_EXT;
         final String csvFileName = zipFileName.replace(JPv3Utils.ZIP_EXT, "-csv" + JPv3Utils.ZIP_EXT);
         final ProcessResult result = runJPv3(UPLOAD, INPUT, CSV_FILE, OUTPUT, zipFileName);
 
-        assertEquals(result.output, 0, result.exitCode);
-        assertTrue(LOGGER.getMessage(MessageCodes.JPA_198, result.output),
-                result.output.contains(LOGGER.getMessage(MessageCodes.JPA_180, zipFileName)));
+        assertEquals(result.aOutput, 0, result.aExitCode);
+        assertTrue(LOGGER.getMessage(MessageCodes.JPA_198, result.aOutput),
+                result.aOutput.contains(LOGGER.getMessage(MessageCodes.JPA_180, zipFileName)));
 
         // Check the output CSV files to confirm they got IIIF Manifest URL(s)
         readZipEntry(csvFileName, "jbu-collection.csv").ifPresentOrElse(contents -> {
@@ -125,12 +146,27 @@ public class JPv3IT {
      */
     @Test
     public void testPatch() throws Exception {
-        final String fileName = TARGET + "patch-" + UUID.randomUUID().toString() + JPv3Utils.ZIP_EXT;
+        final String fileName = TARGET + "patch-" + UUID.randomUUID() + JPv3Utils.ZIP_EXT;
         final ProcessResult result = runJPv3(PATCH, INPUT, CSV_FILE, OUTPUT, fileName);
 
-        assertEquals(result.output, 0, result.exitCode);
-        assertTrue(LOGGER.getMessage(MessageCodes.JPA_198, result.output),
-                result.output.contains(LOGGER.getMessage(MessageCodes.JPA_180, fileName)));
+        assertEquals(result.aOutput, 0, result.aExitCode);
+        assertTrue(LOGGER.getMessage(MessageCodes.JPA_198, result.aOutput),
+                result.aOutput.contains(LOGGER.getMessage(MessageCodes.JPA_180, fileName)));
+    }
+
+    /**
+     * Tests the command line application using the '-t' flag with test environment variables.
+     *
+     * @throws Exception If there is trouble running the command line application
+     */
+    @Test
+    public void testTestFlag() throws Exception {
+        final String fileName = TARGET + "test-env-" + UUID.randomUUID() + JPv3Utils.ZIP_EXT;
+        final ProcessResult result = runJPv3WithTestEnvs(UPLOAD, TEST, INPUT, CSV_FILE, OUTPUT, fileName);
+
+        assertEquals(result.aOutput, 0, result.aExitCode);
+        assertTrue(LOGGER.getMessage(MessageCodes.JPA_198, result.aOutput),
+                result.aOutput.contains(LOGGER.getMessage(MessageCodes.JPA_180, fileName)));
     }
 
     /**
@@ -165,9 +201,40 @@ public class JPv3IT {
      * @throws Exception If there is trouble running the command line application
      */
     private ProcessResult runJPv3(final String... aArgArray) throws Exception {
-        final String executable = System.getProperty("os.name").toLowerCase().contains("win") ? "jpv3.exe" : "jpv3";
+        final String executable = System.getProperty(OS_NAME).toLowerCase().contains(WIN_OS) ? JPV3_EXE : JPV3;
         final List<String> command = Stream.concat(Stream.of(TARGET + executable), Arrays.stream(aArgArray)).toList();
         final Process process = setEnvs(new ProcessBuilder(command).redirectErrorStream(true)).start();
+        final String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+
+        return new ProcessResult(process.waitFor(), output);
+    }
+
+    /**
+     * Runs the JPv3 command line application configured with test environment variables.
+     *
+     * @param aArgArray The command line arguments
+     * @return The process result
+     * @throws Exception If there is trouble running the command line application
+     */
+    private ProcessResult runJPv3WithTestEnvs(final String... aArgArray) throws Exception {
+        final String executable = System.getProperty(OS_NAME).toLowerCase().contains(WIN_OS) ? JPV3_EXE : JPV3;
+        final List<String> command = Stream.concat(Stream.of(TARGET + executable), Arrays.stream(aArgArray)).toList();
+        final ProcessBuilder builder = new ProcessBuilder(command).redirectErrorStream(true);
+        final Map<String, String> environment = builder.environment();
+
+        // Clear or override non-test env vars to ensure -t uses TEST_* instead
+        environment.remove(Configs.JPV3_HOST);
+        environment.remove(Configs.JPV3_USERNAME);
+        environment.remove(Configs.JPV3_PASSWORD);
+
+        environment.put(Configs.JPV3_IMAGE_SERVER, TEST_IMAGE_URL);
+        environment.put(Configs.TEST_JPV3_HOST, TEST_MANIFEST_URL);
+        environment.put(Configs.TEST_JPV3_USERNAME,
+                Env.getOrFail(Configs.JPV3_USERNAME, LOGGER.getMessage(MessageCodes.JPA_197, Configs.JPV3_USERNAME)));
+        environment.put(Configs.TEST_JPV3_PASSWORD,
+                Env.getOrFail(Configs.JPV3_PASSWORD, LOGGER.getMessage(MessageCodes.JPA_197, Configs.JPV3_PASSWORD)));
+
+        final Process process = builder.start();
         final String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
 
         return new ProcessResult(process.waitFor(), output);
@@ -182,8 +249,8 @@ public class JPv3IT {
     private ProcessBuilder setEnvs(final ProcessBuilder aProcessBuilder) {
         final Map<String, String> environment = aProcessBuilder.environment();
 
-        environment.put(Configs.JPV3_HOST, "https://test.ingest.iiif.library.ucla.edu");
-        environment.put(Configs.JPV3_IMAGE_SERVER, "https://iiif.library.ucla.edu/iiif/2");
+        environment.put(Configs.JPV3_HOST, TEST_MANIFEST_URL);
+        environment.put(Configs.JPV3_IMAGE_SERVER, TEST_IMAGE_URL);
         environment.put(Configs.JPV3_USERNAME,
                 Env.getOrFail(Configs.JPV3_USERNAME, LOGGER.getMessage(MessageCodes.JPA_197, Configs.JPV3_USERNAME)));
         environment.put(Configs.JPV3_PASSWORD,
@@ -195,10 +262,10 @@ public class JPv3IT {
     /**
      * A command line process result.
      *
-     * @param exitCode The process exit code.
-     * @param output The process output.
+     * @param aExitCode The process exit code.
+     * @param aOutput The process output.
      */
-    private record ProcessResult(int exitCode, String output) {
+    private record ProcessResult(int aExitCode, String aOutput) {
         // This is intentionally left empty
     }
 }

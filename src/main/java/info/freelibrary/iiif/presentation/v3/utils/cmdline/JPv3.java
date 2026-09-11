@@ -69,17 +69,17 @@ public final class JPv3 implements Callable<Integer> {
 
     /** The authentication username. This is only needed for uploads. */
     @CommandLine.Option(names = { "-U", "--username" }, description = "The username to use for authentication",
-            paramLabel = Configs.JPV3_USERNAME, defaultValue = "${env:JPV3_USERNAME}")
+            paramLabel = Configs.JPV3_USERNAME)
     private String myUsername;
 
     /** The authentication password. This is only needed for uploads. */
     @CommandLine.Option(names = { "-P", "--password" }, description = "The password to use for authentication",
-            paramLabel = Configs.JPV3_PASSWORD, defaultValue = "${env:JPV3_PASSWORD}")
+            paramLabel = Configs.JPV3_PASSWORD)
     private String myPassword;
 
     /** The IIIF manifests and collection documents server. */
     @CommandLine.Option(names = { "-H", "--host" }, description = "The IIIF manifests and collection documents server",
-            paramLabel = Configs.JPV3_HOST, defaultValue = "${env:JPV3_HOST}", required = true)
+            paramLabel = Configs.JPV3_HOST)
     private URI myHost;
 
     /** The IIIF images server. */
@@ -99,6 +99,10 @@ public final class JPv3 implements Callable<Integer> {
     @CommandLine.Option(names = { "-V", "--verbose" }, arity = "0..1", paramLabel = "LOG_LEVEL",
             description = "Increase logging verbosity; optionally provide a log level such as WARN, INFO, or DEBUG")
     private String myLogLevel;
+
+    /** The flag for test environment variables. */
+    @CommandLine.Option(names = { "-t", "--test" }, description = "Use test environment variables")
+    private boolean myTestFlag;
 
     /** Creates a new JPv3 instance. */
     private JPv3() {
@@ -128,6 +132,29 @@ public final class JPv3 implements Callable<Integer> {
         // Check to see if we're setting a more verbose log level
         if (myLogLevel != null) {
             JPv3Utils.setLogLevel(LOGGER, myLogLevel);
+        }
+
+        // Resolve host from environment if not supplied via command line
+        if (myHost == null) {
+            final String hostVar = myTestFlag ? Configs.TEST_JPV3_HOST : Configs.JPV3_HOST;
+            final String envHost = System.getenv(hostVar);
+
+            if (StringUtils.trimToNull(envHost) != null) {
+                myHost = URI.create(envHost);
+            } else {
+                final CommandLine cli = new CommandLine(this);
+                throw new CommandLine.ParameterException(cli, LOGGER.getMessage(MessageCodes.JPA_204, hostVar));
+            }
+        }
+
+        // Resolve username from environment if not supplied via command line
+        if (myUsername == null) {
+            myUsername = System.getenv(myTestFlag ? Configs.TEST_JPV3_USERNAME : Configs.JPV3_USERNAME);
+        }
+
+        // Resolve password from environment if not supplied via command line
+        if (myPassword == null) {
+            myPassword = System.getenv(myTestFlag ? Configs.TEST_JPV3_PASSWORD : Configs.JPV3_PASSWORD);
         }
 
         // Make sure we have a username and password if we're uploading the resulting ZIP file
