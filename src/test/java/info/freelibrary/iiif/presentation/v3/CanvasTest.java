@@ -2020,7 +2020,7 @@ public class CanvasTest extends AbstractCookbookTest {
                 myCanvas.getSupplementingPages().getFirst().getAnnotations().getFirst().getTargets();
         final SpecificResource specificResource = (SpecificResource) targets.getFirst();
 
-        return (specificResource.getSelector().get()).toString();
+        return specificResource.getSelector().orElseThrow().toString();
     }
 
 }

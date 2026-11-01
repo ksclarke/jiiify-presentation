@@ -42,15 +42,16 @@
         <revision>0.0.0-SNAPSHOT</revision>
 
         <!-- Application dependencies -->
-        <jackson.version>2.22.0</jackson.version>
-        <jackson.databind.version>2.22.0</jackson.databind.version>
+        <jackson.version>2.22.3</jackson.version>
+        <jackson.databind.version>2.22.4</jackson.databind.version>
         <jackson.annotations.version>2.22</jackson.annotations.version>
         <freelib.utils.version>6.0.0</freelib.utils.version>
-        <jsoup.version>1.22.2</jsoup.version>
+        <jsoup.version>1.23.2</jsoup.version>
         <combinatorics.version>3.4.0</combinatorics.version>
         <media.fragments.uri.version>2.4</media.fragments.uri.version>
 
         <!-- Build-related dependencies -->
+        <jspecify.version>1.0.1</jspecify.version>
         <exec.plugin.version>3.5.0</exec.plugin.version>
         <native.maven.plugin.version>1.1.0</native.maven.plugin.version>
 
@@ -75,6 +76,14 @@
     </properties>
 
     <dependencies>
+        <!-- Annotation dependencies -->
+        <dependency>
+            <groupId>org.jspecify</groupId>
+            <artifactId>jspecify</artifactId>
+            <version>${jspecify.version}</version>
+        </dependency>
+
+        <!-- Annotation dependencies -->
         <dependency>
             <groupId>info.freelibrary</groupId>
             <artifactId>freelib-utils</artifactId>
@@ -642,7 +651,7 @@
     <parent>
         <artifactId>freelib-parent</artifactId>
         <groupId>info.freelibrary</groupId>
-        <version>14.0.4</version>
+        <version>14.3.6</version>
     </parent>
 
 </project>
