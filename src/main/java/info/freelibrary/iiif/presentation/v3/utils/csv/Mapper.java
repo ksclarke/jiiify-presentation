@@ -118,7 +118,7 @@ public class Mapper {
         myChildren = myDatabase.hashSet("children", Serializer.STRING).createOrOpen();
 
         // Read the source file(s) and populate the database's indices
-        reader.rows(aCsvStream).forEach(uncheck(row -> {
+        reader.rows(aCsvStream).filter(Objects::nonNull).forEach(uncheck(row -> {
             final String rowID = row.getItemID().orElse(UUID.randomUUID().toString());
             final String rowValue = myMapper.writeValueAsString(row);
 

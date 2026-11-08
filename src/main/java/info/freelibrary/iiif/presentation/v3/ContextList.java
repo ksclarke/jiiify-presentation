@@ -330,6 +330,7 @@ public class ContextList extends ArrayList<URI> {
 
     /**
      * A context list comparator that makes sure the required context is always last in the list.
+     *
      * <p>
      * Cf. https://iiif.io/api/presentation/3.0/#46-linked-data-context-and-extensions
      * </p>

@@ -194,10 +194,12 @@ public class Manifestor {
 
     /**
      * Retrieves the type field from the provided JSON input stream.
+     *
      * <p>
      * This method attempts to parse the JSON data and searches for a field with the key corresponding to the type. If
      * the field is found, its value is returned as an {@code Optional<String>}. If the field is not present or cannot
      * be found, an empty {@code Optional} is returned.
+     *
      * <p>
      * The JSON input stream must represent a valid JSON object. If the input does not start with a JSON object root, an
      * {@code IllegalStateException} is thrown.

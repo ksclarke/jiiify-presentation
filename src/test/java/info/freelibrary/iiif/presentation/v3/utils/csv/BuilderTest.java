@@ -47,6 +47,7 @@ public class BuilderTest {
 
     /**
      * Tests the functionality of the {@link Builder#build(Row)} method.
+     *
      * <p>
      * This test verifies that the `build(Row)` method correctly processes the first row of the pre-loaded CSV data and
      * attempts to create a resource without errors. The test is designed to ensure the builder implementation can

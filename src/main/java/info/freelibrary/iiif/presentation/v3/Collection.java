@@ -43,7 +43,7 @@ import java.util.Optional;
  * own descriptive information. They can also provide clients with a means to locate all the manifests known to the
  * publishing institution.
  */
-@SuppressWarnings({ PMD.COUPLING_BETWEEN_OBJECTS, PMD.EXCESSIVE_IMPORTS })
+@SuppressWarnings({ PMD.EXCESSIVE_IMPORTS })
 public class Collection extends NavigableResource<Collection> {
 
     /**

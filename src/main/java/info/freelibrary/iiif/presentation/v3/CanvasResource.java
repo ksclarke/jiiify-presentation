@@ -85,16 +85,20 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
     /**
      * Paints content resources onto a {@link Minter} initialized canvas using a {@link PaintingAnnotation}. If the
      * minter does not exist, a {@link MintingException} is thrown.
+     *
      * <p>
      * Calling this method with a single {@link ContentResource} associates that resource with the canvas using an
      * annotation with a single body.
+     *
      * <p>
      * Calling this method with <code>aChoice = true</code> and multiple {@link ContentResource}s associates those
      * resources with the canvas using a single annotation with a
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
+     *
      * <p>
      * Calling this method with <code>aChoice = false</code> and multiple {@link ContentResource}s associates those
      * resources with the canvas using a single annotation with multiple resources.
+     *
      * <p>
      * If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -112,16 +116,20 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
     /**
      * Paints content resources onto a {@link Minter} initialized canvas using a {@link PaintingAnnotation}. If the
      * minter does not exist, a {@link MintingException} is thrown.
+     *
      * <p>
      * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
      * canvas using an annotation with a single body.
+     *
      * <p>
      * Calling this method with <code>aChoice = true</code> and a list containing more than one {@link ContentResource}
      * associates those resources with the canvas using a single annotation with a
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
+     *
      * <p>
      * Calling this method with <code>aChoice = false</code> and a list containing more than one {@link ContentResource}
      * associates those resources with the canvas using a single annotation with multiple resources.
+     *
      * <p>
      * If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -138,13 +146,16 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
 
     /**
      * Paints content resources onto a {@link Minter} initialized canvas using a {@link PaintingAnnotation}.
+     *
      * <p>
      * Calling this method with a single {@link ContentResource} associates that resource with the canvas using an
      * annotation with a single body.
+     *
      * <p>
      * Calling this method with multiple {@link ContentResource}s associates those resources with the canvas using a
      * single annotation with a
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
+     *
      * <p>
      * If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -161,13 +172,16 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
     /**
      * Paints content resources onto a {@link Minter} initialized canvas using a {@link PaintingAnnotation}. If the
      * minter does not exist, a {@link MintingException} is thrown.
+     *
      * <p>
      * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
      * canvas using an annotation with a single body.
+     *
      * <p>
      * Calling this method with a list containing more than one {@link ContentResource} associates those resources with
      * the canvas using a single annotation with a
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
+     *
      * <p>
      * If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -184,16 +198,20 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
     /**
      * Paints content resources onto a region of a {@link Minter} initialized canvas using a {@link PaintingAnnotation}.
      * If the minter does not exist, a {@link MintingException} is thrown.
+     *
      * <p>
      * Calling this method with a single {@link ContentResource} associates that resource with the canvas region using
      * an annotation with a single body.
+     *
      * <p>
      * Calling this method with <code>aChoice = true</code> and multiple {@link ContentResource}s associates those
      * resources with the canvas region using a single annotation with a
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
+     *
      * <p>
      * Calling this method with <code>aChoice = false</code> and multiple {@link ContentResource}s associates those
      * resources with the canvas region using a single annotation with multiple resources.
+     *
      * <p>
      * If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -214,16 +232,20 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
     /**
      * Paints content resources onto a region of a {@link Minter} initialized canvas using a {@link PaintingAnnotation}.
      * If the minter does not exist, a {@link MintingException} is thrown.
+     *
      * <p>
      * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
      * canvas region using an annotation with a single body.
+     *
      * <p>
      * Calling this method with <code>aChoice = true</code> and a list containing more than one {@link ContentResource}
      * associates those resources with the canvas region using a single annotation with a
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
+     *
      * <p>
      * Calling this method with <code>aChoice = false</code> and a list containing more than one {@link ContentResource}
      * associates those resources with the canvas region using a single annotation with multiple resources.
+     *
      * <p>
      * If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -244,13 +266,16 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
     /**
      * Paints content resources onto a region of a {@link Minter} initialized canvas using a {@link PaintingAnnotation}.
      * If the minter does not exist, a {@link MintingException} is thrown.
+     *
      * <p>
      * Calling this method with a single {@link ContentResource} associates that resource with the canvas region using
      * an annotation with a single body.
+     *
      * <p>
      * Calling this method with multiple {@link ContentResource}s associates those resources with the canvas region
      * using a single annotation with a
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
+     *
      * <p>
      * If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -270,13 +295,16 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
     /**
      * Paints content resources onto a region of a {@link Minter} initialized canvas using a {@link PaintingAnnotation}.
      * If the minter does not exist, a {@link MintingException} is thrown.
+     *
      * <p>
      * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
      * canvas region using an annotation with a single body.
+     *
      * <p>
      * Calling this method with a list containing more than one {@link ContentResource} associates those resources with
      * the canvas region using a single annotation with a
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
+     *
      * <p>
      * If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -296,16 +324,20 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
     /**
      * Paints content resources onto a region of a {@link Minter} initialized canvas using a {@link PaintingAnnotation}.
      * If the minter does not exist, a {@link MintingException} is thrown.
+     *
      * <p>
      * Calling this method with a single {@link ContentResource} associates that resource with the canvas region using
      * an annotation with a single body.
+     *
      * <p>
      * Calling this method with <code>aChoice = true</code> and multiple {@link ContentResource}s associates those
      * resources with the canvas region using a single annotation with a
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
+     *
      * <p>
      * Calling this method with <code>aChoice = false</code> and multiple {@link ContentResource}s associates those
      * resources with the canvas region using a single annotation with multiple resources.
+     *
      * <p>
      * If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -325,16 +357,20 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
     /**
      * Paints content resources onto a region of a {@link Minter} initialized canvas using a {@link PaintingAnnotation}.
      * If the minter does not exist, a {@link MintingException} is thrown.
+     *
      * <p>
      * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
      * canvas region using an annotation with a single body.
+     *
      * <p>
      * Calling this method with <code>aChoice = true</code> and a list containing more than one {@link ContentResource}
      * associates those resources with the canvas region using a single annotation with a
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
+     *
      * <p>
      * Calling this method with <code>aChoice = false</code> and a list containing more than one {@link ContentResource}
      * associates those resources with the canvas region using a single annotation with multiple resources.
+     *
      * <p>
      * If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -354,13 +390,16 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
     /**
      * Paints content resources onto a region of a {@link Minter} initialized canvas using a {@link PaintingAnnotation}.
      * If the minter does not exist, a {@link MintingException} is thrown.
+     *
      * <p>
      * Calling this method with a single {@link ContentResource} associates that resource with the canvas region using
      * an annotation with a single body.
+     *
      * <p>
      * Calling this method with multiple {@link ContentResource}s associates those resources with the canvas region
      * using a single annotation with a
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
+     *
      * <p>
      * If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -379,13 +418,16 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
     /**
      * Paints content resources onto a region of a {@link Minter} initialized canvas using a {@link PaintingAnnotation}.
      * If the minter does not exist, a {@link MintingException} is thrown.
+     *
      * <p>
      * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
      * canvas region using an annotation with a single body.
+     *
      * <p>
      * Calling this method with a list containing more than one {@link ContentResource} associates those resources with
      * the canvas region using a single annotation with a
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
+     *
      * <p>
      * If no {@link AnnotationPage} for painting annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -481,16 +523,20 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
     /**
      * Associates supplementing content resources onto a {@link Minter} initialized canvas using a
      * {@link SupplementingAnnotation}. If the minter does not exist, a {@link MintingException} is thrown.
+     *
      * <p>
      * Calling this method with a single {@link ContentResource} associates that resource with the canvas using an
      * annotation with a single body.
+     *
      * <p>
      * Calling this method with <code>aChoice = true</code> and multiple {@link ContentResource}s associates those
      * resources with the canvas using a single annotation with a
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
+     *
      * <p>
      * Calling this method with <code>aChoice = false</code> and multiple {@link ContentResource}s associates those
      * resources with the canvas using a single annotation with multiple resources.
+     *
      * <p>
      * If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -506,16 +552,20 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
     /**
      * Associates supplementing content resources onto a {@link Minter} initialized canvas using a
      * {@link SupplementingAnnotation}. If the minter does not exist, a {@link MintingException} is thrown.
+     *
      * <p>
      * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
      * canvas using an annotation with a single body.
+     *
      * <p>
      * Calling this method with <code>aChoice = true</code> and a list containing more than one {@link ContentResource}
      * associates those resources with the canvas using a single annotation with a
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
+     *
      * <p>
      * Calling this method with <code>aChoice = false</code> and a list containing more than one {@link ContentResource}
      * associates those resources with the canvas using a single annotation with multiple resources.
+     *
      * <p>
      * If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -531,13 +581,16 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
     /**
      * Associates supplementing content resources onto a {@link Minter} initialized canvas using a
      * {@link SupplementingAnnotation}. If the minter does not exist, a {@link MintingException} is thrown.
+     *
      * <p>
      * Calling this method with a single {@link ContentResource} associates that resource with the canvas using an
      * annotation with a single body.
+     *
      * <p>
      * Calling this method with multiple {@link ContentResource}s associates those resources with the canvas using a
      * single annotation with a
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
+     *
      * <p>
      * If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -552,13 +605,16 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
     /**
      * Associates supplementing content resources onto a {@link Minter} initialized canvas using a
      * {@link SupplementingAnnotation}. If the minter does not exist, a {@link MintingException} is thrown.
+     *
      * <p>
      * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
      * canvas using an annotation with a single body.
+     *
      * <p>
      * Calling this method with a list containing more than one {@link ContentResource} associates those resources with
      * the canvas using a single annotation with a
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
+     *
      * <p>
      * If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -573,16 +629,20 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
     /**
      * Associates supplementing content resources onto a region of a {@link Minter} initialized canvas using a
      * {@link SupplementingAnnotation}. If the minter does not exist, a {@link MintingException} is thrown.
+     *
      * <p>
      * Calling this method with a single {@link ContentResource} associates that resource with the canvas region using
      * an annotation with a single body.
+     *
      * <p>
      * Calling this method with <code>aChoice = true</code> and multiple {@link ContentResource}s associates those
      * resources with the canvas region using a single annotation with a
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
+     *
      * <p>
      * Calling this method with <code>aChoice = false</code> and multiple {@link ContentResource}s associates those
      * resources with the canvas region using a single annotation with multiple resources.
+     *
      * <p>
      * If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -600,16 +660,20 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
     /**
      * Associates supplementing content resources onto a region of a {@link Minter} initialized canvas using a
      * {@link SupplementingAnnotation}. If the minter does not exist, a {@link MintingException} is thrown.
+     *
      * <p>
      * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
      * canvas region using an annotation with a single body.
+     *
      * <p>
      * Calling this method with <code>aChoice = true</code> and a list containing more than one {@link ContentResource}
      * associates those resources with the canvas region using a single annotation with a
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
+     *
      * <p>
      * Calling this method with <code>aChoice = false</code> and a list containing more than one {@link ContentResource}
      * associates those resources with the canvas region using a single annotation with multiple resources.
+     *
      * <p>
      * If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -627,13 +691,16 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
     /**
      * Associates supplementing content resources onto a region of a {@link Minter} initialized canvas using a
      * {@link SupplementingAnnotation}. If the minter does not exist, a {@link MintingException} is thrown.
+     *
      * <p>
      * Calling this method with a single {@link ContentResource} associates that resource with the canvas region using
      * an annotation with a single body.
+     *
      * <p>
      * Calling this method with multiple {@link ContentResource}s associates those resources with the canvas region
      * using a single annotation with a
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
+     *
      * <p>
      * If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -650,13 +717,16 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
     /**
      * Associates supplementing content resources onto a region of a {@link Minter} initialized canvas using a
      * {@link SupplementingAnnotation}. If the minter does not exist, a {@link MintingException} is thrown.
+     *
      * <p>
      * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
      * canvas region using an annotation with a single body.
+     *
      * <p>
      * Calling this method with a list containing more than one {@link ContentResource} associates those resources with
      * the canvas region using a single annotation with a
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
+     *
      * <p>
      * If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -673,16 +743,20 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
     /**
      * Associates supplementing content resources onto a region of a {@link Minter} initialized canvas using a
      * {@link SupplementingAnnotation}. If the minter does not exist, a {@link MintingException} is thrown.
+     *
      * <p>
      * Calling this method with a single {@link ContentResource} associates that resource with the canvas region using
      * an annotation with a single body.
+     *
      * <p>
      * Calling this method with <code>aChoice = true</code> and multiple {@link ContentResource}s associates those
      * resources with the canvas region using a single annotation with a
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
+     *
      * <p>
      * Calling this method with <code>aChoice = false</code> and multiple {@link ContentResource}s associates those
      * resources with the canvas region using a single annotation with multiple resources.
+     *
      * <p>
      * If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -700,16 +774,20 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
     /**
      * Associates supplementing content resources onto a region of a {@link Minter} initialized canvas using a
      * {@link SupplementingAnnotation}. If the minter does not exist, a {@link MintingException} is thrown.
+     *
      * <p>
      * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
      * canvas region using an annotation with a single body.
+     *
      * <p>
      * Calling this method with <code>aChoice = true</code> and a list containing more than one {@link ContentResource}
      * associates those resources with the canvas region using a single annotation with a
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
+     *
      * <p>
      * Calling this method with <code>aChoice = false</code> and a list containing more than one {@link ContentResource}
      * associates those resources with the canvas region using a single annotation with multiple resources.
+     *
      * <p>
      * If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -727,13 +805,16 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
     /**
      * Associates supplementing content resources onto a region of a {@link Minter} initialized canvas using a
      * {@link SupplementingAnnotation}. If the minter does not exist, a {@link MintingException} is thrown.
+     *
      * <p>
      * Calling this method with a single {@link ContentResource} associates that resource with the canvas region using
      * an annotation with a single body.
+     *
      * <p>
      * Calling this method with multiple {@link ContentResource}s associates those resources with the canvas region
      * using a single annotation with a
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
+     *
      * <p>
      * If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the
@@ -750,13 +831,16 @@ public interface CanvasResource<T extends CanvasResource<T>> extends Resource<T>
     /**
      * Associates supplementing content resources onto a region of a {@link Minter} initialized canvas using a
      * {@link SupplementingAnnotation}. If the minter does not exist, a {@link MintingException} is thrown.
+     *
      * <p>
      * Calling this method with a list containing a single {@link ContentResource} associates that resource with the
      * canvas region using an annotation with a single body.
+     *
      * <p>
      * Calling this method with a list containing more than one {@link ContentResource} associates those resources with
      * the canvas region using a single annotation with a
      * <a href="https://www.w3.org/TR/annotation-model/#choice-between-bodies"><code>Choice</code></a> body.
+     *
      * <p>
      * If no {@link AnnotationPage} for supplementing annotations exists on the canvas, one is created and the new
      * annotations are added to it. Otherwise, the new annotations are added to the last {@link AnnotationPage} in the

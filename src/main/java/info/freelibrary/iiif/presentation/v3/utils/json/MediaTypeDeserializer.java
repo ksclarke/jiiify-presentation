@@ -4,21 +4,20 @@ package info.freelibrary.iiif.presentation.v3.utils.json;
 import static info.freelibrary.util.Constants.EMPTY;
 import static info.freelibrary.util.Constants.SINGLE_INSTANCE;
 
-import java.io.IOException;
-import java.io.Serial;
-import java.util.Optional;
-
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-
+import info.freelibrary.iiif.presentation.v3.properties.MediaType;
+import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.util.Constants;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import info.freelibrary.util.warnings.PMD;
 
-import info.freelibrary.iiif.presentation.v3.properties.MediaType;
-import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import java.io.IOException;
+import java.io.Serial;
+import java.util.Optional;
 
 /**
  * A deserializer for {@code MediaType}(s).
@@ -48,6 +47,7 @@ public class MediaTypeDeserializer extends StdDeserializer<MediaType> {
         super(aClass);
     }
 
+    @SuppressWarnings({ PMD.AVOID_DEEPLY_NESTED_IF_STMTS })
     @Override
     public MediaType deserialize(final JsonParser aParser, final DeserializationContext aContext) throws IOException {
         final JsonNode node = aParser.getCodec().readTree(aParser);

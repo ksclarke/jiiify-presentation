@@ -1,0 +1,147 @@
+# A mapping file for JSON to CSV and vice versa.
+
+Alternate Title:
+  - AltTitle.other
+  - AltTitle.translated
+
+Behavior:
+  - viewingHint
+
+Bucketeer State:
+  - Bucketeer State
+
+Contents Note:
+  - Contents note
+
+Copyright Holder: # Required
+  - Rights.rightsHolderContact
+
+Copyright Status: # Required
+  - Rights.copyrightStatus
+
+Creator:
+  - Creator
+  - Name.creator
+
+Date Created: # Required
+  - Date.created
+  - Date.creation
+
+Date Normalized: # Required
+  - Date.normalized
+
+Descriptive Note:
+  - Description.note
+
+Editor:
+  - Editor
+
+File Name: # Required; An image file path
+  - File Name
+
+Finding Aid URL:
+  - Finding Aid URL
+
+Format Extent:
+  - Format.extent
+
+Format Medium:
+  - Format.medium
+
+Genre: # Required
+  - Genre
+
+Geographic Subject:
+  - Subject geographic
+
+IIIF Access URL:
+  - IIIF Access URL
+
+IIIF Manifest URL: # Required
+  - IIIF Manifest URL
+
+Item ID: # Required
+  - Item ARK
+  - Item ID
+
+Language:
+  - Language
+
+Local Identifier:
+  - AltIdentifier.local
+
+Local Rights:
+  - Rights.statementLocal
+
+Masthead:
+  - Masthead
+
+Media Height:
+  - media.height
+
+Media Width:
+  - media.width
+
+Name Subject:
+  - Name.subject
+
+Notes:
+  - Notes
+
+Object Type: # Required
+  - Object Type
+
+Parent ID: # Required
+  - Parent ARK
+  - Parent ID
+
+Place of Origin:
+  - Place of origin
+  - Publisher.placeOfOrigin
+
+Program:
+  - Program
+
+Publisher:
+  - Publisher.publisherName
+
+Representative Image:
+  - Representative image
+
+Repository: # Required
+  - Repository
+  - Name.repository
+
+Resource Type:
+  - IIIF Object Type
+
+Subject:
+  - Subject
+
+Summary:
+  - Summary
+
+Target:
+  - Target
+
+Temporal Subject:
+  - Subject temporal
+
+Thumbnail:
+  - Thumbnail
+
+Title: # Required
+  - Title
+
+Topical Subject:
+  - Subject topic
+
+Type of Resource: # Required
+  - Type.typeOfResource
+
+Viewing Direction:
+  - viewingDirection
+  - Text direction
+
+Visibility:
+  - Visibility

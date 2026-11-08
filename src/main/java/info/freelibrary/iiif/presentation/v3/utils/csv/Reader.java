@@ -1,8 +1,8 @@
 
 package info.freelibrary.iiif.presentation.v3.utils.csv;
 
-import static info.freelibrary.iiif.presentation.v3.utils.cmdline.JPv3Utils.CSV_EXT;
-import static info.freelibrary.iiif.presentation.v3.utils.cmdline.JPv3Utils.ZIP_EXT;
+import static info.freelibrary.iiif.presentation.v3.utils.cmdline.JPv3.CSV_EXT;
+import static info.freelibrary.iiif.presentation.v3.utils.cmdline.JPv3.ZIP_EXT;
 import static info.freelibrary.util.Constants.SLASH;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;

@@ -15,6 +15,8 @@ import info.freelibrary.iiif.presentation.v3.utils.csv.Row;
 import info.freelibrary.util.Env;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -89,7 +91,7 @@ public class JPv3IT {
      */
     @Test
     public void testCreate() throws Exception {
-        final String fileName = TARGET + "create-" + UUID.randomUUID() + JPv3Utils.ZIP_EXT;
+        final String fileName = TARGET + "create-" + UUID.randomUUID() + JPv3.ZIP_EXT;
         final ProcessResult result = runJPv3(CREATE, INPUT, CSV_FILE, OUTPUT, fileName);
 
         assertEquals(result.aOutput, 0, result.aExitCode);
@@ -104,8 +106,8 @@ public class JPv3IT {
      */
     @Test
     public void testUpload() throws Exception {
-        final String zipFileName = TARGET + "upload-" + UUID.randomUUID() + JPv3Utils.ZIP_EXT;
-        final String csvFileName = zipFileName.replace(JPv3Utils.ZIP_EXT, "-csv" + JPv3Utils.ZIP_EXT);
+        final String zipFileName = TARGET + "upload-" + UUID.randomUUID() + JPv3.ZIP_EXT;
+        final String csvFileName = zipFileName.replace(JPv3.ZIP_EXT, "-csv" + JPv3.ZIP_EXT);
         final ProcessResult result = runJPv3(UPLOAD, INPUT, CSV_FILE, OUTPUT, zipFileName);
 
         assertEquals(result.aOutput, 0, result.aExitCode);
@@ -146,7 +148,7 @@ public class JPv3IT {
      */
     @Test
     public void testPatch() throws Exception {
-        final String fileName = TARGET + "patch-" + UUID.randomUUID() + JPv3Utils.ZIP_EXT;
+        final String fileName = TARGET + "patch-" + UUID.randomUUID() + JPv3.ZIP_EXT;
         final ProcessResult result = runJPv3(PATCH, INPUT, CSV_FILE, OUTPUT, fileName);
 
         assertEquals(result.aOutput, 0, result.aExitCode);
@@ -161,7 +163,7 @@ public class JPv3IT {
      */
     @Test
     public void testTestFlag() throws Exception {
-        final String fileName = TARGET + "test-env-" + UUID.randomUUID() + JPv3Utils.ZIP_EXT;
+        final String fileName = TARGET + "test-env-" + UUID.randomUUID() + JPv3.ZIP_EXT;
         final ProcessResult result = runJPv3WithTestEnvs(UPLOAD, TEST, INPUT, CSV_FILE, OUTPUT, fileName);
 
         assertEquals(result.aOutput, 0, result.aExitCode);
@@ -200,7 +202,7 @@ public class JPv3IT {
      * @return The process result
      * @throws Exception If there is trouble running the command line application
      */
-    private ProcessResult runJPv3(final String... aArgArray) throws Exception {
+    private @NotNull ProcessResult runJPv3(final String... aArgArray) throws Exception {
         final String executable = System.getProperty(OS_NAME).toLowerCase().contains(WIN_OS) ? JPV3_EXE : JPV3;
         final List<String> command = Stream.concat(Stream.of(TARGET + executable), Arrays.stream(aArgArray)).toList();
         final Process process = setEnvs(new ProcessBuilder(command).redirectErrorStream(true)).start();
@@ -216,7 +218,7 @@ public class JPv3IT {
      * @return The process result
      * @throws Exception If there is trouble running the command line application
      */
-    private ProcessResult runJPv3WithTestEnvs(final String... aArgArray) throws Exception {
+    private @NonNull ProcessResult runJPv3WithTestEnvs(final String... aArgArray) throws Exception {
         final String executable = System.getProperty(OS_NAME).toLowerCase().contains(WIN_OS) ? JPV3_EXE : JPV3;
         final List<String> command = Stream.concat(Stream.of(TARGET + executable), Arrays.stream(aArgArray)).toList();
         final ProcessBuilder builder = new ProcessBuilder(command).redirectErrorStream(true);

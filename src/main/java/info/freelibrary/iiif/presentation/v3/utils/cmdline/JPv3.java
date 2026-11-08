@@ -28,7 +28,6 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Base64;
-import java.util.concurrent.Callable;
 import java.util.stream.Stream;
 
 /** A jpv3 executable. */
@@ -40,13 +39,16 @@ import java.util.stream.Stream;
             JPv3.EXPORT + Configs.JPV3_PASSWORD + "=\"password\"",
             JPv3.EXPORT + Configs.JPV3_HOST + "=\"https://test.ingest.iiif.library.ucla.edu\"",
             JPv3.EXPORT + Configs.JPV3_IMAGE_SERVER + "=\"https://iiif.library.ucla.edu/iiif/2\"%n" })
-public final class JPv3 implements Callable<Integer> {
+public final class JPv3 extends AbstractCallable {
 
     /** The expected prefix for the IIIF manifests and collection documents server. */
     public static final String ENDPOINT_PREFIX = "ingest";
 
     /** The expected endpoint for the IIIF manifests and collection documents server. */
     public static final String INGEST_ENDPOINT_PATH = "/package";
+
+    /** The expected endpoint for collection documents. */
+    public static final String COLLECTIONS_PATH = "/collections/";
 
     /** A constant for exporting environmental variables. */
     static final String EXPORT = "  export ";
@@ -62,6 +64,11 @@ public final class JPv3 implements Callable<Integer> {
     @CommandLine.Option(names = { "-i", "--input" }, description = "An input file or directory to be processed",
             paramLabel = "INPUT", required = true)
     private Path myInputFile;
+
+    /** An optional collection ID argument for segmented processing. */
+    @CommandLine.Option(names = { "-d", "--download" }, description = "The collection ID for batch processing",
+            paramLabel = "COLLECTION_ID")
+    private String myCollectionID;
 
     /** The action to take. Only one is allowed for a given invocation. */
     @CommandLine.ArgGroup(exclusive = true, multiplicity = "1")
@@ -111,6 +118,7 @@ public final class JPv3 implements Callable<Integer> {
 
     /**
      * Entry point for the jpv3 command-line tool.
+     *
      * <p>
      * Currently in development. Some features may be incomplete.
      *
@@ -166,9 +174,17 @@ public final class JPv3 implements Callable<Integer> {
 
         try {
             final Path outputFile = myOutputOpts.getOutputFile(myInputFile);
+            final Stream.Builder<Path> streamBuilder = Stream.builder();
+
+            streamBuilder.add(myInputFile); // Add the files we received as input to the stream
+
+            // Add a supplied collection document that's been downloaded and converted to a CSV
+            if (myCollectionID != null) {
+                streamBuilder.add(convertToCSV(formatHost(myHost, myCollectionID), myUsername, myPassword));
+            }
 
             // Map the CSV file(s) to JSON manifests and collection documents
-            final int result = new Mapper(Stream.of(myInputFile), outputFile).map(myHost, myImageServer);
+            final int result = new Mapper(streamBuilder.build(), outputFile).map(myHost, myImageServer);
 
             // If the mapping was unsuccessful, we can bail; nothing else needs to happen
             if (result != 0) {
@@ -184,7 +200,7 @@ public final class JPv3 implements Callable<Integer> {
                     final byte[] credentials = (myUsername + COLON + myPassword).getBytes(StandardCharsets.UTF_8);
                     final String basicAuth = "Basic " + Base64.getEncoder().encodeToString(credentials);
                     final HttpRequest.BodyPublisher bodyPublisher = HttpRequest.BodyPublishers.ofFile(outputFile);
-                    final HttpRequest.Builder builder = HttpRequest.newBuilder().uri(JPv3Utils.formatHost(myHost))
+                    final HttpRequest.Builder builder = HttpRequest.newBuilder().uri(formatHost(myHost))
                             .header(HTTP.Header.CONTENT_TYPE, MediaType.APPLICATION_ZIP.toString())
                             .header(HTTP.Header.AUTHORIZATION, basicAuth);
                     final HttpRequest request;
@@ -207,7 +223,7 @@ public final class JPv3 implements Callable<Integer> {
                 }
 
                 LOGGER.info(LOGGER.getMessage(MessageCodes.JPA_189, csvZipFile));
-                return JPv3Utils.outputZipFile(myInputFile, csvZipFile, myHost);
+                return outputZipFile(myInputFile, csvZipFile, myHost);
             } else if (myAction.isCreate()) {
                 LOGGER.info(LOGGER.getMessage(MessageCodes.JPA_178, outputFile.toAbsolutePath()));
                 return 0;
@@ -221,6 +237,11 @@ public final class JPv3 implements Callable<Integer> {
             LOGGER.error(details, details.getMessage());
             return -1;
         }
+    }
+
+    @Override
+    protected Logger getLogger() {
+        return LOGGER;
     }
 
     /** The output options for the jpv3 program. */
@@ -243,7 +264,7 @@ public final class JPv3 implements Callable<Integer> {
          */
         private Path getOutputFile(final Path aInputFile) {
             if (isCustomOutputFile) {
-                return JPv3Utils.getCustomOutputPath(aInputFile);
+                return Path.of(EMPTY).resolve("output-" + getPathParent(aInputFile) + ZIP_EXT);
             }
 
             return myOutputFile;

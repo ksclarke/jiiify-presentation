@@ -49,6 +49,7 @@
         <jsoup.version>1.23.2</jsoup.version>
         <combinatorics.version>3.4.0</combinatorics.version>
         <media.fragments.uri.version>2.4</media.fragments.uri.version>
+        <snakeyaml.version>2.7</snakeyaml.version>
 
         <!-- Build-related dependencies -->
         <jspecify.version>1.0.1</jspecify.version>
@@ -88,6 +89,11 @@
             <groupId>info.freelibrary</groupId>
             <artifactId>freelib-utils</artifactId>
             <version>${freelib.utils.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>${snakeyaml.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -261,12 +267,6 @@
 
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
-            </plugin>
-
-            <!-- The rules need to be updated to fit some IDEA changes -->
-            <plugin>
-                <groupId>net.revelc.code.formatter</groupId>
-                <artifactId>formatter-maven-plugin</artifactId>
             </plugin>
 
             <plugin>

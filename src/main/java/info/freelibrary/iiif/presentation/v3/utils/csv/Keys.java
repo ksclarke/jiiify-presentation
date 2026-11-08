@@ -3,10 +3,12 @@ package info.freelibrary.iiif.presentation.v3.utils.csv;
 
 /**
  * CSV header names used by the CSV mapping components.
+ *
  * <p>
  * This constants class centralizes canonical column keys expected in input CSV files so that parsing and serialization
  * logic can reference a single source of truth. Keeping these keys here reduces duplication and prevents subtle typos
  * from breaking field bindings.
+ *
  * <p>
  * Notes:
  * <ul>

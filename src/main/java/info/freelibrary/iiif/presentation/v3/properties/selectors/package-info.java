@@ -5,13 +5,13 @@
 
 package info.freelibrary.iiif.presentation.v3.properties.selectors;
 
-import info.freelibrary.util.warnings.Eclipse;
-
 import info.freelibrary.iiif.presentation.v3.Canvas;
+import info.freelibrary.util.warnings.Eclipse;
 
 /**
  * A package info class.
  */
+@SuppressWarnings({ "PMD.TypeNameMismatch" }) // FIXME: Use PMD constant in next freelib-utils release
 final class Info {
 
     /** Including this allows us to reference Canvas in the package Javadoc. */

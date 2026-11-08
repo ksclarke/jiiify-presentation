@@ -30,16 +30,18 @@ import java.util.Optional;
 
 /**
  * A wrapper for Canvas that helps supports the special serialization preference from the 0283-missing-image recipe.
+ *
  * <p>
  * This is required because we don't handle serialization ourselves, but rely on Jackson's JsonInclude annotations to
  * define how serialization should happen, and a canvas is a canvas, regardless of whether it's in a range or not. This
  * may change at some point in the future, at which point this wrapper would no longer be needed. This class is package
  * specific because it's intended for internal purposes only.
  * </p>
+ *
  * <p>
  * Consumers of the Jiiify Presentation library should not use this class directly.
  * </p>
- * <p>
+
  * <dl>
  * <dt>From the <a href="https://iiif.io/api/cookbook/recipe/0283-missing-image/">recipe</a>:</dt>
  * <dd>To maintain a sequence presentation of a paged object with missing images, we suggest adding a content-less
@@ -49,17 +51,18 @@ import java.util.Optional;
  * differentiates between Canvas references found in Ranges and Canvas references found not in Ranges by the presence of
  * items.</dd>
  * </dl>
- * </p>
+ *
  * <p>
  * Our initial implementation would not serialize an empty items array. By updating the JsonInclude annotations and
  * adding this class, we've changed the behavior so that canvases outside of range's do serialize an empty items array
  * and canvases in ranges do not.
  * </p>
+ *
  * <p>
  * Joke about this kludge: There isn't anything one more layer of abstraction cannot solve!
  * </p>
  */
-@SuppressWarnings({ PMD.EXCESSIVE_PUBLIC_COUNT, PMD.COUPLING_BETWEEN_OBJECTS, Sonar.MONSTER_CLASS })
+@SuppressWarnings({ PMD.EXCESSIVE_PUBLIC_COUNT, PMD.COUPLING_BETWEEN_OBJECTS, PMD.COMMENT_SIZE, Sonar.MONSTER_CLASS })
 class RangeCanvas extends Canvas {
 
     /** The wrapped canvas. */
