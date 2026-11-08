@@ -63,7 +63,7 @@ public final class JPv3 extends AbstractCallable {
     private Path myInputFile;
 
     /** An optional collection ID argument for segmented processing. */
-    @CommandLine.Option(names = { "-d", "--download" }, description = "A collection ID used to upload via patch",
+    @CommandLine.Option(names = { "-d", "--download" }, description = "The collection ID for batch processing",
             paramLabel = "COLLECTION_ID")
     private String myCollectionID;
 

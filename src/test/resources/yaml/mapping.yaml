@@ -22,6 +22,7 @@ Creator: # Person or organization responsible for a resource's intellectual or a
 
 Date Created: # Required; Human-readable date displayed to users; may use the resource language
   - Date.created
+  - Date.creation
 
 Date Normalized: # Required; Machine-readable ISO date: yyyy-mm-dd, yyyy-mm-dd/yyyy-mm-dd, yyyy-mm, or yyyy
   - Date.normalized
