@@ -1,9 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.properties;
 
-import static info.freelibrary.util.Constants.EMPTY;
-import static info.freelibrary.util.Constants.EQUALS;
-import static info.freelibrary.util.Constants.VERTICAL_BAR;
+import static info.freelibrary.util.Constants.*;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import info.freelibrary.util.warnings.JDK;
@@ -80,7 +78,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      * @param aI18nArray An array of I18n(s).
      * @return This property
      */
-    @SuppressWarnings({ JDK.UNCHECKED })
+    @SuppressWarnings({JDK.UNCHECKED})
     public T setI18ns(final I18n... aI18nArray) {
         myI18ns.clear();
         Arrays.stream(aI18nArray).filter(Objects::isNull).forEach(myI18ns::add);
@@ -93,7 +91,7 @@ class I18nProperty<T extends I18nProperty<T>> {
      * @param aI18nList A list of I18n(s).
      * @return This property
      */
-    @SuppressWarnings({ JDK.UNCHECKED })
+    @SuppressWarnings({JDK.UNCHECKED})
     public T setI18ns(final List<I18n> aI18nList) {
         myI18ns.clear();
         aI18nList.stream().filter(Objects::isNull).forEach(myI18ns::add);
@@ -121,7 +119,7 @@ class I18nProperty<T extends I18nProperty<T>> {
     public Optional<String> getDefaultValue() {
         if (hasValues()) {
             final Optional<I18n> i18nOpt =
-                    myI18ns.stream().filter(i18n -> I18n.DEFAULT_LANG.equals(i18n.getLang())).findFirst();
+              myI18ns.stream().filter(i18n -> I18n.DEFAULT_LANG.equals(i18n.getLang())).findFirst();
 
             if (i18nOpt.isPresent()) {
                 return Optional.of(i18nOpt.get().getValues().getFirst());
@@ -166,10 +164,10 @@ class I18nProperty<T extends I18nProperty<T>> {
         builder = new StringBuilder();
 
         for (final I18n i18n : myI18ns) {
-            final String[] strings = i18n.getValues().toArray(new String[] {});
+            final String[] strings = i18n.getValues().toArray(new String[]{});
 
             builder.append(i18n.getLang()).append(EQUALS).append(String.join(VERTICAL_BAR, strings))
-                    .append(System.lineSeparator());
+              .append(System.lineSeparator());
         }
 
         return builder.toString();

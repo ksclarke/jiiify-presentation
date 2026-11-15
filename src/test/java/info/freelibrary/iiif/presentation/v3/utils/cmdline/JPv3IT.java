@@ -1,14 +1,21 @@
 
 package info.freelibrary.iiif.presentation.v3.utils.cmdline;
 
+import static info.freelibrary.util.Constants.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.junit.Assume.assumeTrue;
 
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.read.ListAppender;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
+import info.freelibrary.iiif.presentation.v3.utils.TestUtils;
 import info.freelibrary.iiif.presentation.v3.utils.csv.Configs;
 import info.freelibrary.iiif.presentation.v3.utils.csv.Keys;
 import info.freelibrary.iiif.presentation.v3.utils.csv.Row;
@@ -17,19 +24,28 @@ import info.freelibrary.util.Logger;
 import info.freelibrary.util.LoggerFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+import org.junit.rules.TestName;
+import picocli.CommandLine;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -60,6 +76,27 @@ public class JPv3IT {
     /** The command line argument for the output file. */
     private static final String OUTPUT = "-o";
 
+    /** The command line argument for the manifest host. */
+    private static final String HOST_OPTION = "-H";
+
+    /** The command line argument for the image server. */
+    private static final String IMAGE_OPTION = "-I";
+
+    /** The command line argument for a collection document ID. */
+    private static final String DOCUMENT_ID_OPTION = "-d";
+
+    /** A sample credential username for validation tests. */
+    private static final String TEST_USERNAME = "username";
+
+    /** A sample credential password for validation tests. */
+    private static final String TEST_PASSWORD = "password";
+
+    /** A sample non-default password for validation tests. */
+    private static final String REAL_PASSWORD = "real-password";
+
+    /** The collection document ID used in ARK tests. */
+    private static final String COLLECTION_ID = "ark:/21198/z1fb75c1";
+
     /** The OS name for Windows. */
     private static final String WIN_OS = "win";
 
@@ -84,6 +121,29 @@ public class JPv3IT {
     /** The operating system name. */
     private static final String OS_NAME = "os.name";
 
+    /** The default test password, which will not work with the real test server. */
+    private static final String DEFAULT_PASSWORD = "test_pswd";
+
+    /** The test name. */
+    @Rule
+    public TestName myTest = new TestName();
+
+    /** A temporary directory for staging test inputs. */
+    @Rule
+    public TemporaryFolder myTempFolder = new TemporaryFolder();
+
+    /**
+     * Checks whether usable server credentials have been supplied.
+     *
+     * @param aUsername The supplied username
+     * @param aPassword The supplied password
+     * @return True if both credentials are nonblank and the password is not the default test password
+     */
+    private static boolean hasCredentials(final String aUsername, final String aPassword) {
+        return aUsername != null && !aUsername.isBlank() && aPassword != null && !aPassword.isBlank() &&
+               !DEFAULT_PASSWORD.equalsIgnoreCase(aPassword);
+    }
+
     /**
      * Tests the command line application's 'create' functionality.
      *
@@ -96,7 +156,86 @@ public class JPv3IT {
 
         assertEquals(result.aOutput, 0, result.aExitCode);
         assertTrue(LOGGER.getMessage(MessageCodes.JPA_198, result.aOutput),
-                result.aOutput.contains(LOGGER.getMessage(MessageCodes.JPA_178, new File(fileName).getAbsolutePath())));
+          result.aOutput.contains(LOGGER.getMessage(MessageCodes.JPA_178, new File(fileName).getAbsolutePath())));
+    }
+
+    /**
+     * Tests the command line application's 'create' functionality in the test JVM.
+     *
+     * @throws Exception If there is trouble running the command line application
+     */
+    @Test
+    public void testCreateInProcess() throws Exception {
+        final String fileName = TARGET + "create-in-process-" + UUID.randomUUID() + JPv3.ZIP_EXT;
+        final ProcessResult result = runJPv3InProcess(CREATE, INPUT, CSV_FILE, OUTPUT, fileName, HOST_OPTION,
+          TEST_MANIFEST_URL, IMAGE_OPTION, TEST_IMAGE_URL);
+
+        assertEquals(result.aOutput, 0, result.aExitCode);
+        assertTrue(LOGGER.getMessage(MessageCodes.JPA_198, result.aOutput),
+          result.aOutput.contains(LOGGER.getMessage(MessageCodes.JPA_178, new File(fileName).getAbsolutePath())));
+    }
+
+    /**
+     * Tests the command line application's 'create' functionality, while supplying a collection document ID.
+     *
+     * @throws Exception If there is trouble running the command line application
+     */
+    @Test
+    public void testCreatePlusARK() throws Exception {
+        skipTestIfNoPasswordSupplied();
+
+        final String fileName = TARGET + "createPlusARK-" + UUID.randomUUID() + JPv3.ZIP_EXT;
+        final String inputFilesDir = stageSmallMultipartFiles().toString();
+        final ProcessResult result = runJPv3(CREATE, INPUT, inputFilesDir, OUTPUT, fileName, DOCUMENT_ID_OPTION,
+          COLLECTION_ID);
+
+        assertEquals(result.aOutput, 0, result.aExitCode);
+        assertTrue(LOGGER.getMessage(MessageCodes.JPA_198, result.aOutput),
+          result.aOutput.contains(LOGGER.getMessage(MessageCodes.JPA_178, new File(fileName).getAbsolutePath())));
+    }
+
+    /**
+     * Tests the command line application's 'create' functionality with a collection document in the test JVM.
+     *
+     * @throws Exception If there is trouble running the command line application
+     */
+    @Test
+    public void testCollectionPatchInProcess() throws Exception {
+        skipTestIfNoPasswordSupplied();
+
+        final String fileName = TARGET + "collectionPatchInProcess-" + UUID.randomUUID() + JPv3.ZIP_EXT;
+        final String inputFilesDir = stageSmallMultipartFiles().toString();
+        final ProcessResult result = runJPv3InProcess(CREATE, INPUT, inputFilesDir, OUTPUT,
+          fileName, DOCUMENT_ID_OPTION, COLLECTION_ID, HOST_OPTION, TEST_MANIFEST_URL, IMAGE_OPTION,
+          TEST_IMAGE_URL);
+
+        assertEquals(result.aOutput, 0, result.aExitCode);
+        assertTrue(LOGGER.getMessage(MessageCodes.JPA_198, result.aOutput),
+          result.aOutput.contains(LOGGER.getMessage(MessageCodes.JPA_178, new File(fileName).getAbsolutePath())));
+    }
+
+    /**
+     * Tests that the smaller multipart CSV fixtures can be staged without credentials.
+     *
+     * @throws Exception If there is trouble staging or checking the fixture files
+     */
+    @Test
+    public void testSmallMultipartInputs() throws Exception {
+        final Path directory = stageSmallMultipartFiles();
+        final List<String> expectedNames = List.of("accion-issues.csv", "accion-pages.csv", "lat-collection.csv",
+          "lat-multi-works.csv");
+        final List<String> foundNames;
+
+        try (Stream<Path> paths = Files.list(directory)) {
+            foundNames = paths.map(path -> path.getFileName().toString()).sorted().toList();
+        }
+
+        assertEquals(expectedNames, foundNames);
+
+        for (final String name : expectedNames) {
+            assertEquals(Files.readString(TestUtils.MULTIPART_CSV_DIR.resolve(name)),
+              Files.readString(directory.resolve(name)));
+        }
     }
 
     /**
@@ -106,18 +245,20 @@ public class JPv3IT {
      */
     @Test
     public void testUpload() throws Exception {
+        skipTestIfNoPasswordSupplied();
+
         final String zipFileName = TARGET + "upload-" + UUID.randomUUID() + JPv3.ZIP_EXT;
         final String csvFileName = zipFileName.replace(JPv3.ZIP_EXT, "-csv" + JPv3.ZIP_EXT);
         final ProcessResult result = runJPv3(UPLOAD, INPUT, CSV_FILE, OUTPUT, zipFileName);
 
         assertEquals(result.aOutput, 0, result.aExitCode);
         assertTrue(LOGGER.getMessage(MessageCodes.JPA_198, result.aOutput),
-                result.aOutput.contains(LOGGER.getMessage(MessageCodes.JPA_180, zipFileName)));
+          result.aOutput.contains(LOGGER.getMessage(MessageCodes.JPA_180, zipFileName)));
 
         // Check the output CSV files to confirm they got IIIF Manifest URL(s)
         readZipEntry(csvFileName, "jbu-collection.csv").ifPresentOrElse(contents -> {
             try (MappingIterator<Map<String, String>> iterator = new CsvMapper().readerForMapOf(String.class)
-                    .with(CsvSchema.emptySchema().withHeader()).readValues(contents)) {
+              .with(CsvSchema.emptySchema().withHeader()).readValues(contents)) {
                 iterator.readAll().forEach(map -> {
                     final String objectType = JPv3Utils.getObjectType(map);
                     final Row row = new Row(null, objectType, null);
@@ -127,7 +268,7 @@ public class JPv3IT {
                     } else if (JPv3Utils.isManifest(row)) {
                         assertTrue(map.get(Keys.IIIF_MANIFEST_URL).endsWith("/manifest"));
                     } else if (Keys.PAGE.equals(objectType) || Keys.CHOICE.equals(objectType) ||
-                            Keys.LAYER.equals(objectType)) {
+                               Keys.LAYER.equals(objectType)) {
                         // Skip row types which do not get their own manifest or collection doc
                     } else {
                         fail(LOGGER.getMessage(MessageCodes.JPA_202, row));
@@ -148,12 +289,14 @@ public class JPv3IT {
      */
     @Test
     public void testPatch() throws Exception {
+        skipTestIfNoPasswordSupplied();
+
         final String fileName = TARGET + "patch-" + UUID.randomUUID() + JPv3.ZIP_EXT;
         final ProcessResult result = runJPv3(PATCH, INPUT, CSV_FILE, OUTPUT, fileName);
 
         assertEquals(result.aOutput, 0, result.aExitCode);
         assertTrue(LOGGER.getMessage(MessageCodes.JPA_198, result.aOutput),
-                result.aOutput.contains(LOGGER.getMessage(MessageCodes.JPA_180, fileName)));
+          result.aOutput.contains(LOGGER.getMessage(MessageCodes.JPA_180, fileName)));
     }
 
     /**
@@ -163,12 +306,61 @@ public class JPv3IT {
      */
     @Test
     public void testTestFlag() throws Exception {
+        skipTestIfNoPasswordSupplied();
+
         final String fileName = TARGET + "test-env-" + UUID.randomUUID() + JPv3.ZIP_EXT;
         final ProcessResult result = runJPv3WithTestEnvs(UPLOAD, TEST, INPUT, CSV_FILE, OUTPUT, fileName);
 
         assertEquals(result.aOutput, 0, result.aExitCode);
         assertTrue(LOGGER.getMessage(MessageCodes.JPA_198, result.aOutput),
-                result.aOutput.contains(LOGGER.getMessage(MessageCodes.JPA_180, fileName)));
+          result.aOutput.contains(LOGGER.getMessage(MessageCodes.JPA_180, fileName)));
+    }
+
+    /**
+     * Skips a test that requires server credentials if usable credentials have not been supplied.
+     */
+    private void skipTestIfNoPasswordSupplied() {
+        final String message = LOGGER.getMessage(MessageCodes.JPA_209, myTest.getMethodName());
+        final String username = System.getenv(Configs.JPV3_USERNAME);
+        final String password = System.getenv(Configs.JPV3_PASSWORD);
+        final boolean credentialsSupplied = hasCredentials(username, password);
+
+        if (!credentialsSupplied) {
+            LOGGER.warn(message);
+            assumeTrue(message, credentialsSupplied);
+        }
+    }
+
+    /**
+     * Tests that credential validation rejects missing, blank, and default credentials.
+     */
+    @Test
+    public void testCredentialsSupplied() {
+        assertFalse(hasCredentials(null, TEST_PASSWORD));
+        assertFalse(hasCredentials(TEST_USERNAME, null));
+        assertFalse(hasCredentials(SPACE, TEST_PASSWORD));
+        assertFalse(hasCredentials(TEST_USERNAME, "\t"));
+        assertFalse(hasCredentials(TEST_USERNAME, DEFAULT_PASSWORD));
+        assertFalse(hasCredentials(TEST_USERNAME, DEFAULT_PASSWORD.toUpperCase()));
+        assertTrue(hasCredentials(TEST_USERNAME, REAL_PASSWORD));
+    }
+
+    /**
+     * Copies the smaller multipart CSV fixtures into a temporary directory.
+     *
+     * @return The directory containing the staged CSV fixtures
+     * @throws IOException If there is trouble creating the directory or copying the fixtures
+     */
+    private Path stageSmallMultipartFiles() throws IOException {
+        final Path directory = myTempFolder.newFolder("multi-part").toPath();
+
+        try (Stream<Path> paths = Files.list(TestUtils.MULTIPART_CSV_DIR)) {
+            for (final Path path : paths.filter(TestUtils::isSmallMultipartCsv).toList()) {
+                Files.copy(path, directory.resolve(path.getFileName()));
+            }
+        }
+
+        return directory;
     }
 
     /**
@@ -188,7 +380,7 @@ public class JPv3IT {
             }
 
             try (InputStream inStream = zipFile.getInputStream(entry);
-                    ByteArrayOutputStream outStream = new ByteArrayOutputStream()) {
+                 ByteArrayOutputStream outStream = new ByteArrayOutputStream()) {
                 inStream.transferTo(outStream);
                 return Optional.of(outStream.toString(StandardCharsets.UTF_8));
             }
@@ -212,6 +404,42 @@ public class JPv3IT {
     }
 
     /**
+     * Runs the JPv3 command line application directly in the test JVM.
+     *
+     * @param aArgArray The command line arguments
+     * @return The process result
+     */
+    private @NotNull ProcessResult runJPv3InProcess(final String... aArgArray) {
+        final StringWriter standardOutput = new StringWriter();
+        final StringWriter standardError = new StringWriter();
+        final LoggerContext loggerContext = (LoggerContext) org.slf4j.LoggerFactory.getILoggerFactory();
+        final ch.qos.logback.classic.Logger rootLogger = loggerContext.getLogger(
+          org.slf4j.Logger.ROOT_LOGGER_NAME);
+        final ListAppender<ILoggingEvent> appender = new ListAppender<>();
+
+        appender.setContext(loggerContext);
+        appender.start();
+        rootLogger.addAppender(appender);
+
+        try {
+            final CommandLine commandLine = new CommandLine(new JPv3());
+            commandLine.setOut(new PrintWriter(standardOutput));
+            commandLine.setErr(new PrintWriter(standardError));
+
+            final int exitCode = commandLine.execute(aArgArray);
+            final String logOutput = appender.list.stream().map(ILoggingEvent::getFormattedMessage)
+              .collect(Collectors.joining(System.lineSeparator()));
+            final String output = Stream.of(logOutput, standardOutput.toString(), standardError.toString())
+              .filter(text -> !text.isBlank()).collect(Collectors.joining(System.lineSeparator()));
+
+            return new ProcessResult(exitCode, output);
+        } finally {
+            rootLogger.detachAppender(appender);
+            appender.stop();
+        }
+    }
+
+    /**
      * Runs the JPv3 command line application configured with test environment variables.
      *
      * @param aArgArray The command line arguments
@@ -232,9 +460,9 @@ public class JPv3IT {
         environment.put(Configs.JPV3_IMAGE_SERVER, TEST_IMAGE_URL);
         environment.put(Configs.TEST_JPV3_HOST, TEST_MANIFEST_URL);
         environment.put(Configs.TEST_JPV3_USERNAME,
-                Env.getOrFail(Configs.JPV3_USERNAME, LOGGER.getMessage(MessageCodes.JPA_197, Configs.JPV3_USERNAME)));
+          Env.getOrFail(Configs.JPV3_USERNAME, LOGGER.getMessage(MessageCodes.JPA_197, Configs.JPV3_USERNAME)));
         environment.put(Configs.TEST_JPV3_PASSWORD,
-                Env.getOrFail(Configs.JPV3_PASSWORD, LOGGER.getMessage(MessageCodes.JPA_197, Configs.JPV3_PASSWORD)));
+          Env.getOrFail(Configs.JPV3_PASSWORD, LOGGER.getMessage(MessageCodes.JPA_197, Configs.JPV3_PASSWORD)));
 
         final Process process = builder.start();
         final String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
@@ -254,9 +482,9 @@ public class JPv3IT {
         environment.put(Configs.JPV3_HOST, TEST_MANIFEST_URL);
         environment.put(Configs.JPV3_IMAGE_SERVER, TEST_IMAGE_URL);
         environment.put(Configs.JPV3_USERNAME,
-                Env.getOrFail(Configs.JPV3_USERNAME, LOGGER.getMessage(MessageCodes.JPA_197, Configs.JPV3_USERNAME)));
+          Env.getOrFail(Configs.JPV3_USERNAME, LOGGER.getMessage(MessageCodes.JPA_197, Configs.JPV3_USERNAME)));
         environment.put(Configs.JPV3_PASSWORD,
-                Env.getOrFail(Configs.JPV3_PASSWORD, LOGGER.getMessage(MessageCodes.JPA_197, Configs.JPV3_PASSWORD)));
+          Env.getOrFail(Configs.JPV3_PASSWORD, LOGGER.getMessage(MessageCodes.JPA_197, Configs.JPV3_PASSWORD)));
 
         return aProcessBuilder;
     }

@@ -61,7 +61,6 @@
         <system.lambda.version>1.2.1</system.lambda.version>
         <commonmark.version>0.28.0</commonmark.version>
         <mockito.version>5.20.0</mockito.version>
-        <opencsv.version>4.6</opencsv.version>
         <lorem.version>2.1</lorem.version>
 
         <!-- A property used by the build process -->
@@ -70,6 +69,13 @@
         <!-- The log level to use when testing -->
         <!--suppress UnresolvedMavenProperty -->
         <testLogLevel>${testLogLevel:-INFO}</testLogLevel>
+
+        <!-- Test level overrides -->
+        <skipUTs>false</skipUTs>
+        <skipITs>false</skipITs>
+
+        <!-- Skip native build when using the 'native' profile -->
+        <skipNativeBuild>false</skipNativeBuild>
 
         <!-- Mockito configuration properties -->
         <mockito.path>${settings.localRepository}/org/mockito/mockito-core/${mockito.version}</mockito.path>
@@ -89,11 +95,6 @@
             <groupId>info.freelibrary</groupId>
             <artifactId>freelib-utils</artifactId>
             <version>${freelib.utils.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-            <version>${snakeyaml.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -277,6 +278,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
+                    <skipITs>${skipITs}</skipITs>
                     <systemPropertyVariables>
                         <jiiify.version>${project.version}</jiiify.version>
                     </systemPropertyVariables>
@@ -326,6 +328,7 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
+                    <skipTests>${skipUTs}</skipTests>
                     <!-- Uses 'add-opens' argument for system-lambda functionality in unit tests -->
                     <!--suppress UnresolvedMavenProperty warning for jacoco.agent.arg -->
                     <argLine><![CDATA[ ${jacoco.agent.arg} ${mockito.agent.arg}
@@ -358,6 +361,7 @@
                 <!-- Build plugin versions -->
                 <maven.clean.version>3.5.0</maven.clean.version>
                 <shade.plugin.version>3.6.2</shade.plugin.version>
+
                 <!-- Testing properties -->
                 <jpv3.username>test_user</jpv3.username>
                 <jpv3.password>test_pswd</jpv3.password>
@@ -399,6 +403,11 @@
                             <artifactId>guava</artifactId>
                         </exclusion>
                     </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>org.yaml</groupId>
+                    <artifactId>snakeyaml</artifactId>
+                    <version>${snakeyaml.version}</version>
                 </dependency>
                 <dependency>
                     <groupId>org.jetbrains.kotlin</groupId>
@@ -525,6 +534,7 @@
                             <metadataRepository>
                                 <enabled>true</enabled>
                             </metadataRepository>
+                            <skip>${skipNativeBuild}</skip>
                         </configuration>
                     </plugin>
 

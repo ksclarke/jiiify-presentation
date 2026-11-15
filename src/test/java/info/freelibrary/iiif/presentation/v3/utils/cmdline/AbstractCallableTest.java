@@ -125,18 +125,6 @@ public class AbstractCallableTest {
     }
 
     /**
-     * Tests converting a remote URI into a local path.
-     *
-     * @throws IOException If there is I/O trouble while testing
-     */
-    @Test // FIXME: U/P hardcoded
-    public void testConvertToCSV() throws IOException {
-        final URI uri = URI.create("https://ingest.iiif.library.ucla.edu/collections/ark%3A%2F21198%2Fz1fb75c1");
-        final Path expected = myCallable.convertToCSV(uri, "admin", "EvduqxEpak.nd3YhLww7");
-
-    }
-
-    /**
      * Checks the contents of a zip file.
      *
      * @param aZipPath A path to a zip file

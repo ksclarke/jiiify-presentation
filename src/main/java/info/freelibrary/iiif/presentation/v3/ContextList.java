@@ -7,6 +7,7 @@ import info.freelibrary.util.LoggerFactory;
 import info.freelibrary.util.warnings.PMD;
 import info.freelibrary.util.warnings.Sonar;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class ContextList extends ArrayList<URI> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ContextList.class, MessageCodes.BUNDLE);
 
     /** The context list's <code>serialVersionUID</code>. */
+    @Serial
     private static final long serialVersionUID = -877433424933939199L;
 
     /** A simple sorter that only moves the required context to the first slot. */
@@ -41,7 +43,7 @@ public class ContextList extends ArrayList<URI> {
         super();
 
         myComparator = new ContextListComparator();
-        super.add(0, PRESENTATION_CONTEXT_URI);
+        super.add(PRESENTATION_CONTEXT_URI);
     }
 
     /**
@@ -332,12 +334,13 @@ public class ContextList extends ArrayList<URI> {
      * A context list comparator that makes sure the required context is always last in the list.
      *
      * <p>
-     * Cf. https://iiif.io/api/presentation/3.0/#46-linked-data-context-and-extensions
+     * Cf. <a href="https://iiif.io/api/presentation/3.0/#46-linked-data-context-and-extensions">documentation</a>.
      * </p>
      */
     private static final class ContextListComparator implements Comparator<URI>, Serializable {
 
         /** The {@code serialVersionUID} for the {@code ContextListComparator}. */
+        @Serial
         private static final long serialVersionUID = 5516185678973318858L;
 
         @Override

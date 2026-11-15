@@ -89,14 +89,14 @@ public class RowTest {
     public void testToString() throws IOException {
         final JsonNode node = JSON.readTree(StringUtils.read(JSON_FILE.toFile()));
         final List<Row> rows = JSON.convertValue(node, new TypeReference<>() {});
-        final String expected = """
+        final String expected = StringUtils.format("""
             {
-              "ObjectType" : "Collection",
+              "{}" : "Collection",
               "Title" : "Japanese Books at UCLA",
-              "ItemID" : "ark:/21198/z11g7wqv",
+              "{}" : "ark:/21198/z11g7wqv",
               "Thumbnail" : "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fz1pw65h4",
               "Notes" : "https://github.com/UCLALibrary/eureka/blob/master/yanai/yanai-collection.csv"
-            }""";
+            }""", Keys.OBJECT_TYPE, Keys.ITEM_ID);
 
         assertEquals(expected, rows.getFirst().toString());
     }

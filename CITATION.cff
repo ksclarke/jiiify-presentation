@@ -4,9 +4,6 @@ authors:
 - family-names: "Clarke"
   given-names: "Kevin S."
   orcid: "https://orcid.org/0000-0002-9222-8074"
-- family-names: "Matney"
-  given-names: "Mark A."
-  name-suffix: "Jr."
 title: "Jiiify Presentation (v3)"
 version: 0.12.4
 date-released: 2023-07-28

@@ -45,6 +45,9 @@ public final class TestUtils {
     /** The directory path of test fixtures. */
     public static final String TEST_DIR = "src/test/resources/json";
 
+    /** The directory containing multipart CSV test fixtures. */
+    public static final Path MULTIPART_CSV_DIR = Path.of("src/test/resources/csv/multi-part");
+
     /** A regex to replace the ID with a placeholder. */
     private static final String REPLACED_ID = "\"(https://iiif\\.library\\.ucla\\.edu(?:/iiif/2)?/[^\"]*)\"";
 
@@ -72,6 +75,18 @@ public final class TestUtils {
      */
     public static String replaceIDs(final String aJsonDoc) {
         return aJsonDoc.replaceAll(REPLACED_ID, REPLACE_ID);
+    }
+
+    /**
+     * Checks whether a path is one of the smaller multipart CSV fixtures.
+     *
+     * @param aPath A multipart fixture path
+     * @return True if the path is a CSV fixture used by the smaller multipart tests
+     */
+    public static boolean isSmallMultipartCsv(final Path aPath) {
+        final String name = aPath.getFileName().toString();
+
+        return name.endsWith(".csv") && (name.startsWith("accion-") || name.startsWith("lat-"));
     }
 
     /**

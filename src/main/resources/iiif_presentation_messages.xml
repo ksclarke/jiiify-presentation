@@ -183,4 +183,12 @@
     <entry key="JPA-202">Row is neither collection nor manifest: {}</entry>
     <entry key="JPA-203">Didn't find the expected CSV content in the zip file</entry>
     <entry key="JPA-204">Missing required host. Set via -H/--host or environment variable {}</entry>
+    <entry key="JPA-205">Expected string keys with lists of aliases</entry>
+    <entry key="JPA-206">Expected a string alias for {}</entry>
+    <entry key="JPA-207">Alias belongs to multiple keys: {}</entry>
+    <entry key="JPA-208">Expected a YAML mapping</entry>
+    <entry key="JPA-209">Test '{}' is disabled because valid `JPV3_USERNAME` and `JPV3_PASSWORD` credentials haven't been supplied</entry>
+    <entry key="JPA-210">All pre-existing records should already have a title</entry>
+    <entry key="JPA-211">Downloading related collection document from '{}'</entry>
+    <entry key="JPA-212">Failed to download related collection document from '{}': response code {}</entry>
 </properties>

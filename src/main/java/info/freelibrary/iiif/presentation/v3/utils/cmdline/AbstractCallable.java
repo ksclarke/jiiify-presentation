@@ -2,16 +2,13 @@ package info.freelibrary.iiif.presentation.v3.utils.cmdline;
 
 import static info.freelibrary.iiif.presentation.v3.utils.cmdline.JPv3.COLLECTIONS_PATH;
 import static info.freelibrary.iiif.presentation.v3.utils.cmdline.JPv3.ENDPOINT_PREFIX;
-import static info.freelibrary.util.Constants.COLON;
-import static info.freelibrary.util.Constants.DOT_CHAR;
-import static info.freelibrary.util.Constants.EMPTY;
-import static info.freelibrary.util.Constants.PERIOD;
-import static info.freelibrary.util.Constants.SLASH;
+import static info.freelibrary.util.Constants.*;
 import static info.freelibrary.util.ThrowingConsumer.uncheck;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.databind.SequenceWriter;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import info.freelibrary.iiif.presentation.v3.Collection;
@@ -27,12 +24,15 @@ import info.freelibrary.util.HTTP;
 import info.freelibrary.util.IllegalArgumentI18nException;
 import info.freelibrary.util.Logger;
 import info.freelibrary.util.StringUtils;
+import info.freelibrary.util.warnings.PMD;
 import org.jspecify.annotations.NonNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Writer;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -53,6 +53,7 @@ import java.util.stream.Stream;
 /**
  * An abstract class for command line callables. It contains the plumbing needed to support the application executable.
  */
+@SuppressWarnings({PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS})
 public abstract class AbstractCallable implements Callable<Integer> {
 
     /** The file extension for CSV files. */
@@ -66,7 +67,8 @@ public abstract class AbstractCallable implements Callable<Integer> {
      *
      * @param aPath The {@link Path} to process
      * @return The name of the parent directory
-     * @throws info.freelibrary.util.IllegalArgumentI18nException If the path is not a directory, ZIP file, or CSV file
+     * @throws info.freelibrary.util.IllegalArgumentI18nException If the path is not a directory, ZIP file, or CSV
+     *   file
      */
     protected static String getPathParent(final Path aPath) {
         if (Objects.requireNonNull(aPath).toFile().isDirectory()) {
@@ -135,15 +137,15 @@ public abstract class AbstractCallable implements Callable<Integer> {
         }
 
         // Append the ingest endpoint prefix to the host if it's not already there
-        ingestHost = host.contains(ENDPOINT_PREFIX + PERIOD) ? host : ENDPOINT_PREFIX + PERIOD + host;
+        ingestHost = host.contains(ENDPOINT_PREFIX + DOT_CHAR) ? host : ENDPOINT_PREFIX + DOT_CHAR + host;
 
         if (!aCollectionID.isBlank()) {
             final String uriPath = aURI.getPath();
 
             // If no path is supplied, and we have a collection ID, we're looking up a collection
-            if (uriPath.equals(SLASH) || uriPath.isBlank()) {
+            if (SLASH.equals(uriPath) || uriPath.isBlank()) {
                 // This collection doc lookup is hard-coded to Fester's path for now
-                path = JPv3.COLLECTIONS_PATH + URLEncoder.encode(aCollectionID, StandardCharsets.UTF_8);
+                path = COLLECTIONS_PATH + URLEncoder.encode(aCollectionID, StandardCharsets.UTF_8);
             } else {
                 path = uriPath;
             }
@@ -164,13 +166,16 @@ public abstract class AbstractCallable implements Callable<Integer> {
      * @throws IOException If an I/O error occurs
      */
     protected Path convertToCSV(final URI aURI, final String aUsername, final String aPassword) throws IOException {
+        final Path csvFile = Files.createTempFile(Keys.COLLECTION, DOT_CHAR + MediaType.TEXT_CSV.getExt());
+
+        getLogger().info(MessageCodes.JPA_211, aURI);
+
         try (HttpClient client = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NORMAL).build()) {
             final byte[] credentials = (aUsername + COLON + aPassword).getBytes(StandardCharsets.UTF_8);
-            final Path outputFile = Files.createTempFile(Keys.COLLECTION, MediaType.TEXT_CSV.getExt());
             final String basicAuth = "Basic " + Base64.getEncoder().encodeToString(credentials);
-            final HttpRequest request = HttpRequest.newBuilder().uri(Objects.requireNonNull(aURI))
-              .header(HTTP.Header.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString())
-              .header(HTTP.Header.AUTHORIZATION, basicAuth).GET().build();
+            final HttpRequest request = HttpRequest.newBuilder().uri(Objects.requireNonNull(aURI)).header(
+              HTTP.Header.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString()).header(HTTP.Header.AUTHORIZATION,
+              basicAuth).GET().build();
             final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             final int statusCode = response.statusCode();
 
@@ -178,18 +183,17 @@ public abstract class AbstractCallable implements Callable<Integer> {
                 final Manifestor manifestor = new Manifestor();
                 final Collection collection = manifestor.readCollection(response.body());
 
-                // Clear out all items and keep just the collection metadata
+                // Clear out all items and keep just the collection metadata, then write the CSV file
                 collection.getItems().clear();
-
-                // LEFT OFF HERE
-                System.out.println(collection);
+                writeCSV(collection, csvFile);
+            } else {
+                throw new IOException(getLogger().getMessage(MessageCodes.JPA_212, aURI, statusCode));
             }
-
         } catch (final InterruptedException details) {
             throw new IOException(details);
         }
 
-        return Path.of("/");
+        return csvFile;
     }
 
     /**
@@ -313,6 +317,62 @@ public abstract class AbstractCallable implements Callable<Integer> {
     }
 
     /**
+     * Returns the logger for this callable.
+     *
+     * @return The callable's logger
+     */
+    protected abstract Logger getLogger();
+
+    /**
+     * Writes the supplied collection to a CSV file.
+     *
+     * @param aCollection A collection doc to partially serialize to CSV
+     * @param aCsvPath The path of the output CSV file
+     * @throws IOException If there is trouble writing the CSV file
+     * @throws IllegalArgumentI18nException If no title is found for the collection
+     */
+    private void writeCSV(final Collection aCollection, final Path aCsvPath) throws IOException {
+        final List<String> row = new ArrayList<>();
+        final CsvMapper mapper = new CsvMapper();
+        final CsvSchema.Builder builder = CsvSchema.builder();
+        final String id = aCollection.getID();
+        final CsvSchema schema;
+
+        // "Object Type" is always a collection here
+        builder.addColumn(Keys.OBJECT_TYPE);
+        row.add(Keys.COLLECTION);
+
+        // Add "Title"
+        Objects.requireNonNull(aCollection).getLabel().ifPresent(label -> {
+            label.getDefaultValue().ifPresentOrElse(row::add, () -> {
+                label.getFirstValue().ifPresentOrElse(row::add, () -> {
+                    // All pre-existing records should already have a title
+                    throw new IllegalArgumentI18nException(MessageCodes.JPA_210);
+                });
+            });
+
+            builder.addColumn(Keys.TITLE);
+        });
+
+        // Add "Item ID", making the same assumption about the structure of manifest server URLs
+        builder.addColumn(Keys.ITEM_ID);
+        row.add(URLDecoder.decode(id.substring(id.lastIndexOf('/') + 1), StandardCharsets.UTF_8));
+
+        // Add "Parent ID"
+        builder.addColumn(Keys.PARENT_ID);
+        row.add(EMPTY);
+
+        // Prepare the headers
+        schema = builder.setUseHeader(true).build();
+
+        // Write the CSV file
+        try (Writer fileWriter = Files.newBufferedWriter(aCsvPath, StandardCharsets.UTF_8); SequenceWriter csvWriter =
+          mapper.writerFor(String[].class).with(schema).writeValues(fileWriter)) {
+            csvWriter.write(row.toArray(new String[]{}));
+        }
+    }
+
+    /**
      * Gets the file path within the ZIP archive for a given file path and temporary directory path.
      *
      * @param aPath The file path
@@ -336,13 +396,6 @@ public abstract class AbstractCallable implements Callable<Integer> {
     }
 
     /**
-     * Returns the logger for this callable.
-     *
-     * @return The callable's logger
-     */
-    protected abstract Logger getLogger();
-
-    /**
      * Strips a supplied source path from another path.
      *
      * @param aSource The source path
@@ -357,7 +410,7 @@ public abstract class AbstractCallable implements Callable<Integer> {
             return target.getFileName().toString();
         }
 
-        return aPath.startsWith(aSource.toString())
-          ? Path.of(getPathParent(aSource)).resolve(aSource.relativize(target)).toString() : aPath;
+        return aPath.startsWith(aSource.toString()) ? Path.of(getPathParent(aSource)).resolve(
+          aSource.relativize(target)).toString() : aPath;
     }
 }

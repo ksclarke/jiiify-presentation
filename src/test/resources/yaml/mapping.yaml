@@ -111,6 +111,9 @@ Repository: # Required; Name of repository holding physical resource; use its pr
 Resource Type: # DLP-only; for multipart collections, use Work for Object Type and Collection for Festerize
   - IIIF Object Type
 
+Rights Holder: # Rarely used; Prefer "Rights Contact" to provide contact info for the unit or institution
+  - Rights Holder
+
 Subject: # Topics or themes of a work, including persons, organizations, places, and time periods
   - Subject
 

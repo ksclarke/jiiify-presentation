@@ -40,7 +40,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Utility class for working with IIIF Presentation JSON files.
  */
-@SuppressWarnings({ PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS, PMD.TOO_MANY_STATIC_IMPORTS, PMD.GOD_CLASS })
+@SuppressWarnings({ PMD.EXCESSIVE_IMPORTS })
 public final class JPv3Utils {
 
     /** A logger for the JPv3Utils class. */

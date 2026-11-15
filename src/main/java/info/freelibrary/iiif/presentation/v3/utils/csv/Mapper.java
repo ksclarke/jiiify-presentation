@@ -302,7 +302,7 @@ public class Mapper {
      * @param aMinter A minter used for generating unique identifiers for the canvas objects
      * @return A list of canvases associated with the specified manifest
      */
-    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY })
+    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY, PMD.AVOID_DEEPLY_NESTED_IF_STMTS })
     protected List<Canvas> mapCanvases(final String aManifestID, final Minter aMinter) {
         final List<Canvas> canvases = new ArrayList<>();
 

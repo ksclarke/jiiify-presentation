@@ -66,9 +66,10 @@ public class JPv3UtilsTest {
     @Test
     public void testFindValuePresent() throws IOException {
         final Path jsonFile = myFolder.newFile().toPath();
-        final Optional<String> value = JPv3Utils.findValue(jsonFile, JsonKeys.TYPE);
+        final Optional<String> value;
 
         Files.writeString(jsonFile, "{\"type\":\"Manifest\"}");
+        value = JPv3Utils.findValue(jsonFile, JsonKeys.TYPE);
 
         assertTrue(value.isPresent());
         assertEquals(ResourceTypes.MANIFEST, value.get());

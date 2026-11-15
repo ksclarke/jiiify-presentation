@@ -1,16 +1,13 @@
 
 package info.freelibrary.iiif.presentation.v3.utils.cmdline;
 
-import static info.freelibrary.util.Constants.COLON;
-import static info.freelibrary.util.Constants.EMPTY;
-import static info.freelibrary.util.Constants.SPACE;
+import static info.freelibrary.util.Constants.*;
 
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
 import info.freelibrary.iiif.presentation.v3.utils.MessageCodes;
 import info.freelibrary.iiif.presentation.v3.utils.csv.Configs;
 import info.freelibrary.iiif.presentation.v3.utils.csv.Mapper;
 import info.freelibrary.iiif.presentation.v3.utils.csv.MappingException;
-import info.freelibrary.util.Constants;
 import info.freelibrary.util.FileUtils;
 import info.freelibrary.util.HTTP;
 import info.freelibrary.util.Logger;
@@ -66,7 +63,7 @@ public final class JPv3 extends AbstractCallable {
     private Path myInputFile;
 
     /** An optional collection ID argument for segmented processing. */
-    @CommandLine.Option(names = { "-d", "--download" }, description = "The collection ID for batch processing",
+    @CommandLine.Option(names = { "-d", "--download" }, description = "A collection ID used to upload via patch",
             paramLabel = "COLLECTION_ID")
     private String myCollectionID;
 
@@ -112,7 +109,7 @@ public final class JPv3 extends AbstractCallable {
     private boolean myTestFlag;
 
     /** Creates a new JPv3 instance. */
-    private JPv3() {
+    JPv3() {
         // This is intentionally empty
     }
 
@@ -135,7 +132,7 @@ public final class JPv3 extends AbstractCallable {
 
     /** Runs the application. */
     @Override
-    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY, PMD.COGNITIVE_COMPLEXITY, PMD.N_PATH_COMPLEXITY })
+    @SuppressWarnings({ PMD.CYCLOMATIC_COMPLEXITY, PMD.COGNITIVE_COMPLEXITY, PMD.N_PATH_COMPLEXITY, PMD.NCSS_COUNT })
     public Integer call() throws Exception {
         // Check to see if we're setting a more verbose log level
         if (myLogLevel != null) {
@@ -169,7 +166,7 @@ public final class JPv3 extends AbstractCallable {
         if ((myAction.myUploadFlag || myAction.myPatchFlag) &&
                 (StringUtils.trimToNull(myUsername) == null || StringUtils.trimToNull(myPassword) == null)) {
             throw new CommandLine.ParameterException(new CommandLine(this),
-                    LOGGER.getMessage(MessageCodes.JPA_174, Constants.EOL));
+                    LOGGER.getMessage(MessageCodes.JPA_174, EOL));
         }
 
         try {
@@ -179,8 +176,11 @@ public final class JPv3 extends AbstractCallable {
             streamBuilder.add(myInputFile); // Add the files we received as input to the stream
 
             // Add a supplied collection document that's been downloaded and converted to a CSV
-            if (myCollectionID != null) {
-                streamBuilder.add(convertToCSV(formatHost(myHost, myCollectionID), myUsername, myPassword));
+            if (myCollectionID != null && myAction.isPatch()) {
+                final URI collectionURI = formatHost(myHost, myCollectionID);
+                final Path collectionPath = convertToCSV(collectionURI, myUsername, myPassword);
+
+                streamBuilder.add(collectionPath);
             }
 
             // Map the CSV file(s) to JSON manifests and collection documents
@@ -233,7 +233,7 @@ public final class JPv3 extends AbstractCallable {
             }
 
             return result;
-        } catch (final MappingException details) {
+        } catch (final MappingException | IOException details) {
             LOGGER.error(details, details.getMessage());
             return -1;
         }

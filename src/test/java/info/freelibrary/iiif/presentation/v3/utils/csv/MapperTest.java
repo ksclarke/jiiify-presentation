@@ -2,7 +2,7 @@
 package info.freelibrary.iiif.presentation.v3.utils.csv;
 
 import static info.freelibrary.iiif.presentation.v3.utils.TestUtils.replaceIDs;
-import static info.freelibrary.util.Constants.SLASH;
+import static info.freelibrary.util.Constants.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -62,9 +62,6 @@ public class MapperTest {
     /** A CSV file for testing. */
     private static final Path CSV_FILE = Path.of("src/test/resources/csv/jbu-collection.csv");
 
-    /** A directory containing multipart CSV files. */
-    private static final Path MULTIPART_DIR = Path.of("src/test/resources/csv/multi-part");
-
     /** A directory containing JSON files corresponding to multipart CSV files. */
     private static final String EXPECTED_RESULTS = "src/test/resources/json/multi-part";
 
@@ -94,13 +91,9 @@ public class MapperTest {
      */
     @Test
     @SuppressWarnings({ "JvmTaintAnalysis" }) // Suppresses Qodana taint warnings (we control the input here)
-    public void testMultiPartMappingAccion() throws Exception {
-        try (Stream<Path> fileStream = Files.list(MULTIPART_DIR).filter(path -> {
-            final String name = path.getFileName().toString();
-
-            // Only load the smaller CSV for this test
-            return name.endsWith(".csv") && (name.startsWith("accion-") || name.startsWith("lat-"));
-        })) {
+    public void testMultiPartMapping() throws Exception {
+        try (Stream<Path> fileStream = Files.list(TestUtils.MULTIPART_CSV_DIR)
+                .filter(TestUtils::isSmallMultipartCsv)) {
             assertEquals(0, new Mapper(fileStream, myZipFile).map(SERVER, IIIF_SERVER));
             assertTrue(Files.exists(myZipFile));
 
