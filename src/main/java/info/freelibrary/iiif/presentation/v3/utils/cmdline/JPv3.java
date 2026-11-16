@@ -176,7 +176,7 @@ public final class JPv3 extends AbstractCallable {
             streamBuilder.add(myInputFile); // Add the files we received as input to the stream
 
             // Add a supplied collection document that's been downloaded and converted to a CSV
-            if (myCollectionID != null && myAction.isPatch()) {
+            if (myCollectionID != null && (myAction.isPatch() || myAction.isCreate())) {
                 final URI collectionURI = formatHost(myHost, myCollectionID);
                 final Path collectionPath = convertToCSV(collectionURI, myUsername, myPassword);
 

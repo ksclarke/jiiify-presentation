@@ -1,4 +1,3 @@
-
 package info.freelibrary.iiif.presentation.v3.utils.cmdline;
 
 import static info.freelibrary.util.Constants.*;
@@ -115,6 +114,9 @@ public class JPv3IT {
     /** The file to upload. */
     private static final String CSV_FILE = "src/test/resources/csv/jbu-collection.csv";
 
+    /** A directory containing JSON files corresponding to multipart CSV files. */
+    private static final Path MULTIPART_EXPECTED_RESULTS = Path.of("src/test/resources/json/multi-part");
+
     /** The build's target directory. */
     private static final String TARGET = "target" + File.separator;
 
@@ -181,10 +183,10 @@ public class JPv3IT {
      * @throws Exception If there is trouble running the command line application
      */
     @Test
-    public void testCreatePlusARK() throws Exception {
+    public void testCollectionPatch() throws Exception {
         skipTestIfNoPasswordSupplied();
 
-        final String fileName = TARGET + "createPlusARK-" + UUID.randomUUID() + JPv3.ZIP_EXT;
+        final String fileName = TARGET + "collectionPath-" + UUID.randomUUID() + JPv3.ZIP_EXT;
         final String inputFilesDir = stageSmallMultipartFiles().toString();
         final ProcessResult result = runJPv3(CREATE, INPUT, inputFilesDir, OUTPUT, fileName, DOCUMENT_ID_OPTION,
           COLLECTION_ID);
@@ -192,6 +194,7 @@ public class JPv3IT {
         assertEquals(result.aOutput, 0, result.aExitCode);
         assertTrue(LOGGER.getMessage(MessageCodes.JPA_198, result.aOutput),
           result.aOutput.contains(LOGGER.getMessage(MessageCodes.JPA_178, new File(fileName).getAbsolutePath())));
+        assertMultipartZipContents(Path.of(fileName));
     }
 
     /**
@@ -205,13 +208,13 @@ public class JPv3IT {
 
         final String fileName = TARGET + "collectionPatchInProcess-" + UUID.randomUUID() + JPv3.ZIP_EXT;
         final String inputFilesDir = stageSmallMultipartFiles().toString();
-        final ProcessResult result = runJPv3InProcess(CREATE, INPUT, inputFilesDir, OUTPUT,
-          fileName, DOCUMENT_ID_OPTION, COLLECTION_ID, HOST_OPTION, TEST_MANIFEST_URL, IMAGE_OPTION,
-          TEST_IMAGE_URL);
+        final ProcessResult result = runJPv3InProcess(CREATE, INPUT, inputFilesDir, OUTPUT, fileName,
+          DOCUMENT_ID_OPTION, COLLECTION_ID, HOST_OPTION, TEST_MANIFEST_URL, IMAGE_OPTION, TEST_IMAGE_URL);
 
         assertEquals(result.aOutput, 0, result.aExitCode);
         assertTrue(LOGGER.getMessage(MessageCodes.JPA_198, result.aOutput),
           result.aOutput.contains(LOGGER.getMessage(MessageCodes.JPA_178, new File(fileName).getAbsolutePath())));
+        assertMultipartZipContents(Path.of(fileName));
     }
 
     /**
@@ -256,9 +259,9 @@ public class JPv3IT {
           result.aOutput.contains(LOGGER.getMessage(MessageCodes.JPA_180, zipFileName)));
 
         // Check the output CSV files to confirm they got IIIF Manifest URL(s)
-        readZipEntry(csvFileName, "jbu-collection.csv").ifPresentOrElse(contents -> {
-            try (MappingIterator<Map<String, String>> iterator = new CsvMapper().readerForMapOf(String.class)
-              .with(CsvSchema.emptySchema().withHeader()).readValues(contents)) {
+        readZipEntry(csvFileName).ifPresentOrElse(contents -> {
+            try (MappingIterator<Map<String, String>> iterator = new CsvMapper().readerForMapOf(String.class).with(
+              CsvSchema.emptySchema().withHeader()).readValues(contents)) {
                 iterator.readAll().forEach(map -> {
                     final String objectType = JPv3Utils.getObjectType(map);
                     final Row row = new Row(null, objectType, null);
@@ -327,8 +330,9 @@ public class JPv3IT {
 
         if (!credentialsSupplied) {
             LOGGER.warn(message);
-            assumeTrue(message, credentialsSupplied);
         }
+
+        assumeTrue(message, credentialsSupplied);
     }
 
     /**
@@ -364,16 +368,50 @@ public class JPv3IT {
     }
 
     /**
+     * Checks the contents of a multipart JSON ZIP against its expected fixtures.
+     *
+     * @param aZipPath The ZIP file path
+     * @throws IOException If there is trouble reading the ZIP or fixtures
+     */
+    private void assertMultipartZipContents(final Path aZipPath) throws IOException {
+        final List<String> expectedNames;
+
+        try (Stream<Path> paths = Files.list(MULTIPART_EXPECTED_RESULTS)) {
+            expectedNames = paths.filter(path -> path.getFileName().toString().endsWith(".json")).map(
+              path -> path.getFileName().toString()).sorted().toList();
+        }
+
+        try (ZipFile zipFile = new ZipFile(aZipPath.toFile())) {
+            final List<String> foundNames = zipFile.stream().filter(entry -> !entry.isDirectory()).map(
+              ZipEntry::getName).sorted().toList();
+
+            assertEquals(expectedNames, foundNames);
+
+            for (final String name : expectedNames) {
+                if (!"ark%3A%2F21198%2Fz1bc6271.json".equals(name)) {
+                    final ZipEntry entry = zipFile.getEntry(name);
+
+                    try (InputStream inputStream = zipFile.getInputStream(entry)) {
+                        final String expected = Files.readString(MULTIPART_EXPECTED_RESULTS.resolve(name));
+                        final String found = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+
+                        TestUtils.assertEquals(myTest, TestUtils.replaceIDs(expected), TestUtils.replaceIDs(found));
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * Reads a zip entry as a string.
      *
      * @param aZipPath The path to the zip file
-     * @param aEntryName The name of the entry to read
      * @return The contents of the zip entry as a string, or an empty optional if the entry does not exist
      * @throws IOException If there is trouble reading the zip entry
      */
-    private Optional<String> readZipEntry(final String aZipPath, final String aEntryName) throws IOException {
+    private Optional<String> readZipEntry(final String aZipPath) throws IOException {
         try (ZipFile zipFile = new ZipFile(aZipPath)) {
-            final ZipEntry entry = zipFile.getEntry(aEntryName);
+            final ZipEntry entry = zipFile.getEntry("jbu-collection.csv");
 
             if (entry == null) {
                 return Optional.empty();
@@ -413,8 +451,8 @@ public class JPv3IT {
         final StringWriter standardOutput = new StringWriter();
         final StringWriter standardError = new StringWriter();
         final LoggerContext loggerContext = (LoggerContext) org.slf4j.LoggerFactory.getILoggerFactory();
-        final ch.qos.logback.classic.Logger rootLogger = loggerContext.getLogger(
-          org.slf4j.Logger.ROOT_LOGGER_NAME);
+        final String rootLoggerName = org.slf4j.Logger.ROOT_LOGGER_NAME;
+        final ch.qos.logback.classic.Logger rootLogger = loggerContext.getLogger(rootLoggerName);
         final ListAppender<ILoggingEvent> appender = new ListAppender<>();
 
         appender.setContext(loggerContext);
@@ -423,14 +461,15 @@ public class JPv3IT {
 
         try {
             final CommandLine commandLine = new CommandLine(new JPv3());
+
             commandLine.setOut(new PrintWriter(standardOutput));
             commandLine.setErr(new PrintWriter(standardError));
 
             final int exitCode = commandLine.execute(aArgArray);
-            final String logOutput = appender.list.stream().map(ILoggingEvent::getFormattedMessage)
-              .collect(Collectors.joining(System.lineSeparator()));
-            final String output = Stream.of(logOutput, standardOutput.toString(), standardError.toString())
-              .filter(text -> !text.isBlank()).collect(Collectors.joining(System.lineSeparator()));
+            final String logOutput = appender.list.stream().map(ILoggingEvent::getFormattedMessage).collect(
+              Collectors.joining(System.lineSeparator()));
+            final String output = Stream.of(logOutput, standardOutput.toString(), standardError.toString()).filter(
+              text -> !text.isBlank()).collect(Collectors.joining(System.lineSeparator()));
 
             return new ProcessResult(exitCode, output);
         } finally {

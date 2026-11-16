@@ -49,7 +49,8 @@ public final class TestUtils {
     public static final Path MULTIPART_CSV_DIR = Path.of("src/test/resources/csv/multi-part");
 
     /** A regex to replace the ID with a placeholder. */
-    private static final String REPLACED_ID = "\"(https://iiif\\.library\\.ucla\\.edu(?:/iiif/2)?/[^\"]*)\"";
+    private static final String REPLACED_ID =
+            "\"(https://(?:test\\.ingest\\.)?iiif\\.library\\.ucla\\.edu(?:/iiif/2)?/[^\"]*)\"";
 
     /** A placeholder ID. */
     private static final String REPLACE_ID = "\"PLACEHOLDER_ID\"";
