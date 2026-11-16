@@ -1,0 +1,146 @@
+# A mapping file for JSON to CSV and vice versa.
+
+Alternate Title: # Translated, alternative, or other non-primary or non-uniform title
+  - AltTitle.other
+  - AltTitle.translated
+
+Behavior: # IIIF viewer behavior; values include paged, continuous, or individuals (default)
+  - viewingHint
+
+Contents Note: # Notes or summary of item contents; may supplement or replace a table of contents
+  - Contents note
+
+Copyright Holder: # Required; Contact for reuse questions (email, phone, website, or physical address)
+  - Rights.rightsHolderContact
+
+Copyright Status: # Required; Copyright status: copyrighted, public domain, or unknown
+  - Rights.copyrightStatus
+
+Creator: # Person or organization responsible for a resource's intellectual or artistic content
+  - Creator
+  - Name.creator
+
+Date Created: # Required; Human-readable date displayed to users; may use the resource language
+  - Date.created
+
+Date Normalized: # Required; Machine-readable ISO date: yyyy-mm-dd, yyyy-mm-dd/yyyy-mm-dd, yyyy-mm, or yyyy
+  - Date.normalized
+
+Descriptive Note: # Short general description; also appears below the title in search results
+  - Description.note
+
+Editor: # Person or organization who revises or elucidates a resource's content
+  - Editor
+
+File Name: # Required; DLP-only; metadata creators should not edit; full NetApp path starting with Masters/
+  - File Name
+
+Finding Aid URL: # Link to the finding aid (usually OAC for UCLA collections), if applicable
+  - Finding Aid URL
+
+Format Extent: # Number of items, pages, or resource duration
+  - Format.extent
+
+Format Medium: # Material or physical carrier of the resource, e.g. gouache on wood
+  - Format.medium
+
+Genre: # Required; Category of style, form, or content; use template terms or Getty AAT
+  - Genre
+
+Geographic Subject: # Preferred geographic source: MARC List for Geographic Areas
+  - Subject geographic
+
+IIIF Access URL: # DLP-only URL for reformatted image on IIIF server; used to create the manifest
+  - IIIF Access URL
+
+IIIF Manifest URL: # Required; DLP-only URL to a manifest containing IIIF image URLs and other data
+  - IIIF Manifest URL
+
+Item ID: # Required; A persistent unique identifier associated with a work, supplied by DLP
+  - Item ARK
+  - Item ID
+
+Language: # Language(s) of the resource, expressed as an ISO language code
+  - Language
+
+Local Identifier: # Locally assigned ID, such as a shelfmark, catalog number, or filename
+  - AltIdentifier.local
+
+Local Rights: # Prose statement of basic copyright, attribution, or other use terms
+  - Rights.statementLocal
+
+Masthead: # IIIF image region for Collection page masthead
+  - Masthead
+
+Media Height: # The item's image height in pixels
+  - media.height
+
+Media Width: # The item's image width in pixels
+  - media.width
+
+Name Subject: # Any of the topics or themes of a work, essentially the "aboutness"
+  - Name.subject
+
+Note: # General notes about the resources, its production, circulation, etc.
+  - Note
+
+Object Type: # Required; DLP-only; required for IIIF/Samvera; values: Work, Page, Collection
+  - Object Type
+
+Parent ID: # Required; ARK of hierarchical parent, supplied by DLP
+  - Parent ARK
+  - Parent ID
+
+Place of Origin: # For manuscripts/unpublished items, geographic place of creation; transcribe from item
+  - Place of origin
+  - Publisher.placeOfOrigin
+
+Program: # Program providing the resource, e.g. MEAP or IDEP
+  - Program
+
+Publisher: # Publisher name or statement; use LCSH/VIAF if known but not supplied
+  - Publisher.publisherName
+
+Representative Image: # Image URL for Collection page masthead
+  - Representative image
+
+Repository: # Required; Name of repository holding physical resource; use its preferred name
+  - Repository
+  - Name.repository
+
+Resource Type: # DLP-only; for multipart collections, use Work for Object Type and Collection for Festerize
+  - IIIF Object Type
+
+Rights Holder: # Rarely used; Prefer "Rights Contact" to provide contact info for the unit or institution
+  - Rights Holder
+
+Subject: # Topics or themes of a work, including persons, organizations, places, and time periods
+  - Subject
+
+Summary: # Primary about field for Collections; also an item abstract or short summary
+  - Summary
+
+Target: # The target manifest's URL
+  - Target
+
+Temporal Subject: # Preferred time-period sources: LCSH or PeriodO
+  - Subject temporal
+
+Thumbnail: # IIIF image URL stem without other API parameters; supply if there is no access URL
+  - Thumbnail
+
+Title: # Required; The primary title of the item being described.
+  - Title
+
+Topical Subject: # Preferred topic source: Library of Congress Subject Headings (LCSH)
+  - Subject topic
+
+Type of Resource: # Required; General content type; each item has one type
+  - Type.typeOfResource
+
+Viewing Direction: # IIIF text direction: left-to-right, right-to-left, top-to-bottom, or bottom-to-top
+  - viewingDirection
+  - Text direction
+
+Visibility: # Whether the item is visible to the public without authentication
+  - Visibility

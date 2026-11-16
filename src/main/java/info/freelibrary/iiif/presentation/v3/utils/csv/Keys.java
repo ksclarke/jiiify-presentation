@@ -3,10 +3,12 @@ package info.freelibrary.iiif.presentation.v3.utils.csv;
 
 /**
  * CSV header names used by the CSV mapping components.
+ *
  * <p>
  * This constants class centralizes canonical column keys expected in input CSV files so that parsing and serialization
  * logic can reference a single source of truth. Keeping these keys here reduces duplication and prevents subtle typos
  * from breaking field bindings.
+ *
  * <p>
  * Notes:
  * <ul>
@@ -35,49 +37,49 @@ public final class Keys {
     public static final String WORK = "Work";
 
     /** Column name for the item's IIIF access URL (e.g., base image service). */
-    public static final String ACCESS_URL = "AccessURL";
+    public static final String ACCESS_URL = "IIIF Access URL";
 
     /** Column name for the item's IIIF manifest URL. */
     public static final String IIIF_MANIFEST_URL = "IIIF Manifest URL";
 
     /** Column name for the item's Bucketeer (ingest) state or status. */
-    public static final String BUCKETEER_STATE = "BucketeerState";
+    public static final String BUCKETEER_STATE = "Bucketeer State";
 
     /** Column name for the source file name or path associated with the item. */
-    public static final String FILE_NAME = "FileName";
+    public static final String FILE_NAME = "File Name";
 
     /** Column name for the human-readable title of the item. */
     public static final String TITLE = "Title";
 
     /** Column name for the item's identifier (e.g., ARK or internal ID). */
-    public static final String ITEM_ID = "ItemID";
+    public static final String ITEM_ID = "Item ID";
 
     /** Column name for the item's sequence or ordering within its parent. */
-    public static final String ITEM_SEQUENCE = "ItemSequence";
+    public static final String ITEM_SEQUENCE = "Item Sequence";
 
     /** Column name for the pixel width of the associated media. */
-    public static final String MEDIA_WIDTH = "MediaWidth";
+    public static final String MEDIA_WIDTH = "Media Width";
 
     /** Column name for the pixel height of the associated media. */
-    public static final String MEDIA_HEIGHT = "MediaHeight";
+    public static final String MEDIA_HEIGHT = "Media Height";
 
     /** Column name for free-form notes or comments about the item. */
     public static final String NOTES = "Notes";
 
     /** Column name for the logical object type (e.g., Collection, Work, Page, Layer, Choice). */
-    public static final String OBJECT_TYPE = "ObjectType";
+    public static final String OBJECT_TYPE = "Object Type";
 
     /** Column name for the IIIF resource type (Collection, Work). */
-    public static final String RESOURCE_TYPE = "ResourceType";
+    public static final String RESOURCE_TYPE = "Resource Type";
 
     /** Column name for the identifier of the item's parent object. */
-    public static final String PARENT_ID = "ParentID";
+    public static final String PARENT_ID = "Parent ID";
 
     /** Column name for the item's IIIF target (e.g., fragment selector or target URI). */
     public static final String TARGET = "Target";
 
     /** Column name for the textual direction of the item (e.g., left-to-right, right-to-left). */
-    public static final String VIEWING_DIRECTION = "ViewingDirection";
+    public static final String VIEWING_DIRECTION = "Viewing Direction";
 
     /** Column name for a thumbnail reference (e.g., image service or absolute URL). */
     public static final String THUMBNAIL = "Thumbnail";
@@ -86,7 +88,7 @@ public final class Keys {
     public static final String BEHAVIOR = "Behavior";
 
     /** Column name for the item's representative image. */
-    public static final String REPRESENTATIVE_IMAGE = "Representative image";
+    public static final String REPRESENTATIVE_IMAGE = "Representative Image";
 
     /** Column name for the item's masthead image. */
     public static final String MASTHEAD = "Masthead";
@@ -95,10 +97,10 @@ public final class Keys {
     public static final String VISIBILITY = "Visibility";
 
     /** Column name for the item's format extent. */
-    public static final String FORMAT_EXTENT = "Format.extent";
+    public static final String FORMAT_EXTENT = "Format Extent";
 
     /** Column name for the item's format medium. */
-    public static final String FORMAT_MEDIUM = "Format.medium";
+    public static final String FORMAT_MEDIUM = "Format Medium";
 
     /** Column name for the item's summary. */
     public static final String SUMMARY = "Summary";
@@ -110,22 +112,22 @@ public final class Keys {
     public static final String SUBJECT = "Subject";
 
     /** Column name for the item's subject topic. */
-    public static final String SUBJECT_TOPIC = "Subject topic";
+    public static final String SUBJECT_TOPIC = "Topical Subject";
 
     /** Column name for the item's subject name. */
-    public static final String SUBJECT_NAME = "Name.subject";
+    public static final String SUBJECT_NAME = "Name Subject";
 
     /** Column name for the item's subject geographic. */
-    public static final String SUBJECT_GEO = "Subject geographic";
+    public static final String SUBJECT_GEO = "Geographic Subject";
 
     /** Column name for the item's subject temporal. */
-    public static final String SUBJECT_TEMPORAL = "Subject temporal";
+    public static final String SUBJECT_TEMPORAL = "Temporal Subject";
 
     /** Column name for the item's language. */
     public static final String LANGUAGE = "Language";
 
     /** Column name for the item's place of origin. */
-    public static final String PLACE_OF_ORIGIN = "Place of origin";
+    public static final String PLACE_OF_ORIGIN = "Place of Origin";
 
     /** Column name for the item's repository. */
     public static final String REPOSITORY = "Repository";
@@ -134,19 +136,19 @@ public final class Keys {
     public static final String PROGRAM = "Program";
 
     /** Column name for the item's type of resource. */
-    public static final String TYPE_OF_RESOURCE = "Type.typeOfResource";
+    public static final String TYPE_OF_RESOURCE = "Type of Resource";
 
     /** Column name for the item's copyright status. */
-    public static final String COPYRIGHT_STATUS = "Rights.copyrightStatus";
+    public static final String COPYRIGHT_STATUS = "Copyright Status";
 
     /** Column name for the item's copyright holder. */
-    public static final String COPYRIGHT_HOLDER = "Rights.rightsHolderContact";
+    public static final String COPYRIGHT_HOLDER = "Copyright Holder";
 
     /** Column name for the item's descriptive note. */
-    public static final String DESCRIPTIVE_NOTE = "Description.note";
+    public static final String DESCRIPTIVE_NOTE = "Descriptive Note";
 
     /** Column name for the item's contents note. */
-    public static final String CONTENTS_NOTE = "Contents note";
+    public static final String CONTENTS_NOTE = "Contents Note";
 
     /** Column name for the item's editor. */
     public static final String EDITOR = "Editor";
@@ -155,13 +157,13 @@ public final class Keys {
     public static final String CREATOR = "Creator";
 
     /** Column name for the item's publisher. */
-    public static final String PUBLISHER = "Publisher.publisherName";
+    public static final String PUBLISHER = "Publisher";
+
+    /** Column name for the item's rights contact. */
+    public static final String RIGHTS_CONTACT = "Rights Contact";
 
     /** Column name for the item's local rights statement. */
-    public static final String RIGHTS_STATEMENT_LOCAL = "Rights.statementLocal";
-
-    /** Column name for the item's rights contact information. */
-    public static final String RIGHTS_CONTACT = "Rights.servicesContact";
+    public static final String RIGHTS_STATEMENT_LOCAL = "Local Rights";
 
     /**
      * Private constructor to prevent instantiation of the utility class. This ensures that the class can only be used

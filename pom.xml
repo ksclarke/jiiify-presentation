@@ -42,15 +42,17 @@
         <revision>0.0.0-SNAPSHOT</revision>
 
         <!-- Application dependencies -->
-        <jackson.version>2.22.0</jackson.version>
-        <jackson.databind.version>2.22.0</jackson.databind.version>
+        <jackson.version>2.22.3</jackson.version>
+        <jackson.databind.version>2.22.4</jackson.databind.version>
         <jackson.annotations.version>2.22</jackson.annotations.version>
         <freelib.utils.version>6.0.0</freelib.utils.version>
-        <jsoup.version>1.22.2</jsoup.version>
+        <jsoup.version>1.23.2</jsoup.version>
         <combinatorics.version>3.4.0</combinatorics.version>
         <media.fragments.uri.version>2.4</media.fragments.uri.version>
+        <snakeyaml.version>2.7</snakeyaml.version>
 
         <!-- Build-related dependencies -->
+        <jspecify.version>1.0.1</jspecify.version>
         <exec.plugin.version>3.5.0</exec.plugin.version>
         <native.maven.plugin.version>1.1.0</native.maven.plugin.version>
 
@@ -59,7 +61,6 @@
         <system.lambda.version>1.2.1</system.lambda.version>
         <commonmark.version>0.28.0</commonmark.version>
         <mockito.version>5.20.0</mockito.version>
-        <opencsv.version>4.6</opencsv.version>
         <lorem.version>2.1</lorem.version>
 
         <!-- A property used by the build process -->
@@ -69,12 +70,27 @@
         <!--suppress UnresolvedMavenProperty -->
         <testLogLevel>${testLogLevel:-INFO}</testLogLevel>
 
+        <!-- Test level overrides -->
+        <skipUTs>false</skipUTs>
+        <skipITs>false</skipITs>
+
+        <!-- Skip native build when using the 'native' profile -->
+        <skipNativeBuild>false</skipNativeBuild>
+
         <!-- Mockito configuration properties -->
         <mockito.path>${settings.localRepository}/org/mockito/mockito-core/${mockito.version}</mockito.path>
         <mockito.agent.arg>-javaagent:${mockito.path}/mockito-core-${mockito.version}.jar</mockito.agent.arg>
     </properties>
 
     <dependencies>
+        <!-- Annotation dependencies -->
+        <dependency>
+            <groupId>org.jspecify</groupId>
+            <artifactId>jspecify</artifactId>
+            <version>${jspecify.version}</version>
+        </dependency>
+
+        <!-- Annotation dependencies -->
         <dependency>
             <groupId>info.freelibrary</groupId>
             <artifactId>freelib-utils</artifactId>
@@ -254,12 +270,6 @@
                 <artifactId>maven-dependency-plugin</artifactId>
             </plugin>
 
-            <!-- The rules need to be updated to fit some IDEA changes -->
-            <plugin>
-                <groupId>net.revelc.code.formatter</groupId>
-                <artifactId>formatter-maven-plugin</artifactId>
-            </plugin>
-
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
             </plugin>
@@ -268,6 +278,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
+                    <skipITs>${skipITs}</skipITs>
                     <systemPropertyVariables>
                         <jiiify.version>${project.version}</jiiify.version>
                     </systemPropertyVariables>
@@ -317,6 +328,7 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
+                    <skipTests>${skipUTs}</skipTests>
                     <!-- Uses 'add-opens' argument for system-lambda functionality in unit tests -->
                     <!--suppress UnresolvedMavenProperty warning for jacoco.agent.arg -->
                     <argLine><![CDATA[ ${jacoco.agent.arg} ${mockito.agent.arg}
@@ -349,6 +361,7 @@
                 <!-- Build plugin versions -->
                 <maven.clean.version>3.5.0</maven.clean.version>
                 <shade.plugin.version>3.6.2</shade.plugin.version>
+
                 <!-- Testing properties -->
                 <jpv3.username>test_user</jpv3.username>
                 <jpv3.password>test_pswd</jpv3.password>
@@ -390,6 +403,11 @@
                             <artifactId>guava</artifactId>
                         </exclusion>
                     </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>org.yaml</groupId>
+                    <artifactId>snakeyaml</artifactId>
+                    <version>${snakeyaml.version}</version>
                 </dependency>
                 <dependency>
                     <groupId>org.jetbrains.kotlin</groupId>
@@ -516,6 +534,7 @@
                             <metadataRepository>
                                 <enabled>true</enabled>
                             </metadataRepository>
+                            <skip>${skipNativeBuild}</skip>
                         </configuration>
                     </plugin>
 
@@ -642,7 +661,7 @@
     <parent>
         <artifactId>freelib-parent</artifactId>
         <groupId>info.freelibrary</groupId>
-        <version>14.0.4</version>
+        <version>14.3.6</version>
     </parent>
 
 </project>

@@ -3,16 +3,16 @@ package info.freelibrary.iiif.presentation.v3.utils.json;
 
 import static info.freelibrary.iiif.presentation.v3.ContextList.PRESENTATION_CONTEXT_URI;
 
-import java.io.IOException;
-import java.net.URI;
-import java.util.List;
-
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-
 import info.freelibrary.iiif.presentation.v3.ContextList;
+
+import java.io.IOException;
+import java.io.Serial;
+import java.net.URI;
+import java.util.List;
 
 /**
  * A custom deserializer for ContextList. Deserialization is a little different because it either deserializes from a
@@ -21,12 +21,13 @@ import info.freelibrary.iiif.presentation.v3.ContextList;
 public class ContextListDeserializer extends StdDeserializer<List<URI>> {
 
     /** The {@code ContextListDeserializer}'s {@code serialVersionUID}. */
+    @Serial
     private static final long serialVersionUID = 3623670131870204191L;
 
     /**
      * Creates a new {@link ContextList} deserializer.
      */
-    protected ContextListDeserializer() {
+    public ContextListDeserializer() {
         this(null);
     }
 
@@ -49,18 +50,17 @@ public class ContextListDeserializer extends StdDeserializer<List<URI>> {
                 final URI uri = URI.create(context.textValue());
 
                 if (!PRESENTATION_CONTEXT_URI.equals(uri)) {
-                    contexts.add(uri);
+                    contexts.add(contexts.size() - 1, uri);
                 }
             });
         } else {
             final URI uri = URI.create(currentNode.textValue());
 
             if (!PRESENTATION_CONTEXT_URI.equals(uri)) {
-                contexts.add(uri);
+                contexts.add(contexts.size() - 1, uri);
             }
         }
 
         return contexts;
     }
-
 }

@@ -1,12 +1,13 @@
 
 package info.freelibrary.iiif.presentation.v3.utils.csv;
 
-import static info.freelibrary.util.Constants.SLASH;
+import static info.freelibrary.util.Constants.*;
 import static info.freelibrary.util.ThrowingBiConsumer.uncheck;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import info.freelibrary.util.StringUtils;
+import org.jspecify.annotations.NonNull;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -18,6 +19,7 @@ import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -89,8 +91,9 @@ public class CsvSourcesTest {
      * @param aPath The input path to normalize, where a slash separates segments
      * @return The normalized path as a string
      */
+    @NonNull
     private String normalizePath(final String aPath) {
-        final String normalized = aPath.replace("\\", SLASH); // Normalize Windows separators
+        final String normalized = Objects.requireNonNull(aPath).replace("\\", SLASH); // Normalize Windows separators
         return normalized.replaceAll(".*/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}[a-f0-9]*/",
                 "TEMP_DIR/");
     }

@@ -10,21 +10,25 @@ import info.freelibrary.util.warnings.Sonar;
 /**
  * A factory that generates Skolem IRIs. If the well-known IRI base is set, the IRIs generated can be mapped back to
  * blank nodes, if needed. It's used by the TextualBody class, but can also be used like:
+ *
  * <p>
  * <code>
  * SkolemIriFactory iriFactory = SkolemIriFactory.getFactory().setWellKnownBase("https://freelibrary.info/");<br>
  * URI skolemIRI = iriFactory.getSkolemIRI();<br>
  * </code>
  * </p>
+ *
  * <p>
  * or to generate a Skolem IRI that cannot be mapped back to a blank node (which is the default):
  * </p>
+ *
  * <p>
  * <code>
  * SkolemIriFactory iriFactory = SkolemIriFactory.getFactory();<br>
  * URI skolemIRI = iriFactory.getSkolemIRI();<br>
  * </code>
  * </p>
+ *
  * <p>
  * What what makes an ID mappable back to a blank node? Consult
  * <a href="https://www.w3.org/TR/rdf11-concepts/#section-skolemization">Replacing Blank Nodes with IRIs</a>.

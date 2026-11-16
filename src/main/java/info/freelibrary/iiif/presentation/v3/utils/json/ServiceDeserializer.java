@@ -39,6 +39,7 @@ import info.freelibrary.util.warnings.PMD;
 import info.freelibrary.util.warnings.Sonar;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,13 +47,14 @@ import java.util.Optional;
 /**
  * Deserializes services from JSON documents into {@link Service} implementations.
  */
-@SuppressWarnings({ PMD.GOD_CLASS, PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS, Sonar.COGNITIVE_COMPLEXITY })
+@SuppressWarnings({ PMD.GOD_CLASS, PMD.EXCESSIVE_IMPORTS, Sonar.COGNITIVE_COMPLEXITY })
 public class ServiceDeserializer extends StdDeserializer<Service> {
 
     /** The logger for the service deserializer. */
     private static final Logger LOGGER = LoggerFactory.getLogger(ServiceDeserializer.class, MessageCodes.BUNDLE);
 
     /** The <code>serialVersionUID</code> for ServiceDeserializer. */
+    @Serial
     private static final long serialVersionUID = 1840979246965623150L;
 
     /** Creates a new metadata deserializer. */
@@ -506,6 +508,7 @@ public class ServiceDeserializer extends StdDeserializer<Service> {
 
     /**
      * A temporary workaround that saves us from having to make the abstract user mediated cookie service class public.
+     *
      * <p>
      * "We can solve any problem by introducing an extra level of indirection." --David J. Wheeler
      * </p>

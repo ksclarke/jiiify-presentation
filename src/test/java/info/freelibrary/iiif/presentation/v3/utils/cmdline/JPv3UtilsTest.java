@@ -1,144 +1,77 @@
 
 package info.freelibrary.iiif.presentation.v3.utils.cmdline;
 
+import static info.freelibrary.util.Constants.EMPTY;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import info.freelibrary.util.Constants;
-import info.freelibrary.util.IllegalArgumentI18nException;
-import info.freelibrary.util.StringUtils;
+import info.freelibrary.iiif.presentation.v3.ResourceTypes;
+import info.freelibrary.iiif.presentation.v3.utils.JsonKeys;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Stream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+import java.util.Optional;
 
 /**
  * Unit tests for JPv3Utils.
  */
 public class JPv3UtilsTest {
 
-    /** A host for testing. */
-    private static final URI HOST = URI.create("https://test.ingest.iiif.library.ucla.edu");
+    /** A bad file path for testing. */
+    private static final String BAD_FILE_PATH = "/tmp/nonexistent-file.json";
 
-    /** A target directory for testing. */
-    private static final String TARGET = "target";
-
-    /** A nested zip file name pattern. */
-    private static final String NESTED_ZIP = "nested{}.zip";
-
-    /** A list of expected nested files. */
-    private static final List<String> EXPECTED_NESTED_FILES = Stream
-            .of("nested/collection/jbu-2-collection.csv", "nested/layers/jbu-2-layers.csv",
-                    "nested/pages/jbu-2-pages.csv", "nested/works/jbu-2-works.csv")
-            .map(Path::of).map(Path::toString).toList();
+    /** A temporary folder to use in testing. */
+    @Rule
+    public TemporaryFolder myFolder = new TemporaryFolder();
 
     /**
-     * Tests the outputZipFile method of JPv3Utils.
+     * Tests finding a value in an empty JSON file.
      */
     @Test
-    public void testOutputZipFileDirs() throws IOException {
-        final Path source = Path.of("src/test/resources/csv/nested");
-        final String zipFile = StringUtils.format(NESTED_ZIP, Constants.DASH + UUID.randomUUID().toString());
-        final Path target = Path.of(TARGET, zipFile);
+    public void testFindValueEmptyFile() throws IOException {
+        final Path jsonFile = myFolder.newFile("empty.json").toPath();
 
-        JPv3Utils.outputZipFile(source, target, HOST);
-        checkZipEntries(target, EXPECTED_NESTED_FILES);
+        Files.writeString(jsonFile, EMPTY);
+        assertFalse(JPv3Utils.findValue(jsonFile, JsonKeys.TYPE).isPresent());
     }
 
     /**
-     * Tests the outputZipFile method of JPv3Utils.
+     * Tests behavior when a file does not exist.
+     */
+    @Test(expected = IOException.class)
+    public void testFindValueNonExistentFile() throws IOException {
+        JPv3Utils.findValue(Path.of(BAD_FILE_PATH), JsonKeys.TYPE);
+    }
+
+    /**
+     * Tests finding a key that does not exist in a JSON file.
      */
     @Test
-    public void testOutputZipFileFlat() throws IOException {
-        final Path source = Path.of("src/test/resources/zip/layers-choice.zip");
-        final Path target = Path.of(TARGET, "layers-choice.zip");
-        final List<String> expected = Stream.of("layers-choice/collection.csv", "layers-choice/layers.csv",
-                "layers-choice/pages.csv", "layers-choice/works.csv").map(Path::of).map(Path::toString).toList();
+    public void testFindValueAbsent() throws IOException {
+        final Path jsonFile = myFolder.newFile().toPath();
+        final String json = "{\"label\":\"Example\"}";
 
-        JPv3Utils.outputZipFile(source, target, HOST);
-        checkZipEntries(target, expected);
+        Files.writeString(jsonFile, json);
+        assertFalse(JPv3Utils.findValue(jsonFile, JsonKeys.TYPE).isPresent());
     }
 
     /**
-     * Tests the outputZipFile method of JPv3Utils.
+     * Tests finding a known key in a JSON file.
      */
     @Test
-    public void testOutputZipFileNested() throws IOException {
-        final Path source = Path.of("src/test/resources/zip/nested.zip");
-        final Path target = Path.of(TARGET, StringUtils.format(NESTED_ZIP, Constants.EMPTY));
+    public void testFindValuePresent() throws IOException {
+        final Path jsonFile = myFolder.newFile().toPath();
+        final Optional<String> value;
 
-        JPv3Utils.outputZipFile(source, target, HOST);
-        checkZipEntries(target, EXPECTED_NESTED_FILES);
-    }
+        Files.writeString(jsonFile, "{\"type\":\"Manifest\"}");
+        value = JPv3Utils.findValue(jsonFile, JsonKeys.TYPE);
 
-    /**
-     * Tests the getCustomOutputPath method of JPv3Utils.
-     */
-    @Test
-    public void testGetCustomOutputPathZip() {
-        final Path inputPath = Path.of("src/test/resources/zip/package.zip");
-        final Path actual = JPv3Utils.getCustomOutputPath(inputPath);
-        final Path expected = Path.of("output-package.zip");
-
-        assertEquals(expected, actual);
-    }
-
-    /**
-     * Tests the getCustomOutputPath method of JPv3Utils.
-     */
-    @Test(expected = IllegalArgumentI18nException.class)
-    public void testGetCustomOutputPathDir() {
-        final Path actual = JPv3Utils.getCustomOutputPath(Path.of("src/test/resources/zip/nested"));
-    }
-
-    /**
-     * Tests the checkHost method of JPv3Utils.
-     */
-    @Test
-    public void testCheckHost() throws URISyntaxException {
-        final URI host = JPv3Utils.formatHost(URI.create("https://iiif.library.ucla.edu"));
-
-        assertEquals(URI.create("https://ingest.iiif.library.ucla.edu/package"), host);
-        assertEquals(HOST.toString() + JPv3.INGEST_ENDPOINT_PATH, JPv3Utils.formatHost(HOST).toString());
-    }
-
-    /**
-     * Tests reading headers from a CSV file.
-     *
-     * @throws IOException If there is trouble reading the CSV data
-     */
-    @Test
-    public void testReadHeaders() throws IOException {
-        final String source = StringUtils.read(new File("src/test/resources/csv/jbu-collection.csv"));
-        final List<String> actual = JPv3Utils.readHeaders(source);
-        final List<String> expected = List.of("File Name", "Object Type", "Title", "Item Sequence", "Item ARK",
-                "Parent ARK", "IIIF target", "viewingHint", "Text direction", "Bucketeer state", "Thumbnail",
-                "media.height", "media.width", "IIIF Access URL", "NOTES");
-
-        assertEquals(expected, actual);
-    }
-
-    /**
-     * Checks the contents of a zip file.
-     *
-     * @param aZipPath A path to a zip file
-     * @param aExpectedList The expected contents of the zip file
-     * @throws IOException If there is trouble reading the zip file
-     */
-    private void checkZipEntries(final Path aZipPath, final List<String> aExpectedList) throws IOException {
-        final List<String> entryNames;
-
-        try (ZipFile zipFile = new ZipFile(aZipPath.toFile())) {
-            entryNames = zipFile.stream().filter(entry -> !entry.isDirectory()).map(ZipEntry::getName).toList();
-        }
-
-        assertEquals(aExpectedList, entryNames);
+        assertTrue(value.isPresent());
+        assertEquals(ResourceTypes.MANIFEST, value.get());
     }
 }

@@ -260,7 +260,27 @@
       "allDeclaredMethods": true
     },
     {
+      "type": "info.freelibrary.iiif.presentation.v3.utils.json.AnnotationDeserializer",
+      "allDeclaredConstructors": true
+    },
+    {
       "type": "info.freelibrary.iiif.presentation.v3.utils.json.AnnotationTargetSerializer",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.utils.json.BehaviorDeserializer",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.utils.json.CanvasAnnotationDeserializer",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.utils.json.ContentResourceDeserializer",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.utils.json.ContextListDeserializer",
       "allDeclaredConstructors": true
     },
     {
@@ -268,7 +288,31 @@
       "allDeclaredConstructors": true
     },
     {
+      "type": "info.freelibrary.iiif.presentation.v3.utils.json.LabelDeserializer",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.utils.json.MediaTypeDeserializer",
+      "allDeclaredConstructors": true
+    },
+    {
       "type": "info.freelibrary.iiif.presentation.v3.utils.json.PaintingAnnotationSerializer",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.utils.json.PartOfDeserializer",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.utils.json.ServiceDeserializer",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.utils.json.SummaryDeserializer",
+      "allDeclaredConstructors": true
+    },
+    {
+      "type": "info.freelibrary.iiif.presentation.v3.utils.json.WebAnnotationDeserializer",
       "allDeclaredConstructors": true
     },
     {

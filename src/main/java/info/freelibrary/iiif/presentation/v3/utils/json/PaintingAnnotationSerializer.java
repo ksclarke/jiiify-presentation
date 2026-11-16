@@ -153,7 +153,7 @@ public class PaintingAnnotationSerializer extends StdSerializer<PaintingAnnotati
      * @throws IOException If there is trouble writing to the generator
      * @throws JsonProcessingException If there is trouble parsing the source annotation
      */
-    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY })
+    @SuppressWarnings({ PMD.COGNITIVE_COMPLEXITY, PMD.AVOID_DEEPLY_NESTED_IF_STMTS })
     private void serializeResources(final List<ContentResource<?>> aList, final boolean aChoice,
             final Optional<String> aBodyID, final JsonGenerator aJsonGenerator) throws IOException {
         if (aList.size() == SINGLE_INSTANCE) {

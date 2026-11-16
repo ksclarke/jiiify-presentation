@@ -2,6 +2,7 @@
 package info.freelibrary.iiif.presentation.v3.utils.csv;
 
 import info.freelibrary.iiif.presentation.v3.properties.MediaType;
+import info.freelibrary.util.HTTP;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -86,7 +87,7 @@ public class Uploader {
         connection = (HttpURLConnection) myHost.openConnection();
         connection.setDoOutput(true);
         connection.setRequestMethod("POST");
-        connection.setRequestProperty("Content-Type", MediaType.APPLICATION_ZIP.toString());
+        connection.setRequestProperty(HTTP.Header.CONTENT_TYPE, MediaType.APPLICATION_ZIP.toString());
         connection.setFixedLengthStreamingMode(Files.size(filePath));
 
         try (OutputStream outStream = connection.getOutputStream();

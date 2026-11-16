@@ -1,9 +1,9 @@
 
 package info.freelibrary.iiif.presentation.v3.utils.csv;
 
-import static info.freelibrary.iiif.presentation.v3.utils.cmdline.JPv3Utils.CSV_EXT;
-import static info.freelibrary.iiif.presentation.v3.utils.cmdline.JPv3Utils.ZIP_EXT;
-import static info.freelibrary.util.Constants.SLASH;
+import static info.freelibrary.iiif.presentation.v3.utils.cmdline.JPv3.CSV_EXT;
+import static info.freelibrary.iiif.presentation.v3.utils.cmdline.JPv3.ZIP_EXT;
+import static info.freelibrary.util.Constants.*;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
@@ -25,6 +25,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Objects;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Stream;
@@ -58,7 +59,7 @@ public class Reader {
      * @return A {@link Stream} of {@link Row} objects representing the parsed content of the files
      */
     public Stream<Row> rows(final Stream<Path> aStream) {
-        return aStream.flatMap(this::rows);
+        return Objects.requireNonNull(aStream).flatMap(this::rows);
     }
 
     /**
