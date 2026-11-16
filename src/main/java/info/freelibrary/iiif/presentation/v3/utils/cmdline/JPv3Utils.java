@@ -1,7 +1,7 @@
 
 package info.freelibrary.iiif.presentation.v3.utils.cmdline;
 
-import static info.freelibrary.util.Constants.PERIOD;
+import static info.freelibrary.util.Constants.*;
 import static org.slf4j.Logger.ROOT_LOGGER_NAME;
 
 import ch.qos.logback.classic.Level;
@@ -203,8 +203,22 @@ public final class JPv3Utils {
      * @return The object type
      */
     public static String getObjectType(final Map<String, String> aRow) {
-        return aRow.get(Keys.OBJECT_TYPE) == null ? aRow.get(Keys.OBJECT_TYPE.replaceAll("(?<!^)([A-Z])", " $1"))
+        return Objects.requireNonNull(aRow).get(Keys.OBJECT_TYPE) == null
+          ? aRow.get(Keys.OBJECT_TYPE.replaceAll("(?<!^)([A-Z])", " $1"))
           : aRow.get(Keys.OBJECT_TYPE); // A poor man's @JsonAlias
+    }
+
+    /**
+     * Gets the resource type from the supplied row, without using the mapping that the Row class does. This is
+     * something that will be able to be removed once the more dynamic mapping has been implemented.
+     *
+     * @param aRow A CSV row
+     * @return The resource type
+     */
+    public static String getResourceType(final Map<String, String> aRow) {
+        final String resourceType = Objects.requireNonNull(aRow).get(Keys.RESOURCE_TYPE);
+        final String iiifResourceType = aRow.get("IIIF Object Type");
+        return resourceType != null ? resourceType : iiifResourceType; // Another poor man's @JsonAlias
     }
 
     /**

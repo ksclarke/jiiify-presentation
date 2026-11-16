@@ -220,7 +220,7 @@ public abstract class AbstractCallable implements Callable<Integer> {
                 final Map<String, String> row = new HashMap<>(originalRows.next());
                 final String id = row.get(idKey);
                 final String objectType = JPv3Utils.getObjectType(row);
-                final String resourceType = row.get(Keys.RESOURCE_TYPE);
+                final String resourceType = JPv3Utils.getResourceType(row);
                 final Row rowObject = new Row(id, objectType, resourceType);
                 final String url;
 
