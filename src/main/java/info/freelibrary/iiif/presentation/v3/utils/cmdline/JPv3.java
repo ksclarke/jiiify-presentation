@@ -38,14 +38,8 @@ import java.util.stream.Stream;
             JPv3.EXPORT + Configs.JPV3_IMAGE_SERVER + "=\"https://iiif.library.ucla.edu/iiif/2\"%n" })
 public final class JPv3 extends AbstractCallable {
 
-    /** The expected prefix for the IIIF manifests and collection documents server. */
-    public static final String ENDPOINT_PREFIX = "ingest";
-
     /** The expected endpoint for the IIIF manifests and collection documents server. */
     public static final String INGEST_ENDPOINT_PATH = "/package";
-
-    /** The expected endpoint for collection documents. */
-    public static final String COLLECTIONS_PATH = "/collections/";
 
     /** A constant for exporting environmental variables. */
     static final String EXPORT = "  export ";
