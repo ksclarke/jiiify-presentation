@@ -247,6 +247,7 @@ public abstract class AbstractCallable implements Callable<Integer> {
             }
         }
 
+        // Skip any pre-existing IIIF_MANIFEST_URL headers; we add a new one
         readHeaders(aCsvString).stream().filter(header -> !Keys.IIIF_MANIFEST_URL.equals(header))
           .forEach(columns::addColumn);
         columns.addColumn(Keys.IIIF_MANIFEST_URL);
