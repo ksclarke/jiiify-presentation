@@ -38,7 +38,7 @@ This will process all CSV files in the specified input directory and create a ZI
 and collection documents in the specified output directory. The `-c` flag indicates that the ZIP file is created
 locally and not sent to a remote IIIF manifest server. The default output is a file named `output.zip` in the current
 working directory. The output file can be renamed by specifying a different output file name with the `-o` flag. It
-would be a good idea to still use the `.zip` extension for the output file so that it is indentified as a ZIP file.
+would be a good idea to still use the `.zip` extension for the output file so that it is identified as a ZIP file.
 
 ### Uploading to a Remote Server
 
@@ -67,6 +67,14 @@ Like with regular uploads, the `JPV3_USERNAME` and `JPV3_PASSWORD` environment v
 passed on the command line with the `-U` and `-P` flags). Manifests uploaded with the `-p` flag will overwrite any
 existing manifests with the same ID. Collection documents uploaded with the `-p` flag will append their resources to
 the existing collection document.
+
+When using `-p` it is also possible to add to an existing collection document without having to supply the collection
+document at the same time the other CSVs are supplied. This is useful for batch processing. To use this feature, supply
+the collection document's ID with the `-d` option. For example:
+
+```bash
+jpv3 -p -i /path/to/csv/file_or_directory -d 'ark:/21198/z1fb75c1'
+```
 
 ### Uploading to a Test Server
 

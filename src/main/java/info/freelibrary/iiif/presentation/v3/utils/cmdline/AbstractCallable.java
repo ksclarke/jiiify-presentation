@@ -1,7 +1,5 @@
 package info.freelibrary.iiif.presentation.v3.utils.cmdline;
 
-import static info.freelibrary.iiif.presentation.v3.utils.cmdline.JPv3.COLLECTIONS_PATH;
-import static info.freelibrary.iiif.presentation.v3.utils.cmdline.JPv3.ENDPOINT_PREFIX;
 import static info.freelibrary.util.Constants.*;
 import static info.freelibrary.util.ThrowingConsumer.uncheck;
 
@@ -55,6 +53,12 @@ import java.util.stream.Stream;
  */
 @SuppressWarnings({PMD.EXCESSIVE_IMPORTS, PMD.COUPLING_BETWEEN_OBJECTS})
 public abstract class AbstractCallable implements Callable<Integer> {
+
+    /** The expected prefix for the IIIF manifests and collection documents server. */
+    public static final String ENDPOINT_PREFIX = "ingest";
+
+    /** The expected endpoint for collection documents. */
+    public static final String COLLECTIONS_PATH = "/collections/";
 
     /** The file extension for CSV files. */
     public static final String CSV_EXT = DOT_CHAR + MediaType.TEXT_CSV.getExt();
@@ -220,7 +224,7 @@ public abstract class AbstractCallable implements Callable<Integer> {
                 final Map<String, String> row = new HashMap<>(originalRows.next());
                 final String id = row.get(idKey);
                 final String objectType = JPv3Utils.getObjectType(row);
-                final String resourceType = row.get(Keys.RESOURCE_TYPE);
+                final String resourceType = JPv3Utils.getResourceType(row);
                 final Row rowObject = new Row(id, objectType, resourceType);
                 final String url;
 
@@ -243,7 +247,9 @@ public abstract class AbstractCallable implements Callable<Integer> {
             }
         }
 
-        readHeaders(aCsvString).forEach(columns::addColumn);
+        // Skip any pre-existing IIIF_MANIFEST_URL headers; we add a new one
+        readHeaders(aCsvString).stream().filter(header -> !Keys.IIIF_MANIFEST_URL.equals(header))
+          .forEach(columns::addColumn);
         columns.addColumn(Keys.IIIF_MANIFEST_URL);
 
         return csvMapper.writerFor(modifiedRows.getClass()).with(columns.build()).writeValueAsString(modifiedRows);
